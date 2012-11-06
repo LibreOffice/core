@@ -1,5 +1,17 @@
 --- misc/liblangtag-0.4.0/configure.ac
 +++ misc/build/liblangtag-0.4.0/configure.ac
+@@ -173,8 +173,9 @@
+ __sync_synchronize();
+ j = __sync_fetch_and_sub(&i, 1);
+ return j;
+-       ]])], [AC_MSG_ERROR([liblangtag has to be built with -march=i486 or later.])]
+-       [lt_cv_has_atomic=no])])
++       ]])], [AC_MSG_ERROR([liblangtag has to be built with -march=i486 or later.])],
++       [lt_cv_has_atomic=no
++        CFLAGS="$_save_cflags"])])
+ ])
+ if test "x$lt_cv_has_atomic" = "xyes"; then
+ 	AC_DEFINE(LT_HAVE_ATOMIC_BUILTINS, 1, [Have buit-in atomic functions])
 @@ -291,8 +291,14 @@
  dnl ======================================================================
  dnl check another libraries
@@ -18,6 +30,16 @@
  if test "x$enable_introspection" != "xyes"; then
 --- misc/liblangtag-0.4.0/configure
 +++ misc/build/liblangtag-0.4.0/configure
+@@ -12607,7 +12607,9 @@
+ _ACEOF
+ if ac_fn_c_try_link "$LINENO"; then :
+   as_fn_error $? "liblangtag has to be built with -march=i486 or later." "$LINENO" 5
++else
+        lt_cv_has_atomic=no
++       CFLAGS="$_save_cflags"
+ fi
+ rm -f core conftest.err conftest.$ac_objext \
+     conftest$ac_exeext conftest.$ac_ext
 @@ -13203,6 +13203,10 @@
  ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
  ac_compiler_gnu=$ac_cv_c_compiler_gnu
