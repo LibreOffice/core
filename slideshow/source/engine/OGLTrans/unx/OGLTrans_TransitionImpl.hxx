@@ -28,70 +28,29 @@
 #ifndef INCLUDED_OGLTRANS_TRANSITIONIMPL_HXX_
 #define INCLUDED_OGLTRANS_TRANSITIONIMPL_HXX_
 
+#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
+
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 
 #include <vector>
 #include <GL/gl.h>
 
-using namespace std;
-
 class Primitive;
 class Operation;
 class SceneObject;
+class TransitionData;
 
-
-/** OpenGL 3D Transition class. It implicitly is constructed from XOGLTransition
-
-    This class is capable of making itself into many difference transitions. It holds Primitives and Operations on those primitives.
-*/
-class OGLTransitionImpl
+struct TransitionSettings
 {
-public:
-    OGLTransitionImpl() :
+    TransitionSettings() :
         mbUseMipMapLeaving( true ),
         mbUseMipMapEntering( true ),
         mnRequiredGLVersion( 1.0 ),
-        maLeavingSlidePrimitives(),
-        maEnteringSlidePrimitives(),
-        maSceneObjects(),
-        mbReflectSlides( false ),
-        mVertexObject( 0 ),
-        mFragmentObject( 0 ),
-        mProgramObject( 0 ),
-        maHelperTexture( 0 ),
-        mmPrepare( NULL ),
-        mmPrepareTransition( NULL ),
-        mmClearTransition( NULL ),
-        mmDisplaySlides( NULL )
-    {}
-
-    ~OGLTransitionImpl();
-
-    void prepare( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
-    void display( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
-    void finish();
-
-    void makeOutsideCubeFaceToLeft();
-    void makeInsideCubeFaceToLeft();
-    void makeNByMTileFlip( ::sal_uInt16 n, ::sal_uInt16 m );
-    void makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt16 nPointsOnCircles );
-    void makeHelix( ::sal_uInt16 nRows );
-    void makeFallLeaving();
-    void makeTurnAround();
-    void makeTurnDown();
-    void makeIris();
-    void makeRochade();
-    void makeVenetianBlinds( bool vertical, int parts );
-    void makeStatic();
-    void makeDissolve();
-    void makeNewsflash();
-
-    /** 2D replacements
-     */
-    void makeDiamond();
-    void makeFadeSmoothly();
-    void makeFadeThroughBlack();
+        mbReflectSlides( false )
+    {
+    }
 
     /** Whether to use mipmaping for slides textures
      */
@@ -102,92 +61,196 @@ public:
      */
     float mnRequiredGLVersion;
 
-private:
-    /** clears all the primitives and operations
-    */
-    void clear();
-
-    /** All the primitives that use the leaving slide texture
-    */
-    vector<Primitive> maLeavingSlidePrimitives;
-
-    /** All the primitives that use the leaving slide texture
-    */
-    vector<Primitive> maEnteringSlidePrimitives;
-
-    /** All the surrounding scene objects
-    */
-    vector<SceneObject*> maSceneObjects;
-
-    /** All the operations that should be applied to both leaving and entering slide primitives. These operations will be called in the order they were pushed back in. In OpenGL this effectively uses the operations in the opposite order they were pushed back.
-    */
-    vector<Operation*> OverallOperations;
-
     /** Whether to reflect slides, the reflection happens on flat surface beneath the slides.
      ** Now it only works with slides which keep their rectangular shape together.
      */
     bool mbReflectSlides;
+};
 
-    /** GLSL objects, shaders and program
-     */
-    GLuint mVertexObject, mFragmentObject, mProgramObject;
+typedef std::vector<Primitive> Primitives_t;
+typedef std::vector<boost::shared_ptr<SceneObject> > SceneObjects_t;
+typedef std::vector<boost::shared_ptr<Operation> > Operations_t;
 
-    /** various data */
-    GLuint maHelperTexture;
+class TransitionScene
+{
+public:
+    TransitionScene()
+    {
+    }
 
-    /** When this method is not NULL, it is called in display method to prepare the slides, scene, etc.
-     ** We might later replace this by cleaner derived class.
-     */
-    void (OGLTransitionImpl::*mmPrepare)( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
+    TransitionScene(
+            const Primitives_t& rLeavingSlidePrimitives,
+            const Primitives_t& rEnteringSlidePrimitives,
+            const Operations_t& rOverallOperations = Operations_t(),
+            const SceneObjects_t& rSceneObjects = SceneObjects_t()
+    )
+        : maLeavingSlidePrimitives(rLeavingSlidePrimitives)
+        , maEnteringSlidePrimitives(rEnteringSlidePrimitives)
+        , maOverallOperations(rOverallOperations)
+        , maSceneObjects(rSceneObjects)
+    {
+    }
 
-    /** When this method is not NULL, it is called after glx context is ready to let the transition prepare GL related things, like GLSL program.
-     ** We might later replace this by cleaner derived class.
-     */
-    void (OGLTransitionImpl::*mmPrepareTransition)( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
+    TransitionScene(TransitionScene const& rOther);
+    TransitionScene& operator=(const TransitionScene& rOther);
 
-    /** When this method is not NULL, it is called when the transition needs to clear after itself, like delete own textures etc.
-     ** We might later replace this by cleaner derived class.
-     */
-    void (OGLTransitionImpl::*mmClearTransition)();
+    void swap(TransitionScene& rOther);
+    void clear();
 
-    /** When this method is not NULL, it is called in display method to display the slides.
-     ** We might later replace this by cleaner derived class.
-     */
-    void (OGLTransitionImpl::*mmDisplaySlides)( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+    const Primitives_t& getLeavingSlide() const
+    {
+        return maLeavingSlidePrimitives;
+    }
 
-    void displaySlides( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
-    void displaySlide( double nTime, ::sal_Int32 glSlideTex, std::vector<Primitive>& primitives, double SlideWidthScale, double SlideHeightScale );
+    const Primitives_t& getEnteringSlide() const
+    {
+        return maEnteringSlidePrimitives;
+    }
+
+    const Operations_t& getOperations() const
+    {
+        return maOverallOperations;
+    }
+
+    const SceneObjects_t& getSceneObjects() const
+    {
+        return maSceneObjects;
+    }
+
+private:
+    /** All the primitives that use the leaving slide texture
+    */
+    Primitives_t maLeavingSlidePrimitives;
+
+    /** All the primitives that use the leaving slide texture
+    */
+    Primitives_t maEnteringSlidePrimitives;
+
+    /** All the operations that should be applied to both leaving and entering slide primitives. These operations will be called in the order they were pushed back in. In OpenGL this effectively uses the operations in the opposite order they were pushed back.
+    */
+    Operations_t maOverallOperations;
+
+    /** All the surrounding scene objects
+    */
+    SceneObjects_t maSceneObjects;
+};
+
+/** OpenGL 3D Transition class. It implicitly is constructed from XOGLTransition
+
+    It holds Primitives and Operations on those primitives.
+*/
+class OGLTransitionImpl : private boost::noncopyable
+{
+public:
+    virtual ~OGLTransitionImpl();
+
+    /** Prepare transition.
+      */
+    void prepare( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
+    /** Display a step of the transition.
+      */
+    void display( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
+    /** Clean up after transition.
+      */
+    void finish();
+
+    TransitionSettings const& getSettings() const
+    {
+        return maSettings;
+    }
+
+protected:
+    OGLTransitionImpl(const TransitionScene& rScene, const TransitionSettings& rSettings)
+        : maScene(rScene)
+        , maSettings(rSettings)
+    {}
+
+    OGLTransitionImpl() {}
+
+    TransitionScene const& getScene() const
+    {
+        return maScene;
+    }
+
+    void setScene(TransitionScene const& rScene);
+    // void setSettings(TransitionSettings const& rSettings);
+
+    void clearScene();
+
+    void displaySlide( double nTime, ::sal_Int32 glSlideTex, const Primitives_t& primitives, double SlideWidthScale, double SlideHeightScale );
     void displayScene( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight);
     void applyOverallOperations( double nTime, double SlideWidthScale, double SlideHeightScale );
 
-    /** various transitions helper methods
-     */
-    void prepareDiamond( double nTime, double SlideWidth, double SlideHeight,double DispWidth, double DispHeight );
-    void displaySlidesFadeSmoothly( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
-        void displaySlidesFadeThroughBlack( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
-        void displaySlidesRochade( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
-    void displaySlidesShaders( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
-    void prepareStatic( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
-    void prepareDissolve( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
-    void preparePermShader();
+private:
+    /** This function is called in display method to prepare the slides, scene, etc.
+      *
+      * Default implementation does nothing.
+      */
+    virtual void prepare_( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
+
+    /** This function is called after glx context is ready to let the transition prepare GL related things, like GLSL program.
+      *
+      * Default implementation does nothing.
+      */
+    virtual void prepareTransition_( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
+
+    /** This function is called when the transition needs to clear after itself, like delete own textures etc.
+      *
+      * Default implementation does nothing.
+      */
+    virtual void finishTransition_();
+
+    /** This function is called in display method to display the slides.
+      *
+      * Default implementation applies overall operations and then
+      * displays both slides.
+      */
+    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+
+private:
+    TransitionScene maScene;
+    const TransitionSettings maSettings;
 };
 
-class SceneObject
+
+// "Constructors" of available transitions
+boost::shared_ptr<OGLTransitionImpl> makeOutsideCubeFaceToLeft();
+boost::shared_ptr<OGLTransitionImpl> makeInsideCubeFaceToLeft();
+boost::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( ::sal_uInt16 n, ::sal_uInt16 m );
+boost::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt16 nPointsOnCircles );
+boost::shared_ptr<OGLTransitionImpl> makeHelix( ::sal_uInt16 nRows );
+boost::shared_ptr<OGLTransitionImpl> makeFallLeaving();
+boost::shared_ptr<OGLTransitionImpl> makeTurnAround();
+boost::shared_ptr<OGLTransitionImpl> makeTurnDown();
+boost::shared_ptr<OGLTransitionImpl> makeIris();
+boost::shared_ptr<OGLTransitionImpl> makeRochade();
+boost::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts );
+boost::shared_ptr<OGLTransitionImpl> makeStatic();
+boost::shared_ptr<OGLTransitionImpl> makeDissolve();
+boost::shared_ptr<OGLTransitionImpl> makeNewsflash();
+
+/** 2D replacements
+    */
+boost::shared_ptr<OGLTransitionImpl> makeDiamond();
+boost::shared_ptr<OGLTransitionImpl> makeFadeSmoothly();
+boost::shared_ptr<OGLTransitionImpl> makeFadeThroughBlack();
+
+class SceneObject : private boost::noncopyable
 {
 public:
     SceneObject();
     virtual ~SceneObject();
 
-    virtual void prepare() {};
-    virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight);
-    virtual void finish() {};
+    virtual void prepare() {}
+    virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight) const;
+    virtual void finish() {}
 
     void pushPrimitive (const Primitive &p);
 
 protected:
     /** All the surrounding scene primitives
     */
-    vector<Primitive> maPrimitives;
+    Primitives_t maPrimitives;
 };
 
 class Iris : public SceneObject
@@ -196,11 +259,10 @@ public:
     Iris ();
 
     virtual void prepare();
-    virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight);
+    virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight) const;
     virtual void finish();
 
 private:
-
     GLuint maTexture;
 };
 
@@ -212,11 +274,12 @@ public:
     Primitive() {}
     // making copy constructor explicit makes the class un-suitable for use with stl containers
     Primitive(const Primitive& rvalue);
-    ~Primitive();
-
-    void applyOperations(double nTime, double SlideWidthScale, double SlideHeightScale);
-    void display(double nTime, double SlideWidthScale, double SlideHeightScale);
     const Primitive& operator=(const Primitive& rvalue);
+
+    void swap(Primitive& rOther);
+
+    void applyOperations(double nTime, double SlideWidthScale, double SlideHeightScale) const;
+    void display(double nTime, double SlideWidthScale, double SlideHeightScale) const;
 
     /** PushBack a vertex,normal, and tex coord. Each SlideLocation is where on the slide is mapped to this location ( from (0,0) to (1,1)  ). This will make sure the correct aspect ratio is used, and helps to make slides begin and end at the correct position. (0,0) is the top left of the slide, and (1,1) is the bottom right.
 
@@ -241,11 +304,11 @@ public:
         @return
         the list of vertices
     */
-    const vector<basegfx::B3DVector>& getVertices() const {return Vertices;}
+    const std::vector<basegfx::B3DVector>& getVertices() const {return Vertices;}
 
     /** guards against directly changing the vertices
     */
-    const vector<basegfx::B3DVector>& getNormals() const {return Normals;}
+    const std::vector<basegfx::B3DVector>& getNormals() const {return Normals;}
 
     /** guards against directly changing the vertices
 
@@ -253,7 +316,7 @@ public:
         the list of Texture Coordinates
 
     */
-    const vector<basegfx::B2DVector>& getTexCoords() const {return TexCoords;}
+    const std::vector<basegfx::B2DVector>& getTexCoords() const {return TexCoords;}
 
     /** list of Operations to be performed on this primitive.These operations will be called in the order they were pushed back in. In OpenGL this effectively uses the operations in the opposite order they were pushed back.
 
@@ -261,28 +324,27 @@ public:
         the list of Operations
 
     */
-    vector<Operation*> Operations;
+    Operations_t Operations;
 
 private:
     /** list of vertices
     */
-    vector<basegfx::B3DVector> Vertices;
+    std::vector<basegfx::B3DVector> Vertices;
 
     /** list of Normals
     */
-    vector<basegfx::B3DVector> Normals;
+    std::vector<basegfx::B3DVector> Normals;
 
     /** list of Texture Coordinates
     */
-    vector<basegfx::B2DVector> TexCoords;
+    std::vector<basegfx::B2DVector> TexCoords;
 };
 
 /** This class is to be derived to make any operation (tranform) you may need in order to construct your transitions
 */
-class Operation
+class Operation : private boost::noncopyable
 {
 public:
-    Operation(){}
     virtual ~Operation(){}
 
     /** Should this operation be interpolated . If TRUE, the transform will smoothly move from making no difference from t = 0.0 to nT0 to being completely transformed from t = nT1 to 1. If FALSE, the transform will be inneffectual from t = 0 to nT0, and completely transformed from t = nT0 to 1.
@@ -309,11 +371,10 @@ public:
         height of slide divided by height of window
 
     */
-    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) = 0;
+    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const = 0;
 
-    /** return a copy of this operation
-    */
-    virtual Operation* clone() = 0;
+protected:
+    Operation(){}
 };
 
 /** this class is a generic CounterClockWise(CCW) rotation with an axis angle
@@ -321,8 +382,7 @@ public:
 class SRotate: public Operation
 {
 public:
-    void interpolate(double t,double SlideWidthScale,double SlideHeightScale);
-    virtual SRotate* clone();
+    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const;
 
     /** Constructor
 
@@ -361,13 +421,15 @@ private:
     double angle;
 };
 
+boost::shared_ptr<SRotate>
+makeSRotate(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
+
 /** scaling transformation
 */
 class SScale: public Operation
 {
 public:
-    void interpolate(double t,double SlideWidthScale,double SlideHeightScale);
-    SScale* clone();
+    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const;
 
     /** Constructor
 
@@ -394,13 +456,15 @@ private:
     basegfx::B3DVector origin;
 };
 
+boost::shared_ptr<SScale>
+makeSScale(const basegfx::B3DVector& Scale, const basegfx::B3DVector& Origin,bool bInter, double T0, double T1);
+
 /** translation transformation
 */
 class STranslate: public Operation
 {
 public:
-    void interpolate(double t,double SlideWidthScale,double SlideHeightScale);
-    STranslate* clone();
+    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const;
 
     /** Constructor
 
@@ -425,13 +489,15 @@ private:
     basegfx::B3DVector vector;
 };
 
+boost::shared_ptr<STranslate>
+makeSTranslate(const basegfx::B3DVector& Vector,bool bInter, double T0, double T1);
+
 /** translation transformation
 */
 class SEllipseTranslate: public Operation
 {
 public:
-    void interpolate(double t,double SlideWidthScale,double SlideHeightScale);
-    SEllipseTranslate* clone();
+    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const;
 
     /** Constructor
 
@@ -461,13 +527,15 @@ private:
     double endPosition;
 };
 
+boost::shared_ptr<SEllipseTranslate>
+makeSEllipseTranslate(double dWidth, double dHeight, double dStartPosition, double dEndPosition, bool bInter, double T0, double T1);
+
 /** Same as SRotate, except the depth is scaled by the width of the slide divided by the width of the window.
 */
 class RotateAndScaleDepthByWidth: public Operation
 {
 public:
-    void interpolate(double t,double SlideWidthScale,double SlideHeightScale);
-    RotateAndScaleDepthByWidth* clone();
+    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const;
 
     RotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
     ~RotateAndScaleDepthByWidth(){}
@@ -477,13 +545,15 @@ private:
     double angle;
 };
 
+boost::shared_ptr<RotateAndScaleDepthByWidth>
+makeRotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
+
 /** Same as SRotate, except the depth is scaled by the width of the slide divided by the height of the window.
 */
 class RotateAndScaleDepthByHeight: public Operation
 {
 public:
-    void interpolate(double t,double SlideWidthScale,double SlideHeightScale);
-    RotateAndScaleDepthByHeight* clone();
+    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const;
 
     RotateAndScaleDepthByHeight(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
     ~RotateAndScaleDepthByHeight(){}
@@ -492,6 +562,9 @@ private:
     basegfx::B3DVector origin;
     double angle;
 };
+
+boost::shared_ptr<RotateAndScaleDepthByHeight>
+makeRotateAndScaleDepthByHeight(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
 
 #endif // INCLUDED_SLIDESHOW_TRANSITION_HXX_
 

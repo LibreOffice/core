@@ -174,7 +174,7 @@ class OGLTransitionerImpl : private cppu::BaseMutex, private boost::noncopyable,
 public:
     OGLTransitionerImpl();
     void setSlides( const Reference< rendering::XBitmap >& xLeavingSlide , const uno::Reference< rendering::XBitmap >& xEnteringSlide );
-    void setTransition( OGLTransitionImpl* pOGLTransition );
+    void setTransition( boost::shared_ptr<OGLTransitionImpl> pOGLTransition );
     bool initialize( const Reference< presentation::XSlideShowView >& xView );
 
     // XTransition
@@ -293,7 +293,7 @@ private:
 
     /** Our Transition to be used.
     */
-    OGLTransitionImpl* pTransition;
+    boost::shared_ptr<OGLTransitionImpl> mpTransition;
 
 public:
     /** whether we are running on ATI fglrx with bug related to textures
@@ -868,12 +868,12 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
 #endif
 }
 
-void OGLTransitionerImpl::setTransition( OGLTransitionImpl* const pNewTransition )
+void OGLTransitionerImpl::setTransition( boost::shared_ptr<OGLTransitionImpl> const pNewTransition )
 {
-    pTransition = pNewTransition;
+    mpTransition = pNewTransition;
 
-    if( pTransition && pTransition->mnRequiredGLVersion <= cnGLVersion )
-        pTransition->prepare( GLleavingSlide, GLenteringSlide );
+    if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= cnGLVersion )
+        mpTransition->prepare( GLleavingSlide, GLenteringSlide );
 }
 
 void OGLTransitionerImpl::createTexture( unsigned int* texID,
@@ -942,7 +942,7 @@ void OGLTransitionerImpl::impl_createTexture(
         glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest_supported_anisotropy);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest_supported_anisotropy);
     } else {
-        if( pTransition && !cbBrokenTexturesATI && !useMipmap) {
+        if( mpTransition && !cbBrokenTexturesATI && !useMipmap) {
             glTexImage2D( GL_TEXTURE_2D, 0, pFormat->nInternalFormat, SlideSize.Width, SlideSize.Height, 0, pFormat->eFormat, pFormat->eType, &data[0] );
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
@@ -1109,7 +1109,7 @@ void OGLTransitionerImpl::GLInitSlides()
 {
     osl::MutexGuard const guard( m_aMutex );
 
-    if (isDisposed() || pTransition->mnRequiredGLVersion > cnGLVersion)
+    if (isDisposed() || mpTransition->getSettings().mnRequiredGLVersion > cnGLVersion)
         return;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1127,7 +1127,7 @@ void OGLTransitionerImpl::GLInitSlides()
            LeavingPixmap,
            mbUseLeavingPixmap,
 #endif
-           pTransition->mbUseMipMapLeaving,
+           mpTransition->getSettings().mbUseMipMapLeaving,
            LeavingBytes,
            pFormat );
 
@@ -1136,7 +1136,7 @@ void OGLTransitionerImpl::GLInitSlides()
            EnteringPixmap,
            mbUseEnteringPixmap,
 #endif
-           pTransition->mbUseMipMapEntering,
+           mpTransition->getSettings().mbUseMipMapEntering,
            EnteringBytes,
            pFormat );
 
@@ -1158,7 +1158,7 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
 #endif
     osl::MutexGuard const guard( m_aMutex );
 
-    if (isDisposed() || !cbGLXPresent || pTransition->mnRequiredGLVersion > cnGLVersion)
+    if (isDisposed() || !cbGLXPresent || mpTransition->getSettings().mnRequiredGLVersion > cnGLVersion)
         return;
 
 #ifdef WNT
@@ -1171,8 +1171,8 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if(pTransition)
-        pTransition->display( nTime, GLleavingSlide, GLenteringSlide,
+    if(mpTransition)
+        mpTransition->display( nTime, GLleavingSlide, GLenteringSlide,
                               SlideSize.Width, SlideSize.Height,
                               static_cast<double>(GLWin.Width),
                               static_cast<double>(GLWin.Height) );
@@ -1313,8 +1313,8 @@ void OGLTransitionerImpl::disposing()
     if( pWindow ) {
         disposeTextures();
 
-        if (pTransition)
-            pTransition->finish();
+        if (mpTransition)
+            mpTransition->finish();
 
 #ifdef UNX
         if( mbRestoreSync ) {
@@ -1327,8 +1327,7 @@ void OGLTransitionerImpl::disposing()
         disposeContextAndWindow();
     }
 
-    if (pTransition)
-        delete pTransition;
+    mpTransition.reset();
 
     mxLeavingBitmap.clear();
     mxEnteringBitmap.clear();
@@ -1348,8 +1347,7 @@ OGLTransitionerImpl::OGLTransitionerImpl() :
     mbUseLeavingPixmap( false ),
     mbUseEnteringPixmap( false ),
     SlideBitmapLayout(),
-    SlideSize(),
-    pTransition( 0 )
+    SlideSize()
 {
 #if defined( WNT )
     GLWin.hWnd = 0;
@@ -1429,67 +1427,62 @@ public:
             ( transitionType == animations::TransitionType::IRISWIPE && transitionSubType == animations::TransitionSubType::DIAMOND ) ) )
             return uno::Reference< presentation::XTransition >();
 
-        OGLTransitionImpl* pTransition = NULL;
+        boost::shared_ptr<OGLTransitionImpl> pTransition;
 
         if( transitionType == animations::TransitionType::MISCSHAPEWIPE ) {
-            pTransition = new OGLTransitionImpl();
             switch( transitionSubType )
                 {
                 case animations::TransitionSubType::ACROSS:
-                    pTransition->makeNByMTileFlip(8,6);
+                    pTransition = makeNByMTileFlip(8,6);
                     break;
                 case animations::TransitionSubType::CORNERSOUT:
-                    pTransition->makeOutsideCubeFaceToLeft();
+                    pTransition = makeOutsideCubeFaceToLeft();
                     break;
                 case animations::TransitionSubType::CIRCLE:
-                    pTransition->makeRevolvingCircles(8,128);
+                    pTransition = makeRevolvingCircles(8,128);
                     break;
                 case animations::TransitionSubType::FANOUTHORIZONTAL:
-                    pTransition->makeHelix(20);
+                    pTransition = makeHelix(20);
                     break;
                 case animations::TransitionSubType::CORNERSIN:
-                    pTransition->makeInsideCubeFaceToLeft();
+                    pTransition = makeInsideCubeFaceToLeft();
                     break;
                 case animations::TransitionSubType::LEFTTORIGHT:
-                    pTransition->makeFallLeaving();
+                    pTransition = makeFallLeaving();
                     break;
                 case animations::TransitionSubType::TOPTOBOTTOM:
-                    pTransition->makeTurnAround();
+                    pTransition = makeTurnAround();
                     break;
                 case animations::TransitionSubType::TOPRIGHT:
-                    pTransition->makeTurnDown();
+                    pTransition = makeTurnDown();
                     break;
                 case animations::TransitionSubType::TOPLEFT:
-                    pTransition->makeIris();
+                    pTransition = makeIris();
                     break;
                 case animations::TransitionSubType::BOTTOMRIGHT:
-                    pTransition->makeRochade();
+                    pTransition = makeRochade();
                     break;
                 case animations::TransitionSubType::BOTTOMLEFT:
-                    pTransition->makeVenetianBlinds( true, 8 );
+                    pTransition = makeVenetianBlinds( true, 8 );
                     break;
                 case animations::TransitionSubType::TOPCENTER:
-                    pTransition->makeVenetianBlinds( false, 6 );
+                    pTransition = makeVenetianBlinds( false, 6 );
                     break;
                 case animations::TransitionSubType::RIGHTCENTER:
-                    pTransition->makeStatic();
+                    pTransition = makeStatic();
                     break;
                 case animations::TransitionSubType::BOTTOMCENTER:
-                    pTransition->makeDissolve();
+                    pTransition = makeDissolve();
                     break;
                 }
         } else if( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::CROSSFADE ) {
-            pTransition = new OGLTransitionImpl();
-            pTransition->makeFadeSmoothly();
+            pTransition = makeFadeSmoothly();
         } else if( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::FADEOVERCOLOR ) {
-            pTransition = new OGLTransitionImpl();
-            pTransition->makeFadeThroughBlack();
+            pTransition = makeFadeThroughBlack();
         } else if( transitionType == animations::TransitionType::IRISWIPE && transitionSubType == animations::TransitionSubType::DIAMOND ) {
-            pTransition = new OGLTransitionImpl();
-            pTransition->makeDiamond();
+            pTransition = makeDiamond();
         } else if( transitionType == animations::TransitionType::ZOOM && transitionSubType == animations::TransitionSubType::ROTATEIN ) {
-            pTransition = new OGLTransitionImpl();
-            pTransition->makeNewsflash();
+            pTransition = makeNewsflash();
         }
 
         if ( !pTransition )

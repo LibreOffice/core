@@ -26,71 +26,87 @@
  *
  ************************************************************************/
 
+#include <utility>
+
+#include <boost/make_shared.hpp>
+
 #include "OGLTrans_TransitionImpl.hxx"
 #include "OGLTrans_Shaders.hxx"
 #include <GL/gl.h>
 #include <math.h>
 
+using boost::make_shared;
+using boost::shared_ptr;
 
-void OGLTransitionImpl::clear()
+using std::max;
+using std::min;
+using std::vector;
+
+TransitionScene::TransitionScene(TransitionScene const& rOther)
+    : maLeavingSlidePrimitives(rOther.maLeavingSlidePrimitives)
+    , maEnteringSlidePrimitives(rOther.maEnteringSlidePrimitives)
+    , maOverallOperations(rOther.maOverallOperations)
+    , maSceneObjects(rOther.maSceneObjects)
 {
-    for(unsigned int i( 0 ); i < OverallOperations.size(); ++i)
-        delete OverallOperations[i];
-    OverallOperations.clear();
+}
+
+TransitionScene& TransitionScene::operator=(const TransitionScene& rOther)
+{
+    TransitionScene aTmp(rOther);
+    swap(aTmp);
+    return *this;
+}
+
+void TransitionScene::swap(TransitionScene& rOther)
+{
+    using std::swap;
+
+    swap(maLeavingSlidePrimitives, rOther.maLeavingSlidePrimitives);
+    swap(maEnteringSlidePrimitives, rOther.maEnteringSlidePrimitives);
+    swap(maOverallOperations, rOther.maOverallOperations);
+    swap(maSceneObjects, rOther.maSceneObjects);
+}
+
+void TransitionScene::clear()
+{
     maLeavingSlidePrimitives.clear();
     maEnteringSlidePrimitives.clear();
-    for(unsigned int i(0); i < maSceneObjects.size(); ++i)
-        delete maSceneObjects[i];
+    maOverallOperations.clear();
     maSceneObjects.clear();
-
-    mbReflectSlides = false;
-
-#ifdef GL_VERSION_2_0
-    if( mProgramObject ) {
-        OGLShaders::glDeleteProgram( mProgramObject );
-        mProgramObject = 0;
-    }
-
-    if( mVertexObject ) {
-        OGLShaders::glDeleteShader( mVertexObject );
-        mVertexObject = 0;
-    }
-
-    if( mFragmentObject ) {
-        OGLShaders::glDeleteShader( mFragmentObject );
-        mFragmentObject = 0;
-    }
-#endif
-
-    if( maHelperTexture ) {
-        glDeleteTextures( 1, &maHelperTexture );
-        maHelperTexture = 0;
-    }
-
-    if( mmClearTransition )
-        (this->*mmClearTransition)();
 }
 
 OGLTransitionImpl::~OGLTransitionImpl()
 {
-    clear();
+}
+
+void OGLTransitionImpl::setScene(TransitionScene const& rScene)
+{
+    maScene = rScene;
+}
+
+void OGLTransitionImpl::clearScene()
+{
+    maScene.clear();
 }
 
 void OGLTransitionImpl::prepare( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex )
 {
-    for(unsigned int i(0); i < maSceneObjects.size(); ++i) {
-        maSceneObjects[i]->prepare();
+    const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
+    for(unsigned int i(0); i != rSceneObjects.size(); ++i) {
+        rSceneObjects[i]->prepare();
     }
 
-    if( mmPrepareTransition )
-        (this->*mmPrepareTransition)( glLeavingSlideTex, glEnteringSlideTex );
+    prepareTransition_( glLeavingSlideTex, glEnteringSlideTex );
 }
 
 void OGLTransitionImpl::finish()
 {
-    for(unsigned int i(0); i < maSceneObjects.size(); ++i) {
-        maSceneObjects[i]->finish();
+    const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
+    for(unsigned int i(0); i != rSceneObjects.size(); ++i) {
+        rSceneObjects[i]->finish();
     }
+
+    finishTransition_();
 }
 
 static void blendSlide( double depth )
@@ -119,7 +135,7 @@ static void blendSlide( double depth )
     glEnable( GL_DEPTH_TEST );
 }
 
-static void slideShadow( double nTime, Primitive& primitive, double sw, double sh )
+static void slideShadow( double nTime, const Primitive& primitive, double sw, double sh )
 {
     double reflectionDepth = 0.3;
 
@@ -136,33 +152,53 @@ static void slideShadow( double nTime, Primitive& primitive, double sw, double s
     glEnable(GL_LIGHTING);
 }
 
+void OGLTransitionImpl::prepare_( double, double, double, double, double )
+{
+}
+
+void OGLTransitionImpl::prepareTransition_( ::sal_Int32, ::sal_Int32 )
+{
+}
+
+void OGLTransitionImpl::finishTransition_()
+{
+}
+
+void OGLTransitionImpl::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
+{
+    applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
+
+    glEnable(GL_TEXTURE_2D);
+    displaySlide( nTime, glLeavingSlideTex, maScene.getLeavingSlide(), SlideWidthScale, SlideHeightScale );
+    displaySlide( nTime, glEnteringSlideTex, maScene.getEnteringSlide(), SlideWidthScale, SlideHeightScale );
+}
+
 void OGLTransitionImpl::display( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex,
                                  double SlideWidth, double SlideHeight, double DispWidth, double DispHeight )
 {
-    double SlideWidthScale, SlideHeightScale;
+    const double SlideWidthScale = SlideWidth/DispWidth;
+    const double SlideHeightScale = SlideHeight/DispHeight;
 
-    SlideWidthScale = SlideWidth/DispWidth;
-    SlideHeightScale = SlideHeight/DispHeight;
-
-    if( mmPrepare ) {
-        clear();
-        (this->*mmPrepare)( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
-    }
+    prepare_( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
 
     glPushMatrix();
-    displaySlides( nTime, glLeavingSlideTex, glEnteringSlideTex, SlideWidthScale, SlideHeightScale );
+    displaySlides_( nTime, glLeavingSlideTex, glEnteringSlideTex, SlideWidthScale, SlideHeightScale );
     displayScene( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
     glPopMatrix();
 }
 
 void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthScale, double SlideHeightScale )
 {
-    for(unsigned int i(0); i < OverallOperations.size(); ++i)
-        OverallOperations[i]->interpolate(nTime,SlideWidthScale,SlideHeightScale);
+    const Operations_t& rOverallOperations(maScene.getOperations());
+    for(unsigned int i(0); i != rOverallOperations.size(); ++i)
+        rOverallOperations[i]->interpolate(nTime,SlideWidthScale,SlideHeightScale);
 }
 
-void OGLTransitionImpl::displaySlide( double nTime, ::sal_Int32 glSlideTex, std::vector<Primitive>& primitives,
-                                      double SlideWidthScale, double SlideHeightScale )
+void
+OGLTransitionImpl::displaySlide(
+        const double nTime,
+        const ::sal_Int32 glSlideTex, const Primitives_t& primitives,
+        double SlideWidthScale, double SlideHeightScale )
 {
    //TODO change to foreach
     glBindTexture(GL_TEXTURE_2D, glSlideTex);
@@ -170,7 +206,7 @@ void OGLTransitionImpl::displaySlide( double nTime, ::sal_Int32 glSlideTex, std:
     // display slide reflection
     // note that depth test is turned off while blending the shadow
     // so the slides has to be rendered in right order, see rochade as example
-    if( mbReflectSlides ) {
+    if( maSettings.mbReflectSlides ) {
         double surfaceLevel = -0.04;
 
         /* reflected slides */
@@ -193,28 +229,15 @@ void OGLTransitionImpl::displaySlide( double nTime, ::sal_Int32 glSlideTex, std:
         primitives[i].display(nTime, SlideWidthScale, SlideHeightScale);
 }
 
-void OGLTransitionImpl::displaySlides( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex,
-                                       double SlideWidthScale, double SlideHeightScale )
-{
-    if( mmDisplaySlides )
-        (this->*mmDisplaySlides)( nTime, glLeavingSlideTex, glEnteringSlideTex, SlideWidthScale, SlideHeightScale );
-    else {
-        applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
-
-        glEnable(GL_TEXTURE_2D);
-        displaySlide( nTime, glLeavingSlideTex, maLeavingSlidePrimitives, SlideWidthScale, SlideHeightScale );
-        displaySlide( nTime, glEnteringSlideTex, maEnteringSlidePrimitives, SlideWidthScale, SlideHeightScale );
-    }
-}
-
 void OGLTransitionImpl::displayScene( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight )
 {
+    const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
     glEnable(GL_TEXTURE_2D);
-    for(unsigned int i(0); i < maSceneObjects.size(); ++i)
-        maSceneObjects[i]->display(nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
+    for(unsigned int i(0); i != rSceneObjects.size(); ++i)
+        rSceneObjects[i]->display(nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
 }
 
-void Primitive::display(double nTime, double WidthScale, double HeightScale)
+void Primitive::display(double nTime, double WidthScale, double HeightScale) const
 {
     glPushMatrix();
 
@@ -233,21 +256,14 @@ void Primitive::display(double nTime, double WidthScale, double HeightScale)
     glPopMatrix();
 }
 
-void Primitive::applyOperations(double nTime, double WidthScale, double HeightScale)
+void Primitive::applyOperations(double nTime, double WidthScale, double HeightScale) const
 {
     for(unsigned int i(0); i < Operations.size(); ++i)
         Operations[i]->interpolate( nTime ,WidthScale,HeightScale);
     glScaled(WidthScale,HeightScale,1);
 }
 
-Primitive::~Primitive()
-{
-    for(unsigned int i( 0 ); i < Operations.size(); ++i)
-        delete Operations[i];
-}
-
-
-void SceneObject::display(double nTime, double /* SlideWidth */, double /* SlideHeight */, double DispWidth, double DispHeight )
+void SceneObject::display(double nTime, double /* SlideWidth */, double /* SlideHeight */, double DispWidth, double DispHeight ) const
 {
     for(unsigned int i(0); i < maPrimitives.size(); ++i) {
         // fixme: allow various model spaces, now we make it so that
@@ -281,7 +297,7 @@ Iris::Iris()
 {
 }
 
-void Iris::display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight )
+void Iris::display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) const
 {
     glBindTexture(GL_TEXTURE_2D, maTexture);
     SceneObject::display(nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
@@ -305,103 +321,194 @@ void Iris::finish()
     glDeleteTextures(1, &maTexture);
 }
 
-void OGLTransitionImpl::makeOutsideCubeFaceToLeft()
+namespace
 {
-    clear();
+
+class SimpleTransition : public OGLTransitionImpl
+{
+public:
+    SimpleTransition()
+        : OGLTransitionImpl()
+    {
+    }
+
+    SimpleTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
+        : OGLTransitionImpl(rScene, rSettings)
+    {
+    }
+};
+
+shared_ptr<OGLTransitionImpl>
+makeSimpleTransition()
+{
+    return make_shared<SimpleTransition>();
+}
+
+shared_ptr<OGLTransitionImpl>
+makeSimpleTransition(
+        const Primitives_t& rLeavingSlidePrimitives,
+        const Primitives_t& rEnteringSlidePrimitives,
+        const Operations_t& rOverallOperations,
+        const SceneObjects_t& rSceneObjects,
+        const TransitionSettings& rSettings = TransitionSettings())
+{
+    return make_shared<SimpleTransition>(
+            TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives, rOverallOperations, rSceneObjects),
+            rSettings)
+        ;
+}
+
+shared_ptr<OGLTransitionImpl>
+makeSimpleTransition(
+        const Primitives_t& rLeavingSlidePrimitives,
+        const Primitives_t& rEnteringSlidePrimitives,
+        const Operations_t& rOverallOperations,
+        const TransitionSettings& rSettings = TransitionSettings())
+{
+    return makeSimpleTransition(rLeavingSlidePrimitives, rEnteringSlidePrimitives, rOverallOperations, SceneObjects_t(), rSettings);
+}
+
+shared_ptr<OGLTransitionImpl>
+makeSimpleTransition(
+        const Primitives_t& rLeavingSlidePrimitives,
+        const Primitives_t& rEnteringSlidePrimitives,
+        const SceneObjects_t& rSceneObjects,
+        const TransitionSettings& rSettings = TransitionSettings())
+{
+    return makeSimpleTransition(rLeavingSlidePrimitives, rEnteringSlidePrimitives, Operations_t(), rSceneObjects, rSettings);
+}
+
+shared_ptr<OGLTransitionImpl>
+makeSimpleTransition(
+        const Primitives_t& rLeavingSlidePrimitives,
+        const Primitives_t& rEnteringSlidePrimitives,
+        const TransitionSettings& rSettings = TransitionSettings())
+{
+    return makeSimpleTransition(rLeavingSlidePrimitives, rEnteringSlidePrimitives, Operations_t(), SceneObjects_t(), rSettings);
+}
+
+}
+
+boost::shared_ptr<OGLTransitionImpl> makeOutsideCubeFaceToLeft()
+{
     Primitive Slide;
 
     Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
     Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
 
-    maLeavingSlidePrimitives.push_back(Slide);
+    Primitives_t aLeavingPrimitives;
+    aLeavingPrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,-1),90,false,0.0,1.0));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,-1),90,false,0.0,1.0));
 
-    maEnteringSlidePrimitives.push_back(Slide);
+    Primitives_t aEnteringPrimitives;
+    aEnteringPrimitives.push_back(Slide);
 
-    OverallOperations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,-1),-90,true,0.0,1.0));
+    Operations_t aOperations;
+    aOperations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,-1),-90,true,0.0,1.0));
+
+    return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations);
 }
 
-void OGLTransitionImpl::makeInsideCubeFaceToLeft()
+boost::shared_ptr<OGLTransitionImpl> makeInsideCubeFaceToLeft()
 {
-    clear();
     Primitive Slide;
 
     Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
     Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
 
-    maLeavingSlidePrimitives.push_back(Slide);
+    Primitives_t aLeavingPrimitives;
+    aLeavingPrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,1),-90,false,0.0,1.0));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,1),-90,false,0.0,1.0));
 
-    maEnteringSlidePrimitives.push_back(Slide);
+    Primitives_t aEnteringPrimitives;
+    aEnteringPrimitives.push_back(Slide);
 
-    OverallOperations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,1),90,true,0.0,1.0));
+    Operations_t aOperations;
+    aOperations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,1),90,true,0.0,1.0));
+
+    return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations);
 }
 
-void OGLTransitionImpl::makeFallLeaving()
+boost::shared_ptr<OGLTransitionImpl> makeFallLeaving()
 {
-    clear();
     Primitive Slide;
 
     Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
     Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
-    maEnteringSlidePrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(1,0,0),basegfx::B3DVector(0,-1,0), 90,true,0.0,1.0));
-    maLeavingSlidePrimitives.push_back(Slide);
+    Primitives_t aEnteringPrimitives;
+    aEnteringPrimitives.push_back(Slide);
 
-    mbUseMipMapEntering = false;
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(1,0,0),basegfx::B3DVector(0,-1,0), 90,true,0.0,1.0));
+    Primitives_t aLeavingPrimitives;
+    aLeavingPrimitives.push_back(Slide);
+
+    TransitionSettings aSettings;
+    aSettings.mbUseMipMapEntering = false;
+
+    return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aSettings);
 }
 
-void OGLTransitionImpl::makeTurnAround()
+boost::shared_ptr<OGLTransitionImpl> makeTurnAround()
 {
-    clear();
     Primitive Slide;
 
-    mbReflectSlides = true;
+    TransitionSettings aSettings;
+    aSettings.mbReflectSlides = true;
 
     Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
     Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
-    maLeavingSlidePrimitives.push_back(Slide);
+    Primitives_t aLeavingPrimitives;
+    aLeavingPrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0),-180,false,0.0,1.0));
-    maEnteringSlidePrimitives.push_back(Slide);
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0),-180,false,0.0,1.0));
+    Primitives_t aEnteringPrimitives;
+    aEnteringPrimitives.push_back(Slide);
 
-    OverallOperations.push_back(new STranslate(basegfx::B3DVector(0, 0, -1.5),true, 0, 0.5));
-    OverallOperations.push_back(new STranslate(basegfx::B3DVector(0, 0, 1.5), true, 0.5, 1));
-    OverallOperations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0, 1, 0),basegfx::B3DVector(0, 0, 0), -180, true, 0.0, 1.0));
+    Operations_t aOperations;
+    aOperations.push_back(makeSTranslate(basegfx::B3DVector(0, 0, -1.5),true, 0, 0.5));
+    aOperations.push_back(makeSTranslate(basegfx::B3DVector(0, 0, 1.5), true, 0.5, 1));
+    aOperations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0, 1, 0),basegfx::B3DVector(0, 0, 0), -180, true, 0.0, 1.0));
+
+    return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations, aSettings);
 }
 
-void OGLTransitionImpl::makeTurnDown()
+boost::shared_ptr<OGLTransitionImpl> makeTurnDown()
 {
-    clear();
     Primitive Slide;
 
     Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
     Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
-    maLeavingSlidePrimitives.push_back(Slide);
+    Primitives_t aLeavingPrimitives;
+    aLeavingPrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(new STranslate(basegfx::B3DVector(0, 0, 0.0001), false, -1.0, 0.0));
-    Slide.Operations.push_back(new SRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(-1, 1, 0), -90, true, 0.0, 1.0));
-    Slide.Operations.push_back(new SRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(-1, 1, 0), 90, false, -1.0, 0.0));
-    maEnteringSlidePrimitives.push_back(Slide);
+    Slide.Operations.push_back(makeSTranslate(basegfx::B3DVector(0, 0, 0.0001), false, -1.0, 0.0));
+    Slide.Operations.push_back(makeSRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(-1, 1, 0), -90, true, 0.0, 1.0));
+    Slide.Operations.push_back(makeSRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(-1, 1, 0), 90, false, -1.0, 0.0));
+    Primitives_t aEnteringPrimitives;
+    aEnteringPrimitives.push_back(Slide);
 
-    mbUseMipMapLeaving = false;
+    TransitionSettings aSettings;
+    aSettings.mbUseMipMapLeaving = false;
+
+    return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aSettings);
 }
 
-void OGLTransitionImpl::makeIris()
+boost::shared_ptr<OGLTransitionImpl> makeIris()
 {
-    clear();
     Primitive Slide;
 
     Slide.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0,1));
     Slide.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (0,1), basegfx::B2DVector (1,1));
-    maEnteringSlidePrimitives.push_back (Slide);
+    Primitives_t aEnteringPrimitives;
+    aEnteringPrimitives.push_back (Slide);
 
-    Slide.Operations.push_back (new STranslate (basegfx::B3DVector (0, 0,  0.000001), false, -1, 0));
-    Slide.Operations.push_back (new STranslate (basegfx::B3DVector (0, 0, -0.000002), false, 0.5, 1));
-    maLeavingSlidePrimitives.push_back (Slide);
+    Slide.Operations.push_back (makeSTranslate (basegfx::B3DVector (0, 0,  0.000001), false, -1, 0));
+    Slide.Operations.push_back (makeSTranslate (basegfx::B3DVector (0, 0, -0.000002), false, 0.5, 1));
+    Primitives_t aLeavingPrimitives;
+    aLeavingPrimitives.push_back (Slide);
 
 
     Primitive irisPart, part;
@@ -430,7 +537,7 @@ void OGLTransitionImpl::makeIris()
         t += 1.0/nSteps;
     }
 
-    Iris* pIris = new Iris();
+    shared_ptr<Iris> pIris = make_shared<Iris>();
     double angle = 87;
 
     for (i = 0; i < nParts; i++) {
@@ -439,46 +546,76 @@ void OGLTransitionImpl::makeIris()
 
         rx = cos ((2*M_PI*i)/nParts);
         ry = sin ((2*M_PI*i)/nParts);
-        irisPart.Operations.push_back (new SRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(rx, ry, 0),  angle, true, 0.0, 0.5));
-        irisPart.Operations.push_back (new SRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(rx, ry, 0), -angle, true, 0.5, 1));
+        irisPart.Operations.push_back (makeSRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(rx, ry, 0),  angle, true, 0.0, 0.5));
+        irisPart.Operations.push_back (makeSRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(rx, ry, 0), -angle, true, 0.5, 1));
         if (i > 0) {
-            irisPart.Operations.push_back (new STranslate (basegfx::B3DVector(rx, ry, 0),  false, -1, 0));
-            irisPart.Operations.push_back (new SRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(0, 0, 0), i*360.0/nParts, false, -1, 0));
-            irisPart.Operations.push_back (new STranslate (basegfx::B3DVector(-1, 0, 0),  false, -1, 0));
+            irisPart.Operations.push_back (makeSTranslate (basegfx::B3DVector(rx, ry, 0),  false, -1, 0));
+            irisPart.Operations.push_back (makeSRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(0, 0, 0), i*360.0/nParts, false, -1, 0));
+            irisPart.Operations.push_back (makeSTranslate (basegfx::B3DVector(-1, 0, 0),  false, -1, 0));
         }
-        irisPart.Operations.push_back(new STranslate(basegfx::B3DVector(0, 0, 1), false, -2, 0.0));
-        irisPart.Operations.push_back (new SRotate (basegfx::B3DVector(1, .5, 0), basegfx::B3DVector(1, 0, 0), -30, false, -1, 0));
+        irisPart.Operations.push_back(makeSTranslate(basegfx::B3DVector(0, 0, 1), false, -2, 0.0));
+        irisPart.Operations.push_back (makeSRotate (basegfx::B3DVector(1, .5, 0), basegfx::B3DVector(1, 0, 0), -30, false, -1, 0));
         pIris->pushPrimitive (irisPart);
     }
 
-    maSceneObjects.push_back (pIris);
+    SceneObjects_t aSceneObjects;
+    aSceneObjects.push_back (pIris);
 
-    mbUseMipMapLeaving = mbUseMipMapEntering = false;
+    TransitionSettings aSettings;
+    aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
+
+    return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aSceneObjects, aSettings);
 }
 
-void OGLTransitionImpl::displaySlidesRochade( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex,
-                          double SlideWidthScale, double SlideHeightScale )
+namespace
+{
+
+class RochadeTransition : public OGLTransitionImpl
+{
+public:
+    RochadeTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
+        : OGLTransitionImpl(rScene, rSettings)
+    {}
+
+private:
+    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+};
+
+void RochadeTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
 {
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
     glEnable(GL_TEXTURE_2D);
 
     if( nTime > .5) {
-        displaySlide( nTime, glLeavingSlideTex, maLeavingSlidePrimitives, SlideWidthScale, SlideHeightScale );
-        displaySlide( nTime, glEnteringSlideTex, maEnteringSlidePrimitives, SlideWidthScale, SlideHeightScale );
+        displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
+        displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
     } else {
-        displaySlide( nTime, glEnteringSlideTex, maEnteringSlidePrimitives, SlideWidthScale, SlideHeightScale );
-        displaySlide( nTime, glLeavingSlideTex, maLeavingSlidePrimitives, SlideWidthScale, SlideHeightScale );
+        displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
+        displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
     }
 }
 
-void OGLTransitionImpl::makeRochade()
+shared_ptr<OGLTransitionImpl>
+makeRochadeTransition(
+        const Primitives_t& rLeavingSlidePrimitives,
+        const Primitives_t& rEnteringSlidePrimitives,
+        const TransitionSettings& rSettings)
 {
-    clear();
+    return make_shared<RochadeTransition>(
+            TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+            rSettings)
+        ;
+
+}
+}
+
+boost::shared_ptr<OGLTransitionImpl> makeRochade()
+{
     Primitive Slide;
 
-    mbReflectSlides = true;
-    mmDisplaySlides = &OGLTransitionImpl::displaySlidesRochade;
+    TransitionSettings aSettings;
+    aSettings.mbReflectSlides = true;
 
     double w, h;
 
@@ -488,17 +625,20 @@ void OGLTransitionImpl::makeRochade()
     Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
     Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
 
-    Slide.Operations.push_back(new SEllipseTranslate(w, h, 0.25, -0.25, true, 0, 1));
-    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0), -45, true, 0, 1));
-    maLeavingSlidePrimitives.push_back(Slide);
+    Slide.Operations.push_back(makeSEllipseTranslate(w, h, 0.25, -0.25, true, 0, 1));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0), -45, true, 0, 1));
+    Primitives_t aLeavingSlide;
+    aLeavingSlide.push_back(Slide);
 
     Slide.Operations.clear();
-    Slide.Operations.push_back(new SEllipseTranslate(w, h, 0.75, 0.25, true, 0, 1));
-    Slide.Operations.push_back(new STranslate(basegfx::B3DVector(0, 0, -h), false, -1, 0));
-    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0), -45, true, 0, 1));
-    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0), 45, false, -1, 0));
-    maEnteringSlidePrimitives.push_back(Slide);
+    Slide.Operations.push_back(makeSEllipseTranslate(w, h, 0.75, 0.25, true, 0, 1));
+    Slide.Operations.push_back(makeSTranslate(basegfx::B3DVector(0, 0, -h), false, -1, 0));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0), -45, true, 0, 1));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0), 45, false, -1, 0));
+    Primitives_t aEnteringSlide;
+    aEnteringSlide.push_back(Slide);
 
+    return makeRochadeTransition(aLeavingSlide, aEnteringSlide, aSettings);
 }
 
 // TODO(Q3): extract to basegfx
@@ -528,14 +668,13 @@ inline basegfx::B3DVector randNormVectorInXYPlane()
     return toReturn/toReturn.getLength();
 }
 
-void OGLTransitionImpl::makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt16 nPointsOnCircles )
+boost::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt16 nPointsOnCircles )
 {
-    clear();
     double dAngle(2*3.1415926/static_cast<double>( nPointsOnCircles ));
     if(nCircles < 2 || nPointsOnCircles < 4)
     {
         makeNByMTileFlip(1,1);
-        return;
+        return makeSimpleTransition();
     }
     double Radius(1.0/static_cast<double>( nCircles ));
     double dRadius(Radius);
@@ -556,6 +695,8 @@ void OGLTransitionImpl::makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt
         TempAngle += dAngle;
     }
 
+    Primitives_t aLeavingSlide;
+    Primitives_t aEnteringSlide;
     {
         Primitive EnteringSlide;
         Primitive LeavingSlide;
@@ -568,12 +709,12 @@ void OGLTransitionImpl::makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt
         LeavingSlide.pushTriangle( basegfx::B2DVector(0.5,0.5) , Radius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) , Radius*unScaledTexCoords[nPointsOnCircles - 1]/2.0 + basegfx::B2DVector(0.5,0.5) );
 
         basegfx::B3DVector axis(randNormVectorInXYPlane());
-        EnteringSlide.Operations.push_back( new SRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
-        LeavingSlide.Operations.push_back( new SRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
-        EnteringSlide.Operations.push_back( new SRotate( axis , basegfx::B3DVector(0,0,0) , -180, false,0.0,1.0) );
+        EnteringSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
+        LeavingSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
+        EnteringSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , -180, false,0.0,1.0) );
 
-        maEnteringSlidePrimitives.push_back(EnteringSlide);
-        maLeavingSlidePrimitives.push_back(LeavingSlide);
+        aEnteringSlide.push_back(EnteringSlide);
+        aLeavingSlide.push_back(LeavingSlide);
         LastRadius = Radius;
         Radius = NextRadius;
         NextRadius += dRadius;
@@ -599,12 +740,12 @@ void OGLTransitionImpl::makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt
         LeavingSlide.pushTriangle(Radius*unScaledTexCoords[nPointsOnCircles - 1]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) , Radius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) );
 
         basegfx::B3DVector axis(randNormVectorInXYPlane());
-        EnteringSlide.Operations.push_back( new SRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
-        LeavingSlide.Operations.push_back( new SRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
-        EnteringSlide.Operations.push_back( new SRotate( axis , basegfx::B3DVector(0,0,0) , -180, false,0.0,1.0) );
+        EnteringSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
+        LeavingSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
+        EnteringSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , -180, false,0.0,1.0) );
 
-        maEnteringSlidePrimitives.push_back(EnteringSlide);
-        maLeavingSlidePrimitives.push_back(LeavingSlide);
+        aEnteringSlide.push_back(EnteringSlide);
+        aLeavingSlide.push_back(LeavingSlide);
 
         LastRadius = Radius;
         Radius = NextRadius;
@@ -631,21 +772,24 @@ void OGLTransitionImpl::makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt
         LeavingSlide.pushTriangle(clamp(Radius*unScaledTexCoords[nPointsOnCircles - 1])/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) , clamp(Radius*unScaledTexCoords[0])/2.0 + basegfx::B2DVector(0.5,0.5) );
 
         basegfx::B3DVector axis(randNormVectorInXYPlane());
-        EnteringSlide.Operations.push_back( new SRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, (LastRadius + dRadius)/2.0 , 1.0 ) );
-        LeavingSlide.Operations.push_back( new SRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, (LastRadius + dRadius)/2.0 , 1.0 ) );
-        EnteringSlide.Operations.push_back( new SRotate( axis , basegfx::B3DVector(0,0,0) , -180, false,0.0,1.0) );
+        EnteringSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, (LastRadius + dRadius)/2.0 , 1.0 ) );
+        LeavingSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, (LastRadius + dRadius)/2.0 , 1.0 ) );
+        EnteringSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , -180, false,0.0,1.0) );
 
-        maEnteringSlidePrimitives.push_back(EnteringSlide);
-        maLeavingSlidePrimitives.push_back(LeavingSlide);
+        aEnteringSlide.push_back(EnteringSlide);
+        aLeavingSlide.push_back(LeavingSlide);
     }
+
+    return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
 }
 
-void OGLTransitionImpl::makeHelix( ::sal_uInt16 nRows )
+boost::shared_ptr<OGLTransitionImpl> makeHelix( ::sal_uInt16 nRows )
 {
-    clear();
     double invN(1.0/static_cast<double>(nRows));
     double iDn = 0.0;
     double iPDn = invN;
+    Primitives_t aLeavingSlide;
+    Primitives_t aEnteringSlide;
     for(unsigned int i(0); i < nRows; ++i)
     {
         Primitive Tile;
@@ -654,28 +798,31 @@ void OGLTransitionImpl::makeHelix( ::sal_uInt16 nRows )
 
         Tile.pushTriangle(basegfx::B2DVector( 1.0 , iPDn ) , basegfx::B2DVector( 1.0 , iDn ) , basegfx::B2DVector( 0.0 , iPDn ));
 
-        Tile.Operations.push_back( new SRotate( basegfx::B3DVector( 0 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0 , 180 ,
+        Tile.Operations.push_back( makeSRotate( basegfx::B3DVector( 0 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0 , 180 ,
                                                 true,min(max(static_cast<double>(i - nRows/2.0)*invN/2.0,0.0),1.0),
                                                 min(max(static_cast<double>(i + nRows/2.0)*invN/2.0,0.0),1.0) ) );
 
-        maLeavingSlidePrimitives.push_back(Tile);
+        aLeavingSlide.push_back(Tile);
 
-        Tile.Operations.push_back( new SRotate( basegfx::B3DVector( 0 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0 , -180 , false,0.0,1.0) );
+        Tile.Operations.push_back( makeSRotate( basegfx::B3DVector( 0 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0 , -180 , false,0.0,1.0) );
 
-        maEnteringSlidePrimitives.push_back(Tile);
+        aEnteringSlide.push_back(Tile);
 
         iDn += invN;
         iPDn += invN;
     }
+
+    return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
 }
 
-void OGLTransitionImpl::makeNByMTileFlip( ::sal_uInt16 n, ::sal_uInt16 m )
+boost::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( ::sal_uInt16 n, ::sal_uInt16 m )
 {
-    clear();
     double invN(1.0/static_cast<double>(n));
     double invM(1.0/static_cast<double>(m));
     double iDn = 0.0;
     double iPDn = invN;
+    Primitives_t aLeavingSlide;
+    Primitives_t aEnteringSlide;
     for(unsigned int i(0); i < n; ++i)
     {
         double jDm = 0.0;
@@ -688,11 +835,11 @@ void OGLTransitionImpl::makeNByMTileFlip( ::sal_uInt16 n, ::sal_uInt16 m )
 
             Tile.pushTriangle(basegfx::B2DVector( iPDn , jPDm ) , basegfx::B2DVector( iPDn , jDm ) , basegfx::B2DVector( iDn , jPDm ));//bottom left corner of tile
 
-            Tile.Operations.push_back( new SRotate( basegfx::B3DVector( 1 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0 , 180 , true, iDn*jDm/2.0 , ((iPDn*jPDm)+1.0)/2.0 ) );
-            maLeavingSlidePrimitives.push_back(Tile);
-            Tile.Operations.push_back( new SRotate( basegfx::B3DVector( 1 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0 , -180, false, iDn*jDm/2.0 , ((iPDn*jPDm)+1.0)/2.0 ) );
+            Tile.Operations.push_back( makeSRotate( basegfx::B3DVector( 1 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0 , 180 , true, iDn*jDm/2.0 , ((iPDn*jPDm)+1.0)/2.0 ) );
+            aLeavingSlide.push_back(Tile);
+            Tile.Operations.push_back( makeSRotate( basegfx::B3DVector( 1 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0 , -180, false, iDn*jDm/2.0 , ((iPDn*jPDm)+1.0)/2.0 ) );
 
-            maEnteringSlidePrimitives.push_back(Tile);
+            aEnteringSlide.push_back(Tile);
 
             jDm += invM;
             jPDm += invM;
@@ -700,6 +847,8 @@ void OGLTransitionImpl::makeNByMTileFlip( ::sal_uInt16 n, ::sal_uInt16 m )
         iDn += invN;
         iPDn += invN;
     }
+
+    return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
 }
 
 SRotate::SRotate(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle, bool bInter, double T0, double T1):axis(Axis),origin(Origin),angle(Angle)
@@ -738,12 +887,48 @@ STranslate::STranslate(const basegfx::B3DVector& Vector, bool bInter, double T0,
     bInterpolate = bInter;
 }
 
+boost::shared_ptr<SRotate>
+makeSRotate(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1)
+{
+    return make_shared<SRotate>(Axis, Origin, Angle, bInter, T0, T1);
+}
+
+boost::shared_ptr<SScale>
+makeSScale(const basegfx::B3DVector& Scale, const basegfx::B3DVector& Origin,bool bInter, double T0, double T1)
+{
+    return make_shared<SScale>(Scale, Origin, bInter, T0, T1);
+}
+
+boost::shared_ptr<STranslate>
+makeSTranslate(const basegfx::B3DVector& Vector,bool bInter, double T0, double T1)
+{
+    return make_shared<STranslate>(Vector, bInter, T0, T1);
+}
+
+boost::shared_ptr<SEllipseTranslate>
+makeSEllipseTranslate(double dWidth, double dHeight, double dStartPosition, double dEndPosition, bool bInter, double T0, double T1)
+{
+    return make_shared<SEllipseTranslate>(dWidth, dHeight, dStartPosition, dEndPosition, bInter, T0, T1);
+}
+
+boost::shared_ptr<RotateAndScaleDepthByWidth>
+makeRotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1)
+{
+    return make_shared<RotateAndScaleDepthByWidth>(Axis, Origin, Angle, bInter, T0, T1);
+}
+
+boost::shared_ptr<RotateAndScaleDepthByHeight>
+makeRotateAndScaleDepthByHeight(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1)
+{
+    return make_shared<RotateAndScaleDepthByHeight>(Axis, Origin, Angle, bInter, T0, T1);
+}
+
 inline double intervalInter(double t, double T0, double T1)
 {
     return ( t - T0 ) / ( T1 - T0 );
 }
 
-void STranslate::interpolate(double t,double SlideWidthScale,double SlideHeightScale)
+void STranslate::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
     if(t <= nT0)
         return;
@@ -753,7 +938,7 @@ void STranslate::interpolate(double t,double SlideWidthScale,double SlideHeightS
     glTranslated(SlideWidthScale*t*vector.getX(),SlideHeightScale*t*vector.getY(),t*vector.getZ());
 }
 
-void SRotate::interpolate(double t,double SlideWidthScale,double SlideHeightScale)
+void SRotate::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
     if(t <= nT0)
         return;
@@ -767,7 +952,7 @@ void SRotate::interpolate(double t,double SlideWidthScale,double SlideHeightScal
     glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-origin.getZ());
 }
 
-void SScale::interpolate(double t,double SlideWidthScale,double SlideHeightScale)
+void SScale::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
     if(t <= nT0)
         return;
@@ -779,7 +964,7 @@ void SScale::interpolate(double t,double SlideWidthScale,double SlideHeightScale
     glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-origin.getZ());
 }
 
-void RotateAndScaleDepthByWidth::interpolate(double t,double SlideWidthScale,double SlideHeightScale)
+void RotateAndScaleDepthByWidth::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
     if(t <= nT0)
         return;
@@ -791,7 +976,7 @@ void RotateAndScaleDepthByWidth::interpolate(double t,double SlideWidthScale,dou
     glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-SlideWidthScale*origin.getZ());
 }
 
-void RotateAndScaleDepthByHeight::interpolate(double t,double SlideWidthScale,double SlideHeightScale)
+void RotateAndScaleDepthByHeight::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
     if(t <= nT0)
         return;
@@ -814,7 +999,7 @@ SEllipseTranslate::SEllipseTranslate(double dWidth, double dHeight, double dStar
     endPosition = dEndPosition;
 }
 
-void SEllipseTranslate::interpolate(double t,double /* SlideWidthScale */,double /* SlideHeightScale */)
+void SEllipseTranslate::interpolate(double t,double /* SlideWidthScale */,double /* SlideHeightScale */) const
 {
     if(t <= nT0)
         return;
@@ -831,58 +1016,29 @@ void SEllipseTranslate::interpolate(double t,double /* SlideWidthScale */,double
     glTranslated(x, 0, y);
 }
 
-STranslate* STranslate::clone()
-{
-    return new STranslate(*this);
-}
-SRotate* SRotate::clone()
-{
-    return new SRotate(*this);
-}
-
-SScale* SScale::clone()
-{
-    return new SScale(*this);
-}
-
-SEllipseTranslate* SEllipseTranslate::clone()
-{
-    return new SEllipseTranslate(*this);
-}
-
-RotateAndScaleDepthByWidth* RotateAndScaleDepthByWidth::clone()
-{
-    return new RotateAndScaleDepthByWidth(*this);
-}
-
-RotateAndScaleDepthByHeight* RotateAndScaleDepthByHeight::clone()
-{
-    return new RotateAndScaleDepthByHeight(*this);
-}
-
 const Primitive& Primitive::operator=(const Primitive& rvalue)
 {
-    for(unsigned int i( 0 ); i < rvalue.Operations.size(); ++i)
-        Operations.push_back(rvalue.Operations[i]->clone());
-    for(unsigned int i( 0 ); i < rvalue.Vertices.size(); ++i)//SPEED! use copy or something. this is slow.
-        Vertices.push_back(rvalue.Vertices[i]);
-    for(unsigned int i( 0 ); i < rvalue.TexCoords.size(); ++i)//SPEED! use copy or something. this is slow.
-        TexCoords.push_back(rvalue.TexCoords[i]);
-    for(unsigned int i( 0 ); i < rvalue.Normals.size(); ++i)//SPEED! use copy or something. this is slow.
-        Normals.push_back(rvalue.Normals[i]);
+    Primitive aTmp(rvalue);
+    swap(aTmp);
     return *this;
 }
 
 Primitive::Primitive(const Primitive& rvalue)
+    : Operations(rvalue.Operations)
+    , Vertices(rvalue.Vertices)
+    , Normals(rvalue.Normals)
+    , TexCoords(rvalue.TexCoords)
 {
-    for(unsigned int i( 0 ); i < rvalue.Operations.size(); ++i)
-        Operations.push_back(rvalue.Operations[i]->clone());
-    for(unsigned int i( 0 ); i < rvalue.Vertices.size(); ++i)//SPEED! use copy or something. this is slow.
-        Vertices.push_back(rvalue.Vertices[i]);
-    for(unsigned int i( 0 ); i < rvalue.TexCoords.size(); ++i)//SPEED! use copy or something. this is slow.
-        TexCoords.push_back(rvalue.TexCoords[i]);
-    for(unsigned int i( 0 ); i < rvalue.Normals.size(); ++i)//SPEED! use copy or something. this is slow.
-        Normals.push_back(rvalue.Normals[i]);
+}
+
+void Primitive::swap(Primitive& rOther)
+{
+    using std::swap;
+
+    swap(Operations, rOther.Operations);
+    swap(Vertices, rOther.Vertices);
+    swap(Normals, rOther.Normals);
+    swap(TexCoords, rOther.TexCoords);
 }
 
 void Primitive::pushTriangle(const basegfx::B2DVector& SlideLocation0,const basegfx::B2DVector& SlideLocation1,const basegfx::B2DVector& SlideLocation2)
@@ -928,20 +1084,29 @@ void Primitive::pushTriangle(const basegfx::B2DVector& SlideLocation0,const base
     Normals.push_back(basegfx::B3DVector(0,0,1));//all normals always face the screen when untransformed.
 }
 
-void OGLTransitionImpl::makeDiamond()
+namespace
 {
-    mmPrepare = &OGLTransitionImpl::prepareDiamond;
-    mbUseMipMapLeaving = mbUseMipMapEntering = false;
-}
 
-void OGLTransitionImpl::prepareDiamond( double nTime, double /* SlideWidth */, double /* SlideHeight */, double /* DispWidth */, double /* DispHeight */ )
+class DiamondTransition : public OGLTransitionImpl
+{
+public:
+    DiamondTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
+        : OGLTransitionImpl(rScene, rSettings)
+        {}
+
+private:
+    virtual void prepare_( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
+    // mmPrepare = &OGLTransitionImpl::prepareDiamond;
+};
+
+void DiamondTransition::prepare_( double nTime, double /* SlideWidth */, double /* SlideHeight */, double /* DispWidth */, double /* DispHeight */ )
 {
     Primitive Slide1, Slide2;
 
     Slide1.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0,1));
     Slide1.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (0,1), basegfx::B2DVector (1,1));
-    maEnteringSlidePrimitives.push_back (Slide1);
-
+    Primitives_t aEnteringSlidePrimitives;
+    aEnteringSlidePrimitives.push_back (Slide1);
 
     if( nTime >= 0.5 ) {
         double m = 1 - nTime;
@@ -963,56 +1128,93 @@ void OGLTransitionImpl::prepareDiamond( double nTime, double /* SlideWidth */, d
         Slide2.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (l,0.5), basegfx::B2DVector (0,1));
         Slide2.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (0.5,l), basegfx::B2DVector (l,0.5));
     }
-    Slide2.Operations.push_back (new STranslate (basegfx::B3DVector (0, 0, 0.00000001), false, -1, 0));
-    maLeavingSlidePrimitives.push_back (Slide2);
+    Slide2.Operations.push_back (makeSTranslate (basegfx::B3DVector (0, 0, 0.00000001), false, -1, 0));
+    Primitives_t aLeavingSlidePrimitives;
+    aLeavingSlidePrimitives.push_back (Slide2);
+
+    setScene(TransitionScene(aLeavingSlidePrimitives, aEnteringSlidePrimitives));
 }
 
-void OGLTransitionImpl::makeVenetianBlinds( bool vertical, int parts )
+shared_ptr<OGLTransitionImpl>
+makeDiamondTransition(const TransitionSettings& rSettings)
+{
+    return make_shared<DiamondTransition>(TransitionScene(), rSettings);
+}
+
+}
+
+boost::shared_ptr<OGLTransitionImpl> makeDiamond()
+{
+    TransitionSettings aSettings;
+    aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
+
+    return makeDiamondTransition(aSettings);
+}
+
+boost::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts )
 {
     static double t30 = tan( M_PI/6.0 );
     double n, ln = 0;
     double p = 1.0/parts;
 
+    Primitives_t aLeavingSlide;
+    Primitives_t aEnteringSlide;
     for( int i=0; i<parts; i++ ) {
         Primitive Slide;
         n = (i + 1)/(double)parts;
         if( vertical ) {
             Slide.pushTriangle (basegfx::B2DVector (ln,0), basegfx::B2DVector (n,0), basegfx::B2DVector (ln,1));
             Slide.pushTriangle (basegfx::B2DVector (n,0), basegfx::B2DVector (ln,1), basegfx::B2DVector (n,1));
-            Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0, 1, 0), basegfx::B3DVector(n + ln - 1, 0, -t30*p), -120, true, 0.0, 1.0));
+            Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0, 1, 0), basegfx::B3DVector(n + ln - 1, 0, -t30*p), -120, true, 0.0, 1.0));
         } else {
             Slide.pushTriangle (basegfx::B2DVector (0,ln), basegfx::B2DVector (1,ln), basegfx::B2DVector (0,n));
             Slide.pushTriangle (basegfx::B2DVector (1,ln), basegfx::B2DVector (0,n), basegfx::B2DVector (1,n));
-            Slide.Operations.push_back(new RotateAndScaleDepthByHeight(basegfx::B3DVector(1, 0, 0), basegfx::B3DVector(0, 1 - n - ln, -t30*p), -120, true, 0.0, 1.0));
+            Slide.Operations.push_back(makeRotateAndScaleDepthByHeight(basegfx::B3DVector(1, 0, 0), basegfx::B3DVector(0, 1 - n - ln, -t30*p), -120, true, 0.0, 1.0));
         }
-        maLeavingSlidePrimitives.push_back (Slide);
+        aLeavingSlide.push_back (Slide);
 
         if( vertical ) {
-            Slide.Operations.push_back(new SRotate(basegfx::B3DVector(0, 1, 0), basegfx::B3DVector(2*n - 1, 0, 0), -60, false, -1, 0));
-            Slide.Operations.push_back(new SRotate(basegfx::B3DVector(0, 1, 0), basegfx::B3DVector(n + ln - 1, 0, 0), 180, false, -1, 0));
+            Slide.Operations.push_back(makeSRotate(basegfx::B3DVector(0, 1, 0), basegfx::B3DVector(2*n - 1, 0, 0), -60, false, -1, 0));
+            Slide.Operations.push_back(makeSRotate(basegfx::B3DVector(0, 1, 0), basegfx::B3DVector(n + ln - 1, 0, 0), 180, false, -1, 0));
         } else {
-            Slide.Operations.push_back(new SRotate(basegfx::B3DVector(1, 0, 0), basegfx::B3DVector(0, 1 - 2*n, 0), -60, false, -1, 0));
-            Slide.Operations.push_back(new SRotate(basegfx::B3DVector(1, 0, 0), basegfx::B3DVector(0, 1 - n - ln, 0), 180, false, -1, 0));
+            Slide.Operations.push_back(makeSRotate(basegfx::B3DVector(1, 0, 0), basegfx::B3DVector(0, 1 - 2*n, 0), -60, false, -1, 0));
+            Slide.Operations.push_back(makeSRotate(basegfx::B3DVector(1, 0, 0), basegfx::B3DVector(0, 1 - n - ln, 0), 180, false, -1, 0));
         }
-        maEnteringSlidePrimitives.push_back (Slide);
+        aEnteringSlide.push_back (Slide);
         ln = n;
     }
+
+    return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
 }
 
-void OGLTransitionImpl::displaySlidesFadeSmoothly( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
+namespace
+{
+
+class FadeSmoothlyTransition : public OGLTransitionImpl
+{
+public:
+    FadeSmoothlyTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
+        : OGLTransitionImpl(rScene, rSettings)
+    {}
+
+private:
+    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+};
+
+void FadeSmoothlyTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
 {
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
     glDisable(GL_DEPTH_TEST);
 
-    displaySlide( nTime, glLeavingSlideTex, maLeavingSlidePrimitives, SlideWidthScale, SlideHeightScale );
+    displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
 
     glDisable(GL_LIGHTING);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     glColor4f( 1, 1, 1, nTime );
-    displaySlide( nTime, glEnteringSlideTex, maEnteringSlidePrimitives, SlideWidthScale, SlideHeightScale );
+    displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
     glDisable(GL_BLEND);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     glEnable(GL_LIGHTING);
@@ -1020,20 +1222,52 @@ void OGLTransitionImpl::displaySlidesFadeSmoothly( double nTime, ::sal_Int32 glL
     glEnable(GL_DEPTH_TEST);
 }
 
-void OGLTransitionImpl::makeFadeSmoothly()
+shared_ptr<OGLTransitionImpl>
+makeFadeSmoothlyTransition(
+        const Primitives_t& rLeavingSlidePrimitives,
+        const Primitives_t& rEnteringSlidePrimitives,
+        const TransitionSettings& rSettings)
+{
+    return make_shared<FadeSmoothlyTransition>(
+            TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+            rSettings)
+        ;
+}
+
+}
+
+boost::shared_ptr<OGLTransitionImpl> makeFadeSmoothly()
 {
     Primitive Slide;
 
     Slide.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0,1));
     Slide.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (0,1), basegfx::B2DVector (1,1));
-    maLeavingSlidePrimitives.push_back (Slide);
-    maEnteringSlidePrimitives.push_back (Slide);
+    Primitives_t aLeavingSlide;
+    aLeavingSlide.push_back (Slide);
+    Primitives_t aEnteringSlide;
+    aEnteringSlide.push_back (Slide);
 
-    mmDisplaySlides = &OGLTransitionImpl::displaySlidesFadeSmoothly;
-    mbUseMipMapLeaving = mbUseMipMapEntering = false;
+    TransitionSettings aSettings;
+    aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
+
+    return makeFadeSmoothlyTransition(aLeavingSlide, aEnteringSlide, aSettings);
 }
 
-void OGLTransitionImpl::displaySlidesFadeThroughBlack( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
+namespace
+{
+
+class FadeThroughBlackTransition : public OGLTransitionImpl
+{
+public:
+    FadeThroughBlackTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
+        : OGLTransitionImpl(rScene, rSettings)
+    {}
+
+private:
+    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+};
+
+void FadeThroughBlackTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
 {
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
@@ -1045,10 +1279,10 @@ void OGLTransitionImpl::displaySlidesFadeThroughBlack( double nTime, ::sal_Int32
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     if( nTime < 0.5 ) {
         glColor4f( 1, 1, 1, 1 - nTime*2 );
-        displaySlide( nTime, glLeavingSlideTex, maLeavingSlidePrimitives, SlideWidthScale, SlideHeightScale );
+        displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
     } else {
         glColor4f( 1, 1, 1, (nTime - 0.5)*2 );
-        displaySlide( nTime, glEnteringSlideTex, maEnteringSlidePrimitives, SlideWidthScale, SlideHeightScale );
+        displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
     }
     glDisable(GL_BLEND);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
@@ -1057,17 +1291,35 @@ void OGLTransitionImpl::displaySlidesFadeThroughBlack( double nTime, ::sal_Int32
     glEnable(GL_DEPTH_TEST);
 }
 
-void OGLTransitionImpl::makeFadeThroughBlack()
+shared_ptr<OGLTransitionImpl>
+makeFadeThroughBlackTransition(
+        const Primitives_t& rLeavingSlidePrimitives,
+        const Primitives_t& rEnteringSlidePrimitives,
+        const TransitionSettings& rSettings)
+{
+    return make_shared<FadeThroughBlackTransition>(
+            TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+            rSettings)
+        ;
+}
+
+}
+
+boost::shared_ptr<OGLTransitionImpl> makeFadeThroughBlack()
 {
     Primitive Slide;
 
     Slide.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0,1));
     Slide.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (0,1), basegfx::B2DVector (1,1));
-    maLeavingSlidePrimitives.push_back (Slide);
-    maEnteringSlidePrimitives.push_back (Slide);
+    Primitives_t aLeavingSlide;
+    aLeavingSlide.push_back (Slide);
+    Primitives_t aEnteringSlide;
+    aEnteringSlide.push_back (Slide);
 
-    mmDisplaySlides = &OGLTransitionImpl::displaySlidesFadeThroughBlack;
-    mbUseMipMapLeaving = mbUseMipMapEntering = false;
+    TransitionSettings aSettings;
+    aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
+
+    return makeFadeThroughBlackTransition(aLeavingSlide, aEnteringSlide, aSettings);
 }
 
 static const char* basicVertexShader = "\n\
@@ -1138,6 +1390,73 @@ void main() {\n\
 }\n\
 ";
 
+namespace
+{
+
+class ShaderTransition : public OGLTransitionImpl
+{
+protected:
+    ShaderTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
+        : OGLTransitionImpl(rScene, rSettings)
+        , m_nProgramObject(0)
+        , m_nHelperTexture(0)
+    {}
+
+private:
+    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+    virtual void prepareTransition_( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
+    virtual void finishTransition_();
+    virtual GLuint makeShader_() = 0;
+
+    void impl_preparePermShader();
+
+private:
+    /** GLSL program object
+     */
+    GLuint m_nProgramObject;
+
+    /** various data */
+    GLuint m_nHelperTexture;
+};
+
+void ShaderTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex,
+                                              double SlideWidthScale, double SlideHeightScale )
+{
+    applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
+
+#ifdef GL_VERSION_2_0
+    if( m_nProgramObject ) {
+        GLint location = OGLShaders::glGetUniformLocation( m_nProgramObject, "time" );
+        if( location != -1 ) {
+            OGLShaders::glUniform1f( location, nTime );
+        }
+    }
+
+    glActiveTexture( GL_TEXTURE2 );
+    glBindTexture( GL_TEXTURE_2D, glEnteringSlideTex );
+    glActiveTexture( GL_TEXTURE0 );
+#endif
+
+    displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
+}
+
+void ShaderTransition::prepareTransition_( ::sal_Int32 /* glLeavingSlideTex */, ::sal_Int32 /* glEnteringSlideTex */ )
+{
+    m_nProgramObject = makeShader_();
+
+    impl_preparePermShader();
+}
+
+void ShaderTransition::finishTransition_()
+{
+#ifdef GL_VERSION_2_0
+    if( m_nProgramObject ) {
+        OGLShaders::glDeleteProgram( m_nProgramObject );
+        m_nProgramObject = 0;
+    }
+#endif
+}
+
 int permutation256 [256]= {
 215, 100, 200, 204, 233,  50,  85, 196,
  71, 141, 122, 160,  93, 131, 243, 234,
@@ -1195,28 +1514,28 @@ void initPermTexture(GLuint *texID)
   glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
 }
 
-void OGLTransitionImpl::preparePermShader()
+void ShaderTransition::impl_preparePermShader()
 {
 #ifdef GL_VERSION_2_0
-    if( mProgramObject ) {
-        OGLShaders::glUseProgram( mProgramObject );
+    if( m_nProgramObject ) {
+        OGLShaders::glUseProgram( m_nProgramObject );
 
-        GLint location = OGLShaders::glGetUniformLocation( mProgramObject, "leavingSlideTexture" );
+        GLint location = OGLShaders::glGetUniformLocation( m_nProgramObject, "leavingSlideTexture" );
         if( location != -1 ) {
             OGLShaders::glUniform1i( location, 0 );  // texture unit 0
         }
 
         glActiveTexture(GL_TEXTURE1);
-        if( !maHelperTexture )
-            initPermTexture( &maHelperTexture );
+        if( !m_nHelperTexture )
+            initPermTexture( &m_nHelperTexture );
         glActiveTexture(GL_TEXTURE0);
 
-        location = OGLShaders::glGetUniformLocation( mProgramObject, "permTexture" );
+        location = OGLShaders::glGetUniformLocation( m_nProgramObject, "permTexture" );
         if( location != -1 ) {
             OGLShaders::glUniform1i( location, 1 );  // texture unit 1
         }
 
-        location = OGLShaders::glGetUniformLocation( mProgramObject, "enteringSlideTexture" );
+        location = OGLShaders::glGetUniformLocation( m_nProgramObject, "enteringSlideTexture" );
         if( location != -1 ) {
             OGLShaders::glUniform1i( location, 2 );  // texture unit 2
         }
@@ -1224,93 +1543,151 @@ void OGLTransitionImpl::preparePermShader()
 #endif
 }
 
-void OGLTransitionImpl::prepareStatic( ::sal_Int32 /* glLeavingSlideTex */, ::sal_Int32 /* glEnteringSlideTex */ )
-{
-    mProgramObject = OGLShaders::LinkProgram( basicVertexShader, staticFragmentShader );
-
-    preparePermShader();
 }
 
-void OGLTransitionImpl::displaySlidesShaders( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex,
-                                              double SlideWidthScale, double SlideHeightScale )
+namespace
 {
-    applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
-#ifdef GL_VERSION_2_0
-    if( mProgramObject ) {
-        GLint location = OGLShaders::glGetUniformLocation( mProgramObject, "time" );
-        if( location != -1 ) {
-            OGLShaders::glUniform1f( location, nTime );
-        }
-    }
+class StaticNoiseTransition : public ShaderTransition
+{
+public:
+    StaticNoiseTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
+        : ShaderTransition(rScene, rSettings)
+    {}
 
-    glActiveTexture( GL_TEXTURE2 );
-    glBindTexture( GL_TEXTURE_2D, glEnteringSlideTex );
-    glActiveTexture( GL_TEXTURE0 );
-#endif
+private:
+    virtual GLuint makeShader_();
+};
 
-    displaySlide( nTime, glLeavingSlideTex, maLeavingSlidePrimitives, SlideWidthScale, SlideHeightScale );
+GLuint StaticNoiseTransition::makeShader_()
+{
+    return OGLShaders::LinkProgram( basicVertexShader, staticFragmentShader );
 }
 
-void OGLTransitionImpl::makeStatic()
+shared_ptr<OGLTransitionImpl>
+makeStaticNoiseTransition(
+        const Primitives_t& rLeavingSlidePrimitives,
+        const Primitives_t& rEnteringSlidePrimitives,
+        const TransitionSettings& rSettings)
 {
-    Primitive Slide;
-
-    Slide.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0,1));
-    Slide.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (0,1), basegfx::B2DVector (1,1));
-    maLeavingSlidePrimitives.push_back (Slide);
-    maEnteringSlidePrimitives.push_back (Slide);
-
-    mmDisplaySlides = &OGLTransitionImpl::displaySlidesShaders;
-    mmPrepareTransition = &OGLTransitionImpl::prepareStatic;
-    mbUseMipMapLeaving = mbUseMipMapEntering = false;
-
-    mnRequiredGLVersion = 2.0;
+    return make_shared<StaticNoiseTransition>(
+            TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+            rSettings)
+        ;
 }
 
-void OGLTransitionImpl::prepareDissolve( ::sal_Int32 /* glLeavingSlideTex */, ::sal_Int32 /* glEnteringSlideTex */ )
-{
-    mProgramObject = OGLShaders::LinkProgram( basicVertexShader, dissolveFragmentShader );
-
-    preparePermShader();
 }
 
-void OGLTransitionImpl::makeDissolve()
+boost::shared_ptr<OGLTransitionImpl> makeStatic()
 {
     Primitive Slide;
 
     Slide.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0,1));
     Slide.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (0,1), basegfx::B2DVector (1,1));
-    maLeavingSlidePrimitives.push_back (Slide);
-    maEnteringSlidePrimitives.push_back (Slide);
+    Primitives_t aLeavingSlide;
+    aLeavingSlide.push_back (Slide);
+    Primitives_t aEnteringSlide;
+    aEnteringSlide.push_back (Slide);
 
-    mmDisplaySlides = &OGLTransitionImpl::displaySlidesShaders;
-    mmPrepareTransition = &OGLTransitionImpl::prepareDissolve;
-    mbUseMipMapLeaving = mbUseMipMapEntering = false;
+    TransitionSettings aSettings;
+    aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
+    aSettings.mnRequiredGLVersion = 2.0;
 
-    mnRequiredGLVersion = 2.0;
+    return makeStaticNoiseTransition(aLeavingSlide, aEnteringSlide, aSettings);
 }
 
-void OGLTransitionImpl::makeNewsflash()
+namespace
+{
+
+class DissolveTransition : public ShaderTransition
+{
+public:
+    DissolveTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
+        : ShaderTransition(rScene, rSettings)
+    {}
+
+private:
+    virtual GLuint makeShader_();
+};
+
+GLuint DissolveTransition::makeShader_()
+{
+    return OGLShaders::LinkProgram( basicVertexShader, dissolveFragmentShader );
+}
+
+shared_ptr<OGLTransitionImpl>
+makeDissolveTransition(
+        const Primitives_t& rLeavingSlidePrimitives,
+        const Primitives_t& rEnteringSlidePrimitives,
+        const TransitionSettings& rSettings)
+{
+    return make_shared<DissolveTransition>(
+            TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+            rSettings)
+        ;
+}
+
+}
+
+boost::shared_ptr<OGLTransitionImpl> makeDissolve()
+{
+    Primitive Slide;
+
+    Slide.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0,1));
+    Slide.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (0,1), basegfx::B2DVector (1,1));
+    Primitives_t aLeavingSlide;
+    aLeavingSlide.push_back (Slide);
+    Primitives_t aEnteringSlide;
+    aEnteringSlide.push_back (Slide);
+
+    TransitionSettings aSettings;
+    aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
+    aSettings.mnRequiredGLVersion = 2.0;
+
+    return makeDissolveTransition(aLeavingSlide, aEnteringSlide, aSettings);
+}
+
+boost::shared_ptr<OGLTransitionImpl> makeNewsflash()
 {
     Primitive Slide;
 
     Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
     Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
-    Slide.Operations.push_back(new SRotate(basegfx::B3DVector(0,0,1),basegfx::B3DVector(0,0,0),3000,true,0,0.5));
-    Slide.Operations.push_back(new SScale(basegfx::B3DVector(0.01,0.01,0.01),basegfx::B3DVector(0,0,0),true,0,0.5));
-    Slide.Operations.push_back(new STranslate(basegfx::B3DVector(-10000, 0, 0),false, 0.5, 2));
-    maLeavingSlidePrimitives.push_back(Slide);
+    Slide.Operations.push_back(makeSRotate(basegfx::B3DVector(0,0,1),basegfx::B3DVector(0,0,0),3000,true,0,0.5));
+    Slide.Operations.push_back(makeSScale(basegfx::B3DVector(0.01,0.01,0.01),basegfx::B3DVector(0,0,0),true,0,0.5));
+    Slide.Operations.push_back(makeSTranslate(basegfx::B3DVector(-10000, 0, 0),false, 0.5, 2));
+    Primitives_t aLeavingSlide;
+    aLeavingSlide.push_back(Slide);
 
     Slide.Operations.clear();
-    Slide.Operations.push_back(new SRotate(basegfx::B3DVector(0,0,1),basegfx::B3DVector(0,0,0),-3000,true,0.5,1));
-    Slide.Operations.push_back(new STranslate(basegfx::B3DVector(-100, 0, 0),false, -1, 1));
-    Slide.Operations.push_back(new STranslate(basegfx::B3DVector(100, 0, 0),false, 0.5, 1));
-    Slide.Operations.push_back(new SScale(basegfx::B3DVector(0.01,0.01,0.01),basegfx::B3DVector(0,0,0),false,-1,1));
-    Slide.Operations.push_back(new SScale(basegfx::B3DVector(100,100,100),basegfx::B3DVector(0,0,0),true,0.5,1));
-    maEnteringSlidePrimitives.push_back(Slide);
+    Slide.Operations.push_back(makeSRotate(basegfx::B3DVector(0,0,1),basegfx::B3DVector(0,0,0),-3000,true,0.5,1));
+    Slide.Operations.push_back(makeSTranslate(basegfx::B3DVector(-100, 0, 0),false, -1, 1));
+    Slide.Operations.push_back(makeSTranslate(basegfx::B3DVector(100, 0, 0),false, 0.5, 1));
+    Slide.Operations.push_back(makeSScale(basegfx::B3DVector(0.01,0.01,0.01),basegfx::B3DVector(0,0,0),false,-1,1));
+    Slide.Operations.push_back(makeSScale(basegfx::B3DVector(100,100,100),basegfx::B3DVector(0,0,0),true,0.5,1));
+    Primitives_t aEnteringSlide;
+    aEnteringSlide.push_back(Slide);
 
-    OverallOperations.push_back(new SRotate(basegfx::B3DVector(0,0,1),basegfx::B3DVector(0.2,0.2,0),1080,true,0,1));
+    Operations_t aOverallOperations;
+    aOverallOperations.push_back(makeSRotate(basegfx::B3DVector(0,0,1),basegfx::B3DVector(0.2,0.2,0),1080,true,0,1));
+
+    return makeSimpleTransition(aLeavingSlide, aEnteringSlide, aOverallOperations);
+}
+
+namespace
+{
+
+/** various transitions helper methods
+ */
+void prepareDiamond( double nTime, double SlideWidth, double SlideHeight,double DispWidth, double DispHeight );
+void displaySlidesFadeSmoothly( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+    void displaySlidesFadeThroughBlack( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+    void displaySlidesRochade( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+void displaySlidesShaders( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+void prepareStatic( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
+void prepareDissolve( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
+void preparePermShader();
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
