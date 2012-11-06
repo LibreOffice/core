@@ -1382,6 +1382,10 @@ SCROW ScColumn::FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const
     }
 }
 
+void ScColumn::CellStorageModified()
+{
+}
+
 void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const
 {
     // check if we are in a data area

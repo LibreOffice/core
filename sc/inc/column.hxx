@@ -342,7 +342,6 @@ public:
         SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHeight, OutputDevice* pDev,
         double nPPTX, double nPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
         bool bShrink, sal_uInt16 nMinHeight, SCROW nMinStart) const;
-public:
 
                 /// Including current, may return -1
     SCsROW      GetNextUnprotected( SCROW nRow, bool bUp ) const;
@@ -377,6 +376,12 @@ private:
 
     SCROW FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const;
     SCROW FindNextVisibleRow(SCROW nRow, bool bForward) const;
+
+    /**
+     * Called whenever the state of cell array gets modified i.e. a new cell
+     * is inserted, a cell is moved or removed, cells are swapped, and so on.
+     */
+    void CellStorageModified();
 };
 
 
