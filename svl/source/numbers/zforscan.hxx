@@ -83,7 +83,7 @@ public:
     const String& GetErrorString() const    { return sErrStr; }
 
     Date* GetNullDate() const                   { return pNullDate; }
-    const String& GetStandardName() const
+    const OUString& GetStandardName() const
         {
             if ( bKeywordsNeedInit )
             {
@@ -93,7 +93,7 @@ public:
         }
     sal_uInt16 GetStandardPrec() const          { return nStandardPrec; }
     const Color& GetRedColor() const            { return StandardColor[4]; }
-    Color* GetColor(String& sStr);          // Setzt Hauptfarben oder
+    Color* GetColor(OUString& sStr);          // Setzt Hauptfarben oder
                                                 // definierte Farben
 
     // the compatibility currency symbol for old automatic currency formats

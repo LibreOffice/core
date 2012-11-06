@@ -453,7 +453,7 @@ void ImpSvNumberformatScan::ChangeStandardPrec(sal_uInt16 nPrec)
     nStandardPrec = nPrec;
 }
 
-Color* ImpSvNumberformatScan::GetColor(String& sStr)
+Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
 {
     OUString sString = pFormatter->GetCharClass()->uppercase(sStr);
     const NfKeywordTable & rKeyword = GetKeywords();
@@ -483,17 +483,17 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
         sal_Int32 nPos = sString.startsWith(rColorWord);
         if (nPos > 0)
         {
-            sStr.Erase(0, nPos);
+            sStr = sStr.copy(nPos);
             sStr = comphelper::string::strip(sStr, ' ');
             if (bConvertMode)
             {
                 pFormatter->ChangeIntl(eNewLnge);
-                sStr.Insert( GetKeywords()[NF_KEY_COLOR], 0 );  // Color -> FARBE
+                sStr = GetKeywords()[NF_KEY_COLOR] + sStr;  // Color -> FARBE
                 pFormatter->ChangeIntl(eTmpLnge);
             }
             else
             {
-                sStr.Insert(rColorWord,0);
+                sStr = rColorWord + sStr;
             }
             sString = sString.copy(nPos);
             sString = comphelper::string::strip(sString, ' ');
@@ -510,7 +510,7 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
     }
     else
     {
-        sStr.Erase();
+        sStr = "";
         if (bConvertMode)
         {
             pFormatter->ChangeIntl(eNewLnge);

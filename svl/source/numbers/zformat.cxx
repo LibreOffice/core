@@ -369,9 +369,13 @@ void ImpSvNumFor::Copy( const ImpSvNumFor& rNumFor, ImpSvNumberformatScan* pSc )
     aI.Copy( rNumFor.aI, nAnzStrings );
     sColorName = rNumFor.sColorName;
     if ( pSc )
+    {
         pColor = pSc->GetColor( sColorName );   // #121103# don't copy pointer between documents
+    }
     else
+    {
         pColor = rNumFor.pColor;
+    }
     aNatNum = rNumFor.aNatNum;
 }
 
@@ -383,7 +387,7 @@ void ImpSvNumFor::Save(SvStream& rStream) const
 }
 
 void ImpSvNumFor::Load(SvStream& rStream, ImpSvNumberformatScan& rSc,
-        String& rLoadedColorName )
+                       OUString& rLoadedColorName )
 {
     sal_uInt16 nAnz;
     rStream >> nAnz;        //! noch nicht direkt nAnzStrings wg. Enlarge
@@ -755,8 +759,10 @@ SvNumberformat::SvNumberformat(String& rString,
                         }
                         else
                         {
-                            Color* pColor = pSc->GetColor( sStr);
-                            NumFor[nIndex].SetColor( pColor, sStr);
+                            OUString aStr(sStr);
+                            Color* pColor = pSc->GetColor( aStr);
+                            NumFor[nIndex].SetColor( pColor, aStr);
+                            sStr = aStr;
                             if (pColor == NULL)
                             {                       // error
                                 bCancel = true;     // break for
@@ -1581,7 +1587,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
         eOldTmpLang = rScan.GetTmpLnge();
         eOldNewLang = rScan.GetNewLnge();
     }
-    String aLoadedColorName;
+    OUString aLoadedColorName;
     for (sal_uInt16 i = 0; i < 4; i++)
     {
         NumFor[i].Load( rStream, rScan, aLoadedColorName );
@@ -1593,8 +1599,8 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
             // System-German FARBE nach System-xxx COLOR umsetzen und vice versa,
             //! geht davon aus, dass onSave nur GERMAN und ENGLISH KeyWords in
             //! ImpSvNumberformatScan existierten
-            if ( aLoadedColorName.Len() && !NumFor[i].GetColor() &&
-                 OUString(aLoadedColorName) != rScan.GetColorString() )
+            if ( !aLoadedColorName.isEmpty() && !NumFor[i].GetColor() &&
+                 aLoadedColorName != rScan.GetColorString() )
             {
                 if ( rScan.GetColorString() == "FARBE" )
                 {   // English -> German
@@ -1608,7 +1614,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
                     rScan.GetNumberformatter()->ChangeIntl( LANGUAGE_GERMAN );
                     rScan.SetConvertMode( LANGUAGE_GERMAN, LANGUAGE_ENGLISH_US );
                 }
-                String aColorName = NumFor[i].GetColorName();
+                OUString aColorName = NumFor[i].GetColorName();
                 const Color* pColor = rScan.GetColor( aColorName );
                 if ( !pColor && aLoadedColorName == aColorName )
                 {
@@ -1746,7 +1752,7 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
         // pColor zeigt noch auf Tabelle in temporaerem Formatter/Scanner
         for ( sal_uInt16 i = 0; i < 4; i++ )
         {
-            String aColorName = NumFor[i].GetColorName();
+            OUString aColorName = NumFor[i].GetColorName();
             Color* pColor = rScan.GetColor( aColorName );
             NumFor[i].SetColor( pColor, aColorName );
         }

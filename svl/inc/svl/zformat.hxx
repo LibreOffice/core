@@ -126,7 +126,7 @@ public:
 
     void Enlarge(sal_uInt16 nAnz);      // Init of arrays to the right size
     void Load( SvStream& rStream, ImpSvNumberformatScan& rSc,
-                String& rLoadedColorName);
+               OUString& rLoadedColorName);
     void Save( SvStream& rStream ) const;
 
     // if pSc is set, it is used to get the Color pointer
@@ -140,9 +140,9 @@ public:
     sal_uInt16 GetCount() const { return nAnzStrings;}
 
     Color* GetColor() const { return pColor; }
-    void SetColor( Color* pCol, String& rName )
+    void SetColor( Color* pCol, OUString& rName )
      { pColor = pCol; sColorName = rName; }
-    const String& GetColorName() const { return sColorName; }
+    const OUString& GetColorName() const { return sColorName; }
 
     // new SYMBOLTYPE_CURRENCY in subformat?
     bool HasNewCurrency() const;
@@ -158,7 +158,7 @@ public:
 
 private:
     ImpSvNumberformatInfo aI;           // Hilfsstruct fuer die restlichen Infos
-    String sColorName;                  // color name
+    OUString sColorName;                  // color name
     Color* pColor;                      // pointer to color of subformat
     sal_uInt16 nAnzStrings;             // count of symbols
     SvNumberNatNum aNatNum;             // DoubleByteNumber
