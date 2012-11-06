@@ -122,7 +122,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         merge_flists gid_Module_Optional_OGLTrans $FILELISTSDIR/common_list.txt
     fi
 
-    if test "$SPLIT_APP_MODULES" = "YES" -a "$OOO_VENDOR" = "Novell, Inc." ; then
+    if test "$SPLIT_APP_MODULES" = "YES" -a "$OOO_VENDOR" = "SUSE" ; then
         # move the prebuilt icons into a hacky temporary package
         # we want to repack them into a noarch package as soon as possible
         # without the build dependency on the huge devel package
@@ -164,7 +164,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     # lang packs
     for lang in `echo $WITH_LANG_LIST | sed -e s/-/_/g`; do
         lang_lists=
-        if test "$OOO_VENDOR" = "Mandriva" -o \( "$OOO_VENDOR" = "Novell, Inc." -a "$SPLIT_APP_MODULES" = "YES" \) ; then
+        if test "$OOO_VENDOR" = "Mandriva" -o \( "$OOO_VENDOR" = "SUSE" -a "$SPLIT_APP_MODULES" = "YES" \) ; then
             test -f gid_Module_Langpack_Basis_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Basis_$lang" || :
             test -f gid_Module_Langpack_Brand_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Brand_$lang" || :
             test -f gid_Module_Langpack_Resource_$lang  && lang_lists="$lang_lists gid_Module_Langpack_Resource_$lang" || :
@@ -197,7 +197,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         fi
         # some help files are in _Langpack_{Writer,Impress,...}_<lang>
         # move them from -l10n to -help
-        if test "$OOO_VENDOR" = "Mandriva" -o \( "$OOO_VENDOR" = "Novell, Inc." -a "$SPLIT_APP_MODULES" = "YES" \) ; then
+        if test "$OOO_VENDOR" = "Mandriva" -o \( "$OOO_VENDOR" = "SUSE" -a "$SPLIT_APP_MODULES" = "YES" \) ; then
             for lang in `echo $WITH_LANG_LIST | sed -e s/-/_/g`; do
                 test -f $FILELISTSDIR/help_${lang}_list.txt || continue;
                 mv_file_between_flists $FILELISTSDIR/help_${lang}_list.txt $FILELISTSDIR/lang_${lang}_list.txt $INSTALLDIR/help/.*
@@ -206,7 +206,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         fi
     done
 
-    if test -f $FILELISTSDIR/lang_en_US_list.txt -a "$OOO_VENDOR" = "Novell, Inc." -a "$SPLIT_APP_MODULES" != "YES" ; then
+    if test -f $FILELISTSDIR/lang_en_US_list.txt -a "$OOO_VENDOR" = "SUSE" -a "$SPLIT_APP_MODULES" != "YES" ; then
         cat $FILELISTSDIR/lang_en_US_list.txt >>$FILELISTSDIR/common_list.txt
         rm $FILELISTSDIR/lang_en_US_list.txt
     fi
@@ -272,7 +272,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         add_used_directories $flist common_list.txt
     fi
 
-    if test "z$OOO_VENDOR" = "zNovell, Inc." ; then
+    if test "z$OOO_VENDOR" = "zSUSE" ; then
         # officebean subpackage
         test -f $DESTDIR/gid_Module_Optional_Extensions_Script_Provider_For_Beanshell && cp $DESTDIR/gid_Module_Optional_Extensions_Script_Provider_For_Beanshell officebean_list.txt || :
         mv_file_between_flists officebean_list.txt common_list.txt $INSTALLDIR/program/classes/officebean.jar
@@ -541,7 +541,7 @@ fi
 
 # mark the config files
 RPM_CONFIG_FILE_TAGS=
-if test "$OOO_VENDOR" = "Novell, Inc." -o "$OOO_VENDOR" = "RedHat"; then
+if test "$OOO_VENDOR" = "SUSE" -o "$OOO_VENDOR" = "RedHat"; then
     RPM_CONFIG_FILE_TAGS="%config"
 elif test "$OOO_VENDOR" = "PLD" ; then
     RPM_CONFIG_FILE_TAGS="%config(noreplace) %verify(not md5 size mtime)"
