@@ -123,7 +123,7 @@ public:
     virtual sal_Bool drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
     virtual sal_Bool drawPolyPolygonBezier( sal_uLong nPoly, const sal_uLong* pPoints,
                                             const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry );
-    virtual bool        drawPolyLine(
+    virtual bool     drawPolyLine(
         const ::basegfx::B2DPolygon&,
         double fTransparency,
         const ::basegfx::B2DVector& rLineWidths,

@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "dp_descriptioninfoset.hxx"
 
@@ -33,10 +23,15 @@
 #include "sal/config.h"
 
 #include "comphelper/sequence.hxx"
+#include "comphelper/seqstream.hxx"
 #include "comphelper/makesequence.hxx"
 #include "comphelper/processfactory.hxx"
 #include "boost/optional.hpp"
+#include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/beans/Optional.hpp"
+#include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/io/SequenceInputStream.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/lang/Locale.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -361,6 +356,7 @@ DescriptionInfoset getDescriptionInfoset(OUString const & sExtensionFolderURL)
 DescriptionInfoset::DescriptionInfoset(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     css::uno::Reference< css::xml::dom::XNode > const & element):
+    m_context(context),
     m_element(element)
 {
     css::uno::Reference< css::lang::XMultiComponentFactory > manager(
@@ -403,6 +399,117 @@ DescriptionInfoset::~DescriptionInfoset() {}
     return n.is() ? getNodeValue(n) : ::rtl::OUString();
 }
 
+void DescriptionInfoset::checkBlacklist() const
+{
+    if (m_element.is()) {
+        boost::optional< OUString > id(getIdentifier());
+        if (!id)
+            return; // nothing to check
+        OUString currentversion(getVersion());
+        if (currentversion.getLength() == 0)
+            return;  // nothing to check
+
+        css::uno::Reference< css::lang::XMultiComponentFactory > manager(
+            m_context->getServiceManager(), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::lang::XMultiServiceFactory> provider(
+            manager->createInstanceWithContext(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")), m_context),
+                css::uno::UNO_QUERY_THROW);
+
+        css::uno::Sequence< css::uno::Any > args = css::uno::Sequence< css::uno::Any >(1);
+        css::beans::PropertyValue prop;
+        prop.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
+        prop.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.ExtensionDependencies/Extensions"));
+        args[0] <<= prop;
+
+        css::uno::Reference< css::container::XNameAccess > blacklist(
+            provider->createInstanceWithArguments(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")), args),
+                css::uno::UNO_QUERY_THROW);
+
+        // check first if a blacklist entry is available
+        if (blacklist.is() && blacklist->hasByName(*id)) {
+            css::uno::Reference< css::beans::XPropertySet > extProps(
+                blacklist->getByName(*id), css::uno::UNO_QUERY_THROW);
+
+            css::uno::Any anyValue = extProps->getPropertyValue(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Versions")));
+
+            css::uno::Sequence< ::rtl::OUString > blversions;
+            anyValue >>= blversions;
+
+            // check if the current version requires further dependency checks from the blacklist
+            if (checkBlacklistVersion(currentversion, blversions)) {
+                anyValue = extProps->getPropertyValue(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dependencies")));
+                ::rtl::OUString udeps;
+                anyValue >>= udeps;
+
+                if (udeps.getLength() == 0)
+                    return; // nothing todo
+
+                ::rtl::OString xmlDependencies = ::rtl::OUStringToOString(udeps, RTL_TEXTENCODING_UNICODE);
+
+                css::uno::Reference< css::xml::dom::XDocumentBuilder> docbuilder(
+                    manager->createInstanceWithContext(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.dom.DocumentBuilder")), m_context),
+                    css::uno::UNO_QUERY_THROW);
+
+                css::uno::Sequence< sal_Int8 > byteSeq((const sal_Int8*)xmlDependencies.getStr(), xmlDependencies.getLength());
+
+                css::uno::Reference< css::io::XInputStream> inputstream( css::io::SequenceInputStream::createStreamFromSequence(m_context, byteSeq),
+                                                                         css::uno::UNO_QUERY_THROW);
+
+                css::uno::Reference< css::xml::dom::XDocument > xDocument(docbuilder->parse(inputstream));
+                css::uno::Reference< css::xml::dom::XElement > xElement(xDocument->getDocumentElement());
+                css::uno::Reference< css::xml::dom::XNodeList > xDeps(xElement->getChildNodes());
+                sal_Int32 nLen = xDeps->getLength();
+
+                // get the parent xml document  of current description info for the import
+                css::uno::Reference< css::xml::dom::XDocument > xCurrentDescInfo(m_element->getOwnerDocument());
+
+                // get dependency node of current description info to merge the new dependencies from the blacklist
+                css::uno::Reference< css::xml::dom::XNode > xCurrentDeps(
+                    m_xpath->selectSingleNode(m_element, ::rtl::OUString(
+                                                  RTL_CONSTASCII_USTRINGPARAM("desc:dependencies"))));
+
+                // if no dependency node exists, create a new one in the current description info
+                if (!xCurrentDeps.is()) {
+                    css::uno::Reference< css::xml::dom::XNode > xNewDepNode(
+                        xCurrentDescInfo->createElementNS(
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http://openoffice.org/extensions/description/2006")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dependencies"))), css::uno::UNO_QUERY_THROW);
+                    m_element->appendChild(xNewDepNode);
+                    xCurrentDeps = m_xpath->selectSingleNode(m_element, ::rtl::OUString(
+                                                  RTL_CONSTASCII_USTRINGPARAM("desc:dependencies")));
+                }
+
+                for (sal_Int32 i=0; i<nLen; i++) {
+                    css::uno::Reference< css::xml::dom::XNode > xNode(xDeps->item(i));
+                    css::uno::Reference< css::xml::dom::XElement > xDep(xNode, css::uno::UNO_QUERY);
+                    if (xDep.is()) {
+                        // found valid blacklist dependency, import the node first and append it to the existing dependency node
+                        css::uno::Reference< css::xml::dom::XNode > importedNode = xCurrentDescInfo->importNode(xNode, true);
+                        xCurrentDeps->appendChild(importedNode);
+                    }
+                }
+            }
+        }
+    }
+}
+
+bool DescriptionInfoset::checkBlacklistVersion(
+    ::rtl::OUString currentversion,
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > const & versions) const
+{
+    sal_Int32 nLen = versions.getLength();
+    for (sal_Int32 i=0; i<nLen; i++) {
+        if (currentversion.equals(versions[i]))
+            return true;
+    }
+
+    return false;
+}
 
 ::rtl::OUString DescriptionInfoset::getVersion() const
 {
@@ -452,6 +559,9 @@ css::uno::Reference< css::xml::dom::XNodeList >
 DescriptionInfoset::getDependencies() const {
     if (m_element.is()) {
         try {
+            // check the extension blacklist first and expand the dependencies if applicable
+            checkBlacklist();
+
             return m_xpath->selectNodeList(m_element, ::rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM("desc:dependencies/*")));
         } catch (const css::xml::xpath::XPathException &) {

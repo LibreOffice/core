@@ -44,9 +44,6 @@
 #include <sfx2/app.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/bitmap.hxx>
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-#  include <vcl/rendergraphicrasterizer.hxx>
-#endif
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star::uno;

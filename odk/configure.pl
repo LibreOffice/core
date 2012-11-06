@@ -743,12 +743,12 @@ sub testVersion
 
     for ($i=0; $i <= $length; $i++ )
     {
-        if ( @testVersion->[$i] > @mustBeVersion->[$i] )
+        if ( $testVersion[$i] > $mustBeVersion[$i] )
         {
             return 1; # 1 indicates a correct version
         }
 
-        if ( @testVersion->[$i] < @mustBeVersion->[$i] )
+        if ( $testVersion[$i] < $mustBeVersion[$i] )
         {
             if ( $#checkOnly == 1 ) {
                 print " The command '$toolName' has the version $tmpTestVersion.\n";

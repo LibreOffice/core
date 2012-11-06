@@ -1,29 +1,20 @@
-#*************************************************************************
 #
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# This file is part of the LibreOffice project.
 #
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# OpenOffice.org - a multi-platform office productivity suite
+# This file incorporates work covered by the following license notice:
 #
-# This file is part of OpenOffice.org.
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-# OpenOffice.org is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License version 3
-# only, as published by the Free Software Foundation.
-#
-# OpenOffice.org is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License version 3 for more details
-# (a copy is included in the LICENSE file that accompanied this code).
-#
-# You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
-# <http://www.openoffice.org/license.html>
-# for a copy of the LGPLv3 License.
-#
-#*************************************************************************
 
 package installer::epmfile;
 
@@ -40,6 +31,17 @@ use installer::scpzipfiles;
 use installer::scriptitems;
 use installer::systemactions;
 use POSIX;
+
+# please Debian packaging, fdo#53341
+sub debian_rewrite($)
+{
+    my $dep = shift;
+    if ( $installer::globals::debian ) {
+	$dep =~ s/_/-/g;  # Debian allows no underline in package name
+	$dep = lc ($dep);
+    }
+    return $dep;
+}
 
 ############################################################################
 # Reading the package map to find Solaris package names for
@@ -331,12 +333,12 @@ sub create_epm_header
     {
         if ( $installer::globals::iswindowsbuild )
         {
-            $licensefilename = "license.txt"; # _$searchlanguage.txt";
+            $licensefilename = "license.txt";
             $readmefilename = "readme_$searchlanguage.txt";
         }
         else
         {
-            $licensefilename = "LICENSE"; # _$searchlanguage";
+            $licensefilename = "LICENSE";
             $readmefilename = "README_$searchlanguage";
         }
     }
@@ -443,16 +445,12 @@ sub create_epm_header
     }
     else
     {
-        for ( my $i = 0; $i <= $#{$filesinproduct}; $i++ )
-        {
-            my $onefile = ${$filesinproduct}[$i];
-            my $filename = $onefile->{'Name'};
-
-            if ( $filename eq $licensefilename )
+	for my $onefile (@{$filesinproduct})
+	{
+	    if ($licensefilename eq $onefile->{'Name'})
             {
+                push @epmheader, "%license" . " " . $onefile->{'sourcepath'} . "\n";
                 $foundlicensefile = 1;
-                $line = "%license" . " " . $onefile->{'sourcepath'} . "\n";
-                push(@epmheader, $line);
                 last;
             }
         }
@@ -511,6 +509,7 @@ sub create_epm_header
                 my $onereplaces = ${$allreplaces}[$i];
                 $onereplaces =~ s/\s*$//;
                 installer::packagelist::resolve_packagevariables(\$onereplaces, $variableshashref, 1);
+		$onereplaces = debian_rewrite($onereplaces);
                 $line = "%replaces" . " " . $onereplaces . "\n";
                 push(@epmheader, $line);
 
@@ -577,6 +576,7 @@ sub create_epm_header
             my $oneprovides = ${$allprovides}[$i];
             $oneprovides =~ s/\s*$//;
             installer::packagelist::resolve_packagevariables(\$oneprovides, $variableshashref, 1);
+	    $oneprovides = debian_rewrite($oneprovides);
             $line = "%provides" . " " . $oneprovides . "\n";
             push(@epmheader, $line);
         }
@@ -604,7 +604,7 @@ sub create_epm_header
             my $onerequires = ${$allrequires}[$i];
             $onerequires =~ s/\s*$//;
             installer::packagelist::resolve_packagevariables2(\$onerequires, $variableshashref, 0, $isdict);
-
+	    $onerequires = debian_rewrite($onerequires);
             $line = "%requires" . " " . $onerequires . "\n";
             push(@epmheader, $line);
         }
@@ -831,7 +831,10 @@ sub call_epm
 
     $extraflags .= ' -g' unless $installer::globals::strip;
 
-    my $systemcall = $ldpreloadstring . $epmname . " -f " . $packageformat . " " . $extraflags . " " . $localpackagename . " " . $epmlistfilename . $outdirstring . " -v " . " 2\>\&1 |";
+    my $verboseflag = "-v";
+    if ( ! $installer::globals::quiet ) { $verboseflag = "-v2"; };
+
+    my $systemcall = $ldpreloadstring . $epmname . " -f " . $packageformat . " " . $extraflags . " " . $localpackagename . " " . $epmlistfilename . $outdirstring . " " . $verboseflag . " " . " 2\>\&1 |";
 
     installer::logger::print_message( "... $systemcall ...\n" );
 
@@ -1340,7 +1343,7 @@ sub set_autoprovreq_in_specfile
 
 #####################################################################
 # Replacing Copyright with License in the spec file
-# Syntax: License: LGPL, SISSL
+# Syntax: License: LGPLv3 (or MPLv2 on ALv2, older usages were LGPL, SISSL)
 #####################################################################
 
 sub set_license_in_specfile

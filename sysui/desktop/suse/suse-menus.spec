@@ -1,10 +1,27 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
 # version and release passed by command-line
 Version: %version
 Release: %release
 Summary: %productname desktop integration
 Name: %pkgprefix-suse-menus
 Group: Office
-License: LGPL
+License: LGPLv3 with MPLv2, ALv2 and others
 Vendor: The Document Foundation
 AutoReqProv: no
 BuildArch: noarch
@@ -20,7 +37,7 @@ Provides: libreoffice-desktop-integration
 %define gnome_dir /opt/gnome
 %define gnome_mime_theme hicolor
 
-%description 
+%description
 %productname desktop integration
 
 %install
@@ -33,7 +50,7 @@ export NO_BRP_STALE_LINK_ERROR=yes
 
 mkdir -p $RPM_BUILD_ROOT
 
-# set parameters for the create_tree script 
+# set parameters for the create_tree script
 export DESTDIR=$RPM_BUILD_ROOT
 export KDEMAINDIR=/opt/kde3
 export GNOMEDIR=%{gnome_dir}
@@ -47,21 +64,21 @@ rm -rf $RPM_BUILD_ROOT
 if [ -x /opt/gnome/bin/update-desktop-database ]; then
   echo Update Desktop Database
   /opt/gnome/bin/update-desktop-database -q /usr/share/applications
-  /opt/gnome/bin/update-desktop-database 
-fi 
+  /opt/gnome/bin/update-desktop-database
+fi
 
 %triggerun -- %pkgprefix, %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-base, %pkgprefix-math
-if [ "$1" = "0" ] ; then  
+if [ "$1" = "0" ] ; then
   # the menu-package gets uninstalled/updated - postun will run the command
   exit 0
 fi
-if [ "$2" = "0" ] ; then  
+if [ "$2" = "0" ] ; then
   # the triggering package gets removed
   if [ -x /opt/gnome/bin/update-desktop-database ]; then
     echo Update Desktop Database
     /opt/gnome/bin/update-desktop-database -q /usr/share/applications
-    /opt/gnome/bin/update-desktop-database 
-fi 
+    /opt/gnome/bin/update-desktop-database
+fi
 fi
 
 %post
@@ -74,10 +91,10 @@ fi
 if [ -x /opt/gnome/bin/update-desktop-database ]; then
   echo Update Desktop Database
   /opt/gnome/bin/update-desktop-database -q /usr/share/applications
-  /opt/gnome/bin/update-desktop-database 
-fi 
+  /opt/gnome/bin/update-desktop-database
+fi
 
-# add symlinks so that nautilus can identify the mime-icons 
+# add symlinks so that nautilus can identify the mime-icons
 # not strictly freedesktop-stuff but there is no common naming scheme yet.
 # One proposal is "mime-application:vnd.oasis.opendocument.spreadsheet.png"
 # for e.g. application/vnd.oasis.opendocument.spreadsheet
@@ -123,7 +140,7 @@ do
 done
 
 # run only on first install, since postun is run when updating
-# post would be run before the old files are removed 
+# post would be run before the old files are removed
 if [ "$1" = "1" ] ; then  # first install
   for themedir in /opt/gnome/share/icons/gnome /opt/gnome/share/icons/hicolor /opt/kde3/share/icons/hicolor /opt/kde3/share/icons/locolor; do
     if [ -e $themedir/icon-theme.cache ] ; then
@@ -225,7 +242,7 @@ then
 
   # now append our stuff to the temporary file
   cat >> /etc/mailcap.tmp$$ << END
-# OpenOffice.org
+# LibreOffice
 application/vnd.oasis.opendocument.text; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-flat-xml; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-template; %unixfilename -view %s
@@ -313,12 +330,12 @@ then
 fi
 
 %postun
-# run only when erasing this package, since %post of the new package ran 
+# run only when erasing this package, since %post of the new package ran
 # previously or updates already handled by triggers.
-if [ "$1" = 0 ] ; then 
+if [ "$1" = 0 ] ; then
   if [ -x /opt/gnome/bin/update-desktop-database ]; then
     /opt/gnome/bin/update-desktop-database -q /usr/share/applications
-  fi 
+  fi
   if [ -x /usr/bin/update-mime-database ]; then
     update-mime-database /usr/share/mime
   fi

@@ -1,61 +1,32 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
-
-#include <stdio.h>
-
-#include <osl/mutex.hxx>
-#include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
-#include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <sal/types.h>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include "MyProtocolHandler.h"
 #include "MyListener.h"
 
 namespace css = ::com::sun::star;
 
-// static void writeInfo(const css::uno::Reference< css::registry::XRegistryKey >& xRegistryKey       ,
-//                       const char*                                               pImplementationName,
-//                       const char*                                               pServiceName       )
-// {
-//     ::rtl::OUStringBuffer sKey(256);
-//  sKey.append     (::rtl::OUString::createFromAscii(pImplementationName));
-//     sKey.appendAscii("/UNO/SERVICES/");
-//     sKey.append     (::rtl::OUString::createFromAscii(pServiceName));
-
-//     xRegistryKey->createKey(sKey.makeStringAndClear());
-// }
-
 extern "C"
 {
+
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* pImplName      ,
                                                                 void*     pServiceManager,
                                                                 void*     pRegistryKey   )
@@ -67,17 +38,16 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* pImplNa
     css::uno::Reference< css::lang::XMultiServiceFactory >  xSMGR     (reinterpret_cast< css::lang::XMultiServiceFactory* >(pServiceManager), css::uno::UNO_QUERY);
     ::rtl::OUString                                         sImplName = ::rtl::OUString::createFromAscii(pImplName);
 
-    if (sImplName.equalsAscii(MYLISTENER_IMPLEMENTATIONNAME))
+    if (sImplName == MYLISTENER_IMPLEMENTATIONNAME)
     {
         css::uno::Sequence< ::rtl::OUString > lNames(1);
-        lNames[0] = ::rtl::OUString(MYLISTENER_IMPLEMENTATIONNAME);
+        lNames[0] = MYLISTENER_IMPLEMENTATIONNAME;
         xFactory = ::cppu::createSingleFactory(xSMGR, sImplName, MyListener::st_createInstance, lNames);
     }
-    else
-    if (sImplName.equalsAscii(MYPROTOCOLHANDLER_IMPLEMENTATIONNAME))
+    else if (sImplName == MYPROTOCOLHANDLER_IMPLEMENTATIONNAME)
     {
         css::uno::Sequence< ::rtl::OUString > lNames(1);
-        lNames[0] = ::rtl::OUString(MYPROTOCOLHANDLER_SERVICENAME);
+        lNames[0] = MYPROTOCOLHANDLER_SERVICENAME;
         xFactory = ::cppu::createSingleFactory(xSMGR, sImplName, MyProtocolHandler_createInstance, lNames);
     }
 

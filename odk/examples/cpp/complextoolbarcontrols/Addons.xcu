@@ -1,11 +1,28 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+-->
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Addons" oor:package="org.openoffice.Office">
     <node oor:name="AddonUI">
         <node oor:name="OfficeToolBar">
             <node oor:name="com.sun.star.comp.framework.addon.complextoolbarcontrols" oor:op="replace">
                 <node oor:name="m1" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.demo.complextoolbarcontrols.demoaddon:Command1</value>
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:ImageButtonCmd</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value xml:lang="en-US">Image Button</value>
@@ -22,7 +39,7 @@
                 </node>
                 <node oor:name="m2" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.demo.complextoolbarcontrols.demoaddon:Command2</value>
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:ComboboxCmd</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value xml:lang="en-US">ComboBox</value>
@@ -47,7 +64,7 @@
                 </node>
                 <node oor:name="m4" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.demo.complextoolbarcontrols.demoaddon:Command5</value>
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:SpinfieldCmd</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value xml:lang="en-US">Spinfield</value>
@@ -72,7 +89,7 @@
                 </node>
                 <node oor:name="m6" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.demo.complextoolbarcontrols.demoaddon:Command6</value>
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:EditfieldCmd</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value xml:lang="en-US">Editfield</value>
@@ -97,7 +114,7 @@
                 </node>
                 <node oor:name="m8" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.demo.complextoolbarcontrols.demoaddon:Command7</value>
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:DropdownboxCmd</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value xml:lang="en-US">Dropdownbox</value>
@@ -117,7 +134,7 @@
                 </node>
                 <node oor:name="m9" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.demo.complextoolbarcontrols.demoaddon:Command3</value>
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:ToggleDropdownButtonCmd</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value xml:lang="en-US">Toggle Dropdown Button</value>
@@ -134,7 +151,7 @@
                 </node>
                 <node oor:name="m10" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.demo.complextoolbarcontrols.demoaddon:Command4</value>
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:DropdownButtonCmd</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value xml:lang="en-US">Dropdown Button</value>
@@ -154,7 +171,7 @@
         <node oor:name="Images">
             <node oor:name="vnd.demo.complextoolbarcontrols.image1" oor:op="replace">
                 <prop oor:name="URL">
-                    <value>vnd.demo.complextoolbarcontrols.demoaddon:Command1</value>
+                    <value>vnd.demo.complextoolbarcontrols.demoaddon:ImageButtonCmd</value>
                 </prop>
                 <node oor:name="UserDefinedImages">
                     <prop oor:name="ImageSmallURL" oor:type="xs:string">

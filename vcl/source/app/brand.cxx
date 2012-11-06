@@ -25,9 +25,6 @@
 #include <tools/stream.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/svapp.hxx>
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-#include <vcl/rendergraphicrasterizer.hxx>
-#endif
 
 namespace {
     static bool loadPng(const char *pPath, const rtl::OUString &rName, BitmapEx &rBitmap)

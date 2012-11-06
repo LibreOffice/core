@@ -1,3 +1,21 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
+
 # Format:
 
 # Start
@@ -23,7 +41,7 @@ solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01 (Name="C
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-presentation-minimizer"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-core02,%BASISPACKAGEPREFIX%PRODUCTVERSION-core03,%BASISPACKAGEPREFIX%PRODUCTVERSION-core04,%BASISPACKAGEPREFIX%PRODUCTVERSION-core05,%BASISPACKAGEPREFIX%PRODUCTVERSION-core06,%BASISPACKAGEPREFIX%PRODUCTVERSION-core07"
 linuxpatchrequires = ""
-copyright = "1999-2008 by OpenOffice.org"
+copyright = "2012 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
 description = "Presentation Minimizer extension for %PRODUCTNAME %PRODUCTVERSION"
@@ -38,7 +56,7 @@ solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01 (Name="C
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-report-builder"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-core02,%BASISPACKAGEPREFIX%PRODUCTVERSION-core03,%BASISPACKAGEPREFIX%PRODUCTVERSION-core04,%BASISPACKAGEPREFIX%PRODUCTVERSION-core05,%BASISPACKAGEPREFIX%PRODUCTVERSION-core06,%BASISPACKAGEPREFIX%PRODUCTVERSION-core07"
 linuxpatchrequires = ""
-copyright = "1999-2008 by OpenOffice.org"
+copyright = "2012 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
 description = "Report Builder extension for %PRODUCTNAME %PRODUCTVERSION"
@@ -53,7 +71,7 @@ solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01 (Name="C
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-mediawiki-publisher"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-core02,%BASISPACKAGEPREFIX%PRODUCTVERSION-core03,%BASISPACKAGEPREFIX%PRODUCTVERSION-core04,%BASISPACKAGEPREFIX%PRODUCTVERSION-core05,%BASISPACKAGEPREFIX%PRODUCTVERSION-core06,%BASISPACKAGEPREFIX%PRODUCTVERSION-core07"
 linuxpatchrequires = ""
-copyright = "1999-2008 by OpenOffice.org"
+copyright = "2012 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
 description = "MediaWiki publisher extension for %PRODUCTNAME %PRODUCTVERSION"
@@ -68,7 +86,7 @@ solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01 (Name="C
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-presenter-screen"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-core02,%BASISPACKAGEPREFIX%PRODUCTVERSION-core03,%BASISPACKAGEPREFIX%PRODUCTVERSION-core04,%BASISPACKAGEPREFIX%PRODUCTVERSION-core05,%BASISPACKAGEPREFIX%PRODUCTVERSION-core06,%BASISPACKAGEPREFIX%PRODUCTVERSION-core07"
 linuxpatchrequires = ""
-copyright = "1999-2008 by OpenOffice.org"
+copyright = "2012 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
 description = "Presenter Screen extension for %PRODUCTNAME %PRODUCTVERSION"
@@ -83,7 +101,7 @@ solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01 (Name="C
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-pdf-import"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-core02,%BASISPACKAGEPREFIX%PRODUCTVERSION-core03,%BASISPACKAGEPREFIX%PRODUCTVERSION-core04,%BASISPACKAGEPREFIX%PRODUCTVERSION-core05,%BASISPACKAGEPREFIX%PRODUCTVERSION-core06,%BASISPACKAGEPREFIX%PRODUCTVERSION-core07"
 linuxpatchrequires = ""
-copyright = "1999-2008 by OpenOffice.org"
+copyright = "2012 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
 description = "PDF import extension for %PRODUCTNAME %PRODUCTVERSION"
@@ -233,7 +251,7 @@ solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01 (Name="C
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-nlpsolver"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-core02,%BASISPACKAGEPREFIX%PRODUCTVERSION-core03,%BASISPACKAGEPREFIX%PRODUCTVERSION-core04,%BASISPACKAGEPREFIX%PRODUCTVERSION-core05,%BASISPACKAGEPREFIX%PRODUCTVERSION-core06,%BASISPACKAGEPREFIX%PRODUCTVERSION-core07"
 linuxpatchrequires = ""
-copyright = "2009 by Sun Microsystems, Inc."
+copyright = "2012 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
 description = "NLPSolver extension for %PRODUCTNAME %PRODUCTVERSION"
@@ -263,7 +281,7 @@ solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01 (Name="C
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-mysql-connector"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-core02,%BASISPACKAGEPREFIX%PRODUCTVERSION-core03,%BASISPACKAGEPREFIX%PRODUCTVERSION-core04,%BASISPACKAGEPREFIX%PRODUCTVERSION-core05,%BASISPACKAGEPREFIX%PRODUCTVERSION-core06,%BASISPACKAGEPREFIX%PRODUCTVERSION-core07"
 linuxpatchrequires = ""
-copyright = "2008 by Sun Mcrosystems, Inc."
+copyright = "2012 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
 description = "MySQL Connector extension for %PRODUCTNAME %PRODUCTVERSION"
@@ -293,7 +311,7 @@ solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01 (Name="C
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-beanshell-script-provider"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-core02,%BASISPACKAGEPREFIX%PRODUCTVERSION-core03,%BASISPACKAGEPREFIX%PRODUCTVERSION-core04,%BASISPACKAGEPREFIX%PRODUCTVERSION-core05,%BASISPACKAGEPREFIX%PRODUCTVERSION-core06,%BASISPACKAGEPREFIX%PRODUCTVERSION-core07"
 linuxpatchrequires = ""
-copyright = "1999-2008 by OpenOffice.org"
+copyright = "2012 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
 description = "Script provider for BeanShell extension for %PRODUCTNAME %PRODUCTVERSION"
@@ -308,7 +326,7 @@ solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01 (Name="C
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-javascript-script-provider"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-core02,%BASISPACKAGEPREFIX%PRODUCTVERSION-core03,%BASISPACKAGEPREFIX%PRODUCTVERSION-core04,%BASISPACKAGEPREFIX%PRODUCTVERSION-core05,%BASISPACKAGEPREFIX%PRODUCTVERSION-core06,%BASISPACKAGEPREFIX%PRODUCTVERSION-core07"
 linuxpatchrequires = ""
-copyright = "1999-2008 by OpenOffice.org"
+copyright = "2012 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
 description = "Script provider for JavaScript extension for %PRODUCTNAME %PRODUCTVERSION"
@@ -323,7 +341,7 @@ solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01 (Name="C
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-python-script-provider"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-core02,%BASISPACKAGEPREFIX%PRODUCTVERSION-core03,%BASISPACKAGEPREFIX%PRODUCTVERSION-core04,%BASISPACKAGEPREFIX%PRODUCTVERSION-core05,%BASISPACKAGEPREFIX%PRODUCTVERSION-core06,%BASISPACKAGEPREFIX%PRODUCTVERSION-core07"
 linuxpatchrequires = ""
-copyright = "1999-2008 by OpenOffice.org"
+copyright = "2012 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
 description = "Script provider for Python extension for %PRODUCTNAME %PRODUCTVERSION"

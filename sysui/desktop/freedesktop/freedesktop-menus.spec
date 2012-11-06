@@ -1,3 +1,20 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
 # version and release passed by command-line
 Version: %version
 Release: %release
@@ -6,7 +23,7 @@ Name: %pkgprefix-freedesktop-menus
 #BuildRequires: sed
 #BuildRequires: perl
 Group: Office
-License: LGPL
+License: LGPLv3 with MPLv2, ALv2 and others
 Provides: libreoffice-desktop-integration
 Conflicts: %pkgprefix-suse-menus
 Conflicts: %pkgprefix-debian-menus
@@ -21,9 +38,9 @@ AutoReqProv: no
 %define gnome_mime_theme hicolor
 
 %description
-%productname desktop integration for desktop-environments that implement 
+%productname desktop integration for desktop-environments that implement
 the menu- and mime-related specifications from http://www.freedesktop.org
-Install this package if you're using a distribution not covered by any of 
+Install this package if you're using a distribution not covered by any of
 the other %pkgprefix-<distribution>-menus packages.
 
 %install
@@ -39,7 +56,7 @@ mkdir -p $RPM_BUILD_ROOT
 # FIXME: remove - only purpose is to create packages identical to OOF680 m8
 umask 0000
 
-# set parameters for the create_tree script 
+# set parameters for the create_tree script
 export DESTDIR=$RPM_BUILD_ROOT
 export KDEMAINDIR=/usr
 export GNOMEDIR=%{gnome_dir}
@@ -57,7 +74,7 @@ rm -rf usr/share/applnk-redhat
 #find usr/share/icons -name '*.png' -exec chmod g+w {} \;
 
 %clean
-rm -rf $RPM_BUILD_ROOT 
+rm -rf $RPM_BUILD_ROOT
 
 %triggerin -- %pkgprefix, %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-math
 # this is run when one of the above packages is already installed and the menu
@@ -78,11 +95,11 @@ elif (which update-desktop-database); then
 fi
 
 %triggerun -- %pkgprefix, %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-math
-if [ "$1" = "0" ] ; then  
+if [ "$1" = "0" ] ; then
   # the menu-package gets uninstalled/updated - postun will run the command
   exit 0
 fi
-if [ "$2" = "0" ] ; then  
+if [ "$2" = "0" ] ; then
   # the triggering package gets removed
   if [ -x /opt/gnome/bin/update-desktop-database ]; then
       /opt/gnome/bin/update-desktop-database -q
@@ -91,7 +108,7 @@ if [ "$2" = "0" ] ; then
   fi
 fi
 
-%post 
+%post
 # no need to run it when updating, since %postun of the old package is run
 # afterwards
 
@@ -101,13 +118,13 @@ if [ "$1" = "1" ] ; then  # first install
   elif (which update-desktop-database); then
     update-desktop-database -q /usr/share/applications
   fi
-  
+
   if (which update-mime-database); then
     update-mime-database /usr/share/mime
   fi
 fi
 
-# add symlinks so that nautilus can identify the mime-icons 
+# add symlinks so that nautilus can identify the mime-icons
 # not strictly freedesktop-stuff but there is no common naming scheme yet.
 # One proposal is "mime-application:vnd.oasis.opendocument.spreadsheet.png"
 # for e.g. application/vnd.oasis.opendocument.spreadsheet
@@ -158,7 +175,7 @@ for theme in gnome hicolor locolor; do
         # touch it, just in case we cannot find the binary...
         touch /usr/share/icons/$theme
         if [ -x /opt/gnome/bin/gtk-update-icon-cache ]; then
-            /opt/gnome/bin/gtk-update-icon-cache -q /usr/share/icons/$theme 
+            /opt/gnome/bin/gtk-update-icon-cache -q /usr/share/icons/$theme
         elif (which gtk-update-icon-cache); then
             gtk-update-icon-cache -q /usr/share/icons/$theme
         fi
@@ -328,7 +345,7 @@ elif (which update-desktop-database); then
   update-desktop-database -q /usr/share/applications
 fi
 
-%preun 
+%preun
 # remove from /etc/mailcap only on de-install
 if [ "$1" = 0 ]
 then
@@ -339,10 +356,10 @@ then
   mv -f /etc/mailcap.tmp$$ /etc/mailcap
 fi
 
-%postun 
+%postun
 if [ "$1" = 0 ] ; then # only run when erasing the package - other cases handled by the triggers
   if [ -x /opt/gnome/bin/update-desktop-database ]; then
-    /opt/gnome/bin/update-desktop-database -q 
+    /opt/gnome/bin/update-desktop-database -q
   elif (which update-desktop-database); then
     update-desktop-database -q
   fi
@@ -367,8 +384,8 @@ for theme in gnome hicolor locolor; do
   fi
 done
 
-%files 
-# specify stale symlinks verbatim, not as glob - a change in recent versions of 
+%files
+# specify stale symlinks verbatim, not as glob - a change in recent versions of
 # glibc breaks rpm unless rpm is build with internal glob-matching (issue 49374)
 # https://bugzilla.redhat.com/beta/show_bug.cgi?id=134362
 %defattr(-, root, root)

@@ -1,34 +1,25 @@
-'*************************************************************************
 '
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-' 
-' Copyright 2000, 2010 Oracle and/or its affiliates.
+' This file is part of the LibreOffice project.
 '
-' OpenOffice.org - a multi-platform office productivity suite
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
-' This file is part of OpenOffice.org.
+' This file incorporates work covered by the following license notice:
 '
-' OpenOffice.org is free software: you can redistribute it and/or modify
-' it under the terms of the GNU Lesser General Public License version 3
-' only, as published by the Free Software Foundation.
+'   Licensed to the Apache Software Foundation (ASF) under one or more
+'   contributor license agreements. See the NOTICE file distributed
+'   with this work for additional information regarding copyright
+'   ownership. The ASF licenses this file to you under the Apache
+'   License, Version 2.0 (the "License"); you may not use this file
+'   except in compliance with the License. You may obtain a copy of
+'   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 '
-' OpenOffice.org is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU Lesser General Public License version 3 for more details
-' (a copy is included in the LICENSE file that accompanied this code).
-'
-' You should have received a copy of the GNU Lesser General Public License
-' version 3 along with OpenOffice.org.  If not, see
-' <http://www.openoffice.org/license.html>
-' for a copy of the LGPLv3 License.
-'
-'*************************************************************************
 
 Option Explicit On
 Option Strict On
 
-imports System	
+imports System
 imports System.Collections
 imports Microsoft.VisualBasic
 imports unoidl.com.sun.star.lang
@@ -42,8 +33,8 @@ Sub Main( ByVal args() As String)
 '    If args.Length <> 2 Then
 '        Console.WriteLine("WriterDemo takes two arguments. A file url to the office" & _
 '        "program directory and a connection string.")
-'    End If        
-'Connect to a running office 
+'    End If
+'Connect to a running office
 '--------------------------------------------------
 
 'Create a service manager of the remote office
@@ -52,20 +43,20 @@ Sub Main( ByVal args() As String)
 Dim xContext As XComponentContext
 'xLocalContext = Bootstrap.defaultBootstrap_InitialComponentContext( _
 '    args(0) & "/uno.ini", ht.GetEnumerator())
-        
+
 xContext = Bootstrap.bootstrap()
 
-'Dim xURLResolver As XUnoUrlResolver 
+'Dim xURLResolver As XUnoUrlResolver
 'xURLResolver = DirectCast(xLocalContext.getServiceManager(). _
 '    createInstanceWithContext("com.sun.star.bridge.UnoUrlResolver", _
 '	    xLocalContext), XUnoUrlResolver)
-        
-'Dim xRemoteContext As XComponentContext 
+
+'Dim xRemoteContext As XComponentContext
 'xRemoteContext = DirectCast(xURLResolver.resolve( _
 '	"uno:socket,host=localhost,port=8100;urp;StarOffice.ComponentContext"), _
 '        XComponentContext)
 
-Dim xFactory As XMultiServiceFactory 
+Dim xFactory As XMultiServiceFactory
 xFactory = DirectCast(xContext.getServiceManager(), _
     XMultiServiceFactory)
 
@@ -97,7 +88,7 @@ Dim xCursor As unoidl.com.sun.star.text.XTextCursor
 xCursor = xSimpleText.createTextCursor()
 
 'Inserting some Text
-xText.insertString(xCursor, "The first line in the newly created text document." _ 
+xText.insertString(xCursor, "The first line in the newly created text document." _
     & vbLf, false)
 
 'Create instance of a text table with 4 columns and 4 rows
@@ -138,12 +129,12 @@ xTextTable.getCellByName("A2").setValue(22.5)
 xTextTable.getCellByName("B2").setValue(5615.3)
 xTextTable.getCellByName("C2").setValue(-2315.7)
 xTextTable.getCellByName("D2").setFormula("sum <A2:C2>")
-    
+
 xTextTable.getCellByName("A3").setValue(21.5)
 xTextTable.getCellByName("B3").setValue (615.3)
 xTextTable.getCellByName("C3").setValue( -315.7)
 xTextTable.getCellByName("D3").setFormula( "sum <A3:C3>")
-           
+
 xTextTable.getCellByName("A4").setValue( 121.5)
 xTextTable.getCellByName("B4").setValue( -615.3)
 xTextTable.getCellByName("C4").setValue( 415.7)
@@ -176,14 +167,14 @@ Dim xTextFrame As unoidl.com.sun.star.text.XTextFrame = _
     DirectCast(objTextFrame, unoidl.com.sun.star.text.XTextFrame)
 
 'Set the size of the frame
-Dim aSize As unoidl.com.sun.star.awt.Size = _ 
+Dim aSize As unoidl.com.sun.star.awt.Size = _
     New unoidl.com.sun.star.awt.Size(15000, 400)
 DirectCast(xTextFrame, unoidl.com.sun.star.drawing.XShape).setSize(aSize)
 
 'Set anchortype
 Dim xPropertySetFrame As unoidl.com.sun.star.beans.XPropertySet
 xPropertySetFrame = DirectCast(xTextFrame, unoidl.com.sun.star.beans.XPropertySet)
-xPropertySetFrame.setPropertyValue("AnchorType", New uno.Any( _ 
+xPropertySetFrame.setPropertyValue("AnchorType", New uno.Any( _
     GetType(unoidl.com.sun.star.text.TextContentAnchorType), _
     unoidl.com.sun.star.text.TextContentAnchorType.AS_CHARACTER))
 
@@ -223,7 +214,7 @@ End Sub
 
 Sub insertIntoCell(sCellName As String,sText As String, _
      xTable As unoidl.com.sun.star.text.XTextTable)
-    Dim xCell As unoidl.com.sun.star.table.XCell 
+    Dim xCell As unoidl.com.sun.star.table.XCell
     xCell = xTable.getCellByName(sCellName)
 
     Dim xSimpleTextCell As unoidl.com.sun.star.text.XSimpleText

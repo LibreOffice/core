@@ -1,4 +1,21 @@
 #!/bin/sh
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
 
 jarfilename="JavaSetup.jar"
 tempdir=/var/tmp/install_$$
@@ -9,6 +26,9 @@ java_runtime_sufficient="no"
 java_versions_supported="1.4 1.5 1.6"
 rpm2cpio_found="no"
 rpm_found="no"
+is_64bit_arch="no"
+arch64string="x86_64"
+arch64string2="64-bit"
 sunjavahotspot="HotSpot"
 errortext=""
 errorcode=""
@@ -381,7 +401,7 @@ check_architecture()
     fi
 }
 
-find_solaris_jre()
+find_jre_in_path()
 {
     # searching for java runtime in path
     for i in `echo $PATH | sed -e 's/^:/.:/g' -e 's/:$/:./g' -e 's/::/:.:/g' -e 's/:/ /g'`; do
@@ -418,6 +438,36 @@ check_jre_version()
                 fi
             done
         fi
+    fi
+}
+
+check_linux_jre_version()
+{
+    # check version of an installed JRE
+    javaoutput=`$java_runtime -version 2>&1 | head -1`
+
+    for i in $java_versions_supported; do
+        versionmatch=`echo $javaoutput | grep $i`
+        if [ ! -z "$versionmatch" ]; then
+            java_runtime_sufficient="yes"
+            break
+        fi
+    done
+}
+
+check_64bit_architecture()
+{
+    # check system architecture using "uname -m"
+    # unameoutput=`uname -m 2>&1`
+    # x64str=`echo $unameoutput | grep $arch64string`
+
+    # check system architecture using "file /usr/bin/file"
+    fileoutput=`file /usr/bin/file 2>&1`
+    x64str=`echo $fileoutput | grep $arch64string2`
+
+    if [ ! -z "$x64str" ]; then
+        is_64bit_arch="yes"
+        echo "64-bit Linux"
     fi
 }
 
@@ -460,10 +510,27 @@ cd "`dirname "$0"`"
 if [ "$java_runtime_set" != "yes" ]; then
     platform=`uname -s`
     if [ "`uname -s`" = "Linux" ]; then
-        install_linux_rpm
+        check_64bit_architecture
+        if [ "$is_64bit_arch" = "no" ]; then
+            install_linux_rpm
+        else
+            find_jre_in_path
+            if [ "$java_runtime_found" = "yes" ]; then
+                check_linux_jre_version
+                if [ ! "$java_runtime_sufficient" = "yes" ]; then
+                    errortext="Error: Did not find a valid Java Runtime Environment (JRE). Required JRE versions: $java_versions_supported"
+                    errorcode="14"
+                    do_exit
+                fi
+            else
+                errortext="Error: Did not find an installed Java Runtime Environment (JRE)."
+                errorcode="15"
+                do_exit
+            fi
+        fi
     elif [ "`uname -s`" = "SunOS" ]; then
         check_architecture
-        find_solaris_jre
+        find_jre_in_path
         if [ "$java_runtime_found" = "yes" ]; then
             check_jre_version
             if [ ! "$java_runtime_sufficient" = "yes" ]; then

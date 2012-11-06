@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
-#take a .zip containing a flat hierarchy of odf files and strip out the
-#language and country tags in each of them and repack it all up
-#should convert templates so that documents based on them use
-#the default-document-language rather than the hardcoded lang-tag
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
 
-#All a bit hacky, but it should work
+# take a .zip containing a flat hierarchy of odf files and strip out the
+# language and country tags in each of them and repack it all up
+# should convert templates so that documents based on them use
+# the default-document-language rather than the hardcoded lang-tag
+#
+# All a bit hacky, but it should work
 
 tempfoo=`basename $0`
 

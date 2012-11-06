@@ -659,11 +659,12 @@ void IosSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     ImplDrawPixel( nX, nY, aPixelColor );
 }
 
-bool IosSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
-                                    double fTransparency,
-                                    const ::basegfx::B2DVector& rLineWidths,
-                                    basegfx::B2DLineJoin eLineJoin,
-                                    com::sun::star::drawing::LineCap eLineCap )
+bool IosSalGraphics::drawPolyLine(
+    const ::basegfx::B2DPolygon& rPolyLine,
+    double fTransparency,
+    const ::basegfx::B2DVector& rLineWidths,
+    basegfx::B2DLineJoin eLineJoin,
+    com::sun::star::drawing::LineCap eLineCap)
 {
     // short circuit if there is nothing to do
     const int nPointCount = rPolyLine.count();
@@ -684,6 +685,28 @@ bool IosSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
     {
         return false;
     }
+    // setup cap attribute
+    CGLineCap aCGLineCap(kCGLineCapButt);
+
+    switch(eLineCap)
+    {
+        default: // com::sun::star::drawing::LineCap_BUTT:
+        {
+            aCGLineCap = kCGLineCapButt;
+            break;
+        }
+        case com::sun::star::drawing::LineCap_ROUND:
+        {
+            aCGLineCap = kCGLineCapRound;
+            break;
+        }
+        case com::sun::star::drawing::LineCap_SQUARE:
+        {
+            aCGLineCap = kCGLineCapSquare;
+            break;
+        }
+    }
+
     // setup line attributes
     CGLineJoin aCGLineJoin = kCGLineJoinMiter;
     switch( eLineJoin )

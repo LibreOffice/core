@@ -1,4 +1,21 @@
 #! /bin/sh
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
 
 # This script starts a new shell and sets all enviroment variables, which
 # are necessary for building the examples of the Office Development Kit.
@@ -160,7 +177,7 @@ case ${sdk_platform} in
     then
 	SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
 	export SDK_GXX_INCLUDE_PATH
-    fi	
+    fi
 
     directoryname=linux
     comid=gcc3
@@ -177,7 +194,7 @@ case ${sdk_platform} in
     then
 	SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
 	export SDK_GXX_INCLUDE_PATH
-    fi	
+    fi
 
     directoryname=freebsd
     comid=gcc3
@@ -206,7 +223,7 @@ case ${sdk_platform} in
 	PTHREAD_LIBS=-lc_r
 	export PTHREAD_CFLAGS
 	export PTHREAD_LIBS
-    else	
+    else
 	PTHREAD_LIBS=-pthread
 	export PTHREAD_LIBS
     fi
@@ -292,11 +309,11 @@ fi
 
 
 # Prepare shell with all necessary environment variables.
-echo 
+echo
 echo " ************************************************************************"
-echo " *"                                                  
-echo " * SDK environment is prepared for ${platform}"      
-echo " *"                                                  
+echo " *"
+echo " * SDK environment is prepared for ${platform}"
+echo " *"
 echo " * SDK = $OO_SDK_HOME"
 echo " * Office = $OFFICE_HOME"
 echo " * URE = $OO_SDK_URE_HOME"

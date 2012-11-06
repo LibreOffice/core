@@ -709,8 +709,8 @@ void AquaSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 
 bool AquaSalGraphics::drawPolyLine(
     const ::basegfx::B2DPolygon& rPolyLine,
-                                    double fTransparency,
-                                    const ::basegfx::B2DVector& rLineWidths,
+    double fTransparency,
+    const ::basegfx::B2DVector& rLineWidths,
     basegfx::B2DLineJoin eLineJoin,
     com::sun::star::drawing::LineCap eLineCap)
 {

@@ -1,10 +1,27 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
 # version and release passed by command-line
 Version: %version
 Release: %release
 Summary: %productname desktop integration
 Name: %pkgprefix-mandriva-menus
 Group: Office
-License: LGPL
+License: LGPLv3 with MPLv2, ALv2 and others
 AutoReqProv: no
 BuildArch: noarch
 #
@@ -23,7 +40,7 @@ Provides: libreoffice-desktop-integration
 %{?!update_menus:%define update_menus if [ -x /usr/bin/update-menus ]; then /usr/bin/update-menus || true ; fi}
 %{?!trigger_clean_menus:%define trigger_clean_menus if [ "$2" = "0" -a -x /usr/bin/update-menus ]; then /usr/bin/update-menus || true ; fi}
 
-%description 
+%description
 %productname desktop integration
 
 # Update menus
@@ -127,7 +144,7 @@ then
 
   # now append our stuff to the temporary file
   cat >> /etc/mailcap.tmp$$ << END
-# OpenOffice.org
+# LibreOffice
 application/vnd.oasis.opendocument.text; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-flat-xml; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-template; %unixfilename -view %s

@@ -18,6 +18,7 @@ officecfg_XCSFILES := \
     Office/Embedding \
     Office/Events \
     Office/ExtendedColorScheme \
+    Office/ExtensionDependencies \
     Office/ExtensionManager \
     Office/FormWizard \
     Office/Histories \

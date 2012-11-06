@@ -1,4 +1,11 @@
 #!/bin/bash
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
 
 # add-modelines, a simple script to add comments to
 # the beginning and end of source files for LibreOffice devs
@@ -7,10 +14,6 @@
 # someone AT boldandbusted dotty-dot com
 # http://www.boldandbusted.com/
 # (c) 2010 Bold and Busted LLC
-# Licensed under the MPL/LGPLv3 or later
-# First edit 2010-10-08
-# Updated on 2010-10-09
-# Version 0.7
 
 # NOTE: At present, this script only works for files with C-like comments.
 # NOTE: If you don't specify -p, the script will act on the current working directory.
