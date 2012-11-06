@@ -291,14 +291,14 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
                     line.copy(nIndex+1).trim(), RTL_TEXTENCODING_UTF8 );
 
 #if OSL_DEBUG_LEVEL > 1
-				OString name_tmp = OUStringToOString(sName, RTL_TEXTENCODING_ASCII_US);
-				OString value_tmp = OUStringToOString(sValue, RTL_TEXTENCODING_UTF8);
+                OString name_tmp = OUStringToOString(sName, RTL_TEXTENCODING_ASCII_US);
+                OString value_tmp = OUStringToOString(sValue, RTL_TEXTENCODING_UTF8);
                 OSL_TRACE(
                     "pushing: name=%s value=%s",
                     name_tmp.getStr(), value_tmp.getStr() );
 #endif /* OSL_DEBUG_LEVEL > 1 */
 
-				map_[sName] = sValue;
+                map_[sName] = sValue;
             }
         }
         osl_closeFile(handle);
@@ -473,24 +473,24 @@ bool Bootstrap_Impl::getValue(
     if (override && getDirectValue(key, value, mode, requestStack)) {
         return true;
     }
-    if ( key == "_OS" ) {
+    if (key == "_OS") {
         rtl_uString_assign(
             value, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(RTL_OS)).pData);
         return true;
     }
-    if ( key == "_ARCH" ) {
+    if (key == "_ARCH") {
         rtl_uString_assign(
             value, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(RTL_ARCH)).pData);
         return true;
     }
-    if ( key == "_CPPU_ENV" ) {
+    if (key == "_CPPU_ENV") {
         rtl_uString_assign(
             value,
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MY_STRING(CPPU_ENV))).
              pData));
         return true;
     }
-    if ( key == "ORIGIN" ) {
+    if (key == "ORIGIN") {
         rtl_uString_assign(
             value,
             _iniName.copy(
@@ -500,21 +500,21 @@ bool Bootstrap_Impl::getValue(
     if (getAmbienceValue(key, value, mode, requestStack)) {
         return true;
     }
-    if ( key == "SYSUSERCONFIG" ) {
+    if (key == "SYSUSERCONFIG") {
         rtl::OUString v;
         bool b = osl::Security().getConfigDir(v);
         EnsureNoFinalSlash(v);
         rtl_uString_assign(value, v.pData);
         return b;
     }
-    if ( key == "SYSUSERHOME" ) {
+    if (key == "SYSUSERHOME") {
         rtl::OUString v;
         bool b = osl::Security().getHomeDir(v);
         EnsureNoFinalSlash(v);
         rtl_uString_assign(value, v.pData);
         return b;
     }
-    if ( key == "SYSBINDIR" ) {
+    if (key == "SYSBINDIR") {
         getExecutableDirectory_Impl(value);
         return true;
     }
