@@ -123,8 +123,12 @@ public:
     virtual sal_Bool drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
     virtual sal_Bool drawPolyPolygonBezier( sal_uLong nPoly, const sal_uLong* pPoints,
                                             const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry );
-    virtual bool drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency,
-                               const ::basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin );
+    virtual bool        drawPolyLine(
+        const ::basegfx::B2DPolygon&,
+        double fTransparency,
+        const ::basegfx::B2DVector& rLineWidths,
+        basegfx::B2DLineJoin,
+        com::sun::star::drawing::LineCap eLineCap);
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
