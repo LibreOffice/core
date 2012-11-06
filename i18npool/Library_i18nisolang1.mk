@@ -61,6 +61,11 @@ ifeq ($(ENABLE_LIBLANGTAG),YES)
 $(eval $(call gb_Library_add_defs,i18nisolang1,-DENABLE_LIBLANGTAG))
 $(eval $(call gb_Library_use_external,i18nisolang1,liblangtag))
 $(eval $(call gb_Library_use_external,i18nisolang1,libxml2))
+$(eval $(call gb_Library_use_system_win32_libs,i18nisolang1,\
+        $(if $(filter $(COM),MSC), \
+                kernel32 \
+        ) \
+))
 endif
 
 # vim: set noet sw=4 ts=4:
