@@ -9549,10 +9549,14 @@ if test  "$test_gtk" = "yes"; then
         PKG_CHECK_MODULES(GTHREAD, gthread-2.0,,AC_MSG_ERROR([requirements to build the gtk-plugin not met. Use --disable-gtk or install the missing packages]))
         BUILD_TYPE="$BUILD_TYPE GTK"
 
+	AC_MSG_CHECKING([whether to enable the systray quickstarter])
         if test "x$enable_systray" = "xyes"; then
+	    AC_MSG_RESULT([yes])
             PKG_CHECK_MODULES( GTK210, gtk+-2.0 >= 2.10.0,
                             [ ENABLE_SYSTRAY_GTK="TRUE" ],
                             [ ENABLE_SYSTRAY_GTK="" ])
+        else
+	    AC_MSG__RESULT([no])
         fi
 
         AC_MSG_CHECKING([whether to enable Gtk print dialog support])
