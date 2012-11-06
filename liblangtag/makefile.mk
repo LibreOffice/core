@@ -37,12 +37,13 @@ TARFILE_MD5=54e578c91b1b68e69c72be22adcb2195
 PATCH_FILES=liblangtag-0.4.0-msvc-warning.patch
 PATCH_FILES+=liblangtag-0.4.0-windows.patch
 PATCH_FILES+=liblangtag-0.4.0-reg2xml-encoding-problem.patch
+PATCH_FILES+=liblangtag-0.4.0-windows2.patch
 .IF "$(OS)" == "MACOSX"
 PATCH_FILES=liblangtag-0.4.0-mac.patch
 .END
 CONFIGURE_DIR=.
 BUILD_DIR=$(CONFIGURE_DIR)
-CONFIGURE_FLAGS= --disable-modules
+CONFIGURE_FLAGS= --disable-modules --disable-test
 
 .IF "$(OS)" == "MACOSX"
 my_prefix = @.__________________________________________________$(EXTRPATH)
@@ -100,6 +101,7 @@ PATCH_FILES+=liblangtag-0.4.0-mingw.patch
 .ELSE	# "$(COM)"=="GCC"
 
 PATCH_FILES+=liblangtag-0.4.0-msc-configure.patch
+PATCH_FILES+=liblangtag-0.4.0-cross.patch
 
 .ENDIF	# "$(COM)"=="GCC"
 .ENDIF	# "$(GUI)"=="WNT"
