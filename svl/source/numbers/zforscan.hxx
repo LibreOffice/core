@@ -155,7 +155,7 @@ private:                            // ---- privater Teil
     Color StandardColor[NF_MAX_DEFAULT_COLORS];
                                                 // Array der Standardfarben
     Date* pNullDate;                            // 30Dec1899
-    String sNameStandardFormat;                 // "Standard"
+    OUString sNameStandardFormat;               // "Standard"
     sal_uInt16 nStandardPrec;                   // default Precision for Standardformat
     SvNumberFormatter* pFormatter;              // Pointer auf die Formatliste
 

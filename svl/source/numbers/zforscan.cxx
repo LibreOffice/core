@@ -169,9 +169,9 @@ void ImpSvNumberformatScan::InitKeywords() const
 
 /** Extract the name of General, Standard, Whatever, ignoring leading modifiers
     such as [NatNum1]. */
-static String lcl_extractStandardGeneralName( const ::rtl::OUString & rCode )
+static OUString lcl_extractStandardGeneralName( const ::rtl::OUString & rCode )
 {
-    String aStr;
+    OUString aStr;
     const sal_Unicode* p = rCode.getStr();
     const sal_Unicode* const pStop = p + rCode.getLength();
     const sal_Unicode* pBeg = p;    // name begins here
@@ -181,32 +181,36 @@ static String lcl_extractStandardGeneralName( const ::rtl::OUString & rCode )
     {
         switch (*p)
         {
-            case '[':
-                bMod = true;
-                break;
-            case ']':
-                if (bMod)
-                {
-                    bMod = false;
-                    pBeg = p+1;
-                }
-                // else: would be a locale data error, easily to be spotted in
-                // UI dialog
-                break;
-            case ';':
-                if (!bMod)
-                {
-                    bDone = true;
-                    --p;    // put back, increment by one follows
-                }
-                break;
+        case '[':
+            bMod = true;
+            break;
+        case ']':
+            if (bMod)
+            {
+                bMod = false;
+                pBeg = p+1;
+            }
+            // else: would be a locale data error, easily to be spotted in
+            // UI dialog
+            break;
+        case ';':
+            if (!bMod)
+            {
+                bDone = true;
+                --p;    // put back, increment by one follows
+            }
+            break;
         }
         ++p;
         if (bMod)
+        {
             pBeg = p;
+        }
     }
     if (pBeg < p)
+    {
         aStr = rCode.copy( pBeg - rCode.getStr(), p - pBeg);
+    }
     return aStr;
 }
 
@@ -1558,7 +1562,9 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
                     {
                         nThousand = FLAG_STANDARD_IN_FORMAT;
                         if ( bConvertMode )
+                        {
                             sStrArray[i] = sNameStandardFormat;
+                        }
                     }
                     nPos = nPos + sStrArray[i].Len();
                     i++;
