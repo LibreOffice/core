@@ -1271,7 +1271,7 @@ endef
 else # ENABLE_GIO
 
 define gb_LinkTarget__use_gio
-$(error gb_LinkTarget__use_gio should not be used any more)
+
 endef
 
 endif # ENABLE_GIO
