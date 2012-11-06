@@ -759,16 +759,16 @@ File gid_File_Lib_Langtag
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef MACOSX
-    Name = STRING(CONCAT4(liblangtag,.,0,UNXSUFFIX));
+    Name = STRING(CONCAT4(liblangtag,.,1,UNXSUFFIX));
   #elif defined WNT
     #if defined _gcc3
-        Name = STRING(CONCAT4(liblangtag,-,0,.dll));
+        Name = STRING(CONCAT4(liblangtag,-,1,.dll));
     #else
         // Nothing, statically linked to libi18nisolang1
     #endif
   #else
     // FIXME: use version vars
-    Name = STRING(CONCAT4(liblangtag,UNXSUFFIX,.,0));
+    Name = STRING(CONCAT4(liblangtag,UNXSUFFIX,.,1));
   #endif
 End
 
