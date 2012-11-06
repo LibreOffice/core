@@ -539,7 +539,7 @@ Components::Components(
             n = conf.getLength();
         }
         rtl::OUString type(conf.copy(i, c - i));
-        rtl::OUString url(expand(conf.copy(c + 1, n - c - 1)));
+        rtl::OUString url(conf.copy(c + 1, n - c - 1));
         if ( type == "xcsxcu" ) {
             parseXcsXcuLayer(layer, url);
             layer += 2; //TODO: overflow
@@ -696,12 +696,11 @@ void Components::parseFiles(
 
 void Components::parseFileList(
     int layer, FileParser * parseFile, rtl::OUString const & urls,
-    rtl::Bootstrap const & ini, bool recordAdditions)
+    bool recordAdditions)
 {
     for (sal_Int32 i = 0;;) {
         rtl::OUString url(urls.getToken(0, ' ', i));
         if (!url.isEmpty()) {
-            ini.expandMacrosFrom(url); //TODO: detect failure
             Additions * adds = 0;
             if (recordAdditions) {
                 adds = data_.addExtensionXcuAdditions(url, layer);
@@ -831,9 +830,7 @@ void Components::parseXcsXcuIniLayer(
     // Check if ini file exists (otherwise .override would still read global
     // SCHEMA/DATA variables, which could interfere with unrelated environment
     // variables):
-    rtl::Bootstrap ini(url);
-    if (ini.getHandle() != 0)
-    {
+    if (rtl::Bootstrap(url).getHandle() != 0) {
         rtl::OUStringBuffer prefix("${.override:");
         for (sal_Int32 i = 0; i != url.getLength(); ++i) {
             sal_Unicode c = url[i];
@@ -852,13 +849,13 @@ void Components::parseXcsXcuIniLayer(
         rtl::Bootstrap::expandMacros(urls);
         if (!urls.isEmpty())
         {
-            parseFileList(layer, &parseXcsFile, urls, ini, false);
+            parseFileList(layer, &parseXcsFile, urls, false);
         }
         urls = prefix.makeStringAndClear() + rtl::OUString("DATA}");
         rtl::Bootstrap::expandMacros(urls);
         if (!urls.isEmpty())
         {
-            parseFileList(layer + 1, &parseXcuFile, urls, ini, recordAdditions);
+            parseFileList(layer + 1, &parseXcuFile, urls, recordAdditions);
         }
     }
 }
