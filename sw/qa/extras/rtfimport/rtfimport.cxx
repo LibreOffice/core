@@ -123,6 +123,7 @@ public:
     void testDppolyline();
     void testFdo56512();
     void testFdo52989();
+    void testFdo48442();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -197,6 +198,7 @@ void Test::run()
         {"dppolyline.rtf", &Test::testDppolyline},
         {"fdo56512.rtf", &Test::testFdo56512},
         {"fdo52989.rtf", &Test::testFdo52989},
+        {"fdo48442.rtf", &Test::testFdo48442},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -904,6 +906,15 @@ void Test::testFdo52989()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(423), xShape->getSize().Width);
+}
+
+void Test::testFdo48442()
+{
+    // The problem was that \pvmrg is the default in RTF, but not in Writer.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_PRINT_AREA, getProperty<sal_Int16>(xShape, "VertOrientRelation")); // was FRAME
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

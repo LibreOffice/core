@@ -4347,12 +4347,14 @@ RTFSprms RTFFrame::getSprms()
                     pValue.reset(new RTFValue(nVertPadding));
                 break;
             case NS_ooxml::LN_CT_FramePr_hAnchor:
-                if ( nHoriAnchor != 0 )
-                    pValue.reset(new RTFValue(nHoriAnchor));
+                if ( nHoriAnchor == 0 )
+                    nHoriAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_margin;
+                pValue.reset(new RTFValue(nHoriAnchor));
                 break;
             case NS_ooxml::LN_CT_FramePr_vAnchor:
-                if ( nVertAnchor != 0 )
-                    pValue.reset(new RTFValue(nVertAnchor));
+                if ( nVertAnchor == 0 )
+                    nVertAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_margin;
+                pValue.reset(new RTFValue(nVertAnchor));
                 break;
             case NS_ooxml::LN_CT_FramePr_xAlign:
                 pValue.reset(new RTFValue(nHoriAlign));
