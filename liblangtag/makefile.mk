@@ -39,6 +39,7 @@ PATCH_FILES+=liblangtag-0.4.0-reg2xml-encoding-problem.patch
 
 CONFIGURE_DIR=.
 BUILD_DIR=$(CONFIGURE_DIR)
+CONFIGURE_FLAGS= --disable-modules
 
 .IF "$(OS)" == "MACOSX"
 my_prefix = @.__________________________________________________$(EXTRPATH)
@@ -70,24 +71,6 @@ CONFIGURE_FLAGS+= LIBXML2_LIBS='-L$(SOLARLIBDIR) -lxml2'
 .IF "$(OS)" == "MACOSX"
 CONFIGURE_FLAGS+= LIBXML2_CFLAGS='$(LIBXML_CFLAGS)' LIBXML2_LIBS='$(LIBXML_LIBS)'
 .ENDIF
-.ENDIF
-
-.IF "$(SYSTEM_GLIB)"!="YES"
-# we're cheating here.. pkg-config wouldn't find anything useful, see configure patch
-CONFIGURE_FLAGS+= LIBO_GLIB_CHEAT=YES
-CONFIGURE_FLAGS+= GLIB_CFLAGS='-I$(SOLARINCDIR)/external/glib-2.0'
-.IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
-CONFIGURE_FLAGS+= GLIB_LIBS='$(SOLARLIBDIR)/gio-2.0.lib $(SOLARLIBDIR)/gobject-2.0.lib $(SOLARLIBDIR)/gthread-2.0.lib $(SOLARLIBDIR)/gmodule-2.0.lib $(SOLARLIBDIR)/glib-2.0.lib'
-.ELSE
-CONFIGURE_FLAGS+= GLIB_LIBS='-L$(SOLARLIBDIR) -lgio-2.0 -lgobject-2.0 -lgthread-2.0 -lgmodule-2.0 -lglib-2.0'
-.IF "$(OS)" == "MACOSX"
-EXTRA_LINKFLAGS+=-Wl,-dylib_file,@loader_path/libglib-2.0.0.dylib:$(SOLARLIBDIR)/libglib-2.0.0.dylib
-.ENDIF
-.ENDIF
-CONFIGURE_FLAGS+= GLIB_GENMARSHAL=glib-genmarshal
-CONFIGURE_FLAGS+= GLIB_MKENUMS=glib-mkenums
-CONFIGURE_FLAGS+= GOBJECT_QUERY=gobject-query
-CONFIGURE_FLAGS+= --disable-glibtest
 .ENDIF
 
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure
