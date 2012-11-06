@@ -39,6 +39,13 @@ $(eval $(call gb_Module_add_targets,unoil,\
 endif
 
 ifeq ($(COM),MSC)
+unoil_climaker_build := YES
+endif
+ifeq ($(ENABLE_MONO),YES)
+unoil_climaker_build := YES
+endif
+
+ifeq ($(unoil_climaker_build),YES)
 $(eval $(call gb_Module_add_targets,unoil,\
     CustomTarget_climaker \
     Package_climaker \
