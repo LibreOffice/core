@@ -53,10 +53,7 @@ namespace com { namespace sun { namespace star {
         class XComponentContext;
     }
 } } }
-namespace rtl {
-    class Bootstrap;
-    class OUString;
-}
+namespace rtl { class OUString; }
 
 namespace configmgr {
 
@@ -142,7 +139,7 @@ private:
 
     void parseFileList(
         int layer, FileParser * parseFile, rtl::OUString const & urls,
-        rtl::Bootstrap const & ini, bool recordAdditions);
+        bool recordAdditions);
 
     void parseXcdFiles(int layer, rtl::OUString const & url);
 
