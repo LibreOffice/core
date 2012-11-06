@@ -11596,16 +11596,13 @@ SYSTEM_LIBLANGTAG=
 AC_MSG_CHECKING([whether to use liblangtag])
 if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a $_os != Android -a $_os != iOS \); then
     ENABLE_LIBLANGTAG=YES
-    want_glib=yes
     AC_MSG_RESULT([yes])
     AC_MSG_CHECKING([whether to use system liblangtag])
     if test "$with_system_liblangtag" = yes; then
         SYSTEM_LIBLANGTAG=YES
         AC_MSG_RESULT([yes])
-        PKG_CHECK_MODULES( LIBLANGTAG, liblangtag >= 0.3)
+        PKG_CHECK_MODULES( LIBLANGTAG, liblangtag >= 0.4.0)
         libo_MINGW_CHECK_DLL([LIBLANGTAG], [liblangtag])
-        libo_MINGW_TRY_DLL([GLIB], [libglib-2.0])
-        libo_MINGW_TRY_DLL([GMODULE], [libgmodule-2.0])
     else
         SYSTEM_LIBLANGTAG=NO
         AC_MSG_RESULT([no])
