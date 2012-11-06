@@ -35,6 +35,7 @@ TARFILE_NAME=liblangtag-$(LIBLANGTAG_MAJOR).$(LIBLANGTAG_MINOR).$(LIBLANGTAG_MIC
 TARFILE_MD5=54e578c91b1b68e69c72be22adcb2195
 
 PATCH_FILES=liblangtag-0.4.0-msvc-warning.patch
+PATCH_FILES+=liblangtag-0.4.0-windows.patch
 PATCH_FILES+=liblangtag-0.4.0-reg2xml-encoding-problem.patch
 .IF "$(OS)" == "MACOSX"
 PATCH_FILES=liblangtag-0.4.0-mac.patch
