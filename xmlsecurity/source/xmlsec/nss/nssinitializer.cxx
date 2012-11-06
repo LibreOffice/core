@@ -252,7 +252,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
 #ifdef XMLSEC_CRYPTO_NSS
     sCertDir = getMozillaCurrentProfile(rxContext);
 #else
-    (void) xMSF;
+    (void) rxContext;
 #endif
     xmlsec_trace( "Using profile: %s", sCertDir.getStr() );
 
