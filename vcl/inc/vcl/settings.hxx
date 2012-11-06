@@ -348,7 +348,10 @@ private:
     sal_uLong                           mnPreferredSymbolsStyle;
     sal_uInt16                          mnSkipDisabledInMenus;
     sal_Bool                            mbHideDisabledMenuItems;
-    sal_Bool                            mnAcceleratorsInContextMenus;
+    sal_Bool                            mbAcceleratorsInContextMenus;
+    //mbPrimaryButtonWarpsSlider == true for "jump to here" behavior for primary button, otherwise
+    //primary means scroll by single page. Secondary button takes the alternative behaviour
+    sal_Bool                        mbPrimaryButtonWarpsSlider;
     Wallpaper                       maWorkspaceGradient;
     DialogStyle                     maDialogStyle;
     FrameStyle                      maFrameStyle;
@@ -649,10 +652,14 @@ public:
                                         { CopyData(); mpData->mbHideDisabledMenuItems = bHideDisabledMenuItems; }
     sal_Bool                            GetHideDisabledMenuItems() const
                                         { return mpData->mbHideDisabledMenuItems; }
-    void                                                       SetAcceleratorsInContextMenus( sal_Bool bAcceleratorsInContextMenus )
-                                        { CopyData(); mpData->mnAcceleratorsInContextMenus = bAcceleratorsInContextMenus; }
-    sal_Bool                            GetAcceleratorsInContextMenus() const
-                                        { return mpData->mnAcceleratorsInContextMenus; }
+    void                            SetAcceleratorsInContextMenus( sal_Bool bAcceleratorsInContextMenus )
+                                        { CopyData(); mpData->mbAcceleratorsInContextMenus = bAcceleratorsInContextMenus; }
+    sal_Bool                        GetAcceleratorsInContextMenus() const
+                                        { return mpData->mbAcceleratorsInContextMenus; }
+    void                            SetPrimaryButtonWarpsSlider( sal_Bool bPrimaryButtonWarpsSlider )
+                                        { CopyData(); mpData->mbPrimaryButtonWarpsSlider = bPrimaryButtonWarpsSlider; }
+    sal_Bool                        GetPrimaryButtonWarpsSlider() const
+                                        { return mpData->mbPrimaryButtonWarpsSlider; }
 
     void                            SetCairoFontOptions( const void *pOptions )
                                         { CopyData(); mpData->mpFontOptions = pOptions;  }

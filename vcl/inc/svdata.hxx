@@ -294,7 +294,6 @@ struct ImplSVNWFData
     bool                    mbCheckBoxNeedsErase:1;         // set true for platforms that should draw the
                                                             // window background before drawing the native
                                                             // checkbox
-    bool                    mbScrollbarJumpPage:1;          // true for "jump to here" behavior
     bool                    mbCanDrawWidgetAnySize:1;       // set to true currently on gtk
 };
 

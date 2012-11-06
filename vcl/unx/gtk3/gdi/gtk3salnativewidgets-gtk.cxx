@@ -1376,9 +1376,13 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aMouseSettings.SetMenuDelay( iMenuPopupDelay );
     rSettings.SetMouseSettings( aMouseSettings );
 
-    gboolean showmenuicons = true;
-    g_object_get( pSettings, "gtk-menu-images", &showmenuicons, (char *)NULL );
-    aStyleSet.SetPreferredUseImagesInMenus( showmenuicons );
+    gboolean showmenuicons = true, primarybuttonwarps = false;
+    g_object_get( pSettings,
+        "gtk-menu-images", &showmenuicons,
+        "gtk-primary-button-warps-slider", &primarybuttonwarps,
+        (char *)NULL );
+    aStyleSet.SetPreferredUseImagesInMenus(showmenuicons);
+    aStyleSet.SetPrimaryButtonWarpsSlider(primarybuttonwarps);
 
     // set scrollbar settings
     gint slider_width = 14;

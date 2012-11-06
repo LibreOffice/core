@@ -337,11 +337,12 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnUseImagesInMenus          = rData.mnUseImagesInMenus;
     mbPreferredUseImagesInMenus = rData.mbPreferredUseImagesInMenus;
     mnSkipDisabledInMenus       = rData.mnSkipDisabledInMenus;
-    mbHideDisabledMenuItems              = rData.mbHideDisabledMenuItems;
-    mnAcceleratorsInContextMenus    = rData.mnAcceleratorsInContextMenus;
+    mbHideDisabledMenuItems     = rData.mbHideDisabledMenuItems;
+    mbAcceleratorsInContextMenus = rData.mbAcceleratorsInContextMenus;
+    mbPrimaryButtonWarpsSlider  = rData.mbPrimaryButtonWarpsSlider;
     mnToolbarIconSize           = rData.mnToolbarIconSize;
     mnSymbolsStyle              = rData.mnSymbolsStyle;
-    mnPreferredSymbolsStyle         = rData.mnPreferredSymbolsStyle;
+    mnPreferredSymbolsStyle     = rData.mnPreferredSymbolsStyle;
     mpFontOptions               = rData.mpFontOptions;
 }
 
@@ -425,10 +426,11 @@ void ImplStyleData::SetStandardStyles()
     mnUseSystemUIFonts          = 1;
     mnUseFlatBorders            = 0;
     mnUseFlatMenues             = 0;
-    mbPreferredUseImagesInMenus         = sal_True;
+    mbPreferredUseImagesInMenus = sal_True;
     mnSkipDisabledInMenus       = (sal_uInt16)sal_False;
     mbHideDisabledMenuItems     = sal_False;
-    mnAcceleratorsInContextMenus    = sal_True;
+    mbAcceleratorsInContextMenus = sal_True;
+    mbPrimaryButtonWarpsSlider = sal_False;
 
     Gradient aGrad( GradientStyle_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
     maWorkspaceGradient = Wallpaper( aGrad );
@@ -852,7 +854,8 @@ sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mbPreferredUseImagesInMenus == rSet.mpData->mbPreferredUseImagesInMenus) &&
          (mpData->mnSkipDisabledInMenus     == rSet.mpData->mnSkipDisabledInMenus)      &&
          (mpData->mbHideDisabledMenuItems   == rSet.mpData->mbHideDisabledMenuItems)    &&
-         (mpData->mnAcceleratorsInContextMenus  == rSet.mpData->mnAcceleratorsInContextMenus)       &&
+         (mpData->mbAcceleratorsInContextMenus  == rSet.mpData->mbAcceleratorsInContextMenus)&&
+         (mpData->mbPrimaryButtonWarpsSlider == rSet.mpData->mbPrimaryButtonWarpsSlider) &&
          (mpData->maFontColor               == rSet.mpData->maFontColor ))
         return sal_True;
     else

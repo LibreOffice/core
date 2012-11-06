@@ -946,7 +946,12 @@ void ScrollBar::ImplDragThumb( const Point& rMousePos )
 
 void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( rMEvt.IsLeft() || rMEvt.IsMiddle() )
+    bool bPrimaryWarps = GetSettings().GetStyleSettings().GetPrimaryButtonWarpsSlider();
+    bool bWarp = bPrimaryWarps ? rMEvt.IsLeft() : rMEvt.IsMiddle();
+    bool bPrimaryWarping = bWarp && rMEvt.IsLeft();
+    bool bPage = bPrimaryWarps ? rMEvt.IsRight() : rMEvt.IsLeft();
+
+    if (rMEvt.IsLeft() || rMEvt.IsMiddle() || rMEvt.IsRight())
     {
         const Point&    rMousePos = rMEvt.GetPosPixel();
         sal_uInt16          nTrackFlags = 0;
@@ -962,7 +967,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                 bIsInside:
                 maBtn1Rect.IsInside( rMousePos ) )
         {
-            if ( !(mnStateFlags & SCRBAR_STATE_BTN1_DISABLE) )
+            if (rMEvt.IsLeft() && !(mnStateFlags & SCRBAR_STATE_BTN1_DISABLE) )
             {
                 nTrackFlags     = STARTTRACK_BUTTONREPEAT;
                 meScrollType    = SCROLL_LINEUP;
@@ -974,7 +979,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                 bIsInside:
                 maBtn2Rect.IsInside( rMousePos ) )
         {
-            if ( !(mnStateFlags & SCRBAR_STATE_BTN2_DISABLE) )
+            if (rMEvt.IsLeft() && !(mnStateFlags & SCRBAR_STATE_BTN2_DISABLE) )
             {
                 nTrackFlags     = STARTTRACK_BUTTONREPEAT;
                 meScrollType    = SCROLL_LINEDOWN;
@@ -986,7 +991,10 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             bool bThumbHit = HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_THUMB_HORZ : PART_THUMB_VERT,
                                                    maThumbRect, rMousePos, bIsInside )
                              ? bIsInside : maThumbRect.IsInside( rMousePos );
-            bool bDragHandling = rMEvt.IsMiddle() || bThumbHit || ImplGetSVData()->maNWFData.mbScrollbarJumpPage;
+
+            bool bThumbAction = bWarp || bPage;
+
+            bool bDragHandling = bWarp || (bThumbHit && bThumbAction);
             if( bDragHandling )
             {
                 if( mpData )
@@ -1003,7 +1011,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                     mnDragDraw      = SCRBAR_DRAW_THUMB;
 
                     // calculate mouse offset
-                    if( rMEvt.IsMiddle() || (ImplGetSVData()->maNWFData.mbScrollbarJumpPage && !bThumbHit) )
+                    if (bWarp && (!bThumbHit || !bPrimaryWarping))
                     {
                         bDragToMouse = sal_True;
                         if ( GetStyle() & WB_HORZ )
@@ -1023,9 +1031,9 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                     ImplDraw( mnDragDraw, this );
                 }
             }
-            else if( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA,
-                                           aControlRegion, rMousePos, bIsInside )?
-                bIsInside : sal_True )
+            else if(bPage && (HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA,
+                                           aControlRegion, rMousePos, bIsInside ) ?
+                bIsInside : sal_True) )
             {
                 nTrackFlags = STARTTRACK_BUTTONREPEAT;
 
