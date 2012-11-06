@@ -47,6 +47,8 @@ $(eval $(call gb_Module_add_targets,sal,\
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,sal,\
 		Executable_osl_process_child \
+))
+$(eval $(call gb_Module_add_check_targets,sal,\
 		CppunitTest_sal_osl_process \
 ))
 endif
