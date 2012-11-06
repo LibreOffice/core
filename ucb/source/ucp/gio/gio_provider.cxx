@@ -51,7 +51,8 @@ ContentProvider::queryContent(
 
     try
     {
-        xContent = new ::gio::Content(m_xSMgr, this, Identifier);
+        uno::Reference<lang::XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
+        xContent = new ::gio::Content(xMSF, this, Identifier);
     }
     catch ( com::sun::star::ucb::ContentCreationException const & )
     {
@@ -65,8 +66,8 @@ ContentProvider::queryContent(
 }
 
 ContentProvider::ContentProvider(
-    const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-: ::ucbhelper::ContentProviderImplHelper( rSMgr )
+    const uno::Reference< uno::XComponentContext >& rxContext )
+: ::ucbhelper::ContentProviderImplHelper( rxContext )
 {
 }
 
@@ -84,7 +85,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XServiceInfo,
                       com::sun::star::ucb::XContentProvider );
 
-XSERVICEINFO_IMPL_1( ContentProvider,
+XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      rtl::OUString( "com.sun.star.comp.GIOContentProvider" ),
                      rtl::OUString( "com.sun.star.ucb.GIOContentProvider" ) );
 
