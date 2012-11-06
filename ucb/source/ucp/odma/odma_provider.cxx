@@ -246,7 +246,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     if(!aProp.is())
         throw ucb::IllegalIdentifierException();
 
-    xContent = new Content( m_xSMgr, this, xCanonicId ,aProp);
+    xContent = new Content( uno::Reference< lang::XMultiServiceFactory >(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, xCanonicId ,aProp);
     registerNewContent( xContent );
 
     if ( !xContent->getIdentifier().is() )
