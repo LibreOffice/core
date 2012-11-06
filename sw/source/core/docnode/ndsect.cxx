@@ -520,7 +520,7 @@ SwSectionFmt* SwDoc::MakeSectionFmt( SwSectionFmt *pDerivedFrom )
     return pNew;
 }
 
-void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, sal_Bool bDelNodes )
+void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes )
 {
     SwSectionFmts::iterator itFmtPos = std::find( pSectionFmtTbl->begin(), pSectionFmtTbl->end(), pFmt );
 

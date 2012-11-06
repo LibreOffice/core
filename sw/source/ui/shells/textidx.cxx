@@ -167,7 +167,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             const SwTOXBase* pBase = rSh.GetCurTOX();
             OSL_ENSURE(pBase, "no TOXBase to remove");
             if( pBase )
-                rSh.DeleteTOX(*pBase, sal_True);
+                rSh.DeleteTOX(*pBase, true);
         }
         break;
         default:

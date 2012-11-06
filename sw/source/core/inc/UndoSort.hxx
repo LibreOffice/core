@@ -77,7 +77,7 @@ class SwUndoSort : public SwUndo, private SwUndRng
 public:
     SwUndoSort( const SwPaM&, const SwSortOptions& );
     SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode&,
-                const SwSortOptions&, sal_Bool bSaveTable );
+                const SwSortOptions&, bool bSaveTable );
 
     virtual ~SwUndoSort();
 

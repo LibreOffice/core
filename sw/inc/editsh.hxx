@@ -435,7 +435,7 @@ public:
     sal_Bool                UpdateTableOf(const SwTOXBase& rTOX,
                                         const SfxItemSet* pSet = 0);
     const SwTOXBase*    GetCurTOX() const;
-    const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, sal_Bool bCreate = sal_False );
+    const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, bool bCreate = false );
     void                SetDefaultTOXBase(const SwTOXBase& rBase);
 
     sal_Bool                IsTOXBaseReadonly(const SwTOXBase& rTOXBase) const;
@@ -443,7 +443,7 @@ public:
 
     sal_uInt16              GetTOXCount() const;
     const SwTOXBase*    GetTOX( sal_uInt16 nPos ) const;
-    sal_Bool                DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes = sal_False );
+    bool                DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes = false );
 
     /// After reading file update all content tables.
     void SetUpdateTOX( sal_Bool bFlag = sal_True );

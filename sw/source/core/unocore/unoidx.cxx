@@ -1302,7 +1302,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
     //TODO: apply Section attributes (columns and background)
     SwTOXBaseSection const*const pTOX =
-        pDoc->InsertTableOf( *aPam.GetPoint(), rTOXBase, 0, sal_False );
+        pDoc->InsertTableOf( *aPam.GetPoint(), rTOXBase, 0, false );
 
     pDoc->SetTOXBaseName(*pTOX, m_pImpl->m_pProps->GetTOXBase().GetTOXName());
 
@@ -1351,7 +1351,7 @@ void SAL_CALL SwXDocumentIndex::dispose() throw (uno::RuntimeException)
     {
         pSectionFmt->GetDoc()->DeleteTOX(
             *static_cast<SwTOXBaseSection*>(pSectionFmt->GetSection()),
-            sal_True);
+            true);
     }
 }
 

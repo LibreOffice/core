@@ -65,7 +65,7 @@ void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox,
 void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox,
              sal_uInt16 nS, sal_uInt16 nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=0);
 void MoveCell(SwDoc* pDoc, const SwTableBox* pSource,
-              const SwTableBox* pTar, sal_Bool bMovedBefore, SwUndoSort* pUD=0);
+              const SwTableBox* pTar, bool bMovedBefore, SwUndoSort* pUD=0);
 
 // Elements for sorting text and table content
 struct SwSortElement
@@ -86,8 +86,8 @@ struct SwSortElement
     virtual String GetKey(sal_uInt16 nKey ) const = 0;
     virtual double GetValue(sal_uInt16 nKey ) const;
 
-    sal_Bool operator==(const SwSortElement& ) const;
-    sal_Bool operator<(const SwSortElement& ) const;
+    bool operator==(const SwSortElement& ) const;
+    bool operator<(const SwSortElement& ) const;
 
     double StrToDouble(const String& rStr) const;
 private:
@@ -125,21 +125,21 @@ public:
     FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox);
     ~FlatFndBox();
 
-    sal_Bool            IsSymmetric() const { return bSym;  }
+    bool            IsSymmetric() const { return bSym;  }
     sal_uInt16          GetRows()     const { return nRows; }
     sal_uInt16          GetCols()     const { return nCols; }
 
     const _FndBox*      GetBox(sal_uInt16 nCol, sal_uInt16 nRow) const;
 
-    inline sal_Bool     HasItemSets() const;
+    inline bool     HasItemSets() const;
     const SfxItemSet*   GetItemSet(sal_uInt16 nCol, sal_uInt16 nRow) const;
 
 private:
-    sal_Bool            CheckLineSymmetry(const _FndBox& rBox);
-    sal_Bool            CheckBoxSymmetry(const _FndLine& rLn);
+    bool            CheckLineSymmetry(const _FndBox& rBox);
+    bool            CheckBoxSymmetry(const _FndLine& rLn);
     sal_uInt16          GetColCount(const _FndBox& rBox);
     sal_uInt16          GetRowCount(const _FndBox& rBox);
-    void                FillFlat(const _FndBox&, sal_Bool bLastBox=sal_False);
+    void                FillFlat(const _FndBox&, bool bLastBox=false);
 
     SwDoc*              pDoc;
     const _FndBox&      rBoxRef;
@@ -151,10 +151,10 @@ private:
     sal_uInt16          nRow;
     sal_uInt16          nCol;
 
-    sal_Bool            bSym;
+    bool            bSym;
 };
 
-inline sal_Bool FlatFndBox::HasItemSets() const { return 0 != ppItemSets; }
+inline bool FlatFndBox::HasItemSets() const { return 0 != ppItemSets; }
 
 #endif
 

@@ -1391,18 +1391,18 @@ public:
     const SwTOXBaseSection* InsertTableOf( const SwPosition& rPos,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = 0,
-                                            sal_Bool bExpand = sal_False );
+                                            bool bExpand = false );
     const SwTOXBaseSection* InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = 0                                          );
     const SwTOXBase* GetCurTOX( const SwPosition& rPos ) const;
     const SwAttrSet& GetTOXBaseAttrSet(const SwTOXBase& rTOX) const;
 
-    sal_Bool DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes = sal_False );
+    bool DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes = false );
     String GetUniqueTOXBaseName( const SwTOXType& rType,
                                 const String* pChkStr = 0 ) const;
 
-    sal_Bool SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName);
+    bool SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName);
     void SetTOXBaseProtection(const SwTOXBase& rTOXBase, sal_Bool bProtect);
 
     /// After reading file update all tables/indices.
@@ -1433,15 +1433,15 @@ public:
     const SwTOXType* InsertTOXType( const SwTOXType& rTyp );
     const SwTOXTypes& GetTOXTypes() const { return *pTOXTypes; }
 
-    const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, sal_Bool bCreate = sal_False );
+    const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, bool bCreate = false );
     void                SetDefaultTOXBase(const SwTOXBase& rBase);
 
     /// Key for management of index.
     sal_uInt16 GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) const;
 
     /// Sort table text.
-    sal_Bool SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions&);
-    sal_Bool SortText(const SwPaM&, const SwSortOptions&);
+    bool SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions&);
+    bool SortText(const SwPaM&, const SwSortOptions&);
 
     // Correct the SwPosition-Objects that are registered with the document
     // e. g. ::com::sun::star::text::Bookmarks or tables/indices.
@@ -1753,7 +1753,7 @@ public:
     SwSectionFmts& GetSections() { return *pSectionFmtTbl; }
     const SwSectionFmts& GetSections() const { return *pSectionFmtTbl; }
     SwSectionFmt *MakeSectionFmt( SwSectionFmt *pDerivedFrom );
-    void DelSectionFmt( SwSectionFmt *pFmt, sal_Bool bDelNodes = sal_False );
+    void DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes = false );
     void UpdateSection(sal_uInt16 const nSect, SwSectionData &,
             SfxItemSet const*const = 0, bool const bPreventLinkUpdate = false);
     String GetUniqueSectionName( const String* pChkStr = 0 ) const;

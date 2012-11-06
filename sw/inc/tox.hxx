@@ -560,7 +560,7 @@ public:
     SwCaptionDisplay        GetCaptionDisplay() const { return eCaptionDisplay;}
     void                    SetCaptionDisplay(SwCaptionDisplay eSet) {eCaptionDisplay = eSet;}
 
-    sal_Bool                    IsTOXBaseInReadonly() const;
+    bool                    IsTOXBaseInReadonly() const;
 
     const SfxItemSet*       GetAttrSet() const;
     void                    SetAttrSet( const SfxItemSet& );

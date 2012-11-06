@@ -295,14 +295,14 @@ sal_Bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
     case GLBLDOC_TOXBASE:
         {
             SwTOXBaseSection* pTOX = (SwTOXBaseSection*)rDelPos.GetTOX();
-            pMyDoc->DeleteTOX( *pTOX, sal_True );
+            pMyDoc->DeleteTOX( *pTOX, true );
         }
         break;
 
     case GLBLDOC_SECTION:
         {
             SwSectionFmt* pSectFmt = (SwSectionFmt*)rDelPos.GetSection()->GetFmt();
-            pMyDoc->DelSectionFmt( pSectFmt, sal_True );
+            pMyDoc->DelSectionFmt( pSectFmt, true );
         }
         break;
     }

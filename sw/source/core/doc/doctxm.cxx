@@ -345,7 +345,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
 const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
                                                 const SwTOXBase& rTOX,
                                                 const SfxItemSet* pSet,
-                                                sal_Bool bExpand )
+                                                bool bExpand )
 {
     GetIDocumentUndoRedo().StartUndo( UNDO_INSTOX, NULL );
 
@@ -467,7 +467,7 @@ const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase) const
     return pFmt->GetAttrSet();
 }
 
-const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, sal_Bool bCreate )
+const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, bool bCreate )
 {
     SwTOXBase** prBase = 0;
     switch(eTyp)
@@ -510,10 +510,10 @@ void    SwDoc::SetDefaultTOXBase(const SwTOXBase& rBase)
 /*--------------------------------------------------------------------
   Description: Delete table of contents
  --------------------------------------------------------------------*/
-sal_Bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes )
+bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
 {
     // We only delete the TOX, not the Nodes
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
 
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
@@ -592,7 +592,7 @@ sal_Bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes )
         DelSectionFmt( pFmt, bDelNodes );
 
         GetIDocumentUndoRedo().EndUndo( UNDO_CLEARTOXRANGE, NULL );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -680,14 +680,14 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     return aName += String::CreateFromInt32( ++nNum );
 }
 
-sal_Bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
+bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
 {
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ),
                     "no TOXBaseSection!" );
     SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOXBase;
 
     String sTmp = GetUniqueTOXBaseName(*rTOXBase.GetTOXType(), &rName);
-    sal_Bool bRet = sTmp == rName;
+    bool bRet = sTmp == rName;
     if(bRet)
     {
         pTOX->SetTOXName(rName);
@@ -732,9 +732,9 @@ SwTOXBaseSection::~SwTOXBaseSection()
 {
 }
 
-sal_Bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, sal_Bool bAtStart ) const
+bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, bool bAtStart ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwSectionNode* pSectNd = GetFmt()->GetSectionNode();
     if( pSectNd )
     {
@@ -752,7 +752,7 @@ sal_Bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, sal_Bool bAtStart
             if( pCNd ) nC = pCNd->Len();
         }
         rPos.nContent.Assign( pCNd, nC );
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
@@ -1547,7 +1547,7 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
   Description: Generate String according to the Form and remove the
   special characters 0-31 and 255
  --------------------------------------------------------------------*/
-static String lcl_GetNumString( const SwTOXSortTabBase& rBase, sal_Bool bUsePrefix, sal_uInt8 nLevel )
+static String lcl_GetNumString( const SwTOXSortTabBase& rBase, bool bUsePrefix, sal_uInt8 nLevel )
 {
     String sRet;
 
@@ -1619,7 +1619,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
             case TOKEN_ENTRY:
                 {
                     // for TOC numbering
-                    rTxt.Insert( lcl_GetNumString( rBase, sal_True, MAXLEVEL ));
+                    rTxt.Insert( lcl_GetNumString( rBase, true, MAXLEVEL ));
 
                     SwIndex aIdx( pTOXNd, rTxt.Len() );
                     rBase.FillText( *pTOXNd, aIdx );
@@ -2294,10 +2294,10 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
     return Range(nStart, nEnd);
 }
 
-sal_Bool SwTOXBase::IsTOXBaseInReadonly() const
+bool SwTOXBase::IsTOXBaseInReadonly() const
 {
     const SwTOXBaseSection *pSect = dynamic_cast<const SwTOXBaseSection*>(this);
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwSectionNode* pSectNode;
     if(pSect && pSect->GetFmt() &&
             0 != (pSectNode = pSect->GetFmt()->GetSectionNode()))

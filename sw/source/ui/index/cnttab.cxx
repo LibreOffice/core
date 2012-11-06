@@ -389,7 +389,7 @@ short   SwMultiTOXTabDialog::Ok()
 {
     short nRet = SfxTabDialog::Ok();
     SwTOXDescription& rDesc = GetTOXDescription(eCurrentTOXType);
-    SwTOXBase aNewDef(*rSh.GetDefaultTOXBase( eCurrentTOXType.eType, sal_True ));
+    SwTOXBase aNewDef(*rSh.GetDefaultTOXBase( eCurrentTOXType.eType, true ));
 
     sal_uInt16 nIndex = static_cast< sal_uInt16 >(eCurrentTOXType.eType);
     if(eCurrentTOXType.eType == TOX_USER && eCurrentTOXType.nIndex)
