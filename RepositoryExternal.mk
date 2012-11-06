@@ -1300,7 +1300,7 @@ endif
 endef
 
 define gb_LinkTarget__use_gthread
-$(error gb_LinkTarget__use_gthread should not be used any more)
+$(call gb_LinkTarget_add_libs,$(1),$(GTHREAD_LIBS))
 endef
 
 ifeq ($(ENABLE_CUPS),TRUE)
@@ -1621,7 +1621,14 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 endif # SYSTEM_CLUCENE
 
 define gb_LinkTarget__use_gobject
-$(error gb_LinkTarget__use_gobject should not be used any more)
+$(call gb_LinkTarget_add_libs,$(1),\
+       $(GOBJECT_LIBS) \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+       $$(INCLUDE) \
+       $(GOBJECT_CFLAGS) \
+)
 endef
 
 ifeq ($(SYSTEM_HSQLDB),YES)
