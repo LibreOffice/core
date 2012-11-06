@@ -36,6 +36,29 @@ $(call gb_CustomTarget_get_target,unoil/climaker) : \
 	$(unoil_CLIDIR)/cli_oootypes.config \
 	$(unoil_CLIDIR)/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll
 
+
+ifeq ($(ENABLE_MONO),YES)
+ifneq ($(ENABLE_MONO_CLIMAKER),YES)
+unoil_prebuilt_mono_dlls := YES
+endif
+endif
+
+ifeq ($(unoil_prebuilt_mono_dlls),YES)
+
+$(unoil_CLIDIR)/cli_oootypes.dll : $(OUTDIR)/inc/external/cli/cli_oootypes.dll
+	mkdir -p $(@D)
+	$(GNUCOPY) $? $@
+
+$(unoil_CLIDIR)/cli_oootypes.config : $(OUTDIR)/inc/external/cli/cli_oootypes.config
+	mkdir -p $(@D)
+	$(GNUCOPY) $? $@
+
+$(unoil_CLIDIR)/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll : $(OUTDIR)/inc/external/cli/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll
+	mkdir -p $(@D)
+	$(GNUCOPY) $< $@
+
+else
+
 $(unoil_CLIDIR)/cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt \
 		$(OUTDIR)/bin/offapi.rdb $(OUTDIR)/bin/udkapi.rdb \
 		$(OUTDIR)/bin/cliuno.snk $(OUTDIR)/bin/cli_uretypes.dll \
@@ -73,5 +96,6 @@ $(unoil_CLIDIR)/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll : \
 		-keyfile:$(OUTDIR)/bin/cliuno.snk \
 		-link:cli_oootypes.config)
 	rm cli_oootypes.config
+endif
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
