@@ -593,41 +593,9 @@ endef
 
 endif # SYSTEM_LIBXSLT
 
-
-ifeq ($(SYSTEM_GLIB),YES)
-
 define gb_LinkTarget__use_glib
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(GLIB_CFLAGS) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),$(GLIB_LIBS))
-
+$(error gb_LinkTarget__use_glib should not be called any more)
 endef
-
-else # !SYSTEM_GLIB
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	glib-2.0 \
-	gmodule-2.0 \
-))
-
-define gb_LinkTarget__use_glib
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/external/glib-2.0 \
-)
-
-$(call gb_LinkTarget_use_libraries,$(1),\
-	glib-2.0 \
-	gmodule-2.0 \
-)
-
-endef
-
-endif # SYSTEM_GLIB
-
 
 ifeq ($(ENABLE_LIBLANGTAG),YES)
 
@@ -653,12 +621,6 @@ define gb_LinkTarget__use_liblangtag
 $(call gb_LinkTarget_use_libraries,$(1),\
 	langtag \
 )
-
-ifeq ($(OS),MACOSX)
-
-$(call gb_LinkTarget_add_libs,$(1),$(foreach replaceme,libglib-2.0.0 libgmodule-2.0.0,-dylib_file @loader_path/$(replaceme).dylib:$(gb_Library_OUTDIRLOCATION)/$(replaceme).dylib))
-
-endif
 
 endef
 
@@ -1308,24 +1270,9 @@ endef
 
 else # ENABLE_GIO
 
-ifeq ($(SYSTEM_GLIB),YES)
-
-gb_LinkTarget__use_gio :=
-
-else # !SYSTEM_GLIB
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	gio-2.0 \
-))
-
 define gb_LinkTarget__use_gio
-$(call gb_LinkTarget_use_libraries,$(1),\
-	gio-2.0 \
-)
-
+$(error gb_LinkTarget__use_gio should not be used any more)
 endef
-
-endif # SYSTEM_GLIB
 
 endif # ENABLE_GIO
 
@@ -1352,26 +1299,9 @@ endif
 
 endef
 
-ifeq ($(SYSTEM_GLIB),YES)
-
 define gb_LinkTarget__use_gthread
-$(call gb_LinkTarget_add_libs,$(1),$(GTHREAD_LIBS))
-
+$(error gb_LinkTarget__use_gthread should not be used any more)
 endef
-
-else # !SYSTEM_GLIB
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	gthread-2.0 \
-))
-
-define gb_LinkTarget__use_gthread
-$(call gb_LinkTarget_use_libraries,$(1),\
-	gthread-2.0 \
-)
-endef
-
-endif # SYSTEM_GLIB
 
 ifeq ($(ENABLE_CUPS),TRUE)
 
@@ -1458,107 +1388,21 @@ gb_LinkTarget__use_telepathy :=
 
 endif # ENABLE_TELEPATHY
 
-ifeq ($(SYSTEM_LIBCROCO),NO)
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	croco-0.6-3 \
-))
-
 define gb_LinkTarget__use_croco
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/external/libcroco-0.6 \
-)
-
-$(call gb_LinkTarget_use_libraries,$(1),\
-	croco-0.6-3 \
-)
-
+$(error gb_LinkTarget__use_croco should not be used any more)
 endef
-
-else # !SYSTEM_LIBCROCO
-
-gb_LinkTarget__use_croco :=
-
-endif # SYSTEM_LIBCROCO
-
-ifeq ($(SYSTEM_PANGO),NO)
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	pango-1.0 \
-	pangocairo-1.0 \
-))
 
 define gb_LinkTarget__use_pango
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/external/pango-1.0 \
-)
-
-$(call gb_LinkTarget_use_libraries,$(1),\
-	pango-1.0 \
-	pangocairo-1.0 \
-)
-
+$(error gb_LinkTarget__use_pango should not be used any more)
 endef
-
-else # !SYSTEM_PANGO
-
-gb_LinkTarget__use_pango :=
-
-endif # SYSTEM_PANGO
-
-ifeq ($(SYSTEM_LIBGSF),NO)
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	gsf-1 \
-))
 
 define gb_LinkTarget__use_gsf
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/external/libgsf-1 \
-)
-
-$(call gb_LinkTarget_use_libraries,$(1),\
-	gsf-1 \
-)
-
+$(error gb_LinkTarget__use_gsf should not be used any more)
 endef
-
-else # !SYSTEM_LIBGSF
-
-gb_LinkTarget__use_gsf :=
-
-endif # SYSTEM_LIBGSF
-
-ifeq ($(SYSTEM_GDKPIXBUF),NO)
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	gdk_pixbuf-2.0 \
-))
 
 define gb_LinkTarget__use_pixbuf
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/external/gdk-pixbuf-2.0 \
-)
-
-$(call gb_LinkTarget_use_libraries,$(1),\
-	gdk_pixbuf-2.0 \
-)
-
+$(error gb_LinkTarget__use_pixbuf should not be used any more)
 endef
-
-else # !SYSTEM_GDKPIXBUF
-
-gb_LinkTarget__use_pixbuf :=
-
-endif # SYSTEM_GDKPIXBUF
 
 ifeq ($(SYSTEM_DB),YES)
 
@@ -1776,31 +1620,9 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 
 endif # SYSTEM_CLUCENE
 
-ifeq ($(SYSTEM_GLIB),YES)
 define gb_LinkTarget__use_gobject
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(GOBJECT_LIBS) \
-)
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(GOBJECT_CFLAGS) \
-)
+$(error gb_LinkTarget__use_gobject should not be used any more)
 endef
-
-else # !SYSTEM_GLIB
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	gobject-2.0 \
-))
-
-define gb_LinkTarget__use_gobject
-$(call gb_LinkTarget_use_libraries,$(1),\
-	gobject-2.0 \
-)
-endef
-
-endif # !SYSTEM_GLIB
 
 ifeq ($(SYSTEM_HSQLDB),YES)
 

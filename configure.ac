@@ -833,14 +833,6 @@ AC_ARG_ENABLE(cairo-canvas,
                           platforms where Cairo is available.
 ])
 
-AC_ARG_ENABLE(librsvg,
-    AS_HELP_STRING([--enable-librsvg=<no/auto/system/internal/fully-internal>],
-        [Enables or disables use of librsvg to render SVG at run-time.
-         Also specificed what librsvg to use. 'auto' is the default.
-         'fully-internal' also forces internal versions of libraries (only)
-         librsvg depends on (currently GLib, gdk-pixbuf, libcroco, libgsf,
-         pango).]))
-
 AC_ARG_ENABLE(opengl,
     AS_HELP_STRING([--disable-opengl],
         [Determines whether to build the OpenGL 3D slide transitions component.]),
@@ -1259,11 +1251,6 @@ AC_ARG_WITH(system-cairo,
     AS_HELP_STRING([--with-system-cairo],
         [Use Cairo libraries already on system.]),,
     [with_system_cairo="$with_system_libs"])
-
-AC_ARG_WITH(system-glib,
-    AS_HELP_STRING([--with-system-glib],
-        [Use GLib library already installed on system.]),,
-    [with_system_glib=auto])
 
 AC_ARG_WITH(system-graphite,
     AS_HELP_STRING([--with-system-graphite],
@@ -4297,7 +4284,6 @@ if test "$enable_headless" = "yes"; then
     test_kde4=no
     test_unix_quickstarter=no
     test_cairo=no
-    enable_librsvg=no
     enable_gnome_vfs=no
 fi
 
@@ -11376,114 +11362,6 @@ AC_SUBST(USE_XINERAMA)
 AC_SUBST(XINERAMA_LINK)
 
 dnl ===================================================================
-dnl Checks for librsvg
-dnl ===================================================================
-
-dnl ENABLE_LIBRSVG is set to NO, SYSTEM or INTERNAL. The
-dnl SYSTEM_LIBRSVG, SYSTEM_GDKPIXBUF etc are redundant.
-
-dnl FIXME: RSVG is a hard dependency now as the impress masterpages use it
-dnl FIXME: thus the --enable-rsvg=no is not really an option anymore and we
-dnl should error out in that case. leaving as is for now as this might be an
-dnl unwelcome buildbreaker otherwise
-ENABLE_LIBRSVG=""
-LIBRSVG_CFLAGS=""
-LIBRSVG_LIBS=""
-
-AC_MSG_CHECKING([what librsvg to use])
-
-case "$enable_librsvg" in
-no|disable)
-    AC_MSG_RESULT([none])
-    enable_librsvg=no
-    ;;
-
-""|yes|auto)
-    if test $build_os = cygwin -o \
-           $_os = Darwin; then
-        dnl When building on/for these OSes always use the internal one,
-        dnl if at all. Add more OSes above as needed.
-        AC_MSG_RESULT([internal])
-        enable_librsvg=internal
-    elif test  $_os = iOS -o $_os = Android; then
-        AC_MSG_RESULT([none])
-        enable_librsvg=no
-    else
-        if test "$with_system_libs" = yes; then
-            AC_MSG_RESULT([system])
-            PKG_CHECK_MODULES(LIBRSVG, librsvg-2.0 >= 2.14)
-            enable_librsvg=system
-        elif test "$with_system_libs" = no; then
-            AC_MSG_RESULT([internal])
-            enable_librsvg=internal
-        else
-            AC_MSG_RESULT([checking further])
-            PKG_CHECK_MODULES(LIBRSVG, librsvg-2.0 >= 2.14,, [:])
-            if test -z "$LIBRSVG_PKG_ERRORS"; then
-                enable_librsvg=system
-            else
-                enable_librsvg=internal
-            fi
-        fi
-    fi
-    ;;
-
-internal)
-    AC_MSG_RESULT([internal])
-    ;;
-
-fully-internal)
-    AC_MSG_RESULT([fully internal])
-    ;;
-
-system)
-    if test $_os = WINNT -a "$WITH_MINGW" != yes; then
-        AC_MSG_ERROR([Must use internal librsvg when building with MSVC])
-    fi
-    AC_MSG_RESULT([system])
-    PKG_CHECK_MODULES(LIBRSVG, librsvg-2.0 >= 2.14)
-    ;;
-
-*)
-    AC_MSG_ERROR([Incorrect --enable-librsvg option])
-    ;;
-esac
-
-want_glib=
-dnl By now enable_librsvg should be "system", "internal", "fully-internal", or
-dnl "no":
-case $enable_librsvg in
-system)
-    ENABLE_LIBRSVG=SYSTEM
-    SYSTEM_LIBRSVG=YES
-    want_glib=yes
-    ;;
-
-internal|fully-internal)
-    ENABLE_LIBRSVG=INTERNAL
-    SYSTEM_LIBRSVG=NO
-    BUILD_TYPE="$BUILD_TYPE LIBRSVG"
-	LIBRSVG_TARBALL="d7a242ca43e33e1b63d3073f9d46a6a8-librsvg-2.32.1.tar.gz"
-    want_glib=yes
-    ;;
-
-no)
-    ENABLE_LIBRSVG=NO
-    SYSTEM_LIBRSVG=NO
-    ;;
-
-*)
-    AC_MSG_ERROR([Internal configure script error, invalid enable_librsvg value "$enable_librsvg"])
-    ;;
-esac
-
-AC_SUBST(ENABLE_LIBRSVG)
-AC_SUBST(LIBRSVG_TARBALL)
-AC_SUBST(LIBRSVG_CFLAGS)
-AC_SUBST(LIBRSVG_LIBS)
-AC_SUBST(SYSTEM_LIBRSVG)
-
-dnl ===================================================================
 dnl Test whether to build cairo or rely on the system version
 dnl ===================================================================
 
@@ -11524,7 +11402,7 @@ if test "$test_cairo" = "yes" ; then
         if test $_os = WINNT; then
             dnl We only need cairo for Windows if we
             dnl build librsvg or directx disabled
-            if test "$ENABLE_LIBRSVG" != NO -o -z "$ENABLE_DIRECTX"; then
+            if test -z "$ENABLE_DIRECTX"; then
                 BUILD_TYPE="$BUILD_TYPE CAIRO"
             fi
         else
@@ -11532,9 +11410,7 @@ if test "$test_cairo" = "yes" ; then
                 BUILD_TYPE="$BUILD_TYPE CAIRO"
             else
                 if test "$with_system_cairo" != "yes"; then
-                    if test "$ENABLE_LIBRSVG" != NO; then
-                        BUILD_TYPE="$BUILD_TYPE CAIRO"
-                    fi
+                    BUILD_TYPE="$BUILD_TYPE CAIRO"
                 fi
             fi
         fi
@@ -11549,44 +11425,6 @@ AC_SUBST([MINGW_FONTCONFIG_DLL])
 AC_SUBST([MINGW_FREETYPE_DLL])
 AC_SUBST([MINGW_PIXMAN_DLL])
 AC_SUBST([MINGW_PNG15_DLL])
-
-
-dnl ===================================================================
-dnl Test whether to build gdk-pixbuf or rely on the system version
-dnl ===================================================================
-
-if test "$ENABLE_LIBRSVG" != NO; then
-    AC_MSG_CHECKING([whether to use the system gdk-pixbuf])
-
-    dnl As long as the only thing we need gdk-pixbuf for is below
-    dnl librsvg, use the same --enable-librsvg (possibly implied
-    dnl by --with-system-libs) to override this.
-
-    if test "$SYSTEM_LIBRSVG" = YES; then
-        SYSTEM_GDKPIXBUF=YES
-    elif test "$enable_librsvg" = fully-internal; then
-        SYSTEM_GDKPIXBUF=NO
-    else
-        case "$_os" in
-        WINNT|Darwin|iOS|Android)
-            SYSTEM_GDKPIXBUF=NO
-            ;;
-        *)
-            SYSTEM_GDKPIXBUF=YES
-            ;;
-        esac
-    fi
-
-    if test "$SYSTEM_GDKPIXBUF" = YES; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-        BUILD_TYPE="$BUILD_TYPE GDK_PIXBUF"
-    fi
-else
-    SYSTEM_GDKPIXBUF=NO
-fi
-AC_SUBST(SYSTEM_GDKPIXBUF)
 
 dnl ===================================================================
 dnl Test whether to use liblangtag
@@ -11617,186 +11455,6 @@ AC_SUBST(SYSTEM_LIBLANGTAG)
 AC_SUBST(LIBLANGTAG_CFLAGS)
 AC_SUBST(LIBLANGTAG_LIBS)
 AC_SUBST([MINGW_LIBLANGTAG_DLL])
-AC_SUBST([MINGW_GLIB_DLL])
-AC_SUBST([MINGW_GMODULE_DLL])
-
-dnl ===================================================================
-dnl Test whether to build GLib or rely on the system version
-dnl ===================================================================
-
-if test "$want_glib" = yes; then
-    if test "$with_system_glib" = auto; then
-        case "$_os" in
-        WINNT|Darwin|iOS|Android)
-            with_system_glib="$with_system_libs"
-            ;;
-        *)
-            with_system_glib=yes
-            ;;
-        esac
-    fi
-
-    AC_MSG_CHECKING([which GLib to use])
-
-    if test "$with_system_glib" = yes; then
-        AC_MSG_RESULT([external])
-        SYSTEM_GLIB=YES
-        PKG_CHECK_MODULES( GLIB, glib-2.0 )
-        libo_MINGW_CHECK_DLL([GLIB], [libglib-2.0])
-        libo_MINGW_TRY_DLL([GMODULE], [libgmodule-2.0])
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_GLIB=NO
-        BUILD_TYPE="$BUILD_TYPE GLIB"
-    fi
-fi
-AC_SUBST([SYSTEM_GLIB])
-AC_SUBST([GLIB_CFLAGS])
-AC_SUBST([GLIB_LIBS])
-
-dnl ===================================================================
-dnl Test whether to build gettext runtime (libintl) or rely on the
-dnl system version
-dnl ===================================================================
-
-AC_MSG_CHECKING([whether to use the system gettext runtime])
-
-if test -z "$with_system_gettext"; then
-    case "$_os" in
-    WINNT|Darwin|iOS|Android)
-        with_system_gettext=no
-        ;;
-    *)
-        with_system_gettext=yes
-        ;;
-    esac
-fi
-if test "$with_system_gettext" = yes; then
-    SYSTEM_GETTEXT=YES
-    AC_MSG_RESULT([yes])
-elif test "$with_system_gettext" = no; then
-    SYSTEM_GETTEXT=NO
-    dnl gettext is only used by the librsvg stack, so let us not build
-    dnl it unless it is actually needed
-    if test "$ENABLE_LIBRSVG" != NO; then
-        BUILD_TYPE="$BUILD_TYPE GETTEXT"
-    fi
-    AC_MSG_RESULT([no])
-else
-    AC_MSG_ERROR([bad --with-system-gettext=$with_system_gettext])
-fi
-AC_SUBST(SYSTEM_GETTEXT)
-
-dnl ===================================================================
-dnl Test whether to build libcroco or rely on the system version
-dnl ===================================================================
-
-if test "$ENABLE_LIBRSVG" != NO; then
-    AC_MSG_CHECKING([whether to use the system libcroco])
-
-    dnl As long as the only thing we need libcroco for is below
-    dnl librsvg, use the same --enable-librsvg (possibly implied
-    dnl by --with-system-libs) to override this.
-
-    if test "$SYSTEM_LIBRSVG" = YES; then
-        SYSTEM_LIBCROCO=YES
-    elif test "$enable_librsvg" = fully-internal; then
-        SYSTEM_LIBCROCO=NO
-    else
-        case "$_os" in
-        WINNT|Darwin|iOS|Android)
-            SYSTEM_LIBCROCO=NO
-            ;;
-        *)
-            SYSTEM_LIBCROCO=YES
-            ;;
-        esac
-    fi
-
-    if test "$SYSTEM_LIBCROCO" = YES; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-        BUILD_TYPE="$BUILD_TYPE LIBCROCO"
-    fi
-else
-    SYSTEM_LIBCROCO=NO
-fi
-AC_SUBST(SYSTEM_LIBCROCO)
-
-dnl ===================================================================
-dnl Test whether to build Pango or rely on the system version
-dnl ===================================================================
-
-if test "$ENABLE_LIBRSVG" != NO; then
-    AC_MSG_CHECKING([whether to use the system pango])
-
-    dnl As long as the only thing we need Pango for is below
-    dnl librsvg, use the same --enable-librsvg (possibly implied
-    dnl by --with-system-libs) to override this.
-
-    if test "$SYSTEM_LIBRSVG" = YES; then
-        SYSTEM_PANGO=YES
-    elif test "$enable_librsvg" = fully-internal; then
-        SYSTEM_PANGO=NO
-    else
-        case "$_os" in
-        WINNT|Darwin|iOS|Android)
-            SYSTEM_PANGO=NO
-            ;;
-        *)
-            SYSTEM_PANGO=YES
-            ;;
-        esac
-    fi
-
-    if test "$SYSTEM_PANGO" = YES; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-        BUILD_TYPE="$BUILD_TYPE PANGO"
-    fi
-else
-    SYSTEM_PANGO=NO
-fi
-AC_SUBST(SYSTEM_PANGO)
-
-dnl ===================================================================
-dnl Test whether to build libgsf or rely on the system version
-dnl ===================================================================
-
-if test "$ENABLE_LIBRSVG" != NO; then
-    AC_MSG_CHECKING([whether to use the system libgsf])
-
-    dnl As long as the only thing we need libgsf for is below librsvg (is
-    dnl it?), use the same --enable-librsvg (possibly implied by
-    dnl --with-system-libs) to override this.
-
-    if test "$SYSTEM_LIBRSVG" = YES; then
-        SYSTEM_LIBGSF=YES
-    elif test "$enable_librsvg" = fully-internal; then
-        SYSTEM_LIBGSF=NO
-    else
-        case "$_os" in
-        WINNT|Darwin|iOS|Android)
-            SYSTEM_LIBGSF=NO
-            ;;
-        *)
-            SYSTEM_LIBGSF=YES
-            ;;
-        esac
-    fi
-
-    if test "$SYSTEM_LIBGSF" = YES; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-        BUILD_TYPE="$BUILD_TYPE LIBGSF"
-    fi
-else
-    SYSTEM_LIBGSF=NO
-fi
-AC_SUBST(SYSTEM_LIBGSF)
 
 dnl ===================================================================
 dnl Test whether to build libpng or rely on the system version

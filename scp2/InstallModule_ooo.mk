@@ -53,9 +53,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_CURL \
 	SYSTEM_DB \
 	SYSTEM_EXPAT \
-	SYSTEM_GDKPIXBUF \
-	SYSTEM_GETTEXT \
-	SYSTEM_GLIB \
 	SYSTEM_GRAPHITE \
 	SYSTEM_HSQLDB \
 	SYSTEM_HUNSPELL \
@@ -63,12 +60,9 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_ICU \
 	SYSTEM_JPEG \
 	SYSTEM_LCMS2 \
-	SYSTEM_LIBCROCO \
 	SYSTEM_LIBEXTTEXTCAT \
-	SYSTEM_LIBGSF \
 	SYSTEM_LIBJPEG \
 	SYSTEM_LIBLANGTAG \
-	SYSTEM_LIBRSVG \
 	SYSTEM_LIBXML \
 	SYSTEM_LIBXSLT \
 	SYSTEM_LPSOLVE \
@@ -100,8 +94,6 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 	MINGW_FONTCONFIG_DLL \
 	MINGW_FREETYPE_DLL \
 	MINGW_GCRYPT_DLL \
-	MINGW_GLIB_DLL \
-	MINGW_GMODULE_DLL \
 	MINGW_GNUTLS_DLL \
 	MINGW_GPG_ERROR_DLL \
 	MINGW_GRAPHITE2_DLL \
@@ -142,9 +134,6 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 ))
 
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	$(if $(filter INTERNAL,$(ENABLE_LIBRSVG)),\
-		-DENABLE_LIBRSVG \
-	) \
 	$(if $(filter gcj,$(JDK)),\
 		-DGCJ \
 	) \
