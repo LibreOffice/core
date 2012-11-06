@@ -160,8 +160,8 @@ OUT2LIB+=.libs$/libxml2*.a
 OUT2BIN+=.libs$/xmllint.exe
 OUT2BIN+=xml2-config
 .ELSE
-OUT2LIB+=win32$/bin.msvc$/*.lib
-OUT2BIN+=win32$/bin.msvc$/*.dll
+OUT2LIB+=win32$/bin.msvc$/libxml2.lib
+OUT2BIN+=win32$/bin.msvc$/libxml2.dll
 OUT2BIN+=win32$/bin.msvc$/xmllint.exe
 .ENDIF
 .ELSE
