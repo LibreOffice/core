@@ -837,7 +837,6 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     SwWrtShell &rSh = GetShell();
     pSdrView = rSh.GetDrawView();
     SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
-    pOutliner = pSdrView->GetTextEditOutliner();
     return &pOutliner->GetUndoManager();
 }
 

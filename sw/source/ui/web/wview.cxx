@@ -197,7 +197,6 @@ void SwWebView::SelectShell()
             SetShell( new svx::ExtrusionBar( this ) );
             rDispatcher.Push( *GetCurShell() );
 
-            eShellMode = SHELL_MODE_DRAW;
             SetShell( new svx::FontworkBar( this ) );
             rDispatcher.Push( *GetCurShell() );
 

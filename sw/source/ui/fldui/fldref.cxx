@@ -116,11 +116,7 @@ void SwFldRefPage::SaveSelectedTxtNode()
         if ( pEntry )
         {
             const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
-            SwWrtShell *pSh = GetWrtShell();
-            if ( !pSh )
-            {
-                pSh = ::GetActiveWrtShell();
-            }
+
             if ( nTypeId == REFFLDFLAG_HEADING )
             {
                 mnSavedSelectedPos = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pEntry->GetUserData()));
