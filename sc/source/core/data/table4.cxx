@@ -694,7 +694,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     nInc,nMinDigits, pListData,nListIndex);
 
         if (bVertical)
-            aCol[nCol].Resize( aCol[nCol].GetCellCount() + nFillCount );
+            aCol[nCol].ReserveSize(aCol[nCol].GetCellCount() + nFillCount);
 
         if (pListData)
         {
@@ -1389,7 +1389,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         ScBaseCell* pSrcCell = aCol[nCol].GetCell(static_cast<SCROW>(nRow));
 
         if (bVertical && bAttribs)
-            aCol[nCol].Resize( aCol[nCol].GetCellCount() + nFillCount );
+            aCol[nCol].ReserveSize(aCol[nCol].GetCellCount() + nFillCount);
 
         if (bAttribs)
         {

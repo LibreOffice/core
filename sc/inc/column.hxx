@@ -121,7 +121,7 @@ public:
     void        Delete( SCROW nRow );
     void        DeleteAtIndex( SCSIZE nIndex );
     void        FreeAll();
-    void        Resize( SCSIZE nSize );
+    void ReserveSize( SCSIZE nSize );
     void        SwapRow( SCROW nRow1, SCROW nRow2 );
     void        SwapCell( SCROW nRow, ScColumn& rCol);
 

@@ -681,7 +681,7 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
         //! IDF_ALL muss immer mehr Flags enthalten, als bei "Inhalte Einfuegen"
         //! einzeln ausgewaehlt werden koennen!
 
-        Resize( maItems.size() + static_cast<SCSIZE>(nRow2-nRow1+1) );
+        ReserveSize(maItems.size() + static_cast<SCSIZE>(nRow2-nRow1+1));
 
         ScAddress aDestPos( nCol, 0, nTab );        // Row wird angepasst
 
@@ -715,8 +715,7 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
         //! Always do the Resize from the outside, where the number of repetitions is known
         //! (then it can be removed here)
 
-        SCSIZE nNew = maItems.size() + nColCount;
-        Resize( nNew );
+        ReserveSize(maItems.size() + nColCount);
     }
 
     sal_Bool bAtEnd = false;

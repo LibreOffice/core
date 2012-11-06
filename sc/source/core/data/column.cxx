@@ -760,8 +760,7 @@ ScBaseCell* ScColumn::GetCell( SCROW nRow ) const
     return NULL;
 }
 
-
-void ScColumn::Resize( SCSIZE nSize )
+void ScColumn::ReserveSize( SCSIZE nSize )
 {
     if (nSize > sal::static_int_cast<SCSIZE>(MAXROWCOUNT))
         nSize = MAXROWCOUNT;
@@ -1178,7 +1177,7 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKee
 
     if (nBlockCount)
     {
-        rColumn.Resize( rColumn.GetCellCount() + nBlockCount );
+        rColumn.ReserveSize(rColumn.GetCellCount() + nBlockCount);
         ScAddress aOwnPos( nCol, 0, nTab );
         ScAddress aDestPos( rColumn.nCol, 0, rColumn.nTab );
         for (i = nStartIndex; i <= nEndIndex; i++)
@@ -1368,7 +1367,7 @@ void ScColumn::CopyToColumn(
 
         if (nBlockCount)
         {
-            rColumn.Resize( rColumn.GetCellCount() + nBlockCount );
+            rColumn.ReserveSize(rColumn.GetCellCount() + nBlockCount);
             ScAddress aDestPos( rColumn.nCol, 0, rColumn.nTab );
             for (i = nStartIndex; i <= nEndIndex; i++)
             {

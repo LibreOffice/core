@@ -1868,7 +1868,7 @@ void ScTable::CopyPrintRange(const ScTable& rTable)
 void ScTable::DoColResize( SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd )
 {
     for (SCCOL nCol=nCol1; nCol<=nCol2; nCol++)
-        aCol[nCol].Resize(aCol[nCol].GetCellCount() + nAdd);
+        aCol[nCol].ReserveSize(aCol[nCol].GetCellCount() + nAdd);
 }
 
 void ScTable::SetRepeatColRange( const ScRange* pNew )
