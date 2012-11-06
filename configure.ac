@@ -9556,7 +9556,7 @@ if test  "$test_gtk" = "yes"; then
                             [ ENABLE_SYSTRAY_GTK="TRUE" ],
                             [ ENABLE_SYSTRAY_GTK="" ])
         else
-	    AC_MSG__RESULT([no])
+	    AC_MSG_RESULT([no])
         fi
 
         AC_MSG_CHECKING([whether to enable Gtk print dialog support])
