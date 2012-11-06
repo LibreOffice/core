@@ -12,7 +12,7 @@ PRJNAME=liblangtag
 TARGET=liblangtag
 
 LIBLANGTAG_MAJOR=0
-LIBLANGTAG_MINOR=2
+LIBLANGTAG_MINOR=4
 LIBLANGTAG_MICRO=0
 # Currently liblangtag.so.0.1.0 is generated instead of 0.2.0, presumably a bug?
 # For new versions adapt symlink in prj/d.lst
@@ -31,20 +31,11 @@ LIBLANGTAG_MICRO=0
 	@echo "Not building liblangtag."
 .ENDIF
 
-TARFILE_NAME=liblangtag-$(LIBLANGTAG_MAJOR).$(LIBLANGTAG_MINOR)
-TARFILE_MD5=fa6a2f85bd28baab035b2c95e722713f
+TARFILE_NAME=liblangtag-$(LIBLANGTAG_MAJOR).$(LIBLANGTAG_MINOR).$(LIBLANGTAG_MICRO)
+TARFILE_MD5=54e578c91b1b68e69c72be22adcb2195
 
-# liblangtag 132170753ea9cbd63cda8f3a80498c144f75b8ba
-PATCH_FILES=liblangtag-0.2-0001-Fix-a-memory-leak.patch
-# liblangtag cf8dfcf1604e534f4c9eccbd9a05571c8a9dc74d
-PATCH_FILES+=liblangtag-0.2-0002-Fix-invalid-memory-access.patch
-PATCH_FILES+=liblangtag-0.2-configure.patch
-PATCH_FILES+=liblangtag-0.2-datadir.patch
-PATCH_FILES+=liblangtag-0.2-msvc-warning.patch
-PATCH_FILES+=liblangtag-0.2-reg2xml-encoding-problem.patch
-PATCH_FILES+=liblangtag-0.2-xmlCleanupParser.patch
-    # addressed upstream as <https://github.com/tagoh/liblangtag/pull/7> "Do not
-    # call xmlCleanupParser from liblangtag"
+PATCH_FILES=liblangtag-0.4.0-msvc-warning.patch
+PATCH_FILES+=liblangtag-0.4.0-reg2xml-encoding-problem.patch
 
 CONFIGURE_DIR=.
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -118,11 +109,11 @@ CONFIGURE_FLAGS+= LDFLAGS=-Wl,-R\'\$$\$$ORIGIN:\$$\$$ORIGIN/../ure-link/lib\'
 
 CONFIGURE_FLAGS+= LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
 
-PATCH_FILES+=liblangtag-0.2-mingw.patch
+PATCH_FILES+=liblangtag-0.4.0-mingw.patch
 
 .ELSE	# "$(COM)"=="GCC"
 
-PATCH_FILES+=liblangtag-0.2-msc-configure.patch
+PATCH_FILES+=liblangtag-0.4.0-msc-configure.patch
 
 .ENDIF	# "$(COM)"=="GCC"
 .ENDIF	# "$(GUI)"=="WNT"
@@ -130,7 +121,7 @@ PATCH_FILES+=liblangtag-0.2-msc-configure.patch
 .IF "$(CROSS_COMPILING)"=="YES"
 # There's a tool used only at build time to create the .xml file, and this does not work
 # with cross-compiling. The file for this case is from a normal (non-cross) build.
-PATCH_FILES+=liblangtag-0.2-cross.patch
+PATCH_FILES+=liblangtag-0.4.0-cross.patch
 CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 

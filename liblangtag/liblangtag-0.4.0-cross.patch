@@ -1,17 +1,6 @@
---- misc/build/liblangtag-0.2/data/Makefile.in.sav	2012-02-02 11:04:10.000000000 +0100
-+++ misc/build/liblangtag-0.2/data/Makefile.in	2012-09-13 14:38:02.000000000 +0200
-@@ -691,7 +691,7 @@ uninstall-am: uninstall-ldmldataDATA uni
- language-subtag-registry:
- 	wget -O $@ http://www.iana.org/assignments/language-subtag-registry || \
- 	curl -o $@ http://www.iana.org/assignments/language-subtag-registry
--language-subtag-registry.xml: language-subtag-registry reg2xml Makefile
-+language-subtag-registry.xml: language-subtag-registry
- 	$(builddir)/reg2xml $(srcdir)/language-subtag-registry > $@
- stamp-core-zip:
- 	[ -f core.zip ] && rm core.zip
---- misc/build/liblangtag-0.2/data/language-subtag-registry.xml.sav	2012-09-13 14:37:05.000000000 +0200
-+++ misc/build/liblangtag-0.2/data/language-subtag-registry.xml	2012-09-13 14:35:37.000000000 +0200
-@@ -0,0 +1,45298 @@
+--- misc/liblangtag-0.4.0/data/language-subtag-registry.xml	2012-10-22 06:58:50.000000000 +0200
++++ misc/build/liblangtag-0.4.0/data/language-subtag-registry.xml	2012-11-06 14:23:56.998945962 +0100
+@@ -1,3 +1,45301 @@
 +<?xml version="1.0"?>
 +<registry>
 +  <language>
@@ -45310,14 +45299,28 @@
 +  </redundant>
 +</registry>
 +
---- misc/build/liblangtag-0.2/data/Makefile.am.sav	2012-02-02 09:58:40.000000000 +0100
-+++ misc/build/liblangtag-0.2/data/Makefile.am	2012-09-13 14:37:45.000000000 +0200
-@@ -38,7 +38,7 @@ bcp47_xml_files =			\
+ <?xml version="1.0" encoding="UTF-8"?>
+ <registry>
+   <language>
+--- misc/liblangtag-0.4.0/data/Makefile.am	2012-10-16 07:39:20.000000000 +0200
++++ misc/build/liblangtag-0.4.0/data/Makefile.am	2012-11-06 14:25:29.489175992 +0100
+@@ -59,7 +59,7 @@
  language-subtag-registry:
- 	wget -O $@ http://www.iana.org/assignments/language-subtag-registry || \
+ 	$(AM_V_DL) wget -O $@ http://www.iana.org/assignments/language-subtag-registry || \
  	curl -o $@ http://www.iana.org/assignments/language-subtag-registry
 -language-subtag-registry.xml: language-subtag-registry reg2xml Makefile
 +language-subtag-registry.xml: language-subtag-registry
- 	$(builddir)/reg2xml $(srcdir)/language-subtag-registry > $@
+ 	$(AM_V_GEN) $(builddir)/reg2xml $(srcdir)/language-subtag-registry $@.tmp;	\
+ 	head -1 $@.tmp | grep -E '^<\?xml version'>/dev/null 2>&1 && mv $@.tmp $@ || (echo "E: $@ isn't an expected result"; rm $@.tmp)
  stamp-core-zip:
- 	[ -f core.zip ] && rm core.zip
+--- misc/liblangtag-0.4.0/data/Makefile.in	2012-10-22 05:47:23.000000000 +0200
++++ misc/build/liblangtag-0.4.0/data/Makefile.in	2012-11-06 14:26:06.487085669 +0100
+@@ -780,7 +780,7 @@
+ language-subtag-registry:
+ 	$(AM_V_DL) wget -O $@ http://www.iana.org/assignments/language-subtag-registry || \
+ 	curl -o $@ http://www.iana.org/assignments/language-subtag-registry
+-language-subtag-registry.xml: language-subtag-registry reg2xml Makefile
++language-subtag-registry.xml: language-subtag-registry
+ 	$(AM_V_GEN) $(builddir)/reg2xml $(srcdir)/language-subtag-registry $@.tmp;	\
+ 	head -1 $@.tmp | grep -E '^<\?xml version'>/dev/null 2>&1 && mv $@.tmp $@ || (echo "E: $@ isn't an expected result"; rm $@.tmp)
+ stamp-core-zip:
