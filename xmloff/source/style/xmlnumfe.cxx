@@ -805,16 +805,16 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
 
     LanguageType nLang = LanguageTag( rLocale ).getLanguageType( false);
     pFormatter->ChangeIntl( nLang );
-    String sCurString, sDummy;
+    OUString sCurString, sDummy;
     pFormatter->GetCompatibilityCurrency( sCurString, sDummy );
 
     pCharClass->setLocale( rLocale );
     OUString sUpperStr = pCharClass->uppercase(rString);
-    sal_Int32 nPos = lcl_FindSymbol( sUpperStr, OUString(sCurString) );
+    sal_Int32 nPos = lcl_FindSymbol( sUpperStr, sCurString );
     if ( nPos >= 0 )
     {
         sal_Int32 nLength = rString.getLength();
-        sal_Int32 nCurLen = sCurString.Len();
+        sal_Int32 nCurLen = sCurString.getLength();
         sal_Int32 nCont = nPos + nCurLen;
 
         //  text before currency symbol

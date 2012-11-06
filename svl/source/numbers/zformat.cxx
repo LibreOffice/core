@@ -937,10 +937,14 @@ SvNumberformat::SvNumberformat(String& rString,
                     if (sInsertCalendar.Len())
                         sStr.Insert( sInsertCalendar, 0);
 
-                    xub_StrLen nStrPos = pSc->ScanFormat( sStr );
+                    OUString aStr(sStr);
+                    sal_Int32 nStrPos = pSc->ScanFormat( aStr);
+                    sStr = aStr;
                     sal_uInt16 nAnz = pSc->GetAnzResStrings();
                     if (nAnz == 0)              // error
+                    {
                         nStrPos = 1;
+                    }
                     if (nStrPos == 0)               // ok
                     {
                         // e.g. Thai T speciality
@@ -1019,34 +1023,42 @@ SvNumberformat::SvNumberformat(String& rString,
             }
         }
         if ( bCancel && !nCheckPos )
+        {
             nCheckPos = 1;      // nCheckPos is used as an error condition
+        }
         if ( !bCancel )
         {
             if ( NumFor[nIndex].GetNatNum().IsSet() &&
-                    NumFor[nIndex].GetNatNum().GetLang() == LANGUAGE_DONTKNOW )
+                 NumFor[nIndex].GetNatNum().GetLang() == LANGUAGE_DONTKNOW )
+            {
                  NumFor[nIndex].SetNatNumLang( eLan );
+            }
         }
         if (rString.Len() == nPos)
         {
             if ( nIndex == 2 && eSymbolType == BRACKET_SYMBOLTYPE_FORMAT &&
                     rString.GetChar(nPos-1) == ';' )
-            {   // #83510# A 4th subformat explicitly specified to be empty
+            {
+                // #83510# A 4th subformat explicitly specified to be empty
                 // hides any text. Need the type here for HasTextFormat()
                 NumFor[3].Info().eScannedType = NUMBERFORMAT_TEXT;
             }
             bCancel = true;
         }
         if ( NumFor[nIndex].GetNatNum().IsSet() )
+        {
             NumFor[nIndex].SetNatNumDate(
                 (NumFor[nIndex].Info().eScannedType & NUMBERFORMAT_DATE) != 0 );
+        }
     }
 
     if ( bCondition && !nCheckPos )
     {
         if ( nIndex == 1 && NumFor[0].GetCount() == 0 &&
-                rString.GetChar(rString.Len()-1) != ';' )
-        {   // No format code => GENERAL   but not if specified empty
-            String aAdd( pSc->GetStandardName() );
+             rString.GetChar(rString.Len()-1) != ';' )
+        {
+            // No format code => GENERAL   but not if specified empty
+            OUString aAdd( pSc->GetStandardName() );
             if ( !pSc->ScanFormat( aAdd ) )
             {
                 sal_uInt16 nAnz = pSc->GetAnzResStrings();
@@ -1062,9 +1074,10 @@ SvNumberformat::SvNumberformat(String& rString,
                 rString.GetChar(rString.Len()-1) != ';' &&
                 (NumFor[0].GetCount() > 1 || (NumFor[0].GetCount() == 1 &&
                 NumFor[0].Info().nTypeArray[0] != NF_KEY_GENERAL)) )
-        {   // No trailing second subformat => GENERAL   but not if specified empty
+        {
+            // No trailing second subformat => GENERAL   but not if specified empty
             // and not if first subformat is GENERAL
-            String aAdd( pSc->GetStandardName() );
+            OUString aAdd( pSc->GetStandardName() );
             if ( !pSc->ScanFormat( aAdd ) )
             {
                 sal_uInt16 nAnz = pSc->GetAnzResStrings();
@@ -1080,8 +1093,9 @@ SvNumberformat::SvNumberformat(String& rString,
         else if ( nIndex == 2 && NumFor[nIndex].GetCount() == 0 &&
                 rString.GetChar(rString.Len()-1) != ';' &&
                 eOp2 != NUMBERFORMAT_OP_NO )
-        {   // No trailing third subformat => GENERAL   but not if specified empty
-            String aAdd( pSc->GetStandardName() );
+        {
+            // No trailing third subformat => GENERAL   but not if specified empty
+            OUString aAdd( pSc->GetStandardName() );
             if ( !pSc->ScanFormat( aAdd ) )
             {
                 sal_uInt16 nAnz = pSc->GetAnzResStrings();

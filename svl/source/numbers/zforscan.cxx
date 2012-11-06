@@ -103,7 +103,7 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     pNullDate = new Date(30,12,1899);
     nStandardPrec = 2;
 
-    sErrStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "###"));
+    sErrStr =  "###";
     Reset();
 }
 
@@ -526,9 +526,9 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
     return pResult;
 }
 
-short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos )
+short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos )
 {
-    OUString sString = pFormatter->GetCharClass()->uppercase( sSymbol, nPos, sSymbol.Len() - nPos );
+    OUString sString = pFormatter->GetCharClass()->uppercase( sSymbol, nPos, sSymbol.getLength() - nPos );
     const NfKeywordTable & rKeyword = GetKeywords();
     // #77026# for the Xcl perverts: the GENERAL keyword is recognized anywhere
     if ( sString.startsWith( rKeyword[NF_KEY_GENERAL] ))
@@ -632,269 +632,260 @@ enum ScanState
     SsGetBlank  = 6
 };
 
-short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
-            xub_StrLen& nPos, String& sSymbol )
+short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
+                                          sal_Int32& nPos,
+                                          OUString& sSymbol )
 {
     if ( bKeywordsNeedInit )
+    {
         InitKeywords();
+    }
     const CharClass* pChrCls = pFormatter->GetCharClass();
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
-    const xub_StrLen nStart = nPos;
+    const sal_Int32 nStart = nPos;
     short eType = 0;
     ScanState eState = SsStart;
-    sSymbol.Erase();
-    while ( nPos < rStr.Len() && eState != SsStop )
+    sSymbol = "";
+    while ( nPos < rStr.getLength() && eState != SsStop )
     {
-        sal_Unicode cToken = rStr.GetChar( nPos++ );
+        sal_Unicode cToken = rStr[nPos++];
         switch (eState)
         {
-            case SsStart:
+        case SsStart:
+            // Fetch any currency longer than one character and don't get
+            // confused later on by "E/" or other combinations of letters
+            // and meaningful symbols. Necessary for old automatic currency.
+            // #96158# But don't do it if we're starting a "[...]" section,
+            // for example a "[$...]" new currency symbol to not parse away
+            // "$U" (symbol) of "[$UYU]" (abbreviation).
+            if ( nCurrPos >= 0 && sCurString.getLength() > 1 &&
+                 nPos-1 + sCurString.getLength() <= rStr.getLength() &&
+                 !(nPos > 1 && rStr[nPos-2] == '[') )
             {
-                // Fetch any currency longer than one character and don't get
-                // confused later on by "E/" or other combinations of letters
-                // and meaningful symbols. Necessary for old automatic currency.
-                // #96158# But don't do it if we're starting a "[...]" section,
-                // for example a "[$...]" new currency symbol to not parse away
-                // "$U" (symbol) of "[$UYU]" (abbreviation).
-                if ( nCurrPos != STRING_NOTFOUND && sCurString.Len() > 1 &&
-                        nPos-1 + sCurString.Len() <= rStr.Len() &&
-                        !(nPos > 1 && rStr.GetChar( nPos-2 ) == '[') )
+                OUString aTest = pChrCls->uppercase( rStr.copy( nPos-1, sCurString.getLength() ) );
+                if ( aTest == sCurString )
                 {
-                    String aTest = pChrCls->uppercase( rStr.Copy( nPos-1, sCurString.Len() ) );
-                    if ( aTest == sCurString )
-                    {
-                        sSymbol = rStr.Copy( --nPos, sCurString.Len() );
-                        nPos = nPos + sSymbol.Len();
-                        eState = SsStop;
-                        eType = NF_SYMBOLTYPE_STRING;
-                        return eType;
-                    }
-                }
-                switch (cToken)
-                {
-                    case '#':
-                    case '0':
-                    case '?':
-                    case '%':
-                    case '@':
-                    case '[':
-                    case ']':
-                    case ',':
-                    case '.':
-                    case '/':
-                    case '\'':
-                    case ' ':
-                    case ':':
-                    case '-':
-                    {
-                        eType = NF_SYMBOLTYPE_DEL;
-                        sSymbol += cToken;
-                        eState = SsStop;
-                    }
-                    break;
-                    case '*':
-                    {
-                        eType = NF_SYMBOLTYPE_STAR;
-                        sSymbol += cToken;
-                        eState = SsGetStar;
-                    }
-                    break;
-                    case '_':
-                    {
-                        eType = NF_SYMBOLTYPE_BLANK;
-                        sSymbol += cToken;
-                        eState = SsGetBlank;
-                    }
-                    break;
-                    case '"':
-                        eType = NF_SYMBOLTYPE_STRING;
-                        eState = SsGetString;
-                        sSymbol += cToken;
-                    break;
-                    case '\\':
-                        eType = NF_SYMBOLTYPE_STRING;
-                        eState = SsGetChar;
-                        sSymbol += cToken;
-                    break;
-                    case '$':
-                    case '+':
-                    case '(':
-                    case ')':
-                        eType = NF_SYMBOLTYPE_STRING;
-                        eState = SsStop;
-                        sSymbol += cToken;
-                    break;
-                    default :
-                    {
-                        if (StringEqualsChar( pFormatter->GetNumDecimalSep(), cToken) ||
-                                StringEqualsChar( pFormatter->GetNumThousandSep(), cToken) ||
-                                StringEqualsChar( pFormatter->GetDateSep(), cToken) ||
-                                StringEqualsChar( pLoc->getTimeSep(), cToken) ||
-                                StringEqualsChar( pLoc->getTime100SecSep(), cToken))
-                        {
-                            // Another separator than pre-known ASCII
-                            eType = NF_SYMBOLTYPE_DEL;
-                            sSymbol += cToken;
-                            eState = SsStop;
-                        }
-                        else if ( pChrCls->isLetter( rStr, nPos-1 ) )
-                        {
-                            short nTmpType = GetKeyWord( rStr, nPos-1 );
-                            if ( nTmpType )
-                            {
-                                bool bCurrency = false;
-                                // "Automatic" currency may start with keyword,
-                                // like "R" (Rand) and 'R' (era)
-                                if ( nCurrPos != STRING_NOTFOUND &&
-                                    nPos-1 + sCurString.Len() <= rStr.Len() &&
-                                     sCurString.Search( String(sKeyword[nTmpType]) ) == 0 )
-                                {
-                                    String aTest = pChrCls->uppercase( rStr.Copy( nPos-1, sCurString.Len() ) );
-                                    if ( aTest == sCurString )
-                                        bCurrency = true;
-                                }
-                                if ( bCurrency )
-                                {
-                                    eState = SsGetWord;
-                                    sSymbol += cToken;
-                                }
-                                else
-                                {
-                                    eType = nTmpType;
-                                    sal_Int32 nLen = sKeyword[eType].getLength();
-                                    sSymbol = rStr.Copy( nPos-1, (sal_uInt16)nLen );
-                                    if ( eType == NF_KEY_E || IsAmbiguousE( eType ) )
-                                    {
-                                        sal_Unicode cNext = rStr.GetChar(nPos);
-                                        switch ( cNext )
-                                        {
-                                            case '+' :
-                                            case '-' :  // E+ E- combine to one symbol
-                                                sSymbol += cNext;
-                                                eType = NF_KEY_E;
-                                                nPos++;
-                                            break;
-                                            case '0' :
-                                            case '#' :  // scientific E without sign
-                                                eType = NF_KEY_E;
-                                            break;
-                                        }
-                                    }
-                                    nPos--;
-                                    nPos = nPos + nLen;
-                                    eState = SsStop;
-                                }
-                            }
-                            else
-                            {
-                                eState = SsGetWord;
-                                sSymbol += cToken;
-                            }
-                        }
-                        else
-                        {
-                            eType = NF_SYMBOLTYPE_STRING;
-                            eState = SsStop;
-                            sSymbol += cToken;
-                        }
-                    }
-                    break;
-                }
-            }
-            break;
-            case SsGetChar:
-            {
-                sSymbol += cToken;
-                eState = SsStop;
-            }
-            break;
-            case SsGetString:
-            {
-                if (cToken == '"')
+                    sSymbol = rStr.copy( --nPos, sCurString.getLength() );
+                    nPos = nPos + sSymbol.getLength();
                     eState = SsStop;
-                sSymbol += cToken;
+                    eType = NF_SYMBOLTYPE_STRING;
+                    return eType;
+                }
             }
-            break;
-            case SsGetWord:
+            switch (cToken)
             {
-                if ( pChrCls->isLetter( rStr, nPos-1 ) )
+            case '#':
+            case '0':
+            case '?':
+            case '%':
+            case '@':
+            case '[':
+            case ']':
+            case ',':
+            case '.':
+            case '/':
+            case '\'':
+            case ' ':
+            case ':':
+            case '-':
+                eType = NF_SYMBOLTYPE_DEL;
+                sSymbol += OUString(cToken);
+                eState = SsStop;
+                break;
+            case '*':
+                eType = NF_SYMBOLTYPE_STAR;
+                sSymbol += OUString(cToken);
+                eState = SsGetStar;
+                break;
+            case '_':
+                eType = NF_SYMBOLTYPE_BLANK;
+                sSymbol += OUString(cToken);
+                eState = SsGetBlank;
+                break;
+            case '"':
+                eType = NF_SYMBOLTYPE_STRING;
+                eState = SsGetString;
+                sSymbol += OUString(cToken);
+                break;
+            case '\\':
+                eType = NF_SYMBOLTYPE_STRING;
+                eState = SsGetChar;
+                sSymbol += OUString(cToken);
+                break;
+            case '$':
+            case '+':
+            case '(':
+            case ')':
+                eType = NF_SYMBOLTYPE_STRING;
+                eState = SsStop;
+                sSymbol += OUString(cToken);
+                break;
+            default :
+                if (StringEqualsChar( pFormatter->GetNumDecimalSep(), cToken) ||
+                    StringEqualsChar( pFormatter->GetNumThousandSep(), cToken) ||
+                    StringEqualsChar( pFormatter->GetDateSep(), cToken) ||
+                    StringEqualsChar( pLoc->getTimeSep(), cToken) ||
+                    StringEqualsChar( pLoc->getTime100SecSep(), cToken))
+                {
+                    // Another separator than pre-known ASCII
+                    eType = NF_SYMBOLTYPE_DEL;
+                    sSymbol += OUString(cToken);
+                    eState = SsStop;
+                }
+                else if ( pChrCls->isLetter( rStr, nPos-1 ) )
                 {
                     short nTmpType = GetKeyWord( rStr, nPos-1 );
                     if ( nTmpType )
-                    {   // beginning of keyword, stop scan and put back
-                        eType = NF_SYMBOLTYPE_STRING;
-                        eState = SsStop;
-                        nPos--;
+                    {
+                        bool bCurrency = false;
+                        // "Automatic" currency may start with keyword,
+                        // like "R" (Rand) and 'R' (era)
+                        if ( nCurrPos != STRING_NOTFOUND &&
+                             nPos-1 + sCurString.getLength() <= rStr.getLength() &&
+                             sCurString.indexOf( sKeyword[nTmpType] ) == 0 )
+                        {
+                            OUString aTest = pChrCls->uppercase( rStr.copy( nPos-1, sCurString.getLength() ) );
+                            if ( aTest == sCurString )
+                            {
+                                bCurrency = true;
+                            }
+                        }
+                        if ( bCurrency )
+                        {
+                            eState = SsGetWord;
+                            sSymbol += OUString(cToken);
+                        }
+                        else
+                        {
+                            eType = nTmpType;
+                            sal_Int32 nLen = sKeyword[eType].getLength();
+                            sSymbol = rStr.copy( nPos-1, nLen );
+                            if ( eType == NF_KEY_E || IsAmbiguousE( eType ) )
+                            {
+                                sal_Unicode cNext = rStr[nPos];
+                                switch ( cNext )
+                                {
+                                case '+' :
+                                case '-' :  // E+ E- combine to one symbol
+                                    sSymbol += OUString(cNext);
+                                    eType = NF_KEY_E;
+                                    nPos++;
+                                    break;
+                                case '0' :
+                                case '#' :  // scientific E without sign
+                                    eType = NF_KEY_E;
+                                    break;
+                                }
+                            }
+                            nPos--;
+                            nPos = nPos + nLen;
+                            eState = SsStop;
+                        }
                     }
                     else
-                        sSymbol += cToken;
+                    {
+                        eState = SsGetWord;
+                        sSymbol += OUString(cToken);
+                    }
                 }
                 else
                 {
-                    bool bDontStop = false;
-                    switch (cToken)
+                    eType = NF_SYMBOLTYPE_STRING;
+                    eState = SsStop;
+                    sSymbol += OUString(cToken);
+                }
+                break;
+            }
+            break;
+        case SsGetChar:
+            sSymbol += OUString(cToken);
+            eState = SsStop;
+            break;
+        case SsGetString:
+            if (cToken == '"')
+            {
+                eState = SsStop;
+            }
+            sSymbol += OUString(cToken);
+            break;
+        case SsGetWord:
+            if ( pChrCls->isLetter( rStr, nPos-1 ) )
+            {
+                short nTmpType = GetKeyWord( rStr, nPos-1 );
+                if ( nTmpType )
+                {
+                    // beginning of keyword, stop scan and put back
+                    eType = NF_SYMBOLTYPE_STRING;
+                    eState = SsStop;
+                    nPos--;
+                }
+                else
+                {
+                    sSymbol += OUString(cToken);
+                }
+            }
+            else
+            {
+                bool bDontStop = false;
+                sal_Unicode cNext;
+                switch (cToken)
+                {
+                case '/':                       // AM/PM, A/P
+                    cNext = rStr[nPos];
+                    if ( cNext == 'P' || cNext == 'p' )
                     {
-                        case '/':                       // AM/PM, A/P
+                        sal_Int32 nLen = sSymbol.getLength();
+                        if ( 1 <= nLen &&
+                             (sSymbol[0] == 'A' || sSymbol[0] == 'a') &&
+                             (nLen == 1 ||
+                              (nLen == 2 && (sSymbol[1] == 'M' || sSymbol[1] == 'm')
+                               && (rStr[nPos + 1] == 'M' || rStr[nPos + 1] == 'm'))))
                         {
-                            sal_Unicode cNext = rStr.GetChar(nPos);
-                            if ( cNext == 'P' || cNext == 'p' )
-                            {
-                                xub_StrLen nLen = sSymbol.Len();
-                                if ( 1 <= nLen
-                                        && (sSymbol.GetChar(0) == 'A' || sSymbol.GetChar(0) == 'a')
-                                        && (nLen == 1 || (nLen == 2
-                                            && (sSymbol.GetChar(1) == 'M' || sSymbol.GetChar(1) == 'm')
-                                            && (rStr.GetChar(nPos+1) == 'M' || rStr.GetChar(nPos+1) == 'm'))) )
-                                {
-                                    sSymbol += cToken;
-                                    bDontStop = true;
-                                }
-                            }
+                            sSymbol += OUString(cToken);
+                            bDontStop = true;
                         }
-                        break;
                     }
-                    // anything not recognized will stop the scan
-                    if ( eState != SsStop && !bDontStop )
-                    {
-                        eState = SsStop;
-                        nPos--;
-                        eType = NF_SYMBOLTYPE_STRING;
-                    }
+                    break;
+                }
+                // anything not recognized will stop the scan
+                if ( eState != SsStop && !bDontStop )
+                {
+                    eState = SsStop;
+                    nPos--;
+                    eType = NF_SYMBOLTYPE_STRING;
                 }
             }
             break;
-            case SsGetStar:
-            {
-                eState = SsStop;
-                sSymbol += cToken;
-                nRepPos = (nPos - nStart) - 1;  // everytime > 0!!
-            }
+        case SsGetStar:
+            eState = SsStop;
+            sSymbol += OUString(cToken);
+            nRepPos = (nPos - nStart) - 1;  // everytime > 0!!
             break;
-            case SsGetBlank:
-            {
-                eState = SsStop;
-                sSymbol += cToken;
-            }
+        case SsGetBlank:
+            eState = SsStop;
+            sSymbol += OUString(cToken);
             break;
-            default:
+        default:
             break;
         }                                   // of switch
     }                                       // of while
     if (eState == SsGetWord)
+    {
         eType = NF_SYMBOLTYPE_STRING;
+    }
     return eType;
 }
 
-xub_StrLen ImpSvNumberformatScan::Symbol_Division(const String& rString)
+sal_Int32 ImpSvNumberformatScan::Symbol_Division(const OUString& rString)
 {
-    nCurrPos = STRING_NOTFOUND;
+    nCurrPos = -1;
                                                     // Ist Waehrung im Spiel?
-    String sString = pFormatter->GetCharClass()->uppercase(rString);
-    xub_StrLen nCPos = 0;
-    while (nCPos != STRING_NOTFOUND)
+    OUString sString = pFormatter->GetCharClass()->uppercase(rString);
+    sal_Int32 nCPos = 0;
+    while (nCPos >= 0)
     {
-        nCPos = sString.Search(GetCurString(),nCPos);
-        if (nCPos != STRING_NOTFOUND)
+        nCPos = sString.indexOf(GetCurString(),nCPos);
+        if (nCPos >= 0)
         {
             // in Quotes?
             sal_Int32 nQ = SvNumberformat::GetQuoteEnd( sString, nCPos );
@@ -902,14 +893,16 @@ xub_StrLen ImpSvNumberformatScan::Symbol_Division(const String& rString)
             {
                 sal_Unicode c;
                 if ( nCPos == 0 ||
-                    ((c = sString.GetChar(xub_StrLen(nCPos-1))) != '"'
+                    ((c = sString[nCPos-1]) != '"'
                             && c != '\\') )         // dm kann durch "dm
                 {                                   // \d geschuetzt werden
                     nCurrPos = nCPos;
-                    nCPos = STRING_NOTFOUND;        // Abbruch
+                    nCPos = -1;
                 }
                 else
+                {
                     nCPos++;                        // weitersuchen
+                }
             }
             else
             {
@@ -921,17 +914,21 @@ xub_StrLen ImpSvNumberformatScan::Symbol_Division(const String& rString)
     bool bStar = false;                 // wird bei '*'Detektion gesetzt
     Reset();
 
-    xub_StrLen nPos = 0;
-    const xub_StrLen nLen = rString.Len();
+    sal_Int32 nPos = 0;
+    const sal_Int32 nLen = rString.getLength();
     while (nPos < nLen && nAnzStrings < NF_MAX_FORMAT_SYMBOLS)
     {
         nTypeArray[nAnzStrings] = Next_Symbol(rString, nPos, sStrArray[nAnzStrings]);
         if (nTypeArray[nAnzStrings] == NF_SYMBOLTYPE_STAR)
         {                               // Ueberwachung des '*'
             if (bStar)
+            {
                 return nPos;        // Fehler: doppelter '*'
+            }
             else
+            {
                 bStar = true;
+            }
         }
         nAnzStrings++;
     }
@@ -939,13 +936,13 @@ xub_StrLen ImpSvNumberformatScan::Symbol_Division(const String& rString)
     return 0;                       // 0 => ok
 }
 
-void ImpSvNumberformatScan::SkipStrings(sal_uInt16& i, xub_StrLen& nPos)
+void ImpSvNumberformatScan::SkipStrings(sal_uInt16& i, sal_Int32& nPos)
 {
     while (i < nAnzStrings && (   nTypeArray[i] == NF_SYMBOLTYPE_STRING
                                || nTypeArray[i] == NF_SYMBOLTYPE_BLANK
                                || nTypeArray[i] == NF_SYMBOLTYPE_STAR) )
     {
-        nPos = nPos + sStrArray[i].Len();
+        nPos = nPos + sStrArray[i].getLength();
         i++;
     }
 }
@@ -957,9 +954,13 @@ sal_uInt16 ImpSvNumberformatScan::PreviousKeyword(sal_uInt16 i)
     {
         i--;
         while (i > 0 && nTypeArray[i] <= 0)
+        {
             i--;
+        }
         if (nTypeArray[i] > 0)
+        {
             res = nTypeArray[i];
+        }
     }
     return res;
 }
@@ -971,9 +972,13 @@ sal_uInt16 ImpSvNumberformatScan::NextKeyword(sal_uInt16 i)
     {
         i++;
         while (i < nAnzStrings-1 && nTypeArray[i] <= 0)
+        {
             i++;
+        }
         if (nTypeArray[i] > 0)
+        {
             res = nTypeArray[i];
+        }
     }
     return res;
 }
@@ -985,7 +990,8 @@ short ImpSvNumberformatScan::PreviousType( sal_uInt16 i )
         do
         {
             i--;
-        } while ( i > 0 && nTypeArray[i] == NF_SYMBOLTYPE_EMPTY );
+        }
+        while ( i > 0 && nTypeArray[i] == NF_SYMBOLTYPE_EMPTY );
         return nTypeArray[i];
     }
     return 0;
@@ -997,13 +1003,18 @@ sal_Unicode ImpSvNumberformatScan::PreviousChar(sal_uInt16 i)
     if (i > 0 && i < nAnzStrings)
     {
         i--;
-        while (i > 0 && (   nTypeArray[i] == NF_SYMBOLTYPE_EMPTY
-                         || nTypeArray[i] == NF_SYMBOLTYPE_STRING
-                         || nTypeArray[i] == NF_SYMBOLTYPE_STAR
-                         || nTypeArray[i] == NF_SYMBOLTYPE_BLANK ) )
+        while (i > 0 &&
+               ( nTypeArray[i] == NF_SYMBOLTYPE_EMPTY ||
+                 nTypeArray[i] == NF_SYMBOLTYPE_STRING ||
+                 nTypeArray[i] == NF_SYMBOLTYPE_STAR ||
+                 nTypeArray[i] == NF_SYMBOLTYPE_BLANK ))
+        {
             i--;
-        if (sStrArray[i].Len() > 0)
-            res = sStrArray[i].GetChar(xub_StrLen(sStrArray[i].Len()-1));
+        }
+        if (sStrArray[i].getLength() > 0)
+        {
+            res = sStrArray[i][sStrArray[i].getLength()-1];
+        }
     }
     return res;
 }
@@ -1015,13 +1026,17 @@ sal_Unicode ImpSvNumberformatScan::NextChar(sal_uInt16 i)
     {
         i++;
         while (i < nAnzStrings-1 &&
-               (   nTypeArray[i] == NF_SYMBOLTYPE_EMPTY
-                || nTypeArray[i] == NF_SYMBOLTYPE_STRING
-                || nTypeArray[i] == NF_SYMBOLTYPE_STAR
-                || nTypeArray[i] == NF_SYMBOLTYPE_BLANK))
+               ( nTypeArray[i] == NF_SYMBOLTYPE_EMPTY ||
+                 nTypeArray[i] == NF_SYMBOLTYPE_STRING ||
+                 nTypeArray[i] == NF_SYMBOLTYPE_STAR ||
+                 nTypeArray[i] == NF_SYMBOLTYPE_BLANK))
+        {
             i++;
-        if (sStrArray[i].Len() > 0)
-            res = sStrArray[i].GetChar(0);
+        }
+        if (sStrArray[i].getLength() > 0)
+        {
+            res = sStrArray[i][0];
+        }
     }
     return res;
 }
@@ -1037,18 +1052,25 @@ bool ImpSvNumberformatScan::IsLastBlankBeforeFrac(sal_uInt16 i)
         {
             i++;
             if ( nTypeArray[i] == NF_SYMBOLTYPE_DEL &&
-                    sStrArray[i].GetChar(0) == '/')
+                 sStrArray[i][0] == '/')
+            {
                 bStop = true;
+            }
             else if ( nTypeArray[i] == NF_SYMBOLTYPE_DEL &&
-                    sStrArray[i].GetChar(0) == ' ')
+                      sStrArray[i][0] == ' ')
+            {
                 res = false;
+            }
         }
-        if (!bStop)                                 // kein '/'
+        if (!bStop)                                 // kein '/'{
+        {
             res = false;
+        }
     }
     else
+    {
         res = false;                                // kein '/' mehr
-
+    }
     return res;
 }
 
@@ -1070,9 +1092,9 @@ void ImpSvNumberformatScan::Reset()
     bThousand = false;
     nThousand = 0;
     bDecSep = false;
-    nDecPos =  -1;
-    nExpPos = (sal_uInt16) -1;
-    nBlankPos = (sal_uInt16) -1;
+    nDecPos = (sal_uInt16)-1;
+    nExpPos = (sal_uInt16)-1;
+    nBlankPos = (sal_uInt16)-1;
     nCntPre = 0;
     nCntPost = 0;
     nCntExp = 0;
@@ -1084,17 +1106,17 @@ void ImpSvNumberformatScan::Reset()
 bool ImpSvNumberformatScan::Is100SecZero( sal_uInt16 i, bool bHadDecSep )
 {
     sal_uInt16 nIndexPre = PreviousKeyword( i );
-    return (nIndexPre == NF_KEY_S || nIndexPre == NF_KEY_SS)
-            && (bHadDecSep                 // S, SS ','
-            || (i>0 && nTypeArray[i-1] == NF_SYMBOLTYPE_STRING));
+    return (nIndexPre == NF_KEY_S || nIndexPre == NF_KEY_SS) &&
+            (bHadDecSep ||
+             ( i > 0 && nTypeArray[i-1] == NF_SYMBOLTYPE_STRING));
                 // SS"any"00  take "any" as a valid decimal separator
 }
 
-xub_StrLen ImpSvNumberformatScan::ScanType()
+sal_Int32 ImpSvNumberformatScan::ScanType()
 {
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
 
-    xub_StrLen nPos = 0;
+    sal_Int32 nPos = 0;
     sal_uInt16 i = 0;
     short eNewType;
     bool bMatchBracket = false;
@@ -1105,151 +1127,164 @@ xub_StrLen ImpSvNumberformatScan::ScanType()
     {
         if (nTypeArray[i] > 0)
         {                                       // keyword
+            sal_uInt16 nIndexPre;
+            sal_uInt16 nIndexNex;
+            sal_Unicode cChar;
+
             switch (nTypeArray[i])
             {
-                case NF_KEY_E:                          // E
-                    eNewType = NUMBERFORMAT_SCIENTIFIC;
+            case NF_KEY_E:                          // E
+                eNewType = NUMBERFORMAT_SCIENTIFIC;
                 break;
-                case NF_KEY_AMPM:                       // AM,A,PM,P
-                case NF_KEY_AP:
-                case NF_KEY_H:                          // H
-                case NF_KEY_HH:                         // HH
-                case NF_KEY_S:                          // S
-                case NF_KEY_SS:                         // SS
+            case NF_KEY_AMPM:                       // AM,A,PM,P
+            case NF_KEY_AP:
+            case NF_KEY_H:                          // H
+            case NF_KEY_HH:                         // HH
+            case NF_KEY_S:                          // S
+            case NF_KEY_SS:                         // SS
+                eNewType = NUMBERFORMAT_TIME;
+                break;
+            case NF_KEY_M:                          // M
+            case NF_KEY_MM:                         // MM
+                // minute or month
+                nIndexPre = PreviousKeyword(i);
+                nIndexNex = NextKeyword(i);
+                cChar = PreviousChar(i);
+                if (nIndexPre == NF_KEY_H   ||  // H
+                    nIndexPre == NF_KEY_HH  ||  // HH
+                    nIndexNex == NF_KEY_S   ||  // S
+                    nIndexNex == NF_KEY_SS  ||  // SS
+                    cChar == '['  )     // [M
+                {
                     eNewType = NUMBERFORMAT_TIME;
-                break;
-                case NF_KEY_M:                          // M
-                case NF_KEY_MM:                         // MM
-                {                                       // minute or month
-                    sal_uInt16 nIndexPre = PreviousKeyword(i);
-                    sal_uInt16 nIndexNex = NextKeyword(i);
-                    sal_Unicode cChar = PreviousChar(i);
-                    if (nIndexPre == NF_KEY_H   ||  // H
-                        nIndexPre == NF_KEY_HH  ||  // HH
-                        nIndexNex == NF_KEY_S   ||  // S
-                        nIndexNex == NF_KEY_SS  ||  // SS
-                        cChar == '['  )     // [M
-                    {
-                        eNewType = NUMBERFORMAT_TIME;
-                        nTypeArray[i] -= 2;         // 6 -> 4, 7 -> 5
-                    }
-                    else
-                        eNewType = NUMBERFORMAT_DATE;
+                    nTypeArray[i] -= 2;         // 6 -> 4, 7 -> 5
+                }
+                else
+                {
+                    eNewType = NUMBERFORMAT_DATE;
                 }
                 break;
-                case NF_KEY_MMM:                // MMM
-                case NF_KEY_MMMM:               // MMMM
-                case NF_KEY_MMMMM:              // MMMMM
-                case NF_KEY_Q:                  // Q
-                case NF_KEY_QQ:                 // QQ
-                case NF_KEY_D:                  // D
-                case NF_KEY_DD:                 // DD
-                case NF_KEY_DDD:                // DDD
-                case NF_KEY_DDDD:               // DDDD
-                case NF_KEY_YY:                 // YY
-                case NF_KEY_YYYY:               // YYYY
-                case NF_KEY_NN:                 // NN
-                case NF_KEY_NNN:                // NNN
-                case NF_KEY_NNNN:               // NNNN
-                case NF_KEY_WW :                // WW
-                case NF_KEY_AAA :               // AAA
-                case NF_KEY_AAAA :              // AAAA
-                case NF_KEY_EC :                // E
-                case NF_KEY_EEC :               // EE
-                case NF_KEY_G :                 // G
-                case NF_KEY_GG :                // GG
-                case NF_KEY_GGG :               // GGG
-                case NF_KEY_R :                 // R
-                case NF_KEY_RR :                // RR
-                    eNewType = NUMBERFORMAT_DATE;
+            case NF_KEY_MMM:                // MMM
+            case NF_KEY_MMMM:               // MMMM
+            case NF_KEY_MMMMM:              // MMMMM
+            case NF_KEY_Q:                  // Q
+            case NF_KEY_QQ:                 // QQ
+            case NF_KEY_D:                  // D
+            case NF_KEY_DD:                 // DD
+            case NF_KEY_DDD:                // DDD
+            case NF_KEY_DDDD:               // DDDD
+            case NF_KEY_YY:                 // YY
+            case NF_KEY_YYYY:               // YYYY
+            case NF_KEY_NN:                 // NN
+            case NF_KEY_NNN:                // NNN
+            case NF_KEY_NNNN:               // NNNN
+            case NF_KEY_WW :                // WW
+            case NF_KEY_AAA :               // AAA
+            case NF_KEY_AAAA :              // AAAA
+            case NF_KEY_EC :                // E
+            case NF_KEY_EEC :               // EE
+            case NF_KEY_G :                 // G
+            case NF_KEY_GG :                // GG
+            case NF_KEY_GGG :               // GGG
+            case NF_KEY_R :                 // R
+            case NF_KEY_RR :                // RR
+                eNewType = NUMBERFORMAT_DATE;
                 break;
-                case NF_KEY_CCC:                // CCC
-                    eNewType = NUMBERFORMAT_CURRENCY;
+            case NF_KEY_CCC:                // CCC
+                eNewType = NUMBERFORMAT_CURRENCY;
                 break;
-                case NF_KEY_GENERAL:            // Standard
-                    eNewType = NUMBERFORMAT_NUMBER;
-                    bHaveGeneral = true;
+            case NF_KEY_GENERAL:            // Standard
+                eNewType = NUMBERFORMAT_NUMBER;
+                bHaveGeneral = true;
                 break;
-                default:
-                    eNewType = NUMBERFORMAT_UNDEFINED;
+            default:
+                eNewType = NUMBERFORMAT_UNDEFINED;
                 break;
             }
         }
         else
         {                                       // control character
-            switch ( sStrArray[i].GetChar(0) )
+            switch ( sStrArray[i][0] )
             {
-                case '#':
-                case '?':
+            case '#':
+            case '?':
+                eNewType = NUMBERFORMAT_NUMBER;
+                break;
+            case '0':
+                if ( (eScannedType & NUMBERFORMAT_TIME) == NUMBERFORMAT_TIME )
+                {
+                    if ( Is100SecZero( i, bDecSep ) )
+                    {
+                        bDecSep = true;                 // subsequent 0's
+                        eNewType = NUMBERFORMAT_TIME;
+                    }
+                    else
+                    {
+                        return nPos;                    // Error
+                    }
+                }
+                else
+                {
                     eNewType = NUMBERFORMAT_NUMBER;
-                break;
-                case '0':
-                {
-                    if ( (eScannedType & NUMBERFORMAT_TIME) == NUMBERFORMAT_TIME )
-                    {
-                        if ( Is100SecZero( i, bDecSep ) )
-                        {
-                            bDecSep = true;                 // subsequent 0's
-                            eNewType = NUMBERFORMAT_TIME;
-                        }
-                        else
-                            return nPos;                    // Error
-                    }
-                    else
-                        eNewType = NUMBERFORMAT_NUMBER;
                 }
                 break;
-                case '%':
-                    eNewType = NUMBERFORMAT_PERCENT;
+            case '%':
+                eNewType = NUMBERFORMAT_PERCENT;
                 break;
-                case '/':
-                    eNewType = NUMBERFORMAT_FRACTION;
+            case '/':
+                eNewType = NUMBERFORMAT_FRACTION;
                 break;
-                case '[':
+            case '[':
+                if ( i < nAnzStrings-1 &&
+                     nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
+                     sStrArray[i+1][0] == '$' )
+                {   // as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
+                    eNewType = NUMBERFORMAT_CURRENCY;
+                    bMatchBracket = true;
+                }
+                else if ( i < nAnzStrings-1 &&
+                          nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
+                          sStrArray[i+1][0] == '~' )
+                {   // as of SV_NUMBERFORMATTER_VERSION_CALENDAR
+                    eNewType = NUMBERFORMAT_DATE;
+                    bMatchBracket = true;
+                }
+                else
                 {
-                    if ( i < nAnzStrings-1 &&
-                            nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
-                            sStrArray[i+1].GetChar(0) == '$' )
-                    {   // as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
-                        eNewType = NUMBERFORMAT_CURRENCY;
-                        bMatchBracket = true;
-                    }
-                    else if ( i < nAnzStrings-1 &&
-                            nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
-                            sStrArray[i+1].GetChar(0) == '~' )
-                    {   // as of SV_NUMBERFORMATTER_VERSION_CALENDAR
-                        eNewType = NUMBERFORMAT_DATE;
-                        bMatchBracket = true;
-                    }
+                    sal_uInt16 nIndexNex = NextKeyword(i);
+                    if (nIndexNex == NF_KEY_H   ||  // H
+                        nIndexNex == NF_KEY_HH  ||  // HH
+                        nIndexNex == NF_KEY_M   ||  // M
+                        nIndexNex == NF_KEY_MM  ||  // MM
+                        nIndexNex == NF_KEY_S   ||  // S
+                        nIndexNex == NF_KEY_SS   )  // SS
+                        eNewType = NUMBERFORMAT_TIME;
                     else
                     {
-                        sal_uInt16 nIndexNex = NextKeyword(i);
-                        if (nIndexNex == NF_KEY_H   ||  // H
-                            nIndexNex == NF_KEY_HH  ||  // HH
-                            nIndexNex == NF_KEY_M   ||  // M
-                            nIndexNex == NF_KEY_MM  ||  // MM
-                            nIndexNex == NF_KEY_S   ||  // S
-                            nIndexNex == NF_KEY_SS   )  // SS
-                            eNewType = NUMBERFORMAT_TIME;
-                        else
-                            return nPos;                // Error
+                        return nPos;                // Error
                     }
                 }
                 break;
-                case '@':
-                    eNewType = NUMBERFORMAT_TEXT;
+            case '@':
+                eNewType = NUMBERFORMAT_TEXT;
                 break;
-                default:
-                    if (pLoc->getTime100SecSep().equals(sStrArray[i]))
-                        bDecSep = true;                     // for SS,0
-                    eNewType = NUMBERFORMAT_UNDEFINED;
+            default:
+                if (pLoc->getTime100SecSep().equals(sStrArray[i]))
+                {
+                    bDecSep = true;                     // for SS,0
+                }
+                eNewType = NUMBERFORMAT_UNDEFINED;
                 break;
             }
         }
         if (eScannedType == NUMBERFORMAT_UNDEFINED)
+        {
             eScannedType = eNewType;
+        }
         else if (eScannedType == NUMBERFORMAT_TEXT || eNewType == NUMBERFORMAT_TEXT)
+        {
             eScannedType = NUMBERFORMAT_TEXT;               // Text bleibt immer Text
+        }
         else if (eNewType == NUMBERFORMAT_UNDEFINED)
         {                                           // bleibt wie bisher
         }
@@ -1257,157 +1292,171 @@ xub_StrLen ImpSvNumberformatScan::ScanType()
         {
             switch (eScannedType)
             {
-                case NUMBERFORMAT_DATE:
+            case NUMBERFORMAT_DATE:
+                switch (eNewType)
                 {
-                    switch (eNewType)
-                    {
-                        case NUMBERFORMAT_TIME:
-                            eScannedType = NUMBERFORMAT_DATETIME;
-                        break;
-                        case NUMBERFORMAT_FRACTION:         // DD/MM
-                        break;
-                        default:
-                        {
-                            if (nCurrPos != STRING_NOTFOUND)
-                                eScannedType = NUMBERFORMAT_UNDEFINED;
-                            else if ( sStrArray[i] != pFormatter->GetDateSep() )
-                                return nPos;
-                        }
-                    }
-                }
-                break;
                 case NUMBERFORMAT_TIME:
-                {
-                    switch (eNewType)
-                    {
-                        case NUMBERFORMAT_DATE:
-                            eScannedType = NUMBERFORMAT_DATETIME;
-                        break;
-                        case NUMBERFORMAT_FRACTION:         // MM/SS
-                        break;
-                        default:
-                        {
-                            if (nCurrPos != STRING_NOTFOUND)
-                                eScannedType = NUMBERFORMAT_UNDEFINED;
-                            else if (!pLoc->getTimeSep().equals(sStrArray[i]))
-                                return nPos;
-                        }
-                    }
-                }
-                break;
-                case NUMBERFORMAT_DATETIME:
-                {
-                    switch (eNewType)
-                    {
-                        case NUMBERFORMAT_TIME:
-                        case NUMBERFORMAT_DATE:
-                        break;
-                        case NUMBERFORMAT_FRACTION:         // DD/MM
-                        break;
-                        default:
-                        {
-                            if (nCurrPos != STRING_NOTFOUND)
-                                eScannedType = NUMBERFORMAT_UNDEFINED;
-                            else if ( pFormatter->GetDateSep() != sStrArray[i]
-                                   && !pLoc->getTimeSep().equals(sStrArray[i]) )
-                                return nPos;
-                        }
-                    }
-                }
-                break;
-                case NUMBERFORMAT_PERCENT:
-                {
-                    switch (eNewType)
-                    {
-                        case NUMBERFORMAT_NUMBER:   // nur Zahl nach Prozent
-                        break;
-                        default:
-                            return nPos;
-                    }
-                }
-                break;
-                case NUMBERFORMAT_SCIENTIFIC:
-                {
-                    switch (eNewType)
-                    {
-                        case NUMBERFORMAT_NUMBER:   // nur Zahl nach E
-                        break;
-                        default:
-                            return nPos;
-                    }
-                }
-                break;
-                case NUMBERFORMAT_NUMBER:
-                {
-                    switch (eNewType)
-                    {
-                        case NUMBERFORMAT_SCIENTIFIC:
-                        case NUMBERFORMAT_PERCENT:
-                        case NUMBERFORMAT_FRACTION:
-                        case NUMBERFORMAT_CURRENCY:
-                            eScannedType = eNewType;
-                        break;
-                        default:
-                            if (nCurrPos != STRING_NOTFOUND)
-                                eScannedType = NUMBERFORMAT_UNDEFINED;
-                            else
-                                return nPos;
-                    }
-                }
-                break;
-                case NUMBERFORMAT_FRACTION:
-                {
-                    switch (eNewType)
-                    {
-                        case NUMBERFORMAT_NUMBER:           // nur Zahl nach Bruch
-                        break;
-                        default:
-                            return nPos;
-                    }
-                }
-                break;
+                    eScannedType = NUMBERFORMAT_DATETIME;
+                    break;
+                case NUMBERFORMAT_FRACTION:         // DD/MM
+                    break;
                 default:
+                    if (nCurrPos >= 0)
+                    {
+                        eScannedType = NUMBERFORMAT_UNDEFINED;
+                    }
+                    else if ( sStrArray[i] != OUString(pFormatter->GetDateSep()) )
+                    {
+                        return nPos;
+                    }
+                }
+                break;
+            case NUMBERFORMAT_TIME:
+                switch (eNewType)
+                {
+                case NUMBERFORMAT_DATE:
+                    eScannedType = NUMBERFORMAT_DATETIME;
+                    break;
+                case NUMBERFORMAT_FRACTION:         // MM/SS
+                    break;
+                default:
+                    if (nCurrPos != STRING_NOTFOUND)
+                    {
+                        eScannedType = NUMBERFORMAT_UNDEFINED;
+                    }
+                    else if (!pLoc->getTimeSep().equals(sStrArray[i]))
+                    {
+                        return nPos;
+                    }
+                    break;
+                }
+                break;
+            case NUMBERFORMAT_DATETIME:
+                switch (eNewType)
+                {
+                case NUMBERFORMAT_TIME:
+                case NUMBERFORMAT_DATE:
+                    break;
+                case NUMBERFORMAT_FRACTION:         // DD/MM
+                    break;
+                default:
+                    if (nCurrPos >= 0)
+                    {
+                        eScannedType = NUMBERFORMAT_UNDEFINED;
+                    }
+                    else if ( OUString(pFormatter->GetDateSep()) != sStrArray[i] &&
+                              !pLoc->getTimeSep().equals(sStrArray[i]) )
+                    {
+                        return nPos;
+                    }
+                }
+                break;
+            case NUMBERFORMAT_PERCENT:
+                switch (eNewType)
+                {
+                case NUMBERFORMAT_NUMBER:   // nur Zahl nach Prozent
+                    break;
+                default:
+                    return nPos;
+                }
+                break;
+            case NUMBERFORMAT_SCIENTIFIC:
+                switch (eNewType)
+                {
+                case NUMBERFORMAT_NUMBER:   // nur Zahl nach E
+                    break;
+                default:
+                    return nPos;
+                }
+                break;
+            case NUMBERFORMAT_NUMBER:
+                switch (eNewType)
+                {
+                case NUMBERFORMAT_SCIENTIFIC:
+                case NUMBERFORMAT_PERCENT:
+                case NUMBERFORMAT_FRACTION:
+                case NUMBERFORMAT_CURRENCY:
+                    eScannedType = eNewType;
+                    break;
+                default:
+                    if (nCurrPos != STRING_NOTFOUND)
+                    {
+                        eScannedType = NUMBERFORMAT_UNDEFINED;
+                    }
+                    else
+                    {
+                        return nPos;
+                    }
+                }
+                break;
+            case NUMBERFORMAT_FRACTION:
+                switch (eNewType)
+                {
+                case NUMBERFORMAT_NUMBER:           // nur Zahl nach Bruch
+                    break;
+                default:
+                    return nPos;
+                }
+                break;
+            default:
                 break;
             }
         }
-        nPos = nPos + sStrArray[i].Len();           // Korrekturposition
+        nPos = nPos + sStrArray[i].getLength();           // Korrekturposition
         i++;
         if ( bMatchBracket )
         {   // no type detection inside of matching brackets if [$...], [~...]
             while ( bMatchBracket && i < nAnzStrings )
             {
                 if ( nTypeArray[i] == NF_SYMBOLTYPE_DEL
-                        && sStrArray[i].GetChar(0) == ']' )
+                     && sStrArray[i][0] == ']' )
+                {
                     bMatchBracket = false;
+                }
                 else
+                {
                     nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                nPos = nPos + sStrArray[i].Len();
+                }
+                nPos = nPos + sStrArray[i].getLength();
                 i++;
             }
             if ( bMatchBracket )
+            {
                 return nPos;    // missing closing bracket at end of code
+            }
         }
         SkipStrings(i, nPos);
     }
 
-    if ((eScannedType == NUMBERFORMAT_NUMBER || eScannedType == NUMBERFORMAT_UNDEFINED)
-         && nCurrPos != STRING_NOTFOUND && !bHaveGeneral)
+    if ((eScannedType == NUMBERFORMAT_NUMBER ||
+         eScannedType == NUMBERFORMAT_UNDEFINED) &&
+        nCurrPos >= 0 && !bHaveGeneral)
+    {
         eScannedType = NUMBERFORMAT_CURRENCY;   // old "automatic" currency
+    }
     if (eScannedType == NUMBERFORMAT_UNDEFINED)
+    {
         eScannedType = NUMBERFORMAT_DEFINED;
+    }
     return 0;                               // Alles ok
 }
 
-bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType eType, const String& rStr )
+bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType eType, const OUString& rStr )
 {
     if (nAnzStrings >= NF_MAX_FORMAT_SYMBOLS || nPos > nAnzStrings)
+    {
         return false;
+    }
     if (nPos > 0 && nTypeArray[nPos-1] == NF_SYMBOLTYPE_EMPTY)
+    {
         --nPos;     // reuse position
+    }
     else
     {
         if ((size_t) (nAnzStrings + 1) >= NF_MAX_FORMAT_SYMBOLS)
+        {
             return false;
+        }
         ++nAnzStrings;
         for (size_t i = nAnzStrings; i > nPos; --i)
         {
@@ -1421,62 +1470,67 @@ bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType e
     return true;
 }
 
-int ImpSvNumberformatScan::FinalScanGetCalendar( xub_StrLen& nPos, sal_uInt16& i,
-            sal_uInt16& rAnzResStrings )
+int ImpSvNumberformatScan::FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i,
+                                                 sal_uInt16& rAnzResStrings )
 {
-    if ( sStrArray[i].GetChar(0) == '[' &&
-            i < nAnzStrings-1 &&
-            nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
-            sStrArray[i+1].GetChar(0) == '~' )
-    {   // [~calendarID]
+    if ( sStrArray[i][0] == '[' &&
+         i < nAnzStrings-1 &&
+         nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
+         sStrArray[i+1][0] == '~' )
+    {
+        // [~calendarID]
         // as of SV_NUMBERFORMATTER_VERSION_CALENDAR
-        nPos = nPos + sStrArray[i].Len();           // [
+        nPos = nPos + sStrArray[i].getLength();           // [
         nTypeArray[i] = NF_SYMBOLTYPE_CALDEL;
-        nPos = nPos + sStrArray[++i].Len();     // ~
+        nPos = nPos + sStrArray[++i].getLength();     // ~
         sStrArray[i-1] += sStrArray[i];     // [~
         nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
         rAnzResStrings--;
         if ( ++i >= nAnzStrings )
+        {
             return -1;      // error
-        nPos = nPos + sStrArray[i].Len();           // calendarID
-        String& rStr = sStrArray[i];
+        }
+        nPos = nPos + sStrArray[i].getLength();           // calendarID
+        OUString& rStr = sStrArray[i];
         nTypeArray[i] = NF_SYMBOLTYPE_CALENDAR; // convert
         i++;
         while ( i < nAnzStrings &&
-                sStrArray[i].GetChar(0) != ']' )
+                sStrArray[i][0] != ']' )
         {
-            nPos = nPos + sStrArray[i].Len();
+            nPos = nPos + sStrArray[i].getLength();
             rStr += sStrArray[i];
             nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
             rAnzResStrings--;
             i++;
         }
-        if ( rStr.Len() && i < nAnzStrings &&
-                sStrArray[i].GetChar(0) == ']' )
+        if ( rStr.getLength() && i < nAnzStrings &&
+             sStrArray[i][0] == ']' )
         {
             nTypeArray[i] = NF_SYMBOLTYPE_CALDEL;
-            nPos = nPos + sStrArray[i].Len();
+            nPos = nPos + sStrArray[i].getLength();
             i++;
         }
         else
+        {
             return -1;      // error
+        }
         return 1;
     }
     return 0;
 }
 
-xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
+sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
 {
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
 
     // save values for convert mode
-    String sOldDecSep       = pFormatter->GetNumDecimalSep();
-    String sOldThousandSep  = pFormatter->GetNumThousandSep();
-    String sOldDateSep      = pFormatter->GetDateSep();
-    String sOldTimeSep      = pLoc->getTimeSep();
-    String sOldTime100SecSep= pLoc->getTime100SecSep();
-    String sOldCurSymbol    = GetCurSymbol();
-    rtl::OUString sOldCurString = GetCurString();
+    OUString sOldDecSep       = pFormatter->GetNumDecimalSep();
+    OUString sOldThousandSep  = pFormatter->GetNumThousandSep();
+    OUString sOldDateSep      = pFormatter->GetDateSep();
+    OUString sOldTimeSep      = pLoc->getTimeSep();
+    OUString sOldTime100SecSep= pLoc->getTime100SecSep();
+    OUString sOldCurSymbol    = GetCurSymbol();
+    OUString sOldCurString = GetCurString();
     sal_Unicode cOldKeyH    = sKeyword[NF_KEY_H][0];
     sal_Unicode cOldKeyMI   = sKeyword[NF_KEY_MI][0];
     sal_Unicode cOldKeyS    = sKeyword[NF_KEY_S][0];
@@ -1485,9 +1539,10 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
     // normal space instead so queries on space work correctly.
     // The format string is adjusted to allow both.
     // For output of the format code string the LocaleData characters are used.
-    if ( sOldThousandSep.GetChar(0) == cNonBreakingSpace && sOldThousandSep.Len() == 1 )
-        sOldThousandSep = ' ';
-
+    if ( sOldThousandSep[0] == cNonBreakingSpace && sOldThousandSep.getLength() == 1 )
+    {
+        sOldThousandSep = " ";
+    }
     // change locale data et al
     if (bConvertMode)
     {
@@ -1499,1038 +1554,1079 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
     }
     const CharClass* pChrCls = pFormatter->GetCharClass();
 
-    xub_StrLen nPos = 0;                    // error correction position
-    sal_uInt16 i = 0;                           // symbol loop counter
-    sal_uInt16 nCounter = 0;                    // counts digits
-    nAnzResStrings = nAnzStrings;           // counts remaining symbols
-    bDecSep = false;                        // reset in case already used in TypeCheck
-    bool bThaiT = false;                    // Thai T NatNum modifier present
+    sal_Int32 nPos = 0;                    // error correction position
+    sal_uInt16 i = 0;                      // symbol loop counter
+    sal_uInt16 nCounter = 0;               // counts digits
+    nAnzResStrings = nAnzStrings;          // counts remaining symbols
+    bDecSep = false;                       // reset in case already used in TypeCheck
+    bool bThaiT = false;                   // Thai T NatNum modifier present
+    bool bTimePart = false;
 
     switch (eScannedType)
     {
-        case NUMBERFORMAT_TEXT:
-        case NUMBERFORMAT_DEFINED:
+    case NUMBERFORMAT_TEXT:
+    case NUMBERFORMAT_DEFINED:
+        while (i < nAnzStrings)
         {
-            while (i < nAnzStrings)
+            switch (nTypeArray[i])
             {
-                switch (nTypeArray[i])
+            case NF_SYMBOLTYPE_BLANK:
+            case NF_SYMBOLTYPE_STAR:
+                break;
+            case NF_KEY_GENERAL :   // #77026# "General" is the same as "@"
+                break;
+            default:
+                if ( nTypeArray[i] != NF_SYMBOLTYPE_DEL ||
+                     sStrArray[i][0] != '@' )
                 {
-                    case NF_SYMBOLTYPE_BLANK:
-                    case NF_SYMBOLTYPE_STAR:
-                    break;
-                    case NF_KEY_GENERAL :   // #77026# "General" is the same as "@"
-                    break;
-                    default:
-                    {
-                        if ( nTypeArray[i] != NF_SYMBOLTYPE_DEL ||
-                                sStrArray[i].GetChar(0) != '@' )
-                            nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                    }
-                    break;
+                    nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                 }
-                nPos = nPos + sStrArray[i].Len();
-                i++;
-            }                                       // of while
-        }
+                break;
+            }
+            nPos = nPos + sStrArray[i].getLength();
+            i++;
+        }                                       // of while
         break;
-        case NUMBERFORMAT_NUMBER:
-        case NUMBERFORMAT_PERCENT:
-        case NUMBERFORMAT_CURRENCY:
-        case NUMBERFORMAT_SCIENTIFIC:
-        case NUMBERFORMAT_FRACTION:
+
+    case NUMBERFORMAT_NUMBER:
+    case NUMBERFORMAT_PERCENT:
+    case NUMBERFORMAT_CURRENCY:
+    case NUMBERFORMAT_SCIENTIFIC:
+    case NUMBERFORMAT_FRACTION:
+        while (i < nAnzStrings)
         {
-            while (i < nAnzStrings)
+            // TODO: rechecking eScannedType is unnecessary.
+            // This switch-case is for eScannedType == NUMBERFORMAT_FRACTION anyway
+            if (eScannedType == NUMBERFORMAT_FRACTION &&    // special case
+                nTypeArray[i] == NF_SYMBOLTYPE_DEL &&           // # ### #/#
+                StringEqualsChar( sOldThousandSep, ' ' ) && // e.g. France or Sweden
+                StringEqualsChar( sStrArray[i], ' ' ) &&
+                !bFrac                          &&
+                IsLastBlankBeforeFrac(i) )
             {
-                // TODO: rechecking eScannedType is unnecessary.
-                // This switch-case is for eScannedType == NUMBERFORMAT_FRACTION anyway
-                if (eScannedType == NUMBERFORMAT_FRACTION &&    // special case
-                    nTypeArray[i] == NF_SYMBOLTYPE_DEL &&           // # ### #/#
-                    StringEqualsChar( sOldThousandSep, ' ' ) && // e.g. France or Sweden
-                    StringEqualsChar( sStrArray[i], ' ' ) &&
-                    !bFrac                          &&
-                    IsLastBlankBeforeFrac(i) )
-                {
-                    nTypeArray[i] = NF_SYMBOLTYPE_STRING;           // del->string
-                }                                               // kein Taus.p.
+                nTypeArray[i] = NF_SYMBOLTYPE_STRING;           // del->string
+            }                                               // kein Taus.p.
 
-                if (nTypeArray[i] == NF_SYMBOLTYPE_BLANK    ||
-                    nTypeArray[i] == NF_SYMBOLTYPE_STAR ||
-                    nTypeArray[i] == NF_KEY_CCC         ||  // CCC
-                    nTypeArray[i] == NF_KEY_GENERAL )       // Standard
+            if (nTypeArray[i] == NF_SYMBOLTYPE_BLANK    ||
+                nTypeArray[i] == NF_SYMBOLTYPE_STAR ||
+                nTypeArray[i] == NF_KEY_CCC         ||  // CCC
+                nTypeArray[i] == NF_KEY_GENERAL )       // Standard
+            {
+                if (nTypeArray[i] == NF_KEY_GENERAL)
                 {
-                    if (nTypeArray[i] == NF_KEY_GENERAL)
+                    nThousand = FLAG_STANDARD_IN_FORMAT;
+                    if ( bConvertMode )
                     {
-                        nThousand = FLAG_STANDARD_IN_FORMAT;
-                        if ( bConvertMode )
-                        {
-                            sStrArray[i] = sNameStandardFormat;
-                        }
+                        sStrArray[i] = sNameStandardFormat;
                     }
-                    nPos = nPos + sStrArray[i].Len();
-                    i++;
                 }
-                else if (nTypeArray[i] == NF_SYMBOLTYPE_STRING ||  // Strings oder
-                         nTypeArray[i] > 0)                     // Keywords
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+            }
+            else if (nTypeArray[i] == NF_SYMBOLTYPE_STRING ||  // Strings oder
+                     nTypeArray[i] > 0)                     // Keywords
+            {
+                if (eScannedType == NUMBERFORMAT_SCIENTIFIC &&
+                    nTypeArray[i] == NF_KEY_E)         // E+
                 {
-                    if (eScannedType == NUMBERFORMAT_SCIENTIFIC &&
-                             nTypeArray[i] == NF_KEY_E)         // E+
+                    if (bExp)                               // doppelt
                     {
-                        if (bExp)                               // doppelt
-                            return nPos;
-                        bExp = true;
-                        nExpPos = i;
-                        if (bDecSep)
-                            nCntPost = nCounter;
-                        else
-                            nCntPre = nCounter;
+                        return nPos;
+                    }
+                    bExp = true;
+                    nExpPos = i;
+                    if (bDecSep)
+                    {
+                        nCntPost = nCounter;
+                    }
+                    else
+                    {
+                        nCntPre = nCounter;
+                    }
+                    nCounter = 0;
+                    nTypeArray[i] = NF_SYMBOLTYPE_EXP;
+                }
+                else if (eScannedType == NUMBERFORMAT_FRACTION &&
+                         sStrArray[i][0] == ' ')
+                {
+                    if (!bBlank && !bFrac)  // nicht doppelt oder hinter /
+                    {
+                        if (bDecSep && nCounter > 0)    // Nachkommastellen
+                        {
+                            return nPos;                // Fehler
+                        }
+                        bBlank = true;
+                        nBlankPos = i;
+                        nCntPre = nCounter;
                         nCounter = 0;
-                        nTypeArray[i] = NF_SYMBOLTYPE_EXP;
                     }
-                    else if (eScannedType == NUMBERFORMAT_FRACTION &&
-                             sStrArray[i].GetChar(0) == ' ')
-                    {
-                        if (!bBlank && !bFrac)  // nicht doppelt oder hinter /
-                        {
-                            if (bDecSep && nCounter > 0)    // Nachkommastellen
-                                return nPos;                // Fehler
-                            bBlank = true;
-                            nBlankPos = i;
-                            nCntPre = nCounter;
-                            nCounter = 0;
-                        }
-                        nTypeArray[i] = NF_SYMBOLTYPE_FRACBLANK;
-                    }
-                    else if (nTypeArray[i] == NF_KEY_THAI_T)
-                    {
-                        bThaiT = true;
-                        sStrArray[i] = String(sKeyword[nTypeArray[i]]);
-                    }
-                    else if (sStrArray[i].GetChar(0) >= '0' &&
-                             sStrArray[i].GetChar(0) <= '9')
-                    {
-                        rtl::OUString sDiv;
-                        sal_uInt16 j = i;
-                        while(j < nAnzStrings)
-                            sDiv += sStrArray[j++];
-                        if (rtl::OUString::valueOf(sDiv.toInt32()) == sDiv)
-                        {
-                            /* Found a Divisor */
-                            while (i < j)
-                                nTypeArray[i++] = NF_SYMBOLTYPE_FRAC_FDIV;
-                            i = j - 1;                            // Stop the loop
-                            if (nCntPost)
-                                nCounter = nCntPost;
-                            else if (nCntPre)
-                                nCounter = nCntPre;
-                            // don't artificially increment nCntPre
-                            // for forced denominator
-                            if ( ( eScannedType != NUMBERFORMAT_FRACTION ) && (!nCntPre) )
-                                nCntPre++;
-                        }
-                    }
-                    else
-                        nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                    nPos = nPos + sStrArray[i].Len();
-                    i++;
+                    nTypeArray[i] = NF_SYMBOLTYPE_FRACBLANK;
                 }
-                else if (nTypeArray[i] == NF_SYMBOLTYPE_DEL)
+                else if (nTypeArray[i] == NF_KEY_THAI_T)
                 {
-                    sal_Unicode cHere = sStrArray[i].GetChar(0);
-                    // Handle not pre-known separators in switch.
-                    sal_Unicode cSimplified;
-                    if (StringEqualsChar( pFormatter->GetNumThousandSep(), cHere))
-                        cSimplified = ',';
-                    else if (StringEqualsChar( pFormatter->GetNumDecimalSep(), cHere))
-                        cSimplified = '.';
-                    else
-                        cSimplified = cHere;
-                    switch ( cSimplified )
+                    bThaiT = true;
+                    sStrArray[i] = sKeyword[nTypeArray[i]];
+                }
+                else if (sStrArray[i][0] >= '0' &&
+                         sStrArray[i][0] <= '9')
+                {
+                    OUString sDiv;
+                    sal_uInt16 j = i;
+                    while(j < nAnzStrings)
                     {
-                        case '#':
-                        case '0':
-                        case '?':
+                        sDiv += sStrArray[j++];
+                    }
+                    if (OUString::valueOf(sDiv.toInt32()) == sDiv)
+                    {
+                        /* Found a Divisor */
+                        while (i < j)
                         {
-                            if (nThousand > 0)                  // #... #
-                                return nPos;                    // Fehler
-                            else if (bFrac && cHere == '0')
-                                return nPos;                    // 0 im Nenner
-                            nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
-                            String& rStr = sStrArray[i];
-                            nPos = nPos + rStr.Len();
-                            i++;
-                            nCounter++;
-                            while (i < nAnzStrings &&
-                                (sStrArray[i].GetChar(0) == '#' ||
-                                    sStrArray[i].GetChar(0) == '0' ||
-                                    sStrArray[i].GetChar(0) == '?')
-                                )
-                            {
-                                nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
-                                nPos = nPos + sStrArray[i].Len();
-                                nCounter++;
-                                i++;
-                            }
+                            nTypeArray[i++] = NF_SYMBOLTYPE_FRAC_FDIV;
                         }
-                        break;
-                        case '-':
+                        i = j - 1;                            // Stop the loop
+                        if (nCntPost)
                         {
-                            if ( bDecSep && nDecPos+1 == i &&
-                                    nTypeArray[nDecPos] == NF_SYMBOLTYPE_DECSEP )
-                            {   // "0.--"
-                                nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
-                                String& rStr = sStrArray[i];
-                                nPos = nPos + rStr.Len();
-                                i++;
-                                nCounter++;
-                                while (i < nAnzStrings &&
-                                        (sStrArray[i].GetChar(0) == '-') )
-                                {
-                                    // If more than two dashes are present in
-                                    // currency formats the last dash will be
-                                    // interpreted literally as a minus sign.
-                                    // Has to be this ugly. Period.
-                                    if ( eScannedType == NUMBERFORMAT_CURRENCY
-                                            && rStr.Len() >= 2 &&
-                                            (i == nAnzStrings-1 ||
-                                            sStrArray[i+1].GetChar(0) != '-') )
-                                        break;
-                                    rStr += sStrArray[i];
-                                    nPos = nPos + sStrArray[i].Len();
-                                    nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                    nAnzResStrings--;
-                                    nCounter++;
-                                    i++;
-                                }
-                            }
-                            else
-                            {
-                                nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                                nPos = nPos + sStrArray[i].Len();
-                                i++;
-                            }
+                            nCounter = nCntPost;
                         }
-                        break;
-                        case '.':
-                        case ',':
-                        case '\'':
-                        case ' ':
+                        else if (nCntPre)
                         {
-                            sal_Unicode cSep = cHere;   // remember
-                            if ( StringEqualsChar( sOldThousandSep, cSep ) )
-                            {
-                                // previous char with skip empty
-                                sal_Unicode cPre = PreviousChar(i);
-                                sal_Unicode cNext;
-                                if (bExp || bBlank || bFrac)
-                                {   // after E, / or ' '
-                                    if ( !StringEqualsChar( sOldThousandSep, ' ' ) )
-                                    {
-                                        nPos = nPos + sStrArray[i].Len();
-                                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                        nAnzResStrings--;
-                                        i++;                // eat it
-                                    }
-                                    else
-                                        nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                                }
-                                else if (i > 0 && i < nAnzStrings-1   &&
-                                    (cPre == '#' || cPre == '0')      &&
-                                    ((cNext = NextChar(i)) == '#' || cNext == '0')
-                                    )                   // #,#
-                                {
-                                    nPos = nPos + sStrArray[i].Len();
-                                    if (!bThousand)                 // only once
-                                        bThousand = true;
-                                    // Eat it, will be reinserted at proper
-                                    // grouping positions further down.
-                                    nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                    nAnzResStrings--;
-                                    i++;
-                                }
-                                else if (i > 0 && (cPre == '#' || cPre == '0')
-                                    && PreviousType(i) == NF_SYMBOLTYPE_DIGIT
-                                    && nThousand < FLAG_STANDARD_IN_FORMAT )
-                                {                                   // #,,,,
-                                    if ( StringEqualsChar( sOldThousandSep, ' ' ) )
-                                    {   // strange, those French..
-                                        bool bFirst = true;
-                                        String& rStr = sStrArray[i];
-                                        //  set a hard Non-Breaking Space or ConvertMode
-                                        const String& rSepF = pFormatter->GetNumThousandSep();
-                                        while ( i < nAnzStrings
-                                            && sStrArray[i] == sOldThousandSep
-                                            && StringEqualsChar( sOldThousandSep, NextChar(i) ) )
-                                        {   // last was a space or another space
-                                            // is following => separator
-                                            nPos = nPos + sStrArray[i].Len();
-                                            if ( bFirst )
-                                            {
-                                                bFirst = false;
-                                                rStr = rSepF;
-                                                nTypeArray[i] = NF_SYMBOLTYPE_THSEP;
-                                            }
-                                            else
-                                            {
-                                                rStr += rSepF;
-                                                nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                                nAnzResStrings--;
-                                            }
-                                            nThousand++;
-                                            i++;
-                                        }
-                                        if ( i < nAnzStrings-1
-                                            && sStrArray[i] == sOldThousandSep )
-                                        {   // something following last space
-                                            // => space if currency contained,
-                                            // else separator
-                                            nPos = nPos + sStrArray[i].Len();
-                                            if ( (nPos <= nCurrPos &&
-                                                    nCurrPos < nPos + sStrArray[i+1].Len())
-                                                || nTypeArray[i+1] == NF_KEY_CCC
-                                                || (i < nAnzStrings-2 &&
-                                                sStrArray[i+1].GetChar(0) == '[' &&
-                                                sStrArray[i+2].GetChar(0) == '$') )
-                                            {
-                                                nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                                            }
-                                            else
-                                            {
-                                                if ( bFirst )
-                                                {
-                                                    bFirst = false;
-                                                    rStr = rSepF;
-                                                    nTypeArray[i] = NF_SYMBOLTYPE_THSEP;
-                                                }
-                                                else
-                                                {
-                                                    rStr += rSepF;
-                                                    nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                                    nAnzResStrings--;
-                                                }
-                                                nThousand++;
-                                            }
-                                            i++;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        do
-                                        {
-                                            nThousand++;
-                                            nTypeArray[i] = NF_SYMBOLTYPE_THSEP;
-                                            nPos = nPos + sStrArray[i].Len();
-                                            sStrArray[i] = pFormatter->GetNumThousandSep();
-                                            i++;
-                                        } while (i < nAnzStrings &&
-                                                sStrArray[i] == sOldThousandSep);
-                                    }
-                                }
-                                else                    // any grsep
-                                {
-                                    nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                                    String& rStr = sStrArray[i];
-                                    nPos = nPos + rStr.Len();
-                                    i++;
-                                    while ( i < nAnzStrings &&
-                                        sStrArray[i] == sOldThousandSep )
-                                    {
-                                        rStr += sStrArray[i];
-                                        nPos = nPos + sStrArray[i].Len();
-                                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                        nAnzResStrings--;
-                                        i++;
-                                    }
-                                }
-                            }
-                            else if ( StringEqualsChar( sOldDecSep, cSep ) )
-                            {
-                                if (bBlank || bFrac)    // . behind / or ' '
-                                    return nPos;        // error
-                                else if (bExp)          // behind E
-                                {
-                                    nPos = nPos + sStrArray[i].Len();
-                                    nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                    nAnzResStrings--;
-                                    i++;                // eat it
-                                }
-                                else if (bDecSep)       // any .
-                                {
-                                    nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                                    String& rStr = sStrArray[i];
-                                    nPos = nPos + rStr.Len();
-                                    i++;
-                                    while ( i < nAnzStrings &&
-                                        sStrArray[i] == sOldDecSep )
-                                    {
-                                        rStr += sStrArray[i];
-                                        nPos = nPos + sStrArray[i].Len();
-                                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                        nAnzResStrings--;
-                                        i++;
-                                    }
-                                }
-                                else
-                                {
-                                    nPos = nPos + sStrArray[i].Len();
-                                    nTypeArray[i] = NF_SYMBOLTYPE_DECSEP;
-                                    sStrArray[i] = pFormatter->GetNumDecimalSep();
-                                    bDecSep = true;
-                                    nDecPos = i;
-                                    nCntPre = nCounter;
-                                    nCounter = 0;
+                            nCounter = nCntPre;
+                        }
+                        // don't artificially increment nCntPre
+                        // for forced denominator
+                        if ( ( eScannedType != NUMBERFORMAT_FRACTION ) && (!nCntPre) )
+                        {
+                            nCntPre++;
+                        }
+                    }
+                }
+                else
+                {
+                    nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                }
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+            }
+            else if (nTypeArray[i] == NF_SYMBOLTYPE_DEL)
+            {
+                sal_Unicode cHere = sStrArray[i][0];
+                sal_Unicode cSaved = cHere;
+                // Handle not pre-known separators in switch.
+                sal_Unicode cSimplified;
+                if (StringEqualsChar( pFormatter->GetNumThousandSep(), cHere))
+                {
+                    cSimplified = ',';
+                }
+                else if (StringEqualsChar( pFormatter->GetNumDecimalSep(), cHere))
+                {
+                    cSimplified = '.';
+                }
+                else
+                {
+                    cSimplified = cHere;
+                }
 
-                                    i++;
-                                }
-                            }                           // of else = DecSep
-                            else                        // . without meaning
-                            {
-                                if (cSep == ' ' &&
-                                    eScannedType == NUMBERFORMAT_FRACTION &&
-                                    StringEqualsChar( sStrArray[i], ' ' ) )
-                                {
-                                    if (!bBlank && !bFrac)  // no dups
-                                    {                       // or behind /
-                                        if (bDecSep && nCounter > 0)// dec.
-                                            return nPos;            // error
-                                        bBlank = true;
-                                        nBlankPos = i;
-                                        nCntPre = nCounter;
-                                        nCounter = 0;
-                                    }
-                                    nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                                    nPos = nPos + sStrArray[i].Len();
-                                }
-                                else
-                                {
-                                    nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                                    String& rStr = sStrArray[i];
-                                    nPos = nPos + rStr.Len();
-                                    i++;
-                                    while (i < nAnzStrings &&
-                                        StringEqualsChar( sStrArray[i], cSep ) )
-                                    {
-                                        rStr += sStrArray[i];
-                                        nPos = nPos + sStrArray[i].Len();
-                                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                        nAnzResStrings--;
-                                        i++;
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                        case '/':
+                OUString& rStr = sStrArray[i];
+
+                switch ( cSimplified )
+                {
+                case '#':
+                case '0':
+                case '?':
+                    if (nThousand > 0)                  // #... #
+                    {
+                        return nPos;                    // Fehler
+                    }
+                    else if (bFrac && cHere == '0')
+                    {
+                        return nPos;                    // 0 im Nenner
+                    }
+                    nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
+                    nPos = nPos + rStr.getLength();
+                    i++;
+                    nCounter++;
+                    while (i < nAnzStrings &&
+                           (sStrArray[i][0] == '#' ||
+                            sStrArray[i][0] == '0' ||
+                            sStrArray[i][0] == '?')
+                        )
+                    {
+                        nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
+                        nPos = nPos + sStrArray[i].getLength();
+                        nCounter++;
+                        i++;
+                    }
+                    break;
+                case '-':
+                    if ( bDecSep && nDecPos+1 == i &&
+                         nTypeArray[nDecPos] == NF_SYMBOLTYPE_DECSEP )
+                    {   // "0.--"
+                        nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
+                        nPos = nPos + rStr.getLength();
+                        i++;
+                        nCounter++;
+                        while (i < nAnzStrings &&
+                               (sStrArray[i][0] == '-') )
                         {
-                            if (eScannedType == NUMBERFORMAT_FRACTION)
-                            {
-                                if ( i == 0 ||
-                                        (nTypeArray[i-1] != NF_SYMBOLTYPE_DIGIT &&
-                                         nTypeArray[i-1] != NF_SYMBOLTYPE_EMPTY) )
-                                    return nPos ? nPos : 1; // /? not allowed
-                                else if (!bFrac || (bDecSep && nCounter > 0))
-                                {
-                                    bFrac = true;
-                                    nCntPost = nCounter;
-                                    nCounter = 0;
-                                    nTypeArray[i] = NF_SYMBOLTYPE_FRAC;
-                                    nPos = nPos + sStrArray[i].Len();
-                                    i++;
-                                }
-                                else                // / doppelt od. , imZaehl
-                                    return nPos;    // Fehler
-                            }
-                            else
-                            {
-                                nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                                nPos = nPos + sStrArray[i].Len();
-                                i++;
-                            }
+                            // If more than two dashes are present in
+                            // currency formats the last dash will be
+                            // interpreted literally as a minus sign.
+                            // Has to be this ugly. Period.
+                            if ( eScannedType == NUMBERFORMAT_CURRENCY
+                                 && rStr.getLength() >= 2 &&
+                                 (i == nAnzStrings-1 ||
+                                  sStrArray[i+1][0] != '-') )
+                                break;
+                            rStr += sStrArray[i];
+                            nPos = nPos + sStrArray[i].getLength();
+                            nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                            nAnzResStrings--;
+                            nCounter++;
+                            i++;
                         }
-                        break;
-                        case '[' :
-                        {
-                            if ( eScannedType == NUMBERFORMAT_CURRENCY &&
-                                    i < nAnzStrings-1 &&
-                                    nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
-                                    sStrArray[i+1].GetChar(0) == '$' )
-                            {   // [$DM-xxx]
-                                // ab SV_NUMBERFORMATTER_VERSION_NEW_CURR
-                                nPos = nPos + sStrArray[i].Len();           // [
-                                nTypeArray[i] = NF_SYMBOLTYPE_CURRDEL;
-                                nPos = nPos + sStrArray[++i].Len();     // $
-                                sStrArray[i-1] += sStrArray[i];     // [$
+                    }
+                    else
+                    {
+                        nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                        nPos = nPos + sStrArray[i].getLength();
+                        i++;
+                    }
+                    break;
+                case '.':
+                case ',':
+                case '\'':
+                case ' ':
+                    if ( StringEqualsChar( sOldThousandSep, cSaved ) )
+                    {
+                        // previous char with skip empty
+                        sal_Unicode cPre = PreviousChar(i);
+                        sal_Unicode cNext;
+                        if (bExp || bBlank || bFrac)
+                        {   // after E, / or ' '
+                            if ( !StringEqualsChar( sOldThousandSep, ' ' ) )
+                            {
+                                nPos = nPos + sStrArray[i].getLength();
                                 nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
                                 nAnzResStrings--;
-                                if ( ++i >= nAnzStrings )
-                                    return nPos;        // Fehler
-                                nPos = nPos + sStrArray[i].Len();           // DM
-                                String& rStr = sStrArray[i];
-                                String* pStr = &sStrArray[i];
-                                nTypeArray[i] = NF_SYMBOLTYPE_CURRENCY; // wandeln
-                                bool bHadDash = false;
-                                i++;
+                                i++;                // eat it
+                            }
+                            else
+                            {
+                                nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                            }
+                        }
+                        else if (i > 0 && i < nAnzStrings-1   &&
+                                 (cPre == '#' || cPre == '0')      &&
+                                 ((cNext = NextChar(i)) == '#' || cNext == '0')) // #,#
+                        {
+                            nPos = nPos + sStrArray[i].getLength();
+                            if (!bThousand)                 // only once
+                            {
+                                bThousand = true;
+                            }
+                            // Eat it, will be reinserted at proper
+                            // grouping positions further down.
+                            nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                            nAnzResStrings--;
+                            i++;
+                        }
+                        else if (i > 0 && (cPre == '#' || cPre == '0')
+                                 && PreviousType(i) == NF_SYMBOLTYPE_DIGIT
+                                 && nThousand < FLAG_STANDARD_IN_FORMAT )
+                        {                                   // #,,,,
+                            if ( StringEqualsChar( sOldThousandSep, ' ' ) )
+                            {
+                                // strange, those French..
+                                bool bFirst = true;
+                                //  set a hard Non-Breaking Space or ConvertMode
+                                const OUString& rSepF = pFormatter->GetNumThousandSep();
                                 while ( i < nAnzStrings &&
-                                        sStrArray[i].GetChar(0) != ']' )
-                                {
-                                    nPos = nPos + sStrArray[i].Len();
-                                    if ( bHadDash )
+                                        sStrArray[i] == sOldThousandSep &&
+                                        StringEqualsChar( sOldThousandSep, NextChar(i) ) )
+                                {   // last was a space or another space
+                                    // is following => separator
+                                    nPos = nPos + sStrArray[i].getLength();
+                                    if ( bFirst )
                                     {
-                                        *pStr += sStrArray[i];
-                                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                        nAnzResStrings--;
+                                        bFirst = false;
+                                        rStr = rSepF;
+                                        nTypeArray[i] = NF_SYMBOLTYPE_THSEP;
                                     }
                                     else
                                     {
-                                        if ( sStrArray[i].GetChar(0) == '-' )
+                                        rStr += rSepF;
+                                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                                        nAnzResStrings--;
+                                    }
+                                    nThousand++;
+                                    i++;
+                                }
+                                if ( i < nAnzStrings-1 &&
+                                     sStrArray[i] == sOldThousandSep )
+                                {
+                                    // something following last space
+                                    // => space if currency contained,
+                                    // else separator
+                                    nPos = nPos + sStrArray[i].getLength();
+                                    if ( (nPos <= nCurrPos &&
+                                          nCurrPos < nPos + sStrArray[i+1].getLength()) ||
+                                         nTypeArray[i+1] == NF_KEY_CCC ||
+                                         (i < nAnzStrings-2 &&
+                                          sStrArray[i+1][0] == '[' &&
+                                          sStrArray[i+2][0] == '$') )
+                                    {
+                                        nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                                    }
+                                    else
+                                    {
+                                        if ( bFirst )
                                         {
-                                            bHadDash = true;
-                                            pStr = &sStrArray[i];
-                                            nTypeArray[i] = NF_SYMBOLTYPE_CURREXT;
+                                            bFirst = false;
+                                            rStr = rSepF;
+                                            nTypeArray[i] = NF_SYMBOLTYPE_THSEP;
                                         }
                                         else
                                         {
-                                            *pStr += sStrArray[i];
+                                            rStr += rSepF;
                                             nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
                                             nAnzResStrings--;
                                         }
+                                        nThousand++;
                                     }
                                     i++;
                                 }
-                                if ( rStr.Len() && i < nAnzStrings &&
-                                        sStrArray[i].GetChar(0) == ']' )
-                                {
-                                    nTypeArray[i] = NF_SYMBOLTYPE_CURRDEL;
-                                    nPos = nPos + sStrArray[i].Len();
-                                    i++;
-                                }
-                                else
-                                    return nPos;        // Fehler
                             }
                             else
                             {
-                                nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                                nPos = nPos + sStrArray[i].Len();
+                                do
+                                {
+                                    nThousand++;
+                                    nTypeArray[i] = NF_SYMBOLTYPE_THSEP;
+                                    nPos = nPos + sStrArray[i].getLength();
+                                    sStrArray[i] = pFormatter->GetNumThousandSep();
+                                    i++;
+                                }
+                                while (i < nAnzStrings && sStrArray[i] == sOldThousandSep);
+                            }
+                        }
+                        else                    // any grsep
+                        {
+                            nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                            nPos = nPos + rStr.getLength();
+                            i++;
+                            while ( i < nAnzStrings && sStrArray[i] == sOldThousandSep )
+                            {
+                                rStr += sStrArray[i];
+                                nPos = nPos + sStrArray[i].getLength();
+                                nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                                nAnzResStrings--;
                                 i++;
                             }
                         }
-                        break;
-                        default:                    // andere Dels
+                    }
+                    else if ( StringEqualsChar( sOldDecSep, cSaved ) )
+                    {
+                        if (bBlank || bFrac)    // . behind / or ' '
                         {
-                            if (eScannedType == NUMBERFORMAT_PERCENT &&
-                                    cHere == '%')
-                                nTypeArray[i] = NF_SYMBOLTYPE_PERCENT;
-                            else
-                                nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                            nPos = nPos + sStrArray[i].Len();
+                            return nPos;        // error
+                        }
+                        else if (bExp)          // behind E
+                        {
+                            nPos = nPos + sStrArray[i].getLength();
+                            nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                            nAnzResStrings--;
+                            i++;                // eat it
+                        }
+                        else if (bDecSep)       // any .
+                        {
+                            nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                            nPos = nPos + rStr.getLength();
+                            i++;
+                            while ( i < nAnzStrings && sStrArray[i] == sOldDecSep )
+                            {
+                                rStr += sStrArray[i];
+                                nPos = nPos + sStrArray[i].getLength();
+                                nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                                nAnzResStrings--;
+                                i++;
+                            }
+                        }
+                        else
+                        {
+                            nPos = nPos + sStrArray[i].getLength();
+                            nTypeArray[i] = NF_SYMBOLTYPE_DECSEP;
+                            sStrArray[i] = pFormatter->GetNumDecimalSep();
+                            bDecSep = true;
+                            nDecPos = i;
+                            nCntPre = nCounter;
+                            nCounter = 0;
+
                             i++;
                         }
-                        break;
-                    }                               // of switch (Del)
-                }                                   // of else Del
-                else
-                {
-                    SAL_WARN( "svl.numbers", "unknown NF_SYMBOLTYPE_..." );
-                    nPos = nPos + sStrArray[i].Len();
+                    }                           // of else = DecSep
+                    else                        // . without meaning
+                    {
+                        if (cSaved == ' ' &&
+                            eScannedType == NUMBERFORMAT_FRACTION &&
+                            StringEqualsChar( sStrArray[i], ' ' ) )
+                        {
+                            if (!bBlank && !bFrac)  // no dups
+                            {                       // or behind /
+                                if (bDecSep && nCounter > 0)// dec.
+                                {
+                                    return nPos;            // error
+                                }
+                                bBlank = true;
+                                nBlankPos = i;
+                                nCntPre = nCounter;
+                                nCounter = 0;
+                            }
+                            nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                            nPos = nPos + sStrArray[i].getLength();
+                        }
+                        else
+                        {
+                            nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                            nPos = nPos + rStr.getLength();
+                            i++;
+                            while (i < nAnzStrings && StringEqualsChar( sStrArray[i], cSaved ) )
+                            {
+                                rStr += sStrArray[i];
+                                nPos = nPos + sStrArray[i].getLength();
+                                nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                                nAnzResStrings--;
+                                i++;
+                            }
+                        }
+                    }
+                    break;
+                case '/':
+                    if (eScannedType == NUMBERFORMAT_FRACTION)
+                    {
+                        if ( i == 0 ||
+                             (nTypeArray[i-1] != NF_SYMBOLTYPE_DIGIT &&
+                              nTypeArray[i-1] != NF_SYMBOLTYPE_EMPTY) )
+                        {
+                            return nPos ? nPos : 1; // /? not allowed
+                        }
+                        else if (!bFrac || (bDecSep && nCounter > 0))
+                        {
+                            bFrac = true;
+                            nCntPost = nCounter;
+                            nCounter = 0;
+                            nTypeArray[i] = NF_SYMBOLTYPE_FRAC;
+                            nPos = nPos + sStrArray[i].getLength();
+                            i++;
+                        }
+                        else                // / doppelt od. , imZaehl
+                        {
+                            return nPos;    // Fehler
+                        }
+                    }
+                    else
+                    {
+                        nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                        nPos = nPos + sStrArray[i].getLength();
+                        i++;
+                    }
+                    break;
+                case '[' :
+                    if ( eScannedType == NUMBERFORMAT_CURRENCY &&
+                         i < nAnzStrings-1 &&
+                         nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
+                         sStrArray[i+1][0] == '$' )
+                    {
+                        // [$DM-xxx]
+                        // ab SV_NUMBERFORMATTER_VERSION_NEW_CURR
+                        nPos = nPos + sStrArray[i].getLength();           // [
+                        nTypeArray[i] = NF_SYMBOLTYPE_CURRDEL;
+                        nPos = nPos + sStrArray[++i].getLength();     // $
+                        sStrArray[i-1] += sStrArray[i];     // [$
+                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                        nAnzResStrings--;
+                        if ( ++i >= nAnzStrings )
+                        {
+                            return nPos;        // Fehler
+                        }
+                        nPos = nPos + sStrArray[i].getLength();           // DM
+                        OUString* pStr = &sStrArray[i];
+                        nTypeArray[i] = NF_SYMBOLTYPE_CURRENCY; // wandeln
+                        bool bHadDash = false;
+                        i++;
+                        while ( i < nAnzStrings && sStrArray[i][0] != ']' )
+                        {
+                            nPos = nPos + sStrArray[i].getLength();
+                            if ( bHadDash )
+                            {
+                                *pStr += sStrArray[i];
+                                nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                                nAnzResStrings--;
+                            }
+                            else
+                            {
+                                if ( sStrArray[i][0] == '-' )
+                                {
+                                    bHadDash = true;
+                                    pStr = &sStrArray[i];
+                                    nTypeArray[i] = NF_SYMBOLTYPE_CURREXT;
+                                }
+                                else
+                                {
+                                    *pStr += sStrArray[i];
+                                    nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                                    nAnzResStrings--;
+                                }
+                            }
+                            i++;
+                        }
+                        if ( rStr.getLength() && i < nAnzStrings && sStrArray[i][0] == ']' )
+                        {
+                            nTypeArray[i] = NF_SYMBOLTYPE_CURRDEL;
+                            nPos = nPos + sStrArray[i].getLength();
+                            i++;
+                        }
+                        else
+                        {
+                            return nPos;        // Fehler
+                        }
+                    }
+                    else
+                    {
+                        nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                        nPos = nPos + sStrArray[i].getLength();
+                        i++;
+                    }
+                    break;
+                default:                    // andere Dels
+                    if (eScannedType == NUMBERFORMAT_PERCENT && cHere == '%')
+                    {
+                        nTypeArray[i] = NF_SYMBOLTYPE_PERCENT;
+                    }
+                    else
+                    {
+                        nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                    }
+                    nPos = nPos + sStrArray[i].getLength();
                     i++;
-                }
-            }                                       // of while
-            if (eScannedType == NUMBERFORMAT_FRACTION)
+                    break;
+                }                               // of switch (Del)
+            }                                   // of else Del
+            else
             {
-                if (bFrac)
-                    nCntExp = nCounter;
-                else if (bBlank)
-                    nCntPost = nCounter;
-                else
-                    nCntPre = nCounter;
+                SAL_WARN( "svl.numbers", "unknown NF_SYMBOLTYPE_..." );
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+            }
+        }                                       // of while
+        if (eScannedType == NUMBERFORMAT_FRACTION)
+        {
+            if (bFrac)
+            {
+                nCntExp = nCounter;
+            }
+            else if (bBlank)
+            {
+                nCntPost = nCounter;
             }
             else
             {
-                if (bExp)
-                    nCntExp = nCounter;
-                else if (bDecSep)
-                    nCntPost = nCounter;
-                else
-                    nCntPre = nCounter;
+                nCntPre = nCounter;
             }
-            if (bThousand)                          // Expansion of grouping separators
+        }
+        else
+        {
+            if (bExp)
             {
-                sal_uInt16 nMaxPos;
-                if (bFrac)
+                nCntExp = nCounter;
+            }
+            else if (bDecSep)
+            {
+                nCntPost = nCounter;
+            }
+            else
+            {
+                nCntPre = nCounter;
+            }
+        }
+        if (bThousand)                          // Expansion of grouping separators
+        {
+            sal_uInt16 nMaxPos;
+            if (bFrac)
+            {
+                if (bBlank)
                 {
-                    if (bBlank)
-                        nMaxPos = nBlankPos;
-                    else
-                        nMaxPos = 0;                // no grouping
+                    nMaxPos = nBlankPos;
                 }
-                else if (bDecSep)                   // decimal separator present
-                    nMaxPos = nDecPos;
-                else if (bExp)                      // 'E' exponent present
-                    nMaxPos = nExpPos;
-                else                                // up to end
-                    nMaxPos = i;
-                // Insert separators at proper positions.
-                xub_StrLen nCount = 0;
-                utl::DigitGroupingIterator aGrouping( pLoc->getDigitGrouping());
-                size_t nFirstDigitSymbol = nMaxPos;
-                size_t nFirstGroupingSymbol = nMaxPos;
-                i = nMaxPos;
-                while (i-- > 0)
+                else
                 {
-                    if (nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
-                    {
-                        nFirstDigitSymbol = i;
-                        nCount = nCount + sStrArray[i].Len();   // MSC converts += to int and then warns, so ...
-                        // Insert separator only if not leftmost symbol.
-                        if (i > 0 && nCount >= aGrouping.getPos())
-                        {
-                            DBG_ASSERT( sStrArray[i].Len() == 1,
-                                    "ImpSvNumberformatScan::FinalScan: combined digits in group separator insertion");
-                            if (!InsertSymbol( i, NF_SYMBOLTYPE_THSEP,
-                                        pFormatter->GetNumThousandSep()))
-                                // nPos isn't correct here, but signals error
-                                return nPos;
-                            // i may have been decremented by 1
-                            nFirstDigitSymbol = i + 1;
-                            nFirstGroupingSymbol = i;
-                            aGrouping.advance();
-                        }
-                    }
-                }
-                // Generated something like "string",000; remove separator again.
-                if (nFirstGroupingSymbol < nFirstDigitSymbol)
-                {
-                    nTypeArray[nFirstGroupingSymbol] = NF_SYMBOLTYPE_EMPTY;
-                    nAnzResStrings--;
+                    nMaxPos = 0;                // no grouping
                 }
             }
-            // Combine digits into groups to save memory (Info will be copied
-            // later, taking only non-empty symbols).
-            for (i = 0; i < nAnzStrings; ++i)
+            else if (bDecSep)                   // decimal separator present
+            {
+                nMaxPos = nDecPos;
+            }
+            else if (bExp)                      // 'E' exponent present
+            {
+                nMaxPos = nExpPos;
+            }
+            else                                // up to end
+            {
+                nMaxPos = i;
+            }
+            // Insert separators at proper positions.
+            sal_Int32 nCount = 0;
+            utl::DigitGroupingIterator aGrouping( pLoc->getDigitGrouping());
+            size_t nFirstDigitSymbol = nMaxPos;
+            size_t nFirstGroupingSymbol = nMaxPos;
+            i = nMaxPos;
+            while (i-- > 0)
             {
                 if (nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
                 {
-                    String& rStr = sStrArray[i];
-                    while (++i < nAnzStrings &&
-                            nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
+                    nFirstDigitSymbol = i;
+                    nCount = nCount + sStrArray[i].getLength();   // MSC converts += to int and then warns, so ...
+                    // Insert separator only if not leftmost symbol.
+                    if (i > 0 && nCount >= aGrouping.getPos())
                     {
-                        rStr += sStrArray[i];
-                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                        nAnzResStrings--;
+                        DBG_ASSERT( sStrArray[i].getLength() == 1,
+                                    "ImpSvNumberformatScan::FinalScan: combined digits in group separator insertion");
+                        if (!InsertSymbol( i, NF_SYMBOLTYPE_THSEP, pFormatter->GetNumThousandSep()))
+                        {
+                            // nPos isn't correct here, but signals error
+                            return nPos;
+                        }
+                        // i may have been decremented by 1
+                        nFirstDigitSymbol = i + 1;
+                        nFirstGroupingSymbol = i;
+                        aGrouping.advance();
                     }
+                }
+            }
+            // Generated something like "string",000; remove separator again.
+            if (nFirstGroupingSymbol < nFirstDigitSymbol)
+            {
+                nTypeArray[nFirstGroupingSymbol] = NF_SYMBOLTYPE_EMPTY;
+                nAnzResStrings--;
+            }
+        }
+        // Combine digits into groups to save memory (Info will be copied
+        // later, taking only non-empty symbols).
+        for (i = 0; i < nAnzStrings; ++i)
+        {
+            if (nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
+            {
+                OUString& rStr = sStrArray[i];
+                while (++i < nAnzStrings && nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
+                {
+                    rStr += sStrArray[i];
+                    nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                    nAnzResStrings--;
                 }
             }
         }
         break;                                      // of NUMBERFORMAT_NUMBER
-        case NUMBERFORMAT_DATE:
+    case NUMBERFORMAT_DATE:
+        while (i < nAnzStrings)
         {
-            while (i < nAnzStrings)
+            int nCalRet;
+            switch (nTypeArray[i])
             {
-                switch (nTypeArray[i])
+            case NF_SYMBOLTYPE_BLANK:
+            case NF_SYMBOLTYPE_STAR:
+            case NF_SYMBOLTYPE_STRING:
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+                break;
+            case NF_SYMBOLTYPE_DEL:
+                if (sStrArray[i] == sOldDateSep)
                 {
-                    case NF_SYMBOLTYPE_BLANK:
-                    case NF_SYMBOLTYPE_STAR:
-                    case NF_SYMBOLTYPE_STRING:
-                        nPos = nPos + sStrArray[i].Len();
-                        i++;
-                    break;
-                    case NF_SYMBOLTYPE_DEL:
+                    nTypeArray[i] = NF_SYMBOLTYPE_DATESEP;
+                    nPos = nPos + sStrArray[i].getLength();
+                    if (bConvertMode)
                     {
-                        int nCalRet;
-                        if (sStrArray[i] == sOldDateSep)
-                        {
-                            nTypeArray[i] = NF_SYMBOLTYPE_DATESEP;
-                            nPos = nPos + sStrArray[i].Len();
-                            if (bConvertMode)
-                                sStrArray[i] = pFormatter->GetDateSep();
-                            i++;
-                        }
-                        else if ( (nCalRet = FinalScanGetCalendar( nPos, i, nAnzResStrings )) != 0 )
-                        {
-                            if ( nCalRet < 0  )
-                                return nPos;        // error
-                        }
-                        else
-                        {
-                            nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                            nPos = nPos + sStrArray[i].Len();
-                            i++;
-                        }
+                        sStrArray[i] = pFormatter->GetDateSep();
                     }
-                    break;
-                    case NF_KEY_THAI_T :
-                        bThaiT = true;
-                        // fall thru
-                    case NF_KEY_M:                          // M
-                    case NF_KEY_MM:                         // MM
-                    case NF_KEY_MMM:                        // MMM
-                    case NF_KEY_MMMM:                       // MMMM
-                    case NF_KEY_MMMMM:                      // MMMMM
-                    case NF_KEY_Q:                          // Q
-                    case NF_KEY_QQ:                         // QQ
-                    case NF_KEY_D:                          // D
-                    case NF_KEY_DD:                         // DD
-                    case NF_KEY_DDD:                        // DDD
-                    case NF_KEY_DDDD:                       // DDDD
-                    case NF_KEY_YY:                         // YY
-                    case NF_KEY_YYYY:                       // YYYY
-                    case NF_KEY_NN:                         // NN
-                    case NF_KEY_NNN:                        // NNN
-                    case NF_KEY_NNNN:                       // NNNN
-                    case NF_KEY_WW :                        // WW
-                    case NF_KEY_AAA :                       // AAA
-                    case NF_KEY_AAAA :                      // AAAA
-                    case NF_KEY_EC :                        // E
-                    case NF_KEY_EEC :                       // EE
-                    case NF_KEY_G :                         // G
-                    case NF_KEY_GG :                        // GG
-                    case NF_KEY_GGG :                       // GGG
-                    case NF_KEY_R :                         // R
-                    case NF_KEY_RR :                        // RR
-                        sStrArray[i] = String(sKeyword[nTypeArray[i]]); // tTtT -> TTTT
-                        nPos = nPos + sStrArray[i].Len();
-                        i++;
-                    break;
-                    default:                            // andere Keywords
-                        nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                        nPos = nPos + sStrArray[i].Len();
-                        i++;
-                    break;
+                    i++;
                 }
-            }                                       // of while
-        }
+                else if ( (nCalRet = FinalScanGetCalendar( nPos, i, nAnzResStrings )) != 0 )
+                {
+                    if ( nCalRet < 0  )
+                    {
+                        return nPos;        // error
+                    }
+                }
+                else
+                {
+                    nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                    nPos = nPos + sStrArray[i].getLength();
+                    i++;
+                }
+                break;
+            case NF_KEY_THAI_T :
+                bThaiT = true;
+                // fall thru
+            case NF_KEY_M:                          // M
+            case NF_KEY_MM:                         // MM
+            case NF_KEY_MMM:                        // MMM
+            case NF_KEY_MMMM:                       // MMMM
+            case NF_KEY_MMMMM:                      // MMMMM
+            case NF_KEY_Q:                          // Q
+            case NF_KEY_QQ:                         // QQ
+            case NF_KEY_D:                          // D
+            case NF_KEY_DD:                         // DD
+            case NF_KEY_DDD:                        // DDD
+            case NF_KEY_DDDD:                       // DDDD
+            case NF_KEY_YY:                         // YY
+            case NF_KEY_YYYY:                       // YYYY
+            case NF_KEY_NN:                         // NN
+            case NF_KEY_NNN:                        // NNN
+            case NF_KEY_NNNN:                       // NNNN
+            case NF_KEY_WW :                        // WW
+            case NF_KEY_AAA :                       // AAA
+            case NF_KEY_AAAA :                      // AAAA
+            case NF_KEY_EC :                        // E
+            case NF_KEY_EEC :                       // EE
+            case NF_KEY_G :                         // G
+            case NF_KEY_GG :                        // GG
+            case NF_KEY_GGG :                       // GGG
+            case NF_KEY_R :                         // R
+            case NF_KEY_RR :                        // RR
+                sStrArray[i] = OUString(sKeyword[nTypeArray[i]]); // tTtT -> TTTT
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+                break;
+            default:                            // andere Keywords
+                nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+                break;
+            }
+        }                                       // of while
         break;                                      // of NUMBERFORMAT_DATE
-        case NUMBERFORMAT_TIME:
+    case NUMBERFORMAT_TIME:
+        while (i < nAnzStrings)
         {
-            while (i < nAnzStrings)
+            switch (nTypeArray[i])
             {
-                switch (nTypeArray[i])
+            case NF_SYMBOLTYPE_BLANK:
+            case NF_SYMBOLTYPE_STAR:
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+                break;
+            case NF_SYMBOLTYPE_DEL:
+                switch( sStrArray[i][0] )
                 {
-                    case NF_SYMBOLTYPE_BLANK:
-                    case NF_SYMBOLTYPE_STAR:
+                case '0':
+                {
+                    if ( Is100SecZero( i, bDecSep ) )
                     {
-                        nPos = nPos + sStrArray[i].Len();
+                        bDecSep = true;
+                        nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
+                        OUString& rStr = sStrArray[i];
                         i++;
-                    }
-                    break;
-                    case NF_SYMBOLTYPE_DEL:
-                    {
-                        switch( sStrArray[i].GetChar(0) )
+                        nPos = nPos + sStrArray[i].getLength();
+                        nCounter++;
+                        while (i < nAnzStrings &&
+                               sStrArray[i][0] == '0')
                         {
-                            case '0':
-                            {
-                                if ( Is100SecZero( i, bDecSep ) )
-                                {
-                                    bDecSep = true;
-                                    nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
-                                    String& rStr = sStrArray[i];
-                                    i++;
-                                    nPos = nPos + sStrArray[i].Len();
-                                    nCounter++;
-                                    while (i < nAnzStrings &&
-                                           sStrArray[i].GetChar(0) == '0')
-                                    {
-                                        rStr += sStrArray[i];
-                                        nPos = nPos + sStrArray[i].Len();
-                                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                        nAnzResStrings--;
-                                        nCounter++;
-                                        i++;
-                                    }
-                                }
-                                else
-                                    return nPos;
-                            }
-                            break;
-                            case '#':
-                            case '?':
-                                return nPos;
-                            case '[':
-                            {
-                                if (bThousand)              // doppelt
-                                    return nPos;
-                                bThousand = true;           // bei Time frei
-                                sal_Unicode cChar = pChrCls->uppercase(rtl::OUString(NextChar(i)))[0];
-                                if ( cChar == cOldKeyH )
-                                    nThousand = 1;      // H
-                                else if ( cChar == cOldKeyMI )
-                                    nThousand = 2;      // M
-                                else if ( cChar == cOldKeyS )
-                                    nThousand = 3;      // S
-                                else
-                                    return nPos;
-                                nPos = nPos + sStrArray[i].Len();
-                                i++;
-                            }
-                            break;
-                            case ']':
-                            {
-                                if (!bThousand)             // kein [ vorher
-                                    return nPos;
-                                nPos = nPos + sStrArray[i].Len();
-                                i++;
-                            }
-                            break;
-                            default:
-                            {
-                                nPos = nPos + sStrArray[i].Len();
-                                if ( sStrArray[i] == sOldTimeSep )
-                                {
-                                    nTypeArray[i] = NF_SYMBOLTYPE_TIMESEP;
-                                    if ( bConvertMode )
-                                        sStrArray[i] = pLoc->getTimeSep();
-                                }
-                                else if ( sStrArray[i] == sOldTime100SecSep )
-                                {
-                                    bDecSep = true;
-                                    nTypeArray[i] = NF_SYMBOLTYPE_TIME100SECSEP;
-                                    if ( bConvertMode )
-                                        sStrArray[i] = pLoc->getTime100SecSep();
-                                }
-                                else
-                                    nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                                i++;
-                            }
-                            break;
+                            rStr += sStrArray[i];
+                            nPos = nPos + sStrArray[i].getLength();
+                            nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                            nAnzResStrings--;
+                            nCounter++;
+                            i++;
                         }
                     }
-                    break;
-                    case NF_SYMBOLTYPE_STRING:
+                    else
                     {
-                        nPos = nPos + sStrArray[i].Len();
-                        i++;
+                        return nPos;
                     }
-                    break;
-                    case NF_KEY_AMPM:                       // AM/PM
-                    case NF_KEY_AP:                         // A/P
-                    {
-                        bExp = true;                    // missbraucht fuer A/P
-                        sStrArray[i] = String(sKeyword[nTypeArray[i]]); // tTtT -> TTTT
-                        nPos = nPos + sStrArray[i].Len();
-                        i++;
-                    }
-                    break;
-                    case NF_KEY_THAI_T :
-                        bThaiT = true;
-                        // fall thru
-                    case NF_KEY_MI:                         // M
-                    case NF_KEY_MMI:                        // MM
-                    case NF_KEY_H:                          // H
-                    case NF_KEY_HH:                         // HH
-                    case NF_KEY_S:                          // S
-                    case NF_KEY_SS:                         // SS
-                    {
-                        sStrArray[i] = String(sKeyword[nTypeArray[i]]); // tTtT -> TTTT
-                        nPos = nPos + sStrArray[i].Len();
-                        i++;
-                    }
-                    break;
-                    default:                            // andere Keywords
-                    {
-                        nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                        nPos = nPos + sStrArray[i].Len();
-                        i++;
-                    }
-                    break;
                 }
-            }                                       // of while
-            nCntPost = nCounter;                    // Zaehler der Nullen
-            if (bExp)
-                nCntExp = 1;                        // merkt AM/PM
+                break;
+                case '#':
+                case '?':
+                    return nPos;
+                case '[':
+                {
+                    if (bThousand)              // doppelt
+                        return nPos;
+                    bThousand = true;           // bei Time frei
+                    sal_Unicode cChar = pChrCls->uppercase(rtl::OUString(NextChar(i)))[0];
+                    if ( cChar == cOldKeyH )
+                        nThousand = 1;      // H
+                    else if ( cChar == cOldKeyMI )
+                        nThousand = 2;      // M
+                    else if ( cChar == cOldKeyS )
+                        nThousand = 3;      // S
+                    else
+                        return nPos;
+                    nPos = nPos + sStrArray[i].getLength();
+                    i++;
+                }
+                break;
+                case ']':
+                {
+                    if (!bThousand)             // kein [ vorher
+                        return nPos;
+                    nPos = nPos + sStrArray[i].getLength();
+                    i++;
+                }
+                break;
+                default:
+                {
+                    nPos = nPos + sStrArray[i].getLength();
+                    if ( sStrArray[i] == sOldTimeSep )
+                    {
+                        nTypeArray[i] = NF_SYMBOLTYPE_TIMESEP;
+                        if ( bConvertMode )
+                            sStrArray[i] = pLoc->getTimeSep();
+                    }
+                    else if ( sStrArray[i] == sOldTime100SecSep )
+                    {
+                        bDecSep = true;
+                        nTypeArray[i] = NF_SYMBOLTYPE_TIME100SECSEP;
+                        if ( bConvertMode )
+                            sStrArray[i] = pLoc->getTime100SecSep();
+                    }
+                    else
+                        nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                    i++;
+                }
+                break;
+                }
+                break;
+            case NF_SYMBOLTYPE_STRING:
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+                break;
+            case NF_KEY_AMPM:                       // AM/PM
+            case NF_KEY_AP:                         // A/P
+                bExp = true;                    // missbraucht fuer A/P
+                sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+                break;
+            case NF_KEY_THAI_T :
+                bThaiT = true;
+                // fall thru
+            case NF_KEY_MI:                         // M
+            case NF_KEY_MMI:                        // MM
+            case NF_KEY_H:                          // H
+            case NF_KEY_HH:                         // HH
+            case NF_KEY_S:                          // S
+            case NF_KEY_SS:                         // SS
+                sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+                break;
+            default:                            // andere Keywords
+                nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+                break;
+            }
+        }                                       // of while
+        nCntPost = nCounter;                    // Zaehler der Nullen
+        if (bExp)
+        {
+            nCntExp = 1;                        // merkt AM/PM
         }
         break;                                      // of NUMBERFORMAT_TIME
-        case NUMBERFORMAT_DATETIME:
+    case NUMBERFORMAT_DATETIME:
+        while (i < nAnzStrings)
         {
-            bool bTimePart = false;
-            while (i < nAnzStrings)
+            int nCalRet;
+            switch (nTypeArray[i])
             {
-                switch (nTypeArray[i])
+            case NF_SYMBOLTYPE_BLANK:
+            case NF_SYMBOLTYPE_STAR:
+            case NF_SYMBOLTYPE_STRING:
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+                break;
+            case NF_SYMBOLTYPE_DEL:
+                if ( (nCalRet = FinalScanGetCalendar( nPos, i, nAnzResStrings )) != 0 )
                 {
-                    case NF_SYMBOLTYPE_BLANK:
-                    case NF_SYMBOLTYPE_STAR:
-                    case NF_SYMBOLTYPE_STRING:
-                        nPos = nPos + sStrArray[i].Len();
-                        i++;
-                    break;
-                    case NF_SYMBOLTYPE_DEL:
+                    if ( nCalRet < 0  )
+                        return nPos;        // error
+                }
+                else
+                {
+                    switch( sStrArray[i][0] )
                     {
-                        int nCalRet;
-                        if ( (nCalRet = FinalScanGetCalendar( nPos, i, nAnzResStrings )) != 0 )
+                    case '0':
+                        if ( bTimePart && Is100SecZero( i, bDecSep ) )
                         {
-                            if ( nCalRet < 0  )
-                                return nPos;        // error
+                            bDecSep = true;
+                            nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
+                            OUString& rStr = sStrArray[i];
+                            i++;
+                            nPos = nPos + sStrArray[i].getLength();
+                            nCounter++;
+                            while (i < nAnzStrings &&
+                                   sStrArray[i][0] == '0')
+                            {
+                                rStr += sStrArray[i];
+                                nPos = nPos + sStrArray[i].getLength();
+                                nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                                nAnzResStrings--;
+                                nCounter++;
+                                i++;
+                            }
                         }
                         else
                         {
-                            switch( sStrArray[i].GetChar(0) )
-                            {
-                                case '0':
-                                {
-                                    if ( bTimePart && Is100SecZero( i, bDecSep ) )
-                                    {
-                                        bDecSep = true;
-                                        nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
-                                        String& rStr = sStrArray[i];
-                                        i++;
-                                        nPos = nPos + sStrArray[i].Len();
-                                        nCounter++;
-                                        while (i < nAnzStrings &&
-                                            sStrArray[i].GetChar(0) == '0')
-                                        {
-                                            rStr += sStrArray[i];
-                                            nPos = nPos + sStrArray[i].Len();
-                                            nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                            nAnzResStrings--;
-                                            nCounter++;
-                                            i++;
-                                        }
-                                    }
-                                    else
-                                        return nPos;
-                                }
-                                break;
-                                case '#':
-                                case '?':
-                                    return nPos;
-                                default:
-                                {
-                                    nPos = nPos + sStrArray[i].Len();
-                                    if (bTimePart)
-                                    {
-                                        if ( sStrArray[i] == sOldTimeSep )
-                                        {
-                                            nTypeArray[i] = NF_SYMBOLTYPE_TIMESEP;
-                                            if ( bConvertMode )
-                                                sStrArray[i] = pLoc->getTimeSep();
-                                        }
-                                        else if ( sStrArray[i] == sOldTime100SecSep )
-                                        {
-                                            bDecSep = true;
-                                            nTypeArray[i] = NF_SYMBOLTYPE_TIME100SECSEP;
-                                            if ( bConvertMode )
-                                                sStrArray[i] = pLoc->getTime100SecSep();
-                                        }
-                                        else
-                                            nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                                    }
-                                    else
-                                    {
-                                        if ( sStrArray[i] == sOldDateSep )
-                                        {
-                                            nTypeArray[i] = NF_SYMBOLTYPE_DATESEP;
-                                            if (bConvertMode)
-                                                sStrArray[i] = pFormatter->GetDateSep();
-                                        }
-                                        else
-                                            nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                                    }
-                                    i++;
-                                }
-                            }
+                            return nPos;
                         }
+                        break;
+                    case '#':
+                    case '?':
+                        return nPos;
+                    default:
+                        nPos = nPos + sStrArray[i].getLength();
+                        if (bTimePart)
+                        {
+                            if ( sStrArray[i] == sOldTimeSep )
+                            {
+                                nTypeArray[i] = NF_SYMBOLTYPE_TIMESEP;
+                                if ( bConvertMode )
+                                    sStrArray[i] = pLoc->getTimeSep();
+                            }
+                            else if ( sStrArray[i] == sOldTime100SecSep )
+                            {
+                                bDecSep = true;
+                                nTypeArray[i] = NF_SYMBOLTYPE_TIME100SECSEP;
+                                if ( bConvertMode )
+                                    sStrArray[i] = pLoc->getTime100SecSep();
+                            }
+                            else
+                                nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                        }
+                        else
+                        {
+                            if ( sStrArray[i] == sOldDateSep )
+                            {
+                                nTypeArray[i] = NF_SYMBOLTYPE_DATESEP;
+                                if (bConvertMode)
+                                    sStrArray[i] = pFormatter->GetDateSep();
+                            }
+                            else
+                                nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                        }
+                        i++;
+                        break;
                     }
-                    break;
-                    case NF_KEY_AMPM:                       // AM/PM
-                    case NF_KEY_AP:                         // A/P
-                    {
-                        bTimePart = true;
-                        bExp = true;                    // missbraucht fuer A/P
-                        sStrArray[i] = String(sKeyword[nTypeArray[i]]); // tTtT -> TTTT
-                        nPos = nPos + sStrArray[i].Len();
-                        i++;
-                    }
-                    break;
-                    case NF_KEY_MI:                         // M
-                    case NF_KEY_MMI:                        // MM
-                    case NF_KEY_H:                          // H
-                    case NF_KEY_HH:                         // HH
-                    case NF_KEY_S:                          // S
-                    case NF_KEY_SS:                         // SS
-                        bTimePart = true;
-                        sStrArray[i] = String(sKeyword[nTypeArray[i]]); // tTtT -> TTTT
-                        nPos = nPos + sStrArray[i].Len();
-                        i++;
-                    break;
-                    case NF_KEY_M:                          // M
-                    case NF_KEY_MM:                         // MM
-                    case NF_KEY_MMM:                        // MMM
-                    case NF_KEY_MMMM:                       // MMMM
-                    case NF_KEY_MMMMM:                      // MMMMM
-                    case NF_KEY_Q:                          // Q
-                    case NF_KEY_QQ:                         // QQ
-                    case NF_KEY_D:                          // D
-                    case NF_KEY_DD:                         // DD
-                    case NF_KEY_DDD:                        // DDD
-                    case NF_KEY_DDDD:                       // DDDD
-                    case NF_KEY_YY:                         // YY
-                    case NF_KEY_YYYY:                       // YYYY
-                    case NF_KEY_NN:                         // NN
-                    case NF_KEY_NNN:                        // NNN
-                    case NF_KEY_NNNN:                       // NNNN
-                    case NF_KEY_WW :                        // WW
-                    case NF_KEY_AAA :                       // AAA
-                    case NF_KEY_AAAA :                      // AAAA
-                    case NF_KEY_EC :                        // E
-                    case NF_KEY_EEC :                       // EE
-                    case NF_KEY_G :                         // G
-                    case NF_KEY_GG :                        // GG
-                    case NF_KEY_GGG :                       // GGG
-                    case NF_KEY_R :                         // R
-                    case NF_KEY_RR :                        // RR
-                        bTimePart = false;
-                        sStrArray[i] = String(sKeyword[nTypeArray[i]]); // tTtT -> TTTT
-                        nPos = nPos + sStrArray[i].Len();
-                        i++;
-                    break;
-                    case NF_KEY_THAI_T :
-                        bThaiT = true;
-                        sStrArray[i] = String(sKeyword[nTypeArray[i]]);
-                        nPos = nPos + sStrArray[i].Len();
-                        i++;
-                    break;
-                    default:                            // andere Keywords
-                        nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                        nPos = nPos + sStrArray[i].Len();
-                        i++;
-                    break;
                 }
-            }                                       // of while
-            nCntPost = nCounter;                    // decimals (100th seconds)
-            if (bExp)
-                nCntExp = 1;                        // merkt AM/PM
+                break;
+            case NF_KEY_AMPM:                       // AM/PM
+            case NF_KEY_AP:                         // A/P
+                bTimePart = true;
+                bExp = true;                    // missbraucht fuer A/P
+                sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+                break;
+            case NF_KEY_MI:                         // M
+            case NF_KEY_MMI:                        // MM
+            case NF_KEY_H:                          // H
+            case NF_KEY_HH:                         // HH
+            case NF_KEY_S:                          // S
+            case NF_KEY_SS:                         // SS
+                bTimePart = true;
+                sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+                break;
+            case NF_KEY_M:                          // M
+            case NF_KEY_MM:                         // MM
+            case NF_KEY_MMM:                        // MMM
+            case NF_KEY_MMMM:                       // MMMM
+            case NF_KEY_MMMMM:                      // MMMMM
+            case NF_KEY_Q:                          // Q
+            case NF_KEY_QQ:                         // QQ
+            case NF_KEY_D:                          // D
+            case NF_KEY_DD:                         // DD
+            case NF_KEY_DDD:                        // DDD
+            case NF_KEY_DDDD:                       // DDDD
+            case NF_KEY_YY:                         // YY
+            case NF_KEY_YYYY:                       // YYYY
+            case NF_KEY_NN:                         // NN
+            case NF_KEY_NNN:                        // NNN
+            case NF_KEY_NNNN:                       // NNNN
+            case NF_KEY_WW :                        // WW
+            case NF_KEY_AAA :                       // AAA
+            case NF_KEY_AAAA :                      // AAAA
+            case NF_KEY_EC :                        // E
+            case NF_KEY_EEC :                       // EE
+            case NF_KEY_G :                         // G
+            case NF_KEY_GG :                        // GG
+            case NF_KEY_GGG :                       // GGG
+            case NF_KEY_R :                         // R
+            case NF_KEY_RR :                        // RR
+                bTimePart = false;
+                sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+                break;
+            case NF_KEY_THAI_T :
+                bThaiT = true;
+                sStrArray[i] = sKeyword[nTypeArray[i]];
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+                break;
+            default:                            // andere Keywords
+                nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                nPos = nPos + sStrArray[i].getLength();
+                i++;
+                break;
+            }
+        }                                       // of while
+        nCntPost = nCounter;                    // decimals (100th seconds)
+        if (bExp)
+        {
+            nCntExp = 1;                        // merkt AM/PM
         }
         break;                                      // of NUMBERFORMAT_DATETIME
-        default:
+    default:
         break;
     }
     if (eScannedType == NUMBERFORMAT_SCIENTIFIC &&
         (nCntPre + nCntPost == 0 || nCntExp == 0))
+    {
         return nPos;
+    }
     else if (eScannedType == NUMBERFORMAT_FRACTION && (nCntExp > 8 || nCntExp == 0))
+    {
         return nPos;
-
+    }
     if (bThaiT && !GetNatNumModifier())
+    {
         SetNatNumModifier(1);
-
+    }
     if ( bConvertMode )
     {   // strings containing keywords of the target locale must be quoted, so
         // the user sees the difference and is able to edit the format string
         for ( i=0; i < nAnzStrings; i++ )
         {
             if ( nTypeArray[i] == NF_SYMBOLTYPE_STRING &&
-                    sStrArray[i].GetChar(0) != '\"' )
+                 sStrArray[i][0] != '\"' )
             {
                 if ( bConvertSystemToSystem && eScannedType == NUMBERFORMAT_CURRENCY )
-                {   // don't stringize automatic currency, will be converted
+                {
+                    // don't stringize automatic currency, will be converted
                     if ( sStrArray[i] == sOldCurSymbol )
-                        continue;   // for
-                    // DM might be splitted into D and M
-                    if ( sStrArray[i].Len() < sOldCurSymbol.Len() &&
-                            pChrCls->uppercase( sStrArray[i], 0, 1 )[0] ==
-                            sOldCurString[0] )
                     {
-                        String aTmp( sStrArray[i] );
+                        continue;   // for
+                    }
+                    // DM might be splitted into D and M
+                    if ( sStrArray[i].getLength() < sOldCurSymbol.getLength() &&
+                         pChrCls->uppercase( sStrArray[i], 0, 1 )[0] ==
+                         sOldCurString[0] )
+                    {
+                        OUString aTmp( sStrArray[i] );
                         sal_uInt16 j = i + 1;
-                        while ( aTmp.Len() < sOldCurSymbol.Len() &&
+                        while ( aTmp.getLength() < sOldCurSymbol.getLength() &&
                                 j < nAnzStrings &&
                                 nTypeArray[j] == NF_SYMBOLTYPE_STRING )
                         {
@@ -2549,14 +2645,13 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
                         }
                     }
                 }
-                String& rStr = sStrArray[i];
-                xub_StrLen nLen = rStr.Len();
-                for ( xub_StrLen j=0; j<nLen; j++ )
+                OUString& rStr = sStrArray[i];
+                sal_Int32 nLen = rStr.getLength();
+                for ( sal_Int32 j = 0; j < nLen; j++ )
                 {
-                    if ( (j == 0 || rStr.GetChar(j-1) != '\\') && GetKeyWord( rStr, j ) )
+                    if ( (j == 0 || rStr[j - 1] != '\\') && GetKeyWord( rStr, j ) )
                     {
-                        rStr.Insert( '\"', 0 );
-                        rStr += '\"';
+                        rStr = "\"" + rStr + "\"";
                         break;  // for
                     }
                 }
@@ -2564,178 +2659,195 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
         }
     }
     // concatenate strings, remove quotes for output, and rebuild the format string
-    rString.Erase();
+    rString = "";
     i = 0;
     while (i < nAnzStrings)
     {
+        sal_Int32 nStringPos;
+        sal_Int32 nArrPos = 0;
+        sal_uInt16 iPos = i;
         switch ( nTypeArray[i] )
         {
-            case NF_SYMBOLTYPE_STRING :
+        case NF_SYMBOLTYPE_STRING :
+            nStringPos = rString.getLength();
+            do
             {
-                xub_StrLen nStringPos = rString.Len();
-                xub_StrLen nArrPos = 0;
-                sal_uInt16 iPos = i;
-                do
+                if (sStrArray[i].getLength() == 2 &&
+                    sStrArray[i][0] == '\\')
                 {
-                    if (sStrArray[i].Len() == 2 &&
-                            sStrArray[i].GetChar(0) == '\\')
+                    // Unescape some simple forms of symbols even in the UI
+                    // visible string to prevent duplicates that differ
+                    // only in notation, originating from import.
+                    // e.g. YYYY-MM-DD and YYYY\-MM\-DD are identical,
+                    // but 0\ 000 0 and 0 000 0 in a French locale are not.
+                    sal_Unicode c = sStrArray[i][1];
+                    switch (c)
                     {
-                        // Unescape some simple forms of symbols even in the UI
-                        // visible string to prevent duplicates that differ
-                        // only in notation, originating from import.
-                        // e.g. YYYY-MM-DD and YYYY\-MM\-DD are identical,
-                        // but 0\ 000 0 and 0 000 0 in a French locale are not.
-                        sal_Unicode c = sStrArray[i].GetChar(1);
-                        switch (c)
+                    case '+':
+                    case '-':
+                        rString += OUString(c);
+                        break;
+                    case ' ':
+                    case '.':
+                    case '/':
+                        if (((eScannedType & NUMBERFORMAT_DATE) == 0) &&
+                            (StringEqualsChar( pFormatter->GetNumThousandSep(), c) ||
+                             StringEqualsChar( pFormatter->GetNumDecimalSep(), c) ||
+                             (c == ' ' && StringEqualsChar( pFormatter->GetNumThousandSep(), cNonBreakingSpace))))
                         {
-                            case '+':
-                            case '-':
-                                rString += c;
-                                break;
-                            case ' ':
-                            case '.':
-                            case '/':
-                                if (((eScannedType & NUMBERFORMAT_DATE) == 0)
-                                        && (StringEqualsChar(
-                                                pFormatter->GetNumThousandSep(),
-                                                c) || StringEqualsChar(
-                                                    pFormatter->GetNumDecimalSep(),
-                                                    c) || (c == ' ' &&
-                                                        StringEqualsChar(
-                                                            pFormatter->GetNumThousandSep(),
-                                                            cNonBreakingSpace))))
-                                    rString += sStrArray[i];
-                                else if ((eScannedType & NUMBERFORMAT_DATE) &&
-                                        StringEqualsChar(
-                                            pFormatter->GetDateSep(), c))
-                                    rString += sStrArray[i];
-                                else if ((eScannedType & NUMBERFORMAT_TIME) &&
-                                        (StringEqualsChar( pLoc->getTimeSep(),
-                                                           c) ||
-                                         StringEqualsChar(
-                                             pLoc->getTime100SecSep(), c)))
-                                    rString += sStrArray[i];
-                                else if (eScannedType & NUMBERFORMAT_FRACTION)
-                                    rString += sStrArray[i];
-                                else
-                                    rString += c;
-                                break;
-                            default:
-                                rString += sStrArray[i];
+                            rString += sStrArray[i];
                         }
-                    }
-                    else
+                        else if ((eScannedType & NUMBERFORMAT_DATE) &&
+                                 StringEqualsChar( pFormatter->GetDateSep(), c))
+                        {
+                            rString += sStrArray[i];
+                        }
+                        else if ((eScannedType & NUMBERFORMAT_TIME) &&
+                                 (StringEqualsChar( pLoc->getTimeSep(), c) ||
+                                  StringEqualsChar( pLoc->getTime100SecSep(), c)))
+                        {
+                            rString += sStrArray[i];
+                        }
+                        else if (eScannedType & NUMBERFORMAT_FRACTION)
+                        {
+                            rString += sStrArray[i];
+                        }
+                        else
+                        {
+                            rString += OUString(c);
+                        }
+                        break;
+                    default:
                         rString += sStrArray[i];
-                    if ( RemoveQuotes( sStrArray[i] ) > 0 )
-                    {   // update currency up to quoted string
-                        if ( eScannedType == NUMBERFORMAT_CURRENCY )
-                        {   // dM -> DM  or  DM -> $  in old automatic
-                            // currency formats, oh my ..., why did we ever
-                            // introduce them?
-                            String aTmp( pChrCls->uppercase(
-                                sStrArray[iPos], nArrPos,
-                                sStrArray[iPos].Len()-nArrPos ) );
-                            xub_StrLen nCPos = aTmp.Search( sOldCurString );
-                            if ( nCPos != STRING_NOTFOUND )
-                            {
-                                const String& rCur =
-                                    bConvertMode && bConvertSystemToSystem ?
-                                    GetCurSymbol() : sOldCurSymbol;
-                                sStrArray[iPos].Replace( nArrPos+nCPos,
-                                    sOldCurString.getLength(), rCur );
-                                rString.Replace( nStringPos+nCPos,
-                                    sOldCurString.getLength(), rCur );
-                            }
-                            nStringPos = rString.Len();
-                            if ( iPos == i )
-                                nArrPos = sStrArray[iPos].Len();
-                            else
-                                nArrPos = sStrArray[iPos].Len() + sStrArray[i].Len();
-                        }
-                    }
-                    if ( iPos != i )
-                    {
-                        sStrArray[iPos] += sStrArray[i];
-                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                        nAnzResStrings--;
-                    }
-                    i++;
-                } while ( i < nAnzStrings && nTypeArray[i] == NF_SYMBOLTYPE_STRING );
-                if ( i < nAnzStrings )
-                    i--;    // enter switch on next symbol again
-                if ( eScannedType == NUMBERFORMAT_CURRENCY && nStringPos < rString.Len() )
-                {   // same as above, since last RemoveQuotes
-                    String aTmp( pChrCls->uppercase(
-                        sStrArray[iPos], nArrPos,
-                        sStrArray[iPos].Len()-nArrPos ) );
-                    xub_StrLen nCPos = aTmp.Search( sOldCurString );
-                    if ( nCPos != STRING_NOTFOUND )
-                    {
-                        const String& rCur =
-                            bConvertMode && bConvertSystemToSystem ?
-                            GetCurSymbol() : sOldCurSymbol;
-                        sStrArray[iPos].Replace( nArrPos+nCPos,
-                            sOldCurString.getLength(), rCur );
-                        rString.Replace( nStringPos+nCPos,
-                            sOldCurString.getLength(), rCur );
                     }
                 }
-            }
-            break;
-            case NF_SYMBOLTYPE_CURRENCY :
-            {
-                rString += sStrArray[i];
-                RemoveQuotes( sStrArray[i] );
-            }
-            break;
-            case NF_KEY_THAI_T:
-                if (bThaiT && GetNatNumModifier() == 1)
-                {   // Remove T from format code, will be replaced with a [NatNum1] prefix.
+                else
+                {
+                    rString += sStrArray[i];
+                }
+                if ( RemoveQuotes( sStrArray[i] ) > 0 )
+                {
+                    // update currency up to quoted string
+                    if ( eScannedType == NUMBERFORMAT_CURRENCY )
+                    {
+                        // dM -> DM  or  DM -> $  in old automatic
+                        // currency formats, oh my ..., why did we ever
+                        // introduce them?
+                        OUString aTmp( pChrCls->uppercase( sStrArray[iPos], nArrPos,
+                                                           sStrArray[iPos].getLength()-nArrPos ) );
+                        sal_Int32 nCPos = aTmp.indexOf( sOldCurString );
+                        if ( nCPos >= 0 )
+                        {
+                            const OUString& rCur = bConvertMode && bConvertSystemToSystem ?
+                                GetCurSymbol() : sOldCurSymbol;
+                            sStrArray[iPos] = sStrArray[iPos].replaceAt( nArrPos + nCPos,
+                                                                         sOldCurString.getLength(),
+                                                                         rCur );
+                            rString = rString.replaceAt( nStringPos + nCPos,
+                                                         sOldCurString.getLength(),
+                                                         rCur );
+                        }
+                        nStringPos = rString.getLength();
+                        if ( iPos == i )
+                        {
+                            nArrPos = sStrArray[iPos].getLength();
+                        }
+                        else
+                        {
+                            nArrPos = sStrArray[iPos].getLength() + sStrArray[i].getLength();
+                        }
+                    }
+                }
+                if ( iPos != i )
+                {
+                    sStrArray[iPos] += sStrArray[i];
                     nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
                     nAnzResStrings--;
                 }
-                else
-                    rString += sStrArray[i];
+                i++;
+            }
+            while ( i < nAnzStrings && nTypeArray[i] == NF_SYMBOLTYPE_STRING );
+
+            if ( i < nAnzStrings )
+            {
+                i--;    // enter switch on next symbol again
+            }
+            if ( eScannedType == NUMBERFORMAT_CURRENCY && nStringPos < rString.getLength() )
+            {
+                // same as above, since last RemoveQuotes
+                OUString aTmp( pChrCls->uppercase( sStrArray[iPos], nArrPos,
+                                                   sStrArray[iPos].getLength()-nArrPos ) );
+                sal_Int32 nCPos = aTmp.indexOf( sOldCurString );
+                if ( nCPos >= 0 )
+                {
+                    const OUString& rCur = bConvertMode && bConvertSystemToSystem ?
+                        GetCurSymbol() : sOldCurSymbol;
+                    sStrArray[iPos] = sStrArray[iPos].replaceAt( nArrPos + nCPos,
+                                                                 sOldCurString.getLength(),
+                                                                 rCur );
+                    rString = rString.replaceAt( nStringPos + nCPos,
+                                                 sOldCurString.getLength(), rCur );
+                }
+            }
             break;
-            case NF_SYMBOLTYPE_EMPTY :
-                // nothing
+        case NF_SYMBOLTYPE_CURRENCY :
+            rString += sStrArray[i];
+            RemoveQuotes( sStrArray[i] );
             break;
-            default:
+        case NF_KEY_THAI_T:
+            if (bThaiT && GetNatNumModifier() == 1)
+            {
+                // Remove T from format code, will be replaced with a [NatNum1] prefix.
+                nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                nAnzResStrings--;
+            }
+            else
+            {
                 rString += sStrArray[i];
+            }
+            break;
+        case NF_SYMBOLTYPE_EMPTY :
+            // nothing
+            break;
+        default:
+            rString += sStrArray[i];
         }
         i++;
     }
     return 0;
 }
 
-xub_StrLen ImpSvNumberformatScan::RemoveQuotes( String& rStr )
+sal_Int32 ImpSvNumberformatScan::RemoveQuotes( OUString& rStr )
 {
-    if ( rStr.Len() > 1 )
+    if ( rStr.getLength() > 1 )
     {
-        sal_Unicode c = rStr.GetChar(0);
-        xub_StrLen n;
-        if ( c == '"' && rStr.GetChar( (n = xub_StrLen(rStr.Len()-1)) ) == '"' )
+        sal_Unicode c = rStr[0];
+        sal_Int32 n = rStr.getLength() - 1;
+        if ( c == '"' && rStr[n] == '"' )
         {
-            rStr.Erase(n,1);
-            rStr.Erase(0,1);
+            rStr = rStr.copy(1,n);
             return 2;
         }
         else if ( c == '\\' )
         {
-            rStr.Erase(0,1);
+            rStr = rStr.copy(1);
             return 1;
         }
     }
     return 0;
 }
 
-xub_StrLen ImpSvNumberformatScan::ScanFormat( String& rString )
+sal_Int32 ImpSvNumberformatScan::ScanFormat( OUString& rString )
 {
-    xub_StrLen res = Symbol_Division(rString);  //lexikalische Analyse
+    sal_Int32 res = Symbol_Division(rString);  //lexikalische Analyse
     if (!res)
+    {
         res = ScanType(); // Erkennung des Formattyps
+    }
     if (!res)
+    {
         res = FinalScan( rString );         // Typabhaengige Endanalyse
+    }
     return res;                             // res = Kontrollposition
                                             // res = 0 => Format ok
 }

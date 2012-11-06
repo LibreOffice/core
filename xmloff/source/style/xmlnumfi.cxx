@@ -1875,7 +1875,7 @@ void SvXMLNumFormatContext::AddCurrency( const rtl::OUString& rContent, Language
         if ( pFormatter )
         {
             pFormatter->ChangeIntl( nFormatLang );
-            String sCurString, sDummy;
+            OUString sCurString, sDummy;
             pFormatter->GetCompatibilityCurrency( sCurString, sDummy );
             aSymbol = sCurString;
 

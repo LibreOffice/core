@@ -48,7 +48,7 @@ public:
                                                 // tauscht Referenzdatum aus
     void ChangeStandardPrec(sal_uInt16 nPrec);  // tauscht Standardprecision aus
 
-    xub_StrLen ScanFormat( String& rString );   // Aufruf der Scan-Analyse
+    sal_Int32 ScanFormat( OUString& rString );   // Aufruf der Scan-Analyse
 
     void CopyInfo(ImpSvNumberformatInfo* pInfo,
                      sal_uInt16 nAnz);              // Kopiert die FormatInfo
@@ -80,7 +80,7 @@ public:
     const OUString& GetColorString() const    { return GetKeywords()[NF_KEY_COLOR]; }
     const OUString& GetRedString() const      { return GetKeywords()[NF_KEY_RED]; }
     const OUString& GetBooleanString() const  { return GetKeywords()[NF_KEY_BOOLEAN]; }
-    const String& GetErrorString() const    { return sErrStr; }
+    const OUString& GetErrorString() const    { return sErrStr; }
 
     Date* GetNullDate() const                   { return pNullDate; }
     const OUString& GetStandardName() const
@@ -97,26 +97,32 @@ public:
                                                 // definierte Farben
 
     // the compatibility currency symbol for old automatic currency formats
-    const String& GetCurSymbol() const
+    const OUString& GetCurSymbol() const
         {
             if ( bCompatCurNeedInit )
+            {
                 InitCompatCur();
+            }
             return sCurSymbol;
         }
 
     // the compatibility currency abbreviation for CCC format code
-    const String& GetCurAbbrev() const
+    const OUString& GetCurAbbrev() const
         {
             if ( bCompatCurNeedInit )
+            {
                 InitCompatCur();
+            }
             return sCurAbbrev;
         }
 
     // the compatibility currency symbol upper case for old automatic currency formats
-    const String& GetCurString() const
+    const OUString& GetCurString() const
         {
             if ( bCompatCurNeedInit )
+            {
                 InitCompatCur();
+            }
             return sCurString;
         }
 
@@ -159,7 +165,7 @@ private:                            // ---- privater Teil
     sal_uInt16 nStandardPrec;                   // default Precision for Standardformat
     SvNumberFormatter* pFormatter;              // Pointer auf die Formatliste
 
-    String sStrArray[NF_MAX_FORMAT_SYMBOLS];    // Array der Symbole
+    OUString sStrArray[NF_MAX_FORMAT_SYMBOLS];    // Array der Symbole
     short nTypeArray[NF_MAX_FORMAT_SYMBOLS];    // Array der Infos
                                                 // externe Infos:
     sal_uInt16 nAnzResStrings;                  // Anzahl der Ergebnissymbole
@@ -185,10 +191,10 @@ private:                            // ---- privater Teil
     bool bDecSep;                               // Wird beim ersten , gesetzt
     mutable bool bKeywordsNeedInit;             // Locale dependent keywords need to be initialized
     mutable bool bCompatCurNeedInit;            // Locale dependent compatibility currency need to be initialized
-    String sCurSymbol;                          // Currency symbol for compatibility format codes
-    String sCurString;                          // Currency symbol in upper case
-    String sCurAbbrev;                          // Currency abbreviation
-    String sErrStr;                             // String fuer Fehlerausgaben
+    OUString sCurSymbol;                        // Currency symbol for compatibility format codes
+    OUString sCurString;                        // Currency symbol in upper case
+    OUString sCurAbbrev;                        // Currency abbreviation
+    OUString sErrStr;                           // String fuer Fehlerausgaben
 
     bool bConvertMode;                          // Wird im Convert-Mode gesetzt
                                                 // Land/Sprache, in die der
@@ -204,7 +210,7 @@ private:                            // ---- privater Teil
                                                 // currency symbol is converted
                                                 // too).
 
-    xub_StrLen nCurrPos;                        // Position des Waehrungssymbols
+    sal_Int32 nCurrPos;                         // Position des Waehrungssymbols
 
     sal_uInt8 nNatNumModifier;                       // Thai T speciality
 
@@ -215,7 +221,7 @@ private:                            // ---- privater Teil
 #ifdef _ZFORSCAN_CXX                // ----- private Methoden -----
     void SetDependentKeywords();
                                                 // Setzt die Sprachabh. Keyw.
-    void SkipStrings(sal_uInt16& i,xub_StrLen& nPos);// Ueberspringt StringSymbole
+    void SkipStrings(sal_uInt16& i, sal_Int32& nPos);// Ueberspringt StringSymbole
     sal_uInt16 PreviousKeyword(sal_uInt16 i);   // Gibt Index des vorangeh.
                                                 // Schluesselworts oder 0
     sal_uInt16 NextKeyword(sal_uInt16 i);       // Gibt Index des naechsten
@@ -230,8 +236,8 @@ private:                            // ---- privater Teil
                                                 // mehr bis zum '/'
     void Reset();                               // Reset aller Variablen
                                                 // vor Analysestart
-    short GetKeyWord( const String& sSymbol,    // determine keyword at nPos
-        xub_StrLen nPos );                      // return 0 <=> not found
+    short GetKeyWord( const OUString& sSymbol,  // determine keyword at nPos
+                      sal_Int32 nPos );         // return 0 <=> not found
 
     inline bool IsAmbiguousE( short nKey )      // whether nKey is ambiguous E of NF_KEY_E/NF_KEY_EC
         {
@@ -242,28 +248,28 @@ private:                            // ---- privater Teil
     // if 0 at strArray[i] is of S,00 or SS,00 or SS"any"00 in ScanType() or FinalScan()
     bool Is100SecZero( sal_uInt16 i, bool bHadDecSep );
 
-    short Next_Symbol(const String& rStr,
-                        xub_StrLen& nPos,
-                      String& sSymbol);       // Naechstes Symbol
-    xub_StrLen Symbol_Division(const String& rString);// lexikalische Voranalyse
-    xub_StrLen ScanType(); // Analyse des Formattyps
-    xub_StrLen FinalScan( String& rString );  // Endanalyse mit Vorgabe des Typs
+    short Next_Symbol(const OUString& rStr,
+                      sal_Int32& nPos,
+                      OUString& sSymbol);       // Naechstes Symbol
+    sal_Int32 Symbol_Division(const OUString& rString);// lexikalische Voranalyse
+    sal_Int32 ScanType(); // Analyse des Formattyps
+    sal_Int32 FinalScan( OUString& rString );  // Endanalyse mit Vorgabe des Typs
 
     // -1:= error, return nPos in FinalScan; 0:= no calendar, 1:= calendar found
-    int FinalScanGetCalendar( xub_StrLen& nPos, sal_uInt16& i, sal_uInt16& nAnzResStrings );
+    int FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i, sal_uInt16& nAnzResStrings );
 
     /** Insert symbol into nTypeArray and sStrArray, e.g. grouping separator.
         If at nPos-1 a symbol type NF_SYMBOLTYPE_EMPTY is present, that is
         reused instead of shifting all one up and nPos is decremented! */
-    bool InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType eType, const String& rStr );
+    bool InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType eType, const OUString& rStr );
 
-    static inline bool StringEqualsChar( const String& rStr, sal_Unicode ch )
-        { return rStr.GetChar(0) == ch && rStr.Len() == 1; }
+    static inline bool StringEqualsChar( const OUString& rStr, sal_Unicode ch )
+        { return rStr[0] == ch && rStr.getLength() == 1; }
         // Yes, for efficiency get the character first and then compare length
         // because in most places where this is used the string is one char.
 
     // remove "..." and \... quotes from rStr, return how many chars removed
-    static xub_StrLen RemoveQuotes( String& rStr );
+    static sal_Int32 RemoveQuotes( OUString& rStr );
 
 #endif //_ZFORSCAN_CXX
 };

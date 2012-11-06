@@ -777,7 +777,7 @@ public:
                 LanguageType eFormatLanguage, bool bOnlyStringLanguage = false );
 
     /// Get compatibility ("automatic" old style) currency from I18N locale data
-    void GetCompatibilityCurrency( String& rSymbol, String& rAbbrev ) const;
+    void GetCompatibilityCurrency( OUString& rSymbol, OUString& rAbbrev ) const;
 
     /// Fill rList with the language/country codes that have been allocated
     void    GetUsedLanguages( std::vector<sal_uInt16>& rList );

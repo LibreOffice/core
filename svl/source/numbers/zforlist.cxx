@@ -2783,7 +2783,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
         }
         else
         {   // "automatic" old style
-            String aSymbol, aAbbrev;
+            OUString aSymbol, aAbbrev;
             GetCompatibilityCurrency( aSymbol, aAbbrev );
             ImpGetPosCurrFormat( sString, aSymbol );
             ImpGetNegCurrFormat( sNegStr, aSymbol );
@@ -3449,7 +3449,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
 }
 
 
-void SvNumberFormatter::GetCompatibilityCurrency( String& rSymbol, String& rAbbrev ) const
+void SvNumberFormatter::GetCompatibilityCurrency( OUString& rSymbol, OUString& rAbbrev ) const
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 >
         xCurrencies( xLocaleData->getAllCurrencies() );
