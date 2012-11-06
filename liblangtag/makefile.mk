@@ -78,7 +78,7 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) && \
 			 $(AUGMENT_LIBRARY_PATH) $(GNUMAKE) install DESTDIR=$(my_destdir)
 
-.IF "$(SYSTEM_LIBXML)"!="YES" || "$(SYSTEM_GLIB)"!="YES"
+.IF "$(SYSTEM_LIBXML)"!="YES"
 .IF "$(OS)"=="FREEBSD" || "$(OS)"=="LINUX"
 CONFIGURE_FLAGS+= \
  LDFLAGS=-Wl,-z,origin\ -Wl,-rpath,\'\$$\$$ORIGIN:\$$\$$ORIGIN/../ure-link/lib\'
@@ -112,7 +112,7 @@ OUT2INC += $(my_install_relative)/include/liblangtag/*
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-OUT2BIN += $(my_install_relative)/bin/liblangtag-0.dll
+OUT2BIN += $(my_install_relative)/bin/liblangtag-1.dll
 OUT2LIB += $(my_install_relative)/lib/liblangtag.dll.a
 .ELSE
 OUT2LIB += $(my_install_relative)/lib/langtag.lib*
