@@ -110,7 +110,6 @@ libcmis\
 libmspub\
 liborcus\
 libpng\
-librsvg\
 libvisio\
 libwpd\
 libwpg\
@@ -219,15 +218,10 @@ cairo\
 cppunit\
 crashrep\
 external\
-gdk-pixbuf\
-gettext\
-glib\
 helpcontent2 \
 icu\
 instsetoo_native\
-libcroco\
 libexttextcat\
-libgsf\
 liblangtag\
 libxml2\
 libxmlsec\
@@ -241,7 +235,6 @@ mysqlcppconn\
 nss\
 odk\
 openssl\
-pango\
 postprocess\
 python\
 redland\
