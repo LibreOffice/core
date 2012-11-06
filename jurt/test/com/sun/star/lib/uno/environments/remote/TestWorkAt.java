@@ -18,6 +18,8 @@
 
 package com.sun.star.lib.uno.environments.remote;
 
+import static org.junit.Assert.*;
+
 class TestWorkAt implements TestIWorkAt {
     /**
      * When set to true, enables various debugging output.
@@ -38,9 +40,12 @@ class TestWorkAt implements TestIWorkAt {
     boolean _passedAync = true;
     boolean _notified = false;
 
-    public void syncCall() throws Throwable {
+    public synchronized void syncCall() throws Throwable {
         ++ _sync_counter;
 
+        // at least in currently run tests this should never fire, so dont
+        // defer the check until passedAsyncTest and assert here
+        assertEquals(MESSAGES, _async_counter);
         if(_async_counter != MESSAGES)
             _passedAync = false;
 
@@ -53,7 +58,7 @@ class TestWorkAt implements TestIWorkAt {
         if(DEBUG) System.err.println("syncCall:" + _sync_counter + " " + _passedAync + " " + Thread.currentThread());
     }
 
-    public void asyncCall() throws Throwable {
+    public synchronized void asyncCall() throws Throwable {
 //          Thread.sleep(50);
 
         ++ _async_counter;
@@ -83,6 +88,8 @@ class TestWorkAt implements TestIWorkAt {
     }
 
     public boolean passedAsyncTest() {
+        assertEquals(MESSAGES, _sync_counter);
+        assertTrue(_passedAync);
         return  _passedAync && (_sync_counter == MESSAGES);
     }
 }
