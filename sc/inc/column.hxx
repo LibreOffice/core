@@ -107,6 +107,9 @@ friend class ScCellIterator;
 friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
 
+    ScColumn(const ScColumn&); // disabled
+    ScColumn& operator= (const ScColumn&); // disabled
+
 public:
                 ScColumn();
                 ~ScColumn();
