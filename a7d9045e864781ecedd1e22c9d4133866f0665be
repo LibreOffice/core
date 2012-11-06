@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQX///+4\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 3374,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2012-11-06T16:04:04Z",
+      "side": 1,
+      "message": "Wrong option name (2x).",
+      "revId": "a7d9045e864781ecedd1e22c9d4133866f0665be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQX///+0\u003d",
+        "filename": "solenv/gbuild/gbuild.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2012-11-06T16:04:04Z",
+      "side": 1,
+      "message": "This makes --enable-debug/dbgutil and --enable-symbols dependant, even though your configure checks say that should not be used together. Or, put differently, this breaks the selective debuginfo functionality.",
+      "revId": "a7d9045e864781ecedd1e22c9d4133866f0665be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
