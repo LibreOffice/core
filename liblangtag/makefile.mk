@@ -34,10 +34,15 @@ LIBLANGTAG_MICRO=0
 TARFILE_NAME=liblangtag-$(LIBLANGTAG_MAJOR).$(LIBLANGTAG_MINOR).$(LIBLANGTAG_MICRO)
 TARFILE_MD5=54e578c91b1b68e69c72be22adcb2195
 
+ADDITIONAL_FILES=\
+	msvs2008$/liblangtag.sln msvs2008$/liblangtag.vcproj \
+	msvs2010$/liblangtag.sln msvs2010$/liblangtag.vcxproj
+
 PATCH_FILES=liblangtag-0.4.0-msvc-warning.patch
 PATCH_FILES+=liblangtag-0.4.0-windows.patch
 PATCH_FILES+=liblangtag-0.4.0-reg2xml-encoding-problem.patch
 PATCH_FILES+=liblangtag-0.4.0-windows2.patch
+PATCH_FILES+=liblangtag-0.4.0-msvcprojects.patch
 .IF "$(OS)" == "MACOSX"
 PATCH_FILES=liblangtag-0.4.0-mac.patch
 .END
