@@ -846,16 +846,9 @@ static inline void print_fullpaths(char* line)
                     end = token + 2;
             }
         }
-        else if(*token == ':' || *token == '\\' || *token == '/' ||
-                *token == '$' || ':' == token[1])
-        {
-            if(fwrite(token, token_len, 1, stdout) != 1)
-                abort();
-            fputc(' ', stdout);
-        }
         else
         {
-            if(fwrite(token, end - token, 1, stdout) != 1)
+            if (fwrite(token, token_len, 1, stdout) != 1)
                 abort();
             fputc(' ', stdout);
         }
