@@ -31,7 +31,7 @@ struct SbxDim {                 // an array-dimension:
 
 class SbxVarEntry : public SbxVariableRef {
 public:
-    XubString* pAlias;
+    OUString* pAlias;
     SbxVarEntry() : SbxVariableRef(), pAlias( NULL ) {}
    ~SbxVarEntry() { delete pAlias; }
 };
@@ -83,11 +83,17 @@ SbxArray& SbxArray::operator=( const SbxArray& rArray )
             SbxVarEntryPtr pDstRef = new SbxVarEntry;
             *((SbxVariableRef*) pDstRef) = *((SbxVariableRef*) pSrcRef);
             if( pSrcRef->pAlias )
-                pDstRef->pAlias = new XubString( *pSrcRef->pAlias );
+            {
+                pDstRef->pAlias = new OUString( *pSrcRef->pAlias );
+            }
             if( eType != SbxVARIANT )
+            {
                 // Convert no objects
                 if( eType != SbxOBJECT || pSrc_->GetClass() != SbxCLASS_OBJECT )
+                {
                     ((SbxVariable*) pSrc_)->Convert( eType );
+                }
+            }
             pData->push_back( pDstRef );
         }
     }
@@ -247,17 +253,21 @@ void SbxArray::Put( SbxVariable* pVar, sal_uInt16 nIdx )
     }
 }
 
-const XubString& SbxArray::GetAlias( sal_uInt16 nIdx )
+const OUString& SbxArray::GetAlias( sal_uInt16 nIdx )
 {
+static const OUString sEmpty("");
+
     if( !CanRead() )
     {
         SetError( SbxERR_PROP_WRITEONLY );
-        return String::EmptyString();
+        return sEmpty;
     }
     SbxVarEntry& rRef = (SbxVarEntry&) GetRef( nIdx );
 
     if ( !rRef.pAlias )
-        return String::EmptyString();
+    {
+        return sEmpty;
+    }
 #ifdef DBG_UTIL
     else
     {
@@ -268,7 +278,7 @@ const XubString& SbxArray::GetAlias( sal_uInt16 nIdx )
     return *rRef.pAlias;
 }
 
-void SbxArray::PutAlias( const XubString& rAlias, sal_uInt16 nIdx )
+void SbxArray::PutAlias( const OUString& rAlias, sal_uInt16 nIdx )
 {
     if( !CanWrite() )
     {
@@ -278,7 +288,9 @@ void SbxArray::PutAlias( const XubString& rAlias, sal_uInt16 nIdx )
     {
         SbxVarEntry& rRef = (SbxVarEntry&) GetRef( nIdx );
         if( !rRef.pAlias )
-            rRef.pAlias = new XubString( rAlias );
+        {
+            rRef.pAlias = new OUString( rAlias );
+        }
         else
         {
             *rRef.pAlias = rAlias;
@@ -378,13 +390,13 @@ void SbxArray::Merge( SbxArray* p )
             SbxVariable* pVar = *pRef1;
             if( pVar )
             {
-                XubString aName = pVar->GetName();
+                OUString aName = pVar->GetName();
                 sal_uInt16 nHash = pVar->GetHashCode();
                 for( sal_uInt32 j = 0; j < pData->size(); j++ )
                 {
                     SbxVariableRef* pRef2 = (*pData)[j];
                     if( (*pRef2)->GetHashCode() == nHash
-                     && (*pRef2)->GetName().EqualsIgnoreCaseAscii( aName ) )
+                        && (*pRef2)->GetName().equalsIgnoreAsciiCase( aName ) )
                     {
                         *pRef2 = pVar; pRef1 = NULL;
                         break;
@@ -397,7 +409,9 @@ void SbxArray::Merge( SbxArray* p )
                     pData->push_back( pTemp );
                     *((SbxVariableRef*) pRef) = *((SbxVariableRef*) pRef1);
                     if( pRef1->pAlias )
-                        pRef->pAlias = new XubString( *pRef1->pAlias );
+                    {
+                        pRef->pAlias = new OUString( *pRef1->pAlias );
+                    }
                 }
             }
         }
@@ -473,7 +487,7 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
             sal_uInt16 nVarHash = pVar->GetHashCode();
             if( ( !nVarHash || nVarHash == nHash )
                 && ( t == SbxCLASS_DONTCARE || pVar->GetClass() == t )
-                && ( pVar->GetName().EqualsIgnoreCaseAscii( rName ) ) )
+                && ( pVar->GetName().equalsIgnoreAsciiCase( rName ) ) )
             {
                 p = pVar;
                 p->ResetFlag( SBX_EXTFOUND );

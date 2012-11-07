@@ -421,8 +421,9 @@ SwSbxValue SwCalc::Calculate( const String& rStr )
 String SwCalc::GetStrResult( const SwSbxValue& rVal, sal_Bool bRound )
 {
     if( !rVal.IsDouble() )
-        return rVal.GetString();
-
+    {
+        return rVal.GetOUString();
+    }
     return GetStrResult( rVal.GetDouble(), bRound );
 }
 
@@ -1285,7 +1286,7 @@ SwSbxValue SwCalc::Prim()
             nErg = Prim();
             if( SbxSTRING == nErg.GetType() )
             {
-                nErg.PutBool( 0 == nErg.GetString().Len() );
+                nErg.PutBool( nErg.GetOUString().isEmpty() );
             }
             else if(SbxBOOL == nErg.GetType() )
             {
@@ -1612,7 +1613,7 @@ SwSbxValue::~SwSbxValue()
 
 sal_Bool SwSbxValue::GetBool() const
 {
-    return SbxSTRING == GetType() ? 0 != GetString().Len()
+    return SbxSTRING == GetType() ? !GetOUString().isEmpty()
                                   : 0 != SbxValue::GetBool();
 }
 
@@ -1622,7 +1623,7 @@ double SwSbxValue::GetDouble() const
     if( SbxSTRING == GetType() )
     {
         xub_StrLen nStt = 0;
-        SwCalc::Str2Double( GetString(), nStt, nRet );
+        SwCalc::Str2Double( GetOUString(), nStt, nRet );
     }
     else if (IsBool())
     {

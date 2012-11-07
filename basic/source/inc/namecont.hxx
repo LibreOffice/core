@@ -71,10 +71,10 @@ typedef ::cppu::WeakImplHelper3<
 
 class NameContainer : public ::cppu::BaseMutex, public NameContainer_BASE
 {
-    typedef boost::unordered_map < ::rtl::OUString, sal_Int32, ::rtl::OUStringHash > NameContainerNameMap;
+    typedef boost::unordered_map < OUString, sal_Int32, ::rtl::OUStringHash > NameContainerNameMap;
 
     NameContainerNameMap mHashMap;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > mNames;
+    ::com::sun::star::uno::Sequence< OUString > mNames;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > mValues;
     sal_Int32 mnElementCount;
 
@@ -103,29 +103,29 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
 
     // Methods XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw(::com::sun::star::uno::RuntimeException);
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
+    virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
+    virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::container::ElementExistException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeByName( const ::rtl::OUString& Name )
+    virtual void SAL_CALL removeByName( const OUString& Name )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
@@ -216,7 +216,7 @@ class SfxLibraryContainer : public SfxLibraryContainer_BASE, public ::utl::OEven
     VBAScriptListenerContainer maVBAScriptListeners;
     sal_Int32 mnRunningVBAScripts;
     sal_Bool mbVBACompat;
-    rtl::OUString msProjectName;
+    OUString msProjectName;
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >   mxMSF;
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 >      mxSFI;
@@ -231,12 +231,12 @@ protected:
     bool    mbOldInfoFormat;
     bool    mbOasis2OOoFormat;
 
-    ::rtl::OUString maInitialDocumentURL;
-    ::rtl::OUString maInfoFileName;
-    ::rtl::OUString maOldInfoFileName;
-    ::rtl::OUString maLibElementFileExtension;
-    ::rtl::OUString maLibraryPath;
-    ::rtl::OUString maLibrariesDir;
+    OUString maInitialDocumentURL;
+    OUString maInfoFileName;
+    OUString maOldInfoFileName;
+    OUString maLibElementFileExtension;
+    OUString maLibraryPath;
+    OUString maLibrariesDir;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > mxStorage;
     BasicManager*   mpBasMgr;
@@ -252,14 +252,14 @@ protected:
     } meInitMode;
 
     void implStoreLibrary( SfxLibrary* pLib,
-                            const ::rtl::OUString& aName,
+                            const OUString& aName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
     // New variant for library export
     void implStoreLibrary( SfxLibrary* pLib,
-                            const ::rtl::OUString& aName,
+                            const OUString& aName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                            const ::rtl::OUString& aTargetURL,
+                            const OUString& aTargetURL,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 > xToUseSFI,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
 
@@ -269,27 +269,27 @@ protected:
     // New variant for library export
     void implStoreLibraryIndexFile( SfxLibrary* pLib, const ::xmlscript::LibDescriptor& rLib,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                                    const ::rtl::OUString& aTargetURL,
+                                    const OUString& aTargetURL,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 > xToUseSFI );
 
     bool implLoadLibraryIndexFile( SfxLibrary* pLib,
                                     ::xmlscript::LibDescriptor& rLib,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                                    const ::rtl::OUString& aIndexFileName );
+                                    const OUString& aIndexFileName );
 
     void implImportLibDescriptor( SfxLibrary* pLib, ::xmlscript::LibDescriptor& rLib );
 
     // Methods to distinguish between deffirent library types
-    virtual SfxLibrary* SAL_CALL implCreateLibrary( const ::rtl::OUString& aName ) = 0;
+    virtual SfxLibrary* SAL_CALL implCreateLibrary( const OUString& aName ) = 0;
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
-        ( const ::rtl::OUString& aName, const ::rtl::OUString& aLibInfoFileURL,
-          const ::rtl::OUString& StorageURL, sal_Bool ReadOnly ) = 0;
+        ( const OUString& aName, const OUString& aLibInfoFileURL,
+          const OUString& StorageURL, sal_Bool ReadOnly ) = 0;
     virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement( void ) = 0;
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const = 0;
     virtual void SAL_CALL writeLibraryElement
     (
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
-        const ::rtl::OUString& aElementName,
+        const OUString& aElementName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutput
     )
         throw(::com::sun::star::uno::Exception) = 0;
@@ -297,22 +297,22 @@ protected:
     virtual ::com::sun::star::uno::Any SAL_CALL importLibraryElement
     (
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
-        const ::rtl::OUString& aElementName,
-        const ::rtl::OUString& aFile,
+        const OUString& aElementName,
+        const OUString& aFile,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xElementStream ) = 0;
-    virtual void SAL_CALL importFromOldStorage( const ::rtl::OUString& aFile ) = 0;
+    virtual void SAL_CALL importFromOldStorage( const OUString& aFile ) = 0;
 
     // Password encryption
-    virtual sal_Bool implStorePasswordLibrary( SfxLibrary* pLib, const ::rtl::OUString& aName,
+    virtual sal_Bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler );
 
     // New variant for library export
-    virtual sal_Bool implStorePasswordLibrary( SfxLibrary* pLib, const ::rtl::OUString& aName,
+    virtual sal_Bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                        const ::rtl::OUString& aTargetURL,
+                        const OUString& aTargetURL,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 > xToUseSFI, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler );
 
-    virtual sal_Bool implLoadPasswordLibrary( SfxLibrary* pLib, const ::rtl::OUString& Name,
+    virtual sal_Bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
         sal_Bool bVerifyPasswordOnly=false )
             throw(::com::sun::star::lang::WrappedTargetException,
                   ::com::sun::star::uno::RuntimeException);
@@ -327,9 +327,9 @@ protected:
 
     // Interface to get the BasicManager (Hack for password implementation)
     BasicManager* getBasicManager( void );
-    ::rtl::OUString createAppLibraryFolder( SfxLibrary* pLib, const ::rtl::OUString& aName );
+    OUString createAppLibraryFolder( SfxLibrary* pLib, const OUString& aName );
 
-    void init( const ::rtl::OUString& rInitialDocumentURL,
+    void init( const OUString& rInitialDocumentURL,
                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxInitialStorage );
 
     virtual const sal_Char* SAL_CALL    getInfoFileName() const = 0;
@@ -340,21 +340,21 @@ protected:
     // Handle maLibInfoFileURL and maStorageURL correctly
     void checkStorageURL
     (
-        const ::rtl::OUString& aSourceURL,
-        ::rtl::OUString& aLibInfoFileURL,
-        ::rtl::OUString& aStorageURL,
-        ::rtl::OUString& aUnexpandedStorageURL
+        const OUString& aSourceURL,
+        OUString& aLibInfoFileURL,
+        OUString& aStorageURL,
+        OUString& aUnexpandedStorageURL
     );
-    ::rtl::OUString expand_url( const ::rtl::OUString& url )
+    OUString expand_url( const OUString& url )
         throw(::com::sun::star::uno::RuntimeException);
 
-    SfxLibrary* getImplLib( const String& rLibraryName );
+    SfxLibrary* getImplLib( const OUString& rLibraryName );
 
     void storeLibraries_Impl(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                             bool bComplete );
 
-    void SAL_CALL initializeFromDocumentURL( const ::rtl::OUString& _rInitialDocumentURL );
+    void SAL_CALL initializeFromDocumentURL( const OUString& _rInitialDocumentURL );
     void SAL_CALL initializeFromDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStorageBasedDocument >& _rxDocument );
 
     // OEventListenerAdapter
@@ -364,7 +364,7 @@ protected:
     virtual void SAL_CALL disposing();
 
 private:
-    void init_Impl( const ::rtl::OUString& rInitialDocumentURL,
+    void init_Impl( const OUString& rInitialDocumentURL,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxInitialStorage );
     void implScanExtensions( void );
 
@@ -391,13 +391,13 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
 
     // Methods XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw(::com::sun::star::uno::RuntimeException);
 
     // Members XStorageBasedLibraryContainer
@@ -413,53 +413,53 @@ public:
 
     // Methods XPersistentLibraryContainer (base of XStorageBasedLibraryContainer)
     virtual ::com::sun::star::uno::Any SAL_CALL getRootLocation() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getContainerLocationName() throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getContainerLocationName() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL storeLibraries(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     //Methods XLibraryContainer3
-    virtual ::rtl::OUString SAL_CALL getOriginalLibraryLinkURL( const ::rtl::OUString& Name )
+    virtual OUString SAL_CALL getOriginalLibraryLinkURL( const OUString& Name )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
 
     // Methods XLibraryContainer2 (base of XPersistentLibraryContainer)
-    virtual sal_Bool SAL_CALL isLibraryLink( const ::rtl::OUString& Name )
+    virtual sal_Bool SAL_CALL isLibraryLink( const OUString& Name )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getLibraryLinkURL( const ::rtl::OUString& Name )
+    virtual OUString SAL_CALL getLibraryLinkURL( const OUString& Name )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isLibraryReadOnly( const ::rtl::OUString& Name )
+    virtual sal_Bool SAL_CALL isLibraryReadOnly( const OUString& Name )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setLibraryReadOnly( const ::rtl::OUString& Name, sal_Bool bReadOnly )
+    virtual void SAL_CALL setLibraryReadOnly( const OUString& Name, sal_Bool bReadOnly )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL renameLibrary( const ::rtl::OUString& Name, const ::rtl::OUString& NewName )
+    virtual void SAL_CALL renameLibrary( const OUString& Name, const OUString& NewName )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::container::ElementExistException,
                ::com::sun::star::uno::RuntimeException);
 
     // Methods XLibraryContainer (base of XLibraryContainer2)
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL
-        createLibrary( const ::rtl::OUString& Name )
+        createLibrary( const OUString& Name )
             throw(::com::sun::star::lang::IllegalArgumentException,
                   ::com::sun::star::container::ElementExistException,
                   ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL createLibraryLink
-        ( const ::rtl::OUString& Name, const ::rtl::OUString& StorageURL, sal_Bool ReadOnly )
+        ( const OUString& Name, const OUString& StorageURL, sal_Bool ReadOnly )
             throw(::com::sun::star::lang::IllegalArgumentException,
                   ::com::sun::star::container::ElementExistException,
                   ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeLibrary( const ::rtl::OUString& Name )
+    virtual void SAL_CALL removeLibrary( const OUString& Name )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isLibraryLoaded( const ::rtl::OUString& Name )
+    virtual sal_Bool SAL_CALL isLibraryLoaded( const OUString& Name )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL loadLibrary( const ::rtl::OUString& Name )
+    virtual void SAL_CALL loadLibrary( const OUString& Name )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
@@ -471,19 +471,19 @@ public:
                    ::com::sun::star::uno::RuntimeException);
 
     // Methods XLibraryContainerPassword
-    virtual sal_Bool SAL_CALL isLibraryPasswordProtected( const ::rtl::OUString& Name )
+    virtual sal_Bool SAL_CALL isLibraryPasswordProtected( const OUString& Name )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isLibraryPasswordVerified( const ::rtl::OUString& Name )
+    virtual sal_Bool SAL_CALL isLibraryPasswordVerified( const OUString& Name )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL verifyLibraryPassword( const ::rtl::OUString& Name, const ::rtl::OUString& Password )
+    virtual sal_Bool SAL_CALL verifyLibraryPassword( const OUString& Name, const OUString& Password )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL changeLibraryPassword( const ::rtl::OUString& Name,
-        const ::rtl::OUString& OldPassword, const ::rtl::OUString& NewPassword )
+    virtual void SAL_CALL changeLibraryPassword( const OUString& Name,
+        const OUString& OldPassword, const OUString& NewPassword )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
@@ -497,24 +497,24 @@ public:
             throw (::com::sun::star::uno::RuntimeException);
 
     // Methods XLibraryContainerExport
-    virtual void SAL_CALL exportLibrary( const ::rtl::OUString& Name, const ::rtl::OUString& URL,
+    virtual void SAL_CALL exportLibrary( const OUString& Name, const OUString& URL,
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
             throw (::com::sun::star::uno::Exception,
                    ::com::sun::star::container::NoSuchElementException,
                    ::com::sun::star::uno::RuntimeException);
 
     // Methods XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName( )
+    virtual OUString SAL_CALL getImplementationName( )
         throw (::com::sun::star::uno::RuntimeException) = 0;
-    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames( )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
         throw (::com::sun::star::uno::RuntimeException) = 0;
     // Methods XVBACompatibility
     virtual ::sal_Bool SAL_CALL getVBACompatibilityMode() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getProjectName() throw (::com::sun::star::uno::RuntimeException) { return msProjectName; }
-    virtual void SAL_CALL setProjectName( const ::rtl::OUString& _projectname ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getProjectName() throw (::com::sun::star::uno::RuntimeException) { return msProjectName; }
+    virtual void SAL_CALL setProjectName( const OUString& _projectname ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getRunningVBAScripts()
             throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addVBAScriptListener(
@@ -523,7 +523,7 @@ public:
     virtual void SAL_CALL removeVBAScriptListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::script::vba::XVBAScriptListener >& Listener )
             throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL broadcastVBAScriptEvent( sal_Int32 nIdentifier, const ::rtl::OUString& rModuleName )
+    virtual void SAL_CALL broadcastVBAScriptEvent( sal_Int32 nIdentifier, const OUString& rModuleName )
             throw (::com::sun::star::uno::RuntimeException);
 };
 
@@ -571,11 +571,11 @@ class SfxLibrary
 
 private:
 
-    ::rtl::OUString maLibElementFileExtension;
-    ::rtl::OUString maLibInfoFileURL;
-    ::rtl::OUString maStorageURL;
-    ::rtl::OUString maUnexpandedStorageURL;
-    ::rtl::OUString maOriginalStorageURL;
+    OUString maLibElementFileExtension;
+    OUString maLibInfoFileURL;
+    OUString maStorageURL;
+    OUString maUnexpandedStorageURL;
+    OUString maOriginalStorageURL;
 
     sal_Bool mbLink;
     sal_Bool mbReadOnly;
@@ -585,7 +585,7 @@ private:
     sal_Bool mbPasswordProtected;
     sal_Bool mbPasswordVerified;
     bool mbDoc50Password;
-    ::rtl::OUString maPassword;
+    OUString maPassword;
 
     bool mbSharedIndexFile;
     bool mbExtension;
@@ -594,8 +594,8 @@ private:
     // Provide modify state including resources
     virtual sal_Bool isModified( void ) = 0;
     virtual void storeResources( void ) = 0;
-    virtual void storeResourcesAsURL( const ::rtl::OUString& URL, const ::rtl::OUString& NewName ) = 0;
-    virtual void storeResourcesToURL( const ::rtl::OUString& URL,
+    virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName ) = 0;
+    virtual void storeResourcesToURL( const OUString& URL,
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) = 0;
     virtual void storeResourcesToStorage( const ::com::sun::star::uno::Reference
         < ::com::sun::star::embed::XStorage >& xStorage ) = 0;
@@ -614,7 +614,7 @@ private:
     void    impl_checkLoaded();
 
 private:
-    void    impl_removeWithoutChecks( const ::rtl::OUString& _rElementName );
+    void    impl_removeWithoutChecks( const OUString& _rElementName );
 
 public:
     SfxLibrary(
@@ -628,8 +628,8 @@ public:
         const ::com::sun::star::uno::Type& aType,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSF,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 >& xSFI,
-        const ::rtl::OUString& aLibInfoFileURL,
-        const ::rtl::OUString&
+        const OUString& aLibInfoFileURL,
+        const OUString&
         aStorageURL,
         sal_Bool ReadOnly
     );
@@ -646,29 +646,29 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
 
     // Methods XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw(::com::sun::star::uno::RuntimeException);
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
+    virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
+    virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::container::ElementExistException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeByName( const ::rtl::OUString& Name )
+    virtual void SAL_CALL removeByName( const OUString& Name )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
@@ -697,7 +697,7 @@ public:
 
 public:
     struct LibraryContainerAccess { friend class SfxLibraryContainer; private: LibraryContainerAccess() { } };
-    void    removeElementWithoutChecks( const ::rtl::OUString& _rElementName, LibraryContainerAccess )
+    void    removeElementWithoutChecks( const OUString& _rElementName, LibraryContainerAccess )
     {
         impl_removeWithoutChecks( _rElementName );
     }
@@ -736,7 +736,7 @@ class ScriptExtensionIterator
 {
 public:
     ScriptExtensionIterator( void );
-    rtl::OUString nextBasicOrDialogLibrary( bool& rbPureDialogLib );
+    OUString nextBasicOrDialogLibrary( bool& rbPureDialogLib );
 
 protected:
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >

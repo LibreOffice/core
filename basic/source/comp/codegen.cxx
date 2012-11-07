@@ -135,7 +135,7 @@ void SbiCodeGen::Save()
         {
             for( int i = 0 ; i < nIfaceCount ; i++ )
             {
-                const String& rIfaceName = pParser->aIfaceVector[i];
+                const OUString& rIfaceName = pParser->aIfaceVector[i];
                 SbxVariable* pIfaceVar = new SbxVariable( SbxVARIANT );
                 pIfaceVar->SetName( rIfaceName );
                 SbxArray* pIfaces = rMod.pClassData->mxIfaces;
@@ -168,30 +168,31 @@ void SbiCodeGen::Save()
         SbiProcDef* pProc = pDef->GetProcDef();
         if( pProc && pProc->IsDefined() )
         {
-            String aProcName = pProc->GetName();
-            String aIfaceProcName;
-            String aIfaceName;
+            OUString aProcName = pProc->GetName();
+            OUString aIfaceProcName;
+            OUString aIfaceName;
             sal_uInt16 nPassCount = 1;
             if( nIfaceCount )
             {
-                int nPropPrefixFound =
-                    aProcName.Search( String( RTL_CONSTASCII_USTRINGPARAM("Property ") ) );
-                String aPureProcName = aProcName;
-                String aPropPrefix;
+                int nPropPrefixFound = aProcName.indexOf(OUString("Property "));
+                OUString aPureProcName = aProcName;
+                OUString aPropPrefix;
                 if( nPropPrefixFound == 0 )
                 {
-                    aPropPrefix = aProcName.Copy( 0, 13 );      // 13 == Len( "Property ?et " )
-                    aPureProcName = aProcName.Copy( 13 );
+                    aPropPrefix = aProcName.copy( 0, 13 );      // 13 == Len( "Property ?et " )
+                    aPureProcName = aProcName.copy( 13 );
                 }
                 for( int i = 0 ; i < nIfaceCount ; i++ )
                 {
-                    const String& rIfaceName = pParser->aIfaceVector[i];
-                    int nFound = aPureProcName.Search( rIfaceName );
-                    if( nFound == 0 && '_' == aPureProcName.GetChar( rIfaceName.Len() ) )
+                    const OUString& rIfaceName = pParser->aIfaceVector[i];
+                    int nFound = aPureProcName.indexOf( rIfaceName );
+                    if( nFound == 0 && '_' == aPureProcName[rIfaceName.getLength()] )
                     {
                         if( nPropPrefixFound == 0 )
+                        {
                             aIfaceProcName += aPropPrefix;
-                        aIfaceProcName += aPureProcName.Copy( rIfaceName.Len() + 1 );
+                        }
+                        aIfaceProcName += aPureProcName.copy( rIfaceName.getLength() + 1 );
                         aIfaceName = rIfaceName;
                         nPassCount = 2;
                         break;
@@ -211,34 +212,38 @@ void SbiCodeGen::Save()
                     SbxDataType ePropType = SbxEMPTY;
                     switch( ePropMode )
                     {
-                        case PROPERTY_MODE_GET:
-                            ePropType = pProc->GetType();
-                            break;
-                        case PROPERTY_MODE_LET:
+                    case PROPERTY_MODE_GET:
+                        ePropType = pProc->GetType();
+                        break;
+                    case PROPERTY_MODE_LET:
+                    {
+                        // type == type of first parameter
+                        ePropType = SbxVARIANT;     // Default
+                        SbiSymPool* pPool = &pProc->GetParams();
+                        if( pPool->GetSize() > 1 )
                         {
-                            // type == type of first parameter
-                            ePropType = SbxVARIANT;     // Default
-                            SbiSymPool* pPool = &pProc->GetParams();
-                            if( pPool->GetSize() > 1 )
+                            SbiSymDef* pPar = pPool->Get( 1 );
+                            if( pPar )
                             {
-                                SbiSymDef* pPar = pPool->Get( 1 );
-                                if( pPar )
-                                    ePropType = pPar->GetType();
+                                ePropType = pPar->GetType();
                             }
-                            break;
                         }
-                        case PROPERTY_MODE_SET:
-                            ePropType = SbxOBJECT;
-                            break;
-                        case PROPERTY_MODE_NONE:
-                            OSL_FAIL( "Illegal PropertyMode PROPERTY_MODE_NONE" );
-                            break;
+                        break;
                     }
-                    String aPropName = pProc->GetPropName();
+                    case PROPERTY_MODE_SET:
+                        ePropType = SbxOBJECT;
+                        break;
+                    case PROPERTY_MODE_NONE:
+                        OSL_FAIL( "Illegal PropertyMode PROPERTY_MODE_NONE" );
+                        break;
+                    }
+                    OUString aPropName = pProc->GetPropName();
                     if( nPass == 1 )
-                        aPropName = aPropName.Copy( aIfaceName.Len() + 1 );
+                    {
+                        aPropName = aPropName.copy( aIfaceName.getLength() + 1 );
+                    }
                     OSL_TRACE("*** getProcedureProperty for thing %s",
-                        rtl::OUStringToOString( aPropName,RTL_TEXTENCODING_UTF8 ).getStr() );
+                              rtl::OUStringToOString( aPropName,RTL_TEXTENCODING_UTF8 ).getStr() );
                     rMod.GetProcedureProperty( aPropName, ePropType );
                 }
                 if( nPass == 1 )
@@ -250,10 +255,11 @@ void SbiCodeGen::Save()
                     pMeth = rMod.GetMethod( aProcName, pProc->GetType() );
 
                     if( !pProc->IsPublic() )
+                    {
                         pMeth->SetFlag( SBX_PRIVATE );
-
+                    }
                     // Declare? -> Hidden
-                    if( pProc->GetLib().Len() > 0 )
+                    if( !pProc->GetLib().isEmpty())
                     {
                         pMeth->SetFlag( SBX_HIDDEN );
                     }
@@ -262,7 +268,7 @@ void SbiCodeGen::Save()
                     pMeth->nLine2 = pProc->GetLine2();
                     // The parameter:
                     SbxInfo* pInfo = pMeth->GetInfo();
-                    String aHelpFile, aComment;
+                    OUString aHelpFile, aComment;
                     sal_uIntPtr nHelpId = 0;
                     if( pInfo )
                     {
@@ -289,7 +295,7 @@ void SbiCodeGen::Save()
                             t = (SbxDataType) ( t | SbxARRAY );
                         }
                         // #33677 hand-over an Optional-Info
-                        sal_uInt16 nFlags = SBX_READ;
+                       sal_uInt16 nFlags = SBX_READ;
                         if( pPar->IsOptional() )
                         {
                             nFlags |= SBX_OPTIONAL;

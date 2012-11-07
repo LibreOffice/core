@@ -327,7 +327,7 @@ SbxBase* SbiRuntime::FindElementExtern( const OUString& rName )
             const SbxParamInfo* pParam = pInfo->GetParam( j );
             while( pParam )
             {
-                if( pParam->aName.EqualsIgnoreCaseAscii( rName ) )
+                if( pParam->aName.equalsIgnoreAsciiCase( rName ) )
                 {
                     if( j >= nParamCount )
                     {
@@ -372,7 +372,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
         sal_uInt16 nArgCount = refArgv->Count();
         for( i = 1 ; i < nArgCount ; i++ )
         {
-            if( refArgv->GetAlias( i ).Len() )
+            if( !refArgv->GetAlias(i).isEmpty() )
             {
                 bHasNamed = true; break;
             }
@@ -470,7 +470,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                         const SbxParamInfo* pParam = pInfo->GetParam( j );
                         while( pParam )
                         {
-                            if( pParam->aName.EqualsIgnoreCaseAscii( rName ) )
+                            if( pParam->aName.equalsIgnoreAsciiCase( rName ) )
                             {
                                 nCurPar = j;
                                 break;
@@ -664,8 +664,8 @@ void SbiRuntime::StepRTL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     PushVar( FindElement( rBasic.pRtl, nOp1, nOp2, SbERR_PROC_UNDEFINED, false ) );
 }
 
-void
-SbiRuntime::StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError nNotFound, bool bLocal, bool bStatic )
+void SbiRuntime::StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2,
+                                SbError nNotFound, bool bLocal, bool bStatic )
 {
     if( !refLocals )
     {
@@ -782,8 +782,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                 if( pParam && ( (pParam->nFlags & SBX_OPTIONAL) != 0 ) )
                 {
                     // Default value?
-                    sal_uInt16 nDefaultId = sal::static_int_cast< sal_uInt16 >(
-                        pParam->nUserData & 0xffff );
+                    sal_uInt16 nDefaultId = (sal_uInt16)(pParam->nUserData & 0x0ffff);
                     if( nDefaultId > 0 )
                     {
                         OUString aDefaultStr = pImg->GetString( nDefaultId );
@@ -980,7 +979,7 @@ void SbiRuntime::StepOPEN( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     SbxVariableRef pLen  = PopVar();
     short nBlkLen = pLen->GetInteger();
     short nChan   = pChan->GetInteger();
-    OString aName(rtl::OUStringToOString(pName->GetString(), osl_getThreadTextEncoding()));
+    OString aName(rtl::OUStringToOString(pName->GetOUString(), osl_getThreadTextEncoding()));
     pIosys->Open( nChan, aName, static_cast<short>( nOp1 ),
                   static_cast<short>( nOp2 ), nBlkLen );
     Error( pIosys->GetError() );
@@ -1190,7 +1189,7 @@ void SbiRuntime::implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt3
     if( bFixedString )
     {
         sal_uInt16 nCount = static_cast<sal_uInt16>( nOp2 >> 17 );      // len = all bits above 0x10000
-        rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         comphelper::string::padToLength(aBuf, nCount, 0);
         pVar->PutString(aBuf.makeStringAndClear());
     }

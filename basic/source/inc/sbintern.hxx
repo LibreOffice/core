@@ -40,10 +40,10 @@ class SbiFactory : public SbxFactory
 {
 public:
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const rtl::OUString& );
+    virtual SbxObject* CreateObject( const OUString& );
 };
 
-typedef ::std::vector< String > StringVector;
+typedef ::std::vector< OUString > StringVector;
 
 struct SbClassData
 {
@@ -73,9 +73,9 @@ public:
     void RemoveClassModule( SbModule* pClassModule );
 
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const rtl::OUString& );
+    virtual SbxObject* CreateObject( const OUString& );
 
-    SbModule* FindClass( const String& rClassName );
+    SbModule* FindClass( const OUString& rClassName );
 };
 
 struct SbiGlobals
@@ -93,12 +93,12 @@ struct SbiGlobals
     Link            aErrHdl;        // global error handler
     Link            aBreakHdl;      // global break handler
     SbError         nCode;
-    xub_StrLen      nLine;
-    xub_StrLen      nCol1,nCol2;    // from... to...
+    sal_Int32       nLine;
+    sal_Int32       nCol1,nCol2;    // from... to...
     bool            bCompiler;      // flag for compiler error
     bool            bGlobalInitErr;
     bool            bRunInit;       // true, if RunInit active from the Basic
-    String          aErrMsg;        // buffer for GetErrorText()
+    OUString        aErrMsg;        // buffer for GetErrorText()
     ::utl::TransliterationWrapper* pTransliterationWrapper;    // For StrComp
     bool            bBlockCompilerError;
     BasicManager*   pAppBasMgr;

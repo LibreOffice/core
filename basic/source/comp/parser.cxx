@@ -155,7 +155,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
 
 
 // part of the runtime-library?
-SbiSymDef* SbiParser::CheckRTLForSym( const String& rSym, SbxDataType eType )
+SbiSymDef* SbiParser::CheckRTLForSym( const OUString& rSym, SbxDataType eType )
 {
     SbxVariable* pVar = GetBasic()->GetRtl()->Find( rSym, SbxCLASS_DONTCARE );
     SbiSymDef* pDef = NULL;
@@ -495,8 +495,8 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
     SbiSymDef* pDef = aVar.GetRealVar();
     if( bEQ && pDef && pDef->GetScope() == SbRTL )
     {
-        String aRtlName = pDef->GetName();
-        if( aRtlName.EqualsIgnoreCaseAscii("Mid") )
+        OUString aRtlName = pDef->GetName();
+        if( aRtlName.equalsIgnoreAsciiCase("Mid") )
         {
             SbiExprNode* pExprNode = aVar.GetExprNode();
             if( pExprNode && pExprNode->GetNodeType() == SbxVARVAL )
@@ -588,7 +588,7 @@ void SbiParser::Set()
     if( eTok == NEW )
     {
         Next();
-        String aStr;
+        OUString aStr;
         SbiSymDef* pTypeDef = new SbiSymDef( aStr );
         TypeDecl( *pTypeDef, sal_True );
 
@@ -715,11 +715,11 @@ void SbiParser::Implements()
         return;
     }
 
-    String aImplementedIface = aSym;
+    OUString aImplementedIface = aSym;
     Next();
     if( Peek() == DOT )
     {
-        rtl::OUString aDotStr( '.' );
+        OUString aDotStr( '.' );
         while( Peek() == DOT )
         {
             aImplementedIface += aDotStr;
@@ -769,9 +769,11 @@ void SbiParser::Option()
             break;
         case PRIVATE:
         {
-            String aString = SbiTokenizer::Symbol(Next());
-            if( !aString.EqualsIgnoreCaseAscii("Module") )
+            OUString aString = SbiTokenizer::Symbol(Next());
+            if( !aString.equalsIgnoreAsciiCase("Module") )
+            {
                 Error( SbERR_EXPECTED, "Module" );
+            }
             break;
         }
         case COMPARE:
@@ -825,9 +827,9 @@ void SbiParser::Option()
     }
 }
 
-void addStringConst( SbiSymPool& rPool, const char* pSym, const String& rStr )
+void addStringConst( SbiSymPool& rPool, const char* pSym, const OUString& rStr )
 {
-    SbiConstDef* pConst = new SbiConstDef( rtl::OUString::createFromAscii( pSym ) );
+    SbiConstDef* pConst = new SbiConstDef( OUString::createFromAscii( pSym ) );
     pConst->SetType( SbxSTRING );
     pConst->Set( rStr );
     rPool.Add( pConst );
@@ -855,8 +857,7 @@ void SbiParser::AddConstants( void )
     addStringConst( aPublics, "vbVerticalTab", "\x0B" );
 
     // Force length 1 and make char 0 afterwards
-    String aNullCharStr( rtl::OUString(" ") );
-    aNullCharStr.SetChar( 0, 0 );
+    OUString aNullCharStr((sal_Unicode)0);
     addStringConst( aPublics, "vbNullChar", aNullCharStr );
 }
 

@@ -201,16 +201,16 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement( const Reference < 
         switch( aModInfo.ModuleType )
         {
         case ModuleType::NORMAL:
-            aMod.aModuleType = OUString( "normal" );
+            aMod.aModuleType = "normal";
             break;
         case ModuleType::CLASS:
-            aMod.aModuleType = OUString( "class" );
+            aMod.aModuleType ="class";
             break;
         case ModuleType::FORM:
-            aMod.aModuleType = OUString( "form" );
+            aMod.aModuleType = "form";
             break;
         case ModuleType::DOCUMENT:
-            aMod.aModuleType = OUString( "document" );
+            aMod.aModuleType = "document";
             break;
         case ModuleType::UNKNOWN:
             // nothing
@@ -544,13 +544,19 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
                                             INetURLObject::LAST_SEGMENT, sal_True,
                                             INetURLObject::ENCODE_ALL );
                 if( bKillUncryptedFiles )
+                {
                     aElementInetObj.setExtension( maLibElementFileExtension );
+                }
                 else
+                {
                     aElementInetObj.setExtension( OUString( "pba" ) );
-                String aElementPath( aElementInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                }
+                OUString aElementPath( aElementInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                 if( mxSFI->exists( aElementPath ) )
+                {
                     mxSFI->kill( aElementPath );
+                }
             }
         }
         catch(const Exception& ) {}

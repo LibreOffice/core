@@ -53,7 +53,7 @@ SbiExprNode::SbiExprNode( SbiParser* p, double n, SbxDataType t )
     nVal      = n;
 }
 
-SbiExprNode::SbiExprNode( SbiParser* p, const String& rVal )
+SbiExprNode::SbiExprNode( SbiParser* p, const OUString& rVal )
 {
     BaseInit( p );
 
@@ -256,8 +256,8 @@ void SbiExprNode::FoldConstants()
                 eType = SbxSTRING;
             if( eType == SbxSTRING )
             {
-                String rl( pLeft->GetString() );
-                String rr( pRight->GetString() );
+                OUString rl( pLeft->GetString() );
+                OUString rr( pRight->GetString() );
                 delete pLeft; pLeft = NULL;
                 delete pRight; pRight = NULL;
                 if( eTok == PLUS || eTok == CAT )
@@ -273,30 +273,31 @@ void SbiExprNode::FoldConstants()
                 {
                     eType = SbxDOUBLE;
                     eNodeType = SbxNUMVAL;
-                    StringCompare eRes = rr.CompareTo( rl );
+                    int eRes = rr.compareTo( rl );
                     switch( eTok )
                     {
-                        case EQ:
-                            nVal = ( eRes == COMPARE_EQUAL ) ? SbxTRUE : SbxFALSE;
-                            break;
-                        case NE:
-                            nVal = ( eRes != COMPARE_EQUAL ) ? SbxTRUE : SbxFALSE;
-                            break;
-                        case LT:
-                            nVal = ( eRes == COMPARE_LESS ) ? SbxTRUE : SbxFALSE;
-                            break;
-                        case GT:
-                            nVal = ( eRes == COMPARE_GREATER ) ? SbxTRUE : SbxFALSE;
-                            break;
-                        case LE:
-                            nVal = ( eRes != COMPARE_GREATER ) ? SbxTRUE : SbxFALSE;
-                            break;
-                        case GE:
-                            nVal = ( eRes != COMPARE_LESS ) ? SbxTRUE : SbxFALSE;
-                            break;
-                        default:
-                            pGen->GetParser()->Error( SbERR_CONVERSION );
-                            bError = true;
+                    case EQ:
+                        nVal = ( eRes == 0 ) ? SbxTRUE : SbxFALSE;
+                        break;
+                    case NE:
+                        nVal = ( eRes != 0 ) ? SbxTRUE : SbxFALSE;
+                        break;
+                    case LT:
+                        nVal = ( eRes < 0 ) ? SbxTRUE : SbxFALSE;
+                        break;
+                    case GT:
+                        nVal = ( eRes > 0 ) ? SbxTRUE : SbxFALSE;
+                        break;
+                    case LE:
+                        nVal = ( eRes <= 0 ) ? SbxTRUE : SbxFALSE;
+                        break;
+                    case GE:
+                        nVal = ( eRes >= 0 ) ? SbxTRUE : SbxFALSE;
+                        break;
+                    default:
+                        pGen->GetParser()->Error( SbERR_CONVERSION );
+                        bError = true;
+                        break;
                     }
                 }
             }

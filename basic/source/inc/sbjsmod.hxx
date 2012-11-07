@@ -33,7 +33,7 @@ class SbJScriptModule : public SbModule
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_JSCRIPTMOD,1);
     TYPEINFO();
-    SbJScriptModule( const String& );       // hand through
+    SbJScriptModule( const OUString& );       // hand through
 };
 
 #endif

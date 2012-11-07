@@ -19,9 +19,8 @@
 
 #ifndef _BUFFER_HXX
 #define _BUFFER_HXX
-
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include <tools/string.hxx>
 
 class SbiParser;
 
@@ -32,13 +31,13 @@ class SbiBuffer {
     sal_uInt32  nOff;
     sal_uInt32  nSize;
     short   nInc;
-    bool    Check( sal_uInt16 );
+    bool    Check( sal_Int32 );
 public:
     SbiBuffer( SbiParser*, short ); // increment
    ~SbiBuffer();
     void Patch( sal_uInt32, sal_uInt32 );
     void Chain( sal_uInt32 );
-    bool operator += (const String&);   // save basic-string
+    bool operator += (const OUString&); // save basic-string
     bool operator += (sal_Int8);        // save character
     bool operator += (sal_Int16);       // save integer
     bool operator += (sal_uInt8);       // save character
