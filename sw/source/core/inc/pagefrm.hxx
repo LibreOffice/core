@@ -182,7 +182,7 @@ public:
     virtual sal_Bool GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0 ) const;
         // erfrage vom Client Informationen
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const;
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );

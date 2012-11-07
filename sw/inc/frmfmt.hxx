@@ -183,7 +183,7 @@ public:
 
     virtual Graphic MakeGraphic( ImageMap* pMap = NULL );
 
-    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
+    virtual bool GetInfo( SfxPoolItem& rInfo ) const;
 
     const String GetObjTitle() const;
     void SetObjTitle( const String& rTitle,

@@ -489,7 +489,7 @@ public:
     SwTOXBase( const SwTOXBase& rCopy, SwDoc* pDoc = 0 );
     virtual ~SwTOXBase();
 
-    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
+    virtual bool GetInfo( SfxPoolItem& rInfo ) const;
 
     // a kind of CopyCtor - check if the TOXBase is at TOXType of the doc.
     // If not, so create it an copy all other used things. The return is this

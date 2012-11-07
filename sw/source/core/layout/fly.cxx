@@ -1148,11 +1148,11 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 *************************************************************************/
 
     // erfrage vom Modify Informationen
-sal_Bool SwFlyFrm::GetInfo( SfxPoolItem & rInfo ) const
+bool SwFlyFrm::GetInfo( SfxPoolItem & rInfo ) const
 {
     if( RES_AUTOFMT_DOCNODE == rInfo.Which() )
-        return sal_False;   // es gibt einen FlyFrm also wird er benutzt
-    return sal_True;        // weiter suchen
+        return false;   // es gibt einen FlyFrm also wird er benutzt
+    return true;        // weiter suchen
 }
 
 /*************************************************************************

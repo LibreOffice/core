@@ -126,9 +126,9 @@ void SwFmtDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
     }
 }
 
-sal_Bool SwFmtDrop::GetInfo( SfxPoolItem& ) const
+bool SwFmtDrop::GetInfo( SfxPoolItem& ) const
 {
-    return sal_True;    // weiter
+    return true;    // weiter
 }
 
 int SwFmtDrop::operator==( const SfxPoolItem& rAttr ) const

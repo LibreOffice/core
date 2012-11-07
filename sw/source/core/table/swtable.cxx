@@ -1951,7 +1951,7 @@ sal_uLong SwTableBox::GetSttIdx() const
 }
 
     // retrieve informations from the client
-sal_Bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
+bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
     {
@@ -1966,7 +1966,7 @@ sal_Bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
                 ((SwAutoFmtGetDocNode&)rInfo).pCntntNode =
                                 GetFrmFmt()->GetDoc()->GetNodes().GoNext( &aIdx );
             }
-            return sal_False;
+            return false;
         }
         break;
     }
@@ -1983,9 +1983,9 @@ sal_Bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
         {
             ((SwPtrMsgPoolItem&)rInfo).pObject = SwIterator<SwFrm,SwFmt>::FirstElement( *GetFrmFmt() );
         }
-        return sal_False;
+        return false;
     }
-    return sal_True;
+    return true;
 }
 
 SwTable * SwTable::FindTable( SwFrmFmt const*const pFmt )

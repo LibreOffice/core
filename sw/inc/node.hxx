@@ -440,7 +440,7 @@ public:
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const = 0;
 
     /// Get information from Client.
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const;
 
     /// SS for PoolItems: hard attributation.
 

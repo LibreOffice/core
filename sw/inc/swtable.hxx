@@ -313,7 +313,7 @@ public:
                             SwSelBoxes& rBoxes, sal_Bool bToTop = sal_True ) const;
 
     // Get information from client.
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const;
 
     // Search in format for registered table.
     static SwTable * FindTable( SwFrmFmt const*const pFmt );

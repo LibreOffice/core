@@ -752,14 +752,14 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 |*
 *************************************************************************/
     // erfrage vom Modify Informationen
-sal_Bool SwPageFrm::GetInfo( SfxPoolItem & rInfo ) const
+bool SwPageFrm::GetInfo( SfxPoolItem & rInfo ) const
 {
     if( RES_AUTOFMT_DOCNODE == rInfo.Which() )
     {
         // es gibt einen PageFrm also wird er benutzt
-        return sal_False;
+        return false;
     }
-    return sal_True;        // weiter suchen
+    return true;        // weiter suchen
 }
 
 /*************************************************************************

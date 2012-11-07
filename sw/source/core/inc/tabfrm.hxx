@@ -127,7 +127,7 @@ public:
     inline       SwTabFrm *GetFollow();
     SwTabFrm* FindMaster( bool bFirstMaster = false ) const;
 
-    virtual sal_Bool GetInfo( SfxPoolItem &rHnt ) const;
+    virtual bool GetInfo( SfxPoolItem &rHnt ) const;
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
     virtual void  CheckDirection( sal_Bool bVert );

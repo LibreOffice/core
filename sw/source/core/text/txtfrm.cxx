@@ -1358,7 +1358,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         CalcFtnFlag();
 }
 
-sal_Bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
+bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
 {
     if ( RES_VIRTPAGENUM_INFO == rHnt.Which() && IsInDocBody() && ! IsFollow() )
     {
@@ -1371,7 +1371,7 @@ sal_Bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
                 //Das sollte er sein (kann allenfalls temporaer anders sein,
                 //                    sollte uns das beunruhigen?)
                 rInfo.SetInfo( pPage, this );
-                return sal_False;
+                return false;
             }
             if ( pPage->GetPhyPageNum() < rInfo.GetOrigPage()->GetPhyPageNum() &&
                  (!rInfo.GetPage() || pPage->GetPhyPageNum() > rInfo.GetPage()->GetPhyPageNum()))
@@ -1381,7 +1381,7 @@ sal_Bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
             }
         }
     }
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************

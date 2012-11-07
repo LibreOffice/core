@@ -119,9 +119,9 @@ void SwFmtCharFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
 
 // weiterleiten an das TextAttribut
-sal_Bool SwFmtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
+bool SwFmtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
-    return pTxtAttr ? pTxtAttr->GetInfo( rInfo ) : sal_False;
+    return pTxtAttr ? pTxtAttr->GetInfo( rInfo ) : false;
 }
 bool SwFmtCharFmt::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {

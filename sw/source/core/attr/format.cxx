@@ -539,10 +539,9 @@ sal_uInt16 SwFmt::ResetAllFmtAttr()
     return aNew.Count();
 }
 
-sal_Bool SwFmt::GetInfo( SfxPoolItem& rInfo ) const
+bool SwFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
-    sal_Bool bRet = SwModify::GetInfo( rInfo );
-    return bRet;
+    return SwModify::GetInfo( rInfo );
 }
 
 void SwFmt::DelDiffs( const SfxItemSet& rSet )

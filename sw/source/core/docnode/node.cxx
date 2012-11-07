@@ -1309,7 +1309,7 @@ SwCntntNode *SwCntntNode::JoinPrev()
 
 
 // Get info from Modify
-sal_Bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
+bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
     {
@@ -1317,21 +1317,21 @@ sal_Bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
         if( &GetNodes() == ((SwAutoFmtGetDocNode&)rInfo).pNodes )
         {
             ((SwAutoFmtGetDocNode&)rInfo).pCntntNode = this;
-            return sal_False;
+            return false;
         }
         break;
 
     case RES_FINDNEARESTNODE:
         if( ((SwFmtPageDesc&)GetAttr( RES_PAGEDESC )).GetPageDesc() )
             ((SwFindNearestNode&)rInfo).CheckNode( *this );
-        return sal_True;
+        return true;
 
     case RES_CONTENT_VISIBLE:
         {
             ((SwPtrMsgPoolItem&)rInfo).pObject =
                 SwIterator<SwFrm,SwCntntNode>::FirstElement(*this);
         }
-        return sal_False;
+        return false;
     }
 
     return SwModify::GetInfo( rInfo );

@@ -51,7 +51,7 @@ public:
     virtual ~SwTxtINetFmt();
     TYPEINFO();
 
-    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
+    virtual bool GetInfo( SfxPoolItem& rInfo ) const;
 
     SW_DLLPRIVATE void InitINetFmt(SwTxtNode & rNode);
 

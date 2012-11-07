@@ -238,7 +238,7 @@ public:
     void SetPoolHlpFileId( sal_uInt8 nId )  { aMaster.SetPoolHlpFileId( nId ); }
 
     /// Query information from Client.
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const;
 
     const SwFrmFmt* GetPageFmtOfNode( const SwNode& rNd,
                                     sal_Bool bCheckForThisPgDc = sal_True ) const;

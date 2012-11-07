@@ -118,7 +118,7 @@ public:
     TYPEINFO();
 
     // get information about attribute
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const;
 };
 
 inline SwClient::SwClient() :
@@ -165,7 +165,7 @@ public:
     const SwClient* GetDepends() const  { return pRoot; }
 
     // get information about attribute
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const;
 
     void LockModify()                   { bModifyLocked = sal_True;  }
     void UnlockModify()                 { bModifyLocked = sal_False; }
@@ -199,7 +199,7 @@ public:
     SwClient* GetToTell() { return pToTell; }
 
     /** get Client information */
-    virtual sal_Bool GetInfo( SfxPoolItem & ) const;
+    virtual bool GetInfo( SfxPoolItem & ) const;
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue );
     virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint );

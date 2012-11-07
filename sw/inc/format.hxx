@@ -81,7 +81,7 @@ public:
 
 
     /// Query format information.
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const;
 
     /// Copy attributes even among documents.
     void CopyAttrs( const SwFmt&, sal_Bool bReplace=sal_True );

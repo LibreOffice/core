@@ -2327,7 +2327,7 @@ void SwTOXBase::SetAttrSet( const SfxItemSet& rSet )
         pSect->GetFmt()->SetFmtAttr( rSet );
 }
 
-sal_Bool SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
+bool SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
     {
@@ -2337,9 +2337,9 @@ sal_Bool SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
             if( pSect && pSect->GetFmt() )
                 pSect->GetFmt()->GetInfo( rInfo );
         }
-        return sal_False;
+        return false;
     }
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

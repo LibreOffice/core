@@ -856,7 +856,7 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 }
 
 // Get info from the Format
-sal_Bool SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
+bool SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
     {
@@ -867,7 +867,7 @@ sal_Bool SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
             if( pNd )
                 ((SwFindNearestNode&)rInfo).CheckNode( *pNd );
         }
-        return sal_True;
+        return true;
 
     case RES_CONTENT_VISIBLE:
         {
@@ -885,7 +885,7 @@ sal_Bool SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
             }
             ((SwPtrMsgPoolItem&)rInfo).pObject = pFrm;
         }
-        return sal_False;
+        return false;
     }
     return SwModify::GetInfo( rInfo );
 }
