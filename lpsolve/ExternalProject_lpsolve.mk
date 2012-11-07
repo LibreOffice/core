@@ -11,8 +11,6 @@ $(eval $(call gb_ExternalProject_ExternalProject,lpsolve))
 
 $(eval $(call gb_ExternalProject_use_unpacked,lpsolve,lpsolve))
 
-$(eval $(call gb_ExternalProject_use_package,lpsolve,hunspell))
-
 $(eval $(call gb_ExternalProject_register_targets,lpsolve,\
 	build \
 ))
