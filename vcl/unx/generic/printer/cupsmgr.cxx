@@ -286,7 +286,7 @@ void CUPSManager::initialize()
         m_bUseIncludeFeature = true;
         bUsePDF = true;
         if( m_aGlobalDefaults.m_nPSLevel == 0 && m_aGlobalDefaults.m_nPDFDevice == 0 )
-            m_aGlobalDefaults.m_nPDFDevice = 1;
+            m_aGlobalDefaults.m_nPSLevel = 2;
     }
     // do not send include JobPatch; CUPS will insert that itself
     // TODO: currently unknown which versions of CUPS insert JobPatches
@@ -352,7 +352,7 @@ void CUPSManager::initialize()
             aPrinter.m_aInfo.m_aContext = c_it->second;
         }
         if( bUsePDF && aPrinter.m_aInfo.m_nPSLevel == 0 && aPrinter.m_aInfo.m_nPDFDevice == 0 )
-            aPrinter.m_aInfo.m_nPDFDevice = 1;
+            aPrinter.m_aInfo.m_nPSLevel = 2;
         aPrinter.m_aInfo.m_aDriverName = aBuf.makeStringAndClear();
         aPrinter.m_bModified = false;
 
