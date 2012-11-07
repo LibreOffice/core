@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -19,42 +20,14 @@
 #ifndef __com_sun_star_drawing_XSlidePreviewCache_idl__
 #define __com_sun_star_drawing_XSlidePreviewCache_idl__
 
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
-#ifndef __com_sun_star_geometry_IntegerSize2D_idl__
 #include <com/sun/star/geometry/IntegerSize2D.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_rendering_XBitmap_idl__
 #include <com/sun/star/rendering/XBitmap.idl>
-#endif
-#ifndef __com_sun_star_rendering_XCanvas_idl__
 #include <com/sun/star/rendering/XCanvas.idl>
-#endif
+#include <com/sun/star/drawing/XSlidePreviewCacheListener.idl>
 
 module com { module sun { module star { module drawing {
-
-/** Listener for asynchronous preview creations.  Called when a slide
-    preview has been created that was previously requested via a call to
-    <method>XSlidePreviewCache::getSlidePreview()</method>.  The
-    implementor may then call <method>getSlidePreview()</method> a second
-    time to get the up-to-date version of the preview.
-*/
-published interface XSlidePreviewCacheListener
-{
-    /** Called by a <interface>XSlidePreviewCache</interface> object when a
-        preview has been created for the slide with the given index.
-        @param nSlideIndex
-            The index of the slide for which a new preview has been created.
-    */
-    void notifyPreviewCreation ([in] long nSlideIndex);
-};
-
-
-
 
 /** A cache of preview bitmaps for the slides of one Impress or Draw
     document in one size.  There may be more than one cache for one
@@ -67,7 +40,7 @@ published interface XSlidePreviewCacheListener
     order to allow multiple references to a single slide (custom
     presentations).
 */
-published interface XSlidePreviewCache
+interface XSlidePreviewCache
 {
     /** Set the set of slides for which the cache will provide the
         previews.  All slides in the given XIndexAccess are required to come
@@ -131,3 +104,5 @@ published interface XSlidePreviewCache
 }; }; }; }; // ::com::sun::star::drawing
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
