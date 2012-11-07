@@ -73,9 +73,9 @@ CONFIGURE_FLAGS+= --disable-introspection
 CONFIGURE_FLAGS+= LIBXML2_CFLAGS='-I$(SOLARINCDIR)/external'
 .IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
 CONFIGURE_FLAGS+= LIBXML2_LIBS='$(SOLARLIBDIR)/libxml2.lib'
-CC:=$(CC) -MD
+CC!:=$(CC) -MD
 .IF "$(debug)"=="TRUE"
-CC:=$(CC) -Zi
+CC!:=$(CC) -Zi
 .ENDIF
 .ELSE
 CONFIGURE_FLAGS+= LIBXML2_LIBS='-L$(SOLARLIBDIR) -lxml2'
