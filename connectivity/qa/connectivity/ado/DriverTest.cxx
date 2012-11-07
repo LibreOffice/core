@@ -65,10 +65,8 @@ void AdoDriverTest::setUp()
     m_xAdoComponent = getMultiServiceFactory()->createInstance("com.sun.star.comp.sdbc.ado.ODriver");
     CPPUNIT_ASSERT_MESSAGE("no ado component!", m_xAdoComponent.is());
 
-    // is this the best way to pass test file through URL?
-    // may be take a custom Sequence< PropertyValue > route?
     OUString url = OUString("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=") +
-        getPathFromSrc("/connectivity/qa/connectivity/ado/TS001018407.mdb");
+        getPathFromWorkdir("/CppunitTest/TS001018407.mdb");
 
     Sequence< PropertyValue > info;
     Reference< XDriver> xDriver(m_xAdoComponent, UNO_QUERY);
