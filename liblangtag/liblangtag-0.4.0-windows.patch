@@ -293,6 +293,19 @@
  }
  
  static void
+--- misc/liblangtag-0.4.0/liblangtag/lt-string.c
++++ misc/build/liblangtag-0.4.0/liblangtag/lt-string.c
+@@ -302,8 +302,10 @@
+ 	lt_return_val_if_fail (string != NULL, NULL);
+ 	lt_return_val_if_fail (path != NULL, string);
+ 
++#ifndef _WIN32
+ 	if (lt_string_length(string) == 0 && path[0] != LT_DIR_SEPARATOR)
+ 		lt_string_append(string, LT_DIR_SEPARATOR_S);
++#endif
+ 
+ 	va_start(ap, path);
+ 	p = path;
 --- misc/liblangtag-0.4.0/liblangtag/lt-tag.c
 +++ misc/build/liblangtag-0.4.0/liblangtag/lt-tag.c
 @@ -15,9 +15,15 @@
