@@ -49,6 +49,11 @@ inline bool IsAmbiguousScriptNonZero( sal_uInt8 nScript )
              nScript != 0 );
 }
 
+ScNeededSizeOptions::ScNeededSizeOptions() :
+    pPattern(NULL), bFormula(false), bSkipMerged(true), bGetFont(true), bTotalSize(false)
+{
+}
+
 ScColumn::ScColumn() :
     nCol( 0 ),
     pAttrArray( NULL ),

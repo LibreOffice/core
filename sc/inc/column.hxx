@@ -67,14 +67,7 @@ struct ScNeededSizeOptions
     bool                bGetFont;
     bool                bTotalSize;
 
-    ScNeededSizeOptions()
-    {
-        pPattern = NULL;
-        bFormula = false;
-        bSkipMerged = true;
-        bGetFont = true;
-        bTotalSize = false;
-    }
+    ScNeededSizeOptions();
 };
 
 struct ColEntry
@@ -82,7 +75,6 @@ struct ColEntry
     SCROW       nRow;
     ScBaseCell* pCell;
 };
-
 
 class ScColumn
 {
