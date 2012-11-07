@@ -24,8 +24,6 @@ $(eval $(call gb_Library_use_packages,svgio,\
 	svgio_inc \
 ))
 
-$(eval $(call gb_Library_add_precompiled_header,svgio,$(SRCDIR)/svgio/inc/pch/precompiled_svgio))
-
 $(eval $(call gb_Library_use_sdk_api,svgio))
 
 $(eval $(call gb_Library_add_defs,svgio,\
