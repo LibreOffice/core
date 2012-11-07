@@ -8,12 +8,11 @@
     </display-name>
     <version value="0.2rc2" />
     <publisher>
-        <name lang="en" xlink:href="http://www.numbertext.org/logo">László Németh</name>
+        <name lang="en-US" xlink:href="http://www.numbertext.org/logo">László Németh</name>
         <name lang="hu" xlink:href="http://www.numbertext.org/logo">Németh László</name>
     </publisher>
     <extension-description>
-        <src lang="en" xlink:href="description-en.txt" />
-        <src lang="hu" xlink:href="description-hu.txt" />
+        <src lang="en-US" xlink:href="description-en-US.txt" />
     </extension-description>
     <dependencies>
         <OpenOffice.org-minimal-version value="3.2" d:name="OpenOffice.org 3.2" />

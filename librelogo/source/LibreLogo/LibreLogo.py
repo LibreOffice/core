@@ -6,7 +6,7 @@ import threading, time as __time__
 
 ctx = uno.getComponentContext()
 __lngpath__ = re.sub("[\w_.]*$", "", ctx.ServiceManager.createInstanceWithContext("org.openoffice.LibreLogo.LibreLogoDummy", ctx).get_path())
-__translang__ = "cz|de|dk|en|es|fr|hu|it|nl|no|pl|pt|ru|se|sl" # FIXME supported languages for language guessing, expand this list, according to the localizations
+__translang__ = "cz|de|dk|en_US|es|fr|hu|it|nl|no|pl|pt|ru|se|sl" # FIXME supported languages for language guessing, expand this list, according to the localizations
 __lng__ = {}
 __docs__ = {}
 __prevcode__ = None
@@ -118,7 +118,7 @@ def __l12n__(lng):
         return __lng__[lng]
     except:
         try:
-            __lng__[lng] = dict([[i.split("=")[0].strip(), i.split("=")[1].strip().decode("unicode-escape")] for i in open(__lngpath__ + lng + ".properties", 'r').readlines() if "=" in i])
+            __lng__[lng] = dict([[i.split("=")[0].strip(), i.split("=")[1].strip().decode("unicode-escape")] for i in open(__lngpath__ + "LibreLogo_" + lng + ".properties", 'r').readlines() if "=" in i])
             return __lng__[lng]
         except:
             return None
@@ -281,7 +281,7 @@ def __translate__(arg = None):
         if not lang:
             lang = __l12n__(_.lng)
             if not lang:
-                lang = __l12n__("en")
+                lang = __l12n__("en_US")
 
     lq = '\'' + lang['LEFTSTRING'].replace("|", "")
     rq = '\'' + lang['RIGHTSTRING'].replace("|", "")
@@ -521,7 +521,7 @@ def __setlang__():
         if not __l12n__(_.lng):
             _.lng = loc.Language
             if not __l12n__(_.lng):
-                _.lng = "en"
+                _.lng = "en_US"
 
 def run(arg=None, arg2 = -1):
     global _, __thread__, __halt__, _, __prevcode__, __prevlang__, __prevcompiledcode__

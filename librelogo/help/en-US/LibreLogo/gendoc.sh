@@ -1,3 +1,0 @@
-#!/bin/sh
-cat doc.txt | awk 'BEGIN{system("cat head")}/^ /{code = code $0 "<br/>";next}{if (code != ""){print "<paragraph role=\"code\">" gensub(" ", "\\&#160;", "g", code) "</paragraph>";code=""}}/^=+/{l=length($1);print "<paragraph role=\"heading\" level=\"" l "\">"substr($0, l+2, length($0)-l*2-2)"</paragraph>";next}/^[{][|]/{print "<table><tablerow>";next}/^[|]}/{print "</tablerow></table>";next}/^[|]-/{print "</tablerow><tablerow>";next}/^[|]/{print "<tablecell>"gensub("^.*[|]","","g")"</tablecell>";next}{print "<paragraph role=\"paragraph\">" $0 "</paragraph>" }END{print "</body></helpdocument>"}' >LibreLogo.xhp
-

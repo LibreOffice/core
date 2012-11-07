@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<helpdocument version="1.0">
+<meta>
+<topic id="LibreLogo" indexer="include" status="PUBLISH">
+<title id="title">LibreLogo</title>
+<filename>/org.openoffice.comp.pyuno.LibreLogo/LibreLogo.xhp</filename>
+</topic>
+</meta>
+<body>
+
+<bookmark xml-lang="en-US" branch="index" id="bm1">
+<bookmark_value>LibreLogo</bookmark_value>
+<bookmark_value>Logo</bookmark_value>
+<bookmark_value>Turtle graphics</bookmark_value>
+</bookmark>
+
+<paragraph role="heading" level="1" xml-lang="en-US" id="hd_170">LibreLogo</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_180">LibreLogo is a simple, native, Logo-like programming environment with turtle vector graphics for teaching of computing (programming and word processing), DTP and graphic design. See http://www.numbertext.org/logo/librelogo.pdf.</paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_220">LibreLogo toolbar</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_230">The LibreLogo toolbar (View » Toolbars » Logo) contains turtle moving, program run and stop, home and clear screen and syntax highlighting/translating icons and an input bar (command line).</paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_240">Turtle moving icons</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_250">They are equivalents of the Logo commands “FORWARD 10”, “BACK 10”, “LEFT 15”, “RIGHT 15”. Clicking on one of the icons will also focus the turtle shape scrolling the page to its position.</paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_280">Program run and start</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_290">Click on the icon “run” to execute the text of the Writer document as a LibreLogo program.</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_300">Click on the icon “stop” to stop the program execution.</paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_310">Home</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_320">Click on the icon “home” to reset the position and settings of the turtle.</paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_330">Clear screen</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_340">Click on the icon “clear screen” to remove the drawing objects of the document.</paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_350">Command line</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_360">Hit Enter in the command line to execute its content. To stop the program use the icon “stop”.</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_370">Hold down the Enter to repeat the command line, for example, on the following command sequence:</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_380">&#160;FORWARD&#160;200&#160;LEFT&#160;89<br/></paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_390">To reset the command line click triple in it or press Ctrl-A to select the previous commands, and type the new commands.</paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_400">Syntax highlighting/Translating</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_410">It expands and upper case Logo commands in the Writer document. Change the language of the document (Tools » Options » Language Settings » Languages » Western) and click on this icon to translate the Logo program to the selected language.</paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_420">Program editing</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_430">LibreLogo drawings and programs use the same Writer document. The LibreLogo canvas is on the first page of the Writer document. You can insert a page break before the LibreLogo programs and set the zoom/font size for a comfortable two page layout for LibreLogo programming: left (first) page is the canvas, right (second) page is for the LibreLogo programs.</paragraph>
+<paragraph role="heading" level="1" xml-lang="en-US" id="hd_440">LibreLogo programming language</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_450">LibreLogo is a native, easily localisable, Logo-like programming language. It is back-compatible with the older Logo systems in the case of the simple Logo programs used in education, eg.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_460">&#160;TO&#160;triangle&#160;:size<br/>&#160;REPEAT&#160;3&#160;[<br/>&#160;&#160;&#160;FORWARD&#160;:size<br/>&#160;&#160;&#160;LEFT&#160;120<br/>&#160;]<br/>&#160;END<br/>&#160;<br/>&#160;triangle&#160;10&#160;triangle&#160;100&#160;triangle&#160;200<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_470">Differences from the Logo programming language</paragraph>
+<list type="unordered">
+    <listitem>
+        <paragraph role="listitem" xml-lang="en-US" id="par_480">List members are comma separated: POSITION [0, 0]</paragraph>
+    </listitem>
+    <listitem>
+        <paragraph role="listitem" xml-lang="en-US" id="par_490">Program blocks and lists are different</paragraph>
+    </listitem>
+    <listitem>
+        <list type="unordered">
+            <listitem>
+                <paragraph role="listitem" xml-lang="en-US" id="par_500">Program blocks need space or new line at parenthesization: REPEAT 10 [ forward 10 left 36 ]</paragraph>
+            </listitem>
+            <listitem>
+                <paragraph role="listitem" xml-lang="en-US" id="par_510">Lists need close parenthesization: POSITION [0, 0], and not POSITION [ 0, 0 ]</paragraph>
+            </listitem>
+        </list>
+    </listitem>
+    <listitem>
+        <paragraph role="listitem" xml-lang="en-US" id="par_520">1-line function declarations have not supported yet (TO and END need new lines).</paragraph>
+    </listitem>
+</list>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_530">Other features of LibreLogo</paragraph>
+<list type="unordered">
+    <listitem>
+        <paragraph role="listitem" xml-lang="en-US" id="par_540">The colon is optional before the variables (like in the Berkeley Logo)</paragraph>
+        <paragraph role="code" xml-lang="en-US" id="par_550">&#160;TO&#160;triangle&#160;size<br/>&#160;&#160;&#160;REPEAT&#160;3&#160;[&#160;FORWARD&#160;size&#160;LEFT&#160;120&#160;]<br/>&#160;END<br/></paragraph>
+    </listitem>
+    <listitem>
+        <paragraph role="paragraph" xml-lang="en-US" id="par_560">String notation supports also orthographical and Python syntax:</paragraph>
+        <paragraph role="code" xml-lang="en-US" id="par_570">&#160;PRINT&#160;"word"	;&#160;original&#160;Logo&#160;syntax<br/>&#160;PRINT&#160;“Arbitrary&#160;text.”	;&#160;orthography,&#160;Writer<br/>&#160;PRINT&#160;'Arbitrary&#160;text.'	;&#160;Python&#160;syntax<br/></paragraph>
+    </listitem>
+    <listitem>
+        <paragraph role="paragraph" xml-lang="en-US" id="par_580">Python list and string handling</paragraph>
+        <paragraph role="code" xml-lang="en-US" id="par_590">&#160;PRINT&#160;“text”[2]		;&#160;print&#160;“x”<br/>&#160;PRINT&#160;“text”[1:3]		;&#160;print&#160;“ex”<br/></paragraph>
+    </listitem>
+    <listitem>
+        <paragraph role="paragraph" xml-lang="en-US" id="par_600">Python-like FOR loop</paragraph>
+    </listitem>
+    <listitem>
+        <paragraph role="paragraph" xml-lang="en-US" id="par_610">Python-like variable declaration:</paragraph>
+        <paragraph role="code" xml-lang="en-US" id="par_620">&#160;x&#160;=&#160;15<br/>&#160;PRINT&#160;x<br/></paragraph>
+    </listitem>
+    <listitem>
+        <paragraph role="paragraph" xml-lang="en-US" id="par_630">There are no extra query functions:</paragraph>
+        <paragraph role="code" xml-lang="en-US" id="par_640">&#160;PRINT&#160;FILLCOLOR<br/>&#160;p&#160;=&#160;POSITION<br/>&#160;PRINT&#160;p<br/>&#160;REPEAT&#160;10&#160;[&#160;POSITION&#160;ANY&#160;POSITION&#160;p&#160;]<br/></paragraph>
+    </listitem>
+    <listitem>
+        <paragraph role="paragraph" xml-lang="en-US" id="par_650">Alternative parenthesization in function calls</paragraph>
+        <paragraph role="code" xml-lang="en-US" id="par_660">&#160;TO&#160;star&#160;size&#160;color<br/>&#160;FILLCOLOR&#160;color<br/>&#160;REPEAT&#160;5&#160;[&#160;LEFT&#160;72&#160;FORWARD&#160;size&#160;RIGHT&#160;144&#160;FORWARD&#160;size&#160;]<br/>&#160;FILL<br/>&#160;END<br/>&#160;<br/>&#160;star&#160;100&#160;“red”<br/>&#160;star&#160;(100,&#160;“green”)<br/>&#160;star(100,&#160;“blue”)<br/></paragraph>
+    </listitem>
+</list>
+<paragraph role="heading" level="1" xml-lang="en-US" id="hd_670">LibreLogo commands</paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_680">Basic syntax</paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_690">Case sensitivity</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_700">Commands, color constants are case insensitive:</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_710">&#160;PRINT&#160;“Hello,&#160;World!”<br/>&#160;print&#160;“Hello,&#160;World,&#160;again!”<br/></paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_720">Variable names are case sensitive:</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_730">&#160;a&#160;=&#160;5<br/>&#160;A&#160;=&#160;7<br/>&#160;PRINT&#160;a<br/>&#160;PRINT&#160;A<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_740">Program lines</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_750">Lines of a LibreLogo program are paragraphs in the LibreOffice Writer document. A program line can contain multiple commands:</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_760">&#160;PRINT&#160;“Hello,&#160;World!”&#160;PRINT&#160;“LibreLogo”<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_770">Comments</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_780">Lines or line parts are comments from a semicolon to the end of the line (paragraph):</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_790">&#160;;&#160;some&#160;comments<br/>&#160;PRINT&#160;5&#160;*&#160;5	;&#160;some&#160;comments<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_800">Break program lines to multiple paragraphs</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_810">It’s possible to break a program line for more paragraphs using the character tilde at the end of the line:</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_820">&#160;PRINT&#160;“This&#160;is&#160;a&#160;very&#160;long&#160;”&#160;+&#160;~<br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160;“warning&#160;message”<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_830">Turtle moving</paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_840">FORWARD (fd)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_850">&#160;FORWARD&#160;10	;&#160;move&#160;forward&#160;10pt&#160;(1pt&#160;=&#160;1/72&#160;inch)<br/>&#160;FORWARD&#160;10pt	;&#160;see&#160;above<br/>&#160;FORWARD&#160;0.5in	;&#160;move&#160;forward&#160;0.5&#160;inch&#160;(1&#160;inch&#160;=&#160;2.54&#160;cm)<br/>&#160;FORWARD&#160;1"	;&#160;see&#160;above<br/>&#160;FD&#160;1mm<br/>&#160;FD&#160;1cm<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_860">BACK (bk)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_870">&#160;BACK&#160;10&#160;;&#160;move&#160;back&#160;10pt<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_880">LEFT (lt)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_890">&#160;LEFT&#160;90	;&#160;turn&#160;counterclockwise&#160;90&#160;degrees<br/>&#160;LEFT&#160;90°	;&#160;see&#160;above<br/>&#160;LT&#160;3h		;&#160;see&#160;above&#160;(clock&#160;position)<br/>&#160;LT&#160;any		;&#160;turn&#160;to&#160;a&#160;random&#160;position<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_900">RIGHT (rt)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_910">&#160;RIGHT&#160;90	;&#160;turn&#160;clockwise&#160;90&#160;degrees<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_920">PENUP (pu)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_930">&#160;PENUP		;&#160;turtle&#160;will&#160;move&#160;without&#160;drawing<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_940">PENDOWN (pd)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_950">&#160;PENDOWN	;&#160;turtle&#160;will&#160;move&#160;with&#160;drawing<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_960">POSITION (pos)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_970">&#160;POSITION&#160;[0,&#160;0]	;&#160;turn&#160;and&#160;move&#160;to&#160;the&#160;top-left&#160;corner<br/>&#160;POSITION&#160;PAGESIZE	;&#160;turn&#160;and&#160;move&#160;to&#160;the&#160;bottom-right&#160;corner<br/>&#160;POSITION&#160;[PAGESIZE[0],&#160;0]&#160;;&#160;turn&#160;and&#160;move&#160;to&#160;the&#160;top-right&#160;corner<br/>&#160;POSITION&#160;ANY		;&#160;turn&#160;and&#160;move&#160;to&#160;a&#160;random&#160;position<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_980">HEADING (seth)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_990">&#160;HEADING&#160;0		;&#160;turn&#160;north<br/>&#160;HEADING&#160;12h		;&#160;see&#160;above<br/>&#160;HEADING&#160;ANY		;&#160;turn&#160;to&#160;a&#160;random&#160;position<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_1000">Other turtle commands</paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1010">HIDETURTLE (ht)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1020">&#160;HIDETURTLE	;&#160;hide&#160;turtle&#160;(until&#160;the&#160;showturtle&#160;command)<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1030">SHOWTURTLE (st)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1040">&#160;SHOWTURTLE	;&#160;show&#160;turtle<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1050">HOME</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1060">&#160;HOME		;&#160;reset&#160;initial&#160;turtle&#160;settings&#160;and&#160;position<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1070">CLEARSCREEN (cs)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1080">&#160;CLEARSCREEN	;&#160;remove&#160;drawing&#160;objects&#160;of&#160;the&#160;document<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1090">FILL and CLOSE</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1100">&#160;FILL		;&#160;close&#160;and&#160;fill&#160;the&#160;actual&#160;line&#160;shape<br/>&#160;CLOSE		;&#160;close&#160;the&#160;actual&#160;line&#160;shape<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_1110">Pen settings</paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1120">PENSIZE (ps)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1130">&#160;PENSIZE&#160;100	;&#160;line&#160;width&#160;is&#160;100&#160;points<br/>&#160;PENSIZE&#160;ANY	;&#160;equivalent&#160;of&#160;PENSIZE&#160;RANDOM&#160;10<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1140">PENCOLOR/PENCOLOUR (pc)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1150">&#160;PENCOLOR&#160;“red”		;&#160;set&#160;red&#160;pen&#160;color&#160;(by&#160;color&#160;name,&#160;see&#160;color&#160;constants)<br/>&#160;PENCOLOR&#160;[255,&#160;255,&#160;0]	;&#160;set&#160;yellow&#160;color&#160;(RGB&#160;list)<br/>&#160;PENCOLOR&#160;0xffff00	;&#160;set&#160;yellow&#160;color&#160;(hexa&#160;code)<br/>&#160;PENCOLOR&#160;0		;&#160;set&#160;black&#160;color&#160;(0x000000)<br/>&#160;PENCOLOR&#160;ANY	;&#160;random&#160;color<br/>&#160;PENCOLOR&#160;[5]		;&#160;set&#160;red&#160;color&#160;(by&#160;color&#160;identifier,&#160;see&#160;color&#160;constants)<br/>&#160;PENCOLOR&#160;“invisible”	;&#160;invisible&#160;pen&#160;color&#160;for&#160;shapes&#160;without&#160;visible&#160;outline<br/>&#160;PENCOLOR&#160;“~red”	;&#160;set&#160;random&#160;red&#160;color<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1160">PENJOINT/LINEJOINT</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1170">&#160;PENJOINT&#160;“rounded”	;&#160;rounded&#160;line&#160;joint&#160;(default)<br/>&#160;PENJOINT&#160;“miter”	;&#160;sharp&#160;line&#160;joint<br/>&#160;PENJOINT&#160;“bevel”	;&#160;bevel&#160;line&#160;joint<br/>&#160;PENJOINT&#160;“none”	;&#160;without&#160;line&#160;joint<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1180">PENSTYLE</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1190">&#160;PENSTYLE&#160;“solid”	;&#160;solid&#160;line&#160;(default)<br/>&#160;PENSTYLE&#160;“dotted”	;&#160;dotted&#160;line<br/>&#160;PENSTYLE&#160;“dashed”	;&#160;dashed&#160;line<br/>&#160;<br/>&#160;;&#160;custom&#160;dot–dash&#160;pattern&#160;specified&#160;by&#160;a&#160;list&#160;with&#160;the&#160;following&#160;arguments:<br/>&#160;;&#160;–&#160;number&#160;of&#160;the&#160;neighbouring&#160;dots<br/>&#160;;&#160;–&#160;length&#160;of&#160;a&#160;dot<br/>&#160;;&#160;–&#160;number&#160;of&#160;the&#160;neighbouring&#160;dashes<br/>&#160;;&#160;–&#160;length&#160;of&#160;a&#160;dash<br/>&#160;;&#160;–&#160;distance&#160;of&#160;the&#160;dots/dashes<br/>&#160;;&#160;–&#160;type&#160;(optional):<br/>&#160;;&#160;&#160;&#160;0&#160;=&#160;dots&#160;are&#160;rectangles&#160;(default)<br/>&#160;;&#160;&#160;&#160;2&#160;=&#160;dots&#160;are&#160;squares&#160;(lengths&#160;and&#160;distances&#160;are&#160;relative&#160;to&#160;the&#160;pensize)<br/>&#160;<br/>&#160;PENSTYLE&#160;[3,&#160;1mm,&#160;2,&#160;4mm,&#160;2mm,&#160;2]	;&#160;...––...––...––<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_1200">Fill settings</paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1210">FILLCOLOR/FILLCOLOUR (fc)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1220">&#160;FILLCOLOR&#160;“blue”	;&#160;fill&#160;with&#160;blue&#160;color,&#160;see&#160;also&#160;PENCOLOR<br/>&#160;FILLCOLOR&#160;“invisible”&#160;CIRCLE&#160;10	;&#160;unfilled&#160;circle<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1230">FILLSTYLE</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1240">&#160;FILLSTYLE&#160;0		;&#160;fill&#160;without&#160;hatches&#160;(default)<br/>&#160;FILLSTYLE&#160;1		;&#160;black&#160;single&#160;hatches&#160;(horizontal)<br/>&#160;FILLSTYLE&#160;2		;&#160;black&#160;single&#160;hatches&#160;(45&#160;degrees)<br/>&#160;FILLSTYLE&#160;3		;&#160;black&#160;single&#160;hatches&#160;(-45&#160;degrees)<br/>&#160;FILLSTYLE&#160;4		;&#160;black&#160;single&#160;hatches&#160;(vertical)<br/>&#160;FILLSTYLE&#160;5		;&#160;red&#160;crossed&#160;hatches&#160;(45&#160;degrees)<br/>&#160;FILLSTYLE&#160;6		;&#160;red&#160;crossed&#160;hatches&#160;(0&#160;degrees)<br/>&#160;FILLSTYLE&#160;7		;&#160;blue&#160;crossed&#160;hatches&#160;(45&#160;degrees)<br/>&#160;FILLSTYLE&#160;8		;&#160;blue&#160;crossed&#160;hatches&#160;(0&#160;degrees)<br/>&#160;FILLSTYLE&#160;9		;&#160;blue&#160;triple&#160;crossed<br/>&#160;FILLSTYLE&#160;10		;&#160;black&#160;wide&#160;single&#160;hatches&#160;(45&#160;degrees)<br/>&#160;<br/>&#160;;&#160;custom&#160;hatches&#160;specified&#160;by&#160;a&#160;list&#160;with&#160;the&#160;following&#160;arguments:<br/>&#160;;&#160;–&#160;style&#160;(1&#160;=&#160;single,&#160;2&#160;=&#160;double,&#160;3&#160;=&#160;triple&#160;hatching)<br/>&#160;;&#160;–&#160;color<br/>&#160;;&#160;–&#160;distance<br/>&#160;;&#160;–&#160;degree<br/>&#160;<br/>&#160;FILLSTYLE&#160;[2,&#160;“green”,&#160;3pt,&#160;15°]	;&#160;green&#160;crossed&#160;hatches&#160;(15&#160;degrees)<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_1250">Drawing objects</paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1260">CIRCLE</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1270">&#160;CIRCLE&#160;100	;&#160;draw&#160;a&#160;circle&#160;shape&#160;(diameter&#160;=&#160;100pt)<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1280">ELLIPSE</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1290">&#160;ELLIPSE&#160;[50,&#160;100]		;&#160;draw&#160;an&#160;ellipse&#160;with&#160;50&#160;and&#160;100&#160;diameters<br/>&#160;ELLIPSE&#160;[50,&#160;100,&#160;2h,&#160;12h]	;&#160;draw&#160;an&#160;elliptical&#160;sector&#160;(from&#160;2h&#160;clock&#160;position&#160;to&#160;12h)<br/>&#160;ELLIPSE&#160;[50,&#160;100,&#160;2h,&#160;12h,&#160;2]&#160;&#160;;&#160;draw&#160;an&#160;elliptical&#160;segment<br/>&#160;ELLIPSE&#160;[50,&#160;100,&#160;2h,&#160;12h,&#160;3]&#160;&#160;;&#160;draw&#160;an&#160;elliptical&#160;arc<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1300">SQUARE</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1310">&#160;SQUARE&#160;100	;&#160;draw&#160;a&#160;square&#160;shape&#160;(size&#160;=&#160;100pt)<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1320">RECTANGLE</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1330">&#160;RECTANGLE&#160;[50,&#160;100]		;&#160;draw&#160;a&#160;rectange&#160;shape&#160;(50×100pt)<br/>&#160;RECTANGLE&#160;[50,&#160;100,&#160;50]	;&#160;draw&#160;a&#160;rectangle&#160;<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1340">POINT</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1350">&#160;POINT		;&#160;draw&#160;a&#160;point&#160;with&#160;size&#160;and&#160;color&#160;of&#160;the&#160;pen<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1360">LABEL</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1370">&#160;LABEL&#160;“text”	;&#160;print&#160;text&#160;in&#160;the&#160;turte&#160;position<br/>&#160;LABEL&#160;'text'	;&#160;see&#160;above<br/>&#160;LABEL&#160;"text	;&#160;see&#160;above&#160;(only&#160;for&#160;single&#160;words)<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1380">TEXT</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1390">&#160;CIRCLE&#160;10&#160;TEXT&#160;“text”	;&#160;set&#160;text&#160;of&#160;the&#160;actual&#160;drawing&#160;object<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_1400">Font settings</paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1410">FONTCOLOR/FONTCOLOUR</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1420">&#160;FONTCOLOR&#160;“green”	;&#160;set&#160;font&#160;color<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1430">FONTFAMILY</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1440">&#160;FONTFAMILY&#160;“Linux&#160;Libertine&#160;G”	;&#160;set&#160;font&#160;(family)<br/>&#160;FONTFAMILY&#160;“Linux&#160;Libertine&#160;G:smcp=1”	;&#160;set&#160;also&#160;font&#160;feature&#160;(small&#160;caps)<br/>&#160;FONTFAMILY&#160;“Linux&#160;Libertine&#160;G:smcp=1&amp;onum=1”	;&#160;small&#160;caps&#160;+&#160;old&#160;figures<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1450">FONTSIZE</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1460">&#160;FONTSIZE&#160;12	;&#160;set&#160;12pt<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1470">FONTWEIGHT</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1480">&#160;FONTWEIGHT&#160;“bold”	;&#160;set&#160;bold&#160;font<br/>&#160;FONTWEIGHT&#160;“normal”	;&#160;set&#160;normal&#160;weight<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1490">FONTSTYLE</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1500">&#160;FONTSTYLE&#160;“italic”	;&#160;set&#160;italic&#160;variant<br/>&#160;FONTSTYLE&#160;“normal”	;&#160;set&#160;normal&#160;variant<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_1510">PICTURE (pic)</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_1520">PICTURE is for </paragraph>
+<list type="unordered">
+    <listitem>
+        <paragraph role="listitem" xml-lang="en-US" id="par_1530">shape grouping;</paragraph>
+    </listitem>
+    <listitem>
+        <paragraph role="listitem" xml-lang="en-US" id="par_1540">starting new line shapes;</paragraph>
+    </listitem>
+    <listitem>
+        <paragraph role="listitem" xml-lang="en-US" id="par_1550">keeping the consistency of positions and line shapes at the left border.</paragraph>
+    </listitem>
+</list>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1560">Shape grouping</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1570">&#160;;&#160;PICTURE&#160;[&#160;LibreLogo_commands&#160;]<br/>&#160;PICTURE&#160;[&#160;FORWARD&#160;100&#160;CIRCLE&#160;100&#160;]	;&#160;tree-like&#160;grouped&#160;shape<br/></paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_1580">See also “Group” in LibreOffice Writer Help.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1590">&#160;TO&#160;tree&#160;location<br/>&#160;&#160;&#160;PENUP&#160;POSITION&#160;location&#160;HEADING&#160;0&#160;PENDOWN<br/>&#160;&#160;&#160;PICTURE&#160;[&#160;FORWARD&#160;100&#160;CIRCLE&#160;100&#160;]	;&#160;tree-like&#160;grouped&#160;shape<br/>&#160;END<br/>&#160;<br/>&#160;PICTURE&#160;[&#160;tree&#160;[30,&#160;50]&#160;tree&#160;[100,&#160;50]&#160;]	;&#160;grouped&#160;shapes&#160;in&#160;a&#160;grouped&#160;shape<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1600">Starting new line shapes</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1610">&#160;PICTURE			;&#160;start&#160;a&#160;new&#160;line&#160;shape<br/>&#160;FORWARD&#160;10&#160;PICTURE&#160;FORWARD&#160;10	;&#160;two&#160;line&#160;shapes<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1620">Consistency at the left border</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_1630">Use picture to keep the consistency of positions and line shapes at the left border of Writer:</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1640">&#160;PICTURE&#160;[&#160;CIRCLE&#160;20&#160;POSITION&#160;[-100,&#160;100]&#160;CIRCLE&#160;20&#160;]<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_1650">Loops</paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1660">REPEAT</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1670">&#160;;&#160;REPEAT&#160;number&#160;[&#160;commands&#160;]<br/>&#160;<br/>&#160;REPEAT&#160;10&#160;[&#160;FORWARD&#160;10&#160;LEFT&#160;45&#160;CIRCLE&#160;10&#160;]	;&#160;repeat&#160;10&#160;times<br/></paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1680">&#160;;&#160;number&#160;is&#160;optional<br/>&#160;<br/>&#160;REPEAT&#160;[&#160;POSITION&#160;ANY&#160;]	;&#160;endless&#160;loop<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1690">REPCOUNT</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_1700">Loop variable (also in the FOR and WHILE loops).</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1710">&#160;REPEAT&#160;100&#160;[&#160;FORWARD&#160;REPCOUNT&#160;LEFT&#160;90&#160;]<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1720">FOR IN</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_1730">Loop for the list elements:</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1740">&#160;FOR&#160;i&#160;IN&#160;[1,&#160;5,&#160;7,&#160;9,&#160;11]&#160;[<br/>&#160;&#160;&#160;FORWARD&#160;i<br/>&#160;&#160;&#160;LEFT&#160;90<br/>&#160;]<br/></paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_1750">Loop for the characters of a character sequence:</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1760">&#160;FOR&#160;i&#160;IN&#160;“text”&#160;[<br/>&#160;&#160;&#160;LABEL&#160;i<br/>&#160;&#160;&#160;FORWARD&#160;10<br/>&#160;]<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1770">WHILE</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1780">&#160;WHILE&#160;TRUE&#160;[&#160;POSITION&#160;ANY&#160;]	;&#160;endless&#160;loop<br/>&#160;WHILE&#160;REPCOUNT&#160;&lt;=&#160;10&#160;[&#160;FORWARD&#160;50&#160;LEFT&#160;36&#160;]	;&#160;as&#160;REPEAT&#160;10&#160;[&#160;...&#160;]<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1790">BREAK</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_1800">Stop the loop.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1810">&#160;REPEAT&#160;[			;&#160;endless&#160;loop<br/>&#160;&#160;&#160;POSITION&#160;ANY<br/>&#160;&#160;&#160;IF&#160;REPCOUNT&#160;=&#160;100&#160;[&#160;BREAK&#160;]&#160;&#160;;&#160;equivalent&#160;of&#160;the&#160;REPEAT&#160;100&#160;[&#160;...&#160;]<br/>&#160;]<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1820">CONTINUE</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_1830">Jump into the next iteration of the loop.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1840">&#160;REPEAT&#160;100&#160;[<br/>&#160;&#160;&#160;POSITION&#160;ANY<br/>&#160;&#160;&#160;IF&#160;REPCOUNT&#160;%&#160;2&#160;&lt;>&#160;0&#160;[&#160;CONTINUE&#160;]<br/>&#160;&#160;&#160;CIRCLE&#160;10	;&#160;draw&#160;circles&#160;on&#160;every&#160;2nd&#160;positions<br/>&#160;]<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_1850">Conditions</paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1860">IF</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1870">&#160;;&#160;IF&#160;condition&#160;[&#160;true&#160;block&#160;]<br/>&#160;;&#160;IF&#160;condition&#160;[&#160;true&#160;block&#160;]&#160;[&#160;false&#160;block&#160;]<br/>&#160;<br/>&#160;IF&#160;a&#160;&lt;&#160;10&#160;[&#160;PRINT&#160;“Small”&#160;]<br/>&#160;IF&#160;a&#160;&lt;&#160;10&#160;[&#160;PRINT&#160;“Small”&#160;]&#160;[&#160;PRINT&#160;“Big”&#160;]<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1880">AND, OR, NOT</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_1890">Logical operators.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1900">&#160;IF&#160;a&#160;&lt;&#160;10&#160;AND&#160;NOT&#160;a&#160;&lt;&#160;5&#160;[&#160;PRINT&#160;“5,&#160;6,&#160;7,&#160;8&#160;or&#160;9”&#160;]<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_1910">Subroutines</paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1920">TO, END</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_1930">New word (or procedure).</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1940">&#160;TO&#160;triangle<br/>&#160;&#160;&#160;REPEAT&#160;[&#160;FORWARD&#160;100&#160;RIGHT&#160;120&#160;]&#160;FILL<br/>&#160;END<br/>&#160;<br/>&#160;REPEAT&#160;10&#160;[&#160;triangle&#160;PENUP&#160;POSITION&#160;ANY&#160;PENDOWN&#160;]<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1950">OUTPUT</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_1960">Return value of the function.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_1970">&#160;TO&#160;randomletter<br/>&#160;&#160;&#160;OUTPUT&#160;RANDOM&#160;“qwertzuiopasdfghjklyxcvbnm”<br/>&#160;END<br/>&#160;<br/>&#160;PRINT&#160;randomletter&#160;+&#160;randomletter&#160;+&#160;randomletter	;&#160;print&#160;3-letter&#160;random&#160;character&#160;sequence<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_1980">STOP</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_1990">Return from the procedure.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2000">&#160;TO&#160;example&#160;number<br/>&#160;&#160;&#160;IF&#160;number&#160;&lt;&#160;0&#160;[&#160;STOP&#160;]<br/>&#160;&#160;&#160;PRINT&#160;SQRT&#160;number		;&#160;print&#160;square&#160;root<br/>&#160;]<br/>&#160;<br/>&#160;example&#160;100<br/>&#160;example&#160;-1	;&#160;without&#160;output&#160;and&#160;error<br/>&#160;example&#160;25<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_2010">Default variables</paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2020">ANY</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_2030">Default random value of colors, etc.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2040">&#160;PENCOLOR&#160;ANY	;&#160;random&#160;pen&#160;color<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2050">TRUE</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_2060">Logical value.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2070">&#160;WHILE&#160;TRUE&#160;[&#160;POSITION&#160;ANY&#160;]	;&#160;endless&#160;loop<br/>&#160;PRINT&#160;TRUE	;&#160;print&#160;true<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2080">FALSE</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_2090">Logical value.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2100">&#160;WHILE&#160;NOT&#160;FALSE&#160;[&#160;POSITION&#160;ANY&#160;]	;&#160;endless&#160;loop<br/>&#160;PRINT&#160;FALSE	;&#160;print&#160;false<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2110">PAGESIZE</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2120">&#160;PRINT&#160;PAGESIZE	;&#160;print&#160;list&#160;of&#160;the&#160;page&#160;sizes&#160;in&#160;points,&#160;eg.&#160;[595.30,&#160;841.89]<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2130">PI/π</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2140">&#160;PRINT&#160;PI	;&#160;print&#160;3.14159265359<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_2150">Input/Output</paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2160">PRINT</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2170">&#160;PRINT&#160;“text”	;&#160;print&#160;“text”&#160;in&#160;a&#160;dialog&#160;box<br/>&#160;PRINT&#160;5&#160;+&#160;10	;&#160;print&#160;15<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2180">INPUT</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2190">&#160;PRINT&#160;INPUT&#160;“Input&#160;value?”	;&#160;ask&#160;and&#160;print&#160;a&#160;string&#160;by&#160;a&#160;query&#160;dialog&#160;box<br/>&#160;PRINT&#160;FLOAT&#160;(INPUT&#160;“First&#160;number?”)&#160;+&#160;FLOAT&#160;(INPUT&#160;“Second&#160;number?”)&#160;;&#160;simple&#160;calculator<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_2200">SLEEP</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2210">&#160;SLEEP&#160;1000	;&#160;wait&#160;for&#160;1000&#160;ms&#160;(1&#160;sec)<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_2220">GLOBAL</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_2230">Set global variables used in procedures.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2240">&#160;GLOBAL&#160;about<br/>&#160;about&#160;=&#160;“LibreLogo”<br/>&#160;<br/>&#160;TO&#160;example<br/>&#160;&#160;&#160;PRINT&#160;about<br/>&#160;&#160;&#160;GLOBAL&#160;about	;&#160;when&#160;we&#160;want&#160;to&#160;add&#160;a&#160;new&#160;value<br/>&#160;&#160;&#160;about&#160;=&#160;“new&#160;value&#160;for&#160;the&#160;global&#160;variable”<br/>&#160;END<br/>&#160;<br/>&#160;example<br/>&#160;PRINT&#160;about<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_2250">Functions</paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2260">RANDOM</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2270">&#160;PRINT&#160;RANDOM&#160;100	;&#160;random&#160;float&#160;number&#160;(0&#160;&lt;=&#160;x&#160;&lt;&#160;100)<br/>&#160;PRINT&#160;RANDOM&#160;“text”	;&#160;random&#160;letter&#160;of&#160;the&#160;“text”<br/>&#160;PRINT&#160;RANDOM&#160;[1,&#160;2]	;&#160;random&#160;list&#160;element&#160;(1&#160;or&#160;2)<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2280">INT</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2290">&#160;PRINT&#160;INT&#160;3.8		;&#160;print&#160;3&#160;(integer&#160;part&#160;of&#160;3.8)<br/>&#160;PRINT&#160;INT&#160;RANDOM&#160;100	;&#160;random&#160;integer&#160;number&#160;(0&#160;&lt;=&#160;x&#160;&lt;&#160;100)<br/>&#160;PRINT&#160;INT&#160;“7”		;&#160;convert&#160;the&#160;string&#160;parameter&#160;to&#160;integer<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2300">FLOAT</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2310">&#160;;&#160;convert&#160;the&#160;string&#160;parameter&#160;to&#160;float&#160;number<br/>&#160;PRINT&#160;2&#160;*&#160;FLOAT&#160;“5.5”	;&#160;print&#160;11.0<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2320">STR</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2330">&#160;;&#160;convert&#160;the&#160;number&#160;parameter&#160;to&#160;string<br/>&#160;PRINT&#160;“Result:&#160;”&#160;+&#160;STR&#160;5	;&#160;print&#160;“Result:&#160;5”<br/>&#160;PRINT&#160;10&#160;*&#160;STR&#160;5	;&#160;print&#160;5555555555<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2340">SQRT</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2350">&#160;PRINT&#160;SQRT&#160;100		;&#160;print&#160;10,&#160;square&#160;root&#160;of&#160;100<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2360">SIN</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2370">&#160;PRINT&#160;SIN&#160;90&#160;*&#160;PI/180	;&#160;print&#160;1.0&#160;(sinus&#160;of&#160;90°&#160;in&#160;radians)<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2380">COS</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2390">&#160;PRINT&#160;COS&#160;0&#160;*&#160;PI/180	;&#160;print&#160;1.0&#160;(sinus&#160;of&#160;0°&#160;in&#160;radians)<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2400">ROUND</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2410">&#160;PRINT&#160;ROUND&#160;3.8	;&#160;print&#160;4&#160;(rounding&#160;3.8)<br/>&#160;PRINT&#160;ROUND&#160;RANDOM&#160;100	;&#160;random&#160;integer&#160;number&#160;(0&#160;&lt;=&#160;x&#160;&lt;=&#160;100)<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2420">ABS</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2430">&#160;PRINT&#160;ABS&#160;-10		;&#160;print&#160;10,&#160;absolute&#160;value&#160;of&#160;-10<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2440">COUNT</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2450">&#160;PRINT&#160;COUNT&#160;“text”	;&#160;print&#160;4,&#160;character&#160;count&#160;of&#160;“text”<br/>&#160;PRINT&#160;COUNT&#160;[1,&#160;2,&#160;3]	;&#160;print&#160;3,&#160;size&#160;of&#160;the&#160;list<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2460">SET</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2470">&#160;;&#160;Convert&#160;list&#160;to&#160;Python&#160;set<br/>&#160;PRINT&#160;SET&#160;[4,&#160;5,&#160;6,&#160;6]	;&#160;print&#160;{4,&#160;5,&#160;6}<br/>&#160;PRINT&#160;SET&#160;[4,&#160;5,&#160;6,&#160;6]&#160;|&#160;SET&#160;[4,&#160;1,&#160;9]	;&#160;print&#160;{1,&#160;4,&#160;5,&#160;6,&#160;9},&#160;union<br/>&#160;PRINT&#160;SET&#160;[4,&#160;5,&#160;6,&#160;6]&#160;&amp;&#160;SET&#160;[4,&#160;1,&#160;9]	;&#160;print&#160;{4},&#160;intersection<br/>&#160;PRINT&#160;SET&#160;([4,&#160;5,&#160;6,&#160;6])&#160;-&#160;SET&#160;[4,&#160;1,&#160;9]	;&#160;print&#160;{5,&#160;6},&#160;difference<br/>&#160;PRINT&#160;SET&#160;[4,&#160;5,&#160;6,&#160;6]&#160;^&#160;SET&#160;[4,&#160;1,&#160;9]	;&#160;print&#160;{1,&#160;5,&#160;6,&#160;9},&#160;symmetric&#160;difference&#160;&#160;<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2480">RANGE</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2490">&#160;;&#160;Python-like&#160;list&#160;generation<br/>&#160;PRINT&#160;RANGE&#160;10	;&#160;print&#160;[0,&#160;1,&#160;2,&#160;3,&#160;4,&#160;5,&#160;6,&#160;7,&#160;8,&#160;9]<br/>&#160;PRINT&#160;RANGE&#160;3&#160;10	;&#160;print&#160;[3,&#160;4,&#160;5,&#160;6,&#160;7,&#160;8,&#160;9]<br/>&#160;PRINT&#160;RANGE&#160;3&#160;10&#160;3	;&#160;print&#160;[3,&#160;6,&#160;9]<br/>&#160;<br/>&#160;FOR&#160;i&#160;in&#160;RANGE&#160;10&#160;50&#160;10&#160;[	;&#160;loop&#160;for&#160;[10,&#160;20,&#160;30,&#160;40]<br/>&#160;&#160;&#160;FORWARD&#160;i<br/>&#160;&#160;&#160;LEFT&#160;90<br/>&#160;]<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2500">LIST</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2510">&#160;;&#160;remove&#160;the&#160;repeating&#160;elements&#160;of&#160;a&#160;list&#160;using&#160;set&#160;and&#160;list&#160;conversion<br/>&#160;PRINT&#160;LIST&#160;(SET&#160;[1,&#160;3,&#160;5,&#160;5,&#160;2,&#160;1])	;&#160;print&#160;[1,&#160;3,&#160;5,&#160;2]<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2520">TUPLE</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_2530">Conversion to Python tuple (non-modifiable list)</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2540">&#160;PRINT&#160;TUPLE&#160;[4,&#160;5]<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2550">SORTED</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_2560">It returns with a sorted list.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2570">&#160;PRINT&#160;SORTED&#160;[5,&#160;1,&#160;3,&#160;4]	;&#160;print&#160;[1,&#160;3,&#160;4,&#160;5]<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2580">SUB</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_2590">Substitue character sequences using regex (regular expression) patterns.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2600">&#160;PRINT&#160;SUB&#160;(“t”,&#160;“T”,&#160;“text”)	;&#160;print&#160;“Text”,&#160;replacing&#160;“t”&#160;with&#160;“T”<br/>&#160;PRINT&#160;SUB&#160;(“(.)”,&#160;“\\1\\1”,&#160;“text”)&#160;;&#160;print&#160;“tteexxtt”,&#160;doubling&#160;every&#160;characters<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2610">SEARCH</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_2620">Search character sequences patterns using regex patterns.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2630">&#160;IF&#160;SEARCH&#160;(“\w”,&#160;word)&#160;[&#160;PRINT&#160;“Letter&#160;in&#160;the&#160;word.”&#160;]<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2640">FINDALL</paragraph>
+<paragraph role="paragraph" xml-lang="en-US" id="par_2650">Find all character sequences in the input string matching the given regex pattern.</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2660">&#160;PRINT&#160;FINDALL(“\w+”,&#160;“Dogs,&#160;cats.”)	;&#160;print&#160;[“Dogs”,&#160;“cats”],&#160;the&#160;list&#160;of&#160;the&#160;words.<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2670">MIN</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2680">&#160;PRINT&#160;MIN&#160;[1,&#160;2,&#160;3]	;&#160;print&#160;1,&#160;the&#160;lowest&#160;element&#160;of&#160;the&#160;list<br/></paragraph>
+<paragraph role="heading" level="3" xml-lang="en-US" id="hd_2690">MAX</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2700">&#160;PRINT&#160;MAX&#160;[1,&#160;2,&#160;3]	;&#160;print&#160;3,&#160;the&#160;greatest&#160;element&#160;of&#160;the&#160;list<br/></paragraph>
+<paragraph role="heading" level="2" xml-lang="en-US" id="hd_2710">Color constants</paragraph>
+<paragraph role="code" xml-lang="en-US" id="par_2720">&#160;PENCOLOR&#160;“SILVER”	;&#160;set&#160;by&#160;name<br/>&#160;PENCOLOR&#160;[1]		;&#160;set&#160;by&#160;identifiers<br/>&#160;PENCOLOR&#160;“~SILVER”	;&#160;random&#160;silver&#160;color<br/>&#160;<br/></paragraph>
+<table><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2740">Identifier</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2750">Name</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2770">0</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2780">BLACK</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2800">1</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2810">SILVER</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2830">2</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2840">GRAY/GREY</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2860">3</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2870">WHITE</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2890">4</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2900">MAROON</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2920">5</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2930">RED</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2950">6</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2960">PURPLE</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2980">7</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_2990">FUCHSIA/MAGENTA</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3010">8</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3020">GREEN</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3040">9</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3050">LIME</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3070">10</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3080">OLIVE</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3100">11</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3110">YELLOW</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3130">12</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3140">NAVY</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3160">13</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3170">BLUE</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3190">14</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3200">TEAL</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3220">15</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3230">AQUA</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3250">16</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3260">PINK</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3280">17</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3290">TOMATO</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3310">18</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3320">ORANGE</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3340">19</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3350">GOLD</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3370">20</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3380">VIOLET</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3400">21</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3410">SKYBLUE</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3430">22</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3440">CHOCOLATE</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3460">23</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3470">BROWN</paragraph></tablecell>
+</tablerow><tablerow>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3490">24</paragraph></tablecell>
+<tablecell><paragraph role="tablecontent" xml-lang="en-US" id="par_3500">INVISIBLE</paragraph></tablecell>
+</tablerow></table>
+</body></helpdocument>

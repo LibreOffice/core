@@ -107,6 +107,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	libmspub \
 	liborcus \
 	libpng \
+	librelogo \
 	libvisio \
 	libwpd \
 	libwpg \

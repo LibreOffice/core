@@ -1,9 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<oor:component-data
- xmlns:oor="http://openoffice.org/2001/registry"
- xmlns:xs="http://www.w3.org/2001/XMLSchema"
- oor:name="Addons"
- oor:package="org.openoffice.Office">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Addons" oor:package="org.openoffice.Office">
     <node oor:name="AddonUI">
         <node oor:name="OfficeToolBar">
             <node oor:name="LibreLogo.OfficeToolBar" oor:op="replace">
@@ -15,8 +11,7 @@
                         <value>vnd.sun.star.script:librelogo-0.2.oxt|LibreLogo|LibreLogo.py$goforward?language=Python&amp;location=user:uno_packages</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en">Forward</value>
-                        <value xml:lang="hu">Előre</value>
+                        <value xml:lang="en-US">Forward</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
@@ -30,8 +25,7 @@
                         <value>vnd.sun.star.script:librelogo-0.2.oxt|LibreLogo|LibreLogo.py$gobackward?language=Python&amp;location=user:uno_packages</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en">Back</value>
-                        <value xml:lang="hu">Hátra</value>
+                        <value xml:lang="en-US">Back</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
@@ -45,8 +39,7 @@
                         <value>vnd.sun.star.script:librelogo-0.2.oxt|LibreLogo|LibreLogo.py$left?language=Python&amp;location=user:uno_packages</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en">Left</value>
-                        <value xml:lang="hu">Balra</value>
+                        <value xml:lang="en-US">Left</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
@@ -60,8 +53,7 @@
                         <value>vnd.sun.star.script:librelogo-0.2.oxt|LibreLogo|LibreLogo.py$right?language=Python&amp;location=user:uno_packages</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en">Right</value>
-                        <value xml:lang="hu">Jobbra</value>
+                        <value xml:lang="en-US">Right</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
@@ -75,8 +67,7 @@
                         <value>vnd.sun.star.script:librelogo-0.2.oxt|LibreLogo|LibreLogo.py$run?language=Python&amp;location=user:uno_packages</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en">Start (the program in the Writer document)</value>
-                        <value xml:lang="hu">Indítás (a Writer dokumentumban lévő programé)</value>
+                        <value xml:lang="en-US">Start (the program in the Writer document)</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
@@ -90,8 +81,7 @@
                         <value>vnd.sun.star.script:librelogo-0.2.oxt|LibreLogo|LibreLogo.py$stop?language=Python&amp;location=user:uno_packages</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en">Stop</value>
-                        <value xml:lang="hu">Leállítás</value>
+                        <value xml:lang="en-US">Stop</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
@@ -105,8 +95,7 @@
                         <value>vnd.sun.star.script:librelogo-0.2.oxt|LibreLogo|LibreLogo.py$home?language=Python&amp;location=user:uno_packages</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en">Home</value>
-                        <value xml:lang="hu">Haza</value>
+                        <value xml:lang="en-US">Home</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
@@ -120,8 +109,7 @@
                         <value>vnd.sun.star.script:librelogo-0.2.oxt|LibreLogo|LibreLogo.py$clearscreen?language=Python&amp;location=user:uno_packages</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en">Clear screen</value>
-                        <value xml:lang="hu">Képernyőtörlés</value>
+                        <value xml:lang="en-US">Clear screen</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
@@ -132,7 +120,7 @@
                         <value>vnd.sun.star.script:librelogo-0.2.oxt|LibreLogo|LibreLogo.py$commandline?language=Python&amp;location=user:uno_packages</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en">FORWARD (fd), BACK (bk), LEFT (lt), RIGHT (rt) • fd 72, bk 1cm + 1in + 1", lt 90, rt 1.5h
+                        <value xml:lang="en-US">FORWARD (fd), BACK (bk), LEFT (lt), RIGHT (rt) • fd 72, bk 1cm + 1in + 1", lt 90, rt 1.5h
 REPEAT num [ commands ], REPCOUNT • repeat 100 [ fd repcount lt 91 ]
 PENUP (pu), PENDOWN (pd), FILL, CLOSE, HOME, CLEARSCREEN (cs), PENSIZE (ps 5)
 PENCOLOR (pc), FILLCOLOR (fc) • pc “red”, pc 0xff0000, fc [255, 0, 0], fc any
@@ -143,17 +131,6 @@ FONTFAMILY “Font” FONTSIZE 9 FONTCOLOR “red” FONTWEIGHT “bold”
 TO name arguments ... END, TO name arguments, OUTPUT return_value, END
 RANDOM, SQRT, INT, COUNT, ABS, SIN, COS, INPUT • ps random 100, print count “string”
 PICTURE (pic) [ ... ] • group different shapes: pic [ fd 100 circle 50 ]</value>
-<value xml:lang="hu">ELŐRE (e), HÁTRA (h), BALRA (b), JOBBRA (j) • e 72, h 1cm + 1in + 1", b 90, j 1,5ó
-ISMÉTLÉS (ism) hányszor [ parancsok ], HÁNYADIK • ism 100 [ e hányadik b 91 ]
-TOLLATFEL (tf), TOLLATLE (tl), TÖLT, ZÁR, HAZA, TÖRÖLKÉP, TOLLVASTAGSÁG (tv 5)
-TOLLSZÍN (tsz), TÖLTŐSZÍN (tlsz) • tsz „kék”, tsz 0xff0000, tsz [0, 0, 0], tsz tetsz
-HELY, IRÁNY • hely [0, 0], hely oldalméret, irány 60, irány [0, 0]
-KÖR, ELLIPSZIS, NÉGYZET, TÉGLALAP • kör 100, ellipszis [50, 100], négyzet 100
-CÍMKE, SZÖVEG, KI • „címke szöveg”, kör 200 szöveg „körfelirat” ki 5+5
-BETŰCSALÁD „betű” BETŰMÉRET 24 BETŰSZÍN „kék” BETŰVASTAGSÁG „vastag”
-EZ név változók ... VÉGE, EZ név változók, EREDMÉNY visszatérési_érték, VÉGE
-VÉLETLENSZÁM (vszám), GYÖK, EGÉSZ, DARAB (db), BE • e vszám 100, ki db „betűk”
-KÉP [ ... ] • alakzatok csoportosítása: kép [ e 100 kör 50 ]</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
@@ -176,8 +153,7 @@ KÉP [ ... ] • alakzatok csoportosítása: kép [ e 100 kör 50 ]</value>
                         <value>vnd.sun.star.script:librelogo-0.2.oxt|LibreLogo|LibreLogo.py$__translate__?language=Python&amp;location=user:uno_packages</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en">Uppercase commands, also translate them to the language of the document</value>
-                        <value xml:lang="hu">Parancsok nagybetűsítése és fordítása a dokumentum nyelvére</value>
+                        <value xml:lang="en-US">Uppercase commands, also translate them to the language of the document</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
