@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest:manifest>
+ <manifest:file-entry manifest:media-type="application/vnd.sun.star.uno-component;type=Python" manifest:full-path="LibreLogoDummy.py"/>
+ <manifest:file-entry manifest:media-type="application/vnd.sun.star.framework-script" manifest:full-path="LibreLogo"/>
+ <manifest:file-entry manifest:full-path="Office/UI/StartModuleWindowState.xcu" manifest:media-type="application/vnd.sun.star.configuration-data"/>
+ <manifest:file-entry manifest:full-path="Office/UI/WriterWindowState.xcu" manifest:media-type="application/vnd.sun.star.configuration-data"/>
+ <manifest:file-entry manifest:full-path="Addons.xcu" manifest:media-type="application/vnd.sun.star.configuration-data"/>
+ <manifest:file-entry manifest:media-type="application/vnd.sun.star.help" manifest:full-path="help"/>
+</manifest:manifest>
