@@ -955,7 +955,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/util/_XSortable \
     qadevOOo/tests/java/ifc/util/_XStringEscape \
     qadevOOo/tests/java/ifc/util/_XStringSubstitution \
-    qadevOOo/tests/java/ifc/util/_XTextSearch \
     qadevOOo/tests/java/ifc/util/_XURLTransformer \
     qadevOOo/tests/java/ifc/view/_XControlAccess \
     qadevOOo/tests/java/ifc/view/_XFormLayerAccess \
@@ -1103,7 +1102,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_i18n/IndexEntrySupplier \
     qadevOOo/tests/java/mod/_i18n/LocaleData \
     qadevOOo/tests/java/mod/_i18n/NumberFormatCodeMapper \
-    qadevOOo/tests/java/mod/_i18n/TextSearch \
     qadevOOo/tests/java/mod/_i18n/Transliteration \
     qadevOOo/tests/java/mod/_implreg/uno/ImplementationRegistration \
     qadevOOo/tests/java/mod/_impreg/ImplementationRegistration \

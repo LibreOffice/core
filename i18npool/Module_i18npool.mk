@@ -64,6 +64,7 @@ $(eval $(call gb_Module_add_check_targets,i18npool,\
 	CppunitTest_i18npool_test_characterclassification \
 	CppunitTest_i18npool_test_languagetag \
 	CppunitTest_i18npool_test_ordinalsuffix \
+	CppunitTest_i18npool_test_textsearch \
 ))
 
 # vim: set noet sw=4 ts=4:
