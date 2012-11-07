@@ -1,53 +1,88 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
- * This file is part of the LibreOffice project.
+/**************************************************************
  *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * This file incorporates work covered by the following license notice:
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Licensed to the Apache Software Foundation (ASF) under one or more
- *   contributor license agreements. See the NOTICE file distributed
- *   with this work for additional information regarding copyright
- *   ownership. The ASF licenses this file to you under the Apache
- *   License, Version 2.0 (the "License"); you may not use this file
- *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- */
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
 #ifndef __com_sun_star_rendering_XCanvas_idl__
 #define __com_sun_star_rendering_XCanvas_idl__
 
+#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+#ifndef __com_sun_star_geometry_RealPoint2D_idl__
 #include <com/sun/star/geometry/RealPoint2D.idl>
+#endif
+#ifndef __com_sun_star_geometry_RealBezierSegment2D_idl__
 #include <com/sun/star/geometry/RealBezierSegment2D.idl>
+#endif
+#ifndef __com_sun_star_geometry_RealRectangle2D_idl__
 #include <com/sun/star/geometry/RealRectangle2D.idl>
+#endif
+#ifndef __com_sun_star_geometry_Matrix2D_idl__
 #include <com/sun/star/geometry/Matrix2D.idl>
+#endif
+#ifndef __com_sun_star_rendering_ViewState_idl__
 #include <com/sun/star/rendering/ViewState.idl>
+#endif
+#ifndef __com_sun_star_rendering_RenderState_idl__
 #include <com/sun/star/rendering/RenderState.idl>
+#endif
+#ifndef __com_sun_star_rendering_FontRequest_idl__
 #include <com/sun/star/rendering/FontRequest.idl>
+#endif
+#ifndef __com_sun_star_rendering_FontInfo_idl__
 #include <com/sun/star/rendering/FontInfo.idl>
+#endif
+#ifndef __com_sun_star_rendering_Texture_idl__
 #include <com/sun/star/rendering/Texture.idl>
+#endif
+#ifndef __com_sun_star_rendering_StringContext_idl__
 #include <com/sun/star/rendering/StringContext.idl>
+#endif
+#ifndef __com_sun_star_rendering_StrokeAttributes_idl__
 #include <com/sun/star/rendering/StrokeAttributes.idl>
+#endif
+#ifndef __com_sun_star_rendering_VolatileContentDestroyedException_idl__
 #include <com/sun/star/rendering/VolatileContentDestroyedException.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
+#endif
 
 
 module com {  module sun {  module star {  module geometry {
-    interface XMapping2D;
+    published interface XMapping2D;
 }; }; }; };
 
 module com { module sun { module star { module rendering {
 
-interface XCanvasFont;
-interface XPolyPolygon2D;
-interface XCachedPrimitive;
-interface XBitmap;
-interface XGraphicDevice;
-interface XTextLayout;
+published interface XCanvasFont;
+published interface XPolyPolygon2D;
+published interface XCachedPrimitive;
+published interface XBitmap;
+published interface XGraphicDevice;
+published interface XTextLayout;
 
 /** Central interface for rendering.<p>
 
@@ -81,7 +116,7 @@ interface XTextLayout;
     <type>RenderState</type> containing only the local offset (and no
     extra clipping).<p>
 
-    Further on, this stateless nature provides easy ways for
+    Furtheron, this stateless nature provides easy ways for
     caching. Every non-trivial operation on <type>XCanvas</type> can
     return a cache object, which, when called to redraw, renders the
     primitive usually much more quickly than the original method. Note
@@ -111,7 +146,7 @@ interface XTextLayout;
 
     @since OOo 2.0
  */
-interface XCanvas : ::com::sun::star::uno::XInterface
+published interface XCanvas : ::com::sun::star::uno::XInterface
 {
     /** Clear the whole canvas area.<p>
 
@@ -127,18 +162,19 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         The point to draw.
 
         @param aViewState
-        The view state to be used when drawing this point.
+        The viewstate to be used when drawing this point.
 
         @param aRenderState
-        The render state to be used when drawing this point.
+        The renderstate to be used when drawing this point.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
      */
     void                drawPoint( [in] ::com::sun::star::geometry::RealPoint2D aPoint, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
+    //-------------------------------------------------------------------------
 
     /** Draw a line in device resolution width (i.e. one device pixel
         wide).
@@ -150,41 +186,43 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         The end point of the line to draw.
 
         @param aViewState
-        The view state to be used when drawing this line.
+        The viewstate to be used when drawing this line.
 
         @param aRenderState
-        The render state to be used when drawing this line.
+        The renderstate to be used when drawing this line.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
      */
     void                drawLine( [in] ::com::sun::star::geometry::RealPoint2D aStartPoint, [in] ::com::sun::star::geometry::RealPoint2D aEndPoint, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
+    //-------------------------------------------------------------------------
 
-    /** Draw a cubic Bezier curve in device resolution width (i.e. one
+    /** Draw a cubic bezier curve in device resolution width (i.e. one
         device pixel wide).
 
         @param aBezierSegment
-        The start and the two control points of the Bezier curve.
+        The start and the two control points of the bezier curve.
 
         @param aEndPoint
-        The end point of the Bezier curve.
+        The end point of the bezier curve.
 
         @param aViewState
-        The view state to be used when drawing this curve.
+        The viewstate to be used when drawing this curve.
 
         @param aRenderState
-        The render state to be used when drawing this curve.
+        The renderstate to be used when drawing this curve.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
      */
     void                drawBezier( [in] ::com::sun::star::geometry::RealBezierSegment2D aBezierSegment, [in] ::com::sun::star::geometry::RealPoint2D aEndPoint, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
+    //-------------------------------------------------------------------------
 
     /** Draw a poly-polygon in device resolution line width (i.e. the
         lines are one device pixel wide).
@@ -193,20 +231,21 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         The poly-polygon to draw.
 
         @param aViewState
-        The view state to be used when drawing this polygon.
+        The viewstate to be used when drawing this polygon.
 
         @param aRenderState
-        The render state to be used when drawing this polygon.
+        The renderstate to be used when drawing this polygon.
 
         @return a handle to the cached rendering output.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
      */
     XCachedPrimitive    drawPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
+    //-------------------------------------------------------------------------
 
     /** Stroke each polygon of the provided poly-polygon with the
         specified stroke attributes.<p>
@@ -222,10 +261,10 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         The poly-polygon to render.
 
         @param aViewState
-        The view state to be used when stroking this polygon.
+        The viewstate to be used when stroking this polygon.
 
         @param aRenderState
-        The render state to be used when stroking this polygon.
+        The renderstate to be used when stroking this polygon.
 
         @param aStrokeAttributes
         Further attributes used to parameterize the stroking.
@@ -233,12 +272,13 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @return a handle to the cached rendering output.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
      */
     XCachedPrimitive    strokePolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] StrokeAttributes aStrokeAttributes )
         raises (com::sun::star::lang::IllegalArgumentException);
 
+    //-------------------------------------------------------------------------
 
     /** Stroke each polygon of the provided poly-polygon with the
         specified stroke attributes, fill the stroked outline
@@ -255,10 +295,10 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         The poly-polygon to render.
 
         @param aViewState
-        The view state to be used when strokes this polygon.
+        The viewstate to be used when strokes this polygon.
 
         @param aRenderState
-        The render state to be used when stroking this polygon.
+        The renderstate to be used when stroking this polygon.
 
         @param aTextures
         A sequence of texture definitions, with which to fill the
@@ -270,7 +310,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @return a handle to the cached rendering output.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
 
         @throws <type>VolatileContentDestroyedException</type>
@@ -281,6 +321,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 
+    //-------------------------------------------------------------------------
 
     /** Stroke each polygon of the provided poly-polygon with the
         specified stroke attributes, fill the stroked outline
@@ -298,10 +339,10 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         The poly-polygon to render.
 
         @param aViewState
-        The view state to be used when stroking this polygon.
+        The viewstate to be used when stroking this polygon.
 
         @param aRenderState
-        The render state to be used when stroking this polygon.
+        The renderstate to be used when stroking this polygon.
 
         @param aTextures
         A sequence of texture definitions, with which to fill the
@@ -317,7 +358,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @return a handle to the cached rendering output.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
 
         @throws <type>VolatileContentDestroyedException</type>
@@ -328,6 +369,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 
+    //-------------------------------------------------------------------------
 
     //  [TODO: Method misplaced at this interface?]
 
@@ -341,10 +383,10 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         The poly-polygon to render.
 
         @param aViewState
-        The view state to be used when generating the outline.
+        The viewstate to be used when generating the outline.
 
         @param aRenderState
-        The render state to be used when generating the outline.
+        The renderstate to be used when generating the outline.
 
         @param aStrokeAttributes
         Further attributes used to parameterize the stroking.
@@ -353,12 +395,13 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         area.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
      */
-    XPolyPolygon2D      queryStrokeShapes( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] StrokeAttributes aStrokeAttributes )
+    XPolyPolygon2D          queryStrokeShapes( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] StrokeAttributes aStrokeAttributes )
         raises (com::sun::star::lang::IllegalArgumentException);
 
+    //-------------------------------------------------------------------------
 
     /** Fill the given poly-polygon.<p>
 
@@ -370,20 +413,21 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         The poly-polygon to render.
 
         @param aViewState
-        The view state to be used when filling this polygon.
+        The viewstate to be used when filling this polygon.
 
         @param aRenderState
-        The render state to be used when filling this polygon.
+        The renderstate to be used when filling this polygon.
 
         @return a handle to the cached rendering output.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
      */
     XCachedPrimitive    fillPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
+    //-------------------------------------------------------------------------
 
     /** Fill the given poly-polygon with a texture.<p>
 
@@ -395,10 +439,10 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         The poly-polygon to render.
 
         @param aViewState
-        The view state to be used when filling this polygon.
+        The viewstate to be used when filling this polygon.
 
         @param aRenderState
-        The render state to be used when filling this polygon.
+        The renderstate to be used when filling this polygon.
 
         @param aTextures
         A sequence of texture definitions, with which to fill the
@@ -407,7 +451,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @return a handle to the cached rendering output.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
 
         @throws <type>VolatileContentDestroyedException</type>
@@ -418,6 +462,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 
+    //-------------------------------------------------------------------------
 
     /** Fill the given poly-polygon with a mapped texture.<p>
 
@@ -430,10 +475,10 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         The poly-polygon to render.
 
         @param aViewState
-        The view state to be used when filling this polygon.
+        The viewstate to be used when filling this polygon.
 
         @param aRenderState
-        The render state to be used when filling this polygon.
+        The renderstate to be used when filling this polygon.
 
         @param aTextures
         A sequence of texture definitions, with which to fill the
@@ -446,7 +491,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @return a handle to the cached rendering output.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
 
         @throws <type>VolatileContentDestroyedException</type>
@@ -457,6 +502,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 
+    //-------------------------------------------------------------------------
 
     /** Create a suitable font for the specified font description.
 
@@ -502,6 +548,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     XCanvasFont             createFont( [in] FontRequest aFontRequest, [in] sequence< ::com::sun::star::beans::PropertyValue > aExtraFontProperties, [in] ::com::sun::star::geometry::Matrix2D aFontMatrix )
         raises (com::sun::star::lang::IllegalArgumentException);
 
+    //-------------------------------------------------------------------------
 
     /** Query font information, specific to this canvas.<p>
 
@@ -525,6 +572,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     sequence< FontInfo >    queryAvailableFonts( [in] FontInfo aFilter, [in] sequence< ::com::sun::star::beans::PropertyValue > aFontProperties )
         raises (com::sun::star::lang::IllegalArgumentException);
 
+    //-------------------------------------------------------------------------
 
     /** Draw the text given by the substring of the specified string
         with the given font.<p>
@@ -542,10 +590,10 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         the text.
 
         @param aViewState
-        The view state to be used when drawing this text.
+        The viewstate to be used when drawing this text.
 
         @param aRenderState
-        The render state to be used when drawing this text.
+        The renderstate to be used when drawing this text.
 
         @param nTextDirection
         A value from the <type>TextDirection</type> collection,
@@ -557,12 +605,13 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @return a handle to the cached rendering output.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
      */
     XCachedPrimitive        drawText( [in] StringContext aText, [in] XCanvasFont xFont, [in] ViewState aViewState, [in] RenderState aRenderState, [in] byte nTextDirection )
         raises (com::sun::star::lang::IllegalArgumentException);
 
+    //-------------------------------------------------------------------------
 
     /** Draw the formatted text given by the text layout.<p>
 
@@ -571,7 +620,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         layout object's baseline. If the layout contains more than one
         baseline, the baseline of the first strong character in
         logical order is used here (strong in this context means that
-        the character can be unambiguously assigned to a Unicode
+        the character can be unambiguously assigned to a unicode
         script).<p>
 
         @param xLayoutetText
@@ -580,20 +629,21 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         layout already carries intrinsic font information.
 
         @param aViewState
-        The view state to be used when drawing this text.
+        The viewstate to be used when drawing this text.
 
         @param aRenderState
-        The render state to be used when drawing this text.
+        The renderstate to be used when drawing this text.
 
         @return a handle to the cached rendering output.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
      */
     XCachedPrimitive        drawTextLayout( [in] XTextLayout xLayoutetText, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
+    //-------------------------------------------------------------------------
 
     /** Render the given bitmap.<p>
 
@@ -608,15 +658,15 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         The bitmap to render.
 
         @param aViewState
-        The view state to be used when drawing this text.
+        The viewstate to be used when drawing this text.
 
         @param aRenderState
-        The render state to be used when drawing this text.
+        The renderstate to be used when drawing this text.
 
         @return a handle to the cached rendering output.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
 
         @throws <type>VolatileContentDestroyedException</type>
@@ -641,11 +691,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         The bitmap to render.
 
         @param aViewState
-        The view state to be used when drawing this text.
+        The viewstate to be used when drawing this text.
 
         @param aRenderState
-        The render state to be used when drawing this text. The device
-        color entry in the render state is multiplied with every pixel
+        The renderstate to be used when drawing this text. The device
+        color entry in the renderstate is multiplied with every pixel
         color value, and only the result is rendered into the
         canvas. If, for example, the bitmap should be rendered with
         increased global transparency, set all device color channels
@@ -655,7 +705,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @return a handle to the cached rendering output.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
+        if one of the view and renderstate parameters are outside the
         specified range.
 
         @throws <type>VolatileContentDestroyedException</type>
@@ -666,6 +716,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 
+    //-------------------------------------------------------------------------
 
     /** Request the associated graphic device for this canvas.<p>
 
@@ -679,8 +730,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     XGraphicDevice          getDevice();
 };
 
+//=============================================================================
+
+/// Service providing an <type>XCanvas</type> interface
+service Canvas: XCanvas;
+
 }; }; }; };
 
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
