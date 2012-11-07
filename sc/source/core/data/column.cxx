@@ -30,6 +30,13 @@
 #include "detfunc.hxx"          // for Notes in Sort/Swap
 #include "postit.hxx"
 
+#include <svl/poolcach.hxx>
+#include <svl/zforlist.hxx>
+#include <editeng/scripttypeitem.hxx>
+
+#include <cstring>
+#include <map>
+
 using ::editeng::SvxBorderLine;
 using namespace formula;
 
