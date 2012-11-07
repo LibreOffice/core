@@ -1,0 +1,1 @@
+Programozási nyelv és környezet oktatáshoz, számítógépes grafikához és kiadványszerkesztéshez. Használat: Nézet→Eszköztárak→Logo eszköztár a Writerben. L. Logo a LibreOffice Súgóban.

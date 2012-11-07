@@ -1,0 +1,82 @@
+2012-11-06 László Németh:
+    * uppercase/translation icon:
+    - expands and uppercase Logo commands (fd -> FORWARD)
+    - translation between supported languages (commands, decimal sign, for/in order)
+    * new icon for clear screen
+    * add English manual (see LibreLogo/Logo/Turtle graphics in Help)
+
+2012-10-25 László Németh:
+    * fix positioning to the faulty program line
+    * program cache depends from the (modified) language of the document, too
+
+2012-10-21 László Németh:
+    * speed up command line
+    * add multiline tooltip to the command line (it works well from LibO 3.6.2)
+    * random color constants: ~color, eg. '~orange', '~green' etc.
+    * handle modulo operator
+    * ask before the compilation of long documents (avoid freezings)
+    * add compilation cache to the multiline programs
+    * better help window caption in the command line
+
+2012-06-27 László Németh:
+    * fix __string__ (use localized decimal sign)
+    * fix repcount in loops with inner picture block
+    * handle reopened documents
+    * modified argument list of custom dashed penstyle
+    * fix warning messages at maximum recursion depth and memory
+    * add hatching styles (fillstyle num or
+      fillstyle [line count(max 3), color, distance, degree]
+    * add localized set(), range(), sorted() 
+    * fix turtle selection at program start
+    * modified turtle colors
+    * fix showturtle
+    * fix LineStyle_SOLID and LineStyle_DASHED
+    * add repcount to the infinite loop
+    * add logical expression and better list support to the simple LibreLogo expression parser
+    * add string size limit for Print()
+    * support "pic" without block: new shape
+    * use localized __string__ for STR instead of str
+    * add min, max, and regex functions: sub, search, findall
+    * fix double round in localizations
+    * more stable dotted lines in the PDF export (implemented as arrays of dot-headed arrows)
+    * circles with dotted lines
+    * working pos and pagesize indices in expressions
+
+2012-05-17 László Németh:
+    * fix opt. suffix syntax of for+in (eg. with Finnish :ssa, Hungarian -ban)
+    * add dashed outline of turtle to show "pen up" state
+    * fix initial turtle focus for OpenOffice.org and older LibreOffice versions
+    * parsing simple (with 0 or 1 argument) user functions in complex expressions
+    * add localized "global"
+    * add localized operator "in" for logical expressions
+    * parsing user functions with 2 or more arguments in simple numerical expressions
+    * function heading supports coordinates
+    * function position supports drawing
+    * function pensize supports argument any
+    * set SizeProtect feature of turtle shape
+    * replace random while repcount variable with iterator
+    * fix repcount checking in conditions of "while" loops
+    * add repcount support to "for x in y" loops
+    * fix OUTPUT and STOP for lines with multiple commands
+    * fix = -> == conversion in logical expressions in OUTPUT
+    * fix multiple document support using CreationDate instead of Title
+    * better OpenOffice.org 3.2 compatibility (optional usage of feature Visible)
+
+2012-05-08 László Németh:
+    * picture [] handles left hanging shapes better
+    * function random works on lists or list-convertable objects (string, tuple, dict, set), too
+    * faster "label" (remove unnecessary shape search)
+    * document-level turtle states
+    * clean name spaces
+    * localization of "pi" (localizations support greek letter pi as alternative)
+    * localized "float"
+    * int & float support localized decimal signs and measurements (float '10,5cm')
+    * print, label, text support localized decimal sign
+
+2012-05-02 László Németh:
+    * fix slow drawing of new line shapes (unnecessary shape search)
+    * "circle" and "square" are synonyms of ellipse and rectangle, eg.
+      square num = rectangle [num, num]
+
+2012-04-27 László Németh:
+    * Initial release
