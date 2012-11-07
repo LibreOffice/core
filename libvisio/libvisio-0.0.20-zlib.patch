@@ -1,0 +1,26 @@
+--- libvisio-0.0.20/configure
++++ libvisio-0.0.20/configure
+@@ -17165,8 +17165,8 @@
+ fi
+ 
+ fi
+-LIBVISIO_CXXFLAGS="${WPD_CFLAGS} ${WPG_CFLAGS} ${LIBXML_CFLAGS}"
+-LIBVISIO_LIBS="${WPD_LIBS} ${WPG_LIBS} ${LIBXML_LIBS}"
++LIBVISIO_CXXFLAGS="${WPD_CFLAGS} ${WPG_CFLAGS} ${LIBXML_CFLAGS} ${ZLIB_CFLAGS}"
++LIBVISIO_LIBS="${WPD_LIBS} ${WPG_LIBS} ${LIBXML_LIBS} ${ZLIB_LIBS}"
+ 
+ 
+ 
+--- libvisio-0.0.20/Makefile.in
++++ libvisio-0.0.20/Makefile.in
+@@ -55,8 +55,8 @@
+ 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
+ 	$(srcdir)/libvisio-0.0.pc.in $(srcdir)/libvisio-zip.in \
+ 	$(srcdir)/libvisio.spec.in $(top_srcdir)/configure AUTHORS \
+-	NEWS ar-lib config.guess config.sub install-sh ltmain.sh \
+-	missing
++	NEWS ar-lib config.guess config.sub depcomp install-sh \
++	ltmain.sh missing
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
