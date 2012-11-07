@@ -809,18 +809,25 @@ static inline void print_fullpaths(char* line)
     char* end;
     int boost_count = 0;
     const char * unpacked_end = 0; /* end of UnpackedTarget match (if any) */
-    int first = 1; /* for UnpackedTarget the first (target) is GenCxxObject! */
+    /* for UnpackedTarget the target is GenC{,xx}Object, dont mangle! */
+    int target_seen = 0;
 
     token = line;
     eat_space(&token);
     while (*token)
     {
         end = token;
-        while (*end && (' ' != *end) && ('\t' != *end)) {
+        /* hard to believe that in this day and age drive letters still exist */
+        if (*end && (':' == *(end+1)) &&
+            (('\\' == *(end+2)) || ('/' == *(end+2))) && isalpha(*end))
+        {
+            end = end + 3; /* only one cross, err drive letter per filename */
+        }
+        while (*end && (' ' != *end) && ('\t' != *end) && (':' != *end)) {
             ++end;
         }
         int token_len = end - token;
-        if (!first &&
+        if (target_seen &&
             elide_dependency(token, token_len, &boost_count, &unpacked_end))
         {
             if (unpacked_end)
@@ -852,9 +859,18 @@ static inline void print_fullpaths(char* line)
                 abort();
             fputc(' ', stdout);
         }
-        first = 0;
         token = end;
         eat_space(&token);
+        if (!target_seen)
+        {
+            if (':' == *token)
+            {
+                target_seen = 1;
+                fputc(':', stdout);
+                ++token;
+                eat_space(&token);
+            }
+        }
     }
 }
 
