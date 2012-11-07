@@ -892,6 +892,12 @@ off_t size;
     {
         base = cursor_out = cursor = end = buffer;
         end += size;
+
+        /* first eat unneeded space at the beginning of file
+         */
+        while(cursor < end && (*cursor == ' ' || *cursor == '\\'))
+            ++cursor;
+
         while(cursor < end)
         {
             if(*cursor == '\\')
