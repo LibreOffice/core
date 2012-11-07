@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -15,38 +16,24 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef __com_sun_star_frame_XUntitledNumbers_idl__
 #define __com_sun_star_frame_XUntitledNumbers_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-constants UntitledNumbersConst
-{
-    const long INVALID_NUMBER = 0;
-};
-
-//=============================================================================
 /** knows all currently used and all free numbers for using with untitled
     but counted objects.
  */
 interface XUntitledNumbers : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-    /** calli has to lease a number befor he can use it within in its own title.
+    /** callee has to lease a number before he can use it within in its own title.
 
         Such number must be freed after using e.g. while the object was closed or
-        get's another title (e.g. by saving a document to a real location on disc).
+        gets another title (e.g. by saving a document to a real location on disc).
 
         @param  xComponent
                 the component which has to be registered for the leased number.
@@ -59,13 +46,12 @@ interface XUntitledNumbers : com::sun::star::uno::XInterface
     long leaseNumber ( [in] com::sun::star::uno::XInterface xComponent )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
     /** has to be used to mark those number as "free for using".
 
-        If the reqistered component does not use such leased number any longer
+        If the registered component does not use such leased number any longer
         it has to be released so it can be used for new components.
 
-        Note: calling this method with an unknown (but normaly valid number)
+        Note: calling this method with an unknown (but normally valid number)
               has to be ignored. No exceptions - no errors.
 
         @param  nNumber
@@ -77,7 +63,6 @@ interface XUntitledNumbers : com::sun::star::uno::XInterface
     void releaseNumber ( [in] long nNumber )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
     /** does the same then releaseNumber () but it searches the corresponding
         number for the specified component and deregister it.
 
@@ -90,11 +75,10 @@ interface XUntitledNumbers : com::sun::star::uno::XInterface
     void releaseNumberForComponent ( [in] com::sun::star::uno::XInterface xComponent )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
-    /** returns the localized string value to be used for untitles objects in
+    /** returns the localized string value to be used for untitled objects in
         combination with the leased number.
 
-        Note: Such string already contains leading spaces/tabs etcpp. !
+        Note: Such string already contains leading spaces/tabs etc. !
         The only thing which an outside code has todo then ... adding a leased number
         to the string.
 
@@ -103,8 +87,9 @@ interface XUntitledNumbers : com::sun::star::uno::XInterface
     string getUntitledPrefix ();
 };
 
-//=============================================================================
 
 }; }; }; };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
