@@ -96,13 +96,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 
-
-// A simple one item cache really helps here ...
-namespace {
-    static const SdrObjCustomShape *g_pLastCacheShape;
-    static Reference< XCustomShapeEngine > g_xLastCacheShapeEngine;
-}
-
 static void lcl_ShapeSegmentFromBinary( EnhancedCustomShapeSegment& rSegInfo, sal_uInt16 nSDat )
 {
     switch( nSDat >> 8 )
@@ -405,21 +398,18 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine( const SdrObjCustomShape* pCustomShape )
+Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine() const
 {
-    Reference< XCustomShapeEngine > xCustomShapeEngine;
+    if (mxCustomShapeEngine.is())
+        return mxCustomShapeEngine;
 
-    // We get dozens of back-to-back calls for the same shape
-    if( pCustomShape == g_pLastCacheShape )
-        return g_xLastCacheShapeEngine;
-
-    String aEngine(((SdrCustomShapeEngineItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue());
+    String aEngine(((SdrCustomShapeEngineItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue());
     if ( !aEngine.Len() )
         aEngine = String( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) );
 
     Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 
-    Reference< XShape > aXShape = GetXShapeForSdrObject( (SdrObjCustomShape*)pCustomShape );
+    Reference< XShape > aXShape = GetXShapeForSdrObject(const_cast<SdrObjCustomShape*>(this));
     if ( aXShape.is() )
     {
         if ( aEngine.Len() && xFactory.is() )
@@ -431,21 +421,18 @@ Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine( const S
             aArgument[ 0 ] <<= aPropValues;
             Reference< XInterface > xInterface( xFactory->createInstanceWithArguments( aEngine, aArgument ) );
             if ( xInterface.is() )
-                xCustomShapeEngine = Reference< XCustomShapeEngine >( xInterface, UNO_QUERY );
+                mxCustomShapeEngine = Reference< XCustomShapeEngine >( xInterface, UNO_QUERY );
         }
     }
 
-    g_pLastCacheShape = pCustomShape;
-    g_xLastCacheShapeEngine = xCustomShapeEngine;
-
-    return xCustomShapeEngine;
+    return mxCustomShapeEngine;
 }
 
 const SdrObject* SdrObjCustomShape::GetSdrObjectFromCustomShape() const
 {
     if ( !mXRenderedCustomShape.is() )
     {
-        Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine( this ) );
+        Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine() );
         if ( xCustomShapeEngine.is() )
             ((SdrObjCustomShape*)this)->mXRenderedCustomShape = xCustomShapeEngine->render();
     }
@@ -577,7 +564,7 @@ sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
 {
     sal_Bool bRet = sal_False;
 
-    Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine( this ) );
+    Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine() );
     if ( xCustomShapeEngine.is() )
     {
         awt::Rectangle aR( xCustomShapeEngine->getTextBounds() );
@@ -592,7 +579,7 @@ sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
 basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const SdrObjCustomShape* pCustomShape, const sal_Bool bBezierAllowed )
 {
     basegfx::B2DPolyPolygon aRetval;
-    Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine( pCustomShape ) );
+    Reference< XCustomShapeEngine > xCustomShapeEngine( pCustomShape->GetCustomShapeEngine() );
     if ( xCustomShapeEngine.is() )
     {
         com::sun::star::drawing::PolyPolygonBezierCoords aBezierCoords = xCustomShapeEngine->getLineGeometry();
@@ -616,7 +603,7 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
     std::vector< SdrCustomShapeInteraction > xRet;
     try
     {
-        Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine( pCustomShape ) );
+        Reference< XCustomShapeEngine > xCustomShapeEngine( pCustomShape->GetCustomShapeEngine() );
         if ( xCustomShapeEngine.is() )
         {
             int i;
@@ -865,11 +852,6 @@ SdrObjCustomShape::SdrObjCustomShape() :
 
 SdrObjCustomShape::~SdrObjCustomShape()
 {
-    if (this == g_pLastCacheShape)
-    {
-        g_pLastCacheShape = NULL;
-        g_xLastCacheShapeEngine.clear();
-    }
     // delete buffered display geometry
     InvalidateRenderGeometry();
 }
