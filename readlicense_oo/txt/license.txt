@@ -441,60 +441,6 @@ Flute
    Robert Wilhelm
    Werner Lemberg
 
-gdk-pixbuf
-
-   The following software may be included in this product: gdk-pixbuf. Use
-   of any of this software is governed by the terms of the license below:
-
-   © Free Software Foundation, Inc.
-
-   This library is free software; you can redistribute it and/or modify it
-   under the terms of the GNU Library General Public License as published
-   by the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
-
-   See LGPL Version 2 below
-
-gettext-runtime
-
-   The following software may be included in this product:
-   gettext-runtime. Use of any of this software is governed by the terms
-   of the license below:
-
-   © Free Software Foundation, Inc.
-
-   The gettext-runtime package is partially under the LGPL and partially
-   under
-   the GPL.
-
-   The following parts are under the LGPL:
-     * the libintl and libasprintf libraries and their header files,
-     * the libintl.jar Java library,
-     * the GNU.Gettext.dll C# library,
-     * the gettext.sh shells script function library.
-
-   The following parts are under the GPL:
-     * the _programs_ gettext, ngettext, envsubst,
-     * the documentation.
-
-   See GPL Version 3 below
-
-   See LGPL Version 2 below
-
-glib
-
-   The following software may be included in this product: glib. Use of
-   any of this software is governed by the terms of the license below:
-
-   © Free Software Foundation, Inc.
-
-   This library is free software; you can redistribute it and/or modify it
-   under the terms of the GNU Library General Public License as published
-   by the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
-
-   See LGPL Version 2 below
-
 GNU ISO C++ Library
 
    The following software may be included in this product: GNU ISO C++
@@ -950,13 +896,6 @@ libcmis
 
    See MPL Version 1.1 below
 
-libcroco
-
-   The following software may be included in this product: libcroco. Use
-   of any of this software is governed by the terms of the license below:
-
-   See LGPL Version 2 below
-
 libcurl
 
    The following software may be included in this product: libcurl. Use of
@@ -1021,12 +960,13 @@ libexttextcat
    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-libgsf
+liblangtag
 
-   The following software may be included in this product: libgsf. Use of
-   any of this software is governed by the terms of the license below:
+   The following software may be included in this product: liblangtag
+   Grammar Checker. Use of any of this software is governed by the terms
+   of the license below:
 
-   See LGPL Version 2.1 below
+   See LGPL Version 3 below
 
 libpng
 
@@ -1131,13 +1071,6 @@ libpng
    Glenn Randers-Pehrson
    glennrp at users.sourceforge.net
    February 3, 2011
-
-librsvg
-
-   The following software may be included in this product: librsvg. Use of
-   any of this software is governed by the terms of the license below:
-
-   See LGPL Version 2 below
 
 libvisio
 
