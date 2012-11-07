@@ -20,16 +20,13 @@ $(eval $(call gb_Library_Library,svgio))
 
 $(eval $(call gb_Library_set_componentfile,svgio,svgio/svgio))
 
-$(eval $(call gb_Library_use_package,svgio))
+$(eval $(call gb_Library_use_packages,svgio,\
+	svgio_inc \
+))
 
 $(eval $(call gb_Library_add_precompiled_header,svgio,$(SRCDIR)/svgio/inc/pch/precompiled_svgio))
 
 $(eval $(call gb_Library_use_sdk_api,svgio))
-
-$(eval $(call gb_Library_set_include,svgio,\
-    $$(INCLUDE) \
-    -I$(SRCDIR)/svgio/inc \
-))
 
 $(eval $(call gb_Library_add_defs,svgio,\
     -DSVGIO_DLLIMPLEMENTATION \
