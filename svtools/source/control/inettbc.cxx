@@ -34,7 +34,7 @@
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
-#include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
+#include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/instance.hxx>
@@ -345,8 +345,6 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
 
     try
     {
-        uno::Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-
         Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ),
                       new ::ucbhelper::CommandEnvironment( uno::Reference< XInteractionHandler >(),
                                                      uno::Reference< XProgressHandler >() ),
@@ -367,8 +365,8 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
             xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
             uno::Reference < XAnyCompareFactory > xCompare;
-            uno::Reference < XSortedDynamicResultSetFactory > xSRSFac(
-                xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory") ) ), UNO_QUERY );
+            uno::Reference < XSortedDynamicResultSetFactory > xSRSFac =
+                SortedDynamicResultSetFactory::create( ::comphelper::getProcessComponentContext() );
 
             Sequence< NumberedSortingInfo > aSortInfo( 2 );
             NumberedSortingInfo* pInfo = aSortInfo.getArray();

@@ -22,8 +22,9 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <cachedcontentresultsetstub.hxx>
 #include <com/sun/star/ucb/ContentResultSetCapability.hpp>
-#include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
+#include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
 #include <osl/diagnose.h>
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
@@ -202,9 +203,7 @@ void SAL_CALL CachedDynamicResultSetStubFactory
         Reference< XSortedDynamicResultSetFactory > xSortFactory;
         try
         {
-            xSortFactory = Reference< XSortedDynamicResultSetFactory >(
-                m_xSMgr->createInstance( OUString( "com.sun.star.ucb.SortedDynamicResultSetFactory" ) ),
-                UNO_QUERY );
+            xSortFactory = SortedDynamicResultSetFactory::create( comphelper::getComponentContext(m_xSMgr) );
         }
         catch ( Exception const & )
         {

@@ -25,7 +25,7 @@
 #include <com/sun/star/ucb/SearchRecursion.hpp>
 #include <com/sun/star/ucb/SearchCommandArgument.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
-#include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
+#include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <tools/urlobj.hxx>
 #include "file/FDriver.hxx"
@@ -201,8 +201,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         return xRef;
 
     Reference<XDynamicResultSet> xContent = m_pConnection->getDir();
-    Reference < XSortedDynamicResultSetFactory > xSRSFac(
-                m_pConnection->getDriver()->getFactory()->createInstance( ::rtl::OUString("com.sun.star.ucb.SortedDynamicResultSetFactory") ), UNO_QUERY );
+    Reference < XSortedDynamicResultSetFactory > xSRSFac =
+                SortedDynamicResultSetFactory::create( comphelper::getComponentContext( m_pConnection->getDriver()->getFactory() ) );
 
     Sequence< NumberedSortingInfo > aSortInfo( 1 );
     NumberedSortingInfo* pInfo = aSortInfo.getArray();

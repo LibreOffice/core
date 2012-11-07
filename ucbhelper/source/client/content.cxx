@@ -46,7 +46,7 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
-#include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
+#include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -658,13 +658,11 @@ Reference< XResultSet > Content::createSortedCursor(
     if( aDynSet.is() )
     {
         Reference< XDynamicResultSet > aDynResult;
-        Reference< XMultiComponentFactory > aServiceManager = m_xImpl->getComponentContext()->getServiceManager();
 
-        if( aServiceManager.is() )
+        if( m_xImpl->getComponentContext().is() )
         {
-            Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstanceWithContext(
-                                "com.sun.star.ucb.SortedDynamicResultSetFactory", m_xImpl->getComponentContext()),
-                                UNO_QUERY );
+            Reference< XSortedDynamicResultSetFactory > aSortFactory =
+                                SortedDynamicResultSetFactory::create( m_xImpl->getComponentContext());
 
             aDynResult = aSortFactory->createSortedDynamicResultSet( aDynSet,
                                                               rSortInfo,
