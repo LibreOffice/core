@@ -16,7 +16,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
-class SvLBoxEntry;
+class SvTreeListEntry;
 
 /**
  * Parameter used during call to ScOrcusFilters::loadXMLStructure().
@@ -47,7 +47,7 @@ struct ScOrcusXMLTreeParam
      */
     UserDataStoreType maUserDataStore;
 
-    static SC_DLLPUBLIC EntryData* getUserData(SvLBoxEntry& rEntry);
+    static SC_DLLPUBLIC EntryData* getUserData(SvTreeListEntry& rEntry);
 };
 
 #endif

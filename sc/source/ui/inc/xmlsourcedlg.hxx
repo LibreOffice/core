@@ -74,9 +74,9 @@ private:
     void HandleGetFocus(Control* pCtrl);
     void HandleLoseFocus(Control* pCtrl);
     void TreeItemSelected();
-    void DefaultElementSelected(SvLBoxEntry& rEntry);
-    void RepeatElementSelected(SvLBoxEntry& rEntry);
-    void AttributeSelected(SvLBoxEntry& rEntry);
+    void DefaultElementSelected(SvTreeListEntry& rEntry);
+    void RepeatElementSelected(SvTreeListEntry& rEntry);
+    void AttributeSelected(SvTreeListEntry& rEntry);
 
     void SetNonLinkable();
     void SetSingleLinkable();
@@ -87,9 +87,9 @@ private:
      * not checked; its parent is the first one to be checked, then all its
      * parents get checked all the way to the root.
      */
-    bool IsParentDirty(SvLBoxEntry* pEntry) const;
+    bool IsParentDirty(SvTreeListEntry* pEntry) const;
 
-    bool IsChildrenDirty(SvLBoxEntry* pEntry) const;
+    bool IsChildrenDirty(SvTreeListEntry* pEntry) const;
 
     DECL_LINK(GetFocusHdl, Control*);
     DECL_LINK(LoseFocusHdl, Control*);

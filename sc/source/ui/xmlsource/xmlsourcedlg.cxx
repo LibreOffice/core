@@ -90,7 +90,7 @@ void ScXMLSourceDlg::SetReference(const ScRange& rRange, ScDocument* pDoc)
     mpActiveEdit->SetRefString(aStr);
 
     // Set this address to currently selected tree item.
-    SvLBoxEntry* pEntry = maLbTree.GetCurEntry();
+    SvTreeListEntry* pEntry = maLbTree.GetCurEntry();
     if (!pEntry)
         return;
 
@@ -195,7 +195,7 @@ void ScXMLSourceDlg::HandleLoseFocus(Control* /*pCtrl*/)
 
 void ScXMLSourceDlg::TreeItemSelected()
 {
-    SvLBoxEntry* pEntry = maLbTree.GetCurEntry();
+    SvTreeListEntry* pEntry = maLbTree.GetCurEntry();
     if (!pEntry)
         return;
 
@@ -228,7 +228,7 @@ void ScXMLSourceDlg::TreeItemSelected()
     }
 }
 
-void ScXMLSourceDlg::DefaultElementSelected(SvLBoxEntry& rEntry)
+void ScXMLSourceDlg::DefaultElementSelected(SvTreeListEntry& rEntry)
 {
     ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
 
@@ -236,7 +236,7 @@ void ScXMLSourceDlg::DefaultElementSelected(SvLBoxEntry& rEntry)
     {
         // Only an element with no child elements (leaf element) can be linked.
         bool bHasChild = false;
-        for (SvLBoxEntry* pChild = maLbTree.FirstChild(&rEntry); pChild; pChild = maLbTree.NextSibling(pChild))
+        for (SvTreeListEntry* pChild = maLbTree.FirstChild(&rEntry); pChild; pChild = maLbTree.NextSibling(pChild))
         {
             pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
             OSL_ASSERT(pUserData);
@@ -266,7 +266,7 @@ void ScXMLSourceDlg::DefaultElementSelected(SvLBoxEntry& rEntry)
     SetSingleLinkable();
 }
 
-void ScXMLSourceDlg::RepeatElementSelected(SvLBoxEntry& rEntry)
+void ScXMLSourceDlg::RepeatElementSelected(SvTreeListEntry& rEntry)
 {
     // Check all its parents first.
 
@@ -290,13 +290,13 @@ void ScXMLSourceDlg::RepeatElementSelected(SvLBoxEntry& rEntry)
     SetRangeLinkable();
 }
 
-void ScXMLSourceDlg::AttributeSelected(SvLBoxEntry& rEntry)
+void ScXMLSourceDlg::AttributeSelected(SvTreeListEntry& rEntry)
 {
     // Check all its parent elements and make sure non of them are linked nor
     // repeat elements.  In attribute's case, it's okay to have the immediate
     // parent element linked (but not range-linked).
 
-    SvLBoxEntry* pParent = maLbTree.GetParent(&rEntry);
+    SvTreeListEntry* pParent = maLbTree.GetParent(&rEntry);
     OSL_ASSERT(pParent); // attribute should have a parent element.
 
     ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
@@ -338,10 +338,10 @@ void ScXMLSourceDlg::SetRangeLinkable()
     maRefBtn.Enable();
 }
 
-bool ScXMLSourceDlg::IsParentDirty(SvLBoxEntry* pEntry) const
+bool ScXMLSourceDlg::IsParentDirty(SvTreeListEntry* pEntry) const
 {
     ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
-    SvLBoxEntry* pParent = maLbTree.GetParent(pEntry);
+    SvTreeListEntry* pParent = maLbTree.GetParent(pEntry);
     while (pParent)
     {
         pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
@@ -361,10 +361,10 @@ bool ScXMLSourceDlg::IsParentDirty(SvLBoxEntry* pEntry) const
     return false;
 }
 
-bool ScXMLSourceDlg::IsChildrenDirty(SvLBoxEntry* pEntry) const
+bool ScXMLSourceDlg::IsChildrenDirty(SvTreeListEntry* pEntry) const
 {
     ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
-    for (SvLBoxEntry* pChild = maLbTree.FirstChild(pEntry); pChild; pChild = maLbTree.NextSibling(pChild))
+    for (SvTreeListEntry* pChild = maLbTree.FirstChild(pEntry); pChild; pChild = maLbTree.NextSibling(pChild))
     {
         pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
         OSL_ASSERT(pUserData);

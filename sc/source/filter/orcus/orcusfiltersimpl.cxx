@@ -177,7 +177,7 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) cons
 namespace {
 
 void setUserDataToEntry(
-    SvLBoxEntry& rEntry, ScOrcusXMLTreeParam::UserDataStoreType& rStore, ScOrcusXMLTreeParam::EntryType eType)
+    SvTreeListEntry& rEntry, ScOrcusXMLTreeParam::UserDataStoreType& rStore, ScOrcusXMLTreeParam::EntryType eType)
 {
     rStore.push_back(new ScOrcusXMLTreeParam::EntryData(eType));
     rEntry.SetUserData(&rStore.back());
@@ -186,10 +186,10 @@ void setUserDataToEntry(
 void populateTree(
    SvTreeListBox& rTreeCtrl, orcus::xml_structure_tree::walker& rWalker,
    const orcus::xml_structure_tree::entity_name& rElemName, bool bRepeat,
-   SvLBoxEntry* pParent, ScOrcusXMLTreeParam& rParam)
+   SvTreeListEntry* pParent, ScOrcusXMLTreeParam& rParam)
 {
     OUString aName(rElemName.name.get(), rElemName.name.size(), RTL_TEXTENCODING_UTF8);
-    SvLBoxEntry* pEntry = rTreeCtrl.InsertEntry(aName, pParent);
+    SvTreeListEntry* pEntry = rTreeCtrl.InsertEntry(aName, pParent);
     if (!pEntry)
         // Can this ever happen!?
         return;
@@ -217,7 +217,7 @@ void populateTree(
     for (; it != itEnd; ++it)
     {
         orcus::xml_structure_tree::entity_name aAttrName = *it;
-        SvLBoxEntry* pAttr = rTreeCtrl.InsertEntry(
+        SvTreeListEntry* pAttr = rTreeCtrl.InsertEntry(
             OUString(aAttrName.name.get(), aAttrName.name.size(), RTL_TEXTENCODING_UTF8), pEntry);
 
         if (!pAttr)

@@ -14,7 +14,7 @@
 ScOrcusXMLTreeParam::EntryData::EntryData(EntryType eType) :
     meType(eType), maLinkedPos(ScAddress::INITIALIZE_INVALID), mbRangeParent(false) {}
 
-ScOrcusXMLTreeParam::EntryData* ScOrcusXMLTreeParam::getUserData(SvLBoxEntry& rEntry)
+ScOrcusXMLTreeParam::EntryData* ScOrcusXMLTreeParam::getUserData(SvTreeListEntry& rEntry)
 {
     return static_cast<ScOrcusXMLTreeParam::EntryData*>(rEntry.GetUserData());
 }
