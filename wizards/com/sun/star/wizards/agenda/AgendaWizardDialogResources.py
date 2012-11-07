@@ -18,9 +18,14 @@
 from wizards.common.Resource import Resource
 
 class AgendaWizardDialogResources(Resource):
+    
     MODULE_NAME = "dbw"
     RID_AGENDAWIZARDDIALOG_START = 5000
     RID_COMMON_START = 500
+    SECTION_ITEMS = "AGENDA_ITEMS"
+    SECTION_TOPICS = "AGENDA_TOPICS"
+    SECTION_MINUTES_ALL = "MINUTES_ALL"
+    SECTION_MINUTES = "MINUTES"
 
     def __init__(self, xmsf):
         super(AgendaWizardDialogResources,self).__init__(xmsf,
@@ -164,7 +169,8 @@ class AgendaWizardDialogResources(Resource):
         self.resButtonUp = self.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 70)
         self.resButtonDown = self.getResText(
-            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 71)
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 71)        
 
+        #Common Resources
         self.resOverwriteWarning = self.getResText(
             AgendaWizardDialogResources.RID_COMMON_START + 19)

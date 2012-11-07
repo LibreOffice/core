@@ -16,10 +16,9 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from .FaxWizardDialog import FaxWizardDialog, Helper, PropertyNames, uno
+from .FaxWizardDialog import FaxWizardDialog, Helper, PropertyNames, uno, HID
 from .CGFaxWizard import CGFaxWizard
 from .FaxDocument import FaxDocument
-from .FaxWizardDialogConst import HID
 from ..ui.PathSelection import PathSelection
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
@@ -234,10 +233,9 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         '''Localise the template'''
         constRangeList = TextDocument.searchFillInItems(1)
         
-        for i in xrange(constRangeList.Count):
-            item = constRangeList.getByIndex(i)
-            text = item.String.lower()
-            aux = TextElement(item, self.resources.dictConstants[text],
+        for i in constRangeList:
+            text = i.String.lower()
+            aux = TextElement(i, self.resources.dictConstants[text],
                 "hint", self.xMSF)
             aux.write()
             

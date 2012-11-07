@@ -989,10 +989,9 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         '''Localise the template'''
         constRangeList = TextDocument.searchFillInItems(1)
         
-        for i in xrange(constRangeList.Count):
-            item = constRangeList.getByIndex(i)
-            text = item.String.lower()
-            aux = TextElement(item, self.resources.dictConstants[text],
+        for i in constRangeList:
+            text = i.String.lower()
+            aux = TextElement(i, self.resources.dictConstants[text],
                 "hint", self.xMSF)
             aux.write()
             

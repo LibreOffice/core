@@ -250,4 +250,9 @@ class TextDocument(object):
         sd.setPropertyValue("SearchRegularExpression", True)
         sd.setPropertyValue("SearchWords", True)
         
-        return self.xTextDocument.findAll(sd)
+        auxList = []
+        allItems = self.xTextDocument.findAll(sd)
+        for i in xrange(allItems.Count):
+            auxList.append(allItems.getByIndex(i))
+            
+        return auxList
