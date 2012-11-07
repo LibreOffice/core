@@ -58,6 +58,7 @@ struct ScMergePatternState;
 class ScFlatBoolRowSegments;
 struct ScSetStringParam;
 struct ScColWidthParam;
+struct ScColumnImpl;
 
 struct ScNeededSizeOptions
 {
@@ -79,6 +80,8 @@ struct ColEntry
 class ScColumn
 {
 private:
+    ScColumnImpl* mpImpl;
+
     SCCOL           nCol;
     SCTAB           nTab;
 

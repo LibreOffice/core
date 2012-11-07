@@ -30,15 +30,10 @@
 #include "detfunc.hxx"          // for Notes in Sort/Swap
 #include "postit.hxx"
 
-#include <svl/poolcach.hxx>
-#include <svl/zforlist.hxx>
-#include <editeng/scripttypeitem.hxx>
-
-#include <cstring>
-#include <map>
-
 using ::editeng::SvxBorderLine;
 using namespace formula;
+
+namespace {
 
 inline bool IsAmbiguousScriptNonZero( sal_uInt8 nScript )
 {
@@ -49,12 +44,19 @@ inline bool IsAmbiguousScriptNonZero( sal_uInt8 nScript )
              nScript != 0 );
 }
 
+}
+
+struct ScColumnImpl
+{
+};
+
 ScNeededSizeOptions::ScNeededSizeOptions() :
     pPattern(NULL), bFormula(false), bSkipMerged(true), bGetFont(true), bTotalSize(false)
 {
 }
 
 ScColumn::ScColumn() :
+    mpImpl(new ScColumnImpl),
     nCol( 0 ),
     pAttrArray( NULL ),
     pDocument( NULL )
