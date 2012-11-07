@@ -53,7 +53,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
-#include <rtl/logfile.hxx>
+#include <sal/log.hxx>
 
 #include "seinitializer_nssimpl.hxx"
 #include "../diagnose.hxx"
@@ -172,7 +172,12 @@ void deleteRootsModule()
     // first, try to get the profile from "MOZILLA_CERTIFICATE_FOLDER"
     const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
     if (pEnv)
+    {
+        SAL_INFO(
+            "xmlsecurity.xmlsec",
+            "Using Mozilla profile from MOZILLA_CERTIFICATE_FOLDER=" << pEnv);
         return rtl::OString(pEnv);
+    }
 
     // second, try to get saved user-preference
     try
@@ -181,11 +186,19 @@ void deleteRootsModule()
             officecfg::Office::Common::Security::Scripting::CertDir::get().get_value_or(rtl::OUString());
 
         if (!sUserSetCertPath.isEmpty())
+        {
+            SAL_INFO(
+                "xmlsecurity.xmlsec",
+                "Using Mozilla profile from /org.openoffice.Office.Common/"
+                    "Security/Scripting/CertDir: " << sUserSetCertPath);
             return rtl::OUStringToOString(sUserSetCertPath, osl_getThreadTextEncoding());
+        }
     }
     catch (const uno::Exception &e)
     {
-        SAL_WARN("xmlsecurity", "getMozillaCurrentProfile: caught exception" << e.Message);
+        SAL_WARN(
+            "xmlsecurity.xmlsec",
+            "getMozillaCurrentProfile: caught exception " << e.Message);
     }
 
     // third, dig around to see if there's one available
@@ -211,13 +224,15 @@ void deleteRootsModule()
             if (!profile.isEmpty())
             {
                 rtl::OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
+                SAL_INFO(
+                    "xmlsecurity.xmlsec",
+                    "Using Mozilla profile " << sProfilePath);
                 return rtl::OUStringToOString(sProfilePath, osl_getThreadTextEncoding());
             }
         }
     }
 
-    RTL_LOGFILE_PRODUCT_TRACE( "XMLSEC: No Mozilla Profile found!" );
-
+    SAL_INFO("xmlsecurity.xmlsec", "No Mozilla profile found");
     return rtl::OString();
 }
 
