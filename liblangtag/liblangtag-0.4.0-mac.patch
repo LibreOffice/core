@@ -45,7 +45,7 @@ diff -r -u liblangtag-0.4.0.org/liblangtag/lt-error.c liblangtag-0.4.0/liblangta
  	lt_bool_t allocated;
  
  	lt_return_val_if_fail (error != NULL, NULL);
-@@ -117,10 +114,7 @@
+@@ -117,13 +114,9 @@
  	d->message = lt_strdup_vprintf(message, ap);
  	va_end(ap);
  
@@ -56,7 +56,10 @@ diff -r -u liblangtag-0.4.0.org/liblangtag/lt-error.c liblangtag-0.4.0/liblangta
 +	d->stack_size = 0;
  
  	lt_mem_add_ref(&d->parent, d->message, free);
- 	lt_mem_add_ref(&d->parent, d->traces, free);
+-	lt_mem_add_ref(&d->parent, d->traces, free);
+ 
+ 	allocated = (*error)->data == NULL;
+ 	(*error)->data = lt_list_append((*error)->data, d, (lt_destroy_func_t)lt_mem_unref);
 diff -r -u liblangtag-0.4.0.org/liblangtag/lt-ext-module.c liblangtag-0.4.0/liblangtag/lt-ext-module.c
 --- misc/liblangtag-0.4.0.org/liblangtag/lt-ext-module.c	2012-11-06 09:15:59.000000000 -0600
 +++ misc/build/liblangtag-0.4.0/liblangtag/lt-ext-module.c	2012-11-06 09:30:31.000000000 -0600
