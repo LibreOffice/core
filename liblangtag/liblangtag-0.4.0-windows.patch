@@ -176,7 +176,7 @@
  #include <stdlib.h>
  #include "lt-list.h"
  #include "lt-mem.h"
-@@ -120,9 +120,13 @@
+@@ -120,13 +120,18 @@
  	d->message = lt_strdup_vprintf(message, ap);
  	va_end(ap);
  
@@ -190,6 +190,12 @@
  	d->stack_size = size;
  
  	lt_mem_add_ref(&d->parent, d->message, free);
+-	lt_mem_add_ref(&d->parent, d->traces, free);
++	if (d->traces != NULL)
++		lt_mem_add_ref(&d->parent, d->traces, free);
+ 
+ 	allocated = (*error)->data == NULL;
+ 	(*error)->data = lt_list_append((*error)->data, d, (lt_destroy_func_t)lt_mem_unref);
 --- misc/liblangtag-0.4.0/liblangtag/lt-ext-module.c
 +++ misc/build/liblangtag-0.4.0/liblangtag/lt-ext-module.c
 @@ -15,11 +15,15 @@
