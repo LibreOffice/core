@@ -97,9 +97,11 @@
 #ifdef __windows
 #define FILE_O_RDONLY     _O_RDONLY
 #define FILE_O_BINARY     _O_BINARY
+#define PATHNCMP strncasecmp /* MSVC converts paths to lower-case sometimes? */
 #else /* not windaube */
 #define FILE_O_RDONLY     O_RDONLY
 #define FILE_O_BINARY     0
+#define PATHNCMP strncmp
 #endif /* not windaube */
 
 #ifndef TRUE
@@ -730,7 +732,7 @@ elide_dependency(const char* key, int key_len,
 #endif
 
     /* .hdl files are always matched by .hpp */
-    if (key_len > 4 && !strncmp(key + key_len - 4, ".hdl", 4))
+    if (key_len > 4 && !PATHNCMP(key + key_len - 4, ".hdl", 4))
         return 1;
 
     /* boost brings a plague of header files */
@@ -746,13 +748,13 @@ elide_dependency(const char* key, int key_len,
             {
                 if (0 == boost)
                 {
-                    if (!strncmp(key + i + 1, "solver/", 7))
+                    if (!PATHNCMP(key + i + 1, "solver/", 7))
                     {
                         boost++;
                         continue;
                     }
                 }
-                else if (!strncmp(key + i + 1, "inc/external/boost/", 19))
+                else if (!PATHNCMP(key + i + 1, "inc/external/boost/", 19))
                 {
                     if (boost_count)
                         (*boost_count)++;
@@ -761,7 +763,7 @@ elide_dependency(const char* key, int key_len,
             }
             if (0 == unpacked)
             {
-                if (!strncmp(key + i + 1, "workdir/", 8))
+                if (!PATHNCMP(key + i + 1, "workdir/", 8))
                 {
                     unpacked = 1;
                     continue;
@@ -769,7 +771,7 @@ elide_dependency(const char* key, int key_len,
             }
             else
             {
-                if (!strncmp(key + i + 1, "UnpackedTarball/", 16))
+                if (!PATHNCMP(key + i + 1, "UnpackedTarball/", 16))
                 {
                     if (unpacked_end)
                         *unpacked_end = strchr(key + i + 17, '/');
