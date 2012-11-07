@@ -261,10 +261,17 @@ public:
     MultiSelectionModeHandler (
         SlideSorter& rSlideSorter,
         SelectionFunction& rSelectionFunction,
+#ifndef MACOSX
         const Point& rMouseModelPosition);
+#else
+        const Point& rMouseModelPosition,
+        const sal_uInt32 nEventCode);
+#endif
     virtual ~MultiSelectionModeHandler (void);
 
+#ifndef MACOSX
     void Initialize(const sal_uInt32 nEventCode);
+#endif
 
     virtual SelectionFunction::Mode GetMode (void) const;
     virtual void Abort (void);
@@ -311,10 +318,19 @@ class DragAndDropModeHandler : public SelectionFunction::ModeHandler
 public:
     DragAndDropModeHandler (
         SlideSorter& rSlideSorter,
+#ifndef MACOSX
         SelectionFunction& rSelectionFunction);
+#else
+        SelectionFunction& rSelectionFunction,
+        const Point& rMousePosition,
+        ::Window* pWindow);
+#endif
     virtual ~DragAndDropModeHandler (void);
 
+#ifndef MACOSX
     void Initialize(const Point& rMousePosition, ::Window* pWindow);
+#endif
+
     virtual SelectionFunction::Mode GetMode (void) const;
     virtual void Abort (void);
 
@@ -827,6 +843,7 @@ void SelectionFunction::SwitchToDragAndDropMode (const Point aMousePosition)
 {
     if (mpModeHandler->GetMode() != DragAndDropMode)
     {
+#ifndef MACOSX
         ::boost::shared_ptr<DragAndDropModeHandler> handler(
             new DragAndDropModeHandler(mrSlideSorter, *this));
         SwitchMode(handler);
@@ -834,6 +851,10 @@ void SelectionFunction::SwitchToDragAndDropMode (const Point aMousePosition)
         // could already trigger DND events, which would recursively trigger this code again,
         // and without mpModeHandler set it would again try to set a new handler.
         handler->Initialize(aMousePosition, mpWindow);
+#else
+        SwitchMode(::boost::shared_ptr<ModeHandler>(
+            new DragAndDropModeHandler(mrSlideSorter, *this, aMousePosition, mpWindow)));
+#endif
     }
 }
 
@@ -845,6 +866,7 @@ void SelectionFunction::SwitchToMultiSelectionMode (
     const sal_uInt32 nEventCode)
 {
     if (mpModeHandler->GetMode() != MultiSelectionMode)
+#ifndef MACOSX
     {
         ::boost::shared_ptr<MultiSelectionModeHandler> handler(
             new MultiSelectionModeHandler(mrSlideSorter, *this, aMousePosition));
@@ -853,6 +875,10 @@ void SelectionFunction::SwitchToMultiSelectionMode (
         // is non-trivial, so it could possibly recurse just like the DND handler above.
         handler->Initialize(nEventCode);
     }
+#else
+        SwitchMode(::boost::shared_ptr<ModeHandler>(
+            new MultiSelectionModeHandler(mrSlideSorter, *this, aMousePosition, nEventCode)));
+#endif
 }
 
 
@@ -1569,7 +1595,12 @@ void NormalModeHandler::ResetButtonDownLocation (void)
 MultiSelectionModeHandler::MultiSelectionModeHandler (
     SlideSorter& rSlideSorter,
     SelectionFunction& rSelectionFunction,
+#ifndef MACOSX
     const Point& rMouseModelPosition)
+#else
+    const Point& rMouseModelPosition,
+    const sal_uInt32 nEventCode)
+#endif
     : ModeHandler(rSlideSorter, rSelectionFunction, false),
       meSelectionMode(SM_Normal),
       maSecondCorner(rMouseModelPosition),
@@ -1578,11 +1609,13 @@ MultiSelectionModeHandler::MultiSelectionModeHandler (
       mnSecondIndex(-1),
       maButtonBarLock(rSlideSorter)
 {
+#ifndef MACOSX
 }
 
 
 void MultiSelectionModeHandler::Initialize(const sal_uInt32 nEventCode)
 {
+#endif
     const Pointer aSelectionPointer (POINTER_TEXT);
     mrSlideSorter.GetContentWindow()->SetPointer(aSelectionPointer);
     SetSelectionModeFromModifier(nEventCode);
@@ -1822,13 +1855,22 @@ void MultiSelectionModeHandler::UpdateSelection (void)
 
 DragAndDropModeHandler::DragAndDropModeHandler (
     SlideSorter& rSlideSorter,
+#ifndef MACOSX
     SelectionFunction& rSelectionFunction)
+#else
+    SelectionFunction& rSelectionFunction,
+    const Point& rMousePosition,
+    ::Window* pWindow)
+#endif
     : ModeHandler(rSlideSorter, rSelectionFunction, false)
 {
+#ifndef MACOSX
 }
+
 
 void DragAndDropModeHandler::Initialize(const Point& rMousePosition, ::Window* pWindow)
 {
+#endif
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
     if (pDragTransferable==NULL && mrSlideSorter.GetViewShell() != NULL)
     {
