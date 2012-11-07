@@ -106,6 +106,14 @@ $(eval $(call gb_Library_use_external,tl,zlib))
 
 ifeq ($(OS),WNT)
 
+ifeq ($(COM),GCC)
+
+$(eval $(call gb_Library_add_libs,tl,\
+    -Wl$(COMMA)--exclude-libs=libzlib.a \
+))
+
+endif
+
 $(eval $(call gb_Library_set_include,tl,\
     -I$(SRCDIR)/tools/win/inc \
     $$(INCLUDE) \
