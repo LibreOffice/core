@@ -1,3 +1,6 @@
 Internationalisation (i18npool) framework ensures that the suite is adaptable to the requirements of different
-native languages, their local settings and customs, etc without source code modification
-or recompilation. 
+native languages, their local settings and customs, etc without source code modification.
+
+Specifically for locale data documentation please see i18npool/source/localedata/data/locale.dtd
+
+See also [http://wiki.documentfoundation.org/Category:I18n]
