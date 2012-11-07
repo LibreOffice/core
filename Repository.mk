@@ -287,7 +287,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     helplinker \
     hwp \
     hyphen \
-    i18nregexp \
 	icd \
 	icg \
 	idx \

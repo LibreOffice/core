@@ -669,8 +669,6 @@ File gid_File_Lib_I18npool
   #endif
 End
 
-STD_LIB_FILE( gid_File_I18nregexp, i18nregexp )
-
 File gid_File_Lib_I18nsearch
     LIB_FILE_BODY;
     Styles = (PACKED);

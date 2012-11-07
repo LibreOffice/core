@@ -131,7 +131,6 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 	readlicense_oo \
-	regexp \
 	registry \
 	remotebridges \
 	reportbuilder \
