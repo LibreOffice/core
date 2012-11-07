@@ -395,6 +395,14 @@
      documents and is not selectable in the UI otherwise. Defaults to "false"
      if not specified. If this attribute is "true", 'default' and
      'usedInCompatibleFormatCodes' must both be "false".
+
+     Currency elements must not be changed to contain only a different
+     CurrencySymbol element without changing the CurrencyID and BankSymbol
+     elements, instead the entire Currency element must be duplicated, the old
+     element needs this 'legacyOnly' attribute be added and 'default' and
+     'usedInCompatibleFormatCodes' attributes must be set to "false", and only
+     in the new duplicated Currency element the CurrencySymbol element be
+     changed.
 -->
 <!ELEMENT CurrencyID (#PCDATA)>
 <!-- The ISO 4217 three letter currency code, e.g. USD or EUR. -->
