@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -15,78 +16,37 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef __com_sun_star_report_XReportDefinition_idl__
 #define __com_sun_star_report_XReportDefinition_idl__
 
-#ifndef __com_sun_star_report_XReportComponent_idl__
 #include <com/sun/star/report/XReportComponent.idl>
-#endif
-#ifndef __com_sun_star_report_XFunctionsSupplier_idl__
 #include <com/sun/star/report/XFunctionsSupplier.idl>
-#endif
-#ifndef __com_sun_star_view_PaperOrientation_idl__
 #include <com/sun/star/view/PaperOrientation.idl>
-#endif
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-#ifndef __com_sun_star_style_GraphicLocation_idl__
 #include <com/sun/star/style/GraphicLocation.idl>
-#endif
-#ifndef __com_sun_star_view_PaperFormat_idl__
 #include <com/sun/star/view/PaperFormat.idl>
-#endif
-#ifndef __com_sun_star_util_XClosable_idl__
 #include <com/sun/star/util/XCloseable.idl>
-#endif
-#ifndef __com_sun_star_ui_XUIConfigurationManagerSupplier_idl__
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.idl>
-#endif
-#ifndef __com_sun_star_document_XDocumentSubStorageSupplier_idl__
 #include <com/sun/star/document/XDocumentSubStorageSupplier.idl>
-#endif
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
-#ifndef __com_sun_star_document_XViewDataSupplier_idl__
 #include <com/sun/star/document/XViewDataSupplier.idl>
-#endif
-#ifndef __com_sun_star_frame_XLoadable_idl__
 #include <com/sun/star/frame/XLoadable.idl>
-#endif
-#ifndef __com_sun_star_embed_XVisualObject_idl__
 #include <com/sun/star/embed/XVisualObject.idl>
-#endif
-#ifndef __com_sun_star_embed_XStorageBasedDocument_idl__
 #include <com/sun/star/document/XStorageBasedDocument.idl>
-#endif
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
-#ifndef __com_sun_star_util_XModifiable2_idl__
 #include <com/sun/star/util/XModifiable2.idl>
-#endif
-#ifndef __com_sun_star_document_XEventBroadcaster_idl__
 #include <com/sun/star/document/XEventBroadcaster.idl>
-#endif
-#ifndef __com_sun_star_lang_DisposedException_idl__
 #include <com/sun/star/lang/DisposedException.idl>
-#endif
-#ifndef __com_sun_star_style_XStyleFamiliesSupplier_idl__
 #include <com/sun/star/style/XStyleFamiliesSupplier.idl>
-#endif
 
 module com {  module sun {  module star {  module sdbc {
 published interface XConnection;
 };};};};
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-     published interface XSection;
-     published interface XGroups;
-//=============================================================================
+     interface XSection;
+     interface XGroups;
 
 /** identifies a <type>XReportComponent</type> as being a (sub-) report.
 
@@ -99,7 +59,7 @@ published interface XConnection;
 
     @see XReportComponent
  */
-published interface XReportDefinition
+interface XReportDefinition
 {
     /** allows the access to the model embedded in the database storage.
     */
@@ -109,7 +69,7 @@ published interface XReportDefinition
     */
     interface com::sun::star::frame::XLoadable;
 
-    /** represents common visualisation functionality for the embedded report.
+    /** represents common visualization functionality for the embedded report.
     */
     interface com::sun::star::embed::XVisualObject;
 
@@ -138,12 +98,11 @@ published interface XReportDefinition
      */
     interface com::sun::star::style::XStyleFamiliesSupplier;
 
-    //-------------------------------------------------------------------------
     /** a storable document should provide information about his modify state
 
         <p>
         With this interface it's possible too, to reset the modify state.
-        That can be neccessary to prevent code against problem during closing
+        That can be necessary to prevent code against problem during closing
         of the document without saving any changes.
         </p>
      */
@@ -173,7 +132,6 @@ published interface XReportDefinition
         raises( ::com::sun::star::lang::DisposedException,
                 ::com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
 
     /** Represents the output format (media (mime) type) of the resulting document when executing this report.
     */
@@ -226,14 +184,14 @@ published interface XReportDefinition
 
         <p><member>Command</member> needs to be interpreted depending on the value of this property.</p>
 
-        <p>This property is only meaningfull together with the <member>Command</member>
+        <p>This property is only meaningful together with the <member>Command</member>
         property, thus either <em>both</em> or <em>none</em> of them are present.</p>
 
         @see com::sun::star::sdb::CommandType
      */
     [attribute,bound] long CommandType;
 
-    /** specifies an addtional filter to optinally use.
+    /** specifies an additional filter to optionally use.
 
         <p>The Filter string has to form a SQL WHERE-clause, <em>without</em> the WHERE-string itself.</p>
 
@@ -343,12 +301,9 @@ published interface XReportDefinition
     };
 };
 
-published service ReportDefinition : XReportDefinition;
-//=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

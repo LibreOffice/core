@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -15,28 +16,17 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef __com_sun_star_report_XFunction_idl__
 #define __com_sun_star_report_XFunction_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_beans_Optional_idl__
 #include <com/sun/star/beans/Optional.idl>
-#endif
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-#ifndef __com_sun_star_container_XChild_idl__
 #include <com/sun/star/container/XChild.idl>
-#endif
-//=============================================================================
  module com {  module sun {  module star {  module report {
-//=============================================================================
 /** specifies a format condition for a control.
 */
-published interface XFunction
+interface XFunction
 {
     /** gives access to the properties.
     */
@@ -63,20 +53,17 @@ published interface XFunction
     */
     [attribute,bound] string Name;
 
-    /** defines the formular of this function
+    /** defines the formula of this function
     */
     [attribute,bound] string Formula;
 
-    /** defines the formular for the intial value
+    /** defines the formula for the initial value
     */
     [attribute,bound] com::sun::star::beans::Optional<string> InitialFormula;
 };
 
-service Function : XFunction
-{
-    create();
-};
-//=============================================================================
 
 }; }; }; };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

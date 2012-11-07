@@ -16,37 +16,17 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_report_XFormattedField_idl__
-#define __com_sun_star_report_XFormattedField_idl__
 
-#include <com/sun/star/report/XReportControlModel.idl>
-#include <com/sun/star/util/XNumberFormatsSupplier.idl>
+#ifndef __com_sun_star_report_FormattedField_idl__
+#define __com_sun_star_report_FormattedField_idl__
+
+#include <com/sun/star/report/XFormattedField.idl>
 
 
  module com {  module sun {  module star {  module report {
 
-/** describes a control which can be used for displaying values with a arbitrary formatting.
 
-    @see com::sun::star::report::XReportControlModel
-    @see com::sun::star::util::XNumberFormatsSupplier
-*/
-interface XFormattedField
-{
-    interface XReportControlModel;
-
-    /** specifies the format to be used when formatting the field input
-        and output.
-
-        <p>This value is meaningful relative to the FormatsSupplier attribute
-        only.</p>
-     */
-    [attribute,bound] long FormatKey;
-
-    /** supplies the formats the field should work with.
-     */
-    [attribute,bound] com::sun::star::util::XNumberFormatsSupplier FormatsSupplier;
-};
-
+service FormattedField : XFormattedField;
 
 }; }; }; };
 

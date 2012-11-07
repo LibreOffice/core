@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -15,20 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef __com_sun_star_report_XFormatCondition_idl__
 #define __com_sun_star_report_XFormatCondition_idl__
 
-#ifndef __com_sun_star_report_XReportControlFormat_idl__
 #include <com/sun/star/report/XReportControlFormat.idl>
-#endif
 
-//=============================================================================
  module com {  module sun {  module star {  module report {
-//=============================================================================
 /** specifies a format condition for a control.
 */
-published interface XFormatCondition
+interface XFormatCondition
 {
     interface XReportControlFormat;
 
@@ -46,8 +42,8 @@ published interface XFormatCondition
     [attribute,bound] string Formula;
 };
 
-service FormatCondition : XFormatCondition;
-//=============================================================================
 
 }; }; }; };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
