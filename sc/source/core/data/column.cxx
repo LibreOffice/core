@@ -36,6 +36,8 @@
 
 #include <cstring>
 #include <map>
+#include <mdds/multi_type_vector.hpp>
+#include <mdds/multi_type_vector_trait.hpp>
 
 using ::editeng::SvxBorderLine;
 using namespace formula;
@@ -55,6 +57,11 @@ inline bool IsAmbiguousScriptNonZero( sal_uInt8 nScript )
 
 struct ScColumnImpl
 {
+    typedef mdds::multi_type_vector<mdds::mtv::element_block_func> TextWidthType;
+
+    TextWidthType maTextWidths;
+
+    ScColumnImpl() : maTextWidths(MAXROWCOUNT) {}
 };
 
 ScNeededSizeOptions::ScNeededSizeOptions() :
@@ -2287,5 +2294,22 @@ bool ScColumn::SearchStyleRange(
         return pAttrArray->SearchStyleRange( rRow, rEndRow, pSearchStyle, bUp, NULL );
 }
 
+sal_uInt16 ScColumn::GetTextWidth(SCROW nRow) const
+{
+    switch (mpImpl->maTextWidths.get_type(nRow))
+    {
+        case mdds::mtv::element_type_ushort:
+            return mpImpl->maTextWidths.get<unsigned short>(nRow);
+        default:
+            ;
+    }
+    return TEXTWIDTH_DIRTY;
+}
+
+void ScColumn::SetTextWidth(SCROW nRow, sal_uInt16 nWidth)
+{
+    // We only use unsigned short type in this container.
+    mpImpl->maTextWidths.set(nRow, static_cast<unsigned short>(nWidth));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
