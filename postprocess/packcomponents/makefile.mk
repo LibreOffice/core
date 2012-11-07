@@ -389,7 +389,9 @@ my_components += component/connectivity/source/drivers/mozab/mozab
 my_components += component/connectivity/source/drivers/mozab/bootstrap/mozbootstrap
 .END
 .ELIF "$(OS)" != "ANDROID" && "$(OS)" != "IOS"
-my_components += component/connectivity/source/drivers/mork/mork
+my_components += \
+    component/connectivity/source/drivers/mork/mork \
+    component/connectivity/source/drivers/mozab/bootstrap/mozbootstrap
 .END
 
 .IF "$(OS)" != "WNT" && "$(OS)" != "ANDROID" && "$(OS)" != "IOS" && "$(OS)" != "headless"

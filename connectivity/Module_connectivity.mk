@@ -136,6 +136,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_mork \
 	Executable_mork_helper \
 	Library_mork \
+	Library_mozbootstrap \
 ))
 
 $(eval $(call gb_Module_add_check_targets,connectivity,\

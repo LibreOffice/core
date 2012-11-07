@@ -905,6 +905,7 @@ End
 #else
 
 STD_LIB_FILE(gid_File_Lib_Mork,mork)
+SPECIAL_LIB_FILE(gid_File_Lib_Mozbootstrap,mozbootstrap)
 
 #endif
 
