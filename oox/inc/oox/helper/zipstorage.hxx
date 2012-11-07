@@ -76,7 +76,7 @@ private:
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
-                        mxStorage;      /// Storage based on input or output stream.
+                        mxStorage;      ///< Storage based on input or output stream.
 };
 
 // ============================================================================

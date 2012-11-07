@@ -130,11 +130,11 @@ private:
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        mxPropSet;          /// The mandatory property set interface.
+                        mxPropSet;          ///< The mandatory property set interface.
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet >
-                        mxMultiPropSet;     /// The optional multi property set interface.
+                        mxMultiPropSet;     ///< The optional multi property set interface.
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
-                        mxPropSetInfo;      /// Property information.
+                        mxPropSetInfo;      ///< Property information.
 };
 
 // ============================================================================

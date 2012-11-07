@@ -171,15 +171,15 @@ private:
 private:
     typedef RefMap< ::rtl::OUString, StorageBase > SubStorageMap;
 
-    SubStorageMap       maSubStorages;      /// Map of direct sub storages.
+    SubStorageMap       maSubStorages;      ///< Map of direct sub storages.
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        mxInStream;         /// Cached base input stream (to keep it alive).
+                        mxInStream;         ///< Cached base input stream (to keep it alive).
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
-                        mxOutStream;        /// Cached base output stream (to keep it alive).
-    ::rtl::OUString     maParentPath;       /// Full path of parent storage.
-    ::rtl::OUString     maStorageName;      /// Name of this storage, if it is a substorage.
-    bool                mbBaseStreamAccess; /// True = access base streams with empty stream name.
-    bool                mbReadOnly;         /// True = storage opened read-only (based on input stream).
+                        mxOutStream;        ///< Cached base output stream (to keep it alive).
+    ::rtl::OUString     maParentPath;       ///< Full path of parent storage.
+    ::rtl::OUString     maStorageName;      ///< Name of this storage, if it is a substorage.
+    bool                mbBaseStreamAccess; ///< True = access base streams with empty stream name.
+    bool                mbReadOnly;         ///< True = storage opened read-only (based on input stream).
 };
 
 // ============================================================================

@@ -115,10 +115,10 @@ private:
     BinaryStreamBase&   operator=( const BinaryStreamBase& );
 
 protected:
-    bool                mbEof;          /// End of stream flag.
+    bool                mbEof;          ///< End of stream flag.
 
 private:
-    const bool          mbSeekable;     /// True = implementation supports seeking.
+    const bool          mbSeekable;     ///< True = implementation supports seeking.
 };
 
 // ============================================================================
@@ -146,7 +146,7 @@ protected:
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable >
-                        mxSeekable;     /// Stream seeking interface.
+                        mxSeekable;     ///< Stream seeking interface.
 };
 
 // ============================================================================
@@ -174,8 +174,8 @@ protected:
     explicit            SequenceSeekableStream( const StreamDataSequence& rData );
 
 protected:
-    const StreamDataSequence* mpData;   /// Wrapped data sequence.
-    sal_Int32           mnPos;          /// Current position in the sequence.
+    const StreamDataSequence* mpData;   ///< Wrapped data sequence.
+    sal_Int32           mnPos;          ///< Current position in the sequence.
 };
 
 // ============================================================================

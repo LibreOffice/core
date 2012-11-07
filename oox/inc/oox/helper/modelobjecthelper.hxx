@@ -58,11 +58,11 @@ private:
 
 private:
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        mxModelFactory;         /// Factory to create the container.
+                        mxModelFactory;         ///< Factory to create the container.
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                        mxContainer;            /// Container for the objects.
-    ::rtl::OUString     maServiceName;          /// Service name to create the container.
-    sal_Int32           mnIndex;                /// Index to create unique identifiers.
+                        mxContainer;            ///< Container for the objects.
+    ::rtl::OUString     maServiceName;          ///< Service name to create the container.
+    sal_Int32           mnIndex;                ///< Index to create unique identifiers.
 };
 
 // ============================================================================
@@ -104,15 +104,15 @@ public:
     ::rtl::OUString     insertFillBitmapUrl( const ::rtl::OUString& rGraphicUrl );
 
 private:
-    ObjectContainer     maMarkerContainer;      /// Contains all named line markers (line end polygons).
-    ObjectContainer     maDashContainer;        /// Contains all named line dsahes.
-    ObjectContainer     maGradientContainer;    /// Contains all named fill gradients.
-    ObjectContainer     maTransGradContainer;   /// Contains all named transparency Gradients.
-    ObjectContainer     maBitmapUrlContainer;   /// Contains all named fill bitmap URLs.
-    const ::rtl::OUString maDashNameBase;       /// Base name for all named line dashes.
-    const ::rtl::OUString maGradientNameBase;   /// Base name for all named fill gradients.
-    const ::rtl::OUString maTransGradNameBase;   /// Base name for all named fill gradients.
-    const ::rtl::OUString maBitmapUrlNameBase;  /// Base name for all named fill bitmap URLs.
+    ObjectContainer     maMarkerContainer;      ///< Contains all named line markers (line end polygons).
+    ObjectContainer     maDashContainer;        ///< Contains all named line dsahes.
+    ObjectContainer     maGradientContainer;    ///< Contains all named fill gradients.
+    ObjectContainer     maTransGradContainer;   ///< Contains all named transparency Gradients.
+    ObjectContainer     maBitmapUrlContainer;   ///< Contains all named fill bitmap URLs.
+    const ::rtl::OUString maDashNameBase;       ///< Base name for all named line dashes.
+    const ::rtl::OUString maGradientNameBase;   ///< Base name for all named fill gradients.
+    const ::rtl::OUString maTransGradNameBase;   ///< Base name for all named fill gradients.
+    const ::rtl::OUString maBitmapUrlNameBase;  ///< Base name for all named fill bitmap URLs.
 };
 
 // ============================================================================

@@ -312,10 +312,10 @@ public:
     inline BinaryXInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
 
 private:
-    StreamDataSequence  maBuffer;       /// Data buffer used in readMemory() function.
+    StreamDataSequence  maBuffer;       ///< Data buffer used in readMemory() function.
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        mxInStrm;       /// Reference to the input stream.
-    bool                mbAutoClose;    /// True = automatically close stream on destruction.
+                        mxInStrm;       ///< Reference to the input stream.
+    bool                mbAutoClose;    ///< True = automatically close stream on destruction.
 };
 
 // ============================================================================
