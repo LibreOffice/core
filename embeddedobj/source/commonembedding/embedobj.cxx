@@ -40,6 +40,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <rtl/logfile.hxx>
+#include <vcl/svapp.hxx>
 
 #include <targetstatecontrol.hxx>
 
@@ -528,6 +529,16 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 uno::RuntimeException )
 {
     RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::doVerb" );
+
+    SolarMutexGuard aSolarGuard;
+        //TODO: a gross hack to avoid deadlocks when this is called from the
+        // outside and OCommonEmbeddedObject::changeState, with m_aMutex locked,
+        // calls into framework code that tries to lock the solar mutex, while
+        // another thread (through Window::ImplCallPaint, say) calls
+        // OCommonEmbeddedObject::getComponent with the solar mutex locked and
+        // then tries to lock m_aMutex (see fdo#56818); the alternative would be
+        // to get locking done right in this class, but that looks like a
+        // daunting task
 
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
