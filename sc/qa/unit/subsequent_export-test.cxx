@@ -76,12 +76,14 @@ public:
 
     void test();
     void testPasswordExport();
+    void testConditionalFormatExportXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
 #if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(WNT)
     CPPUNIT_TEST(testPasswordExport);
 #endif
+    CPPUNIT_TEST(testConditionalFormatExportXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -89,18 +91,27 @@ private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
 
     ScDocShellRef saveAndReload( ScDocShell* pShell, sal_Int32 nFormat );
+    ScDocShellRef loadDocument( const rtl::OUString& rFileNameBase, sal_Int32 nFormat );
+    void createFileURL( const rtl::OUString& aFileBase, const rtl::OUString& rFileExtension, rtl::OUString& rFilePath);
+    void createCSVPath(const rtl::OUString& rFileBase, rtl::OUString& rCSVPath);
 };
 
-/*
-void ScFiltersTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
+void ScExportTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
 {
-    rtl::OUString aSep(RTL_CONSTASCII_USTRINGPARAM("/"));
+    rtl::OUString aSep("/");
     rtl::OUStringBuffer aBuffer( getSrcRootURL() );
     aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
     aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
     rFilePath = aBuffer.makeStringAndClear();
 }
-*/
+
+void ScExportTest::createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rCSVPath)
+{
+    rtl::OUStringBuffer aBuffer(getSrcRootPath());
+    aBuffer.append(m_aBaseString).append(rtl::OUString("/contentCSV/"));
+    aBuffer.append(aFileBase).append(rtl::OUString("csv"));
+    rCSVPath = aBuffer.makeStringAndClear();
+}
 
 ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const rtl::OUString &rFilter,
     const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType)
@@ -210,6 +221,35 @@ ScDocShellRef ScExportTest::saveAndReload( ScDocShell* pShell, sal_Int32 nFormat
     return xDocSh;
 }
 
+ScDocShellRef ScExportTest::loadDocument(const rtl::OUString& rFileName, sal_Int32 nFormat)
+{
+    rtl::OUString aFileExtension(aFileFormats[nFormat].pName, strlen(aFileFormats[nFormat].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFileURL( rFileName, aFileExtension, aFileName );
+    rtl::OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
+    unsigned int nFormatType = aFileFormats[nFormat].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+
+    SfxFilter* pFilter = new SfxFilter(
+        aFilterName,
+        rtl::OUString(), nFormatType, nClipboardId, aFilterType, 0, rtl::OUString(),
+        rtl::OUString(), rtl::OUString("private:factory/scalc*") );
+    pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+
+    ScDocShellRef xDocShRef = new ScDocShell;
+    SfxMedium* pSrcMed = new SfxMedium(aFileName, STREAM_STD_READ);
+    pSrcMed->SetFilter(pFilter);
+    if (!xDocShRef->DoLoad(pSrcMed))
+    {
+        xDocShRef->DoClose();
+        // load failed.
+        xDocShRef.Clear();
+    }
+
+    return xDocShRef;
+}
+
 void ScExportTest::test()
 {
     ScDocShell* pShell = new ScDocShell(
@@ -254,6 +294,20 @@ void ScExportTest::testPasswordExport()
     ScDocument* pLoadedDoc = xDocSh->GetDocument();
     double aVal = pLoadedDoc->GetValue(0,0,0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(aVal, 1.0, 1e-8);
+}
+
+void ScExportTest::testConditionalFormatExportXLSX()
+{
+    ScDocShellRef xShell = loadDocument("new_cond_format_test.", XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    rtl::OUString aCSVFile("new_cond_format_test.");
+    rtl::OUString aCSVPath;
+    createCSVPath( aCSVFile, aCSVPath );
+    testCondFile(aCSVPath, pDoc, 0);
 }
 
 ScExportTest::ScExportTest()
