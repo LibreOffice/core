@@ -1303,11 +1303,9 @@ void ViewShellBase::Implementation::ResizePixel (
         rOrigin.X()+aBaseBorder.Left(),
         rOrigin.Y()+aBaseBorder.Top());
 
-    // -1 (below) is there to let one line of _pFrame->GetWindow() visible,
-    // so that it plays better with the overall look
     Size aViewWindowSize (
         rSize.Width() - aBaseBorder.Left() - aBaseBorder.Right(),
-        rSize.Height() - aBaseBorder.Top() - aBaseBorder.Bottom() - 1);
+        rSize.Height() - aBaseBorder.Top() - aBaseBorder.Bottom());
     mpViewWindow->SetPosSizePixel(aViewWindowPosition, aViewWindowSize);
 
     maClientArea = Rectangle(Point(0,0), aViewWindowSize);
