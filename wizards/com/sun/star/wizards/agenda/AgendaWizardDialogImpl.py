@@ -19,6 +19,7 @@ import traceback
 from .AgendaWizardDialog import AgendaWizardDialog
 from .AgendaWizardDialogConst import HID
 from .AgendaTemplate import AgendaTemplate, FileAccess
+from .TemplateConsts import TemplateConsts
 from .TopicsControl import TopicsControl
 from .CGAgenda import CGAgenda
 from ..ui.PathSelection import PathSelection
@@ -71,8 +72,10 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
             # initialize the agenda template
             self.agenda = CGAgenda()
+            self.templateConsts = TemplateConsts
             self.agendaTemplate = AgendaTemplate(
-                self.xMSF, self.agenda, self.resources, self)
+                self.xMSF, self.agenda, self.resources,
+                self.templateConsts, self)
 
             # build the dialog.
             self.drawNaviBar()
@@ -296,37 +299,37 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         AgendaTemplate.agenda.cp_IncludeMinutes = bool(self.chkMinutes.State)
 
     def chkUseMeetingTypeItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_MEETING_TYPE)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_MEETING_TYPE)
 
     def chkUseReadItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_READ)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_READ)
 
     def chkUseBringItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_BRING)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_BRING)
 
     def chkUseNotesItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_NOTES)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_NOTES)
 
     def chkUseCalledByItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_CALLED_BY)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_CALLED_BY)
 
     def chkUseFacilitatorItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_FACILITATOR)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_FACILITATOR)
 
     def chkUseNoteTakerItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_NOTETAKER)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_NOTETAKER)
 
     def chkUseTimeKeeperItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_TIMEKEEPER)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_TIMEKEEPER)
 
     def chkUseAttendeesItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_PARTICIPANTS)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_PARTICIPANTS)
 
     def chkUseObserversItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_OBSERVERS)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_OBSERVERS)
 
     def chkUseResourcePersonsItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_RESOURCE_PERSONS)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_RESOURCE_PERSONS)
 
     '''
     convenience method.
