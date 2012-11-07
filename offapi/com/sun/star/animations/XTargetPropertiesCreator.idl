@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -15,23 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-
 #ifndef __com_sun_star_animations_XTargetPropertiesCreator_idl__
 #define __com_sun_star_animations_XTargetPropertiesCreator_idl__
 
-#ifndef __com_sun_star_animations_TargetProperties_idl__
 #include <com/sun/star/animations/TargetProperties.idl>
-#endif
-#ifndef __com_sun_star_animations_XAnimationNode_idl__
 #include <com/sun/star/animations/XAnimationNode.idl>
-#endif
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** Factory interface to generate properties for all animated targets.<p>
 
@@ -62,10 +55,9 @@ interface XTargetPropertiesCreator : ::com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
-
-service TargetPropertiesCreator: XTargetPropertiesCreator;
 
 }; }; }; };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
