@@ -17,15 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <map>
-
-#include <svl/poolcach.hxx>
-#include <svl/zforlist.hxx>
-#include <editeng/scripttypeitem.hxx>
-#include <string.h>
-
-#include "scitems.hxx"
 #include "column.hxx"
+#include "scitems.hxx"
 #include "cell.hxx"
 #include "document.hxx"
 #include "docpool.hxx"
@@ -36,6 +29,13 @@
 #include "markdata.hxx"
 #include "detfunc.hxx"          // for Notes in Sort/Swap
 #include "postit.hxx"
+
+#include <svl/poolcach.hxx>
+#include <svl/zforlist.hxx>
+#include <editeng/scripttypeitem.hxx>
+
+#include <cstring>
+#include <map>
 
 using ::editeng::SvxBorderLine;
 using namespace formula;
