@@ -113,7 +113,7 @@
 
 int internal_boost = 0;
 static char* base_dir;
-static char* out_dir;
+static char* work_dir;
 
 #ifdef __GNUC__
 #define clz __builtin_clz
@@ -785,13 +785,13 @@ elide_dependency(const char* key, int key_len,
 }
 
 /*
- * We collapse tens of internal boost headers to a single one, such
+ * We collapse tens of internal boost headers to the unpacked target, such
  * that you can re-compile / install boost and all is well.
  */
 static void emit_single_boost_header(void)
 {
-#define BOOST_HEADER "/inc/external/boost/bind.hpp"
-    fprintf(stdout, "%s" BOOST_HEADER " ", out_dir);
+#define BOOST_TARGET "/UnpackedTarball/boost.done"
+    fprintf(stdout, "%s" BOOST_TARGET " ", work_dir);
 }
 
 static void emit_unpacked_target(char const*const token, char const*const end)
@@ -1038,7 +1038,7 @@ const char *env_str;
         _usage();
         return 1;
     }
-    if(get_var(&base_dir, "SRCDIR") || get_var(&out_dir, "OUTDIR"))
+    if(get_var(&base_dir, "SRCDIR") || get_var(&work_dir, "WORKDIR"))
         return 1;
 
     env_str = getenv("SYSTEM_BOOST");
