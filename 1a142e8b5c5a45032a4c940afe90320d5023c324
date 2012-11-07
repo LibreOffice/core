@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQX///8U\u003d",
+        "filename": "lpsolve/makefile.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-11-07T22:33:48Z",
+      "side": 0,
+      "message": "wonder if these vars still do anything useful?",
+      "revId": "1a142e8b5c5a45032a4c940afe90320d5023c324",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

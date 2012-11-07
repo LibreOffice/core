@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQX///8Y\u003d",
+        "filename": "lpsolve/ExternalProject_lpsolve.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-11-07T22:33:48Z",
+      "side": 1,
+      "message": "why does it need hunspell ?",
+      "revId": "9857add2221e6faea98d783ecc97ac913d70d656",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
