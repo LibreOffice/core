@@ -27,8 +27,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,lpsolve,\
 	lpsolve/lp_solve_5.5.patch \
 ))
 
-$(eval $(call gb_UnpackedTarball_add_file,lpsolve,\
-	lpsolve/lpsolve55/ccc.static,lpsolve/ccc.static))
+$(eval $(call gb_UnpackedTarball_add_file,lpsolve,lpsolve55/ccc.static,lpsolve/ccc.static))
 
 endif
 # vim: set noet sw=4 ts=4:
