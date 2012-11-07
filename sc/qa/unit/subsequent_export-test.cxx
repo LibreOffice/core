@@ -87,6 +87,8 @@ public:
 private:
     rtl::OUString m_aBaseString;
     uno::Reference<uno::XInterface> m_xCalcComponent;
+
+    ScDocShellRef saveAndReload( ScDocShell* pShell, sal_Int32 nFormat );
 };
 
 /*
@@ -197,6 +199,17 @@ ScDocShellRef ScExportTest::saveAndReload(ScDocShell* pShell, const rtl::OUStrin
     return xDocShRef;
 }
 
+ScDocShellRef ScExportTest::saveAndReload( ScDocShell* pShell, sal_Int32 nFormat )
+{
+    rtl::OUString aFileExtension(aFileFormats[nFormat].pName, strlen(aFileFormats[nFormat].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
+    ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, rtl::OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
+
+    CPPUNIT_ASSERT(xDocSh.Is());
+    return xDocSh;
+}
+
 void ScExportTest::test()
 {
     ScDocShell* pShell = new ScDocShell(
@@ -210,11 +223,7 @@ void ScExportTest::test()
     pDoc->SetValue(0,0,0, 1.0);
     CPPUNIT_ASSERT(pDoc);
 
-    sal_Int32 nFormat = ODS;
-    rtl::OUString aFileExtension(aFileFormats[nFormat].pName, strlen(aFileFormats[nFormat].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
-    ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, rtl::OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
+    ScDocShellRef xDocSh = saveAndReload( pShell, ODS );
 
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument* pLoadedDoc = xDocSh->GetDocument();
