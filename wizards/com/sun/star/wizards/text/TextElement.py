@@ -16,26 +16,13 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from .Helper import Helper
-from com.sun.star.text.PlaceholderType import TEXT
 
 class TextElement(object):
 
-    def __init__(self, item, placeHolderText, hint, xmsf):
+    def __init__(self, item, placeHolderText):
         self.item = item
         self.placeHolderText = placeHolderText
-        self.xmsf = xmsf
-        self.paraStyle = Helper.getUnoPropertyValue(
-            item.Start, "ParaStyleName")
 
     def write(self):
-        try:
-            if self.item is not None:
-                self.item.String = ""
-                cursor = self.item.Text.createTextCursorByRange(
-                    self.item.Start)
-                cursor.String = self.placeHolderText
-                Helper.setUnoPropertyValue(
-                    cursor, "ParaStyleName", self.paraStyle)
-        except Exception, e:
-            traceback.print_exc()
+        if self.item is not None:
+            self.item.String = self.placeHolderText

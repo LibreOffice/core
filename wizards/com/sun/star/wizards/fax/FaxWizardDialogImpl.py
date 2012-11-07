@@ -25,13 +25,13 @@ from ..ui.event.RadioDataAware import RadioDataAware
 from ..text.TextFieldHandler import TextFieldHandler
 from ..text.TextDocument import TextDocument
 from ..text.ViewHandler import ViewHandler
+from ..text.TextElement import TextElement
 from ..common.Configuration import Configuration
 from ..common.SystemDialog import SystemDialog
 from ..common.NoValidPathException import NoValidPathException
 from ..common.HelpIds import HelpIds
 from ..common.FileAccess import FileAccess
 from ..common.Desktop import Desktop
-from ..common.TextElement import TextElement
 from ..document.OfficeDocument import OfficeDocument
 
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
@@ -235,8 +235,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         
         for i in constRangeList:
             text = i.String.lower()
-            aux = TextElement(i, self.resources.dictConstants[text],
-                "hint", self.xMSF)
+            aux = TextElement(i, self.resources.dictConstants[text])
             aux.write()
             
     def insertRoadmap(self):

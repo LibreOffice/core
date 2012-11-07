@@ -25,10 +25,10 @@ from ..common.FileAccess import FileAccess
 from ..common.Configuration import Configuration
 from ..common.SystemDialog import SystemDialog
 from ..common.Desktop import Desktop
-from ..common.TextElement import TextElement
 from ..ui.PathSelection import PathSelection
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
+from ..text.TextElement import TextElement
 from ..text.TextDocument import TextDocument
 from ..text.ViewHandler import ViewHandler
 from ..text.TextFieldHandler import TextFieldHandler
@@ -991,8 +991,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         
         for i in constRangeList:
             text = i.String.lower()
-            aux = TextElement(i, self.resources.dictConstants[text],
-                "hint", self.xMSF)
+            aux = TextElement(i, self.resources.dictConstants[text])
             aux.write()
             
     def insertRoadmap(self):
