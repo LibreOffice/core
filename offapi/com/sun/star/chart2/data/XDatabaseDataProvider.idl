@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -15,13 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef __com_sun_star_report_XDatabaseDataProvider_idl__
 #define __com_sun_star_report_XDatabaseDataProvider_idl__
 
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/beans/UnknownPropertyException.idl>
 #include <com/sun/star/lang/XInitialization.idl>
@@ -32,11 +30,9 @@
 #include <com/sun/star/chart2/data/XDataProvider.idl>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart2 { module data {
 
-//=============================================================================
 
 /** identifies a <type>XDataProvider</type> for result sets.
 
@@ -84,7 +80,7 @@ interface XDatabaseDataProvider
     /**is used for subreports and contains the names of the columns of the subreport
     which are related to the master fields of the parent report.
     <p>Entries in this sequence can either denote column names in the sub report,
-    or paramater names.<br/>
+    or parameter names.<br/>
     For instance, you could base the report on the SQL statement
     <code>SELECT * FROM invoices WHERE cust_ref = :cid</code>, and add <code>cid</code>
     to the DetailFields property. In this case, the parameter will be filled from
@@ -96,7 +92,7 @@ interface XDatabaseDataProvider
     master field.<br/>
     If a string in this property denotes both a column name and a parameter name, it
     is undefined which way it is interpreted, but implementations of the service are required
-    to either decide for the paramter or the column, and proceed as usual.
+    to either decide for the parameter or the column, and proceed as usual.
     </p>
     <p>The columns specified herein typically represent a part of the primary key
     fields or their aliases of the detail report.</p>
@@ -127,14 +123,14 @@ interface XDatabaseDataProvider
 
         <p><member>Command</member> needs to be interpreted depending on the value of this property.</p>
 
-        <p>This property is only meaningfull together with the <member>Command</member>
+        <p>This property is only meaningful together with the <member>Command</member>
         property, thus either <em>both</em> or <em>none</em> of them are present.</p>
 
         @see com::sun::star::sdb::CommandType
      */
     [attribute,bound] long CommandType;
 
-    /** specifies an addtional filter to optinally use.
+    /** specifies an additional filter to optionally use.
 
         <p>The Filter string has to form a SQL WHERE-clause, <em>without</em> the WHERE-string itself.</p>
 
@@ -169,7 +165,7 @@ interface XDatabaseDataProvider
         set raises (com::sun::star::beans::UnknownPropertyException);
     };
 
-    /** is a additional sort order definition for a rowset.
+    /** is a additional sort order definition for a row set.
      */
     [attribute,bound] string Order;
 
@@ -196,21 +192,15 @@ interface XDatabaseDataProvider
     {
         set raises (com::sun::star::lang::IllegalArgumentException);
     };
-    /** is the name of the datasource to use, this could be a named datasource
+    /** is the name of the data source to use, this could be a named data source
         or the URL of a data access component.
      */
     [attribute,bound] string DataSourceName;
 };
 
-service DatabaseDataProvider : XDatabaseDataProvider
-{
-    createWithConnection([in] com::sun::star::sdbc::XConnection connection);
-};
-//=============================================================================
 
  }; }; }; };  };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
