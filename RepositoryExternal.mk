@@ -1236,7 +1236,7 @@ define gb_LinkTarget__use_lpsolve
 $(call gb_LinkTarget_add_libs,$(1),-llpsolve55)
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DSYSTEM_LPSOLVE \
-))
+)
 
 endef
 
