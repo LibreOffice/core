@@ -10,6 +10,7 @@
 $(eval $(call gb_UI_UI,sfx))
 
 $(eval $(call gb_UI_add_uifiles,sfx,\
+	sfx2/uiconfig/ui/checkin \
 	sfx2/uiconfig/ui/password \
 ))
 

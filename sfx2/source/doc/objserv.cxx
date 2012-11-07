@@ -87,6 +87,7 @@
 #include "sfx2/sfxhelp.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/checkin.hxx>
 
 #include "../appl/app.hrc"
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
@@ -366,7 +367,6 @@ void SfxObjectShell::CancelCheckOut( )
     try
     {
         uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
-        // TODO Pop up dialog to ask whether to loose data or not
         xCmisDoc->cancelCheckOut( );
     }
     catch ( const uno::RuntimeException& e )
@@ -382,13 +382,17 @@ void SfxObjectShell::CheckIn( )
     try
     {
         uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
-        sal_Bool bIsMajor = sal_False;
-        rtl::OUString sComment( "Some sample comment" );
-        // TODO Pop up dialog to ask for comment and major
-        xCmisDoc->checkIn( bIsMajor, sComment );
-        uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
-        if ( xModifiable.is( ) )
-            xModifiable->setModified( sal_False );
+        // Pop up dialog to ask for comment and major
+        SfxCheckinDialog checkinDlg( &GetFrame( )->GetWindow( ) );
+        if ( checkinDlg.Execute( ) == RET_OK )
+        {
+            rtl::OUString sComment = checkinDlg.GetComment( );
+            sal_Bool bMajor = checkinDlg.IsMajor( );
+            xCmisDoc->checkIn( bMajor, sComment );
+            uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
+            if ( xModifiable.is( ) )
+                xModifiable->setModified( sal_False );
+        }
     }
     catch ( const uno::RuntimeException& e )
     {
