@@ -13,7 +13,7 @@ Globals
             SERVICETAG_PRODUCTVERSION 3.6
             SERVICETAG_PARENTNAME LibreOffice 3.6
             SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
-            SERVICETAG_URN urn:uuid:0187debd-e458-11de-82d6-080020a9ed93
+            SERVICETAG_URN urn:uuid:0187debd-e458-11de-82d6-280020a9ed93
             HIDELICENSEDIALOG 0
             PACKAGEPREFIX
             BASISPACKAGEPREFIX libobasis
@@ -51,13 +51,13 @@ LibreOffice
             PRODUCTVERSION 3.6
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION -0
+            SHORT_PRODUCTEXTENSION -2
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 3.6
             USERDIRPRODUCTVERSION 3
             ABOUTBOXPRODUCTVERSION 3.6
-            ABOUTBOXPRODUCTVERSIONSUFFIX :build-200
+            ABOUTBOXPRODUCTVERSIONSUFFIX :build-302
             BASEPRODUCTVERSION 3.6
             PCPFILENAME libreoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
@@ -103,21 +103,21 @@ LibreOffice_Dev
             PRODUCTVERSION 3.6
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION -0
+            SHORT_PRODUCTEXTENSION -2
             UNIXBASISROOTNAME lodev3.6
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 3.6
             USERDIRPRODUCTVERSION 3
             ABOUTBOXPRODUCTVERSION 3.6
-            ABOUTBOXPRODUCTVERSIONSUFFIX :build-200
+            ABOUTBOXPRODUCTVERSIONSUFFIX :build-302
             BASEPRODUCTVERSION 3.6
             DEVELOPMENTPRODUCT 1
             BASISPACKAGEPREFIX lodevbasis
             UREPACKAGEPREFIX lodev
             SOLSUREPACKAGEPREFIX lodev
             REGISTRYLAYERNAME LayerDev
-            SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
+            SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-280020a9ed93
             UPDATEURL http://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
             ADDSYSTEMINTEGRATION 1
@@ -167,7 +167,7 @@ URE
             PRODUCTEXTENSION
             BRANDPACKAGEVERSION 3.6
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION -0
+            SHORT_PRODUCTEXTENSION -2
             LICENSENAME LGPL
             NOVERSIONINDIRNAME 1
             PCPFILENAME ure.pcp
@@ -199,7 +199,7 @@ LibreOffice_SDK
             PRODUCTVERSION 3.6
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION -0
+            SHORT_PRODUCTEXTENSION -2
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 3.6
@@ -240,7 +240,7 @@ LibreOffice_Dev_SDK
             PRODUCTVERSION 3.6
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION -0
+            SHORT_PRODUCTEXTENSION -2
             UNIXBASISROOTNAME lodev3.6
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
@@ -287,7 +287,7 @@ LibreOffice_Test
             PRODUCTVERSION 3.6
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION -0
+            SHORT_PRODUCTEXTENSION -2
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
             BRANDPACKAGEVERSION 3.6
@@ -328,7 +328,7 @@ LibreOffice_Dev_Test
             PRODUCTVERSION 3.6
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION -0
+            SHORT_PRODUCTEXTENSION -2
             UNIXBASISROOTNAME lodev3.6
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
@@ -374,13 +374,13 @@ OxygenOffice
             PRODUCTVERSION 3.6
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION -0
+            SHORT_PRODUCTEXTENSION -2
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 3.6
             USERDIRPRODUCTVERSION 3
             ABOUTBOXPRODUCTVERSION 3.6
-            ABOUTBOXPRODUCTVERSIONSUFFIX :build-200
+            ABOUTBOXPRODUCTVERSIONSUFFIX :build-302
             BASEPRODUCTVERSION 3.6
             PCPFILENAME openoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
