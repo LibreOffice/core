@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,cmis,0))
 $(eval $(call gb_UnpackedTarball_add_patches,cmis, \
 	libcmis/libcmis-0.3.0-warnings.patch \
 	libcmis/libcmis-0.3.0-win.patch \
+	libcmis/libcmis-0.3.0.patch \
 ))
 
 ifeq ($(OS)$(COM),WNTMSC)
