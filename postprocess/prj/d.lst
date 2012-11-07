@@ -1,5 +1,5 @@
 mkdir: %_DEST%\xml\ooo
-..\%__SRC%\bin\uiconfig.zip %_DEST%\bin\uiconfig.zip
+..\%__SRC%\bin\uiconfig*.zip %_DEST%\bin\
 ..\%__SRC%\misc\*.xcd %_DEST%\xml\
 ..\%__SRC%\misc\lang\*.xcd %_DEST%\xml\
 ..\%__SRC%\misc\scriptproviderforbeanshell.rdb %_DEST%\xml\scriptproviderforbeanshell.rdb

@@ -156,7 +156,7 @@ $$(eval $$(call gb_Module_register_target,$(call gb_UI_get_target,$(1)),$(call g
 endef
 
 # gb_UI__get_outdir_filename target file lang?
-gb_UI__get_outdir_filename = xml/uiconfig/$(1)/ui/$(if $(3),res/$(3)/)$(notdir $(2)).ui
+gb_UI__get_outdir_filename = xml/uiconfig/$(1)/ui/$(if $(3),res/$(3)/)$(notdir $(2))$(if $(3),,.ui)
 
 # gb_UI__add_uifile target package destfile srcfile lang?
 define gb_UI__package_uifile

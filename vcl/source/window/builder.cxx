@@ -73,6 +73,45 @@ namespace
     }
 }
 
+void VclBuilder::loadTranslations(const com::sun::star::lang::Locale &rLocale, const OUString& rUri)
+{
+    for (int i = rLocale.Country.isEmpty() ? 1 : 0; i < 2; ++i)
+    {
+        OUStringBuffer aTransBuf;
+        sal_Int32 nLastSlash = rUri.lastIndexOf('/');
+        if (nLastSlash != -1)
+            aTransBuf.append(rUri.copy(0, nLastSlash));
+        else
+        {
+            aTransBuf.append('.');
+            nLastSlash = 0;
+        }
+        aTransBuf.append("/res/").append(rLocale.Language);
+        switch (i)
+        {
+            case 0:
+                aTransBuf.append('-').append(rLocale.Country);
+                break;
+            default:
+                break;
+        }
+        sal_Int32 nEndName = rUri.lastIndexOf('.');
+        if (nEndName == -1)
+            nEndName = rUri.getLength();
+        aTransBuf.append(rUri.copy(nLastSlash, nEndName-nLastSlash));
+
+        OUString sTransUri = aTransBuf.makeStringAndClear();
+        try
+        {
+            xmlreader::XmlReader reader(sTransUri);
+            handleTranslations(reader);
+        }
+        catch (const ::com::sun::star::uno::Exception &)
+        {
+        }
+    }
+}
+
 VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OString sID)
     : m_sID(sID)
     , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
@@ -89,39 +128,10 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
 
     OUString sUri = sUIDir + sUIFile;
 
-    ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-    for (int i = aLocale.Country.isEmpty() ? 1 : 0; i < 2; ++i)
-    {
-        OUStringBuffer aTransBuf;
-        sal_Int32 nLastSlash = sUri.lastIndexOf('/');
-        if (nLastSlash != -1)
-            aTransBuf.append(sUri.copy(0, nLastSlash));
-        else
-        {
-            aTransBuf.append('.');
-            nLastSlash = 0;
-        }
-        aTransBuf.append("/res/").append(aLocale.Language);
-        switch (i)
-        {
-            case 0:
-                aTransBuf.append('-').append(aLocale.Country);
-                break;
-            default:
-                break;
-        }
-        aTransBuf.append(sUri.copy(nLastSlash));
-
-        OUString sTransUri = aTransBuf.makeStringAndClear();
-        try
-        {
-            xmlreader::XmlReader reader(sTransUri);
-            handleTranslations(reader);
-        }
-        catch (const ::com::sun::star::uno::Exception &)
-        {
-        }
-    }
+    com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+    bool bEN_US = aLocale.Language == "en" && aLocale.Country == "US" && aLocale.Variant.isEmpty();
+    if (!bEN_US)
+        loadTranslations(aLocale, sUri);
 
     xmlreader::XmlReader reader(sUri);
 

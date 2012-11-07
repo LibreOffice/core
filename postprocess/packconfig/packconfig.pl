@@ -27,6 +27,7 @@ use strict;
 use Getopt::Long;
 use File::Find;
 use File::Basename;
+use File::Spec;
 use Archive::Zip qw(:ERROR_CODES :CONSTANTS);
 
 #### globals ####
@@ -35,6 +36,7 @@ my $out_path;                # path to output archives in
 my $files_path;              # path to look for desired files
 my $verbose;                 # be verbose
 my $extra_verbose;           # be extra verbose
+my $current_lang;            # big fat global because File::Find is a pig
 
 #### script id #####
 
@@ -43,10 +45,23 @@ my $extra_verbose;           # be extra verbose
 #### main #####
 
 parse_options();
+
+#pack the .ui translations
+my @langs = split(/\s+/, $ENV{WITH_LANG});
+foreach (@langs) {
+    next if ($_ eq "en-US");
+    my %files_hash;
+    my $file_ref = get_lang_files(\%files_hash, $_);
+    my $out_file="$out_path"."uiconfig_".$_.".zip";
+    packzip(\%files_hash, $out_file);
+}
+
+#pack the core files
 my %files_hash;
 my $file_ref = get_core_files(\%files_hash);
 my $out_file="$out_path"."uiconfig.zip";
 packzip(\%files_hash, $out_file);
+
 exit(0);
 
 #### subroutines ####
@@ -108,8 +123,8 @@ sub get_core_files
     my $files_hash_ref = shift;
     find_core_files($files_hash_ref);
 
-    if ( !keys %files_hash ) {
-        print_error("can't find any image lists in '$files_path'", 3);
+    if ( !keys $files_hash_ref ) {
+        print_error("can't find any config files in '$files_path'", 3);
     }
 
     return wantarray ? @main::file_list : \@main::file_list;
@@ -118,18 +133,55 @@ sub get_core_files
 sub find_core_files
 {
     my $files_hash_ref = shift;
-    find({ wanted => \&wanted, no_chdir => 0 }, "$files_path");
+    find({ wanted => \&wanted_core, no_chdir => 0 }, "$files_path");
     foreach ( @main::file_list ) {
         /^\Q$files_path\E\/(.*)$/o;
         $files_hash_ref->{$1}++;
     }
 }
 
-sub wanted
+sub get_lang_files
+{
+    local @main::file_list;
+
+    my $files_hash_ref = shift;
+    my $lang = shift;
+    find_lang_files($files_hash_ref, $lang);
+
+    if ( !keys $files_hash_ref ) {
+        print_error("can't find any config files in '$files_path'", 3);
+    }
+
+    return wantarray ? @main::file_list : \@main::file_list;
+}
+
+sub find_lang_files
+{
+    my $files_hash_ref = shift;
+    $current_lang = shift;
+    find({ wanted => \&wanted_lang, no_chdir => 0 }, "$files_path");
+    foreach ( @main::file_list ) {
+        /^\Q$files_path\E\/(.*)$/o;
+        $files_hash_ref->{$1}++;
+    }
+}
+
+sub wanted_core
 {
     my $file = $_;
 
     if ( $file =~ /.*\.(ui|xml)$/ && -f $file ) {
+        push @main::file_list, $File::Find::name;
+    }
+}
+
+sub wanted_lang
+{
+    my $file = $_;
+
+    my @dirs = File::Spec->splitdir($File::Find::dir);
+
+    if ($dirs[-1] eq $current_lang) {
         push @main::file_list, $File::Find::name;
     }
 }

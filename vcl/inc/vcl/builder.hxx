@@ -116,6 +116,7 @@ private:
         std::set<Window*> m_aRedundantParentWidgets;
     };
 
+    void loadTranslations(const com::sun::star::lang::Locale &rLocale, const OUString &rUri);
     OString getTranslation(const OString &rId, const OString &rProperty) const;
 
     OString m_sID;

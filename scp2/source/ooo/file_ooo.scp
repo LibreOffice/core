@@ -738,13 +738,21 @@ End
 #endif
 #endif
 
-// new user interface configuration files
+// user interface configuration files
 File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
     TXT_FILE_BODY;
     Styles = (ARCHIVE);
     Dir = gid_Dir_Share_Config_Sofficecfg;
     Name = "uiconfig.zip";
     Patchfiles = ();
+End
+
+// user interface configuration file translations
+File gid_File_Share_Config_Sofficecfg_uiconfig_Zip_Lang
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE);
+    Dir = gid_Dir_Share_Config_Sofficecfg;
+    EXTRA_ALL_LANG_BUT_EN_US(uiconfig,zip);
 End
 
 #ifdef WNT

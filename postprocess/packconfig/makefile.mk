@@ -29,5 +29,5 @@ TARGET=uiconfig
 ALLTAR : $(BIN)$/uiconfig.zip
 
 $(BIN)$/uiconfig.zip .PHONY:
-    $(PERL) packconfig.pl -i $(SOLARXMLDIR)$/uiconfig -o $@
+    $(PERL) packconfig.pl -i $(SOLARXMLDIR)$/uiconfig -o $(BIN)$/
 
