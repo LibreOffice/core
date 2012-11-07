@@ -54,9 +54,7 @@ private:
     sal_Bool getData();
 
 public:
-    DataSupplier( const com::sun::star::uno::Reference<
-              com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-              const rtl::Reference< Content >& rContent,
+    DataSupplier(const rtl::Reference< Content >& rContent,
               sal_Int32 nOpenMode);
 
     virtual ~DataSupplier();

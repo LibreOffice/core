@@ -78,15 +78,12 @@ struct DataSupplier_Impl
     osl::Mutex                                   m_aMutex;
     ResultList                                   m_aResults;
     rtl::Reference< ODocumentContainer >             m_xContent;
-    Reference< XMultiServiceFactory >            m_xSMgr;
       sal_Int32                                  m_nOpenMode;
       sal_Bool                                   m_bCountFinal;
 
-    DataSupplier_Impl( const Reference< XMultiServiceFactory >& rxSMgr,
-                        const rtl::Reference< ODocumentContainer >& rContent,
+    DataSupplier_Impl( const rtl::Reference< ODocumentContainer >& rContent,
                        sal_Int32 nOpenMode )
     : m_xContent(rContent)
-    , m_xSMgr( rxSMgr )
     , m_nOpenMode( nOpenMode )
     , m_bCountFinal( sal_False ) {}
     ~DataSupplier_Impl();
@@ -114,10 +111,9 @@ DataSupplier_Impl::~DataSupplier_Impl()
 //=========================================================================
 DBG_NAME(DataSupplier)
 
-DataSupplier::DataSupplier( const Reference< XMultiServiceFactory >& rxSMgr,
-                           const rtl::Reference< ODocumentContainer >& rContent,
+DataSupplier::DataSupplier( const rtl::Reference< ODocumentContainer >& rContent,
                             sal_Int32 nOpenMode )
-: m_pImpl( new DataSupplier_Impl( rxSMgr, rContent,nOpenMode ) )
+: m_pImpl( new DataSupplier_Impl( rContent,nOpenMode ) )
 {
     DBG_CTOR(DataSupplier,NULL);
 

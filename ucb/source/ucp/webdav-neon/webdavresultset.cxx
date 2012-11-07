@@ -37,6 +37,7 @@
  *************************************************************************/
 #include "webdavresultset.hxx"
 #include "DAVSession.hxx"
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 using namespace webdav_ucp;
@@ -69,7 +70,7 @@ DynamicResultSet::DynamicResultSet(
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
-        = new ::ucbhelper::ResultSet( m_xSMgr,
+        = new ::ucbhelper::ResultSet( comphelper::getComponentContext(m_xSMgr),
                                       m_aCommand.Properties,
                                       new DataSupplier( m_xSMgr,
                                                         m_xContent,
@@ -81,7 +82,7 @@ void DynamicResultSet::initStatic()
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
-        = new ::ucbhelper::ResultSet( m_xSMgr,
+        = new ::ucbhelper::ResultSet( comphelper::getComponentContext(m_xSMgr),
                                       m_aCommand.Properties,
                                       new DataSupplier( m_xSMgr,
                                                         m_xContent,

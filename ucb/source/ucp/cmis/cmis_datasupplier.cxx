@@ -28,9 +28,8 @@ namespace cmis
 
     typedef std::vector< ResultListEntry* > ResultList;
 
-    DataSupplier::DataSupplier( const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
-        ChildrenProvider* pChildrenProvider, sal_Int32 nOpenMode )
-        : m_pChildrenProvider( pChildrenProvider ), m_xSMgr(rxSMgr), mnOpenMode(nOpenMode), mbCountFinal(false)
+    DataSupplier::DataSupplier( ChildrenProvider* pChildrenProvider, sal_Int32 nOpenMode )
+        : m_pChildrenProvider( pChildrenProvider ), mnOpenMode(nOpenMode), mbCountFinal(false)
     {
     }
 

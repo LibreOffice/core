@@ -83,7 +83,7 @@ public:
       */
     ResultSet(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                com::sun::star::uno::XComponentContext >& rxContext,
             const com::sun::star::uno::Sequence<
                 com::sun::star::beans::Property >& rProperties,
             const rtl::Reference< ResultSetDataSupplier >& rDataSupplier );
@@ -99,7 +99,7 @@ public:
       */
     ResultSet(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                com::sun::star::uno::XComponentContext >& rxContext,
             const com::sun::star::uno::Sequence<
                 com::sun::star::beans::Property >& rProperties,
             const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,

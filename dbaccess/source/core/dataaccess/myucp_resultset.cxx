@@ -29,6 +29,7 @@
 
 #include "myucp_datasupplier.hxx"
 #include "myucp_resultset.hxx"
+#include <comphelper/processfactory.hxx>
 
 
 using namespace ::com::sun::star::uno;
@@ -66,10 +67,9 @@ DynamicResultSet::DynamicResultSet(
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
-        = new ::ucbhelper::ResultSet( m_xSMgr,
+        = new ::ucbhelper::ResultSet( comphelper::getComponentContext(m_xSMgr),
                                       m_aCommand.Properties,
-                                      new DataSupplier( m_xSMgr,
-                                                        m_xContent,
+                                      new DataSupplier( m_xContent,
                                                         m_aCommand.Mode ),
                                       m_xEnv );
 }
@@ -77,10 +77,9 @@ void DynamicResultSet::initStatic()
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
-        = new ::ucbhelper::ResultSet( m_xSMgr,
+        = new ::ucbhelper::ResultSet( comphelper::getComponentContext(m_xSMgr),
                                       m_aCommand.Properties,
-                                      new DataSupplier( m_xSMgr,
-                                                        m_xContent,
+                                      new DataSupplier( m_xContent,
                                                         m_aCommand.Mode ),
                                       m_xEnv );
     m_xResultSet2 = m_xResultSet1;

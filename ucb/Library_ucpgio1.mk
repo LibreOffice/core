@@ -32,6 +32,7 @@ $(eval $(call gb_Library_set_componentfile,ucpgio1,ucb/source/ucp/gio/ucpgio))
 $(eval $(call gb_Library_use_sdk_api,ucpgio1))
 
 $(eval $(call gb_Library_use_libraries,ucpgio1,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \

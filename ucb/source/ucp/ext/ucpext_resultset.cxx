@@ -22,6 +22,7 @@
 #include "ucpext_datasupplier.hxx"
 
 #include <ucbhelper/resultset.hxx>
+#include <comphelper/processfactory.hxx>
 
 //......................................................................................................................
 namespace ucb { namespace ucp { namespace ext
@@ -67,7 +68,7 @@ namespace ucb { namespace ucp { namespace ext
             m_aCommand.Mode
         ) );
         m_xResultSet1 = new ::ucbhelper::ResultSet(
-            m_xSMgr,
+            comphelper::getComponentContext(m_xSMgr),
             m_aCommand.Properties,
             pDataSupplier.get(),
             m_xEnvironment

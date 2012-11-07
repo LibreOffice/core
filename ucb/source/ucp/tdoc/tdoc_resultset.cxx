@@ -32,6 +32,7 @@
 #include "tdoc_datasupplier.hxx"
 #include "tdoc_resultset.hxx"
 #include "tdoc_content.hxx"
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 using namespace tdoc_ucp;
@@ -63,7 +64,7 @@ void DynamicResultSet::initStatic()
 {
     m_xResultSet1
         = new ::ucbhelper::ResultSet(
-            m_xSMgr,
+            comphelper::getComponentContext(m_xSMgr),
             m_aCommand.Properties,
             new ResultSetDataSupplier( m_xSMgr,
                                        m_xContent,
@@ -75,7 +76,7 @@ void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
         = new ::ucbhelper::ResultSet(
-            m_xSMgr,
+            comphelper::getComponentContext(m_xSMgr),
             m_aCommand.Properties,
             new ResultSetDataSupplier( m_xSMgr,
                                        m_xContent,

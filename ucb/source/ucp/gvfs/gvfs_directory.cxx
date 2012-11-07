@@ -31,6 +31,7 @@
 
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <libgnomevfs/gnome-vfs-directory.h>
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 using namespace gvfs;
@@ -50,10 +51,9 @@ DynamicResultSet::DynamicResultSet(
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
-        = new ::ucbhelper::ResultSet( m_xSMgr,
+        = new ::ucbhelper::ResultSet( comphelper::getComponentContext(m_xSMgr),
                                       m_aCommand.Properties,
-                                      new DataSupplier( m_xSMgr,
-                                                        m_xContent,
+                                      new DataSupplier( m_xContent,
                                                         m_aCommand.Mode ),
                                       m_xEnv );
 }
@@ -108,15 +108,13 @@ struct gvfs::DataSupplier_Impl
     osl::Mutex                                   m_aMutex;
     ResultList                                   m_aResults;
     rtl::Reference< Content >                    m_xContent;
-    uno::Reference< lang::XMultiServiceFactory > m_xSMgr;
     sal_Int32                                    m_nOpenMode;
     sal_Bool                                     m_bCountFinal;
 
     DataSupplier_Impl(
-              const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
               const rtl::Reference< Content >& rContent,
               sal_Int32 nOpenMode )
-        : m_xContent( rContent ), m_xSMgr( rxSMgr ),
+        : m_xContent( rContent ),
           m_nOpenMode( nOpenMode ), m_bCountFinal( sal_False ) {}
     ~DataSupplier_Impl()
     {
@@ -132,10 +130,9 @@ struct gvfs::DataSupplier_Impl
 };
 
 DataSupplier::DataSupplier(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             const rtl::Reference< Content >& rContent,
             sal_Int32 nOpenMode )
-: m_pImpl( new DataSupplier_Impl( rxSMgr, rContent, nOpenMode ) )
+: m_pImpl( new DataSupplier_Impl( rContent, nOpenMode ) )
 {
 }
 

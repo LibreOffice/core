@@ -9,6 +9,7 @@
 
 #include "cmis_datasupplier.hxx"
 #include "cmis_resultset.hxx"
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
@@ -30,8 +31,8 @@ namespace cmis
     void DynamicResultSet::initStatic()
     {
         m_xResultSet1 = new ::ucbhelper::ResultSet(
-            m_xSMgr, m_aCommand.Properties,
-            new DataSupplier( m_xSMgr, m_pChildrenProvider, m_aCommand.Mode ), m_xEnv );
+            comphelper::getComponentContext(m_xSMgr), m_aCommand.Properties,
+            new DataSupplier( m_pChildrenProvider, m_aCommand.Mode ), m_xEnv );
     }
 
     void DynamicResultSet::initDynamic()

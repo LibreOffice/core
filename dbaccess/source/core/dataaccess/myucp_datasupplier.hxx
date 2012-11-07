@@ -34,9 +34,7 @@ class DataSupplier : public ucbhelper::ResultSetDataSupplier
     ::std::auto_ptr<DataSupplier_Impl> m_pImpl;
 
 public:
-    DataSupplier( const com::sun::star::uno::Reference<
-                      com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                    const rtl::Reference< ODocumentContainer >& rxContent,
+    DataSupplier( const rtl::Reference< ODocumentContainer >& rxContent,
                   sal_Int32 nOpenMode );
     virtual ~DataSupplier();
 

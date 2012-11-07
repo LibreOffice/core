@@ -86,7 +86,6 @@ class PropertySetInfo :
         public lang::XTypeProvider,
         public beans::XPropertySetInfo
 {
-    uno::Reference< lang::XMultiServiceFactory > m_xSMgr;
     uno::Sequence< beans::Property >*            m_pProps;
 
 private:
@@ -95,7 +94,6 @@ private:
 
 public:
     PropertySetInfo(
-        const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
         const PropertyInfo* pProps,
         sal_Int32 nProps );
     virtual ~PropertySetInfo();
@@ -173,7 +171,7 @@ namespace ucbhelper
 
 struct ResultSet_Impl
 {
-    uno::Reference< lang::XMultiServiceFactory >    m_xSMgr;
+    uno::Reference< uno::XComponentContext >    m_xContext;
     uno::Reference< com::sun::star::ucb::XCommandEnvironment >  m_xEnv;
     uno::Reference< beans::XPropertySetInfo >       m_xPropSetInfo;
     uno::Reference< sdbc::XResultSetMetaData >      m_xMetaData;
@@ -187,7 +185,7 @@ struct ResultSet_Impl
     sal_Bool                            m_bAfterLast;
 
     inline ResultSet_Impl(
-        const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+        const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Sequence< beans::Property >& rProperties,
         const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
         const uno::Reference< com::sun::star::ucb::XCommandEnvironment >&
@@ -196,11 +194,11 @@ struct ResultSet_Impl
 };
 
 inline ResultSet_Impl::ResultSet_Impl(
-    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const uno::Reference< uno::XComponentContext >& rxContext,
     const uno::Sequence< beans::Property >& rProperties,
     const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
     const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rxEnv )
-: m_xSMgr( rxSMgr ),
+: m_xContext( rxContext ),
   m_xEnv( rxEnv ),
   m_aProperties( rProperties ),
   m_xDataSupplier( rDataSupplier ),
@@ -228,11 +226,11 @@ inline ResultSet_Impl::~ResultSet_Impl()
 //=========================================================================
 
 ResultSet::ResultSet(
-    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const uno::Reference< uno::XComponentContext >& rxContext,
     const uno::Sequence< beans::Property >& rProperties,
     const rtl::Reference< ResultSetDataSupplier >& rDataSupplier )
 : m_pImpl( new ResultSet_Impl(
-               rxSMgr,
+               rxContext,
                rProperties,
                rDataSupplier,
                uno::Reference< com::sun::star::ucb::XCommandEnvironment >() ) )
@@ -242,11 +240,11 @@ ResultSet::ResultSet(
 
 //=========================================================================
 ResultSet::ResultSet(
-    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const uno::Reference< uno::XComponentContext >& rxContext,
     const uno::Sequence< beans::Property >& rProperties,
     const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
     const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rxEnv )
-: m_pImpl( new ResultSet_Impl( rxSMgr, rProperties, rDataSupplier, rxEnv ) )
+: m_pImpl( new ResultSet_Impl( rxContext, rProperties, rDataSupplier, rxEnv ) )
 {
     rDataSupplier->m_pResultSet = this;
 }
@@ -372,7 +370,7 @@ uno::Reference< sdbc::XResultSetMetaData > SAL_CALL ResultSet::getMetaData()
     osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( !m_pImpl->m_xMetaData.is() )
-        m_pImpl->m_xMetaData = new ResultSetMetaData( ucbhelper::getComponentContext(m_pImpl->m_xSMgr),
+        m_pImpl->m_xMetaData = new ResultSetMetaData( m_pImpl->m_xContext,
                                                       m_pImpl->m_aProperties );
 
     return m_pImpl->m_xMetaData;
@@ -1328,8 +1326,7 @@ ResultSet::getPropertySetInfo()
 
     if ( !m_pImpl->m_xPropSetInfo.is() )
         m_pImpl->m_xPropSetInfo
-            = new PropertySetInfo( m_pImpl->m_xSMgr,
-                                   aPropertyTable,
+            = new PropertySetInfo( aPropertyTable,
                                    RESULTSET_PROPERTY_COUNT );
     return m_pImpl->m_xPropSetInfo;
 }
@@ -1575,10 +1572,8 @@ namespace ucbhelper_impl {
 //=========================================================================
 
 PropertySetInfo::PropertySetInfo(
-    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
     const PropertyInfo* pProps,
     sal_Int32 nProps )
-: m_xSMgr( rxSMgr )
 {
     m_pProps = new uno::Sequence< beans::Property >( nProps );
 

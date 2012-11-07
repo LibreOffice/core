@@ -41,15 +41,13 @@ namespace cmis
     {
         private:
             ChildrenProvider* m_pChildrenProvider;
-            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
             sal_Int32 mnOpenMode;
             bool mbCountFinal;
             bool getData();
             ResultList maResults;
 
         public:
-            DataSupplier( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                ChildrenProvider* pChildrenProvider, sal_Int32 nOpenMode );
+            DataSupplier( ChildrenProvider* pChildrenProvider, sal_Int32 nOpenMode );
 
             virtual ~DataSupplier();
 
