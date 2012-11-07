@@ -231,8 +231,8 @@ sub replace_file
 
 sub usage
 {
-    print STDERR "Usage: packimages.pl [-h] -o out_file -i file_path\n";
-    print STDERR "Creates archive of images\n";
+    print STDERR "Usage: packconfig.pl [-h] -o out_file -i file_path\n";
+    print STDERR "Creates archive of userinterface config files\n";
     print STDERR "Options:\n";
     print STDERR "    -h                 print this help\n";
     print STDERR "    -o out_file        path to output archive\n";
