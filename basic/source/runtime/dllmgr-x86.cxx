@@ -193,7 +193,7 @@ SbError marshalString(
 {
     OSL_ASSERT(variable != 0 && buffer != 0);
     rtl::OString str;
-    SbError e = convert(variable->GetString(), &str);
+    SbError e = convert(variable->GetOUString(), &str);
     if (e != ERRCODE_NONE) {
         return e;
     }
@@ -463,7 +463,7 @@ SbError unmarshalString(StringData const & data, SbxVariable & result) {
             return e;
         }
     }
-    data.variable->PutString(String(str));
+    data.variable->PutString(str);
     return ERRCODE_NONE;
 }
 
@@ -528,7 +528,7 @@ SbError call(
             if (e != ERRCODE_NONE) {
                 return e;
             }
-            result.PutString(String(s2));
+            result.PutString(s2);
             break;
         }
     case SbxOBJECT:
