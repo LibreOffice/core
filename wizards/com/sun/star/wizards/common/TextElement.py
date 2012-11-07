@@ -30,7 +30,7 @@ class TextElement(object):
 
     def write(self):
         try:
-            if self.item is not None and not self.placeHolderText:
+            if self.item is not None:
                 self.item.String = ""
                 cursor = self.item.Text.createTextCursorByRange(
                     self.item.Start)
