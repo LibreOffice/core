@@ -373,7 +373,7 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
 
     rpNumberFormatter = new SvNumberFormatter( xFactory, eLangType );
 
-    xub_StrLen nCheckPos = 0; short nType;
+    sal_uInt16 nCheckPos = 0; short nType;
     rnStdTimeIdx = rpNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eLangType );
 
     // the formatter's standard templates have only got a two-digit date
@@ -422,7 +422,7 @@ void setBasicWatchMode( bool bOn )
 
 void SbiInstance::Error( SbError n )
 {
-    Error( n, String() );
+    Error( n, OUString() );
 }
 
 void SbiInstance::Error( SbError n, const OUString& rMsg )
@@ -963,7 +963,7 @@ SbxVariableRef SbiRuntime::PopVar()
 #endif
     SbxVariableRef xVar = refExprStk->Get( --nExprLvl );
 #ifdef DBG_UTIL
-    if ( xVar->GetName().EqualsAscii( "Cells" ) )
+    if ( xVar->GetName().equalsAscii( "Cells" ) )
         OSL_TRACE( "" );
 #endif
     // methods hold themselves in parameter 0
@@ -1256,8 +1256,8 @@ SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* p
 //  DLL-calls
 
 void SbiRuntime::DllCall
-    ( const String& aFuncName,
-      const String& aDLLName,
+    ( const OUString& aFuncName,
+      const OUString& aDLLName,
       SbxArray* pArgs,          // parameter (from index 1, can be NULL)
       SbxDataType eResType,     // return value
       bool bCDecl )         // true: according to C-conventions

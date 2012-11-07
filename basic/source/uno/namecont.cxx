@@ -84,8 +84,6 @@ using namespace osl;
 
 using com::sun::star::uno::Reference;
 
-using ::rtl::OStringBuffer;
-using ::rtl::OUStringToOString;
 using ::rtl::Uri;
 
 // #i34411: Flag for error handling during migration
@@ -143,8 +141,9 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
 {
     Type aAnyType = aElement.getValueType();
     if( mType != aAnyType )
+    {
         throw IllegalArgumentException();
-
+    }
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
     {
@@ -189,8 +188,9 @@ void NameContainer::insertByName( const OUString& aName, const Any& aElement )
 {
     Type aAnyType = aElement.getValueType();
     if( mType != aAnyType )
+    {
         throw IllegalArgumentException();
-
+    }
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt != mHashMap.end() )
     {
@@ -237,7 +237,7 @@ void NameContainer::removeByName( const OUString& aName )
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
     {
-        rtl::OUString sMessage = rtl::OUStringBuffer().append('"')
+        OUString sMessage = OUStringBuffer().append('"')
             .append(aName).append("\" not found")
             .makeStringAndClear();
         throw NoSuchElementException(sMessage, uno::Reference< uno::XInterface >());
@@ -699,11 +699,13 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
     {
 
     uno::Reference< embed::XStorage > xLibrariesStor;
-    String aFileName;
+    OUString aFileName;
 
     int nPassCount = 1;
     if( !bStorage && meInitMode == DEFAULT )
+    {
         nPassCount = 2;
+    }
     for( int nPass = 0 ; nPass < nPassCount ; nPass++ )
     {
         if( bStorage )
@@ -719,7 +721,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 if ( xLibrariesStor.is() )
                 {
                     aFileName = maInfoFileName;
-                    aFileName += String( RTL_CONSTASCII_USTRINGPARAM("-lc.xml") );
+                    aFileName += "-lc.xml";
 
                     try
                     {
@@ -734,7 +736,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
                         // Check old version
                         aFileName = maOldInfoFileName;
-                        aFileName += String( RTL_CONSTASCII_USTRINGPARAM(".xml") );
+                        aFileName += ".xml";
 
                         try
                         {
@@ -747,14 +749,16 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                         {
                             // Check for EA2 document version with wrong extensions
                             aFileName = maOldInfoFileName;
-                            aFileName += String( RTL_CONSTASCII_USTRINGPARAM(".xli") );
+                            aFileName += ".xli";
                             xStream = xLibrariesStor->openStreamElement( aFileName, embed::ElementModes::READ );
                         }
                     }
                 }
 
                 if ( xStream.is() )
+                {
                     xInput = xStream->getInputStream();
+                }
             }
             catch(const uno::Exception& )
             {
@@ -771,9 +775,13 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             else
             {
                 if( nPass == 1 )
-                    pLibInfoInetObj = new INetURLObject( String(maLibraryPath).GetToken(0) );
+                {
+                    pLibInfoInetObj = new INetURLObject( maLibraryPath.getToken(0, (sal_Unicode)';') );
+                }
                 else
-                    pLibInfoInetObj = new INetURLObject( String(maLibraryPath).GetToken(1) );
+                {
+                    pLibInfoInetObj = new INetURLObject( maLibraryPath.getToken(1, (sal_Unicode)';') );
+                }
                 pLibInfoInetObj->insertName( maInfoFileName, sal_False, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
                 pLibInfoInetObj->setExtension( OUString("xlc") );
                 aFileName = pLibInfoInetObj->GetMainURL( INetURLObject::NO_DECODE );
@@ -792,7 +800,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             // Old variant?
             if( !xInput.is() && nPass == 0 )
             {
-                INetURLObject aLibInfoInetObj( String(maLibraryPath).GetToken(1) );
+                INetURLObject aLibInfoInetObj( maLibraryPath.getToken(1, (sal_Unicode)';') );
                 aLibInfoInetObj.insertName( maOldInfoFileName, sal_False, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
                 aLibInfoInetObj.setExtension( OUString( "xli") );
                 aFileName = aLibInfoInetObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -845,11 +853,15 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 OUString aStorageURL = rLib.aStorageURL;
                 if( !bStorage && aStorageURL.isEmpty() && nPass == 0 )
                 {
-                    String aLibraryPath;
+                    OUString aLibraryPath;
                     if( meInitMode == CONTAINER_INIT_FILE )
+                    {
                         aLibraryPath = maLibraryPath;
+                    }
                     else
-                        aLibraryPath = String(maLibraryPath).GetToken(1);
+                    {
+                        aLibraryPath = maLibraryPath.getToken(1, (sal_Unicode)';');
+                    }
                     INetURLObject aInetObj( aLibraryPath );
 
                     aInetObj.insertName( rLib.aName, sal_True, INetURLObject::LAST_SEGMENT,
@@ -863,7 +875,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     else if( rLib.bLink )
                     {
                         // Check "share" path
-                        INetURLObject aShareInetObj( String(maLibraryPath).GetToken(0) );
+                        INetURLObject aShareInetObj( maLibraryPath.getToken(0, (sal_Unicode)';') );
                         aShareInetObj.insertName( rLib.aName, sal_True, INetURLObject::LAST_SEGMENT,
                                                   sal_True, INetURLObject::ENCODE_ALL );
                         OUString aShareLibDirPath = aShareInetObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -885,8 +897,9 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 // If the same library name is used by the shared and the
                 // user lib container index files the user file wins
                 if( nPass == 1 && hasByName( aLibName ) )
+                {
                     continue;
-
+                }
                 SfxLibrary* pImplLib;
                 if( rLib.bLink )
                 {
@@ -1008,7 +1021,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
     if( meInitMode == DEFAULT )
     {
-        INetURLObject aUserBasicInetObj( String(maLibraryPath).GetToken(1) );
+        INetURLObject aUserBasicInetObj( maLibraryPath.getToken(1, (sal_Unicode)';') );
         OUString aStandardStr( RTL_CONSTASCII_USTRINGPARAM("Standard") );
 
         static char const strPrevFolderName_1[] = "__basic_80";
@@ -1024,7 +1037,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         try
         {
             INetURLObject aPrevUserBasicInetObj = aPrevUserBasicInetObj_1;
-            String aPrevFolder = aPrevUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
+            OUString aPrevFolder = aPrevUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
             if( mxSFI->isFolder( aPrevFolder ) )
             {
                 // Check if Standard folder exists and is complete
@@ -1037,35 +1050,35 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 OUString aPrevStandardFolder = aPrevUserBasicStandardInetObj.GetMainURL( INetURLObject::NO_DECODE );
                 if( mxSFI->isFolder( aPrevStandardFolder ) )
                 {
-                    OUString aXlbExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("xlb") ) );
+                    OUString aXlbExtension( "xlb" );
                     OUString aCheckFileName;
 
                     // Check if script.xlb exists
-                    aCheckFileName = OUString( RTL_CONSTASCII_USTRINGPARAM("script") );
+                    aCheckFileName = OUString("script");
                     checkAndCopyFileImpl( aUserBasicStandardInetObj,
                                           aPrevUserBasicStandardInetObj,
                                           aCheckFileName, aXlbExtension, mxSFI );
 
                     // Check if dialog.xlb exists
-                    aCheckFileName = OUString( RTL_CONSTASCII_USTRINGPARAM("dialog") );
+                    aCheckFileName = OUString("dialog");
                     checkAndCopyFileImpl( aUserBasicStandardInetObj,
                                           aPrevUserBasicStandardInetObj,
                                           aCheckFileName, aXlbExtension, mxSFI );
 
                     // Check if module1.xba exists
-                    OUString aXbaExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("xba") ) );
-                    aCheckFileName = OUString( RTL_CONSTASCII_USTRINGPARAM("Module1") );
+                    OUString aXbaExtension("xba");
+                    aCheckFileName = OUString("Module1");
                     checkAndCopyFileImpl( aUserBasicStandardInetObj,
                                           aPrevUserBasicStandardInetObj,
                                           aCheckFileName, aXbaExtension, mxSFI );
                 }
                 else
                 {
-                    String aStandardFolder = aUserBasicStandardInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                    OUString aStandardFolder = aUserBasicStandardInetObj.GetMainURL( INetURLObject::NO_DECODE );
                     mxSFI->copy( aStandardFolder, aPrevStandardFolder );
                 }
 
-                String aPrevCopyToFolder = aPrevUserBasicInetObj_2.GetMainURL( INetURLObject::NO_DECODE );
+                OUString aPrevCopyToFolder = aPrevUserBasicInetObj_2.GetMainURL( INetURLObject::NO_DECODE );
                 mxSFI->copy( aPrevFolder, aPrevCopyToFolder );
             }
             else
@@ -1079,11 +1092,11 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 Reference< XInterface > xRef = static_cast< XInterface* >( static_cast< OWeakObject* >(pPrevCont) );
 
                 // Rename previous basic folder to make storage URLs correct during initialisation
-                String aFolderUserBasic = aUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                OUString aFolderUserBasic = aUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
                 INetURLObject aUserBasicTmpInetObj( aUserBasicInetObj );
                 aUserBasicTmpInetObj.removeSegment();
                 aUserBasicTmpInetObj.Append( rtl::OString( "__basic_tmp" ));
-                String aFolderTmp = aUserBasicTmpInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                OUString aFolderTmp = aUserBasicTmpInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 mxSFI->move( aFolderUserBasic, aFolderTmp );
                 try
@@ -1106,7 +1119,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 INetURLObject aPrevUserBasicLibInfoInetObj( aUserBasicInetObj );
                 aPrevUserBasicLibInfoInetObj.insertName( maInfoFileName, sal_False, INetURLObject::LAST_SEGMENT,
                                                     sal_True, INetURLObject::ENCODE_ALL );
-                aPrevUserBasicLibInfoInetObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("xlc") ) );
+                aPrevUserBasicLibInfoInetObj.setExtension( OUString("xlc"));
                 OUString aLibInfoFileName = aPrevUserBasicLibInfoInetObj.GetMainURL( INetURLObject::NO_DECODE );
                 Sequence<Any> aInitSeq( 1 );
                 aInitSeq.getArray()[0] <<= aLibInfoFileName;
@@ -1136,7 +1149,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                         {
                             SfxLibrary* pImplLib = getImplLib( aStandardStr );
                             INetURLObject aStandardFolderInetObj( pImplLib->maStorageURL );
-                            String aStandardFolder = pImplLib->maStorageURL;
+                            OUString aStandardFolder = pImplLib->maStorageURL;
                             mxSFI->kill( aStandardFolder );
                         }
                         else
@@ -1167,11 +1180,11 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                         // Move folder if not already done
                         INetURLObject aUserBasicLibFolderInetObj( aUserBasicInetObj );
                         aUserBasicLibFolderInetObj.Append( aLibName );
-                        String aLibFolder = aUserBasicLibFolderInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                        OUString aLibFolder = aUserBasicLibFolderInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                         INetURLObject aPrevUserBasicLibFolderInetObj( aPrevUserBasicInetObj );
                         aPrevUserBasicLibFolderInetObj.Append( aLibName );
-                        String aPrevLibFolder = aPrevUserBasicLibFolderInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                        OUString aPrevLibFolder = aPrevUserBasicLibFolderInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                         if( mxSFI->isFolder( aPrevLibFolder ) && !mxSFI->isFolder( aLibFolder ) )
                         {
@@ -1213,12 +1226,12 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             INetURLObject aPrevUserBasicInetObj_Err( aUserBasicInetObj );
             aPrevUserBasicInetObj_Err.removeSegment();
             aPrevUserBasicInetObj_Err.Append( rtl::OString( strErrorSavFolderName ));
-            String aPrevFolder_Err = aPrevUserBasicInetObj_Err.GetMainURL( INetURLObject::NO_DECODE );
+            OUString aPrevFolder_Err = aPrevUserBasicInetObj_Err.GetMainURL( INetURLObject::NO_DECODE );
 
             bool bSaved = false;
             try
             {
-                String aPrevFolder_1 = aPrevUserBasicInetObj_1.GetMainURL( INetURLObject::NO_DECODE );
+                OUString aPrevFolder_1 = aPrevUserBasicInetObj_1.GetMainURL( INetURLObject::NO_DECODE );
                 if( mxSFI->isFolder( aPrevFolder_1 ) )
                 {
                     mxSFI->move( aPrevFolder_1, aPrevFolder_Err );
@@ -1229,11 +1242,15 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             {}
             try
             {
-                String aPrevFolder_2 = aPrevUserBasicInetObj_2.GetMainURL( INetURLObject::NO_DECODE );
+                OUString aPrevFolder_2 = aPrevUserBasicInetObj_2.GetMainURL( INetURLObject::NO_DECODE );
                 if( !bSaved && mxSFI->isFolder( aPrevFolder_2 ) )
+                {
                     mxSFI->move( aPrevFolder_2, aPrevFolder_Err );
+                }
                 else
+                {
                     mxSFI->kill( aPrevFolder_2 );
+                }
             }
             catch(const Exception& )
             {}
@@ -1273,14 +1290,15 @@ void SfxLibraryContainer::implScanExtensions( void )
         // Add index file to URL
         OUString aIndexFileURL = aLibURL;
         if( nReduceCopy == 0 )
-            aIndexFileURL += OUString(sal_Unicode('/'));
+        {
+            aIndexFileURL += "/";
+        }
         aIndexFileURL += maInfoFileName;
-        aIndexFileURL += OUString(RTL_CONSTASCII_USTRINGPARAM(".xlb"));
+        aIndexFileURL += OUString(".xlb");
 
         // Create link
         const bool bReadOnly = false;
-        Reference< XNameAccess > xLib =
-            createLibraryLink( aLibName, aIndexFileURL, bReadOnly );
+        Reference< XNameAccess > xLib = createLibraryLink( aLibName, aIndexFileURL, bReadOnly );
     }
 }
 
@@ -1313,7 +1331,7 @@ void SfxLibraryContainer::checkStorageURL( const OUString& aSourceURL,
     }
 }
 
-SfxLibrary* SfxLibraryContainer::getImplLib( const String& rLibraryName )
+SfxLibrary* SfxLibraryContainer::getImplLib( const OUString& rLibraryName )
 {
     Any aLibAny = maNameContainer.getByName( rLibraryName ) ;
     Reference< XNameAccess > xNameAccess;
@@ -1357,17 +1375,16 @@ throw(WrappedTargetException, RuntimeException)
 
 
 #define EXPAND_PROTOCOL "vnd.sun.star.expand"
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 OUString SfxLibraryContainer::createAppLibraryFolder( SfxLibrary* pLib, const OUString& aName )
 {
     OUString aLibDirPath = pLib->maStorageURL;
     if( aLibDirPath.isEmpty() )
     {
-        INetURLObject aInetObj( String(maLibraryPath).GetToken(1) );
+        INetURLObject aInetObj( maLibraryPath.getToken(1, (sal_Unicode)';') );
         aInetObj.insertName( aName, sal_True, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
         checkStorageURL( aInetObj.GetMainURL( INetURLObject::NO_DECODE ), pLib->maLibInfoFileURL,
-            pLib->maStorageURL, pLib->maUnexpandedStorageURL );
+                         pLib->maStorageURL, pLib->maUnexpandedStorageURL );
         aLibDirPath = pLib->maStorageURL;
     }
 
@@ -1499,7 +1516,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                                             INetURLObject::LAST_SEGMENT, sal_True,
                                             INetURLObject::ENCODE_ALL );
                 aElementInetObj.setExtension( maLibElementFileExtension );
-                String aElementPath( aElementInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                OUString aElementPath( aElementInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
@@ -1672,7 +1689,7 @@ bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
 
     // Read info file
     uno::Reference< io::XInputStream > xInput;
-    String aLibInfoPath;
+    OUString aLibInfoPath;
     if( bStorage )
     {
         aLibInfoPath = maInfoFileName;
@@ -1828,11 +1845,11 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             if ( bInplaceStorage )
             {
                 // create a temporary target storage
-                const ::rtl::OUStringBuffer aTempTargetNameBase = maLibrariesDir + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_temp_" ) );
+                const OUStringBuffer aTempTargetNameBase = maLibrariesDir + OUString( "_temp_" );
                 sal_Int32 index = 0;
                 do
                 {
-                    ::rtl::OUStringBuffer aTempTargetName( aTempTargetNameBase );
+                    OUStringBuffer aTempTargetName( aTempTargetNameBase );
                     aTempTargetName.append( index++ );
 
                     sTargetLibrariesStoreName = aTempTargetName.makeStringAndClear();
@@ -1976,7 +1993,6 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                     }
                 }
             }
-
             maModifiable.setModified( sal_True );
             pImplLib->implSetModified( sal_False );
         }
@@ -2042,7 +2058,9 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     }
 
     if( !mbOldInfoFormat && !maModifiable.isModified() )
+    {
         return;
+    }
     maModifiable.setModified( sal_False );
     mbOldInfoFormat = false;
 
@@ -2086,10 +2104,10 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     else
     {
         // Create Output stream
-        INetURLObject aLibInfoInetObj( String(maLibraryPath).GetToken(1) );
+        INetURLObject aLibInfoInetObj( maLibraryPath.getToken(1, (sal_Unicode)';') );
         aLibInfoInetObj.insertName( maInfoFileName, sal_False, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
-        aLibInfoInetObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("xlc") ) );
-        String aLibInfoPath( aLibInfoInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
+        aLibInfoInetObj.setExtension( OUString("xlc") );
+        OUString aLibInfoPath( aLibInfoInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
         try
         {
@@ -2285,7 +2303,7 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
 
         // Delete index file
         createAppLibraryFolder( pImplLib, Name );
-        String aLibInfoPath = pImplLib->maLibInfoFileURL;
+        OUString aLibInfoPath = pImplLib->maLibInfoFileURL;
         try
         {
             if( mxSFI->exists( aLibInfoPath ) )
@@ -2296,7 +2314,7 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
         catch(const Exception& ) {}
 
         // Delete folder if empty
-        INetURLObject aInetObj( String(maLibraryPath).GetToken(1) );
+        INetURLObject aInetObj( maLibraryPath.getToken(1, (sal_Unicode)';') );
         aInetObj.insertName( Name, sal_True, INetURLObject::LAST_SEGMENT,
                              sal_True, INetURLObject::ENCODE_ALL );
         OUString aLibDirPath = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -2406,7 +2424,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                 uno::Reference< io::XStream > xElementStream;
 
                 aFile = aElementName;
-                aFile += String( RTL_CONSTASCII_USTRINGPARAM(".xml") );
+                aFile += ".xml";
 
                 try
                 {
@@ -2419,7 +2437,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                 {
                     // Check for EA2 document version with wrong extensions
                     aFile = aElementName;
-                    aFile += String( RTL_CONSTASCII_USTRINGPARAM(".") );
+                    aFile += ".";
                     aFile += maLibElementFileExtension;
                     try
                     {
@@ -2444,7 +2462,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
             }
             else
             {
-                String aLibDirPath = pImplLib->maStorageURL;
+                OUString aLibDirPath = pImplLib->maStorageURL;
                 INetURLObject aElementInetObj( aLibDirPath );
                 aElementInetObj.insertName( aElementName, sal_False,
                                             INetURLObject::LAST_SEGMENT, sal_True,
@@ -2565,7 +2583,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
 
         OUString aLibDirPath = pImplLib->maStorageURL;
 
-        INetURLObject aDestInetObj( String(maLibraryPath).GetToken(1) );
+        INetURLObject aDestInetObj( maLibraryPath.getToken(1, (sal_Unicode)';'));
         aDestInetObj.insertName( NewName, sal_True, INetURLObject::LAST_SEGMENT,
                                  sal_True, INetURLObject::ENCODE_ALL );
         OUString aDestDirPath = aDestInetObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -2607,19 +2625,21 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
                     aElementInetObj.insertName( aElementName, sal_False,
                         INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
                     aElementInetObj.setExtension( maLibElementFileExtension );
-                    String aElementPath( aElementInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                    OUString aElementPath( aElementInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                     INetURLObject aElementDestInetObj( aDestDirPath );
                     aElementDestInetObj.insertName( aElementName, sal_False,
                                                     INetURLObject::LAST_SEGMENT, sal_True,
                                                     INetURLObject::ENCODE_ALL );
                     aElementDestInetObj.setExtension( maLibElementFileExtension );
-                    String aDestElementPath( aElementDestInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                    OUString aDestElementPath( aElementDestInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                     try
                     {
                         if( mxSFI->exists( aDestElementPath ) )
+                        {
                             mxSFI->kill( aDestElementPath );
+                        }
                         mxSFI->move( aElementPath, aDestElementPath );
                     }
                     catch(const Exception& )
@@ -2899,10 +2919,11 @@ void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( ::sal_Bool _vbacompa
     if( BasicManager* pBasMgr = getBasicManager() )
     {
         // get the standard library
-        String aLibName = pBasMgr->GetName();
-        if ( aLibName.Len() == 0 )
-            aLibName = String( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-
+        OUString aLibName = pBasMgr->GetName();
+        if ( aLibName.isEmpty())
+        {
+            aLibName = "Standard";
+        }
         if( StarBASIC* pBasic = pBasMgr->GetLib( aLibName ) )
         {
             pBasic->SetVBAEnabled( _vbacompatmodeon );

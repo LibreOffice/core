@@ -32,32 +32,32 @@ class SbiImage {
 
     SbxArrayRef    rTypes;          // User defined types
     SbxArrayRef    rEnums;          // Enum types
-    sal_uInt32*        pStringOff;      // StringId-Offsets
+    sal_uInt32*    pStringOff;      // StringId-Offsets
     sal_Unicode*   pStrings;        // StringPool
     char*          pCode;           // Code-Image
     char*          pLegacyPCode;        // Code-Image
     bool           bError;
-    sal_uInt16         nFlags;
+    sal_uInt16     nFlags;
     short          nStrings;
-    sal_uInt32         nStringSize;
-    sal_uInt32         nCodeSize;
-    sal_uInt16         nLegacyCodeSize;
-    sal_uInt16         nDimBase;        // OPTION BASE value
+    sal_uInt32     nStringSize;
+    sal_uInt32     nCodeSize;
+    sal_uInt16     nLegacyCodeSize;
+    sal_uInt16     nDimBase;        // OPTION BASE value
     rtl_TextEncoding eCharSet;
                                     // temporary management-variable:
     short          nStringIdx;
-    sal_uInt32         nStringOff;      // current Pos in the stringbuffer
+    sal_uInt32     nStringOff;      // current Pos in the stringbuffer
                                     // routines for the compiler:
     void MakeStrings( short );      // establish StringPool
-    void AddString( const String& );
+    void AddString( const OUString& );
     void AddCode( char*, sal_uInt32 );
     void AddType(SbxObject *);
     void AddEnum(SbxObject *);
 
 public:
-    String aName;                   // macro name
-    ::rtl::OUString aOUSource;      // source code
-    String aComment;
+    OUString aName;          // macro name
+    OUString aOUSource;      // source code
+    OUString aComment;
     bool   bInit;
     bool   bFirstInit;
 
@@ -71,21 +71,20 @@ public:
     bool IsError()                  { return bError;    }
 
     const char* GetCode() const     { return pCode;     }
-    sal_uInt32      GetCodeSize() const { return nCodeSize; }
-    ::rtl::OUString& GetSource32()  { return aOUSource; }
-    sal_uInt16      GetBase() const     { return nDimBase;  }
-    String      GetString( short nId ) const;
-    const SbxObject*  FindType (String aTypeName) const;
+    sal_uInt32  GetCodeSize() const { return nCodeSize; }
+    OUString&   GetSource32()  { return aOUSource; }
+    sal_uInt16  GetBase() const     { return nDimBase;  }
+    OUString    GetString( short nId ) const;
+    const SbxObject* FindType (OUString aTypeName) const;
 
     SbxArrayRef GetEnums()          { return rEnums; }
 
     void        SetFlag( sal_uInt16 n ) { nFlags |= n;      }
-    sal_uInt16      GetFlag( sal_uInt16 n ) const { return nFlags & n; }
-    sal_uInt16      CalcLegacyOffset( sal_Int32 nOffset );
-    sal_uInt32      CalcNewOffset( sal_Int16 nOffset );
+    sal_uInt16  GetFlag( sal_uInt16 n ) const { return nFlags & n; }
+    sal_uInt16  CalcLegacyOffset( sal_Int32 nOffset );
+    sal_uInt32  CalcNewOffset( sal_Int16 nOffset );
     void        ReleaseLegacyBuffer();
     bool        ExceedsLegacyLimits();
-
 };
 
 #define SBIMG_EXPLICIT      0x0001  // OPTION EXPLICIT is active

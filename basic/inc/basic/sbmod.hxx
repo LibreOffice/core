@@ -51,14 +51,14 @@ class BASIC_DLLPUBLIC SbModule : public SbxObject, private ::boost::noncopyable
     friend class    StarBASIC;
     friend class    SbClassModuleObject;
 
-    std::vector< String > mModuleVariableNames;
+    std::vector< OUString > mModuleVariableNames;
 
     BASIC_DLLPRIVATE void implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic );
 
 protected:
     com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
-    ::rtl::OUString     aOUSource;
-    String              aComment;
+    OUString            aOUSource;
+    OUString            aComment;
     SbiImage*           pImage;        // the Image
     SbiBreakpoints*     pBreaks;       // Breakpoints
     SbClassData*        pClassData;
@@ -69,10 +69,10 @@ protected:
 
     static void     implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem );
     void            StartDefinitions();
-    SbMethod*       GetMethod( const String&, SbxDataType );
-    SbProperty*     GetProperty( const String&, SbxDataType );
-    SbProcedureProperty* GetProcedureProperty( const String&, SbxDataType );
-    SbIfaceMapperMethod* GetIfaceMapperMethod( const String&, SbMethod* );
+    SbMethod*       GetMethod( const OUString&, SbxDataType );
+    SbProperty*     GetProperty( const OUString&, SbxDataType );
+    SbProcedureProperty* GetProcedureProperty( const OUString&, SbxDataType );
+    SbIfaceMapperMethod* GetIfaceMapperMethod( const OUString&, SbMethod* );
     void            EndDefinitions( sal_Bool=sal_False );
     sal_uInt16      Run( SbMethod* );
     void            RunInit();
@@ -93,21 +93,21 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMOD,2);
     TYPEINFO();
-                    SbModule( const String&, sal_Bool bCompat = sal_False );
+                    SbModule( const OUString&, sal_Bool bCompat = sal_False );
     virtual void    SetParent( SbxObject* );
     virtual void    Clear();
 
-    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType );
 
-    virtual const String&   GetSource() const;
-    const ::rtl::OUString&  GetSource32() const;
-    const String&   GetComment() const            { return aComment; }
-    virtual void    SetSource( const String& r );
-    void            SetSource32( const ::rtl::OUString& r );
+    virtual const OUString& GetSource() const;
+    const OUString&  GetSource32() const;
+    const OUString&  GetComment() const { return aComment; }
+    virtual void     SetSource( const OUString& r );
+    void             SetSource32( const OUString& r );
 
-    virtual sal_Bool    Compile();
-    virtual sal_Bool    IsCompiled() const;
-    const SbxObject* FindType( String aTypeName ) const;
+    virtual sal_Bool Compile();
+    virtual sal_Bool IsCompiled() const;
+    const SbxObject* FindType( OUString aTypeName ) const;
 
     virtual sal_Bool IsBreakable( sal_uInt16 nLine ) const;
     virtual size_t   GetBPCount() const;
@@ -131,10 +131,10 @@ public:
     bool     IsVBACompat() const;
     void     SetVBACompat( bool bCompat );
     sal_Int32 GetModuleType() { return mnType; }
-    void SetModuleType( sal_Int32 nType ) { mnType = nType; }
-    bool isProxyModule() { return bIsProxyModule; }
-    void AddVarName( const String& aName );
-    void RemoveVars();
+    void     SetModuleType( sal_Int32 nType ) { mnType = nType; }
+    bool     isProxyModule() { return bIsProxyModule; }
+    void     AddVarName( const OUString& aName );
+    void     RemoveVars();
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
     bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
 };
@@ -153,7 +153,7 @@ public:
     ~SbClassModuleObject();
 
     // Overridden to support NameAccess etc.
-    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType );
 
     virtual void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
 

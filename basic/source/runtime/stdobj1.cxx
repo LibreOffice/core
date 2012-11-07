@@ -46,7 +46,7 @@ SbStdFactory::SbStdFactory()
 {
 }
 
-SbxObject* SbStdFactory::CreateObject( const rtl::OUString& rClassName )
+SbxObject* SbStdFactory::CreateObject( const OUString& rClassName )
 {
     if( rClassName.equalsIgnoreAsciiCase("Picture") )
         return new SbStdPicture;
@@ -115,16 +115,16 @@ void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 TYPEINIT1( SbStdPicture, SbxObject );
 
 SbStdPicture::SbStdPicture() :
-    SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("Picture") ) )
+    SbxObject( OUString("Picture"))
 {
     // Properties
-    SbxVariable* p = Make( String( RTL_CONSTASCII_USTRINGPARAM("Type") ), SbxCLASS_PROPERTY, SbxVARIANT );
+    SbxVariable* p = Make( OUString("Type"), SbxCLASS_PROPERTY, SbxVARIANT );
     p->SetFlags( SBX_READ | SBX_DONTSTORE );
     p->SetUserData( ATTR_IMP_TYPE );
-    p = Make( String( RTL_CONSTASCII_USTRINGPARAM("Width") ), SbxCLASS_PROPERTY, SbxVARIANT );
+    p = Make( OUString("Width"), SbxCLASS_PROPERTY, SbxVARIANT );
     p->SetFlags( SBX_READ | SBX_DONTSTORE );
     p->SetUserData( ATTR_IMP_WIDTH );
-    p = Make( String( RTL_CONSTASCII_USTRINGPARAM("Height") ), SbxCLASS_PROPERTY, SbxVARIANT );
+    p = Make( OUString("Height"), SbxCLASS_PROPERTY, SbxVARIANT );
     p->SetFlags( SBX_READ | SBX_DONTSTORE );
     p->SetUserData( ATTR_IMP_HEIGHT );
 }
@@ -134,7 +134,7 @@ SbStdPicture::~SbStdPicture()
 }
 
 
-SbxVariable* SbStdPicture::Find( const rtl::OUString& rName, SbxClassType t )
+SbxVariable* SbStdPicture::Find( const OUString& rName, SbxClassType t )
 {
     // entered already?
     return SbxObject::Find( rName, t );
@@ -218,36 +218,40 @@ void SbStdFont::PropSize( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 void SbStdFont::PropName( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 {
     if( bWrite )
-        SetFontName( pVar->GetString() );
+    {
+        SetFontName( pVar->GetOUString() );
+    }
     else
+    {
         pVar->PutString( GetFontName() );
+    }
 }
 
 
 TYPEINIT1( SbStdFont, SbxObject );
 
 SbStdFont::SbStdFont() :
-    SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("Font") ) )
+    SbxObject( OUString("Font") )
 {
     // Properties
-    SbxVariable* p = Make( String( RTL_CONSTASCII_USTRINGPARAM("Bold") ), SbxCLASS_PROPERTY, SbxVARIANT );
+    SbxVariable* p = Make( OUString("Bold"), SbxCLASS_PROPERTY, SbxVARIANT );
     p->SetFlags( SBX_READWRITE | SBX_DONTSTORE );
     p->SetUserData( ATTR_IMP_BOLD );
-    p = Make( String( RTL_CONSTASCII_USTRINGPARAM("Italic") ), SbxCLASS_PROPERTY, SbxVARIANT );
+    p = Make( OUString("Italic"), SbxCLASS_PROPERTY, SbxVARIANT );
     p->SetFlags( SBX_READWRITE | SBX_DONTSTORE );
     p->SetUserData( ATTR_IMP_ITALIC );
-    p = Make( String( RTL_CONSTASCII_USTRINGPARAM("StrikeThrough") ), SbxCLASS_PROPERTY, SbxVARIANT );
+    p = Make( OUString("StrikeThrough"), SbxCLASS_PROPERTY, SbxVARIANT );
     p->SetFlags( SBX_READWRITE | SBX_DONTSTORE );
     p->SetUserData( ATTR_IMP_STRIKETHROUGH );
-    p = Make( String( RTL_CONSTASCII_USTRINGPARAM("Underline") ), SbxCLASS_PROPERTY, SbxVARIANT );
+    p = Make( OUString("Underline"), SbxCLASS_PROPERTY, SbxVARIANT );
     p->SetFlags( SBX_READWRITE | SBX_DONTSTORE );
     p->SetUserData( ATTR_IMP_UNDERLINE );
-    p = Make( String( RTL_CONSTASCII_USTRINGPARAM("Size") ), SbxCLASS_PROPERTY, SbxVARIANT );
+    p = Make( OUString("Size"), SbxCLASS_PROPERTY, SbxVARIANT );
     p->SetFlags( SBX_READWRITE | SBX_DONTSTORE );
     p->SetUserData( ATTR_IMP_SIZE );
 
     // handle name property yourself
-    p = Find( String( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_PROPERTY );
+    p = Find( OUString("Name"), SbxCLASS_PROPERTY );
     DBG_ASSERT( p, "Keine Name Property" );
     p->SetUserData( ATTR_IMP_NAME );
 }
@@ -257,7 +261,7 @@ SbStdFont::~SbStdFont()
 }
 
 
-SbxVariable* SbStdFont::Find( const rtl::OUString& rName, SbxClassType t )
+SbxVariable* SbStdFont::Find( const OUString& rName, SbxClassType t )
 {
     return SbxObject::Find( rName, t );
 }
@@ -356,7 +360,7 @@ void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
         return;
     }
 
-    pVar->PutString( String() );
+    pVar->PutString( OUString() );
 }
 
 void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
@@ -394,29 +398,29 @@ void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
 TYPEINIT1( SbStdClipboard, SbxObject );
 
 SbStdClipboard::SbStdClipboard() :
-    SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("Clipboard") ) )
+    SbxObject( OUString("Clipboard") )
 {
-    SbxVariable* p = Find( String( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_PROPERTY );
+    SbxVariable* p = Find( OUString("Name"), SbxCLASS_PROPERTY );
     DBG_ASSERT( p, "Keine Name Property" );
     p->SetUserData( ATTR_IMP_NAME );
 
     // register methods
-    p = Make( String( RTL_CONSTASCII_USTRINGPARAM("Clear") ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( OUString("Clear"), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
     p->SetUserData( METH_CLEAR );
-    p = Make( String( RTL_CONSTASCII_USTRINGPARAM("GetData") ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( OUString("GetData"), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
     p->SetUserData( METH_GETDATA );
-    p = Make( String( RTL_CONSTASCII_USTRINGPARAM("GetFormat") ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( OUString("GetFormat"), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
     p->SetUserData( METH_GETFORMAT );
-    p = Make( String( RTL_CONSTASCII_USTRINGPARAM("GetText") ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( OUString("GetText"), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
     p->SetUserData( METH_GETTEXT );
-    p = Make( String( RTL_CONSTASCII_USTRINGPARAM("SetData") ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( OUString("SetData"), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
     p->SetUserData( METH_SETDATA );
-    p = Make( String( RTL_CONSTASCII_USTRINGPARAM("SetText") ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( OUString("SetText"), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
     p->SetUserData( METH_SETTEXT );
 }
@@ -426,7 +430,7 @@ SbStdClipboard::~SbStdClipboard()
 }
 
 
-SbxVariable* SbStdClipboard::Find( const rtl::OUString& rName, SbxClassType t )
+SbxVariable* SbStdClipboard::Find( const OUString& rName, SbxClassType t )
 {
     return SbxObject::Find( rName, t );
 }

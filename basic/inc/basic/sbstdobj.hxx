@@ -33,7 +33,7 @@ class BASIC_DLLPUBLIC SbStdFactory : public SbxFactory
 public:
     SbStdFactory();
 
-    virtual SbxObject*  CreateObject( const rtl::OUString& rClassName );
+    virtual SbxObject*  CreateObject( const OUString& rClassName );
 };
 
 //--------------------
@@ -56,7 +56,7 @@ public:
     TYPEINFO();
 
     SbStdPicture();
-    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType );
 
     Graphic GetGraphic() const { return aGraphic; }
     void    SetGraphic( const Graphic& rGrf ) { aGraphic = rGrf; }
@@ -73,7 +73,7 @@ protected:
     sal_Bool    bStrikeThrough;
     sal_Bool    bUnderline;
     sal_uInt16  nSize;
-    String  aName;
+    OUString  aName;
 
    ~SbStdFont();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
@@ -90,20 +90,20 @@ public:
     TYPEINFO();
 
     SbStdFont();
-    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType );
 
-    void    SetBold( sal_Bool bB ) { bBold = bB; }
-    sal_Bool    IsBold() const { return bBold; }
-    void    SetItalic( sal_Bool bI ) { bItalic = bI; }
-    sal_Bool    IsItalic() const { return bItalic; }
-    void    SetStrikeThrough( sal_Bool bS ) { bStrikeThrough = bS; }
-    sal_Bool    IsStrikeThrough() const { return bStrikeThrough; }
-    void    SetUnderline( sal_Bool bU ) { bUnderline = bU; }
-    sal_Bool    IsUnderline() const { return bUnderline; }
-    void    SetSize( sal_uInt16 nS ) { nSize = nS; }
-    sal_uInt16  GetSize() const { return nSize; }
-    void    SetFontName( const String& rName ) { aName = rName; }
-    String  GetFontName() const { return aName; }
+    void     SetBold( sal_Bool bB ) { bBold = bB; }
+    sal_Bool IsBold() const { return bBold; }
+    void     SetItalic( sal_Bool bI ) { bItalic = bI; }
+    sal_Bool IsItalic() const { return bItalic; }
+    void     SetStrikeThrough( sal_Bool bS ) { bStrikeThrough = bS; }
+    sal_Bool IsStrikeThrough() const { return bStrikeThrough; }
+    void     SetUnderline( sal_Bool bU ) { bUnderline = bU; }
+    sal_Bool IsUnderline() const { return bUnderline; }
+    void     SetSize( sal_uInt16 nS ) { nSize = nS; }
+    sal_uInt16 GetSize() const { return nSize; }
+    void     SetFontName( const OUString& rName ) { aName = rName; }
+    OUString GetFontName() const { return aName; }
 };
 
 //----------------------
@@ -128,7 +128,7 @@ public:
     TYPEINFO();
 
     SbStdClipboard();
-    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType );
 };
 
 #endif

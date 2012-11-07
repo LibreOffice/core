@@ -43,8 +43,8 @@ class BASIC_DLLPUBLIC SbMethod : public SbxMethod
     sal_uInt16    nLine1, nLine2;
     sal_uInt32    nStart;
     sal_Bool      bInvalid;
-    SbxArrayRef refStatics;
-    BASIC_DLLPRIVATE SbMethod( const String&, SbxDataType, SbModule* );
+    SbxArrayRef   refStatics;
+    BASIC_DLLPRIVATE SbMethod( const OUString&, SbxDataType, SbModule* );
     BASIC_DLLPRIVATE SbMethod( const SbMethod& );
     virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
     virtual sal_Bool StoreData( SvStream& ) const;
@@ -77,7 +77,7 @@ class BASIC_DLLPUBLIC SbIfaceMapperMethod : public SbMethod
 
 public:
     TYPEINFO();
-    SbIfaceMapperMethod( const String& rName, SbMethod* pImplMeth )
+    SbIfaceMapperMethod( const OUString& rName, SbMethod* pImplMeth )
         : SbMethod( rName, pImplMeth->GetType(), NULL )
         , mxImplMeth( pImplMeth )
     {}

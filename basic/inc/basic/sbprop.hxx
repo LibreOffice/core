@@ -33,7 +33,7 @@ class BASIC_DLLPUBLIC SbProperty : public SbxProperty
     friend class SbProcedureProperty;
     SbModule* pMod;
     sal_Bool     bInvalid;
-    BASIC_DLLPRIVATE SbProperty( const String&, SbxDataType, SbModule* );
+    BASIC_DLLPRIVATE SbProperty( const OUString&, SbxDataType, SbModule* );
     virtual ~SbProperty();
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICPROP,1);
@@ -50,7 +50,7 @@ class BASIC_DLLPUBLIC SbProcedureProperty : public SbxProperty
     virtual ~SbProcedureProperty();
 
 public:
-    SbProcedureProperty( const String& r, SbxDataType t )
+    SbProcedureProperty( const OUString& r, SbxDataType t )
             : SbxProperty( r, t ) // , pMod( p )
             , mbSet( false )
     {}

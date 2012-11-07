@@ -59,7 +59,7 @@ static const sal_Unicode* SkipWhitespace( const sal_Unicode* p )
 // Scanning of a symbol. The symbol were inserted in rSym, the return value
 // is the new scan position. The symbol is at errors empty.
 
-static const sal_Unicode* Symbol( const sal_Unicode* p, XubString& rSym, const SbxSimpleCharClass& rCharClass )
+static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym, const SbxSimpleCharClass& rCharClass )
 {
     sal_uInt16 nLen = 0;
     // Did we have a nonstandard symbol?
@@ -67,26 +67,34 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, XubString& rSym, const S
     {
         rSym = ++p;
         while( *p && *p != ']' )
+        {
             p++, nLen++;
+        }
         p++;
     }
     else
     {
         // A symbol had to begin with a alphabetic character or an underline
         if( !rCharClass.isAlpha( *p ) && *p != '_' )
+        {
             SbxBase::SetError( SbxERR_SYNTAX );
+        }
         else
         {
             rSym = p;
             // The it can contain alphabetic characters, numbers or underlines
             while( *p && (rCharClass.isAlphaNumeric( *p ) || *p == '_') )
+            {
                 p++, nLen++;
+            }
             // BASIC-Standard-Suffixes were ignored
             if( *p && (*p == '%' || *p == '&' || *p == '!' || *p == '#' || *p == '$' ) )
+            {
                 p++;
+            }
         }
     }
-    rSym.Erase( nLen );
+    rSym = rSym.copy( 0, nLen );
     return p;
 }
 
@@ -156,18 +164,24 @@ static SbxVariable* Operand
     else if( !bVar && *p == '"' )
     {
         // A string
-        XubString aString;
+        OUString aString;
         p++;
         for( ;; )
         {
             // This is perhaps an error
             if( !*p )
+            {
                 return NULL;
+            }
             // Double quotes are OK
             if( *p == '"' )
+            {
                 if( *++p != '"' )
+                {
                     break;
-            aString += *p++;
+                }
+            }
+            aString += OUString(*p++);
         }
         refVar->PutString( aString );
     }
@@ -294,14 +308,16 @@ static SbxVariable* Element
     ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf,
       SbxClassType t, const SbxSimpleCharClass& rCharClass )
 {
-    XubString aSym;
+    OUString aSym;
     const sal_Unicode* p = Symbol( *ppBuf, aSym, rCharClass );
     SbxVariableRef refVar;
-    if( aSym.Len() )
+    if( !aSym.isEmpty() )
     {
         sal_uInt16 nOld = pObj->GetFlags();
         if( pObj == pGbl )
+        {
             pObj->SetFlag( SBX_GBLSEARCH );
+        }
         refVar = pObj->Find( aSym, t );
         pObj->SetFlags( nOld );
         if( refVar.Is() )
@@ -354,22 +370,26 @@ static SbxVariable* Element
 
 // Mainroutine
 
-SbxVariable* SbxObject::Execute( const XubString& rTxt )
+SbxVariable* SbxObject::Execute( const OUString& rTxt )
 {
     SbxVariable* pVar = NULL;
-    const sal_Unicode* p = rTxt.GetBuffer();
+    const sal_Unicode* p = rTxt.getStr();
     for( ;; )
     {
         p = SkipWhitespace( p );
         if( !*p )
+        {
             break;
+        }
         if( *p++ != '[' )
         {
             SetError( SbxERR_SYNTAX ); break;
         }
         pVar = Assign( this, this, &p );
         if( !pVar )
+        {
             break;
+        }
         p = SkipWhitespace( p );
         if( *p++ != ']' )
         {
@@ -379,17 +399,21 @@ SbxVariable* SbxObject::Execute( const XubString& rTxt )
     return pVar;
 }
 
-SbxVariable* SbxObject::FindQualified( const XubString& rName, SbxClassType t )
+SbxVariable* SbxObject::FindQualified( const OUString& rName, SbxClassType t )
 {
     SbxVariable* pVar = NULL;
-    const sal_Unicode* p = rName.GetBuffer();
+    const sal_Unicode* p = rName.getStr();
     p = SkipWhitespace( p );
     if( !*p )
+    {
         return NULL;;
+    }
     pVar = QualifiedName( this, this, &p, t );
     p = SkipWhitespace( p );
     if( *p )
+    {
         SetError( SbxERR_SYNTAX );
+    }
     return pVar;
 }
 
