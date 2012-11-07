@@ -216,7 +216,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             }
 
             OUString aModul = aMacro.getToken( (sal_Int32)0, (sal_Unicode)'.', nLast );
-            aMacro = aMacro.copy( nLast , aMacro.getLength() - nLast);
+            aMacro = aMacro.copy( nLast );
         }
 
         SbxObject* p = maBasicRef;
