@@ -1,35 +1,24 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "textsearch.hxx"
 #include "levdis.hxx"
-#include <regexp/reclass.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
@@ -59,7 +48,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
-using namespace ::rtl;
+using namespace ::com::sun::star;
 
 static sal_Int32 COMPLEX_TRANS_MASK_TMP =
     TransliterationModules_ignoreBaFa_ja_JP |
@@ -70,11 +59,8 @@ static sal_Int32 COMPLEX_TRANS_MASK_TMP =
     TransliterationModules_ignoreIandEfollowedByYa_ja_JP |
     TransliterationModules_ignoreKiKuFollowedBySa_ja_JP |
     TransliterationModules_ignoreProlongedSoundMark_ja_JP;
-static const sal_Int32 SIMPLE_TRANS_MASK = 0xffffffff ^ COMPLEX_TRANS_MASK_TMP;
-static const sal_Int32 COMPLEX_TRANS_MASK =
-    COMPLEX_TRANS_MASK_TMP |
-    TransliterationModules_IGNORE_KANA |
-    TransliterationModules_IGNORE_WIDTH;
+static const sal_Int32 COMPLEX_TRANS_MASK = COMPLEX_TRANS_MASK_TMP | TransliterationModules_IGNORE_KANA | TransliterationModules_FULLWIDTH_HALFWIDTH;
+static const sal_Int32 SIMPLE_TRANS_MASK = ~COMPLEX_TRANS_MASK;
     // Above 2 transliteration is simple but need to take effect in
     // complex transliteration
 
@@ -82,7 +68,7 @@ TextSearch::TextSearch(const Reference < XComponentContext > & rxContext)
         : m_xContext( rxContext )
         , pJumpTable( 0 )
         , pJumpTable2( 0 )
-        , pRegExp( 0 )
+        , pRegexMatcher( NULL )
         , pWLD( 0 )
 {
     SearchOptions aOpt;
@@ -94,7 +80,7 @@ TextSearch::TextSearch(const Reference < XComponentContext > & rxContext)
 
 TextSearch::~TextSearch()
 {
-    delete pRegExp;
+    delete pRegexMatcher;
     delete pWLD;
     delete pJumpTable;
     delete pJumpTable2;
@@ -104,7 +90,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
 {
     aSrchPara = rOptions;
 
-    delete pRegExp, pRegExp = 0;
+    delete pRegexMatcher, pRegexMatcher = NULL;
     delete pWLD, pWLD = 0;
     delete pJumpTable, pJumpTable = 0;
     delete pJumpTable2, pJumpTable2 = 0;
@@ -113,13 +99,10 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     if( aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK )
     {
         if( !xTranslit.is() )
-        {
             xTranslit.set( Transliteration::create( m_xContext ) );
-        }
-        // Load transliteration module
         xTranslit->loadModule(
-                (TransliterationModules)( aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK ),
-                aSrchPara.Locale);
+             (TransliterationModules)( aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK ),
+             aSrchPara.Locale);
     }
     else if( xTranslit.is() )
         xTranslit = 0;
@@ -128,29 +111,25 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     if ( aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
     {
         if( !xTranslit2.is() )
-        {
             xTranslit2.set( Transliteration::create( m_xContext ) );
-        }
         // Load transliteration module
         xTranslit2->loadModule(
-                (TransliterationModules)( aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK ),
-                aSrchPara.Locale);
+             (TransliterationModules)( aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK ),
+             aSrchPara.Locale);
     }
 
     if ( !xBreak.is() )
-    {
-        xBreak = BreakIterator::create(m_xContext);
-    }
+        xBreak = com::sun::star::i18n::BreakIterator::create( m_xContext );
 
     sSrchStr = aSrchPara.searchString;
 
-    // use transliteration here, but only if not RegEx, which does it different
-    if ( aSrchPara.algorithmType != SearchAlgorithms_REGEXP && xTranslit.is() &&
+    // use transliteration here
+    if ( xTranslit.is() &&
      aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK )
         sSrchStr = xTranslit->transliterateString2String(
                 aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
 
-    if ( aSrchPara.algorithmType != SearchAlgorithms_REGEXP && xTranslit2.is() &&
+    if ( xTranslit2.is() &&
      aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
     sSrchStr2 = xTranslit2->transliterateString2String(
             aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
@@ -162,17 +141,15 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     checkCTLEnd = (xBreak.is() && (xBreak->getScriptType(sSrchStr,
                     sSrchStr.getLength()-1) == ScriptType::COMPLEX));
 
-    if ( aSrchPara.algorithmType == SearchAlgorithms_REGEXP )
+    switch( aSrchPara.algorithmType)
     {
-        fnForward = &TextSearch::RESrchFrwrd;
-        fnBackward = &TextSearch::RESrchBkwrd;
+        case SearchAlgorithms_REGEXP:
+            fnForward = &TextSearch::RESrchFrwrd;
+            fnBackward = &TextSearch::RESrchBkwrd;
+            RESrchPrepare( aSrchPara);
+            break;
 
-        pRegExp = new Regexpr( aSrchPara, xTranslit );
-    }
-    else
-    {
-        if ( aSrchPara.algorithmType == SearchAlgorithms_APPROXIMATE )
-        {
+        case SearchAlgorithms_APPROXIMATE:
             fnForward = &TextSearch::ApproxSrchFrwrd;
             fnBackward = &TextSearch::ApproxSrchBkwrd;
 
@@ -181,12 +158,12 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
                     0 != (SearchFlags::LEV_RELAXED & aSrchPara.searchFlag ) );
 
             nLimit = pWLD->GetLimit();
-        }
-        else
-        {
+            break;
+
+        default:
             fnForward = &TextSearch::NSrchFrwrd;
             fnBackward = &TextSearch::NSrchBkwrd;
-        }
+            break;
     }
 }
 
@@ -254,7 +231,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
     {
         SearchResult sres2;
 
-    in_str = OUString(searchStr);
+        in_str = OUString(searchStr);
         com::sun::star::uno::Sequence <sal_Int32> offset( in_str.getLength());
 
         in_str = xTranslit2->transliterate( searchStr, 0, in_str.getLength(), offset );
@@ -383,9 +360,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
     return sres;
 }
 
-
-
-//--------------- die Wort-Trennner ----------------------------------
+//---------------------------------------------------------------------
 
 bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
 {
@@ -393,9 +368,7 @@ bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
     if( '\x7f' != rStr[nPos])
     {
         if ( !xCharClass.is() )
-        {
              xCharClass = CharacterClassification::create( m_xContext );
-        }
         sal_Int32 nCType = xCharClass->getCharacterType( rStr, nPos,
                 aSrchPara.Locale );
         if( 0 != (( KCharacterType::DIGIT | KCharacterType::ALPHA |
@@ -405,10 +378,8 @@ bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
     return bRet;
 }
 
-
-
-// --------- methods for the kind of boyer-morre search ------------------
-
+// --------- helper methods for Boyer-Moore like text searching ----------
+// TODO: use ICU's regex UREGEX_LITERAL mode instead when it becomes available
 
 void TextSearch::MakeForwardTab()
 {
@@ -690,10 +661,42 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
     return aRet;
 }
 
+void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOptions)
+{
+    // select the transliterated pattern string
+    const OUString& rPatternStr =
+        (rOptions.transliterateFlags & SIMPLE_TRANS_MASK) ? sSrchStr
+        : ((rOptions.transliterateFlags & COMPLEX_TRANS_MASK) ? sSrchStr2 : rOptions.searchString);
 
+    sal_uInt32 nIcuSearchFlags = UREGEX_UWORD; // request UAX#29 unicode capability
+    // map com::sun::star::util::SearchFlags to ICU uregex.h flags
+    // TODO: REG_EXTENDED, REG_NOT_BEGINOFLINE, REG_NOT_ENDOFLINE
+    // REG_NEWLINE is neither properly defined nor used anywhere => not implemented
+    // REG_NOSUB is not used anywhere => not implemented
+    // NORM_WORD_ONLY is only used for SearchAlgorithm==Absolute
+    // LEV_RELAXED is only used for SearchAlgorithm==Approximate
+    // why is even ALL_IGNORE_CASE deprecated in UNO? because of transliteration taking care of it???
+    if( (rOptions.searchFlag & com::sun::star::util::SearchFlags::ALL_IGNORE_CASE) != 0)
+        nIcuSearchFlags |= UREGEX_CASE_INSENSITIVE;
+    UErrorCode nIcuErr = U_ZERO_ERROR;
+    // assumption: transliteration didn't mangle regexp control chars
+    IcuUniString aIcuSearchPatStr( (const UChar*)rPatternStr.getStr(), rPatternStr.getLength());
+#ifndef DISABLE_WORDBOUND_EMULATION
+    // for conveniance specific syntax elements of the old regex engine are emulated
+    // by using regular word boundary matching \b to replace \< and \>
+    static const IcuUniString aChevronPattern( "\\\\<|\\\\>", -1, IcuUniString::kInvariant);
+    static const IcuUniString aChevronReplace( "\\\\b", -1, IcuUniString::kInvariant);
+    static RegexMatcher aChevronMatcher( aChevronPattern, 0, nIcuErr);
+    aChevronMatcher.reset( aIcuSearchPatStr);
+    aIcuSearchPatStr = aChevronMatcher.replaceAll( aChevronReplace, nIcuErr);
+    aChevronMatcher.reset();
+#endif
+    pRegexMatcher = new RegexMatcher( aIcuSearchPatStr, nIcuSearchFlags, nIcuErr);
+    if( nIcuErr)
+        { delete pRegexMatcher; pRegexMatcher = NULL;}
+}
 
 //---------------------------------------------------------------------------
-// ------- Methoden fuer die Suche ueber Regular-Expressions --------------
 
 SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
                                       sal_Int32 startPos, sal_Int32 endPos )
@@ -701,121 +704,97 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
 {
     SearchResult aRet;
     aRet.subRegExpressions = 0;
-    OUString aStr( searchStr );
+    if( !pRegexMatcher)
+        return aRet;
 
-    bool bSearchInSel = (0 != (( SearchFlags::REG_NOT_BEGINOFLINE |
-                    SearchFlags::REG_NOT_ENDOFLINE ) & aSrchPara.searchFlag ));
+    if( endPos > searchStr.getLength())
+        endPos = searchStr.getLength();
 
-    pRegExp->set_line(aStr.getStr(), bSearchInSel ? endPos : aStr.getLength());
-
-    struct re_registers regs;
-
-    // Clear structure
-    memset((void *)&regs, 0, sizeof(struct re_registers));
-    if ( ! pRegExp->re_search(&regs, startPos) )
+    // use the ICU RegexMatcher to find the matches
+    UErrorCode nIcuErr = U_ZERO_ERROR;
+    const IcuUniString aSearchTargetStr( (const UChar*)searchStr.getStr(), endPos);
+    pRegexMatcher->reset( aSearchTargetStr);
+    // search until there is a valid match
+    for(;;)
     {
-        if( regs.num_of_match > 0 &&
-                (regs.start[0] != -1 && regs.end[0] != -1) )
-        {
-            aRet.startOffset.realloc(regs.num_of_match);
-            aRet.endOffset.realloc(regs.num_of_match);
+        if( !pRegexMatcher->find( startPos, nIcuErr))
+            return aRet;
 
-            sal_Int32 i = 0, j = 0;
-            while( j < regs.num_of_match )
-            {
-                if( regs.start[j] != -1 && regs.end[j] != -1 )
-                {
-                    aRet.startOffset[i] = regs.start[j];
-                    aRet.endOffset[i] = regs.end[j];
-                    ++i;
-                }
-                ++j;
-            }
-            aRet.subRegExpressions = i;
-        }
-        if ( regs.num_regs > 0 )
-        {
-            if ( regs.start )
-                free(regs.start);
-            if ( regs.end )
-                free(regs.end);
-        }
+        // #i118887# ignore zero-length matches e.g. "a*" in "bc"
+        int nStartOfs = pRegexMatcher->start( nIcuErr);
+        int nEndOfs = pRegexMatcher->end( nIcuErr);
+        if( nStartOfs < nEndOfs)
+            break;
+        // try at next position if there was a zero-length match
+        if( ++startPos >= endPos)
+            return aRet;
+    }
+
+    // extract the result of the search
+    const int nGroupCount = pRegexMatcher->groupCount();
+    aRet.subRegExpressions = nGroupCount + 1;
+    aRet.startOffset.realloc( aRet.subRegExpressions);
+    aRet.endOffset.realloc( aRet.subRegExpressions);
+    aRet.startOffset[0] = pRegexMatcher->start( nIcuErr);
+    aRet.endOffset[0]   = pRegexMatcher->end( nIcuErr);
+    for( int i = 1; i <= nGroupCount; ++i) {
+        aRet.startOffset[i] = pRegexMatcher->start( i, nIcuErr);
+        aRet.endOffset[i]   = pRegexMatcher->end( i, nIcuErr);
     }
 
     return aRet;
 }
 
-/*
- * Sucht das Muster aSrchPara.sSrchStr rueckwaerts im String rStr
- */
 SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
                                       sal_Int32 startPos, sal_Int32 endPos )
             throw(RuntimeException)
 {
+    // NOTE: for backwards search callers provide startPos/endPos inverted!
     SearchResult aRet;
     aRet.subRegExpressions = 0;
-    OUString aStr( searchStr );
+    if( !pRegexMatcher)
+        return aRet;
 
-    sal_Int32 nOffset = 0;
-    sal_Int32 nStrEnde = aStr.getLength() == endPos ? 0 : endPos;
+    if( startPos > searchStr.getLength())
+        startPos = searchStr.getLength();
 
-    bool bSearchInSel = (0 != (( SearchFlags::REG_NOT_BEGINOFLINE |
-                    SearchFlags::REG_NOT_ENDOFLINE ) & aSrchPara.searchFlag ));
+    // use the ICU RegexMatcher to find the matches
+    // TODO: use ICU's backward searching once it becomes available
+    //       as its replacement using forward search is not as good as the real thing
+    UErrorCode nIcuErr = U_ZERO_ERROR;
+    const IcuUniString aSearchTargetStr( (const UChar*)searchStr.getStr(), startPos);
+    pRegexMatcher->reset( aSearchTargetStr);
+    if( !pRegexMatcher->find( endPos, nIcuErr))
+        return aRet;
 
-    if( startPos )
-        nOffset = startPos - 1;
+    // find the last match
+    int nLastPos = 0;
+    do {
+        nLastPos = pRegexMatcher->start( nIcuErr);
+    } while( pRegexMatcher->find( nLastPos + 1, nIcuErr));
 
-    // search only in the subString
-    if( bSearchInSel && nStrEnde )
-    {
-        aStr = aStr.copy( nStrEnde, aStr.getLength() - nStrEnde );
-        if( nOffset > nStrEnde )
-            nOffset = nOffset - nStrEnde;
-        else
-            nOffset = 0;
-    }
+    // find last match again to get its details
+    pRegexMatcher->find( nLastPos, nIcuErr);
 
-    // set the length to negative for reverse search
-    pRegExp->set_line( aStr.getStr(), -(aStr.getLength()) );
-    struct re_registers regs;
-
-    // Clear structure
-    memset((void *)&regs, 0, sizeof(struct re_registers));
-    if ( ! pRegExp->re_search(&regs, nOffset) )
-    {
-        if( regs.num_of_match > 0 &&
-                (regs.start[0] != -1 && regs.end[0] != -1) )
-        {
-            nOffset = bSearchInSel ? nStrEnde : 0;
-            aRet.startOffset.realloc(regs.num_of_match);
-            aRet.endOffset.realloc(regs.num_of_match);
-
-            sal_Int32 i = 0, j = 0;
-            while( j < regs.num_of_match )
-            {
-                if( regs.start[j] != -1 && regs.end[j] != -1 )
-                {
-                    aRet.startOffset[i] = regs.end[j] + nOffset;
-                    aRet.endOffset[i] = regs.start[j] + nOffset;
-                    ++i;
-                }
-                ++j;
-            }
-            aRet.subRegExpressions = i;
-        }
-        if ( regs.num_regs > 0 )
-        {
-            if ( regs.start )
-                free(regs.start);
-            if ( regs.end )
-                free(regs.end);
-        }
+    // fill in the details of the last match
+    const int nGroupCount = pRegexMatcher->groupCount();
+    aRet.subRegExpressions = nGroupCount + 1;
+    aRet.startOffset.realloc( aRet.subRegExpressions);
+    aRet.endOffset.realloc( aRet.subRegExpressions);
+    // NOTE: existing users of backward search seem to expect startOfs/endOfs being inverted!
+    aRet.startOffset[0] = pRegexMatcher->end( nIcuErr);
+    aRet.endOffset[0]   = pRegexMatcher->start( nIcuErr);
+    for( int i = 1; i <= nGroupCount; ++i) {
+        aRet.startOffset[i] = pRegexMatcher->end( i, nIcuErr);
+        aRet.endOffset[i]   = pRegexMatcher->start( i, nIcuErr);
     }
 
     return aRet;
 }
 
-// Phonetische Suche von Worten
+//---------------------------------------------------------------------------
+
+// search for words phonetically
 SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,
                                           sal_Int32 startPos, sal_Int32 endPos )
             throw(RuntimeException)
@@ -932,7 +911,7 @@ sal_Bool SAL_CALL
 TextSearch::supportsService(const OUString& rServiceName)
                 throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii( cSearchName );
+    return rServiceName == cSearchName;
 }
 
 Sequence< OUString > SAL_CALL
@@ -950,14 +929,16 @@ SAL_CALL TextSearch_CreateInstance(
 {
     return ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface >(
-                (::cppu::OWeakObject*) new TextSearch( comphelper::getComponentContext(rxMSF) ) );
+                (::cppu::OWeakObject*) new TextSearch(
+                        comphelper::getComponentContext( rxMSF ) ) );
 }
 
 extern "C"
 {
-
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL i18nsearch_component_getFactory( const sal_Char* sImplementationName,
-        void* _pServiceManager, SAL_UNUSED_PARAMETER void* /*_pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL
+i18nsearch_component_getFactory( const sal_Char* sImplementationName,
+                                 void* _pServiceManager,
+                                 SAL_UNUSED_PARAMETER void* )
 {
     void* pRet = NULL;
 
@@ -969,7 +950,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL i18nsearch_component_getFactory( const sal_C
 
     if ( 0 == rtl_str_compare( sImplementationName, cSearchImpl) )
     {
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
+        ::com::sun::star::uno::Sequence< OUString > aServiceNames(1);
         aServiceNames[0] = getServiceName_Static();
         xFactory = ::cppu::createSingleFactory(
                 pServiceManager, getImplementationName_Static(),
