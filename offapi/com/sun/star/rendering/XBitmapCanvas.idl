@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -15,31 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef __com_sun_star_rendering_XBitmapCanvas_idl__
 #define __com_sun_star_rendering_XBitmapCanvas_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealRectangle2D_idl__
 #include <com/sun/star/geometry/RealRectangle2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_RenderState_idl__
 #include <com/sun/star/rendering/RenderState.idl>
-#endif
-#ifndef __com_sun_star_rendering_XBitmap_idl__
-#include <com/sun/star/rendering/XBitmap.idl>
-#endif
-#ifndef __com_sun_star_rendering_XCanvas_idl__
 #include <com/sun/star/rendering/XCanvas.idl>
-#endif
-#ifndef __com_sun_star_rendering_VolatileContentDestroyedException_idl__
 #include <com/sun/star/rendering/VolatileContentDestroyedException.idl>
-#endif
 
 
 module com { module sun { module star { module rendering {
@@ -53,7 +38,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-published interface XBitmapCanvas : XCanvas
+interface XBitmapCanvas : XCanvas
 {
     /** This method copies a rectangular area from a place of one
         canvas to a place on another.<p>
@@ -121,23 +106,8 @@ published interface XBitmapCanvas : XCanvas
 
 };
 
-//=============================================================================
-
-// TODO: Multiple-inheritance interfaces
-
-/** This service provides the interfaces for a <type>XBitmapCanvas</type>
- */
-service BitmapCanvas
-{
-    /** Canvas interface, to issue rendering operations.
-     */
-    interface XBitmapCanvas;
-
-    /** Bitmap interface, to directly manipulate the pixel.
-     */
-    interface XBitmap;
-};
-
 }; }; }; };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
