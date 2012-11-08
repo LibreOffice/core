@@ -2977,6 +2977,11 @@ void OQueryDesignView::setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable)
         case SID_QUERY_VIEW_ALIASES:
             nRow = BROW_COLUMNALIAS_ROW;
             break;
+////*****
+        case SID_QUERY_VIEW_TOP_LIMIT:
+            nRow = BROW_TOP_LIMIT_ROW;
+            break;
+
         default:
             // ????????????
             nRow = 0;

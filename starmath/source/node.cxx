@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <iostream>
 
 #include "node.hxx"
 #include "rect.hxx"
@@ -1914,6 +1915,7 @@ void SmVerticalBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFor
 SmNode * SmOperNode::GetSymbol()
 {
     SmNode *pNode = GetSubNode(0);
+
     OSL_ENSURE(pNode, "Sm: NULL pointer!");
 
     if (pNode->GetType() == NSUBSUP)
@@ -1951,6 +1953,11 @@ long SmOperNode::CalcSymbolHeight(const SmNode &rSymbol,
     return nHeight;
 }
 
+void SmOperNode::GetHeightVerOffset(const SmRect &rRect, long &rHeight, long &rVerOffset) const
+{
+     rVerOffset = (rRect.GetBottom() - rRect.GetAlignB()) / 2;
+     rHeight    = rRect.GetHeight() - rVerOffset;
+ }
 
 void SmOperNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
@@ -1960,11 +1967,21 @@ void SmOperNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     OSL_ENSURE(pOper, "Sm: missing subnode");
     OSL_ENSURE(pBody, "Sm: missing subnode");
 
-    SmNode *pSymbol = GetSymbol();
-    pSymbol->SetSize(Fraction(CalcSymbolHeight(*pSymbol, rFormat),
-                              pSymbol->GetFont().GetSize().Height()));
-
+    //--
     pBody->Arrange(rDev, rFormat);
+    long  nHeight,
+          nVerOffset;
+   GetHeightVerOffset(*pBody, nHeight, nVerOffset);
+   nHeight += rFormat.GetDistance(DIS_ROOT)
+            * GetFont().GetSize().Height() / 100L;
+
+    pOper->AdaptToY(rDev, nHeight + nHeight / 10L );
+    pOper->AdaptToX(rDev, pBody->GetItalicWidth());
+    //--
+
+    SmNode *pSymbol = GetSymbol();
+    //pSymbol->SetSize(Fraction(CalcSymbolHeight(*pSymbol, rFormat),
+    //                          pSymbol->GetFont().GetSize().Height()));
     pOper->Arrange(rDev, rFormat);
 
     long  nOrigHeight = GetFont().GetSize().Height(),
@@ -1973,6 +1990,10 @@ void SmOperNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
     Point aPos = pOper->AlignTo(*pBody, RP_LEFT, RHA_CENTER, /*RVA_CENTERY*/RVA_MID);
     aPos.X() -= nDist;
+    //--
+    aPos.Y()  = pOper->GetTop() + pBody->GetBottom() - pOper->GetBottom();
+    aPos.Y() -= nVerOffset;
+    //--
     pOper->MoveTo(aPos);
 
     SmRect::operator = (*pBody);
@@ -2677,6 +2698,7 @@ void SmMathSymbolNode::AdaptToX(const OutputDevice &rDev, sal_uLong nWidth)
     aFntSize.Width() /= nDenom ? nDenom : 1;
 
     GetFont().SetSize(aFntSize);
+
 }
 
 void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
