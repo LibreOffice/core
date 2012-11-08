@@ -449,6 +449,13 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     {
         PropertySet( xShape ).setAnyProperty( PROP_FrameIsAutomaticHeight, makeAny( maTypeModel.mbAutoHeight ) );
         PropertySet( xShape ).setAnyProperty( PROP_SizeType, makeAny( maTypeModel.mbAutoHeight ? SizeType::MIN : SizeType::FIX ) );
+        if( getTextBox()->borderDistanceSet )
+        {
+            PropertySet( xShape ).setAnyProperty( PROP_LeftBorderDistance, makeAny( getTextBox()->borderDistanceLeft ));
+            PropertySet( xShape ).setAnyProperty( PROP_TopBorderDistance, makeAny( getTextBox()->borderDistanceTop ));
+            PropertySet( xShape ).setAnyProperty( PROP_RightBorderDistance, makeAny( getTextBox()->borderDistanceRight ));
+            PropertySet( xShape ).setAnyProperty( PROP_BottomBorderDistance, makeAny( getTextBox()->borderDistanceBottom ));
+        }
     }
     else
     {

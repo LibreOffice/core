@@ -38,6 +38,7 @@ TextPortionModel::TextPortionModel( const TextFontModel& rFont, const OUString& 
 }
 
 TextBox::TextBox()
+    : borderDistanceSet( false )
 {
 }
 

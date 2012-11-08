@@ -19,6 +19,7 @@
 
 #include "oox/vml/vmlshapecontext.hxx"
 
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
@@ -406,7 +407,8 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
             // Custom shape in Writer with a textbox are transformed into a frame
             dynamic_cast<SimpleShape&>( mrShape ).setService(
                     "com.sun.star.text.TextFrame");
-            return new TextBoxContext( *this, mrShapeModel.createTextBox(), rAttribs );
+            return new TextBoxContext( *this, mrShapeModel.createTextBox(), rAttribs,
+                mrShape.getDrawing().getFilter().getGraphicHelper());
         case VMLX_TOKEN( ClientData ):
             return new ClientDataContext( *this, mrShapeModel.createClientData(), rAttribs );
         case VMLPPT_TOKEN( textdata ):
