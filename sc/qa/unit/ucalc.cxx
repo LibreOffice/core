@@ -178,6 +178,12 @@ public:
      */
     void testPivotTableCaseInsensitiveStrings();
 
+    /**
+     * Test for pivot table's handling of double-precision numbers that are
+     * very close together.
+     */
+    void testPivotTableNumStability();
+
     void testSheetCopy();
     void testSheetMove();
     void testExternalRef();
@@ -257,6 +263,7 @@ public:
     CPPUNIT_TEST(testPivotTableEmptyRows);
     CPPUNIT_TEST(testPivotTableTextNumber);
     CPPUNIT_TEST(testPivotTableCaseInsensitiveStrings);
+    CPPUNIT_TEST(testPivotTableNumStability);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
     CPPUNIT_TEST(testExternalRef);
@@ -3176,6 +3183,111 @@ void Test::testPivotTableCaseInsensitiveStrings()
         bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Case insensitive strings");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
+
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableNumStability()
+{
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    // Raw Data
+    const char* aData[][4] = {
+        { "Name",   "Time Start", "Time End", "Total"          },
+        { "Sam",    "07:48 AM",   "09:00 AM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "09:00 AM",   "10:30 AM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "10:30 AM",   "12:30 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "12:30 PM",   "01:00 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "01:00 PM",   "01:30 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "01:30 PM",   "02:00 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "02:00 PM",   "07:15 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "07:47 AM",   "09:00 AM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "09:00 AM",   "10:00 AM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "10:00 AM",   "11:00 AM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "11:00 AM",   "11:30 AM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "11:30 AM",   "12:45 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "12:45 PM",   "01:15 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "01:15 PM",   "02:30 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "02:30 PM",   "02:45 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "02:45 PM",   "04:30 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "04:30 PM",   "06:00 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "06:00 PM",   "07:15 PM", "=RC[-1]-RC[-2]" },
+        { "Mike",   "06:15 AM",   "08:30 AM", "=RC[-1]-RC[-2]" },
+        { "Mike",   "08:30 AM",   "10:03 AM", "=RC[-1]-RC[-2]" },
+        { "Mike",   "10:03 AM",   "12:00 PM", "=RC[-1]-RC[-2]" },
+        { "Dennis", "11:00 AM",   "01:00 PM", "=RC[-1]-RC[-2]" },
+        { "Dennis", "01:00 PM",   "02:00 PM", "=RC[-1]-RC[-2]" }
+    };
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Total", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+    };
+
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
+
+    size_t nRowCount = SAL_N_ELEMENTS(aData);
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, nRowCount);
+
+    // Insert formulas to manually calculate sums for each name.
+    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+1, aDataRange.aStart.Tab(), "=SUMIF(R[-23]C:R[-1]C;\"Dennis\";R[-23]C[3]:R[-1]C[3])");
+    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+2, aDataRange.aStart.Tab(), "=SUMIF(R[-24]C:R[-2]C;\"Mike\";R[-24]C[3]:R[-2]C[3])");
+    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+3, aDataRange.aStart.Tab(), "=SUMIF(R[-25]C:R[-3]C;\"Sam\";R[-25]C[3]:R[-3]C[3])");
+
+    m_pDoc->CalcAll();
+
+    // Get correct sum values.
+    double fDennisTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+1, aDataRange.aStart.Tab());
+    double fMikeTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+2, aDataRange.aStart.Tab());
+    double fSamTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+3, aDataRange.aStart.Tab());
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount(), static_cast<size_t>(1));
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    ScRange aOutRange = refresh(pDPObj);
+
+    // Manually check the total value for each name.
+    //
+    // +--------------+----------------+
+    // | Name         |                |
+    // +--------------+----------------+
+    // | Dennis       | <Dennis total> |
+    // +--------------+----------------+
+    // | Mike         | <Miks total>   |
+    // +--------------+----------------+
+    // | Sam          | <Sam total>    |
+    // +--------------+----------------+
+    // | Total Result | ...            |
+    // +--------------+----------------+
+
+    aPos = aOutRange.aStart;
+    aPos.IncCol();
+    aPos.IncRow();
+    double fTest = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Incorrect value for Dennis.", rtl::math::approxEqual(fTest, fDennisTotal));
+    aPos.IncRow();
+    fTest = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Incorrect value for Mike.", rtl::math::approxEqual(fTest, fMikeTotal));
+    aPos.IncRow();
+    fTest = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Incorrect value for Sam.", rtl::math::approxEqual(fTest, fSamTotal));
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
