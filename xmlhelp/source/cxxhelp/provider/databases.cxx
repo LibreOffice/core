@@ -25,6 +25,7 @@
 #include <osl/file.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
+#include <com/sun/star/i18n/Collator.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "inputstream.hxx"
 #include <algorithm>
@@ -628,10 +629,7 @@ Databases::getCollator( const rtl::OUString& Language,
 
     if( ! it->second.is() )
     {
-        it->second =
-            Reference< XCollator > (
-                m_xSMgr->createInstanceWithContext( rtl::OUString( "com.sun.star.i18n.Collator" ),
-                m_xContext ), UNO_QUERY );
+        it->second = Collator::create(m_xContext);
         rtl::OUString langStr = processLang(Language);
         rtl::OUString countryStr = country(Language);
         if( countryStr.isEmpty() )

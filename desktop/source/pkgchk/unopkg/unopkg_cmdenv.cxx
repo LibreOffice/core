@@ -36,7 +36,7 @@
 #include "com/sun/star/deployment/LicenseException.hpp"
 #include "com/sun/star/deployment/VersionException.hpp"
 #include "com/sun/star/deployment/PlatformException.hpp"
-#include "com/sun/star/i18n/XCollator.hpp"
+#include "com/sun/star/i18n/Collator.hpp"
 #include "com/sun/star/i18n/CollatorOptions.hpp"
 
 #include <stdio.h>
@@ -160,11 +160,8 @@ void CommandEnvironmentImpl::printLicense(
     dp_misc::writeConsole(s3);
 
     //the user may enter "yes" or "no", we compare in a case insensitive way
-    Reference< css::i18n::XCollator > xCollator(
-        m_xComponentContext->getServiceManager()
-            ->createInstanceWithContext(
-                OUSTR("com.sun.star.i18n.Collator"),m_xComponentContext),
-            UNO_QUERY_THROW );
+    Reference< css::i18n::XCollator > xCollator =
+        css::i18n::Collator::create( m_xComponentContext );
     xCollator->loadDefaultCollator(
         toLocale(utl::ConfigManager::getLocale()),
         css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE);

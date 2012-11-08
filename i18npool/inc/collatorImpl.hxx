@@ -20,7 +20,6 @@
 #define _I18N_COLLATORIMPL_HXX_
 
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
@@ -44,7 +43,7 @@ class CollatorImpl : public cppu::WeakImplHelper2
 public:
 
     // Constructors
-    CollatorImpl( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+    CollatorImpl( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
     // Destructor
     ~CollatorImpl();
 
@@ -95,7 +94,7 @@ private :
     lookupTableItem *cachedItem;
 
     // Service Factory
-    com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
+    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
     // lang::Locale Data
     com::sun::star::uno::Reference < XLocaleData4 > mxLocaleData;
 

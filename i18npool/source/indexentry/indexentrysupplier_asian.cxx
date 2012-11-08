@@ -35,7 +35,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 #endif
 
 IndexEntrySupplier_asian::IndexEntrySupplier_asian(
-    const Reference < XMultiServiceFactory >& rxMSF ) : IndexEntrySupplier_Common(rxMSF)
+    const Reference < XComponentContext >& rxContext ) : IndexEntrySupplier_Common(rxContext)
 {
     implementationName = "com.sun.star.i18n.IndexEntrySupplier_asian";
 #ifndef DISABLE_DYNLOADING

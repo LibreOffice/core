@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include <com/sun/star/i18n/XCollator.hpp>
+#include <com/sun/star/i18n/Collator.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
@@ -225,22 +225,15 @@ private:
 
 ImplStlEffectCategorySortHelper::ImplStlEffectCategorySortHelper()
 {
-    uno::Reference<lang::XMultiServiceFactory> xFac( ::comphelper::getProcessServiceFactory() );
-    if( xFac.is() )
-    {
-        mxCollator.set( xFac->createInstance( "com.sun.star.i18n.Collator" ), uno::UNO_QUERY );
+    mxCollator = i18n::Collator::create( ::comphelper::getProcessComponentContext() );
 
-        if( mxCollator.is() )
-        {
-            const lang::Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
-            mxCollator->loadDefaultCollator(rLocale, 0);
-        }
-    }
+    const lang::Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
+    mxCollator->loadDefaultCollator(rLocale, 0);
 }
 
 bool ImplStlEffectCategorySortHelper::operator()( const CustomAnimationPresetPtr& p1, const CustomAnimationPresetPtr& p2 )
 {
-    return mxCollator.is() ? mxCollator->compareString(p1->getLabel(), p2->getLabel()) == -1 : false;
+    return mxCollator->compareString(p1->getLabel(), p2->getLabel()) == -1;
 }
 
 CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, int nTabId, const PresetCategoryList& rCategoryList, bool bHasText )

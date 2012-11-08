@@ -31,11 +31,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::rtl;
 
-ChapterCollator::ChapterCollator( const Reference < XMultiServiceFactory >& rxMSF ) : CollatorImpl(rxMSF)
+ChapterCollator::ChapterCollator( const Reference < XComponentContext >& rxContext ) : CollatorImpl(rxContext)
 {
-    if ( rxMSF.is()) {
-        cclass = CharacterClassification::create( comphelper::getComponentContext( rxMSF ) );
-    }
+    cclass = CharacterClassification::create( rxContext );
 }
 
 ChapterCollator::~ChapterCollator()

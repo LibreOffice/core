@@ -38,7 +38,7 @@ class IndexEntrySupplier_Common : public cppu::WeakImplHelper2
 >
 {
 public:
-    IndexEntrySupplier_Common( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+    IndexEntrySupplier_Common( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
     ~IndexEntrySupplier_Common();
 
     virtual com::sun::star::uno::Sequence < com::sun::star::lang::Locale > SAL_CALL getLocaleList()

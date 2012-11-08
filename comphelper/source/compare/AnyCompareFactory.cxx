@@ -21,7 +21,7 @@
 #include "comphelper_module.hxx"
 
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
-#include <com/sun/star/i18n/XCollator.hpp>
+#include <com/sun/star/i18n/Collator.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -51,16 +51,9 @@ class AnyCompare : public ::cppu::WeakImplHelper1< XAnyCompare >
 public:
     AnyCompare( Reference< XComponentContext > xContext, const Locale& rLocale ) throw()
     {
-        Reference< XMultiComponentFactory > xFactory = xContext->getServiceManager();
-        if ( xFactory.is() )
-    {
-        m_rCollator = Reference< XCollator >(
-                xFactory->createInstanceWithContext( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.Collator" )), xContext ),
-                        UNO_QUERY );
+        m_rCollator = Collator::create( xContext );
         m_rCollator->loadDefaultCollator( rLocale,
                                           0 ); //???
-        }
-
     }
 
     virtual sal_Int16 SAL_CALL compare( const Any& any1, const Any& any2 ) throw(RuntimeException);
@@ -102,16 +95,13 @@ sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 ) throw
 {
     sal_Int16 aResult = 0;
 
-    if( m_rCollator.is() )
-    {
-        OUString aStr1;
-        OUString aStr2;
+    OUString aStr1;
+    OUString aStr2;
 
-        any1 >>= aStr1;
-        any2 >>= aStr2;
+    any1 >>= aStr1;
+    any2 >>= aStr2;
 
-        aResult = ( sal_Int16 )m_rCollator->compareString( aStr1, aStr2 );
-    }
+    aResult = ( sal_Int16 )m_rCollator->compareString( aStr1, aStr2 );
 
     return aResult;
 }

@@ -31,7 +31,7 @@ class ChapterCollator : public CollatorImpl
 {
 public:
     // Constructors
-    ChapterCollator( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+    ChapterCollator( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
     // Destructor
     ~ChapterCollator();
 

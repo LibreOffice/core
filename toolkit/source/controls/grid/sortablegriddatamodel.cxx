@@ -21,11 +21,12 @@
 #include "sortablegriddatamodel.hxx"
 #include "toolkit/helper/servicenames.hxx"
 
-#include <com/sun/star/i18n/XCollator.hpp>
+#include <com/sun/star/i18n/Collator.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 
 #include <comphelper/anycompare.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
@@ -52,12 +53,14 @@ namespace toolkit
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::lang::IndexOutOfBoundsException;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::awt::grid::XGridDataListener;
     using ::com::sun::star::beans::Pair;
     using ::com::sun::star::util::XCloneable;
     using ::com::sun::star::i18n::XCollator;
+    using ::com::sun::star::i18n::Collator;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::awt::grid::GridDataEvent;
@@ -127,10 +130,10 @@ namespace toolkit
     //==================================================================================================================
     DBG_NAME( SortableGridDataModel )
     //------------------------------------------------------------------------------------------------------------------
-    SortableGridDataModel::SortableGridDataModel( Reference< XMultiServiceFactory > const & i_factory )
+    SortableGridDataModel::SortableGridDataModel( Reference< XComponentContext > const & rxContext )
         :SortableGridDataModel_Base( m_aMutex )
         ,SortableGridDataModel_PrivateBase()
-        ,m_context( i_factory )
+        ,m_xContext( rxContext )
         ,m_isInitialized( false )
         ,m_delegator()
         ,m_collator()
@@ -147,7 +150,7 @@ namespace toolkit
         :cppu::BaseMutex()
         ,SortableGridDataModel_Base( m_aMutex )
         ,SortableGridDataModel_PrivateBase()
-        ,m_context( i_copySource.m_context )
+        ,m_xContext( i_copySource.m_xContext )
         ,m_isInitialized( true )
         ,m_delegator()
         ,m_collator( i_copySource.m_collator )
@@ -213,9 +216,9 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     namespace
     {
-        Reference< XCollator > lcl_loadDefaultCollator_throw( ::comphelper::ComponentContext const & i_context )
+        Reference< XCollator > lcl_loadDefaultCollator_throw( const Reference<XComponentContext> & rxContext )
         {
-            Reference< XCollator > const xCollator( i_context.createComponent( "com.sun.star.i18n.Collator" ), UNO_QUERY_THROW );
+            Reference< XCollator > const xCollator = Collator::create( rxContext );
             xCollator->loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0 );
             return xCollator;
         }
@@ -236,7 +239,7 @@ namespace toolkit
         {
         case 1: // SortableGridDataModel.create( XMutableGridDataModel )
             xDelegator.set( i_arguments[0], UNO_QUERY );
-            xCollator = lcl_loadDefaultCollator_throw( m_context );
+            xCollator = lcl_loadDefaultCollator_throw( m_xContext );
             break;
 
         case 2: // SortableGridDataModel.createWithCollator( XMutableGridDataModel, XCollator )
@@ -891,7 +894,7 @@ namespace toolkit
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SortableGridDataModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
 {
-    return *( new ::toolkit::SortableGridDataModel( i_factory ) );
+    return *( new ::toolkit::SortableGridDataModel( comphelper::getComponentContext(i_factory) ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

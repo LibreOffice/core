@@ -55,7 +55,7 @@ namespace toolkit
                                 ,public SortableGridDataModel_PrivateBase
     {
     public:
-        SortableGridDataModel( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & i_factory );
+        SortableGridDataModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext );
         SortableGridDataModel( SortableGridDataModel const & i_copySource );
 
         bool    isInitialized() const { return m_isInitialized; }
@@ -183,7 +183,7 @@ namespace toolkit
         void    impl_removeColumnSort_noBroadcast();
 
     private:
-        ::comphelper::ComponentContext                                                          m_context;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
         bool                                                                                    m_isInitialized;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XMutableGridDataModel >  m_delegator;
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >                   m_collator;

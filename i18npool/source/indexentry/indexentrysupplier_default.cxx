@@ -29,11 +29,11 @@ using namespace ::rtl;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 IndexEntrySupplier_Unicode::IndexEntrySupplier_Unicode(
-    const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF ) :
-    IndexEntrySupplier_Common(rxMSF)
+    const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext ) :
+    IndexEntrySupplier_Common(rxContext)
 {
     implementationName = "com.sun.star.i18n.IndexEntrySupplier_Unicode";
-    index = new Index(rxMSF);
+    index = new Index(rxContext);
 }
 
 IndexEntrySupplier_Unicode::~IndexEntrySupplier_Unicode()
@@ -106,9 +106,9 @@ void IndexTable::init(sal_Unicode start_, sal_Unicode end_, IndexKey *keys, sal_
     }
 }
 
-Index::Index(const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF)
+Index::Index(const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext)
 {
-    collator = new CollatorImpl(rxMSF);
+    collator = new CollatorImpl(rxContext);
 }
 
 Index::~Index()

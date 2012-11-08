@@ -36,6 +36,7 @@
 
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharType.hpp>
+#include <com/sun/star/i18n/Collator.hpp>
 
 
 namespace comphelper { namespace string {
@@ -343,12 +344,7 @@ NaturalStringSorter::NaturalStringSorter(
     const uno::Reference< uno::XComponentContext > &rContext,
     const lang::Locale &rLocale) : m_aLocale(rLocale)
 {
-    uno::Reference< lang::XMultiComponentFactory > xFactory(rContext->getServiceManager(),
-        uno::UNO_SET_THROW);
-
-    m_xCollator = uno::Reference< i18n::XCollator >(xFactory->createInstanceWithContext(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.Collator")), rContext),
-            uno::UNO_QUERY_THROW);
+    m_xCollator = i18n::Collator::create( rContext );
     m_xCollator->loadDefaultCollator(m_aLocale, 0);
     m_xBI = i18n::BreakIterator::create( rContext );
 }

@@ -33,9 +33,9 @@ using ::rtl::OUStringBuffer;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-CollatorImpl::CollatorImpl( const Reference < XMultiServiceFactory >& rxMSF ) : xMSF(rxMSF)
+CollatorImpl::CollatorImpl( const Reference < XComponentContext >& rxContext ) : m_xContext(rxContext)
 {
-    mxLocaleData.set(LocaleData::create(comphelper::getComponentContext(xMSF)));
+    mxLocaleData.set( LocaleData::create(rxContext) );
     cachedItem = NULL;
 }
 
@@ -155,7 +155,7 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
         }
     }
     Reference < XInterface > xI =
-        xMSF->createInstance(OUString("com.sun.star.i18n.Collator_") + serviceName);
+        m_xContext->getServiceManager()->createInstanceWithContext( OUString("com.sun.star.i18n.Collator_") + serviceName, m_xContext );
 
     if (xI.is()) {
         Reference < XCollator > xC;

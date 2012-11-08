@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 class IndexEntrySupplier_ja_phonetic : public IndexEntrySupplier_Common {
 public:
-    IndexEntrySupplier_ja_phonetic( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF ) : IndexEntrySupplier_Common(rxMSF) {
+    IndexEntrySupplier_ja_phonetic( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext ) : IndexEntrySupplier_Common(rxContext) {
         implementationName = "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic";
     };
     virtual rtl::OUString SAL_CALL getIndexCharacter( const rtl::OUString& rIndexEntry,\
@@ -49,7 +49,7 @@ public:
 #define INDEXENTRYSUPPLIER_JA_PHONETIC( algorithm ) \
 class IndexEntrySupplier_##algorithm : public IndexEntrySupplier_ja_phonetic {\
 public:\
-    IndexEntrySupplier_##algorithm (const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF) : IndexEntrySupplier_ja_phonetic (rxMSF) {\
+    IndexEntrySupplier_##algorithm (const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext) : IndexEntrySupplier_ja_phonetic (rxContext) {\
         implementationName = "com.sun.star.i18n.IndexEntrySupplier_"#algorithm;\
     };\
     virtual sal_Bool SAL_CALL loadAlgorithm(\

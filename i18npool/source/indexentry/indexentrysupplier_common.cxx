@@ -28,10 +28,10 @@ using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-IndexEntrySupplier_Common::IndexEntrySupplier_Common(const Reference < lang::XMultiServiceFactory >& rxMSF)
+IndexEntrySupplier_Common::IndexEntrySupplier_Common(const Reference < uno::XComponentContext >& rxContext)
 {
     implementationName = "com.sun.star.i18n.IndexEntrySupplier_Common";
-    collator = new CollatorImpl(rxMSF);
+    collator = new CollatorImpl(rxContext);
     usePhonetic = sal_False;
 }
 

@@ -30,7 +30,7 @@ class Index;
 //  ----------------------------------------------------
 class IndexEntrySupplier_Unicode : public IndexEntrySupplier_Common {
 public:
-    IndexEntrySupplier_Unicode( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+    IndexEntrySupplier_Unicode( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
     ~IndexEntrySupplier_Unicode();
 
     virtual sal_Bool SAL_CALL loadAlgorithm(
@@ -81,7 +81,7 @@ public:
 class Index
 {
 public:
-    Index(const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF);
+    Index(const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext);
     ~Index();
 
     void init(const com::sun::star::lang::Locale& rLocale, const rtl::OUString& algorithm) throw (com::sun::star::uno::RuntimeException);
