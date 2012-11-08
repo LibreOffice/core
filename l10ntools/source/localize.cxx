@@ -262,17 +262,23 @@ void handleCommand(
                     << outFilePath.getStr() << "\n";
                 throw false; //TODO
             }
-            rtl::OString relativPath;
-            if (!inPath.copy(inPath.indexOf(project),
-                inPath.lastIndexOf('/')-inPath.indexOf(project)).
-                convertToString(&relativPath, osl_getThreadTextEncoding(),
-                (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-                | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+
+            //Add header to actual po file
             {
-                std::cerr << "Error: Cannot convert pathname from UTF-16\n";
-                throw false; //TODO
+                const sal_Int32 nProjectInd = inPath.indexOf(project);
+                const OString relativPath =
+                    project == OUString("dictionaries") ?
+                        OUStringToOString(
+                            inPath.copy( nProjectInd + 13,
+                                inPath.lastIndexOf('/')- nProjectInd - 13),
+                            RTL_TEXTENCODING_UTF8 ) :
+                        OUStringToOString(
+                            inPath.copy( nProjectInd,
+                                inPath.lastIndexOf('/')- nProjectInd),
+                            RTL_TEXTENCODING_UTF8 );
+
+                rPoOutPut.writeHeader(PoHeader(relativPath));
             }
-            rPoOutPut.writeHeader(PoHeader(relativPath));
         }
         while (!in.eof())
         {
