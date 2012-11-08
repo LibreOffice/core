@@ -368,6 +368,10 @@ void SfxObjectShell::CancelCheckOut( )
     {
         uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
         xCmisDoc->cancelCheckOut( );
+
+        uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
+        if ( xModifiable.is( ) )
+            xModifiable->setModified( sal_False );
     }
     catch ( const uno::RuntimeException& e )
     {
