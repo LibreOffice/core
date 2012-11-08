@@ -44,11 +44,11 @@ using namespace http_dav_ucp;
 //=========================================================================
 
 DynamicResultSet::DynamicResultSet(
-                const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+                const uno::Reference< uno::XComponentContext >& rxContext,
                 const rtl::Reference< Content >& rxContent,
                 const ucb::OpenCommandArgument2& rCommand,
                 const uno::Reference< ucb::XCommandEnvironment >& rxEnv )
-: ResultSetImplHelper( rxSMgr, rCommand ),
+: ResultSetImplHelper( rxContext, rCommand ),
   m_xContent( rxContent ),
   m_xEnv( rxEnv )
 {

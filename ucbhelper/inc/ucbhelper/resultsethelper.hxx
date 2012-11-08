@@ -21,7 +21,6 @@
 #define _UCBHELPER_RESULTSETHELPER_HXX
 
 #include <osl/mutex.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
@@ -67,7 +66,7 @@ protected:
     osl::Mutex                                           m_aMutex;
     com::sun::star::ucb::OpenCommandArgument2            m_aCommand;
     com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >     m_xSMgr;
+        com::sun::star::uno::XComponentContext >         m_xContext;
     // Resultset #1
     com::sun::star::uno::Reference<
         com::sun::star::sdbc::XResultSet >               m_xResultSet1;
@@ -121,13 +120,13 @@ public:
     /**
       * Construtor.
       *
-      * @param rxSMgr is a Service Manager.
+      * @param rxContext is a Service Manager.
       * @param rCommand is the paramter for the open command that produces
       *        this resultset.
       */
     ResultSetImplHelper(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                com::sun::star::uno::XComponentContext >& rxContext,
             const com::sun::star::ucb::OpenCommandArgument2& rCommand );
 
     /**

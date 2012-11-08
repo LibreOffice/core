@@ -272,7 +272,7 @@ namespace ucb { namespace ucp { namespace ext
             if ( bOpenFolder && impl_isFolder() )
             {
                 Reference< XDynamicResultSet > xSet = new ResultSet(
-                    m_xSMgr, this, aOpenCommand, i_rEvironment );
+                    comphelper::getComponentContext(m_xSMgr), this, aOpenCommand, i_rEvironment );
                 aRet <<= xSet;
               }
 

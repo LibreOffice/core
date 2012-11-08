@@ -24,7 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/ucb/ListActionType.hpp>
 #include <com/sun/star/ucb/WelcomeDynamicResultSetStruct.hpp>
-#include <com/sun/star/ucb/XCachedDynamicResultSetStubFactory.hpp>
+#include <com/sun/star/ucb/CachedDynamicResultSetStubFactory.hpp>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
@@ -42,12 +42,12 @@ using ::rtl::OUString;
 
 DynamicResultSetWrapper::DynamicResultSetWrapper(
                     Reference< XDynamicResultSet > xOrigin
-                    , const Reference< XMultiServiceFactory > & xSMgr )
+                    , const Reference< XComponentContext > & rxContext )
 
                 : m_bDisposed( sal_False )
                 , m_bInDispose( sal_False )
                 , m_pDisposeEventListeners( NULL )
-                , m_xSMgr( xSMgr )
+                , m_xContext( rxContext )
                 , m_bStatic( sal_False )
                 , m_bGotWelcome( sal_False )
                 , m_xSource( xOrigin )
@@ -409,18 +409,14 @@ void SAL_CALL DynamicResultSetWrapper
 
     Reference< XSourceInitialization > xTarget( xCache, UNO_QUERY );
     OSL_ENSURE( xTarget.is(), "The given Target dosn't have the required interface 'XSourceInitialization'" );
-    if( xTarget.is() && m_xSMgr.is() )
+    if( xTarget.is() && m_xContext.is() )
     {
         //@todo m_aSourceSet.wait();?
 
         Reference< XCachedDynamicResultSetStubFactory > xStubFactory;
         try
         {
-            xStubFactory = Reference< XCachedDynamicResultSetStubFactory >(
-                m_xSMgr->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" )) ),
-                UNO_QUERY );
+            xStubFactory = CachedDynamicResultSetStubFactory::create( m_xContext );
         }
         catch ( Exception const & )
         {

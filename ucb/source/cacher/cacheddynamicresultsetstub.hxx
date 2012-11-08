@@ -45,7 +45,7 @@ public:
     CachedDynamicResultSetStub( com::sun::star::uno::Reference<
                         com::sun::star::ucb::XDynamicResultSet > xOrigin
         , const com::sun::star::uno::Reference<
-                        com::sun::star::lang::XMultiServiceFactory > & xSMgr );
+                        com::sun::star::uno::XComponentContext > & rxContext );
 
     virtual ~CachedDynamicResultSetStub();
 
@@ -74,13 +74,13 @@ class CachedDynamicResultSetStubFactory
 {
 protected:
     com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >    m_xSMgr;
+        com::sun::star::uno::XComponentContext >    m_xContext;
 
 public:
 
     CachedDynamicResultSetStubFactory(
         const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > & rSMgr);
+        com::sun::star::uno::XComponentContext > & rxContext);
 
     virtual ~CachedDynamicResultSetStubFactory();
 

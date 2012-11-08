@@ -59,6 +59,7 @@
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -440,7 +441,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         }
 
         uno::Reference< ucb::XDynamicResultSet > xSet
-                = new DynamicResultSet( m_xSMgr, this, aOpenCommand );
+                = new DynamicResultSet( comphelper::getComponentContext(m_xSMgr), this, aOpenCommand );
         aRet <<= xSet;
     }
     else if ( aCommand.Name == "insert" && ( m_eKind != ROOT ) && !isReadOnly() )

@@ -343,7 +343,7 @@ uno::Any SAL_CALL Content::execute(
 
         if ( bOpenFolder && isFolder( xEnv ) ) {
             uno::Reference< ucb::XDynamicResultSet > xSet
-                = new DynamicResultSet(m_xSMgr, this, aOpenCommand, xEnv );
+                = new DynamicResultSet( comphelper::getComponentContext(m_xSMgr), this, aOpenCommand, xEnv );
             aRet <<= xSet;
 
         } else if ( aOpenCommand.Sink.is() ) {

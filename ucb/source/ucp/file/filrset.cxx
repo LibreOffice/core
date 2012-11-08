@@ -29,7 +29,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/ListActionType.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
-#include <com/sun/star/ucb/XCachedDynamicResultSetStubFactory.hpp>
+#include <com/sun/star/ucb/CachedDynamicResultSetStubFactory.hpp>
 #include <ucbhelper/resultsetmetadata.hxx>
 
 using namespace fileaccess;
@@ -705,8 +705,6 @@ XResultSet_impl::connectToCache(
            ucb::ServiceNotFoundException,
            uno::RuntimeException )
 {
-    uno::Reference< lang::XMultiServiceFactory > mxSMgr(m_pMyShell->m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-
     if( m_xListener.is() )
         throw ucb::ListenerAlreadySetException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
     if( m_bStatic )
@@ -714,17 +712,14 @@ XResultSet_impl::connectToCache(
 
     uno::Reference< ucb::XSourceInitialization > xTarget(
         xCache, uno::UNO_QUERY );
-    if( xTarget.is() && mxSMgr.is() )
+    if( xTarget.is() && m_pMyShell->m_xContext.is() )
     {
         uno::Reference< ucb::XCachedDynamicResultSetStubFactory > xStubFactory;
         try
         {
             xStubFactory
-                = uno::Reference< ucb::XCachedDynamicResultSetStubFactory >(
-                    mxSMgr->createInstance(
-                        rtl::OUString(
-                            "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
-                    uno::UNO_QUERY );
+                = ucb::CachedDynamicResultSetStubFactory::create(
+                    m_pMyShell->m_xContext );
         }
         catch ( uno::Exception const & )
         {

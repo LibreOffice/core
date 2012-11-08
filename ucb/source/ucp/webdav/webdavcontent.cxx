@@ -21,6 +21,7 @@
 #include "osl/doublecheckedlocking.h"
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>
@@ -1915,7 +1916,7 @@ uno::Any Content::open(
             // Open collection.
 
             uno::Reference< ucb::XDynamicResultSet > xSet
-                = new DynamicResultSet( m_xSMgr, this, rArg, xEnv );
+                = new DynamicResultSet( comphelper::getComponentContext(m_xSMgr), this, rArg, xEnv );
             aRet <<= xSet;
         }
         else

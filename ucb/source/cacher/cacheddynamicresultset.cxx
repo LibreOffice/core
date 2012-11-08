@@ -22,6 +22,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <cachedcontentresultset.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
@@ -34,7 +35,7 @@ CachedDynamicResultSet::CachedDynamicResultSet(
         Reference< XDynamicResultSet > xOrigin
         , const Reference< XContentIdentifierMapping > & xContentMapping
         , const Reference< XMultiServiceFactory > & xSMgr )
-        : DynamicResultSetWrapper( xOrigin, xSMgr )
+        : DynamicResultSetWrapper( xOrigin, comphelper::getComponentContext(xSMgr) )
         , m_xContentIdentifierMapping( xContentMapping )
 {
     impl_init();
@@ -53,7 +54,7 @@ void SAL_CALL CachedDynamicResultSet
     OSL_ENSURE( m_xSourceResultOne.is(), "need source resultset" );
 
     Reference< XResultSet > xCache(
-        new CachedContentResultSet( m_xSMgr, m_xSourceResultOne, m_xContentIdentifierMapping ) );
+        new CachedContentResultSet( m_xContext, m_xSourceResultOne, m_xContentIdentifierMapping ) );
 
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_xMyResultOne = xCache;
@@ -67,7 +68,7 @@ void SAL_CALL CachedDynamicResultSet
     OSL_ENSURE( m_xSourceResultTwo.is(), "need source resultset" );
 
     Reference< XResultSet > xCache(
-        new CachedContentResultSet( m_xSMgr, m_xSourceResultTwo, m_xContentIdentifierMapping ) );
+        new CachedContentResultSet( m_xContext, m_xSourceResultTwo, m_xContentIdentifierMapping ) );
 
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_xMyResultTwo = xCache;

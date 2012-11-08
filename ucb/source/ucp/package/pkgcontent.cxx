@@ -57,6 +57,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -1461,7 +1462,7 @@ uno::Any Content::open(
         //////////////////////////////////////////////////////////////////
 
         uno::Reference< ucb::XDynamicResultSet > xSet
-            = new DynamicResultSet( m_xSMgr, this, rArg, xEnv );
+            = new DynamicResultSet( comphelper::getComponentContext(m_xSMgr), this, rArg, xEnv );
         return uno::makeAny( xSet );
     }
     else

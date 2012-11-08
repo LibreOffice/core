@@ -647,13 +647,13 @@ sal_Int32 SAL_CALL CCRS_PropertySetInfo
 //--------------------------------------------------------------------------
 
 CachedContentResultSet::CachedContentResultSet(
-                  const Reference< XMultiServiceFactory > & xSMgr
+                  const Reference< XComponentContext > & rxContext
                 , const Reference< XResultSet > & xOrigin
                 , const Reference< XContentIdentifierMapping > &
                     xContentIdentifierMapping )
                 : ContentResultSetWrapper( xOrigin )
 
-                , m_xSMgr( xSMgr )
+                , m_xContext( rxContext )
                 , m_xFetchProvider( NULL )
                 , m_xFetchProviderForContentAccess( NULL )
 
@@ -2140,7 +2140,7 @@ const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
     if ( !m_bTriedToGetTypeConverter && !m_xTypeConverter.is() )
     {
         m_bTriedToGetTypeConverter = sal_True;
-        m_xTypeConverter = Reference< XTypeConverter >( Converter::create(comphelper::getComponentContext(m_xSMgr)) );
+        m_xTypeConverter = Reference< XTypeConverter >( Converter::create(m_xContext) );
 
         OSL_ENSURE( m_xTypeConverter.is(),
                     "PropertyValueSet::getTypeConverter() - "
@@ -2156,9 +2156,9 @@ const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
 //--------------------------------------------------------------------------
 
 CachedContentResultSetFactory::CachedContentResultSetFactory(
-        const Reference< XMultiServiceFactory > & rSMgr )
+        const Reference< XComponentContext > & rxContext )
 {
-    m_xSMgr = rSMgr;
+    m_xContext = rxContext;
 }
 
 CachedContentResultSetFactory::~CachedContentResultSetFactory()
@@ -2187,7 +2187,7 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetFactory,
 // CachedContentResultSetFactory XServiceInfo methods.
 //--------------------------------------------------------------------------
 
-XSERVICEINFO_IMPL_1( CachedContentResultSetFactory,
+XSERVICEINFO_IMPL_1_CTX( CachedContentResultSetFactory,
                      OUString( "com.sun.star.comp.ucb.CachedContentResultSetFactory" ),
                      OUString( CACHED_CONTENT_RESULTSET_FACTORY_NAME ) );
 
@@ -2209,7 +2209,7 @@ Reference< XResultSet > SAL_CALL CachedContentResultSetFactory
             throw( com::sun::star::uno::RuntimeException )
 {
     Reference< XResultSet > xRet;
-    xRet = new CachedContentResultSet( m_xSMgr, xSource, xMapping );
+    xRet = new CachedContentResultSet( m_xContext, xSource, xMapping );
     return xRet;
 }
 

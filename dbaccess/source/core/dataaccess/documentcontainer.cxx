@@ -427,7 +427,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
             // open as folder - return result set
 
             Reference< XDynamicResultSet > xSet
-                            = new DynamicResultSet( m_aContext.getLegacyServiceFactory(),
+                            = new DynamicResultSet( m_aContext.getUNOContext(),
                                                     this,
                                                     aOpenCommand,
                                                     Environment );

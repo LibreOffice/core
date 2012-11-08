@@ -43,7 +43,7 @@ namespace chelp {
     public:
         DynamicResultSet(
             const com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+            com::sun::star::uno::XComponentContext >& rxContext,
             const rtl::Reference< Content >& rxContent,
             const com::sun::star::ucb::OpenCommandArgument2& rCommand,
             const com::sun::star::uno::Reference<

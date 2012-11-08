@@ -24,7 +24,7 @@
 #include <com/sun/star/ucb/ContentResultSetCapability.hpp>
 #include <com/sun/star/ucb/ListActionType.hpp>
 #include <com/sun/star/ucb/WelcomeDynamicResultSetStruct.hpp>
-#include <com/sun/star/ucb/XCachedDynamicResultSetStubFactory.hpp>
+#include <com/sun/star/ucb/CachedDynamicResultSetStubFactory.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
 
 //-----------------------------------------------------------------------------
@@ -66,7 +66,7 @@ SortedDynamicResultSet::SortedDynamicResultSet(
                         const Reference < XDynamicResultSet > &xOriginal,
                         const Sequence < NumberedSortingInfo > &aOptions,
                         const Reference < XAnyCompareFactory > &xCompFac,
-                        const Reference < XMultiServiceFactory > &xSMgr )
+                        const Reference < XComponentContext > &rxContext )
 {
     mpDisposeEventListeners = NULL;
     mpOwnListener           = new SortedDynamicResultSetListener( this );
@@ -76,7 +76,7 @@ SortedDynamicResultSet::SortedDynamicResultSet(
     mxOriginal  = xOriginal;
     maOptions   = aOptions;
     mxCompFac   = xCompFac;
-    mxSMgr      = xSMgr;
+    m_xContext  = rxContext;
 
     mpOne = NULL;
     mpTwo = NULL;
@@ -236,15 +236,12 @@ SortedDynamicResultSet::connectToCache(
         throw ListenerAlreadySetException();
 
     Reference< XSourceInitialization > xTarget( xCache, UNO_QUERY );
-    if( xTarget.is() && mxSMgr.is() )
+    if( xTarget.is() && m_xContext.is() )
     {
         Reference< XCachedDynamicResultSetStubFactory > xStubFactory;
         try
         {
-            xStubFactory = Reference< XCachedDynamicResultSetStubFactory >(
-                mxSMgr->createInstance(
-                    OUString( "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
-                UNO_QUERY );
+            xStubFactory = CachedDynamicResultSetStubFactory::create( m_xContext );
         }
         catch ( Exception const & )
         {
@@ -466,9 +463,9 @@ void SortedDynamicResultSet::SendNotify()
 //
 //=========================================================================
 SortedDynamicResultSetFactory::SortedDynamicResultSetFactory(
-                        const Reference< XMultiServiceFactory > & rSMgr )
+                        const Reference< XComponentContext > & rxContext )
 {
-    mxSMgr = rSMgr;
+    m_xContext = rxContext;
 }
 
 //--------------------------------------------------------------------------
@@ -498,7 +495,7 @@ XTYPEPROVIDER_IMPL_3( SortedDynamicResultSetFactory,
 // XServiceInfo methods.
 //--------------------------------------------------------------------------
 
-XSERVICEINFO_IMPL_1( SortedDynamicResultSetFactory,
+XSERVICEINFO_IMPL_1_CTX( SortedDynamicResultSetFactory,
                          OUString( "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" ),
                          OUString( DYNAMIC_RESULTSET_FACTORY_NAME ) );
 
@@ -519,7 +516,7 @@ SortedDynamicResultSetFactory::createSortedDynamicResultSet(
     throw( RuntimeException )
 {
     Reference< XDynamicResultSet > xRet;
-    xRet = new SortedDynamicResultSet( Source, Info, CompareFactory, mxSMgr );
+    xRet = new SortedDynamicResultSet( Source, Info, CompareFactory, m_xContext );
     return xRet;
 }
 

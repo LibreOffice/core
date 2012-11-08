@@ -41,6 +41,7 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::ucb::XContentIdentifier;
     using ::com::sun::star::ucb::OpenCommandArgument2;
@@ -51,9 +52,9 @@ namespace ucb { namespace ucp { namespace ext
     //= ResultSet
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    ResultSet::ResultSet( const Reference< XMultiServiceFactory >& i_rORB, const ::rtl::Reference< Content >& i_rContent,
+    ResultSet::ResultSet( const Reference< XComponentContext >& rxContext, const ::rtl::Reference< Content >& i_rContent,
             const OpenCommandArgument2& i_rCommand, const Reference< XCommandEnvironment >& i_rEnv )
-        :ResultSetImplHelper( i_rORB, i_rCommand )
+        :ResultSetImplHelper( rxContext, i_rCommand )
         ,m_xEnvironment( i_rEnv )
         ,m_xContent( i_rContent )
     {
@@ -63,12 +64,12 @@ namespace ucb { namespace ucp { namespace ext
     void ResultSet::initStatic()
     {
         ::rtl::Reference< DataSupplier > pDataSupplier( new DataSupplier(
-            m_xSMgr,
+            Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW),
             m_xContent,
             m_aCommand.Mode
         ) );
         m_xResultSet1 = new ::ucbhelper::ResultSet(
-            comphelper::getComponentContext(m_xSMgr),
+            m_xContext,
             m_aCommand.Properties,
             pDataSupplier.get(),
             m_xEnvironment

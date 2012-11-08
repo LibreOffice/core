@@ -1854,7 +1854,7 @@ uno::Any Content::open(
             // Open collection.
 
             uno::Reference< ucb::XDynamicResultSet > xSet
-                = new DynamicResultSet( m_xSMgr, this, rArg, xEnv );
+                = new DynamicResultSet( comphelper::getComponentContext(m_xSMgr), this, rArg, xEnv );
             aRet <<= xSet;
         }
         else

@@ -388,7 +388,7 @@ uno::Any SAL_CALL Content::execute(
         {
             uno::Reference< ucb::XDynamicResultSet > xSet
                 = new DynamicResultSet(
-                    m_xSMgr,
+                    comphelper::getComponentContext(m_xSMgr),
                     this,
                     aOpenCommand,
                     Environment,
@@ -406,7 +406,7 @@ uno::Any SAL_CALL Content::execute(
         {
             uno::Reference< ucb::XDynamicResultSet > xSet
                 = new DynamicResultSet(
-                    m_xSMgr,
+                    comphelper::getComponentContext(m_xSMgr),
                     this,
                     aOpenCommand,
                     Environment,

@@ -42,10 +42,10 @@ using namespace hierarchy_ucp;
 //=========================================================================
 
 DynamicResultSet::DynamicResultSet(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             const rtl::Reference< HierarchyContent >& rxContent,
             const ucb::OpenCommandArgument2& rCommand )
-: ResultSetImplHelper( rxSMgr, rCommand ),
+: ResultSetImplHelper( rxContext, rCommand ),
   m_xContent( rxContent )
 {
 }
@@ -60,9 +60,9 @@ void DynamicResultSet::initStatic()
 {
     m_xResultSet1
         = new ::ucbhelper::ResultSet(
-            comphelper::getComponentContext(m_xSMgr),
+            m_xContext,
             m_aCommand.Properties,
-            new  HierarchyResultSetDataSupplier( m_xSMgr,
+            new  HierarchyResultSetDataSupplier( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW),
                                                  m_xContent,
                                                  m_aCommand.Mode ) );
 }
@@ -72,9 +72,9 @@ void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
         = new ::ucbhelper::ResultSet(
-            comphelper::getComponentContext(m_xSMgr),
+            m_xContext,
             m_aCommand.Properties,
-            new  HierarchyResultSetDataSupplier( m_xSMgr,
+            new  HierarchyResultSetDataSupplier( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW),
                                                  m_xContent,
                                                  m_aCommand.Mode ) );
     m_xResultSet2 = m_xResultSet1;

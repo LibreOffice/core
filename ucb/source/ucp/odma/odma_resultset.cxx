@@ -49,11 +49,11 @@ using namespace odma;
 //=========================================================================
 
 DynamicResultSet::DynamicResultSet(
-                      const Reference< XMultiServiceFactory >& rxSMgr,
+                      const Reference< XComponentContext >& rxContext,
                       const rtl::Reference< Content >& rxContent,
                       const OpenCommandArgument2& rCommand,
                       const Reference< XCommandEnvironment >& rxEnv )
-: ResultSetImplHelper( rxSMgr, rCommand ),
+: ResultSetImplHelper( rxContext, rCommand ),
   m_xContent( rxContent ),
   m_xEnv( rxEnv )
 {
@@ -68,9 +68,9 @@ DynamicResultSet::DynamicResultSet(
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
-        = new ::ucbhelper::ResultSet( comphelper::getComponentContext(m_xSMgr),
+        = new ::ucbhelper::ResultSet( m_xContext,
                                       m_aCommand.Properties,
-                                      new DataSupplier( m_xSMgr,
+                                      new DataSupplier( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW),
                                                         m_xContent,
                                                         m_aCommand.Mode ),
                                       m_xEnv );

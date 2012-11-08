@@ -56,6 +56,7 @@
 #include "com/sun/star/ucb/XCommandInfo.hpp"
 #include "com/sun/star/ucb/XPersistentPropertySet.hpp"
 
+#include "comphelper/processfactory.hxx"
 #include "ucbhelper/cancelcommandexecution.hxx"
 #include "ucbhelper/contentidentifier.hxx"
 #include "ucbhelper/propertyvalueset.hxx"
@@ -1417,7 +1418,7 @@ uno::Any Content::open(
         //////////////////////////////////////////////////////////////////
 
         uno::Reference< ucb::XDynamicResultSet > xSet
-            = new DynamicResultSet( m_xSMgr, this, rArg );
+            = new DynamicResultSet( comphelper::getComponentContext(m_xSMgr), this, rArg );
         return uno::makeAny( xSet );
     }
     else

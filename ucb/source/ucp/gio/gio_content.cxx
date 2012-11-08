@@ -60,6 +60,7 @@
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/interactionrequest.hxx>
@@ -854,7 +855,7 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
     if ( bOpenFolder && bIsFolder )
     {
         uno::Reference< ucb::XDynamicResultSet > xSet
-            = new DynamicResultSet(m_xSMgr, this, rOpenCommand, xEnv );
+            = new DynamicResultSet( comphelper::getComponentContext(m_xSMgr), this, rOpenCommand, xEnv );
         aRet <<= xSet;
     }
     else if ( rOpenCommand.Sink.is() )

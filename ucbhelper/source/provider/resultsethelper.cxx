@@ -28,10 +28,11 @@
  *************************************************************************/
 #include <com/sun/star/ucb/ListActionType.hpp>
 #include <com/sun/star/ucb/WelcomeDynamicResultSetStruct.hpp>
-#include <com/sun/star/ucb/XCachedDynamicResultSetStubFactory.hpp>
+#include <com/sun/star/ucb/CachedDynamicResultSetStubFactory.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <ucbhelper/resultsethelper.hxx>
+#include <ucbhelper/getcomponentcontext.hxx>
 
 #include "osl/diagnose.h"
 
@@ -49,13 +50,13 @@ namespace ucbhelper {
 
 //=========================================================================
 ResultSetImplHelper::ResultSetImplHelper(
-    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const uno::Reference< uno::XComponentContext >& rxContext,
     const com::sun::star::ucb::OpenCommandArgument2& rCommand )
 : m_pDisposeEventListeners( 0 ),
   m_bStatic( sal_False ),
   m_bInitDone( sal_False ),
   m_aCommand( rCommand ),
-  m_xSMgr( rxSMgr )
+  m_xContext( rxContext )
 {
 }
 
@@ -249,12 +250,8 @@ void SAL_CALL ResultSetImplHelper::connectToCache(
         try
         {
             xStubFactory
-                = uno::Reference<
-                    com::sun::star::ucb::XCachedDynamicResultSetStubFactory >(
-                        m_xSMgr->createInstance(
-                            rtl::OUString(
-                                "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
-                uno::UNO_QUERY );
+                = com::sun::star::ucb::CachedDynamicResultSetStubFactory::create(
+                      m_xContext );
         }
         catch ( uno::Exception const & )
         {

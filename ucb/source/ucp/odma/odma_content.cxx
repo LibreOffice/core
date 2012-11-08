@@ -310,7 +310,7 @@ uno::Any SAL_CALL Content::execute(
             // open as folder - return result set
 
             uno::Reference< ucb::XDynamicResultSet > xSet
-                            = new DynamicResultSet( m_xSMgr,
+                            = new DynamicResultSet( comphelper::getComponentContext(m_xSMgr),
                                                     this,
                                                     aOpenCommand,
                                                     Environment );

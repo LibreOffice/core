@@ -682,7 +682,7 @@ namespace cmis
         if ( bOpenFolder && bIsFolder )
         {
             uno::Reference< ucb::XDynamicResultSet > xSet
-                = new DynamicResultSet(m_xSMgr, this, rOpenCommand, xEnv );
+                = new DynamicResultSet(comphelper::getComponentContext(m_xSMgr), this, rOpenCommand, xEnv );
             aRet <<= xSet;
         }
         else if ( rOpenCommand.Sink.is() )

@@ -37,7 +37,7 @@ namespace gio
 
     public:
     DynamicResultSet(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
             const com::sun::star::uno::Reference< Content >& rxContent,
             const com::sun::star::ucb::OpenCommandArgument2& rCommand,
             const com::sun::star::uno::Reference<

@@ -39,12 +39,12 @@ using namespace chelp;
 //=========================================================================
 
 DynamicResultSet::DynamicResultSet(
-    const Reference< XMultiServiceFactory >& rxSMgr,
+    const Reference< XComponentContext >& rxContext,
     const rtl::Reference< Content >& rxContent,
     const OpenCommandArgument2& rCommand,
     const Reference< XCommandEnvironment >& rxEnv,
     ResultSetFactory* pFactory )
-    : ResultSetImplHelper( rxSMgr, rCommand ),
+    : ResultSetImplHelper( rxContext, rCommand ),
       m_xContent( rxContent ),
       m_xEnv( rxEnv ),
       m_pFactory( pFactory )

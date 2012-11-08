@@ -20,7 +20,7 @@
 #ifndef _SORTDYNRES_HXX
 #define _SORTDYNRES_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -47,7 +47,7 @@ namespace cppu {
 #define SEQUENCE                    com::sun::star::uno::Sequence
 #define EVENTOBJECT                 com::sun::star::lang::EventObject
 #define XEVENTLISTENER              com::sun::star::lang::XEventListener
-#define XMULTISERVICEFACTORY        com::sun::star::lang::XMultiServiceFactory
+#define XCOMPONENTCONTEXT           com::sun::star::uno::XComponentContext
 #define XRESULTSET                  com::sun::star::sdbc::XResultSet
 #define SQLEXCEPTION                com::sun::star::sdbc::SQLException
 #define XANYCOMPAREFACTORY          com::sun::star::ucb::XAnyCompareFactory
@@ -77,7 +77,7 @@ class SortedDynamicResultSet:
     REFERENCE < XDYNAMICRESULTSET >     mxOriginal;
     SEQUENCE  < NUMBERED_SORTINGINFO >  maOptions;
     REFERENCE < XANYCOMPAREFACTORY >    mxCompFac;
-    REFERENCE < XMULTISERVICEFACTORY >  mxSMgr;
+    REFERENCE < XCOMPONENTCONTEXT >     m_xContext;
 
     SortedResultSet*                    mpOne;
     SortedResultSet*                    mpTwo;
@@ -97,7 +97,7 @@ public:
     SortedDynamicResultSet( const REFERENCE < XDYNAMICRESULTSET >    &xOriginal,
                             const SEQUENCE  < NUMBERED_SORTINGINFO > &aOptions,
                             const REFERENCE < XANYCOMPAREFACTORY >   &xCompFac,
-                            const REFERENCE < XMULTISERVICEFACTORY > &xSMgr );
+                            const REFERENCE < XCOMPONENTCONTEXT >    &rxContext );
 
     ~SortedDynamicResultSet();
 
@@ -211,12 +211,12 @@ class SortedDynamicResultSetFactory:
                 public com::sun::star::ucb::XSortedDynamicResultSetFactory
 {
 
-    REFERENCE< XMULTISERVICEFACTORY >   mxSMgr;
+    REFERENCE< XCOMPONENTCONTEXT >   m_xContext;
 
 public:
 
     SortedDynamicResultSetFactory(
-        const REFERENCE< XMULTISERVICEFACTORY > & rSMgr);
+        const REFERENCE< XCOMPONENTCONTEXT > & rxContext);
 
     ~SortedDynamicResultSetFactory();
 

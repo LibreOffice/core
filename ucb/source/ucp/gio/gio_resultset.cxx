@@ -28,11 +28,11 @@ using namespace com::sun::star::uno;
 using namespace gio;
 
 DynamicResultSet::DynamicResultSet(
-    const Reference< XMultiServiceFactory >& rxSMgr,
+    const Reference< XComponentContext >& rxContext,
     const Reference< Content >& rxContent,
     const OpenCommandArgument2& rCommand,
     const Reference< XCommandEnvironment >& rxEnv )
-    : ResultSetImplHelper( rxSMgr, rCommand ),
+    : ResultSetImplHelper( rxContext, rCommand ),
       m_xContent( rxContent ),
       m_xEnv( rxEnv )
 {
@@ -41,8 +41,8 @@ DynamicResultSet::DynamicResultSet(
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1 = new ::ucbhelper::ResultSet(
-        comphelper::getComponentContext(m_xSMgr), m_aCommand.Properties,
-        new DataSupplier( m_xSMgr, m_xContent, m_aCommand.Mode ), m_xEnv );
+        m_xContext, m_aCommand.Properties,
+        new DataSupplier( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW), m_xContent, m_aCommand.Mode ), m_xEnv );
 }
 
 void DynamicResultSet::initDynamic()

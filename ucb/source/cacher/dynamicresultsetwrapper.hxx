@@ -57,8 +57,8 @@ protected:
     DynamicResultSetWrapperListener*
                             m_pMyListenerImpl;
 
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-                            m_xSMgr;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+                            m_xContext;
 
     osl::Mutex              m_aMutex;
     sal_Bool                m_bStatic;
@@ -107,7 +107,7 @@ public:
         com::sun::star::uno::Reference<
                         com::sun::star::ucb::XDynamicResultSet > xOrigin
         , const com::sun::star::uno::Reference<
-                        com::sun::star::lang::XMultiServiceFactory > & xSMgr );
+                        com::sun::star::uno::XComponentContext > & rxContext );
 
     virtual ~DynamicResultSetWrapper();
 

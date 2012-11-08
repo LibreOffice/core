@@ -35,10 +35,10 @@ using ::rtl::OUString;
 
 CachedDynamicResultSetStub::CachedDynamicResultSetStub(
         Reference< XDynamicResultSet > xOrigin
-        , const Reference< XMultiServiceFactory > & xSMgr )
-        : DynamicResultSetWrapper( xOrigin, xSMgr )
+        , const Reference< XComponentContext > & rxContext )
+        : DynamicResultSetWrapper( xOrigin, rxContext )
 {
-    OSL_ENSURE( m_xSMgr.is(), "need Multiservicefactory to create stub" );
+    OSL_ENSURE( m_xContext.is(), "need Multiservicefactory to create stub" );
     impl_init();
 }
 
@@ -124,9 +124,9 @@ XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSetStub,
 //--------------------------------------------------------------------------
 
 CachedDynamicResultSetStubFactory::CachedDynamicResultSetStubFactory(
-        const Reference< XMultiServiceFactory > & rSMgr )
+        const Reference< XComponentContext > & rxContext )
 {
-    m_xSMgr = rSMgr;
+    m_xContext = rxContext;
 }
 
 CachedDynamicResultSetStubFactory::~CachedDynamicResultSetStubFactory()
@@ -155,7 +155,7 @@ XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetStubFactory,
 // CachedDynamicResultSetStubFactory XServiceInfo methods.
 //--------------------------------------------------------------------------
 
-XSERVICEINFO_IMPL_1( CachedDynamicResultSetStubFactory,
+XSERVICEINFO_IMPL_1_CTX( CachedDynamicResultSetStubFactory,
                      OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetStubFactory" ),
                      OUString( CACHED_DRS_STUB_FACTORY_NAME ) );
 
@@ -176,7 +176,7 @@ Reference< XDynamicResultSet > SAL_CALL CachedDynamicResultSetStubFactory
             throw( RuntimeException )
 {
     Reference< XDynamicResultSet > xRet;
-    xRet = new CachedDynamicResultSetStub( Source, m_xSMgr );
+    xRet = new CachedDynamicResultSetStub( Source, m_xContext );
     return xRet;
 }
 
@@ -203,7 +203,7 @@ void SAL_CALL CachedDynamicResultSetStubFactory
         Reference< XSortedDynamicResultSetFactory > xSortFactory;
         try
         {
-            xSortFactory = SortedDynamicResultSetFactory::create( comphelper::getComponentContext(m_xSMgr) );
+            xSortFactory = SortedDynamicResultSetFactory::create( m_xContext );
         }
         catch ( Exception const & )
         {
@@ -220,7 +220,7 @@ void SAL_CALL CachedDynamicResultSetStubFactory
     }
 
     Reference< XDynamicResultSet > xStub(
-        new CachedDynamicResultSetStub( xSource, m_xSMgr ) );
+        new CachedDynamicResultSetStub( xSource, m_xContext ) );
 
     Reference< XSourceInitialization > xTarget( TargetCache, UNO_QUERY );
     OSL_ENSURE( xTarget.is(), "Target must have interface XSourceInitialization" );

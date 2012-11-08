@@ -41,6 +41,7 @@
 #include <string.h>
 #include "curl.hxx"
 #include <curl/easy.h>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/fd_inputstream.hxx>
@@ -541,7 +542,7 @@ Any SAL_CALL FTPContent::execute(
                         m_aFTPURL.list(sal_Int16(aOpenCommand.Mode));
                     Reference< XDynamicResultSet > xSet
                         = new DynamicResultSet(
-                            m_xSMgr,
+                            comphelper::getComponentContext(m_xSMgr),
                             this,
                             aOpenCommand,
                             Environment,
