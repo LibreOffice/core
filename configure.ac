@@ -7034,6 +7034,7 @@ if test "$with_system_lcms2" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LCMS2=NO
+    LCMS2_TARBALL="861ef15fa0bc018f9ddc932c4ad8b6dd-lcms2-2.4.tar.gz"
     BUILD_TYPE="$BUILD_TYPE LCMS2"
     LCMS2_CFLAGS="-I${OUTDIR}/inc/lcms2"
     if test $_os = Darwin; then
@@ -7044,6 +7045,7 @@ fi
 AC_SUBST(SYSTEM_LCMS2)
 AC_SUBST(LCMS2_CFLAGS)
 AC_SUBST(LCMS2_LIBS)
+AC_SUBST(LCMS2_TARBALL)
 AC_SUBST([MINGW_LCMS2_DLL])
 
 dnl ===================================================================
@@ -7058,11 +7060,13 @@ if test "$with_system_cppunit" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CPPUNIT=NO
+    CPPUNIT_TARBALL="fa9aa839145cdf860bf596532bb8af97-cppunit-1.13.1.tar.gz"
     BUILD_TYPE="$BUILD_TYPE CPPUNIT"
 fi
 AC_SUBST(SYSTEM_CPPUNIT)
 AC_SUBST(CPPUNIT_CFLAGS)
 AC_SUBST(CPPUNIT_LIBS)
+AC_SUBST(CPPUNIT_TARBALL)
 
 dnl ===================================================================
 dnl Check whether freetype is available
@@ -7185,6 +7189,7 @@ if test "$with_system_libxml" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXSLT=NO
+    LIBXSLT_TARBALL="e61d0364a30146aaa3001296f853b2b9-libxslt-1.1.26.tar.gz"
     BUILD_TYPE="$BUILD_TYPE LIBXSLT"
 
     if test "$cross_compiling" = "yes"; then
@@ -7204,6 +7209,7 @@ AC_SUBST(LIBEXSLT_CFLAGS)
 AC_SUBST(LIBEXSLT_LIBS)
 AC_SUBST(LIBXSLT_CFLAGS)
 AC_SUBST(LIBXSLT_LIBS)
+AC_SUBST(LIBXSLT_TARBALL)
 AC_SUBST(XSLTPROC)
 AC_SUBST([MINGW_LIBEXSLT_DLL])
 AC_SUBST([MINGW_LIBXSLT_DLL])
@@ -7241,11 +7247,13 @@ if test "$with_system_libxml" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXML=NO
+    LIBXML_TARBALL="7740a8ec23878a2f50120e1faa2730f2-libxml2-2.7.6.tar.gz"
     BUILD_TYPE="$BUILD_TYPE LIBXML2"
 fi
 AC_SUBST(SYSTEM_LIBXML)
 AC_SUBST(LIBXML_CFLAGS)
 AC_SUBST(LIBXML_LIBS)
+AC_SUBST(LIBXML_TARBALL)
 AC_SUBST(XMLLINT)
 AC_SUBST([MINGW_LIBXML_DLL])
 AC_SUBST([MINGW_ZLIB_DLL])
@@ -7412,6 +7420,7 @@ system)
 
 internal)
     SYSTEM_PYTHON=NO
+    PYTHON_TARBALL="e81c2f0953aa60f8062c05a4673f2be0-Python-2.6.1.tar.bz2"
     BUILD_TYPE="$BUILD_TYPE PYTHON"
     # Embedded Python dies without Home set
     if test "$HOME" = ""; then
@@ -7444,6 +7453,7 @@ fi
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
+AC_SUBST(PYTHON_TARBALL)
 AC_SUBST([MINGW_PYTHON_EXE])
 AC_SUBST([MINGW_PYTHON_DLL])
 AC_SUBST([MINGW_READLINE_DLL])
@@ -7506,6 +7516,7 @@ or install the Berkeley db development package.])
 elif test $_os != iOS -a $_os != Android; then
     AC_MSG_RESULT([internal])
     SYSTEM_DB=NO
+    BERKELEYDB_TARBALL="d70951c80dabecc2892c919ff5d07172-db-4.7.25.NC-custom.tar.gz"
     BUILD_TYPE="$BUILD_TYPE BERKELEYDB"
 else
    AC_MSG_RESULT([none])
@@ -7514,6 +7525,7 @@ AC_SUBST(SYSTEM_DB)
 AC_SUBST(SYSTEM_DB_CFLAGS)
 AC_SUBST(DB_LIB)
 AC_SUBST(DB_CPPLIB)
+AC_SUBST(BERKELEYDB_TARBALL)
 AC_SUBST([MINGW_DB_DLL])
 
 AC_MSG_CHECKING([whether to build the MySQL Connector extension])
@@ -7622,12 +7634,14 @@ int main(int argc, char **argv) {
         else
             AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
         fi
+        MYSQLCPPCONN_TARBALL="0981bda6548a8c8233ffce2b6e4b2a23-mysql-connector-c++-1.1.0.tar.gz"
         BUILD_TYPE="$BUILD_TYPE MYSQLCPPCONN"
         SYSTEM_MYSQL_CPPCONN=NO
     fi
     AC_LANG_POP([C++])
-    AC_SUBST(SYSTEM_MYSQL_CPPCONN)
 fi
+AC_SUBST(SYSTEM_MYSQL_CPPCONN)
+AC_SUBST(MYSQLCPPCONN_TARBALL)
 
 dnl ===================================================================
 dnl Check for system hsqldb
@@ -8279,6 +8293,12 @@ AC_SUBST(MOZ_LIB)
 AC_SUBST(MOZ_LIB_XPCOM)
 AC_SUBST(MOZ_TARBALL)
 
+# libxmlsec is mandatory
+if test $_os != Android -a $_os != iOS ; then
+    LIBXMLSEC_TARBALL="1f24ab1d39f4a51faf22244c94a6203f-xmlsec1-1.2.14.tar.gz"
+fi
+AC_SUBST(LIBXMLSEC_TARBALL)
+
 dnl ===================================================================
 dnl Check for system NSS
 dnl ===================================================================
@@ -8296,6 +8316,7 @@ if test "$with_system_nss" = "yes"; then
     libo_MINGW_CHECK_DLL([SSL3], [ssl3])
 else
     SYSTEM_NSS="NO"
+    NSS_TARBALL="a0a861f539f0e7a91d05e6b9457e4db1-nss-3.13.5-with-nspr-4.9.1.tar.gz"
     BUILD_TYPE="$BUILD_TYPE NSS"
     AC_MSG_RESULT([internal])
     if test "$build_os" = "cygwin"; then
@@ -8325,6 +8346,7 @@ fi # system nss
 AC_SUBST(SYSTEM_NSS)
 AC_SUBST(NSS_CFLAGS)
 AC_SUBST(NSS_LIBS)
+AC_SUBST(NSS_TARBALL)
 AC_SUBST([MINGW_SMIME3_DLL])
 
 dnl ===================================================================
@@ -8487,6 +8509,7 @@ You can use --with-system-icu-for-build=force to use it anyway.])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU="NO"
+    ICU_TARBALL="7c53f83e0327343f4060c0eb83842daf-icu4c-49_1_1-src.tgz"
     BUILD_TYPE="$BUILD_TYPE ICU"
 fi
 
@@ -8501,6 +8524,7 @@ AC_SUBST(ICU_RECLASSIFIED_CLOSE_PARENTHESIS)
 AC_SUBST([ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER])
 AC_SUBST([ICU_RECLASSIFIED_HEBREW_LETTER])
 AC_SUBST(ICU_RECLASSIFIED_PREPEND_SET_EMPTY)
+AC_SUBST(ICU_TARBALL)
 AC_SUBST([MINGW_ICUDATA_DLL])
 AC_SUBST([MINGW_ICUI18N_DLL])
 AC_SUBST([MINGW_ICUUC_DLL])
@@ -8770,11 +8794,13 @@ if test "$with_system_openssl" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_OPENSSL=NO
+    OPENSSL_TARBALL="51a40a81b3b7abe8a5c33670bd3da0ce-openssl-0.9.8v.tar.gz"
     BUILD_TYPE="$BUILD_TYPE OPENSSL"
 fi
 AC_SUBST(SYSTEM_OPENSSL)
 AC_SUBST(OPENSSL_CFLAGS)
 AC_SUBST(OPENSSL_LIBS)
+AC_SUBST(OPENSSL_TARBALL)
 AC_SUBST([MINGW_SSL_DLL])
 AC_SUBST([MINGW_CRYPTO_DLL])
 
@@ -8793,12 +8819,18 @@ if test "$with_system_redland" = "yes"; then
     libo_MINGW_TRY_DLL([SQLITE3], [libsqlite3])
 else
     AC_MSG_RESULT([internal])
+    RAPTOR_TARBALL="284e768eeda0e2898b0d5bf7e26a016e-raptor-1.4.18.tar.gz"
+    RASQAL_TARBALL="fca8706f2c4619e2fa3f8f42f8fc1e9d-rasqal-0.9.16.tar.gz"
+    REDLAND_TARBALL="ca66e26082cab8bb817185a116db809b-redland-1.0.8.tar.gz"
     BUILD_TYPE="$BUILD_TYPE REDLAND"
     SYSTEM_REDLAND=NO
 fi
 AC_SUBST(SYSTEM_REDLAND)
+AC_SUBST(RAPTOR_TARBALL)
+AC_SUBST(RASQAL_TARBALL)
 AC_SUBST(REDLAND_CFLAGS)
 AC_SUBST(REDLAND_LIBS)
+AC_SUBST(REDLAND_TARBALL)
 AC_SUBST([MINGW_RAPTOR_DLL])
 AC_SUBST([MINGW_RASQAL_DLL])
 AC_SUBST([MINGW_REDLAND_DLL])
@@ -8966,12 +8998,14 @@ if test "$with_system_libexttextcat" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBEXTTEXTCAT=NO
+    LIBEXTTEXTCAT_TARBALL="6097739c841f671cb21332b9cc593ae7-libexttextcat-3.3.1.tar.bz2"
     BUILD_TYPE="$BUILD_TYPE LIBEXTTEXTCAT"
 fi
 AC_SUBST(SYSTEM_LIBEXTTEXTCAT)
 AC_SUBST(SYSTEM_LIBEXTTEXTCAT_DATA)
 AC_SUBST(LIBEXTTEXTCAT_CFLAGS)
 AC_SUBST(LIBEXTTEXTCAT_LIBS)
+AC_SUBST(LIBEXTTEXTCAT_TARBALL)
 
 dnl ***************************************
 dnl testing libc version for Linux...
@@ -9808,6 +9842,7 @@ if test "x$enable_ext_pdfimport" != "xno" -a "x$enable_extension_integration" !=
   else
       AC_MSG_RESULT([internal])
       SYSTEM_POPPLER=NO
+      XPDF_TARBALL="599dc4cc65a07ee868cf92a667a913d2-xpdf-3.02.tar.gz"
       BUILD_TYPE="$BUILD_TYPE XPDF"
   fi
 else
@@ -9819,6 +9854,7 @@ AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
+AC_SUBST(XPDF_TARBALL)
 
 
 if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$ENABLE_PDFIMPORT" = "YES"; then
@@ -10219,6 +10255,7 @@ if test "${enable_scripting_javascript}" != "no" -a "x$with_java" != "xno"; then
        AC_MSG_RESULT([internal])
        SYSTEM_RHINO=NO
        RHINO_TARBALL="798b2ffdc8bcfe7bca2cf92b62caf685-rhino1_5R5.zip"
+       SWING_TARBALL="35c94d2df8893241173de1d16b6034c0-swingExSrc.zip"
        BUILD_TYPE="$BUILD_TYPE RHINO"
    fi
 else
@@ -10230,6 +10267,7 @@ AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 AC_SUBST(SYSTEM_RHINO)
 AC_SUBST(RHINO_JAR)
 AC_SUBST(RHINO_TARBALL)
+AC_SUBST(SWING_TARBALL)
 
 dnl Scripting provider for Python extension?
 dnl We always provide this unless we have disabled Python completely
@@ -11415,13 +11453,19 @@ if test "$test_cairo" = "yes" ; then
             dnl We only need cairo for Windows if we
             dnl build librsvg or directx disabled
             if test -z "$ENABLE_DIRECTX"; then
+                CAIRO_TARBALL="f101a9e88b783337b20b2e26dfd26d5f-cairo-1.10.2.tar.gz"
+                PIXMAN_TARBALL="c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2"
                 BUILD_TYPE="$BUILD_TYPE CAIRO"
             fi
         else
             if test "$enable_cairo_canvas" = "yes"; then
+                CAIRO_TARBALL="f101a9e88b783337b20b2e26dfd26d5f-cairo-1.10.2.tar.gz"
+                PIXMAN_TARBALL="c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2"
                 BUILD_TYPE="$BUILD_TYPE CAIRO"
             else
                 if test "$with_system_cairo" != "yes"; then
+                    CAIRO_TARBALL="f101a9e88b783337b20b2e26dfd26d5f-cairo-1.10.2.tar.gz"
+                    PIXMAN_TARBALL="c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2"
                     BUILD_TYPE="$BUILD_TYPE CAIRO"
                 fi
             fi
@@ -11432,6 +11476,8 @@ fi
 AC_SUBST(SYSTEM_CAIRO)
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
+AC_SUBST(CAIRO_TARBALL)
+AC_SUBST(PIXMAN_TARBALL)
 AC_SUBST([MINGW_CAIRO_DLL])
 AC_SUBST([MINGW_FONTCONFIG_DLL])
 AC_SUBST([MINGW_FREETYPE_DLL])
@@ -11456,6 +11502,7 @@ if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a $_os != 
     else
         SYSTEM_LIBLANGTAG=NO
         AC_MSG_RESULT([no])
+        LIBLANGTAG_TARBALL="54e578c91b1b68e69c72be22adcb2195-liblangtag-0.4.0.tar.bz2"
         BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
     fi
 else
@@ -11466,6 +11513,7 @@ AC_SUBST(ENABLE_LIBLANGTAG)
 AC_SUBST(SYSTEM_LIBLANGTAG)
 AC_SUBST(LIBLANGTAG_CFLAGS)
 AC_SUBST(LIBLANGTAG_LIBS)
+AC_SUBST(LIBLANGTAG_TARBALL)
 AC_SUBST([MINGW_LIBLANGTAG_DLL])
 
 dnl ===================================================================
