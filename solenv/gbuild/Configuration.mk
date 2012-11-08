@@ -393,6 +393,7 @@ $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuDataTarget_get_clean_target,$(2)/$(3))
 $(call gb_XcuDataTarget_get_target,$(2)/$(3)) : \
 	$(call gb_Configuration__get_source,$(1),$(2)/$(3)) \
+	$(call gb_Configuration_get_preparation_target,$(1)) \
 	$(call gb_XcsTarget_for_XcuTarget,$(3))
 $(call gb_XcuDataTarget_get_target,$(2)/$(3)) : XCUFILE := $(3)
 $(call gb_XcuDataTarget_get_clean_target,$(2)/$(3)) : XCUFILE := $(3)
@@ -425,6 +426,7 @@ $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuModuleTarget_get_clean_target,$(2)/$(3))
 $(call gb_XcuModuleTarget_get_target,$(2)/$(3)) : \
 	$(call gb_XcuDataSource_for_XcuModuleTarget,$(1),$(2)/$(3)) \
+	$(call gb_Configuration_get_preparation_target,$(1)) \
 	$(call gb_XcsTarget_for_XcuModuleTarget,$(3))
 $(call gb_XcuModuleTarget_get_clean_target,$(2)/$(3)) : XCUFILE := $(3)
 ifeq ($(strip $(gb_Configuration_NODELIVER_$(1))),)
