@@ -2073,7 +2073,6 @@ SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId,Window *pWin, co
     SfxDispatcher &rDisp = *SFX_APP()->GetDispatcher_Impl();
     sal_uInt16 nShLevel = 0;
     SfxShell *pSh;
-    nShLevel=0;
 
     if ( rDisp.pImp->bQuiet )
     {
@@ -2101,7 +2100,6 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Poin
     sal_uInt16 nShLevel = 0;
     SfxShell *pSh;
 
-    nShLevel=0;
     if ( rDisp.pImp->bQuiet )
     {
         nConfigId = 0;
