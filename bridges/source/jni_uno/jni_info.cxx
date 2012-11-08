@@ -985,7 +985,7 @@ extern "C"
 {
 
 //------------------------------------------------------------------------------
-SAL_DLLPUBLIC_EXPORT void
+JNIEXPORT void
 JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1info_1holder_finalize__J(
     JNIEnv * jni_env, SAL_UNUSED_PARAMETER jobject, jlong jni_info_handle )
     SAL_THROW_EXTERN_C()
