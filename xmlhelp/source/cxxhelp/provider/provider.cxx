@@ -207,7 +207,7 @@ ContentProvider::queryContent(
     if ( xContent.is() )
         return xContent;
 
-    xContent = new Content( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, xCanonicId, m_pDatabases );
+    xContent = new Content( m_xContext, this, xCanonicId, m_pDatabases );
 
     // register new content
     registerNewContent( xContent );

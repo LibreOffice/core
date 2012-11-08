@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace container {
@@ -81,7 +82,7 @@ class HierarchyEntry
     ::rtl::OUString m_aPath;
     ::osl::Mutex    m_aMutex;
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
+            ::com::sun::star::uno::XComponentContext >     m_xContext;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > m_xConfigProvider;
     ::com::sun::star::uno::Reference<
@@ -100,7 +101,7 @@ private:
 
 public:
     HierarchyEntry( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
+                        ::com::sun::star::uno::XComponentContext >& rxContext,
                     HierarchyContentProvider* pProvider,
                     const ::rtl::OUString& rURL );
 

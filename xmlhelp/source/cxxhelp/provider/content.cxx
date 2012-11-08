@@ -60,12 +60,12 @@ using namespace chelp;
 //=========================================================================
 //=========================================================================
 
-Content::Content( const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+Content::Content( const uno::Reference< uno::XComponentContext >& rxContext,
                   ::ucbhelper::ContentProviderImplHelper* pProvider,
                   const uno::Reference< ucb::XContentIdentifier >&
                       Identifier,
                   Databases* pDatabases )
-    : ContentImplHelper( rxSMgr, pProvider, Identifier ),
+    : ContentImplHelper( rxContext, pProvider, Identifier ),
       m_aURLParameter( Identifier->getContentIdentifier(),pDatabases ),
       m_pDatabases( pDatabases ) // not owner
 {
@@ -360,8 +360,7 @@ uno::Any SAL_CALL Content::execute(
             aOpenCommand.Sink, uno::UNO_QUERY);
 
         if(xActiveDataSink.is())
-            m_aURLParameter.open(m_xSMgr,
-                                 aCommand,
+            m_aURLParameter.open(aCommand,
                                  CommandId,
                                  Environment,
                                  xActiveDataSink);
@@ -378,8 +377,7 @@ uno::Any SAL_CALL Content::execute(
             aOpenCommand.Sink, uno::UNO_QUERY);
 
         if(xOutputStream.is() )
-            m_aURLParameter.open(m_xSMgr,
-                                 aCommand,
+            m_aURLParameter.open(aCommand,
                                  CommandId,
                                  Environment,
                                  xOutputStream);
@@ -388,12 +386,12 @@ uno::Any SAL_CALL Content::execute(
         {
             uno::Reference< ucb::XDynamicResultSet > xSet
                 = new DynamicResultSet(
-                    comphelper::getComponentContext(m_xSMgr),
+                    m_xContext,
                     this,
                     aOpenCommand,
                     Environment,
                     new ResultSetForRootFactory(
-                        comphelper::getComponentContext(m_xSMgr),
+                        m_xContext,
                         m_xProvider.get(),
                         aOpenCommand.Mode,
                         aOpenCommand.Properties,
@@ -406,12 +404,12 @@ uno::Any SAL_CALL Content::execute(
         {
             uno::Reference< ucb::XDynamicResultSet > xSet
                 = new DynamicResultSet(
-                    comphelper::getComponentContext(m_xSMgr),
+                    m_xContext,
                     this,
                     aOpenCommand,
                     Environment,
                     new ResultSetForQueryFactory(
-                        comphelper::getComponentContext(m_xSMgr),
+                        m_xContext,
                         m_xProvider.get(),
                         aOpenCommand.Mode,
                         aOpenCommand.Properties,
@@ -443,7 +441,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     osl::MutexGuard aGuard( m_aMutex );
 
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow =
-        new ::ucbhelper::PropertyValueSet( m_xSMgr );
+        new ::ucbhelper::PropertyValueSet( m_xContext );
 
     for ( sal_Int32 n = 0; n < rProperties.getLength(); ++n )
     {

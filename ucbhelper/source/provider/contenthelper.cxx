@@ -177,12 +177,12 @@ using namespace ucbhelper_impl;
 namespace ucbhelper {
 
 ContentImplHelper::ContentImplHelper(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             const rtl::Reference< ContentProviderImplHelper >& rxProvider,
             const uno::Reference<
             com::sun::star::ucb::XContentIdentifier >& Identifier )
 : m_pImpl( new ContentImplHelper_Impl ),
-  m_xSMgr( rxSMgr ),
+  m_xContext( rxContext ),
   m_xIdentifier( Identifier ),
   m_xProvider( rxProvider ),
   m_nCommandId( 0 )

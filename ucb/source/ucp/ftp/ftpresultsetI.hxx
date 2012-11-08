@@ -36,7 +36,7 @@ namespace ftp {
 
         ResultSetI(
             const com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory>& xMSF,
+            com::sun::star::uno::XComponentContext>& rxContext,
             const com::sun::star::uno::Reference<
             com::sun::star::ucb::XContentProvider>& xProvider,
             sal_Int32 nOpenMode,

@@ -144,13 +144,13 @@ private:
 
 public:
     Content( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >& rxSMgr, ContentProvider *pProvider,
+        com::sun::star::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier,
         libcmis::ObjectPtr pObject = libcmis::ObjectPtr( ) )
             throw ( com::sun::star::ucb::ContentCreationException );
 
     Content( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >& rxSMgr, ContentProvider *pProvider,
+        com::sun::star::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier,
         sal_Bool bIsFolder)
             throw ( com::sun::star::ucb::ContentCreationException );

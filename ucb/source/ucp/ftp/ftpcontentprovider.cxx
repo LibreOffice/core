@@ -154,7 +154,7 @@ FTPContentProvider::queryContent(
             aURL.host(),
             aURL.port().toInt32()))
         {
-            xContent = new FTPContent( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW), this,xCanonicId,aURL);
+            xContent = new FTPContent( m_xContext, this,xCanonicId,aURL);
             registerNewContent(xContent);
         }
         else {

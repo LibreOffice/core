@@ -213,11 +213,11 @@ namespace
 
 namespace cmis
 {
-    Content::Content( const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    Content::Content( const uno::Reference< uno::XComponentContext >& rxContext,
         ContentProvider *pProvider, const uno::Reference< ucb::XContentIdentifier >& Identifier,
         libcmis::ObjectPtr pObject )
             throw ( ucb::ContentCreationException )
-        : ContentImplHelper( rxSMgr, pProvider, Identifier ),
+        : ContentImplHelper( rxContext, pProvider, Identifier ),
         m_pProvider( pProvider ),
         m_pSession( NULL ),
         m_pObject( pObject ),
@@ -232,11 +232,11 @@ namespace cmis
         m_sObjectId = m_aURL.getObjectId( );
     }
 
-    Content::Content( const uno::Reference< lang::XMultiServiceFactory >& rxSMgr, ContentProvider *pProvider,
+    Content::Content( const uno::Reference< uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const uno::Reference< ucb::XContentIdentifier >& Identifier,
         sal_Bool bIsFolder )
             throw ( ucb::ContentCreationException )
-        : ContentImplHelper( rxSMgr, pProvider, Identifier ),
+        : ContentImplHelper( rxContext, pProvider, Identifier ),
         m_pProvider( pProvider ),
         m_pSession( NULL ),
         m_sURL( Identifier->getContentIdentifier( ) ),
@@ -351,7 +351,7 @@ namespace cmis
             const uno::Sequence< beans::Property >& rProperties,
             const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
-        rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_xSMgr );
+        rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_xContext );
 
         sal_Int32 nProps;
         const beans::Property* pProps;
@@ -682,7 +682,7 @@ namespace cmis
         if ( bOpenFolder && bIsFolder )
         {
             uno::Reference< ucb::XDynamicResultSet > xSet
-                = new DynamicResultSet(comphelper::getComponentContext(m_xSMgr), this, rOpenCommand, xEnv );
+                = new DynamicResultSet(m_xContext, this, rOpenCommand, xEnv );
             aRet <<= xSet;
         }
         else if ( rOpenCommand.Sink.is() )
@@ -1524,7 +1524,7 @@ namespace cmis
 
         try
         {
-            return new ::cmis::Content( m_xSMgr, m_pProvider, xId, !create_document );
+            return new ::cmis::Content( m_xContext, m_pProvider, xId, !create_document );
         }
         catch ( ucb::ContentCreationException & )
         {
@@ -1630,7 +1630,7 @@ namespace cmis
                     sPath += STD_TO_OUSTR( ( *it )->getName( ) );
                     aUrl.setObjectPath( sPath );
                     uno::Reference< ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( aUrl.asString( ) );
-                    uno::Reference< ucb::XContent > xContent = new Content( m_xSMgr, m_pProvider, xId, *it );
+                    uno::Reference< ucb::XContent > xContent = new Content( m_xContext, m_pProvider, xId, *it );
 
                     results.push_back( xContent );
                 }

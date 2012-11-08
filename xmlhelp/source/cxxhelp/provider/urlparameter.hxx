@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -169,14 +168,12 @@ namespace chelp {
 
         rtl::OString getByName( const char* par );
 
-        void open( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                   const com::sun::star::ucb::Command& aCommand,
+        void open( const com::sun::star::ucb::Command& aCommand,
                    sal_Int32 CommandId,
                    const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& Environment,
                    const com::sun::star::uno::Reference< com::sun::star::io::XActiveDataSink >& xDataSink );
 
-        void open( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                   const com::sun::star::ucb::Command& aCommand,
+        void open( const com::sun::star::ucb::Command& aCommand,
                    sal_Int32 CommandId,
                    const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& Environment,
                    const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xDataSink );

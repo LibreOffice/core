@@ -62,7 +62,7 @@ namespace chelp
     public:
 
         Content( const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                 ::com::sun::star::uno::XComponentContext >& rxContext,
                  ::ucbhelper::ContentProviderImplHelper* pProvider,
                  const ::com::sun::star::uno::Reference<
                  ::com::sun::star::ucb::XContentIdentifier >& Identifier,

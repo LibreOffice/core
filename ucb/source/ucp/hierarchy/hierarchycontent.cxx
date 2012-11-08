@@ -83,22 +83,22 @@ using namespace hierarchy_ucp;
 
 // static ( "virtual" ctor )
 HierarchyContent* HierarchyContent::create(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier )
 {
     // Fail, if content does not exist.
     HierarchyContentProperties aProps;
-    if ( !loadData( rxSMgr, pProvider, Identifier, aProps ) )
+    if ( !loadData( rxContext, pProvider, Identifier, aProps ) )
         return 0;
 
-    return new HierarchyContent( rxSMgr, pProvider, Identifier, aProps );
+    return new HierarchyContent( rxContext, pProvider, Identifier, aProps );
 }
 
 //=========================================================================
 // static ( "virtual" ctor )
 HierarchyContent* HierarchyContent::create(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             const ucb::ContentInfo& Info )
@@ -109,16 +109,16 @@ HierarchyContent* HierarchyContent::create(
     if ( Info.Type != HIERARCHY_FOLDER_CONTENT_TYPE && Info.Type != HIERARCHY_LINK_CONTENT_TYPE )
         return 0;
 
-    return new HierarchyContent( rxSMgr, pProvider, Identifier, Info );
+    return new HierarchyContent( rxContext, pProvider, Identifier, Info );
 }
 
 //=========================================================================
 HierarchyContent::HierarchyContent(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             const HierarchyContentProperties& rProps )
-: ContentImplHelper( rxSMgr, pProvider, Identifier ),
+: ContentImplHelper( rxContext, pProvider, Identifier ),
   m_aProps( rProps ),
   m_eState( PERSISTENT ),
   m_pProvider( pProvider ),
@@ -130,11 +130,11 @@ HierarchyContent::HierarchyContent(
 
 //=========================================================================
 HierarchyContent::HierarchyContent(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             const ucb::ContentInfo& Info )
-  : ContentImplHelper( rxSMgr, pProvider, Identifier ),
+  : ContentImplHelper( rxContext, pProvider, Identifier ),
   m_aProps( Info.Type == HIERARCHY_FOLDER_CONTENT_TYPE ? HierarchyEntryData::FOLDER : HierarchyEntryData::LINK ),
   m_eState( TRANSIENT ),
   m_pProvider( pProvider ),
@@ -441,7 +441,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         }
 
         uno::Reference< ucb::XDynamicResultSet > xSet
-                = new DynamicResultSet( comphelper::getComponentContext(m_xSMgr), this, aOpenCommand );
+                = new DynamicResultSet( m_xContext, this, aOpenCommand );
         aRet <<= xSet;
     }
     else if ( aCommand.Name == "insert" && ( m_eKind != ROOT ) && !isReadOnly() )
@@ -619,7 +619,7 @@ HierarchyContent::createNewContent( const ucb::ContentInfo& Info )
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aURL );
 
-        return create( m_xSMgr, m_pProvider, xId, Info );
+        return create( m_xContext, m_pProvider, xId, Info );
     }
     else
     {
@@ -639,7 +639,7 @@ rtl::OUString HierarchyContent::getParentURL()
 //=========================================================================
 //static
 sal_Bool HierarchyContent::hasData(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier )
 {
@@ -654,13 +654,13 @@ sal_Bool HierarchyContent::hasData(
         return sal_True;
     }
 
-    return HierarchyEntry( rxSMgr, pProvider, aURL ).hasData();
+    return HierarchyEntry( rxContext, pProvider, aURL ).hasData();
 }
 
 //=========================================================================
 //static
 sal_Bool HierarchyContent::loadData(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             HierarchyContentProperties& rProps )
@@ -675,7 +675,7 @@ sal_Bool HierarchyContent::loadData(
     }
     else
     {
-        HierarchyEntry aEntry( rxSMgr, pProvider, aURL );
+        HierarchyEntry aEntry( rxContext, pProvider, aURL );
         HierarchyEntryData aData;
         if ( !aEntry.getData( aData ) )
             return sal_False;
@@ -689,7 +689,7 @@ sal_Bool HierarchyContent::loadData(
 sal_Bool HierarchyContent::storeData()
 {
     HierarchyEntry aEntry(
-            m_xSMgr, m_pProvider, m_xIdentifier->getContentIdentifier() );
+            m_xContext, m_pProvider, m_xIdentifier->getContentIdentifier() );
     return aEntry.setData( m_aProps.getHierarchyEntryData(), sal_True );
 }
 
@@ -699,7 +699,7 @@ sal_Bool HierarchyContent::renameData(
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
     HierarchyEntry aEntry(
-            m_xSMgr, m_pProvider, xOldId->getContentIdentifier() );
+            m_xContext, m_pProvider, xOldId->getContentIdentifier() );
     return aEntry.move( xNewId->getContentIdentifier(),
                         m_aProps.getHierarchyEntryData() );
 }
@@ -708,7 +708,7 @@ sal_Bool HierarchyContent::renameData(
 sal_Bool HierarchyContent::removeData()
 {
     HierarchyEntry aEntry(
-        m_xSMgr, m_pProvider, m_xIdentifier->getContentIdentifier() );
+        m_xContext, m_pProvider, m_xIdentifier->getContentIdentifier() );
     return aEntry.remove();
 }
 
@@ -913,7 +913,7 @@ sal_Bool HierarchyContent::exchangeIdentity(
 //=========================================================================
 // static
 uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
-                const uno::Reference< lang::XMultiServiceFactory >& rSMgr,
+                const uno::Reference< uno::XComponentContext >& rxContext,
                 const uno::Sequence< beans::Property >& rProperties,
                 const HierarchyContentProperties& rData,
                 HierarchyContentProvider* pProvider,
@@ -922,7 +922,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
     // Note: Empty sequence means "get values of all supported properties".
 
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
-        = new ::ucbhelper::PropertyValueSet( rSMgr );
+        = new ::ucbhelper::PropertyValueSet( rxContext );
 
     sal_Int32 nCount = rProperties.getLength();
     if ( nCount )
@@ -1066,7 +1066,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
                         const uno::Sequence< beans::Property >& rProperties )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    return getPropertyValues( m_xSMgr,
+    return getPropertyValues( m_xContext,
                               rProperties,
                               m_aProps,
                               m_pProvider,
@@ -1795,7 +1795,7 @@ void HierarchyContent::transfer(
     if ( xSource->isFolder() )
     {
         HierarchyEntry aFolder(
-            m_xSMgr, m_pProvider, xId->getContentIdentifier() );
+            m_xContext, m_pProvider, xId->getContentIdentifier() );
         HierarchyEntry::iterator it;
 
         while ( aFolder.next( it ) )

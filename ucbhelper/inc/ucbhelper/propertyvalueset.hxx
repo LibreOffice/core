@@ -20,7 +20,6 @@
 #ifndef _UCBHELPER_PROPERTYVALUESET_HXX
 #define _UCBHELPER_PROPERTYVALUESET_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -59,8 +58,8 @@ class UCBHELPER_DLLPUBLIC PropertyValueSet :
                 public com::sun::star::sdbc::XRow,
                 public com::sun::star::sdbc::XColumnLocate
 {
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-                                     m_xSMgr;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+                                     m_xContext;
     com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter >
                                      m_xTypeConverter;
     osl::Mutex      m_aMutex;
@@ -76,7 +75,7 @@ private:
 public:
     PropertyValueSet(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr );
+                com::sun::star::uno::XComponentContext >& rxContext );
     virtual ~PropertyValueSet();
 
     // XInterface

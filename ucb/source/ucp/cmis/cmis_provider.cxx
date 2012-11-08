@@ -60,12 +60,12 @@ ContentProvider::queryContent(
         URL aUrl( Identifier->getContentIdentifier( ) );
         if ( aUrl.getRepositoryId( ).isEmpty( ) )
         {
-            xContent = new RepoContent( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, Identifier );
+            xContent = new RepoContent( m_xContext, this, Identifier );
             registerNewContent( xContent );
         }
         else
         {
-            xContent = new Content( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, Identifier );
+            xContent = new Content( m_xContext, this, Identifier );
             registerNewContent( xContent );
         }
     }

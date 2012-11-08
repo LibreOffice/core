@@ -216,7 +216,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
 
     // Create a new content.
 
-    xContent = Content::create( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, Identifier ); // not xId!!!
+    xContent = Content::create( m_xContext, this, Identifier ); // not xId!!!
     registerNewContent( xContent );
 
     if ( xContent.is() && !xContent->getIdentifier().is() )

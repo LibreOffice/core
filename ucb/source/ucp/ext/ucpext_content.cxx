@@ -40,7 +40,7 @@
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
-#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
+#include <com/sun/star/deployment/PackageInformationProvider.hpp>
 
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
@@ -73,6 +73,7 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::ucb::XContentIdentifier;
     using ::com::sun::star::ucb::IllegalIdentifierException;
@@ -96,6 +97,7 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::beans::PropertyChangeEvent;
     using ::com::sun::star::lang::IllegalAccessException;
     using ::com::sun::star::ucb::CommandInfo;
+    using ::com::sun::star::deployment::PackageInformationProvider;
     using ::com::sun::star::deployment::XPackageInformationProvider;
     /** === end UNO using === **/
     namespace OpenMode = ::com::sun::star::ucb::OpenMode;
@@ -132,9 +134,9 @@ namespace ucb { namespace ucp { namespace ext
     //= Content
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    Content::Content( const Reference< XMultiServiceFactory >& i_rORB, ::ucbhelper::ContentProviderImplHelper* i_pProvider,
+    Content::Content( const Reference< XComponentContext >& rxContext, ::ucbhelper::ContentProviderImplHelper* i_pProvider,
                       const Reference< XContentIdentifier >& i_rIdentifier )
-        :Content_Base( i_rORB, i_pProvider, i_rIdentifier )
+        :Content_Base( rxContext, i_pProvider, i_rIdentifier )
         ,m_eExtContentType( E_UNKNOWN )
         ,m_aIsFolder()
         ,m_aContentType()
@@ -271,15 +273,14 @@ namespace ucb { namespace ucp { namespace ext
 
             if ( bOpenFolder && impl_isFolder() )
             {
-                Reference< XDynamicResultSet > xSet = new ResultSet(
-                    comphelper::getComponentContext(m_xSMgr), this, aOpenCommand, i_rEvironment );
+                Reference< XDynamicResultSet > xSet = new ResultSet( m_xContext, this, aOpenCommand, i_rEvironment );
                 aRet <<= xSet;
               }
 
             if ( aOpenCommand.Sink.is() )
             {
                 const ::rtl::OUString sPhysicalContentURL( getPhysicalURL() );
-                ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEvironment, comphelper::getComponentContext(m_xSMgr) );
+                ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEvironment, m_xContext );
                 aRet = aRequestedContent.executeCommand( ::rtl::OUString(  "open"  ), makeAny( aOpenCommand ) );
             }
         }
@@ -397,11 +398,11 @@ namespace ucb { namespace ucp { namespace ext
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XRow > Content::getArtificialNodePropertyValues( const Reference< XMultiServiceFactory >& i_rORB,
+    Reference< XRow > Content::getArtificialNodePropertyValues( const Reference< XComponentContext >& rxContext,
         const Sequence< Property >& i_rProperties, const ::rtl::OUString& i_rTitle )
     {
         // note: empty sequence means "get values of all supported properties".
-        ::rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( i_rORB );
+        ::rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( rxContext );
 
         const sal_Int32 nCount = i_rProperties.getLength();
         if ( nCount )
@@ -471,9 +472,7 @@ namespace ucb { namespace ucp { namespace ext
         ENSURE_OR_RETURN( m_eExtContentType != E_ROOT, "illegal call", ::rtl::OUString() );
 
         // create an ucb::XContent for the physical file within the deployed extension
-        const ::comphelper::ComponentContext aContext( m_xSMgr );
-        const Reference< XPackageInformationProvider > xPackageInfo(
-            aContext.getSingleton( "com.sun.star.deployment.PackageInformationProvider" ), UNO_QUERY_THROW );
+        const Reference< XPackageInformationProvider > xPackageInfo = PackageInformationProvider::get(m_xContext);
         const ::rtl::OUString sPackageLocation( xPackageInfo->getPackageLocation( m_sExtensionId ) );
 
         if ( m_sPathIntoExtension.isEmpty() )
@@ -489,13 +488,13 @@ namespace ucb { namespace ucp { namespace ext
         switch ( m_eExtContentType )
         {
         case E_ROOT:
-            return getArtificialNodePropertyValues( m_xSMgr, i_rProperties, ContentProvider::getRootURL() );
+            return getArtificialNodePropertyValues( m_xContext, i_rProperties, ContentProvider::getRootURL() );
         case E_EXTENSION_ROOT:
-            return getArtificialNodePropertyValues( m_xSMgr, i_rProperties, m_sExtensionId );
+            return getArtificialNodePropertyValues( m_xContext, i_rProperties, m_sExtensionId );
         case E_EXTENSION_CONTENT:
         {
             const ::rtl::OUString sPhysicalContentURL( getPhysicalURL() );
-            ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEnv, comphelper::getComponentContext(m_xSMgr) );
+            ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEnv, m_xContext );
 
             // translate the property request
             Sequence< ::rtl::OUString > aPropertyNames( i_rProperties.getLength() );
@@ -506,7 +505,7 @@ namespace ucb { namespace ucp { namespace ext
                 SelectPropertyName()
             );
             const Sequence< Any > aPropertyValues = aRequestedContent.getPropertyValues( aPropertyNames );
-            const ::rtl::Reference< ::ucbhelper::PropertyValueSet > xValueRow = new ::ucbhelper::PropertyValueSet( m_xSMgr );
+            const ::rtl::Reference< ::ucbhelper::PropertyValueSet > xValueRow = new ::ucbhelper::PropertyValueSet( m_xContext );
             sal_Int32 i=0;
             for (   const Any* value = aPropertyValues.getConstArray();
                     value != aPropertyValues.getConstArray() + aPropertyValues.getLength();

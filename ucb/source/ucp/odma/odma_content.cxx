@@ -569,7 +569,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 //=========================================================================
 // static
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
-            const uno::Reference< lang::XMultiServiceFactory >& rSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             const uno::Sequence< beans::Property >& rProperties,
             const rtl::Reference<ContentProperties>& rData,
             const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >& rProvider,
@@ -578,7 +578,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     // Note: Empty sequence means "get values of all supported properties".
 
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
-                                = new ::ucbhelper::PropertyValueSet( rSMgr );
+                                = new ::ucbhelper::PropertyValueSet( rxContext );
 
     sal_Int32 nCount = rProperties.getLength();
     if ( nCount )
@@ -768,7 +768,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             const uno::Reference< ucb::XCommandEnvironment >& /*xEnv*/ )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    return getPropertyValues( m_xSMgr,
+    return getPropertyValues( comphelper::getComponentContext(m_xSMgr),
                               rProperties,
                               m_aProps,
                               rtl::Reference<

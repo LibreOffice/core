@@ -198,7 +198,7 @@ ContentProvider::queryContent(
     try
     {
         xContent = new ::webdav_ucp::Content(
-                        uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, xCanonicId, m_xDAVSessionFactory );
+                        m_xContext, this, xCanonicId, m_xDAVSessionFactory );
         registerNewContent( xContent );
     }
     catch ( ucb::ContentCreationException const & )

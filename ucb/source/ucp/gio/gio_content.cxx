@@ -83,11 +83,11 @@ namespace gio
 {
 
 Content::Content(
-    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const uno::Reference< uno::XComponentContext >& rxContext,
     ContentProvider* pProvider,
     const uno::Reference< ucb::XContentIdentifier >& Identifier)
         throw ( ucb::ContentCreationException )
-    : ContentImplHelper( rxSMgr, pProvider, Identifier ),
+    : ContentImplHelper( rxContext, pProvider, Identifier ),
       m_pProvider( pProvider ), mpFile (NULL), mpInfo( NULL ), mbTransient(false)
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -96,12 +96,12 @@ Content::Content(
 }
 
 Content::Content(
-    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const uno::Reference< uno::XComponentContext >& rxContext,
     ContentProvider* pProvider,
     const uno::Reference< ucb::XContentIdentifier >& Identifier,
     sal_Bool bIsFolder)
         throw ( ucb::ContentCreationException )
-    : ContentImplHelper( rxSMgr, pProvider, Identifier ),
+    : ContentImplHelper( rxContext, pProvider, Identifier ),
       m_pProvider( pProvider ), mpFile (NULL), mpInfo( NULL ), mbTransient(true)
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -390,11 +390,11 @@ static util::DateTime getDateFromUnix (time_t t)
 }
 
 uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *pInfo,
-    const uno::Reference< lang::XMultiServiceFactory >& rSMgr,
+    const uno::Reference< uno::XComponentContext >& rxContext,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv,
     const uno::Sequence< beans::Property >& rProperties)
 {
-    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( rSMgr );
+    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( rxContext );
 
     sal_Int32 nProps;
     const beans::Property* pProps;
@@ -514,7 +514,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     if (!pInfo)
         ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
 
-    return getPropertyValuesFromGFileInfo(pInfo, m_xSMgr, xEnv, rProperties);
+    return getPropertyValuesFromGFileInfo(pInfo, m_xContext, xEnv, rProperties);
 }
 
 static lang::IllegalAccessException
@@ -855,7 +855,7 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
     if ( bOpenFolder && bIsFolder )
     {
         uno::Reference< ucb::XDynamicResultSet > xSet
-            = new DynamicResultSet( comphelper::getComponentContext(m_xSMgr), this, rOpenCommand, xEnv );
+            = new DynamicResultSet( m_xContext, this, rOpenCommand, xEnv );
         aRet <<= xSet;
     }
     else if ( rOpenCommand.Sink.is() )
@@ -1163,7 +1163,7 @@ uno::Reference< ucb::XContent >
 
     try
     {
-        return new ::gio::Content( m_xSMgr, m_pProvider, xId, !create_document );
+        return new ::gio::Content( m_xContext, m_pProvider, xId, !create_document );
     } catch ( ucb::ContentCreationException & )
     {
             return uno::Reference< ucb::XContent >();

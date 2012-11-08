@@ -91,11 +91,11 @@ using namespace com::sun::star::sdbc;
 //=========================================================================
 //=========================================================================
 
-FTPContent::FTPContent( const Reference< XMultiServiceFactory >& rxSMgr,
+FTPContent::FTPContent( const Reference< XComponentContext >& rxContext,
                         FTPContentProvider* pProvider,
                         const Reference< XContentIdentifier >& Identifier,
                         const FTPURL& aFTPURL)
-    : ContentImplHelper(rxSMgr,pProvider,Identifier),
+    : ContentImplHelper(rxContext,pProvider,Identifier),
       m_pFCP(pProvider),
       m_aFTPURL(aFTPURL),
       m_bInserted(false),
@@ -105,11 +105,11 @@ FTPContent::FTPContent( const Reference< XMultiServiceFactory >& rxSMgr,
 
 
 
-FTPContent::FTPContent( const Reference< XMultiServiceFactory >& rxSMgr,
+FTPContent::FTPContent( const Reference< XComponentContext >& rxContext,
                         FTPContentProvider* pProvider,
                         const Reference< XContentIdentifier >& Identifier,
                         const ContentInfo& Info)
-    : ContentImplHelper(rxSMgr,pProvider,Identifier),
+    : ContentImplHelper(rxContext,pProvider,Identifier),
       m_pFCP(pProvider),
       m_aFTPURL(Identifier->getContentIdentifier(),
                 pProvider),
@@ -213,13 +213,13 @@ class ResultSetFactoryI
 {
 public:
 
-    ResultSetFactoryI(const Reference<XMultiServiceFactory >&  xSMgr,
+    ResultSetFactoryI(const Reference<XComponentContext >&  rxContext,
                       const Reference<XContentProvider >&  xProvider,
                       sal_Int32 nOpenMode,
                       const Sequence<Property>& seq,
                       const Sequence<NumberedSortingInfo>& seqSort,
                       const std::vector<FTPDirentry>& dirvec)
-        : m_xSMgr(xSMgr),
+        : m_xContext(rxContext),
           m_xProvider(xProvider),
           m_nOpenMode(nOpenMode),
           m_seq(seq),
@@ -230,7 +230,7 @@ public:
 
     virtual ResultSetBase* createResultSet()
     {
-        return new ResultSetI(m_xSMgr,
+        return new ResultSetI(m_xContext,
                               m_xProvider,
                               m_nOpenMode,
                               m_seq,
@@ -240,7 +240,7 @@ public:
 
 public:
 
-    Reference< XMultiServiceFactory >               m_xSMgr;
+    Reference< XComponentContext >                  m_xContext;
     Reference< XContentProvider >                   m_xProvider;
     sal_Int32                                       m_nOpenMode;
     Sequence< Property >                            m_seq;
@@ -542,11 +542,11 @@ Any SAL_CALL FTPContent::execute(
                         m_aFTPURL.list(sal_Int16(aOpenCommand.Mode));
                     Reference< XDynamicResultSet > xSet
                         = new DynamicResultSet(
-                            comphelper::getComponentContext(m_xSMgr),
+                            m_xContext,
                             this,
                             aOpenCommand,
                             Environment,
-                            new ResultSetFactoryI(m_xSMgr,
+                            new ResultSetFactoryI(m_xContext,
                                                   m_xProvider.get(),
                                                   aOpenCommand.Mode,
                                                   aOpenCommand.Properties,
@@ -659,7 +659,7 @@ FTPContent::createNewContent( const ContentInfo& Info )
     throw (RuntimeException)
 {
     if( Info.Type =="application/vnd.sun.staroffice.ftp-file" || Info.Type == "application/vnd.sun.staroffice.ftp-folder" )
-        return new FTPContent(m_xSMgr,
+        return new FTPContent(m_xContext,
                               m_pFCP,
                               m_xIdentifier,Info);
     else
@@ -813,7 +813,7 @@ Reference< XRow > FTPContent::getPropertyValues(
 )
 {
     rtl::Reference<ucbhelper::PropertyValueSet> xRow =
-        new ucbhelper::PropertyValueSet(m_xSMgr);
+        new ucbhelper::PropertyValueSet(m_xContext);
 
     FTPDirentry aDirEntry = m_aFTPURL.direntry();
 

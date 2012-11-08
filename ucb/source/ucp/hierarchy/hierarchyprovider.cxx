@@ -130,7 +130,7 @@ HierarchyContentProvider::queryContent(
         return xContent;
 
     // Create a new content.
-    xContent = HierarchyContent::create( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, xCanonicId );
+    xContent = HierarchyContent::create( m_xContext, this, xCanonicId );
     registerNewContent( xContent );
 
     if ( xContent.is() && !xContent->getIdentifier().is() )

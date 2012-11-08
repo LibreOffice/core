@@ -253,16 +253,14 @@ namespace ucbhelper {
 //=========================================================================
 //=========================================================================
 
-#define PROPERTYVALUESET_INIT()             \
-  m_xSMgr( rxSMgr ),                        \
-  m_pValues( new PropertyValues ),          \
-  m_bWasNull( sal_False ),                  \
-  m_bTriedToGetTypeConverter( sal_False )
-
 //=========================================================================
 PropertyValueSet::PropertyValueSet(
-                    const Reference< XMultiServiceFactory >& rxSMgr )
-: PROPERTYVALUESET_INIT()
+                    const Reference< XComponentContext >& rxContext )
+:  m_xContext( rxContext ),
+  m_pValues( new PropertyValues ),
+  m_bWasNull( sal_False ),
+  m_bTriedToGetTypeConverter( sal_False )
+
 {
 }
 
@@ -628,9 +626,7 @@ const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
     if ( !m_bTriedToGetTypeConverter && !m_xTypeConverter.is() )
     {
         m_bTriedToGetTypeConverter = sal_True;
-        Reference< XPropertySet > xFactoryProperties( m_xSMgr, UNO_QUERY_THROW );
-        Reference< XComponentContext > xContext( xFactoryProperties->getPropertyValue( "DefaultContext" ), UNO_QUERY_THROW );
-        m_xTypeConverter = Converter::create(xContext);
+        m_xTypeConverter = Converter::create(m_xContext);
 
         OSL_ENSURE( m_xTypeConverter.is(),
                     "PropertyValueSet::getTypeConverter() - "

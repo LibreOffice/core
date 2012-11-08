@@ -93,7 +93,7 @@ private:
 
 public:
     RepoContent( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >& rxSMgr, ContentProvider *pProvider,
+        com::sun::star::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier,
         std::list< libcmis::RepositoryPtr > aRepos = std::list< libcmis::RepositoryPtr > ( ) )
             throw ( com::sun::star::ucb::ContentCreationException );

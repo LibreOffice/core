@@ -51,8 +51,7 @@ ContentProvider::queryContent(
 
     try
     {
-        uno::Reference<lang::XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-        xContent = new ::gio::Content(xMSF, this, Identifier);
+        xContent = new ::gio::Content(m_xContext, this, Identifier);
     }
     catch ( com::sun::star::ucb::ContentCreationException const & )
     {

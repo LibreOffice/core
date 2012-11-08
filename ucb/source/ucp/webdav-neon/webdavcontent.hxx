@@ -204,14 +204,14 @@ private:
 
 public:
     Content( const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                 ::com::sun::star::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const ::com::sun::star::uno::Reference<
                  ::com::sun::star::ucb::XContentIdentifier >& Identifier,
              rtl::Reference< DAVSessionFactory > const & rSessionFactory )
         throw ( ::com::sun::star::ucb::ContentCreationException );
     Content( const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                 ::com::sun::star::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const ::com::sun::star::uno::Reference<
                  ::com::sun::star::ucb::XContentIdentifier >& Identifier,
@@ -292,7 +292,7 @@ public:
     // Called from resultset data supplier.
     static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
+                           ::com::sun::star::uno::XComponentContext >& rxContext,
                        const ::com::sun::star::uno::Sequence<
                            ::com::sun::star::beans::Property >& rProperties,
                        const ContentProperties& rData,

@@ -109,10 +109,10 @@ void makeXMLName( const rtl::OUString & rIn, rtl::OUStringBuffer & rBuffer  )
 
 //=========================================================================
 HierarchyEntry::HierarchyEntry(
-                const uno::Reference< lang::XMultiServiceFactory >& rSMgr,
+                const uno::Reference< uno::XComponentContext >& rxContext,
                 HierarchyContentProvider* pProvider,
                 const rtl::OUString& rURL )
-: m_xSMgr( rSMgr ),
+: m_xContext( rxContext ),
   m_xOfficeInstDirs( pProvider->getOfficeInstallationDirectories() ),
   m_bTriedToGetRootReadAccess( sal_False )
 {
@@ -128,7 +128,7 @@ HierarchyEntry::HierarchyEntry(
     }
 
     // Note: do not init m_aPath in init list. createPathFromHierarchyURL
-    //       needs m_xSMgr and m_aMutex.
+    //       needs m_xContext and m_aMutex.
     m_aPath = createPathFromHierarchyURL( aUri );
 
     // Extract language independent name from URL.
@@ -269,7 +269,7 @@ sal_Bool HierarchyEntry::setData(
 
         if ( !m_xConfigProvider.is() )
             m_xConfigProvider = uno::Reference< lang::XMultiServiceFactory >(
-                m_xSMgr->createInstance( m_aServiceSpecifier ),
+                m_xContext->getServiceManager()->createInstanceWithContext(m_aServiceSpecifier, m_xContext),
                 uno::UNO_QUERY );
 
         if ( m_xConfigProvider.is() )
@@ -524,7 +524,7 @@ sal_Bool HierarchyEntry::move(
     {
         if ( !m_xConfigProvider.is() )
             m_xConfigProvider = uno::Reference< lang::XMultiServiceFactory >(
-                m_xSMgr->createInstance( m_aServiceSpecifier ),
+                m_xContext->getServiceManager()->createInstanceWithContext(m_aServiceSpecifier, m_xContext),
                 uno::UNO_QUERY );
 
         if ( !m_xConfigProvider.is() )
@@ -794,7 +794,7 @@ sal_Bool HierarchyEntry::remove()
 
         if ( !m_xConfigProvider.is() )
             m_xConfigProvider = uno::Reference< lang::XMultiServiceFactory >(
-                m_xSMgr->createInstance( m_aServiceSpecifier ),
+                m_xContext->getServiceManager()->createInstanceWithContext(m_aServiceSpecifier, m_xContext),
                 uno::UNO_QUERY );
 
         if ( m_xConfigProvider.is() )
@@ -1050,7 +1050,7 @@ HierarchyEntry::getRootReadAccess()
                 if ( !m_xConfigProvider.is() )
                     m_xConfigProvider
                         = uno::Reference< lang::XMultiServiceFactory >(
-                            m_xSMgr->createInstance( m_aServiceSpecifier ),
+                            m_xContext->getServiceManager()->createInstanceWithContext(m_aServiceSpecifier, m_xContext),
                             uno::UNO_QUERY );
 
                 if ( m_xConfigProvider.is() )

@@ -52,14 +52,14 @@ namespace ftp
     public:
 
         FTPContent( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                    ::com::sun::star::uno::XComponentContext >& rxContext,
                     FTPContentProvider* pProvider,
                     const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XContentIdentifier >& Identifier,
                     const FTPURL& FtpUrl);
 
         FTPContent( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                    ::com::sun::star::uno::XComponentContext >& rxContext,
                     FTPContentProvider* pProvider,
                     const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XContentIdentifier >& Identifier,

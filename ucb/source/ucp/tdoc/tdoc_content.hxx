@@ -113,13 +113,13 @@ class Content : public ::ucbhelper::ContentImplHelper,
 
 private:
     Content( const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                com::sun::star::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
             const ContentProperties & rProps );
     Content( const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                com::sun::star::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
@@ -201,7 +201,7 @@ private:
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
+                        ::com::sun::star::uno::XComponentContext >& rxContext,
                        const ::com::sun::star::uno::Sequence<
                         ::com::sun::star::beans::Property >& rProperties,
                        const ContentProperties& rData,
@@ -244,7 +244,7 @@ public:
     // Create existing content. Fail, if not already exists.
     static Content* create(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                com::sun::star::uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier );
@@ -252,7 +252,7 @@ public:
     // Create new content. Fail, if already exists.
     static Content* create(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                com::sun::star::uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
@@ -316,7 +316,7 @@ public:
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
+                        ::com::sun::star::uno::XComponentContext >& rxContext,
                        const ::com::sun::star::uno::Sequence<
                         ::com::sun::star::beans::Property >& rProperties,
                        ContentProvider* pProvider,

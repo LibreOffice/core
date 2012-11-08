@@ -100,8 +100,8 @@ class UCBHELPER_DLLPUBLIC ContentImplHelper :
 
 protected:
     osl::Mutex                       m_aMutex;
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-                                     m_xSMgr;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+                                     m_xContext;
     com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >
                                      m_xIdentifier;
     rtl::Reference< ContentProviderImplHelper >
@@ -303,13 +303,13 @@ public:
       * in a hash map. So it easyly can be found and reused when the provider
       * is asked for a content.
       *
-      * @param rxSMgr is a Service Manager.
+      * @param rxContext is a Service Manager.
       * @param rxProvider is the provider for the content.
       * @param Identifier is the content identifier for the content.
       */
     ContentImplHelper(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                com::sun::star::uno::XComponentContext >& rxContext,
             const rtl::Reference< ContentProviderImplHelper >& rxProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier );

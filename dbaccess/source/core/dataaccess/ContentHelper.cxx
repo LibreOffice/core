@@ -442,7 +442,7 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
 {
     // Note: Empty sequence means "get values of all supported properties".
 
-    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_aContext.getLegacyServiceFactory() );
+    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_aContext.getUNOContext() );
 
     sal_Int32 nCount = rProperties.getLength();
     if ( nCount )

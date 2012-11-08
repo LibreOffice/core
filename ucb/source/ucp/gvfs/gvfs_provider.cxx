@@ -115,7 +115,7 @@ ContentProvider::queryContent(
 
     try
     {
-        xContent = new ::gvfs::Content(uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, Identifier );
+        xContent = new ::gvfs::Content( m_xContext, this, Identifier );
         registerNewContent( xContent );
     }
     catch ( com::sun::star::ucb::ContentCreationException const & )

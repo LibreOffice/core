@@ -77,17 +77,17 @@ struct DataSupplier_Impl
     osl::Mutex                                   m_aMutex;
     ResultList                                   m_aResults;
     rtl::Reference< Content >                    m_xContent;
-    uno::Reference< lang::XMultiServiceFactory > m_xSMgr;
+    uno::Reference< uno::XComponentContext >     m_xContext;
     uno::Reference< container::XEnumeration >    m_xFolderEnum;
     sal_Int32                                    m_nOpenMode;
     sal_Bool                                     m_bCountFinal;
     sal_Bool                                     m_bThrowException;
 
     DataSupplier_Impl(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             const rtl::Reference< Content >& rContent,
             sal_Int32 nOpenMode )
-    : m_xContent( rContent ), m_xSMgr( rxSMgr ),
+    : m_xContent( rContent ), m_xContext( rxContext ),
       m_xFolderEnum( rContent->getIterator() ), m_nOpenMode( nOpenMode ),
       m_bCountFinal( !m_xFolderEnum.is() ), m_bThrowException( m_bCountFinal )
     {}
@@ -118,10 +118,10 @@ DataSupplier_Impl::~DataSupplier_Impl()
 //=========================================================================
 
 DataSupplier::DataSupplier(
-                const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+                const uno::Reference< uno::XComponentContext >& rxContext,
                 const rtl::Reference< Content >& rContent,
                 sal_Int32 nOpenMode )
-: m_pImpl( new DataSupplier_Impl( rxSMgr, rContent, nOpenMode ) )
+: m_pImpl( new DataSupplier_Impl( rxContext, rContent, nOpenMode ) )
 {
 }
 
@@ -413,7 +413,7 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
     if ( getResult( nIndex ) )
     {
         uno::Reference< sdbc::XRow > xRow = Content::getPropertyValues(
-                        m_pImpl->m_xSMgr,
+                        m_pImpl->m_xContext,
                         getResultSet()->getProperties(),
                         static_cast< ContentProvider * >(
                             m_pImpl->m_xContent->getProvider().get() ),

@@ -41,7 +41,7 @@ private:
 public:
     HierarchyResultSetDataSupplier(
                     const com::sun::star::uno::Reference<
-                        com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                        com::sun::star::uno::XComponentContext >& rxContext,
                     const rtl::Reference< HierarchyContent >& rContent,
                     sal_Int32 nOpenMode = com::sun::star::ucb::OpenMode::ALL );
     virtual ~HierarchyResultSetDataSupplier();

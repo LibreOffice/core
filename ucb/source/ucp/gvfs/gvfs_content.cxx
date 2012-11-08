@@ -109,11 +109,11 @@ GnomeToOUString( const char *utf8_str)
 
 
 Content::Content(
-          const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+          const uno::Reference< uno::XComponentContext >& rxContext,
           ContentProvider* pProvider,
           const uno::Reference< ucb::XContentIdentifier >& Identifier)
   throw ( ucb::ContentCreationException )
-    : ContentImplHelper( rxSMgr, pProvider, Identifier ),
+    : ContentImplHelper( rxContext, pProvider, Identifier ),
       m_pProvider( pProvider ),
       m_bTransient( sal_False )
 {
@@ -124,12 +124,12 @@ Content::Content(
 }
 
 Content::Content(
-    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const uno::Reference< uno::XComponentContext >& rxContext,
     ContentProvider                                   * pProvider,
     const uno::Reference< ucb::XContentIdentifier >&    Identifier,
     sal_Bool                                            IsFolder)
         throw ( ucb::ContentCreationException )
-    : ContentImplHelper( rxSMgr, pProvider, Identifier ),
+    : ContentImplHelper( rxContext, pProvider, Identifier ),
       m_pProvider( pProvider ),
       m_bTransient( sal_True )
 {
@@ -343,7 +343,7 @@ uno::Any SAL_CALL Content::execute(
 
         if ( bOpenFolder && isFolder( xEnv ) ) {
             uno::Reference< ucb::XDynamicResultSet > xSet
-                = new DynamicResultSet( comphelper::getComponentContext(m_xSMgr), this, aOpenCommand, xEnv );
+                = new DynamicResultSet( m_xContext, this, aOpenCommand, xEnv );
             aRet <<= xSet;
 
         } else if ( aOpenCommand.Sink.is() ) {
@@ -517,7 +517,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
         ( new ::ucbhelper::ContentIdentifier( aURL ) );
 
     try {
-        return new ::gvfs::Content( m_xSMgr, m_pProvider, xId, !create_document );
+        return new ::gvfs::Content( m_xContext, m_pProvider, xId, !create_document );
     } catch ( ucb::ContentCreationException & ) {
         return uno::Reference< ucb::XContent >();
     }
@@ -595,7 +595,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     }
 
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
-        = new ::ucbhelper::PropertyValueSet( m_xSMgr );
+        = new ::ucbhelper::PropertyValueSet( m_xContext );
 
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
     for( sal_Int32 n = 0; n < nProps; ++n ) {
@@ -1438,7 +1438,7 @@ Content::createTempStream(
     // Something badly wrong happened - can't seek => stream to a temporary file
     uno::Reference < io::XOutputStream > xTempOut =
         uno::Reference < io::XOutputStream >
-            ( io::TempFile::create(comphelper::getComponentContext(m_xSMgr)), uno::UNO_QUERY );
+            ( io::TempFile::create( m_xContext ), uno::UNO_QUERY );
 
     if ( !xTempOut.is() )
         cancelCommandExecution( GNOME_VFS_ERROR_IO, xEnv );

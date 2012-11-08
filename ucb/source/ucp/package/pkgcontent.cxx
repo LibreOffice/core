@@ -147,7 +147,7 @@ ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
 
 // static ( "virtual" ctor )
 Content* Content::create(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier )
 {
@@ -170,7 +170,7 @@ Content* Content::create(
 
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aURI.getUri() );
-        return new Content( rxSMgr, pProvider, xId, xPackage, aURI, aProps );
+        return new Content( rxContext, pProvider, xId, xPackage, aURI, aProps );
     }
     else
     {
@@ -192,14 +192,14 @@ Content* Content::create(
         else
             aInfo.Type = getContentType( aURI.getScheme(), sal_False );
 
-        return new Content( rxSMgr, pProvider, xId, xPackage, aURI, aInfo );
+        return new Content( rxContext, pProvider, xId, xPackage, aURI, aInfo );
     }
 }
 
 //=========================================================================
 // static ( "virtual" ctor )
 Content* Content::create(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             const ucb::ContentInfo& Info )
@@ -221,7 +221,7 @@ Content* Content::create(
 
     uno::Reference< ucb::XContentIdentifier > xId
         = new ::ucbhelper::ContentIdentifier( aURI.getUri() );
-    return new Content( rxSMgr, pProvider, xId, xPackage, aURI, Info );
+    return new Content( rxContext, pProvider, xId, xPackage, aURI, Info );
 }
 
 //=========================================================================
@@ -238,13 +238,13 @@ Content* Content::create(
 
 //=========================================================================
 Content::Content(
-        const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+        const uno::Reference< uno::XComponentContext >& rxContext,
         ContentProvider* pProvider,
         const uno::Reference< ucb::XContentIdentifier >& Identifier,
         const uno::Reference< container::XHierarchicalNameAccess > & Package,
         const PackageUri& rUri,
         const ContentProperties& rProps )
-: ContentImplHelper( rxSMgr, pProvider, Identifier ),
+: ContentImplHelper( rxContext, pProvider, Identifier ),
   m_aUri( rUri ),
   m_aProps( rProps ),
   m_eState( PERSISTENT ),
@@ -256,13 +256,13 @@ Content::Content(
 
 //=========================================================================
 Content::Content(
-        const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+        const uno::Reference< uno::XComponentContext >& rxContext,
         ContentProvider* pProvider,
         const uno::Reference< ucb::XContentIdentifier >& Identifier,
         const uno::Reference< container::XHierarchicalNameAccess > & Package,
         const PackageUri& rUri,
         const ucb::ContentInfo& Info )
-  : ContentImplHelper( rxSMgr, pProvider, Identifier ),
+  : ContentImplHelper( rxContext, pProvider, Identifier ),
   m_aUri( rUri ),
   m_aProps( Info.Type ),
   m_eState( TRANSIENT ),
@@ -739,7 +739,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
         uno::Reference< ucb::XContentIdentifier > xId(
             new ::ucbhelper::ContentIdentifier( aURL ) );
 
-        return create( m_xSMgr, m_pProvider, xId, Info );
+        return create( m_xContext, m_pProvider, xId, Info );
     }
     else
     {
@@ -763,7 +763,7 @@ rtl::OUString Content::getParentURL()
 //=========================================================================
 // static
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
-                const uno::Reference< lang::XMultiServiceFactory >& rSMgr,
+                const uno::Reference< uno::XComponentContext >& rxContext,
                 const uno::Sequence< beans::Property >& rProperties,
                 ContentProvider* pProvider,
                 const rtl::OUString& rContentId )
@@ -772,7 +772,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     uno::Reference< container::XHierarchicalNameAccess > xPackage;
     if ( loadData( pProvider, PackageUri( rContentId ), aData, xPackage ) )
     {
-        return getPropertyValues( rSMgr,
+        return getPropertyValues( rxContext,
                                   rProperties,
                                   aData,
                                   rtl::Reference<
@@ -783,7 +783,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     else
     {
         rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
-            = new ::ucbhelper::PropertyValueSet( rSMgr );
+            = new ::ucbhelper::PropertyValueSet( rxContext );
 
         sal_Int32 nCount = rProperties.getLength();
         if ( nCount )
@@ -800,7 +800,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 //=========================================================================
 // static
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
-        const uno::Reference< lang::XMultiServiceFactory >& rSMgr,
+        const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Sequence< beans::Property >& rProperties,
         const ContentProperties& rData,
         const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >&
@@ -810,7 +810,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     // Note: Empty sequence means "get values of all supported properties".
 
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
-        = new ::ucbhelper::PropertyValueSet( rSMgr );
+        = new ::ucbhelper::PropertyValueSet( rxContext );
 
     sal_Int32 nCount = rProperties.getLength();
     if ( nCount )
@@ -1028,7 +1028,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         const uno::Sequence< beans::Property >& rProperties )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    return getPropertyValues( m_xSMgr,
+    return getPropertyValues( m_xContext,
                               rProperties,
                               m_aProps,
                               rtl::Reference<
@@ -1462,7 +1462,7 @@ uno::Any Content::open(
         //////////////////////////////////////////////////////////////////
 
         uno::Reference< ucb::XDynamicResultSet > xSet
-            = new DynamicResultSet( comphelper::getComponentContext(m_xSMgr), this, rArg, xEnv );
+            = new DynamicResultSet( m_xContext, this, rArg, xEnv );
         return uno::makeAny( xSet );
     }
     else

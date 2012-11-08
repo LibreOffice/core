@@ -119,12 +119,12 @@ private:
 
 public:
     Content( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >& rxSMgr, ContentProvider *pProvider,
+        com::sun::star::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier)
             throw ( com::sun::star::ucb::ContentCreationException );
 
     Content( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >& rxSMgr, ContentProvider *pProvider,
+        com::sun::star::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier,
         sal_Bool bIsFolder)
             throw ( com::sun::star::ucb::ContentCreationException );
@@ -132,7 +132,7 @@ public:
     virtual ~Content();
 
     com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > getPropertyValuesFromGFileInfo(
-        GFileInfo *pInfo, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr,
+        GFileInfo *pInfo, const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv,
         const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& rProperties);
 

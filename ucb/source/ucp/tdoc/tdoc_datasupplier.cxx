@@ -73,17 +73,17 @@ struct DataSupplier_Impl
     osl::Mutex                                   m_aMutex;
     ResultList                                   m_aResults;
     rtl::Reference< Content >                    m_xContent;
-    uno::Reference< lang::XMultiServiceFactory > m_xSMgr;
+    uno::Reference< uno::XComponentContext >     m_xContext;
     uno::Sequence< rtl::OUString > *             m_pNamesOfChildren;
     sal_Int32                                    m_nOpenMode;
     bool                                         m_bCountFinal;
     bool                                         m_bThrowException;
 
     DataSupplier_Impl(
-            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             const rtl::Reference< Content >& rContent,
             sal_Int32 nOpenMode )
-    : m_xContent( rContent ), m_xSMgr( rxSMgr ),
+    : m_xContent( rContent ), m_xContext( rxContext ),
       m_pNamesOfChildren( 0 ), m_nOpenMode( nOpenMode ),
       m_bCountFinal( false ), m_bThrowException( false )
     {}
@@ -116,10 +116,10 @@ DataSupplier_Impl::~DataSupplier_Impl()
 //=========================================================================
 
 ResultSetDataSupplier::ResultSetDataSupplier(
-                const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+                const uno::Reference< uno::XComponentContext >& rxContext,
                 const rtl::Reference< Content >& rContent,
                 sal_Int32 nOpenMode )
-: m_pImpl( new DataSupplier_Impl( rxSMgr, rContent, nOpenMode ) )
+: m_pImpl( new DataSupplier_Impl( rxContext, rContent, nOpenMode ) )
 {
 }
 
@@ -377,7 +377,7 @@ ResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
     if ( getResult( nIndex ) )
     {
         uno::Reference< sdbc::XRow > xRow = Content::getPropertyValues(
-                        m_pImpl->m_xSMgr,
+                        m_pImpl->m_xContext,
                         getResultSet()->getProperties(),
                         m_pImpl->m_xContent->getContentProvider().get(),
                         queryContentIdentifierString( nIndex ) );

@@ -22,7 +22,7 @@
 #include "ucpext_content.hxx"
 #include "ucpext_provider.hxx"
 
-#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
+#include <com/sun/star/deployment/PackageInformationProvider.hpp>
 
 #include <ucbhelper/contentidentifier.hxx>
 #include <comphelper/componentcontext.hxx>
@@ -53,12 +53,14 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::ucb::XContent;
     using ::com::sun::star::ucb::XContentIdentifier;
     using ::com::sun::star::sdbc::XRow;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::ucb::IllegalIdentifierException;
     using ::com::sun::star::ucb::ResultSetException;
+    using ::com::sun::star::deployment::PackageInformationProvider;
     using ::com::sun::star::deployment::XPackageInformationProvider;
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::sdbc::XResultSet;
@@ -86,13 +88,13 @@ namespace ucb { namespace ucp { namespace ext
         ::osl::Mutex                                m_aMutex;
         ResultList                                  m_aResults;
         ::rtl::Reference< Content >                 m_xContent;
-        Reference< XMultiServiceFactory >           m_xSMgr;
+        Reference< XComponentContext >              m_xContext;
         sal_Int32                                   m_nOpenMode;
 
-        DataSupplier_Impl( const Reference< XMultiServiceFactory >& i_rORB, const ::rtl::Reference< Content >& i_rContent,
+        DataSupplier_Impl( const Reference< XComponentContext >& rxContext, const ::rtl::Reference< Content >& i_rContent,
                            const sal_Int32 i_nOpenMode )
             :m_xContent( i_rContent )
-            ,m_xSMgr( i_rORB )
+            ,m_xContext( rxContext )
             ,m_nOpenMode( i_nOpenMode )
         {
         }
@@ -126,10 +128,10 @@ namespace ucb { namespace ucp { namespace ext
     //= DataSupplier
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    DataSupplier::DataSupplier( const Reference< XMultiServiceFactory >& i_rORB,
+    DataSupplier::DataSupplier( const Reference< XComponentContext >& rxContext,
                                 const ::rtl::Reference< Content >& i_rContent,
                                 const sal_Int32 i_nOpenMode )
-        :m_pImpl( new DataSupplier_Impl( i_rORB, i_rContent, i_nOpenMode ) )
+        :m_pImpl( new DataSupplier_Impl( rxContext, i_rContent, i_nOpenMode ) )
     {
     }
 
@@ -138,9 +140,7 @@ namespace ucb { namespace ucp { namespace ext
     {
         try
         {
-            const ::comphelper::ComponentContext aContext( m_pImpl->m_xSMgr );
-            const Reference< XPackageInformationProvider > xPackageInfo(
-                aContext.getSingleton( "com.sun.star.deployment.PackageInformationProvider" ), UNO_QUERY_THROW );
+            const Reference< XPackageInformationProvider > xPackageInfo = PackageInformationProvider::get( m_pImpl->m_xContext );
 
             const ::rtl::OUString sContentIdentifier( m_pImpl->m_xContent->getIdentifier()->getContentIdentifier() );
 
@@ -171,7 +171,7 @@ namespace ucb { namespace ucp { namespace ext
             case E_EXTENSION_CONTENT:
             {
                 const ::rtl::OUString sPackageLocation( m_pImpl->m_xContent->getPhysicalURL() );
-                ::ucbhelper::Content aWrappedContent( sPackageLocation, getResultSet()->getEnvironment(), comphelper::getComponentContext(m_pImpl->m_xSMgr) );
+                ::ucbhelper::Content aWrappedContent( sPackageLocation, getResultSet()->getEnvironment(), m_pImpl->m_xContext );
 
                 // obtain the properties which our result set is set up for from the wrapped content
                 Sequence< ::rtl::OUString > aPropertyNames(1);
@@ -326,7 +326,7 @@ namespace ucb { namespace ucp { namespace ext
             ::rtl::OUString sTitle = Content::decodeIdentifier( rId.copy( sRootURL.getLength() ) );
             if ( !sTitle.isEmpty() && ( sTitle[ sTitle.getLength() - 1 ] == '/' ) )
                 sTitle = sTitle.copy( 0, sTitle.getLength() - 1 );
-            xRow = Content::getArtificialNodePropertyValues( m_pImpl->m_xSMgr, getResultSet()->getProperties(), sTitle );
+            xRow = Content::getArtificialNodePropertyValues( m_pImpl->m_xContext, getResultSet()->getProperties(), sTitle );
         }
         break;
 

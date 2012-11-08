@@ -182,7 +182,7 @@ namespace ucb { namespace ucp { namespace ext
             return xContent;
 
         // create a new content
-        xContent = new Content( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW), this, xNormalizedIdentifier );
+        xContent = new Content( m_xContext, this, xNormalizedIdentifier );
         if ( !xContent->getIdentifier().is() )
             throw IllegalIdentifierException();
 

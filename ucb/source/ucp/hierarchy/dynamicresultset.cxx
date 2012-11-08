@@ -62,7 +62,7 @@ void DynamicResultSet::initStatic()
         = new ::ucbhelper::ResultSet(
             m_xContext,
             m_aCommand.Properties,
-            new  HierarchyResultSetDataSupplier( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW),
+            new  HierarchyResultSetDataSupplier( m_xContext,
                                                  m_xContent,
                                                  m_aCommand.Mode ) );
 }
@@ -74,7 +74,7 @@ void DynamicResultSet::initDynamic()
         = new ::ucbhelper::ResultSet(
             m_xContext,
             m_aCommand.Properties,
-            new  HierarchyResultSetDataSupplier( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW),
+            new  HierarchyResultSetDataSupplier( m_xContext,
                                                  m_xContent,
                                                  m_aCommand.Mode ) );
     m_xResultSet2 = m_xResultSet1;

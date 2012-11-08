@@ -389,13 +389,11 @@ private:
 
 
 
-void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
-                         const Command& aCommand,
+void URLParameter::open( const Command& aCommand,
                          sal_Int32 CommandId,
                          const Reference< XCommandEnvironment >& Environment,
                          const Reference< XOutputStream >& xDataSink )
 {
-    (void)rxSMgr;
     (void)aCommand;
     (void)CommandId;
     (void)Environment;
@@ -462,13 +460,11 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
 
 
 
-void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
-                         const Command& aCommand,
+void URLParameter::open( const Command& aCommand,
                          sal_Int32 CommandId,
                          const Reference< XCommandEnvironment >& Environment,
                          const Reference< XActiveDataSink >& xDataSink )
 {
-    (void)rxSMgr;
     (void)aCommand;
     (void)CommandId;
     (void)Environment;

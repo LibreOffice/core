@@ -64,7 +64,7 @@ namespace ucb { namespace ucp { namespace ext
     void ResultSet::initStatic()
     {
         ::rtl::Reference< DataSupplier > pDataSupplier( new DataSupplier(
-            Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW),
+            m_xContext,
             m_xContent,
             m_aCommand.Mode
         ) );

@@ -38,13 +38,13 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 
-ResultSetI::ResultSetI(const Reference<XMultiServiceFactory>&  xMSF,
+ResultSetI::ResultSetI(const Reference<XComponentContext>&  rxContext,
                        const Reference<XContentProvider>&  xProvider,
                        sal_Int32 nOpenMode,
                        const Sequence<Property>& seqProp,
                        const Sequence< NumberedSortingInfo >& seqSort,
                        const std::vector<FTPDirentry>&  dirvec)
-    : ResultSetBase(comphelper::getComponentContext(xMSF),xProvider,nOpenMode,seqProp,seqSort)
+    : ResultSetBase(rxContext,xProvider,nOpenMode,seqProp,seqSort)
 {
     for( unsigned int i = 0; i < dirvec.size(); ++i)
         m_aPath.push_back(dirvec[i].m_aURL);
@@ -56,7 +56,7 @@ ResultSetI::ResultSetI(const Reference<XMultiServiceFactory>&  xMSF,
 
     for(unsigned n = 0; n < m_aItems.size(); ++n) {
         rtl::Reference<ucbhelper::PropertyValueSet> xRow =
-            new ucbhelper::PropertyValueSet(xMSF);
+            new ucbhelper::PropertyValueSet(rxContext);
 
         for( int i = 0; i < seqProp.getLength(); ++i) {
             const rtl::OUString& Name = seqProp[i].Name;

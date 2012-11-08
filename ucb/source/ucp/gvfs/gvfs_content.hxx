@@ -185,13 +185,13 @@ public:
 public:
 
     Content( const ::com::sun::star::uno::Reference<
-         ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+         ::com::sun::star::uno::XComponentContext >& rxContext,
          ContentProvider                                *pProvider,
          const ::com::sun::star::uno::Reference<
          ::com::sun::star::ucb::XContentIdentifier >&    Identifier)
             throw ( ::com::sun::star::ucb::ContentCreationException );
     Content( const ::com::sun::star::uno::Reference<
-         ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+         ::com::sun::star::uno::XComponentContext >& rxContext,
          ContentProvider                                *pProvider,
          const ::com::sun::star::uno::Reference<
          ::com::sun::star::ucb::XContentIdentifier >&    Identifier,

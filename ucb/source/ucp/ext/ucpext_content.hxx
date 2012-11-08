@@ -54,14 +54,14 @@ namespace ucb { namespace ucp { namespace ext
     {
     public:
         Content(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             ::ucbhelper::ContentProviderImplHelper* pProvider,
             const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier >& Identifier
         );
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
             getArtificialNodePropertyValues(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& rProperties,
                 const ::rtl::OUString& rTitle
             );

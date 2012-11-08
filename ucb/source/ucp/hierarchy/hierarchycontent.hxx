@@ -124,14 +124,14 @@ class HierarchyContent : public ::ucbhelper::ContentImplHelper,
 private:
     HierarchyContent(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                com::sun::star::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
             const HierarchyContentProperties& rProps );
     HierarchyContent(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                com::sun::star::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
@@ -147,17 +147,17 @@ private:
 
     static sal_Bool hasData(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                com::sun::star::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier );
     sal_Bool hasData(
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier )
-    { return hasData( m_xSMgr, m_pProvider, Identifier ); }
+    { return hasData( m_xContext, m_pProvider, Identifier ); }
     static sal_Bool loadData(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                com::sun::star::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
@@ -218,7 +218,7 @@ public:
     // Create existing content. Fail, if not already exists.
     static HierarchyContent* create(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                com::sun::star::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier );
@@ -226,7 +226,7 @@ public:
     // Create new content. Fail, if already exists.
     static HierarchyContent* create(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                com::sun::star::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
@@ -290,7 +290,7 @@ public:
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
+                        ::com::sun::star::uno::XComponentContext >& rxContext,
                        const ::com::sun::star::uno::Sequence<
                             ::com::sun::star::beans::Property >& rProperties,
                        const HierarchyContentProperties& rData,

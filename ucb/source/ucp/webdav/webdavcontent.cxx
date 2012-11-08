@@ -1074,7 +1074,7 @@ rtl::OUString Content::getParentURL()
 
 // static
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
-    const uno::Reference< lang::XMultiServiceFactory >& rSMgr,
+    const uno::Reference< uno::XComponentContext >& rxContext,
     const uno::Sequence< beans::Property >& rProperties,
     const ContentProperties& rData,
     const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >& rProvider,
@@ -1083,7 +1083,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     // Note: Empty sequence means "get values of all supported properties".
 
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
-        = new ::ucbhelper::PropertyValueSet( rSMgr );
+        = new ::ucbhelper::PropertyValueSet( rxContext );
 
     sal_Int32 nCount = rProperties.getLength();
     if ( nCount )
@@ -1448,7 +1448,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     }
 
     uno::Reference< sdbc::XRow > xResultRow
-        = getPropertyValues( xSMgr,
+        = getPropertyValues( comphelper::getComponentContext(xSMgr),
                              rProperties,
                              *xProps,
                              xProvider,
