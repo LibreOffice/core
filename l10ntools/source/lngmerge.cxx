@@ -66,6 +66,7 @@ LngParser::LngParser(const rtl::OString &rLngFile,
             pLines->push_back( new rtl::OString(sLine) );
             std::getline(aStream, s);
         }
+        pLines->push_back( new rtl::OString() );
     }
     else
         nError = LNG_COULD_NOT_OPEN;
