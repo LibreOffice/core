@@ -3,10 +3,6 @@ http://dev-www.libreoffice.org/src
 7376930b0d3f3d77a685d94c4a3acda8-STLport-4.5-0119.tar.gz
 c441926f3a552ed3e5b274b62e86af16-STLport-4.0.tar.gz
 4a660ce8466c9df01f19036435425c3a-glibc-2.1.3-stub.tar.gz
-bc702168a2af16869201dbe91e46ae48-LICENSE_Python-2.6.1
-d4c4d91ab3a8e52a2e69d48d34ef4df4-core.zip
-e0707ff896045731ff99e99799606441-README_db-4.7.25.NC-custom.txt
-0f63ee487fda8f21fafa767b3c447ac9-ixion-0.2.0.tar.gz
 @AFMS_TARBALL@
 @APACHE_COMMONS_CODEC_TARBALL@
 @APACHE_COMMONS_HTTPCLIENT_TARBALL@
