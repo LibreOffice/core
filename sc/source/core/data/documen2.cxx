@@ -1006,7 +1006,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         {
             rtl::OUString aLibName("Standard");
             const BasicManager *pBasicManager = pSrcShell->GetBasicManager();
-            if (pBasicManager && !pBasicManager->GetName().isEmpty() > 0)
+            if (pBasicManager && !pBasicManager->GetName().isEmpty())
             {
                 aLibName = pSrcShell->GetBasicManager()->GetName();
             }
