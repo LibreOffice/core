@@ -335,7 +335,6 @@ class SC_DLLPUBLIC ScConditionalFormat
 
     typedef boost::ptr_vector<ScFormatEntry> CondFormatContainer;
     CondFormatContainer maEntries;
-    bool                bIsUsed;            // temporary at Save
     ScRangeList maRanges;            // Ranges for conditional format
 
 public:
@@ -377,9 +376,6 @@ public:
 
     sal_uInt32      GetKey() const          { return nKey; }
     void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
-
-    void            SetUsed(bool bSet)      { bIsUsed = bSet; }
-    bool            IsUsed() const          { return bIsUsed; }
 
     bool            MarkUsedExternalReferences() const;
 
