@@ -342,6 +342,10 @@ cygwin*|interix*|mingw32*)
     _os=WINNT
     use_shl_version="TRUE"
     DYNAMIC_CRT="TRUE"
+
+    DLLPOST=".dll"
+    LINKFLAGSNOUNDEFS=
+
     # If the host OS matches "mingw32*", that means we are using the
     # MinGW cross-compiler, because we don't see the point in building
     # LibreOffice using MinGW on Windows. If you want to build on
@@ -5572,7 +5576,7 @@ _ACEOF
         else
             case "$host_cpu" in
             i?86|x86_64)
-                if test "$_os" = "Darwin"; then
+                if test "$_os" = "Darwin" -o "$WITH_MINGW" = "yes"; then
                     gccvisbroken=no
                 else
                     if $EGREP -q '@PLT|@GOT' visibility.s; then
