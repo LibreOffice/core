@@ -9,9 +9,15 @@
 
 $(eval $(call gb_Module_Module,librelogo))
 
+ifneq ($(DISABLE_SCRIPTING),TRUE)
+ifneq ($(DISABLE_PYTHON),TRUE)
+
 $(eval $(call gb_Module_add_targets,librelogo,\
 	Configuration_librelogo \
 	Extension_librelogo \
 ))
+
+endif
+endif
 
 # vim: set noet sw=4 ts=4:
