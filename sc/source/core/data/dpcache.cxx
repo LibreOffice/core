@@ -1117,6 +1117,13 @@ void dumpItems(const ScDPCache& rCache, long nDim, const ScDPCache::ItemsType& r
         cout << "      " << (i+nOffset) << ": " << rCache.GetFormattedString(nDim, rItems[i]) << endl;
 }
 
+void dumpSourceData(const ScDPCache& rCache, long nDim, const ScDPCache::ItemsType& rItems, const ScDPCache::IndexArrayType& rArray)
+{
+    ScDPCache::IndexArrayType::const_iterator it = rArray.begin(), itEnd = rArray.end();
+    for (; it != itEnd; ++it)
+        cout << "      '" << rCache.GetFormattedString(nDim, rItems[*it]) << "'" << endl;
+}
+
 }
 
 void ScDPCache::Dump() const
@@ -1135,6 +1142,9 @@ void ScDPCache::Dump() const
                 cout << "    group item count: " << fld.mpGroup->maItems.size() << endl;
                 dumpItems(*this, i, fld.mpGroup->maItems, fld.maItems.size());
             }
+
+            cout << "    source data (re-constructed):" << endl;
+            dumpSourceData(*this, i, fld.maItems, fld.maData);
         }
     }
 
