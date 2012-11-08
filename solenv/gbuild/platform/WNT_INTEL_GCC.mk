@@ -161,7 +161,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(LIBS) \
 		-Wl$(COMMA)-Map$(COMMA)$(dir $(1))$(notdir $(basename $(DLLTARGET)).map) \
 		-Wl$(COMMA)--out-implib$(COMMA)$(1) \
-		-o $(dir $(1))/$(notdir $(DLLTARGET))))
+		-o $(dir $(1))/$(notdir $(DLLTARGET))) \
+		$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 endef
 
 define gb_LinkTarget__command_staticlinklibrary
@@ -174,7 +175,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
-		$(if $(findstring s,$(MAKEFLAGS)),2> /dev/null))
+		$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 endef
 
 define gb_LinkTarget__command
