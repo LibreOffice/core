@@ -73,6 +73,11 @@ Bitmap SV_RESID_BITMAP_INDEX
     File = "index.png";
 };
 
+Bitmap SV_RESID_BITMAP_REFRESH
+{
+    File = "reload.png";
+};
+
 Bitmap SV_RESID_BITMAP_SPLITHPIN
 {
     File = "splhpin.png";

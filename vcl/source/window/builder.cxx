@@ -39,6 +39,8 @@ namespace
         sal_uInt16 nRet = 0;
         if (sType == "gtk-index")
             nRet = SV_RESID_BITMAP_INDEX;
+        else if (sType == "gtk-refresh")
+            nRet = SV_RESID_BITMAP_REFRESH;
         return nRet;
     }
 
