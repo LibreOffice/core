@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Configuration_Configuration,librelogo,nodeliver))
 
+$(eval $(call gb_Configuration_use_configuration,librelogo,registry))
+
 $(eval $(call gb_Configuration_add_localized_datas,librelogo,librelogo/source/registry/data,\
 	org/openoffice/Office/Addons.xcu \
 	org/openoffice/Office/UI/StartModuleWindowState.xcu \
