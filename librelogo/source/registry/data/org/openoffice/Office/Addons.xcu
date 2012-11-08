@@ -130,17 +130,7 @@
                         <value>vnd.sun.star.script:librelogo.oxt|LibreLogo|LibreLogo.py$commandline?language=Python&amp;location=user:uno_packages</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">FORWARD (fd), BACK (bk), LEFT (lt), RIGHT (rt) • fd 72, bk 1cm + 1in + 1", lt 90, rt 1.5h
-REPEAT num [ commands ], REPCOUNT • repeat 100 [ fd repcount lt 91 ]
-PENUP (pu), PENDOWN (pd), FILL, CLOSE, HOME, CLEARSCREEN (cs), PENSIZE (ps 5)
-PENCOLOR (pc), FILLCOLOR (fc) • pc “red”, pc 0xff0000, fc [255, 0, 0], fc any
-POSITION (pos), HEADING (seth) • pos [0, 0], pos pagesize, seth 60, seth [0, 0]
-CIRCLE, ELLIPSE, BOX, RECTANGLE • circle 10 ellipse [5, 9] box 10 rectangle [5, 2]
-LABEL, TEXT, PRINT • label “Some text”, circle 200 text “center of the actual shape”
-FONTFAMILY “Font” FONTSIZE 9 FONTCOLOR “red” FONTWEIGHT “bold”
-TO name arguments ... END, TO name arguments, OUTPUT return_value, END
-RANDOM, SQRT, INT, COUNT, ABS, SIN, COS, INPUT • ps random 100, print count “string”
-PICTURE (pic) [ ... ] • group different shapes: pic [ fd 100 circle 50 ]</value>
+                        <value xml:lang="en-US">Logo command line (press F1 here for help)</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>

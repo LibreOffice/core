@@ -74,12 +74,12 @@
 <paragraph role="heading" level="2" xml-lang="en-US" id="hd_530">Other features of LibreLogo</paragraph>
 <list type="unordered">
     <listitem>
-        <paragraph role="listitem" xml-lang="en-US" id="par_540">The colon is optional before the variables (like in the Berkeley Logo)</paragraph>
+        <paragraph role="listitem" xml-lang="en-US" id="par_540">The colon is optional before the variable names.</paragraph>
         <paragraph role="code" xml-lang="en-US" id="par_550">&#160;TO&#160;triangle&#160;size<br/>&#160;&#160;&#160;REPEAT&#160;3&#160;[&#160;FORWARD&#160;size&#160;LEFT&#160;120&#160;]<br/>&#160;END<br/></paragraph>
     </listitem>
     <listitem>
-        <paragraph role="paragraph" xml-lang="en-US" id="par_560">String notation supports also orthographical and Python syntax:</paragraph>
-        <paragraph role="code" xml-lang="en-US" id="par_570">&#160;PRINT&#160;"word"	;&#160;original&#160;Logo&#160;syntax<br/>&#160;PRINT&#160;“Arbitrary&#160;text.”	;&#160;orthography,&#160;Writer<br/>&#160;PRINT&#160;'Arbitrary&#160;text.'	;&#160;Python&#160;syntax<br/></paragraph>
+        <paragraph role="paragraph" xml-lang="en-US" id="par_560">String notation supports also orthographical and Python syntax.</paragraph>
+        <paragraph role="code" xml-lang="en-US" id="par_570">&#160;PRINT&#160;"word	;&#160;original&#160;Logo&#160;syntax<br/>&#160;PRINT&#160;“Arbitrary&#160;text.”	;&#160;orthography,&#160;Writer<br/>&#160;PRINT&#160;'Arbitrary&#160;text.'	;&#160;Python&#160;syntax<br/></paragraph>
     </listitem>
     <listitem>
         <paragraph role="paragraph" xml-lang="en-US" id="par_580">Python list and string handling</paragraph>

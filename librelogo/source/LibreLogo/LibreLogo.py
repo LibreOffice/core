@@ -1262,7 +1262,7 @@ def __compil__(s):
             __loadlang__(_.lng, __l12n__(_.lng))
     except:
         __trace__()
-        _.lng = 'en'
+        _.lng = 'en_US'
         if not _.lng in __comp__:
             __loadlang__(_.lng, __l12n__(_.lng)) 
 
