@@ -126,30 +126,6 @@ class JobURL : private ThreadHelpBase
                                             ::rtl::OUString& rPartValue      ,
                                             ::rtl::OUString& rPartArguments  );
 
-    //___________________________________
-    // debug methods!
-
-    #ifdef ENABLE_COMPONENT_SELF_CHECK
-
-    public:
-        static void impldbg_checkIt();
-
-    private:
-        static void impldbg_checkURL( const sal_Char*  pURL                 ,
-                                            sal_uInt32 eExpectedPart        ,
-                                      const sal_Char*  pExpectedEvent       ,
-                                      const sal_Char*  pExpectedAlias       ,
-                                      const sal_Char*  pExpectedService     ,
-                                      const sal_Char*  pExpectedEventArgs   ,
-                                      const sal_Char*  pExpectedAliasArgs   ,
-                                      const sal_Char*  pExpectedServiceArgs );
-        ::rtl::OUString impldbg_toString() const;
-
-        sal_Bool getServiceArgs(       ::rtl::OUString& sServiceArgs ) const;
-        sal_Bool getEventArgs  (       ::rtl::OUString& sEventArgs   ) const;
-        sal_Bool getAliasArgs  (       ::rtl::OUString& sAliasArgs   ) const;
-
-    #endif // ENABLE_COMPONENT_SELF_CHECK
 };
 
 } // namespace framework

@@ -390,14 +390,6 @@ class FilterCache   :   private ThreadHelpBase
 
     #endif  //  #ifdef ENABLE_ASSERTIONS
 
-    #ifdef ENABLE_COMPONENT_SELF_CHECK
-
-    private:
-
-        void impldbg_dumpCache();
-
-    #endif // ENABLE_COMPONENT_SELF_CHECK
-
     //-------------------------------------------------------------------------------------------------------------
     //  private variables
     //-------------------------------------------------------------------------------------------------------------
