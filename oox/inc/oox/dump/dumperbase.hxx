@@ -162,17 +162,17 @@ public:
 /** Specifiers for atomic data types. */
 enum DataType
 {
-    DATATYPE_VOID,              /// No data type.
-    DATATYPE_INT8,              /// Signed 8-bit integer.
-    DATATYPE_UINT8,             /// Unsigned 8-bit integer.
-    DATATYPE_INT16,             /// Signed 16-bit integer.
-    DATATYPE_UINT16,            /// Unsigned 16-bit integer.
-    DATATYPE_INT32,             /// Signed 32-bit integer.
-    DATATYPE_UINT32,            /// Unsigned 32-bit integer.
-    DATATYPE_INT64,             /// Signed 64-bit integer.
-    DATATYPE_UINT64,            /// Unsigned 64-bit integer.
-    DATATYPE_FLOAT,             /// Floating-point, single precision.
-    DATATYPE_DOUBLE             /// Floating-point, double precision.
+    DATATYPE_VOID,              ///< No data type.
+    DATATYPE_INT8,              ///< Signed 8-bit integer.
+    DATATYPE_UINT8,             ///< Unsigned 8-bit integer.
+    DATATYPE_INT16,             ///< Signed 16-bit integer.
+    DATATYPE_UINT16,            ///< Unsigned 16-bit integer.
+    DATATYPE_INT32,             ///< Signed 32-bit integer.
+    DATATYPE_UINT32,            ///< Unsigned 32-bit integer.
+    DATATYPE_INT64,             ///< Signed 64-bit integer.
+    DATATYPE_UINT64,            ///< Unsigned 64-bit integer.
+    DATATYPE_FLOAT,             ///< Floating-point, single precision.
+    DATATYPE_DOUBLE             ///< Floating-point, double precision.
 };
 
 // ----------------------------------------------------------------------------
@@ -180,13 +180,13 @@ enum DataType
 /** Specifiers for the output format of values. */
 enum FormatType
 {
-    FORMATTYPE_NONE,            /// No numeric format (e.g. show name only).
-    FORMATTYPE_DEC,             /// Decimal.
-    FORMATTYPE_HEX,             /// Hexadecimal.
-    FORMATTYPE_SHORTHEX,        /// Hexadecimal, as short as possible (no leading zeros).
-    FORMATTYPE_BIN,             /// Binary.
-    FORMATTYPE_FIX,             /// Fixed-point.
-    FORMATTYPE_BOOL             /// Boolean ('true' or 'false').
+    FORMATTYPE_NONE,            ///< No numeric format (e.g. show name only).
+    FORMATTYPE_DEC,             ///< Decimal.
+    FORMATTYPE_HEX,             ///< Hexadecimal.
+    FORMATTYPE_SHORTHEX,        ///< Hexadecimal, as short as possible (no leading zeros).
+    FORMATTYPE_BIN,             ///< Binary.
+    FORMATTYPE_FIX,             ///< Fixed-point.
+    FORMATTYPE_BOOL             ///< Boolean ('true' or 'false').
 };
 
 // ----------------------------------------------------------------------------
@@ -213,10 +213,10 @@ enum FormatType
  */
 struct ItemFormat
 {
-    DataType            meDataType;         /// Data type of the item.
-    FormatType          meFmtType;          /// Output format for the value.
-    ::rtl::OUString     maItemName;         /// Name of the item.
-    ::rtl::OUString     maListName;         /// Name of a name list to be used for this item.
+    DataType            meDataType;         ///< Data type of the item.
+    FormatType          meFmtType;          ///< Output format for the value.
+    ::rtl::OUString     maItemName;         ///< Name of the item.
+    ::rtl::OUString     maListName;         ///< Name of a name list to be used for this item.
 
     explicit            ItemFormat();
 
