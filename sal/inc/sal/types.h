@@ -270,10 +270,17 @@ typedef void *                   sal_Handle;
 #     define SAL_DLLPRIVATE        __hidden
 #     define SAL_DLLPUBLIC_TEMPLATE
 #   elif defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
-#     define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("default")))
-#     define SAL_DLLPUBLIC_IMPORT  __attribute__ ((visibility("default")))
-#     define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
-#     define SAL_DLLPUBLIC_TEMPLATE __attribute__ ((visibility("default")))
+#     if defined(DISABLE_DYNLOADING)
+#       define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("hidden")))
+#       define SAL_DLLPUBLIC_IMPORT  __attribute__ ((visibility("hidden")))
+#       define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
+#       define SAL_DLLPUBLIC_TEMPLATE __attribute__ ((visibility("hidden")))
+#     else
+#       define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("default")))
+#       define SAL_DLLPUBLIC_IMPORT  __attribute__ ((visibility("default")))
+#       define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
+#       define SAL_DLLPUBLIC_TEMPLATE __attribute__ ((visibility("default")))
+#     endif
 #   else
 #     define SAL_DLLPUBLIC_EXPORT
 #     define SAL_DLLPUBLIC_IMPORT
