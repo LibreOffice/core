@@ -210,6 +210,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SwScrollbar         *pHScrollbar,   // MDI control elements
                         *pVScrollbar;
 
+    bool                mbHScrollbarEnabled;
+    bool                mbVScrollbarEnabled;
+
     Window              *pScrollFill;   // dummy window for filling the lower right edge
                                         // when both scrollbars are active
 
@@ -505,6 +508,9 @@ public:
 
     void            ShowVScrollbar(sal_Bool bShow);
     sal_Bool        IsVScrollbarVisible()const;
+
+    void            EnableHScrollbar(bool bEnable);
+    void            EnableVScrollbar(bool bEnable);
 
     int             CreateVLineal();
     int             KillVLineal();

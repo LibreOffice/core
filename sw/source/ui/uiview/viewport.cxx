@@ -1076,6 +1076,15 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         bShowV = pVOpt->IsViewVScrollBar();
     }
 
+    if (!mbHScrollbarEnabled)
+    {
+        bHAuto = bShowH = false;
+    }
+    if (!mbVScrollbarEnabled)
+    {
+        bAuto = bShowV = false;
+    }
+
     SwDocShell* pDocSh = GetDocShell();
     sal_Bool bIsPreview = pDocSh->IsPreview();
     if( bIsPreview )

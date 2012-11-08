@@ -320,8 +320,6 @@ int SwView::_CreateScrollbar( sal_Bool bHori )
 
     (*ppScrollbar)->EnableDrag( sal_True );
 
-    (*ppScrollbar)->SetAuto( sal_True );
-
     if(GetWindow())
         InvalidateBorder();
 
@@ -670,5 +668,22 @@ sal_Bool SwView::IsVScrollbarVisible()const
     return pVScrollbar->IsVisible( sal_False );
 }
 
+void SwView::EnableHScrollbar(bool bEnable)
+{
+    if (mbHScrollbarEnabled != bEnable)
+    {
+        mbHScrollbarEnabled = bEnable;
+        InvalidateBorder();
+    }
+}
+
+void SwView::EnableVScrollbar(bool bEnable)
+{
+    if (mbVScrollbarEnabled != bEnable)
+    {
+        mbVScrollbarEnabled = bEnable;
+        InvalidateBorder();
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
