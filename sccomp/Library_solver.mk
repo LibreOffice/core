@@ -41,6 +41,12 @@ $(eval $(call gb_Library_use_libraries,solver,\
 	$(gb_UWINAPI) \
 ))
 
+ifeq ($(SYSTEM_LPSOLVE),YES)
+$(eval $(call gb_Library_add_defs,solver, \
+	-DSYSTEM_LPSOLVE \
+))
+endif
+
 $(eval $(call gb_Library_use_external,solver,lpsolve))
 
 $(eval $(call gb_Library_add_exception_objects,solver,\
