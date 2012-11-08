@@ -173,7 +173,6 @@ class AgendaTemplate(TextDocument):
     def redraw(self, itemName):
         AgendaTemplate.xTextDocument.lockControllers()
         try:
-            print "kinki"
             # get the table in which the item is...
             itemsTable = AgendaTemplate.itemsMap[itemName]
             # rewrite the table.
@@ -450,9 +449,9 @@ class AgendaTemplate(TextDocument):
     @classmethod
     def writeTitle(self, te, tr, text):
         if text is None:
-            te.text = ""
+            te.placeHolderText = ""
         else:
-            te.text = text
+            te.placeHolderText = text
         te.write(tr)
 
     @classmethod
@@ -1141,18 +1140,18 @@ inserts a placeholder instead.
 class PlaceholderTextElement(TextElement):
 
     def __init__(self, textRange, placeHolderText_, hint_, xmsf_):
-        super(PlaceholderTextElement,self).__init__(textRange, placeHolderText_)
+        super(PlaceholderTextElement,self).__init__(textRange, "")
 
-        self.placeHolderText = placeHolderText_
+        self.text = placeHolderText_
         self.hint = hint_
         self.xmsf = xmsf_
 
     def write(self, textRange):
-        textRange.String = self.text
-        if self.text is None or self.text == "":
+        textRange.String = self.placeHolderText
+        if self.placeHolderText is None or self.placeHolderText == "":
             try:
                 xTextContent = AgendaTemplate.createPlaceHolder(
-                    self.xmsf, self.placeHolderText, self.hint)
+                    self.xmsf, self.text, self.hint)
                 textRange.Text.insertTextContent(
                     textRange.Start, xTextContent, True)
             except Exception, ex:
