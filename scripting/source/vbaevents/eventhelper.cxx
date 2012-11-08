@@ -915,7 +915,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
             //rtl::OUString sMacroLoc("Project");
             sProject = "Standard";
 
-            if ( !pBasicManager->GetName().isEmpty() > 0 )
+            if (!pBasicManager->GetName().isEmpty())
             {
                 sProject =  pBasicManager->GetName();
             }
