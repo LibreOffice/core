@@ -207,11 +207,11 @@ struct LessByDataIndex : std::binary_function<Bucket, Bucket, bool>
     }
 };
 
-struct EqualByValue : std::binary_function<Bucket, Bucket, bool>
+struct EqualByOrderIndex : std::binary_function<Bucket, Bucket, bool>
 {
     bool operator() (const Bucket& left, const Bucket& right) const
     {
-        return left.maValue.IsCaseInsEqual(right.maValue);
+        return left.mnOrderIndex == right.mnOrderIndex;
     }
 };
 
@@ -287,7 +287,7 @@ void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
 
     // Unique by value.
     std::vector<Bucket>::iterator itUniqueEnd =
-        std::unique(aBuckets.begin(), aBuckets.end(), EqualByValue());
+        std::unique(aBuckets.begin(), aBuckets.end(), EqualByOrderIndex());
 
     // Copy the unique values into items.
     std::vector<Bucket>::iterator itBeg = aBuckets.begin();
