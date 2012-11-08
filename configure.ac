@@ -7789,7 +7789,7 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
             POSTGRESQL_LIB=""
             POSTGRESQL_INC="%OVERRIDE_ME%"
             BUILD_TYPE="$BUILD_TYPE POSTGRESQL"
-	    POSTGRESQL_TARBALL="061a9f17323117c9358ed60f33ecff78-postgresql-9.1.1.tar.bz2"
+        POSTGRESQL_TARBALL="061a9f17323117c9358ed60f33ecff78-postgresql-9.1.1.tar.bz2"
         fi
     fi
     if test "${SYSTEM_POSTGRESQL}" = "YES"; then
@@ -9509,8 +9509,8 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
     if test -n "$enable_bluetooth" -a "$enable_bluetooth" != "no"; then
         if test "$OS" = "LINUX"; then
             if test "$ENABLE_DBUS" = "TRUE"; then
-				AC_MSG_RESULT([yes])
-				ENABLE_BLUETOOTH=YES
+                AC_MSG_RESULT([yes])
+                ENABLE_BLUETOOTH=YES
                 dnl ===================================================================
                 dnl Check for system bluez
                 dnl ===================================================================
@@ -9523,15 +9523,15 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
                     AC_MSG_RESULT([internal])
                     BUILD_TYPE="$BUILD_TYPE BLUEZ"
                 fi
-			else
-				AC_MSG_RESULT([no, dbus disabled])
-				ENABLE_BLUETOOTH=NO
-			fi
-		else
-			AC_MSG_RESULT([no])
-			ENABLE_BLUETOOTH=NO
-		fi
-	fi
+            else
+                AC_MSG_RESULT([no, dbus disabled])
+                ENABLE_BLUETOOTH=NO
+            fi
+        else
+            AC_MSG_RESULT([no])
+            ENABLE_BLUETOOTH=NO
+        fi
+    fi
 else
     ENABLE_SDREMOTE=NO
     AC_MSG_RESULT([no])
@@ -9553,14 +9553,14 @@ if test  "$test_gtk" = "yes"; then
         PKG_CHECK_MODULES(GTHREAD, gthread-2.0,,AC_MSG_ERROR([requirements to build the gtk-plugin not met. Use --disable-gtk or install the missing packages]))
         BUILD_TYPE="$BUILD_TYPE GTK"
 
-	AC_MSG_CHECKING([whether to enable the systray quickstarter])
+    AC_MSG_CHECKING([whether to enable the systray quickstarter])
         if test "x$enable_systray" = "xyes"; then
-	    AC_MSG_RESULT([yes])
+        AC_MSG_RESULT([yes])
             PKG_CHECK_MODULES( GTK210, gtk+-2.0 >= 2.10.0,
                             [ ENABLE_SYSTRAY_GTK="TRUE" ],
                             [ ENABLE_SYSTRAY_GTK="" ])
         else
-	    AC_MSG_RESULT([no])
+        AC_MSG_RESULT([no])
         fi
 
         AC_MSG_CHECKING([whether to enable Gtk print dialog support])
