@@ -123,7 +123,7 @@ sub get_core_files
     my $files_hash_ref = shift;
     find_core_files($files_hash_ref);
 
-    if ( !keys $files_hash_ref ) {
+    if ( !keys %$files_hash_ref ) {
         print_error("can't find any config files in '$files_path'", 3);
     }
 
@@ -148,7 +148,7 @@ sub get_lang_files
     my $lang = shift;
     find_lang_files($files_hash_ref, $lang);
 
-    if ( !keys $files_hash_ref ) {
+    if ( !keys %$files_hash_ref ) {
         print_error("can't find any config files in '$files_path'", 3);
     }
 
