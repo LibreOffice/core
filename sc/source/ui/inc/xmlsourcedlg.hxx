@@ -38,10 +38,10 @@ class ScXMLSourceDlg : public ScAnyRefDlg
     FixedLine maFtMapXmlDoc;
 
     FixedText maFtMappedCellTitle;
-    formula::RefEdit   maRefEdit;
-    formula::RefButton maRefBtn;
 
     ScXMLSourceTree maLbTree;
+    formula::RefEdit   maRefEdit;
+    formula::RefButton maRefBtn;
 
     CancelButton maBtnCancel;
 

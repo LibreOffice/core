@@ -48,6 +48,14 @@ ModelessDialog RID_SCDLG_XML_SOURCE
         Text [ en-US ] = "Map to document";
     };
 
+    Control LB_SOURCE_TREE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 52 ) ;
+        Size = MAP_APPFONT ( 130 , 120 ) ;
+        TabStop = TRUE ;
+    };
+
     FixedText FT_MAPPED_CELL_TITLE
     {
         Pos = MAP_APPFONT( 145, 55 );
@@ -70,14 +78,6 @@ ModelessDialog RID_SCDLG_XML_SOURCE
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-    };
-
-    Control LB_SOURCE_TREE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 52 ) ;
-        Size = MAP_APPFONT ( 130 , 120 ) ;
-        TabStop = TRUE ;
     };
 
     Image IMG_ELEMENT_DEFAULT
