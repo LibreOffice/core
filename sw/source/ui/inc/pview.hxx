@@ -193,6 +193,8 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
     // MDI control elements
     SwScrollbar             *pHScrollbar;
     SwScrollbar             *pVScrollbar;
+    bool                    mbHScrollbarEnabled;
+    bool                    mbVScrollbarEnabled;
     ImageButton             *pPageUpBtn,
                             *pPageDownBtn;
     // dummy window for filling the lower right edge when both scrollbars are active
@@ -269,8 +271,9 @@ public:
     void            ScrollViewSzChg();
     void            ScrollDocSzChg();
     void            ShowHScrollbar(sal_Bool bShow);
-
     void            ShowVScrollbar(sal_Bool bShow);
+    void            EnableHScrollbar(bool bEnable);
+    void            EnableVScrollbar(bool bEnable);
 
     sal_uInt16          GetPageCount() const        { return mnPageCount; }
     sal_uInt16      GetSelectedPage() const {return aViewWin.SelectedPage();}
