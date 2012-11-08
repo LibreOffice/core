@@ -14,7 +14,7 @@
 <bookmark_value>Logo</bookmark_value>
 <bookmark_value>Turtle graphics</bookmark_value>
 </bookmark>
-
+<bookmark xml-lang="en-US" branch="hid/.HelpId:addon_LibreLogo.OfficeToolBar" id="bm2" localize="false"/>
 <paragraph role="heading" level="1" xml-lang="en-US" id="hd_170">LibreLogo</paragraph>
 <paragraph role="paragraph" xml-lang="en-US" id="par_180">LibreLogo is a simple, native, Logo-like programming environment with turtle vector graphics for teaching of computing (programming and word processing), DTP and graphic design. See http://www.numbertext.org/logo/librelogo.pdf.</paragraph>
 <paragraph role="heading" level="2" xml-lang="en-US" id="hd_220">LibreLogo toolbar</paragraph>
