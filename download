@@ -150,9 +150,17 @@ downloaditem()
                     mv $2 ${i}_broken
                 else
                     mv $2 ..
+                    if [ $? -ne 0 ]; then
+                        echo cannot mv $2 to destination 2>&1 | tee -a $logfile
+                        failed="$failed $2"
+                    fi
                 fi
             else
                 mv $2 ..
+                if [ $? -ne 0 ]; then
+                    echo cannot mv $2 to destination 2>&1 | tee -a $logfile
+                    failed="$failed $2"
+                fi
             fi
         fi
     fi
