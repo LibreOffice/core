@@ -683,8 +683,8 @@ PoHeader::PoHeader( const OString& rExtSrc )
         "MIME-Version: 1.0\n"
         "Content-Type: text/plain; charset=UTF-8\n"
         "Content-Transfer-Encoding: 8bit\n"
-        "X-Genarator: LibreOffice\n"
-        "X-Accelerator_Marker: ~\n"));
+        "X-Generator: LibreOffice\n"
+        "X-Accelerator-Marker: ~\n"));
     m_bIsInitialized = true;
 }
 
