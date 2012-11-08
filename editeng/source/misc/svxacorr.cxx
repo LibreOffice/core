@@ -122,12 +122,6 @@ bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const String& rTxt,
 {
     for( ; nStt < nEnd; ++nStt )
     {
-#if OSL_DEBUG_LEVEL > 1
-        sal_Int32 nCharType;
-        sal_Int32 nChType;
-        nCharType = rCC.getCharacterType( rTxt, nStt );
-        nChType = rCC.getType( rTxt, nStt );
-#endif
         short nScript = rCC.getScript( rTxt, nStt );
         switch( nScript )
         {
