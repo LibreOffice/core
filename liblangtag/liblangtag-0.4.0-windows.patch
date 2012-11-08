@@ -74,7 +74,7 @@
 +{
 +       lt_return_val_if_fail (v != NULL, FALSE);
 +
-+       return 1 == InterlockedExchangeAdd((LONG*)v, -1) - 1;
++       return 0 == (InterlockedExchangeAdd((LONG*)v, -1) - 1);
 +}
 +
 +
