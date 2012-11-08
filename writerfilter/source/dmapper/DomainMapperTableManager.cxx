@@ -478,7 +478,7 @@ void DomainMapperTableManager::endOfRowAction()
             }while( --nGridCount );
 
             sal_Int16 nRelPos =
-                sal::static_int_cast< sal_Int16 >( round( fGridWidth * nFullWidthRelative / nFullWidth ) );
+                sal::static_int_cast< sal_Int16 >( floor( fGridWidth * nFullWidthRelative / nFullWidth  + 0.5 ) );
 
             pSeparators[nBorder].Position =  nRelPos + nLastRelPos;
             pSeparators[nBorder].IsVisible = sal_True;
