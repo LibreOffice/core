@@ -253,8 +253,9 @@ Reference< XShape > Drawing::createAndInsertXControlShape( const ::oox::ole::Emb
         // set the control model at the shape
         Reference< XControlShape >( xShape, UNO_QUERY_THROW )->setControl( xCtrlModel );
     }
-    catch( Exception& )
+    catch (Exception const& e)
     {
+        SAL_WARN("oox", "exception inserting Shape: " << e.Message);
     }
     return xShape;
 }
