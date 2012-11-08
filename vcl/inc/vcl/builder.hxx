@@ -28,16 +28,28 @@ public:
     typedef std::map<OString, OString> stringmap;
     typedef Window* (*customMakeWidget)(Window *pParent, stringmap &rVec);
 private:
+
+    struct PackingData
+    {
+        bool m_bVerticalOrient;
+        sal_Int32 m_nPosition;
+        PackingData(bool bVerticalOrient = false, sal_Int32 nPosition = -1)
+            : m_bVerticalOrient(bVerticalOrient)
+            , m_nPosition(nPosition)
+        {
+        }
+    };
+
     struct WinAndId
     {
         OString m_sID;
         Window *m_pWindow;
-        sal_Int32 m_nPosition;
+        PackingData m_aPackingData;
         bool m_bOwned;
-        WinAndId(const OString &rId, Window *pWindow)
+        WinAndId(const OString &rId, Window *pWindow, bool bVertical)
             : m_sID(rId)
             , m_pWindow(pWindow)
-            , m_nPosition(-1)
+            , m_aPackingData(bVertical)
             , m_bOwned(true)
         {
         }
@@ -192,7 +204,7 @@ private:
     void handleAdjustment(const OString &rID, stringmap &rProperties);
     void handleTabChild(Window *pParent, xmlreader::XmlReader &reader);
 
-    sal_Int32 get_window_packing_position(const Window *pWindow) const;
+    PackingData get_window_packing_data(const Window *pWindow) const;
     void set_window_packing_position(const Window *pWindow, sal_Int32 nPosition);
 
     //Helpers to retrofit all the existing code the the builder

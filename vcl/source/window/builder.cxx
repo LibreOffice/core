@@ -570,6 +570,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OString &id, stringmap &rMap)
 {
     bool bIsPlaceHolder = name.isEmpty();
+    bool bVertical = false;
 
     if (pParent && pParent->GetType() == WINDOW_TABCONTROL)
     {
@@ -594,14 +595,14 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             OString sTabPageId = get_by_window(pParent) +
                 OString("-page") +
                 OString::valueOf(static_cast<sal_Int32>(nNewPageCount));
-            m_aChildren.push_back(WinAndId(sTabPageId, pPage));
+            m_aChildren.push_back(WinAndId(sTabPageId, pPage, false));
             pPage->SetHelpId(m_sHelpRoot + sTabPageId);
 
             //And give the page one container as a child to make it a layout enabled
             //tab page
             VclBin* pContainer = new VclBin(pPage);
             pContainer->Show();
-            m_aChildren.push_back(WinAndId(OString(), pContainer));
+            m_aChildren.push_back(WinAndId(OString(), pContainer, false));
             pContainer->SetHelpId(m_sHelpRoot + sTabPageId + OString("-bin"));
             pParent = pContainer;
 
@@ -622,14 +623,16 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "GtkBox")
     {
-        if (extractOrientation(rMap))
+        bVertical = extractOrientation(rMap);
+        if (bVertical)
             pWindow = new VclVBox(pParent);
         else
             pWindow = new VclHBox(pParent);
     }
     else if (name == "GtkButtonBox")
     {
-        if (extractOrientation(rMap))
+        bVertical = extractOrientation(rMap);
+        if (bVertical)
             pWindow = new VclVButtonBox(pParent);
         else
             pWindow = new VclHButtonBox(pParent);
@@ -742,7 +745,8 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "GtkSeparator")
     {
-        if (extractOrientation(rMap))
+        bVertical = extractOrientation(rMap);
+        if (bVertical)
             pWindow = new FixedLine(pParent, WB_VERT);
         else
             pWindow = new FixedLine(pParent, WB_HORZ);
@@ -750,7 +754,8 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkScrollbar")
     {
         extractScrollAdjustment(id, rMap);
-        if (extractOrientation(rMap))
+        bVertical = extractOrientation(rMap);
+        if (bVertical)
             pWindow = new ScrollBar(pParent, WB_VERT);
         else
             pWindow = new ScrollBar(pParent, WB_HORZ);
@@ -830,7 +835,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             pWindow->mpWindowImpl->mpRealParent << "/" <<
             pWindow->mpWindowImpl->mpBorderWindow << ") with helpid " <<
             pWindow->GetHelpId().getStr());
-        m_aChildren.push_back(WinAndId(id, pWindow));
+        m_aChildren.push_back(WinAndId(id, pWindow, bVertical));
     }
     return pWindow;
 }
@@ -1042,15 +1047,27 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, con
         return true;
     if (ePackA > ePackB)
         return false;
-    //group secondaries before primaries
+    bool bVerticalContainer = m_pBuilder->get_window_packing_data(pA->GetParent()).m_bVerticalOrient;
     bool bPackA = pA->get_secondary();
     bool bPackB = pB->get_secondary();
-    if (bPackA > bPackB)
-        return true;
-    if (bPackA < bPackB)
-        return false;
+    if (!bVerticalContainer)
+    {
+        //for horizontal boxes group secondaries before primaries
+        if (bPackA > bPackB)
+            return true;
+        if (bPackA < bPackB)
+            return false;
+    }
+    else
+    {
+        //for vertical boxes group secondaries after primaries
+        if (bPackA < bPackB)
+            return true;
+        if (bPackA > bPackB)
+            return false;
+    }
     //honour relative box positions with pack group
-    return m_pBuilder->get_window_packing_position(pA) < m_pBuilder->get_window_packing_position(pB);
+    return m_pBuilder->get_window_packing_data(pA).m_nPosition < m_pBuilder->get_window_packing_data(pB).m_nPosition;
 }
 
 void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
@@ -1582,7 +1599,7 @@ OString VclBuilder::get_by_window(const Window *pWindow) const
     return OString();
 }
 
-sal_Int32 VclBuilder::get_window_packing_position(const Window *pWindow) const
+VclBuilder::PackingData VclBuilder::get_window_packing_data(const Window *pWindow) const
 {
     //We've stored the return of new Control, some of these get
     //border windows placed around them which are what you get
@@ -1595,10 +1612,10 @@ sal_Int32 VclBuilder::get_window_packing_position(const Window *pWindow) const
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
     {
         if (aI->m_pWindow == pPropHolder)
-            return aI->m_nPosition;
+            return aI->m_aPackingData;
     }
 
-    return -1;
+    return PackingData();
 }
 
 void VclBuilder::set_window_packing_position(const Window *pWindow, sal_Int32 nPosition)
@@ -1607,7 +1624,7 @@ void VclBuilder::set_window_packing_position(const Window *pWindow, sal_Int32 nP
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
     {
         if (aI->m_pWindow == pWindow)
-            aI->m_nPosition = nPosition;
+            aI->m_aPackingData.m_nPosition = nPosition;
     }
 }
 
