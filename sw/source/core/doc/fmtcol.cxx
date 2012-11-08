@@ -335,18 +335,18 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         SwFmtColl::Modify( pOld, pNew );
 }
 
-sal_Bool SwTxtFmtColl::IsAtDocNodeSet() const
+bool SwTxtFmtColl::IsAtDocNodeSet() const
 {
     SwIterator<SwCntntNode,SwFmtColl> aIter( *this );
     const SwNodes& rNds = GetDoc()->GetNodes();
     for( SwCntntNode* pNode = aIter.First(); pNode; pNode = aIter.Next() )
         if( &(pNode->GetNodes()) == &rNds )
-            return sal_True;
+            return true;
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwTxtFmtColl::SetFmtAttr( const SfxPoolItem& rAttr )
+bool SwTxtFmtColl::SetFmtAttr( const SfxPoolItem& rAttr )
 {
     const bool bIsNumRuleItem = rAttr.Which() == RES_PARATR_NUMRULE;
     if ( bIsNumRuleItem )
@@ -354,7 +354,7 @@ sal_Bool SwTxtFmtColl::SetFmtAttr( const SfxPoolItem& rAttr )
         TxtFmtCollFunc::RemoveFromNumRule( *this );
     }
 
-    const sal_Bool bRet = SwFmtColl::SetFmtAttr( rAttr );
+    const bool bRet = SwFmtColl::SetFmtAttr( rAttr );
 
     if ( bIsNumRuleItem )
     {
@@ -364,7 +364,7 @@ sal_Bool SwTxtFmtColl::SetFmtAttr( const SfxPoolItem& rAttr )
     return bRet;
 }
 
-sal_Bool SwTxtFmtColl::SetFmtAttr( const SfxItemSet& rSet )
+bool SwTxtFmtColl::SetFmtAttr( const SfxItemSet& rSet )
 {
     const bool bIsNumRuleItemAffected =
                 rSet.GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_SET;
@@ -373,7 +373,7 @@ sal_Bool SwTxtFmtColl::SetFmtAttr( const SfxItemSet& rSet )
         TxtFmtCollFunc::RemoveFromNumRule( *this );
     }
 
-    const sal_Bool bRet = SwFmtColl::SetFmtAttr( rSet );
+    const bool bRet = SwFmtColl::SetFmtAttr( rSet );
 
     if ( bIsNumRuleItemAffected )
     {
@@ -383,7 +383,7 @@ sal_Bool SwTxtFmtColl::SetFmtAttr( const SfxItemSet& rSet )
     return bRet;
 }
 
-sal_Bool SwTxtFmtColl::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
+bool SwTxtFmtColl::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 {
     const bool bIsNumRuleItemAffected =
                 ( nWhich2 != 0 && nWhich2 > nWhich1 )
@@ -395,7 +395,7 @@ sal_Bool SwTxtFmtColl::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
         TxtFmtCollFunc::RemoveFromNumRule( *this );
     }
 
-    const sal_Bool bRet = SwFmtColl::ResetFmtAttr( nWhich1, nWhich2 );
+    const bool bRet = SwFmtColl::ResetFmtAttr( nWhich1, nWhich2 );
 
     return bRet;
 }
@@ -597,14 +597,14 @@ void SwConditionTxtFmtColl::InsertCondition( const SwCollCondition& rCond )
 }
 
 
-sal_Bool SwConditionTxtFmtColl::RemoveCondition( const SwCollCondition& rCond )
+bool SwConditionTxtFmtColl::RemoveCondition( const SwCollCondition& rCond )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     for( sal_uInt16 n = 0; n < aCondColls.size(); ++n )
         if( aCondColls[ n ] == rCond )
         {
             aCondColls.erase( aCondColls.begin() + n );
-            bRet = sal_True;
+            bRet = true;
         }
 
     return bRet;

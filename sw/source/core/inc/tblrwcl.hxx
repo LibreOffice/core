@@ -139,18 +139,18 @@ struct _SwGCLineBorder
 class _SwGCBorder_BoxBrd
 {
     const editeng::SvxBorderLine* pBrdLn;
-    sal_Bool bAnyBorderFnd;
+    bool bAnyBorderFnd;
 public:
-    _SwGCBorder_BoxBrd() : pBrdLn( 0 ), bAnyBorderFnd( sal_False ) {}
+    _SwGCBorder_BoxBrd() : pBrdLn( 0 ), bAnyBorderFnd( false ) {}
 
     void SetBorder( const editeng::SvxBorderLine& rBorderLine )
-        { pBrdLn = &rBorderLine; bAnyBorderFnd = sal_False; }
+        { pBrdLn = &rBorderLine; bAnyBorderFnd = false; }
 
     // checke, ob die linke Border dieselbe wie die gesetzte ist
-    // returnt sal_False falls gar keine Border gesetzt ist
-    sal_Bool CheckLeftBorderOfFormat( const SwFrmFmt& rFmt );
+    // returnt false falls gar keine Border gesetzt ist
+    bool CheckLeftBorderOfFormat( const SwFrmFmt& rFmt );
 
-    sal_Bool IsAnyBorderFound() const { return bAnyBorderFnd; }
+    bool IsAnyBorderFound() const { return bAnyBorderFnd; }
 };
 
 void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara );

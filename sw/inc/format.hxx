@@ -98,9 +98,9 @@ public:
                                           sal_Bool bInParents = sal_True ) const;
     inline SfxItemState GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent = sal_True,
                                     const SfxPoolItem **ppItem = 0 ) const;
-    virtual sal_Bool SetFmtAttr( const SfxPoolItem& rAttr );
-    virtual sal_Bool SetFmtAttr( const SfxItemSet& rSet );
-    virtual sal_Bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
+    virtual bool SetFmtAttr( const SfxPoolItem& rAttr );
+    virtual bool SetFmtAttr( const SfxItemSet& rSet );
+    virtual bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
 
     /** Takes all hints from Delta-Array,
         @return count of deleted hints. */

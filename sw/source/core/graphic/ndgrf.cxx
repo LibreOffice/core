@@ -529,9 +529,9 @@ short SwGrfNode::SwapOut()
 }
 
 
-sal_Bool SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
+bool SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( refLink.Is() && refLink->GetLinkManager() )
     {
         sal_uInt16 nType = refLink->GetObjType();
@@ -548,7 +548,7 @@ sal_Bool SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
                 ( *pFileNm += sTopic ) += sfx2::cTokenSeperator;
                 *pFileNm += sItem;
                 pFilterNm->AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDE" ));
-                bRet = sal_True;
+                bRet = true;
             }
         }
     }

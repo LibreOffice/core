@@ -1803,7 +1803,7 @@ public:
     // Query if ::com::sun::star::util::URL was visited.
     // Query via Doc, if only a ::com::sun::star::text::Bookmark has been given.
     // In this case the document name has to be set in front.
-    sal_Bool IsVisitedURL( const String& rURL ) const;
+    bool IsVisitedURL( const String& rURL ) const;
 
     /// Save current values for automatic registration of exceptions in Autocorrection.
     void SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew );

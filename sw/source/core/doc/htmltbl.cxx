@@ -88,7 +88,7 @@ public:
 
 SwHTMLTableLayoutCnts::SwHTMLTableLayoutCnts( const SwStartNode *pSttNd,
                                           SwHTMLTableLayout* pTab,
-                                          sal_Bool bNoBrTag,
+                                          bool bNoBrTag,
                                           SwHTMLTableLayoutCnts* pNxt ) :
     pNext( pNxt ), pBox( 0 ), pTable( pTab ), pStartNode( pSttNd ),
     nPass1Done( 0 ), nWidthSet( 0 ), bNoBreakTag( bNoBrTag )
@@ -437,7 +437,7 @@ SwFrmFmt *SwHTMLTableLayout::FindFlyFrmFmt() const
 
 static void lcl_GetMinMaxSize( sal_uLong& rMinNoAlignCnts, sal_uLong& rMaxNoAlignCnts,
                         sal_uLong& rAbsMinNoAlignCnts,
-                        SwTxtNode *pTxtNd, sal_uLong nIdx, sal_Bool bNoBreak )
+                        SwTxtNode *pTxtNd, sal_uLong nIdx, bool bNoBreak )
 {
     pTxtNd->GetMinMaxSize( nIdx, rMinNoAlignCnts, rMaxNoAlignCnts,
                            rAbsMinNoAlignCnts );

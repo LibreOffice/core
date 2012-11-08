@@ -57,7 +57,7 @@ public:
     SwLineNumberInfo(const SwLineNumberInfo&);
 
     SwLineNumberInfo& operator=(const SwLineNumberInfo&);
-    sal_Bool operator==( const SwLineNumberInfo& rInf ) const;
+    bool operator==( const SwLineNumberInfo& rInf ) const;
 
     SwCharFmt *GetCharFmt( IDocumentStylePoolAccess& rIDSPA ) const;
     void SetCharFmt( SwCharFmt* );

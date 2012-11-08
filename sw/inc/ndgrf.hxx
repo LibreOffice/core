@@ -184,11 +184,11 @@ public:
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
 
     /// Query link-data.
-    sal_Bool IsGrfLink() const                  { return refLink.Is(); }
-    inline sal_Bool IsLinkedFile() const;
-    inline sal_Bool IsLinkedDDE() const;
+    bool IsGrfLink() const                  { return refLink.Is(); }
+    inline bool IsLinkedFile() const;
+    inline bool IsLinkedDDE() const;
     ::sfx2::SvBaseLinkRef GetLink() const    { return refLink; }
-    sal_Bool GetFileFilterNms( String* pFileNm, String* pFilterNm ) const;
+    bool GetFileFilterNms( String* pFileNm, String* pFilterNm ) const;
     void ReleaseLink();
 
     /** Scale an image-map: the image-map becomes zoomed in / out by
@@ -221,11 +221,11 @@ inline const SwGrfNode   *SwNode::GetGrfNode() const
 }
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
-inline sal_Bool SwGrfNode::IsLinkedFile() const
+inline bool SwGrfNode::IsLinkedFile() const
 {
     return refLink.Is() && OBJECT_CLIENT_GRF == refLink->GetObjType();
 }
-inline sal_Bool SwGrfNode::IsLinkedDDE() const
+inline bool SwGrfNode::IsLinkedDDE() const
 {
     return refLink.Is() && OBJECT_CLIENT_DDE == refLink->GetObjType();
 }

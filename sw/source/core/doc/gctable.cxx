@@ -41,7 +41,7 @@ inline const SvxBorderLine* GetLineTB( const SvxBoxItem* pBox, bool bTop )
 }
 
 
-sal_Bool _SwGCBorder_BoxBrd::CheckLeftBorderOfFormat( const SwFrmFmt& rFmt )
+bool _SwGCBorder_BoxBrd::CheckLeftBorderOfFormat( const SwFrmFmt& rFmt )
 {
     const SvxBorderLine* pBrd;
     const SfxPoolItem* pItem;
@@ -49,10 +49,10 @@ sal_Bool _SwGCBorder_BoxBrd::CheckLeftBorderOfFormat( const SwFrmFmt& rFmt )
         0 != ( pBrd = ((SvxBoxItem*)pItem)->GetLeft() ) )
     {
         if( *pBrdLn == *pBrd )
-            bAnyBorderFnd = sal_True;
-        return sal_True;
+            bAnyBorderFnd = true;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 

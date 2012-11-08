@@ -79,9 +79,9 @@ using namespace com::sun::star;
 extern void ClrContourCache( const SdrObject *pObj ); // TxtFly.Cxx
 
 
-inline sal_Bool GetRealURL( const SwGrfNode& rNd, String& rTxt )
+inline bool GetRealURL( const SwGrfNode& rNd, String& rTxt )
 {
-    sal_Bool bRet = rNd.GetFileFilterNms( &rTxt, 0 );
+    bool bRet = rNd.GetFileFilterNms( &rTxt, 0 );
     if( bRet )
         rTxt = URIHelper::removePassword( rTxt, INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
@@ -90,7 +90,7 @@ inline sal_Bool GetRealURL( const SwGrfNode& rNd, String& rTxt )
 
 static void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
                            const ViewShell &rSh, const SwNoTxtFrm *pFrm,
-                           sal_Bool bDefect )
+                           bool bDefect )
 {
     static Font *pFont = 0;
     if ( !pFont )
@@ -108,7 +108,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
     const SwFmtURL &rURL = pFrm->FindFlyFrm()->GetFmt()->GetURL();
     if( rURL.GetURL().Len() || rURL.GetMap() )
     {
-        sal_Bool bVisited = sal_False;
+        bool bVisited = false;
         if ( rURL.GetMap() )
         {
             ImageMap *pMap = (ImageMap*)rURL.GetMap();
@@ -117,7 +117,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
                 IMapObject *pObj = pMap->GetIMapObject( i );
                 if( rSh.GetDoc()->IsVisitedURL( pObj->GetURL() ) )
                 {
-                    bVisited = sal_True;
+                    bVisited = true;
                     break;
                 }
             }
@@ -134,7 +134,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
     pFont->SetUnderline( eUnderline );
     pFont->SetColor( aCol );
 
-    const BitmapEx& rBmp = ViewShell::GetReplacementBitmap( bDefect != sal_False );
+    const BitmapEx& rBmp = ViewShell::GetReplacementBitmap( bDefect );
     Graphic::DrawEx( rSh.GetOut(), rText, *pFont, rBmp, rRect.Pos(), rRect.SSize() );
 }
 
@@ -249,7 +249,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 GetRealURL( *(SwGrfNode*)pNd, aTxt );
             if( !aTxt.Len() )
                 aTxt = FindFlyFrm()->GetFmt()->GetName();
-            lcl_PaintReplacement( Frm(), aTxt, *pSh, this, sal_False );
+            lcl_PaintReplacement( Frm(), aTxt, *pSh, this, false );
         }
         return;
     }
@@ -369,7 +369,7 @@ static void lcl_CalcRect( Point& rPt, Size& rDim, sal_uInt16 nMirror )
 *************************************************************************/
 
 void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
-                             sal_Bool ) const
+                             bool ) const
 {
     // Currently only used for scaling, cropping and mirroring the contour of graphics!
     // Everything else is handled by GraphicObject
@@ -938,7 +938,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 String aTxt( pGrfNd->GetTitle() );
                 if ( !aTxt.Len() )
                     GetRealURL( *pGrfNd, aTxt );
-                ::lcl_PaintReplacement( aAlignedGrfArea, aTxt, *pShell, this, sal_False );
+                ::lcl_PaintReplacement( aAlignedGrfArea, aTxt, *pShell, this, false );
                 bContinue = false;
             }
             else if( rGrfObj.IsCached( pOut, aAlignedGrfArea.Pos(),
@@ -1037,7 +1037,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 if ( nResId )
                     aText = SW_RESSTR( nResId );
 
-                ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, sal_True );
+                ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, true );
             }
 
             // When printing, we must not collect the graphics
