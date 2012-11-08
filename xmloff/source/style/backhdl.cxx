@@ -236,7 +236,6 @@ void XMLBackGraphicPositionPropHdl::MergeXMLVertPos( style::GraphicLocation& ePo
               (style::GraphicLocation_MIDDLE_MIDDLE==eVert ?
                style::GraphicLocation_LEFT_MIDDLE :
                style::GraphicLocation_LEFT_BOTTOM);
-        ePos = eVert;
         break;
 
     case style::GraphicLocation_MIDDLE_TOP:
