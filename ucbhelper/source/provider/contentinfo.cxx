@@ -43,11 +43,9 @@ using namespace com::sun::star;
 namespace ucbhelper {
 
 PropertySetInfo::PropertySetInfo(
-    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
     const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rxEnv,
     ContentImplHelper* pContent )
-: m_xSMgr( rxSMgr ),
-  m_xEnv( rxEnv ),
+: m_xEnv( rxEnv ),
   m_pProps( 0 ),
   m_pContent( pContent )
 {
@@ -218,11 +216,9 @@ sal_Bool PropertySetInfo::queryProperty(
 //=========================================================================
 
 CommandProcessorInfo::CommandProcessorInfo(
-    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
     const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rxEnv,
     ContentImplHelper* pContent )
-: m_xSMgr( rxSMgr ),
-  m_xEnv( rxEnv ),
+: m_xEnv( rxEnv ),
   m_pCommands( 0 ),
   m_pContent( pContent )
 {

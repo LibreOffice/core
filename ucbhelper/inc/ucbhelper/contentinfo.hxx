@@ -22,7 +22,6 @@
 
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/weak.hxx>
@@ -51,8 +50,6 @@ class PropertySetInfo :
                 public com::sun::star::lang::XTypeProvider,
                 public com::sun::star::beans::XPropertySetInfo
 {
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-                                m_xSMgr;
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >
                                 m_xEnv;
     com::sun::star::uno::Sequence< com::sun::star::beans::Property >*
@@ -66,8 +63,6 @@ private:
 
 public:
     PropertySetInfo( const com::sun::star::uno::Reference<
-                        com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                     const com::sun::star::uno::Reference<
                         com::sun::star::ucb::XCommandEnvironment >& rxEnv,
                      ContentImplHelper* pContent );
     virtual ~PropertySetInfo();
@@ -111,8 +106,6 @@ class CommandProcessorInfo :
                 public com::sun::star::lang::XTypeProvider,
                 public com::sun::star::ucb::XCommandInfo
 {
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-                                m_xSMgr;
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >
                                 m_xEnv;
     com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >*
@@ -128,8 +121,6 @@ private:
 
 public:
     CommandProcessorInfo( const com::sun::star::uno::Reference<
-                            com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                           const com::sun::star::uno::Reference<
                             com::sun::star::ucb::XCommandEnvironment >& rxEnv,
                          ContentImplHelper* pContent );
     virtual ~CommandProcessorInfo();

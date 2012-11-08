@@ -1063,7 +1063,7 @@ ContentImplHelper::getCommandInfo(
 
     if ( !m_pImpl->m_xCommandsInfo.is() )
         m_pImpl->m_xCommandsInfo
-            = new CommandProcessorInfo( m_xSMgr, xEnv, this );
+            = new CommandProcessorInfo( xEnv, this );
     else if ( !bCache )
         m_pImpl->m_xCommandsInfo->reset();
 
@@ -1081,7 +1081,7 @@ ContentImplHelper::getPropertySetInfo(
 
     if ( !m_pImpl->m_xPropSetInfo.is() )
         m_pImpl->m_xPropSetInfo
-            = new PropertySetInfo( m_xSMgr, xEnv, this );
+            = new PropertySetInfo( xEnv, this );
     else if ( !bCache )
         m_pImpl->m_xPropSetInfo->reset();
 
