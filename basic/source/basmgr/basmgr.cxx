@@ -1243,7 +1243,7 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName,
     DBG_ASSERT( !aStorName.isEmpty(), "No Storage Name!" );
 
     OUString aStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
-    DBG_ASSERT(!aStorageName.isEmpty() != 0, "Bad storage name");
+    DBG_ASSERT(!aStorageName.isEmpty(), "Bad storage name");
 
     OUString aNewLibName( rLibName );
     while ( HasLib( aNewLibName ) )
