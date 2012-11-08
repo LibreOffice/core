@@ -273,7 +273,7 @@ SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nP
         case XML_TOK_FORMATTING_ENTRY:
         case XML_TOK_DATABAR_DATABARENTRY:
         {
-            ScColorScaleEntry* pEntry;
+            ScColorScaleEntry* pEntry(0);
             pContext = new ScXMLFormattingEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, pEntry );
             if(mpFormatData->mpLowerLimit)
             {
@@ -353,7 +353,7 @@ SvXMLImportContext* ScXMLIconSetFormatContext::CreateChildContext( sal_uInt16 nP
     {
         case XML_TOK_FORMATTING_ENTRY:
             {
-                ScColorScaleEntry* pEntry;
+                ScColorScaleEntry* pEntry(0);
                 pContext = new ScXMLFormattingEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, pEntry );
                 mpFormatData->maEntries.push_back(pEntry);
             }
