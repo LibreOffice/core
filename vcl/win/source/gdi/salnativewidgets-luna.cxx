@@ -1466,6 +1466,9 @@ void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
     ImplSVData* pSVData = ImplGetSVData();
 
+    // don't draw frame around each and every toolbar
+    pSVData->maNWFData.mbDockingAreaAvoidTBFrames = true;
+
     // check if vista or newer runs
     // in Aero theme (and similar ?) the menu text color does not change
     // for selected items; also on WinXP and earlier menus are not themed
@@ -1478,9 +1481,6 @@ void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
         pSVData->maNWFData.mnMenuFormatBorderY = 2;
         pSVData->maNWFData.maMenuBarHighlightTextColor = aStyleSettings.GetMenuTextColor();
         GetSalData()->mbThemeMenuSupport = TRUE;
-
-        // don't draw frame around each and every toolbar
-        pSVData->maNWFData.mbDockingAreaAvoidTBFrames = true;
     }
 
     rSettings.SetStyleSettings( aStyleSettings );
