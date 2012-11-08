@@ -168,6 +168,21 @@ struct Bucket
         maValue(rValue), mnOrderIndex(nOrder), mnDataIndex(nData), mnValueSortIndex(0) {}
 };
 
+#if DEBUG_PIVOT_TABLE
+#include <iostream>
+using std::cout;
+using std::endl;
+
+struct PrintBucket : std::unary_function<Bucket, void>
+{
+    void operator() (const Bucket& v) const
+    {
+        cout << "value: " << v.maValue.GetValue() << "  order index: " << v.mnOrderIndex << "  data index: " << v.mnDataIndex << "  value sort index: " << v.mnValueSortIndex << endl;
+    }
+};
+
+#endif
+
 struct LessByValue : std::binary_function<Bucket, Bucket, bool>
 {
     bool operator() (const Bucket& left, const Bucket& right) const
@@ -1099,10 +1114,6 @@ long ScDPCache::GetColumnCount() const
 }
 
 #if DEBUG_PIVOT_TABLE
-
-#include <iostream>
-using std::cout;
-using std::endl;
 
 namespace {
 
