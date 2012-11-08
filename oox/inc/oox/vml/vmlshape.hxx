@@ -129,6 +129,8 @@ public:
     /** Returns the fragment path to the embedded graphic used by this shape. */
     ::rtl::OUString     getGraphicPath() const;
 
+    const Drawing& getDrawing() const { return mrDrawing; }
+
 protected:
     /** Returns the coordinate system of this shape. */
     ::com::sun::star::awt::Rectangle getCoordSystem() const;

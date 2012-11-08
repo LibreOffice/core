@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include "oox/vml/vmlformatting.hxx"
 #include "oox/vml/vmltextboxcontext.hxx"
 
 namespace oox {
@@ -126,10 +127,29 @@ void TextPortionContext::onEndElement()
 
 // ============================================================================
 
-TextBoxContext::TextBoxContext( ContextHandler2Helper& rParent, TextBox& rTextBox, const AttributeList& /*rAttribs*/ ) :
+TextBoxContext::TextBoxContext( ContextHandler2Helper& rParent, TextBox& rTextBox, const AttributeList& rAttribs,
+    const GraphicHelper& graphicHelper ) :
     ContextHandler2( rParent ),
     mrTextBox( rTextBox )
 {
+    if( rAttribs.getString( XML_insetmode ).get() != "auto" )
+    {
+        OUString inset = rAttribs.getString( XML_inset ).get();
+        OUString value;
+        ConversionHelper::separatePair( value, inset, inset, ',' );
+        rTextBox.borderDistanceLeft = ConversionHelper::decodeMeasureToEmu( graphicHelper,
+            value.isEmpty() ? "0.1in" : value, 0, false, false );
+        ConversionHelper::separatePair( value, inset, inset, ',' );
+        rTextBox.borderDistanceTop = ConversionHelper::decodeMeasureToEmu( graphicHelper,
+            value.isEmpty() ? "0.05in" : value, 0, false, false );
+        ConversionHelper::separatePair( value, inset, inset, ',' );
+        rTextBox.borderDistanceRight = ConversionHelper::decodeMeasureToEmu( graphicHelper,
+            value.isEmpty() ? "0.1in" : value, 0, false, false );
+        ConversionHelper::separatePair( value, inset, inset, ',' );
+        rTextBox.borderDistanceBottom = ConversionHelper::decodeMeasureToEmu( graphicHelper,
+            value.isEmpty() ? "0.05in" : value, 0, false, false );
+        rTextBox.borderDistanceSet = true;
+    }
 }
 
 ContextHandlerRef TextBoxContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
