@@ -2732,22 +2732,24 @@ if test "$_os" = "Darwin"; then
         esac
     fi
 
-    case "$with_macosx_version_min_required" in
-    10.4)
-        case "$with_macosx_sdk" in
+    if test "$BITNESS_OVERRIDE" == ""; then
+        case "$with_macosx_version_min_required" in
         10.4)
+            case "$with_macosx_sdk" in
+            10.4)
+                ;;
+            *)
+                AC_MSG_WARN([Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for deliverable build until verified that it really works])
+                add_warning "Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for deliverable build until verified that it really works"
+                ;;
+            esac
             ;;
         *)
-            AC_MSG_WARN([Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for deliverable build until verified that it really works])
-            add_warning "Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for deliverable build until verified that it really works"
+            AC_MSG_WARN([Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for deliverable build])
+            add_warning "Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for deliverable build"
             ;;
         esac
-        ;;
-    *)
-        AC_MSG_WARN([Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for deliverable build])
-        add_warning "Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for deliverable build"
-        ;;
-    esac
+    fi
 
     # If no CC and CXX environment vars, try to guess where the compiler is
     if test -z "$save_CC"; then
