@@ -9,8 +9,8 @@
 
 #include "sc.hrc"
 
-#define BTN_OK 0
-#define BTN_CANCEL 1
+#define BTN_OK 1
+#define BTN_CANCEL 2
 
 #define FL_SOURCE_FILE 10
 #define BTN_SELECT_SOURCE_FILE 11

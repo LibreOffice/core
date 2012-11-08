@@ -104,6 +104,12 @@ ModelessDialog RID_SCDLG_XML_SOURCE
         MaskColor = STD_MASKCOLOR ;
     };
 
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 139 , 181 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+
     CancelButton BTN_CANCEL
     {
         Pos = MAP_APPFONT ( 194 , 181 ) ;

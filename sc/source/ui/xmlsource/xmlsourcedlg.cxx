@@ -40,6 +40,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maRefEdit(this, this, ScResId(ED_MAPPED_CELL)),
     maRefBtn(this, ScResId(BTN_MAPPED_CELL), &maRefEdit, this),
     maLbTree(this, ScResId(LB_SOURCE_TREE)),
+    maBtnOk(this, ScResId(BTN_OK)),
     maBtnCancel(this, ScResId(BTN_CANCEL)),
     maImgFileOpen(ScResId(IMG_FILE_OPEN)),
     mpDoc(pDoc),

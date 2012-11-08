@@ -43,6 +43,7 @@ class ScXMLSourceDlg : public ScAnyRefDlg
     formula::RefEdit   maRefEdit;
     formula::RefButton maRefBtn;
 
+    OKButton maBtnOk;
     CancelButton maBtnCancel;
 
     Image maImgFileOpen;
