@@ -340,7 +340,7 @@ my $lo_core_tempdir;
 my $force;
 my $verbose=1;
 my $is_lo_core_dir=0;
-my @pieces=("binfilter", "dictionaries", "help", "translations");
+my @pieces=("dictionaries", "help", "translations");
 my %piece_tarball_name;
 
 ###################

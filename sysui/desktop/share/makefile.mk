@@ -54,7 +54,7 @@ ULFFILES= \
     launcher_name.ulf
 
 LAUNCHERLIST_APPS = writer calc draw impress math base printeradmin startcenter
-LAUNCHERLIST = $(LAUNCHERLIST_APPS) qstart javafilter binfilter xsltfilter
+LAUNCHERLIST = $(LAUNCHERLIST_APPS) qstart javafilter xsltfilter
 LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 
 LAUNCHERFLAGFILE = $(COMMONMISC)/$(TARGET)/xdg.flag

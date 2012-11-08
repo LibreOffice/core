@@ -49,9 +49,6 @@ $(eval $(call gb_InstallScript_use_modules,setup_osl,\
 			scp2/winexplorerext \
 		) \
 	) \
-	$(if $(filter YES,$(WITH_BINFILTER)),\
-		scp2/binfilter \
-	) \
 	$(if $(filter TRUE,$(ENABLE_CRASHDUMP)),\
 		scp2/crashrep \
 	) \

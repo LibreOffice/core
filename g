@@ -7,7 +7,7 @@ if [ -n "$g_debug" ] ; then
     set -x
 fi
 
-SUBMODULES_ALL="binfilter dictionaries helpcontent2 translations"
+SUBMODULES_ALL="dictionaries helpcontent2 translations"
 
 pushd $(dirname $0) > /dev/null
 COREDIR=$(pwd)

@@ -943,12 +943,6 @@ AC_ARG_ENABLE(unix-qstart-libpng,
          enabling this is a good idea (ie. for Linux Distro packaging).]),
 ,enable_unix_qstart_libpng=yes)
 
-AC_ARG_ENABLE(binfilter,
-    AS_HELP_STRING([--enable-binfilter],
-        [Enable legacy binary file formats filters build.]),
-,enable_binfilter=no
-)
-
 AC_ARG_ENABLE(rpath,
     AS_HELP_STRING([--disable-rpath],
         [Disable the use of relative paths in shared libraries.]),
@@ -4350,21 +4344,6 @@ else
     DO_FETCH_TARBALLS="NO"
 fi
 AC_SUBST(DO_FETCH_TARBALLS)
-
-
-dnl Disable legacy binary file formats filters
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable filters for legacy binary file formats (StarOffice 5.2)])
-if test "$enable_binfilter" = "no"; then
-    WITH_BINFILTER="NO"
-    AC_MSG_RESULT([no])
-else
-    WITH_BINFILTER="YES"
-    BUILD_TYPE="$BUILD_TYPE BINFILTER"
-    GIT_NEEDED_SUBMODULES="binfilter $GIT_NEEDED_SUBMODULES"
-    AC_MSG_RESULT([yes])
-fi
-AC_SUBST(WITH_BINFILTER)
 
 AC_MSG_CHECKING([whether to build help])
 if test "$with_help" != "no" -a $_os != iOS -a $_os != Android; then
@@ -12358,16 +12337,11 @@ fi
 AC_MSG_CHECKING([whether to create huge library])
 MERGELIBS=
 if test "$enable_mergelibs" = "yes" ; then
-    if test $WITH_BINFILTER = YES; then
-        add_warning "--enable-mergelibs conflicts with --enable-binfilter. Disabling mergelibs."
-        AC_MSG_RESULT([no])
-    else
-        if test $_os != Linux -a $_os != Android -a $_os != WINNT; then
-            add_warning "--enable-mergelibs is not tested for this platform"
-        fi
-        MERGELIBS="TRUE"
-        AC_MSG_RESULT([yes])
+    if test $_os != Linux -a $_os != Android -a $_os != WINNT; then
+        add_warning "--enable-mergelibs is not tested for this platform"
     fi
+    MERGELIBS="TRUE"
+    AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
 fi

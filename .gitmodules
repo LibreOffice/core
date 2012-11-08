@@ -1,7 +1,3 @@
-[submodule "binfilter"]
-	path = binfilter
-	url = git://gerrit.libreoffice.org/binfilter
-	branch = .
 [submodule "dictionaries"]
 	path = dictionaries
 	url = git://gerrit.libreoffice.org/dictionaries

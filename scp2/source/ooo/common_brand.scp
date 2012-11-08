@@ -84,7 +84,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Share_Registry_O5oo_Xcd,
              gid_Brand_File_Script_Unopkg,
              gid_Brand_File_Share_Xdg_Base,
-             gid_Brand_File_Share_Xdg_BinFilter,
              gid_Brand_File_Share_Xdg_Calc,
              gid_Brand_File_Share_Xdg_Draw,
              gid_Brand_File_Share_Xdg_Extension,
@@ -760,15 +759,6 @@ File gid_Brand_File_Share_Xdg_JavaFilter
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Share_Xdg;
     Name = "javafilter.desktop";
-    Styles = (PACKED,SCPZIP_REPLACE);
-End
-#endif
-
-#if defined UNX && ! defined MACOSX
-File gid_Brand_File_Share_Xdg_BinFilter
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Xdg;
-    Name = "binfilter.desktop";
     Styles = (PACKED,SCPZIP_REPLACE);
 End
 #endif
