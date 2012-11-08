@@ -92,6 +92,9 @@ private:
 
     bool IsChildrenDirty(SvTreeListEntry* pEntry) const;
 
+    void OkPressed();
+    void CancelPressed();
+
     DECL_LINK(GetFocusHdl, Control*);
     DECL_LINK(LoseFocusHdl, Control*);
     DECL_LINK(BtnPressedHdl, Button*);

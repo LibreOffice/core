@@ -37,9 +37,9 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maFtSourceFile(this, ScResId(FT_SOURCE_FILE)),
     maFtMapXmlDoc(this, ScResId(FL_MAP_XML_TO_DOCUMENT)),
     maFtMappedCellTitle(this, ScResId(FT_MAPPED_CELL_TITLE)),
+    maLbTree(this, ScResId(LB_SOURCE_TREE)),
     maRefEdit(this, this, ScResId(ED_MAPPED_CELL)),
     maRefBtn(this, ScResId(BTN_MAPPED_CELL), &maRefEdit, this),
-    maLbTree(this, ScResId(LB_SOURCE_TREE)),
     maBtnOk(this, ScResId(BTN_OK)),
     maBtnCancel(this, ScResId(BTN_CANCEL)),
     maImgFileOpen(ScResId(IMG_FILE_OPEN)),
@@ -54,7 +54,10 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maBtnSelectSource.SetModeImage(maImgFileOpen);
     FreeResource();
 
-    maBtnSelectSource.SetClickHdl(LINK(this, ScXMLSourceDlg, BtnPressedHdl));
+    Link aBtnHdl = LINK(this, ScXMLSourceDlg, BtnPressedHdl);
+    maBtnSelectSource.SetClickHdl(aBtnHdl);
+    maBtnOk.SetClickHdl(aBtnHdl);
+    maBtnCancel.SetClickHdl(aBtnHdl);
 
     Link aLink = LINK(this, ScXMLSourceDlg, GetFocusHdl);
     maRefEdit.SetGetFocusHdl(aLink);
@@ -388,6 +391,17 @@ bool ScXMLSourceDlg::IsChildrenDirty(SvTreeListEntry* pEntry) const
     return false;
 }
 
+void ScXMLSourceDlg::OkPressed()
+{
+    // Store the xml link data to document.
+    Close();
+}
+
+void ScXMLSourceDlg::CancelPressed()
+{
+    Close();
+}
+
 IMPL_LINK(ScXMLSourceDlg, GetFocusHdl, Control*, pCtrl)
 {
     HandleGetFocus(pCtrl);
@@ -404,6 +418,10 @@ IMPL_LINK(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn)
 {
     if (pBtn == &maBtnSelectSource)
         SelectSourceFile();
+    else if (pBtn == &maBtnOk)
+        OkPressed();
+    else if (pBtn == &maBtnCancel)
+        CancelPressed();
     return 0;
 }
 
