@@ -2732,7 +2732,7 @@ if test "$_os" = "Darwin"; then
         esac
     fi
 
-    if test "$BITNESS_OVERRIDE" == ""; then
+    if test "$BITNESS_OVERRIDE" = ""; then
         case "$with_macosx_version_min_required" in
         10.4)
             case "$with_macosx_sdk" in
