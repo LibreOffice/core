@@ -133,8 +133,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
 
     if test "$SPLIT_OPT_FEATURES" = "YES" ; then
         if test "z$OOO_VENDOR" = "zMandriva" ; then
-            merge_flists gid_Module_Optional_Binfilter         $FILELISTSDIR/filter-binfilter_list.txt
-            merge_flists gid_Module_Langpack_Binfilter_en_US   $FILELISTSDIR/filter-binfilter_list.txt
             merge_flists gid_Module_Optional_Grfflt            $FILELISTSDIR/draw_list.txt
             merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
             merge_flists gid_Module_Optional_Javafilter        $FILELISTSDIR/common_list.txt
@@ -142,7 +140,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
             merge_flists gid_Module_Optional_Pyuno             $FILELISTSDIR/pyuno_list.txt
             merge_flists gid_Module_Optional_Xsltfiltersamples $FILELISTSDIR/common_list.txt
         else
-            merge_flists gid_Module_Optional_Binfilter         $FILELISTSDIR/filters_list.txt
             merge_flists gid_Module_Optional_Grfflt            $FILELISTSDIR/common_list.txt
             merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
             merge_flists gid_Module_Optional_Javafilter        $FILELISTSDIR/filters_list.txt
@@ -151,8 +148,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
             merge_flists gid_Module_Optional_Xsltfiltersamples $FILELISTSDIR/filters_list.txt
         fi
     else
-        merge_flists gid_Module_Optional_Binfilter         $FILELISTSDIR/common_list.txt
-        merge_flists gid_Module_Langpack_Binfilter         $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Grfflt            $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Javafilter        $FILELISTSDIR/common_list.txt
@@ -174,7 +169,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
             test -f gid_Module_Langpack_Calc_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Calc_$lang" || :
             test -f gid_Module_Langpack_Base_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Base_$lang" || :
             test -f gid_Module_Langpack_Writer_$lang    && lang_lists="$lang_lists gid_Module_Langpack_Writer_$lang" || :
-            test -f gid_Module_Langpack_Binfilter_$lang && lang_lists="$lang_lists gid_Module_Langpack_Binfilter_$lang" || :
             # Place helps on dedicated packages.
             test -f gid_Module_Helppack_Help_$lang      && sort -u gid_Module_Helppack_Help_$lang > $FILELISTSDIR/help_${lang}_list.txt || :
         else
@@ -187,7 +181,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
             test -f gid_Module_Langpack_Calc_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Calc_$lang" || :
             test -f gid_Module_Langpack_Base_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Base_$lang" || :
             test -f gid_Module_Langpack_Writer_$lang    && lang_lists="$lang_lists gid_Module_Langpack_Writer_$lang" || :
-            test -f gid_Module_Langpack_Binfilter_$lang && lang_lists="$lang_lists gid_Module_Langpack_Binfilter_$lang" || :
             test -f gid_Module_Helppack_Help_$lang      && lang_lists="$lang_lists gid_Module_Helppack_Help_$lang" || :
         fi
         if test -n "$lang_lists" ; then
@@ -320,9 +313,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         mv_file_between_flists java_common_list.txt common_list.txt "$INSTALLDIR/program/classes.*"
         mv_file_between_flists java_common_list.txt common_list.txt $INSTALLDIR/program/libofficebean.so
         mv_file_between_flists java_common_list.txt common_list.txt "$INSTALLDIR/share/Scripts/java.*"
-        mv_file_between_flists java_common_list.txt filter-binfilter_list.txt $INSTALLDIR/program/classes/aportisdoc.jar
-        mv_file_between_flists java_common_list.txt filter-binfilter_list.txt $INSTALLDIR/program/classes/pocketword.jar
-        mv_file_between_flists java_common_list.txt filter-binfilter_list.txt $INSTALLDIR/program/classes/pexcel.jar
         mv_file_between_flists java_common_list.txt writer_list.txt $INSTALLDIR/program/classes/writer2latex.jar
 
         # Move arch-dependent/dup files from common to core
@@ -409,9 +399,6 @@ else
     create_package_directory gid_Module_Oo_Linguistic               pkg/libreoffice-common
     create_package_directory gid_Module_Optional_Xsltfiltersamples  pkg/libreoffice-common
     create_package_directory gid_Module_Optional_Javafilter         pkg/libreoffice-common
-    if [ -f gid_Module_Optional_Binfilter ]; then
-        create_package_directory gid_Module_Optional_Binfilter      pkg/libreoffice-filter-binfilter
-    fi
     create_package_directory gid_Module_Optional_Grfflt             pkg/libreoffice-draw
     create_package_directory gid_Module_Prg_Calc_Bin                pkg/libreoffice-calc
     create_package_directory gid_Module_Prg_Math_Bin                pkg/libreoffice-math
@@ -455,13 +442,7 @@ else
         create_package_directory gid_Module_Langpack_Brand_`echo $l | sed -e s/-/_/g`     pkg/libreoffice-l10n-$l
         create_package_directory gid_Module_Langpack_Resource_`echo $l | sed -e s/-/_/g`  pkg/libreoffice-l10n-$l
         create_package_directory gid_Module_Helppack_Help_`echo $l | sed -e s/-/_/g`      pkg/libreoffice-help-$l
-        if [ -f gid_Module_Optional_Binfilter ]; then
-            if [ "$l" = "en-US" ]; then
-                create_package_directory gid_Module_Langpack_Binfilter_en_US    pkg/libreoffice-filter-binfilter
-            else
-                create_package_directory gid_Module_Langpack_Binfilter_`echo $l | sed -e s/-/_/g`    pkg/libreoffice-l10n-$l
-            fi
-        fi
+
         # some help files are in _Langpack_{Writer,Impress,...}_<lang>
         # move them from -l10n to -help
         if [ "$l" = "en-US" ]; then d=en; else d=$l; fi

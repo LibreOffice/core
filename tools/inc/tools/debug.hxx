@@ -410,13 +410,6 @@ public:
 #define DBG_ASSERT( sCon, aError ) \
     SAL_DETAIL_WARN_IF_FORMAT(!(sCon), "legacy.tools", aError)
 
-#ifdef DBG_BINFILTER
-#define DBG_BF_ASSERT( sCon, aError ) \
-    SAL_DETAIL_WARN_IF_FORMAT(!(sCon), "legacy.binfilter", aError)
-#else
-#define DBG_BF_ASSERT( sCon, aError ) ((void)0)
-#endif
-
 #define DBG_WARNING( aWarning ) \
     SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", aWarning)
 #define DBG_WARNING1( aWarning, x1 ) \

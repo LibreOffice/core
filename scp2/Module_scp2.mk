@@ -58,9 +58,6 @@ $(eval $(call gb_Module_add_targets,scp2,\
 			InstallModule_winexplorerext \
 		) \
 	) \
-	$(if $(filter YES,$(WITH_BINFILTER)),\
-		InstallModule_binfilter \
-	) \
 	$(if $(filter TRUE,$(ENABLE_CRASHDUMP)),\
 		InstallModule_crashrep \
 	) \

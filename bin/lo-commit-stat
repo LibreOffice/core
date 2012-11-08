@@ -8,7 +8,7 @@ use LWP::UserAgent;
 use utf8;
 
 my $main_repo="core";
-my @pieces=("binfilter", "dictionaries", "help", "translations");
+my @pieces=("dictionaries", "help", "translations");
 
 my %bugzillas = (
     fdo  => "https://bugs.freedesktop.org/show_bug.cgi?id=",

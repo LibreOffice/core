@@ -307,12 +307,6 @@ my_components += \
     component/wizards/com/sun/star/wizards/web/web
 .END
 
-.IF "$(WITH_BINFILTER)" != "NO"
-my_components += \
-    bf_migratefilter \
-    bindet
-.END
-
 .IF "$(WITH_MOZILLA)" != "NO"
 my_components += component/extensions/source/plugin/pl
 .END

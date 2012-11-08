@@ -43,10 +43,7 @@
 typedef short StorageMode;
 
 class SvStorage;
-namespace binfilter
-{
-    class SvStorage;
-}
+
 
 /*************************************************************************
 *************************************************************************/
@@ -101,7 +98,6 @@ class SOT_DLLPUBLIC SotStorage : virtual public SotObject
 {
 friend class SotStorageStream;
 friend class SvStorage;
-friend class ::binfilter::SvStorage;
 
     BaseStorage *   m_pTmpStg;   // Temp-Storage fuer Transacted, nur auf diesem schreiben!        ??? Useless ???
     BaseStorage *   m_pOwnStg;   // Zielstorage

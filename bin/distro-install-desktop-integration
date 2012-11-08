@@ -169,7 +169,6 @@ add_wrapper loffice        soffice ""            "libreoffice" ""               
 add_wrapper unopkg         unopkg  ""            "unopkg"      ""                                "gid_Module_Root_Brand"
 
 # there are two more desktop files for optional filters
-test -f $DESTDIR/gid_Module_Optional_Binfilter && echo "$PREFIXDIR/share/applications/libreoffice-binfilter.desktop" >>"$DESTDIR/gid_Module_Optional_Binfilter"
 test -f $DESTDIR/gid_Module_Optional_Xsltfiltersamples && echo "$PREFIXDIR/share/applications/libreoffice-xsltfilter.desktop" >>"$DESTDIR/gid_Module_Optional_Xsltfiltersamples"
 
 # $PREFIXDIR/bin/ooffice symlink is necessary by java UNO components to find
