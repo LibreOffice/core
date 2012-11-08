@@ -24,7 +24,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 	&& $(if $(debug),CFLAGS=-g) $(if $(filter ANDROID,$(OS)),LIBS="-lm") ./configure \
 		--disable-shared \
 		--with-arch=arm \
-		--with-expat-includes=$(OUTDIR)/inc/external \
+		--with-expat-includes=$(OUTDIR)/inc/external/expat \
 		--with-expat-lib=$(OUTDIR)/lib \
 		--with-freetype-config=$(OUTDIR)/bin/freetype-config \
 		--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
