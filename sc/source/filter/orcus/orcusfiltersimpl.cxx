@@ -66,6 +66,7 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
 public:
     ScOrcusSheet(ScDocument& rDoc, SCTAB nTab);
 
+    // Orcus import interface
     virtual void set_auto(row_t row, col_t col, const char* p, size_t n);
     virtual void set_format(row_t row, col_t col, size_t xf_index);
     virtual void set_formula(row_t row, col_t col, formula_grammar_t grammar, const char* p, size_t n);
@@ -79,6 +80,8 @@ public:
     virtual void set_shared_formula(row_t row, col_t col, size_t sindex);
     virtual void set_string(row_t row, col_t col, size_t sindex);
     virtual void set_value(row_t row, col_t col, double value);
+
+    SCTAB getIndex() const { return mnTab; }
 };
 
 ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) : mrDoc(rDoc) {}
@@ -94,10 +97,36 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(const char
     return &maSheets.back();
 }
 
-orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* /*sheet_name*/, size_t /*sheet_name_length*/)
+class FindSheetByIndex : std::unary_function<ScOrcusSheet, bool>
 {
-    // TODO: Implement this.
-    return NULL;
+    SCTAB mnTab;
+public:
+    FindSheetByIndex(SCTAB nTab) : mnTab(nTab) {}
+    bool operator() (const ScOrcusSheet& rSheet) const
+    {
+        return rSheet.getIndex() == mnTab;
+    }
+};
+
+orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* sheet_name, size_t sheet_name_length)
+{
+    OUString aTabName(sheet_name, sheet_name_length, RTL_TEXTENCODING_UTF8);
+    SCTAB nTab = -1;
+    if (!mrDoc.GetTable(aTabName, nTab))
+        // Sheet by that name not found.
+        return NULL;
+
+    // See if we already have an orcus sheet instance by that index.
+    boost::ptr_vector<ScOrcusSheet>::iterator it =
+        std::find_if(maSheets.begin(), maSheets.end(), FindSheetByIndex(nTab));
+
+    if (it != maSheets.end())
+        // We already have one. Return it.
+        return &(*it);
+
+    // Create a new orcus sheet instance for this.
+    maSheets.push_back(new ScOrcusSheet(mrDoc, nTab));
+    return &maSheets.back();
 }
 
 orcus::spreadsheet::iface::import_shared_strings* ScOrcusFactory::get_shared_strings()
