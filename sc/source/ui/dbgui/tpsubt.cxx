@@ -275,20 +275,19 @@ void ScTpSubTotalGroup::FillListBoxes()
         SCTAB   nTab        = pViewData->GetTabNo();
         SCCOL   nMaxCol     = rSubTotalData.nCol2;
         SCCOL   col;
-        sal_uInt16  i=0;
+        sal_uInt16  i;
         rtl::OUString  aFieldName;
 
         aLbGroup.Clear();
         aLbColumns.Clear();
         aLbGroup.InsertEntry( aStrNone, 0 );
 
-        i=0;
-        for ( col=nFirstCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
+        for ( i=0, col=nFirstCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
         {
             pDoc->GetString( col, nFirstRow, nTab, aFieldName );
             if ( aFieldName.isEmpty() )
             {
-               rtl::OUStringBuffer aBuf;
+                rtl::OUStringBuffer aBuf;
                 aBuf.append(aStrColumn);
                 aFieldName = aBuf.makeStringAndClear().replaceAll("%1", ScColToAlpha( col ));
             }
