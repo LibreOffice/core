@@ -22,34 +22,29 @@
 
 namespace {
 
-typedef char gchar;
-typedef void* gpointer;
-typedef int gint;
-typedef gint gboolean;
+typedef int lt_bool_t;
 
-struct GError {
-    char *message;
-    GError() : message(NULL) {}
+struct lt_error_t {
+    void *something;
+    lt_error_t() : something(NULL) {}
 };
 
-typedef struct GError lt_error_t;
-
-static gpointer g_malloc(size_t s)
+static void* g_malloc(size_t s)
 {
     return malloc(s);
 }
 
-static void g_free(gpointer p)
+static void g_free(void* p)
 {
     if (p)
         free(p);
 }
 
-static void  __attribute__((used)) g_error_free(GError *error)
+static void lt_error_unref(lt_error_t *error)
 {
     if (error)
     {
-        g_free( error->message);
+        g_free( error->something);
         g_free( error);
     }
 }
@@ -65,7 +60,7 @@ struct my_ref
 
 struct my_t_impl : public my_ref
 {
-    gchar*  mpStr;
+    char* mpStr;
     explicit my_t_impl() : my_ref(), mpStr(NULL) {}
     virtual ~my_t_impl() { g_free( mpStr); }
     explicit my_t_impl( const my_t_impl& r )
@@ -82,30 +77,30 @@ struct my_t_impl : public my_ref
         mpStr = (r.mpStr ? strdup( r.mpStr) : NULL);
         return *this;
     }
-    void assign( const gchar* str )
+    void assign( const char* str )
     {
         g_free( mpStr);
         mpStr = (str ? strdup( str) : NULL);
     }
-    void assign( const gchar* str, const gchar* stop )
+    void assign( const char* str, const char* stop )
     {
         g_free( mpStr);
         if (str && str < stop)
         {
-            mpStr = static_cast<gchar*>(g_malloc( stop - str + 1));
+            mpStr = static_cast<char*>(g_malloc( stop - str + 1));
             memcpy( mpStr, str, stop - str);
             mpStr[stop - str] = 0;
         }
         else
             mpStr = NULL;
     }
-    void append( const gchar* str, const gchar* stop )
+    void append( const char* str, const char* stop )
     {
         if (str && str < stop)
         {
             size_t nOld = mpStr ? strlen( mpStr) : 0;
             size_t nNew = nOld + (stop - str) + 1;
-            char* p = static_cast<gchar*>(g_malloc( nNew));
+            char* p = static_cast<char*>(g_malloc( nNew));
             if (nOld)
                 memcpy( p, mpStr, nOld);
             memcpy( p + nOld, str, stop - str);
@@ -164,7 +159,7 @@ struct lt_tag_t : public my_t_impl
         maRegion = r.maRegion;
         return *this;
     }
-    void assign( const gchar* str )
+    void assign( const char* str )
     {
         maLanguage.zero();
         maScript.zero();
@@ -200,9 +195,9 @@ static void lt_tag_unref(lt_tag_t *tag)
     any i-* irregular and x-* privateuse. Subtags are not checked for validity
     (alpha, digit, registered, ...).
  */
-static gboolean lt_tag_parse(lt_tag_t *tag,
-                        const gchar *tag_string,
-                        GError **error)
+static lt_bool_t lt_tag_parse(lt_tag_t *tag,
+                              const char *tag_string,
+                              lt_error_t **error)
 {
     (void) error;
     if (!tag)
@@ -213,9 +208,9 @@ static gboolean lt_tag_parse(lt_tag_t *tag,
     // In case we supported other subtags this would get more complicated.
     my_t_impl* aSubtags[] = { &tag->maLanguage, &tag->maScript, &tag->maRegion, NULL };
     my_t_impl** ppSub = &aSubtags[0];
-    const gchar* pStart = tag_string;
-    const gchar* p = pStart;
-    const gchar* pEnd = pStart + strlen( pStart);   // scanning includes \0
+    const char* pStart = tag_string;
+    const char* p = pStart;
+    const char* pEnd = pStart + strlen( pStart);   // scanning includes \0
     bool bStartLang = true;
     bool bPrivate = false;
     for ( ; p <= pEnd && ppSub && *ppSub; ++p)
@@ -352,8 +347,8 @@ static gboolean lt_tag_parse(lt_tag_t *tag,
     return !0;
 }
 
-static gchar* lt_tag_canonicalize(lt_tag_t *tag,
-                                 GError **error)
+static char* lt_tag_canonicalize(lt_tag_t *tag,
+                                 lt_error_t **error)
 {
     (void) error;
     return tag && tag->mpStr ? strdup( tag->mpStr) : NULL;
@@ -374,17 +369,17 @@ static const lt_region_t *lt_tag_get_region(const lt_tag_t  *tag)
     return tag && tag->maRegion.mpStr ? &tag->maRegion : NULL;
 }
 
-static const gchar *lt_lang_get_tag(const lt_lang_t *lang)
+static const char *lt_lang_get_tag(const lt_lang_t *lang)
 {
     return lang ? lang->mpStr : NULL;
 }
 
-static const gchar *lt_script_get_tag(const lt_script_t *script)
+static const char *lt_script_get_tag(const lt_script_t *script)
 {
     return script ? script->mpStr : NULL;
 }
 
-static const gchar *lt_region_get_tag(const lt_region_t *region)
+static const char *lt_region_get_tag(const lt_region_t *region)
 {
     return region ? region->mpStr : NULL;
 }
