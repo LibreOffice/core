@@ -8990,7 +8990,7 @@ if test "$with_system_libexttextcat" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBEXTTEXTCAT=NO
-    LIBEXTTEXTCAT_TARBALL="6097739c841f671cb21332b9cc593ae7-libexttextcat-3.3.1.tar.bz2"
+    LIBEXTTEXTCAT_TARBALL="dc3d21a3921931096d6e80f6701f6763-libexttextcat-3.4.0.tar.bz2"
     BUILD_TYPE="$BUILD_TYPE LIBEXTTEXTCAT"
 fi
 AC_SUBST(SYSTEM_LIBEXTTEXTCAT)
