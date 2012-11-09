@@ -74,11 +74,10 @@ static SwTwips lcl_GetFrmMinHeight(const SwLayoutFrm & rFrm)
 
 static SwTwips lcl_CalcContentHeight(SwLayoutFrm & frm)
 {
-    SwFrm* pFrm = frm.Lower();
-
     SwTwips nRemaining = 0;
     sal_uInt16 nNum = 0;
-    pFrm = frm.Lower();
+    SwFrm* pFrm = frm.Lower();
+
     while ( pFrm )
     {
         SwTwips nTmp;
