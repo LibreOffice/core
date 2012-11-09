@@ -1,0 +1,104 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef org_freedesktop_PackageKit_XModify_idl
+#define org_freedesktop_PackageKit_XModify_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+
+module org
+{
+module freedesktop
+{
+module PackageKit
+{
+/**
+ *  The interface used for modifying the package database.
+ */
+interface XModify : com::sun::star::uno::XInterface
+{
+    /**
+     * Installs local package sequence< string > files or service packs.
+     * @since LibreOffice 3.7
+     */
+
+    void InstallPackageFiles( [in] unsigned long xid, [in] sequence< string > files, [in] string interaction);
+
+    /**
+     * Installs sequence< string > packages to provide sequence< string > files.
+     * @since LibreOffice 3.7
+     */
+
+    void InstallProvideFiles( [in] unsigned long xid, [in] sequence< string > files, [in] string interaction);
+
+    /**
+     * Installs sequence< string > packages to provide sequence< string > files.
+     * @since LibreOffice 3.7
+     */
+
+    void InstallCatalogs( [in] unsigned long xid, [in] sequence< string > files, [in] string interaction);
+
+    /**
+     * Installs sequence< string > packages from a configured software source.
+     * @since LibreOffice 3.7
+     */
+
+    void InstallPackageNames( [in] unsigned long xid, [in] sequence< string > packages, [in] string interaction);
+
+    /**
+     * Installs mimetype handlers from a configured software source.
+     * @since LibreOffice 3.7
+     */
+
+    void InstallMimeTypes( [in] unsigned long xid, [in] sequence< string > mime_types, [in] string interaction);
+
+    /**
+     * Installs fontconfig resources ( [in] usually fonts) from a configured software source.
+     * @since LibreOffice 3.7
+     */
+
+    void InstallFontconfigRessources( [in] unsigned long xid, [in] sequence< string > resources, [in] string interaction);
+
+    /**
+     * Installs GStreamer resources ( [in] usually codecs) from a configured software source.
+     * @since LibreOffice 3.7
+     */
+
+    void InstalliGStreamerRessources( [in] unsigned long xid, [in] sequence< string > resources, [in] string interaction);
+
+    /**
+     * Installs resources of a given type from a configured software source.
+     * @since LibreOffice 3.7
+     */
+
+    void InstallRessources( [in] unsigned long xid, [in] sequence< string > types, [in] sequence< string > resources, [in] string interaction);
+
+    /**
+     * Removes sequence< string > packages that provide the given local sequence< string > files.
+     * @since LibreOffice 3.7
+     */
+
+    void RemovePackageByFiles( [in] unsigned long xid, [in] sequence< string > files, [in] string interaction);
+
+    /**
+     * Installs printer drivers from a configured software source.
+     * @since LibreOffice 3.7
+     */
+
+    void InstallPrinterDrivers( [in] unsigned long xid, [in] sequence< string > files, [in] string interaction);
+};
+
+} ; // PackageKit
+} ; // freedesktop
+} ; // org
+
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

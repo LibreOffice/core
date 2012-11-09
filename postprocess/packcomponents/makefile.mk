@@ -93,6 +93,7 @@ my_components = \
     component/sot/util/sot \
     component/starmath/util/sm \
     component/starmath/util/smd \
+    component/shell/source/sessioninstall/losessioninstall \
     component/svl/source/fsstor/fsstorage \
     component/svl/source/passwordcontainer/passwordcontainer \
     component/svl/util/svl \

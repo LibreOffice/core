@@ -1,0 +1,31 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef org_freedesktop_PackageKit_XSyncDbusSessionHelper_idl
+#define org_freedesktop_PackageKit_XSyncDbusSessionHelper_idl
+
+#include <org/freedesktop/PackageKit/XModify.idl>
+#include <org/freedesktop/PackageKit/XQuery.idl>
+
+module org {
+module freedesktop {
+module PackageKit {
+
+interface XSyncDbusSessionHelper
+{
+    interface XModify;
+    interface XQuery;
+};
+
+} ; // PackageKit
+} ; // freedesktop
+} ; // org
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

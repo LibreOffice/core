@@ -1,0 +1,48 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef org_freedesktop_PakageKit_XQuery_idl
+#define org_freedesktop_PakageKit_XQuery_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+
+module org
+{
+module freedesktop
+{
+module PackageKit
+{
+/**
+ *  The interface used for quering the package database.
+ */
+interface XQuery : com::sun::star::uno::XInterface
+{
+    /**
+     * Installs local package files or service packs.
+     * @since LibreOffice 3.7
+     */
+
+    void IsInstalled([in] string package_name, [in] string interaction, [out] boolean installed);
+
+    /**
+     * Installs packages to provide files.
+     * @since LibreOffice 3.7
+     */
+
+    void SearchFile([in] string file_name, [in] string interaction, [out] boolean installed, [out] string package_name);
+
+};
+
+} ; // PackageKit
+} ; // freedesktop
+} ; // org
+
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

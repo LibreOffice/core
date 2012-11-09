@@ -94,6 +94,7 @@ End
 #endif
 
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_Configmgr, configmgr.uno)
+SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_Losessioninstall, losessioninstall.uno )
 
 File gid_File_Lib_Ldapbe2
     LIB_FILE_BODY;

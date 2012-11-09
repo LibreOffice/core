@@ -558,6 +558,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     ldapbe2 \
     localebe1 \
     lomenubar \
+    losessioninstall \
     macbe1 \
     migrationoo2 \
     migrationoo3 \
