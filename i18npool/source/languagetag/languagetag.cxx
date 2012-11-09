@@ -298,15 +298,18 @@ bool LanguageTag::canonicalize() const
     if (!mpImplLangtag)
         mpImplLangtag = lt_tag_new();
 
-    lt_error_t *pError;
-
-    if (lt_tag_parse( MPLANGTAG, OUStringToOString( maBcp47, RTL_TEXTENCODING_UTF8).getStr(), &pError))
+    // ensure error is free'd
+    struct myerror
     {
-        char* pTag = lt_tag_canonicalize( MPLANGTAG, &pError);
-#if 0
-        SAL_WARN_IF( !pTag || lt_error_is_set(pError), "i18npool.langtag", "LanguageTag::canonicalize: could not canonicalize, " <<
-                (lt_error_is_set(pError) ? pError->message : ""));
-#endif
+        lt_error_t* p;
+        myerror() : p(NULL) {}
+        ~myerror() { if (p) lt_error_unref( p); }
+    } aError;
+
+    if (lt_tag_parse( MPLANGTAG, OUStringToOString( maBcp47, RTL_TEXTENCODING_UTF8).getStr(), &aError.p))
+    {
+        char* pTag = lt_tag_canonicalize( MPLANGTAG, &aError.p);
+        SAL_WARN_IF( !pTag, "i18npool.langtag", "LanguageTag::canonicalize: could not canonicalize " << maBcp47);
         if (pTag)
         {
             OUString aOld( maBcp47);
@@ -315,12 +318,9 @@ bool LanguageTag::canonicalize() const
             // removes default script and such.
             if (maBcp47 != aOld)
             {
-                if (!lt_tag_parse( MPLANGTAG, pTag, &pError))
+                if (!lt_tag_parse( MPLANGTAG, pTag, &aError.p))
                 {
-#if 0
-                    SAL_WARN( "i18npool.langtag", "LanguageTag::canonicalize: could not reparse, " <<
-                            (lt_error_is_set(pError) ? pError->message : ""));
-#endif
+                    SAL_WARN( "i18npool.langtag", "LanguageTag::canonicalize: could not reparse " << maBcp47);
                     free( pTag);
                     meIsValid = DECISION_NO;
                     return false;
@@ -333,12 +333,7 @@ bool LanguageTag::canonicalize() const
     }
     else
     {
-#if 0
-        SAL_INFO(
-            "i18npool.langtag",
-            "LanguageTag::canonicalize " << maBcp47 << ": could not parse, "
-                << (lt_error_is_set(pError) ? pError->message : ""));
-#endif
+        SAL_INFO( "i18npool.langtag", "LanguageTag::canonicalize: could not parse " << maBcp47);
     }
     meIsValid = DECISION_NO;
     return false;
