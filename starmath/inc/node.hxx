@@ -1091,6 +1091,8 @@ inline SmVerticalBraceNode::SmVerticalBraceNode(const SmToken &rNodeToken) :
  */
 class SmOperNode : public SmStructureNode
 {
+protected:
+    void   GetHeightVerOffset(const SmRect &rRect, long &rHeight, long &rVerOffset) const;
 public:
     SmOperNode(const SmToken &rNodeToken)
     :   SmStructureNode(NOPER, rNodeToken)
