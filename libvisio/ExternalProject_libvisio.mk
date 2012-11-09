@@ -56,14 +56,6 @@ else
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	cd $(EXTERNAL_WORKDIR) \
 	&& PKG_CONFIG="" \
-	WPD_CFLAGS=" $(WPD_CFLAGS)" \
-	WPD_LIBS=" $(WPD_LIBS)" \
-	WPG_CFLAGS=" $(WPG_CFLAGS)" \
-	WPG_LIBS=" $(WPG_LIBS)" \
-	LIBXML_CFLAGS=" $(LIBXML_CFLAGS)" \
-	LIBXML_LIBS=" $(LIBXML_LIBS)" \
-	ZLIB_CFLAGS=" $(ZLIB_CFLAGS)" \
-	ZLIB_LIBS=" $(ZLIB_LIBS)" \
 	./configure \
 		--with-pic \
 		--enable-static \
