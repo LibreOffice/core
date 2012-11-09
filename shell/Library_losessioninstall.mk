@@ -23,8 +23,6 @@ $(eval $(call gb_Library_use_libraries,losessioninstall,\
 	sal \
 ))
 
-ifeq ($(RTL_OS),Linux)
-ifeq ($(ENABLE_GIO),TRUE)
 $(eval $(call gb_Library_use_externals,losessioninstall,\
     dbus \
     gio \
@@ -34,7 +32,5 @@ $(eval $(call gb_Library_add_exception_objects,losessioninstall,\
 	shell/source/sessioninstall/SyncDbusSessionHelper \
 	shell/source/sessioninstall/services \
 ))
-endif
-endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

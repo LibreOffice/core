@@ -33,6 +33,8 @@ File gid_File_Lib_GIO
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(ucpgio1.uno,UNXSUFFIX));
 End
+
+SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_Losessioninstall, losessioninstall.uno)
 #endif
 
 #ifdef ENABLE_GNOMEVFS
