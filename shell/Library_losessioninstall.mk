@@ -21,7 +21,6 @@ $(eval $(call gb_Library_use_libraries,losessioninstall,\
 	cppu \
 	cppuhelper \
 	sal \
-	$(gb_STDLIBS) \
 ))
 
 ifeq ($(RTL_OS),Linux)
