@@ -3350,38 +3350,53 @@ dnl by our build system, but explicit override is possible.
 AC_MSG_CHECKING(for explicit CFLAGS)
 if test -n "$CFLAGS"; then
     AC_MSG_RESULT([$CFLAGS])
+    x_CFLAGS=
 else
     AC_MSG_RESULT(no)
+    x_CFLAGS=[\#]
 fi
 AC_MSG_CHECKING(for explicit CXXFLAGS)
 if test -n "$CXXFLAGS"; then
     AC_MSG_RESULT([$CXXFLAGS])
+    x_CXXFLAGS=
 else
     AC_MSG_RESULT(no)
+    x_CXXFLAGS=[\#]
 fi
 AC_MSG_CHECKING(for explicit OBJCFLAGS)
 if test -n "$OBJCFLAGS"; then
     AC_MSG_RESULT([$OBJCFLAGS])
+    x_OBJCFLAGS=
 else
     AC_MSG_RESULT(no)
+    x_OBJCFLAGS=[\#]
 fi
 AC_MSG_CHECKING(for explicit OBJCXXFLAGS)
 if test -n "$OBJCXXFLAGS"; then
     AC_MSG_RESULT([$OBJCXXFLAGS])
+    x_OBJCXXFLAGS=
 else
     AC_MSG_RESULT(no)
+    x_OBJCXXFLAGS=[\#]
 fi
 AC_MSG_CHECKING(for explicit LDFLAGS)
 if test -n "$LDFLAGS"; then
     AC_MSG_RESULT([$LDFLAGS])
+    x_LDFLAGS=
 else
     AC_MSG_RESULT(no)
+    x_LDFLAGS=[\#]
 fi
 AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)
 AC_SUBST(OBJCFLAGS)
 AC_SUBST(OBJCXXFLAGS)
 AC_SUBST(LDFLAGS)
+AC_SUBST(x_CFLAGS)
+AC_SUBST(x_CXXFLAGS)
+AC_SUBST(x_OBJCFLAGS)
+AC_SUBST(x_OBJCXXFLAGS)
+AC_SUBST(x_LDFLAGS)
 
 #
 # determine CPU, CPUNAME, GUI, GUIBASE, ...
