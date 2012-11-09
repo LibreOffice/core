@@ -93,7 +93,6 @@ my_components = \
     component/sot/util/sot \
     component/starmath/util/sm \
     component/starmath/util/smd \
-    component/shell/source/sessioninstall/losessioninstall \
     component/svl/source/fsstor/fsstorage \
     component/svl/source/passwordcontainer/passwordcontainer \
     component/svl/util/svl \
@@ -251,7 +250,9 @@ my_components += component/shell/source/backends/gconfbe/gconfbe1
 .END
 
 .IF "$(ENABLE_GIO)" != ""
-my_components += component/ucb/source/ucp/gio/ucpgio
+my_components += \
+    component/shell/source/sessioninstall/losessioninstall \
+    component/ucb/source/ucp/gio/ucpgio
 .END
 
 .IF "$(ENABLE_GNOMEVFS)" != ""
