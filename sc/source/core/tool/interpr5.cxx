@@ -453,7 +453,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
                     nGlobalError = 0;
                 }
 
-                if (nThisRow == nPrevRow + 1)
+                if (!aBucket.maNumVals.empty() && nThisRow == nPrevRow + 1)
                 {
                     // Secondary numbers.
                     aBucket.maNumVals.push_back(fVal);
@@ -475,7 +475,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
                 double fVal = CreateDoubleError( nGlobalError);
                 nGlobalError = 0;
 
-                if (nThisRow == nPrevRow + 1)
+                if (!aBucket.maNumVals.empty() && nThisRow == nPrevRow + 1)
                 {
                     // Secondary numbers.
                     aBucket.maNumVals.push_back(fVal);
@@ -490,7 +490,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
             }
             else
             {
-                if (nThisRow == nPrevRow + 1)
+                if (!aBucket.maStrVals.empty() && nThisRow == nPrevRow + 1)
                 {
                     // Secondary numbers.
                     aBucket.maStrVals.push_back(aStr);
