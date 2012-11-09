@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <accessibility/extended/textwindowaccessibility.hxx>
 #include "comphelper/accessibleeventnotifier.hxx"
 #include "unotools/accessiblerelationsethelper.hxx"
@@ -2124,18 +2123,19 @@ void Document::handleSelectionChangeNotification()
 
 void Document::notifySelectionChange( sal_Int32 nFirst, sal_Int32 nLast )
 {
-    if ( nFirst < nLast )
+    nFirst = std::max( nFirst, sal_Int32( 0 ) );
+    nLast = std::min( nLast, sal_Int32( m_xParagraphs->size() ) );
+    Paragraphs::iterator iFirst(m_xParagraphs->begin() + nFirst);
+    Paragraphs::iterator iLast(m_xParagraphs->begin() + nLast);
+    if ( iFirst < m_aVisibleBegin )
+        iFirst = m_aVisibleBegin;
+    if ( iLast > m_aVisibleEnd )
+        iLast = m_aVisibleEnd;
+    if ( iFirst < iLast )
     {
-        Paragraphs::iterator aItBound1 = m_xParagraphs->begin();
-        for (sal_Int32 i = 0; i < nLast  && aItBound1 !=  m_xParagraphs->end() ; ++aItBound1, ++i);
-        Paragraphs::iterator aEnd( ::std::min( aItBound1, m_aVisibleEnd ) );
-
-        Paragraphs::iterator aItBound2 = m_xParagraphs->begin();
-        for (sal_Int32 i = 0; i < nFirst && aItBound2 !=  m_xParagraphs->end() ; ++aItBound2, ++i);
-
-        for ( Paragraphs::iterator aIt = ::std::max( aItBound2, m_aVisibleBegin ); aIt != aEnd; ++aIt )
+        for ( Paragraphs::iterator i = iFirst; i != iLast; i++ )
         {
-            ::rtl::Reference< ParagraphImpl > xParagraph( getParagraph( aIt ) );
+            ::rtl::Reference< ParagraphImpl > xParagraph( getParagraph( i ) );
             if ( xParagraph.is() )
             {
                 xParagraph->notifyEvent(
