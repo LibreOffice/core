@@ -58,7 +58,7 @@
 +{
 +       lt_return_val_if_fail (v != NULL, 0);
 +
-+       return (int)InterlockedExchangeAdd((LONG*)v, 0);
++       return (int)InterlockedExchange((LONG*)v, (LONG)*v);
 +}
 +
 +LT_INLINE_FUNC int
@@ -66,7 +66,7 @@
 +{
 +       lt_return_val_if_fail (v != NULL, 0);
 +
-+       return (int)InterlockedExchangeAdd((LONG*)v, 1) + 1;
++       return (int)InterlockedIncrement((LONG*)v);
 +}
 +
 +lt_bool_t
@@ -74,7 +74,7 @@
 +{
 +       lt_return_val_if_fail (v != NULL, FALSE);
 +
-+       return 0 == (InterlockedExchangeAdd((LONG*)v, -1) - 1);
++       return !InterlockedDecrement((LONG*)v);
 +}
 +
 +
