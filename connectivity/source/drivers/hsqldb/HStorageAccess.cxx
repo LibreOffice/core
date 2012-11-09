@@ -44,7 +44,7 @@ using namespace ::connectivity::hsqldb;
  * Method:    openStream
  * Signature: (Ljava/lang/String;Ljava/lang/String;I)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_openStream
+SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_openStream
   (JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key, jint mode)
 {
 #ifdef HSQLDB_DBG
@@ -62,7 +62,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_o
  * Method:    close
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_close
+SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_close
   (JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key)
 {
 #ifdef HSQLDB_DBG
@@ -101,7 +101,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_c
  * Method:    getFilePointer
  * Signature: (Ljava/lang/String;Ljava/lang/String;)J
  */
-JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_getFilePointer
+SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_getFilePointer
   (JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key)
 {
 #ifdef HSQLDB_DBG
@@ -125,7 +125,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_
  * Method:    length
  * Signature: (Ljava/lang/String;Ljava/lang/String;)J
  */
-JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_length
+SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_length
   (JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key)
 {
 #ifdef HSQLDB_DBG
@@ -192,7 +192,7 @@ jint read_from_storage_stream( JNIEnv * env, jobject /*obj_this*/, jstring name,
  * Method:    read
  * Signature: (Ljava/lang/String;Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_read__Ljava_lang_String_2Ljava_lang_String_2
+SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_read__Ljava_lang_String_2Ljava_lang_String_2
   (JNIEnv* env, jobject obj_this, jstring name, jstring key)
 {
 #ifdef HSQLDB_DBG
@@ -265,7 +265,7 @@ jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,js
  * Method:    read
  * Signature: (Ljava/lang/String;Ljava/lang/String;[BII)I
  */
-JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_read__Ljava_lang_String_2Ljava_lang_String_2_3BII
+SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_read__Ljava_lang_String_2Ljava_lang_String_2_3BII
   (JNIEnv * env, jobject obj_this,jstring name, jstring key, jbyteArray buffer, jint off, jint len)
 {
 #ifdef HSQLDB_DBG
@@ -286,7 +286,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
  * Method:    readInt
  * Signature: (Ljava/lang/String;Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_readInt
+SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_readInt
   (JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key)
 {
 #ifdef HSQLDB_DBG
@@ -354,7 +354,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
  * Method:    seek
  * Signature: (Ljava/lang/String;Ljava/lang/String;J)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_seek
+SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_seek
   (JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key, jlong position)
 {
 #ifdef HSQLDB_DBG
@@ -466,7 +466,7 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
  * Method:    write
  * Signature: (Ljava/lang/String;Ljava/lang/String;[BII)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_write
+SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_write
   (JNIEnv * env, jobject obj_this,jstring name, jstring key, jbyteArray buffer, jint off, jint len)
 {
 #ifdef HSQLDB_DBG
@@ -525,7 +525,7 @@ void write_to_storage_stream( JNIEnv* env, jobject /*obj_this*/, jstring name, j
  * Method:    writeInt
  * Signature: (Ljava/lang/String;Ljava/lang/String;I)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_writeInt
+SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_writeInt
   (JNIEnv * env, jobject obj_this,jstring name, jstring key, jint v)
 {
 #ifdef HSQLDB_DBG
