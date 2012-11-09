@@ -107,7 +107,7 @@ XMLRedlineExport::~XMLRedlineExport()
     // delete changes lists
     for( ChangesMapType::iterator aIter = aChangeMap.begin();
          aIter != aChangeMap.end();
-         aIter++ )
+         ++aIter )
     {
         delete aIter->second;
     }
