@@ -19,6 +19,9 @@ public:
 
     virtual bool loadXMLStructure(
         const rtl::OUString& rPath, SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) const;
+
+    virtual bool importXML(
+        ScDocument& rDoc, const rtl::OUString& rPath, const ScOrcusImportXMLParam& rParam) const;
 };
 
 #endif

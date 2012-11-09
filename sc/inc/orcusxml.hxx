@@ -14,6 +14,7 @@
 #include "address.hxx"
 #include "vcl/image.hxx"
 
+#include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 class SvTreeListEntry;
@@ -48,6 +49,27 @@ struct ScOrcusXMLTreeParam
     UserDataStoreType maUserDataStore;
 
     static SC_DLLPUBLIC EntryData* getUserData(SvTreeListEntry& rEntry);
+    static SC_DLLPUBLIC const EntryData* getUserData(const SvTreeListEntry& rEntry);
+};
+
+struct ScOrcusImportXMLParam
+{
+    struct CellLink
+    {
+        ScAddress maPos;
+        rtl::OUString maPath;
+
+        CellLink(const ScAddress& rPos, const rtl::OUString& rPath);
+    };
+
+    struct RangeLink
+    {
+        ScAddress maPos;
+        std::vector<rtl::OUString> maFieldPaths;
+    };
+
+    std::vector<CellLink> maCellLinks;
+    std::vector<RangeLink> maRangeLinks;
 };
 
 #endif

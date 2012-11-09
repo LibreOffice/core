@@ -18,6 +18,7 @@
 
 #include "unotools/pathoptions.hxx"
 #include "tools/urlobj.hxx"
+#include "svtools/svlbitm.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -25,6 +26,35 @@
 
 using namespace com::sun::star;
 
+namespace {
+
+bool isAttribute(const SvTreeListEntry& rEntry)
+{
+    const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rEntry);
+    if (!pUserData)
+        return false;
+
+    return pUserData->meType == ScOrcusXMLTreeParam::Attribute;
+}
+
+OUString getXPath(const SvTreeListBox& rTree, const SvTreeListEntry& rEntry)
+{
+    OUStringBuffer aBuf;
+    for (SvTreeListEntry* p = const_cast<SvTreeListEntry*>(&rEntry); p; p = rTree.GetParent(p))
+    {
+        const SvLBoxItem* pItem = p->GetFirstItem(SV_ITEM_ID_LBOXSTRING);
+        if (!pItem)
+            continue;
+
+        const SvLBoxString* pStr = static_cast<const SvLBoxString*>(pItem);
+        aBuf.insert(0, pStr->GetText());
+        aBuf.insert(0, isAttribute(*p) ? '@' : '/');
+    }
+
+    return aBuf.makeStringAndClear();
+}
+
+}
 
 ScXMLSourceTree::ScXMLSourceTree(Window* pParent, const ResId& rResId) :
     SvTreeListBox(pParent, rResId) {}
@@ -69,6 +99,9 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     aLink = LINK(this, ScXMLSourceDlg, TreeItemSelectHdl);
     maLbTree.SetSelectHdl(aLink);
 
+    aLink = LINK(this, ScXMLSourceDlg, RefModifiedHdl);
+    maRefEdit.SetModifyHdl(aLink);
+
     SetNonLinkable();
 }
 
@@ -93,17 +126,7 @@ void ScXMLSourceDlg::SetReference(const ScRange& rRange, ScDocument* pDoc)
     rRange.aStart.Format(aStr, SCA_ABS_3D, pDoc, pDoc->GetAddressConvention());
     mpActiveEdit->SetRefString(aStr);
 
-    // Set this address to currently selected tree item.
-    SvTreeListEntry* pEntry = maLbTree.GetCurEntry();
-    if (!pEntry)
-        return;
-
-    ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pEntry);
-    if (!pUserData)
-        return;
-
-    pUserData->maLinkedPos = rRange.aStart;
-    pUserData->mbRangeParent = pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat;
+    fprintf(stdout, "ScXMLSourceDlg::SetReference:   ref str = '%s'\n", rtl::OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void ScXMLSourceDlg::Deactivate()
@@ -312,7 +335,7 @@ void ScXMLSourceDlg::AttributeSelected(SvTreeListEntry& rEntry)
         return;
     }
 
-    if (IsParentDirty(pParent))
+    if (IsParentDirty(&rEntry))
     {
         SetNonLinkable();
         return;
@@ -393,13 +416,87 @@ bool ScXMLSourceDlg::IsChildrenDirty(SvTreeListEntry* pEntry) const
 
 void ScXMLSourceDlg::OkPressed()
 {
-    // Store the xml link data to document.
+    // Begin import.
+
+    ScOrcusImportXMLParam aParam;
+
+    std::set<const SvTreeListEntry*>::const_iterator it = maCellLinks.begin(), itEnd = maCellLinks.end();
+    for (; it != itEnd; ++it)
+    {
+        const SvTreeListEntry& rEntry = **it;
+        OUString aPath = getXPath(maLbTree, rEntry);
+        const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rEntry);
+        ScAddress aPos = pUserData->maLinkedPos;
+
+        fprintf(stdout, "ScXMLSourceDlg::OkPressed:   linked to (col=%d,row=%d)  path = '%s'\n",
+                aPos.Col(), aPos.Row(), rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr());
+
+        aParam.maCellLinks.push_back(ScOrcusImportXMLParam::CellLink(aPos, aPath));
+    }
+
+    // TODO: Process range links.
+
     Close();
+
+    ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+    if (!pOrcus)
+        return;
+
+    pOrcus->importXML(*mpDoc, maSrcPath, aParam);
 }
 
 void ScXMLSourceDlg::CancelPressed()
 {
     Close();
+}
+
+void ScXMLSourceDlg::RefEditModified()
+{
+    OUString aRefStr = maRefEdit.GetText();
+
+    // Check if the address is valid.
+    ScAddress aLinkedPos;
+    sal_uInt16 nRes = aLinkedPos.Parse(aRefStr, mpDoc, mpDoc->GetAddressConvention());
+    bool bValid = (nRes & SCA_VALID) == SCA_VALID;
+    fprintf(stdout, "ScXMLSourceDlg::RefEditModified:   ref str = '%s'  valid = %d\n",
+            rtl::OUStringToOString(aRefStr, RTL_TEXTENCODING_UTF8).getStr(), bValid);
+
+    // TODO: For some unknown reason, setting the ref invalid will hide the text altogether.
+    // Find out how to make this work.
+//  maRefEdit.SetRefValid(bValid);
+
+    if (!bValid)
+        aLinkedPos.SetInvalid();
+
+    // Set this address to currently selected tree item.
+    SvTreeListEntry* pEntry = maLbTree.GetCurEntry();
+    if (!pEntry)
+        // This should never happen.
+        return;
+
+    ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pEntry);
+    if (!pUserData)
+        // This should never happen either.
+        return;
+
+    bool bRepeatElem = pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat;
+    pUserData->maLinkedPos = aLinkedPos;
+    pUserData->mbRangeParent = aLinkedPos.IsValid() && bRepeatElem;
+
+    if (bRepeatElem)
+    {
+        if (bValid)
+            maRangeLinks.insert(pEntry);
+        else
+            maRangeLinks.erase(pEntry);
+    }
+    else
+    {
+        if (bValid)
+            maCellLinks.insert(pEntry);
+        else
+            maCellLinks.erase(pEntry);
+    }
 }
 
 IMPL_LINK(ScXMLSourceDlg, GetFocusHdl, Control*, pCtrl)
@@ -428,6 +525,12 @@ IMPL_LINK(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn)
 IMPL_LINK_NOARG(ScXMLSourceDlg, TreeItemSelectHdl)
 {
     TreeItemSelected();
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScXMLSourceDlg, RefModifiedHdl)
+{
+    RefEditModified();
     return 0;
 }
 

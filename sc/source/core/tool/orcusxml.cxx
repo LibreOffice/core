@@ -19,4 +19,12 @@ ScOrcusXMLTreeParam::EntryData* ScOrcusXMLTreeParam::getUserData(SvTreeListEntry
     return static_cast<ScOrcusXMLTreeParam::EntryData*>(rEntry.GetUserData());
 }
 
+const ScOrcusXMLTreeParam::EntryData* ScOrcusXMLTreeParam::getUserData(const SvTreeListEntry& rEntry)
+{
+    return static_cast<const ScOrcusXMLTreeParam::EntryData*>(rEntry.GetUserData());
+}
+
+ScOrcusImportXMLParam::CellLink::CellLink(const ScAddress& rPos, const OUString& rPath) :
+    maPos(rPos), maPath(rPath) {}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

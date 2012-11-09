@@ -299,4 +299,10 @@ bool ScOrcusFiltersImpl::loadXMLStructure(
     return true;
 }
 
+bool ScOrcusFiltersImpl::importXML(
+    ScDocument& rDoc, const rtl::OUString& rPath, const ScOrcusImportXMLParam& rParam) const
+{
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

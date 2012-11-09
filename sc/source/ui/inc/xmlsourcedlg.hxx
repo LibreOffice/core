@@ -18,6 +18,7 @@
 #include "anyrefdg.hxx"
 #include "orcusxml.hxx"
 
+#include <set>
 #include <boost/scoped_ptr.hpp>
 
 class ScDocument;
@@ -51,6 +52,8 @@ class ScXMLSourceDlg : public ScAnyRefDlg
     rtl::OUString maSrcPath;
 
     ScOrcusXMLTreeParam maXMLParam;
+    std::set<const SvTreeListEntry*> maCellLinks;
+    std::set<const SvTreeListEntry*> maRangeLinks;
 
     ScDocument* mpDoc;
 
@@ -94,11 +97,13 @@ private:
 
     void OkPressed();
     void CancelPressed();
+    void RefEditModified();
 
     DECL_LINK(GetFocusHdl, Control*);
     DECL_LINK(LoseFocusHdl, Control*);
     DECL_LINK(BtnPressedHdl, Button*);
     DECL_LINK(TreeItemSelectHdl, void*);
+    DECL_LINK(RefModifiedHdl, void*);
 };
 
 #endif
