@@ -123,10 +123,7 @@ $(eval $(call gb_Library_add_defs,vclplug_gen,\
 endif
 
 $(eval $(call gb_Library_add_defs,vclplug_gen,\
-    $(if $(VALGRIND_CFLAGS), \
-        $(VALGRIND_CFLAGS) \
-        -DHAVE_MEMCHECK_H=1 \
-    ) \
+	$(VALGRIND_CFLAGS) \
 ))
 
 ## handle Xinerama

@@ -471,10 +471,7 @@ vcl_headless_code=\
     vcl/headless/svpvd
 
 $(eval $(call gb_Library_add_defs,vcl,\
-    $(if $(VALGRIND_CFLAGS), \
-        $(VALGRIND_CFLAGS) \
-        -DHAVE_MEMCHECK_H=1 \
-    ) \
+	$(VALGRIND_CFLAGS) \
 ))
 
 ifeq ($(GUIBASE),unx)

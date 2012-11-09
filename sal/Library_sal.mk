@@ -40,10 +40,7 @@ $(eval $(call gb_Library_set_include,sal,\
 ))
 
 $(eval $(call gb_Library_add_defs,sal,\
-	$(if $(VALGRIND_CFLAGS), \
-		$(VALGRIND_CFLAGS) \
-		-DHAVE_MEMCHECK_H=1 \
-	) \
+	$(VALGRIND_CFLAGS) \
 	$(if $(filter $(ALLOC),SYS_ALLOC TCMALLOC JEMALLOC), \
 		-DFORCE_SYSALLOC \
 	) \
