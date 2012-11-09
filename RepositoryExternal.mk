@@ -1527,11 +1527,13 @@ endef
 
 endif # SYSTEM_CURL
 
-ifneq ($(VALGRIND_CFLAGS),)
+# strip because of gb_SPACE
+ifneq ($(strip $(VALGRIND_CFLAGS)),)
 
 define gb_LinkTarget__use_valgrind
 $(call gb_LinkTarget_add_defs,$(1),\
-    -DHAVE_VALGRIND_H \
+	-DHAVE_VALGRIND_H \
+	-DHAVE_MEMCHECK_H \
 )
 
 $(call gb_LinkTarget_set_include,$(1),\

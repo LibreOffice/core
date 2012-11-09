@@ -56,6 +56,7 @@ $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	graphite \
 	icule \
 	icuuc \
+	valgrind \
 	Xrender \
 ))
 
@@ -121,10 +122,6 @@ $(eval $(call gb_Library_add_defs,vclplug_gen,\
     -DUSE_RANDR \
 ))
 endif
-
-$(eval $(call gb_Library_add_defs,vclplug_gen,\
-	$(VALGRIND_CFLAGS) \
-))
 
 ## handle Xinerama
 ifneq ($(USE_XINERAMA),NO)

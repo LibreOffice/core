@@ -40,7 +40,6 @@ $(eval $(call gb_Library_set_include,sal,\
 ))
 
 $(eval $(call gb_Library_add_defs,sal,\
-	$(VALGRIND_CFLAGS) \
 	$(if $(filter $(ALLOC),SYS_ALLOC TCMALLOC JEMALLOC), \
 		-DFORCE_SYSALLOC \
 	) \
@@ -58,6 +57,10 @@ $(eval $(call gb_Library_use_libraries,sal,\
 		lo-bootstrap \
 	) \
 	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_Library_use_externals,sal,\
+    valgrind \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,sal,\

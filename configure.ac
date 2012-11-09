@@ -5057,9 +5057,6 @@ if test "$cross_compiling" != "yes" -a -n "$ENABLE_DBGUTIL" -a \
         CPPFLAGS=$VALGRIND_CFLAGS
         AC_CHECK_HEADER([memcheck.h], [], [VALGRIND_CFLAGS=""])
     fi
-    if test -n "$VALGRIND_CFLAGS"; then
-        VALGRIND_CFLAGS="${VALGRIND_CFLAGS} -DHAVE_MEMCHECK_H=1"
-    fi
     CPPFLAGS=$prev_cppflags
 fi
 AC_SUBST([VALGRIND_CFLAGS])

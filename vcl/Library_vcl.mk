@@ -470,10 +470,6 @@ vcl_headless_code=\
     vcl/headless/svptext \
     vcl/headless/svpvd
 
-$(eval $(call gb_Library_add_defs,vcl,\
-	$(VALGRIND_CFLAGS) \
-))
-
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_defs,vcl,\
     -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
@@ -497,6 +493,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	dbus \
 	fontconfig \
 	freetype \
+	valgrind \
 	x11extensions \
 ))
 endif
