@@ -428,10 +428,9 @@ void ScXMLSourceDlg::OkPressed()
         const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rEntry);
         ScAddress aPos = pUserData->maLinkedPos;
 
-        fprintf(stdout, "ScXMLSourceDlg::OkPressed:   linked to (col=%d,row=%d)  path = '%s'\n",
-                aPos.Col(), aPos.Row(), rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr());
-
-        aParam.maCellLinks.push_back(ScOrcusImportXMLParam::CellLink(aPos, aPath));
+        aParam.maCellLinks.push_back(
+            ScOrcusImportXMLParam::CellLink(
+                aPos, rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8)));
     }
 
     // TODO: Process range links.

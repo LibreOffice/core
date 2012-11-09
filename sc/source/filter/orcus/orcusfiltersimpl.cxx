@@ -20,6 +20,7 @@
 #include <orcus/orcus_csv.hpp>
 #include <orcus/xml_structure_tree.hpp>
 #include <orcus/xml_namespace.hpp>
+#include <orcus/orcus_xml.hpp>
 #include <orcus/global.hpp>
 
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -35,6 +36,12 @@ using orcus::spreadsheet::formula_grammar_t;
 #endif
 
 namespace {
+
+OString toSystemPath(const OUString& rPath)
+{
+    INetURLObject aURL(rPath);
+    return rtl::OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8);
+}
 
 class ScOrcusSheet;
 
@@ -156,8 +163,7 @@ void ScOrcusSheet::set_value(row_t /*row*/, col_t /*col*/, double /*value*/)
 bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) const
 {
     ScOrcusFactory aFactory(rDoc);
-    INetURLObject aURL(rPath);
-    OString aSysPath = rtl::OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8);
+    OString aSysPath = toSystemPath(rPath);
     const char* path = aSysPath.getStr();
 
     try
@@ -262,8 +268,7 @@ bool ScOrcusFiltersImpl::loadXMLStructure(
 {
     rParam.maUserDataStore.clear();
 
-    INetURLObject aURL(rPath);
-    OString aSysPath = rtl::OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8);
+    OString aSysPath = toSystemPath(rPath);
     const char* path = aSysPath.getStr();
 
     // TODO: Use our own stream loading call instead of one from orcus.
@@ -302,6 +307,34 @@ bool ScOrcusFiltersImpl::loadXMLStructure(
 bool ScOrcusFiltersImpl::importXML(
     ScDocument& rDoc, const rtl::OUString& rPath, const ScOrcusImportXMLParam& rParam) const
 {
+    ScOrcusFactory aFactory(rDoc);
+    OString aSysPath = toSystemPath(rPath);
+    const char* path = aSysPath.getStr();
+    try
+    {
+        orcus::orcus_xml filter(&aFactory, NULL);
+
+        // Set cell links.
+        ScOrcusImportXMLParam::CellLinksType::const_iterator it = rParam.maCellLinks.begin();
+        ScOrcusImportXMLParam::CellLinksType::const_iterator itEnd = rParam.maCellLinks.end();
+
+        for (; it != itEnd; ++it)
+        {
+            const ScOrcusImportXMLParam::CellLink& rLink = *it;
+            OUString aTabName;
+            rDoc.GetName(rLink.maPos.Tab(), aTabName);
+            filter.set_cell_link(
+                rLink.maPath.getStr(),
+                rtl::OUStringToOString(aTabName, RTL_TEXTENCODING_UTF8).getStr(),
+                rLink.maPos.Row(), rLink.maPos.Col());
+        }
+
+        filter.read_file(path);
+    }
+    catch (const std::exception&)
+    {
+        return false;
+    }
     return true;
 }
 

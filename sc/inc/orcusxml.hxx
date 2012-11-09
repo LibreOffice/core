@@ -57,19 +57,22 @@ struct ScOrcusImportXMLParam
     struct CellLink
     {
         ScAddress maPos;
-        rtl::OUString maPath;
+        rtl::OString maPath;
 
-        CellLink(const ScAddress& rPos, const rtl::OUString& rPath);
+        CellLink(const ScAddress& rPos, const rtl::OString& rPath);
     };
 
     struct RangeLink
     {
         ScAddress maPos;
-        std::vector<rtl::OUString> maFieldPaths;
+        std::vector<rtl::OString> maFieldPaths;
     };
 
-    std::vector<CellLink> maCellLinks;
-    std::vector<RangeLink> maRangeLinks;
+    typedef std::vector<CellLink> CellLinksType;
+    typedef std::vector<RangeLink> RangeLinksType;
+
+    CellLinksType maCellLinks;
+    RangeLinksType maRangeLinks;
 };
 
 #endif

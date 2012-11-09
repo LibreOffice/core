@@ -24,7 +24,7 @@ const ScOrcusXMLTreeParam::EntryData* ScOrcusXMLTreeParam::getUserData(const SvT
     return static_cast<const ScOrcusXMLTreeParam::EntryData*>(rEntry.GetUserData());
 }
 
-ScOrcusImportXMLParam::CellLink::CellLink(const ScAddress& rPos, const OUString& rPath) :
+ScOrcusImportXMLParam::CellLink::CellLink(const ScAddress& rPos, const OString& rPath) :
     maPos(rPos), maPath(rPath) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
