@@ -1189,7 +1189,14 @@ $(call gb_LinkTarget_add_libs,$(1),$(LCMS2_LIBS))
 
 endef
 
+gb_ExternalProject__use_lcms2 :=
+
 else # !SYSTEM_LCMS2
+
+define gb_ExternalProject__use_lcms2
+$(call gb_ExternalProject_use_package,$(1),lcms2)
+
+endef
 
 ifeq ($(OS),ANDROID)
 
@@ -1224,11 +1231,6 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_use_libraries,$(1),\
 	lcms2 \
 )
-
-endef
-
-define gb_ExternalProject__use_lcms2
-$(call gb_ExternalProject_use_package,$(1),lcms2)
 
 endef
 
