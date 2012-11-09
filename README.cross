@@ -334,8 +334,8 @@ will probably drive you insane.
 
 You will also need the SDK as full "make" also builds a couple of
 Android apps (written in Java). Use the "android" tool from the SDK to
-install the SDK Tools, SDK Platform Tools, the API 14 SDK Platform,
-and the Android Support Library. (Hopefully that list is enough.)
+install the SDK Tools, SDK Platform Tools, the API 14 SDK Platform + ARM EABI
+v7a System Image, and the Android Support Library.
 
 Here is an autogen.lastrun for Android, when cross-compiling from Mac
 OS X 10.8 with Xcode 4.4.1:
