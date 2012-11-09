@@ -125,6 +125,7 @@ public:
     void testNamedRange();
     void testCSV();
     void testMatrix();
+    void testEnterMixedMatrix();
 
     /**
      * Basic test for pivot tables.
@@ -250,6 +251,7 @@ public:
     CPPUNIT_TEST(testNamedRange);
     CPPUNIT_TEST(testCSV);
     CPPUNIT_TEST(testMatrix);
+    CPPUNIT_TEST(testEnterMixedMatrix);
     CPPUNIT_TEST(testPivotTable);
     CPPUNIT_TEST(testPivotTableLabels);
     CPPUNIT_TEST(testPivotTableDateLabels);
@@ -1511,6 +1513,31 @@ void Test::testMatrix()
     pMat->PutString(aStr, 8, 2);
     pMat->PutEmptyPath(8, 11);
     checkMatrixElements<PartiallyFilledEmptyMatrix>(*pMat);
+}
+
+void Test::testEnterMixedMatrix()
+{
+    m_pDoc->InsertTab(0, "foo");
+
+    // Insert the source values in A1:B2.
+    m_pDoc->SetString(0, 0, 0, "A");
+    m_pDoc->SetString(1, 0, 0, "B");
+    double val = 1.0;
+    m_pDoc->SetValue(0, 1, 0, val);
+    val = 2.0;
+    m_pDoc->SetValue(1, 1, 0, val);
+
+    // Create a matrix range in A4:B5 referencing A1:B2.
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0, 3, 1, 4, aMark, "=A1:B2", NULL);
+
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,0,0), m_pDoc->GetString(0,3,0));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(1,0,0), m_pDoc->GetString(1,3,0));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(0,1,0), m_pDoc->GetValue(0,4,0));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(1,1,0), m_pDoc->GetValue(1,4,0));
+
+    m_pDoc->DeleteTab(0);
 }
 
 namespace {
