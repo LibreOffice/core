@@ -487,32 +487,28 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(LIBEXTTEXTCAT_CFLAGS) \
 )
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_LIBEXTTEXTCAT \
+)
 $(call gb_LinkTarget_add_libs,$(1),$(LIBEXTTEXTCAT_LIBS))
 
 endef
 
 else # !SYSTEM_LIBEXTTEXTCAT
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	libexttextcat \
-))
-else
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	exttextcat-1.0 \
+	exttextcat \
 ))
-endif
 
 define gb_LinkTarget__use_libexttextcat
-ifeq ($(OS),WNT)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	libexttextcat \
-)
-else
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	exttextcat-1.0 \
+	exttextcat \
 )
-endif
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,libexttextcat/src) \
+	$$(INCLUDE) \
+)
 
 endef
 

@@ -21,7 +21,11 @@
 #include <iostream>
 #include <string.h>
 
+#ifdef SYSTEM_LIBEXTEXTCAT
 #include <libexttextcat/textcat.h>
+#else
+#include <textcat.h>
+#endif
 #include <altstrfunc.hxx>
 #include <guess.hxx>
 
