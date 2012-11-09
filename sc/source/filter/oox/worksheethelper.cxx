@@ -1543,7 +1543,14 @@ void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rT
 {
     ScAddress aAddress;
     ScUnoConversion::FillScAddress( aAddress, rAddress );
-    getScDocument().SetString( aAddress.Col(), aAddress.Row(), aAddress.Tab(), rText );
+    ScBaseCell* pNewCell = NULL;
+    ScDocument& rDoc = getScDocument();
+    if ( !rText.isEmpty() )
+        pNewCell = ScBaseCell::CreateTextCell( rText, &rDoc );
+    if ( pNewCell )
+        rDoc.PutCell( aAddress, pNewCell );
+    else
+        rDoc.SetString( aAddress.Col(), aAddress.Row(), aAddress.Tab(), rText );
 }
 
 void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichString& rString, const Font* pFirstPortionFont ) const
