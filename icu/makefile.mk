@@ -190,7 +190,7 @@ OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicui18n.a \
     $(BUILD_DIR)$/lib$/libicule.a \
     $(BUILD_DIR)$/lib$/libicutu.a
-.ELIF "$(OS)"=="ANDROID" # The so far normal, non-DISABLE_DYNLOADING case for Android
+.ELIF "$(OS)"=="ANDROID" # The no longer normal, non-DISABLE_DYNLOADING case for Android
 BUILD_ACTION+= && cat uconfig.h.prepend common/unicode/uconfig.h >common/unicode/uconfig.h.new && mv common/unicode/uconfig.h.new common/unicode/uconfig.h
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudatalo.so \
