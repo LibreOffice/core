@@ -26,11 +26,20 @@
 #include "i18npool/lang.h"
 #include <com/sun/star/lang/Locale.hpp>
 
+// 0 := normal usage
+// 1 := force LanguageTag and make all conversion functions private to make the
+// compiler bail out
+#define I18NPOOL_FORCE_LANGUAGETAG 0
 
 /** Methods related to Microsoft language IDs. For details about MS-LANGIDs
     please see lang.h */
 class I18NISOLANG_DLLPUBLIC MsLangId
 {
+
+#if I18NPOOL_FORCE_LANGUAGETAG
+    friend class LanguageTag;
+#endif
+
 public:
 
     /// Create a LangID from a primary and a sublanguage.
@@ -84,6 +93,10 @@ public:
     static LanguageType getRealLanguage( LanguageType nLang );
 
 
+#if I18NPOOL_FORCE_LANGUAGETAG
+private:
+#endif
+
     /** @short: Convert a LanguageType to a Locale, resolving LANGUAGE_SYSTEM.
 
         @ATTENTION: A round trip convertLanguageToLocale(
@@ -136,12 +149,22 @@ public:
             const ::com::sun::star::lang::Locale & rLocale );
 
 
+#if I18NPOOL_FORCE_LANGUAGETAG
+public:
+#endif
+    // TODO: refactor to LanguageTag? Used only in
+    // i18npool/source/localedata/localedata.cxx
+
     /** Get fall-back Locale for Locale with handling of an empty language name
         designating the SYSTEM language. Returns the same Locale if an exact
         match was found.
       */
     static ::com::sun::star::lang::Locale getFallbackLocale(
             const ::com::sun::star::lang::Locale & rLocale );
+
+#if I18NPOOL_FORCE_LANGUAGETAG
+private:
+#endif
 
     // -----------------------------
     // - ConvertLanguageToIsoNames -
@@ -166,8 +189,23 @@ public:
             const rtl::OString& rCountry );
     static LanguageType convertIsoStringToLanguage(
             const rtl::OUString& rString, sal_Unicode cSep = '-' );
-    static LanguageType convertUnxByteStringToLanguage(
-            const rtl::OString& rString );
+
+#if I18NPOOL_FORCE_LANGUAGETAG
+public:
+#endif
+    // TODO: refactor to LanguageTag, used only in
+    // i18npool/source/isolang/inunx.cxx to convert Unix locale string
+
+    static LanguageType convertUnxByteStringToLanguage( const rtl::OString& rString );
+
+#if I18NPOOL_FORCE_LANGUAGETAG
+private:
+#endif
+
+
+#if I18NPOOL_FORCE_LANGUAGETAG
+public:
+#endif
 
     static LanguageType resolveSystemLanguageByScriptType( LanguageType nLang, sal_Int16 nType );
 
