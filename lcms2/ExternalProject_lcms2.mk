@@ -25,7 +25,7 @@ $(call gb_ExternalProject_get_state_target,lcms2,build):
 	&& touch $@
 else
 $(call gb_ExternalProject_get_state_target,lcms2,build):
-	cd $(EXTERNAL_WORKDIR)/VC2008/lcms2_DLL \
+	cd $(EXTERNAL_WORKDIR)/Projects/VC2008/lcms2_DLL \
 	&& $(COMPATH)/vcpackages/vcbuild.exe lcms2_DLL.vcproj "Release|Win32" \
 	&& touch $@
 endif
