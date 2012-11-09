@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQX///5c\u003d",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3097,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-11-09T15:03:33Z",
+      "side": 0,
+      "message": "Intead, move the declaration from here ...",
+      "revId": "2f0b0e54f45cd9694d07d9e0399cd39bc465c09e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQX///5Y\u003d",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3106,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-11-09T15:03:33Z",
+      "side": 0,
+      "message": "... to here.",
+      "revId": "2f0b0e54f45cd9694d07d9e0399cd39bc465c09e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQX///5U\u003d",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5100,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-11-09T15:03:33Z",
+      "side": 0,
+      "message": "Actually this line should be moved from here ...",
+      "revId": "2f0b0e54f45cd9694d07d9e0399cd39bc465c09e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQX///5Q\u003d",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5102,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-11-09T15:03:33Z",
+      "side": 0,
+      "message": "... to here.",
+      "revId": "2f0b0e54f45cd9694d07d9e0399cd39bc465c09e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
