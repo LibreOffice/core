@@ -7489,15 +7489,13 @@ if test "$with_system_db" = "yes"; then
     SYSTEM_DB_CFLAGS="-DSYSTEM_DB_HEADER='<$db_header>'"
 
     DB_LIB=
-    dnl At least on OpenBSD dbver is not appended to the library
-    if test "$_os" = "OpenBSD"; then
-        dbver=''
-    fi
-    for dash in - ''; do
-        AC_CHECK_LIB(db$dash$dbver, dbopen,
-            [ DB_LIB="db$dash$dbver"; DB_CPPLIB="db_cxx$dash$dbver"; break ])
-        AC_CHECK_LIB(db$dash$dbver, __db185_open,
-            [ DB_LIB="db$dash$dbver"; DB_CPPLIB="db_cxx$dash$dbver"; break ])
+    dnl At least on OpenBSD and RHEL-6 dbver is not appended to the library
+    dnl even though the headers are in a versioned dir
+    for suffix in '' '-$dbver' '$dbver' ''; do
+        AC_CHECK_LIB(db$suffix, dbopen,
+            [ DB_LIB="db$suffix"; DB_CPPLIB="db_cxx$suffix"; break ])
+        AC_CHECK_LIB(db$suffix, __db185_open,
+            [ DB_LIB="db$suffix"; DB_CPPLIB="db_cxx$suffix"; break ])
     done
 
     if test -z "$DB_LIB"; then
