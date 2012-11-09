@@ -34,7 +34,7 @@ $(call gb_ExternalProject_get_state_target,lcms2,build):
 	cd $(EXTERNAL_WORKDIR) \
 	&& ./configure --without-jpeg --without-tiff --with-pic \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	$(if $(filter WNTGCC,$(OS)$(COM)),LDFLAGS="-Wl,--export-all-symbols -Wl,--enable-stdcall-fixup -Wl,--enable-runtime-pseudo-reloc-v2") \
+	$(if $(filter-out WNTGCC,$(OS)$(COM)),,LDFLAGS="-Wl,--export-all-symbols -Wl,--enable-stdcall-fixup -Wl,--enable-runtime-pseudo-reloc-v2") \
 	CPPFLAGS=" $(SOLARINC)" \
 	$(if $(filter IOS ANDROID,$(OS)),--disable-shared, --enable-shared --disable-static) \
 	&& cd src \
