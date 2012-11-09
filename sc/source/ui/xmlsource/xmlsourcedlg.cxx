@@ -436,13 +436,13 @@ void ScXMLSourceDlg::OkPressed()
 
     // TODO: Process range links.
 
-    Close();
-
     ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
     if (!pOrcus)
         return;
 
     pOrcus->importXML(*mpDoc, maSrcPath, aParam);
+
+    Close();
 }
 
 void ScXMLSourceDlg::CancelPressed()
