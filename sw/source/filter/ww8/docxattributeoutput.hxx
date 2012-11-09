@@ -300,9 +300,14 @@ private:
     /// @see InitCollectedRunProperies(), WriteCollectedParagraphProperties()
     void WriteCollectedRunProperties();
 
-    /// Output graphic fly frames.
-    void FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize );
-    void WriteOLE2Obj( const SdrObject* pSdrObj, const SwOLENode& rNode, const Size& rSize );
+    /// Output graphic fly frames or replacement graphics for OLE nodes.
+    ///
+    /// For graphic frames, just use the first two parameters, for OLE
+    /// replacement graphics, set the first as 0, and pass the remaining three.
+    ///
+    /// @see WriteOLE2Obj()
+    void FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt = 0, SwOLENode* pOLENode = 0);
+    void WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rNode, const Size& rSize, const SwFlyFrmFmt* pFlyFrmFmt);
     bool WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize );
     bool WriteOLEMath( const SdrObject* pSdrObj, const SwOLENode& rNode, const Size& rSize );
 
