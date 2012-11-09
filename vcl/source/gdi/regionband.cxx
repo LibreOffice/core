@@ -1364,7 +1364,7 @@ const char* ImplDbgTestRegionBand(const void* pObj)
                     }
                 }
 
-                if ( pSep->mbRemoved > 1 )
+                if ( pSep->mbRemoved )
                 {
                     return "Sep-mbRemoved overwrite";
                 }
