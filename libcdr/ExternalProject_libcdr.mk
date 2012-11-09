@@ -57,12 +57,6 @@ else
 $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	cd $(EXTERNAL_WORKDIR) \
 	&& PKG_CONFIG="" \
-	$(if $(filter YES,$(SYSTEM_LCMS2)),\
-	LCMS2_CFLAGS=" $(LCMS2_CFLAGS)" \
-	LCMS2_LIBS=" $(LCMS2_LIBS)", \
-	LCMS2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,lcms2/include) \
-	$(if $(filter MACOSX,$(OS)),-Wno-long-long)" \
-	LCMS2_LIBS="-L$(OUTDIR)/lib -llcms2" ) \
 	./configure \
 		--with-pic \
 		--enable-static \

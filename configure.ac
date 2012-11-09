@@ -7014,6 +7014,11 @@ if test "$with_system_lcms2" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LCMS2=NO
+    LCMS2_LIBS="-L${OUTDIR}/lib -llcms2"
+    LCMS2_CFLAGS="-I${WORKDIR}/UnpackedTarball/lcms2/include"
+    if test "$GCC" = "yes"; then
+        LCMS2_CFLAGS="${LCMS2_CFLAGS} -Wno-long-long"
+    fi
     LCMS2_TARBALL="861ef15fa0bc018f9ddc932c4ad8b6dd-lcms2-2.4.tar.gz"
     BUILD_TYPE="$BUILD_TYPE LCMS2"
 fi
