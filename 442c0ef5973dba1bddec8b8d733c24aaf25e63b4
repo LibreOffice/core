@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQX///5w\u003d",
+        "filename": "sc/source/ui/dbgui/tpsubt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-11-09T14:53:35Z",
+      "side": 0,
+      "message": "I\u0027d rather move the declaration from here ...",
+      "revId": "442c0ef5973dba1bddec8b8d733c24aaf25e63b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQX///5s\u003d",
+        "filename": "sc/source/ui/dbgui/tpsubt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-11-09T14:53:35Z",
+      "side": 0,
+      "message": "... to here, and keep the initialization out of the loop, this way it\u0027s made clear that the variable will be used after the loop.",
+      "revId": "442c0ef5973dba1bddec8b8d733c24aaf25e63b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
