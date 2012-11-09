@@ -984,7 +984,7 @@ void DocxAttributeOutput::WritePostponedGraphic()
     for( std::list< PostponedGraphic >::const_iterator it = m_postponedGraphic->begin();
          it != m_postponedGraphic->end();
          ++it )
-        FlyFrameGraphic( *( it->grfNode ), it->size );
+        FlyFrameGraphic( it->grfNode, it->size );
     delete m_postponedGraphic;
     m_postponedGraphic = NULL;
 }
@@ -1988,17 +1988,18 @@ void DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )
 #endif
 }
 
-void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize )
+void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode )
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize ) - some stuff still missing" );
+    OSL_TRACE( "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode ) - some stuff still missing" );
+    const SwFrmFmt* pFrmFmt = pGrfNode ? pGrfNode->GetFlyFmt() : pOLEFrmFmt;
     // create the relation ID
     OString aRelId;
     sal_Int32 nImageType;
-    if ( rGrfNode.IsLinkedFile() )
+    if ( pGrfNode && pGrfNode->IsLinkedFile() )
     {
         // linked image, just create the relation
         String aFileName;
-        rGrfNode.GetFileFilterNms( &aFileName, 0 );
+        pGrfNode->GetFileFilterNms( &aFileName, 0 );
 
         // TODO Convert the file name to relative for better interoperability
 
@@ -2011,10 +2012,14 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
     else
     {
         // inline, we also have to write the image itself
-        Graphic& rGraphic = const_cast< Graphic& >( rGrfNode.GetGrf() );
+        Graphic* pGraphic = 0;
+        if (pGrfNode)
+            pGraphic = &const_cast< Graphic& >( pGrfNode->GetGrf() );
+        else
+            pGraphic = pOLENode->GetGraphic();
 
         m_rDrawingML.SetFS( m_pSerializer ); // to be sure that we write to the right stream
-        OUString aImageId = m_rDrawingML.WriteImage( rGraphic );
+        OUString aImageId = m_rDrawingML.WriteImage( *pGraphic );
 
         aRelId = OUStringToOString( aImageId, RTL_TEXTENCODING_UTF8 );
 
@@ -2026,11 +2031,11 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
 
     m_pSerializer->startElementNS( XML_w, XML_drawing,
             FSEND );
-    bool isAnchor = rGrfNode.GetFlyFmt()->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
+    bool isAnchor = pFrmFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
     if( isAnchor )
     {
         ::sax_fastparser::FastAttributeList* attrList = m_pSerializer->createAttrList();
-        attrList->add( XML_behindDoc, rGrfNode.GetFlyFmt()->GetOpaque().GetValue() ? "0" : "1" );
+        attrList->add( XML_behindDoc, pFrmFmt->GetOpaque().GetValue() ? "0" : "1" );
         attrList->add( XML_distT, "0" );
         attrList->add( XML_distB, "0" );
         attrList->add( XML_distL, "0" );
@@ -2039,13 +2044,13 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
         attrList->add( XML_locked, "0" );
         attrList->add( XML_layoutInCell, "1" );
         attrList->add( XML_allowOverlap, "1" ); // TODO
-        if( const SdrObject* pObj = rGrfNode.GetFlyFmt()->FindRealSdrObject())
+        if( const SdrObject* pObj = pFrmFmt->FindRealSdrObject())
             attrList->add( XML_relativeHeight, OString::valueOf( sal_Int32( pObj->GetOrdNum())));
         m_pSerializer->startElementNS( XML_wp, XML_anchor, XFastAttributeListRef( attrList ));
         m_pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND ); // required, unused
         const char* relativeFromH;
         const char* relativeFromV;
-        switch( rGrfNode.GetFlyFmt()->GetAnchor().GetAnchorId())
+        switch( pFrmFmt->GetAnchor().GetAnchorId())
         {
             case FLY_AT_PAGE:
                 relativeFromV = relativeFromH = "page";
@@ -2061,7 +2066,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
                 break;
         };
         Point pos( 0, 0 );
-        if( SwFlyFrmFmt* flyfmt = dynamic_cast<SwFlyFrmFmt*>(rGrfNode.GetFlyFmt())) // TODO is always true?
+        if( const SwFlyFrmFmt* flyfmt = dynamic_cast<const SwFlyFrmFmt*>(pFrmFmt)) // TODO is always true?
             pos = flyfmt->GetAnchoredObj()->GetCurrRelPos();
         OString x( OString::valueOf( TwipsToEMU( pos.X())));
         OString y( OString::valueOf( TwipsToEMU( pos.Y())));
@@ -2097,7 +2102,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
 
     if( isAnchor )
     {
-        switch( rGrfNode.GetFlyFmt()->GetSurround().GetValue())
+        switch( pFrmFmt->GetSurround().GetValue())
         {
             case SURROUND_NONE:
                 m_pSerializer->singleElementNS( XML_wp, XML_wrapTopAndBottom, FSEND );
@@ -2120,9 +2125,9 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
     ::sax_fastparser::FastAttributeList* docPrattrList = m_pSerializer->createAttrList();
     docPrattrList->add( XML_id, OString::valueOf( sal_Int32( m_anchorId++ )).getStr());
     docPrattrList->add( XML_name, "Picture" );
-    docPrattrList->add( XML_descr, OUStringToOString( rGrfNode.GetDescription(), RTL_TEXTENCODING_UTF8 ).getStr());
+    docPrattrList->add( XML_descr, OUStringToOString( pGrfNode ? pGrfNode->GetDescription() : pOLEFrmFmt->GetObjDescription(), RTL_TEXTENCODING_UTF8 ).getStr());
     if( GetExport().GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )
-        docPrattrList->add( XML_title, OUStringToOString( rGrfNode.GetTitle(), RTL_TEXTENCODING_UTF8 ).getStr());
+        docPrattrList->add( XML_title, OUStringToOString( pGrfNode ? pGrfNode->GetTitle() : pOLEFrmFmt->GetObjTitle(), RTL_TEXTENCODING_UTF8 ).getStr());
     XFastAttributeListRef docPrAttrListRef( docPrattrList );
     m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrAttrListRef );
     // TODO hyperlink
@@ -2224,7 +2229,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
     m_pSerializer->endElementNS( XML_a, XML_ln );
 
     // Output effects
-    SvxShadowItem aShadowItem = rGrfNode.GetFlyFmt()->GetShadow();
+    SvxShadowItem aShadowItem = pFrmFmt->GetShadow();
     if ( aShadowItem.GetLocation() != SVX_SHADOW_NONE )
     {
         // Distance is measured diagonally from corner
@@ -2265,12 +2270,14 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
     m_pSerializer->endElementNS( XML_w, XML_drawing );
 }
 
-void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, const SwOLENode& rOLENode, const Size& rSize )
+void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOLENode, const Size& rSize, const SwFlyFrmFmt* pFlyFrmFmt )
 {
     if( WriteOLEChart( pSdrObj, rSize ))
         return;
     if( WriteOLEMath( pSdrObj, rOLENode, rSize ))
         return;
+    // Then we fall back to just export the object as a graphic.
+    FlyFrameGraphic( 0, rSize, pFlyFrmFmt, &rOLENode );
 }
 
 bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize )
@@ -2391,7 +2398,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 if ( pGrfNode )
                 {
                     if( m_postponedGraphic == NULL )
-                        FlyFrameGraphic( *pGrfNode, rFrame.GetLayoutSize() );
+                        FlyFrameGraphic( pGrfNode, rFrame.GetLayoutSize() );
                     else // we are writting out attributes, but w:drawing should not be inside w:rPr,
                     {    // so write it out later
                         m_postponedGraphic->push_back( PostponedGraphic( pGrfNode, rFrame.GetLayoutSize()));
@@ -2443,7 +2450,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 {
                     SwNodeIndex aIdx(*rFrmFmt.GetCntnt().GetCntntIdx(), 1);
                     SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
-                    WriteOLE2Obj( pSdrObj, rOLENd, rFrame.GetLayoutSize() );
+                    WriteOLE2Obj( pSdrObj, rOLENd, rFrame.GetLayoutSize(), dynamic_cast<const SwFlyFrmFmt*>( &rFrmFmt ));
                 }
             }
             break;

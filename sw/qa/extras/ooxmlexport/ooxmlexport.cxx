@@ -65,6 +65,7 @@ public:
     void testTablePosition();
     void testFdo47669();
     void testTableBorders();
+    void testFdo51550();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -101,6 +102,7 @@ void Test::run()
         {"table-position.docx", &Test::testTablePosition},
         {"fdo47669.docx", &Test::testFdo47669},
         {"table-borders.docx", &Test::testTableBorders},
+        {"fdo51550.odt", &Test::testFdo51550},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -470,6 +472,14 @@ void Test::testTableBorders() {
             }
         }
     }
+}
+
+void Test::testFdo51550()
+{
+    // The problem was that we lacked the fallback to export the replacement graphic for OLE objects.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
