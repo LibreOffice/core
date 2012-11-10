@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQX///4c\u003d",
+        "filename": "sw/source/ui/uiview/viewsrch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-10T08:41:07Z",
+      "side": 1,
+      "message": "do not use String, but OUString\nand use replaceFirst()\n\nso \nOUString aText(....);\naText\u003daText.replaceFirst(\"XX\",OUString::valueOf((sal_Int32)nFound));",
+      "revId": "60109341b0a6bd283d9bf8e04406b63745dca49d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQX///4Y\u003d",
+        "filename": "sw/source/ui/uiview/viewsrch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-10T08:41:07Z",
+      "side": 1,
+      "message": "trailing spaces ?",
+      "revId": "60109341b0a6bd283d9bf8e04406b63745dca49d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
