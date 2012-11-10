@@ -44,7 +44,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	$(call gb_Helper_optional,BSH,beanshell) \
 	binaryurp \
 	$(call gb_Helper_optional,BLUEZ,bluez_bluetooth) \
-	boost \
+	$(call gb_Helper_optional,BOOST,boost) \
 	bridges \
 	canvas \
 	chart2 \
@@ -109,7 +109,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
 	libmspub \
 	liborcus \
-	libpng \
+	$(call gb_Helper_optional,LIBPNG,libpng) \
 	librelogo \
 	libvisio \
 	libwpd \
@@ -169,6 +169,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	starmath \
 	stoc \
 	store \
+	svgio \
 	svl \
 	svtools \
 	svx \
