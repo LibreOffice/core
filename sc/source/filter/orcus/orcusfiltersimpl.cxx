@@ -113,11 +113,8 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* s
     OUString aTabName(sheet_name, sheet_name_length, RTL_TEXTENCODING_UTF8);
     SCTAB nTab = -1;
     if (!mrDoc.GetTable(aTabName, nTab))
-    {
         // Sheet by that name not found.
-        fprintf(stdout, "ScOrcusFactory::get_sheet:   no such sheet!!! (%s)\n", rtl::OUStringToOString(aTabName, RTL_TEXTENCODING_UTF8).getStr());
         return NULL;
-    }
 
     // See if we already have an orcus sheet instance by that index.
     boost::ptr_vector<ScOrcusSheet>::iterator it =
@@ -349,7 +346,6 @@ public:
     InsertFieldPath(orcus::orcus_xml& rFilter) : mrFilter(rFilter) {}
     void operator() (const OString& rPath)
     {
-        fprintf(stdout, "InsertFieldPath::():   field path = '%s'\n", rPath.getStr());
         mrFilter.append_field_link(rPath.getStr());
     }
 };

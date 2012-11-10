@@ -125,8 +125,6 @@ void ScXMLSourceDlg::SetReference(const ScRange& rRange, ScDocument* pDoc)
     OUString aStr;
     rRange.aStart.Format(aStr, SCA_ABS_3D, pDoc, pDoc->GetAddressConvention());
     mpActiveEdit->SetRefString(aStr);
-
-    fprintf(stdout, "ScXMLSourceDlg::SetReference:   ref str = '%s'\n", rtl::OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void ScXMLSourceDlg::Deactivate()
@@ -431,9 +429,8 @@ void getFieldLinks(ScOrcusImportXMLParam::RangeLink& rRangeLink, const SvTreeLis
     {
         const SvTreeListEntry& rChild = *it;
         OUString aPath = getXPath(rTree, rChild);
-
         const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rChild);
-        fprintf(stdout, "getFieldLinks:   path = '%s'  leaf = %d\n", rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr(), pUserData->mbLeafNode);
+
         if (pUserData && pUserData->mbLeafNode)
         {
             if (!aPath.isEmpty())
@@ -510,8 +507,6 @@ void ScXMLSourceDlg::RefEditModified()
     ScAddress aLinkedPos;
     sal_uInt16 nRes = aLinkedPos.Parse(aRefStr, mpDoc, mpDoc->GetAddressConvention());
     bool bValid = (nRes & SCA_VALID) == SCA_VALID;
-    fprintf(stdout, "ScXMLSourceDlg::RefEditModified:   ref str = '%s'  valid = %d\n",
-            rtl::OUStringToOString(aRefStr, RTL_TEXTENCODING_UTF8).getStr(), bValid);
 
     // TODO: For some unknown reason, setting the ref invalid will hide the text altogether.
     // Find out how to make this work.
