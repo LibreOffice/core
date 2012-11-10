@@ -145,6 +145,10 @@ String STR_NB_REPLACED
 {
     Text [ en-US ] = "Search key replaced XX times." ;
 };
+String STR_NB_FINDALL
+{
+    Text [ en-US ] = "There are XX words found." ;
+};
 String RID_TOOLS_TOOLBOX
 {
     Text [ en-US ] = "Main Toolbar" ;
