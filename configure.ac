@@ -9836,8 +9836,8 @@ if test "x$enable_ext_pdfimport" != "xno" -a "x$enable_extension_integration" !=
   else
       AC_MSG_RESULT([internal])
       SYSTEM_POPPLER=NO
-      XPDF_TARBALL="599dc4cc65a07ee868cf92a667a913d2-xpdf-3.02.tar.gz"
-      BUILD_TYPE="$BUILD_TYPE XPDF"
+      POPPLER_TARBALL="8a80ae83eb7a327b031808d09ee1d54d-poppler-0.20.5.tar.gz"
+      BUILD_TYPE="$BUILD_TYPE POPPLER"
   fi
 else
   AC_MSG_RESULT([no])
@@ -9848,7 +9848,7 @@ AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
-AC_SUBST(XPDF_TARBALL)
+AC_SUBST(POPPLER_TARBALL)
 
 
 if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$ENABLE_PDFIMPORT" = "YES"; then
@@ -11422,7 +11422,7 @@ dnl Test whether to build cairo or rely on the system version
 dnl ===================================================================
 
 
-SYSTEM_CAIRO=""
+SYSTEM_CAIRO="NO"
 
 if test "$test_cairo" = "yes" ; then
     AC_MSG_CHECKING([whether to use the system cairo])
