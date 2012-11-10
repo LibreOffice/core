@@ -17,8 +17,8 @@
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::comphelper;
-using namespace ::std;;
-using namespace ::rtl;;
+using namespace ::std;
+using namespace ::rtl;
 
 namespace
 {
@@ -29,7 +29,7 @@ namespace
     {
         GError* m_pError;
         public:
-            GErrorWrapper(GError* pError) : m_pError(pError) {};
+            GErrorWrapper(GError* pError) : m_pError(pError) {}
             ~GErrorWrapper()
             {
                 if(!m_pError)
@@ -55,7 +55,7 @@ namespace
         if(!proxy)
             throw RuntimeException(OUString("couldnt get a proxy!"),NULL);
         return proxy;
-    };
+    }
 }
 
 namespace shell { namespace sessioninstall
