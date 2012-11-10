@@ -744,43 +744,27 @@ $(call gb_LinkTarget_add_libs,$(1),$(CAIRO_LIBS))
 
 endef
 
-else # !SYSTEM_CAIRO
+else ifeq ($(SYSTEM_CAIRO),NO)
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	cairo \
+	$(if $(filter-out MACOSX WNT,$(OS)), \
+		pixman-1 \
+	) \
 ))
-ifneq ($(OS),WNT)
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	pixman-1 \
-))
-else
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	pixman-1 \
-))
-endif # MACOSX
-endif # WNT
 
 define gb_LinkTarget__use_cairo
 $(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/cairo \
+	-I$(call gb_UnpackedTarball_get_dir,cairo)/src \
 	$(FREETYPE_CFLAGS) \
+	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_libraries,$(1),\
 	cairo \
+	$(if $(filter-out MACOSX WNT,$(OS)), \
+		pixman-1 \
+	) \
 )
-ifneq ($(OS),WNT)
-ifeq ($(OS),MACOSX)
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	pixman-1 \
-)
-else
-$(call gb_LinkTarget_use_libraries,$(1),\
-	pixman-1 \
-)
-endif
-endif
 
 endef
 

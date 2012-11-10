@@ -106,7 +106,6 @@ gb_Library_DLLFILENAMES := $(patsubst ssl:ssl%,ssl:ssleay32%,$(gb_Library_DLLFIL
 
 else # $(COM) != GCC
 
-gb_Library_FILENAMES := $(patsubst cairo:icairo%,cairo:cairo%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst croco-0.6-3:icroco-0.6-3%,croco-0.6-3:libcroco-0.6-3%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppunit:icppunit%,cppunit:icppunit_dll%,$(gb_Library_FILENAMES))

@@ -42,6 +42,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	binaryurp \
 	$(call gb_Helper_optional,BLUEZ,bluez_bluetooth) \
 	bridges \
+	$(call gb_Helper_optional,CAIRO,cairo) \
 	canvas \
 	chart2 \
 	cli_ure \

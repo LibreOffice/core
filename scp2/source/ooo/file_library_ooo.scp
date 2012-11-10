@@ -601,11 +601,7 @@ File gid_File_Lib_Pixman
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
-    #ifdef MACOSX
-       Name = "libpixman-1.a";
-    #else
        Name = STRING(CONCAT3(libpixman-1,UNXSUFFIX,.0));
-    #endif
   #endif
 End
 

@@ -253,7 +253,7 @@ test_xrender=yes
 test_cups=yes
 test_dbus=yes
 test_fontconfig=yes
-test_cairo=yes
+test_cairo=no
 
 # Default values, as such probably valid just for Linux, set
 # differently below just for Mac OSX,but at least better than
@@ -4290,7 +4290,7 @@ if test "$enable_headless" = "yes"; then
     test_kde=no
     test_kde4=no
     test_unix_quickstarter=no
-    test_cairo=no
+    enable_cairo_canvas=no
     enable_gnome_vfs=no
 fi
 
@@ -9425,6 +9425,7 @@ if test $_os = Darwin -o $_os = iOS -o $_os = Android -o "$enable_headless" = "y
 fi
 ENABLE_GTK=""
 if test "x$enable_gtk" = "xyes"; then
+    test_cairo=yes
     ENABLE_GTK="TRUE"
     R="gtk $R"
 fi
@@ -9698,7 +9699,8 @@ elif test -z "$enable_cairo_canvas"; then
 fi
 
 ENABLE_CAIRO_CANVAS=""
-if test "$test_cairo" = "yes" -a "$enable_cairo_canvas" = "yes"; then
+if test "$enable_cairo_canvas" = "yes"; then
+    test_cairo=yes
     ENABLE_CAIRO_CANVAS="TRUE"
 fi
 AC_SUBST(ENABLE_CAIRO_CANVAS)
@@ -11420,8 +11422,10 @@ dnl ===================================================================
 dnl Test whether to build cairo or rely on the system version
 dnl ===================================================================
 
-
-SYSTEM_CAIRO=""
+if test "$GUIBASE" = "unx"; then
+    # Used in vcl/Library_vclplug_gen.mk
+    test_cairo=yes
+fi
 
 if test "$test_cairo" = "yes" ; then
     AC_MSG_CHECKING([whether to use the system cairo])
@@ -11452,29 +11456,12 @@ if test "$test_cairo" = "yes" ; then
         libo_MINGW_TRY_DLL([PIXMAN], [libpixman])
         libo_MINGW_TRY_DLL([PNG15], [libpng15])
     else
+        SYSTEM_CAIRO=NO
         AC_MSG_RESULT([no])
 
-        if test $_os = WINNT; then
-            dnl We only need cairo for Windows if we
-            dnl build librsvg or directx disabled
-            if test -z "$ENABLE_DIRECTX"; then
-                CAIRO_TARBALL="f101a9e88b783337b20b2e26dfd26d5f-cairo-1.10.2.tar.gz"
-                PIXMAN_TARBALL="c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2"
-                BUILD_TYPE="$BUILD_TYPE CAIRO"
-            fi
-        else
-            if test "$enable_cairo_canvas" = "yes"; then
-                CAIRO_TARBALL="f101a9e88b783337b20b2e26dfd26d5f-cairo-1.10.2.tar.gz"
-                PIXMAN_TARBALL="c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2"
-                BUILD_TYPE="$BUILD_TYPE CAIRO"
-            else
-                if test "$with_system_cairo" != "yes"; then
-                    CAIRO_TARBALL="f101a9e88b783337b20b2e26dfd26d5f-cairo-1.10.2.tar.gz"
-                    PIXMAN_TARBALL="c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2"
-                    BUILD_TYPE="$BUILD_TYPE CAIRO"
-                fi
-            fi
-        fi
+        CAIRO_TARBALL="f101a9e88b783337b20b2e26dfd26d5f-cairo-1.10.2.tar.gz"
+        PIXMAN_TARBALL="c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2"
+        BUILD_TYPE="$BUILD_TYPE CAIRO"
     fi
 fi
 
