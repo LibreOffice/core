@@ -416,6 +416,8 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
+gb_ExternalProject__use_boost_headers:=
+
 else # !SYSTEM_BOOST
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
@@ -450,6 +452,10 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 
 endef
 
+define gb_ExternalProject__use_boost_headers
+$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_UnpackedTarball_get_target,boost)
+
+endef
 endif # SYSTEM_BOOST
 
 

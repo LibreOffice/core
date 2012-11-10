@@ -11,6 +11,8 @@ $(eval $(call gb_ExternalProject_ExternalProject,liborcus))
 
 $(eval $(call gb_ExternalProject_use_unpacked,liborcus,orcus))
 
+$(eval $(call gb_ExternalProject_use_external,liborcus,boost_headers))
+
 $(eval $(call gb_ExternalProject_register_targets,liborcus,\
 	build \
 ))
