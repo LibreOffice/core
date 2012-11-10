@@ -40,7 +40,6 @@ USE_DEFFILE=TRUE
 
 JAVA_INCLUDES:= -I$(JAVA_HOME)/include
 
-# values taken from set_soenv.in
 .IF "$(OS)" == "LINUX"
 JAVA_INCLUDES+= -I$(JAVA_HOME)/include/linux
 .ELIF "$(OS)" == "FREEBSD"

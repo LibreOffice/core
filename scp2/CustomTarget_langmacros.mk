@@ -31,10 +31,10 @@ $(call gb_CustomTarget_get_target,scp2/macros) : $(call gb_CustomTarget_get_work
 
 $(call gb_CustomTarget_get_workdir,scp2/macros)/langmacros.inc :| $(call gb_CustomTarget_get_workdir,scp2/macros)/.dir
 
-$(call gb_CustomTarget_get_workdir,scp2/macros)/langmacros.inc : $(SRCDIR)/scp2/macros/macro.pl $(SRCDIR)/set_soenv.stamp
+$(call gb_CustomTarget_get_workdir,scp2/macros)/langmacros.inc : $(SRCDIR)/scp2/macros/macro.pl $(SRCDIR)/config_host.mk.stamp
 	$(call gb_Helper_abbreviate_dirs,\
 		export COMPLETELANGISO_VAR='$(gb_ScpTemplateTarget_LANGS)' && \
-		$(PERL) $< -verbose -o $@ -c $(SRCDIR)/set_soenv.stamp \
+		$(PERL) $< -verbose -o $@ -c $(SRCDIR)/config_host.mk.stamp \
 	)
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

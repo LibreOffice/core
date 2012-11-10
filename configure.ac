@@ -2903,7 +2903,7 @@ if test "$GCC" = "yes"; then
     if test "$_os" = "Darwin" -a "$with_macosx_sdk" = "10.4" -a "$GCCVER" -ge "040100"; then
         if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0"; then
             export CC="$GCC_HOME/bin/gcc-4.0"
-            #  export CC to have it available in set_soenv -> config.guess
+            #  export CC to make it finally available to config.guess
             GCCVER2=`$CC -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
             if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100"; then
                 GCCVER=$GCCVER2
@@ -3215,8 +3215,7 @@ if test "$_os" = "WINNT"; then
         fi
         AC_SUBST(BUILD_X64)
 
-        # These are passed to the environment through set_soenv.in as usual, and then
-        # used in set_wntx64.mk
+        # These are passed to the environment and then used in set_wntx64.mk
         AC_SUBST(CXX_X64_BINARY)
         AC_SUBST(LINK_X64_BINARY)
         AC_SUBST(LIBMGR_X64_BINARY)
@@ -12524,13 +12523,13 @@ fi
 AC_CONFIG_FILES([config_host.mk ooo.lst])
 AC_OUTPUT
 
-# touch the config timestamp file set_soenv.stamp
-if test ! -f set_soenv.stamp; then
-    echo > set_soenv.stamp
+# touch the config timestamp file
+if test ! -f config_host.mk.stamp; then
+    echo > config_host.mk.stamp
 elif diff config_host.mk config_host.mk.last >/dev/null 2>&1; then
     echo "Configuration unchanged - avoiding scp2 stamp update"
 else
-    echo > set_soenv.stamp
+    echo > config_host.mk.stamp
 fi
 
 
