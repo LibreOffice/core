@@ -1991,6 +1991,8 @@ void DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )
 void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode )
 {
     OSL_TRACE( "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode ) - some stuff still missing" );
+    // detect mis-use of the API
+    assert(pGrfNode || (pOLEFrmFmt && pOLENode));
     const SwFrmFmt* pFrmFmt = pGrfNode ? pGrfNode->GetFlyFmt() : pOLEFrmFmt;
     // create the relation ID
     OString aRelId;
