@@ -215,8 +215,13 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
             break;
             case SVX_SEARCHCMD_FIND_ALL:
             {
-                sal_Bool bRet = SearchAll();
-                if( !bRet )
+                //to delete the existing selections
+                pWrtShell->KillSelection(0, false);
+                sal_uLong nFound;
+                SwSearchOptions aOpt( pWrtShell, pSrchItem->GetBackward() );
+                nFound = FUNC_Search( aOpt );
+
+                if( !nFound )
                 {
                     if( !bApi )
                     {
@@ -225,7 +230,15 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     }
                     bFound = sal_False;
                 }
-                rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
+                else
+                    {
+                        // displaying number of the search key
+                        OUString aText( SW_RES( STR_NB_FINDALL ) );
+                        aText=aText.replaceFirst("XX",OUString::valueOf((sal_Int32)nFound));
+                        Window* pParentWindow = GetParentWindow( pSrchDlg );
+                        InfoBox( pParentWindow, aText ).Execute();
+                    }
+                rReq.SetReturnValue(SfxBoolItem(nSlot, nFound));
             }
             break;
             case SVX_SEARCHCMD_REPLACE:
