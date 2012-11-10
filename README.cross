@@ -136,7 +136,6 @@ CXX_FOR_BUILD=ccache g++
 --host=i686-w64-mingw32
 --with-distro=LibreOfficeWin32
 --disable-activex
---disable-binfilter
 --disable-build-mozilla
 --disable-directx
 --disable-ext-nlpsolver
