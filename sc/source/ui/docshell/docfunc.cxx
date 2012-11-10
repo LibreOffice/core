@@ -3094,8 +3094,6 @@ bool ScDocFunc::SetTabBgColor(
 
 static sal_uInt16 lcl_GetOptimalColWidth( ScDocShell& rDocShell, SCCOL nCol, SCTAB nTab, sal_Bool bFormula )
 {
-    sal_uInt16 nTwips = 0;
-
     ScSizeDeviceProvider aProv(&rDocShell);
     OutputDevice* pDev = aProv.GetDevice();         // has pixel MapMode
     double nPPTX = aProv.GetPPTX();
@@ -3103,8 +3101,8 @@ static sal_uInt16 lcl_GetOptimalColWidth( ScDocShell& rDocShell, SCCOL nCol, SCT
 
     ScDocument* pDoc = rDocShell.GetDocument();
     Fraction aOne(1,1);
-    nTwips = pDoc->GetOptimalColWidth( nCol, nTab, pDev, nPPTX, nPPTY, aOne, aOne,
-                                        bFormula, NULL );
+    sal_uInt16 nTwips = pDoc->GetOptimalColWidth( nCol, nTab, pDev, nPPTX, nPPTY, aOne, aOne,
+                                                    bFormula, NULL );
 
     return nTwips;
 }
@@ -3161,7 +3159,7 @@ sal_Bool ScDocFunc::SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOL
         }
 
         pUndoRanges = new SCCOLROW[ 2*nRangeCnt ];
-        memmove( pUndoRanges, pRanges, 2*nRangeCnt*sizeof(SCCOLROW) );
+        memcpy( pUndoRanges, pRanges, 2*nRangeCnt*sizeof(SCCOLROW) );
 
         ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
         if (pTable)
@@ -5097,9 +5095,9 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
     if(nOldFormat)
     {
         ScConditionalFormat* pOldFormat = pDoc->GetCondFormList(nTab)->GetFormat(nOldFormat);
-        pRepaintRange.reset(new ScRange( pOldFormat->GetRange().Combine() ));
         if(pOldFormat)
         {
+            pRepaintRange.reset(new ScRange( pOldFormat->GetRange().Combine() ));
             RemoveCondFormatAttributes(pDoc, pOldFormat, nTab);
         }
 
