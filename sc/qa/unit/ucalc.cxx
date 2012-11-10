@@ -89,6 +89,7 @@
 #define CALC_DEBUG_OUTPUT 0
 
 #include "helper/debughelper.hxx"
+#include "helper/qahelper.hxx"
 
 const int indeterminate = 2;
 
@@ -4641,7 +4642,7 @@ void Test::testCopyPaste()
     double aValue = 0;
     m_pDoc->GetValue(1, 0, 0, aValue);
     std::cout << "Value: " << aValue << std::endl;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 8", aValue, 8, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 8", aValue, 8);
 
     //copy Sheet1.A1:C1 to Sheet2.A2:C2
     ScRange aRange(0,0,0,2,0,0);
@@ -4666,7 +4667,7 @@ void Test::testCopyPaste()
     rtl::OUString aString;
     m_pDoc->GetValue(1,1,1, aValue);
     m_pDoc->GetFormula(1,1,1, aString);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("copied formula should return 2", aValue, 2, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("copied formula should return 2", aValue, 2);
     CPPUNIT_ASSERT_MESSAGE("formula string was not copied correctly", aString == aFormulaString);
     m_pDoc->GetValue(0,1,1, aValue);
     CPPUNIT_ASSERT_MESSAGE("copied value should be 1", aValue == 1);
@@ -4684,13 +4685,13 @@ void Test::testCopyPaste()
     //check undo and redo
     pUndo->Undo();
     m_pDoc->GetValue(1,1,1, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", aValue, 0, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", aValue, 0);
     m_pDoc->GetString(2,1,1, aString);
     CPPUNIT_ASSERT_MESSAGE("after undo string should be removed", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
 
     pUndo->Redo();
     m_pDoc->GetValue(1,1,1, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 2 after redo", aValue, 2, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 2 after redo", aValue, 2);
     m_pDoc->GetString(2,1,1, aString);
     CPPUNIT_ASSERT_MESSAGE("Cell Sheet2.C2 should contain: test", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test")));
     m_pDoc->GetFormula(1,1,1, aString);
@@ -4822,42 +4823,42 @@ void Test::testUpdateReference()
 
     double aValue;
     m_pDoc->GetValue(2,0,2, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("formula does not return correct result", aValue, 3, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2,1,2, aValue);
-    CPPUNIT_ASSERT_MESSAGE("formula does not return correct result", aValue == 5);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula does not return correct result", aValue, 5);
 
     //test deleting both sheets: one is not directly before the sheet, the other one is
     m_pDoc->DeleteTab(0);
     m_pDoc->GetValue(2,0,1, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 3, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2,1,1, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 5, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 5);
 
     m_pDoc->DeleteTab(0);
     m_pDoc->GetValue(2,0,0, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 3, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2,1,0, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 5, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 5);
 
     //test adding two sheets
     m_pDoc->InsertTab(0, aSheet2);
     m_pDoc->GetValue(2,0,1, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 3, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2,1,1, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 5, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 5);
 
     m_pDoc->InsertTab(0, aSheet1);
     m_pDoc->GetValue(2,0,2, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 3, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2,1,2, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 5, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 5);
 
     //test new DeleteTabs/InsertTabs methods
     m_pDoc->DeleteTabs(0, 2);
     m_pDoc->GetValue(2, 0, 0, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 3, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2, 1, 0, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 5, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 5);
 
     std::vector<rtl::OUString> aSheets;
     aSheets.push_back(aSheet1);
@@ -4868,9 +4869,9 @@ void Test::testUpdateReference()
     m_pDoc->GetFormula(2,0,2, aFormula);
     std::cout << "formel: " << rtl::OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     std::cout << std::endl << aValue << std::endl;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 3, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2, 1, 2, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 5, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 5);
 
     m_pDoc->DeleteTab(3);
     m_pDoc->DeleteTab(2);
@@ -4974,7 +4975,7 @@ void Test::testAutoFill()
 
     m_pDoc->Fill( 0, 0, 0, 0, NULL, aMarkData, 5);
     for (SCROW i = 0; i< 6; ++i)
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i+1.0), m_pDoc->GetValue(0, i, 0), 0.00000001);
+        ASSERT_DOUBLES_EQUAL(static_cast<double>(i+1.0), m_pDoc->GetValue(0, i, 0));
 
     // check that hidden rows are not affected by autofill
     // set values for hidden rows
@@ -4984,10 +4985,10 @@ void Test::testAutoFill()
     m_pDoc->SetRowHidden(1, 2, 0, true);
     m_pDoc->Fill( 0, 0, 0, 0, NULL, aMarkData, 8);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,1,0), 1e-08);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,2,0), 1e-08);
+    ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,1,0));
+    ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,2,0));
     for (SCROW i = 3; i< 8; ++i)
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i-1.0), m_pDoc->GetValue(0, i, 0), 0.00000001);
+        ASSERT_DOUBLES_EQUAL(static_cast<double>(i-1.0), m_pDoc->GetValue(0, i, 0));
 
     m_pDoc->Fill( 0, 0, 0, 8, NULL, aMarkData, 5, FILL_TO_RIGHT );
     for (SCCOL i = 0; i < 5; ++i)
@@ -4996,18 +4997,18 @@ void Test::testAutoFill()
         {
             if (j > 2)
             {
-                CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(j-1+i), m_pDoc->GetValue(i, j, 0), 1e-8);
+                ASSERT_DOUBLES_EQUAL(static_cast<double>(j-1+i), m_pDoc->GetValue(i, j, 0));
             }
             else if (j == 0)
             {
-                CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i+1), m_pDoc->GetValue(i, 0, 0), 1e-8);
+                ASSERT_DOUBLES_EQUAL(static_cast<double>(i+1), m_pDoc->GetValue(i, 0, 0));
             }
             else if (j == 1 || j== 2)
             {
                 if(i == 0)
-                    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,j,0), 1e-8);
+                    ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,j,0));
                 else
-                    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, m_pDoc->GetValue(i,j,0), 1e-8);
+                    ASSERT_DOUBLES_EQUAL(0.0, m_pDoc->GetValue(i,j,0));
             }
         }
     }
@@ -5044,15 +5045,15 @@ void Test::testCopyPasteFormulas()
 
     // to prevent ScEditableTester in ScDocFunc::MoveBlock
     m_pDoc->SetInTest();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,0,0), 1.0, 1e-08);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,1,0), 1.0, 1e-08);
+    ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,0,0), 1.0);
+    ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,1,0), 1.0);
     ScDocFunc& rDocFunc = m_xDocShRef->GetDocFunc();
     bool bMoveDone = rDocFunc.MoveBlock(ScRange(0,0,0,0,4,0), ScAddress( 10, 10, 0), false, false, false, true);
 
     // check that moving was succesful, mainly for editable tester
     CPPUNIT_ASSERT(bMoveDone);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,10,0), 1.0, 1e-8);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,11,0), 1.0, 1e-8);
+    ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,10,0), 1.0);
+    ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,11,0), 1.0);
     rtl::OUString aFormula;
     m_pDoc->GetFormula(10,10,0, aFormula);
     CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=COLUMN($A$1)"));
@@ -5353,7 +5354,7 @@ void Test::testSort()
 
     pDoc->Sort(0, aSortData, false, NULL);
     double nVal = pDoc->GetValue(1,0,0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, 1.0, 1e-8);
+    ASSERT_DOUBLES_EQUAL(nVal, 1.0);
 
     // check that note is also moved
     pNote = m_pDoc->GetNotes(0)->findByAddress( 1, 0 );

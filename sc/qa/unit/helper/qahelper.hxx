@@ -122,6 +122,12 @@ void testCondFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
 
 }
 
+#define ASSERT_DOUBLES_EQUAL( expected, result )    \
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( (expected), (result), 1e-14 )
+
+#define ASSERT_DOUBLES_EQUAL_MESSAGE( message, expected, result )   \
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( (message), (expected), (result), 1e-14 )
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
