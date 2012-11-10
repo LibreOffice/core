@@ -354,7 +354,7 @@ ifeq ($(BUILD_DMAKE),YES)
 endif
 	rm -fr config_host.mk config_build.mk aclocal.m4 autom4te.cache \
 	config.log config.status configure ooo.lst \
-	config_host.mk.last set_soenv.stamp src.downloaded warn
+	config_host.mk.last config_host.mk.stamp src.downloaded warn
 	find $(SOLARENV)/gdb -name "*.pyc" -exec rm {} \;
 
 #

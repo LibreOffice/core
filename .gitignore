@@ -56,6 +56,7 @@
 /config.parms
 /config_host.mk
 /config_host.mk.last
+/config_host.mk.stamp
 /config_build.mk
 /configure
 /desktop/scripts/soffice.sh
@@ -75,7 +76,6 @@
 # misc
 /file-lists
 /cross-build-toolset.built
-/set_soenv.stamp
 /warn
 /build.log
 /build_error.log
