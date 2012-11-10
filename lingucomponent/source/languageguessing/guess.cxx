@@ -21,7 +21,7 @@
 #include <iostream>
 #include <string.h>
 
-#ifdef SYSTEM_LIBEXTEXTCAT
+#ifdef SYSTEM_LIBEXTTEXTCAT
 #include <libexttextcat/textcat.h>
 #else
 #include <textcat.h>

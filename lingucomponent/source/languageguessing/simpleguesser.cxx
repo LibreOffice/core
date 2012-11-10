@@ -32,7 +32,7 @@
 #include <sstream>
 #include <iostream>
 
-#ifdef SYSTEM_LIBEXTEXTCAT
+#ifdef SYSTEM_LIBEXTTEXTCAT
 #include <libexttextcat/textcat.h>
 #include <libexttextcat/common.h>
 #include <libexttextcat/constants.h>
