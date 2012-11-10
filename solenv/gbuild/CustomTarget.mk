@@ -47,4 +47,15 @@ $(call gb_CustomTarget_get_target,$(1)) :| $(dir $(call gb_CustomTarget_get_targ
 
 endef
 
+define gb_CustomTarget_register_target
+$(call gb_CustomTarget_get_target,$(1)) : $(call gb_CustomTarget_get_workdir,$(1))/$(2)
+$(call gb_CustomTarget_get_workdir,$(1))/$(2) :| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
+
+endef
+
+define gb_CustomTarget_register_targets
+$(foreach target,$(2),$(call gb_CustomTarget_register_target,$(1),$(target)))
+
+endef
+
 # vim: set noet sw=4:
