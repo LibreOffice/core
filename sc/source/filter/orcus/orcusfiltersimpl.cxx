@@ -113,8 +113,11 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* s
     OUString aTabName(sheet_name, sheet_name_length, RTL_TEXTENCODING_UTF8);
     SCTAB nTab = -1;
     if (!mrDoc.GetTable(aTabName, nTab))
+    {
         // Sheet by that name not found.
+        fprintf(stdout, "ScOrcusFactory::get_sheet:   no such sheet!!! (%s)\n", rtl::OUStringToOString(aTabName, RTL_TEXTENCODING_UTF8).getStr());
         return NULL;
+    }
 
     // See if we already have an orcus sheet instance by that index.
     boost::ptr_vector<ScOrcusSheet>::iterator it =
@@ -211,11 +214,12 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) cons
 
 namespace {
 
-void setUserDataToEntry(
+ScOrcusXMLTreeParam::EntryData& setUserDataToEntry(
     SvTreeListEntry& rEntry, ScOrcusXMLTreeParam::UserDataStoreType& rStore, ScOrcusXMLTreeParam::EntryType eType)
 {
     rStore.push_back(new ScOrcusXMLTreeParam::EntryData(eType));
     rEntry.SetUserData(&rStore.back());
+    return rStore.back();
 }
 
 void populateTree(
@@ -229,7 +233,7 @@ void populateTree(
         // Can this ever happen!?
         return;
 
-    setUserDataToEntry(
+    ScOrcusXMLTreeParam::EntryData& rEntryData = setUserDataToEntry(
         *pEntry, rParam.maUserDataStore,
         bRepeat ? ScOrcusXMLTreeParam::ElementRepeat : ScOrcusXMLTreeParam::ElementDefault);
 
@@ -265,6 +269,9 @@ void populateTree(
     rTreeCtrl.Expand(pEntry);
 
     rWalker.get_children(aNames);
+
+    // Non-leaf if it has child elements, leaf otherwise.
+    rEntryData.mbLeafNode = aNames.empty();
 
     // Insert child elements recursively.
     for (it = aNames.begin(), itEnd = aNames.end(); it != itEnd; ++it)
@@ -333,6 +340,22 @@ bool ScOrcusFiltersImpl::loadXMLStructure(
     return true;
 }
 
+namespace {
+
+class InsertFieldPath : std::unary_function<OString, void>
+{
+    orcus::orcus_xml& mrFilter;
+public:
+    InsertFieldPath(orcus::orcus_xml& rFilter) : mrFilter(rFilter) {}
+    void operator() (const OString& rPath)
+    {
+        fprintf(stdout, "InsertFieldPath::():   field path = '%s'\n", rPath.getStr());
+        mrFilter.append_field_link(rPath.getStr());
+    }
+};
+
+}
+
 bool ScOrcusFiltersImpl::importXML(
     ScDocument& rDoc, const rtl::OUString& rPath, const ScOrcusImportXMLParam& rParam) const
 {
@@ -344,18 +367,38 @@ bool ScOrcusFiltersImpl::importXML(
         orcus::orcus_xml filter(&aFactory, NULL);
 
         // Set cell links.
-        ScOrcusImportXMLParam::CellLinksType::const_iterator it = rParam.maCellLinks.begin();
-        ScOrcusImportXMLParam::CellLinksType::const_iterator itEnd = rParam.maCellLinks.end();
-
-        for (; it != itEnd; ++it)
         {
-            const ScOrcusImportXMLParam::CellLink& rLink = *it;
-            OUString aTabName;
-            rDoc.GetName(rLink.maPos.Tab(), aTabName);
-            filter.set_cell_link(
-                rLink.maPath.getStr(),
-                rtl::OUStringToOString(aTabName, RTL_TEXTENCODING_UTF8).getStr(),
-                rLink.maPos.Row(), rLink.maPos.Col());
+            ScOrcusImportXMLParam::CellLinksType::const_iterator it = rParam.maCellLinks.begin();
+            ScOrcusImportXMLParam::CellLinksType::const_iterator itEnd = rParam.maCellLinks.end();
+            for (; it != itEnd; ++it)
+            {
+                const ScOrcusImportXMLParam::CellLink& rLink = *it;
+                OUString aTabName;
+                rDoc.GetName(rLink.maPos.Tab(), aTabName);
+                filter.set_cell_link(
+                    rLink.maPath.getStr(),
+                    rtl::OUStringToOString(aTabName, RTL_TEXTENCODING_UTF8).getStr(),
+                    rLink.maPos.Row(), rLink.maPos.Col());
+            }
+        }
+
+        // Set range links.
+        {
+            ScOrcusImportXMLParam::RangeLinksType::const_iterator it = rParam.maRangeLinks.begin();
+            ScOrcusImportXMLParam::RangeLinksType::const_iterator itEnd = rParam.maRangeLinks.end();
+            for (; it != itEnd; ++it)
+            {
+                const ScOrcusImportXMLParam::RangeLink& rLink = *it;
+                OUString aTabName;
+                rDoc.GetName(rLink.maPos.Tab(), aTabName);
+                filter.start_range(
+                    rtl::OUStringToOString(aTabName, RTL_TEXTENCODING_UTF8).getStr(),
+                    rLink.maPos.Row(), rLink.maPos.Col());
+
+                std::for_each(rLink.maFieldPaths.begin(), rLink.maFieldPaths.end(), InsertFieldPath(filter));
+
+                filter.commit_range();
+            }
         }
 
         filter.read_file(path);

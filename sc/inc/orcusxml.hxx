@@ -31,7 +31,8 @@ struct ScOrcusXMLTreeParam
     {
         EntryType meType;
         ScAddress maLinkedPos; /// linked cell position (invalid if unlinked)
-        bool mbRangeParent;
+        bool mbRangeParent:1;
+        bool mbLeafNode:1; /// Leaf if it has no child elements. Child Attributes don't count.
 
         SC_DLLPUBLIC EntryData(EntryType eType);
     };

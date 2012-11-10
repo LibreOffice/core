@@ -414,26 +414,79 @@ bool ScXMLSourceDlg::IsChildrenDirty(SvTreeListEntry* pEntry) const
     return false;
 }
 
+namespace {
+
+/**
+ * Pick only the leaf elements.
+ */
+void getFieldLinks(ScOrcusImportXMLParam::RangeLink& rRangeLink, const SvTreeListBox& rTree, const SvTreeListEntry& rEntry)
+{
+    const SvTreeListEntries& rChildren = rEntry.GetChildEntries();
+    if (rChildren.empty())
+        // No more children.  We're done.
+        return;
+
+    SvTreeListEntries::const_iterator it = rChildren.begin(), itEnd = rChildren.end();
+    for (; it != itEnd; ++it)
+    {
+        const SvTreeListEntry& rChild = *it;
+        OUString aPath = getXPath(rTree, rChild);
+
+        const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rChild);
+        fprintf(stdout, "getFieldLinks:   path = '%s'  leaf = %d\n", rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr(), pUserData->mbLeafNode);
+        if (pUserData && pUserData->mbLeafNode)
+        {
+            if (!aPath.isEmpty())
+                // XPath should never be empty anyway, but it won't hurt to check...
+                rRangeLink.maFieldPaths.push_back(rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
+        }
+
+        // Walk recursively.
+        getFieldLinks(rRangeLink, rTree, rChild);
+    }
+}
+
+}
+
 void ScXMLSourceDlg::OkPressed()
 {
     // Begin import.
 
     ScOrcusImportXMLParam aParam;
 
-    std::set<const SvTreeListEntry*>::const_iterator it = maCellLinks.begin(), itEnd = maCellLinks.end();
-    for (; it != itEnd; ++it)
+    // Convert single cell links.
     {
-        const SvTreeListEntry& rEntry = **it;
-        OUString aPath = getXPath(maLbTree, rEntry);
-        const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rEntry);
-        ScAddress aPos = pUserData->maLinkedPos;
+        std::set<const SvTreeListEntry*>::const_iterator it = maCellLinks.begin(), itEnd = maCellLinks.end();
+        for (; it != itEnd; ++it)
+        {
+            const SvTreeListEntry& rEntry = **it;
+            OUString aPath = getXPath(maLbTree, rEntry);
+            const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rEntry);
 
-        aParam.maCellLinks.push_back(
-            ScOrcusImportXMLParam::CellLink(
-                aPos, rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8)));
+            aParam.maCellLinks.push_back(
+                ScOrcusImportXMLParam::CellLink(
+                    pUserData->maLinkedPos, rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8)));
+        }
     }
 
-    // TODO: Process range links.
+    // Convert range links. For now, an element with range link takes all its
+    // child elements as its fields.
+    {
+        std::set<const SvTreeListEntry*>::const_iterator it = maRangeLinks.begin(), itEnd = maRangeLinks.end();
+        for (; it != itEnd; ++it)
+        {
+            const SvTreeListEntry& rEntry = **it;
+            const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rEntry);
+
+            ScOrcusImportXMLParam::RangeLink aRangeLink;
+            aRangeLink.maPos = pUserData->maLinkedPos;
+
+            // Go through all its child elements.
+            getFieldLinks(aRangeLink, maLbTree, rEntry);
+
+            aParam.maRangeLinks.push_back(aRangeLink);
+        }
+    }
 
     ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
     if (!pOrcus)
