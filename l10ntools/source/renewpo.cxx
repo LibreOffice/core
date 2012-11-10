@@ -158,14 +158,23 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
                 {
                     sActUnTrans = DelLocalId(sActUnTrans);
                 }
-                PoEntry aPE(sActUnTrans, vTypes[nIndex]);
-                const OString sActStr =
-                    sActTrans.getToken(vTypes[nIndex],'\t');
-                aPE.setMsgStr(sActStr);
-                aPE.setFuzzy( sActStr.isEmpty() ? false :
-                    static_cast<bool>(sActTrans.getToken(PoEntry::DUMMY,'\t').
-                        copy(nDummyBit++,1).toBoolean()));
-                aNewPo.writeEntry(aPE);
+                try
+                {
+                    PoEntry aPE(sActUnTrans, vTypes[nIndex]);
+                    const OString sActStr =
+                        sActTrans.getToken(vTypes[nIndex],'\t');
+                    aPE.setMsgStr(sActStr);
+                    aPE.setFuzzy( sActStr.isEmpty() ? false :
+                        static_cast<bool>(sActTrans.getToken(PoEntry::DUMMY,'\t').
+                            copy(nDummyBit++,1).toBoolean()));
+                    aNewPo.writeEntry(aPE);
+                }
+                catch( PoEntry::Exception& )
+                {
+                    cerr
+                        << "Invalid sdf line "
+                        << sActUnTrans.replaceAll("\t","\\t").getStr() << '\n';
+                }
             }
         }
         //Check wheather next entry is in the same po file
