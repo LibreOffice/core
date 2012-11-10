@@ -51,6 +51,9 @@ class SwSpellPopup : public PopupMenu
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives > xSpellAlt;
 
+    ::com::sun::star::linguistic2::ProofreadingResult xGrammarResult;
+    sal_Int32 nGrammarError;
+
     ::com::sun::star::uno::Sequence< rtl::OUString >  aSuggestions;
     rtl::OUString sExplanationLink;
 
