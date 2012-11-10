@@ -17,25 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/fixedhyper.hxx>
-
-//.........................................................................
-namespace svt
-{
-//.........................................................................
+#include <vcl/fixedhyper.hxx>
 
 // class FixedHyperlink --------------------------------------------------
 
-FixedHyperlink::FixedHyperlink( Window* pParent, const ResId& rResId ) :
-    ::toolkit::FixedHyperlinkBase( pParent, rResId ),
-    m_nTextLen(0)
+FixedHyperlink::FixedHyperlink(Window* pParent, const ResId& rResId)
+    : FixedText(pParent, rResId)
+    , m_nTextLen(0)
 {
     Initialize();
 }
 
-FixedHyperlink::FixedHyperlink( Window* pParent, WinBits nWinStyle  ) :
-    ::toolkit::FixedHyperlinkBase( pParent, nWinStyle ),
-    m_nTextLen(0)
+FixedHyperlink::FixedHyperlink(Window* pParent, WinBits nWinStyle)
+    : FixedText(pParent, nWinStyle)
+    , m_nTextLen(0)
 {
     Initialize();
 }
@@ -109,25 +104,30 @@ void FixedHyperlink::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-void FixedHyperlink::SetURL( const String& rNewURL )
+void FixedHyperlink::SetURL( const OUString& rNewURL )
 {
     m_sURL = rNewURL;
     SetQuickHelpText( m_sURL );
 }
 
-String  FixedHyperlink::GetURL() const
+OUString FixedHyperlink::GetURL() const
 {
     return m_sURL;
 }
 
-void FixedHyperlink::SetDescription( const String& rNewDescription )
+void FixedHyperlink::SetDescription(const OUString& rNewDescription)
 {
-    SetText( rNewDescription );
-    m_nTextLen = GetCtrlTextWidth( GetText() );
+    SetText(rNewDescription);
+    m_nTextLen = GetCtrlTextWidth(GetText());
 }
 
-//.........................................................................
-} // namespace svt
-//.........................................................................
+bool FixedHyperlink::set_property(const OString &rKey, const OString &rValue)
+{
+    if (rKey == "uri")
+        SetURL(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    else
+        return FixedText::set_property(rKey, rValue);
+    return true;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

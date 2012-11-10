@@ -28,12 +28,12 @@
 
 
 #include <tools/debug.hxx>
+#include <vcl/fixedhyper.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/svmedit.hxx>
 #include <unoiface.hxx>
 #include <svtools/filectrl.hxx>
 #include <svtools/roadmap.hxx>
-#include <svtools/fixedhyper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
@@ -151,7 +151,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
     {
         if ( pParent )
         {
-            pWindow = new ::svt::FixedHyperlink( pParent, nWinBits );
+            pWindow = new FixedHyperlink( pParent, nWinBits );
             *ppNewComp = new VCLXFixedHyperlink;
         }
         else

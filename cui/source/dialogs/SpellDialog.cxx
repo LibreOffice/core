@@ -420,7 +420,7 @@ void SpellDialog::UpdateBoxes_Impl()
     }
     else
     {
-        bool bHasExplainLink = aExplainLink.GetURL().Len() != 0;
+        bool bHasExplainLink = !aExplainLink.GetURL().isEmpty();
         aExplainLink.Show( bHasExplainLink );
 
         sal_Int32 nExplainWidth = aExplainLink.GetPosPixel().X() - aExplainFT.GetPosPixel().X();
@@ -2156,7 +2156,7 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
     pSpellDialog->aChangePB.Enable();
 }
 
-IMPL_LINK( SpellDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
+IMPL_LINK( SpellDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
 {
     rtl::OUString sURL=pHyperlink->GetURL();
     rtl::OUString sTitle=GetText();

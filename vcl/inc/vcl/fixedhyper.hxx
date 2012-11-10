@@ -17,28 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_FIXEDHYPER_HXX
-#define SVTOOLS_FIXEDHYPER_HXX
+#ifndef VCL_FIXEDHYPER_HXX
+#define VCL_FIXEDHYPER_HXX
 
-#include "svtools/svtdllapi.h"
-
-#include <toolkit/helper/fixedhyperbase.hxx>
-
-//.........................................................................
-namespace svt
-{
-//.........................................................................
+#include <vcl/dllapi.h>
+#include <vcl/fixed.hxx>
 
     //=====================================================================
     //= FixedHyperlink
     //=====================================================================
-    class SVT_DLLPUBLIC FixedHyperlink : public ::toolkit::FixedHyperlinkBase
+    class VCL_DLLPUBLIC FixedHyperlink : public FixedText
     {
     private:
         long                m_nTextLen;
         Pointer             m_aOldPointer;
         Link                m_aClickHdl;
-        String              m_sURL;
+        OUString            m_sURL;
 
         /** initializes the font (link color and underline).
 
@@ -96,6 +90,9 @@ namespace svt
         */
         virtual void        KeyInput( const KeyEvent& rKEvt );
 
+        virtual bool        set_property(const OString &rKey, const OString &rValue);
+
+
         /** sets <member>m_aClickHdl</member> with <arg>rLink</arg>.
 
             <member>m_aClickHdl</member> is called if the text is clicked.
@@ -109,24 +106,21 @@ namespace svt
         */
         inline const Link&  GetClickHdl() const { return m_aClickHdl; }
 
-        // ::toolkit::FixedHyperbaseLink
+        // ::FixedHyperbaseLink
 
         /** sets the URL of the hyperlink and uses it as tooltip. */
-        virtual void        SetURL( const String& rNewURL );
+        void        SetURL(const OUString& rNewURL);
 
         /** returns the URL of the hyperlink.
 
             @return
                 <member>m_sURL</member>
         */
-        virtual String      GetURL() const;
+        OUString    GetURL() const;
 
         /** sets new text and recalculates the text length. */
-        virtual void        SetDescription( const String& rNewDescription );
+        void        SetDescription(const OUString& rNewDescription);
     };
-//.........................................................................
-} // namespace svt
-//.........................................................................
 
 #endif
 

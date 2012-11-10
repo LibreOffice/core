@@ -33,7 +33,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include <svtools/fixedhyper.hxx>
+#include <vcl/fixedhyper.hxx>
 
 struct SvtTmplDlg_Impl;
 
@@ -44,7 +44,7 @@ class SvtTemplateWindow;
 class SVT_DLLPUBLIC SvtDocumentTemplateDialog : public ModalDialog
 {
 private:
-    svt::FixedHyperlink aMoreTemplatesLink;
+    FixedHyperlink      aMoreTemplatesLink;
     FixedLine           aLine;
     PushButton          aManageBtn;
     PushButton          aEditBtn;

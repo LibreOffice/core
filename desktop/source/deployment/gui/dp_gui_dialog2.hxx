@@ -32,9 +32,9 @@
 #include "vcl/dialog.hxx"
 #include "vcl/button.hxx"
 #include "vcl/fixed.hxx"
+#include "vcl/fixedhyper.hxx"
 #include "vcl/timer.hxx"
 
-#include "svtools/fixedhyper.hxx"
 #include "svtools/prgsbar.hxx"
 #include "svtools/svmedit.hxx"
 
@@ -118,7 +118,7 @@ class ExtMgrDialog : public ModelessDialog,
     CheckBox             m_aBundledCbx;
     CheckBox             m_aSharedCbx;
     CheckBox             m_aUserCbx;
-    svt::FixedHyperlink  m_aGetExtensions;
+    FixedHyperlink       m_aGetExtensions;
     FixedText            m_aProgressText;
     ProgressBar          m_aProgressBar;
     CancelButton         m_aCancelBtn;
@@ -145,7 +145,7 @@ class ExtMgrDialog : public ModelessDialog,
     DECL_DLLPRIVATE_LINK( HandleUpdateBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleCancelBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleExtTypeCbx, void * );
-    DECL_DLLPRIVATE_LINK( HandleHyperlink, svt::FixedHyperlink * );
+    DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
     DECL_DLLPRIVATE_LINK(TimeOutHdl, void *);
     DECL_DLLPRIVATE_LINK( startProgress, void * );
 
@@ -214,7 +214,7 @@ class UpdateRequiredDialog : public ModalDialog,
     DECL_DLLPRIVATE_LINK( HandleCancelBtn, void * );
     DECL_DLLPRIVATE_LINK(TimeOutHdl, void *);
     DECL_DLLPRIVATE_LINK( startProgress, void * );
-    DECL_DLLPRIVATE_LINK( HandleHyperlink, svt::FixedHyperlink * );
+    DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
 
     bool            isEnabled( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
     bool            checkDependencies( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;

@@ -29,10 +29,10 @@
 #include "rtl/ustring.hxx"
 #include "vcl/scrbar.hxx"
 #include "vcl/fixed.hxx"
+#include "vcl/fixedhyper.hxx"
 #include "vcl/dialog.hxx"
 
 #include "svtools/extensionlistbox.hxx"
-#include "svtools/fixedhyper.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "unotools/collatorwrapper.hxx"
 
@@ -54,7 +54,7 @@ namespace dp_gui {
 
 class TheExtensionManager;
 
-typedef ::boost::shared_ptr< svt::FixedHyperlink > TFixedHyperlink;
+typedef ::boost::shared_ptr< FixedHyperlink > TFixedHyperlink;
 
 //------------------------------------------------------------------------------
 //                          struct Entry_Impl
@@ -85,7 +85,7 @@ struct Entry_Impl
     String          m_sLicenseText;
     Image           m_aIcon;
     Image           m_aIconHC;
-    svt::FixedHyperlink *m_pPublisher;
+    FixedHyperlink* m_pPublisher;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> m_xPackage;
 

@@ -149,7 +149,7 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
     DECL_DLLPRIVATE_LINK( HandleOptionsBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleEnableBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleRemoveBtn, void * );
-    DECL_DLLPRIVATE_LINK( HandleHyperlink, svt::FixedHyperlink * );
+    DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
 
 public:
                     ExtBoxWithBtns_Impl( ExtMgrDialog* pParent, TheExtensionManager *pManager );
@@ -1122,7 +1122,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn)
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( ExtMgrDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
+IMPL_LINK( ExtMgrDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
 {
     openWebBrowser( pHyperlink->GetURL(), GetText() );
 
@@ -1610,7 +1610,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCloseBtn)
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( UpdateRequiredDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
+IMPL_LINK( UpdateRequiredDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
 {
     openWebBrowser( pHyperlink->GetURL(), GetText() );
 

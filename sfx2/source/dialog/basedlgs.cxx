@@ -25,7 +25,6 @@
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/viewoptions.hxx>
-#include <svtools/fixedhyper.hxx>
 #include <svtools/controldims.hrc>
 
 #include <sfx2/basedlgs.hxx>

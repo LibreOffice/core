@@ -23,7 +23,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/field.hxx>
-#include <svtools/fixedhyper.hxx>
+#include <vcl/fixedhyper.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/checklbx.hxx>
 #include <svx/langbox.hxx>
@@ -59,7 +59,7 @@ class SvxEditModulesDlg : public ModalDialog
     PushButton          aPrioUpPB;
     PushButton          aPrioDownPB;
     PushButton          aBackPB;
-    svt::FixedHyperlink aMoreDictsLink;
+    FixedHyperlink      aMoreDictsLink;
 
     FixedLine           aButtonsFL;
     HelpButton          aHelpPB;
@@ -110,7 +110,7 @@ private:
     FixedText           aLinguOptionsFT;
     SvxCheckListBox     aLinguOptionsCLB;
     PushButton          aLinguOptionsEditPB;
-    svt::FixedHyperlink aMoreDictsLink;
+    FixedHyperlink      aMoreDictsLink;
 
     String              sCapitalWords;
     String              sWordsWithDigits;

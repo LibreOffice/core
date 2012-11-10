@@ -38,7 +38,6 @@ $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/accessiblefacto
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/convert.hxx,toolkit/helper/convert.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/emptyfontdescriptor.hxx,toolkit/helper/emptyfontdescriptor.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/externallock.hxx,toolkit/helper/externallock.hxx))
-$(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/fixedhyperbase.hxx,toolkit/helper/fixedhyperbase.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/formpdfexport.hxx,toolkit/helper/formpdfexport.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/imagealign.hxx,toolkit/helper/imagealign.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/listenermultiplexer.hxx,toolkit/helper/listenermultiplexer.hxx))

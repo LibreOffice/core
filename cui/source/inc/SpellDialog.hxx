@@ -36,7 +36,7 @@
 #include <memory>
 #include <svtools/svmedit.hxx>
 #include <svl/lstner.hxx>
-#include <svtools/fixedhyper.hxx>
+#include <vcl/fixedhyper.hxx>
 #include <vcl/xtextedt.hxx>
 #include <editeng/SpellPortions.hxx>
 
@@ -137,10 +137,10 @@ private:
     FixedText       aLanguageFT;
     SvxLanguageBox  aLanguageLB;
 
-    HelpFixedText       aExplainFT;
-    svt::FixedHyperlink aExplainLink;
+    HelpFixedText   aExplainFT;
+    FixedHyperlink  aExplainLink;
 
-    FixedText           aNotInDictFT;
+    FixedText       aNotInDictFT;
     SentenceEditWindow_Impl  aSentenceED;
 
     FixedText       aSuggestionFT;
@@ -201,7 +201,7 @@ private:
     DECL_LINK( AddToDictClickHdl, PushButton* );
     DECL_LINK( LanguageSelectHdl, SvxLanguageBox* );
     DECL_LINK( DialogUndoHdl, SpellUndoAction_Impl* );
-    DECL_LINK( HandleHyperlink, svt::FixedHyperlink * );
+    DECL_LINK( HandleHyperlink, FixedHyperlink * );
 
     DECL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog * );
 

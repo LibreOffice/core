@@ -33,7 +33,6 @@
 #include "vcl/field.hxx"
 
 #include "svtools/extensionlistbox.hxx"
-#include "svtools/fixedhyper.hxx"
 #include "cppuhelper/implbase1.hxx"
 
 #include "com/sun/star/lang/Locale.hpp"

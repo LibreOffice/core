@@ -1390,7 +1390,7 @@ IMPL_LINK_NOARG(UpdateDialog, closeHandler) {
     return 0;
 }
 
-IMPL_LINK( UpdateDialog, hyperlink_clicked, svt::FixedHyperlink*, pHyperlink )
+IMPL_LINK( UpdateDialog, hyperlink_clicked, FixedHyperlink*, pHyperlink )
 {
     ::rtl::OUString sURL;
     if ( pHyperlink )

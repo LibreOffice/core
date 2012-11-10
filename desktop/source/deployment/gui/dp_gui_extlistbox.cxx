@@ -542,7 +542,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     // Init publisher link here
     if ( !pEntry->m_pPublisher && pEntry->m_sPublisher.Len() )
     {
-        pEntry->m_pPublisher = new svt::FixedHyperlink( this );
+        pEntry->m_pPublisher = new FixedHyperlink( this );
         pEntry->m_pPublisher->SetBackground();
         pEntry->m_pPublisher->SetPaintTransparent( true );
         pEntry->m_pPublisher->SetURL( pEntry->m_sPublisherURL );

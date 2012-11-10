@@ -28,7 +28,6 @@
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/imagealign.hxx>
 #include <toolkit/helper/accessibilityclient.hxx>
-#include <toolkit/helper/fixedhyperbase.hxx>
 #include <toolkit/helper/tkresmgr.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/awt/VisualEffect.hpp>
@@ -46,6 +45,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
+#include <vcl/fixedhyper.hxx>
 #include <vcl/longcurr.hxx>
 #include <vcl/imgctrl.hxx>
 #include <vcl/dialog.hxx>
@@ -2919,7 +2919,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
             {
                 // open the URL
                 ::rtl::OUString sURL;
-                ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
+                FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
                 if ( pBase )
                     sURL = pBase->GetURL();
                 Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute( ::com::sun::star::system::SystemShellExecute::create(
@@ -2954,7 +2954,7 @@ void VCLXFixedHyperlink::setText( const ::rtl::OUString& Text ) throw(::com::sun
 {
     SolarMutexGuard aGuard;
 
-    ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
+    FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
     if ( pBase )
         pBase->SetDescription( Text );
 }
@@ -2974,7 +2974,7 @@ void VCLXFixedHyperlink::setURL( const ::rtl::OUString& URL ) throw(::com::sun::
 {
     SolarMutexGuard aGuard;
 
-    ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
+    FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
     if ( pBase )
         pBase->SetURL( URL );
 }
@@ -2984,7 +2984,7 @@ void VCLXFixedHyperlink::setURL( const ::rtl::OUString& URL ) throw(::com::sun::
     SolarMutexGuard aGuard;
 
     ::rtl::OUString aText;
-    ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
+    FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
     if ( pBase )
         aText = pBase->GetURL();
     return aText;
@@ -3074,7 +3074,7 @@ void VCLXFixedHyperlink::setProperty( const ::rtl::OUString& PropertyName, const
 {
     SolarMutexGuard aGuard;
 
-    ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
+    FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
     if ( pBase )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -3109,7 +3109,7 @@ void VCLXFixedHyperlink::setProperty( const ::rtl::OUString& PropertyName, const
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
-    ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
+    FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
     if ( pBase )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );

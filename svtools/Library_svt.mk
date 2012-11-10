@@ -114,7 +114,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/control/filectrl \
     svtools/source/control/filectrl2 \
     svtools/source/control/fileurlbox \
-    svtools/source/control/fixedhyper \
     svtools/source/control/fmtfield \
     svtools/source/control/headbar \
     svtools/source/control/hyperlabel \

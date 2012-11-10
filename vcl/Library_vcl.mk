@@ -131,6 +131,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/field2 \
     vcl/source/control/field \
     vcl/source/control/fixed \
+    vcl/source/control/fixedhyper \
     vcl/source/control/group \
     vcl/source/control/ilstbox \
     vcl/source/control/imgctrl \

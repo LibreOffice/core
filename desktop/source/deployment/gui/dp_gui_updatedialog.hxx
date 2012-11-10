@@ -41,10 +41,10 @@
 #include "svx/checklbx.hxx"
 #include "tools/link.hxx"
 #include "tools/solar.h"
-#include "vcl/button.hxx"
-#include "vcl/dialog.hxx"
-#include "vcl/fixed.hxx"
-#include <svtools/fixedhyper.hxx>
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/fixedhyper.hxx>
 #include <vcl/throbber.hxx>
 
 #include "descedit.hxx"
@@ -177,7 +177,7 @@ private:
     DECL_LINK(allHandler, void *);
     DECL_LINK(okHandler, void *);
     DECL_LINK(closeHandler, void *);
-    DECL_LINK(hyperlink_clicked, svt::FixedHyperlink *);
+    DECL_LINK(hyperlink_clicked, FixedHyperlink *);
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         m_context;
@@ -188,9 +188,9 @@ private:
     CheckBox m_all;
     FixedLine m_description;
     FixedText m_PublisherLabel;
-    svt::FixedHyperlink m_PublisherLink;
+    FixedHyperlink m_PublisherLink;
     FixedText m_ReleaseNotesLabel;
-    svt::FixedHyperlink m_ReleaseNotesLink;
+    FixedHyperlink m_ReleaseNotesLink;
     dp_gui::DescriptionEdit m_descriptions;
     FixedLine m_line;
     HelpButton m_help;

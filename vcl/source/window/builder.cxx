@@ -16,6 +16,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/fixedhyper.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
@@ -702,6 +703,8 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             pWindow = pField;
         }
     }
+    else if (name == "GtkLinkButton")
+        pWindow = new FixedHyperlink(pParent);
     else if (name == "GtkComboBox")
     {
         extractModel(id, rMap);

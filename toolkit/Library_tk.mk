@@ -114,7 +114,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/unocontrols \
     toolkit/source/helper/accessibilityclient \
     toolkit/source/helper/externallock \
-    toolkit/source/helper/fixedhyperbase \
     toolkit/source/helper/formpdfexport \
     toolkit/source/helper/imagealign \
     toolkit/source/helper/listenermultiplexer \
