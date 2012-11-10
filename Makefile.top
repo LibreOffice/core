@@ -49,6 +49,7 @@ binaryurp\
 bluez_bluetooth\
 boost\
 bridges\
+cairo\
 canvas\
 chart2\
 cli_ure\
@@ -217,7 +218,6 @@ zlib\
 
 dmake_modules:=\
 berkeleydb\
-cairo\
 cppunit\
 crashrep\
 external\
