@@ -35,6 +35,8 @@ $(eval $(call gb_Executable_use_libraries,cfgex,\
     sal \
 ))
 
+$(eval $(call gb_Executable_use_unpacked,cfgex,boost))
+
 $(eval $(call gb_Executable_add_scanners,cfgex,\
     l10ntools/source/cfglex \
 ))
