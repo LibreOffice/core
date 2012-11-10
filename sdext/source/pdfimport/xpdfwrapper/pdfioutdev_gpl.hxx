@@ -34,9 +34,6 @@
 #include "Link.h"
 #include "Object.h"
 #include "OutputDev.h"
-#ifndef SYSTEM_POPPLER
-#  include "parseargs.h"
-#endif
 #include "GlobalParams.h"
 #include "PDFDoc.h"
 
@@ -52,16 +49,11 @@
 class GfxPath;
 class GfxFont;
 class PDFDoc;
-#ifndef SYSTEM_POPPLER
-#define POPPLER_CHECK_VERSION(major,minor,micro) (0)
-typedef GString GooString;
-#else
 #include <cpp/poppler-version.h>
 #define POPPLER_CHECK_VERSION(major,minor,micro) \
   (POPPLER_VERSION_MAJOR > (major) || \
    (POPPLER_VERSION_MAJOR == (major) && POPPLER_VERSION_MINOR > (minor)) || \
    (POPPLER_VERSION_MAJOR == (major) && POPPLER_VERSION_MINOR == (minor) && POPPLER_VERSION_MICRO >= (micro)))
-#endif
 
 namespace pdfi
 {

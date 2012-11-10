@@ -137,6 +137,7 @@ openldap\
 package\
 packimages\
 padmin\
+poppler\
 postgresql\
 psprint_config\
 pyuno\
@@ -241,7 +242,6 @@ redland\
 setup_native\
 stlport\
 sysui\
-xpdf\
 
 export gb_TAILBUILDTARGET=all slowcheck
 

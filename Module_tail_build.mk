@@ -126,6 +126,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	$(call gb_Helper_optional,OPENLDAP,openldap) \
 	package \
 	padmin \
+	$(call gb_Helper_optional,POPPLER,poppler) \
 	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
 	psprint_config \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
