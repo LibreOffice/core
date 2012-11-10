@@ -15,7 +15,7 @@ $(eval $(call gb_ExternalPackage_use_external_project,libexttextcat,libexttextca
 
 $(eval $(call gb_ExternalPackage_add_file,libexttextcat,lib/libexttextcat.a,src/.libs/libexttextcat-1.0.a))
 ifeq ($(OS),WNT)
-$(eval $(call gb_ExternalPackage_add_file,libexttextcat,bin/libexttextcat.dll,src/.libs/libexttextcat-1.0.dll))
+$(eval $(call gb_ExternalPackage_add_file,libexttextcat,bin/libexttextcat.dll,src/.libs/libexttextcat.dll))
 endif
 
 endif
