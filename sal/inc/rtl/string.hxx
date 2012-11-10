@@ -1479,6 +1479,20 @@ struct OStringHash
 
 /* ======================================================================= */
 
+/**
+    Support for rtl::OString in std::ostream (and thus in
+    CPPUNIT_ASSERT or SAL_INFO macros, for example).
+
+    @since LibreOffice 3.7
+ */
+template< typename charT, typename traits > std::basic_ostream<charT, traits> &
+operator <<(
+    std::basic_ostream<charT, traits> & stream, rtl::OString const & string)
+{
+    return stream << string.getStr();
+        // best effort; potentially loses data due to embedded null characters
+}
+
 } /* Namespace */
 
 #ifdef RTL_USING
