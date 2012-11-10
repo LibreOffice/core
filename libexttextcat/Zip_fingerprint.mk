@@ -25,9 +25,9 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Zip_Zip,fingerprint,$(call gb_UnpackedTarball_get_dir,libexttextcat)/langclass))
+$(eval $(call gb_Zip_Zip,fingerprint,$(call gb_UnpackedTarball_get_dir,exttextcat)/langclass))
 
-$(eval $(call gb_Zip_use_unpacked,fingerprint,libexttextcat))
+$(eval $(call gb_Zip_use_unpacked,fingerprint,exttextcat))
 
 $(eval $(call gb_Zip_add_files,fingerprint,\
 	langclass/fpdb.conf \
