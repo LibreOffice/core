@@ -14,11 +14,11 @@ $(eval $(call gb_StaticLibrary_use_unpacked,exttextcat,libexttextcat))
 $(eval $(call gb_StaticLibrary_set_warnings_not_errors,exttextcat))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,exttextcat,\
-	UnpackedTarball/libexttextcat/src/common \
-	UnpackedTarball/libexttextcat/src/fingerprint \
-	UnpackedTarball/libexttextcat/src/textcat \
-	UnpackedTarball/libexttextcat/src/wg_mempool \
-	UnpackedTarball/libexttextcat/src/utf8misc \
+	UnpackedTarball/exttextcat/src/common \
+	UnpackedTarball/exttextcat/src/fingerprint \
+	UnpackedTarball/exttextcat/src/textcat \
+	UnpackedTarball/exttextcat/src/wg_mempool \
+	UnpackedTarball/exttextcat/src/utf8misc \
 ))
 
 

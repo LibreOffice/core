@@ -7,15 +7,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,libexttextcat))
+$(eval $(call gb_ExternalProject_ExternalProject,exttextcat))
 
-$(eval $(call gb_ExternalProject_use_unpacked,libexttextcat,libexttextcat))
+$(eval $(call gb_ExternalProject_use_unpacked,exttextcat,exttextcat))
 
-$(eval $(call gb_ExternalProject_register_targets,libexttextcat,\
+$(eval $(call gb_ExternalProject_register_targets,exttextcat,\
 	build \
 ))
 
-$(call gb_ExternalProject_get_state_target,libexttextcat,build):
+$(call gb_ExternalProject_get_state_target,exttextcat,build):
 	cd $(EXTERNAL_WORKDIR) \
 	&& ./configure --disable-shared --with-pic \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \

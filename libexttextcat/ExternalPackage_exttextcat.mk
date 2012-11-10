@@ -7,15 +7,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,libexttextcat,libexttextcat))
+$(eval $(call gb_ExternalPackage_ExternalPackage,exttextcat,exttextcat))
 
 ifneq ($(COM),MSC)
 
-$(eval $(call gb_ExternalPackage_use_external_project,libexttextcat,libexttextcat))
+$(eval $(call gb_ExternalPackage_use_external_project,exttextcat,exttextcat))
 
-$(eval $(call gb_ExternalPackage_add_file,libexttextcat,lib/libexttextcat.a,src/.libs/libexttextcat-1.0.a))
+$(eval $(call gb_ExternalPackage_add_file,exttextcat,lib/libexttextcat.a,src/.libs/libexttextcat-1.0.a))
 ifeq ($(OS),WNT)
-$(eval $(call gb_ExternalPackage_add_file,libexttextcat,bin/libexttextcat.dll,src/.libs/libexttextcat.dll))
+$(eval $(call gb_ExternalPackage_add_file,exttextcat,bin/libexttextcat.dll,src/.libs/libexttextcat.dll))
 endif
 
 endif

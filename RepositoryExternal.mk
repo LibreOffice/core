@@ -512,7 +512,7 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,libexttextcat/src) \
+	-I$(call gb_UnpackedTarball_get_dir,exttextcat/src) \
 	$$(INCLUDE) \
 )
 
