@@ -244,12 +244,7 @@ namespace cairocanvas
             getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
                       const ::com::sun::star::geometry::IntegerPoint2D& pos );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapPalette > getPalette();
-
         ::com::sun::star::rendering::IntegerBitmapLayout getMemoryLayout();
-
-        // Flush drawing queue to screen
-        void                    flush() const;
 
         /** Called from XCanvas base classes, to notify that content
             is _about_ to change

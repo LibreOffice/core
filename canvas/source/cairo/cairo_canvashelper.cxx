@@ -1626,12 +1626,6 @@ namespace cairocanvas
         return uno::Sequence< sal_Int8 >();
     }
 
-    uno::Reference< rendering::XBitmapPalette > CanvasHelper::getPalette()
-    {
-        // TODO(F1): Palette bitmaps NYI
-        return uno::Reference< rendering::XBitmapPalette >();
-    }
-
     namespace
     {
         class CairoColorSpace : public cppu::WeakImplHelper1< com::sun::star::rendering::XIntegerBitmapColorSpace >
@@ -2018,10 +2012,6 @@ namespace cairocanvas
         aLayout.IsMsbFirst = sal_False;
 
         return aLayout;
-    }
-
-    void CanvasHelper::flush() const
-    {
     }
 
     bool CanvasHelper::hasAlpha() const

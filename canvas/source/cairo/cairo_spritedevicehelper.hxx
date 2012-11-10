@@ -64,7 +64,6 @@ namespace cairocanvas
         void notifySizeUpdate( const ::com::sun::star::awt::Rectangle& rBounds );
         void setSize( const ::basegfx::B2ISize& rSize );
 
-        ::cairo::SurfaceSharedPtr getSurface();
         ::cairo::SurfaceSharedPtr getBufferSurface();
         ::cairo::SurfaceSharedPtr getWindowSurface();
         ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
