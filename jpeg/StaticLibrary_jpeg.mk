@@ -11,6 +11,8 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,jpeg))
 
 $(eval $(call gb_StaticLibrary_set_warnings_not_errors,jpeg))
 
+$(eval $(call gb_StaticLibrary_use_package,jpeg,jpeg_inc))
+
 $(eval $(call gb_StaticLibrary_use_unpacked,jpeg,jpeg))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,jpeg,\
