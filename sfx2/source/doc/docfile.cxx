@@ -637,7 +637,20 @@ SvStream* SfxMedium::GetOutStream()
 
         if ( pImp->pTempFile )
         {
-            pImp->m_pOutStream = new SvFileStream( pImp->m_aName, STREAM_STD_READWRITE );
+            // try to re-use XOutStream from xStream if that exists;
+            // opening new SvFileStream in this situation may fail on
+            // Windows with ERROR_SHARING_VIOLATION
+            if (pImp->xStream.is())
+            {
+                assert(pImp->xStream->getOutputStream().is()); // need that...
+                pImp->m_pOutStream = utl::UcbStreamHelper::CreateStream(
+                        pImp->xStream, false);
+            }
+            else
+            {
+                pImp->m_pOutStream = new SvFileStream(
+                        pImp->m_aName, STREAM_STD_READWRITE);
+            }
             CloseStorage();
         }
     }
