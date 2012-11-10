@@ -567,12 +567,14 @@ SwSpellPopup::SwSpellPopup(
     const String &rParaText ) :
 PopupMenu( SW_RES(MN_SPELL_POPUP) ),
 pSh( pWrtSh ),
+xGrammarResult( rResult ),
 aSuggestions( rSuggestions ),
 sExplanationLink( ),
 bGrammarResults( true ),
 aInfo16( SW_RES(IMG_INFO_16) )
 {
     nCheckedLanguage = SvxLocaleToLanguage( rResult.aLocale );
+    nGrammarError = nErrorInResult;
     bool bUseImagesInMenus = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
 
     sal_uInt16 nPos = 0;
@@ -806,8 +808,20 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     else if (nId == MN_IGNORE_SELECTION)
     {
         SwPaM *pPaM = pSh->GetCrsr();
-        if (pPaM)
+        if (pPaM) {
+            if (bGrammarResults) {
+                try
+                {
+                    xGrammarResult.xProofreader->ignoreRule(
+                        xGrammarResult.aErrors[ nGrammarError ].aRuleIdentifier,
+                            xGrammarResult.aLocale );
+                }
+                catch( const uno::Exception& )
+                {
+                }
+            }
             pSh->IgnoreGrammarErrorAt( *pPaM );
+        }
     }
     else if (nId == MN_IGNORE_WORD)
     {
