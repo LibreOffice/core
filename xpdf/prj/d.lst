@@ -1,5 +1,0 @@
-mkdir: %_DEST%\inc\xpdf
-..\%__SRC%\inc\*.h %_DEST%\inc\xpdf\*.h
-..\%__SRC%\lib\lib*.a %_DEST%\lib
-..\%__SRC%\lib\*.lib %_DEST%\lib
-..\%__SRC%\bin\*.dll %_DEST%\bin
