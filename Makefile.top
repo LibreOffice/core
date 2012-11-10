@@ -217,7 +217,6 @@ zlib\
 
 dmake_modules:=\
 berkeleydb\
-binfilter \
 cairo\
 cppunit\
 crashrep\
