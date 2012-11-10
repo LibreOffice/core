@@ -310,30 +310,6 @@ namespace cairocanvas
         cairo_set_font_size( pCairo, aFontRequest.CellSize );
     }
 
-  /** TextLayout:draw
-   *
-   * This function uses the "toy" api of the cairo library
-   *
-   **/
-    bool TextLayout::draw( Cairo* pCairo )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        ::rtl::OUString aSubText = maText.Text.copy( maText.StartPosition, maText.Length );
-        ::rtl::OString aUTF8String = ::rtl::OUStringToOString( aSubText, RTL_TEXTENCODING_UTF8 );
-
-        cairo_save( pCairo );
-        /* move to 0, 0 as cairo_show_text advances current point and current point is not restored by cairo_restore.
-           before we were depending on unmodified current point which I believed was preserved by save/restore */
-        cairo_move_to( pCairo, 0, 0 );
-        useFont( pCairo );
-        cairo_show_text( pCairo, aUTF8String.getStr() );
-        cairo_restore( pCairo );
-
-        return true;
-    }
-
-
   /**
    * TextLayout::isCairoRenderable
    *
