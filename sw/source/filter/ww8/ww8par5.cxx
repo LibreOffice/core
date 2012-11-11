@@ -3464,12 +3464,12 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
     String sURL, sTarget, sMark;
     bool bDataImport = false;
     //HYPERLINK "filename" [switches]
-    bool bOptions=false;
 
     rStr = comphelper::string::stripEnd(rStr, 1);
 
     if (!bDataImport)
     {
+        bool bOptions = false;
         long nRet;
         _ReadFieldParams aReadParam( rStr );
         while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
@@ -3477,7 +3477,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
             switch( nRet )
             {
                 case -2:
-                    if (!sURL.Len() & !bOptions)
+                    if (!sURL.Len() && !bOptions)
                         ConvertFFileName(sURL, aReadParam.GetResult());
                     break;
 
