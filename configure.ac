@@ -4125,7 +4125,6 @@ if test "$cross_compiling" = "yes"; then
     ./configure \
         --disable-graphite \
         --disable-build-mozilla \
-        --disable-mozilla \
         --disable-postgresql-sdbc \
         --disable-zenity \
         --with-parallelism="$with_parallelism" \
