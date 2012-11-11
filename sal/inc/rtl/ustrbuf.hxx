@@ -919,6 +919,20 @@ public:
         return *this;
     }
 
+    /**
+        Removes the tail of a string buffer start at the indicate position
+
+        start must be >= 0 && <= This->length
+
+        @param  start       The beginning index, inclusive. default to 0
+        @return this string buffer.
+     */
+    OUStringBuffer & remove( sal_Int32 start = 0)
+    {
+        rtl_uStringbuffer_remove( &pData, start, getLength() - start );
+        return *this;
+    }
+
     /** Allows access to the internal data of this OUStringBuffer, for effective
         manipulation.
 
