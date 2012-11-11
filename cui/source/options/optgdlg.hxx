@@ -185,6 +185,7 @@ class OfaLanguagesTabPage : public SfxTabPage
     CheckBox        aAsianSupportCB;
     ReadOnlyImage   aCTLSupportFI;
     CheckBox        aCTLSupportCB;
+    CheckBox        aIgnoreLanguageChangeCB;
 
     const String    sDecimalSeparatorLabel;
 

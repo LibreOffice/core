@@ -149,6 +149,8 @@
 
 #include "../../core/inc/rootfrm.hxx"
 
+#include <unotools/syslocaleoptions.hxx>
+
 using namespace sw::mark;
 using namespace ::com::sun::star;
 
@@ -773,6 +775,16 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView&
     const String &rInBuffer)
 {
     sal_uInt16 nWhich = INVALID_HINT;
+
+    //If the option to IgnoreLanguageChange is set, short-circuit this method
+    //which results in the document/paragraph language remaining the same
+    //despite a change to the keyboard/input language
+    SvtSysLocaleOptions aSysLocaleOptions;
+    if(aSysLocaleOptions.IsIgnoreLanguageChange())
+    {
+        return INVALID_HINT;
+    }
+
     bool bLang = true;
     if(eBufferLanguage != LANGUAGE_DONTKNOW)
     {

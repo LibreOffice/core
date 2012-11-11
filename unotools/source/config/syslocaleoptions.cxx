@@ -79,12 +79,14 @@ class SvtSysLocaleOptions_Impl : public utl::ConfigItem
         OUString                m_aCurrencyString;  // USD-en-US or EUR-de-DE
         OUString                m_aDatePatternsString;  // "Y-M-D;M-D"
         sal_Bool                m_bDecimalSeparator; //use decimal separator same as locale
+		sal_Bool                m_bIgnoreLanguageChange; //OS language change doesn't affect LO document language
 
         sal_Bool                m_bROLocale;
         sal_Bool                m_bROUILocale;
         sal_Bool                m_bROCurrency;
         sal_Bool                m_bRODatePatterns;
         sal_Bool                m_bRODecimalSeparator;
+		sal_Bool                m_bROIgnoreLanguageChange;
 
         static  const Sequence< /* const */ OUString >  GetPropertyNames();
         void                    MakeRealLocale();
@@ -115,6 +117,9 @@ public:
 
             sal_Bool            IsDecimalSeparatorAsLocale() const { return m_bDecimalSeparator;}
             void                SetDecimalSeparatorAsLocale( sal_Bool bSet);
+			
+			sal_Bool            IsIgnoreLanguageChange() const { return m_bIgnoreLanguageChange;}
+			void                SetIgnoreLanguageChange( sal_Bool bSet);
 
             sal_Bool            IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const;
             const Locale&       GetRealLocale() { return m_aRealLocale; }
@@ -131,14 +136,17 @@ public:
 #define PROPERTYNAME_CURRENCY           OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupCurrency"))
 #define PROPERTYNAME_DECIMALSEPARATOR   OUString(RTL_CONSTASCII_USTRINGPARAM("DecimalSeparatorAsLocale"))
 #define PROPERTYNAME_DATEPATTERNS       OUString(RTL_CONSTASCII_USTRINGPARAM("DateAcceptancePatterns"))
+#define PROPERTYNAME_IGNORELANGCHANGE   OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreLanguageChange"))
 
 #define PROPERTYHANDLE_LOCALE           0
 #define PROPERTYHANDLE_UILOCALE         1
 #define PROPERTYHANDLE_CURRENCY         2
 #define PROPERTYHANDLE_DECIMALSEPARATOR 3
 #define PROPERTYHANDLE_DATEPATTERNS     4
+#define PROPERTYHANDLE_IGNORELANGCHANGE 5
 
-#define PROPERTYCOUNT                   5
+//#define PROPERTYCOUNT                   5
+#define PROPERTYCOUNT                   6
 
 const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
 {
@@ -148,7 +156,8 @@ const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
         PROPERTYNAME_UILOCALE,
         PROPERTYNAME_CURRENCY,
         PROPERTYNAME_DECIMALSEPARATOR,
-        PROPERTYNAME_DATEPATTERNS
+        PROPERTYNAME_DATEPATTERNS,
+		PROPERTYNAME_IGNORELANGCHANGE
     };
     const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     return seqPropertyNames;
@@ -164,6 +173,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     , m_bROCurrency(CFG_READONLY_DEFAULT)
     , m_bRODatePatterns(CFG_READONLY_DEFAULT)
     , m_bRODecimalSeparator(sal_False)
+	, m_bROIgnoreLanguageChange(sal_False)
 
 {
     if ( IsValidConfigMgr() )
@@ -243,6 +253,18 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                                 m_bRODatePatterns = pROStates[nProp];
                             }
                         break;
+						case PROPERTYHANDLE_IGNORELANGCHANGE :
+						    {
+                                sal_Bool bValue = sal_Bool();
+                                if ( pValues[nProp] >>= bValue )
+                                    m_bIgnoreLanguageChange = bValue;
+                                else
+                                {
+                                    SAL_WARN( "unotools.config", "Wrong property type!" );
+                                }
+                                m_bROIgnoreLanguageChange = pROStates[nProp];
+							}
+						break;
                         default:
                             SAL_WARN( "unotools.config", "Wrong property type!" );
                     }
@@ -368,7 +390,7 @@ void SvtSysLocaleOptions_Impl::Commit()
                     }
                 }
                 break;
-            case  PROPERTYHANDLE_DECIMALSEPARATOR:
+            case PROPERTYHANDLE_DECIMALSEPARATOR:
                 if( !m_bRODecimalSeparator )
                 {
                     pNames[nRealCount] = aOrgNames[nProp];
@@ -384,6 +406,14 @@ void SvtSysLocaleOptions_Impl::Commit()
                     ++nRealCount;
                 }
                 break;
+			case PROPERTYHANDLE_IGNORELANGCHANGE :
+			    if (!m_bROIgnoreLanguageChange)
+				{
+				    pNames[nRealCount] = aOrgNames[nProp];
+					pValues[nRealCount] <<= m_bIgnoreLanguageChange;
+					++nRealCount;
+				}
+				break;
             default:
                 SAL_WARN( "unotools.config", "invalid index to save a path" );
         }
@@ -454,6 +484,16 @@ void SvtSysLocaleOptions_Impl::SetDecimalSeparatorAsLocale( sal_Bool bSet)
     }
 }
 
+void SvtSysLocaleOptions_Impl::SetIgnoreLanguageChange( sal_Bool bSet)
+{
+    if(bSet != m_bIgnoreLanguageChange)
+    {
+        m_bIgnoreLanguageChange = bSet;
+        SetModified();
+        NotifyListeners( SYSLOCALEOPTIONS_HINT_IGNORELANG );
+    }
+}
+
 void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPropertyNames )
 {
     sal_uLong nHint = 0;
@@ -492,6 +532,11 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPrope
             seqValues[nProp] >>= m_bDecimalSeparator;
             m_bRODecimalSeparator = seqROStates[nProp];
         }
+		else if( seqPropertyNames[nProp] == PROPERTYNAME_IGNORELANGCHANGE )
+		{
+			seqValues[nProp] >>= m_bIgnoreLanguageChange;
+			m_bROIgnoreLanguageChange = seqROStates[nProp];
+		}
         else if( seqPropertyNames[nProp] == PROPERTYNAME_DATEPATTERNS )
         {
             DBG_ASSERT( seqValues[nProp].getValueTypeClass() == TypeClass_STRING, "DatePatterns property type" );
@@ -628,6 +673,17 @@ void SvtSysLocaleOptions::SetDecimalSeparatorAsLocale( sal_Bool bSet)
     pOptions->SetDecimalSeparatorAsLocale(bSet);
 }
 
+sal_Bool SvtSysLocaleOptions::IsIgnoreLanguageChange() const
+{
+    MutexGuard aGuard( GetMutex() );
+    return pOptions->IsIgnoreLanguageChange();
+}
+
+void SvtSysLocaleOptions::SetIgnoreLanguageChange( sal_Bool bSet)
+{
+    MutexGuard aGuard( GetMutex() );
+    pOptions->SetIgnoreLanguageChange(bSet);
+}
 
 sal_Bool SvtSysLocaleOptions::IsReadOnly( EOption eOption ) const
 {

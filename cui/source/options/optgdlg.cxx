@@ -1222,6 +1222,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aAsianSupportCB(this,       CUI_RES(CB_ASIANSUPPORT   )),
     aCTLSupportFI(this,         CUI_RES(FI_CTLSUPPORT    )),
     aCTLSupportCB(this,         CUI_RES(CB_CTLSUPPORT   )),
+    aIgnoreLanguageChangeCB(this, CUI_RES(CB_IGNORE_LANG_CHANGE   )),
     sDecimalSeparatorLabel(aDecimalSeparatorCB.GetText()),
     pLangConfig(new LanguageConfig_Impl)
 {
@@ -1347,6 +1348,8 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aCTLSupportCB.Enable(!bReadonly);
     aCTLSupportFI.Show(bReadonly);
     SupportHdl( &aCTLSupportCB );
+
+    aIgnoreLanguageChangeCB.Check( pLangConfig->aSysLocaleOptions.IsIgnoreLanguageChange() );
 }
 
 OfaLanguagesTabPage::~OfaLanguagesTabPage()
@@ -1514,6 +1517,9 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     if(aDecimalSeparatorCB.GetSavedValue() != aDecimalSeparatorCB.IsChecked())
         pLangConfig->aSysLocaleOptions.SetDecimalSeparatorAsLocale(aDecimalSeparatorCB.IsChecked());
 
+    if(aIgnoreLanguageChangeCB.GetSavedValue() != aIgnoreLanguageChangeCB.IsChecked())
+        pLangConfig->aSysLocaleOptions.SetIgnoreLanguageChange(aIgnoreLanguageChangeCB.IsChecked());
+
     // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default.
     OUString sOldCurr = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
     sal_uInt16 nCurrPos = aCurrencyLB.GetSelectEntryPos();
@@ -1659,6 +1665,9 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     aDecimalSeparatorCB.Check( pLangConfig->aSysLocaleOptions.IsDecimalSeparatorAsLocale());
     aDecimalSeparatorCB.SaveValue();
 
+    aIgnoreLanguageChangeCB.Check( pLangConfig->aSysLocaleOptions.IsIgnoreLanguageChange());
+    aIgnoreLanguageChangeCB.SaveValue();
+
     // let LocaleSettingHdl enable/disable checkboxes for CJK/CTL support
     // #i15812# must be done *before* the configured currency is set
     // and update the decimal separator used for the given locale
@@ -1775,6 +1784,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     aWesternLanguageLB.SaveValue();
     aAsianLanguageLB.SaveValue();
     aComplexLanguageLB.SaveValue();
+    aIgnoreLanguageChangeCB.SaveValue();
     aCurrentDocCB.SaveValue();
 
     sal_Bool bEnable = !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale" );

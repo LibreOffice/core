@@ -36,6 +36,7 @@ const sal_uLong SYSLOCALEOPTIONS_HINT_CURRENCY     = 0x00000002;
 const sal_uLong SYSLOCALEOPTIONS_HINT_UILOCALE     = 0x00000004;
 const sal_uLong SYSLOCALEOPTIONS_HINT_DECSEP       = 0x00000008;
 const sal_uLong SYSLOCALEOPTIONS_HINT_DATEPATTERNS = 0x00000010;
+const sal_uLong SYSLOCALEOPTIONS_HINT_IGNORELANG   = 0x00000020;
 
 class SvtSysLocaleOptions_Impl;
 class SvtListener;
@@ -120,6 +121,11 @@ public:
     // or the one approriate to the locale
             sal_Bool            IsDecimalSeparatorAsLocale() const;
             void                SetDecimalSeparatorAsLocale( sal_Bool bSet);
+
+    // determine whether to ignore changes to the system keyboard/locale/language when 
+    // determining the language for newly entered text
+            sal_Bool            IsIgnoreLanguageChange() const;
+            void                SetIgnoreLanguageChange( sal_Bool bSet);
 
     // convenience methods
 

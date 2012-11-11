@@ -457,6 +457,14 @@
                 </info>
                 <value>true</value>
 			</prop>
+            <prop oor:name="IgnoreLanguageChange" oor:type="xs:boolean" oor:nillable="false">
+                <info>
+                    <author>OS</author>
+                    <desc>Indicates whether changes to the system input language/keyboard will be ignored. If ignored, when new text is typed that text will follow the language of the document or current paragraph, not the current system language.</desc>
+                    <label>Ignore system input language.</label>
+                </info>
+                <value>false</value>
+			</prop>
 			<prop oor:name="DateAcceptancePatterns" oor:type="xs:string" oor:nillable="true">
 				<!-- UIHints: Tools - Options - Language Settings - Languages - Language of - Date acceptance patterns -->
 				<info>
