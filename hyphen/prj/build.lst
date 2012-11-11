@@ -1,3 +1,2 @@
 hyp     hyphen  :       soltools solenv NULL
-hyp     hyphen              usr1    -       all hyp_mkout NULL
-hyp     hyphen              nmake   -       all hyp_hyphen NULL
+hyp     hyphen\prj              nmake   -       all hyp_hyphen NULL

@@ -1,3 +1,3 @@
 my	postgresql	:	solenv sal OPENLDAP:openldap OPENSSL:openssl NULL
-my	postgresql    nmake	-	all	my_mkout NULL
+my	postgresql\prj    nmake	-	all	my_mkout NULL
 

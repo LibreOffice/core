@@ -1,3 +1,2 @@
 fc     fontconfig      :       FREETYPE:freetype EXPAT:expat NULL
-fc     fontconfig              usr1    -       u fc_mkout NULL
-fc     fontconfig              nmake   -       u fc_libfontconfig NULL
+fc     fontconfig\prj              nmake   -       u fc_libfontconfig NULL

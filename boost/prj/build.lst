@@ -1,3 +1,2 @@
 bo      boost : solenv soltools NULL
-bo      boost           usr1    -       all     bo_mkout NULL
-bo      boost           nmake   -       all     bo_boost NULL
+bo      boost\prj           nmake   -       all     bo_boost NULL
