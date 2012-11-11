@@ -81,6 +81,7 @@ certain functionality.
 @li @c filter.ms - escher import/export
 @li @c filter.xslt - xslt import/export
 @li @c oox.xmlstream - XmlStream class
+@li @c oox.storage - ZipStorage class
 
 @section formula
 
