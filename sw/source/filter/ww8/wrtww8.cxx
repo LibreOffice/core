@@ -614,7 +614,7 @@ void WW8_WrPlc1::Append( WW8_CP nCp, const void* pNewData )
     if( nDataLen < nInsPos + nStructSiz )
     {
         sal_uInt8* pNew = new sal_uInt8[ 2 * nDataLen ];
-        memmove( pNew, pData, nDataLen );
+        memcpy( pNew, pData, nDataLen );
         delete[] pData;
         pData = pNew;
         nDataLen *= 2;

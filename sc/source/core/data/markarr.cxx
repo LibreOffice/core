@@ -300,7 +300,7 @@ void ScMarkArray::CopyMarksTo( ScMarkArray& rDestMarkArray ) const
     if (pData)
     {
         rDestMarkArray.pData = new ScMarkEntry[nCount];
-        memmove( rDestMarkArray.pData, pData, nCount * sizeof(ScMarkEntry) );
+        memcpy( rDestMarkArray.pData, pData, nCount * sizeof(ScMarkEntry) );
     }
     else
         rDestMarkArray.pData = NULL;
