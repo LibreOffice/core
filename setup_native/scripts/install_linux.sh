@@ -94,6 +94,7 @@ done
 if [ $# != 2 ]
 then
   echo $USAGE
+  echo "Example: $0 . ~/libreoffice"
   exit 2
 fi
 
@@ -134,7 +135,7 @@ fi
 #
 
 INSTALLDIR=$2
-RPM_DB_PATH=${INSTALLDIR}/var/lib/rpm
+RPM_DB_PATH=${INSTALLDIR}/.RPM_OFFICE_DATABASE
 
 # Check for versionrc
 if [ -f ${INSTALLDIR}/program/versionrc ]; then VERSIONRC=versionrc; fi
@@ -206,12 +207,6 @@ then
 else
   rmdir ${INSTALLDIR} 2>/dev/null
 
-  if [ -d  ${INSTALLDIR} -a "$ADD" = "no" ]
-  then
-    printf "\n$0: ${INSTALLDIR} exists and is not empty.\n"
-    exit 2
-  fi
-
   mkdir -p $RPM_DB_PATH || exit 2
   # XXX why ? XXX
   chmod 700 $RPM_DB_PATH
@@ -261,7 +256,7 @@ echo "Installing the RPMs"
 
 ABSROOT=`cd ${INSTALLDIR}; pwd`
 RELOCATIONS=`rpm -qp --qf "--relocate %{PREFIXES}=${ABSROOT}%{PREFIXES} \n" $RPMLIST | sort -u | tr -d "\012"`
-UserInstallation=\$BRAND_BASE_DIR/../UserInstallation rpm ${DEBIAN_FLAGS} $RPMCMD --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST
+UserInstallation=\$BRAND_BASE_DIR/../UserInstallation rpm ${DEBIAN_FLAGS} --nodeps $RPMCMD --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST
 
 #
 # Create a link into the users home directory
