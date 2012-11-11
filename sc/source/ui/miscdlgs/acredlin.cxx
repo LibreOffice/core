@@ -402,7 +402,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeAction(
     pNewData->nActionNo=pScChangeAction->GetActionNumber();
     pNewData->bIsAcceptable=pScChangeAction->IsClickable();
     pNewData->bIsRejectable=pScChangeAction->IsRejectable();
-    pNewData->bDisabled=!pNewData->bIsAcceptable | bDisabled;
+    pNewData->bDisabled=!pNewData->bIsAcceptable || bDisabled;
     pNewData->aDateTime=aDateTime;
     pNewData->nRow  = aRef.aStart.Row();
     pNewData->nCol  = aRef.aStart.Col();
@@ -579,7 +579,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertFilteredAction(
         pNewData->nActionNo=pScChangeAction->GetActionNumber();
         pNewData->bIsAcceptable=pScChangeAction->IsClickable();
         pNewData->bIsRejectable=pScChangeAction->IsRejectable();
-        pNewData->bDisabled=!pNewData->bIsAcceptable | bDisabled;
+        pNewData->bDisabled=!pNewData->bIsAcceptable || bDisabled;
         pNewData->aDateTime=aDateTime;
         pNewData->nRow  = aRef.aStart.Row();
         pNewData->nCol  = aRef.aStart.Col();

@@ -1307,7 +1307,7 @@ void SAXWriter::startCDATA(void) throw(SAXException, RuntimeException)
 
 void SAXWriter::endCDATA(void) throw (RuntimeException)
 {
-    if( ! m_bDocStarted | ! m_bIsCDATA)
+    if( ! m_bDocStarted || ! m_bIsCDATA)
     {
         SAXException except;
         except.Message = OUString(  "endCDATA was called without startCDATA"  );
