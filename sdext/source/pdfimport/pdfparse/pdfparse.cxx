@@ -325,48 +325,21 @@ public:
         if( ! m_aObjectStack.empty() &&
             (pContainer = dynamic_cast<PDFContainer*>(m_aObjectStack.back())) != NULL )
         {
-            if( dynamic_cast<PDFDict*>(pContainer) == NULL      &&
-                dynamic_cast<PDFArray*>(pContainer) == NULL )
-            {
-                PDFObject* pObj = dynamic_cast<PDFObject*>(pContainer);
-                if( pObj )
-                {
-                    if( pObj->m_pObject == NULL )
-                        pObj->m_pObject = pNewValue;
-                    else
-                    {
-                        pMsg = "second value for object";
-                        pContainer = NULL;
-                    }
-                }
-                else if( dynamic_cast<PDFDict*>(pNewValue) )
-                {
-                    PDFTrailer* pTrailer = dynamic_cast<PDFTrailer*>(pContainer);
-                    if( pTrailer )
-                    {
-                        if( pTrailer->m_pDict == NULL )
-                            pTrailer->m_pDict = dynamic_cast<PDFDict*>(pNewValue);
-                        else
-                            pContainer = NULL;
-                    }
-                    else
-                        pContainer = NULL;
-                }
-                else
-                    pContainer = NULL;
-            }
+            pContainer->insertNewValue(pNewValue, pMsg);
         }
-        if( pContainer )
-            pContainer->m_aSubElements.push_back( pNewValue );
         else
         {
-            if( ! pMsg )
+            if( dynamic_cast<PDFContainer*>(pNewValue) )
             {
-                if( dynamic_cast<PDFContainer*>(pNewValue) )
-                    pMsg = "array without container";
-                else
-                    pMsg = "value without container";
+                pMsg = "array without container";
             }
+            else
+            {
+                pMsg = "value without container";
+            }
+        }
+        if (pMsg != NULL)
+        {
             delete pNewValue;
             parseError( pMsg, pPos );
         }

@@ -478,6 +478,11 @@ bool PDFContainer::emitSubElements( EmitContext& rWriteContext ) const
     return true;
 }
 
+void PDFContainer::insertNewValue(PDFEntry* pNewValue, const char*&)
+{
+    m_aSubElements.push_back( pNewValue );
+}
+
 void PDFContainer::cloneSubElements( std::vector<PDFEntry*>& rNewSubElements ) const
 {
     int nEle = m_aSubElements.size();
@@ -912,6 +917,19 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
     return bRet;
 }
 
+void PDFObject::insertNewValue(PDFEntry* pNewValue, const char*& pMsg)
+{
+    if( m_pObject == NULL )
+    {
+        m_pObject = pNewValue;
+        m_aSubElements.push_back( pNewValue );
+    }
+    else
+    {
+        pMsg = "second value for object";
+    }
+}
+
 PDFEntry* PDFObject::clone() const
 {
     PDFObject* pNewOb = new PDFObject( m_nNumber, m_nGeneration );
@@ -1002,6 +1020,25 @@ bool PDFTrailer::emit( EmitContext& rWriteContext ) const
     if( ! rWriteContext.write( aOffset.getStr(), aOffset.getLength() ) )
         return false;
     return rWriteContext.write( "\n%%EOF\n", 7 );
+}
+
+void PDFTrailer::insertNewValue(PDFEntry* pNewValue, const char*& pMsg)
+{
+    PDFDict* pDict;
+    if( (m_pDict == NULL) &&
+        (pDict = dynamic_cast<PDFDict*>(pNewValue)) != NULL)
+    {
+        m_pDict = pDict;
+        m_aSubElements.push_back( pNewValue );
+    }
+    else if( dynamic_cast<PDFContainer*>(pNewValue) )
+    {
+        pMsg = "array without container";
+    }
+    else
+    {
+        pMsg = "value without container";
+    }
 }
 
 PDFEntry* PDFTrailer::clone() const
@@ -1438,6 +1475,18 @@ PDFFileImplData* PDFFile::impl_getData() const
     return m_pData;
 }
 
+void PDFFile::insertNewValue(PDFEntry* pNewValue, const char*& pMsg)
+{
+    if( dynamic_cast<PDFContainer*>(pNewValue) )
+    {
+        pMsg = "array without container";
+    }
+    else
+    {
+        pMsg = "value without container";
+    }
+}
+
 bool PDFFile::emit( EmitContext& rWriteContext ) const
 {
     setEmitData(  rWriteContext, new EmitImplData( this ) );
@@ -1469,6 +1518,18 @@ PDFPart::~PDFPart()
 bool PDFPart::emit( EmitContext& rWriteContext ) const
 {
     return emitSubElements( rWriteContext );
+}
+
+void PDFPart::insertNewValue(PDFEntry* pNewValue, const char*& pMsg)
+{
+    if( dynamic_cast<PDFContainer*>(pNewValue) )
+    {
+        pMsg = "array without container";
+    }
+    else
+    {
+        pMsg = "value without container";
+    }
 }
 
 PDFEntry* PDFPart::clone() const

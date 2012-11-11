@@ -164,6 +164,7 @@ struct PDFContainer : public PDFEntry
     virtual ~PDFContainer();
     virtual bool emitSubElements( EmitContext& rWriteContext ) const;
     virtual void cloneSubElements( std::vector<PDFEntry*>& rNewSubElements ) const;
+    virtual void insertNewValue(PDFEntry* pNewValue, const char*& pMsg);
 
     PDFObject* findObject( unsigned int nNumber, unsigned int nGeneration ) const;
     PDFObject* findObject( PDFObjectRef* pRef ) const
@@ -220,6 +221,7 @@ struct PDFTrailer : public PDFContainer
     PDFTrailer() : PDFContainer(), m_pDict( NULL ) {}
     virtual ~PDFTrailer();
     virtual bool emit( EmitContext& rWriteContext ) const;
+    virtual void insertNewValue(PDFEntry* pNewValue, const char*& pMsg);
     virtual PDFEntry* clone() const;
 };
 
@@ -241,6 +243,7 @@ struct PDFFile : public PDFContainer
     virtual ~PDFFile();
 
     virtual bool emit( EmitContext& rWriteContext ) const;
+    virtual void insertNewValue(PDFEntry* pNewValue, const char*& pMsg);
     virtual PDFEntry* clone() const;
 
     bool isEncrypted() const;
@@ -270,6 +273,7 @@ struct PDFObject : public PDFContainer
     : m_pObject( NULL ), m_pStream( NULL ), m_nNumber( nNr ), m_nGeneration( nGen ) {}
     virtual ~PDFObject();
     virtual bool emit( EmitContext& rWriteContext ) const;
+    virtual void insertNewValue(PDFEntry* pNewValue, const char*& pMsg);
     virtual PDFEntry* clone() const;
 
     // writes only the contained stream, deflated if necessary
@@ -288,6 +292,7 @@ struct PDFPart : public PDFContainer
     PDFPart() : PDFContainer() {}
     virtual ~PDFPart();
     virtual bool emit( EmitContext& rWriteContext ) const;
+    virtual void insertNewValue(PDFEntry* pNewValue, const char*& pMsg);
     virtual PDFEntry* clone() const;
 };
 
