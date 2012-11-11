@@ -211,7 +211,7 @@ ModelessDialog DLG_TEMPLATE_MANAGER
 
                 ItemImage = Image
                 {
-                    ImageBitmap = Bitmap { File = "import.png" ; };
+                    ImageBitmap = Bitmap { File = "document_import.png" ; };
                 };
             };
 
@@ -246,7 +246,7 @@ ModelessDialog DLG_TEMPLATE_MANAGER
 
                 ItemImage = Image
                 {
-                    ImageBitmap = Bitmap { File = "search.png" ; };
+                    ImageBitmap = Bitmap { File = "edit_find.png" ; };
                 };
             };
 
@@ -276,36 +276,67 @@ ModelessDialog DLG_TEMPLATE_MANAGER
             {
                 Identifier = TBI_TEMPLATE_EDIT;
                 Text [ en-US ] = "Edit";
+
+                ButtonImage = Image
+                {
+                 ImageBitmap = Bitmap { File = "document_edit.png" ; };
+                };
             };
 
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_PROPERTIES;
                 Text [ en-US ] = "Properties";
+
+                ButtonImage = Image
+                {
+                 ImageBitmap = Bitmap { File = "document_properties.png" ; };
+                };
+                
             };
 
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_DEFAULT;
                 Text [ en-US ] = "Set as default";
+
+                ButtonImage = Image
+                {
+                 ImageBitmap = Bitmap { File = "document_set_as_default.png" ; };
+                };
             };
 
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_MOVE;
                 Text [ en-US ] = "Move to folder" ;
+
+                ButtonImage = Image
+                {
+                 ImageBitmap = Bitmap { File = "move_to_folder.png" ; };
+                };
             };
 
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_EXPORT;
                 Text [ en-US ] = "Export";
+
+                ButtonImage = Image
+                {
+                 ImageBitmap = Bitmap { File = "document_export.png" ; };
+                };
             };
 
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_DELETE;
                 Text [ en-US ] = "Delete";
+
+                ButtonImage = Image
+                {
+                 ImageBitmap = Bitmap { File = "edit_delete.png" ; };
+                };
             };
         };
     };
