@@ -109,6 +109,7 @@ lcms2\
 libcdr\
 libcmis\
 libexttextcat\
+liblangtag\
 libmspub\
 liborcus\
 libpng\
@@ -224,7 +225,6 @@ external\
 helpcontent2 \
 icu\
 instsetoo_native\
-liblangtag\
 libxml2\
 libxmlsec\
 libxslt\

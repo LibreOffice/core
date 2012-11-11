@@ -620,6 +620,11 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_liblangtag
+$(call gb_LinkTarget_use_unpacked,$(1),langtag)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,langtag) \
+	$$(INCLUDE) \
+)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	langtag \
 )

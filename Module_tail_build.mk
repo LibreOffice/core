@@ -97,6 +97,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	libcdr \
 	libcmis \
 	$(call gb_Helper_optional,LIBEXTTEXTCAT,libexttextcat) \
+	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
 	libmspub \
 	liborcus \
 	librelogo \
