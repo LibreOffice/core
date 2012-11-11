@@ -866,12 +866,12 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const &
             aToken = aToken.getToken(0, '/');
               if (aToken.equalsAscii(INETTYPE_URL_SSUB_SS))
                   eTypeID = rURL.indexOf(INETTYPE_URL_SCHED_CMB)
-                              == STRING_NOTFOUND
+                              == -1
                           && rURL.indexOf(INETTYPE_URL_SCHED_FORM)
-                                 == STRING_NOTFOUND ?
+                                 == -1 ?
                               CONTENT_TYPE_APP_SCHEDULE :
                           rURL.indexOf(INETTYPE_URL_SCHED_TASK)
-                                  == STRING_NOTFOUND ?
+                                  == -1 ?
                               CONTENT_TYPE_APP_SCHEDULE_EVT :
                               CONTENT_TYPE_APP_SCHEDULE_TASK;
         }
@@ -900,22 +900,22 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const &
 bool INetContentTypes::GetExtensionFromURL(OUString const & rURL,
                                            OUString & rExtension)
 {
-    xub_StrLen nSlashPos = 0;
-    xub_StrLen i = 0;
-    while (i != STRING_NOTFOUND)
+    sal_Int32 nSlashPos = 0;
+    sal_Int32 i = 0;
+    while (i != -1)
     {
         nSlashPos = i;
         i = rURL.indexOf('/', i + 1);
     }
     if (nSlashPos != 0)
     {
-        xub_StrLen nLastDotPos = i = rURL.indexOf('.', nSlashPos);
-        while (i != STRING_NOTFOUND)
+        sal_Int32 nLastDotPos = i = rURL.indexOf('.', nSlashPos);
+        while (i != -1)
         {
             nLastDotPos = i;
             i = rURL.indexOf('.', i + 1);
         }
-        if (nLastDotPos != STRING_NOTFOUND)
+        if (nLastDotPos != -1)
             rExtension = rURL.copy(nLastDotPos + 1);
         return true;
     }
