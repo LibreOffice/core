@@ -31,9 +31,7 @@ using namespace ::com::sun::star;
         if ( m_xInvocation.is() )
         {
             sal_Int32 nLength = 0;
-            bResult =
-                ( ( m_xInvocation->getValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "length" ) ) ) >>= nLength )
-                  && nLength > m_nCurInd );
+            bResult = ( ( m_xInvocation->getValue( OUString("length" ) ) >>= nLength ) && nLength > m_nCurInd );
         }
     }
     catch(const uno::Exception& )
@@ -57,7 +55,7 @@ uno::Any SAL_CALL ComEnumerationWrapper::nextElement()
 
             aArgs[0] <<= m_nCurInd++;
 
-            return m_xInvocation->invoke( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "item" ) ),
+            return m_xInvocation->invoke( OUString("item"),
                                           aArgs,
                                           aNamedParamIndex,
                                           aNamedParam );

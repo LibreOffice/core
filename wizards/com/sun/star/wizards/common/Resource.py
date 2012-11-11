@@ -17,7 +17,6 @@
 #
 import traceback
 from .Configuration import Configuration
-from .SystemDialog import SystemDialog
 
 from com.sun.star.awt.VclWindowPeerAttribute import OK
 
@@ -34,9 +33,6 @@ class Resource(object):
                 raise Exception ("could not initialize ResourceIndexAccess")
 
             self.xStringIndexAccess = xResource.getByName("String")
-            self.xStringListIndexAccess = xResource.getByName("StringList")
-            if self.xStringListIndexAccess is None:
-                raise Exception ("could not initialize xStringListIndexAccess")
 
             if self.xStringIndexAccess is None:
                 raise Exception ("could not initialize xStringIndexAccess")
@@ -48,13 +44,6 @@ class Resource(object):
     def getResText(self, nID):
         try:
             return self.xStringIndexAccess.getByIndex(nID)
-        except Exception, exception:
-            traceback.print_exc()
-            raise ValueError("Resource with ID not " + str(nID) + " not found")
-
-    def getStringList(self, nID):
-        try:
-            return self.xStringListIndexAccess.getByIndex(nID)
         except Exception, exception:
             traceback.print_exc()
             raise ValueError("Resource with ID not " + str(nID) + " not found")
@@ -73,9 +62,7 @@ class Resource(object):
 
     @classmethod
     def showCommonResourceError(self, xMSF):
-        ProductName = Configuration.getProductName(xMSF)
+        from .SystemDialog import SystemDialog
         sError = "The files required could not be found.\n" + \
-            "Please start the %PRODUCTNAME Setup and choose 'Repair'."
-        sError = sError.replace("%PRODUCTNAME", ProductName)
+            "Please start the LibreOffice Setup and choose 'Repair'."
         SystemDialog.showMessageBox(xMSF, "ErrorBox", OK, sError)
-

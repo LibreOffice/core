@@ -68,7 +68,7 @@ public:
 
     sal_Bool        mbReadonly;
 
-    rtl::OUString   maXSLTTransformerImpl;
+    sal_Bool        mbNeedsXSLT2;
 
     filter_info_impl();
     filter_info_impl( const filter_info_impl& rInfo );
@@ -97,7 +97,8 @@ extern const application_info_impl* getApplicationInfo( const rtl::OUString& rSe
 
 extern ResMgr* getXSLTDialogResMgr();
 
-#define RESID(x) ResId(x, *getXSLTDialogResMgr() )
+#define RESID(x) ResId(x, *getXSLTDialogResMgr())
+#define RESIDSTR(x) RESID(x).toString()
 
 #endif
 

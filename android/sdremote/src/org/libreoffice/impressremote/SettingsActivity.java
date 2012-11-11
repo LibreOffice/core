@@ -1,3 +1,11 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 package org.libreoffice.impressremote;
 
 import android.os.Bundle;
@@ -8,7 +16,6 @@ public class SettingsActivity extends SherlockPreferenceActivity {
 
     // We use addPreferencesFromResource as we need sdk-9 compatibility
     // but build with sdk 15
-    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -29,3 +36,4 @@ public class SettingsActivity extends SherlockPreferenceActivity {
         }
     }
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

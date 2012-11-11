@@ -77,9 +77,9 @@
 using namespace ::com::sun::star;
 
 /// go to next/previous point on the same level
-sal_Bool SwCrsrShell::GotoNextNum()
+bool SwCrsrShell::GotoNextNum()
 {
-    sal_Bool bRet = GetDoc()->GotoNextNum( *pCurCrsr->GetPoint() );
+    bool bRet = GetDoc()->GotoNextNum( *pCurCrsr->GetPoint() );
     if( bRet )
     {
         SwCallLink aLk( *this ); // watch Crsr-Moves
@@ -117,9 +117,9 @@ sal_Bool SwCrsrShell::GotoNextNum()
 }
 
 
-sal_Bool SwCrsrShell::GotoPrevNum()
+bool SwCrsrShell::GotoPrevNum()
 {
-    sal_Bool bRet = GetDoc()->GotoPrevNum( *pCurCrsr->GetPoint() );
+    bool bRet = GetDoc()->GotoPrevNum( *pCurCrsr->GetPoint() );
     if( bRet )
     {
         SwCallLink aLk( *this ); // watch Crsr-Moves
@@ -798,7 +798,7 @@ void SwCrsrShell::GotoOutline( sal_uInt16 nIdx )
 }
 
 
-sal_Bool SwCrsrShell::GotoOutline( const String& rName )
+bool SwCrsrShell::GotoOutline( const String& rName )
 {
     SwCursor* pCrsr = getShellCrsr( true );
 
@@ -806,11 +806,11 @@ sal_Bool SwCrsrShell::GotoOutline( const String& rName )
     SwCallLink aLk( *this ); // watch Crsr-Moves
     SwCrsrSaveState aSaveState( *pCrsr );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( pDoc->GotoOutline( *pCrsr->GetPoint(), rName ) && !pCrsr->IsSelOvr() )
     {
         UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
@@ -1644,9 +1644,9 @@ sal_Bool SwCrsrShell::SelectTxtAttr( sal_uInt16 nWhich, sal_Bool bExpand,
 }
 
 
-sal_Bool SwCrsrShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
+bool SwCrsrShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( rAttr.GetpTxtNode() )
     {
         SwCursor* pCrsr = getShellCrsr( true );
@@ -1743,7 +1743,7 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 while( aEnd.GetNode().IsEndNode() &&
                         (const SwNode*)&aEnd.GetNode() !=
                         pSectNd->EndOfSectionNode() )
-                    aEnd++;
+                    ++aEnd;
 
                 if( aEnd.GetNode().IsEndNode() &&
                     pCNd->Len() == aPos.nContent.GetIndex() )
@@ -1797,19 +1797,13 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
             case FILL_TAB:
             case FILL_SPACE:
                 {
-                    String sInsert;
-                    if( aFPos.nTabCnt )
-                        sInsert.Fill( aFPos.nTabCnt, '\t' );
-                    if( aFPos.nSpaceCnt )
-                    {
-                        String sSpace;
-                        sSpace.Fill( aFPos.nSpaceCnt );
-                        sInsert += sSpace;
-                    }
-                    if( sInsert.Len() )
-                    {
-                        GetDoc()->InsertString( *pCurCrsr, sInsert );
-                    }
+                    rtl::OUStringBuffer sInsert;
+                    if (aFPos.nTabCnt)
+                        comphelper::string::padToLength(sInsert, aFPos.nTabCnt, '\t');
+                    if (aFPos.nSpaceCnt)
+                        comphelper::string::padToLength(sInsert, sInsert.getLength() + aFPos.nSpaceCnt, ' ');
+                    if (sInsert.getLength())
+                        GetDoc()->InsertString( *pCurCrsr, sInsert.makeStringAndClear());
                 }
                 // no break - still need to set orientation
             case FILL_MARGIN:

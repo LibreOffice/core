@@ -226,6 +226,13 @@ protected:
 
     uno::Reference<lang::XComponent> mxComponent;
     xmlBufferPtr mpXmlBuffer;
+
+    template< typename T >
+    struct MethodEntry
+    {
+        const char* pName;
+        void (T::*pMethod)();
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

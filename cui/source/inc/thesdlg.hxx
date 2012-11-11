@@ -79,7 +79,7 @@ class ThesaurusAlternativesCtrl
 {
     SvxThesaurusDialog*     m_pDialog;
 
-    typedef std::map< const SvLBoxEntry *, AlternativesExtraData >  UserDataMap_t;
+    typedef std::map< const SvTreeListEntry *, AlternativesExtraData >  UserDataMap_t;
     UserDataMap_t           m_aUserData;
 
     /// disable copy ctor and assignment operator
@@ -93,11 +93,11 @@ public:
     virtual ~ThesaurusAlternativesCtrl();
 
 
-    SvLBoxEntry *   AddEntry( sal_Int32 nVal, const String &rText, bool bIsHeader );
+    SvTreeListEntry *   AddEntry( sal_Int32 nVal, const String &rText, bool bIsHeader );
 
     void            ClearExtraData();
-    void            SetExtraData( const SvLBoxEntry *pEntry, const AlternativesExtraData &rData );
-    AlternativesExtraData * GetExtraData( const SvLBoxEntry *pEntry );
+    void            SetExtraData( const SvTreeListEntry *pEntry, const AlternativesExtraData &rData );
+    AlternativesExtraData * GetExtraData( const SvTreeListEntry *pEntry );
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
     virtual void    Paint( const Rectangle& rRect );

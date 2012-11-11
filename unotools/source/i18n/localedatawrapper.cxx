@@ -353,7 +353,7 @@ const rtl::OUString& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) cons
     ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nItem >= LocaleItem::COUNT )
     {
-        SAL_WARN( "unotools", "getOneLocaleItem: bounds" );
+        SAL_WARN( "unotools.i18n", "getOneLocaleItem: bounds" );
         return aLocaleItem[0];
     }
     if (aLocaleItem[nItem].isEmpty())
@@ -426,7 +426,7 @@ void LocaleDataWrapper::getOneLocaleItemImpl( sal_Int16 nItem )
             aLocaleItem[nItem] = aLocaleDataItem.LongDateYearSeparator;
         break;
         default:
-            SAL_WARN( "unotools", "getOneLocaleItemImpl: which one?" );
+            SAL_WARN( "unotools.i18n", "getOneLocaleItemImpl: which one?" );
     }
 }
 
@@ -449,7 +449,7 @@ const rtl::OUString& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) co
     ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nWord < 0 || nWord >= reservedWords::COUNT )
     {
-        SAL_WARN( "unotools", "getOneReservedWord: bounds" );
+        SAL_WARN( "unotools.i18n", "getOneReservedWord: bounds" );
         nWord = reservedWords::FALSE_WORD;
     }
     if (aReservedWord[nWord].isEmpty())

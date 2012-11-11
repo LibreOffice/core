@@ -687,16 +687,19 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
     if( bOutline )
     {                             // Gliederung
         if( !rNum.GetIncludeUpperLevels()           // es sind  <= 1 Nummern anzuzeigen
-            || rNum.GetNumberingType() == SVX_NUM_NUMBER_NONE ){    // oder dieser Level hat keine
+            || rNum.GetNumberingType() == SVX_NUM_NUMBER_NONE )    // oder dieser Level hat keine
+        {
                                                 // eigenen Ziffern
             bInsert = true;                     // -> dann uebernehme Zeichen
 
             // replace by simple Bullet ?
             if( bListSymbol )
+            {
                 //cBulletChar benutzen, damit auf dem MAC richtig gemappt wird
                 sTxt.Fill(  SVBT8ToByte( rAV.cbTextBefore )
                           + SVBT8ToByte( rAV.cbTextAfter  ), cBulletChar );
             }
+        }
     }
     else
     {                                       // Nummerierung / Aufzaehlung
@@ -779,7 +782,7 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     const String aName( rDoc.GetUniqueNumRuleName( &aBaseName, false) );
 
     // #i86652#
-    sal_uInt16 nRul = rDoc.MakeNumRule( aName, 0, sal_False,
+    sal_uInt16 nRul = rDoc.MakeNumRule( aName, 0, false,
                                     SvxNumberFormat::LABEL_ALIGNMENT );
     pStyles->pStyRule = rDoc.GetNumRuleTbl()[nRul];
     // Auto == false-> Nummerierungsvorlage
@@ -997,7 +1000,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         {
             // #i86652#
             pNumRule = rDoc.GetNumRuleTbl()[
-                            rDoc.MakeNumRule( sNumRule, 0, sal_False,
+                            rDoc.MakeNumRule( sNumRule, 0, false,
                                               SvxNumberFormat::LABEL_ALIGNMENT ) ];
         }
         if (pTableDesc)

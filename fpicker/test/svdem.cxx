@@ -79,9 +79,9 @@ SAL_IMPLEMENT_MAIN()
        xMSch.set(xComponentContext->getServiceManager(), com::sun::star::uno::UNO_QUERY);
        comphelper::setProcessServiceFactory(xMSch);
 
-//    comphelper::setProcessServiceFactory( xMS);
+    comphelper::setProcessServiceFactory(xMS);
 
-    InitVCL( xMS );
+    InitVCL();
     ::Main();
     DeInitVCL();
 

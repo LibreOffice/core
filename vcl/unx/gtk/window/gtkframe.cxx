@@ -1853,8 +1853,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
         return;
 
     gint nMonitor;
-    GdkScreen *pScreen = NULL;
-    pScreen = getDisplay()->getSystem()->getScreenMonitorFromIdx( nNewScreen, nMonitor );
+    GdkScreen *pScreen = getDisplay()->getSystem()->getScreenMonitorFromIdx( nNewScreen, nMonitor );
 
     // Heavy lifting, need to move screen ...
     if( pScreen != gtk_widget_get_screen( m_pWindow ))
@@ -2047,10 +2046,9 @@ dbus_inhibit_gsm (const gchar *appname,
         guint            cookie;
         GError          *error = NULL;
         DBusGProxy      *proxy = NULL;
-        DBusGConnection *session_connection = NULL;
 
         /* get the DBUS session connection */
-        session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+        DBusGConnection *session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
         if (error != NULL) {
                 g_debug ("DBUS cannot connect : %s", error->message);
                 g_error_free (error);

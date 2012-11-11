@@ -161,7 +161,7 @@ sal_Bool FmFieldWinListBox::DoubleClickHdl()
 //------------------------------------------------------------------------------
 void FmFieldWinListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
-    SvLBoxEntry* pSelected = FirstSelected();
+    SvTreeListEntry* pSelected = FirstSelected();
     if (!pSelected)
         // no drag without a field
         return;
@@ -250,7 +250,7 @@ void FmFieldWin::GetFocus()
 //-----------------------------------------------------------------------
 sal_Bool FmFieldWin::createSelectionControls( )
 {
-    SvLBoxEntry* pSelected = pListBox->FirstSelected();
+    SvTreeListEntry* pSelected = pListBox->FirstSelected();
     if ( pSelected )
     {
         // build a descriptor for the currently selected field

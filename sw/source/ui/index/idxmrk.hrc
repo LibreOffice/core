@@ -15,85 +15,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define BT_OK       100
-#define BT_CANCEL   101
-#define BT_NXT      102
-#define BT_NXTSAME  103
-#define BT_PREV     104
-#define BT_PREVSAME 105
-#define BT_DEL      106
-#define BT_HELP     107
-#define LBL_INDEX   1
-#define DCB_INDEX   2
-#define LBL_ENTRY   3
-#define SL_ENTRY    4
-#define LBL_KEY     5
-#define DCB_KEY     6
-#define LBL_LEVEL   7
-#define SL_LEVEL    8
-#define FL_INDEX        10
-#define LBL_KEY2    11
-#define DCB_KEY2    12
-#define CB_APPLY_TO_ALL 13
-#define CB_MAIN_ENTRY   14
-#define FT_ENTRY    20
-#define ED_ENTRY    21
 #define PB_OK       22
 #define PB_CANCEL   23
 #define PB_HELP     24
 #define FL_ENTRIES  25
-#define PB_CREATEENTRY 26
-#define FL_ENTRY        27
-#define FT_TITLE    28
-#define FI_TITLE    29
-#define FT_AUTHOR   30
-#define FI_AUTHOR   31
-#define ST_CHANGE   32
-#define WIN_DLG     33
-#define BT_NEW      34
 #define FL_NAME     37
 #define FT_NAME     38
 #define ED_NAME     39
-#define LB_ENTRY    40
-#define RB_FROMCOMPONENT    41
-#define RB_FROMDOCCONTENT   42
-#define PB_EDITENTRY        43
-#define CB_CASESENSITIVE    44
-#define CB_WORDONLY         45
-#define FT_PHONETIC_1       46
-#define FT_PHONETIC_2       47
-#define FT_PHONETIC_3       48
-#define ED_PHONETIC_1       48
-#define ED_PHONETIC_2       49
-#define ED_PHONETIC_3       50
-
-//------------------------------------------------------
-// defines for positions and sizes for IDX_DIALOG_WINDOW
-
-#define IDX_COL1                    12
-#define IDX_COL2                    56
-
-#define IDX_COL2_FULLEND            150
-#define IDX_NEWIMAGE_WIDTH          12
-#define IDX_NEWIMAGE_XPOS           (IDX_COL2_FULLEND-1-IDX_NEWIMAGE_WIDTH)
-
-#define IDX_PHONETIC_EDIT_WIDTH 62
-#define IDX_PHONETIC_TEXT_WIDTH 62
-
-#define IDX_COL_PHONETIC_TEXT       (IDX_COL2+IDX_PHONETIC_EDIT_WIDTH+8)
-#define IDX_COL_PHONETIC_EDIT       (IDX_COL_PHONETIC_TEXT+IDX_PHONETIC_TEXT_WIDTH+1)
-
-#define IDX_COL_BUTTONS_NORMAL      162
-#define IDX_COL_BUTTONS_CJK         (IDX_COL_PHONETIC_EDIT+IDX_PHONETIC_EDIT_WIDTH+14)
-
-#define IDX_WIN_WIDTH_NORMAL        218
-#define IDX_WIN_WIDTH_CJK           (IDX_WIN_WIDTH_NORMAL+IDX_COL_BUTTONS_CJK-IDX_COL_BUTTONS_NORMAL)
-
-#define IDX_ROW_2_TEXT 31
-#define IDX_ROW_2_LIST (IDX_ROW_2_TEXT-2)
-#define IDX_ROW_3_TEXT 46
-#define IDX_ROW_3_LIST (IDX_ROW_3_TEXT-2)
-#define IDX_ROW_4_TEXT 62
-#define IDX_ROW_4_LIST (IDX_ROW_4_TEXT-2)
-
-//------------------------------------------------------

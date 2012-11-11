@@ -86,10 +86,22 @@ void VclContainer::SetSizePixel(const Size& rAllocation)
     }
 }
 
+void VclBox::accumulateMaxes(const Size &rChildSize, Size &rSize) const
+{
+    long nSecondaryChildDimension = getSecondaryDimension(rChildSize);
+    long nSecondaryBoxDimension = getSecondaryDimension(rSize);
+    setSecondaryDimension(rSize, std::max(nSecondaryChildDimension, nSecondaryBoxDimension));
+
+    long nPrimaryChildDimension = getPrimaryDimension(rChildSize);
+    long nPrimaryBoxDimension = getPrimaryDimension(rSize);
+    if (m_bHomogeneous)
+        setPrimaryDimension(rSize, std::max(nPrimaryBoxDimension, nPrimaryChildDimension));
+    else
+        setPrimaryDimension(rSize, nPrimaryBoxDimension + nPrimaryChildDimension);
+}
+
 Size VclBox::calculateRequisition() const
 {
-    long nMaxChildDimension = 0;
-
     sal_uInt16 nVisibleChildren = 0;
 
     Size aSize;
@@ -99,31 +111,15 @@ Size VclBox::calculateRequisition() const
             continue;
         ++nVisibleChildren;
         Size aChildSize = getLayoutRequisition(*pChild);
-        long nSecondaryDimension = getSecondaryDimension(aChildSize);
-        if (nSecondaryDimension > getSecondaryDimension(aSize))
-            setSecondaryDimension(aSize, nSecondaryDimension);
-        if (m_bHomogeneous)
-        {
-            long nPrimaryDimension = getPrimaryDimension(aChildSize);
-            if (nPrimaryDimension > nMaxChildDimension)
-                nMaxChildDimension = nPrimaryDimension;
-        }
-        else
-        {
-            long nPrimaryDimension = getPrimaryDimension(aSize);
-            setPrimaryDimension(aSize, nPrimaryDimension + getPrimaryDimension(aChildSize));
-        }
+
+        long nPrimaryDimension = getPrimaryDimension(aChildSize);
+        nPrimaryDimension += pChild->get_padding() * 2;
+        setPrimaryDimension(aChildSize, nPrimaryDimension);
+
+        accumulateMaxes(aChildSize, aSize);
     }
 
-    if (nVisibleChildren)
-    {
-        long nPrimaryDimension = getPrimaryDimension(aSize);
-        if (m_bHomogeneous)
-            nPrimaryDimension += nMaxChildDimension * nVisibleChildren;
-        setPrimaryDimension(aSize, nPrimaryDimension + m_nSpacing * (nVisibleChildren-1));
-    }
-
-    return aSize;
+    return finalizeMaxes(aSize, nVisibleChildren);
 }
 
 void VclBox::setAllocation(const Size &rAllocation)
@@ -184,10 +180,10 @@ void VclBox::setAllocation(const Size &rAllocation)
             {
                 aBoxSize = getLayoutRequisition(*pChild);
                 long nPrimaryDimension = getPrimaryDimension(aBoxSize);
-                nPrimaryDimension += nPadding;
-                bool bExpand = pChild->get_expand();
-                if (bExpand)
-                    setPrimaryDimension(aBoxSize, nPrimaryDimension + nExtraSpace);
+                nPrimaryDimension += nPadding * 2;
+                if (pChild->get_expand())
+                    nPrimaryDimension += nExtraSpace;
+                setPrimaryDimension(aBoxSize, nPrimaryDimension);
             }
             setSecondaryDimension(aBoxSize, getSecondaryDimension(rAllocation));
 
@@ -238,43 +234,88 @@ bool VclBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
     return true;
 }
 
-#define DEFAULT_CHILD_INTERNAL_PAD_X 4
-#define DEFAULT_CHILD_INTERNAL_PAD_Y 0
 #define DEFAULT_CHILD_MIN_WIDTH 85
 #define DEFAULT_CHILD_MIN_HEIGHT 27
 
-Size VclButtonBox::calculateRequisition() const
+Size VclBox::finalizeMaxes(const Size &rSize, sal_uInt16 nVisibleChildren) const
 {
-    sal_uInt16 nVisibleChildren = 0;
+    Size aRet;
 
-    sal_Int32 nChildMinWidth = DEFAULT_CHILD_MIN_WIDTH; //to-do, pull from theme
-    sal_Int32 nChildMinHeight = DEFAULT_CHILD_MIN_HEIGHT; //to-do, pull from theme
-    Size aSize(nChildMinWidth, nChildMinHeight);
+    if (nVisibleChildren)
+    {
+        long nPrimaryDimension = getPrimaryDimension(rSize);
+        if (m_bHomogeneous)
+            nPrimaryDimension *= nVisibleChildren;
+        setPrimaryDimension(aRet, nPrimaryDimension + m_nSpacing * (nVisibleChildren-1));
+        setSecondaryDimension(aRet, getSecondaryDimension(rSize));
+    }
 
-    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
+    return aRet;
+}
+
+Size VclButtonBox::addReqGroups(const VclButtonBox::Requisition &rReq) const
+{
+    Size aRet;
+
+    long nMainGroupDimension = getPrimaryDimension(rReq.m_aMainGroupSize);
+    long nSubGroupDimension = getPrimaryDimension(rReq.m_aSubGroupSize);
+
+    assert(m_bHomogeneous);
+
+    if (m_bHomogeneousGroups)
+        setPrimaryDimension(aRet, std::max(nMainGroupDimension, nSubGroupDimension));
+    else
+    {
+        setPrimaryDimension(aRet,
+            (rReq.m_nMainGroupChildren * nMainGroupDimension
+            + rReq.m_nSubGroupChildren * nSubGroupDimension) /
+            (rReq.m_nMainGroupChildren + rReq.m_nSubGroupChildren));
+    }
+
+    setSecondaryDimension(aRet,
+        std::max(getSecondaryDimension(rReq.m_aMainGroupSize),
+        getSecondaryDimension(rReq.m_aSubGroupSize)));
+
+    return aRet;
+}
+
+VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() const
+{
+    Requisition aReq;
+
+    Size aMainGroupSize(DEFAULT_CHILD_MIN_WIDTH, DEFAULT_CHILD_MIN_HEIGHT); //to-do, pull from theme
+    Size aSubGroupSize(DEFAULT_CHILD_MIN_WIDTH, DEFAULT_CHILD_MIN_HEIGHT); //to-do, pull from theme
+
+    for (const Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         if (!pChild->IsVisible())
             continue;
-        ++nVisibleChildren;
         Size aChildSize = getLayoutRequisition(*pChild);
-        if (aChildSize.Width() > aSize.Width())
-            aSize.Width() = aChildSize.Width();
-        if (aChildSize.Height() > aSize.Height())
-            aSize.Height() = aChildSize.Height();
+        if (!pChild->get_secondary())
+        {
+            ++aReq.m_nMainGroupChildren;
+            accumulateMaxes(aChildSize, aMainGroupSize);
+        }
+        else
+        {
+            ++aReq.m_nSubGroupChildren;
+            accumulateMaxes(aChildSize, aSubGroupSize);
+        }
     }
 
-    if (!nVisibleChildren)
-        return Size();
+    if (aReq.m_nMainGroupChildren)
+        aReq.m_aMainGroupSize = aMainGroupSize;
+    if (aReq.m_nSubGroupChildren)
+        aReq.m_aSubGroupSize = aSubGroupSize;
 
-    long nPrimaryDimension =
-        (getPrimaryDimension(aSize) * nVisibleChildren) +
-        (m_nSpacing * (nVisibleChildren-1));
-    setPrimaryDimension(aSize, nPrimaryDimension + m_nSpacing);
+    return aReq;
+}
 
-    long nSecondaryDimension = getSecondaryDimension(aSize);
-    setSecondaryDimension(aSize, nSecondaryDimension);
-
-    return aSize;
+Size VclButtonBox::calculateRequisition() const
+{
+    Requisition aReq(calculatePrimarySecondaryRequisitions());
+    sal_uInt16 nVisibleChildren = aReq.m_nMainGroupChildren + aReq.m_nSubGroupChildren;
+    return finalizeMaxes(addReqGroups(aReq), nVisibleChildren);
 }
 
 bool VclButtonBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
@@ -300,6 +341,8 @@ bool VclButtonBox::set_property(const rtl::OString &rKey, const rtl::OString &rV
         }
         set_layout(eStyle);
     }
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("homogeneous")))
+        m_bHomogeneousGroups = toBool(rValue);
     else
         return VclBox::set_property(rKey, rValue);
     return true;
@@ -307,54 +350,69 @@ bool VclButtonBox::set_property(const rtl::OString &rKey, const rtl::OString &rV
 
 void VclButtonBox::setAllocation(const Size &rAllocation)
 {
-    sal_uInt16 nVisibleChildren = 0;
-    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
-    {
-        if (!pChild->IsVisible())
-            continue;
-        ++nVisibleChildren;
-    }
+    Requisition aReq(calculatePrimarySecondaryRequisitions());
 
+    sal_uInt16 nVisibleChildren = aReq.m_nMainGroupChildren + aReq.m_nSubGroupChildren;
     if (!nVisibleChildren)
         return;
 
-    Size aSize = rAllocation;
-
     long nAllocPrimaryDimension = getPrimaryDimension(rAllocation);
-    Size aRequisition = calculateRequisition();
-    long nHomogeneousDimension = ((getPrimaryDimension(aRequisition) -
-        (nVisibleChildren - 1) * m_nSpacing)) / nVisibleChildren;
 
-    Point aPos(0, 0);
-    long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
+    long nMainGroupPrimaryDimension = getPrimaryDimension(aReq.m_aMainGroupSize);
+    long nSubGroupPrimaryDimension = getPrimaryDimension(aReq.m_aSubGroupSize);
+    if (m_bHomogeneousGroups)
+        nSubGroupPrimaryDimension = nMainGroupPrimaryDimension = std::max(nSubGroupPrimaryDimension, nMainGroupPrimaryDimension);
+
+    Point aMainGroupPos, aOtherGroupPos;
 
     //To-Do, other layout styles
     switch (m_eLayoutStyle)
     {
         case VCL_BUTTONBOX_START:
+            if (aReq.m_nSubGroupChildren)
+            {
+                long nOtherPrimaryDimension = getPrimaryDimension(
+                    finalizeMaxes(aReq.m_aSubGroupSize, aReq.m_nSubGroupChildren));
+                setPrimaryCoordinate(aOtherGroupPos,
+                    nAllocPrimaryDimension - nOtherPrimaryDimension);
+            }
             break;
         default:
             SAL_WARN("vcl.layout", "todo unimplemented layout style");
         case VCL_BUTTONBOX_DEFAULT_STYLE:
         case VCL_BUTTONBOX_END:
-            setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension
-                - getPrimaryDimension(aRequisition));
+            if (aReq.m_nMainGroupChildren)
+            {
+                long nMainPrimaryDimension = getPrimaryDimension(
+                    finalizeMaxes(aReq.m_aMainGroupSize, aReq.m_nMainGroupChildren));
+                setPrimaryCoordinate(aMainGroupPos,
+                    nAllocPrimaryDimension - nMainPrimaryDimension);
+            }
             break;
     }
+
+    Size aChildSize;
+    setSecondaryDimension(aChildSize, getSecondaryDimension(rAllocation));
 
     for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         if (!pChild->IsVisible())
             continue;
 
-        Size aChildSize;
-        setSecondaryDimension(aChildSize, getSecondaryDimension(aSize));
-        setPrimaryDimension(aChildSize, nHomogeneousDimension);
-
-        setLayoutAllocation(*pChild, aPos, aChildSize);
-
-        nPrimaryCoordinate = getPrimaryCoordinate(aPos);
-        setPrimaryCoordinate(aPos, nPrimaryCoordinate + nHomogeneousDimension + m_nSpacing);
+        if (pChild->get_secondary())
+        {
+            setPrimaryDimension(aChildSize, nSubGroupPrimaryDimension);
+            setLayoutAllocation(*pChild, aOtherGroupPos, aChildSize);
+            long nPrimaryCoordinate = getPrimaryCoordinate(aOtherGroupPos);
+            setPrimaryCoordinate(aOtherGroupPos, nPrimaryCoordinate + nSubGroupPrimaryDimension + m_nSpacing);
+        }
+        else
+        {
+            setPrimaryDimension(aChildSize, nMainGroupPrimaryDimension);
+            setLayoutAllocation(*pChild, aMainGroupPos, aChildSize);
+            long nPrimaryCoordinate = getPrimaryCoordinate(aMainGroupPos);
+            setPrimaryCoordinate(aMainGroupPos, nPrimaryCoordinate + nMainGroupPrimaryDimension + m_nSpacing);
+        }
     }
 }
 
@@ -648,8 +706,6 @@ Size VclGrid::calculateRequisition() const
 
 void VclGrid::setAllocation(const Size& rAllocation)
 {
-    //SetBackground( Color(0xFF, 0x00, 0x00) );
-
     array_type A = assembleGrid();
 
     if (isNullGrid(A))

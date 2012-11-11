@@ -134,8 +134,6 @@ bool ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize ) cons
 
 void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize )
 {
-    IncRecalcLevel();
-    InitializeNoteCaptions();
     if (nStartCol==0 && nEndCol==MAXCOL)
     {
         if (mpRowHeights && pRowFlags)
@@ -173,6 +171,7 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
     for (SCCOL j=nStartCol; j<=nEndCol; j++)
         aCol[j].InsertRow( nStartRow, nSize );
 
+    // Transfer those notes that will get shifted into another container.
     ScNotes aNotes(pDocument);
     ScNotes::iterator itr = maNotes.begin();
     while( itr != maNotes.end() )
@@ -182,13 +181,14 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         ScPostIt* pPostIt = itr->second;
         ++itr;
 
-        if (nRow >= nStartRow)
+        if (nStartRow <= nRow && nStartCol <= nCol && nCol <= nEndCol)
         {
             aNotes.insert(nCol, nRow + nSize, pPostIt);
             maNotes.ReleaseNote(nCol, nRow);
         }
     }
 
+    // Re-insert the shifted notes.
     itr = aNotes.begin();
     while( itr != aNotes.end() )
     {
@@ -200,8 +200,6 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         maNotes.insert( nCol, nRow, pPostIt);
         aNotes.ReleaseNote( nCol, nRow);
     }
-
-    DecRecalcLevel( false );
 
     InvalidatePageBreaks();
 
@@ -215,8 +213,6 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize,
                             bool* pUndoOutline )
 {
-    IncRecalcLevel();
-    InitializeNoteCaptions();
     if (nStartCol==0 && nEndCol==MAXCOL)
     {
         if (pRowFlags)
@@ -253,6 +249,7 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         }
     }
 
+    // Transfer those notes that will get shifted into another container.
     ScNotes aNotes(pDocument);
     ScNotes::iterator itr = maNotes.begin();
     while( itr != maNotes.end() )
@@ -262,18 +259,22 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         ScPostIt* pPostIt = itr->second;
         ++itr;
 
-        if (nRow >= nStartRow)
+        if (nStartRow <= nRow && nStartCol <= nCol && nCol <= nEndCol)
         {
-            if(nRow - nStartRow > static_cast<SCROW>(nSize))
+            SCROW nEndRow = nStartRow + nSize - 1; // last row of deleted region
+            if (nEndRow < nRow)
             {
+                // This note will get shifted.
                 aNotes.insert(nCol, nRow - nSize, pPostIt);
                 maNotes.ReleaseNote(nCol, nRow);
             }
             else
+                // Note is in the deleted area. Remove it.
                 maNotes.erase(nCol, nRow);
         }
     }
 
+    // Re-insert the shifted notes.
     itr = aNotes.begin();
     while( itr != aNotes.end() )
     {
@@ -291,7 +292,6 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         for (SCCOL j=nStartCol; j<=nEndCol; j++)
             aCol[j].DeleteRow( nStartRow, nSize );
     }
-    DecRecalcLevel();
 
     InvalidatePageBreaks();
 
@@ -321,8 +321,6 @@ bool ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) cons
 
 void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
 {
-    IncRecalcLevel();
-    InitializeNoteCaptions();
     if (nStartRow==0 && nEndRow==MAXROW)
     {
         if (pColWidth && pColFlags)
@@ -368,6 +366,7 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
             aCol[MAXCOL - nSize - i].MoveTo(nStartRow, nEndRow, aCol[MAXCOL - i]);
     }
 
+    // Transfer those notes that will get shifted into another container.
     ScNotes aNotes(pDocument);
     ScNotes::iterator itr = maNotes.begin();
     while( itr != maNotes.end() )
@@ -377,13 +376,14 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         ScPostIt* pPostIt = itr->second;
         ++itr;
 
-        if (nCol - nStartCol >= nStartCol)
+        if (nStartCol <= nCol && nStartRow <= nRow && nRow <= nEndRow)
         {
             aNotes.insert(nCol + nSize, nRow, pPostIt);
             maNotes.ReleaseNote(nCol, nRow);
         }
     }
 
+    // Re-insert the shifted notes.
     itr = aNotes.begin();
     while( itr != aNotes.end() )
     {
@@ -411,7 +411,6 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
             aCol[nStartCol+i].ClearItems( nStartRow, nEndRow, nWhichArray );
         }
     }
-    DecRecalcLevel();
 
     InvalidatePageBreaks();
 
@@ -425,8 +424,6 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
 void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize,
                             bool* pUndoOutline )
 {
-    IncRecalcLevel();
-    InitializeNoteCaptions();
     if (nStartRow==0 && nEndRow==MAXROW)
     {
         if (pColWidth && pColFlags)
@@ -477,6 +474,7 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
             aCol[nStartCol + nSize + i].MoveTo(nStartRow, nEndRow, aCol[nStartCol + i]);
     }
 
+    // Transfer those notes that will get shifted into another container.
     ScNotes aNotes(pDocument);
     ScNotes::iterator itr = maNotes.begin();
     while( itr != maNotes.end() )
@@ -486,18 +484,22 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         ScPostIt* pPostIt = itr->second;
         ++itr;
 
-        if (nCol >= nStartCol)
+        if (nStartCol <= nCol && nStartRow <= nRow && nRow <= nEndRow)
         {
-            if(nCol > static_cast<SCCOL>(nSize))
+            SCCOL nEndCol = nStartCol + nSize - 1;
+            if (nEndCol < nCol)
             {
+                // This note will get shifted.
                 aNotes.insert(nCol - nSize, nRow, pPostIt);
                 maNotes.ReleaseNote(nCol, nRow);
             }
             else
+                // The note is in the deleted region. Remove it.
                 maNotes.erase(nCol, nRow);
         }
     }
 
+    // Re-insert the shifted notes.
     itr = aNotes.begin();
     while( itr != aNotes.end() )
     {
@@ -509,8 +511,6 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         maNotes.insert( nCol, nRow, pPostIt);
         aNotes.ReleaseNote( nCol, nRow);
     }
-
-    DecRecalcLevel();
 
     InvalidatePageBreaks();
 
@@ -611,7 +611,7 @@ void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             pTable->mpRangeName = new ScRangeName(*mpRangeName);
 
         // notes
-        pTable->maNotes = *maNotes.clone(pTable->pDocument, nCol1, nRow1, nCol2, nRow2, bCloneNoteCaptions, nTab);
+        maNotes.clone(pTable->pDocument, nCol1, nRow1, nCol2, nRow2, bCloneNoteCaptions, nTab, pTable->maNotes);
 
         SCCOL i;
 
@@ -736,7 +736,6 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
-        IncRecalcLevel();
         for ( SCCOL i = nCol1; i <= nCol2; i++)
             aCol[i].CopyFromClip(nRow1, nRow2, nDy, nInsFlag, bAsLink, bSkipAttrForEmpty, pTable->aCol[i - nDx]);
 
@@ -783,7 +782,6 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             // create deep copies for conditional formatting
             CopyConditionalFormat( nCol1, nRow1, nCol2, nRow2, nDx, nDy, pTable);
         }
-        DecRecalcLevel();
     }
 }
 
@@ -1026,8 +1024,6 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
     if (bWidth || bHeight)
     {
-        pDestTab->IncRecalcLevel();
-
         if (bWidth)
         {
             for (SCCOL i = nCol1; i <= nCol2; ++i)
@@ -1092,7 +1088,6 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             }
             pDestTab->SetRowManualBreaks( maRowManualBreaks);
         }
-        pDestTab->DecRecalcLevel();
     }
 
     if (bFlagChange)
@@ -1110,9 +1105,6 @@ void ScTable::UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     {
         bool bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
         bool bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
-
-        if (bWidth||bHeight)
-            IncRecalcLevel();
 
         for ( SCCOL i = 0; i <= MAXCOL; i++)
         {
@@ -1147,7 +1139,6 @@ void ScTable::UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 pDestTab->CopyRowHeight(*this, nRow1, nRow2, 0);
                 pDestTab->SetRowManualBreaks( maRowManualBreaks);
             }
-            DecRecalcLevel();
         }
     }
 }
@@ -2408,11 +2399,7 @@ void ScTable::SetColWidth( SCCOL nCol, sal_uInt16 nNewWidth )
 
         if ( nNewWidth != pColWidth[nCol] )
         {
-            IncRecalcLevel();
-            InitializeNoteCaptions();
             pColWidth[nCol] = nNewWidth;
-            DecRecalcLevel();
-
             InvalidatePageBreaks();
         }
     }
@@ -2786,11 +2773,7 @@ void ScTable::ShowCol(SCCOL nCol, bool bShow)
         bool bWasVis = !ColHidden(nCol);
         if (bWasVis != bShow)
         {
-            IncRecalcLevel();
-            InitializeNoteCaptions();
-
             SetColHidden(nCol, nCol, !bShow);
-            DecRecalcLevel();
 
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
             if ( pCharts )
@@ -2891,8 +2874,6 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
 void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
 {
     SCROW nStartRow = nRow1;
-    IncRecalcLevel();
-    InitializeNoteCaptions();
 
     // #i116164# if there are no drawing objects within the row range, a single HeightChanged call is enough
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
@@ -2930,8 +2911,6 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
         if (bShow)
             SetRowFiltered(nRow1, nRow2, false);
     }
-
-    DecRecalcLevel();
 }
 
 bool ScTable::IsDataFiltered(SCCOL nColStart, SCROW nRowStart, SCCOL nColEnd, SCROW nRowEnd) const

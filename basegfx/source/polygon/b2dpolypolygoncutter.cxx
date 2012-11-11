@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <osl/diagnose.h>
 #include <basegfx/numeric/ftools.hxx>
@@ -657,6 +648,14 @@ namespace basegfx
 
         //////////////////////////////////////////////////////////////////////////////
 
+        B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate)
+        {
+            solver aSolver(rCandidate);
+            return aSolver.getB2DPolyPolygon();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
         B2DPolyPolygon stripNeutralPolygons(const B2DPolyPolygon& rCandidate)
         {
             B2DPolyPolygon aRetval;
@@ -672,6 +671,94 @@ namespace basegfx
             }
 
             return aRetval;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate)
+        {
+            B2DPolyPolygon aCandidate;
+
+            // remove all self-intersections and intersections
+            if(rCandidate.count() == 1)
+            {
+                aCandidate = basegfx::tools::solveCrossovers(rCandidate.getB2DPolygon(0));
+            }
+            else
+            {
+                aCandidate = basegfx::tools::solveCrossovers(rCandidate);
+            }
+
+            // cleanup evtl. neutral polygons
+            aCandidate = basegfx::tools::stripNeutralPolygons(aCandidate);
+
+            // remove all polygons which have the same orientation as the polygon they are directly contained in
+            const sal_uInt32 nCount(aCandidate.count());
+
+            if(nCount > 1)
+            {
+                sal_uInt32 a, b;
+                ::std::vector< StripHelper > aHelpers;
+                aHelpers.resize(nCount);
+
+                for(a = 0; a < nCount; a++)
+                {
+                    const B2DPolygon aCand(aCandidate.getB2DPolygon(a));
+                    StripHelper* pNewHelper = &(aHelpers[a]);
+                    pNewHelper->maRange = tools::getRange(aCand);
+                    pNewHelper->meOrinetation = tools::getOrientation(aCand);
+
+                    // initialize with own orientation
+                    pNewHelper->mnDepth = (ORIENTATION_NEGATIVE == pNewHelper->meOrinetation ? -1 : 1);
+                }
+
+                for(a = 0; a < nCount - 1; a++)
+                {
+                    const B2DPolygon aCandA(aCandidate.getB2DPolygon(a));
+                    StripHelper& rHelperA = aHelpers[a];
+
+                    for(b = a + 1; b < nCount; b++)
+                    {
+                        const B2DPolygon aCandB(aCandidate.getB2DPolygon(b));
+                        StripHelper& rHelperB = aHelpers[b];
+                        const bool bAInB(rHelperB.maRange.isInside(rHelperA.maRange) && tools::isInside(aCandB, aCandA, true));
+
+                        if(bAInB)
+                        {
+                            // A is inside B, add orientation of B to A
+                            rHelperA.mnDepth += (ORIENTATION_NEGATIVE == rHelperB.meOrinetation ? -1 : 1);
+                        }
+
+                        const bool bBInA(rHelperA.maRange.isInside(rHelperB.maRange) && tools::isInside(aCandA, aCandB, true));
+
+                        if(bBInA)
+                        {
+                            // B is inside A, add orientation of A to B
+                            rHelperB.mnDepth += (ORIENTATION_NEGATIVE == rHelperA.meOrinetation ? -1 : 1);
+                        }
+                    }
+                }
+
+                const B2DPolyPolygon aSource(aCandidate);
+                aCandidate.clear();
+
+                for(a = 0L; a < nCount; a++)
+                {
+                    const StripHelper& rHelper = aHelpers[a];
+                    // for contained unequal oriented polygons sum will be 0
+                    // for contained equal it will be >=2 or <=-2
+                    // for free polygons (not contained) it will be 1 or -1
+                    // -> accept all which are >=-1 && <= 1
+                    bool bAcceptEntry(rHelper.mnDepth >= -1 && rHelper.mnDepth <= 1);
+
+                    if(bAcceptEntry)
+                    {
+                        aCandidate.append(aSource.getB2DPolygon(a));
+                    }
+                }
+            }
+
+            return aCandidate;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -897,15 +984,15 @@ namespace basegfx
             }
         }
 
-        B2DPolyPolygon mergeToSinglePolyPolygon(const std::vector< basegfx::B2DPolyPolygon >& rInput)
+        B2DPolyPolygon mergeToSinglePolyPolygon(const B2DPolyPolygonVector& rInput)
         {
-            std::vector< basegfx::B2DPolyPolygon > aInput(rInput);
+            B2DPolyPolygonVector aInput(rInput);
 
             // first step: prepareForPolygonOperation and simple merge of non-overlapping
             // PolyPolygons for speedup; this is possible for the wanted OR-operation
             if(!aInput.empty())
             {
-                std::vector< basegfx::B2DPolyPolygon > aResult;
+                B2DPolyPolygonVector aResult;
                 aResult.reserve(aInput.size());
 
                 for(sal_uInt32 a(0); a < aInput.size(); a++)
@@ -947,7 +1034,7 @@ namespace basegfx
             // second step: melt pairwise to a single PolyPolygon
             while(aInput.size() > 1)
             {
-                std::vector< basegfx::B2DPolyPolygon > aResult;
+                B2DPolyPolygonVector aResult;
                 aResult.reserve((aInput.size() / 2) + 1);
 
                 for(sal_uInt32 a(0); a < aInput.size(); a += 2)

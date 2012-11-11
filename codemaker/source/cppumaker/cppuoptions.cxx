@@ -55,7 +55,8 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
         }
 
         i = 1;
-    } else
+    }
+    else
     {
         i = 0;
     }
@@ -74,7 +75,8 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         {
                             i++;
                             s = av[i];
-                        } else
+                        }
+                        else
                         {
                             OString tmp("'-O', please check");
                             if (i <= ac - 1)
@@ -84,7 +86,8 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                             throw IllegalArgument(tmp);
                         }
-                    } else
+                    }
+                    else
                     {
                         s = av[i] + 2;
                     }
@@ -98,7 +101,8 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         {
                             i++;
                             s = av[i];
-                        } else
+                        }
+                        else
                         {
                             OString tmp("'-B', please check");
                             if (i <= ac - 1)
@@ -108,7 +112,8 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                             throw IllegalArgument(tmp);
                         }
-                    } else
+                    }
+                    else
                     {
                         s = av[i] + 2;
                     }
@@ -122,7 +127,8 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         {
                             i++;
                             s = av[i];
-                        } else
+                        }
+                        else
                         {
                             OString tmp("'-T', please check");
                             if (i <= ac - 1)
@@ -132,7 +138,8 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                             throw IllegalArgument(tmp);
                         }
-                    } else
+                    }
+                    else
                     {
                         s = av[i] + 2;
                     }
@@ -142,7 +149,8 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         OString tmp(m_options["-T"]);
                         tmp = tmp + ";" + s;
                         m_options["-T"] = tmp;
-                    } else
+                    }
+                    else
                     {
                         m_options["-T"] = OString(s);
                     }
@@ -187,8 +195,8 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         }
                         m_options["-CS"] = OString("");
                         break;
-                    } else
-                    if (av[i][2] != '\0')
+                    }
+                    else if (av[i][2] != '\0')
                     {
                         OString tmp("'-C', please check");
                         if (i <= ac - 1)
@@ -222,8 +230,8 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                         m_options["-Gc"] = OString("");
                         break;
-                    } else
-                    if (av[i][2] != '\0')
+                    }
+                    else if (av[i][2] != '\0')
                     {
                         OString tmp("'-G', please check");
                         if (i <= ac - 1)
@@ -244,7 +252,8 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         {
                             i++;
                             s = av[i];
-                        } else
+                        }
+                        else
                         {
                             OString tmp("'-X', please check");
                             if (i <= ac - 1)
@@ -254,7 +263,8 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                             throw IllegalArgument(tmp);
                         }
-                    } else
+                    }
+                    else
                     {
                         s = av[i] + 2;
                     }
@@ -271,11 +281,12 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
             if (av[i][0] == '@')
             {
                 FILE* cmdFile = fopen(av[i]+1, "r");
-                  if( cmdFile == NULL )
-                  {
+                if( cmdFile == NULL )
+                {
                     fprintf(stderr, "%s", prepareHelp().getStr());
                     ret = sal_False;
-                } else
+                }
+                else
                 {
                     int rargc=0;
                     char* rargv[512];
@@ -295,12 +306,14 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         free(rargv[j]);
                     }
                 }
-            } else
+            }
+            else
             {
                 if (bCmdFile)
                 {
                     m_inputFiles.push_back(av[i]);
-                } else
+                }
+                else
                 {
                     OUString system_filepath;
                     if (osl_getCommandArg( i-1, &system_filepath.pData )

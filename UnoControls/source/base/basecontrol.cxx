@@ -24,6 +24,8 @@
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
@@ -48,16 +50,15 @@ namespace unocontrols{
 #define DEFAULT_VISIBLE                     sal_False
 #define DEFAULT_INDESIGNMODE                sal_False
 #define DEFAULT_ENABLE                      sal_True
-#define SERVICE_VCLTOOLKIT                  "com.sun.star.awt.Toolkit"
 
 //____________________________________________________________________________________________________________
 //  construct/destruct
 //____________________________________________________________________________________________________________
 
-BaseControl::BaseControl( const Reference< XMultiServiceFactory >& xFactory )
+BaseControl::BaseControl( const Reference< XComponentContext >& rxContext )
     : IMPL_MutexContainer       (                       )
     , OComponentHelper          ( m_aMutex              )
-    , m_xFactory    ( xFactory              )
+    , m_xComponentContext       ( rxContext              )
     , m_pMultiplexer            ( DEFAULT_PMULTIPLEXER  )
     , m_nX                      ( DEFAULT_X             )
     , m_nY                      ( DEFAULT_Y             )
@@ -335,8 +336,8 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
         Reference< XToolkit > xLocalToolkit = xToolkit ;
         if ( xLocalToolkit.is() == sal_False )
         {
-            // but first create wellknown toolkit, if it not exist
-            xLocalToolkit = Reference< XToolkit > ( m_xFactory->createInstance( SERVICE_VCLTOOLKIT ), UNO_QUERY );
+            // but first create well known toolkit, if it not exist
+            xLocalToolkit = Reference< XToolkit > ( Toolkit::create(m_xComponentContext), UNO_QUERY_THROW );
         }
         m_xPeer         = xLocalToolkit->createWindow( *pDescriptor );
         m_xPeerWindow   = Reference< XWindow >( m_xPeer, UNO_QUERY );
@@ -848,9 +849,9 @@ const OUString BaseControl::impl_getStaticImplementationName()
 //  protected method
 //____________________________________________________________________________________________________________
 
-const Reference< XMultiServiceFactory > BaseControl::impl_getMultiServiceFactory()
+const Reference< XComponentContext > BaseControl::impl_getComponentContext()
 {
-    return m_xFactory ;
+    return m_xComponentContext ;
 }
 
 //____________________________________________________________________________________________________________

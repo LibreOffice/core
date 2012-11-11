@@ -32,6 +32,7 @@
 
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
@@ -976,9 +977,8 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
 
         try
         {
-            Reference< XSet > xModelCollection;
-            if ( m_aContext.createComponent( "com.sun.star.frame.GlobalEventBroadcaster", xModelCollection ) )
-                xModelCollection->insert( makeAny( xModel ) );
+            Reference< XGlobalEventBroadcaster > xModelCollection = GlobalEventBroadcaster::create( m_aContext.getUNOContext() );
+            xModelCollection->insert( makeAny( xModel ) );
         }
         catch( const Exception& )
         {

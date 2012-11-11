@@ -105,7 +105,7 @@ extern       SwTxtFrm  *pLinguFrm;
 
 static sal_uInt16 lcl_MaskRedlines( const SwTxtNode& rNode, XubString& rText,
                          const xub_StrLen nStt, const xub_StrLen nEnd,
-                         const xub_Unicode cChar )
+                         const sal_Unicode cChar )
 {
     sal_uInt16 nNumOfMaskedRedlines = 0;
 
@@ -150,7 +150,7 @@ static sal_uInt16 lcl_MaskRedlines( const SwTxtNode& rNode, XubString& rText,
 
 static sal_uInt16 lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, XubString& rText,
                                       const xub_StrLen nStt, const xub_StrLen nEnd,
-                                      const xub_Unicode cChar = CH_TXTATR_INWORD,
+                                      const sal_Unicode cChar = CH_TXTATR_INWORD,
                                       bool bCheckShowHiddenChar = true )
 {
     sal_uInt16 nRedlinesMasked = 0;
@@ -1139,7 +1139,6 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
 
     if (bFound && bInSelection)     // convertible text found within selection/range?
     {
-        const XubString aTxtPortion = m_Text.Copy( nBegin, nLen );
         OSL_ENSURE( m_Text.Len() > 0, "convertible text portion missing!" );
         rArgs.aConvText     = m_Text.Copy( nBegin, nLen );
         rArgs.nConvTextLang = nLangFound;

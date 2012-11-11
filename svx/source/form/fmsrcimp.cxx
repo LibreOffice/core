@@ -49,7 +49,7 @@
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
@@ -686,7 +686,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
 
     :m_xSearchCursor(xCursor)
     ,m_xFormatSupplier(xFormatSupplier)
-    ,m_aCharacterClassficator( _rxORB, SvtSysLocale().GetLocaleData().getLocale() )
+    ,m_aCharacterClassficator( comphelper::getComponentContext(_rxORB), SvtSysLocale().GetLocaleData().getLocale() )
     ,m_aStringCompare( _rxORB )
     ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
     ,m_bUsingTextComponents(sal_False)
@@ -710,10 +710,10 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
 {
     DBG_CTOR(FmSearchEngine,NULL);
 
-    m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (::comphelper::getProcessServiceFactory()
-                    ->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
-    if (m_xFormatter.is())
-        m_xFormatter->attachNumberFormatsSupplier(m_xFormatSupplier);
+    m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(
+                    ::com::sun::star::util::NumberFormatter::create( ::comphelper::getProcessComponentContext() ),
+                    UNO_QUERY_THROW);
+    m_xFormatter->attachNumberFormatsSupplier(m_xFormatSupplier);
 
     Init(sVisibleFields);
 }
@@ -723,7 +723,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
         const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
         const InterfaceArray& arrFields, FMSEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
-    ,m_aCharacterClassficator( _rxORB, SvtSysLocale().GetLocaleData().getLocale() )
+    ,m_aCharacterClassficator( comphelper::getComponentContext(_rxORB), SvtSysLocale().GetLocaleData().getLocale() )
     ,m_aStringCompare( _rxORB )
     ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
     ,m_bUsingTextComponents(sal_True)

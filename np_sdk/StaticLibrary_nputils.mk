@@ -27,6 +27,11 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,nputils))
 
+$(eval $(call gb_StaticLibrary_use_packages,nputils,\
+	sal_generated \
+	sal_inc \
+))
+
 $(eval $(call gb_StaticLibrary_use_externals,nputils,\
 	mozilla_headers \
 ))

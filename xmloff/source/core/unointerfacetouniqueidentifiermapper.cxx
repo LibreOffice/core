@@ -20,6 +20,7 @@
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 
+using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
 using ::rtl::OUString;
@@ -37,8 +38,12 @@ UnoInterfaceToUniqueIdentifierMapper::UnoInterfaceToUniqueIdentifierMapper()
 */
 const OUString& UnoInterfaceToUniqueIdentifierMapper::registerReference( const Reference< XInterface >& rInterface )
 {
+    // Be certain that the references we store in our table are to the
+    // leading / primary XInterface - cf. findReference
+    uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
+
     IdMap_t::const_iterator aIter;
-    if( findReference( rInterface, aIter ) )
+    if( findReference( xRef, aIter ) )
     {
         return (*aIter).first;
     }
@@ -46,7 +51,7 @@ const OUString& UnoInterfaceToUniqueIdentifierMapper::registerReference( const R
     {
         OUString aId( "id" );
         aId += OUString::valueOf( mnNextId++ );
-        return (*maEntries.insert( IdMap_t::value_type( aId, rInterface ) ).first).first;
+        return (*maEntries.insert( IdMap_t::value_type( aId, xRef ) ).first).first;
     }
 }
 
@@ -58,7 +63,12 @@ const OUString& UnoInterfaceToUniqueIdentifierMapper::registerReference( const R
 bool UnoInterfaceToUniqueIdentifierMapper::registerReference( const OUString& rIdentifier, const Reference< XInterface >& rInterface )
 {
     IdMap_t::const_iterator aIter;
-    if( findReference( rInterface, aIter ) )
+
+    // Be certain that the references we store in our table are to the
+    // leading / primary XInterface - cf. findReference
+    uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
+
+    if( findReference( xRef, aIter ) )
     {
         return rIdentifier != (*aIter).first;
     }
@@ -68,7 +78,7 @@ bool UnoInterfaceToUniqueIdentifierMapper::registerReference( const OUString& rI
     }
     else
     {
-        maEntries.insert( IdMap_t::value_type( rIdentifier, rInterface ) );
+        maEntries.insert( IdMap_t::value_type( rIdentifier, xRef ) );
 
         // see if this is a reference like something we would generate in the future
         const sal_Unicode *p = rIdentifier.getStr();
@@ -138,11 +148,18 @@ const Reference< XInterface >& UnoInterfaceToUniqueIdentifierMapper::getReferenc
 
 bool UnoInterfaceToUniqueIdentifierMapper::findReference( const Reference< XInterface >& rInterface, IdMap_t::const_iterator& rIter ) const
 {
+    uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
+
     rIter = maEntries.begin();
+
     const IdMap_t::const_iterator aEnd( maEntries.end() );
     while( rIter != aEnd )
     {
-        if( (*rIter).second == rInterface )
+        // The Reference == operator, does a repeated queryInterface on
+        // this to ensure we got the right XInterface base-class. However,
+        // we can be sure that this has been done already by the time we
+        // get to here.
+        if( (*rIter).second.get() == xRef.get() )
             return true;
 
         rIter++;

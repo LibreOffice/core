@@ -100,6 +100,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
+    i18npool/source/search/i18nsearch \
+    linguistic/source/lng \
     oox/util/oox \
     package/source/xstor/xstor \
     package/util/package2 \

@@ -1057,9 +1057,9 @@ void ScNotes::clear()
     maNoteMap.clear();
 }
 
-ScNotes* ScNotes::clone(ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bCloneNoteCaption, SCTAB nTab)
+void ScNotes::clone(ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bCloneNoteCaption, SCTAB nTab, ScNotes& rTarget)
 {
-    ScNotes* pNotes = new ScNotes(pDoc);
+    rTarget.clear();
     for (ScNotes::iterator itr = maNoteMap.begin(); itr != maNoteMap.end(); ++itr)
     {
         SCCOL nCol = itr->first.first;
@@ -1067,10 +1067,9 @@ ScNotes* ScNotes::clone(ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
 
         if (nCol >= nCol1 && nCol <= nCol2 && nRow >= nRow1 && nRow <= nRow2)
         {
-            pNotes->insert(nCol, nRow, itr->second->Clone( ScAddress(nCol, nRow, nTab),*pDoc, ScAddress(nCol, nRow, nTab), bCloneNoteCaption));
+            rTarget.insert(nCol, nRow, itr->second->Clone( ScAddress(nCol, nRow, nTab), *pDoc, ScAddress(nCol, nRow, nTab), bCloneNoteCaption));
         }
     }
-    return pNotes;
 }
 
 void ScNotes::CopyFromClip(const ScNotes& rNotes, ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCsCOL nDx, SCsROW nDy, SCTAB nTab, bool bCloneCaption)

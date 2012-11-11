@@ -1,30 +1,21 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
-#*************************************************************************
 #
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# This file is part of the LibreOffice project.
 #
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# OpenOffice.org - a multi-platform office productivity suite
+# This file incorporates work covered by the following license notice:
 #
-# This file is part of OpenOffice.org.
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-# OpenOffice.org is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License version 3
-# only, as published by the Free Software Foundation.
-#
-# OpenOffice.org is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
-# GNU Lesser General Public License version 3 for more details
-# (a copy is included in the LICENSE file that accompanied this code).
-#
-# You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
-# <http://www.openoffice.org/license.html>
-# for a copy of the LGPLv3 License.
-#
-#*************************************************************************
 
 $(eval $(call gb_UnoApi_UnoApi,offapi))
 
@@ -54,6 +45,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt,\
 	MenuBar \
 	PopupMenu \
 	TabController \
+	Toolkit \
 	UnoControlDialogModelProvider \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/grid,\
@@ -130,6 +122,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/runti
 	FormOperations \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
+	AutoRecovery \
 	DispatchHelper \
 	DispatchRecorderSupplier \
 	DocumentTemplates \
@@ -151,10 +144,14 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/inspection
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/i18n,\
 	BreakIterator \
+	CharacterClassification \
+	LocaleCalendar \
 	LocaleData \
+	Transliteration \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/linguistic2,\
 	LanguageGuessing \
+	LinguServiceManager \
 	Proofreader \
 	ProofreadingIterator \
 ))
@@ -176,6 +173,10 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/media,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/mozilla,\
 	MozillaBootstrap \
+))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/packages/manifest,\
+	ManifestReader \
+	ManifestWriter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/plugin,\
 	PluginManager \
@@ -300,6 +301,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
 	WindowContentFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui/dialogs,\
+	FolderPicker \
 	Wizard \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/util,\
@@ -310,6 +312,10 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/util,\
 	UriAbbreviation \
 	URLTransformer \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/crypto,\
+	NSSInitializer \
+	SEInitializer \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/dom,\
 	DocumentBuilder \
 	SAXDocumentBuilder \
@@ -318,6 +324,11 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/sax,\
 	FastShapeContextHandler \
 	FastTokenHandler \
 	Parser \
+    Writer \
+))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/xslt,\
+	XSLTTransformer \
+	XSLT2Transformer \
 ))
 
 
@@ -368,7 +379,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt,\
 	RoadmapItem \
 	SpinningProgressControlModel \
 	TabControllerModel \
-	Toolkit \
 	UnoControl \
 	UnoControlButton \
 	UnoControlButtonModel \
@@ -846,16 +856,13 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/graphic
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/i18n,\
 	ChapterCollator \
-	CharacterClassification \
 	Collator \
 	IndexEntrySupplier \
 	InputSequenceChecker \
-	LocaleCalendar \
 	NativeNumberSupplier \
 	NumberFormatMapper \
 	OrdinalSuffix \
 	TextConversion \
-	Transliteration \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/image,\
 	ImageMap \
@@ -879,7 +886,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/linguis
 	HangulHanjaConversionDictionary \
 	Hyphenator \
 	LinguProperties \
-	LinguServiceManager \
 	SpellChecker \
 	Thesaurus \
 ))
@@ -1476,7 +1482,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui,\
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui/dialogs,\
 	FilePicker \
 	FilterOptionsDialog \
-	FolderPicker \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/util,\
 	NumberFormatProperties \
@@ -1818,6 +1823,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	XToggleButton \
 	XToolkit \
 	XToolkit2 \
+	XToolkitExperimental \
 	XTopWindow \
 	XTopWindow2 \
 	XTopWindowListener \
@@ -2604,6 +2610,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/geometry,\
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/graphic,\
 	GraphicColorMode \
 	GraphicType \
+	SvgTools \
 	XGraphic \
 	XGraphicObject \
 	XGraphicProvider \
@@ -2611,8 +2618,10 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/graphic,\
 	XGraphicRenderer \
 	XGraphicTransformer \
 	XPrimitive2D \
+	XPrimitive2DRenderer \
 	XPrimitive3D \
 	XPrimitiveFactory2D \
+	XSvgParser \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/i18n,\
 	AmPmValue \
@@ -2751,6 +2760,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/linguistic2,\
 	XLinguServiceEventBroadcaster \
 	XLinguServiceEventListener \
 	XLinguServiceManager \
+	XLinguServiceManager2 \
 	XMeaning \
 	XPossibleHyphens \
 	XProofreader \
@@ -3756,6 +3766,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	AlreadyInitializedException \
 	AuthenticationRequest \
 	CHAOSProgressStart \
+	CheckinArgument \
 	CertificateValidationRequest \
 	Command \
 	CommandAbortedException \
@@ -3789,10 +3800,12 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	FolderListCommand \
 	FolderListEntry \
 	GlobalTransferCommandArgument \
+	GlobalTransferCommandArgument2 \
 	HandleCookiesRequest \
 	IOErrorCode \
 	IllegalIdentifierException \
 	InsertCommandArgument \
+	InsertCommandArgument2 \
 	InteractiveAppException \
 	InteractiveAugmentedIOException \
 	InteractiveBadTransferURLException \
@@ -3858,6 +3871,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	SynchronizePolicy \
 	TransferCommandOperation \
 	TransferInfo \
+	TransferInfo2 \
 	TransferResult \
 	URLAuthenticationRequest \
 	UnsupportedCommandException \
@@ -3983,6 +3997,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui/dialogs,\
 	XFilterGroupManager \
 	XFilterManager \
 	XFolderPicker \
+	XFolderPicker2 \
 	XWizard \
 	XWizardController \
 	XWizardPage \
@@ -4140,6 +4155,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/crypto,\
 	XDigestContextSupplier \
 	XMLEncryptionException \
 	XMLSignatureException \
+	XNSSInitializer \
 	XSEInitializer \
 	XSecurityEnvironment \
 	XUriBinding \
@@ -4251,6 +4267,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/sax,\
 	XLocator \
 	XParser \
 	XSAXSerializable \
+	XWriter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/wrapper,\
 	XXMLDocumentWrapper \
@@ -4264,10 +4281,21 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/xpath,\
 	XXPathExtension \
 	XXPathObject \
 ))
+
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/xslt,\
+	XXSLTTransformer \
+))
+
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xsd,\
 	DataTypeClass \
 	WhiteSpaceTreatment \
 	XDataType \
+))
+
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/org/freedesktop/PackageKit,\
+    XSyncDbusSessionHelper \
+    XModify \
+    XQuery \
 ))
 
 # vim: set noet sw=4 ts=4:

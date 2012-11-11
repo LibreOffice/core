@@ -41,6 +41,7 @@
 #include "osl/mutex.hxx"
 #include "com/sun/star/ucb/CommandAbortedException.hpp"
 #include "com/sun/star/task/XInteractionHandler.hpp"
+#include "com/sun/star/bridge/BridgeFactory.hpp"
 #include "com/sun/star/bridge/UnoUrlResolver.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
 #include "com/sun/star/deployment/ExtensionManager.hpp"
@@ -586,7 +587,28 @@ void syncRepositories(
      }
 }
 
+void disposeBridges(Reference<css::uno::XComponentContext> const & ctx)
+{
+    if (!ctx.is())
+        return;
 
+    Reference<css::bridge::XBridgeFactory2> bridgeFac( css::bridge::BridgeFactory::create(ctx) );
+
+    const Sequence< Reference<css::bridge::XBridge> >seqBridges = bridgeFac->getExistingBridges();
+    for (sal_Int32 i = 0; i < seqBridges.getLength(); i++)
+    {
+        Reference<css::lang::XComponent> comp(seqBridges[i], UNO_QUERY);
+        if (comp.is())
+        {
+            try {
+                comp->dispose();
+            }
+            catch ( const css::lang::DisposedException& )
+            {
+            }
+        }
+    }
+}
 
 }
 

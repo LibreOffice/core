@@ -238,7 +238,7 @@ void SwDBTreeList::InitTreeList()
 void    SwDBTreeList::AddDataSource(const String& rSource)
 {
     Image aImg = aImageList.GetImage(IMG_DB);
-    SvLBoxEntry* pEntry = InsertEntry(rSource, aImg, aImg, NULL, sal_True);
+    SvTreeListEntry* pEntry = InsertEntry(rSource, aImg, aImg, NULL, sal_True);
     SvTreeListBox::Select(pEntry);
 }
 
@@ -252,14 +252,14 @@ void SwDBTreeList::ShowColumns(sal_Bool bShowCol)
 
         SetUpdateMode(sal_False);
 
-        SvLBoxEntry* pEntry = First();
+        SvTreeListEntry* pEntry = First();
 
         while (pEntry)
         {
-            pEntry = (SvLBoxEntry*)GetRootLevelParent( pEntry );
+            pEntry = (SvTreeListEntry*)GetRootLevelParent( pEntry );
             Collapse(pEntry);       // zuklappen
 
-            SvLBoxEntry* pChild;
+            SvTreeListEntry* pChild;
             while ((pChild = FirstChild(pEntry)) != 0L)
                 GetModel()->Remove(pChild);
 
@@ -274,7 +274,7 @@ void SwDBTreeList::ShowColumns(sal_Bool bShowCol)
     }
 }
 
-void  SwDBTreeList::RequestingChildren(SvLBoxEntry* pParent)
+void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
 {
     if (!pParent->HasChildren())
     {
@@ -369,7 +369,7 @@ void  SwDBTreeList::RequestingChildren(SvLBoxEntry* pParent)
                         for (long i = 0; i < nCount; i++)
                         {
                             sTableName = pTblNames[i];
-                            SvLBoxEntry* pTableEntry = InsertEntry(sTableName, aImg, aImg, pParent, bShowColumns);
+                            SvTreeListEntry* pTableEntry = InsertEntry(sTableName, aImg, aImg, pParent, bShowColumns);
                             //to discriminate between queries and tables the user data of table entries is set
                             pTableEntry->SetUserData((void*)0);
                         }
@@ -387,7 +387,7 @@ void  SwDBTreeList::RequestingChildren(SvLBoxEntry* pParent)
                         for (long i = 0; i < nCount; i++)
                         {
                             sQueryName = pQueryNames[i];
-                            SvLBoxEntry* pQueryEntry = InsertEntry(sQueryName, aImg, aImg, pParent, bShowColumns);
+                            SvTreeListEntry* pQueryEntry = InsertEntry(sQueryName, aImg, aImg, pParent, bShowColumns);
                             pQueryEntry->SetUserData((void*)1);
                         }
                     }
@@ -402,7 +402,7 @@ void  SwDBTreeList::RequestingChildren(SvLBoxEntry* pParent)
 
 IMPL_LINK( SwDBTreeList, DBCompare, SvSortData*, pData )
 {
-    SvLBoxEntry* pRight = (SvLBoxEntry*)(pData->pRight );
+    SvTreeListEntry* pRight = (SvTreeListEntry*)(pData->pRight );
 
     if (GetParent(pRight) && GetParent(GetParent(pRight)))
         return COMPARE_GREATER; // don't sort column names
@@ -413,7 +413,7 @@ IMPL_LINK( SwDBTreeList, DBCompare, SvSortData*, pData )
 String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, sal_Bool* pbIsTable)
 {
     String sDBName;
-    SvLBoxEntry* pEntry = FirstSelected();
+    SvTreeListEntry* pEntry = FirstSelected();
 
     if (pEntry && GetParent(pEntry))
     {
@@ -437,8 +437,8 @@ String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, sal_Boo
 ------------------------------------------------------------------------*/
 void SwDBTreeList::Select(const String& rDBName, const String& rTableName, const String& rColumnName)
 {
-    SvLBoxEntry* pParent;
-    SvLBoxEntry* pChild;
+    SvTreeListEntry* pParent;
+    SvTreeListEntry* pChild;
     sal_uInt16 nParent = 0;
     sal_uInt16 nChild = 0;
 

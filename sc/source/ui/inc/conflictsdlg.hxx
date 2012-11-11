@@ -178,7 +178,7 @@ private:
     String              GetActionString( const ScChangeAction* pAction, ScDocument* pDoc );
     void                HandleListBoxSelection( bool bSelectHandle );
 
-    void                SetConflictAction( SvLBoxEntry* pRootEntry, ScConflictAction eConflictAction );
+    void                SetConflictAction( SvTreeListEntry* pRootEntry, ScConflictAction eConflictAction );
     void                KeepHandler( bool bMine );
     void                KeepAllHandler( bool bMine );
 

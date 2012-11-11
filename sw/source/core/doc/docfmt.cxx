@@ -143,7 +143,7 @@ struct ParaRstFmt
  * Is need for selections at the beginning/end and with no SSelection.
  */
 
-static sal_Bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
+static bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     ParaRstFmt* pPara = (ParaRstFmt*)pArgs;
     SwTxtNode * pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
@@ -173,10 +173,10 @@ static sal_Bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
             pTxtNode->RstAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
                                 pPara->pDelSet, pPara->bInclRefToxMark );
     }
-    return sal_True;
+    return true;
 }
 
-static sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
+static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     ParaRstFmt* pPara = (ParaRstFmt*)pArgs;
     SwCntntNode* pNode = (SwCntntNode*)rpNd->GetCntntNode();
@@ -307,10 +307,10 @@ static sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                 pNode->UnlockModify();
         }
     }
-    return sal_True;
+    return true;
 }
 
-void SwDoc::RstTxtAttrs(const SwPaM &rRg, sal_Bool bInclRefToxMark )
+void SwDoc::RstTxtAttrs(const SwPaM &rRg, bool bInclRefToxMark )
 {
     SwHistory* pHst = 0;
     SwDataChanged aTmp( rRg );
@@ -322,20 +322,20 @@ void SwDoc::RstTxtAttrs(const SwPaM &rRg, sal_Bool bInclRefToxMark )
     }
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
     ParaRstFmt aPara( pStt, pEnd, pHst );
-    aPara.bInclRefToxMark = ( bInclRefToxMark == sal_True );
+    aPara.bInclRefToxMark = bInclRefToxMark;
     GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
                         lcl_RstTxtAttr, &aPara );
     SetModified();
 }
 
 void SwDoc::ResetAttrs( const SwPaM &rRg,
-                        sal_Bool bTxtAttr,
+                        bool bTxtAttr,
                         const std::set<sal_uInt16> &rAttrs,
                         const bool bSendDataChangedEvents )
 {
     SwPaM* pPam = (SwPaM*)&rRg;
     if( !bTxtAttr && !rAttrs.empty() && RES_TXTATR_END > *(rAttrs.begin()) )
-        bTxtAttr = sal_True;
+        bTxtAttr = true;
 
     if( !rRg.HasMark() )
     {
@@ -375,7 +375,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             {
                 nPtPos = nMkPos = rSt.GetIndex();
                 if( bTxtAttr )
-                    pTxtNd->DontExpandFmt( rSt, sal_True );
+                    pTxtNd->DontExpandFmt( rSt, true );
             }
         }
 
@@ -433,7 +433,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             aPara.pDelSet = &aDelSet;
     }
 
-    sal_Bool bAdd = sal_True;
+    bool bAdd = true;
     SwNodeIndex aTmpStt( pStt->nNode );
     SwNodeIndex aTmpEnd( pEnd->nNode );
     if( pStt->nContent.GetIndex() )     // just one part
@@ -453,11 +453,11 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             }
         }
 
-        aTmpStt++;
+        ++aTmpStt;
     }
     if( pEnd->nContent.GetIndex() == pEnd->nNode.GetNode().GetCntntNode()->Len() )
          // set up a later, and all CharFmtAttr -> TxtFmtAttr
-        aTmpEnd++, bAdd = sal_False;
+        aTmpEnd++, bAdd = false;
     else if( pStt->nNode != pEnd->nNode || !pStt->nContent.GetIndex() )
     {
         SwTxtNode* pTNd = aTmpEnd.GetNode().GetTxtNode();
@@ -487,7 +487,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     if( bTxtAttr )
     {
         if( bAdd )
-            aTmpEnd++;
+            ++aTmpEnd;
         GetNodes().ForEach( pStt->nNode, aTmpEnd, lcl_RstTxtAttr, &aPara );
     }
 
@@ -971,11 +971,11 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         pDoc->GetNodes().ForEach( aSt, aEnd, lcl_RstTxtAttr, &aPara );
     }
 
-    sal_Bool bCreateSwpHints = pCharSet && (
+    bool bCreateSwpHints = pCharSet && (
         SFX_ITEM_SET == pCharSet->GetItemState( RES_TXTATR_CHARFMT, sal_False ) ||
         SFX_ITEM_SET == pCharSet->GetItemState( RES_TXTATR_INETFMT, sal_False ) );
 
-    for(; aSt < aEnd; aSt++ )
+    for(; aSt < aEnd; ++aSt )
     {
         pNode = aSt.GetNode().GetCntntNode();
         if( !pNode )
@@ -1167,7 +1167,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     SfxItemPool* pSdrPool = GetAttrPool().GetSecondaryPool();
     while( sal_True )
     {
-        sal_Bool bCheckSdrDflt = sal_False;
+        bool bCheckSdrDflt = false;
         nWhich = pItem->Which();
         aOld.Put( GetAttrPool().GetDefaultItem( nWhich ) );
         GetAttrPool().SetPoolDefaultItem( *pItem );
@@ -1282,7 +1282,7 @@ const SfxPoolItem& SwDoc::GetDefault( sal_uInt16 nFmtHint ) const
 /*
  * Delete the formats
  */
-void SwDoc::DelCharFmt(sal_uInt16 nFmt, sal_Bool bBroadcast)
+void SwDoc::DelCharFmt(sal_uInt16 nFmt, bool bBroadcast)
 {
     SwCharFmt * pDel = (*pCharFmtTbl)[nFmt];
 
@@ -1304,14 +1304,14 @@ void SwDoc::DelCharFmt(sal_uInt16 nFmt, sal_Bool bBroadcast)
     SetModified();
 }
 
-void SwDoc::DelCharFmt( SwCharFmt *pFmt, sal_Bool bBroadcast )
+void SwDoc::DelCharFmt( SwCharFmt *pFmt, bool bBroadcast )
 {
     sal_uInt16 nFmt = pCharFmtTbl->GetPos( pFmt );
     OSL_ENSURE( USHRT_MAX != nFmt, "Fmt not found," );
     DelCharFmt( nFmt, bBroadcast );
 }
 
-void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, sal_Bool bBroadcast )
+void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
 {
     if( pFmt->ISA( SwTableBoxFmt ) || pFmt->ISA( SwTableLineFmt ))
     {
@@ -1384,7 +1384,7 @@ SwDrawFrmFmt *SwDoc::MakeDrawFrmFmt( const String &rFmtName,
 }
 
 
-sal_uInt16 SwDoc::GetTblFrmFmtCount(sal_Bool bUsed) const
+sal_uInt16 SwDoc::GetTblFrmFmtCount(bool bUsed) const
 {
     sal_uInt16 nCount = pTblFrmFmtTbl->size();
     if(bUsed)
@@ -1401,7 +1401,7 @@ sal_uInt16 SwDoc::GetTblFrmFmtCount(sal_Bool bUsed) const
 }
 
 
-SwFrmFmt& SwDoc::GetTblFrmFmt(sal_uInt16 nFmt, sal_Bool bUsed ) const
+SwFrmFmt& SwDoc::GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed ) const
 {
     sal_uInt16 nRemoved = 0;
     if(bUsed)
@@ -1430,7 +1430,7 @@ SwTableFmt* SwDoc::MakeTblFrmFmt( const String &rFmtName,
 
 SwFrmFmt *SwDoc::MakeFrmFmt(const String &rFmtName,
                             SwFrmFmt *pDerivedFrom,
-                            sal_Bool bBroadcast, sal_Bool bAuto)
+                            bool bBroadcast, bool bAuto)
 {
 
     SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom );
@@ -1457,7 +1457,7 @@ SwFrmFmt *SwDoc::MakeFrmFmt(const String &rFmtName,
 
 SwFmt *SwDoc::_MakeFrmFmt(const String &rFmtName,
                             SwFmt *pDerivedFrom,
-                            sal_Bool bBroadcast, sal_Bool bAuto)
+                            bool bBroadcast, bool bAuto)
 {
     SwFrmFmt *pFrmFmt = dynamic_cast<SwFrmFmt*>(pDerivedFrom);
     pFrmFmt = MakeFrmFmt( rFmtName, pFrmFmt, bBroadcast, bAuto );
@@ -1468,12 +1468,12 @@ SwFmt *SwDoc::_MakeFrmFmt(const String &rFmtName,
 // #i40550# - add parameter <bAuto> - not relevant
 SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
                                SwCharFmt *pDerivedFrom,
-                               sal_Bool bBroadcast,
-                               sal_Bool )
+                               bool bBroadcast,
+                               bool )
 {
     SwCharFmt *pFmt = new SwCharFmt( GetAttrPool(), rFmtName, pDerivedFrom );
     pCharFmtTbl->push_back( pFmt );
-    pFmt->SetAuto( sal_False );
+    pFmt->SetAuto( false );
     SetModified();
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -1494,7 +1494,7 @@ SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
 
 SwFmt *SwDoc::_MakeCharFmt(const String &rFmtName,
                             SwFmt *pDerivedFrom,
-                            sal_Bool bBroadcast, sal_Bool bAuto)
+                            bool bBroadcast, bool bAuto)
 {
     SwCharFmt *pCharFmt = dynamic_cast<SwCharFmt*>(pDerivedFrom);
     pCharFmt = MakeCharFmt( rFmtName, pCharFmt, bBroadcast, bAuto );
@@ -1509,13 +1509,13 @@ SwFmt *SwDoc::_MakeCharFmt(const String &rFmtName,
 // #i40550# - add parameter <bAuto> - not relevant
 SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const String &rFmtName,
                                      SwTxtFmtColl *pDerivedFrom,
-                                     sal_Bool bBroadcast,
-                                     sal_Bool )
+                                     bool bBroadcast,
+                                     bool )
 {
     SwTxtFmtColl *pFmtColl = new SwTxtFmtColl( GetAttrPool(), rFmtName,
                                                 pDerivedFrom );
     pTxtFmtCollTbl->push_back(pFmtColl);
-    pFmtColl->SetAuto( sal_False );
+    pFmtColl->SetAuto( false );
     SetModified();
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -1534,7 +1534,7 @@ SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const String &rFmtName,
 
 SwFmt *SwDoc::_MakeTxtFmtColl(const String &rFmtName,
                             SwFmt *pDerivedFrom,
-                            sal_Bool bBroadcast, sal_Bool bAuto)
+                            bool bBroadcast, bool bAuto)
 {
     SwTxtFmtColl *pTxtFmtColl = dynamic_cast<SwTxtFmtColl*>(pDerivedFrom);
     pTxtFmtColl = MakeTxtFmtColl( rFmtName, pTxtFmtColl, bBroadcast, bAuto );
@@ -1545,12 +1545,12 @@ SwFmt *SwDoc::_MakeTxtFmtColl(const String &rFmtName,
 //FEATURE::CONDCOLL
 SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const String &rFmtName,
                                                   SwTxtFmtColl *pDerivedFrom,
-                                                  sal_Bool bBroadcast)
+                                                  bool bBroadcast)
 {
     SwConditionTxtFmtColl*pFmtColl = new SwConditionTxtFmtColl( GetAttrPool(),
                                                     rFmtName, pDerivedFrom );
     pTxtFmtCollTbl->push_back(pFmtColl);
-    pFmtColl->SetAuto( sal_False );
+    pFmtColl->SetAuto( false );
     SetModified();
 
     if (bBroadcast)
@@ -1569,12 +1569,12 @@ SwGrfFmtColl* SwDoc::MakeGrfFmtColl( const String &rFmtName,
     SwGrfFmtColl *pFmtColl = new SwGrfFmtColl( GetAttrPool(), rFmtName,
                                                 pDerivedFrom );
     pGrfFmtCollTbl->push_back( pFmtColl );
-    pFmtColl->SetAuto( sal_False );
+    pFmtColl->SetAuto( false );
     SetModified();
     return pFmtColl;
 }
 
-void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, sal_Bool bBroadcast)
+void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, bool bBroadcast)
 {
     OSL_ENSURE( nFmtColl, "Remove fuer Coll 0." );
 
@@ -1604,14 +1604,14 @@ void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, sal_Bool bBroadcast)
     SetModified();
 }
 
-void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl, sal_Bool bBroadcast )
+void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl, bool bBroadcast )
 {
     sal_uInt16 nFmt = pTxtFmtCollTbl->GetPos( pColl );
     OSL_ENSURE( USHRT_MAX != nFmt, "Collection not found," );
     DelTxtFmtColl( nFmt, bBroadcast );
 }
 
-static sal_Bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
+static bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
 {
     // ParaSetFmtColl * pPara = (ParaSetFmtColl*)pArgs;
     SwCntntNode* pCNd = (SwCntntNode*)rpNode->GetTxtNode();
@@ -1681,10 +1681,10 @@ static sal_Bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
 
         pPara->nWhich++;
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwDoc::SetTxtFmtColl( const SwPaM &rRg,
+bool SwDoc::SetTxtFmtColl( const SwPaM &rRg,
                            SwTxtFmtColl *pFmt,
                            bool bReset,
                            bool bResetListAttrs )
@@ -1692,7 +1692,7 @@ sal_Bool SwDoc::SetTxtFmtColl( const SwPaM &rRg,
     SwDataChanged aTmp( rRg );
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
     SwHistory* pHst = 0;
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -1712,7 +1712,7 @@ sal_Bool SwDoc::SetTxtFmtColl( const SwPaM &rRg,
     GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
                         lcl_SetTxtFmtColl, &aPara );
     if( !aPara.nWhich )
-        bRet = sal_False;           // didn't find a valid Node
+        bRet = false;           // didn't find a valid Node
 
     if( bRet )
         SetModified();
@@ -1744,7 +1744,7 @@ SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
 
     // Create the format and copy the attributes
     // #i40550#
-    SwFmt* pNewFmt = (this->*fnCopyFmt)( rFmt.GetName(), pParent, sal_False, sal_True );
+    SwFmt* pNewFmt = (this->*fnCopyFmt)( rFmt.GetName(), pParent, false, true );
     pNewFmt->SetAuto( rFmt.IsAuto() );
     pNewFmt->CopyAttrs( rFmt, sal_True );           // copy the attributes
 
@@ -1795,7 +1795,7 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
         pNewColl = new SwConditionTxtFmtColl( GetAttrPool(), rColl.GetName(),
                                                 pParent);
         pTxtFmtCollTbl->push_back( pNewColl );
-        pNewColl->SetAuto( sal_False );
+        pNewColl->SetAuto( false );
         SetModified();
 
         // copy the conditions
@@ -1905,7 +1905,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
                 MakeCondTxtFmtColl( pSrc->GetName(), (SwTxtFmtColl*)&rDfltFmt );
             else
                 // #i40550#
-                (this->*fnCopyFmt)( pSrc->GetName(), &rDfltFmt, sal_False, sal_True );
+                (this->*fnCopyFmt)( pSrc->GetName(), &rDfltFmt, false, true );
         }
     }
 
@@ -1917,7 +1917,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
             continue;
 
         pDest = FindFmtByName( rDestArr, pSrc->GetName() );
-        pDest->SetAuto( sal_False );
+        pDest->SetAuto( false );
         pDest->DelDiffs( *pSrc );
 
         // #i94285#: existing <SwFmtPageDesc> instance, before copying attributes
@@ -2034,7 +2034,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
 }
 
 void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
-                            sal_Bool bCopyPoolIds )
+                            bool bCopyPoolIds )
 {
     bool bNotifyLayout = false;
     SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
@@ -2219,7 +2219,7 @@ SwFmt* SwDoc::FindFmtByName( const SwFmtsBase& rFmtArr,
     return pFnd;
 }
 
-void SwDoc::MoveLeftMargin( const SwPaM& rPam, sal_Bool bRight, sal_Bool bModulus )
+void SwDoc::MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus )
 {
     SwHistory* pHistory = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -2275,14 +2275,14 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, sal_Bool bRight, sal_Bool bModulu
             SwRegHistory aRegH( pTNd, *pTNd, pHistory );
             pTNd->SetAttr( aLS );
         }
-        aIdx++;
+        ++aIdx;
     }
     SetModified();
 }
 
-sal_Bool SwDoc::DontExpandFmt( const SwPosition& rPos, sal_Bool bFlag )
+bool SwDoc::DontExpandFmt( const SwPosition& rPos, bool bFlag )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( pTxtNd )
     {
@@ -2457,7 +2457,7 @@ void SwDoc::ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet)
 }
 
 void SwDoc::RenameFmt(SwFmt & rFmt, const String & sNewName,
-                      sal_Bool bBroadcast)
+                      bool bBroadcast)
 {
     SfxStyleFamily eFamily = SFX_STYLE_FAMILY_ALL;
 

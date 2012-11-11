@@ -436,7 +436,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
             {
                 const SwTxtNode* pTxtNd = (const SwTxtNode*)pOutFmtNode;
                 SwPosition aPos(*pTxtNd);
-                bVert = pDoc->IsInVerticalText(aPos) ? true : false;
+                bVert = pDoc->IsInVerticalText(aPos);
             }
             if (!bVert)
             {

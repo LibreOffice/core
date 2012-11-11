@@ -239,24 +239,10 @@ SfxViewShell* ViewShellBase::CreateInstance (
     pBase->LateInit("");
     return pBase;
 }
-void ViewShellBase::RegisterFactory( sal_uInt16 nPrio )
-{
-    pFactory = new SfxViewFactory( &CreateInstance,nPrio,"Default" );
-    InitFactory();
-}
-void ViewShellBase::InitFactory()
-{
-    SFX_VIEW_REGISTRATION(DrawDocShell);
-}
-
-
 
 SFX_IMPL_INTERFACE(ViewShellBase, SfxViewShell, SdResId(0))
 {
 }
-
-
-
 
 ViewShellBase::ViewShellBase (
     SfxViewFrame* _pFrame,
@@ -489,7 +475,25 @@ void ViewShellBase::InitializeFramework (void)
 }
 
 
+String ViewShellBase::GetSelectionText(sal_Bool bCompleteWords)
+{
+    ::boost::shared_ptr<ViewShell> const pMainShell(GetMainViewShell());
+    DrawViewShell *const pDrawViewShell(
+            dynamic_cast<DrawViewShell*>(pMainShell.get()));
+    return (pDrawViewShell)
+        ?   pDrawViewShell->GetSelectionText(bCompleteWords)
+        :   SfxViewShell::GetSelectionText(bCompleteWords);
+}
 
+sal_Bool ViewShellBase::HasSelection(sal_Bool bText) const
+{
+    ::boost::shared_ptr<ViewShell> const pMainShell(GetMainViewShell());
+    DrawViewShell *const pDrawViewShell(
+            dynamic_cast<DrawViewShell*>(pMainShell.get()));
+    return (pDrawViewShell)
+        ?   pDrawViewShell->HasSelection(bText)
+        :   SfxViewShell::HasSelection(bText);
+}
 
 void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize)
 {
@@ -1299,11 +1303,9 @@ void ViewShellBase::Implementation::ResizePixel (
         rOrigin.X()+aBaseBorder.Left(),
         rOrigin.Y()+aBaseBorder.Top());
 
-    // -1 (below) is there to let one line of _pFrame->GetWindow() visible,
-    // so that it plays better with the overall look
     Size aViewWindowSize (
         rSize.Width() - aBaseBorder.Left() - aBaseBorder.Right(),
-        rSize.Height() - aBaseBorder.Top() - aBaseBorder.Bottom() - 1);
+        rSize.Height() - aBaseBorder.Top() - aBaseBorder.Bottom());
     mpViewWindow->SetPosSizePixel(aViewWindowPosition, aViewWindowSize);
 
     maClientArea = Rectangle(Point(0,0), aViewWindowSize);

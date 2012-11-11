@@ -1,29 +1,20 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
- * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ * This file is part of the LibreOffice project.
  *
- * The contents of this file are subject to the Mozilla Public License Version
- * 1.1 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
+ * This file incorporates work covered by the following license notice:
  *
- * The Initial Developer of the Original Code is
- *              Novell, Inc.
- * Portions created by the Initial Developer are Copyright (C) 2010 the
- * Initial Developer. All Rights Reserved.
- *
- * Contributor(s): Michael Meeks <michael.meeks@novell.com>
- *
- * Alternatively, the contents of this file may be used under the terms of
- * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
- * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
- * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
- * instead of those above.
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
 #include <rtl/ustring.hxx>
@@ -33,9 +24,10 @@
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <vcl/pngread.hxx>
-#include <vcl/svgread.hxx>
 #include <vcl/svapp.hxx>
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
 #include <vcl/rendergraphicrasterizer.hxx>
+#endif
 
 namespace {
     static bool loadPng(const char *pPath, const rtl::OUString &rName, BitmapEx &rBitmap)
@@ -53,6 +45,7 @@ namespace {
             return false;
     }
 
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
     static vcl::RenderGraphicRasterizer loadSvg(const char *pPath, const rtl::OUString &rName)
     {
         rtl::OUString uri = rtl::OUString::createFromAscii( pPath ) + rName;
@@ -71,6 +64,7 @@ namespace {
         }
         return aRasterizer;
     }
+#endif
 }
 
 bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
@@ -97,6 +91,7 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
              loadPng ("$BRAND_BASE_DIR/program", aName, rBitmap) );
 }
 
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
 vcl::RenderGraphicRasterizer Application::LoadBrandSVG (const char* pName)
 {
     rtl::OUString aBaseName = ( rtl::OUString("/") +
@@ -126,5 +121,6 @@ vcl::RenderGraphicRasterizer Application::LoadBrandSVG (const char* pName)
     aRasterizer = loadSvg ("$BRAND_BASE_DIR/program", aName);
     return aRasterizer;
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

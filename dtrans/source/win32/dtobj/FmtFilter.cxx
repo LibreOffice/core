@@ -272,7 +272,7 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
     // the HTML Format header
     char aHTMLFmtHdr[120];
 
-    rtl_zeroMemory( aHTMLFmtHdr, sizeof( aHTMLFmtHdr ) );
+    memset( aHTMLFmtHdr, 0, sizeof( aHTMLFmtHdr ) );
 
     // fill the buffer with dummy values to calc the
     // exact length
@@ -318,7 +318,7 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
         nEndFrgmt   = nEndFrgmt   + lHTMLFmtHdr;
 
         // fill the html header
-        rtl_zeroMemory( aHTMLFmtHdr, sizeof( aHTMLFmtHdr ) );
+        memset( aHTMLFmtHdr, 0, sizeof( aHTMLFmtHdr ) );
 
         wsprintf(
             aHTMLFmtHdr,
@@ -327,7 +327,7 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
 
         // we add space for a trailing \0
         aHTMLFmtSequence.realloc( lHTMLFmtHdr + aTextHtml.getLength( ) + 1 );
-        rtl_zeroMemory( aHTMLFmtSequence.getArray( ), aHTMLFmtSequence.getLength( ) );
+        memset( aHTMLFmtSequence.getArray( ), 0, aHTMLFmtSequence.getLength( ) );
 
         // copy the HTML Format header
         memcpy(

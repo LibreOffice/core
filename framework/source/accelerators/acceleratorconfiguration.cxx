@@ -43,6 +43,7 @@
 
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -562,12 +563,12 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
         xSeek->seek(0);
 
     // combine writer/cache/stream etcpp.
-    css::uno::Reference< css::xml::sax::XDocumentHandler > xWriter    (xSMGR->createInstance(SERVICENAME_SAXWRITER), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::io::XActiveDataSource>       xDataSource(xWriter                                     , css::uno::UNO_QUERY_THROW);
-    xDataSource->setOutputStream(xStream);
+    css::uno::Reference< css::xml::sax::XWriter > xWriter = css::xml::sax::Writer::create(comphelper::getComponentContext(xSMGR));
+    xWriter->setOutputStream(xStream);
 
     // write into the stream
-    AcceleratorConfigurationWriter aWriter(aCache, xWriter);
+    css::uno::Reference< css::xml::sax::XDocumentHandler > xHandler(xWriter, css::uno::UNO_QUERY_THROW);
+    AcceleratorConfigurationWriter aWriter(aCache, xHandler);
     aWriter.flush();
 
     // take over all changes into the original container
@@ -623,7 +624,7 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteA
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig(xSMGR,
+    css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig( comphelper::getComponentContext(xSMGR),
         "/org.openoffice.Setup", "L10N", fpc::ConfigurationHelper::E_READONLY);
     css::uno::Reference< css::beans::XPropertySet > xProp     (xCFG, css::uno::UNO_QUERY_THROW);
     ::rtl::OUString                                 sISOLocale;
@@ -670,7 +671,7 @@ XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(const css::un
 {
     const ::rtl::OUString CFG_ENTRY_ACCELERATORS("org.openoffice.Office.Accelerators");
     m_xCfg = css::uno::Reference< css::container::XNameAccess > (
-             ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_ACCELERATORS, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
+             ::comphelper::ConfigurationHelper::openConfig( comphelper::getComponentContext(m_xSMGR), CFG_ENTRY_ACCELERATORS, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
              css::uno::UNO_QUERY );
 }
 
@@ -1111,12 +1112,12 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     if (xSeek.is())
         xSeek->seek(0);
 
-    css::uno::Reference< css::xml::sax::XDocumentHandler > xWriter    (m_xSMGR->createInstance(SERVICENAME_SAXWRITER), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::io::XActiveDataSource>       xDataSource(xWriter                                     , css::uno::UNO_QUERY_THROW);
-    xDataSource->setOutputStream(xOut);
+    css::uno::Reference< css::xml::sax::XWriter > xWriter = css::xml::sax::Writer::create(comphelper::getComponentContext(m_xSMGR));
+    xWriter->setOutputStream(xOut);
 
     // write into the stream
-    AcceleratorConfigurationWriter aWriter(aCache, xWriter);
+    css::uno::Reference< css::xml::sax::XDocumentHandler > xHandler(xWriter, css::uno::UNO_QUERY_THROW);
+    AcceleratorConfigurationWriter aWriter(aCache, xHandler);
     aWriter.flush();
 }
 
@@ -1172,14 +1173,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
     if ( sConfig == "Global" )
     {
         m_xCfg = css::uno::Reference< css::container::XNameAccess > (
-            ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_GLOBAL, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
+            ::comphelper::ConfigurationHelper::openConfig( comphelper::getComponentContext(m_xSMGR), CFG_ENTRY_GLOBAL, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
             css::uno::UNO_QUERY );
         XCUBasedAcceleratorConfiguration::reload();
     }
     else if ( sConfig == "Modules" )
     {
         m_xCfg = css::uno::Reference< css::container::XNameAccess > (
-            ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_MODULES, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
+            ::comphelper::ConfigurationHelper::openConfig( comphelper::getComponentContext(m_xSMGR), CFG_ENTRY_MODULES, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
             css::uno::UNO_QUERY );
         XCUBasedAcceleratorConfiguration::reload();
     }
@@ -1662,7 +1663,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig(xSMGR,
+    css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig( comphelper::getComponentContext(xSMGR),
         "/org.openoffice.Setup", "L10N", fpc::ConfigurationHelper::E_READONLY);
     css::uno::Reference< css::beans::XPropertySet > xProp     (xCFG, css::uno::UNO_QUERY_THROW);
     ::rtl::OUString                                 sISOLocale;

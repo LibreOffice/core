@@ -86,7 +86,7 @@ public:
     sal_Bool    CopyToClipboard(SwWrtShell& rSh, const String& rShortName);
 
     sal_Bool    ExpandGlossary();
-    sal_Bool    InsertGlossary(const String &rName);
+    bool    InsertGlossary(const String &rName);
 
     void    SetMacros(const String& rName,
                       const SvxMacro* pStart,

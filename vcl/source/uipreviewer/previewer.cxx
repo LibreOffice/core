@@ -61,7 +61,7 @@ int UIPreviewApp::Main()
 
     try
     {
-        Dialog *pDialog = new Dialog(NULL, WB_STDDIALOG);
+        Dialog *pDialog = new Dialog(DIALOG_NO_PARENT, WB_STDDIALOG);
 
         {
             VclBuilder aBuilder(pDialog, rtl::OUString(), uifiles[0]);
@@ -84,7 +84,6 @@ int UIPreviewApp::Main()
     {
         fprintf(stderr, "fatal error: %s\n", rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
     }
-    return false;
 
     return EXIT_SUCCESS;
 }

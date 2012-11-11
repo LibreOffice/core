@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include "vcl/event.hxx"
@@ -859,7 +850,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, sal_Bool bCallAction 
     switch ( meScrollType )
     {
         case SCROLL_LINEUP:
-            if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_BUTTON_LEFT: PART_BUTTON_UP,
+            if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? (IsRTLEnabled()? PART_BUTTON_RIGHT: PART_BUTTON_LEFT): PART_BUTTON_UP,
                         aControlRegion, rMousePos, bIsInside )?
                     bIsInside:
                     maBtn1Rect.IsInside( rMousePos ) )
@@ -872,7 +863,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, sal_Bool bCallAction 
             break;
 
         case SCROLL_LINEDOWN:
-            if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_BUTTON_RIGHT: PART_BUTTON_DOWN,
+            if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? (IsRTLEnabled()? PART_BUTTON_LEFT: PART_BUTTON_RIGHT): PART_BUTTON_DOWN,
                         aControlRegion, rMousePos, bIsInside )?
                     bIsInside:
                     maBtn2Rect.IsInside( rMousePos ) )
@@ -955,7 +946,12 @@ void ScrollBar::ImplDragThumb( const Point& rMousePos )
 
 void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( rMEvt.IsLeft() || rMEvt.IsMiddle() )
+    bool bPrimaryWarps = GetSettings().GetStyleSettings().GetPrimaryButtonWarpsSlider();
+    bool bWarp = bPrimaryWarps ? rMEvt.IsLeft() : rMEvt.IsMiddle();
+    bool bPrimaryWarping = bWarp && rMEvt.IsLeft();
+    bool bPage = bPrimaryWarps ? rMEvt.IsRight() : rMEvt.IsLeft();
+
+    if (rMEvt.IsLeft() || rMEvt.IsMiddle() || rMEvt.IsRight())
     {
         const Point&    rMousePos = rMEvt.GetPosPixel();
         sal_uInt16          nTrackFlags = 0;
@@ -966,24 +962,24 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
         Point aPoint( 0, 0 );
         Rectangle aControlRegion( aPoint, GetOutputSizePixel() );
 
-        if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_BUTTON_LEFT: PART_BUTTON_UP,
+        if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? (IsRTLEnabled()? PART_BUTTON_RIGHT: PART_BUTTON_LEFT): PART_BUTTON_UP,
                     aControlRegion, rMousePos, bIsInside )?
                 bIsInside:
                 maBtn1Rect.IsInside( rMousePos ) )
         {
-            if ( !(mnStateFlags & SCRBAR_STATE_BTN1_DISABLE) )
+            if (rMEvt.IsLeft() && !(mnStateFlags & SCRBAR_STATE_BTN1_DISABLE) )
             {
                 nTrackFlags     = STARTTRACK_BUTTONREPEAT;
                 meScrollType    = SCROLL_LINEUP;
                 mnDragDraw      = SCRBAR_DRAW_BTN1;
             }
         }
-        else if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_BUTTON_RIGHT: PART_BUTTON_DOWN,
+        else if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? (IsRTLEnabled()? PART_BUTTON_LEFT: PART_BUTTON_RIGHT): PART_BUTTON_DOWN,
                     aControlRegion, rMousePos, bIsInside )?
                 bIsInside:
                 maBtn2Rect.IsInside( rMousePos ) )
         {
-            if ( !(mnStateFlags & SCRBAR_STATE_BTN2_DISABLE) )
+            if (rMEvt.IsLeft() && !(mnStateFlags & SCRBAR_STATE_BTN2_DISABLE) )
             {
                 nTrackFlags     = STARTTRACK_BUTTONREPEAT;
                 meScrollType    = SCROLL_LINEDOWN;
@@ -995,7 +991,10 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             bool bThumbHit = HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_THUMB_HORZ : PART_THUMB_VERT,
                                                    maThumbRect, rMousePos, bIsInside )
                              ? bIsInside : maThumbRect.IsInside( rMousePos );
-            bool bDragHandling = rMEvt.IsMiddle() || bThumbHit || ImplGetSVData()->maNWFData.mbScrollbarJumpPage;
+
+            bool bThumbAction = bWarp || bPage;
+
+            bool bDragHandling = bWarp || (bThumbHit && bThumbAction);
             if( bDragHandling )
             {
                 if( mpData )
@@ -1012,7 +1011,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                     mnDragDraw      = SCRBAR_DRAW_THUMB;
 
                     // calculate mouse offset
-                    if( rMEvt.IsMiddle() || (ImplGetSVData()->maNWFData.mbScrollbarJumpPage && !bThumbHit) )
+                    if (bWarp && (!bThumbHit || !bPrimaryWarping))
                     {
                         bDragToMouse = sal_True;
                         if ( GetStyle() & WB_HORZ )
@@ -1032,9 +1031,9 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                     ImplDraw( mnDragDraw, this );
                 }
             }
-            else if( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA,
-                                           aControlRegion, rMousePos, bIsInside )?
-                bIsInside : sal_True )
+            else if(bPage && (HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA,
+                                           aControlRegion, rMousePos, bIsInside ) ?
+                bIsInside : sal_True) )
             {
                 nTrackFlags = STARTTRACK_BUTTONREPEAT;
 
@@ -1317,12 +1316,12 @@ Rectangle* ScrollBar::ImplFindPartRect( const Point& rPt )
     Point aPoint( 0, 0 );
     Rectangle aControlRegion( aPoint, GetOutputSizePixel() );
 
-    if( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_BUTTON_LEFT: PART_BUTTON_UP,
+    if( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? (IsRTLEnabled()? PART_BUTTON_RIGHT: PART_BUTTON_LEFT): PART_BUTTON_UP,
                 aControlRegion, rPt, bIsInside )?
             bIsInside:
             maBtn1Rect.IsInside( rPt ) )
         return &maBtn1Rect;
-    else if( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_BUTTON_RIGHT: PART_BUTTON_DOWN,
+    else if( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? (IsRTLEnabled()? PART_BUTTON_LEFT: PART_BUTTON_RIGHT): PART_BUTTON_DOWN,
                 aControlRegion, rPt, bIsInside )?
             bIsInside:
             maBtn2Rect.IsInside( rPt ) )

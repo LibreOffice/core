@@ -45,9 +45,11 @@ SAL_IMPLEMENT_MAIN()
     tools::extendApplicationEnvironment();
 
     Reference< XMultiServiceFactory > xMS;
-    xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "types.rdb" ) ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
+    xMS = cppu::createRegistryServiceFactory( "types.rdb", "applicat.rdb", sal_True );
 
-    InitVCL( xMS );
+    comphelper::setProcessServiceFactory( xMS );
+
+    InitVCL();
     ::Main();
     DeInitVCL();
 

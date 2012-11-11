@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -59,14 +59,14 @@ namespace framework
                         ,const char* _pExtraMode
                         ,const char* _pAsciiName
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& _xMenuBar
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >& _xModuleManager
+                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >& _xModuleManager
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceManager);
 
         protected:
             MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool );
 
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > m_xModuleManager;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >     m_xModuleManager;
     };
 }
 

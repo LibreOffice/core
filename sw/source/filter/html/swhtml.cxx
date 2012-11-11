@@ -445,7 +445,7 @@ SwHTMLParser::~SwHTMLParser()
         if( nLinkMode != NEVER && bAsync &&
             SFX_CREATE_MODE_INTERNAL!=pDoc->GetDocShell()->GetCreateMode() )
             pDoc->GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL,
-                                                   sal_True, sal_False );
+                                                   true, false );
 
         if ( pDoc->GetDocShell()->IsLoading() )
         {

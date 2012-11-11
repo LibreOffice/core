@@ -1637,9 +1637,7 @@ void WW8Export::OutSwString(const String& rStr, xub_StrLen nStt,
     xub_StrLen nLen, bool bUnicode, rtl_TextEncoding eChrSet)
 
 {
-#if OSL_DEBUG_LEVEL > 1
-    ::std::clog << "<OutSwString>" << ::std::endl;
-#endif
+    SAL_INFO( "sw.ww8.level2", "<OutSwString>" );
 
     if( nLen )
     {
@@ -1650,9 +1648,7 @@ void WW8Export::OutSwString(const String& rStr, xub_StrLen nStt,
         {
             String sOut( rStr.Copy( nStt, nLen ) );
 
-#if OSL_DEBUG_LEVEL > 1
-            ::std::clog << ::rtl::OUStringToOString(sOut, RTL_TEXTENCODING_ASCII_US).getStr() << ::std::endl;
-#endif
+            SAL_INFO( "sw.ww8.level2", sOut );
 
             if (bUnicode)
                 SwWW8Writer::WriteString16(Strm(), sOut, false);
@@ -1661,9 +1657,7 @@ void WW8Export::OutSwString(const String& rStr, xub_StrLen nStt,
         }
         else
         {
-#if OSL_DEBUG_LEVEL > 1
-            ::std::clog << ::rtl::OUStringToOString(rStr, RTL_TEXTENCODING_ASCII_US).getStr() << ::std::endl;
-#endif
+            SAL_INFO( "sw.ww8.level2", rStr );
 
             if (bUnicode)
                 SwWW8Writer::WriteString16(Strm(), rStr, false);
@@ -1672,9 +1666,7 @@ void WW8Export::OutSwString(const String& rStr, xub_StrLen nStt,
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    ::std::clog << "</OutSwString>" << ::std::endl;
-#endif
+    SAL_INFO( "sw.ww8.level2", "</OutSwString>" );
 }
 
 void WW8Export::WriteCR(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
@@ -1855,7 +1847,7 @@ void WW8AttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTa
     }
 }
 
-static sal_uInt16 lcl_TCFlags(const SwTableBox * pBox, long nRowSpan)
+static sal_uInt16 lcl_TCFlags(const SwTableBox * pBox, sal_Int32 nRowSpan)
 {
     sal_uInt16 nFlags = 0;
 
@@ -2140,9 +2132,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
 
     for( aIt = pTableBoxes->begin(); aIt != aItEnd; ++aIt, ++aItRowSpans)
     {
-#if OSL_DEBUG_LEVEL > 1
         sal_uInt16 npOCount = m_rWW8Export.pO->size();
-#endif
 
         const SwTableBox * pTabBox1 = *aIt;
         const SwFrmFmt * pBoxFmt = NULL;
@@ -2168,10 +2158,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
         else
             m_rWW8Export.Out_SwFmtTableBox( *m_rWW8Export.pO, NULL); // 8/16 Byte
 
-#if OSL_DEBUG_LEVEL > 1
-        ::std::clog << "<tclength>" << m_rWW8Export.pO->size() - npOCount << "</tclength>"
-                    << ::std::endl;
-#endif
+        SAL_INFO( "sw.ww8.level2", "<tclength>" << ( m_rWW8Export.pO->size() - npOCount ) << "</tclength>" );
     }
 }
 
@@ -2444,16 +2431,12 @@ void MSWordExportBase::WriteText()
         ::SetProgressState( nPos, pCurPam->GetDoc()->GetDocShell() );
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    ::std::clog << "</WriteText>" << ::std::endl;
-#endif
+    SAL_INFO( "sw.ww8.level2", "</WriteText>" );
 }
 
 void WW8Export::WriteMainText()
 {
-#if OSL_DEBUG_LEVEL > 1
-    ::std::clog << "<WriteMainText>" << ::std::endl;
-#endif
+    SAL_INFO( "sw.ww8.level2", "<WriteMainText>" );
 
     pFib->fcMin = Strm().Tell();
 
@@ -2476,9 +2459,7 @@ void WW8Export::WriteMainText()
     if( pLastNd )
         nLastFmtId = GetId( (SwTxtFmtColl&)pLastNd->GetAnyFmtColl() );
 
-#if OSL_DEBUG_LEVEL > 1
-    ::std::clog << "</WriteMainText>" << ::std::endl;
-#endif
+    SAL_INFO( "sw.ww8.level2", "</WriteMainText>" );
 }
 
 bool MSWordExportBase::IsInTable() const
@@ -3608,7 +3589,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
     ShortToSVBT16( m_rWW8Export.nStyleBeforeFly, nStyle );
 
 #ifdef DBG_UTIL
-    ::std::clog << "<OutWW8_TableNodeInfoInner>" << pNodeInfoInner->toString();
+    SAL_INFO( "sw.ww8", "<OutWW8_TableNodeInfoInner>" << pNodeInfoInner->toString());
 #endif
 
     m_rWW8Export.pO->clear();
@@ -3637,9 +3618,8 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
     if (pNodeInfoInner->isEndOfCell())
     {
-#ifdef DBG_UTIL
-        ::std::clog << "<endOfCell/>" << ::std::endl;
-#endif
+        SAL_INFO( "sw.ww8", "<endOfCell/>" );
+
         m_rWW8Export.WriteCR(pNodeInfoInner);
 
         m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), (sal_uInt8*)&nStyle, (sal_uInt8*)&nStyle+2 );     // Style #
@@ -3672,9 +3652,8 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
     if (pNodeInfoInner->isEndOfLine())
     {
-#ifdef DBG_UTIL
-        ::std::clog << "<endOfLine/>" << ::std::endl;
-#endif
+        SAL_INFO( "sw.ww8", "<endOfLine/>" );
+
         TableRowEnd(pNodeInfoInner->getDepth());
 
         ShortToSVBT16(0, nStyle);
@@ -3684,9 +3663,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
         m_rWW8Export.pO->clear();
     }
-#ifdef DBG_UTIL
-    ::std::clog << "</OutWW8_TableNodeInfoInner>" << ::std::endl;
-#endif
+    SAL_INFO( "sw.ww8", "</OutWW8_TableNodeInfoInner>" );
 }
 
 void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
@@ -3698,9 +3675,8 @@ void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
     if (pNodeInfo.get() != NULL)
     {
 #ifdef DBG_UTIL
-        ::std::clog << pNodeInfo->toString() << ::std::endl;
+        SAL_INFO( "sw.ww8", pNodeInfo->toString());
 #endif
-
         const ww8::WW8TableNodeInfo::Inners_t aInners = pNodeInfo->getInners();
         ww8::WW8TableNodeInfo::Inners_t::const_reverse_iterator aIt(aInners.rbegin());
         ww8::WW8TableNodeInfo::Inners_t::const_reverse_iterator aEnd(aInners.rend());
@@ -3712,25 +3688,21 @@ void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
             ++aIt;
         }
     }
-#ifdef DBG_UTIL
-    ::std::clog << "</OutWW8_SwStartNode>" << ::std::endl;
-#endif
+    SAL_INFO( "sw.ww8", "</OutWW8_SwStartNode>" );
 }
 
 void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
 {
 #ifdef DBG_UTIL
-// whoever has need of the missing function should go and implement it!
-// This piece of code always breaks builds...
-//    ::std::clog << "<OutWW8_SwEndNode>" << dbg_out(&rNode) << ::std::endl;
+    SAL_INFO( "sw.ww8", "<OutWW8_SwEndNode>" << dbg_out(&rNode));
 #endif
 
     ww8::WW8TableNodeInfo::Pointer_t pNodeInfo = mpTableInfo->getTableNodeInfo( &rNode );
 
     if (pNodeInfo.get() != NULL)
-     {
+    {
 #ifdef DBG_UTIL
-        ::std::clog << pNodeInfo->toString() << ::std::endl;
+        SAL_INFO( "sw.ww8", pNodeInfo->toString());
 #endif
 
         const ww8::WW8TableNodeInfo::Inners_t aInners = pNodeInfo->getInners();
@@ -3742,10 +3714,8 @@ void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
             AttrOutput().TableNodeInfoInner(pInner);
             ++aIt;
          }
-     }
-#ifdef DBG_UTIL
-    ::std::clog << "</OutWW8_SwEndNode>" << ::std::endl;
-#endif
+    }
+    SAL_INFO( "sw.ww8", "</OutWW8_SwEndNode>" );
 }
 
 const NfKeywordTable & MSWordExportBase::GetNfKeywordTable()

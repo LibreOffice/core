@@ -28,7 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -300,10 +300,8 @@ IMPL_LINK( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, CheckBox *, pBox )
 
 IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl)
 {
-    uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    uno::Reference < dialogs::XFolderPicker > xFolderPicker(
-        xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) ) ),
-        uno::UNO_QUERY );
+    uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    uno::Reference < dialogs::XFolderPicker2 >  xFolderPicker = dialogs::FolderPicker::create(xContext);
 
     rtl::OUString aURL;
     if( osl::FileBase::E_None != osl::FileBase::getFileURLFromSystemPath(m_aDestPath.GetText(), aURL) )

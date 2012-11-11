@@ -29,6 +29,8 @@
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -43,7 +45,10 @@ public:
 
     virtual void setUp();
 
-    virtual bool load(const OUString &, const OUString &rURL, const OUString &);
+    virtual bool load(const rtl::OUString &,
+        const rtl::OUString &rURL, const rtl::OUString &,
+        unsigned int, unsigned int, unsigned int);
+
     void test();
 
     CPPUNIT_TEST_SUITE(RtfTest);
@@ -60,12 +65,26 @@ void RtfTest::setUp()
     m_xFilter = uno::Reference< document::XFilter >(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
 }
 
-bool RtfTest::load(const OUString &, const OUString &rURL, const OUString &)
+bool RtfTest::load(const rtl::OUString &,
+    const rtl::OUString &rURL, const rtl::OUString &,
+    unsigned int, unsigned int, unsigned int)
 {
     uno::Sequence< beans::PropertyValue > aDescriptor(1);
     aDescriptor[0].Name = "URL";
     aDescriptor[0].Value <<= rURL;
-    return m_xFilter->filter(aDescriptor);
+    try
+    {
+        return m_xFilter->filter(aDescriptor);
+    }
+    catch (const lang::WrappedTargetRuntimeException& rWrapped)
+    {
+        io::WrongFormatException e;
+        if (rWrapped.TargetException >>= e)
+        {
+            return false;
+        }
+        throw;
+    }
 }
 
 void RtfTest::test()

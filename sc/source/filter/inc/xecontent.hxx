@@ -224,7 +224,7 @@ class ScConditionalFormat;
 class XclExpCondfmt : public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit            XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, XclExtLstRef xExtLst );
+    explicit            XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, XclExtLstRef xExtLst, sal_Int32& rIndex );
     virtual             ~XclExpCondfmt();
 
     /** Returns true, if this conditional format contains at least one cell range and CF record. */
@@ -275,6 +275,20 @@ private:
     const ScDataBarFormat& mrFormat;
     sal_Int32 mnPriority;
     rtl::OString maGuid;
+};
+
+class XclExpIconSet : public XclExpRecord, protected XclExpRoot
+{
+public:
+    explicit XclExpIconSet( const XclExpRoot& rRoot, const ScIconSetFormat& rFormat, sal_Int32 nPriority );
+
+    virtual void SaveXml( XclExpXmlStream& rStrm );
+private:
+    typedef XclExpRecordList< XclExpCfvo > XclExpCfvoList;
+
+    XclExpCfvoList maCfvoList;
+    const ScIconSetFormat& mrFormat;
+    sal_Int32 mnPriority;
 };
 
 // ----------------------------------------------------------------------------

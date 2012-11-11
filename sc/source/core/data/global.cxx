@@ -56,6 +56,7 @@
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
@@ -806,11 +807,14 @@ const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
 
 // ----------------------------------------------------------------------------
 
-void ScGlobal::AddToken( String& rTokenList, const String& rToken, sal_Unicode cSep, xub_StrLen nSepCount, bool bForceSep )
+OUString ScGlobal::addToken(const OUString& rTokenList, const OUString& rToken,
+    sal_Unicode cSep, sal_Int32 nSepCount, bool bForceSep)
 {
-    if( bForceSep || (rToken.Len() && rTokenList.Len()) )
-        rTokenList.Expand( rTokenList.Len() + nSepCount, cSep );
-    rTokenList.Append( rToken );
+    rtl::OUStringBuffer aBuf(rTokenList);
+    if( bForceSep || (!rToken.isEmpty() && !rTokenList.isEmpty()) )
+        comphelper::string::padToLength(aBuf, aBuf.getLength() + nSepCount, cSep);
+    aBuf.append(rToken);
+    return aBuf.makeStringAndClear();
 }
 
 bool ScGlobal::IsQuoted( const String& rString, sal_Unicode cQuote )
@@ -1113,7 +1117,7 @@ utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
     {
         const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
         pTransliteration = new ::utl::TransliterationWrapper(
-            ::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_IGNORECASE );
+            ::comphelper::getProcessComponentContext(), SC_TRANSLITERATION_IGNORECASE );
         pTransliteration->loadModuleIfNeeded( eOfficeLanguage );
     }
     OSL_ENSURE(
@@ -1133,7 +1137,7 @@ CalendarWrapper*     ScGlobal::GetCalendar()
 {
     if ( !pCalendar )
     {
-        pCalendar = new CalendarWrapper( ::comphelper::getProcessServiceFactory() );
+        pCalendar = new CalendarWrapper( ::comphelper::getProcessComponentContext() );
         pCalendar->loadDefaultCalendar( *GetLocale() );
     }
     return pCalendar;
@@ -1161,7 +1165,7 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
     if ( !pCaseTransliteration )
     {
         const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
-        pCaseTransliteration = new ::utl::TransliterationWrapper(::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_CASESENSE );
+        pCaseTransliteration = new ::utl::TransliterationWrapper(::comphelper::getProcessComponentContext(), SC_TRANSLITERATION_CASESENSE );
         pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
     }
     return pCaseTransliteration;

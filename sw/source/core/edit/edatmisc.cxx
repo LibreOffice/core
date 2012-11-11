@@ -56,7 +56,7 @@ void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
 
         SwPaM* pStartCrsr = pCrsr;
         do {
-                GetDoc()->ResetAttrs(*pCrsr, sal_True, attrs);
+                GetDoc()->ResetAttrs(*pCrsr, true, attrs);
         } while ( ( pCrsr = ( SwPaM* ) pCrsr->GetNext() ) != pStartCrsr );
 
     if( bUndoGroup )

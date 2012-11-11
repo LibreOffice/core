@@ -70,8 +70,11 @@ public:
     {
         return m_bHomogeneous;
     }
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 protected:
+    void accumulateMaxes(const Size &rChildSize, Size &rSize) const;
+    Size finalizeMaxes(const Size &rSize, sal_uInt16 nVisibleChildren) const;
+
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
 
@@ -185,6 +188,7 @@ public:
     VclButtonBox(Window *pParent, int nSpacing)
         : VclBox(pParent, true, nSpacing)
         , m_eLayoutStyle(VCL_BUTTONBOX_DEFAULT_STYLE)
+        , m_bHomogeneousGroups(false)
     {
     }
     void set_layout(VclButtonBoxStyle eStyle)
@@ -195,12 +199,27 @@ public:
     {
         return m_eLayoutStyle;
     }
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
 private:
     VclButtonBoxStyle m_eLayoutStyle;
+    bool m_bHomogeneousGroups;
+    struct Requisition
+    {
+        sal_uInt16 m_nMainGroupChildren;
+        sal_uInt16 m_nSubGroupChildren;
+        Size m_aMainGroupSize;
+        Size m_aSubGroupSize;
+        Requisition()
+            : m_nMainGroupChildren(0)
+            , m_nSubGroupChildren(0)
+        {
+        }
+    };
+    Requisition calculatePrimarySecondaryRequisitions() const;
+    Size addReqGroups(const VclButtonBox::Requisition &rReq) const;
 };
 
 class VCL_DLLPUBLIC VclVButtonBox : public VclButtonBox
@@ -376,7 +395,7 @@ public:
     {
         return m_nColumnSpacing;
     }
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 };
 
 VCL_DLLPUBLIC void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop,
@@ -396,7 +415,7 @@ class VCL_DLLPUBLIC VclFrame : public VclBin
 {
 public:
     VclFrame(Window *pParent) : VclBin(pParent) {}
-    void set_label(const rtl::OUString &rLabel);
+    void set_label(const OUString &rLabel);
     Window *get_label_widget();
     const Window *get_label_widget() const;
 protected:
@@ -419,7 +438,7 @@ public:
         , m_fYScale(1.0)
     {
     }
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
@@ -447,7 +466,7 @@ public:
     }
     virtual Window *get_child();
     virtual const Window *get_child() const;
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);

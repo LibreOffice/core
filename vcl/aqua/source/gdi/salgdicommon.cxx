@@ -1,4 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <sal/types.h>
 #include <osl/file.hxx>
@@ -690,10 +707,12 @@ void AquaSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     ImplDrawPixel( nX, nY, aPixelColor );
 }
 
-bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
+bool AquaSalGraphics::drawPolyLine(
+    const ::basegfx::B2DPolygon& rPolyLine,
                                     double fTransparency,
                                     const ::basegfx::B2DVector& rLineWidths,
-                                    basegfx::B2DLineJoin eLineJoin )
+    basegfx::B2DLineJoin eLineJoin,
+    com::sun::star::drawing::LineCap eLineCap)
 {
     // short circuit if there is nothing to do
     const int nPointCount = rPolyLine.count();
@@ -725,6 +744,28 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
     case ::basegfx::B2DLINEJOIN_ROUND: aCGLineJoin = kCGLineJoinRound; break;
     }
 
+    // setup cap attribute
+    CGLineCap aCGLineCap(kCGLineCapButt);
+
+    switch(eLineCap)
+    {
+        default: // com::sun::star::drawing::LineCap_BUTT:
+        {
+            aCGLineCap = kCGLineCapButt;
+            break;
+        }
+        case com::sun::star::drawing::LineCap_ROUND:
+        {
+            aCGLineCap = kCGLineCapRound;
+            break;
+        }
+        case com::sun::star::drawing::LineCap_SQUARE:
+        {
+            aCGLineCap = kCGLineCapSquare;
+            break;
+        }
+    }
+
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
     AddPolygonToPath( xPath, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true );
@@ -742,6 +783,7 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
         CGContextSetShouldAntialias( mrContext, true );
         CGContextSetAlpha( mrContext, 1.0 - fTransparency );
         CGContextSetLineJoin( mrContext, aCGLineJoin );
+        CGContextSetLineCap( mrContext, aCGLineCap );
         CGContextSetLineWidth( mrContext, rLineWidths.getX() );
         CGContextDrawPath( mrContext, kCGPathStroke );
         CGContextRestoreGState( mrContext );

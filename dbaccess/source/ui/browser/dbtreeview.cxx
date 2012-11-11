@@ -85,7 +85,7 @@ void DBTreeView::Resize()
     m_pTreeListBox->SetPosSizePixel(Point(0,0),GetOutputSizePixel());
 }
 // -------------------------------------------------------------------------
-void DBTreeView::setModel(SvLBoxTreeList* _pTreeModel)
+void DBTreeView::setModel(SvTreeList* _pTreeModel)
 {
     if (_pTreeModel)
         _pTreeModel->InsertView(m_pTreeListBox);

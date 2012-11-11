@@ -1,0 +1,43 @@
+LibreOffice Logo 0.2 RC2
+
+License: GNU LGPL & GPL, MPL
+
+Home page: http://www.numbertext.org/logo
+
+(c) László Németh (nemeth at numbertextdotorg)
+
+FSF.hu Foundation, http://www.fsf.hu
+
+Icons copyright: OpenOffice.org/LibreOffice
+
+Introduction
+============
+
+LibreLogo is a Logo-like programming language with interactive vectorgraphics for education and DTP
+
+- presentation: http://www.numbertext.org/logo/librelogo.pdf
+- basic Logo syntax for back compability with educational Logo systems
+- interactive vectorgraphics in LibreOffice Writer
+- native commands (easily translatable)
+- Python data structures (list, tuple, set, dictionary) and other Python features
+
+Usage
+=====
+
+See Logo in LibreOffice Help and http://www.numbertext.org/logo for documentation.
+
+Translation
+===========
+
+create your_language_id.lng in LibreOffice/ based on en.lng.
+
+Compilation:
+
+python make.py
+
+Development
+===========
+
+LibreLogo uses the PyUNO scripting framework, so Addons.xcu URLs depend from the
+full name of the package. Modify them according to the package name with the
+version number.

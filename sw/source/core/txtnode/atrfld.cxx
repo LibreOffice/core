@@ -248,16 +248,16 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     pTxtAttr->Expand();
 }
 
-sal_Bool SwFmtFld::GetInfo( SfxPoolItem& rInfo ) const
+bool SwFmtFld::GetInfo( SfxPoolItem& rInfo ) const
 {
     const SwTxtNode* pTxtNd;
     if( RES_AUTOFMT_DOCNODE != rInfo.Which() ||
         !pTxtAttr || 0 == ( pTxtNd = pTxtAttr->GetpTxtNode() ) ||
         &pTxtNd->GetNodes() != ((SwAutoFmtGetDocNode&)rInfo).pNodes )
-        return sal_True;
+        return true;
 
     ((SwAutoFmtGetDocNode&)rInfo).pCntntNode = pTxtNd;
-    return sal_False;
+    return false;
 }
 
 

@@ -560,7 +560,7 @@ GoNextCell:
         do {
             if( !IDX.GetNode().IsStartNode() )
                 break;
-            IDX++;
+            ++IDX;
             if( 0 == ( pCNd = IDX.GetNode().GetCntntNode() ))
                 pCNd = IDX.GetNodes().GoNext( &IDX );
             if( 0 == ( bProt = pCNd->IsProtect() ))
@@ -585,7 +585,7 @@ SetNextCrsr:
                              nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
         }
         // end of table, so go to next node
-        IDX++;
+        ++IDX;
         SwNode* pNd;
         if( ( pNd = &IDX.GetNode())->IsEndNode() || HasMark())
         {
@@ -1955,7 +1955,7 @@ sal_Bool SwCursor::GoPrevNextCell( sal_Bool bNext, sal_uInt16 nCnt )
         }
     }
 
-    rPtIdx++;
+    ++rPtIdx;
     if( !rPtIdx.GetNode().IsCntntNode() )
         GetDoc()->GetNodes().GoNextSection( &rPtIdx, sal_True, sal_False );
     GetPoint()->nContent.Assign( GetCntntNode(), 0 );
@@ -1963,14 +1963,14 @@ sal_Bool SwCursor::GoPrevNextCell( sal_Bool bNext, sal_uInt16 nCnt )
     return !IsInProtectTable( sal_True );
 }
 
-sal_Bool SwTableCursor::GotoTable( const String& )
+bool SwTableCursor::GotoTable( const String& )
 {
-    return sal_False; // invalid action
+    return false; // invalid action
 }
 
-sal_Bool SwCursor::GotoTable( const String& rName )
+bool SwCursor::GotoTable( const String& rName )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( !HasMark() )
     {
         SwTable* pTmpTbl = SwTable::FindTable( GetDoc()->FindTblFmtByName( rName ) );

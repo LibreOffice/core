@@ -82,8 +82,8 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
         bInsChar = sal_False;
     }
 
-    sal_Bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
-    pTxtNd->SetIgnoreDontExpand( sal_True );
+    bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
+    pTxtNd->SetIgnoreDontExpand( true );
 
     pTxtNd->InsertText( rtl::OUString(cIns), rPos.nContent,
             IDocumentContentOperations::INS_EMPTYEXPAND );
@@ -160,8 +160,8 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
             bInsChar = sal_True;
     }
 
-    sal_Bool bOldExpFlg = pDelTxtNd->IsIgnoreDontExpand();
-    pDelTxtNd->SetIgnoreDontExpand( sal_True );
+    bool bOldExpFlg = pDelTxtNd->IsIgnoreDontExpand();
+    pDelTxtNd->SetIgnoreDontExpand( true );
 
     pDelTxtNd->InsertText( rtl::OUString(cIns), rPos.nContent,
             IDocumentContentOperations::INS_EMPTYEXPAND );
@@ -211,10 +211,10 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         String aTmpStr = rtl::OUString('1');
         sal_Unicode* pTmpStr = aTmpStr.GetBufferAccess();
 
-        sal_Bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
-        pTxtNd->SetIgnoreDontExpand( sal_True );
+        bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
+        pTxtNd->SetIgnoreDontExpand( true );
 
-        rIdx++;
+        ++rIdx;
         for( xub_StrLen n = 0; n < aDelStr.Len(); n++  )
         {
             // do it individually, to keep the attributes!
@@ -282,8 +282,8 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     rIdx.Assign( pTxtNd, aDelStr.Len() ? nSttCntnt+1 : nSttCntnt );
 
-    sal_Bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
-    pTxtNd->SetIgnoreDontExpand( sal_True );
+    bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
+    pTxtNd->SetIgnoreDontExpand( true );
 
     for( xub_StrLen n = 0; n < aInsStr.Len(); n++  )
     {
@@ -382,7 +382,7 @@ void SwUndoTransliterate::RepeatImpl(::sw::RepeatContext & rContext)
 
 void SwUndoTransliterate::DoTransliterate(SwDoc & rDoc, SwPaM & rPam)
 {
-    utl::TransliterationWrapper aTrans( ::comphelper::getProcessServiceFactory(), nType );
+    utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), nType );
     rDoc.TransliterateText( rPam, aTrans );
 }
 

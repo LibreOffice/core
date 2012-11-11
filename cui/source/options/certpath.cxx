@@ -39,7 +39,7 @@
 
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
@@ -104,7 +104,7 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
                 ::rtl::OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
                 rtl::OUStringBuffer sEntry;
                 sEntry.append('\t').appendAscii(productNames[i]).append(':').append(profile).append('\t').append(sProfilePath);
-                SvLBoxEntry *pEntry = m_aCertPathList.InsertEntry(sEntry.makeStringAndClear());
+                SvTreeListEntry *pEntry = m_aCertPathList.InsertEntry(sEntry.makeStringAndClear());
                 rtl::OUString* pCertPath = new rtl::OUString(sProfilePath);
                 pEntry->SetUserData(pCertPath);
             }
@@ -114,7 +114,7 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
     {
     }
 
-    SvLBoxEntry *pEntry = m_aCertPathList.GetEntry(0);
+    SvTreeListEntry *pEntry = m_aCertPathList.GetEntry(0);
     if (pEntry)
     {
         m_aCertPathList.SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
@@ -163,14 +163,14 @@ IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl)
 
 rtl::OUString CertPathDialog::getDirectory() const
 {
-    SvLBoxEntry* pEntry = m_aCertPathList.FirstSelected();
+    SvTreeListEntry* pEntry = m_aCertPathList.FirstSelected();
     void* pCertPath = pEntry ? pEntry->GetUserData() : NULL;
     return pCertPath ? *static_cast<rtl::OUString*>(pCertPath) : rtl::OUString();
 }
 
 CertPathDialog::~CertPathDialog()
 {
-    SvLBoxEntry* pEntry = m_aCertPathList.First();
+    SvTreeListEntry* pEntry = m_aCertPathList.First();
     while (pEntry)
     {
         rtl::OUString* pCertPath = static_cast<rtl::OUString*>(pEntry->GetUserData());
@@ -181,14 +181,14 @@ CertPathDialog::~CertPathDialog()
 
 IMPL_LINK( CertPathDialog, CheckHdl_Impl, SvxSimpleTable *, pList )
 {
-    SvLBoxEntry* pEntry = pList ? m_aCertPathList.GetEntry(m_aCertPathList.GetCurMousePoint())
+    SvTreeListEntry* pEntry = pList ? m_aCertPathList.GetEntry(m_aCertPathList.GetCurMousePoint())
                                 : m_aCertPathList.FirstSelected();
     if (pEntry)
         m_aCertPathList.HandleEntryChecked(pEntry);
     return 0;
 }
 
-void CertPathDialog::HandleCheckEntry( SvLBoxEntry* _pEntry )
+void CertPathDialog::HandleCheckEntry( SvTreeListEntry* _pEntry )
 {
     m_aCertPathList.Select( _pEntry, true );
     SvButtonState eState = m_aCertPathList.GetCheckButtonState( _pEntry );
@@ -196,7 +196,7 @@ void CertPathDialog::HandleCheckEntry( SvLBoxEntry* _pEntry )
     if (SV_BUTTON_CHECKED == eState)
     {
         // uncheck the other entries
-        SvLBoxEntry* pEntry = m_aCertPathList.First();
+        SvTreeListEntry* pEntry = m_aCertPathList.First();
         while (pEntry)
         {
             if (pEntry != _pEntry)
@@ -210,7 +210,7 @@ void CertPathDialog::HandleCheckEntry( SvLBoxEntry* _pEntry )
 
 void CertPathDialog::AddCertPath(const rtl::OUString &rProfile, const rtl::OUString &rPath)
 {
-    SvLBoxEntry* pEntry = m_aCertPathList.First();
+    SvTreeListEntry* pEntry = m_aCertPathList.First();
     while (pEntry)
     {
         rtl::OUString* pCertPath = static_cast<rtl::OUString*>(pEntry->GetUserData());
@@ -237,10 +237,7 @@ IMPL_LINK_NOARG(CertPathDialog, AddHdl_Impl)
 {
     try
     {
-        uno::Reference<uno::XInterface> xInstance = comphelper::getProcessServiceFactory()->createInstance(
-            "com.sun.star.ui.dialogs.FolderPicker");
-
-        uno::Reference<ui::dialogs::XFolderPicker> xFolderPicker(xInstance, uno::UNO_QUERY_THROW);
+        uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker = ui::dialogs::FolderPicker::create(comphelper::getProcessComponentContext());
 
         rtl::OUString sURL;
         osl::Security().getHomeDir(sURL);

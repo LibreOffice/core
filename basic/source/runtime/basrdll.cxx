@@ -52,7 +52,9 @@ void BasicDLL::EnableBreak( bool bEnable )
     BasicDLL* pThis = BASIC_DLL();
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
     if ( pThis )
+    {
         pThis->bBreakEnabled = bEnable;
+    }
 }
 
 void BasicDLL::SetDebugMode( bool bDebugMode )
@@ -60,7 +62,9 @@ void BasicDLL::SetDebugMode( bool bDebugMode )
     BasicDLL* pThis = BASIC_DLL();
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
     if ( pThis )
+    {
         pThis->bDebugMode = bDebugMode;
+    }
 }
 
 

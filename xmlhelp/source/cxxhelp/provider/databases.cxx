@@ -33,6 +33,7 @@
 #include <rtl/uri.hxx>
 #include <osl/file.hxx>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "inputstream.hxx"
 #include <algorithm>
@@ -50,10 +51,11 @@
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <comphelper/locale.hxx>
@@ -94,22 +96,9 @@ rtl::OUString Databases::expandURL( const rtl::OUString& aURL, Reference< uno::X
     static Reference< util::XMacroExpander > xMacroExpander;
     static Reference< uri::XUriReferenceFactory > xFac;
 
-    if( !xContext.is() )
-        return rtl::OUString();
-
     if( !xMacroExpander.is() || !xFac.is() )
     {
-        Reference< XMultiComponentFactory > xSMgr( xContext->getServiceManager(), UNO_QUERY );
-
-        xFac = Reference< uri::XUriReferenceFactory >(
-            xSMgr->createInstanceWithContext( rtl::OUString(
-            "com.sun.star.uri.UriReferenceFactory"), xContext ) , UNO_QUERY );
-        if( !xFac.is() )
-        {
-            throw RuntimeException(
-                ::rtl::OUString( "Databases::expand(), could not instatiate UriReferenceFactory." ),
-                Reference< XInterface >() );
-        }
+        xFac = uri::UriReferenceFactory::create( xContext );
 
         xMacroExpander = Reference< util::XMacroExpander >(
             xContext->getValueByName(
@@ -264,8 +253,8 @@ rtl::OString Databases::getImagesZipFileURL()
     sal_Int16 nSymbolsStyle = 0;
     try
     {
-        uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-            m_xSMgr ->createInstanceWithContext(::rtl::OUString("com.sun.star.configuration.ConfigurationProvider"), m_xContext), uno::UNO_QUERY_THROW);
+        uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
+            configuration::theDefaultProvider::get(m_xContext);
 
         // set root path
         uno::Sequence < uno::Any > lParams(1);
@@ -453,7 +442,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
     rtl::OUString key = processLang(Language) + rtl::OUString( "/" ) + Module;
 
     std::pair< ModInfoTable::iterator,bool > aPair =
-        m_aModInfo.insert( ModInfoTable::value_type( key,0 ) );
+        m_aModInfo.insert( ModInfoTable::value_type( key,(StaticModuleInformation*)0 ) );
 
     ModInfoTable::iterator it = aPair.first;
 
@@ -605,7 +594,7 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
         key = *pExtensionPath + Language + dbFileName;      // make unique, don't change language
 
     std::pair< DatabasesTable::iterator,bool > aPair =
-        m_aDatabases.insert( DatabasesTable::value_type( key,0 ) );
+        m_aDatabases.insert( DatabasesTable::value_type( key,(Db*)0 ) );
 
     DatabasesTable::iterator it = aPair.first;
 
@@ -654,7 +643,7 @@ Databases::getCollator( const rtl::OUString& Language,
     osl::MutexGuard aGuard( m_aMutex );
 
     CollatorTable::iterator it =
-        m_aCollatorTable.insert( CollatorTable::value_type( key,0 ) ).first;
+        m_aCollatorTable.insert( CollatorTable::value_type( key,(Reference< XCollator >)0 ) ).first;
 
     if( ! it->second.is() )
     {
@@ -895,7 +884,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
     rtl::OUString key = processLang(Language) + rtl::OUString( "/" ) + Database;
 
     std::pair< KeywordInfoTable::iterator,bool > aPair =
-        m_aKeywordInfo.insert( KeywordInfoTable::value_type( key,0 ) );
+        m_aKeywordInfo.insert( KeywordInfoTable::value_type( key,(KeywordInfo*)0 ) );
 
     KeywordInfoTable::iterator it = aPair.first;
 
@@ -1221,24 +1210,17 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
         if ( aCSS.compareToAscii( "default" ) == 0 )
         {
             // #i50760: "default" needs to adapt HC mode
-            uno::Reference< awt::XToolkit > xToolkit = uno::Reference< awt::XToolkit >(
-                    ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( "com.sun.star.awt.Toolkit" ) ), uno::UNO_QUERY );
-            if ( xToolkit.is() )
+            uno::Reference< awt::XToolkit2 > xToolkit =
+                   awt::Toolkit::create( ::comphelper::getProcessComponentContext() );
+            uno::Reference< awt::XTopWindow > xTopWindow = xToolkit->getActiveTopWindow();
+            if ( xTopWindow.is() )
             {
-                uno::Reference< awt::XExtendedToolkit > xExtToolkit( xToolkit, uno::UNO_QUERY );
-                if ( xExtToolkit.is() )
+                uno::Reference< awt::XVclWindowPeer > xVclWindowPeer( xTopWindow, uno::UNO_QUERY );
+                if ( xVclWindowPeer.is() )
                 {
-                    uno::Reference< awt::XTopWindow > xTopWindow = xExtToolkit->getActiveTopWindow();
-                    if ( xTopWindow.is() )
-                    {
-                        uno::Reference< awt::XVclWindowPeer > xVclWindowPeer( xTopWindow, uno::UNO_QUERY );
-                        if ( xVclWindowPeer.is() )
-                        {
-                            uno::Any aHCMode = xVclWindowPeer->getProperty( rtl::OUString( "HighContrastMode" ) );
-                            if ( ( aHCMode >>= bHighContrastMode ) && bHighContrastMode )
-                                aCSS = rtl::OUString( "highcontrastblack" );
-                        }
-                    }
+                    uno::Any aHCMode = xVclWindowPeer->getProperty( rtl::OUString( "HighContrastMode" ) );
+                    if ( ( aHCMode >>= bHighContrastMode ) && bHighContrastMode )
+                        aCSS = rtl::OUString( "highcontrastblack" );
                 }
             }
         }

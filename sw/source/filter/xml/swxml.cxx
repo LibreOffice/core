@@ -162,11 +162,11 @@ sal_Int32 ReadThroughComponent(
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter
+    OUString aFilterName(OUString::createFromAscii(pFilterName));
     uno::Reference< xml::sax::XDocumentHandler > xFilter(
-        rFactory->createInstanceWithArguments(
-            OUString::createFromAscii(pFilterName), rFilterArguments),
-        UNO_QUERY );
-    OSL_ENSURE( xFilter.is(), "Can't instantiate filter component." );
+        rFactory->createInstanceWithArguments(aFilterName, rFilterArguments),
+        UNO_QUERY);
+    SAL_WARN_IF(!xFilter.is(), "sw", "Can't instantiate filter component: " << aFilterName);
     if( !xFilter.is() )
         return ERR_SWG_READ_ERROR;
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "%s created", pFilterName );

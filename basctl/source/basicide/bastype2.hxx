@@ -31,7 +31,7 @@
 #include "basobj.hxx"
 
 class SbModule;
-class SvLBoxEntry;
+class SvTreeListEntry;
 class SbxVariable;
 
 namespace basctl
@@ -177,21 +177,21 @@ class TreeListBox : public SvTreeListBox, public DocumentEventListener
 private:
     sal_uInt16 nMode;
     DocumentEventNotifier m_aNotifier;
-
-    void            SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage );
+    void            Init();
+    void            SetEntryBitmaps( SvTreeListEntry * pEntry, const Image& rImage );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 
 protected:
-    virtual void            RequestingChildren( SvLBoxEntry* pParent );
+    virtual void            RequestingChildren( SvTreeListEntry* pParent );
     virtual void            ExpandedHdl();
-    virtual SvLBoxEntry*    CloneEntry( SvLBoxEntry* pSource );
+    virtual SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource );
     virtual long            ExpandingHdl();
 
-    void                    ImpCreateLibEntries( SvLBoxEntry* pShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation );
-    void                    ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
-    void                    ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
-    void                    ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
-    SvLBoxEntry*            ImpFindEntry( SvLBoxEntry* pParent, const OUString& rText );
+    void                    ImpCreateLibEntries( SvTreeListEntry* pShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation );
+    void                    ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
+    void                    ImpCreateLibSubEntriesInVBAMode( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
+    void                    ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
+    SvTreeListEntry*            ImpFindEntry( SvTreeListEntry* pParent, const OUString& rText );
 
     // DocumentEventListener
     virtual void onDocumentCreated( const ScriptDocument& _rDocument );
@@ -205,34 +205,35 @@ protected:
     virtual void onDocumentModeChanged( const ScriptDocument& _rDocument );
 
 public:
-    TreeListBox( Window* pParent, const ResId& rRes );
+    TreeListBox(Window* pParent, const ResId& rRes);
+    TreeListBox(Window* pParent);
     ~TreeListBox();
 
     void            ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void            ScanAllEntries();
     void            UpdateEntries();
 
-    bool            IsEntryProtected( SvLBoxEntry* pEntry );
+    bool            IsEntryProtected( SvTreeListEntry* pEntry );
 
     void            SetMode( sal_uInt16 nM ) { nMode = nM; }
     sal_uInt16          GetMode() const { return nMode; }
 
-    SbModule*       FindModule( SvLBoxEntry* pEntry );
-    SbxVariable*    FindVariable( SvLBoxEntry* pEntry );
-    SvLBoxEntry*    FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
-    SvLBoxEntry*    FindEntry( SvLBoxEntry* pParent, const OUString& rText, EntryType eType );
+    SbModule*       FindModule( SvTreeListEntry* pEntry );
+    SbxVariable*    FindVariable( SvTreeListEntry* pEntry );
+    SvTreeListEntry*    FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
+    SvTreeListEntry*    FindEntry( SvTreeListEntry* pParent, const OUString& rText, EntryType eType );
 
-    EntryDescriptor GetEntryDescriptor( SvLBoxEntry* pEntry );
+    EntryDescriptor GetEntryDescriptor( SvTreeListEntry* pEntry );
 
     ItemType        ConvertType (EntryType eType);
-    bool            IsValidEntry( SvLBoxEntry* pEntry );
+    bool            IsValidEntry( SvTreeListEntry* pEntry );
 
-    SvLBoxEntry*    AddEntry(
+    SvTreeListEntry*    AddEntry(
         const OUString& rText, const Image& rImage,
-        SvLBoxEntry* pParent, bool bChildrenOnDemand,
+        SvTreeListEntry* pParent, bool bChildrenOnDemand,
         std::auto_ptr<Entry> aUserData
     );
-    void            RemoveEntry (SvLBoxEntry*);
+    void            RemoveEntry (SvTreeListEntry*);
     void            RemoveEntry (ScriptDocument const&);
 
     OUString GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;

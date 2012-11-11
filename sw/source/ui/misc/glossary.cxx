@@ -299,10 +299,10 @@ SwGlossaryDlg::~SwGlossaryDlg()
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
 {
-    SvLBoxEntry* pEntry = pBox->FirstSelected();
+    SvTreeListEntry* pEntry = pBox->FirstSelected();
     if(!pEntry)
         return 0;
-    SvLBoxEntry* pParent = pBox->GetParent(pEntry) ? pBox->GetParent(pEntry) : pEntry;
+    SvTreeListEntry* pParent = pBox->GetParent(pEntry) ? pBox->GetParent(pEntry) : pEntry;
     GroupUserData* pGroupData = (GroupUserData*)pParent->GetUserData();
     String *pGlosGroup = ::GetCurrGlosGroup();
     (*pGlosGroup) = pGroupData->sGroupName;
@@ -366,11 +366,11 @@ void SwGlossaryDlg::Apply()
 /* --------------------------------------------------
  * does the title exist in the selected group?
  * --------------------------------------------------*/
-SvLBoxEntry* SwGlossaryDlg::DoesBlockExist(const String& rBlock,
+SvTreeListEntry* SwGlossaryDlg::DoesBlockExist(const String& rBlock,
                 const String& rShort)
 {
     // look for possible entry in TreeListBox
-    SvLBoxEntry* pEntry = aCategoryBox.FirstSelected();
+    SvTreeListEntry* pEntry = aCategoryBox.FirstSelected();
     if(pEntry)
     {
         if(aCategoryBox.GetParent(pEntry))
@@ -378,7 +378,7 @@ SvLBoxEntry* SwGlossaryDlg::DoesBlockExist(const String& rBlock,
         sal_uInt32 nChildCount = aCategoryBox.GetChildCount( pEntry );
         for(sal_uInt32 i = 0; i < nChildCount; i++)
         {
-            SvLBoxEntry* pChild = aCategoryBox.GetEntry( pEntry, i );
+            SvTreeListEntry* pChild = aCategoryBox.GetEntry( pEntry, i );
             if(rBlock == aCategoryBox.GetEntryText(pChild) &&
                 (!rShort.Len() || rShort == *(String*)pChild->GetUserData()))
             {
@@ -434,7 +434,7 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
 
 IMPL_LINK_INLINE_START( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox )
 {
-    SvLBoxEntry* pEntry = pBox->FirstSelected();
+    SvTreeListEntry* pEntry = pBox->FirstSelected();
     if(pBox->GetParent(pEntry) && !bIsDocReadOnly)
         EndDialog( RET_OK );
     return 0;
@@ -443,7 +443,7 @@ IMPL_LINK_INLINE_END( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox )
 
 IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
 {
-    SvLBoxEntry* pEntry = aCategoryBox.FirstSelected();
+    SvTreeListEntry* pEntry = aCategoryBox.FirstSelected();
 
     const String aEditText(aNameED.GetText());
     const sal_Bool bHasEntry = aEditText.Len() && aShortNameEdit.GetText().Len();
@@ -492,11 +492,11 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             }
             if(pGlossaryHdl->NewGlossary(aStr, aShortName, sal_False, bNoAttr ))
             {
-                SvLBoxEntry* pEntry = aCategoryBox.FirstSelected();
+                SvTreeListEntry* pEntry = aCategoryBox.FirstSelected();
                 if(aCategoryBox.GetParent(pEntry))
                     pEntry = aCategoryBox.GetParent(pEntry);
 
-                SvLBoxEntry* pChild = aCategoryBox.InsertEntry(aStr, pEntry);
+                SvTreeListEntry* pChild = aCategoryBox.InsertEntry(aStr, pEntry);
                 pChild->SetUserData(new String(aShortName));
                 aNameED.SetText(aStr);
                 aShortNameEdit.SetText(aShortName);
@@ -534,8 +534,8 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                                         pNewNameDlg->GetNewShort(),
                                         pNewNameDlg->GetNewName()))
             {
-                SvLBoxEntry* pEntry = aCategoryBox.FirstSelected();
-                SvLBoxEntry* pNewEntry = aCategoryBox.InsertEntry(
+                SvTreeListEntry* pEntry = aCategoryBox.FirstSelected();
+                SvTreeListEntry* pNewEntry = aCategoryBox.InsertEntry(
                         pNewNameDlg->GetNewName(), aCategoryBox.GetParent(pEntry));
                 pNewEntry->SetUserData(new String(pNewNameDlg->GetNewShort()));
                 delete (String*)pEntry->GetUserData();
@@ -556,9 +556,9 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 const String aTitle(aNameED.GetText());
                 if(aTitle.Len() && pGlossaryHdl->DelGlossary(aShortName))
                 {
-                    SvLBoxEntry* pChild = DoesBlockExist(aTitle, aShortName);
+                    SvTreeListEntry* pChild = DoesBlockExist(aTitle, aShortName);
                     OSL_ENSURE(pChild, "entry not found!");
-                    SvLBoxEntry* pParent = aCategoryBox.GetParent(pChild);
+                    SvTreeListEntry* pParent = aCategoryBox.GetParent(pChild);
                     aCategoryBox.Select(pParent);
 
                     aCategoryBox.GetModel()->Remove(pChild);
@@ -691,7 +691,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
                 Init();
                 //if new groups were created - select one of them
                 String sNewGroup = pDlg->GetCreatedGroupName();
-                SvLBoxEntry* pEntry = aCategoryBox.First();
+                SvTreeListEntry* pEntry = aCategoryBox.First();
                 while(sNewGroup.Len() && pEntry)
                 {
                     if(!aCategoryBox.GetParent(pEntry))
@@ -733,7 +733,7 @@ void SwGlossaryDlg::Init()
     aCategoryBox.Clear();
     // display text block regions
     const sal_uInt16 nCnt = pGlossaryHdl->GetGroupCnt();
-    SvLBoxEntry* pSelEntry = 0;
+    SvTreeListEntry* pSelEntry = 0;
     const String sSelStr(::GetCurrGlosGroup()->GetToken(0, GLOS_DELIM));
     const sal_uInt16 nSelPath = static_cast< sal_uInt16 >(::GetCurrGlosGroup()->GetToken(1, GLOS_DELIM).ToInt32());
     // #i66304# - "My AutoText" comes from mytexts.bau, but should be translated
@@ -749,7 +749,7 @@ void SwGlossaryDlg::Init()
             sTitle = sGroupName.GetToken( 0, GLOS_DELIM );
         if(sTitle == sMyAutoTextEnglish)
             sTitle = sMyAutoTextTranslated;
-        SvLBoxEntry* pEntry = aCategoryBox.InsertEntry( sTitle );
+        SvTreeListEntry* pEntry = aCategoryBox.InsertEntry( sTitle );
         sal_uInt16 nPath = static_cast< sal_uInt16 >(sGroupName.GetToken( 1, GLOS_DELIM ).ToInt32());
 
         GroupUserData* pData = new GroupUserData;
@@ -768,7 +768,7 @@ void SwGlossaryDlg::Init()
             for(sal_uInt16 i = 0; i < nCount; ++i)
             {
                 String sGroupTitle(pGlossaryHdl->GetGlossaryName(i));
-                SvLBoxEntry* pChild = aCategoryBox.InsertEntry(
+                SvTreeListEntry* pChild = aCategoryBox.InsertEntry(
                                     sGroupTitle, pEntry);
                 pChild->SetUserData(new String(pGlossaryHdl->GetGlossaryShortName(i)));
             }
@@ -778,7 +778,7 @@ void SwGlossaryDlg::Init()
     if(!pSelEntry)
     {
         //find a non-readonly group
-        SvLBoxEntry* pSearch = aCategoryBox.First();
+        SvTreeListEntry* pSearch = aCategoryBox.First();
         while(pSearch)
         {
             if(!aCategoryBox.GetParent(pSearch))
@@ -896,7 +896,7 @@ SwGlTreeListBox::SwGlTreeListBox(Window* pParent, const ResId& rResId) :
 
 void SwGlTreeListBox::Clear()
 {
-    SvLBoxEntry* pEntry = First();
+    SvTreeListEntry* pEntry = First();
     while(pEntry)
     {
         if(GetParent(pEntry))
@@ -911,7 +911,7 @@ void SwGlTreeListBox::Clear()
 void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
     Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
-    SvLBoxEntry* pEntry = GetEntry( aPos );
+    SvTreeListEntry* pEntry = GetEntry( aPos );
     // there's only help for groups' names
     if(pEntry)
     {
@@ -962,7 +962,7 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 
 DragDropMode SwGlTreeListBox::NotifyStartDrag(
                     TransferDataContainer& /*rContainer*/,
-                    SvLBoxEntry* pEntry )
+                    SvTreeListEntry* pEntry )
 {
     DragDropMode  eRet;
     pDragEntry = pEntry;
@@ -971,7 +971,7 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
     else
     {
         SwGlossaryDlg* pDlg = (SwGlossaryDlg*)Window::GetParent();
-        SvLBoxEntry* pParent = GetParent(pEntry);
+        SvTreeListEntry* pParent = GetParent(pEntry);
 
         GroupUserData* pGroupData = (GroupUserData*)pParent->GetUserData();
         String sEntry(pGroupData->sGroupName);
@@ -989,19 +989,19 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
     return eRet;
 }
 
-sal_Bool    SwGlTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry)
+sal_Bool    SwGlTreeListBox::NotifyAcceptDrop( SvTreeListEntry* pEntry)
 {
     // TODO: Readonly - check still missing!
-    SvLBoxEntry* pSrcParent = GetParent(pEntry) ? GetParent(pEntry) : pEntry;
-    SvLBoxEntry* pDestParent =
+    SvTreeListEntry* pSrcParent = GetParent(pEntry) ? GetParent(pEntry) : pEntry;
+    SvTreeListEntry* pDestParent =
         GetParent(pDragEntry ) ? GetParent(pDragEntry ) : pDragEntry ;
     return pDestParent != pSrcParent;
 
 }
 
-sal_Bool  SwGlTreeListBox::NotifyMoving(   SvLBoxEntry*  pTarget,
-                                    SvLBoxEntry*  pEntry,
-                                    SvLBoxEntry*& /*rpNewParent*/,
+sal_Bool  SwGlTreeListBox::NotifyMoving(   SvTreeListEntry*  pTarget,
+                                    SvTreeListEntry*  pEntry,
+                                    SvTreeListEntry*& /*rpNewParent*/,
                                     sal_uLong&        /*rNewChildPos*/
                                 )
 {
@@ -1012,8 +1012,8 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvLBoxEntry*  pTarget,
     }
     // 1. move to different groups?
     // 2. allowed to write in both groups?
-    SvLBoxEntry* pSrcParent = GetParent(pEntry);
-    SvLBoxEntry* pDestParent =
+    SvTreeListEntry* pSrcParent = GetParent(pEntry);
+    SvTreeListEntry* pDestParent =
         GetParent(pTarget) ? GetParent(pTarget) : pTarget;
     sal_Bool bRet = sal_False;
     if(pDestParent != pSrcParent)
@@ -1037,7 +1037,7 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvLBoxEntry*  pTarget,
                         sDestName, sTitle, sal_True );
         if(bRet)
         {
-            SvLBoxEntry* pChild = InsertEntry(sTitle, pDestParent);
+            SvTreeListEntry* pChild = InsertEntry(sTitle, pDestParent);
             pChild->SetUserData(new String(sShortName));
             GetModel()->Remove(pEntry);
         }
@@ -1045,9 +1045,9 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvLBoxEntry*  pTarget,
     return sal_False; // otherwise the entry is being set automatically
 }
 
-sal_Bool  SwGlTreeListBox::NotifyCopying(   SvLBoxEntry*  pTarget,
-                                    SvLBoxEntry*  pEntry,
-                                    SvLBoxEntry*& /*rpNewParent*/,
+sal_Bool  SwGlTreeListBox::NotifyCopying(   SvTreeListEntry*  pTarget,
+                                    SvTreeListEntry*  pEntry,
+                                    SvTreeListEntry*& /*rpNewParent*/,
                                     sal_uLong&        /*rNewChildPos*/
                                 )
 {
@@ -1058,8 +1058,8 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvLBoxEntry*  pTarget,
     {
         pTarget = GetEntry(0);
     }
-    SvLBoxEntry* pSrcParent = GetParent(pEntry);
-    SvLBoxEntry* pDestParent =
+    SvTreeListEntry* pSrcParent = GetParent(pEntry);
+    SvTreeListEntry* pDestParent =
         GetParent(pTarget) ? GetParent(pTarget) : pTarget;
     sal_Bool bRet = sal_False;
     if(pDestParent != pSrcParent)
@@ -1085,7 +1085,7 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvLBoxEntry*  pTarget,
                         sDestName, sTitle, sal_False );
         if(bRet)
         {
-            SvLBoxEntry* pChild = InsertEntry(sTitle, pDestParent);
+            SvTreeListEntry* pChild = InsertEntry(sTitle, pDestParent);
             pChild->SetUserData(new String(sShortName));
         }
     }
@@ -1094,7 +1094,7 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvLBoxEntry*  pTarget,
 
 String SwGlossaryDlg::GetCurrGrpName() const
 {
-    SvLBoxEntry* pEntry = aCategoryBox.FirstSelected();
+    SvTreeListEntry* pEntry = aCategoryBox.FirstSelected();
     String sRet;
     if(pEntry)
     {

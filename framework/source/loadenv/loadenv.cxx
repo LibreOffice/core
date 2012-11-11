@@ -952,7 +952,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
     try
     {
         css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                xSMGR,
+                                comphelper::getComponentContext(xSMGR),
                                 ::rtl::OUString("org.openoffice.Office.Common/"),
                                 ::rtl::OUString("Misc"),
                                 ::rtl::OUString("MaxOpenDocuments"),
@@ -1690,7 +1690,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
         {
             css::uno::Any const a =
                 ::comphelper::ConfigurationHelper::readDirectKey(
-                  xSMGR,
+                  comphelper::getComponentContext(xSMGR),
                   ::rtl::OUString("org.openoffice.Office.Common/View"),
                   ::rtl::OUString("NewDocumentHandling"),
                   ::rtl::OUString("ForceFocusAndToFront"),
@@ -1770,7 +1770,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
 
         // get access to the configuration of this office module
         css::uno::Reference< css::container::XNameAccess > xModuleCfg(::comphelper::ConfigurationHelper::openConfig(
-                                                                        xSMGR,
+                                                                        comphelper::getComponentContext(xSMGR),
                                                                         PACKAGE_SETUP_MODULES,
                                                                         ::comphelper::ConfigurationHelper::E_READONLY),
                                                                       css::uno::UNO_QUERY_THROW);

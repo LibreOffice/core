@@ -158,6 +158,7 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
         StyleSelectHdl(NULL);
         ScConditionMode eMode = pFormatEntry->GetOperation();
         maEdVal1.SetText(pFormatEntry->GetExpression(maPos, 0));
+        maEdVal2.Hide();
         switch(eMode)
         {
             case SC_COND_EQUAL:
@@ -179,10 +180,12 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
                 maLbCondType.SelectEntryPos(5);
                 break;
             case SC_COND_BETWEEN:
+                maEdVal2.Show();
                 maEdVal2.SetText(pFormatEntry->GetExpression(maPos, 1));
                 maLbCondType.SelectEntryPos(6);
                 break;
             case SC_COND_NOTBETWEEN:
+                maEdVal2.Show();
                 maEdVal2.SetText(pFormatEntry->GetExpression(maPos, 1));
                 maLbCondType.SelectEntryPos(7);
                 break;
@@ -193,7 +196,48 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
                 maLbCondType.SelectEntryPos(9);
                 break;
             case SC_COND_DIRECT:
+                assert(false);
                 //maLbType.SelectEntryPos(2);
+                break;
+            case SC_COND_TOP10:
+                maLbCondType.SelectEntryPos(10);
+                break;
+            case SC_COND_BOTTOM10:
+                maLbCondType.SelectEntryPos(11);
+                break;
+            case SC_COND_TOP_PERCENT:
+                maLbCondType.SelectEntryPos(12);
+                break;
+            case SC_COND_BOTTOM_PERCENT:
+                maLbCondType.SelectEntryPos(13);
+                break;
+            case SC_COND_ABOVE_AVERAGE:
+                maEdVal1.Hide();
+                maLbCondType.SelectEntryPos(14);
+                break;
+            case SC_COND_BELOW_AVERAGE:
+                maEdVal1.Hide();
+                maLbCondType.SelectEntryPos(15);
+                break;
+            case SC_COND_ERROR:
+                maEdVal1.Hide();
+                maLbCondType.SelectEntryPos(16);
+                break;
+            case SC_COND_NOERROR:
+                maEdVal1.Hide();
+                maLbCondType.SelectEntryPos(17);
+                break;
+            case SC_COND_BEGINS_WITH:
+                maLbCondType.SelectEntryPos(18);
+                break;
+            case SC_COND_ENDS_WITH:
+                maLbCondType.SelectEntryPos(19);
+                break;
+            case SC_COND_CONTAINS_TEXT:
+                maLbCondType.SelectEntryPos(20);
+                break;
+            case SC_COND_NOT_CONTAINS_TEXT:
+                maLbCondType.SelectEntryPos(21);
                 break;
             case SC_COND_NONE:
                 break;
@@ -274,6 +318,42 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
             break;
         case 9:
             eMode = SC_COND_NOTDUPLICATE;
+            break;
+        case 10:
+            eMode = SC_COND_TOP10;
+            break;
+        case 11:
+            eMode = SC_COND_BOTTOM10;
+            break;
+        case 12:
+            eMode = SC_COND_TOP_PERCENT;
+            break;
+        case 13:
+            eMode = SC_COND_BOTTOM_PERCENT;
+            break;
+        case 14:
+            eMode = SC_COND_ABOVE_AVERAGE;
+            break;
+        case 15:
+            eMode = SC_COND_BELOW_AVERAGE;
+            break;
+        case 16:
+            eMode = SC_COND_ERROR;
+            break;
+        case 17:
+            eMode = SC_COND_NOERROR;
+            break;
+        case 18:
+            eMode = SC_COND_BEGINS_WITH;
+            break;
+        case 19:
+            eMode = SC_COND_ENDS_WITH;
+            break;
+        case 20:
+            eMode = SC_COND_CONTAINS_TEXT;
+            break;
+        case 21:
+            eMode = SC_COND_NOT_CONTAINS_TEXT;
             break;
         default:
             assert(false); // this cannot happen
@@ -551,8 +631,6 @@ void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const 
         case COLORSCALE_AUTO:
         case COLORSCALE_MIN:
         case COLORSCALE_MAX:
-            break;
-            break;
             break;
         case COLORSCALE_PERCENTILE:
         case COLORSCALE_VALUE:
@@ -912,12 +990,26 @@ IMPL_LINK( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox*, pBox )
 
 IMPL_LINK_NOARG( ScConditionFrmtEntry, ConditionTypeSelectHdl )
 {
-    if(maLbCondType.GetSelectEntryPos() == 6 || maLbCondType.GetSelectEntryPos() == 7)
+    sal_Int32 nSelectPos = maLbCondType.GetSelectEntryPos();
+    if(nSelectPos == 6 || nSelectPos == 7)
     {
+        maEdVal1.Show();
         maEdVal2.Show();
+    }
+    else if(nSelectPos == 8 || nSelectPos == 9)
+    {
+        maEdVal2.Hide();
+        maEdVal1.Hide();
+    }
+    else if(nSelectPos <= 5 || (nSelectPos >= 10 && nSelectPos <= 13)
+            || nSelectPos >= 18)
+    {
+        maEdVal1.Show();
+        maEdVal2.Hide();
     }
     else
     {
+        maEdVal1.Hide();
         maEdVal2.Hide();
     }
 

@@ -109,9 +109,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
     switch ( nSlot )
     {
-
-
-
         case SID_ATTR_SIZE://XXX ???
             break;
 

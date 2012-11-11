@@ -28,7 +28,7 @@
 
 #include <tools/urlobj.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
@@ -237,18 +237,14 @@ bool SvxXMLXTableExportComponent::save(
     try
     {
         uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
+        uno::Reference< uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
         if( !xServiceFactory.is() )
         {
             OSL_FAIL( "got no service manager" );
             return false;
         }
 
-        uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
-        if( !xWriter.is() )
-        {
-            OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
-            return false;
-        }
+        uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create( xContext );
 
         uno::Reference < io::XStream > xStream;
         uno::Reference < io::XOutputStream > xOut;

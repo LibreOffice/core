@@ -35,6 +35,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiHierarchicalPropertySet.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -55,10 +56,10 @@ namespace framework{
     @param  eMode
                 force opening of the configuration access in readonly or in read/write mode
  */
-ConfigAccess::ConfigAccess( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
-                            /*IN*/ const ::rtl::OUString&                                        sRoot )
+ConfigAccess::ConfigAccess( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            /*IN*/ const ::rtl::OUString&                                    sRoot )
     : ThreadHelpBase(          )
-    , m_xSMGR       ( xSMGR    )
+    , m_xContext    ( rxContext)
     , m_sRoot       ( sRoot    )
     , m_eMode       ( E_CLOSED )
 {
@@ -129,35 +130,32 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
         close();
 
         // create the configuration provider, which provides sub access points
-        css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(m_xSMGR->createInstance(SERVICENAME_CFGPROVIDER), css::uno::UNO_QUERY);
-        if (xConfigProvider.is())
+        css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider = css::configuration::theDefaultProvider::get(m_xContext);
+        css::beans::PropertyValue aParam;
+        aParam.Name    = DECLARE_ASCII("nodepath");
+        aParam.Value <<= m_sRoot;
+
+        css::uno::Sequence< css::uno::Any > lParams(1);
+        lParams[0] <<= aParam;
+
+        // open it
+        try
         {
-            css::beans::PropertyValue aParam;
-            aParam.Name    = DECLARE_ASCII("nodepath");
-            aParam.Value <<= m_sRoot;
-
-            css::uno::Sequence< css::uno::Any > lParams(1);
-            lParams[0] <<= aParam;
-
-            // open it
-            try
-            {
-                if (eMode==E_READONLY)
-                    m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS  , lParams);
-                else
-                if (eMode==E_READWRITE)
-                    m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGUPDATEACCESS, lParams);
-            }
-            catch(const css::uno::Exception& ex)
-            {
-                (void) ex; // avoid warning
-                LOG_WARNING("open config ...", U2B(ex.Message))
-            }
-
-            m_eMode = E_CLOSED;
-            if (m_xConfig.is())
-                m_eMode = eMode;
+            if (eMode==E_READONLY)
+                m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS  , lParams);
+            else
+            if (eMode==E_READWRITE)
+                m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGUPDATEACCESS, lParams);
         }
+        catch(const css::uno::Exception& ex)
+        {
+            (void) ex; // avoid warning
+            LOG_WARNING("open config ...", U2B(ex.Message))
+        }
+
+        m_eMode = E_CLOSED;
+        if (m_xConfig.is())
+            m_eMode = eMode;
     }
 
     aWriteLock.unlock();

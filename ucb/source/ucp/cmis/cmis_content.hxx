@@ -34,6 +34,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/ucb/CheckinArgument.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
@@ -61,8 +62,8 @@ namespace ucbhelper
 namespace cmis
 {
 
-#define CMIS_FILE_TYPE   "application/vnd.sun.staroffice.cmis-file"
-#define CMIS_FOLDER_TYPE "application/vnd.sun.staroffice.cmis-folder"
+#define CMIS_FILE_TYPE   "application/vnd.libreoffice.cmis-file"
+#define CMIS_FOLDER_TYPE "application/vnd.libreoffice.cmis-folder"
 
 class ContentProvider;
 class Content : public ::ucbhelper::ContentImplHelper,
@@ -113,7 +114,18 @@ private:
             throw( com::sun::star::uno::Exception );
 
     void insert( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream > & xInputStream,
-        sal_Bool bReplaceExisting, const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
+        sal_Bool bReplaceExisting, const ::rtl::OUString & rMimeType,
+        const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
+            throw( com::sun::star::uno::Exception );
+
+    rtl::OUString checkIn( const com::sun::star::ucb::CheckinArgument& rArg,
+        const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
+            throw( com::sun::star::uno::Exception );
+
+    rtl::OUString checkOut( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
+            throw( com::sun::star::uno::Exception );
+
+    rtl::OUString cancelCheckOut( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
             throw( com::sun::star::uno::Exception );
 
     void destroy( ) throw( com::sun::star::uno::Exception );

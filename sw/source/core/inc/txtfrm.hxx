@@ -288,7 +288,7 @@ public:
     SwRect Paint();
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
-    virtual sal_Bool GetInfo( SfxPoolItem & ) const;
+    virtual bool GetInfo( SfxPoolItem & ) const;
 
     //Layoutorientiertes Cursortravelling: Linker, rechter Rand,
     //vorhergehende/naechste Zeile, gleiche horizontale Position.

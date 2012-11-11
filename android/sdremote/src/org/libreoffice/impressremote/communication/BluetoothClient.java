@@ -45,7 +45,6 @@ public class BluetoothClient extends Client {
         mSocket = aDevice.createRfcommSocketToServiceRecord(UUID
                         .fromString("00001101-0000-1000-8000-00805F9B34FB"));
         mSocket.connect();
-        //            mSocket = aSocket;
         System.out.println("Connected");
 
         mInputStream = mSocket.getInputStream();
@@ -74,7 +73,6 @@ public class BluetoothClient extends Client {
             if (mSocket != null)
                 mSocket.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

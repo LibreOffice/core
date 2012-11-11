@@ -880,7 +880,6 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
     }
     if( !sFontFamily.isEmpty() )
     {
-        String sEmpty;
         Any aAny;
 
         XMLFontFamilyNamePropHdl aFamilyNameHdl;

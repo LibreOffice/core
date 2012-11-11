@@ -122,6 +122,14 @@ bool PersistentMap::has( OString const & key ) const
     return get( 0, key );
 }
 
+// for 3 functions here MSVC gives C4702 "unreachable code" if optimization
+// is enabled and return is there and C4715 "not all control paths return
+// a value" if optimization disabled and no return...
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable: 4702 )
+#endif
+
 //______________________________________________________________________________
 bool PersistentMap::get( OString * value, OString const & key ) const
 {
@@ -144,9 +152,7 @@ bool PersistentMap::get( OString * value, OString const & key ) const
     catch (DbException & exc) {
         throw_rtexc( exc.get_errno(), exc.what() );
     }
-#ifndef _MSC_VER
     return false; // avoiding warning
-#endif
 }
 
 //______________________________________________________________________________
@@ -194,9 +200,7 @@ bool PersistentMap::erase( OString const & key, bool flush_immediately )
     catch (DbException & exc) {
         throw_rtexc( exc.get_errno(), exc.what() );
     }
-#ifndef _MSC_VER
     return false; // avoiding warning
-#endif
 }
 
 //______________________________________________________________________________
@@ -235,10 +239,12 @@ t_string2string_map PersistentMap::getEntries() const
     catch (DbException & exc) {
         throw_rtexc( exc.get_errno(), exc.what() );
     }
-#ifndef _MSC_VER
     return t_string2string_map(); // avoiding warning
-#endif
 }
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 }
 

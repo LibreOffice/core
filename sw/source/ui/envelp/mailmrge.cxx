@@ -51,7 +51,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
@@ -782,15 +782,8 @@ IMPL_LINK_NOARG(SwMailMergeDlg, InsertPathHdl)
         sPath = aPathOpt.GetWorkPath();
     }
 
-    uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    uno::Reference < XFolderPicker > xFP;
-    if( xMgr.is() )
-    {
-        xFP = uno::Reference< XFolderPicker >(
-                xMgr->createInstance(
-                    C2U( "com.sun.star.ui.dialogs.FolderPicker" ) ),
-                UNO_QUERY );
-    }
+    uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    uno::Reference < XFolderPicker2 > xFP = FolderPicker::create(xContext);
     xFP->setDisplayDirectory(sPath);
     if( xFP->execute() == RET_OK )
     {

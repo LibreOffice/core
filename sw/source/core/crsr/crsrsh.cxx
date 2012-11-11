@@ -409,11 +409,11 @@ void SwCrsrShell::MarkListLevel( const String& sListId,
          nListLevel != nMarkedListLevel)
     {
         if ( sMarkedListId.Len() > 0 )
-            pDoc->MarkListLevel( sMarkedListId, nMarkedListLevel, sal_False );
+            pDoc->MarkListLevel( sMarkedListId, nMarkedListLevel, false );
 
         if ( sListId.Len() > 0 )
         {
-            pDoc->MarkListLevel( sListId, nListLevel, sal_True );
+            pDoc->MarkListLevel( sListId, nListLevel, true );
         }
 
         sMarkedListId = sListId;
@@ -2988,7 +2988,7 @@ short SwCrsrShell::GetTextDirection( const Point* pPt ) const
     return pDoc->GetTextDirection( aPos, &aPt );
 }
 
-sal_Bool SwCrsrShell::IsInVerticalText( const Point* pPt ) const
+bool SwCrsrShell::IsInVerticalText( const Point* pPt ) const
 {
     const short nDir = GetTextDirection( pPt );
     return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;

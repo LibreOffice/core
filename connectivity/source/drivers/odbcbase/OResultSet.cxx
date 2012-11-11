@@ -1058,7 +1058,7 @@ void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(
 void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nType = m_aRow[columnIndex].getTypeKind();
-    SQLSMALLINT nOdbcType = static_cast<SQLSMALLINT>(OTools::jdbcTypeToOdbc(nType));
+    SQLSMALLINT nOdbcType = OTools::jdbcTypeToOdbc(nType);
     m_aRow[columnIndex] = x;
     m_aRow[columnIndex].setTypeKind(nType); // OJ: otherwise longvarchar will be recognized by fillNeededData
     updateValue(columnIndex,nOdbcType,(void*)&x);
@@ -1067,7 +1067,7 @@ void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUSt
 void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nType = m_aRow[columnIndex].getTypeKind();
-    SQLSMALLINT nOdbcType = static_cast<SQLSMALLINT>(OTools::jdbcTypeToOdbc(nType));
+    SQLSMALLINT nOdbcType = OTools::jdbcTypeToOdbc(nType);
     m_aRow[columnIndex] = x;
     m_aRow[columnIndex].setTypeKind(nType); // OJ: otherwise longvarbinary will be recognized by fillNeededData
     updateValue(columnIndex,nOdbcType,(void*)&x);

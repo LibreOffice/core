@@ -41,7 +41,7 @@ public:
     SvxRadioButtonListBox(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
     ~SvxRadioButtonListBox();
 
-    void                HandleEntryChecked( SvLBoxEntry* _pEntry );
+    void                HandleEntryChecked( SvTreeListEntry* _pEntry );
 
     const Point&        GetCurMousePoint() const;
 };

@@ -118,7 +118,7 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
             // updates enabled", but this here is not an automatic update, but one triggered explicitly by the user.
 
             uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                    aContext.getLegacyServiceFactory(),
+                                    aContext.getUNOContext(),
                                     DEFINE_CONST_UNICODE("org.openoffice.Office.Addons/"),
                                     DEFINE_CONST_UNICODE("AddonUI/OfficeHelp/UpdateCheckJob"),
                                     DEFINE_CONST_UNICODE("URL"),

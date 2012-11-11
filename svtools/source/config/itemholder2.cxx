@@ -31,6 +31,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/apearcfg.hxx>
@@ -58,12 +59,11 @@ ItemHolder2::ItemHolder2()
 {
     try
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+        css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         css::uno::Reference< css::lang::XComponent > xCfg(
-            xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ))),
-            css::uno::UNO_QUERY);
-        if (xCfg.is())
-            xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
+            css::configuration::theDefaultProvider::get( xContext ),
+            css::uno::UNO_QUERY_THROW );
+        xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
     }
     catch(const css::uno::RuntimeException&)
     {

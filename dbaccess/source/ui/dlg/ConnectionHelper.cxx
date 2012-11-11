@@ -45,7 +45,7 @@
 #include "dsselect.hxx"
 #include <svl/filenotation.hxx>
 #include "dbustrings.hrc"
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -172,13 +172,7 @@ DBG_NAME(OConnectionHelper)
             {
                 try
                 {
-                    ::rtl::OUString sFolderPickerService(SERVICE_UI_FOLDERPICKER);
-                    Reference< XFolderPicker > xFolderPicker(m_xORB->createInstance(sFolderPickerService), UNO_QUERY);
-                    if (!xFolderPicker.is())
-                    {
-                        ShowServiceNotAvailableError(GetParent(), sFolderPickerService, sal_True);
-                        break;
-                    }
+                    Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(comphelper::getComponentContext(m_xORB));
 
                     sal_Bool bDoBrowse = sal_False;
                     String sOldPath = getURLNoPrefix();

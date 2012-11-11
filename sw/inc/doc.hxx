@@ -601,7 +601,7 @@ private:
     // COMPATIBILITY FLAGS END
     //
 
-    sal_Bool    mbStartIdleTimer;               ///< idle timer mode start/stop
+    bool    mbStartIdleTimer;               ///< idle timer mode start/stop
 
     bool        mbSetDrawDefaults;              ///< set draw pool defaults for freshly created documents
 
@@ -635,9 +635,9 @@ private:
                             const xub_StrLen nEndContentIndex,
                             const SwNodeIndex& rStartIdx,
                             const bool bCopyFlyAtFly = false ) const;
-    sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, sal_Bool bNewFrms );
+    sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, bool bNewFrms );
 
-    typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt*, sal_Bool, sal_Bool );
+    typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt*, bool, bool );
     SwFmt* CopyFmt( const SwFmt& rFmt, const SwFmtsBase& rFmtArr,
                         FNCopyFmt fnCopyFmt, const SwFmt& rDfltFmt );
     void CopyFmtArr( const SwFmtsBase& rSourceArr, SwFmtsBase& rDestArr,
@@ -665,7 +665,7 @@ private:
     void AddUsedDBToList( std::vector<String>& rDBNameList,
                           const std::vector<String>& rUsedDBNames );
     void AddUsedDBToList( std::vector<String>& rDBNameList, const String& rDBName );
-    sal_Bool IsNameInArray( const std::vector<String>& rOldNames, const String& rName );
+    bool IsNameInArray( const std::vector<String>& rOldNames, const String& rName );
     void GetAllDBNames( std::vector<String>& rAllDBNames );
     void ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
                         const String& rNewName, String& rFormel );
@@ -697,9 +697,9 @@ private:
     void DoUpdateAllCharts();
     DECL_LINK( DoUpdateModifiedOLE, Timer * );
 
-     SwFmt *_MakeCharFmt(const String &, SwFmt *, sal_Bool, sal_Bool );
-     SwFmt *_MakeFrmFmt(const String &, SwFmt *, sal_Bool, sal_Bool );
-     SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, sal_Bool, sal_Bool );
+     SwFmt *_MakeCharFmt(const String &, SwFmt *, bool, bool );
+     SwFmt *_MakeFrmFmt(const String &, SwFmt *, bool, bool );
+     SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, bool, bool );
 
      void InitTOXTypes();
      void   Paste( const SwDoc& );
@@ -809,7 +809,7 @@ public:
     virtual void SetVisibleLinks(bool bFlag);
     virtual sfx2::LinkManager& GetLinkManager();
     virtual const sfx2::LinkManager& GetLinkManager() const;
-    virtual void UpdateLinks(sal_Bool bUI);
+    virtual void UpdateLinks(bool bUI);
     virtual bool GetData(const rtl::OUString& rItem, const String& rMimeType, ::com::sun::star::uno::Any& rValue) const;
     virtual bool SetData(const rtl::OUString& rItem, const String& rMimeType, const ::com::sun::star::uno::Any& rValue);
     virtual ::sfx2::SvLinkSource* CreateLinkSource(const rtl::OUString& rItem);
@@ -1046,8 +1046,8 @@ public:
      ( Start < Pos < End ) !!!
      (Required for Writers.) */
     void GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts, const SwPaM* = 0,
-                        sal_Bool bDrawAlso = sal_False,
-                        sal_Bool bAsCharAlso = sal_False ) const;
+                        bool bDrawAlso = false,
+                        bool bAsCharAlso = false ) const;
 
     /// Because swrtf.cxx and define private public here now.
     SwFlyFrmFmt  *MakeFlyFrmFmt (const String &rFmtName, SwFrmFmt *pDerivedFrom);
@@ -1070,7 +1070,7 @@ public:
                                  const SwPosition* pAnchorPos,
                                  const SfxItemSet* pSet = 0,
                                  SwFrmFmt *pParent = 0,
-                                 sal_Bool bCalledFromShell = sal_False );
+                                 bool bCalledFromShell = false );
     SwFlyFrmFmt* MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                                 const SwSelBoxes* pSelBoxes = 0,
                                 SwFrmFmt *pParent = 0 );
@@ -1082,10 +1082,10 @@ public:
                             sal_Bool bDelRedlines = sal_True,
                             sal_Bool bCopyFlyAtFly = sal_False ) const;
 
-    sal_Bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
+    bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
 
-    sal_Bool SetFrmFmtToFly( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFmt,
-                        SfxItemSet* pSet = 0, sal_Bool bKeepOrient = sal_False );
+    bool SetFrmFmtToFly( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFmt,
+                        SfxItemSet* pSet = 0, bool bKeepOrient = false );
     void SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
                          const String& sNewTitle );
     void SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
@@ -1125,15 +1125,15 @@ public:
     void SetGlossDoc( bool bGlssDc = true ) { mbGlossDoc = bGlssDc; }
     bool IsInsOnlyTextGlossary() const      { return mbInsOnlyTxtGlssry; }
 
-    void Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool bImpress );
+    void Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress );
 
     void ChangeAuthorityData(const SwAuthEntry* pNewData);
 
     bool IsInCallModified() const      { return mbInCallModified; }
-    sal_Bool IsInHeaderFooter( const SwNodeIndex& rIdx ) const;
+    bool IsInHeaderFooter( const SwNodeIndex& rIdx ) const;
     short GetTextDirection( const SwPosition& rPos,
                             const Point* pPt = 0 ) const;
-    sal_Bool IsInVerticalText( const SwPosition& rPos,
+    bool IsInVerticalText( const SwPosition& rPos,
                                const Point* pPt = 0 ) const;
 
     /** Database  and DB-Manager
@@ -1175,10 +1175,10 @@ public:
      Introduce new optional parameter <bSendDataChangedEvents> in order to
      control, if the side effect "send data changed events" is triggered or not. */
     void ResetAttrs( const SwPaM &rRg,
-                     sal_Bool bTxtAttr = sal_True,
+                     bool bTxtAttr = true,
                      const std::set<sal_uInt16> &rAttrs = std::set<sal_uInt16>(),
                      const bool bSendDataChangedEvents = true );
-    void RstTxtAttrs(const SwPaM &rRg, sal_Bool bInclRefToxMark = sal_False );
+    void RstTxtAttrs(const SwPaM &rRg, bool bInclRefToxMark = false );
 
     /** Set attribute in given format.
      If Undo is activated, the old one is listed in Undo-History. */
@@ -1198,7 +1198,7 @@ public:
     const SfxPoolItem& GetDefault( sal_uInt16 nFmtHint ) const;
 
     /// Do not expand text attributes.
-    sal_Bool DontExpandFmt( const SwPosition& rPos, sal_Bool bFlag = sal_True );
+    bool DontExpandFmt( const SwPosition& rPos, bool bFlag = true );
 
     /* Formats */
     const SwFrmFmts* GetFrmFmts() const     { return pFrmFmtTbl; }
@@ -1225,16 +1225,16 @@ public:
     void RemoveAllFmtLanguageDependencies();
 
     SwFrmFmt  *MakeFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom,
-                          sal_Bool bBroadcast = sal_False, sal_Bool bAuto = sal_True);
-    void       DelFrmFmt( SwFrmFmt *pFmt, sal_Bool bBroadcast = sal_False );
+                          bool bBroadcast = false, bool bAuto = true);
+    void       DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast = false );
     SwFrmFmt* FindFrmFmtByName( const String& rName ) const
         {   return (SwFrmFmt*)FindFmtByName( (SwFmtsBase&)*pFrmFmtTbl, rName ); }
 
     SwCharFmt *MakeCharFmt(const String &rFmtName, SwCharFmt *pDerivedFrom,
-                           sal_Bool bBroadcast = sal_False,
-                           sal_Bool bAuto = sal_True );
-    void       DelCharFmt(sal_uInt16 nFmt, sal_Bool bBroadcast = sal_False);
-    void       DelCharFmt(SwCharFmt* pFmt, sal_Bool bBroadcast = sal_False);
+                           bool bBroadcast = false,
+                           bool bAuto = true );
+    void       DelCharFmt(sal_uInt16 nFmt, bool bBroadcast = false);
+    void       DelCharFmt(SwCharFmt* pFmt, bool bBroadcast = false);
     SwCharFmt* FindCharFmtByName( const String& rName ) const
         {   return (SwCharFmt*)FindFmtByName( (SwFmtsBase&)*pCharFmtTbl, rName ); }
 
@@ -1244,13 +1244,13 @@ public:
     const SwTxtFmtColls *GetTxtFmtColls() const { return pTxtFmtCollTbl; }
     SwTxtFmtColl *MakeTxtFmtColl( const String &rFmtName,
                                   SwTxtFmtColl *pDerivedFrom,
-                                  sal_Bool bBroadcast = sal_False,
-                                  sal_Bool bAuto = sal_True );
+                                  bool bBroadcast = false,
+                                  bool bAuto = true );
     SwConditionTxtFmtColl* MakeCondTxtFmtColl( const String &rFmtName,
                                                SwTxtFmtColl *pDerivedFrom,
-                                               sal_Bool bBroadcast = sal_False);
-    void DelTxtFmtColl(sal_uInt16 nFmt, sal_Bool bBroadcast = sal_False);
-    void DelTxtFmtColl( SwTxtFmtColl* pColl, sal_Bool bBroadcast = sal_False );
+                                               bool bBroadcast = false);
+    void DelTxtFmtColl(sal_uInt16 nFmt, bool bBroadcast = false);
+    void DelTxtFmtColl( SwTxtFmtColl* pColl, bool bBroadcast = false );
     /** Add 4th optional parameter <bResetListAttrs>.
      'side effect' of <SetTxtFmtColl> with <bReset = true> is that the hard
      attributes of the affected text nodes are cleared, except the break
@@ -1258,7 +1258,7 @@ public:
      The new parameter <bResetListAttrs> indicates, if the list attributes
      (list style, restart at and restart with) are cleared as well in case
      that <bReset = true> and the paragraph style has a list style attribute set. */
-    sal_Bool SetTxtFmtColl( const SwPaM &rRg, SwTxtFmtColl *pFmt,
+    bool SetTxtFmtColl( const SwPaM &rRg, SwTxtFmtColl *pFmt,
                             bool bReset = true,
                             bool bResetListAttrs = false );
     SwTxtFmtColl* FindTxtFmtCollByName( const String& rName ) const
@@ -1276,8 +1276,8 @@ public:
     /// Table formating
     const SwFrmFmts* GetTblFrmFmts() const  { return pTblFrmFmtTbl; }
           SwFrmFmts* GetTblFrmFmts()        { return pTblFrmFmtTbl; }
-    sal_uInt16 GetTblFrmFmtCount( sal_Bool bUsed ) const;
-    SwFrmFmt& GetTblFrmFmt(sal_uInt16 nFmt, sal_Bool bUsed ) const;
+    sal_uInt16 GetTblFrmFmtCount( bool bUsed ) const;
+    SwFrmFmt& GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed ) const;
     SwTableFmt* MakeTblFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom);
     void        DelTblFrmFmt( SwTableFmt* pFmt );
     SwTableFmt* FindTblFmtByName( const String& rName, sal_Bool bAll = sal_False ) const;
@@ -1326,7 +1326,7 @@ public:
     void SetGlossaryDoc( SwDoc* pDoc ) { pGlossaryDoc = pDoc; }
 
     /// travel over PaM Ring
-    sal_Bool InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
+    bool InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                         SwPaM& rPaM, SwCrsrShell* pShell = 0);
 
     /** get the set of printable pages for the XRenderable API by
@@ -1348,7 +1348,7 @@ public:
     /** Copy the complete PageDesc - beyond document and "deep"!
      Optionally copying of PoolFmtId, -HlpId can be prevented. */
     void CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
-                        sal_Bool bCopyPoolIds = sal_True );
+                        bool bCopyPoolIds = true );
 
     /** Copy header (with contents) from SrcFmt to DestFmt
      (can also be copied into other document). */
@@ -1365,13 +1365,13 @@ public:
     SwPageDesc * GetPageDesc( const String & rName );
     void ChgPageDesc( const String & rName, const SwPageDesc& );
     void ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
-    sal_Bool FindPageDesc( const String & rName, sal_uInt16 * pFound );
-    void DelPageDesc( const String & rName, sal_Bool bBroadcast = sal_False);
-    void DelPageDesc( sal_uInt16 i, sal_Bool bBroadcast = sal_False );
+    bool FindPageDesc( const String & rName, sal_uInt16 * pFound );
+    void DelPageDesc( const String & rName, bool bBroadcast = false);
+    void DelPageDesc( sal_uInt16 i, bool bBroadcast = false );
     void PreDelPageDesc(SwPageDesc * pDel);
     sal_uInt16 MakePageDesc( const String &rName, const SwPageDesc* pCpy = 0,
-                             sal_Bool bRegardLanguage = sal_True,
-                             sal_Bool bBroadcast = sal_False);
+                             bool bRegardLanguage = true,
+                             bool bBroadcast = false);
     void BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
                                  sal_uInt16 nOp);
 
@@ -1391,18 +1391,18 @@ public:
     const SwTOXBaseSection* InsertTableOf( const SwPosition& rPos,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = 0,
-                                            sal_Bool bExpand = sal_False );
+                                            bool bExpand = false );
     const SwTOXBaseSection* InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = 0                                          );
     const SwTOXBase* GetCurTOX( const SwPosition& rPos ) const;
     const SwAttrSet& GetTOXBaseAttrSet(const SwTOXBase& rTOX) const;
 
-    sal_Bool DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes = sal_False );
+    bool DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes = false );
     String GetUniqueTOXBaseName( const SwTOXType& rType,
                                 const String* pChkStr = 0 ) const;
 
-    sal_Bool SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName);
+    bool SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName);
     void SetTOXBaseProtection(const SwTOXBase& rTOXBase, sal_Bool bProtect);
 
     /// After reading file update all tables/indices.
@@ -1433,15 +1433,15 @@ public:
     const SwTOXType* InsertTOXType( const SwTOXType& rTyp );
     const SwTOXTypes& GetTOXTypes() const { return *pTOXTypes; }
 
-    const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, sal_Bool bCreate = sal_False );
+    const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, bool bCreate = false );
     void                SetDefaultTOXBase(const SwTOXBase& rBase);
 
     /// Key for management of index.
     sal_uInt16 GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) const;
 
     /// Sort table text.
-    sal_Bool SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions&);
-    sal_Bool SortText(const SwPaM&, const SwSortOptions&);
+    bool SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions&);
+    bool SortText(const SwPaM&, const SwSortOptions&);
 
     // Correct the SwPosition-Objects that are registered with the document
     // e. g. ::com::sun::star::text::Bookmarks or tables/indices.
@@ -1472,12 +1472,12 @@ public:
     void PropagateOutlineRule();
 
     /// Outline - promote / demote.
-    sal_Bool OutlineUpDown( const SwPaM& rPam, short nOffset = 1 );
+    bool OutlineUpDown( const SwPaM& rPam, short nOffset = 1 );
 
     /// Ountline - move up / move down.
-    sal_Bool MoveOutlinePara( const SwPaM& rPam, short nOffset = 1);
+    bool MoveOutlinePara( const SwPaM& rPam, short nOffset = 1);
 
-    sal_Bool GotoOutline( SwPosition& rPos, const String& rName ) const;
+    bool GotoOutline( SwPosition& rPos, const String& rName ) const;
 
     /** Accept changes of outline styles for OUtlineRule.
      re-use unused 3rd parameter
@@ -1492,7 +1492,7 @@ public:
                      const SwNumRule&,
                      const bool bCreateNewList,
                      const String sContinuedListId = String(),
-                     sal_Bool bSetItem = sal_True,
+                     bool bSetItem = true,
                      const bool bResetIndentAttrs = false );
     void SetCounted( const SwPaM&, bool bCounted);
 
@@ -1515,27 +1515,27 @@ public:
     /// add optional parameter <eDefaultNumberFormatPositionAndSpaceMode>
     sal_uInt16 MakeNumRule( const String &rName,
         const SwNumRule* pCpy = 0,
-        sal_Bool bBroadcast = sal_False,
+        bool bBroadcast = false,
         const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode =
             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
     sal_uInt16 FindNumRule( const String& rName ) const;
     SwNumRule* FindNumRulePtr( const String& rName ) const;
 
     /// Deletion only possible if ::com::sun::star::chaos::Rule is not used!
-    sal_Bool RenameNumRule(const String & aOldName, const String & aNewName,
-                           sal_Bool bBroadcast = sal_False);
-    sal_Bool DelNumRule( const String& rName, sal_Bool bBroadCast = sal_False );
-    String GetUniqueNumRuleName( const String* pChkStr = 0, sal_Bool bAutoNum = sal_True ) const;
+    bool RenameNumRule(const String & aOldName, const String & aNewName,
+                           bool bBroadcast = false);
+    bool DelNumRule( const String& rName, bool bBroadCast = false );
+    String GetUniqueNumRuleName( const String* pChkStr = 0, bool bAutoNum = true ) const;
 
     void UpdateNumRule();   /// Update all invalids.
     void ChgNumRuleFmts( const SwNumRule& rRule, const String * pOldName = 0 );
-    sal_Bool ReplaceNumRule( const SwPosition& rPos, const String& rOldRule,
+    bool ReplaceNumRule( const SwPosition& rPos, const String& rOldRule,
                         const String& rNewRule );
 
     /// Goto next/previous on same level.
-    sal_Bool GotoNextNum( SwPosition&, sal_Bool bOverUpper = sal_True,
+    bool GotoNextNum( SwPosition&, bool bOverUpper = true,
                         sal_uInt8* pUpper = 0, sal_uInt8* pLower = 0 );
-    sal_Bool GotoPrevNum( SwPosition&, sal_Bool bOverUpper = sal_True,
+    bool GotoPrevNum( SwPosition&, bool bOverUpper = true,
                         sal_uInt8* pUpper = 0, sal_uInt8* pLower = 0 );
 
     /** Searches for a text node with a numbering rule.
@@ -1570,7 +1570,7 @@ public:
                                     const bool bInvestigateStartNode = false );
 
     /// Paragraphs without numbering but with indents.
-    sal_Bool NoNum( const SwPaM& );
+    bool NoNum( const SwPaM& );
 
     /// Delete, splitting of numbering list.
     void DelNumRules( const SwPaM& );
@@ -1578,13 +1578,13 @@ public:
     /// Invalidates all numrules
     void InvalidateNumRules();
 
-    sal_Bool NumUpDown( const SwPaM&, sal_Bool bDown = sal_True );
+    bool NumUpDown( const SwPaM&, bool bDown = true );
 
     /** Move selected paragraphes (not only numberings)
      according to offsets. (if negative: go to doc start). */
-    sal_Bool MoveParagraph( const SwPaM&, long nOffset = 1, sal_Bool bIsOutlMv = sal_False );
+    bool MoveParagraph( const SwPaM&, long nOffset = 1, bool bIsOutlMv = false );
 
-    sal_Bool NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel = sal_False);
+    bool NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel = sal_False);
 
     void StopNumRuleAnimations( OutputDevice* );
 
@@ -1753,7 +1753,7 @@ public:
     SwSectionFmts& GetSections() { return *pSectionFmtTbl; }
     const SwSectionFmts& GetSections() const { return *pSectionFmtTbl; }
     SwSectionFmt *MakeSectionFmt( SwSectionFmt *pDerivedFrom );
-    void DelSectionFmt( SwSectionFmt *pFmt, sal_Bool bDelNodes = sal_False );
+    void DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes = false );
     void UpdateSection(sal_uInt16 const nSect, SwSectionData &,
             SfxItemSet const*const = 0, bool const bPreventLinkUpdate = false);
     String GetUniqueSectionName( const String* pChkStr = 0 ) const;
@@ -1783,7 +1783,7 @@ public:
     bool IsInLoadAsynchron() const             { return mbInLoadAsynchron; }
     void SetInLoadAsynchron( bool bFlag )       { mbInLoadAsynchron = bFlag; }
 
-    sal_Bool SelectServerObj( const String& rStr, SwPaM*& rpPam,
+    bool SelectServerObj( const String& rStr, SwPaM*& rpPam,
                             SwNodeRange*& rpRange ) const;
 
     /// For Drag&Move: (e.g. allow "moving" of RefMarks)
@@ -1792,10 +1792,10 @@ public:
 
     SwDrawContact* GroupSelection( SdrView& );
     void UnGroupSelection( SdrView& );
-    sal_Bool DeleteSelection( SwDrawView& );
+    bool DeleteSelection( SwDrawView& );
 
     /// Invalidates OnlineSpell-WrongLists.
-    void SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong, sal_Bool bSmartTags );
+    void SpellItAgainSam( bool bInvalid, bool bOnlyWrong, bool bSmartTags );
     void InvalidateAutoCompleteFlag();
 
     void SetCalcFieldValueHdl(Outliner* pOutliner);
@@ -1803,7 +1803,7 @@ public:
     // Query if ::com::sun::star::util::URL was visited.
     // Query via Doc, if only a ::com::sun::star::text::Bookmark has been given.
     // In this case the document name has to be set in front.
-    sal_Bool IsVisitedURL( const String& rURL ) const;
+    bool IsVisitedURL( const String& rURL ) const;
 
     /// Save current values for automatic registration of exceptions in Autocorrection.
     void SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew );
@@ -1812,18 +1812,18 @@ public:
     const SwFmtINetFmt* FindINetAttr( const String& rName ) const;
 
     /// Call into intransparent Basic; expect possible Return String.
-    sal_Bool ExecMacro( const SvxMacro& rMacro, String* pRet = 0, SbxArray* pArgs = 0 );
+    bool ExecMacro( const SvxMacro& rMacro, String* pRet = 0, SbxArray* pArgs = 0 );
 
     /// Call into intransparent Basic / JavaScript.
     sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
-                        sal_Bool bChkPtr = sal_False, SbxArray* pArgs = 0,
+                        bool bChkPtr = false, SbxArray* pArgs = 0,
                         const Link* pCallBack = 0 );
 
     /** Adjust left margin via object bar (similar to adjustment of numerations).
      One can either change the margin "by" adding or substracting a given
-     offset or set it "to" this position (bModulus = sal_True). */
-    void MoveLeftMargin( const SwPaM& rPam, sal_Bool bRight = sal_True,
-                        sal_Bool bModulus = sal_True );
+     offset or set it "to" this position (bModulus = true). */
+    void MoveLeftMargin( const SwPaM& rPam, bool bRight = true,
+                        bool bModulus = true );
 
     /// Query NumberFormatter.
     inline       SvNumberFormatter* GetNumberFormatter( sal_Bool bCreate = sal_True );
@@ -1887,10 +1887,10 @@ public:
 
     // -------------------- FeShell - Interfaces -----------------------
     // !!! These assume always an existing layout !!!
-    sal_Bool ChgAnchor( const SdrMarkList& _rMrkList,
+    bool ChgAnchor( const SdrMarkList& _rMrkList,
                         RndStdIds _eAnchorType,
-                        const sal_Bool _bSameOnly,
-                        const sal_Bool _bPosCorr );
+                        const bool _bSameOnly,
+                        const bool _bPosCorr );
 
     void SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew );
     void GetRowHeight( const SwCursor& rCursor, SwFmtFrmSize *& rpSz ) const;
@@ -1925,8 +1925,8 @@ public:
     void Unchain( SwFrmFmt &rFmt );
 
     // For Copy/Move from FrmShell.
-    SdrObject* CloneSdrObj( const SdrObject&, sal_Bool bMoveWithinDoc = sal_False,
-                            sal_Bool bInsInPage = sal_True );
+    SdrObject* CloneSdrObj( const SdrObject&, bool bMoveWithinDoc = false,
+                            bool bInsInPage = true );
 
     //
     // -------------------- FeShell - Interface end ------------------
@@ -1971,12 +1971,12 @@ public:
 
         @param sListId    list Id of the list whose level has to be marked/unmarked
         @param nListLevel level to mark
-        @param bValue     - sal_True  mark the level
-                          - sal_False unmark the level
+        @param bValue     - true  mark the level
+                          - false unmark the level
     */
     void MarkListLevel( const String& sListId,
                         const int nListLevel,
-                        const sal_Bool bValue );
+                        const bool bValue );
 
     /** Marks/Unmarks a list level of a certain list
 
@@ -1984,18 +1984,18 @@ public:
 
         @param rList      list whose level has to be marked/unmarked
         @param nListLevel level to mark
-        @param bValue     - sal_True  mark the level
-                          - sal_False unmark the level
+        @param bValue     - true  mark the level
+                          - false unmark the level
      */
     void MarkListLevel( SwList& rList,
                         const int nListLevel,
-                        const sal_Bool bValue );
+                        const bool bValue );
 
     /// Change a format undoable.
     void ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet);
 
     void RenameFmt(SwFmt & rFmt, const String & sNewName,
-                   sal_Bool bBroadcast = sal_False);
+                   bool bBroadcast = false);
 
     /// Change a TOX undoable.
     void ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew);
@@ -2019,7 +2019,7 @@ public:
      */
     String GetPaMDescr(const SwPaM & rPaM) const;
 
-    sal_Bool IsFirstOfNumRule(SwPosition & rPos);
+    bool IsFirstOfNumRule(SwPosition & rPos);
 
     // access methods for XForms model(s)
 

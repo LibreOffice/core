@@ -53,7 +53,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
-#include <rtl/logfile.hxx>
+#include <sal/log.hxx>
 
 #include "seinitializer_nssimpl.hxx"
 #include "../diagnose.hxx"
@@ -88,14 +88,14 @@ extern "C" void nsscrypto_finalize();
 namespace
 {
 
-bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFactory > &xMSF, bool & out_nss_init );
+bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool & out_nss_init );
 
 struct InitNSSInitialize
 {
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-    InitNSSInitialize( const css::uno::Reference< css::lang::XMultiServiceFactory > &xMSF )
-    : mxMSF( xMSF )
+    InitNSSInitialize( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
+    : m_xContext( rxContext )
     {
     }
 
@@ -103,7 +103,7 @@ struct InitNSSInitialize
         {
             static bool bInitialized = false;
             bool bNSSInit = false;
-            bInitialized = nsscrypto_initialize( mxMSF, bNSSInit );
+            bInitialized = nsscrypto_initialize( m_xContext, bNSSInit );
             if (bNSSInit)
                 atexit(nsscrypto_finalize );
              return & bInitialized;
@@ -167,12 +167,17 @@ void deleteRootsModule()
     }
 }
 
-::rtl::OString getMozillaCurrentProfile( const css::uno::Reference< css::lang::XMultiServiceFactory > &rxMSF )
+::rtl::OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
 {
     // first, try to get the profile from "MOZILLA_CERTIFICATE_FOLDER"
     const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
     if (pEnv)
+    {
+        SAL_INFO(
+            "xmlsecurity.xmlsec",
+            "Using Mozilla profile from MOZILLA_CERTIFICATE_FOLDER=" << pEnv);
         return rtl::OString(pEnv);
+    }
 
     // second, try to get saved user-preference
     try
@@ -181,11 +186,19 @@ void deleteRootsModule()
             officecfg::Office::Common::Security::Scripting::CertDir::get().get_value_or(rtl::OUString());
 
         if (!sUserSetCertPath.isEmpty())
+        {
+            SAL_INFO(
+                "xmlsecurity.xmlsec",
+                "Using Mozilla profile from /org.openoffice.Office.Common/"
+                    "Security/Scripting/CertDir: " << sUserSetCertPath);
             return rtl::OUStringToOString(sUserSetCertPath, osl_getThreadTextEncoding());
+        }
     }
     catch (const uno::Exception &e)
     {
-        SAL_WARN("xmlsecurity", "getMozillaCurrentProfile: caught exception" << e.Message);
+        SAL_WARN(
+            "xmlsecurity.xmlsec",
+            "getMozillaCurrentProfile: caught exception " << e.Message);
     }
 
     // third, dig around to see if there's one available
@@ -195,8 +208,7 @@ void deleteRootsModule()
         mozilla::MozillaProductType_Mozilla };
     int nProduct = SAL_N_ELEMENTS(productTypes);
 
-    uno::Reference<uno::XInterface> xInstance = rxMSF->createInstance(
-        "com.sun.star.mozilla.MozillaBootstrap");
+    uno::Reference<uno::XInterface> xInstance = rxContext->getServiceManager()->createInstanceWithContext("com.sun.star.mozilla.MozillaBootstrap", rxContext);
     OSL_ENSURE( xInstance.is(), "failed to create instance" );
 
     uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap
@@ -212,13 +224,15 @@ void deleteRootsModule()
             if (!profile.isEmpty())
             {
                 rtl::OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
+                SAL_INFO(
+                    "xmlsecurity.xmlsec",
+                    "Using Mozilla profile " << sProfilePath);
                 return rtl::OUStringToOString(sProfilePath, osl_getThreadTextEncoding());
             }
         }
     }
 
-    RTL_LOGFILE_PRODUCT_TRACE( "XMLSEC: No Mozilla Profile found!" );
-
+    SAL_INFO("xmlsecurity.xmlsec", "No Mozilla profile found");
     return rtl::OString();
 }
 
@@ -243,7 +257,7 @@ void deleteRootsModule()
 //return true - whole initialization was successful
 //param out_nss_init = true: at least the NSS initialization (NSS_InitReadWrite
 //was successful and therefor NSS_Shutdown should be called when terminating.
-bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFactory > &xMSF, bool & out_nss_init )
+bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool & out_nss_init )
 {
     bool return_value = true;
 
@@ -251,9 +265,9 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
     rtl::OString sCertDir;
 
 #ifdef XMLSEC_CRYPTO_NSS
-    sCertDir = getMozillaCurrentProfile(xMSF);
+    sCertDir = getMozillaCurrentProfile(rxContext);
 #else
-    (void) xMSF;
+    (void) rxContext;
 #endif
     xmlsec_trace( "Using profile: %s", sCertDir.getStr() );
 
@@ -389,8 +403,8 @@ extern "C" void nsscrypto_finalize()
 } // namespace
 
 ONSSInitializer::ONSSInitializer(
-    const css::uno::Reference< css::lang::XMultiServiceFactory > &rxMSF)
-    :mxMSF( rxMSF )
+    const css::uno::Reference< css::uno::XComponentContext > &rxContext)
+    :m_xContext( rxContext )
 {
 }
 
@@ -398,10 +412,10 @@ ONSSInitializer::~ONSSInitializer()
 {
 }
 
-bool ONSSInitializer::initNSS( const css::uno::Reference< css::lang::XMultiServiceFactory > &xMSF )
+bool ONSSInitializer::initNSS( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
 {
     return *rtl_Instance< bool, InitNSSInitialize, ::osl::MutexGuard, GetNSSInitStaticMutex >
-                ::create( InitNSSInitialize( xMSF ), GetNSSInitStaticMutex() );
+                ::create( InitNSSInitialize( rxContext ), GetNSSInitStaticMutex() );
 }
 
 css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer::getDigestContext( ::sal_Int32 nDigestID, const css::uno::Sequence< css::beans::NamedValue >& aParams )
@@ -431,7 +445,7 @@ css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer
         throw css::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected arguments provided for digest creation." ) ), css::uno::Reference< css::uno::XInterface >(), 2 );
 
     css::uno::Reference< css::xml::crypto::XDigestContext > xResult;
-    if( initNSS( mxMSF ) )
+    if( initNSS( m_xContext ) )
     {
         PK11Context* pContext = PK11_CreateDigestContext( nNSSDigestID );
         if ( pContext && PK11_DigestBegin( pContext ) == SECSuccess )
@@ -461,7 +475,7 @@ css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer
         throw css::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected cipher requested." ) ), css::uno::Reference< css::uno::XInterface >(), 1 );
 
     css::uno::Reference< css::xml::crypto::XCipherContext > xResult;
-    if( initNSS( mxMSF ) )
+    if( initNSS( m_xContext ) )
     {
         if ( aInitializationVector.getLength() != PK11_GetIVLength( nNSSCipherID ) )
             throw css::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected length of initialization vector." ) ), css::uno::Reference< css::uno::XInterface >(), 3 );
@@ -497,7 +511,7 @@ cssu::Sequence< rtl::OUString > SAL_CALL ONSSInitializer_getSupportedServiceName
 cssu::Reference< cssu::XInterface > SAL_CALL ONSSInitializer_createInstance( const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
     throw( cssu::Exception )
 {
-    return (cppu::OWeakObject*) new ONSSInitializer( rSMgr );
+    return (cppu::OWeakObject*) new ONSSInitializer( comphelper::getComponentContext(rSMgr) );
 }
 
 /* XServiceInfo */

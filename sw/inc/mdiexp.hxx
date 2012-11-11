@@ -72,7 +72,7 @@ void DelAllGrfCacheEntries( SwDoc* pDoc );
 // Read ChgMode for tables from configuration.
 TblChgMode GetTblChgDefaultMode();
 
-sal_Bool JumpToSwMark( ViewShell* pVwSh, const rtl::OUString& rMark );
+bool JumpToSwMark( ViewShell* pVwSh, const rtl::OUString& rMark );
 
 
 #endif

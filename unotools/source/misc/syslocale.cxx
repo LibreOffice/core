@@ -75,7 +75,7 @@ SvtSysLocale_Impl::~SvtSysLocale_Impl()
 CharClass* SvtSysLocale_Impl::GetCharClass()
 {
     if ( !pCharClass )
-        pCharClass = new CharClass(::comphelper::getProcessServiceFactory(), aSysLocaleOptions.GetRealLocale() );
+        pCharClass = new CharClass( aSysLocaleOptions.GetRealLocale() );
     return pCharClass;
 }
 

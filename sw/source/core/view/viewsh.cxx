@@ -660,7 +660,7 @@ sal_Bool ViewShell::HasCharts() const
                         StartOfSectionNode(), 1 );
     while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
-        aIdx++;
+        ++aIdx;
         const SwOLENode *pNd = aIdx.GetNode().GetOLENode();
         if( pNd && pNd->GetChartTblName().Len() )
         {

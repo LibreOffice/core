@@ -1,42 +1,33 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <drawinglayer/primitive2d/rendergraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/cropprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // helper class for animated graphics
@@ -247,8 +238,8 @@ namespace drawinglayer
                 aSuppressGraphicAttr.SetRotation(0);
                 aSuppressGraphicAttr.SetMirrorFlags(0);
 
-                const GraphicObject&    rGraphicObject = getGraphicObject();
-                const Graphic           aTransformedGraphic(rGraphicObject.GetTransformedGraphic(&aSuppressGraphicAttr));
+                const GraphicObject& rGraphicObject = getGraphicObject();
+                const Graphic aTransformedGraphic(rGraphicObject.GetTransformedGraphic(&aSuppressGraphicAttr));
 
                 switch(aTransformedGraphic.GetType())
                 {
@@ -281,6 +272,32 @@ namespace drawinglayer
                                 xPrimitive = Primitive2DReference(new AnimatedSwitchPrimitive2D(aAnimationList, aBitmapPrimitives, false));
                             }
                         }
+                        else if(aTransformedGraphic.getSvgData().get())
+                        {
+                            // embedded Svg fill, create embed transform
+                            const basegfx::B2DRange& rSvgRange(aTransformedGraphic.getSvgData()->getRange());
+
+                            if(basegfx::fTools::more(rSvgRange.getWidth(), 0.0) && basegfx::fTools::more(rSvgRange.getHeight(), 0.0))
+                            {
+                                // translate back to origin, scale to unit coordinates
+                                basegfx::B2DHomMatrix aEmbedSvg(
+                                    basegfx::tools::createTranslateB2DHomMatrix(
+                                        -rSvgRange.getMinX(),
+                                        -rSvgRange.getMinY()));
+
+                                aEmbedSvg.scale(
+                                    1.0 / rSvgRange.getWidth(),
+                                    1.0 / rSvgRange.getHeight());
+
+                                // apply created object transformation
+                                aEmbedSvg = aTransform * aEmbedSvg;
+
+                                // add Svg primitives embedded
+                                xPrimitive = new TransformPrimitive2D(
+                                    aEmbedSvg,
+                                    aTransformedGraphic.getSvgData()->getPrimitive2DSequence());
+                            }
+                        }
                         else
                         {
                             xPrimitive = Primitive2DReference(new BitmapPrimitive2D(aTransformedGraphic.GetBitmapEx(), aTransform));
@@ -291,46 +308,33 @@ namespace drawinglayer
 
                     case GRAPHIC_GDIMETAFILE :
                     {
-                            // create MetafilePrimitive2D
-                            const GDIMetaFile& rMetafile = aTransformedGraphic.GetGDIMetaFile();
+                        // create MetafilePrimitive2D
+                        const GDIMetaFile& rMetafile = aTransformedGraphic.GetGDIMetaFile();
 
-                            if( aTransformedGraphic.IsRenderGraphic() )
-                            {
-                                xPrimitive = Primitive2DReference(
-                                    new RenderGraphicPrimitive2D(
-                                        static_cast< MetaRenderGraphicAction* >(rMetafile.GetAction(0))->GetRenderGraphic(),
-                                        aTransform));
-                            }
-                            else
-                            {
-                                xPrimitive = Primitive2DReference(
-                                    new MetafilePrimitive2D(
-                                        aTransform,
-                                        rMetafile));
+                        xPrimitive = Primitive2DReference(
+                                        new MetafilePrimitive2D( aTransform, rMetafile ) );
 
-                                // #i100357# find out if clipping is needed for this primitive. Unfortunately,
-                                // there exist Metafiles who's content is bigger than the proposed PrefSize set
-                                // at them. This is an error, but we need to work around this
-                                const Size aMetaFilePrefSize(rMetafile.GetPrefSize());
-                                const Size aMetaFileRealSize(
-                                    const_cast< GDIMetaFile& >(rMetafile).GetBoundRect(
+                        // #i100357# find out if clipping is needed for this primitive. Unfortunately,
+                        // there exist Metafiles who's content is bigger than the proposed PrefSize set
+                        // at them. This is an error, but we need to work around this
+                        const Size aMetaFilePrefSize(rMetafile.GetPrefSize());
+                        const Size aMetaFileRealSize(
+                                const_cast< GDIMetaFile& >(rMetafile).GetBoundRect(
                                         *Application::GetDefaultDevice()).GetSize());
 
-                                if(aMetaFileRealSize.getWidth() > aMetaFilePrefSize.getWidth()
-                                    || aMetaFileRealSize.getHeight() > aMetaFilePrefSize.getHeight())
-                                {
-                                    // clipping needed. Embed to MaskPrimitive2D. Create children and mask polygon
-                                    const primitive2d::Primitive2DSequence aChildContent(&xPrimitive, 1);
-                                    basegfx::B2DPolygon aMaskPolygon(basegfx::tools::createUnitPolygon());
-                                    aMaskPolygon.transform(aTransform);
+                        if(aMetaFileRealSize.getWidth() > aMetaFilePrefSize.getWidth()
+                           || aMetaFileRealSize.getHeight() > aMetaFilePrefSize.getHeight())
+                        {
+                            // clipping needed. Embed to MaskPrimitive2D. Create childs and mask polygon
+                            const primitive2d::Primitive2DSequence aChildContent(&xPrimitive, 1);
+                            basegfx::B2DPolygon aMaskPolygon(basegfx::tools::createUnitPolygon());
+                            aMaskPolygon.transform(aTransform);
 
-                                    xPrimitive = Primitive2DReference(
-                                        new MaskPrimitive2D(
-                                            basegfx::B2DPolyPolygon(aMaskPolygon),
-                                            aChildContent));
-                                }
-                            }
-
+                            xPrimitive = Primitive2DReference(
+                                    new MaskPrimitive2D(
+                                        basegfx::B2DPolyPolygon(aMaskPolygon),
+                                        aChildContent));
+                        }
                         break;
                     }
 
@@ -346,16 +350,6 @@ namespace drawinglayer
                     // check for cropping
                     if(getGraphicAttr().IsCropped())
                     {
-                        // decompose to get current pos and size
-                        basegfx::B2DVector aScale, aTranslate;
-                        double fRotate, fShearX;
-                        getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
-
-                        // create ranges. The current object range is just scale and translate
-                        const basegfx::B2DRange aCurrent(
-                            aTranslate.getX(), aTranslate.getY(),
-                            aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());
-
                         // calculate scalings between real image size and logic object size. This
                         // is necessary since the crop values are relative to original bitmap size
                         double fFactorX(1.0);
@@ -377,68 +371,31 @@ namespace drawinglayer
 
                             const double fDivX(aBitmapSize.Width() - getGraphicAttr().GetLeftCrop() - getGraphicAttr().GetRightCrop());
                             const double fDivY(aBitmapSize.Height() - getGraphicAttr().GetTopCrop() - getGraphicAttr().GetBottomCrop());
+                            const basegfx::B2DVector aScale(aTransform * basegfx::B2DVector(1.0, 1.0));
 
                             if(!basegfx::fTools::equalZero(fDivX))
                             {
-                                fFactorX = aScale.getX() / fDivX;
+                                fFactorX = fabs(aScale.getX()) / fDivX;
                             }
 
                             if(!basegfx::fTools::equalZero(fDivY))
                             {
-                                fFactorY = aScale.getY() / fDivY;
+                                fFactorY = fabs(aScale.getY()) / fDivY;
                             }
                         }
 
-                        // Create cropped range, describes the bounds of the original graphic
-                        basegfx::B2DRange aCropped;
-                        aCropped.expand(aCurrent.getMinimum() - basegfx::B2DPoint(getGraphicAttr().GetLeftCrop() * fFactorX, getGraphicAttr().GetTopCrop() * fFactorY));
-                        aCropped.expand(aCurrent.getMaximum() + basegfx::B2DPoint(getGraphicAttr().GetRightCrop() * fFactorX, getGraphicAttr().GetBottomCrop() * fFactorY));
-
-                        if(aCropped.isEmpty())
-                        {
-                            // nothing to add since cropped bitmap is completely empty
-                            // xPrimitive will not be used
-                        }
-                        else
-                        {
-                            // build new object transformation for transform primitive which contains xPrimitive
-                            basegfx::B2DHomMatrix aNewObjectTransform(getTransform());
-                            aNewObjectTransform.invert();
-                            aNewObjectTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
-                                aCropped.getWidth(), aCropped.getHeight(),
-                                aCropped.getMinX() - aCurrent.getMinX(), aCropped.getMinY() - aCurrent.getMinY())
-                                * aNewObjectTransform;
-
-                            // add shear, rotate and translate using combined matrix to speedup
-                            const basegfx::B2DHomMatrix aCombinedMatrix(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
-                                fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
-                            aNewObjectTransform = aCombinedMatrix * aNewObjectTransform;
-
-                            // prepare TransformPrimitive2D with xPrimitive
-                            const Primitive2DReference xTransformPrimitive(new TransformPrimitive2D(aNewObjectTransform, Primitive2DSequence(&xPrimitive, 1L)));
-
-                            if(aCurrent.isInside(aCropped))
-                            {
-                                // cropped just got smaller, no need to really use a mask. Add to destination directly
-                                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xTransformPrimitive);
-                            }
-                            else
-                            {
-                                // cropped got bigger, mask it with original object's bounds
-                                basegfx::B2DPolyPolygon aMaskPolyPolygon(basegfx::tools::createUnitPolygon());
-                                aMaskPolyPolygon.transform(getTransform());
-
-                                // create maskPrimitive with aMaskPolyPolygon and aMaskContentVector
-                                const Primitive2DReference xRefB(new MaskPrimitive2D(aMaskPolyPolygon, Primitive2DSequence(&xTransformPrimitive, 1L)));
-                                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xRefB);
-                            }
-                        }
+                        // embed content in cropPrimitive
+                        xPrimitive = new CropPrimitive2D(
+                            Primitive2DSequence(&xPrimitive, 1),
+                            aTransform,
+                            getGraphicAttr().GetLeftCrop() * fFactorX,
+                            getGraphicAttr().GetTopCrop() * fFactorY,
+                            getGraphicAttr().GetRightCrop() * fFactorX,
+                            getGraphicAttr().GetBottomCrop() * fFactorY);
                     }
-                    else
-                    {
-                        // add to decomposition
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xPrimitive);
-                    }
+
+                    // add to decomposition
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xPrimitive);
                 }
             }
 

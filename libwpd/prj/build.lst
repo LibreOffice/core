@@ -1,3 +1,2 @@
 lw	libwpd	: soltools NULL
-lw	libwpd	usr1	-	all	lw_mkout NULL
-lw	libwpd	nmake	-	all	lw_libwpd NULL
+lw	libwpd\prj	nmake	-	all	lw_libwpd NULL

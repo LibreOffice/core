@@ -22,6 +22,7 @@
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
@@ -66,17 +67,10 @@ using ::rtl::OUStringToOString;
 
 ///////////////////////////////////////////////////////////////////////////
 
-static uno::Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
+static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 {
-    uno::Reference< XLinguServiceManager > xRes;
-    uno::Reference< XMultiServiceFactory > xMgr(
-        comphelper::getProcessServiceFactory() );
-    if (xMgr.is())
-    {
-        xRes = uno::Reference< XLinguServiceManager > ( xMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.linguistic2.LinguServiceManager" ) ) ), UNO_QUERY ) ;
-    }
+    uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    uno::Reference< XLinguServiceManager2 > xRes = LinguServiceManager::create( xContext ) ;
     return xRes;
 }
 
@@ -306,7 +300,7 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
 
     uno::Sequence< Reference< XMeaning > > aMeanings( 1 );
     uno::Sequence< Reference< XMeaning > > noMeanings( 0 );
-    uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
+    uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
     uno::Reference< XSpellChecker1 > xSpell;
 
     OUString rTerm(qTerm);
@@ -415,10 +409,6 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
                     codeTerm = seq[0];
                     stem2 = 1;
                 }
-#if 0
-                OString o = OUStringToOString(codeTerm, RTL_TEXTENCODING_UTF8);
-                fprintf(stderr, "CODETERM: %s\n", o.pData->buffer);
-#endif
             }
         }
 
@@ -479,9 +469,6 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
                     OUString aAlt( cTerm + catst);
                     pStr[i] = aAlt;
                 }
-#if 0
-                Meaning * pMn = new Meaning(rTerm,nLanguage,rHelper);
-#endif
                 Meaning * pMn = new Meaning(rTerm,nLanguage);
                 OUString dTerm(pe->defn,strlen(pe->defn),eEnc );
                 pMn->SetMeaning(dTerm);
@@ -514,13 +501,6 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
         if (xTmpRes.is())
         {
             Sequence<OUString>seq = xTmpRes->getAlternatives();
-#if 0
-            for (int i = 0; i < seq.getLength(); i++)
-            {
-                OString o = OUStringToOString(seq[i], RTL_TEXTENCODING_UTF8);
-                fprintf(stderr, "%d: %s\n", i + 1, o.pData->buffer);
-            }
-#endif
             if (seq.getLength() > 0)
             {
                 rTerm = seq[0];  // XXX Use only the first stem

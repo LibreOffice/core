@@ -32,6 +32,7 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -77,6 +78,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
         }
 
         uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
+        uno::Reference< uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
         if( !xServiceFactory.is() )
         {
             OSL_FAIL( "got no service manager" );
@@ -85,12 +87,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
 
         if( bDocRet )
         {
-            uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( "com.sun.star.xml.sax.Writer"  ) ) );
-            if( !xWriter.is() )
-            {
-                OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
-                bDocRet = sal_False;
-            }
+            uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create( xContext );
 
             ::comphelper::IEmbeddedHelper *pPersist = pModel->GetPersist();
             if( pPersist )

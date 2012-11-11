@@ -30,6 +30,7 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/io/UnexpectedEOFException.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -578,15 +579,15 @@ void RTFDocumentImpl::resolve(Stream & rMapper)
             break;
         case ERROR_GROUP_OVER:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unmatched '{'");
-            throw io::UnexpectedEOFException();
+            throw io::WrongFormatException(m_pTokenizer->getPosition(), uno::Reference< uno::XInterface >());
             break;
         case ERROR_EOF:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unexpected end of file");
-            throw io::UnexpectedEOFException();
+            throw io::WrongFormatException(m_pTokenizer->getPosition(), uno::Reference< uno::XInterface >());
             break;
         case ERROR_HEX_INVALID:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": invalid hex char");
-            throw io::WrongFormatException();
+            throw io::WrongFormatException(m_pTokenizer->getPosition(), uno::Reference< uno::XInterface >());
             break;
         case ERROR_CHAR_OVER:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": characters after last '}'");
@@ -609,7 +610,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         for (int i = 0; i < aStr.getLength(); ++i)
         {
             char ch = str[i];
-            if (ch != 0x0d && ch != 0x0a)
+            if (ch != 0x0d && ch != 0x0a && ch != 0x20)
             {
                 b = b << 4;
                 sal_Int8 parsed = m_pTokenizer->asHex(ch);
@@ -640,11 +641,15 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     aExtHeader.mapMode = m_aStates.top().aPicture.eWMetafile;
     aExtHeader.xExt = m_aStates.top().aPicture.nWidth;
     aExtHeader.yExt = m_aStates.top().aPicture.nHeight;
-    OUString aGraphicUrl = m_pGraphicHelper->importGraphicObject(xInputStream, &aExtHeader);
+    WMF_EXTERNALHEADER* pExtHeader = &aExtHeader;
+    uno::Reference<lang::XServiceInfo> xServiceInfo(m_aStates.top().aDrawingObject.xShape, uno::UNO_QUERY);
+    if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+        pExtHeader = 0;
+    OUString aGraphicUrl = m_pGraphicHelper->importGraphicObject(xInputStream, pExtHeader);
 
-    if (m_aStates.top().aPicture.nStyle == BMPSTYLE_PNG)
+    if (m_aStates.top().aPicture.nStyle != BMPSTYLE_NONE)
     {
-        // In case of PNG, the real size is known, don't use the values
+        // In case of PNG/JPEG, the real size is known, don't use the values
         // provided by picw and pich.
         OString aURLBS(OUStringToOString(aGraphicUrl, RTL_TEXTENCODING_UTF8));
         const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
@@ -739,6 +744,10 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     if (bInline)
     {
         RTFSprms aInlineAttributes;
+        aInlineAttributes.set(NS_ooxml::LN_CT_Inline_distT, RTFValue::Pointer_t(new RTFValue(0)));
+        aInlineAttributes.set(NS_ooxml::LN_CT_Inline_distB, RTFValue::Pointer_t(new RTFValue(0)));
+        aInlineAttributes.set(NS_ooxml::LN_CT_Inline_distL, RTFValue::Pointer_t(new RTFValue(0)));
+        aInlineAttributes.set(NS_ooxml::LN_CT_Inline_distR, RTFValue::Pointer_t(new RTFValue(0)));
         RTFSprms aInlineSprms;
         aInlineSprms.set(NS_ooxml::LN_CT_Inline_extent, pExtentValue);
         aInlineSprms.set(NS_ooxml::LN_CT_Inline_docPr, pDocprValue);
@@ -1324,6 +1333,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             }
             break;
         case RTF_SHPTXT:
+        case RTF_DPTXBXTEXT:
             m_aStates.top().nDestinationState = DESTINATION_SHAPETEXT;
             dispatchFlag(RTF_PARD);
             m_bNeedPap = true;
@@ -2001,7 +2011,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
             m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
             m_aStates.top().resetFrame();
-            m_pCurrentBuffer = 0;
+            if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT)
+                m_pCurrentBuffer = 0;
             break;
         case RTF_SECTD:
             m_aStates.top().aSectionSprms = m_aDefaultState.aSectionSprms;
@@ -2053,8 +2064,11 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             }
             break;
         case RTF_LTRCH:
+            // dmapper does not support this.
+            break;
         case RTF_RTLCH:
-            // dmapper does not support these.
+            if (m_aDefaultState.nCurrentEncoding == RTL_TEXTENCODING_MS_1255)
+                m_aStates.top().nCurrentEncoding = m_aDefaultState.nCurrentEncoding;
             break;
         case RTF_ULNONE:
             {
@@ -2247,6 +2261,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PNGBLIP:
             m_aStates.top().aPicture.nStyle = BMPSTYLE_PNG;
             break;
+        case RTF_JPEGBLIP:
+            m_aStates.top().aPicture.nStyle = BMPSTYLE_JPEG;
+            break;
         case RTF_POSYT: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_top); break;
         case RTF_POSYB: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_bottom); break;
         case RTF_POSYC: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_center); break;
@@ -2270,6 +2287,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_DPLINE:
         case RTF_DPRECT:
         case RTF_DPELLIPSE:
+        case RTF_DPTXBX:
+        case RTF_DPPOLYLINE:
                 {
                     sal_Int32 nType = 0;
                     switch (nKeyword)
@@ -2277,11 +2296,43 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                         case RTF_DPLINE:
                             m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.drawing.LineShape"), uno::UNO_QUERY);
                             break;
+                        case RTF_DPPOLYLINE:
+                            // The reason this is not a simple CustomShape is that in the old syntax we have no ViewBox info.
+                            m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.drawing.PolyLineShape"), uno::UNO_QUERY);
+                            break;
                         case RTF_DPRECT:
-                            nType = ESCHER_ShpInst_Rectangle;
+                            m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
                             break;
                         case RTF_DPELLIPSE:
                             nType = ESCHER_ShpInst_Ellipse;
+                            break;
+                        case RTF_DPTXBX:
+                            {
+                                m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
+                                // These are the default in Word, but not in Writer
+                                beans::PropertyValue aPropertyValue;
+                                aPropertyValue.Name = "HoriOrient";
+                                aPropertyValue.Value <<= text::HoriOrientation::NONE;
+                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                                aPropertyValue.Name = "VertOrient";
+                                aPropertyValue.Value <<= text::VertOrientation::NONE;
+                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                                aPropertyValue.Name = "BackColorTransparency";
+                                aPropertyValue.Value <<= sal_Int32(100);
+                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                                aPropertyValue.Name = "LeftBorderDistance";
+                                aPropertyValue.Value <<= sal_Int32(0);
+                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                                aPropertyValue.Name = "RightBorderDistance";
+                                aPropertyValue.Value <<= sal_Int32(0);
+                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                                aPropertyValue.Name = "TopBorderDistance";
+                                aPropertyValue.Value <<= sal_Int32(0);
+                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                                aPropertyValue.Name = "BottomBorderDistance";
+                                aPropertyValue.Value <<= sal_Int32(0);
+                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                            }
                             break;
                         default:
                             break;
@@ -2292,7 +2343,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     if (xDrawSupplier.is())
                     {
                         uno::Reference<drawing::XShapes> xShapes(xDrawSupplier->getDrawPage(), uno::UNO_QUERY);
-                        if (xShapes.is())
+                        if (xShapes.is() && nKeyword != RTF_DPTXBX)
                             xShapes->add(m_aStates.top().aDrawingObject.xShape);
                     }
                     if (nType)
@@ -2304,6 +2355,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     std::vector<beans::PropertyValue>& rPendingProperties = m_aStates.top().aDrawingObject.aPendingProperties;
                     for (std::vector<beans::PropertyValue>::iterator i = rPendingProperties.begin(); i != rPendingProperties.end(); ++i)
                         m_aStates.top().aDrawingObject.xPropertySet->setPropertyValue(i->Name, i->Value);
+                    m_pSdrImport->resolveDhgt(m_aStates.top().aDrawingObject.xPropertySet, m_aStates.top().aDrawingObject.nDhgt);
                 }
                 break;
         case RTF_DOBXMARGIN:
@@ -2321,6 +2373,14 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     beans::PropertyValue aPropertyValue;
                     aPropertyValue.Name = (nKeyword == RTF_DOBXPAGE ? OUString("HoriOrientRelation") : OUString("VertOrientRelation"));
                     aPropertyValue.Value <<= text::RelOrientation::PAGE_FRAME;
+                    m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                }
+                break;
+        case RTF_DOBYPARA:
+                {
+                    beans::PropertyValue aPropertyValue;
+                    aPropertyValue.Name = OUString("VertOrientRelation");
+                    aPropertyValue.Value <<= text::RelOrientation::FRAME;
                     m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
                 }
                 break;
@@ -2365,6 +2425,14 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 break;
         case RTF_SHPBYPAGE:
                 m_aStates.top().aShape.nVertOrientRelation = text::RelOrientation::PAGE_FRAME;
+                break;
+        case RTF_DPLINEHOLLOW:
+                m_aStates.top().aDrawingObject.nFLine = 0;
+                break;
+        case RTF_DPROUNDR:
+                if (m_aStates.top().aDrawingObject.xPropertySet.is())
+                    // Seems this old syntax has no way to specify a custom radius, and this is the default
+                    m_aStates.top().aDrawingObject.xPropertySet->setPropertyValue("CornerRadius", uno::makeAny(sal_Int32(83)));
                 break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
@@ -2525,6 +2593,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_ANSICPG:
+            m_aDefaultState.nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(nParam);
             m_aStates.top().nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(nParam);
             break;
         case RTF_CPG:
@@ -3122,6 +3191,35 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     lcl_putNestedAttribute(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_shd, NS_ooxml::LN_CT_Shd_val, RTFValue::Pointer_t(new RTFValue(nValue)));
             }
             break;
+        case RTF_DODHGT:
+            m_aStates.top().aDrawingObject.nDhgt = nParam;
+            break;
+        case RTF_DPPOLYCOUNT:
+            if (nParam >= 0)
+            {
+                m_aStates.top().aDrawingObject.nPolyLineCount = nParam;
+                m_aStates.top().aDrawingObject.aPolyLinePoints.realloc(nParam);
+            }
+            break;
+        case RTF_DPPTX:
+            {
+                RTFDrawingObject& rDrawingObject = m_aStates.top().aDrawingObject;
+                rDrawingObject.aPolyLinePoints[rDrawingObject.aPolyLinePoints.getLength() - rDrawingObject.nPolyLineCount].X = TWIP_TO_MM100(nParam);
+            }
+            break;
+        case RTF_DPPTY:
+            {
+                RTFDrawingObject& rDrawingObject = m_aStates.top().aDrawingObject;
+                rDrawingObject.aPolyLinePoints[rDrawingObject.aPolyLinePoints.getLength() - rDrawingObject.nPolyLineCount].Y = TWIP_TO_MM100(nParam);
+                rDrawingObject.nPolyLineCount--;
+                if (rDrawingObject.nPolyLineCount == 0)
+                {
+                    uno::Sequence< uno::Sequence<awt::Point> >aPointSequenceSequence(1);
+                    aPointSequenceSequence[0] = rDrawingObject.aPolyLinePoints;
+                    rDrawingObject.xPropertySet->setPropertyValue("PolyPolygon", uno::Any(aPointSequenceSequence));
+                }
+            }
+            break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
@@ -3654,19 +3752,34 @@ int RTFDocumentImpl::popState()
     {
         RTFDrawingObject& rDrawing = m_aStates.top().aDrawingObject;
         uno::Reference<drawing::XShape> xShape(rDrawing.xShape);
-        xShape->setPosition(awt::Point(rDrawing.nLeft, rDrawing.nTop));
-        xShape->setSize(awt::Size(rDrawing.nRight, rDrawing.nBottom));
         uno::Reference<beans::XPropertySet> xPropertySet(rDrawing.xPropertySet);
+
+        uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
+        bool bTextFrame = xServiceInfo->supportsService("com.sun.star.text.TextFrame");
+
+        if (bTextFrame)
+        {
+            xPropertySet->setPropertyValue("HoriOrientPosition", uno::makeAny((sal_Int32)rDrawing.nLeft));
+            xPropertySet->setPropertyValue("VertOrientPosition", uno::makeAny((sal_Int32)rDrawing.nTop));
+        }
+        else
+        {
+            xShape->setPosition(awt::Point(rDrawing.nLeft, rDrawing.nTop));
+        }
+        xShape->setSize(awt::Size(rDrawing.nRight, rDrawing.nBottom));
 
         if (rDrawing.bHasLineColor)
             xPropertySet->setPropertyValue("LineColor", uno::makeAny(sal_uInt32((rDrawing.nLineColorR<<16) + (rDrawing.nLineColorG<<8) + rDrawing.nLineColorB)));
         if (rDrawing.bHasFillColor)
             xPropertySet->setPropertyValue("FillColor", uno::makeAny(sal_uInt32((rDrawing.nFillColorR<<16) + (rDrawing.nFillColorG<<8) + rDrawing.nFillColorB)));
-        else
+        else if (!bTextFrame)
             // If there is no fill, the Word default is 100% transparency.
             xPropertySet->setPropertyValue("FillTransparence", uno::makeAny(sal_Int32(100)));
 
+        m_pSdrImport->resolveFLine(xPropertySet, rDrawing.nFLine);
+
         Mapper().startShape(xShape);
+        replayShapetext();
         Mapper().endShape();
     }
     break;
@@ -3969,11 +4082,17 @@ void RTFDocumentImpl::setDestinationText(OUString& rString)
     m_aStates.top().aDestinationText.append(rString);
 }
 
-bool RTFDocumentImpl::replayShapetext()
+void RTFDocumentImpl::replayShapetext()
 {
-    bool bRet = !m_aShapetextBuffer.empty();
-    replayBuffer(m_aShapetextBuffer);
-    return bRet;
+    Mapper().startParagraphGroup();
+    if (!m_aShapetextBuffer.empty())
+    {
+        replayBuffer(m_aShapetextBuffer);
+        Mapper().startCharacterGroup();
+        runBreak();
+        Mapper().endCharacterGroup();
+    }
+    Mapper().endParagraphGroup();
 }
 
 bool RTFDocumentImpl::getSkipUnknown()
@@ -4101,7 +4220,10 @@ RTFDrawingObject::RTFDrawingObject()
     nFillColorR(0),
     nFillColorG(0),
     nFillColorB(0),
-    bHasFillColor(false)
+    bHasFillColor(false),
+    nDhgt(0),
+    nFLine(-1),
+    nPolyLineCount(0)
 {
 }
 
@@ -4225,12 +4347,14 @@ RTFSprms RTFFrame::getSprms()
                     pValue.reset(new RTFValue(nVertPadding));
                 break;
             case NS_ooxml::LN_CT_FramePr_hAnchor:
-                if ( nHoriAnchor != 0 )
-                    pValue.reset(new RTFValue(nHoriAnchor));
+                if ( nHoriAnchor == 0 )
+                    nHoriAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_margin;
+                pValue.reset(new RTFValue(nHoriAnchor));
                 break;
             case NS_ooxml::LN_CT_FramePr_vAnchor:
-                if ( nVertAnchor != 0 )
-                    pValue.reset(new RTFValue(nVertAnchor));
+                if ( nVertAnchor == 0 )
+                    nVertAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_margin;
+                pValue.reset(new RTFValue(nVertAnchor));
                 break;
             case NS_ooxml::LN_CT_FramePr_xAlign:
                 pValue.reset(new RTFValue(nHoriAlign));

@@ -28,13 +28,13 @@ class CntContentTypeItem : public CntUnencodedStringItem
 {
 private:
     INetContentType _eType;
-    XubString       _aPresentation;
+    OUString _aPresentation;
 
 public:
     TYPEINFO();
 
     CntContentTypeItem();
-    CntContentTypeItem( sal_uInt16 nWhich, const XubString& rType );
+    CntContentTypeItem( sal_uInt16 nWhich, const OUString& rType );
     CntContentTypeItem( const CntContentTypeItem& rOrig );
 
     virtual SfxPoolItem* Create( SvStream& rStream,
@@ -47,7 +47,7 @@ public:
 
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = NULL ) const;
 
-    void SetValue( const XubString& rNewVal );
+    void SetValue( const OUString& rNewVal );
 
     using SfxPoolItem::Compare;
     virtual int Compare( const SfxPoolItem &rWith, const IntlWrapper& rIntlWrapper ) const;

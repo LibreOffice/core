@@ -660,7 +660,9 @@ String ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         case text::textfield::Type::PAGES:
             aRet = lcl_GetNumStr( aData.nTotalPages,aData.eNumType );
         break;
+        case text::textfield::Type::EXTENDED_TIME:
         case text::textfield::Type::TIME:
+            // For now, time field in the header / footer is always dynamic.
             aRet = ScGlobal::pLocaleData->getTime(aData.aTime);
         break;
         case text::textfield::Type::DOCINFO_TITLE:

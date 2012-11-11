@@ -133,7 +133,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 {
     SwFrmFmt *pFmt = 0;
     const sal_Bool bMod = IsModified();
-    sal_Bool bHeader = sal_False;
+    bool bHeader = false;
 
     switch ( eRequest )
     {
@@ -141,7 +141,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
     case RND_STD_HEADERL:
     case RND_STD_HEADERR:
         {
-            bHeader = sal_True;
+            bHeader = true;
             // no break, we continue further down
         }
     case RND_STD_FOOTER:
@@ -522,8 +522,8 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
     return pDest;
 }
 
-SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, sal_Bool bMoveWithinDoc,
-                                sal_Bool bInsInPage )
+SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
+                                bool bInsInPage )
 {
     // #i52858# - method name changed
     SdrPage *pPg = GetOrCreateDrawModel()->GetPage( 0 );
@@ -706,10 +706,10 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
 SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
                                     const SwPosition* pAnchorPos,
                                     const SfxItemSet* pFlySet,
-                                    SwFrmFmt* pFrmFmt, sal_Bool bCalledFromShell )
+                                    SwFrmFmt* pFrmFmt, bool bCalledFromShell )
 {
     SwFlyFrmFmt* pFmt = 0;
-    sal_Bool bCallMake = sal_True;
+    bool bCallMake = true;
     if ( !pAnchorPos && (FLY_AT_PAGE != eAnchorType) )
     {
         const SwFmtAnchor* pAnch;
@@ -723,7 +723,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
                 pAnchorPos = pAnch->GetCntntAnchor();
                 if (pAnchorPos)
                 {
-                    bCallMake = sal_False;
+                    bCallMake = false;
                 }
             }
         }
@@ -839,10 +839,10 @@ if( GetIDocumentUndoRedo().DoesUndo() )
             {
                 // copy all Pams and then delete all
                 SwPaM* pTmp = (SwPaM*)&rPam;
-                sal_Bool bOldFlag = mbCopyIsMove;
+                bool bOldFlag = mbCopyIsMove;
                 bool const bOldUndo = GetIDocumentUndoRedo().DoesUndo();
                 bool const bOldRedlineMove(IsRedlineMove());
-                mbCopyIsMove = sal_True;
+                mbCopyIsMove = true;
                 GetIDocumentUndoRedo().DoUndo(false);
                 SetRedlineMove(true);
                 do {
@@ -867,7 +867,7 @@ if( GetIDocumentUndoRedo().DoesUndo() )
                     pTmp = static_cast<SwPaM*>(pTmp->GetNext());
                 } while ( &rPam != pTmp );
             }
-        } while( sal_False );
+        } while( false );
     }
 
     SetModified();
@@ -984,10 +984,10 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     frames at character - o.k. if the PaM starts at least at the same position
                          as the frame
  ---------------------------------------------------------------------------*/
-sal_Bool TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
+static bool lcl_TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
                         RndStdIds nAnchorId )
 {
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
     const SwPaM* pTmp = pPam;
     do {
         const sal_uInt32 nFlyIndex = pFlyPos->nNode.GetIndex();
@@ -1019,8 +1019,8 @@ sal_Bool TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
 }
 
 void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
-                           const SwPaM* pCmpRange, sal_Bool bDrawAlso,
-                           sal_Bool bAsCharAlso ) const
+                           const SwPaM* pCmpRange, bool bDrawAlso,
+                           bool bAsCharAlso ) const
 {
     SwPosFlyFrm *pFPos = 0;
     SwFrmFmt *pFly;
@@ -1042,7 +1042,7 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
                  ((FLY_AS_CHAR == rAnchor.GetAnchorId()) && bAsCharAlso)))
             {
                 if( pCmpRange &&
-                    !TstFlyRange( pCmpRange, pAPos, rAnchor.GetAnchorId() ))
+                    !lcl_TstFlyRange( pCmpRange, pAPos, rAnchor.GetAnchorId() ))
                         continue;       // not a valid FlyFrame
                 pFPos = new SwPosFlyFrm( pAPos->nNode, pFly, rPosFlyFmts.size() );
                 rPosFlyFmts.insert( pFPos );
@@ -1164,7 +1164,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 {
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
-    sal_Bool bTable = sal_False;    // To save some code.
+    bool bTable = false;    // To save some code.
 
     // Get the field first, beause we retrieve the TxtColl via the field's name
     OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.GetFldTypes()->size(),
@@ -1197,7 +1197,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     switch ( eType )
     {
         case LTYPE_TABLE:
-            bTable = sal_True;
+            bTable = true;
             // no break here
         case LTYPE_FLY:
             // At the FlySection's Beginning/End insert the corresponding Node with it's Field.
@@ -1802,14 +1802,14 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel(
 |*************************************************************************/
 void SwDoc::StartIdling()
 {
-    mbStartIdleTimer = sal_True;
+    mbStartIdleTimer = true;
     if( !mIdleBlockCount )
         aIdleTimer.Start();
 }
 
 void SwDoc::StopIdling()
 {
-    mbStartIdleTimer = sal_False;
+    mbStartIdleTimer = false;
     aIdleTimer.Stop();
 }
 
@@ -1888,7 +1888,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
                 /* && !pStartSh->GetViewOptions()->IsFldName()*/ )
         {
             //  Action brackets!
-            GetUpdtFlds().SetInUpdateFlds( sal_True );
+            GetUpdtFlds().SetInUpdateFlds( true );
 
             pTmpRoot->StartAllAction();
 
@@ -1905,8 +1905,8 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 
             pStartSh->LockView( bOldLockView );
 
-            GetUpdtFlds().SetInUpdateFlds( sal_False );
-            GetUpdtFlds().SetFieldsDirty( sal_False );
+            GetUpdtFlds().SetInUpdateFlds( false );
+            GetUpdtFlds().SetFieldsDirty( false );
         }
     }   //swmod 080219
 #ifdef TIMELOG
@@ -2055,7 +2055,7 @@ void SwDoc::SetAllUniqueFlyNames()
     SwFrmFmts aArr;
     aArr.reserve( n );
     SwFrmFmt* pFlyFmt;
-    sal_Bool bLoadedFlag = sal_True;            // something for the Layout
+    bool bLoadedFlag = true;            // something for the Layout
 
     for( n = GetSpzFrmFmts()->size(); n; )
     {
@@ -2093,7 +2093,7 @@ void SwDoc::SetAllUniqueFlyNames()
                     SFX_ITEM_SET == pFlyFmt->GetItemState(
                                         RES_HORI_ORIENT ))) )
             {
-                bLoadedFlag = sal_False;
+                bLoadedFlag = false;
             }
         }
     }
@@ -2148,7 +2148,7 @@ void SwDoc::SetAllUniqueFlyNames()
         SetLoaded( sal_True );
 }
 
-sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
+bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
 {
     // If there's a Layout, use it!
     // That can also be a Fly in a Fly in the Header.
@@ -2170,9 +2170,9 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
                 pUp = pUp->GetUpper();
             }
             if ( pUp )
-                return sal_True;
+                return true;
 
-            return sal_False;
+            return false;
         }
     }
 
@@ -2192,7 +2192,7 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
                 if ((FLY_AT_PAGE == rAnchor.GetAnchorId()) ||
                     !rAnchor.GetCntntAnchor() )
                 {
-                    return sal_False;
+                    return false;
                 }
 
                 pNd = &rAnchor.GetCntntAnchor()->nNode.GetNode();
@@ -2203,7 +2203,7 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
         if( n >= GetSpzFrmFmts()->size() )
         {
             OSL_ENSURE( mbInReading, "Found a FlySection but not a Format!" );
-            return sal_False;
+            return false;
         }
     }
 
@@ -2265,7 +2265,7 @@ short SwDoc::GetTextDirection( const SwPosition& rPos,
     return nRet;
 }
 
-sal_Bool SwDoc::IsInVerticalText( const SwPosition& rPos, const Point* pPt ) const
+bool SwDoc::IsInVerticalText( const SwPosition& rPos, const Point* pPt ) const
 {
     const short nDir = GetTextDirection( rPos, pPt );
     return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;

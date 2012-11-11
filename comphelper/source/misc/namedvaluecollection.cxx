@@ -33,9 +33,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 
 #include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/instance.hxx>
-#include <osl/diagnose.h>
 
 #include <boost/unordered_map.hpp>
 #include <functional>
@@ -194,7 +192,7 @@ namespace comphelper
         else if ( i_rWrappedElements >>= aPropertyValue )
             impl_assign( Sequence< PropertyValue >( &aPropertyValue, 1 ) );
         else
-            OSL_ENSURE( !i_rWrappedElements.hasValue(), "NamedValueCollection::impl_assign(Any): unsupported type!" );
+            SAL_WARN_IF( i_rWrappedElements.hasValue(), "comphelper", "NamedValueCollection::impl_assign(Any): unsupported type!" );
     }
 
     //--------------------------------------------------------------------
@@ -216,15 +214,14 @@ namespace comphelper
                 m_pImpl->aValues[ aPropertyValue.Name ] = aPropertyValue.Value;
             else if ( *pArgument >>= aNamedValue )
                 m_pImpl->aValues[ aNamedValue.Name ] = aNamedValue.Value;
-#if OSL_DEBUG_LEVEL > 0
-            else if ( pArgument->hasValue() )
+            else
             {
-                ::rtl::OStringBuffer message;
-                message.append( "NamedValueCollection::impl_assign: encountered a value type which I cannot handle:\n" );
-                message.append( ::rtl::OUStringToOString( pArgument->getValueTypeName(), RTL_TEXTENCODING_ASCII_US ) );
-                OSL_FAIL( message.getStr() );
+                SAL_WARN_IF(
+                    pArgument->hasValue(), "comphelper",
+                    ("NamedValueCollection::impl_assign: encountered a value"
+                     " type which I cannot handle: "
+                     + pArgument->getValueTypeName()));
             }
-#endif
         }
     }
 

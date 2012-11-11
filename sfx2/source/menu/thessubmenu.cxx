@@ -21,7 +21,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/XMeaning.hpp>
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <svl/stritem.hxx>
@@ -64,19 +64,12 @@ void SfxThesSubMenuHelper::GetLocale(
 }
 
 
-SfxThesSubMenuHelper::SfxThesSubMenuHelper()
+SfxThesSubMenuHelper::SfxThesSubMenuHelper():
+    m_xLngMgr(
+        linguistic2::LinguServiceManager::create(
+            comphelper::getProcessComponentContext())),
+    m_xThesarus(m_xLngMgr->getThesaurus())
 {
-    try
-    {
-        uno::Reference< lang::XMultiServiceFactory >  xMSF( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        m_xLngMgr = uno::Reference< linguistic2::XLinguServiceManager >( xMSF->createInstance(
-                OUString( "com.sun.star.linguistic2.LinguServiceManager" )), uno::UNO_QUERY_THROW );
-        m_xThesarus = m_xLngMgr->getThesaurus();
-    }
-    catch (const uno::Exception &)
-    {
-        DBG_ASSERT( 0, "failed to get thesaurus" );
-    }
 }
 
 
@@ -140,16 +133,12 @@ bool SfxThesSubMenuHelper::GetMeanings(
 String SfxThesSubMenuHelper::GetThesImplName( const lang::Locale &rLocale ) const
 {
     String aRes;
-    DBG_ASSERT( m_xLngMgr.is(), "LinguServiceManager missing" );
-    if (m_xLngMgr.is())
-    {
-        uno::Sequence< OUString > aServiceNames = m_xLngMgr->getConfiguredServices(
-                OUString("com.sun.star.linguistic2.Thesaurus"), rLocale );
-        // there should be at most one thesaurus configured for each language
-        DBG_ASSERT( aServiceNames.getLength() <= 1, "more than one thesaurus found. Should not be possible" );
-        if (aServiceNames.getLength() == 1)
-            aRes = aServiceNames[0];
-    }
+    uno::Sequence< OUString > aServiceNames = m_xLngMgr->getConfiguredServices(
+            OUString("com.sun.star.linguistic2.Thesaurus"), rLocale );
+    // there should be at most one thesaurus configured for each language
+    DBG_ASSERT( aServiceNames.getLength() <= 1, "more than one thesaurus found. Should not be possible" );
+    if (aServiceNames.getLength() == 1)
+        aRes = aServiceNames[0];
     return aRes;
 }
 

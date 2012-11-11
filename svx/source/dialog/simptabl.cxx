@@ -420,7 +420,7 @@ IMPL_LINK( SvxSimpleTable, HeaderBarDblClick, HeaderBar*, pCtr)
     return 0;
 }
 
-SvLBoxItem* SvxSimpleTable::GetEntryAtPos( SvLBoxEntry* pEntry, sal_uInt16 nPos ) const
+SvLBoxItem* SvxSimpleTable::GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nPos ) const
 {
     DBG_ASSERT(pEntry,"GetEntryText:Invalid Entry");
     SvLBoxItem* pItem = NULL;
@@ -441,7 +441,7 @@ SvLBoxItem* SvxSimpleTable::GetEntryAtPos( SvLBoxEntry* pEntry, sal_uInt16 nPos 
     return pItem;
 }
 
-StringCompare SvxSimpleTable::ColCompare(SvLBoxEntry* pLeft,SvLBoxEntry* pRight)
+StringCompare SvxSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRight)
 {
     StringCompare eCompare=COMPARE_EQUAL;
 
@@ -471,8 +471,8 @@ StringCompare SvxSimpleTable::ColCompare(SvLBoxEntry* pLeft,SvLBoxEntry* pRight)
 
 IMPL_LINK( SvxSimpleTable, CompareHdl, SvSortData*, pData)
 {
-    SvLBoxEntry* pLeft = (SvLBoxEntry*)(pData->pLeft );
-    SvLBoxEntry* pRight = (SvLBoxEntry*)(pData->pRight );
+    SvTreeListEntry* pLeft = (SvTreeListEntry*)(pData->pLeft );
+    SvTreeListEntry* pRight = (SvTreeListEntry*)(pData->pRight );
     return (long) ColCompare(pLeft,pRight);
 }
 

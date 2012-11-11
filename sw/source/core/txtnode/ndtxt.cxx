@@ -1032,7 +1032,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
         for(IDocumentMarkAccess::const_iterator_t ppMark =
                 pMarkAccess->getMarksBegin();
             ppMark != pMarkAccess->getMarksEnd();
-            ppMark++)
+            ++ppMark)
         {
             // Bookmarks must never grow to either side, when
             // editing (directly) to the left or right (#i29942#)!
@@ -1108,8 +1108,8 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
 // Wenn man sich genau am Ende einer Text- bzw. INetvorlage befindet,
 // bekommt diese das DontExpand-Flag verpasst
 
-sal_Bool SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
-                                sal_Bool bFmtToTxtAttributes )
+bool SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
+                                bool bFmtToTxtAttributes )
 {
     const xub_StrLen nIdx = rIdx.GetIndex();
     if ( bFmtToTxtAttributes && nIdx == m_Text.Len() )
@@ -1117,7 +1117,7 @@ sal_Bool SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
         FmtToTxtAttr( this );
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( HasHints() )
     {
         const sal_uInt16 nEndCnt = m_pSwpHints->GetEndCount();
@@ -1133,7 +1133,7 @@ sal_Bool SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
             else if( bFlag != pTmp->DontExpand() && !pTmp->IsLockExpandFlag()
                      && *pEnd > *pTmp->GetStart())
             {
-                bRet = sal_True;
+                bRet = true;
                 m_pSwpHints->NoteInHistory( pTmp );
                 pTmp->SetDontExpand( bFlag );
             }
@@ -1727,10 +1727,10 @@ void SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
 
     if ( !nLen ) return;
 
-    sal_Bool bOldExpFlg = IsIgnoreDontExpand();
+    bool bOldExpFlg = IsIgnoreDontExpand();
     if (nMode & IDocumentContentOperations::INS_FORCEHINTEXPAND)
     {
-        SetIgnoreDontExpand( sal_True );
+        SetIgnoreDontExpand( true );
     }
 
     Update( rIdx, nLen ); // text content changed!
@@ -2967,7 +2967,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
         sTmpText.SearchAndReplaceAll('\t', ' ');
 
     // mask hidden characters
-    const xub_Unicode cChar = CH_TXTATR_BREAKWORD;
+    const sal_Unicode cChar = CH_TXTATR_BREAKWORD;
     sal_uInt16 nHiddenChrs =
         SwScriptInfo::MaskHiddenRanges( *this, sTmpText, 0, sTmpText.Len(), cChar );
 
@@ -3015,7 +3015,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                                 ->ExpandField(true));
                         if( aExpand.Len() )
                         {
-                            aDestIdx++;     // dahinter einfuegen;
+                            ++aDestIdx;     // dahinter einfuegen;
                             rDestNd.InsertText( aExpand, aDestIdx );
                             aDestIdx = nInsPos + nAttrStartIdx;
                             nInsPos = nInsPos + aExpand.Len();
@@ -3041,7 +3041,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                                                 GetNumStr( rFtn.GetNumber() );
                             if( sExpand.Len() )
                             {
-                                aDestIdx++;     // insert behind
+                                ++aDestIdx;     // insert behind
                                 SvxEscapementItem aItem(
                                         SVX_ESCAPEMENT_SUPERSCRIPT );
                                 rDestNd.InsertItem(aItem,
@@ -3330,8 +3330,8 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
         }
     }
 
-    sal_Bool bOldExpFlg = IsIgnoreDontExpand();
-    SetIgnoreDontExpand( sal_True );
+    bool bOldExpFlg = IsIgnoreDontExpand();
+    SetIgnoreDontExpand( true );
 
     if( nLen && rText.Len() )
     {
@@ -3339,7 +3339,7 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
         // Dadurch wird die Attributierung des 1. Zeichen expandiert!
         m_Text.SetChar( nStartPos, rText.GetChar( 0 ) );
 
-        ((SwIndex&)rStart)++;
+        ++((SwIndex&)rStart);
         m_Text.Erase( rStart.GetIndex(), nLen - 1 );
         Update( rStart, nLen - 1, true );
 
@@ -3376,7 +3376,7 @@ namespace {
         SwPaM aPam( rTxtNode );
         // #i96644#
         // suppress side effect "send data changed events"
-        rTxtNode.GetDoc()->ResetAttrs( aPam, sal_False, aAttrs, false );
+        rTxtNode.GetDoc()->ResetAttrs( aPam, false, aAttrs, false );
     }
 
     // Helper method for special handling of modified attributes at text node.

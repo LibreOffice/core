@@ -1220,7 +1220,7 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
 #if OSL_DEBUG_LEVEL > 1
     sal_uInt16 nIndex =
 #endif
-    rDoc.MakeNumRule( sCreatedNumRuleName, 0, sal_False,
+    rDoc.MakeNumRule( sCreatedNumRuleName, 0, false,
                       // #i89178#
                       numfunc::GetDefaultPositionAndSpaceMode() );
 #if OSL_DEBUG_LEVEL > 1

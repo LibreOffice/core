@@ -535,6 +535,15 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_ENGLISH_MALAWI        0x8809  /* makeLangID( 0x22, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 #define LANGUAGE_USER_ERZYA                 0x066C
 #define LANGUAGE_USER_MARI_MEADOW           0x066D
+#define LANGUAGE_USER_KHANTY                0x066E
+#define LANGUAGE_USER_LIVONIAN              0x066F
+#define LANGUAGE_USER_MOKSHA                0x0670
+#define LANGUAGE_USER_MARI_HILL             0x0671
+#define LANGUAGE_USER_NGANASAN              0x0672
+#define LANGUAGE_USER_OLONETS               0x0673
+#define LANGUAGE_USER_VEPS                  0x0674
+#define LANGUAGE_USER_VORO                  0x0675
+#define LANGUAGE_USER_NENETS                0x0676
 #define LANGUAGE_USER_PAPIAMENTU_CURACAO    0x8479  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_PAPIAMENTU)) */
 #define LANGUAGE_USER_PAPIAMENTU_BONAIRE    0x8879  /* makeLangID( 0x22, getPrimaryLanguage( LANGUAGE_PAPIAMENTU)) */
 #define LANGUAGE_USER_SYSTEM_CONFIG         0xFFFE  /* not a locale, to be used only in configuration context to obtain system default, primary 0x3fe, sub 0x3f */

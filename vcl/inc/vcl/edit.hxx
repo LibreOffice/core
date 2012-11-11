@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef _SV_EDIT_HXX
 #define _SV_EDIT_HXX
@@ -78,9 +69,9 @@ private:
     Selection           maSelection;
     sal_uInt16          mnAlign;
     xub_StrLen          mnMaxTextLen;
-    sal_Int32           mnMinWidthInChars;
+    sal_Int32           mnWidthInChars;
     AutocompleteAction  meAutocompleteAction;
-    xub_Unicode         mcEchoChar;
+    sal_Unicode         mcEchoChar;
     sal_Bool                mbModified:1,
                         mbInternModified:1,
                         mbReadOnly:1,
@@ -187,8 +178,8 @@ public:
     virtual void        DisableUpdateData() { delete mpUpdateDataTimer; mpUpdateDataTimer = NULL; }
     virtual sal_uLong       IsUpdateDataEnabled() const;
 
-    void                SetEchoChar( xub_Unicode c );
-    xub_Unicode         GetEchoChar() const { return mcEchoChar; }
+    void                SetEchoChar( sal_Unicode c );
+    sal_Unicode         GetEchoChar() const { return mcEchoChar; }
 
     virtual void        SetReadOnly( sal_Bool bReadOnly = sal_True );
     virtual sal_Bool        IsReadOnly() const { return mbReadOnly; }
@@ -199,8 +190,8 @@ public:
     virtual void        SetMaxTextLen( xub_StrLen nMaxLen = EDIT_NOLIMIT );
     virtual xub_StrLen  GetMaxTextLen() const { return mnMaxTextLen; }
 
-    void                SetMaxWidthInChars(sal_Int32 nMinWidthInChars);
-    sal_Int32           GetMinWidthInChars() const { return mnMinWidthInChars; }
+    void                SetWidthInChars(sal_Int32 nWidthInChars);
+    sal_Int32           GetWidthInChars() const { return mnWidthInChars; }
 
     virtual void        SetSelection( const Selection& rSelection );
     virtual const Selection&    GetSelection() const;

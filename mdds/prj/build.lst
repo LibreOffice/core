@@ -1,3 +1,2 @@
 mdd     mdds : solenv BOOST:boost NULL
-mdd	mdds		usr1	-	all	mdd_mkout NULL
-mdd	mdds		nmake	-	all	mdd_mdds NULL
+mdd	mdds\prj		nmake	-	all	mdd_mdds NULL

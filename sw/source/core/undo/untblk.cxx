@@ -223,7 +223,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         if( !pTxtFmtColl ) // if 0 than it's no TextNode -> delete
         {
             SwNodeIndex aDelIdx( rIdx );
-            rIdx++;
+            ++rIdx;
             SwCntntNode* pCNd = rIdx.GetNode().GetCntntNode();
             xub_StrLen nCnt = 0;
             if( pCNd )

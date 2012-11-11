@@ -907,7 +907,7 @@ void SwRTFParser::NewTblLine()
                 SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
                 if( pCNd && pCNd->HasSwAttrSet() )
                     pCNd->ResetAllAttr();
-                aIdx++;
+                ++aIdx;
             }
         }
         pPam->Exchange();

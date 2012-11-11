@@ -22,6 +22,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
@@ -42,12 +43,9 @@ ItemHolder2::ItemHolder2()
 {
     try
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-        css::uno::Reference< css::lang::XComponent > xCfg(
-            xSMGR->createInstance(::rtl::OUString("com.sun.star.configuration.ConfigurationProvider")),
-            css::uno::UNO_QUERY);
-        if (xCfg.is())
-            xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
+        css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        css::uno::Reference< css::lang::XComponent > xCfg( css::configuration::theDefaultProvider::get(xContext), css::uno::UNO_QUERY_THROW );
+        xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
     }
     catch(const css::uno::RuntimeException&)
     {

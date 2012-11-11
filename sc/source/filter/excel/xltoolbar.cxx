@@ -94,10 +94,6 @@ CTBS::CTBS() : bSignature(0), bVersion(0), reserved1(0), reserved2(0), reserved3
 {
 }
 
-ScCTB::ScCTB() : nViews( 0 ), ectbid(0)
-{
-}
-
 ScCTB::ScCTB(sal_uInt16 nNum ) : nViews( nNum ), ectbid(0)
 {
 }

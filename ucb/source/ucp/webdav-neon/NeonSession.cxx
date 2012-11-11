@@ -49,6 +49,7 @@ extern "C" {
 
 #include "libxml/parser.h"
 #include "rtl/ustrbuf.hxx"
+#include "comphelper/processfactory.hxx"
 #include "comphelper/sequence.hxx"
 #include <comphelper/stl_types.hxx>
 #include "ucbhelper/simplecertificatevalidationrequest.hxx"
@@ -71,14 +72,12 @@ extern "C" {
 #include <com/sun/star/security/XCertificateContainer.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/xml/crypto/XSEInitializer.hpp>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <boost/bind.hpp>
 
 using namespace com::sun::star;
 using namespace webdav_ucp;
-
-#define SEINITIALIZER_COMPONENT "com.sun.star.xml.crypto.SEInitializer"
 
 #ifndef EOL
 #    define EOL "\r\n"
@@ -406,11 +405,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     uno::Reference< security::XCertificateContainer > xCertificateContainer;
     try
     {
-        xCertificateContainer
-            = uno::Reference< security::XCertificateContainer >(
-                pSession->getMSF()->createInstance(
-                    rtl::OUString( "com.sun.star.security.CertificateContainer" ) ),
-                uno::UNO_QUERY );
+        xCertificateContainer = security::CertificateContainer::create( pSession->getComponentContext() );
     }
     catch ( uno::Exception const & )
     {
@@ -439,10 +434,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     uno::Reference< xml::crypto::XSEInitializer > xSEInitializer;
     try
     {
-        xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
-            pSession->getMSF()->createInstance(
-                rtl::OUString( SEINITIALIZER_COMPONENT ) ),
-            uno::UNO_QUERY );
+        xSEInitializer = xml::crypto::SEInitializer::create( pSession->getComponentContext() );
     }
     catch ( uno::Exception const & )
     {

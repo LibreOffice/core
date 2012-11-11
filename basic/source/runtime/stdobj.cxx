@@ -72,9 +72,9 @@ struct Methods {
 
 struct StringHashCode
 {
-    size_t operator()( const String& rStr ) const
+    size_t operator()( const OUString& rStr ) const
     {
-        return rtl_ustr_hashCode_WithLength( rStr.GetBuffer(), rStr.Len() );
+        return rtl_ustr_hashCode_WithLength( rStr.getStr(), rStr.getLength() );
     }
 };
 
@@ -715,21 +715,21 @@ static Methods aMethods[] = {
 
 { NULL,             SbxNULL,     -1,NULL,0 }};  // end of the table
 
-SbiStdObject::SbiStdObject( const String& r, StarBASIC* pb ) : SbxObject( r )
+SbiStdObject::SbiStdObject( const OUString& r, StarBASIC* pb ) : SbxObject( r )
 {
     // do we have to initialize the hashcodes?
     Methods* p = aMethods;
     if( !p->nHash )
       while( p->nArgs != -1 )
     {
-        String aName_ = rtl::OUString::createFromAscii( p->pName );
+        OUString aName_ = rtl::OUString::createFromAscii( p->pName );
         p->nHash = SbxVariable::MakeHashCode( aName_ );
         p += ( p->nArgs & _ARGSMASK ) + 1;
     }
 
     // #i92642: Remove default properties
-    Remove( rtl::OUString("Name"), SbxCLASS_DONTCARE );
-    Remove( rtl::OUString("Parent"), SbxCLASS_DONTCARE );
+    Remove( OUString("Name"), SbxCLASS_DONTCARE );
+    Remove( OUString("Parent"), SbxCLASS_DONTCARE );
 
     SetParent( pb );
 
@@ -753,7 +753,7 @@ SbiStdObject::~SbiStdObject()
 // return NULL without error code, so that a whole chain of
 // objects can be asked for the method/property.
 
-SbxVariable* SbiStdObject::Find( const rtl::OUString& rName, SbxClassType t )
+SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
 {
     // entered already?
     SbxVariable* pVar = SbxObject::Find( rName, t );
@@ -798,12 +798,16 @@ SbxVariable* SbiStdObject::Find( const rtl::OUString& rName, SbxClassType t )
             short nType   = ( p->nArgs & _TYPEMASK );
             if( p->nArgs & _CONST )
                 nAccess |= SBX_CONST;
-            String aName_ = rtl::OUString::createFromAscii( p->pName );
+            OUString aName_ = rtl::OUString::createFromAscii( p->pName );
             SbxClassType eCT = SbxCLASS_OBJECT;
             if( nType & _PROPERTY )
+            {
                 eCT = SbxCLASS_PROPERTY;
+            }
             else if( nType & _METHOD )
+            {
                 eCT = SbxCLASS_METHOD;
+            }
             pVar = Make( aName_, eCT, p->eType );
             pVar->SetUserData( nIndex + 1 );
             pVar->SetFlags( nAccess );
@@ -869,10 +873,12 @@ SbxInfo* SbiStdObject::GetInfo( short nIdx )
     for( short i = 0; i < nPar; i++ )
     {
         p++;
-        String aName_ = rtl::OUString::createFromAscii( p->pName );
+        OUString aName_ = rtl::OUString::createFromAscii( p->pName );
         sal_uInt16 nFlags_ = ( p->nArgs >> 8 ) & 0x03;
         if( p->nArgs & _OPT )
+        {
             nFlags_ |= SBX_OPTIONAL;
+        }
         pInfo_->AddParam( aName_, p->eType, nFlags_ );
     }
     return pInfo_;

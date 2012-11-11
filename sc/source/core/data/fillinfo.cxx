@@ -49,6 +49,8 @@
 #include "colorscale.hxx"
 #include "stlpool.hxx"
 
+#include <iostream>
+
 // -----------------------------------------------------------------------
 
 const sal_uInt16 ROWINFO_MAX = 1024;
@@ -532,7 +534,13 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                     for(std::vector<sal_uInt32>::const_iterator itr = rCondFormats.begin();
                                             itr != rCondFormats.end() && !bFound; ++itr)
                                     {
+                                        if(!pInfo->pCell)
+                                            continue;
+
                                         ScConditionalFormat* pCondForm = pCondFormList->GetFormat(*itr);
+                                        if(!pCondForm)
+                                            continue;
+
                                         ScCondFormatData aData = pCondForm->GetData( pInfo->pCell,
                                                 ScAddress( nX, nCurRow, nTab ) );
                                         if (!aData.aStyleName.isEmpty())
@@ -568,6 +576,11 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                         if(aData.pDataBar)
                                         {
                                             pInfo->pDataBar = aData.pDataBar;
+                                            bFound = true;
+                                        }
+                                        if(aData.pIconSet)
+                                        {
+                                            pInfo->pIconSet = aData.pIconSet;
                                             bFound = true;
                                         }
                                     }

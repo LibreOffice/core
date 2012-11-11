@@ -32,6 +32,9 @@
 #define GLOBALTRANSFER_NAME     "globalTransfer"
 #define GLOBALTRANSFER_HANDLE   1025
 
+#define CHECKIN_NAME            "checkin"
+#define CHECKIN_HANDLE          1026
+
 #endif /* !_UCBCMDS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

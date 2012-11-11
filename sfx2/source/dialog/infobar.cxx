@@ -18,6 +18,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace std;
 
@@ -48,6 +49,14 @@ namespace
 
         basegfx::BColor aLightColor( 1.0, 1.0, 191.0 / 255.0 );
         basegfx::BColor aDarkColor( 217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0 );
+
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        if ( rSettings.GetHighContrastMode() )
+        {
+            aLightColor = rSettings.GetLightColor( ).getBColor( );
+            aDarkColor = rSettings.GetDialogTextColor( ).getBColor( );
+
+        }
 
         // Light background
         basegfx::B2DPolygon aPolygon;
@@ -85,9 +94,10 @@ namespace
     }
 }
 
-SfxInfoBarWindow::SfxInfoBarWindow( Window* pParent, const rtl::OUString& sMessage,
-       vector< PushButton* > aButtons ) :
+SfxInfoBarWindow::SfxInfoBarWindow( Window* pParent, const rtl::OUString& sId,
+       const rtl::OUString& sMessage, vector< PushButton* > aButtons ) :
     Window( pParent, 0 ),
+    m_sId( sId ),
     m_pMessage( NULL ),
     m_pCloseBtn( NULL ),
     m_aActionBtns( aButtons )
@@ -149,6 +159,16 @@ void SfxInfoBarWindow::Paint( const Rectangle& rPaintRect )
     basegfx::BColor aLightColor( 1.0, 1.0, 191.0 / 255.0 );
     basegfx::BColor aDarkColor( 217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0 );
 
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    if ( rSettings.GetHighContrastMode() )
+    {
+        aLightColor = rSettings.GetLightColor( ).getBColor( );
+        aDarkColor = rSettings.GetDialogTextColor( ).getBColor( );
+    }
+
+    // Update the label background color
+    m_pMessage->SetBackground( Wallpaper( Color( aLightColor ) ) );
+
     // Light background
     basegfx::B2DPolygon aPolygon;
     aPolygon.append( basegfx::B2DPoint( aRect.Left( ), aRect.Top( ) ) );
@@ -180,6 +200,27 @@ void SfxInfoBarWindow::Paint( const Rectangle& rPaintRect )
     Window::Paint( rPaintRect );
 }
 
+void SfxInfoBarWindow::Resize( )
+{
+    long nWidth = GetSizePixel().getWidth();
+    m_pCloseBtn->SetPosSizePixel( Point( nWidth - 25, 15 ), Size( 10, 10 ) );
+
+    // Reparent the buttons and place them on the right of the bar
+    long nX = m_pCloseBtn->GetPosPixel( ).getX( ) - 15;
+    long nBtnGap = 5;
+    for ( vector< PushButton* >::iterator it = m_aActionBtns.begin( );
+            it != m_aActionBtns.end( ); ++it )
+    {
+        PushButton* pBtn = *it;
+        long nBtnWidth = pBtn->GetSizePixel( ).getWidth();
+        nX -= nBtnWidth;
+        pBtn->SetPosSizePixel( Point( nX, 5 ), Size( nBtnWidth, 30 ) );
+        nX -= nBtnGap;
+    }
+
+    m_pMessage->SetPosSizePixel( Point( 10, 10 ), Size( nX - 20, 20 ) );
+}
+
 IMPL_LINK_NOARG( SfxInfoBarWindow, CloseHandler )
 {
     ((SfxInfoBarContainerWindow*)GetParent())->removeInfoBar( this );
@@ -203,18 +244,30 @@ SfxInfoBarContainerWindow::~SfxInfoBarContainerWindow( )
     m_pInfoBars.clear( );
 }
 
-void SfxInfoBarContainerWindow::appendInfoBar( const rtl::OUString& sMessage, vector< PushButton* > aButtons )
+void SfxInfoBarContainerWindow::appendInfoBar( const rtl::OUString& sId, const rtl::OUString& sMessage, vector< PushButton* > aButtons )
 {
     Size aSize = GetSizePixel( );
 
-    SfxInfoBarWindow* pInfoBar = new SfxInfoBarWindow( this, sMessage, aButtons );
+    SfxInfoBarWindow* pInfoBar = new SfxInfoBarWindow( this, sId, sMessage, aButtons );
     pInfoBar->SetPosPixel( Point( 0, aSize.getHeight( ) ) );
-    m_pInfoBars.push_back( pInfoBar );
     pInfoBar->Show( );
 
     long nHeight = pInfoBar->GetSizePixel( ).getHeight( );
     aSize.setHeight( aSize.getHeight() + nHeight );
     SetSizePixel( aSize );
+}
+
+SfxInfoBarWindow* SfxInfoBarContainerWindow::getInfoBar( const rtl::OUString& sId )
+{
+    SfxInfoBarWindow* pRet = NULL;
+    for ( vector< SfxInfoBarWindow* >::iterator it = m_pInfoBars.begin( );
+            it != m_pInfoBars.end( ) && pRet == NULL; ++it )
+    {
+        SfxInfoBarWindow* pBar = *it;
+        if ( pBar->getId( ) == sId )
+            pRet = pBar;
+    }
+    return pRet;
 }
 
 void SfxInfoBarContainerWindow::removeInfoBar( SfxInfoBarWindow* pInfoBar )
@@ -245,6 +298,20 @@ void SfxInfoBarContainerWindow::removeInfoBar( SfxInfoBarWindow* pInfoBar )
     m_pChildWin->Update( );
 }
 
+void SfxInfoBarContainerWindow::Resize( )
+{
+    // Only need to change the width of the infobars
+    long nWidth = GetSizePixel( ).getWidth( );
+    for ( vector< SfxInfoBarWindow * >::iterator it = m_pInfoBars.begin( );
+            it != m_pInfoBars.end( ); ++it )
+    {
+        SfxInfoBarWindow* pInfoBar = *it;
+        Size aSize = pInfoBar->GetSizePixel( );
+        aSize.setWidth( nWidth );
+        pInfoBar->SetSizePixel( aSize );
+        pInfoBar->Resize( );
+    }
+}
 
 SFX_IMPL_POS_CHILDWINDOW_WITHID( SfxInfoBarContainerChild, SID_INFOBARCONTAINER, SFX_OBJECTBAR_OBJECT );
 

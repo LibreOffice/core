@@ -78,7 +78,7 @@ namespace /* private */
         sal_uLong count_;
     };
 
-    sal_Bool AddToCount(const ElementPtr& rElem, void* pArgs)
+    bool AddToCount(const ElementPtr& rElem, void* pArgs)
     {
         BigPtrEntryMock* const pbem = static_cast<BigPtrEntryMock* const>(rElem);
         pbem->setCount(pbem->getCount() + *((sal_uLong*)pArgs));

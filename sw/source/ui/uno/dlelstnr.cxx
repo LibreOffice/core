@@ -29,7 +29,7 @@
 
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
@@ -57,34 +57,30 @@ using namespace ::com::sun::star::linguistic2::LinguServiceEventFlags;
 SwLinguServiceEventListener::SwLinguServiceEventListener()
 {
     Reference< XMultiServiceFactory > xMgr( comphelper::getProcessServiceFactory() );
-    if (xMgr.is())
+    Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    try
     {
-        try
-        {
-            OUString aSvcName( OUString( "com.sun.star.frame.Desktop" ) );
-            xDesktop = Reference< frame::XDesktop >(
-                    xMgr->createInstance( aSvcName ), UNO_QUERY );
-            if (xDesktop.is())
-                xDesktop->addTerminateListener( this );
+        OUString aSvcName( OUString( "com.sun.star.frame.Desktop" ) );
+        xDesktop = Reference< frame::XDesktop >(
+                xMgr->createInstance( aSvcName ), UNO_QUERY );
+        if (xDesktop.is())
+            xDesktop->addTerminateListener( this );
 
-            aSvcName = OUString( "com.sun.star.linguistic2.LinguServiceManager" );
-            xLngSvcMgr = Reference< XLinguServiceManager >( xMgr->createInstance( aSvcName ), UNO_QUERY );
-            if (xLngSvcMgr.is())
-                xLngSvcMgr->addLinguServiceManagerListener( (XLinguServiceEventListener *) this );
+        xLngSvcMgr = LinguServiceManager::create(xContext);
+        xLngSvcMgr->addLinguServiceManagerListener( (XLinguServiceEventListener *) this );
 
-            if (SvtLinguConfig().HasGrammarChecker())
-            {
-                aSvcName = OUString( "com.sun.star.linguistic2.ProofreadingIterator" );
-                xGCIterator = Reference< XProofreadingIterator >( xMgr->createInstance( aSvcName ), UNO_QUERY );
-                Reference< XLinguServiceEventBroadcaster > xBC( xGCIterator, UNO_QUERY );
-                if (xBC.is())
-                    xBC->addLinguServiceEventListener( (XLinguServiceEventListener *) this );
-            }
-        }
-        catch (const uno::Exception&)
+        if (SvtLinguConfig().HasGrammarChecker())
         {
-            OSL_FAIL("exception caught in SwLinguServiceEventListener c-tor" );
+            aSvcName = OUString( "com.sun.star.linguistic2.ProofreadingIterator" );
+            xGCIterator = Reference< XProofreadingIterator >( xMgr->createInstance( aSvcName ), UNO_QUERY );
+            Reference< XLinguServiceEventBroadcaster > xBC( xGCIterator, UNO_QUERY );
+            if (xBC.is())
+                xBC->addLinguServiceEventListener( (XLinguServiceEventListener *) this );
         }
+    }
+    catch (const uno::Exception&)
+    {
+        OSL_FAIL("exception caught in SwLinguServiceEventListener c-tor" );
     }
 }
 
@@ -105,16 +101,16 @@ void SwLinguServiceEventListener::processDictionaryListEvent(
             DictionaryListEventFlags::DEL_NEG_ENTRY     |
             DictionaryListEventFlags::ACTIVATE_POS_DIC  |
             DictionaryListEventFlags::DEACTIVATE_NEG_DIC;
-    sal_Bool bIsSpellWrong  =  0 != (nEvt & nSpellWrongFlags);
+    bool bIsSpellWrong  =  0 != (nEvt & nSpellWrongFlags);
     sal_Int16 nSpellAllFlags =
             DictionaryListEventFlags::ADD_NEG_ENTRY     |
             DictionaryListEventFlags::DEL_POS_ENTRY     |
             DictionaryListEventFlags::ACTIVATE_NEG_DIC  |
             DictionaryListEventFlags::DEACTIVATE_POS_DIC;
-    sal_Bool bIsSpellAll    =  0 != (nEvt & nSpellAllFlags);
+    bool bIsSpellAll    =  0 != (nEvt & nSpellAllFlags);
 
     if (bIsSpellWrong || bIsSpellAll)
-        SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll, sal_False );
+        SW_MOD()->CheckSpellChanges( false, bIsSpellWrong, bIsSpellAll, false );
 }
 
 void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
@@ -123,13 +119,13 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
 {
     SolarMutexGuard aGuard;
 
-    sal_Bool bIsSpellWrong = 0 != (rLngSvcEvent.nEvent & SPELL_WRONG_WORDS_AGAIN);
-    sal_Bool bIsSpellAll   = 0 != (rLngSvcEvent.nEvent & SPELL_CORRECT_WORDS_AGAIN);
+    bool bIsSpellWrong = 0 != (rLngSvcEvent.nEvent & SPELL_WRONG_WORDS_AGAIN);
+    bool bIsSpellAll   = 0 != (rLngSvcEvent.nEvent & SPELL_CORRECT_WORDS_AGAIN);
     if (0 != (rLngSvcEvent.nEvent & PROOFREAD_AGAIN))
-        bIsSpellWrong = bIsSpellAll = sal_True;     // have all spelling and grammar checked...
+        bIsSpellWrong = bIsSpellAll = true;     // have all spelling and grammar checked...
     if (bIsSpellWrong || bIsSpellAll)
     {
-        SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll, sal_False );
+        SW_MOD()->CheckSpellChanges( false, bIsSpellWrong, bIsSpellAll, false );
     }
     if (rLngSvcEvent.nEvent & HYPHENATE_AGAIN)
     {

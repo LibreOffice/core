@@ -33,7 +33,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/frame/XModule.hpp>
@@ -57,6 +57,7 @@
 #include <statstr.hrc>
 #include <rtl/logfile.hxx>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/makesequence.hxx>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
@@ -609,13 +610,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
                                 "SwXMLWriter::WriteThroughComponent" );
 
     // get component
-    uno::Reference< io::XActiveDataSource > xSaxWriter(
-        rFactory->createInstance(rtl::OUString("com.sun.star.xml.sax.Writer")),
-        UNO_QUERY );
-    OSL_ENSURE( xSaxWriter.is(), "can't instantiate XML writer" );
-    if(!xSaxWriter.is())
-        return sal_False;
-
+    uno::Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(comphelper::getComponentContext(rFactory));
     RTL_LOGFILE_CONTEXT_TRACE( aFilterLog, "SAX-Writer created" );
 
     // connect XML writer to output stream

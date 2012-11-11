@@ -45,7 +45,7 @@
 #include <sot/storage.hxx>
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
@@ -56,7 +56,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include <com/sun/star/ucb/NameClash.hpp>
-#include "com/sun/star/packages/manifest/XManifestWriter.hpp"
+#include "com/sun/star/packages/manifest/ManifestWriter.hpp"
 #include <unotools/pathoptions.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -119,15 +119,15 @@ public:
 class LibLBoxString : public SvLBoxString
 {
 public:
-    LibLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rTxt ) :
+    LibLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
-    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
+    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry );
 };
 
 //----------------------------------------------------------------------------
 
-void LibLBoxString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16, SvLBoxEntry* pEntry )
+void LibLBoxString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16, SvTreeListEntry* pEntry )
 {
     // Change text color if library is read only:
     bool bReadOnly = false;
@@ -180,7 +180,7 @@ CheckBox::~CheckBox()
     delete pCheckButton;
 
     // delete user data
-    SvLBoxEntry* pEntry = First();
+    SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
         delete static_cast<LibUserData*>(pEntry->GetUserData());
@@ -216,19 +216,19 @@ void CheckBox::SetMode (ObjectMode::Mode e)
 
 //----------------------------------------------------------------------------
 
-SvLBoxEntry* CheckBox::DoInsertEntry( const String& rStr, sal_uLong nPos )
+SvTreeListEntry* CheckBox::DoInsertEntry( const String& rStr, sal_uLong nPos )
 {
     return SvTabListBox::InsertEntryToColumn( rStr, nPos, 0 );
 }
 
 //----------------------------------------------------------------------------
 
-SvLBoxEntry* CheckBox::FindEntry( const String& rName )
+SvTreeListEntry* CheckBox::FindEntry( const String& rName )
 {
     sal_uLong nCount = GetEntryCount();
     for ( sal_uLong i = 0; i < nCount; i++ )
     {
-        SvLBoxEntry* pEntry = GetEntry( i );
+        SvTreeListEntry* pEntry = GetEntry( i );
         DBG_ASSERT( pEntry, "pEntry?!" );
         if ( rName.CompareIgnoreCaseToAscii( GetEntryText( pEntry, 0 ) ) == COMPARE_EQUAL )
             return pEntry;
@@ -242,7 +242,7 @@ void CheckBox::CheckEntryPos( sal_uLong nPos )
 {
     if ( nPos < GetEntryCount() )
     {
-        SvLBoxEntry* pEntry = GetEntry( nPos );
+        SvTreeListEntry* pEntry = GetEntry( nPos );
 
         if ( GetCheckButtonState( pEntry ) != SV_BUTTON_CHECKED )
             SetCheckButtonState( pEntry, SvButtonState(SV_BUTTON_CHECKED) );
@@ -260,9 +260,10 @@ bool CheckBox::IsChecked( sal_uLong nPos ) const
 
 //----------------------------------------------------------------------------
 
-void CheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind )
+void CheckBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rTxt,
+    const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind )
 {
-    SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2, eButtonKind );
+    SvTabListBox::InitEntry(pEntry, rTxt, rImg1, rImg2, eButtonKind);
 
     if (eMode == ObjectMode::Module)
     {
@@ -279,7 +280,7 @@ void CheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const Imag
 
 //----------------------------------------------------------------------------
 
-sal_Bool CheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+sal_Bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 {
     if (eMode != ObjectMode::Module)
         return false;
@@ -327,7 +328,7 @@ sal_Bool CheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 
 //----------------------------------------------------------------------------
 
-sal_Bool CheckBox::EditedEntry( SvLBoxEntry* pEntry, const OUString& rNewName )
+sal_Bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewName )
 {
     bool bValid = rNewName.getLength() <= 30 && IsValidSbxName(rNewName);
     OUString aOldName( GetEntryText( pEntry, 0 ) );
@@ -558,7 +559,7 @@ LibPage::~LibPage()
 
 void LibPage::CheckButtons()
 {
-    SvLBoxEntry* pCur = aLibBox.GetCurEntry();
+    SvTreeListEntry* pCur = aLibBox.GetCurEntry();
     if ( pCur )
     {
         OUString aLibName = aLibBox.GetEntryText( pCur, 0 );
@@ -656,7 +657,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         SFX_APP()->ExecuteSlot( aRequest );
 
         SfxUsrAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( m_aCurDocument.getDocumentOrNull() ) );
-        SvLBoxEntry* pCurEntry = aLibBox.GetCurEntry();
+        SvTreeListEntry* pCurEntry = aLibBox.GetCurEntry();
         DBG_ASSERT( pCurEntry, "Entry?!" );
         String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
@@ -681,7 +682,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
     }
     else if ( pButton == &aPasswordButton )
     {
-        SvLBoxEntry* pCurEntry = aLibBox.GetCurEntry();
+        SvTreeListEntry* pCurEntry = aLibBox.GetCurEntry();
         OUString aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
 
         // load module library (if not loaded)
@@ -748,7 +749,7 @@ IMPL_LINK_INLINE_START( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
 {
     long nRet = 0;
 
-    SvLBoxEntry* pCurEntry = aLibBox.GetCurEntry();
+    SvTreeListEntry* pCurEntry = aLibBox.GetCurEntry();
     OUString aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
     Reference< script::XLibraryContainerPassword > xPasswd( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
 
@@ -899,7 +900,7 @@ void LibPage::InsertLib()
                 if ( !( ( xModLibContImport.is() && xModLibContImport->hasByName( aLibName ) && xModLibContImport->isLibraryLink( aLibName ) ) ||
                         ( xDlgLibContImport.is() && xDlgLibContImport->hasByName( aLibName ) && xDlgLibContImport->isLibraryLink( aLibName ) ) ) )
                 {
-                    SvLBoxEntry* pEntry = pLibDlg->GetLibBox().DoInsertEntry( aLibName );
+                    SvTreeListEntry* pEntry = pLibDlg->GetLibBox().DoInsertEntry( aLibName );
                     sal_uInt16 nPos = (sal_uInt16) pLibDlg->GetLibBox().GetModel()->GetAbsPos( pEntry );
                     pLibDlg->GetLibBox().CheckEntryPos(nPos);
                 }
@@ -928,7 +929,7 @@ void LibPage::InsertLib()
                     {
                         if ( pLibDlg->GetLibBox().IsChecked( nLib ) )
                         {
-                            SvLBoxEntry* pEntry = pLibDlg->GetLibBox().GetEntry( nLib );
+                            SvTreeListEntry* pEntry = pLibDlg->GetLibBox().GetEntry( nLib );
                             DBG_ASSERT( pEntry, "Entry?!" );
                             OUString aLibName( pLibDlg->GetLibBox().GetEntryText( pEntry, 0 ) );
                             Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
@@ -1001,7 +1002,7 @@ void LibPage::InsertLib()
                             if ( bRemove )
                             {
                                 // remove listbox entry
-                                SvLBoxEntry* pEntry_ = aLibBox.FindEntry( aLibName );
+                                SvTreeListEntry* pEntry_ = aLibBox.FindEntry( aLibName );
                                 if ( pEntry_ )
                                     aLibBox.SvTreeListBox::GetModel()->Remove( pEntry_ );
 
@@ -1141,7 +1142,7 @@ void LibPage::InsertLib()
                         }
                     }
 
-                    SvLBoxEntry* pFirstNew = aLibBox.GetEntry( nNewPos );
+                    SvTreeListEntry* pFirstNew = aLibBox.GetEntry( nNewPos );
                     if ( pFirstNew )
                         aLibBox.SetCurEntry( pFirstNew );
                 }
@@ -1158,7 +1159,7 @@ void LibPage::InsertLib()
 
 void LibPage::Export( void )
 {
-    SvLBoxEntry* pCurEntry = aLibBox.GetCurEntry();
+    SvTreeListEntry* pCurEntry = aLibBox.GetCurEntry();
     String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
 
     // Password verification
@@ -1355,9 +1356,8 @@ void LibPage::ExportAsPackage( const String& aLibName )
         manifest.push_back( attribs );
 
         // write into pipe:
-        Reference<packages::manifest::XManifestWriter> xManifestWriter( xMSF->createInstance
-            ( DEFINE_CONST_UNICODE("com.sun.star.packages.manifest.ManifestWriter") ), UNO_QUERY );
-        Reference<io::XOutputStream> xPipe( io::Pipe::create(comphelper::getComponentContext(xMSF)), UNO_QUERY_THROW );
+        Reference<packages::manifest::XManifestWriter> xManifestWriter = packages::manifest::ManifestWriter::create( xContext );
+        Reference<io::XOutputStream> xPipe( io::Pipe::create( xContext ), UNO_QUERY_THROW );
         xManifestWriter->writeManifestSequence(
             xPipe, Sequence< Sequence<beans::PropertyValue> >(
                 &manifest[ 0 ], manifest.size() ) );
@@ -1384,32 +1384,27 @@ void LibPage::ExportAsPackage( const String& aLibName )
 void LibPage::ExportAsBasic( const String& aLibName )
 {
     // Folder picker
-    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    Reference< XFolderPicker > xFolderPicker( xMSF->createInstance(
-                "com.sun.star.ui.dialogs.FolderPicker" ), UNO_QUERY );
+    Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, 0) );
 
-    if( xFolderPicker.is() )
+    xFolderPicker->setTitle( String( IDEResId( RID_STR_EXPORTBASIC ) ) );
+
+    // set display directory and filter
+    String aPath =GetExtraData()->GetAddLibPath();
+    if( !aPath.Len() )
+        aPath = SvtPathOptions().GetWorkPath();
+
+    // INetURLObject aURL(m_sSavePath, INET_PROT_FILE);
+    xFolderPicker->setDisplayDirectory( aPath );
+    short nRet = xFolderPicker->execute();
+    if( nRet == RET_OK )
     {
-        xFolderPicker->setTitle( String( IDEResId( RID_STR_EXPORTBASIC ) ) );
+        String aTargetURL = xFolderPicker->getDirectory();
+        GetExtraData()->SetAddLibPath(aTargetURL);
 
-        // set display directory and filter
-        String aPath =GetExtraData()->GetAddLibPath();
-        if( !aPath.Len() )
-            aPath = SvtPathOptions().GetWorkPath();
-
-        // INetURLObject aURL(m_sSavePath, INET_PROT_FILE);
-        xFolderPicker->setDisplayDirectory( aPath );
-        short nRet = xFolderPicker->execute();
-        if( nRet == RET_OK )
-        {
-            String aTargetURL = xFolderPicker->getDirectory();
-            GetExtraData()->SetAddLibPath(aTargetURL);
-
-            Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
-            implExportLib( aLibName, aTargetURL, xDummyHandler );
-        }
+        Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
+        implExportLib( aLibName, aTargetURL, xDummyHandler );
     }
 }
 
@@ -1417,7 +1412,7 @@ void LibPage::ExportAsBasic( const String& aLibName )
 
 void LibPage::DeleteCurrent()
 {
-    SvLBoxEntry* pCurEntry = aLibBox.GetCurEntry();
+    SvTreeListEntry* pCurEntry = aLibBox.GetCurEntry();
     String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
 
     // check, if library is link
@@ -1518,7 +1513,7 @@ void LibPage::SetCurLib()
                     ImpInsertLibEntry( aLibName, i );
             }
 
-            SvLBoxEntry* pEntry_ = aLibBox.FindEntry( OUString( "Standard" ) );
+            SvTreeListEntry* pEntry_ = aLibBox.FindEntry( OUString( "Standard" ) );
             if ( !pEntry_ )
                 pEntry_ = aLibBox.GetEntry( 0 );
             aLibBox.SetCurEntry( pEntry_ );
@@ -1528,7 +1523,7 @@ void LibPage::SetCurLib()
 
 //----------------------------------------------------------------------------
 
-SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, sal_uLong nPos )
+SvTreeListEntry* LibPage::ImpInsertLibEntry( const String& rLibName, sal_uLong nPos )
 {
     // check, if library is password protected
     bool bProtected = false;
@@ -1543,7 +1538,7 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, sal_uLong nPos 
         }
     }
 
-    SvLBoxEntry* pNewEntry = aLibBox.DoInsertEntry( rLibName, nPos );
+    SvTreeListEntry* pNewEntry = aLibBox.DoInsertEntry( rLibName, nPos );
     pNewEntry->SetUserData( new LibUserData(m_aCurDocument) );
 
     if (bProtected)
@@ -1620,7 +1615,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
 
                 if( pLibBox )
                 {
-                    SvLBoxEntry* pEntry = pLibBox->DoInsertEntry( aLibName );
+                    SvTreeListEntry* pEntry = pLibBox->DoInsertEntry( aLibName );
                     pEntry->SetUserData( new LibUserData( rDocument ) );
                     pLibBox->SetCurEntry( pEntry );
                 }
@@ -1638,8 +1633,8 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
 
                 if( pBasicBox )
                 {
-                    SvLBoxEntry* pEntry = pBasicBox->GetCurEntry();
-                    SvLBoxEntry* pRootEntry = NULL;
+                    SvTreeListEntry* pEntry = pBasicBox->GetCurEntry();
+                    SvTreeListEntry* pRootEntry = NULL;
                     while( pEntry )
                     {
                         pRootEntry = pEntry;
@@ -1649,7 +1644,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                     sal_uInt16 nMode = pBasicBox->GetMode();
                     bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
                     sal_uInt16 nId = bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB;
-                    SvLBoxEntry* pNewLibEntry = pBasicBox->AddEntry(
+                    SvTreeListEntry* pNewLibEntry = pBasicBox->AddEntry(
                         aLibName,
                         Image( IDEResId( nId ) ),
                         pRootEntry, false,
@@ -1659,7 +1654,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
 
                     if( pNewLibEntry )
                     {
-                        SvLBoxEntry* pEntry_ = pBasicBox->AddEntry(
+                        SvTreeListEntry* pEntry_ = pBasicBox->AddEntry(
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
                             pNewLibEntry, false,

@@ -23,7 +23,7 @@
         <value>com.sun.star.comp.sdbc.mysqlc.MysqlCDriver</value>
       </prop>
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
-        <value xml:lang="en-US">MySQL (Connector/OOo)</value>
+        <value xml:lang="en-US">MySQL Connector</value>
       </prop>
       <node oor:name="Properties">
         <node oor:name="CharSet" oor:op="replace">

@@ -1657,7 +1657,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             }
 
             pAktTxtNd->SetAttrListLevel(nLvl);
-            pAktTxtNd->SetNumLSpace( sal_True );
+            pAktTxtNd->SetNumLSpace( true );
 
             // start new list
             pDoc->SetNumRule( aDelPam, aRule, true );

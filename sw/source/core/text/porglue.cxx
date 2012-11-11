@@ -30,11 +30,11 @@
 #include "paratr.hxx"   // pTabStop, ADJ*
 #include "viewopt.hxx"  // SwViewOptions
 #include <SwPortionHandler.hxx>
-
 #include "porglue.hxx"
 #include "inftxt.hxx"
 #include "porlay.hxx"   // SwParaPortion, SetFull
 #include "porfly.hxx"   // SwParaPortion, SetFull
+#include <comphelper/string.hxx>
 
 /*************************************************************************
  *                      class SwGluePortion
@@ -97,8 +97,9 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
 
     if( rInf.GetFont()->IsPaintBlank() )
     {
-        XubString aTxt;
-        aTxt.Fill( GetFixWidth() / GetLen(), ' ' );
+        rtl::OUStringBuffer aBuf;
+        comphelper::string::padToLength(aBuf, GetFixWidth() / GetLen(), ' ');
+        String aTxt(aBuf.makeStringAndClear());
         SwTxtPaintInfo aInf( rInf, aTxt );
         aInf.DrawText( *this, aTxt.Len(), sal_True );
     }
@@ -106,13 +107,13 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( rInf.OnWin() && rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )
     {
 #if OSL_DEBUG_LEVEL > 0
-        const xub_Unicode cChar = rInf.GetChar( rInf.GetIdx() );
+        const sal_Unicode cChar = rInf.GetChar( rInf.GetIdx() );
         OSL_ENSURE( CH_BLANK  == cChar || CH_BULLET == cChar,
                 "SwGluePortion::Paint: blank expected" );
 #endif
         if( 1 == GetLen() )
         {
-            rtl::OUString aBullet( CH_BULLET );
+            OUString aBullet( CH_BULLET );
             SwPosSize aBulletSize( rInf.GetTxtSize( aBullet ) );
             Point aPos( rInf.GetPos() );
             aPos.X() += (Width()/2) - (aBulletSize.Width()/2);

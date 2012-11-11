@@ -13,7 +13,7 @@ ifeq ($(SYSTEM_LIBVISIO),NO)
 
 $(eval $(call gb_Module_add_targets,libvisio,\
 	ExternalPackage_libvisio \
-	StaticLibrary_visio \
+	ExternalProject_libvisio \
 	UnpackedTarball_visio \
 ))
 

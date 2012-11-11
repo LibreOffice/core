@@ -1256,7 +1256,7 @@ void MenuSaveInData::Apply(
     SvxConfigEntry* pRootEntry_,
     uno::Reference< container::XIndexContainer >& rMenuBar,
     uno::Reference< lang::XSingleComponentFactory >& rFactory,
-    SvLBoxEntry *pParentEntry )
+    SvTreeListEntry *pParentEntry )
 {
     (void)pRootEntry_;
     (void)pParentEntry;
@@ -1353,14 +1353,14 @@ MenuSaveInData::Reset()
 class PopupPainter : public SvLBoxString
 {
 public:
-    PopupPainter( SvLBoxEntry* pEntry, const String& rStr )
+    PopupPainter( SvTreeListEntry* pEntry, const String& rStr )
         : SvLBoxString( pEntry, 0, rStr )
     { }
 
     ~PopupPainter() { }
 
     void Paint( const Point& rPos, SvTreeListBox& rOutDev,
-        sal_uInt16 nViewDataEntryFlags, SvLBoxEntry* pEntry )
+        sal_uInt16 nViewDataEntryFlags, SvTreeListEntry* pEntry )
     {
         SvLBoxString::Paint( rPos, rOutDev, nViewDataEntryFlags, pEntry );
 
@@ -1438,7 +1438,7 @@ SvxMenuEntriesListBox::~SvxMenuEntriesListBox()
 
 // drag and drop support
 DragDropMode SvxMenuEntriesListBox::NotifyStartDrag(
-    TransferDataContainer& aTransferDataContainer, SvLBoxEntry* pEntry )
+    TransferDataContainer& aTransferDataContainer, SvTreeListEntry* pEntry )
 {
     (void)aTransferDataContainer;
     (void)pEntry;
@@ -1470,14 +1470,14 @@ sal_Int8 SvxMenuEntriesListBox::AcceptDrop( const AcceptDropEvent& rEvt )
     return SvTreeListBox::AcceptDrop( aNewAcceptDropEvent );
 }
 
-sal_Bool SvxMenuEntriesListBox::NotifyAcceptDrop( SvLBoxEntry* )
+sal_Bool SvxMenuEntriesListBox::NotifyAcceptDrop( SvTreeListEntry* )
 {
     return sal_True;
 }
 
 sal_Bool SvxMenuEntriesListBox::NotifyMoving(
-    SvLBoxEntry* pTarget, SvLBoxEntry* pSource,
-    SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos)
+    SvTreeListEntry* pTarget, SvTreeListEntry* pSource,
+    SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos)
 {
     // only try to do a move if we are dragging within the list box
     if ( m_bIsInternalDrag )
@@ -1500,8 +1500,8 @@ sal_Bool SvxMenuEntriesListBox::NotifyMoving(
 }
 
 sal_Bool SvxMenuEntriesListBox::NotifyCopying(
-    SvLBoxEntry* pTarget, SvLBoxEntry* pSource,
-    SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos)
+    SvTreeListEntry* pTarget, SvTreeListEntry* pSource,
+    SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos)
 {
     (void)pSource;
     (void)rpNewParent;
@@ -2063,8 +2063,8 @@ SvxEntries* SvxConfigPage::FindParentForChild(
     return NULL;
 }
 
-SvLBoxEntry* SvxConfigPage::AddFunction(
-    SvLBoxEntry* pTarget, bool bFront, bool bAllowDuplicates )
+SvTreeListEntry* SvxConfigPage::AddFunction(
+    SvTreeListEntry* pTarget, bool bFront, bool bAllowDuplicates )
 {
     String aDisplayName = pSelectorDlg->GetSelectedDisplayName();
     String aHelpText = pSelectorDlg->GetSelectedHelpText();
@@ -2106,16 +2106,16 @@ SvLBoxEntry* SvxConfigPage::AddFunction(
     return InsertEntry( pNewEntryData, pTarget, bFront );
 }
 
-SvLBoxEntry* SvxConfigPage::InsertEntry(
+SvTreeListEntry* SvxConfigPage::InsertEntry(
     SvxConfigEntry* pNewEntryData,
-    SvLBoxEntry* pTarget,
+    SvTreeListEntry* pTarget,
     bool bFront )
 {
     // Grab the entries list for the currently selected menu
     SvxEntries* pEntries = GetTopLevelSelection()->GetEntries();
 
-    SvLBoxEntry* pNewEntry = NULL;
-    SvLBoxEntry* pCurEntry =
+    SvTreeListEntry* pNewEntry = NULL;
+    SvTreeListEntry* pCurEntry =
         pTarget != NULL ? pTarget : aContentsListBox->GetCurEntry();
 
     if ( bFront )
@@ -2166,10 +2166,10 @@ SvLBoxEntry* SvxConfigPage::InsertEntry(
     return pNewEntry;
 }
 
-SvLBoxEntry* SvxConfigPage::InsertEntryIntoUI(
+SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
     SvxConfigEntry* pNewEntryData, sal_uLong nPos )
 {
-    SvLBoxEntry* pNewEntry = NULL;
+    SvTreeListEntry* pNewEntry = NULL;
 
     if (pNewEntryData->IsSeparator())
     {
@@ -2227,9 +2227,9 @@ IMPL_LINK( SvxConfigPage, MoveHdl, Button *, pButton )
 
 void SvxConfigPage::MoveEntry( bool bMoveUp )
 {
-    SvLBoxEntry *pSourceEntry = aContentsListBox->FirstSelected();
-    SvLBoxEntry *pTargetEntry = NULL;
-    SvLBoxEntry *pToSelect = NULL;
+    SvTreeListEntry *pSourceEntry = aContentsListBox->FirstSelected();
+    SvTreeListEntry *pTargetEntry = NULL;
+    SvTreeListEntry *pToSelect = NULL;
 
     if ( !pSourceEntry )
     {
@@ -2260,7 +2260,7 @@ void SvxConfigPage::MoveEntry( bool bMoveUp )
 }
 
 bool SvxConfigPage::MoveEntryData(
-    SvLBoxEntry* pSourceEntry, SvLBoxEntry* pTargetEntry )
+    SvTreeListEntry* pSourceEntry, SvTreeListEntry* pTargetEntry )
 {
     //modified by shizhoubo for issue53677
     if ( NULL == pSourceEntry || NULL == pTargetEntry )
@@ -2400,7 +2400,7 @@ void SvxMenuConfigPage::UpdateButtonStates()
     PopupMenu* pPopup = aModifyCommandButton.GetPopupMenu();
 
     // Disable Up and Down buttons depending on current selection
-    SvLBoxEntry* selection = aContentsListBox->GetCurEntry();
+    SvTreeListEntry* selection = aContentsListBox->GetCurEntry();
 
     if ( aContentsListBox->GetEntryCount() == 0 || selection == NULL )
     {
@@ -2416,8 +2416,8 @@ void SvxMenuConfigPage::UpdateButtonStates()
         return;
     }
 
-    SvLBoxEntry* first = aContentsListBox->First();
-    SvLBoxEntry* last = aContentsListBox->Last();
+    SvTreeListEntry* first = aContentsListBox->First();
+    SvTreeListEntry* last = aContentsListBox->Last();
 
     aMoveUpButton.Enable( selection != first );
     aMoveDownButton.Enable( selection != last );
@@ -2460,7 +2460,7 @@ void SvxMenuConfigPage::DeleteSelectedTopLevel()
 
 bool SvxMenuConfigPage::DeleteSelectedContent()
 {
-    SvLBoxEntry *pActEntry = aContentsListBox->FirstSelected();
+    SvTreeListEntry *pActEntry = aContentsListBox->FirstSelected();
 
     if ( pActEntry != NULL )
     {
@@ -2651,7 +2651,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
         }
         case ID_RENAME:
         {
-            SvLBoxEntry* pActEntry = aContentsListBox->GetCurEntry();
+            SvTreeListEntry* pActEntry = aContentsListBox->GetCurEntry();
             SvxConfigEntry* pEntry =
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
@@ -2782,7 +2782,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     if ( entries != NULL )
     {
         SvxConfigEntry* pEntry;
-        SvLBoxEntry* pLBEntry;
+        SvTreeListEntry* pLBEntry;
 
         pEntries = new SvxEntries();
         SvxEntries::const_iterator iter = entries->begin();
@@ -2911,9 +2911,9 @@ IMPL_LINK( SvxMainMenuOrganizerDialog, SelectHdl, Control*, pCtrl )
 void SvxMainMenuOrganizerDialog::UpdateButtonStates()
 {
     // Disable Up and Down buttons depending on current selection
-    SvLBoxEntry* selection = aMenuListBox.GetCurEntry();
-    SvLBoxEntry* first = aMenuListBox.First();
-    SvLBoxEntry* last = aMenuListBox.Last();
+    SvTreeListEntry* selection = aMenuListBox.GetCurEntry();
+    SvTreeListEntry* first = aMenuListBox.First();
+    SvTreeListEntry* last = aMenuListBox.Last();
 
     aMoveUpButton.Enable( selection != first );
     aMoveDownButton.Enable( selection != last );
@@ -2921,8 +2921,8 @@ void SvxMainMenuOrganizerDialog::UpdateButtonStates()
 
 IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton )
 {
-    SvLBoxEntry *pSourceEntry = aMenuListBox.FirstSelected();
-    SvLBoxEntry *pTargetEntry = NULL;
+    SvTreeListEntry *pSourceEntry = aMenuListBox.FirstSelected();
+    SvTreeListEntry *pTargetEntry = NULL;
 
     if ( !pSourceEntry )
     {
@@ -3205,7 +3205,7 @@ void SvxToolbarConfigPage::DeleteSelectedTopLevel()
 
 bool SvxToolbarConfigPage::DeleteSelectedContent()
 {
-    SvLBoxEntry *pActEntry = aContentsListBox->FirstSelected();
+    SvTreeListEntry *pActEntry = aContentsListBox->FirstSelected();
 
     if ( pActEntry != NULL )
     {
@@ -3375,7 +3375,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
     {
         case ID_RENAME:
         {
-            SvLBoxEntry* pActEntry = aContentsListBox->GetCurEntry();
+            SvTreeListEntry* pActEntry = aContentsListBox->GetCurEntry();
             SvxConfigEntry* pEntry =
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
@@ -3402,7 +3402,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
         }
         case ID_DEFAULT_COMMAND:
         {
-            SvLBoxEntry* pActEntry = aContentsListBox->GetCurEntry();
+            SvTreeListEntry* pActEntry = aContentsListBox->GetCurEntry();
             SvxConfigEntry* pEntry =
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
@@ -3449,7 +3449,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
 
                 aContentsListBox->GetModel()->Remove( pActEntry );
 
-                SvLBoxEntry* pNewLBEntry =
+                SvTreeListEntry* pNewLBEntry =
                     InsertEntryIntoUI( pEntry, nSelectionPos );
 
                 aContentsListBox->SetCheckButtonState( pNewLBEntry,
@@ -3472,7 +3472,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             SvxConfigEntry* pNewEntryData = new SvxConfigEntry;
             pNewEntryData->SetUserDefined( sal_True );
 
-            SvLBoxEntry* pNewLBEntry = InsertEntry( pNewEntryData );
+            SvTreeListEntry* pNewLBEntry = InsertEntry( pNewEntryData );
 
             aContentsListBox->SetCheckButtonState(
                 pNewLBEntry, SV_BUTTON_TRISTATE );
@@ -3499,7 +3499,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
         }
         case ID_CHANGE_SYMBOL:
         {
-            SvLBoxEntry* pActEntry = aContentsListBox->GetCurEntry();
+            SvTreeListEntry* pActEntry = aContentsListBox->GetCurEntry();
             SvxConfigEntry* pEntry =
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
@@ -3556,7 +3556,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
                         Image aImage( newgraphic );
 
                         aContentsListBox->GetModel()->Remove( pActEntry );
-                        SvLBoxEntry* pNewLBEntry =
+                        SvTreeListEntry* pNewLBEntry =
                             InsertEntryIntoUI( pEntry, nSelectionPos );
 
                         aContentsListBox->SetCheckButtonState( pNewLBEntry,
@@ -3582,7 +3582,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
         }
         case ID_RESET_SYMBOL:
         {
-            SvLBoxEntry* pActEntry = aContentsListBox->GetCurEntry();
+            SvTreeListEntry* pActEntry = aContentsListBox->GetCurEntry();
             SvxConfigEntry* pEntry =
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
@@ -3616,7 +3616,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
                 Image aImage( backup );
                 aContentsListBox->GetModel()->Remove( pActEntry );
 
-                SvLBoxEntry* pNewLBEntry =
+                SvTreeListEntry* pNewLBEntry =
                     InsertEntryIntoUI( pEntry, nSelectionPos );
 
                 aContentsListBox->SetCheckButtonState( pNewLBEntry,
@@ -4525,7 +4525,7 @@ void SvxToolbarConfigPage::UpdateButtonStates()
 
     aDescriptionField.Clear();
 
-    SvLBoxEntry* selection = aContentsListBox->GetCurEntry();
+    SvTreeListEntry* selection = aContentsListBox->GetCurEntry();
     if ( aContentsListBox->GetEntryCount() == 0 || selection == NULL )
     {
         return;
@@ -4621,7 +4621,7 @@ IMPL_LINK( SvxToolbarConfigPage, SelectToolbar, ListBox *, pBox )
     {
         SvxConfigEntry* pEntry = *iter;
 
-        SvLBoxEntry* pNewLBEntry = InsertEntryIntoUI( pEntry );
+        SvTreeListEntry* pNewLBEntry = InsertEntryIntoUI( pEntry );
 
         if (pEntry->IsBinding())
         {
@@ -4741,10 +4741,10 @@ IMPL_LINK( SvxToolbarConfigPage, AddFunctionHdl,
     return 0;
 }
 
-SvLBoxEntry* SvxToolbarConfigPage::AddFunction(
-    SvLBoxEntry* pTarget, bool bFront, bool bAllowDuplicates )
+SvTreeListEntry* SvxToolbarConfigPage::AddFunction(
+    SvTreeListEntry* pTarget, bool bFront, bool bAllowDuplicates )
 {
-    SvLBoxEntry* pNewLBEntry =
+    SvTreeListEntry* pNewLBEntry =
         SvxConfigPage::AddFunction( pTarget, bFront, bAllowDuplicates );
 
     SvxConfigEntry* pEntry = (SvxConfigEntry*) pNewLBEntry->GetUserData();
@@ -4864,7 +4864,7 @@ void SvxToolbarEntriesListBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 // --------------------------------------------------------
 
-void SvxToolbarEntriesListBox::ChangeVisibility( SvLBoxEntry* pEntry )
+void SvxToolbarEntriesListBox::ChangeVisibility( SvTreeListEntry* pEntry )
 {
     if ( pEntry != NULL )
     {
@@ -4908,8 +4908,8 @@ void SvxToolbarEntriesListBox::KeyInput( const KeyEvent& rKeyEvent )
 }
 
 sal_Bool SvxToolbarEntriesListBox::NotifyMoving(
-    SvLBoxEntry* pTarget, SvLBoxEntry* pSource,
-    SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos)
+    SvTreeListEntry* pTarget, SvTreeListEntry* pSource,
+    SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos)
 {
     bool result = SvxMenuEntriesListBox::NotifyMoving(
         pTarget, pSource, rpNewParent, rNewChildPos );
@@ -4930,9 +4930,9 @@ sal_Bool SvxToolbarEntriesListBox::NotifyMoving(
 }
 
 sal_Bool SvxToolbarEntriesListBox::NotifyCopying(
-    SvLBoxEntry*  pTarget,
-    SvLBoxEntry*  pSource,
-    SvLBoxEntry*& rpNewParent,
+    SvTreeListEntry*  pTarget,
+    SvTreeListEntry*  pSource,
+    SvTreeListEntry*& rpNewParent,
     sal_uLong&      rNewChildPos)
 {
     (void)pSource;

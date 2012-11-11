@@ -75,7 +75,7 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
-    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
+    virtual bool GetInfo( SfxPoolItem& rInfo ) const;
 
     const SwField *GetFld() const   { return pField; }
     SwField *GetFld()               { return pField; }

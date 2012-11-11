@@ -70,18 +70,26 @@ UUIInteractionHandler::initialize(
 {
     delete m_pImpl;
 
+    // The old-style InteractionHandler service supported a sequence of
+    // PropertyValue, while the new-style service now uses constructors to pass
+    // in Parent and Context values; for backwards compatibility, keep support
+    // for a PropertyValue sequence, too:
     uno::Reference< awt::XWindow > xWindow;
     rtl::OUString aContext;
-    ::comphelper::NamedValueCollection aProperties( rArguments );
-    if ( aProperties.has( "Parent" ) )
+    if (!((rArguments.getLength() == 1 && (rArguments[0] >>= xWindow)) ||
+          (rArguments.getLength() == 2 && (rArguments[0] >>= xWindow) &&
+           (rArguments[1] >>= aContext))))
     {
-        OSL_VERIFY( aProperties.get( "Parent" ) >>= xWindow );
+        ::comphelper::NamedValueCollection aProperties( rArguments );
+        if ( aProperties.has( "Parent" ) )
+        {
+            OSL_VERIFY( aProperties.get( "Parent" ) >>= xWindow );
+        }
+        if ( aProperties.has( "Context" ) )
+        {
+            OSL_VERIFY( aProperties.get( "Context" ) >>= aContext );
+        }
     }
-    if ( aProperties.has( "Context" ) )
-    {
-        OSL_VERIFY( aProperties.get( "Context" ) >>= aContext );
-    }
-
 
     m_pImpl = new UUIInteractionHelper(m_xServiceFactory, xWindow, aContext);
 }

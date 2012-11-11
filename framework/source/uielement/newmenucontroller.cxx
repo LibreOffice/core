@@ -41,8 +41,7 @@
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
@@ -487,39 +486,35 @@ void NewMenuController::impl_setPopupMenu()
         fillPopupMenu( m_xPopupMenu );
 
     // Identify module that we are attach to. It's our context that we need to know.
-    Reference< XModuleManager > xModuleManager( m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ),UNO_QUERY );
-    if ( xModuleManager.is() )
+    Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
+    try
     {
-        try
+        m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
+        m_bModuleIdentified = sal_True;
+
+        if ( !m_aModuleIdentifier.isEmpty() )
         {
-            m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
-            m_bModuleIdentified = sal_True;
+            Sequence< PropertyValue > aSeq;
 
-            Reference< XNameAccess > xNameAccess( xModuleManager, UNO_QUERY );
-            if ( !m_aModuleIdentifier.isEmpty() && xNameAccess.is() )
+            if ( xModuleManager->getByName( m_aModuleIdentifier ) >>= aSeq )
             {
-                Sequence< PropertyValue > aSeq;
-
-                if ( xNameAccess->getByName( m_aModuleIdentifier ) >>= aSeq )
+                for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
                 {
-                    for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
+                    if ( aSeq[y].Name == "ooSetupFactoryEmptyDocumentURL" )
                     {
-                        if ( aSeq[y].Name == "ooSetupFactoryEmptyDocumentURL" )
-                        {
-                            aSeq[y].Value >>= m_aEmptyDocURL;
-                            break;
-                        }
+                        aSeq[y].Value >>= m_aEmptyDocURL;
+                        break;
                     }
                 }
             }
         }
-        catch ( const RuntimeException& )
-        {
-            throw;
-        }
-        catch ( const Exception& )
-        {
-        }
+    }
+    catch ( const RuntimeException& )
+    {
+        throw;
+    }
+    catch ( const Exception& )
+    {
     }
 }
 

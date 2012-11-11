@@ -109,7 +109,7 @@ public:
                                          true,
                                          Format::THIRTYTWO_BIT_TC_MASK );
 
-        ::rtl::OUString aSvg( "m 0 0h5v10h5v-5h-10z" );
+        OUString aSvg( "m 0 0h5v10h5v-5h-10z" );
 
         basegfx::B2DPolyPolygon aPoly;
         basegfx::tools::importFromSvgD( aPoly, aSvg );
@@ -124,7 +124,7 @@ public:
             aColWhite,
             DrawMode_PAINT );
 
-        aSvg = ::rtl::OUString( "m 0 0 h6 v10 h-6z" );
+        aSvg = "m 0 0 h6 v10 h-6z" ;
 
         aPoly.clear();
         basegfx::tools::importFromSvgD( aPoly, aSvg );

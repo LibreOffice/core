@@ -1499,6 +1499,8 @@ sal_Bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMa
     itr = aMark.begin();
     for (; itr != itrEnd && nTabCount; ++itr)
     {
+        pDoc->InitializeNoteCaptions(*itr);
+
         i = *itr;
         if( pDoc->HasAttrib( nMergeTestStartX, nMergeTestStartY, i, nMergeTestEndX, nMergeTestEndY, i, HASATTR_MERGED | HASATTR_OVERLAPPED ) )
         {
@@ -1721,6 +1723,8 @@ sal_Bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMa
         for (; itr != itrEnd && *itr < nTabCount; ++itr)
         {
             i = *itr;
+            pDoc->SetDrawPageSize(i);
+
             if (bNeedRefresh)
                 pDoc->ExtendMerge( nMergeTestStartX, nMergeTestStartY, nMergeTestEndX, nMergeTestEndY, i, sal_True );
             else
@@ -1904,6 +1908,8 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
     itr = aMark.begin();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
+        pDoc->InitializeNoteCaptions(*itr);
+
         SCTAB i = *itr;
         if ( pDoc->HasAttrib( nUndoStartX, nUndoStartY, i, nMergeTestEndX, nMergeTestEndY, i, HASATTR_MERGED | HASATTR_OVERLAPPED ))
         {
@@ -2227,6 +2233,8 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
     itr = aMark.begin(), itrEnd = aMark.end();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
+        pDoc->SetDrawPageSize(*itr);
+
         if ( eCmd == DEL_DELCOLS || eCmd == DEL_DELROWS )
             pDoc->UpdatePageBreaks( *itr );
 
@@ -2643,9 +2651,11 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const rtl::OUString& sModul
     uno::Reference< container::XNameContainer > xLib;
     if( xLibContainer.is() )
     {
-        String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-        if ( rDocSh.GetBasicManager() && rDocSh.GetBasicManager()->GetName().Len() )
+        String aLibName( "Standard" );
+        if ( rDocSh.GetBasicManager() && !rDocSh.GetBasicManager()->GetName().isEmpty() )
+        {
             aLibName = rDocSh.GetBasicManager()->GetName();
+        }
         uno::Any aLibAny = xLibContainer->getByName( aLibName );
         aLibAny >>= xLib;
     }
@@ -2689,9 +2699,11 @@ void VBA_DeleteModule( ScDocShell& rDocSh, const rtl::OUString& sModuleName )
     uno::Reference< container::XNameContainer > xLib;
     if( xLibContainer.is() )
     {
-        String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-        if ( rDocSh.GetBasicManager() && rDocSh.GetBasicManager()->GetName().Len() )
+        String aLibName( "Standard" );
+        if ( rDocSh.GetBasicManager() && !rDocSh.GetBasicManager()->GetName().isEmpty() )
+        {
             aLibName = rDocSh.GetBasicManager()->GetName();
+        }
         uno::Any aLibAny = xLibContainer->getByName( aLibName );
         aLibAny >>= xLib;
     }

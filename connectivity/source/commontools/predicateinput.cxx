@@ -39,12 +39,12 @@ namespace dbtools
 //.........................................................................
 
     using ::com::sun::star::sdbc::XConnection;
-    using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::util::NumberFormatter;
     using ::com::sun::star::util::XNumberFormatter;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::lang::Locale;
@@ -100,19 +100,18 @@ namespace dbtools
 
     //---------------------------------------------------------------------
     OPredicateInputController::OPredicateInputController(
-        const Reference< XMultiServiceFactory >& _rxORB, const Reference< XConnection >& _rxConnection, const IParseContext* _pParseContext )
-        :m_xORB( _rxORB )
-        ,m_xConnection( _rxConnection )
-        ,m_aParser( m_xORB, _pParseContext )
+        const Reference< XComponentContext >& rxContext, const Reference< XConnection >& _rxConnection, const IParseContext* _pParseContext )
+        : m_xConnection( _rxConnection )
+        ,m_aParser( rxContext, _pParseContext )
     {
         try
         {
             // create a number formatter / number formats supplier pair
-            OSL_ENSURE( m_xORB.is(), "OPredicateInputController::OPredicateInputController: need a service factory!" );
-            if ( m_xORB.is() )
+            OSL_ENSURE( rxContext.is(), "OPredicateInputController::OPredicateInputController: need a service factory!" );
+            if ( rxContext.is() )
             {
                 m_xFormatter = Reference< XNumberFormatter >(
-                    NumberFormatter::create(comphelper::getComponentContext(m_xORB)),
+                    NumberFormatter::create(rxContext),
                     UNO_QUERY_THROW
                 );
             }
@@ -124,9 +123,9 @@ namespace dbtools
                 m_xFormatter->attachNumberFormatsSupplier( xNumberFormats );
 
             // create the locale data
-            if ( m_xORB.is() )
+            if ( rxContext.is() )
             {
-                m_xLocaleData = LocaleData::create( comphelper::getComponentContext(m_xORB) );
+                m_xLocaleData = LocaleData::create( rxContext );
             }
         }
         catch( const Exception& )
@@ -374,7 +373,10 @@ namespace dbtools
                                                                 nType,
                                                                 sal_False,
                                                                 sal_False,
-                                                                xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
+                                                                xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
+                                                                ::rtl::OUString(),
+                                                                ::rtl::OUString(),
+                                                                ::rtl::OUString());
         Reference<XPropertySet> xColumn = pColumn;
         pColumn->setFunction(sal_True);
         pColumn->setRealName(sField);

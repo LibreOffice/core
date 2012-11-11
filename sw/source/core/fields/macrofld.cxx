@@ -32,7 +32,7 @@
 #include <docufld.hxx>
 #include <unofldmid.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
 
@@ -235,23 +235,18 @@ void SwMacroField::CreateMacroString(
 
 sal_Bool SwMacroField::isScriptURL( const String& str )
 {
-    uno::Reference< lang::XMultiServiceFactory > xSMgr =
-        ::comphelper::getProcessServiceFactory();
+    uno::Reference< uno::XComponentContext > xContext =
+        ::comphelper::getProcessComponentContext();
 
     uno::Reference< uri::XUriReferenceFactory >
-        xFactory( xSMgr->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.uri.UriReferenceFactory")) ), uno::UNO_QUERY );
+        xFactory = uri::UriReferenceFactory::create( xContext );
 
-    if ( xFactory.is() )
+    uno::Reference< uri::XVndSunStarScriptUrl >
+        xUrl( xFactory->parse( str ), uno::UNO_QUERY );
+
+    if ( xUrl.is() )
     {
-        uno::Reference< uri::XVndSunStarScriptUrl >
-            xUrl( xFactory->parse( str ), uno::UNO_QUERY );
-
-        if ( xUrl.is() )
-        {
-            return sal_True;
-        }
+        return sal_True;
     }
     return sal_False;
 }

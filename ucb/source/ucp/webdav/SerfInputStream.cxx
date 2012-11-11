@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
 #include "SerfInputStream.hxx"
-#include <rtl/memory.h>
+#include <string.h>
 
 using namespace cppu;
 using namespace rtl;
@@ -54,7 +50,7 @@ SerfInputStream::~SerfInputStream( void )
 void SerfInputStream::AddToStream( const char * inBuf, sal_Int32 inLen )
 {
     mInputBuffer.realloc( sal::static_int_cast<sal_Int32>(mLen) + inLen );
-    rtl_copyMemory( mInputBuffer.getArray() + mLen, inBuf, inLen );
+    memcpy( mInputBuffer.getArray() + mLen, inBuf, inLen );
     mLen += inLen;
 }
 
@@ -91,7 +87,7 @@ sal_Int32 SAL_CALL SerfInputStream::readBytes(
     aData.realloc( theBytes2Read );
 
     // Write the data
-    rtl_copyMemory(
+    memcpy(
         aData.getArray(), mInputBuffer.getConstArray() + mPos, theBytes2Read );
 
     // Update our stream position for next time

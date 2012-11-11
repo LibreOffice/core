@@ -136,7 +136,7 @@ namespace svxform
         virtual void            StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
         void                    DeleteAndClear();
-        void                    RemoveEntry( SvLBoxEntry* _pEntry );
+        void                    RemoveEntry( SvTreeListEntry* _pEntry );
     };
 
     //========================================================================
@@ -163,12 +163,12 @@ namespace svxform
         DECL_LINK(TbxSelectHdl, void *);
         DECL_LINK(ItemSelectHdl, void *);
 
-        void                        AddChildren( SvLBoxEntry* _pParent,
+        void                        AddChildren( SvTreeListEntry* _pParent,
                                                  const ImageList& _rImgLst,
                                                  const XNode_ref& _xNode );
         bool                        DoToolBoxAction( sal_uInt16 _nToolBoxID );
-        SvLBoxEntry*                AddEntry( ItemNode* _pNewNode, bool _bIsElement );
-        SvLBoxEntry*                AddEntry( const XPropertySet_ref& _rPropSet );
+        SvTreeListEntry*                AddEntry( ItemNode* _pNewNode, bool _bIsElement );
+        SvTreeListEntry*                AddEntry( const XPropertySet_ref& _rPropSet );
         void                        EditEntry( const XPropertySet_ref& _rPropSet );
         bool                        RemoveEntry();
 
@@ -190,7 +190,7 @@ namespace svxform
         bool                        DoMenuAction( sal_uInt16 _nMenuID );
         void                        EnableMenuItems( Menu* _pMenu );
 
-        inline SvLBoxEntry*         GetSelectedItem() const { return m_aItemList.FirstSelected(); }
+        inline SvTreeListEntry*         GetSelectedItem() const { return m_aItemList.FirstSelected(); }
         inline const String&        GetInstanceName() const { return m_sInstanceName; }
         inline const String&        GetInstanceURL() const { return m_sInstanceURL; }
         inline bool                 GetLinkOnce() const { return m_bLinkOnce; }

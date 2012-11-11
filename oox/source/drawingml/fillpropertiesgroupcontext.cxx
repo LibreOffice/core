@@ -167,8 +167,8 @@ BlipContext::BlipContext( ContextHandler& rParent,
     else if( aAttribs.hasAttribute( R_TOKEN( link ) ) )
     {
         // external URL
-        OUString aRelId = aAttribs.getString( R_TOKEN( link ), OUString() );
-        OUString aTargetLink = getFilter().getAbsoluteUrl( getRelations().getExternalTargetFromRelId( aRelId ) );
+        // OUString aRelId = aAttribs.getString( R_TOKEN( link ), OUString() );
+        // OUString aTargetLink = getFilter().getAbsoluteUrl( getRelations().getExternalTargetFromRelId( aRelId ) );
         // TODO: load external picture
     }
 }

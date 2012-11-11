@@ -25,6 +25,7 @@
 #include "PresenterPaneContainer.hxx"
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
@@ -834,11 +835,7 @@ Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (
         if ( ! xFactory.is())
             return xViewWindow;
 
-        Reference<awt::XToolkit> xToolkit (
-            xFactory->createInstanceWithContext(
-                OUString("com.sun.star.awt.Toolkit"),
-                mxComponentContext),
-            UNO_QUERY_THROW);
+        Reference<awt::XToolkit2> xToolkit = awt::Toolkit::create(mxComponentContext);
         awt::WindowDescriptor aWindowDescriptor (
             awt::WindowClass_CONTAINER,
             OUString(),

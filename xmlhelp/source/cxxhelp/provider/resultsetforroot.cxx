@@ -39,14 +39,14 @@ using namespace com::sun::star::ucb;
 
 
 
-ResultSetForRoot::ResultSetForRoot( const uno::Reference< lang::XMultiServiceFactory >&  xMSF,
+ResultSetForRoot::ResultSetForRoot( const uno::Reference< uno::XComponentContext >&  rxContext,
                                     const uno::Reference< XContentProvider >&  xProvider,
                                     sal_Int32 nOpenMode,
                                     const uno::Sequence< beans::Property >& seq,
                                     const uno::Sequence< NumberedSortingInfo >& seqSort,
                                     URLParameter& aURLParameter,
                                     Databases* pDatabases )
-    : ResultSetBase( xMSF,xProvider,nOpenMode,seq,seqSort ),
+    : ResultSetBase( rxContext, xProvider,nOpenMode,seq,seqSort ),
       m_aURLParameter( aURLParameter ),
       m_pDatabases( pDatabases )
 {

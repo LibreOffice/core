@@ -599,7 +599,7 @@ sal_Bool Content::exchangeIdentity( const uno::Reference< ucb::XContentIdentifie
                 0, aOldURL.getLength(), xNewId->getContentIdentifier() );
 
             uno::Reference< ucb::XContentIdentifier > xNewChildId
-                = new ::ucbhelper::ContentIdentifier( m_xSMgr, aNewChildURL );
+                = new ::ucbhelper::ContentIdentifier( aNewChildURL );
 
             if ( !xChild->exchangeIdentity( xNewChildId ) )
                 return sal_False;
@@ -730,7 +730,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 rtl::OUString aNewURL = getParentURL();
                 aNewURL += rtl::OUString( newName, strlen(newName), RTL_TEXTENCODING_UTF8 );
                 uno::Reference< ucb::XContentIdentifier > xNewId
-                    = new ::ucbhelper::ContentIdentifier( m_xSMgr, aNewURL );
+                    = new ::ucbhelper::ContentIdentifier( aNewURL );
 
                 if (!exchangeIdentity( xNewId ) )
                 {
@@ -1158,7 +1158,7 @@ uno::Reference< ucb::XContent >
     name = create_document ? "[New_Content]" : "[New_Collection]";
     aURL += rtl::OUString::createFromAscii( name );
 
-    uno::Reference< ucb::XContentIdentifier > xId(new ::ucbhelper::ContentIdentifier(m_xSMgr, aURL));
+    uno::Reference< ucb::XContentIdentifier > xId(new ::ucbhelper::ContentIdentifier(aURL));
 
     try
     {

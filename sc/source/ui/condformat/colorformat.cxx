@@ -36,39 +36,6 @@
 #include <svx/drawitem.hxx>
 #include <vcl/msgbox.hxx>
 
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDocument* pDoc, const ScAddress& rPos):
-    ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
-    maBtnOk( this, ScResId( BTN_OK ) ),
-    maBtnCancel( this, ScResId( BTN_CANCEL ) ),
-    maFlBarColors( this, ScResId( FL_BAR_COLORS ) ),
-    maFlAxes( this, ScResId( FL_AXIS ) ),
-    maFlValues( this, ScResId( FL_VALUES ) ),
-    maFtMin( this, ScResId( FT_MINIMUM ) ),
-    maFtMax( this, ScResId( FT_MAXIMUM ) ),
-    maFtPositive( this, ScResId( FT_POSITIVE ) ),
-    maFtNegative( this, ScResId( FT_NEGATIVE ) ),
-    maFtPosition( this, ScResId( FT_POSITION ) ),
-    maFtAxisColor( this, ScResId( FT_COLOR_AXIS ) ),
-    maLbPos( this, ScResId( LB_POS ) ),
-    maLbNeg( this, ScResId( LB_NEG ) ),
-    maLbAxisCol( this, ScResId( LB_COL_AXIS ) ),
-    maLbTypeMin( this, ScResId( LB_TYPE ) ),
-    maLbTypeMax( this, ScResId( LB_TYPE ) ),
-    maLbAxisPos( this, ScResId( LB_AXIS_POSITION ) ),
-    maEdMin( this, ScResId( ED_MIN ) ),
-    maEdMax( this, ScResId( ED_MAX ) ),
-    mpNumberFormatter( pDoc->GetFormatTable() ),
-    mpDoc(pDoc),
-    maPos(rPos)
-{
-    Init();
-    FreeResource();
-
-    maLbTypeMin.SelectEntryPos(0);
-    maLbTypeMax.SelectEntryPos(0);
-    maLbAxisPos.SelectEntryPos(0);
-}
-
 namespace {
 
 void SetType(const ScColorScaleEntry* pEntry, ListBox& rLstBox)

@@ -45,6 +45,7 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDTDHandler.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -622,7 +623,7 @@ static bool lcl_HasValidStream(ScDocument& rDoc)
 }
 
 sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServiceFactory>& xServiceFactory,
-    uno::Reference<frame::XModel>& xModel, uno::Reference<uno::XInterface>& xWriter,
+    uno::Reference<frame::XModel>& xModel, uno::Reference<xml::sax::XWriter>& xWriter,
     uno::Sequence<beans::PropertyValue>& aDescriptor, const rtl::OUString& sName,
     const rtl::OUString& sMediaType, const rtl::OUString& sComponentName,
     const sal_Bool bPlainText, uno::Sequence<uno::Any>& aArgs, ScMySharedData*& pSharedData)
@@ -667,8 +668,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( sName ) );
     }
 
-    uno::Reference<io::XActiveDataSource> xSrc( xWriter, uno::UNO_QUERY );
-    xSrc->setOutputStream( xOut );
+    xWriter->setOutputStream( xOut );
 
     uno::Reference<document::XFilter> xFilter(
         xServiceFactory->createInstanceWithArguments( sComponentName , aArgs ),
@@ -742,20 +742,15 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScXMLImportWrapper::Export" );
 
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(comphelper::getProcessServiceFactory());
+    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
     OSL_ENSURE( xServiceFactory.is(), "got no service manager" );
     if( !xServiceFactory.is() )
         return false;
 
-    uno::Reference<uno::XInterface> xWriter(xServiceFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" )) ));
-    OSL_ENSURE( xWriter.is(), "com.sun.star.xml.sax.Writer service missing" );
-    if(!xWriter.is())
-        return false;
+    uno::Reference<xml::sax::XWriter> xWriter = xml::sax::Writer::create(xContext);
 
     if ( !xStorage.is() && pMedium )
         xStorage = pMedium->GetOutputStorage();
-
-    uno::Reference<xml::sax::XDocumentHandler> xHandler( xWriter, uno::UNO_QUERY );
 
     OUString sFileName;
     OUString sTextMediaType(RTL_CONSTASCII_USTRINGPARAM("text/xml"));
@@ -841,7 +836,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             uno::Sequence<uno::Any> aMetaArgs(3);
             uno::Any* pMetaArgs = aMetaArgs.getArray();
             pMetaArgs[0] <<= xInfoSet;
-            pMetaArgs[1] <<= xHandler;
+            pMetaArgs[1] <<= xWriter;
             pMetaArgs[2] <<= xStatusIndicator;
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta export start" );
@@ -882,7 +877,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             pStylesArgs[0] <<= xInfoSet;
             pStylesArgs[1] <<= xGrfContainer;
             pStylesArgs[2] <<= xStatusIndicator;
-            pStylesArgs[3] <<= xHandler;
+            pStylesArgs[3] <<= xWriter;
             pStylesArgs[4] <<= xObjectResolver;
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles export start" );
@@ -906,7 +901,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             pDocArgs[0] <<= xInfoSet;
             pDocArgs[1] <<= xGrfContainer;
             pDocArgs[2] <<= xStatusIndicator;
-            pDocArgs[3] <<= xHandler;
+            pDocArgs[3] <<= xWriter;
             pDocArgs[4] <<= xObjectResolver;
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "content export start" );
@@ -934,7 +929,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             uno::Sequence<uno::Any> aSettingsArgs(3);
             uno::Any* pSettingsArgs = aSettingsArgs.getArray();
             pSettingsArgs[0] <<= xInfoSet;
-            pSettingsArgs[1] <<= xHandler;
+            pSettingsArgs[1] <<= xWriter;
             pSettingsArgs[2] <<= xStatusIndicator;
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings export start" );

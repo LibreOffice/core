@@ -47,7 +47,7 @@
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <basegfx/vector/b3dvector.hxx>
 #include <comphelper/processfactory.hxx>
@@ -810,21 +810,9 @@ OUString SvXMLUnitConverter::encodeStyleName(
                 {
                     if (m_pImpl->m_xServiceFactory.is())
                     {
-                        try
-                        {
-                            const_cast < SvXMLUnitConverter * >(this)
-                                ->m_pImpl->m_xCharClass =
-                                    Reference < XCharacterClassification >(
-                                m_pImpl->m_xServiceFactory->createInstance(
-                                    OUString( "com.sun.star.i18n.CharacterClassification_Unicode") ),
-                                UNO_QUERY );
-
-                            OSL_ENSURE( m_pImpl->m_xCharClass.is(),
-                    "can't instantiate character clossification component" );
-                        }
-                        catch( com::sun::star::uno::Exception& )
-                        {
-                        }
+                        const_cast < SvXMLUnitConverter * >(this)
+                            ->m_pImpl->m_xCharClass = CharacterClassification::create(
+                              comphelper::getComponentContext(m_pImpl->m_xServiceFactory) );
                     }
                 }
                 if (m_pImpl->m_xCharClass.is())

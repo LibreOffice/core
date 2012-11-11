@@ -69,7 +69,7 @@ public:
     SwClient   *GetAnchorCharFmtDep() const { return (SwClient*)&aAnchorCharFmtDep; }
 
     SwEndNoteInfo & operator=(const SwEndNoteInfo&);
-    sal_Bool operator==( const SwEndNoteInfo &rInf ) const;
+    bool operator==( const SwEndNoteInfo &rInf ) const;
 
     SwEndNoteInfo( SwTxtFmtColl *pTxtColl = 0);
     SwEndNoteInfo(const SwEndNoteInfo&);
@@ -107,7 +107,7 @@ public:
 
     SwFtnInfo& operator=(const SwFtnInfo&);
 
-    sal_Bool operator==( const SwFtnInfo &rInf ) const;
+    bool operator==( const SwFtnInfo &rInf ) const;
 
     SwFtnInfo(SwTxtFmtColl* pTxtColl = 0);
     SwFtnInfo(const SwFtnInfo&);

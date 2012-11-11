@@ -142,7 +142,7 @@ private:
     DECL_LINK(          ViewCertHdl, void* );
     DECL_LINK(          CertSelectHdl, void* );
     void                Clear( void );
-    SvLBoxEntry*        InsertCert( SvLBoxEntry* _pParent, const OUString& _rName,
+    SvTreeListEntry*        InsertCert( SvTreeListEntry* _pParent, const OUString& _rName,
                                     cssu::Reference< dcss::security::XCertificate > rxCert,
                                     bool bValid);
 

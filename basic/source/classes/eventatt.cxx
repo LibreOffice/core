@@ -98,13 +98,12 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
                     comphelper::getProcessComponentContext() );
                 Reference< provider::XScriptProviderFactory > xFactory(
                     xContext->getValueByName(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory")) ),
-                    UNO_QUERY );
+                        OUString("/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory")), UNO_QUERY );
                 OSL_ENSURE( xFactory.is(), "SFURL_firing_impl: failed to get master script provider factory" );
                 if ( xFactory.is() )
                 {
                     Any aCtx;
-                    aCtx <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
+                    aCtx <<= OUString("user");
                     xScriptProvider.set( xFactory->createScriptProvider( aCtx ), UNO_QUERY );
                 }
             }
@@ -201,13 +200,13 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
     if( aScriptEvent.ScriptType.compareToAscii( "StarBasic" ) == 0 )
     {
         // Full qualified name?
-        String aMacro( aScriptEvent.ScriptCode );
-        String aLibName;
-        String aLocation;
+        OUString aMacro( aScriptEvent.ScriptCode );
+        OUString aLibName;
+        OUString aLocation;
         if( comphelper::string::getTokenCount(aMacro, '.') == 3 )
         {
-            sal_uInt16 nLast = 0;
-            ::rtl::OUString aFullLibName = aMacro.GetToken( 0, '.', nLast );
+            sal_Int32 nLast = 0;
+            ::rtl::OUString aFullLibName = aMacro.getToken( (sal_Int32)0, (sal_Unicode)'.', nLast );
 
             sal_Int32 nIndex = aFullLibName.indexOf( (sal_Unicode)':' );
             if (nIndex >= 0)
@@ -216,8 +215,8 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
                 aLibName = aFullLibName.copy( nIndex + 1 );
             }
 
-            String aModul = aMacro.GetToken( 0, '.', nLast );
-            aMacro.Erase( 0, nLast );
+            OUString aModul = aMacro.getToken( (sal_Int32)0, (sal_Unicode)'.', nLast );
+            aMacro = aMacro.copy( nLast );
         }
 
         SbxObject* p = maBasicRef;
@@ -234,8 +233,8 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         }
         else if( pParent )
         {
-            String aName = p->GetName();
-            if( aName.EqualsAscii("Standard") )
+            OUString aName = p->GetName();
+            if( aName.equalsAscii("Standard") )
             {
                 // Own basic is doc standard lib
                 xDocStandardBasic = (StarBASIC*)p;
@@ -249,13 +248,18 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
 
         bool bSearchLib = true;
         StarBASICRef xLibSearchBasic;
-        if( aLocation.EqualsAscii("application") )
+        if( aLocation.equalsAscii("application") )
+        {
             xLibSearchBasic = xAppStandardBasic;
-        else if( aLocation.EqualsAscii("document") )
+        }
+        else if( aLocation.equalsAscii("document") )
+        {
             xLibSearchBasic = xDocStandardBasic;
+        }
         else
+        {
             bSearchLib = false;
-
+        }
         SbxVariable* pMethVar = NULL;
         // Be still tolerant and make default search if no search basic exists
         if( bSearchLib && xLibSearchBasic.Is() )
@@ -276,7 +280,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
                 }
                 if( pBasic )
                 {
-                    String aName = pBasic->GetName();
+                    OUString aName = pBasic->GetName();
                     if( aName == aLibName )
                     {
                         // Search only in the lib, not automatically in application basic
@@ -292,15 +296,16 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
 
         // Default: Be tolerant and search everywhere
         if( (!pMethVar || !pMethVar->ISA(SbMethod)) && maBasicRef.Is() )
+        {
             pMethVar = maBasicRef->FindQualified( aMacro, SbxCLASS_DONTCARE );
-
+        }
         SbMethod* pMeth = PTR_CAST(SbMethod,pMethVar);
         if( !pMeth )
+        {
             return;
-
+        }
         // Setup parameters
         SbxArrayRef xArray;
-        String aTmp;
         sal_Int32 nCnt = aScriptEvent.Arguments.getLength();
         if( nCnt )
         {
@@ -317,18 +322,21 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         // Call method
         SbxVariableRef xValue = pRet ? new SbxVariable : 0;
         if( xArray.Is() )
+        {
             pMeth->SetParameters( xArray );
+        }
         pMeth->Call( xValue );
         if( pRet )
+        {
             *pRet = sbxToUnoValue( xValue );
+        }
         pMeth->SetParameters( NULL );
     }
-        else // scripting framework script
-        {
-            //callBasic via scripting framework
-            SFURL_firing_impl( aScriptEvent, pRet, m_xModel );
-
-        }
+    else // scripting framework script
+    {
+        //callBasic via scripting framework
+        SFURL_firing_impl( aScriptEvent, pRet, m_xModel );
+    }
 }
 
 Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
@@ -453,17 +461,18 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     }
 
     // Create new uno dialog
-    Reference< XNameContainer > xDialogModel( xMSF->createInstance
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ),
-            UNO_QUERY );
+    Reference< XNameContainer > xDialogModel( xMSF->createInstance(
+                      ::rtl::OUString("com.sun.star.awt.UnoControlDialogModel")), UNO_QUERY );
     if( !xDialogModel.is() )
+    {
         return;
-
+    }
     Reference< XInputStreamProvider > xISP;
     aAnyISP >>= xISP;
     if( !xISP.is() )
+    {
         return;
-
+    }
     Reference< XComponentContext > xContext(
         comphelper::getComponentContext( xMSF ) );
 
@@ -477,15 +486,15 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
         bool bDecoration = true;
         try
         {
-            ::rtl::OUString aDecorationPropName(RTL_CONSTASCII_USTRINGPARAM("Decoration"));
+            OUString aDecorationPropName("Decoration");
             Any aDecorationAny = xDlgModPropSet->getPropertyValue( aDecorationPropName );
             aDecorationAny >>= bDecoration;
             if( !bDecoration )
             {
                 xDlgModPropSet->setPropertyValue( aDecorationPropName, makeAny( true ) );
 
-                ::rtl::OUString aTitlePropName(RTL_CONSTASCII_USTRINGPARAM("Title"));
-                xDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( ::rtl::OUString() ) );
+                OUString aTitlePropName("Title");
+                xDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( OUString() ) );
             }
         }
         catch(const UnknownPropertyException& )
@@ -501,15 +510,15 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     // If we found the dialog then it belongs to the Search basic
     if ( !pFoundBasic )
     {
-        Reference< frame::XDesktop > xDesktop( xMSF->createInstance
-    ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ),
-        UNO_QUERY );
+        Reference< frame::XDesktop > xDesktop( xMSF->createInstance(OUString("com.sun.star.frame.Desktop")), UNO_QUERY);
         Reference< container::XEnumeration > xModels;
         if ( xDesktop.is() )
         {
             Reference< container::XEnumerationAccess > xComponents( xDesktop->getComponents(), UNO_QUERY );
             if ( xComponents.is() )
+            {
                 xModels.set( xComponents->createEnumeration(), UNO_QUERY );
+            }
             if ( xModels.is() )
             {
                 while ( xModels->hasMoreElements() )
@@ -519,7 +528,9 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
                     {
                         BasicManager* pMgr = basic::BasicManagerRepository::getDocumentBasicManager( xNextModel );
                         if ( pMgr )
+                        {
                             aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pMgr->GetLib(0), pFoundBasic );
+                        }
                         if ( aDlgLibAny.hasValue() )
                         {
                             bDocDialog = true;
@@ -532,14 +543,20 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
         }
     }
     if ( pFoundBasic )
+    {
         bDocDialog = pFoundBasic->IsDocBasic();
+    }
     Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( GetSbData()->pInst->GetBasic(), xModel );
 
     Sequence< Any > aArgs( 4 );
     if( bDocDialog )
+    {
        aArgs[ 0 ] <<= xModel;
+    }
     else
+    {
        aArgs[ 0 ] <<= uno::Reference< uno::XInterface >();
+    }
     aArgs[ 1 ] <<= xInput;
     aArgs[ 2 ] = aDlgLibAny;
     aArgs[ 3 ] <<= xScriptListener;
@@ -547,8 +564,8 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     Reference< XControl > xCntrl;
     try
     {
-        Reference< XDialogProvider >  xDlgProv( xMSF->createInstanceWithArguments( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.scripting.DialogProvider" ) ), aArgs ), UNO_QUERY );
-        xCntrl.set( xDlgProv->createDialog( rtl::OUString() ), UNO_QUERY_THROW );
+        Reference< XDialogProvider >  xDlgProv( xMSF->createInstanceWithArguments(OUString("com.sun.star.comp.scripting.DialogProvider" ), aArgs ), UNO_QUERY );
+        xCntrl.set( xDlgProv->createDialog(OUString() ), UNO_QUERY_THROW );
        // Add dialog model to dispose vector
        Reference< XComponent > xDlgComponent( xCntrl->getModel(), UNO_QUERY );
        GetSbData()->pInst->getComponentVector().push_back( xDlgComponent );

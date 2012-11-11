@@ -192,7 +192,6 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
    xSettings->setPropertyValue("FloattableNomargins", uno::makeAny( sal_True ));
    xSettings->setPropertyValue( "ClippedPictures", uno::makeAny( sal_True ) );
    xSettings->setPropertyValue( "BackgroundParaOverDrawings", uno::makeAny( sal_True ) );
-   xSettings->setPropertyValue( "AddParaTableSpacing", uno::makeAny( sal_True ) );
 }
 
 void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )

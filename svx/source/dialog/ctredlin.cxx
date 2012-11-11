@@ -77,7 +77,7 @@ RedlinData::~RedlinData()
 //----------------------------------------------------------------------------
 
 SvxRedlinEntry::SvxRedlinEntry()
-    :SvLBoxEntry()
+    :SvTreeListEntry()
 {
 }
 
@@ -94,7 +94,7 @@ SvxRedlinEntry::~SvxRedlinEntry()
 
 DBG_NAME(SvLBoxColorString);
 
-SvLBoxColorString::SvLBoxColorString( SvLBoxEntry*pEntry,sal_uInt16 nFlags,const XubString& rStr,
+SvLBoxColorString::SvLBoxColorString( SvTreeListEntry*pEntry,sal_uInt16 nFlags,const XubString& rStr,
                                     const Color& rCol)
 
 : SvLBoxString( pEntry, nFlags, rStr )
@@ -122,7 +122,7 @@ SvLBoxItem* SvLBoxColorString::Create() const
 }
 
 void SvLBoxColorString::Paint( const Point& rPos, SvTreeListBox& rDev,
-                             sal_uInt16 nFlags, SvLBoxEntry* pEntry )
+                             sal_uInt16 nFlags, SvTreeListEntry* pEntry )
 /* [Description]
 
    Paint function of the SvLBoxColorString class. The relevant text with the
@@ -166,7 +166,7 @@ SvxRedlinTable::~SvxRedlinTable()
         delete pCommentSearcher;
 }
 
-StringCompare SvxRedlinTable::ColCompare(SvLBoxEntry* pLeft,SvLBoxEntry* pRight)
+StringCompare SvxRedlinTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRight)
 {
     StringCompare eCompare=COMPARE_EQUAL;
 
@@ -387,8 +387,8 @@ sal_Bool SvxRedlinTable::IsValidComment(const String* pCommentStr)
     return nTheFlag;
 }
 
-SvLBoxEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserData,
-                                SvLBoxEntry* pParent,sal_uIntPtr nPos)
+SvTreeListEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserData,
+                                SvTreeListEntry* pParent,sal_uIntPtr nPos)
 {
     aEntryColor=GetTextColor();
     if(pUserData!=NULL)
@@ -414,8 +414,8 @@ SvLBoxEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserDat
 
 }
 
-SvLBoxEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserData,const Color& aColor,
-                                SvLBoxEntry* pParent,sal_uIntPtr nPos)
+SvTreeListEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserData,const Color& aColor,
+                                SvTreeListEntry* pParent,sal_uIntPtr nPos)
 {
     aEntryColor=aColor;
 
@@ -435,13 +435,13 @@ SvLBoxEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserDat
     return SvxSimpleTable::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
 }
 
-SvLBoxEntry* SvxRedlinTable::CreateEntry() const
+SvTreeListEntry* SvxRedlinTable::CreateEntry() const
 {
     return new SvxRedlinEntry;
 }
 
-void SvxRedlinTable::InitEntry( SvLBoxEntry* pEntry, const XubString& rStr,
-    const Image& rColl, const Image& rExp, SvLBoxButtonKind eButtonKind )
+void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
+    const Image& rColl, const Image& rExp, SvLBoxButtonKind eButtonKind)
 {
     SvLBoxButton* pButton;
     SvLBoxString* pString;
@@ -462,9 +462,9 @@ void SvxRedlinTable::InitEntry( SvLBoxEntry* pEntry, const XubString& rStr,
 
     XubString aToken;
 
-    xub_Unicode* pCurToken = (xub_Unicode*)aCurEntry.GetBuffer();
+    sal_Unicode* pCurToken = (sal_Unicode*)aCurEntry.GetBuffer();
     sal_uInt16 nCurTokenLen;
-    xub_Unicode* pNextToken = (xub_Unicode*)GetToken( pCurToken, nCurTokenLen );
+    sal_Unicode* pNextToken = (sal_Unicode*)GetToken( pCurToken, nCurTokenLen );
     sal_uInt16 nCount = TabCount(); nCount--;
 
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
@@ -479,7 +479,7 @@ void SvxRedlinTable::InitEntry( SvLBoxEntry* pEntry, const XubString& rStr,
 
         pCurToken = pNextToken;
         if( pCurToken )
-            pNextToken = (xub_Unicode*)GetToken( pCurToken, nCurTokenLen );
+            pNextToken = (sal_Unicode*)GetToken( pCurToken, nCurTokenLen );
         else
             nCurTokenLen = 0;
     }

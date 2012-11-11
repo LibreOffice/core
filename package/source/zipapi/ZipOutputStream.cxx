@@ -40,9 +40,9 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 /** This class is used to write Zip files
  */
-ZipOutputStream::ZipOutputStream( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+ZipOutputStream::ZipOutputStream( const uno::Reference< uno::XComponentContext >& rxContext,
                                   const uno::Reference < XOutputStream > &xOStream )
-: m_xFactory( xFactory )
+: m_xContext( rxContext )
 , xStream(xOStream)
 , m_aDeflateBuffer(n_ConstBufferSize)
 , aDeflater(DEFAULT_COMPRESSION, sal_True)
@@ -96,8 +96,8 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
     {
         bEncryptCurrentEntry = sal_True;
 
-        m_xCipherContext = ZipFile::StaticGetCipher( m_xFactory, pStream->GetEncryptionData(), true );
-        m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum( m_xFactory, pStream->GetEncryptionData() );
+        m_xCipherContext = ZipFile::StaticGetCipher( m_xContext, pStream->GetEncryptionData(), true );
+        m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum( m_xContext, pStream->GetEncryptionData() );
         mnDigested = 0;
         rEntry.nFlag |= 1 << 4;
         m_pCurrentStream = pStream;

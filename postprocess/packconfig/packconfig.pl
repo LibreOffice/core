@@ -27,16 +27,16 @@ use strict;
 use Getopt::Long;
 use File::Find;
 use File::Basename;
+use File::Spec;
 use Archive::Zip qw(:ERROR_CODES :CONSTANTS);
 
 #### globals ####
 
-my $out_file;                # path to output archive
-my $tmp_out_file;            # path to temporary output file
+my $out_path;                # path to output archives in
 my $files_path;              # path to look for desired files
 my $verbose;                 # be verbose
 my $extra_verbose;           # be extra verbose
-my $do_rebuild = 0;          # is rebuilding zipfile required?
+my $current_lang;            # big fat global because File::Find is a pig
 
 #### script id #####
 
@@ -45,22 +45,51 @@ my $do_rebuild = 0;          # is rebuilding zipfile required?
 #### main #####
 
 parse_options();
-my %files_hash;
-my $file_ref = get_files();
 
-$do_rebuild = is_file_newer(\%files_hash) if $do_rebuild == 0;
-
-if ( $do_rebuild == 1 ) {
-    create_zip_archive(\%files_hash);
-    replace_file($tmp_out_file, $out_file);
-    print_message("packing  $out_file finished.");
-} else {
-    print_message("$out_file up to date. nothing to do.");
+#pack the .ui translations
+my @langs = split(/\s+/, $ENV{WITH_LANG});
+foreach (@langs) {
+    next if ($_ eq "en-US");
+    my %files_hash;
+    my $file_ref = get_lang_files(\%files_hash, $_);
+    my $out_file="$out_path"."uiconfig_".$_.".zip";
+    packzip(\%files_hash, $out_file);
 }
+
+#pack the core files
+my %files_hash;
+my $file_ref = get_core_files(\%files_hash);
+my $out_file="$out_path"."uiconfig.zip";
+packzip(\%files_hash, $out_file);
 
 exit(0);
 
 #### subroutines ####
+
+sub packzip
+{
+    my $file_hash_ref = shift;
+    my $output_file = shift;
+
+    # Check if output_file can be written.
+    my $out_dir = dirname($output_file);
+    print_error("no such directory: '$out_dir'", 2) if ! -d $out_dir;
+    print_error("can't search directory: '$out_dir'", 2) if ! -x $out_dir;
+    print_error("directory is not writable: '$out_dir'", 2) if ! -w $out_dir;
+
+    # is rebuilding zipfile required?
+    my $do_rebuild = is_file_newer($file_hash_ref, $output_file);
+
+    if ( $do_rebuild == 1 ) {
+        #temporary intermediate output file
+        my $tmp_out_file="$output_file"."$$".$ENV{INPATH};
+        create_zip_archive($file_hash_ref, $tmp_out_file);
+        replace_file($tmp_out_file, $output_file);
+        print_message("packing  $output_file finished.");
+    } else {
+        print_message("$output_file up to date. nothing to do.");
+    }
+}
 
 sub parse_options
 {
@@ -68,27 +97,17 @@ sub parse_options
     my $p = Getopt::Long::Parser->new();
     my $success =$p->getoptions(
                              '-h' => \$opt_help,
-                             '-o=s' => \$out_file,
+                             '-o=s' => \$out_path,
                              '-i=s' => \$files_path,
                              '-v'   => \$verbose,
                              '-vv'  => \$extra_verbose
                             );
 
-    if ( $opt_help || !$success || !$out_file || !$files_path )
+    if ( $opt_help || !$success || !$out_path || !$files_path )
     {
         usage();
         exit(1);
     }
-
-    #define intermediate output file
-    $tmp_out_file="$out_file"."$$".$ENV{INPATH};
-    # Sanity checks.
-
-    # Check if out_file can be written.
-    my $out_dir = dirname($out_file);
-    print_error("no such directory: '$out_dir'", 2) if ! -d $out_dir;
-    print_error("can't search directory: '$out_dir'", 2) if ! -x $out_dir;
-    print_error("directory is not writable: '$out_dir'", 2) if ! -w $out_dir;
 
     # Check paths.
     foreach ($files_path) {
@@ -97,30 +116,57 @@ sub parse_options
     }
 }
 
-sub get_files
+sub get_core_files
 {
     local @main::file_list;
 
-    find_files(\%files_hash);
+    my $files_hash_ref = shift;
+    find_core_files($files_hash_ref);
 
-    if ( !keys %files_hash ) {
-        print_error("can't find any image lists in '$files_path'", 3);
+    if ( !keys %$files_hash_ref ) {
+        print_error("can't find any config files in '$files_path'", 3);
     }
 
     return wantarray ? @main::file_list : \@main::file_list;
 }
 
-sub find_files
+sub find_core_files
 {
     my $files_hash_ref = shift;
-    find({ wanted => \&wanted, no_chdir => 0 }, "$files_path");
+    find({ wanted => \&wanted_core, no_chdir => 0 }, "$files_path");
     foreach ( @main::file_list ) {
         /^\Q$files_path\E\/(.*)$/o;
         $files_hash_ref->{$1}++;
     }
 }
 
-sub wanted
+sub get_lang_files
+{
+    local @main::file_list;
+
+    my $files_hash_ref = shift;
+    my $lang = shift;
+    find_lang_files($files_hash_ref, $lang);
+
+    if ( !keys %$files_hash_ref ) {
+        print_error("can't find any config files in '$files_path'", 3);
+    }
+
+    return wantarray ? @main::file_list : \@main::file_list;
+}
+
+sub find_lang_files
+{
+    my $files_hash_ref = shift;
+    $current_lang = shift;
+    find({ wanted => \&wanted_lang, no_chdir => 0 }, "$files_path");
+    foreach ( @main::file_list ) {
+        /^\Q$files_path\E\/(.*)$/o;
+        $files_hash_ref->{$1}++;
+    }
+}
+
+sub wanted_core
 {
     my $file = $_;
 
@@ -129,15 +175,27 @@ sub wanted
     }
 }
 
+sub wanted_lang
+{
+    my $file = $_;
+
+    my @dirs = File::Spec->splitdir($File::Find::dir);
+
+    if ($dirs[-1] eq $current_lang) {
+        push @main::file_list, $File::Find::name;
+    }
+}
+
 sub is_file_newer
 {
     my $test_hash_ref = shift;
+    my $zip_file = shift;
     my $reference_stamp = 0;
 
-    print_message("checking timestamps ...") if $verbose;
-    if ( -e $out_file ) {
-        $reference_stamp = (stat($out_file))[9];
-        print_message("found $out_file with $reference_stamp ...") if $verbose;
+    print_message("checking timestamps for $zip_file ...") if $verbose;
+    if ( -e $zip_file ) {
+        $reference_stamp = (stat($zip_file))[9];
+        print_message("found $zip_file with $reference_stamp ...") if $verbose;
     }
     return 1 if $reference_stamp == 0;
 
@@ -155,6 +213,7 @@ sub is_file_newer
 sub create_zip_archive
 {
     my $zip_hash_ref = shift;
+    my $zip_output_file = shift;
     print_message("creating config archive ...") if $verbose;
     my $zip = Archive::Zip->new();
 
@@ -173,9 +232,9 @@ sub create_zip_archive
         print_error("can't add file '$path' to config zip archive: $!", 5);
     }
     }
-    my $status = $zip->writeToFileNamed($tmp_out_file);
+    my $status = $zip->writeToFileNamed($zip_output_file);
     if ( $status != AZ_OK ) {
-        print_error("write image zip archive '$tmp_out_file' failed. Reason: $status", 6);
+        print_error("write image zip archive '$zip_output_file' failed. Reason: $status", 6);
     }
     return;
 }
@@ -231,11 +290,11 @@ sub replace_file
 
 sub usage
 {
-    print STDERR "Usage: packimages.pl [-h] -o out_file -i file_path\n";
-    print STDERR "Creates archive of images\n";
+    print STDERR "Usage: packconfig.pl [-h] -o out_file -i file_path\n";
+    print STDERR "Creates archive of userinterface config files\n";
     print STDERR "Options:\n";
     print STDERR "    -h                 print this help\n";
-    print STDERR "    -o out_file        path to output archive\n";
+    print STDERR "    -o out_path        path to output archive\n";
     print STDERR "    -i file_path       path to directory containing the config files\n";
     print STDERR "    -v                 verbose\n";
     print STDERR "    -vv                very verbose\n";

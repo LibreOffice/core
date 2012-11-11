@@ -32,15 +32,12 @@
 #define  STR_ALPHA              (RC_INDEX_BEGIN + 7)
 #define  STR_LEVEL              (RC_INDEX_BEGIN + 8)
 
-#define  DLG_INSAUTHMARK        (RC_INDEX_BEGIN + 9)
 #define  DLG_CREATE_AUTH_ENTRY  (RC_INDEX_BEGIN + 10)
 #define  DLG_EDIT_IDXMARK       (RC_INDEX_BEGIN + 11)
 #define  DLG_EDIT_AUTHMARK      (RC_INDEX_BEGIN + 12)
 
 #define  STR_IDXMRK_INSERT      (RC_INDEX_BEGIN + 13)
 #define  STR_IDXMRK_EDIT        (RC_INDEX_BEGIN + 14)
-#define  STR_AUTHMRK_EDIT       (RC_INDEX_BEGIN + 15)
-#define  STR_AUTHMRK_INSERT     (RC_INDEX_BEGIN + 16)
 
 #define  DLG_NEW_USER_IDX       (RC_INDEX_BEGIN + 17)
 

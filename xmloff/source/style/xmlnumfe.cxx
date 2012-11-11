@@ -245,7 +245,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 
     if ( pFormatter )
     {
-        pCharClass = new CharClass( pFormatter->GetServiceManager(),
+        pCharClass = new CharClass( comphelper::getComponentContext(pFormatter->GetServiceManager()),
             pFormatter->GetLocale() );
         pLocaleData = new LocaleDataWrapper( pFormatter->GetServiceManager(),
             pFormatter->GetLocale() );
@@ -254,7 +254,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     {
         lang::Locale aLocale( MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage() ) );
 
-        pCharClass = new CharClass( rExport.getServiceFactory(), aLocale );
+        pCharClass = new CharClass( comphelper::getComponentContext(rExport.getServiceFactory()), aLocale );
         pLocaleData = new LocaleDataWrapper( rExport.getServiceFactory(), aLocale );
     }
 
@@ -280,7 +280,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 
     if ( pFormatter )
     {
-        pCharClass = new CharClass( pFormatter->GetServiceManager(),
+        pCharClass = new CharClass( comphelper::getComponentContext(pFormatter->GetServiceManager()),
             pFormatter->GetLocale() );
         pLocaleData = new LocaleDataWrapper( pFormatter->GetServiceManager(),
             pFormatter->GetLocale() );
@@ -289,7 +289,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     {
         lang::Locale aLocale( MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage() ) );
 
-        pCharClass = new CharClass( rExport.getServiceFactory(), aLocale );
+        pCharClass = new CharClass( comphelper::getComponentContext(rExport.getServiceFactory()), aLocale );
         pLocaleData = new LocaleDataWrapper( rExport.getServiceFactory(), aLocale );
     }
 
@@ -1396,12 +1396,12 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                     //  string for decimal replacement
                                     //  has to be taken from nPrecision
                                     //  (positive number even for automatic decimals)
-                                    String sDashStr;
-                                    if ( bDecDashes && nPrecision > 0 )
-                                        sDashStr.Fill( nPrecision, '-' );
+                                    OUStringBuffer sDashStr;
+                                    if (bDecDashes && nPrecision > 0)
+                                        comphelper::string::padToLength(sDashStr, nPrecision, '-');
 
-                                    WriteNumberElement_Impl( nDecimals, nInteger, sDashStr, bVarDecimals,
-                                                        bThousand, nTrailingThousands, aEmbeddedEntries );
+                                    WriteNumberElement_Impl(nDecimals, nInteger, sDashStr.makeStringAndClear(),
+                                        bVarDecimals, bThousand, nTrailingThousands, aEmbeddedEntries);
                                     bAnyContent = sal_True;
                                 }
                                 break;

@@ -75,7 +75,7 @@
  			     int __long_only);
 --- misc/glibc-2.1.3/posix/makefile.mk	Mon Mar 31 09:43:50 2008
 +++ misc/build/glibc-2.1.3/posix/makefile.mk	Mon Mar 31 09:43:38 2008
-@@ -1 +1,70 @@
+@@ -1 +1,71 @@
 -dummy
 +#*************************************************************************
 +#
@@ -113,6 +113,7 @@
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 +
 +SOLARINC+=-I.. 
++UWINAPILIB=
 +
 +# --- Settings -----------------------------------------------------
 +

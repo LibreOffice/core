@@ -102,9 +102,9 @@ class DocObjectWrapper : public DocObjectWrapper_BASE
     Reference< XTypeProvider > m_xAggregateTypeProv;
     Sequence< Type >           m_Types;
     SbModule*                m_pMod;
-    SbMethodRef getMethod( const rtl::OUString& aName ) throw (RuntimeException);
-    SbPropertyRef getProperty( const rtl::OUString& aName ) throw (RuntimeException);
-    String mName; // for debugging
+    SbMethodRef getMethod( const OUString& aName ) throw (RuntimeException);
+    SbPropertyRef getProperty( const OUString& aName ) throw (RuntimeException);
+    OUString mName; // for debugging
 
 public:
     DocObjectWrapper( SbModule* pMod );
@@ -122,11 +122,11 @@ public:
 
     virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  ) throw (RuntimeException);
 
-    virtual Any SAL_CALL invoke( const ::rtl::OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException);
-    virtual void SAL_CALL setValue( const ::rtl::OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException);
-    virtual Any SAL_CALL getValue( const ::rtl::OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasMethod( const ::rtl::OUString& aName ) throw (RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasProperty( const ::rtl::OUString& aName ) throw (RuntimeException);
+    virtual Any SAL_CALL invoke( const OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException);
+    virtual void SAL_CALL setValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException);
+    virtual Any SAL_CALL getValue( const OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasMethod( const OUString& aName ) throw (RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasProperty( const OUString& aName ) throw (RuntimeException);
     virtual  Any SAL_CALL queryInterface( const Type& aType ) throw ( RuntimeException );
 
     virtual Sequence< Type > SAL_CALL getTypes() throw ( RuntimeException );
@@ -160,7 +160,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
                         comphelper::getProcessComponentContext() );
                     Reference< XMultiComponentFactory > xMFac(
                         xCtx->getServiceManager() );
-                    Reference< XProxyFactory > xProxyFac( xMFac->createInstanceWithContext( rtl::OUString( "com.sun.star.reflection.ProxyFactory"  ), xCtx  ), UNO_QUERY_THROW );
+                    Reference< XProxyFactory > xProxyFac( xMFac->createInstanceWithContext( OUString( "com.sun.star.reflection.ProxyFactory"  ), xCtx  ), UNO_QUERY_THROW );
                     m_xAggProxy = xProxyFac->createProxy( xIf );
                 }
                 catch(const Exception& )
@@ -202,7 +202,9 @@ DocObjectWrapper::release() throw ()
         delete this;
     }
     else
+    {
         OSL_TRACE("DocObjectWrapper::release(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
+    }
 }
 
 DocObjectWrapper::~DocObjectWrapper()
@@ -216,15 +218,21 @@ Sequence< Type > SAL_CALL DocObjectWrapper::getTypes()
     {
         Sequence< Type > sTypes;
         if ( m_xAggregateTypeProv.is() )
+        {
             sTypes = m_xAggregateTypeProv->getTypes();
+        }
         m_Types.realloc( sTypes.getLength() + 1 );
         Type* pPtr = m_Types.getArray();
         for ( int i=0; i<m_Types.getLength(); ++i, ++pPtr )
         {
             if ( i == 0 )
+            {
                 *pPtr = XInvocation::static_type( NULL );
+            }
             else
+            {
                 *pPtr = sTypes[ i - 1 ];
+            }
         }
     }
     return m_Types;
@@ -237,7 +245,7 @@ DocObjectWrapper::getIntrospection(  ) throw (RuntimeException)
 }
 
 Any SAL_CALL
-DocObjectWrapper::invoke( const ::rtl::OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException)
+DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException)
 {
     if ( m_xAggInv.is() &&  m_xAggInv->hasMethod( aFunctionName ) )
             return m_xAggInv->invoke( aFunctionName, aParams, aOutParamIndex, aOutParam );
@@ -261,7 +269,7 @@ DocObjectWrapper::invoke( const ::rtl::OUString& aFunctionName, const Sequence< 
         sal_Int32 nSbxCount = n - 1;
         if ( nParamsCount < nSbxCount - nSbxOptional )
         {
-            throw RuntimeException( ::rtl::OUString( "wrong number of parameters!"  ), Reference< XInterface >() );
+            throw RuntimeException( OUString( "wrong number of parameters!"  ), Reference< XInterface >() );
         }
     }
     // set parameters
@@ -331,7 +339,7 @@ DocObjectWrapper::invoke( const ::rtl::OUString& aFunctionName, const Sequence< 
 }
 
 void SAL_CALL
-DocObjectWrapper::setValue( const ::rtl::OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException)
+DocObjectWrapper::setValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException)
 {
     if ( m_xAggInv.is() &&  m_xAggInv->hasProperty( aPropertyName ) )
             return m_xAggInv->setValue( aPropertyName, aValue );
@@ -343,7 +351,7 @@ DocObjectWrapper::setValue( const ::rtl::OUString& aPropertyName, const Any& aVa
 }
 
 Any SAL_CALL
-DocObjectWrapper::getValue( const ::rtl::OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException)
+DocObjectWrapper::getValue( const OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException)
 {
     if ( m_xAggInv.is() &&  m_xAggInv->hasProperty( aPropertyName ) )
             return m_xAggInv->getValue( aPropertyName );
@@ -361,7 +369,7 @@ DocObjectWrapper::getValue( const ::rtl::OUString& aPropertyName ) throw (Unknow
 }
 
 ::sal_Bool SAL_CALL
-DocObjectWrapper::hasMethod( const ::rtl::OUString& aName ) throw (RuntimeException)
+DocObjectWrapper::hasMethod( const OUString& aName ) throw (RuntimeException)
 {
     if ( m_xAggInv.is() && m_xAggInv->hasMethod( aName ) )
         return sal_True;
@@ -369,7 +377,7 @@ DocObjectWrapper::hasMethod( const ::rtl::OUString& aName ) throw (RuntimeExcept
 }
 
 ::sal_Bool SAL_CALL
-DocObjectWrapper::hasProperty( const ::rtl::OUString& aName ) throw (RuntimeException)
+DocObjectWrapper::hasProperty( const OUString& aName ) throw (RuntimeException)
 {
     sal_Bool bRes = sal_False;
     if ( m_xAggInv.is() && m_xAggInv->hasProperty( aName ) )
@@ -389,7 +397,7 @@ Any SAL_CALL DocObjectWrapper::queryInterface( const Type& aType )
     return aRet;
 }
 
-SbMethodRef DocObjectWrapper::getMethod( const rtl::OUString& aName ) throw (RuntimeException)
+SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeException)
 {
     SbMethodRef pMethod = NULL;
     if ( m_pMod )
@@ -404,7 +412,7 @@ SbMethodRef DocObjectWrapper::getMethod( const rtl::OUString& aName ) throw (Run
     return pMethod;
 }
 
-SbPropertyRef DocObjectWrapper::getProperty( const rtl::OUString& aName ) throw (RuntimeException)
+SbPropertyRef DocObjectWrapper::getProperty( const OUString& aName ) throw (RuntimeException)
 {
     SbPropertyRef pProperty = NULL;
     if ( m_pMod )
@@ -446,7 +454,7 @@ uno::Reference< vba::XVBACompatibility > getVBACompatibility( const uno::Referen
     try
     {
         uno::Reference< beans::XPropertySet > xModelProps( rxModel, uno::UNO_QUERY_THROW );
-        xVBACompat.set( xModelProps->getPropertyValue( ::rtl::OUString( "BasicLibraries"  ) ), uno::UNO_QUERY );
+        xVBACompat.set( xModelProps->getPropertyValue( OUString( "BasicLibraries"  ) ), uno::UNO_QUERY );
     }
     catch(const uno::Exception& )
     {
@@ -476,7 +484,7 @@ public:
         uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
         if ( xFactory.is() )
     {
-            uno::Reference< frame::XDesktop > xDeskTop( xFactory->createInstance( rtl::OUString( "com.sun.star.frame.Desktop" ) ), uno::UNO_QUERY );
+            uno::Reference< frame::XDesktop > xDeskTop( xFactory->createInstance( OUString( "com.sun.star.frame.Desktop" ) ), uno::UNO_QUERY );
            if ( xDeskTop.is() )
                xDeskTop->terminate();
         }
@@ -493,8 +501,8 @@ IMPL_LINK( AsyncQuitHandler, OnAsyncQuit, void*, /*pNull*/ )
 // A Basic module has set EXTSEARCH, so that the elements, that the modul contains,
 // could be found from other module.
 
-SbModule::SbModule( const String& rName,  sal_Bool bVBACompat )
-         : SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("StarBASICModule") ) ),
+SbModule::SbModule( const OUString& rName,  sal_Bool bVBACompat )
+         : SbxObject( OUString("StarBASICModule") ),
            pImage( NULL ), pBreaks( NULL ), pClassData( NULL ), mbVBACompat( bVBACompat ),  pDocObject( NULL ), bIsProxyModule( false )
 {
     SetName( rName );
@@ -502,9 +510,11 @@ SbModule::SbModule( const String& rName,  sal_Bool bVBACompat )
     SetModuleType( script::ModuleType::NORMAL );
 
     // #i92642: Set name property to intitial name
-    SbxVariable* pNameProp = pProps->Find( String( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_PROPERTY );
+    SbxVariable* pNameProp = pProps->Find( OUString("Name"), SbxCLASS_PROPERTY );
     if( pNameProp != NULL )
+    {
         pNameProp->PutString( GetName() );
+    }
 }
 
 SbModule::~SbModule()
@@ -531,7 +541,7 @@ sal_Bool SbModule::IsCompiled() const
     return sal_Bool( pImage != 0 );
 }
 
-const SbxObject* SbModule::FindType( String aTypeName ) const
+const SbxObject* SbModule::FindType( OUString aTypeName ) const
 {
     return pImage ? pImage->FindType( aTypeName ) : NULL;
 }
@@ -566,12 +576,14 @@ void SbModule::StartDefinitions()
 
 // request/create method
 
-SbMethod* SbModule::GetMethod( const String& rName, SbxDataType t )
+SbMethod* SbModule::GetMethod( const OUString& rName, SbxDataType t )
 {
     SbxVariable* p = pMethods->Find( rName, SbxCLASS_METHOD );
     SbMethod* pMeth = p ? PTR_CAST(SbMethod,p) : NULL;
     if( p && !pMeth )
+    {
         pMethods->Remove( p );
+    }
     if( !pMeth )
     {
         pMeth = new SbMethod( rName, t, this );
@@ -588,18 +600,22 @@ SbMethod* SbModule::GetMethod( const String& rName, SbxDataType t )
     pMeth->SetType( t );
     pMeth->ResetFlag( SBX_WRITE );
     if( t != SbxVARIANT )
+    {
         pMeth->SetFlag( SBX_FIXED );
+    }
     return pMeth;
 }
 
 // request/create property
 
-SbProperty* SbModule::GetProperty( const String& rName, SbxDataType t )
+SbProperty* SbModule::GetProperty( const OUString& rName, SbxDataType t )
 {
     SbxVariable* p = pProps->Find( rName, SbxCLASS_PROPERTY );
     SbProperty* pProp = p ? PTR_CAST(SbProperty,p) : NULL;
     if( p && !pProp )
+    {
         pProps->Remove( p );
+    }
     if( !pProp )
     {
         pProp = new SbProperty( rName, t, this );
@@ -611,13 +627,14 @@ SbProperty* SbModule::GetProperty( const String& rName, SbxDataType t )
     return pProp;
 }
 
-SbProcedureProperty* SbModule::GetProcedureProperty
-    ( const String& rName, SbxDataType t )
+SbProcedureProperty* SbModule::GetProcedureProperty( const OUString& rName, SbxDataType t )
 {
     SbxVariable* p = pProps->Find( rName, SbxCLASS_PROPERTY );
     SbProcedureProperty* pProp = p ? PTR_CAST(SbProcedureProperty,p) : NULL;
     if( p && !pProp )
+    {
         pProps->Remove( p );
+    }
     if( !pProp )
     {
         pProp = new SbProcedureProperty( rName, t );
@@ -629,13 +646,14 @@ SbProcedureProperty* SbModule::GetProcedureProperty
     return pProp;
 }
 
-SbIfaceMapperMethod* SbModule::GetIfaceMapperMethod
-    ( const String& rName, SbMethod* pImplMeth )
+SbIfaceMapperMethod* SbModule::GetIfaceMapperMethod( const OUString& rName, SbMethod* pImplMeth )
 {
     SbxVariable* p = pMethods->Find( rName, SbxCLASS_METHOD );
     SbIfaceMapperMethod* pMapperMethod = p ? PTR_CAST(SbIfaceMapperMethod,p) : NULL;
     if( p && !pMapperMethod )
+    {
         pMethods->Remove( p );
+    }
     if( !pMapperMethod )
     {
         pMapperMethod = new SbIfaceMapperMethod( rName, pImplMeth );
@@ -686,12 +704,14 @@ void SbModule::Clear()
 }
 
 
-SbxVariable* SbModule::Find( const rtl::OUString& rName, SbxClassType t )
+SbxVariable* SbModule::Find( const OUString& rName, SbxClassType t )
 {
     // make sure a search in an uninstatiated class module will fail
     SbxVariable* pRes = SbxObject::Find( rName, t );
     if ( bIsProxyModule && !GetSbData()->bRunInit )
+    {
         return NULL;
+    }
     if( !pRes && pImage )
     {
         SbiInstance* pInst = GetSbData()->pInst;
@@ -707,14 +727,16 @@ SbxVariable* SbModule::Find( const rtl::OUString& rName, SbxClassType t )
                 if( pEnumObject )
                 {
                     bool bPrivate = pEnumObject->IsSet( SBX_PRIVATE );
-                    String aEnumName = pEnumObject->GetName();
+                    OUString aEnumName = pEnumObject->GetName();
 
                     pRes = new SbxVariable( SbxOBJECT );
                     pRes->SetName( aEnumName );
                     pRes->SetParent( this );
                     pRes->SetFlag( SBX_READ );
                     if( bPrivate )
+                    {
                         pRes->SetFlag( SBX_PRIVATE );
+                    }
                     pRes->PutObject( pEnumObject );
                 }
             }
@@ -723,14 +745,14 @@ SbxVariable* SbModule::Find( const rtl::OUString& rName, SbxClassType t )
     return pRes;
 }
 
-const ::rtl::OUString& SbModule::GetSource32() const
+const OUString& SbModule::GetSource32() const
 {
     return aOUSource;
 }
 
-const String& SbModule::GetSource() const
+const OUString& SbModule::GetSource() const
 {
-    static String aRetStr;
+    static OUString aRetStr;
     aRetStr = aOUSource;
     return aRetStr;
 }
@@ -757,8 +779,7 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
             if( pHint->GetId() == SBX_HINT_DATAWANTED )
             {
-                String aProcName;
-                aProcName.AppendAscii( "Property Get " );
+                OUString aProcName("Property Get ");
                 aProcName += pProcProperty->GetName();
 
                 SbxVariable* pMethVar = Find( aProcName, SbxCLASS_METHOD );
@@ -800,15 +821,13 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 {
                     pProcProperty->setSet( false );
 
-                    String aProcName;
-                    aProcName.AppendAscii( "Property Set " );
+                    OUString aProcName("Property Set ");
                     aProcName += pProcProperty->GetName();
                     pMethVar = Find( aProcName, SbxCLASS_METHOD );
                 }
                 if( !pMethVar ) // Let
                 {
-                    String aProcName;
-                    aProcName.AppendAscii( "Property Let " );
+                    OUString aProcName("Property Let " );
                     aProcName += pProcProperty->GetName();
                     pMethVar = Find( aProcName, SbxCLASS_METHOD );
                 }
@@ -837,8 +856,10 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             if( pHint->GetId() == SBX_HINT_DATAWANTED )
             {
                 if( pMeth->bInvalid && !Compile() )
+                {
                     // auto compile has not worked!
                     StarBASIC::Error( SbERR_BAD_PROP_VALUE );
+                }
                 else
                 {
                     // Call of a subprogram
@@ -857,11 +878,14 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
             sal_uIntPtr nId = pHint->GetId();
             if( (nId == SBX_HINT_DATAWANTED || nId == SBX_HINT_DATACHANGED) &&
-                pVar->GetName().EqualsIgnoreCaseAscii( "name" ) )
+                pVar->GetName().equalsIgnoreAsciiCase( "name" ) )
+            {
                     bForwardToSbxObject = false;
-
+            }
             if( bForwardToSbxObject )
+            {
                 SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+            }
         }
     }
 }
@@ -869,19 +893,19 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 // The setting of the source makes the image invalid
 // and scans the method definitions newly in
 
-void SbModule::SetSource( const String& r )
+void SbModule::SetSource( const OUString& r )
 {
     SetSource32( r );
 }
 
-void SbModule::SetSource32( const ::rtl::OUString& r )
+void SbModule::SetSource32( const OUString& r )
 {
     // Default basic mode to library container mode, but.. allow Option VBASupport 0/1 override
     SetVBACompat( getDefaultVBAMode( static_cast< StarBASIC*>( GetParent() ) ) );
     aOUSource = r;
     StartDefinitions();
     SbiTokenizer aTok( r );
-        aTok.SetCompatible( IsVBACompat() );
+    aTok.SetCompatible( IsVBACompat() );
     while( !aTok.IsEof() )
     {
         SbiToken eEndTok = NIL;
@@ -910,11 +934,13 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
                 {
                     eCurTok = aTok.Next();
                     if( eCurTok == COMPATIBLE )
+                    {
                         aTok.SetCompatible( true );
+                    }
                     else if ( ( eCurTok == VBASUPPORT ) && ( aTok.Next() == NUMBER ) )
                     {
-                            sal_Bool bIsVBA = ( aTok.GetDbl()== 1 );
-                            SetVBACompat( bIsVBA );
+                        sal_Bool bIsVBA = ( aTok.GetDbl()== 1 );
+                        SetVBACompat( bIsVBA );
                         aTok.SetCompatible( bIsVBA );
                     }
                 }
@@ -928,17 +954,21 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
             sal_uInt16 nLine1 = aTok.GetLine();
             if( aTok.Next() == SYMBOL )
             {
-                String aName_( aTok.GetSym() );
+                OUString aName_( aTok.GetSym() );
                 SbxDataType t = aTok.GetType();
                 if( t == SbxVARIANT && eEndTok == ENDSUB )
+                {
                     t = SbxVOID;
+                }
                 pMeth = GetMethod( aName_, t );
                 pMeth->nLine1 = pMeth->nLine2 = nLine1;
                 // The method is for a start VALID
                 pMeth->bInvalid = sal_False;
             }
             else
+            {
                 eEndTok = NIL;
+            }
         }
         // Skip up to END SUB/END FUNCTION
         if( eEndTok != NIL )
@@ -952,7 +982,9 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
                 }
             }
             if( aTok.IsEof() )
+            {
                 pMeth->nLine2 = aTok.GetLine();
+            }
         }
     }
     EndDefinitions( sal_True );
@@ -1001,29 +1033,33 @@ static void SendHint( SbxObject* pObj, sal_uIntPtr nId, SbMethod* p )
 void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
 {
     // delete the return value of CreateUnoService
-    static String aName( RTL_CONSTASCII_USTRINGPARAM("CreateUnoService") );
+    static OUString aName("CreateUnoService");
     SbxVariable* pVar = pBasic->GetRtl()->Find( aName, SbxCLASS_METHOD );
     if( pVar )
+    {
         pVar->SbxValue::Clear();
-
+    }
     // delete the return value of CreateUnoDialog
-    static String aName2( RTL_CONSTASCII_USTRINGPARAM("CreateUnoDialog") );
+    static OUString aName2("CreateUnoDialog");
     pVar = pBasic->GetRtl()->Find( aName2, SbxCLASS_METHOD );
     if( pVar )
+    {
         pVar->SbxValue::Clear();
-
+    }
     // delete the return value of CDec
-    static String aName3( RTL_CONSTASCII_USTRINGPARAM("CDec") );
+    static OUString aName3("CDec");
     pVar = pBasic->GetRtl()->Find( aName3, SbxCLASS_METHOD );
     if( pVar )
+    {
         pVar->SbxValue::Clear();
-
+    }
     // delete return value of CreateObject
-    static String aName4( RTL_CONSTASCII_USTRINGPARAM("CreateObject") );
+    static OUString aName4("CreateObject");
     pVar = pBasic->GetRtl()->Find( aName4, SbxCLASS_METHOD );
     if( pVar )
+    {
         pVar->SbxValue::Clear();
-
+    }
     // Go over all Sub-Basics
     SbxArray* pObjs = pBasic->GetObjects();
     sal_uInt16 nCount = pObjs->Count();
@@ -1032,7 +1068,9 @@ void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
         SbxVariable* pObjVar = pObjs->Get( i );
         StarBASIC* pSubBasic = PTR_CAST( StarBASIC, pObjVar );
         if( pSubBasic )
+        {
             ClearUnoObjectsInRTL_Impl_Rek( pSubBasic );
+        }
     }
 }
 
@@ -1067,7 +1105,7 @@ void SbModule::SetVBACompat( bool bCompat )
         {
             StarBASIC* pBasic = static_cast< StarBASIC* >( GetParent() );
             uno::Reference< lang::XMultiServiceFactory > xFactory( getDocumentModel( pBasic ), uno::UNO_QUERY_THROW );
-            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+            xFactory->createInstance( OUString("ooo.vba.VBAGlobals") );
         }
         catch( Exception& )
         {
@@ -1083,7 +1121,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
 
     sal_uInt16 nRes = 0;
     bool bDelInst = ( GetSbData()->pInst == NULL );
-        bool bQuit = false;
+    bool bQuit = false;
     StarBASICRef xBasic;
     uno::Reference< frame::XModel > xModel;
     uno::Reference< script::vba::XVBACompatibility > xVBACompat;
@@ -1114,7 +1152,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
         // Launcher problem
         // i80726 The Find below will genarate an error in Testtool so we reset it unless there was one before already
         sal_Bool bWasError = SbxBase::GetError() != 0;
-        SbxVariable* pMSOMacroRuntimeLibVar = Find( rtl::OUString("Launcher"), SbxCLASS_OBJECT );
+        SbxVariable* pMSOMacroRuntimeLibVar = Find( OUString("Launcher"), SbxCLASS_OBJECT );
         if ( !bWasError && (SbxBase::GetError() == SbxERR_PROC_UNDEFINED) )
             SbxBase::ResetError();
         if( pMSOMacroRuntimeLibVar )
@@ -1124,7 +1162,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
             {
                 sal_uInt16 nGblFlag = pMSOMacroRuntimeLib->GetFlags() & SBX_GBLSEARCH;
                 pMSOMacroRuntimeLib->ResetFlag( SBX_GBLSEARCH );
-                SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( rtl::OUString("Application"), SbxCLASS_METHOD );
+                SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( OUString("Application"), SbxCLASS_METHOD );
                 pMSOMacroRuntimeLib->SetFlag( nGblFlag );
                 if( pAppSymbol )
                 {
@@ -1321,11 +1359,11 @@ void SbModule::RunInit()
 
 // Delete with private/dim declared variables
 
-void SbModule::AddVarName( const String& aName )
+void SbModule::AddVarName( const OUString& aName )
 {
     // see if the name is added allready
-    std::vector< String >::iterator it_end = mModuleVariableNames.end();
-    for ( std::vector< String >::iterator it = mModuleVariableNames.begin(); it != it_end; ++it )
+    std::vector< OUString >::iterator it_end = mModuleVariableNames.end();
+    for ( std::vector< OUString >::iterator it = mModuleVariableNames.begin(); it != it_end; ++it )
     {
         if ( aName == *it )
             return;
@@ -1335,8 +1373,8 @@ void SbModule::AddVarName( const String& aName )
 
 void SbModule::RemoveVars()
 {
-    std::vector< String >::iterator it_end = mModuleVariableNames.end();
-    for ( std::vector< String >::iterator it = mModuleVariableNames.begin(); it != it_end; ++it )
+    std::vector< OUString >::iterator it_end = mModuleVariableNames.end();
+    for ( std::vector< OUString >::iterator it = mModuleVariableNames.begin(); it != it_end; ++it )
     {
     // We don't want a Find being called in a derived class ( e.g.
     // SbUserform because it could trigger say an initialise event
@@ -1819,7 +1857,7 @@ sal_Bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
          bRet = SbxObject::StoreData( rStrm );
         if( bRet )
         {
-            pImage->aOUSource = ::rtl::OUString();
+            pImage->aOUSource = OUString();
             pImage->aComment = aComment;
             pImage->aName = GetName();
 
@@ -1841,7 +1879,7 @@ sal_Bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
 
 sal_Bool SbModule::LoadBinaryData( SvStream& rStrm )
 {
-    ::rtl::OUString aKeepSource = aOUSource;
+    OUString aKeepSource = aOUSource;
     bool bRet = LoadData( rStrm, 2 );
     LoadCompleted();
     aOUSource = aKeepSource;
@@ -1883,8 +1921,7 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
 
             if( pHint->GetId() == SBX_HINT_DATAWANTED )
             {
-                String aProcName;
-                aProcName.AppendAscii( "Property Get " );
+                OUString aProcName("Property Get ");
                 aProcName += pProcProperty->GetName();
 
                 SbxVariable* pMeth = Find( aProcName, SbxCLASS_METHOD );
@@ -1926,15 +1963,13 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
                 {
                     pProcProperty->setSet( false );
 
-                    String aProcName;
-                    aProcName.AppendAscii( "Property Set " );
+                    OUString aProcName("Property Set " );
                     aProcName += pProcProperty->GetName();
                     pMeth = Find( aProcName, SbxCLASS_METHOD );
                 }
                 if( !pMeth )    // Let
                 {
-                    String aProcName;
-                    aProcName.AppendAscii( "Property Let " );
+                    OUString aProcName("Property Set " );
                     aProcName += pProcProperty->GetName();
                     pMeth = Find( aProcName, SbxCLASS_METHOD );
                 }
@@ -1961,7 +1996,7 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
 
 
 // Implementation SbJScriptModule (Basic module for JavaScript source code)
-SbJScriptModule::SbJScriptModule( const String& rName )
+SbJScriptModule::SbJScriptModule( const OUString& rName )
     :SbModule( rName )
 {
 }
@@ -1985,7 +2020,7 @@ sal_Bool SbJScriptModule::StoreData( SvStream& rStrm ) const
         return sal_False;
 
     // Write the source string
-    String aTmp = aOUSource;
+    OUString aTmp = aOUSource;
     rStrm.WriteUniOrByteString( aTmp, osl_getThreadTextEncoding() );
     return sal_True;
 }
@@ -1993,7 +2028,7 @@ sal_Bool SbJScriptModule::StoreData( SvStream& rStrm ) const
 
 /////////////////////////////////////////////////////////////////////////
 
-SbMethod::SbMethod( const String& r, SbxDataType t, SbModule* p )
+SbMethod::SbMethod( const OUString& r, SbxDataType t, SbModule* p )
         : SbxMethod( r, t ), pMod( p )
 {
     bInvalid     = sal_True;
@@ -2161,7 +2196,7 @@ void SbMethod::Broadcast( sal_uIntPtr nHintId )
 
 // Implementation of SbJScriptMethod (method class as a wrapper for JavaScript-functions)
 
-SbJScriptMethod::SbJScriptMethod( const String& r, SbxDataType t, SbModule* p )
+SbJScriptMethod::SbJScriptMethod( const OUString& r, SbxDataType t, SbModule* p )
         : SbMethod( r, t, p )
 {
 }
@@ -2170,16 +2205,18 @@ SbJScriptMethod::~SbJScriptMethod()
 {}
 
 
-SbObjModule::SbObjModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible )
+SbObjModule::SbObjModule( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible )
     : SbModule( rName, bIsVbaCompatible )
 {
     SetModuleType( mInfo.ModuleType );
     if ( mInfo.ModuleType == script::ModuleType::FORM )
     {
-        SetClassName( rtl::OUString("Form" ) );
+        SetClassName( OUString("Form" ) );
     }
     else if ( mInfo.ModuleObject.is() )
+    {
         SetUnoObject( uno::makeAny( mInfo.ModuleObject ) );
+    }
 }
 
 SbObjModule::~SbObjModule()
@@ -2195,13 +2232,13 @@ SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException 
     pDocObject = new SbUnoObject( GetName(), uno::makeAny( aObj ) );
 
     com::sun::star::uno::Reference< com::sun::star::lang::XServiceInfo > xServiceInfo( aObj, com::sun::star::uno::UNO_QUERY_THROW );
-    if( xServiceInfo->supportsService( rtl::OUString("ooo.vba.excel.Worksheet" ) ) )
+    if( xServiceInfo->supportsService( OUString("ooo.vba.excel.Worksheet" ) ) )
     {
-        SetClassName( rtl::OUString("Worksheet" ) );
+        SetClassName( OUString("Worksheet" ) );
     }
-    else if( xServiceInfo->supportsService( rtl::OUString("ooo.vba.excel.Workbook" ) ) )
+    else if( xServiceInfo->supportsService( OUString("ooo.vba.excel.Workbook" ) ) )
     {
-        SetClassName( rtl::OUString("Workbook" ) );
+        SetClassName( OUString("Workbook" ) );
     }
 }
 
@@ -2211,7 +2248,7 @@ SbObjModule::GetObject()
     return pDocObject;
 }
 SbxVariable*
-SbObjModule::Find( const rtl::OUString& rName, SbxClassType t )
+SbObjModule::Find( const OUString& rName, SbxClassType t )
 {
     SbxVariable* pVar = NULL;
     if ( pDocObject)
@@ -2347,15 +2384,14 @@ public:
                     aParams[0] <<= nCancel;
                     aParams[1] <<= nCloseMode;
 
-                    mpUserForm->triggerMethod( rtl::OUString("Userform_QueryClose" ),
-                                                aParams);
+                    mpUserForm->triggerMethod( OUString("Userform_QueryClose" ), aParams);
                     return;
 
                 }
             }
         }
 
-        mpUserForm->triggerMethod( rtl::OUString("Userform_QueryClose" ) );
+        mpUserForm->triggerMethod( OUString("Userform_QueryClose" ) );
 #endif
     }
 
@@ -2438,7 +2474,7 @@ public:
     }
 };
 
-SbUserFormModule::SbUserFormModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsCompat )
+SbUserFormModule::SbUserFormModule( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsCompat )
     : SbObjModule( rName, mInfo, bIsCompat )
     , m_mInfo( mInfo )
     , mbInit( false )
@@ -2461,13 +2497,13 @@ void SbUserFormModule::ResetApiObj(  bool bTriggerTerminateEvent )
     m_xDialog = NULL;
 }
 
-void SbUserFormModule::triggerMethod( const String& aMethodToRun )
+void SbUserFormModule::triggerMethod( const OUString& aMethodToRun )
 {
     Sequence< Any > aArguments;
     triggerMethod( aMethodToRun, aArguments );
 }
 
-void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any >& aArguments )
+void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< Any >& aArguments )
 {
     OSL_TRACE("*** trigger %s ***", rtl::OUStringToOString( aMethodToRun, RTL_TEXTENCODING_UTF8 ).getStr() );
     // Search method
@@ -2511,14 +2547,14 @@ void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any 
 void SbUserFormModule::triggerActivateEvent( void )
 {
     OSL_TRACE("**** entering SbUserFormModule::triggerActivate");
-    triggerMethod( rtl::OUString( "UserForm_Activate" ) );
+    triggerMethod( OUString( "UserForm_Activate" ) );
     OSL_TRACE("**** leaving SbUserFormModule::triggerActivate");
 }
 
 void SbUserFormModule::triggerDeactivateEvent( void )
 {
     OSL_TRACE("**** SbUserFormModule::triggerDeactivate");
-    triggerMethod( rtl::OUString("Userform_Deactivate" ) );
+    triggerMethod( OUString("Userform_Deactivate" ) );
 }
 
 void SbUserFormModule::triggerInitializeEvent( void )
@@ -2526,7 +2562,7 @@ void SbUserFormModule::triggerInitializeEvent( void )
     if ( mbInit )
         return;
     OSL_TRACE("**** SbUserFormModule::triggerInitializeEvent");
-    static String aInitMethodName( RTL_CONSTASCII_USTRINGPARAM("Userform_Initialize") );
+    static OUString aInitMethodName( "Userform_Initialize");
     triggerMethod( aInitMethodName );
     mbInit = true;
 }
@@ -2534,20 +2570,20 @@ void SbUserFormModule::triggerInitializeEvent( void )
 void SbUserFormModule::triggerTerminateEvent( void )
 {
     OSL_TRACE("**** SbUserFormModule::triggerTerminateEvent");
-    static String aTermMethodName( RTL_CONSTASCII_USTRINGPARAM("Userform_Terminate") );
+    static OUString aTermMethodName( "Userform_Terminate" );
     triggerMethod( aTermMethodName );
     mbInit=false;
 }
 
 void SbUserFormModule::triggerLayoutEvent( void )
 {
-    static String aMethodName( RTL_CONSTASCII_USTRINGPARAM("Userform_Layout") );
+    static OUString aMethodName( "Userform_Layout" );
     triggerMethod( aMethodName );
 }
 
 void SbUserFormModule::triggerResizeEvent( void )
 {
-    static String aMethodName( RTL_CONSTASCII_USTRINGPARAM("Userform_Resize") );
+    static OUString aMethodName("Userform_Resize");
     triggerMethod( aMethodName );
 }
 
@@ -2558,20 +2594,20 @@ SbUserFormModuleInstance* SbUserFormModule::CreateInstance()
 }
 
 SbUserFormModuleInstance::SbUserFormModuleInstance( SbUserFormModule* pParentModule,
-    const rtl::OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat )
+    const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat )
         : SbUserFormModule( rName, mInfo, bIsVBACompat )
         , m_pParentModule( pParentModule )
 {
 }
 
-sal_Bool SbUserFormModuleInstance::IsClass( const rtl::OUString& rName ) const
+sal_Bool SbUserFormModuleInstance::IsClass( const OUString& rName ) const
 {
-    sal_Bool bParentNameMatches = m_pParentModule->GetName().EqualsIgnoreCaseAscii( rName );
+    sal_Bool bParentNameMatches = m_pParentModule->GetName().equalsIgnoreAsciiCase( rName );
     sal_Bool bRet = bParentNameMatches || SbxObject::IsClass( rName );
     return bRet;
 }
 
-SbxVariable* SbUserFormModuleInstance::Find( const rtl::OUString& rName, SbxClassType t )
+SbxVariable* SbUserFormModuleInstance::Find( const OUString& rName, SbxClassType t )
 {
     SbxVariable* pVar = m_pParentModule->Find( rName, t );
     return pVar;
@@ -2599,7 +2635,7 @@ void SbUserFormModule::Unload()
     aParams[0] <<= nCancel;
     aParams[1] <<= nCloseMode;
 
-    triggerMethod( rtl::OUString("Userform_QueryClose" ), aParams);
+    triggerMethod( OUString("Userform_QueryClose" ), aParams);
 
     aParams[0] >>= nCancel;
     // basic boolean ( and what the user might use ) can be ambiguous ( e.g. basic true = -1 )
@@ -2615,7 +2651,7 @@ void SbUserFormModule::Unload()
         triggerTerminateEvent();
     }
     // Search method
-    SbxVariable* pMeth = SbObjModule::Find( rtl::OUString("UnloadObject"), SbxCLASS_METHOD );
+    SbxVariable* pMeth = SbObjModule::Find( OUString("UnloadObject"), SbxCLASS_METHOD );
     if( pMeth )
     {
         OSL_TRACE("Attempting too run the UnloadObjectMethod");
@@ -2644,7 +2680,7 @@ void SbUserFormModule::InitObject()
 {
     try
     {
-        String aHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
+        OUString aHook("VBAGlobals");
         SbUnoObject* pGlobs = (SbUnoObject*)GetParent()->Find( aHook, SbxCLASS_DONTCARE );
         if ( m_xModel.is() && pGlobs )
         {
@@ -2656,20 +2692,20 @@ void SbUserFormModule::InitObject()
             uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
             uno::Sequence< uno::Any > aArgs(1);
             aArgs[ 0 ] <<= m_xModel;
-            rtl::OUString sDialogUrl( "vnd.sun.star.script:"  );
-            rtl::OUString sProjectName( "Standard" );
+            OUString sDialogUrl( "vnd.sun.star.script:"  );
+            OUString sProjectName( "Standard" );
 
             try
             {
                 Reference< beans::XPropertySet > xProps( m_xModel, UNO_QUERY_THROW );
-                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( rtl::OUString( "BasicLibraries" ) ), uno::UNO_QUERY_THROW );
+                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( OUString( "BasicLibraries" ) ), uno::UNO_QUERY_THROW );
                 sProjectName = xVBAMode->getProjectName();
             }
             catch(const Exception& ) {}
 
-            sDialogUrl = sDialogUrl.concat( sProjectName ).concat( rtl::OUString( '.') ).concat( GetName() ).concat( rtl::OUString( "?location=document" ) );
+            sDialogUrl = sDialogUrl + sProjectName + "." + GetName() + "?location=document";
 
-            uno::Reference< awt::XDialogProvider > xProvider( xFactory->createInstanceWithArguments( rtl::OUString( "com.sun.star.awt.DialogProvider"), aArgs  ), uno::UNO_QUERY_THROW );
+            uno::Reference< awt::XDialogProvider > xProvider( xFactory->createInstanceWithArguments( OUString( "com.sun.star.awt.DialogProvider"), aArgs  ), uno::UNO_QUERY_THROW );
             m_xDialog = xProvider->createDialog( sDialogUrl );
 
             // create vba api object
@@ -2718,7 +2754,7 @@ SbUserFormModule::Find( const rtl::OUString& rName, SbxClassType t )
     return SbObjModule::Find( rName, t );
 }
 
-SbProperty::SbProperty( const String& r, SbxDataType t, SbModule* p )
+SbProperty::SbProperty( const OUString& r, SbxDataType t, SbModule* p )
         : SbxProperty( r, t ), pMod( p )
 {
     bInvalid = sal_False;

@@ -55,7 +55,7 @@ OCommonStatement::OCommonStatement(OEvoabConnection* _pConnection)
     , m_xResultSet(NULL)
     , m_pResultSet(NULL)
     , m_pConnection(_pConnection)
-    , m_aParser(_pConnection->getDriver().getMSFactory())
+    , m_aParser(_pConnection->getDriver().getComponentContext())
     , m_aSQLIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL )
     , m_pParseTree(NULL)
     , m_nMaxFieldSize(0)
@@ -419,7 +419,7 @@ rtl::OUString OCommonStatement::getTableName()
     if( m_pParseTree && m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT )
     {
         Any aCatalog;
-        ::rtl::OUString aSchema, aComposedName;
+        ::rtl::OUString aSchema;
         const OSQLParseNode *pSelectStmnt = m_aSQLIterator.getParseTree();
         const OSQLParseNode *pAllTableNames = pSelectStmnt->getChild( 3 )->getChild( 0 )->getChild( 1 );
 

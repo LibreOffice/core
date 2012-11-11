@@ -64,7 +64,7 @@
 #include "swtablerep.hxx"
 
 
-SwTableRep::SwTableRep( const SwTabCols& rTabCol, sal_Bool bCplx )
+SwTableRep::SwTableRep( const SwTabCols& rTabCol, bool bCplx )
     :
     nTblWidth(0),
     nSpace(0),

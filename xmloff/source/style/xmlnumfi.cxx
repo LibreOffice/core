@@ -1795,9 +1795,9 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
             //  (there always has to be a digit before the leftmost embedded text)
 
             xub_StrLen nAddCount = (xub_StrLen)nLastFormatPos + 1 - nZeroPos;
-            String aDigitStr;
-            aDigitStr.Fill( nAddCount, (sal_Unicode)'#' );
-            aNumStr.Insert( aDigitStr, 0 );
+            OUStringBuffer aDigitStr;
+            comphelper::string::padToLength(aDigitStr, nAddCount, (sal_Unicode)'#');
+            aNumStr.Insert(aDigitStr.makeStringAndClear(), 0);
             nZeroPos = nZeroPos + nAddCount;
         }
 

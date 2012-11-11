@@ -208,13 +208,13 @@ public:
                     }
 
     MenuItemData*   SearchItem(
-                        xub_Unicode cSelectChar,
+                        sal_Unicode cSelectChar,
                         KeyCode aKeyCode,
                         sal_uInt16& rPos,
                         sal_uInt16& nDuplicates,
                         sal_uInt16 nCurrentPos
                     ) const;
-    size_t          GetItemCount( xub_Unicode cSelectChar ) const;
+    size_t          GetItemCount( sal_Unicode cSelectChar ) const;
     size_t          GetItemCount( KeyCode aKeyCode ) const;
     size_t          size()
                     {
@@ -330,7 +330,7 @@ MenuItemData* MenuItemList::GetData( sal_uInt16 nSVId, size_t& rPos ) const
 }
 
 MenuItemData* MenuItemList::SearchItem(
-    xub_Unicode cSelectChar,
+    sal_Unicode cSelectChar,
     KeyCode aKeyCode,
     sal_uInt16& rPos,
     sal_uInt16& nDuplicates,
@@ -376,7 +376,7 @@ MenuItemData* MenuItemList::SearchItem(
                 if ( n != STRING_NOTFOUND )
                 {
                     KeyCode mnKeyCode;
-                    xub_Unicode mnUnicode = pData->aText.GetChar(n+1);
+                    sal_Unicode mnUnicode = pData->aText.GetChar(n+1);
                     Window* pDefWindow = ImplGetDefaultWindow();
                     if(  (  pDefWindow
                          && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( mnUnicode, Application::GetSettings().GetUILanguage(), mnKeyCode )
@@ -400,7 +400,7 @@ MenuItemData* MenuItemList::SearchItem(
     return NULL;
 }
 
-size_t MenuItemList::GetItemCount( xub_Unicode cSelectChar ) const
+size_t MenuItemList::GetItemCount( sal_Unicode cSelectChar ) const
 {
     // returns number of entries with same mnemonic
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
@@ -4951,7 +4951,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
         break;
         default:
         {
-            xub_Unicode nCharCode = rKEvent.GetCharCode();
+            sal_Unicode nCharCode = rKEvent.GetCharCode();
             sal_uInt16 nPos = 0;
             sal_uInt16 nDuplicates = 0;
             MenuItemData* pData = (nCharCode && pMenu) ? pMenu->GetItemList()->SearchItem( nCharCode, rKEvent.GetKeyCode(), nPos, nDuplicates, nHighlightedItem ) : NULL;
@@ -5728,7 +5728,7 @@ sal_Bool MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, sal_Bool bF
 
     if ( !bDone && ( bFromMenu || rKEvent.GetKeyCode().IsMod2() ) )
     {
-        xub_Unicode nCharCode = rKEvent.GetCharCode();
+        sal_Unicode nCharCode = rKEvent.GetCharCode();
         if ( nCharCode )
         {
             sal_uInt16 nEntry, nDuplicates;

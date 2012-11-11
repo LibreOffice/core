@@ -37,10 +37,14 @@ using namespace connectivity::evoab;
 // -------------------------------------------------------------------------
 sdbcx::ObjectType OEvoabColumns::createObject(const ::rtl::OUString& _rName)
 {
+    const Any aCatalog;
+    const ::rtl::OUString sCatalogName;
+    const ::rtl::OUString sSchemaName(m_pTable->getSchema());
+    const ::rtl::OUString sTableName(m_pTable->getTableName());
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(
-        Any(),
-        m_pTable->getSchema(),
-        m_pTable->getTableName(),
+        aCatalog,
+        sSchemaName,
+        sTableName,
         _rName);
 
     sdbcx::ObjectType xRet = NULL;
@@ -64,7 +68,10 @@ sdbcx::ObjectType OEvoabColumns::createObject(const ::rtl::OUString& _rName)
                         sal_False,
                         sal_False,
                         sal_False,
-                        sal_True);
+                        sal_True,
+                        sCatalogName,
+                        sSchemaName,
+                        sTableName);
                 xRet = pRet;
                 break;
             }

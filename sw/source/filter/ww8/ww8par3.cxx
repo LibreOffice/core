@@ -1039,7 +1039,7 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
     sPrefix += String::CreateFromInt32(nUniqueList++);
     // #i86652#
     sal_uInt16 nRul =
-            rDoc.MakeNumRule( rDoc.GetUniqueNumRuleName(&sPrefix), 0, sal_False,
+            rDoc.MakeNumRule( rDoc.GetUniqueNumRuleName(&sPrefix), 0, false,
                               SvxNumberFormat::LABEL_ALIGNMENT );
     SwNumRule* pMyNumRule = rDoc.GetNumRuleTbl()[nRul];
     pMyNumRule->SetAutoRule(false);
@@ -1595,8 +1595,7 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
     bool bRes = true;
     if( rStyleInfo.pFmt && rStyleInfo.bColl )
     {
-        bRes = rDoc.SetTxtFmtColl(rRg, (SwTxtFmtColl*)rStyleInfo.pFmt)
-            ? true : false;
+        bRes = rDoc.SetTxtFmtColl(rRg, (SwTxtFmtColl*)rStyleInfo.pFmt);
         SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
         OSL_ENSURE( pTxtNode, "No Text-Node at PaM-Position" );
         // make code robust
@@ -2183,8 +2182,8 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     // xstzStatText
     sToolTip = read_uInt16_BeltAndBracesString(*pDataStream);
 
-    String sEntryMacro = read_uInt16_BeltAndBracesString(*pDataStream);
-    String sExitMcr = read_uInt16_BeltAndBracesString(*pDataStream);
+    /*String sEntryMacro =*/ read_uInt16_BeltAndBracesString(*pDataStream);
+    /*String sExitMcr =*/ read_uInt16_BeltAndBracesString(*pDataStream);
 
     if (nWhich == WW8_CT_DROPDOWN)
     {

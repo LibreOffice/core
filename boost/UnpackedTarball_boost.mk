@@ -24,6 +24,12 @@ boost_patches += boost.6369.warnings.patch
 boost_patches += boost.6397.warnings.patch
 #backport from boost 1.48.0 fix for "opcode not supported on this processor"
 boost_patches += boost.mipsbackport.patch
+#https://svn.boost.org/trac/boost/ticket/7551
+boost_patches += boost.7551.unusedvars.patch
+boost_patches += boost.4100.warnings.patch
+boost_patches += boost.4510.warnings.patch
+#https://svn.boost.org/trac/boost/ticket/6940
+boost_patches += boost.6940.glibc.patch
 
 boost_patches += boost.windows.patch
 boost_patches += boost.vc2012.patch

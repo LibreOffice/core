@@ -168,7 +168,7 @@ Content* Content::create(
         }
 
         uno::Reference< ucb::XContentIdentifier > xId
-            = new ::ucbhelper::ContentIdentifier( rxSMgr, aURI.getUri() );
+            = new ::ucbhelper::ContentIdentifier( aURI.getUri() );
         return new Content( rxSMgr, pProvider, xId, xPackage, aURI, aProps );
     }
     else
@@ -183,7 +183,7 @@ Content* Content::create(
             bFolder = sal_True;
 
         uno::Reference< ucb::XContentIdentifier > xId
-            = new ::ucbhelper::ContentIdentifier( rxSMgr, aURI.getUri() );
+            = new ::ucbhelper::ContentIdentifier( aURI.getUri() );
 
         ucb::ContentInfo aInfo;
         if ( bFolder || aURI.isRootFolder() )
@@ -219,7 +219,7 @@ Content* Content::create(
     xPackage = pProvider->createPackage( aURI.getPackage(), aURI.getParam() );
 
     uno::Reference< ucb::XContentIdentifier > xId
-        = new ::ucbhelper::ContentIdentifier( rxSMgr, aURI.getUri() );
+        = new ::ucbhelper::ContentIdentifier( aURI.getUri() );
     return new Content( rxSMgr, pProvider, xId, xPackage, aURI, Info );
 }
 
@@ -736,7 +736,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
             aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("New_Stream"));
 
         uno::Reference< ucb::XContentIdentifier > xId(
-            new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL ) );
+            new ::ucbhelper::ContentIdentifier( aURL ) );
 
         return create( m_xSMgr, m_pProvider, xId, Info );
     }
@@ -1373,7 +1373,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         aNewURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
         aNewURL += ::ucb_impl::urihelper::encodeSegment( aNewTitle );
         uno::Reference< ucb::XContentIdentifier > xNewId
-            = new ::ucbhelper::ContentIdentifier( m_xSMgr, aNewURL );
+            = new ::ucbhelper::ContentIdentifier( aNewURL );
 
         aGuard.clear();
         if ( exchangeIdentity( xNewId ) )
@@ -1717,7 +1717,7 @@ void Content::insert(
 
     if ( bNewId )
     {
-        m_xIdentifier = new ::ucbhelper::ContentIdentifier( m_xSMgr, aNewURL );
+        m_xIdentifier = new ::ucbhelper::ContentIdentifier( aNewURL );
         m_aUri = aNewUri;
     }
 
@@ -1863,7 +1863,7 @@ void Content::transfer(
     //////////////////////////////////////////////////////////////////////
 
     uno::Reference< ucb::XContentIdentifier > xId
-        = new ::ucbhelper::ContentIdentifier( m_xSMgr, rInfo.SourceURL );
+        = new ::ucbhelper::ContentIdentifier( rInfo.SourceURL );
 
     // Note: The static cast is okay here, because its sure that
     //       m_xProvider is always the PackageContentProvider.
@@ -2147,8 +2147,7 @@ sal_Bool Content::exchangeIdentity(
                                         aOldURL.getLength(),
                                         xNewId->getContentIdentifier() );
                     uno::Reference< ucb::XContentIdentifier > xNewChildId
-                        = new ::ucbhelper::ContentIdentifier(
-                            m_xSMgr, aNewChildURL );
+                        = new ::ucbhelper::ContentIdentifier( aNewChildURL );
 
                     if ( !xChild->exchangeIdentity( xNewChildId ) )
                         return sal_False;

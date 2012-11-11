@@ -614,7 +614,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
 
                 xOutputStream = xStream->getOutputStream();
                 if ( xOutputStream.is() )
-                    ImagesConfiguration::StoreImages( m_xServiceManager, xOutputStream, aUserImageListInfo );
+                    ImagesConfiguration::StoreImages( comphelper::getComponentContext(m_xServiceManager), xOutputStream, aUserImageListInfo );
 
                 // Commit user image storage
                 xTransaction = uno::Reference< XTransactedObject >( xUserImageStorage, UNO_QUERY );

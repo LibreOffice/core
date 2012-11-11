@@ -41,6 +41,13 @@ ifeq ($(ENABLE_SDREMOTE),YES)
 $(eval $(call gb_Library_add_defs,sdui,\
     -DENABLE_SDREMOTE \
 ))
+
+ifeq ($(ENABLE_BLUETOOTH),YES)
+$(eval $(call gb_Library_add_defs,sdui,\
+    -DENABLE_BLUETOOTH \
+))
+endif
+
 endif
 
 $(eval $(call gb_Library_use_sdk_api,sdui))

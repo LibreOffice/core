@@ -86,12 +86,12 @@ OTableWindowListBox::~OTableWindowListBox()
 }
 
 //------------------------------------------------------------------------------
-SvLBoxEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
+SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
 {
     //////////////////////////////////////////////////////////////////////
     // Liste durchiterieren
     SvTreeList* pTreeList = GetModel();
-    SvLBoxEntry* pEntry = (SvLBoxEntry*)pTreeList->First();
+    SvTreeListEntry* pEntry = pTreeList->First();
     OJoinDesignView* pView = m_pTabWin->getDesignView();
     OJoinController& rController = pView->getController();
 
@@ -111,7 +111,7 @@ SvLBoxEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
             {
                 return pEntry;
             }
-            pEntry = (SvLBoxEntry*)pTreeList->Next( pEntry );
+            pEntry = pTreeList->Next(pEntry);
         }
     }
     catch(SQLException&)
@@ -174,7 +174,7 @@ long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
 //------------------------------------------------------------------------------
 IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
 {
-    SvLBoxEntry* pEntry = GetEntry( m_aMousePos );
+    SvTreeListEntry* pEntry = GetEntry( m_aMousePos );
     if( !pEntry )
         return 0;
 
@@ -191,7 +191,7 @@ IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
 //------------------------------------------------------------------------------
 IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
 {
-    SvLBoxEntry* pEntry = GetEntry( m_aMousePos );
+    SvTreeListEntry* pEntry = GetEntry( m_aMousePos );
     if( !pEntry )
         return 0;
 
@@ -240,7 +240,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
             // hit test
             m_aMousePos = _rEvt.maPosPixel;
             Size aOutputSize = GetOutputSizePixel();
-            SvLBoxEntry* pEntry = GetEntry( m_aMousePos );
+            SvTreeListEntry* pEntry = GetEntry( m_aMousePos );
             if( !pEntry )
                 return DND_ACTION_NONE;
 

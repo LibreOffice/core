@@ -33,6 +33,13 @@ $(eval $(call gb_Module_add_targets,solenv,\
 	Package_minor \
 ))
 
+ifeq ($(CROSS_COMPILING),$(false))
+$(eval $(call gb_Module_add_targets,solenv,\
+	CustomTarget_concat-deps \
+	Package_concat-deps \
+))
+endif
+
 ifeq ($(GUI),UNX)
 ifneq ($(OS),IOS)
 ifneq ($(OS),ANDROID)

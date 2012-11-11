@@ -154,7 +154,6 @@ static void lcl_xmlbic_MergeVertPos( GraphicLocation& ePos,
                 : (GraphicLocation_MIDDLE_MIDDLE==eVert
                         ? GraphicLocation_LEFT_MIDDLE
                         : GraphicLocation_LEFT_BOTTOM);
-        ePos = eVert;
         break;
 
     case GraphicLocation_MIDDLE_TOP:

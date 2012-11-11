@@ -103,7 +103,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-MMD -MT $(1) \
 		-MP -MF $(4) \
 		-I$(dir $(3)) \
-		$(INCLUDE_STL) $(INCLUDE))
+		$(INCLUDE))
 endef
 
 # ObjCObject class
@@ -121,7 +121,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-MMD -MT $(call gb_ObjCObject_get_target,$(2)) \
 		-MP -MF $(call gb_ObjCObject_get_dep_target,$(2)) \
 		-I$(dir $(3)) \
-		$(INCLUDE_STL) $(INCLUDE))
+		$(INCLUDE))
 endef
 
 
@@ -131,13 +131,6 @@ gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS)
 gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_OBJCFLAGS)
-
-ifeq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_CFLAGS += -g
-gb_LinkTarget_CXXFLAGS += -g
-gb_LinkTarget_OBJCXXFLAGS += -g
-gb_LinkTarget_OBJCFLAGS += -g
-endif
 
 define gb_LinkTarget__get_liblinkflags
 $(patsubst lib%.a,-l%,$(foreach lib,$(filter-out $(gb_Library_UNOLIBS_OOO),$(1)),$(call gb_Library_get_filename,$(lib)))) \
@@ -176,6 +169,7 @@ endef
 define gb_LinkTarget__command_staticlink
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
+	rm -f $(1) && \
 	$(gb_AR) -rsu $(1) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \

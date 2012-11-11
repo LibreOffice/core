@@ -146,7 +146,7 @@ private:
         CPPUNIT_ASSERT_MESSAGE("bottom-middle pixel set",
                                rDevice->getPixel(aPt4) == aCol);
 
-        ::rtl::OUString aSvg( RTL_CONSTASCII_USTRINGPARAM( "m 0 0l7 7h-1z" ));
+        OUString aSvg( "m 0 0l7 7h-1z" );
 
         basegfx::B2DPolyPolygon aPoly;
         basegfx::tools::importFromSvgD( aPoly, aSvg );

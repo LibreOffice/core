@@ -88,9 +88,9 @@ SwClient::~SwClient()
         pRegisteredIn->Remove( this );
 }
 
-sal_Bool SwClient::GetInfo( SfxPoolItem& ) const
+bool SwClient::GetInfo( SfxPoolItem& ) const
 {
-    return sal_True;
+    return true;
 }
 
 // ----------
@@ -207,9 +207,9 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
     UnlockModify();
 }
 
-sal_Bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
+bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 {
-    sal_Bool bRet = sal_True;       // means: continue with next
+    bool bRet = true;       // means: continue with next
 
     if( pRoot )
     {
@@ -218,7 +218,7 @@ sal_Bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
         SwClient* pLast = aIter.GoStart();
         if( pLast )
         {
-            while( 0 != ( bRet = pLast->GetInfo( rInfo ) ) &&
+            while( ( bRet = pLast->GetInfo( rInfo ) ) &&
                    0 != ( pLast = aIter++ ) )
                 ;
         }
@@ -392,9 +392,9 @@ void SwDepend::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
         pToTell->SwClientNotifyCall( rMod, rHint );
 }
 
-sal_Bool SwDepend::GetInfo( SfxPoolItem& rInfo ) const
+bool SwDepend::GetInfo( SfxPoolItem& rInfo ) const
 {
-    return pToTell ? pToTell->GetInfo( rInfo ) : sal_True;
+    return pToTell ? pToTell->GetInfo( rInfo ) : true;
 }
 
 // ------------

@@ -83,7 +83,7 @@ gb_COMPILERDEFS += \
 endif
 
 # enable debug STL
-ifeq ($(gb_PRODUCT),$(false))
+ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 gb_COMPILERDEFS += \
 	-D_GLIBCXX_DEBUG \
 
@@ -153,8 +153,15 @@ else
 gb_LINKEROPTFLAGS := -Wl,-O1
 endif
 
+ifneq ($(gb_DEBUGLEVEL),0)
+gb_COMPILEROPTFLAGS :=
+else
 gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
+endif
+
 gb_COMPILERNOOPTFLAGS := -O0
+
+gb_LINKERSTRIPDEBUGFLAGS := -Wl,-S
 
 # LinkTarget class
 
@@ -172,11 +179,6 @@ gb_LinkTarget__RPATHS := \
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
-
-ifeq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_CXXFLAGS += $(GGDB2)
-gb_LinkTarget_CFLAGS += $(GGDB2)
-endif
 
 # note that `cat $(extraobjectlist)` is needed to build with older gcc versions, e.g. 4.1.2 on SLED10
 # we want to use @$(extraobjectlist) in the long run
@@ -207,6 +209,7 @@ endef
 define gb_LinkTarget__command_staticlink
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
+	rm -f $(1) && \
 	$(gb_AR) -rsu $(1) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
@@ -343,7 +346,7 @@ endif
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 	-Dorg.openoffice.test.arg.env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
-	-Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
+	-Dorg.openoffice.test.arg.user=$(call gb_Helper_make_url,$(call gb_JunitTest_get_userdir,$(1))) \
 	-Dorg.openoffice.test.arg.workdir=$(call gb_JunitTest_get_userdir,$(1)) \
 	-Dorg.openoffice.test.arg.postprocesscommand=$(GBUILDDIR)/platform/unxgcc_gdbforjunit.sh \
 	-Dorg.openoffice.test.arg.soffice="$(gb_JunitTest_SOFFICEARG)" \
@@ -356,7 +359,7 @@ define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=`mktemp` && \
 printf 'if [ -e $(DEVINSTALLDIR)/opt/program/ooenv ]; then . $(DEVINSTALLDIR)/opt/program/ooenv; fi\n' > $${OFFICESCRIPT} && \
 printf "gdb $(DEVINSTALLDIR)/opt/program/soffice.bin" >> $${OFFICESCRIPT} && \
-printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=file://$(DEVINSTALLDIR)/\"" >> $${OFFICESCRIPT} && \
+printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=$(call gb_Helper_make_url,$(DEVINSTALLDIR)/)\"" >> $${OFFICESCRIPT} && \
 $(SHELL) $${OFFICESCRIPT} && \
 rm $${OFFICESCRIPT}
 endef

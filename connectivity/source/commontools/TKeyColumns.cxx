@@ -48,13 +48,15 @@ OKeyColumnsHelper::OKeyColumnsHelper(   OTableKeyHelper* _pKey,
 sdbcx::ObjectType OKeyColumnsHelper::createObject(const ::rtl::OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-    ::rtl::OUString aSchema,aTable;
+    ::rtl::OUString aCatalog, aSchema, aTable;
+    ::com::sun::star::uno::Any Catalog(m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)));
+    Catalog >>= aCatalog;
     m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))   >>= aSchema;
     m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))         >>= aTable;
 
     // frist get the related column to _rName
     Reference< XResultSet > xResult = m_pKey->getTable()->getMetaData()->getImportedKeys(
-            m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)),aSchema,aTable);
+            Catalog, aSchema, aTable);
 
     ::rtl::OUString aRefColumnName;
     if ( xResult.is() )
@@ -75,8 +77,7 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const ::rtl::OUString& _rName)
     sdbcx::ObjectType xRet;
 
     // now describe the column _rName and set his related column
-    xResult = m_pKey->getTable()->getMetaData()->getColumns(
-                m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)),aSchema,aTable,_rName);
+    xResult = m_pKey->getTable()->getMetaData()->getColumns(Catalog, aSchema, aTable, _rName);
 
     if ( xResult.is() )
     {
@@ -101,17 +102,20 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const ::rtl::OUString& _rName)
                 }
 
                 OKeyColumn* pRet = new OKeyColumn(aRefColumnName,
-                                                    _rName,
-                                                    aTypeName,
-                                                    sColumnDef,
-                                                    nNull,
-                                                    nSize,
-                                                    nDec,
-                                                    nDataType,
-                                                    sal_False,
-                                                    sal_False,
-                                                    sal_False,
-                                                    isCaseSensitive());
+                                                  _rName,
+                                                  aTypeName,
+                                                  sColumnDef,
+                                                  nNull,
+                                                  nSize,
+                                                  nDec,
+                                                  nDataType,
+                                                  sal_False,
+                                                  sal_False,
+                                                  sal_False,
+                                                  isCaseSensitive(),
+                                                  aCatalog,
+                                                  aSchema,
+                                                  aTable);
                 xRet = pRet;
             }
         }

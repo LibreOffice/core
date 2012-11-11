@@ -3183,11 +3183,9 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             if (!maFtnStack.empty())
                 cInsert = 0x2;
             break;
-#if OSL_DEBUG_LEVEL > 1
         default:
-            ::std::clog << "<unknownValue val=\"" << nWCharVal << "\">" << ::std::endl;
+            SAL_INFO( "sw.ww8.level2", "<unknownValue val=\"" << nWCharVal << "\">" );
             break;
-#endif
     }
 
     if( '\x0' != cInsert )

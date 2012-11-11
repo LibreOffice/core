@@ -20,11 +20,11 @@
 #ifndef _FOLDERPICKER_HXX_
 #define _FOLDERPICKER_HXX_
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 
 #include <memory>
@@ -36,10 +36,9 @@
 //----------------------------------------------------------
 
 class CFolderPicker :
-    public  cppu::WeakImplHelper3<
-                com::sun::star::ui::dialogs::XFolderPicker,
-                com::sun::star::lang::XServiceInfo,
-                com::sun::star::util::XCancellable >
+    public  cppu::WeakImplHelper2<
+                com::sun::star::ui::dialogs::XFolderPicker2,
+                com::sun::star::lang::XServiceInfo >
 {
 public:
 

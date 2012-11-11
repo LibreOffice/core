@@ -60,9 +60,9 @@ public:
 
 protected:
     virtual void Paint(const Rectangle& _rRect);
-    virtual void checkedButton_noBroadcast(SvLBoxEntry* _pEntry);
+    virtual void checkedButton_noBroadcast(SvTreeListEntry* _pEntry);
 
-    SvButtonState   implDetermineState(SvLBoxEntry* _pEntry);
+    SvButtonState   implDetermineState(SvTreeListEntry* _pEntry);
         // determines the check state of the given entry, by analyzing the states of all descendants
 
 private:

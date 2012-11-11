@@ -29,176 +29,189 @@
 $(eval $(call gb_Module_Module,ooo))
 
 $(eval $(call gb_Module_add_moduledirs,ooo,\
-    accessibility \
+	accessibility \
 	$(call gb_Helper_optional,AFMS,afms) \
-    animations \
+	animations \
 	$(call gb_Helper_optional,APACHE_COMMONS,apache-commons) \
-    apple_remote \
-    autodoc \
-    avmedia \
-    basctl \
-    basebmp \
-    basegfx \
-    basic \
-    bean \
+	apple_remote \
+	autodoc \
+	avmedia \
+	basctl \
+	basebmp \
+	basegfx \
+	basic \
+	bean \
 	$(call gb_Helper_optional,BSH,beanshell) \
-    binaryurp \
+	binaryurp \
 	$(call gb_Helper_optional,BLUEZ,bluez_bluetooth) \
 	boost \
 	bridges \
-    canvas \
-    chart2 \
+	canvas \
+	chart2 \
 	cli_ure \
 	$(call gb_Helper_optional,CLUCENE,clucene) \
 	$(call gb_Helper_optional,DESKTOP,codemaker) \
-    comphelper \
-    configmgr \
-    connectivity \
-    cosv \
-    cppcanvas \
-    cppu \
-    cppuhelper \
-    cpputools \
-    cui \
-    dbaccess \
-    desktop \
+	comphelper \
+	configmgr \
+	connectivity \
+	cosv \
+	cppcanvas \
+	cppu \
+	cppuhelper \
+	cpputools \
+	$(call gb_Helper_optional,CT2N,ct2n) \
+	cui \
+	$(call gb_Helper_optional,CURL,curl) \
+	dbaccess \
+	desktop \
 	$(call gb_Helper_optional,DICTIONARIES,dictionaries) \
-    drawinglayer \
-    dtrans \
-    editeng \
-    embeddedobj \
-    embedserv \
-    eventattacher \
-    extensions \
+	drawinglayer \
+	dtrans \
+	editeng \
+	embeddedobj \
+	embedserv \
+	$(call gb_Helper_optional,EPM,epm) \
+	eventattacher \
+	$(call gb_Helper_optional,EXPAT,expat) \
+	extensions \
 	extras \
-    fileaccess \
-    filter \
-    forms \
-    formula \
-    fpicker \
-    framework \
+	fileaccess \
+	filter \
+	$(call gb_Helper_optional,FONTCONFIG,fontconfig) \
+	forms \
+	formula \
+	fpicker \
+	framework \
+	$(call gb_Helper_optional,FREETYPE,freetype) \
+	$(call gb_Helper_optional,GRAPHITE,graphite) \
 	$(call gb_Helper_optional,DESKTOP,helpcompiler) \
 	$(call gb_Helper_optional,HSQLDB,hsqldb) \
-    hwpfilter \
-    i18npool \
-    i18nutil \
-    idl \
+	$(call gb_Helper_optional,HUNSPELL,hunspell) \
+	hwpfilter \
+	$(call gb_Helper_optional,HYPHEN,hyphen) \
+	i18npool \
+	i18nutil \
+	idl \
 	$(call gb_Helper_optional,DESKTOP,idlc) \
-    io \
-    javaunohelper \
+	io \
+	javaunohelper \
 	$(call gb_Helper_optional,JFREEREPORT,jfreereport) \
-    jurt \
-    $(call gb_Helper_optional,JPEG,jpeg) \
-    jvmaccess \
-    jvmfwk \
+	jurt \
+	$(call gb_Helper_optional,JPEG,jpeg) \
+	jvmaccess \
+	jvmfwk \
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
 	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
+	$(call gb_Helper_optional,LCMS2,lcms2) \
 	libcdr \
 	libcmis \
+	$(call gb_Helper_optional,LIBEXTTEXTCAT,libexttextcat) \
 	libmspub \
 	liborcus \
 	libpng \
-	$(call gb_Helper_optional,LIBRSVG,librsvg) \
+	librelogo \
 	libvisio \
 	libwpd \
 	libwpg \
 	libwps \
-    lingucomponent \
-    linguistic \
-    lotuswordpro \
-    MathMLDTD \
+	lingucomponent \
+	linguistic \
+	lotuswordpro \
+	$(call gb_Helper_optional,LPSOLVE,lpsolve) \
+	MathMLDTD \
 	mdds \
-    Mesa \
+	Mesa \
 	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
+	$(call gb_Helper_optional,MYTHES,mythes) \
 	$(call gb_Helper_optional,NEON,neon) \
 	$(call gb_Helper_optional,NLPSOLVER,nlpsolver) \
-    np_sdk \
-    o3tl \
-    offapi \
-    officecfg \
-    oovbaapi \
-    oox \
-    package \
-    packimages \
-    padmin \
-    psprint_config \
+	np_sdk \
+	o3tl \
+	offapi \
+	officecfg \
+	oovbaapi \
+	oox \
+	$(call gb_Helper_optional,OPENLDAP,openldap) \
+	package \
+	packimages \
+	padmin \
+	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
+	psprint_config \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
-	$(if $(strip $(OOO_JUNIT_JAR)),\
-		qadevOOo \
-	) \
-	$(call gb_Helper_optional,DESKTOP,rdbmaker) \
+	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 	readlicense_oo \
-    regexp \
-    registry \
-    remotebridges \
-    reportbuilder \
-    reportdesign \
+	regexp \
+	registry \
+	remotebridges \
+	reportbuilder \
+	reportdesign \
 	$(call gb_Helper_optional,RHINO,rhino) \
-    ridljar \
-    rsc \
-    sal \
-    salhelper \
-    sane \
-    sax \
-	$(call gb_Helper_optional,SAXON,saxon) \
-    sc \
-    scaddins \
-    sccomp \
+	ridljar \
+	rsc \
+	sal \
+	salhelper \
+	sane \
+	sax \
+	sc \
+	scaddins \
+	sccomp \
 	$(call gb_Helper_optional,DESKTOP,scp2) \
-    scripting \
-    sd \
-    sdext \
-    sfx2 \
-    shell \
-    slideshow \
-    smoketest \
-    solenv \
-    sot \
-    starmath \
-    stoc \
-    store \
-    svl \
-    svtools \
-    svx \
-    sw \
-    swext \
-    test \
-    testtools \
+	scripting \
+	sd \
+	sdext \
+	sfx2 \
+	shell \
+	slideshow \
+	smoketest \
+	solenv \
+	soltools \
+	sot \
+	starmath \
+	stoc \
+	store \
+	svl \
+	svtools \
+	svx \
+	sw \
+	swext \
+	test \
+	testtools \
 	$(call gb_Helper_optional,TOMCAT,tomcat) \
-    toolkit \
-    tools \
+	toolkit \
+	tools \
 	touch \
 	$(call gb_Helper_optional,TRANSLATIONS,translations) \
 	tubes \
-    twain \
-    ucb \
-    ucbhelper \
+	twain \
+	ucb \
+	ucbhelper \
 	$(call gb_Helper_optional,UCPP,ucpp) \
-    udkapi \
+	udkapi \
 	udm \
-    unixODBC \
-    UnoControls \
-    unodevtools \
-    unoil \
-    unotest \
-    unotools \
-    unoxml \
-    ure \
-    uui \
-    vbahelper \
-    vcl \
+	unixODBC \
+	UnoControls \
+	unodevtools \
+	unoil \
+	unotest \
+	unotools \
+	unoxml \
+	ure \
+	uui \
+	vbahelper \
+	vcl \
 	vigra \
-    wizards \
-    writerfilter \
-    writerperfect \
+	wizards \
+	writerfilter \
+	writerperfect \
 	$(call gb_Helper_optional,X11_EXTENSIONS,x11_extensions) \
-    xmerge \
+	xmerge \
 	$(call gb_Helper_optional,DESKTOP,xmlhelp) \
-    xmloff \
-    xmlreader \
-    xmlscript \
-    xmlsecurity \
+	xmloff \
+	xmlreader \
+	xmlscript \
+	xmlsecurity \
 	xsltml \
+	$(call gb_Helper_optional,ZLIB,zlib) \
 ))
 
 # vim: set noet ts=4 sw=4:

@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -40,19 +41,16 @@ uno::Sequence< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSe
 }
 
 // -----------------------------------
-void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< beans::StringPair >& aSequence, const uno::Reference< lang::XMultiServiceFactory > xFactory )
+void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< beans::StringPair >& aSequence, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
     if ( !xOutStream.is() )
         throw uno::RuntimeException();
 
-    uno::Reference< io::XActiveDataSource > xWriterSource(
-        xFactory->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ),
-        uno::UNO_QUERY_THROW );
-    uno::Reference< xml::sax::XDocumentHandler > xWriterHandler( xWriterSource, uno::UNO_QUERY_THROW );
+    uno::Reference< xml::sax::XWriter > xWriterHandler(
+        xml::sax::Writer::create(xContext) );
 
-    xWriterSource->setOutputStream( xOutStream );
+    xWriterHandler->setOutputStream( xOutStream );
 
     ::rtl::OUString aGroupListElement( RTL_CONSTASCII_USTRINGPARAM( "groupuinames:template-group-list" ) );
     ::rtl::OUString aGroupElement( RTL_CONSTASCII_USTRINGPARAM( "groupuinames:template-group" ) );

@@ -33,11 +33,13 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 
 using namespace ::com::sun::star::lang          ;   // XMultiServiceFactory
 using namespace ::com::sun::star::container     ;   // XNameAccess
 using namespace ::com::sun::star::uno           ;   // Reference
 using namespace ::com::sun::star::beans         ;   // PropertyValue
+using namespace ::com::sun::star::configuration ;
 using ::rtl::OUString;
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameList[] =
@@ -127,32 +129,28 @@ String FilterConfigCache::FilterConfigCacheEntry::GetShortName()
 Reference< XInterface > openConfig(const char* sPackage)
     throw(RuntimeException)
 {
-    Reference< XMultiServiceFactory > xSMGR(
-        comphelper::getProcessServiceFactory() );
+    Reference< XComponentContext > xContext(
+        comphelper::getProcessComponentContext() );
     Reference< XInterface >           xCfg;
     try
     {
         // get access to config API (not to file!)
-        Reference< XMultiServiceFactory > xConfigProvider( xSMGR->createInstance(
-            OUString( "com.sun.star.configuration.ConfigurationProvider" )), UNO_QUERY);
+        Reference< XMultiServiceFactory > xConfigProvider = theDefaultProvider::get( xContext );
 
-        if (xConfigProvider.is())
-        {
-            Sequence< Any > lParams(1);
-            PropertyValue   aParam    ;
+        Sequence< Any > lParams(1);
+        PropertyValue   aParam    ;
 
-            // define cfg path for open
-            aParam.Name = OUString( "nodepath" );
-            if (rtl_str_compareIgnoreAsciiCase(sPackage, "types") == 0)
-                aParam.Value <<= OUString( "/org.openoffice.TypeDetection.Types/Types" );
-            if (rtl_str_compareIgnoreAsciiCase(sPackage, "filters") == 0)
-                aParam.Value <<= OUString( "/org.openoffice.TypeDetection.GraphicFilter/Filters" );
-            lParams[0] = makeAny(aParam);
+        // define cfg path for open
+        aParam.Name = OUString( "nodepath" );
+        if (rtl_str_compareIgnoreAsciiCase(sPackage, "types") == 0)
+            aParam.Value <<= OUString( "/org.openoffice.TypeDetection.Types/Types" );
+        if (rtl_str_compareIgnoreAsciiCase(sPackage, "filters") == 0)
+            aParam.Value <<= OUString( "/org.openoffice.TypeDetection.GraphicFilter/Filters" );
+        lParams[0] = makeAny(aParam);
 
-            // get access to file
-            xCfg = xConfigProvider->createInstanceWithArguments(
-                OUString( "com.sun.star.configuration.ConfigurationAccess" ), lParams);
-        }
+        // get access to file
+        xCfg = xConfigProvider->createInstanceWithArguments(
+            OUString( "com.sun.star.configuration.ConfigurationAccess" ), lParams);
     }
     catch(const RuntimeException&)
         { throw; }

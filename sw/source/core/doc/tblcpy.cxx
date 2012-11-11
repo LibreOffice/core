@@ -548,13 +548,13 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
         pCpyDoc->CopyWithFlyInFly( *pRg, 0, aInsIdx, sal_False );
     else
         pDoc->GetNodes().MakeTxtNode( aInsIdx, (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
-    aSavePos++;
+    ++aSavePos;
 
     SwTableLine* pLine = pDstBox->GetUpper();
     while( pLine->GetUpper() )
         pLine = pLine->GetUpper()->GetUpper();
 
-    sal_Bool bReplaceColl = sal_True;
+    bool bReplaceColl = true;
     if( bDelCntnt && !bUndoRedline )
     {
         // Delete the Fly first, then the corresponding Nodes
@@ -598,7 +598,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
             if( pCNd &&
                 RES_POOLCOLL_TABLE_HDLN !=
                     pCNd->GetFmtColl()->GetPoolFmtId() )
-                bReplaceColl = sal_False;
+                bReplaceColl = false;
         }
 
         pDoc->GetNodes().Delete( aInsIdx, aEndNdIdx.GetIndex() - aInsIdx.GetIndex() );

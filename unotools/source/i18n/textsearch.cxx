@@ -36,7 +36,7 @@ namespace utl
 {
 // ............................................................................
 
-SearchParam::SearchParam( const String &rText,
+SearchParam::SearchParam( const rtl::OUString &rText,
                                 SearchType eType,
                                 sal_Bool bCaseSensitive,
                                 sal_Bool bWrdOnly,
@@ -113,17 +113,11 @@ Reference<XTextSearch> TextSearch::getXTextSearch( const SearchOptions& rPara )
     if ( lcl_Equals(rCache.Options, rPara) )
         return rCache.xTextSearch;
 
-    try
-    {
-        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        rCache.xTextSearch.set( ::TextSearch::create(xContext) );
-        rCache.xTextSearch->setOptions( rPara );
-        rCache.Options = rPara;
-    }
-    catch ( Exception& e )
-    {
-        SAL_WARN( "unotools.i18n", "caught " << e.Message );
-    }
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    rCache.xTextSearch.set( ::TextSearch::create(xContext) );
+    rCache.xTextSearch->setOptions( rPara );
+    rCache.Options = rPara;
+
     return rCache.xTextSearch;
 }
 

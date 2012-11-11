@@ -37,6 +37,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	basegfx \
 	basic \
 	bean \
+	$(call gb_Helper_optional,BOOST,boost) \
 	$(call gb_Helper_optional,BSH,beanshell) \
 	binaryurp \
 	$(call gb_Helper_optional,BLUEZ,bluez_bluetooth) \
@@ -54,7 +55,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	cppu \
 	cppuhelper \
 	cpputools \
+	$(call gb_Helper_optional,CT2N,ct2n) \
 	cui \
+	$(call gb_Helper_optional,CURL,curl) \
 	dbaccess \
 	desktop \
 	$(call gb_Helper_optional,DICTIONARIES,dictionaries) \
@@ -63,6 +66,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	editeng \
 	embeddedobj \
 	embedserv \
+	$(call gb_Helper_optional,EPM,epm) \
 	eventattacher \
 	extensions \
 	extras \
@@ -72,9 +76,12 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	formula \
 	fpicker \
 	framework \
+	$(call gb_Helper_optional,GRAPHITE,graphite) \
 	$(call gb_Helper_optional,DESKTOP,helpcompiler) \
 	$(call gb_Helper_optional,HSQLDB,hsqldb) \
+	$(call gb_Helper_optional,HUNSPELL,hunspell) \
 	hwpfilter \
+	$(call gb_Helper_optional,HYPHEN,hyphen) \
 	i18npool \
 	i18nutil \
 	idl \
@@ -85,11 +92,14 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	jurt \
 	jvmaccess \
 	jvmfwk \
+	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
+	$(call gb_Helper_optional,LCMS2,lcms2) \
 	libcdr \
 	libcmis \
+	$(call gb_Helper_optional,LIBEXTTEXTCAT,libexttextcat) \
 	libmspub \
 	liborcus \
-	$(call gb_Helper_optional,LIBRSVG,librsvg) \
+	librelogo \
 	libvisio \
 	libwpd \
 	libwpg \
@@ -97,11 +107,13 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	lingucomponent \
 	linguistic \
 	lotuswordpro \
+	$(call gb_Helper_optional,LPSOLVE,lpsolve) \
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
 	MathMLDTD \
 	mdds \
 	Mesa \
 	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
+	$(call gb_Helper_optional,MYTHES,mythes) \
 	$(call gb_Helper_optional,NEON,neon) \
 	$(call gb_Helper_optional,NLPSOLVER,nlpsolver) \
 	np_sdk \
@@ -110,12 +122,13 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	officecfg \
 	oovbaapi \
 	oox \
+	$(call gb_Helper_optional,OPENLDAP,openldap) \
 	package \
 	padmin \
+	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
 	psprint_config \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
-	$(call gb_Helper_optional,DESKTOP,rdbmaker) \
 	readlicense_oo \
 	regexp \
 	registry \
@@ -125,10 +138,10 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	$(call gb_Helper_optional,RHINO,rhino) \
 	ridljar \
 	rsc \
+	sal \
 	salhelper \
 	sane \
 	sax \
-	$(call gb_Helper_optional,SAXON,saxon) \
 	sc \
 	scaddins \
 	sccomp \
@@ -146,6 +159,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	store \
 	svl \
 	svtools \
+	svgio \
 	svx \
 	sw \
 	swext \
@@ -178,7 +192,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	wizards \
 	writerfilter \
 	writerperfect \
-	$(call gb_Helper_optional,EXTENSIONS,x11_extensions) \
+	$(call gb_Helper_optional,X11_EXTENSIONS,x11_extensions) \
 	xmerge \
 	$(call gb_Helper_optional,DESKTOP,xmlhelp) \
 	xmloff \

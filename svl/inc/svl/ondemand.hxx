@@ -31,6 +31,7 @@
 #include <unotools/nativenumberwrapper.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/processfactory.hxx>
 
 /*
     On demand instanciation and initialization of several i18n wrappers,
@@ -165,7 +166,7 @@ public:
  */
 class OnDemandCalendarWrapper
 {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
             ::com::sun::star::lang::Locale  aLocale;
     mutable CalendarWrapper*    pPtr;
     mutable bool                bValid;
@@ -178,13 +179,13 @@ public:
                                     , bInitialized(false)
                                     {}
                                 OnDemandCalendarWrapper(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                                     ::com::sun::star::lang::Locale& rLocale
                                     )
                                     : bValid(false)
                                     , bInitialized(false)
                                     {
-                                        init( rxSMgr, rLocale );
+                                        init( rxContext, rLocale );
                                     }
                                 ~OnDemandCalendarWrapper()
                                     {
@@ -196,11 +197,11 @@ public:
             bool                is() const      { return pPtr != NULL; }
 
             void                init(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                                     ::com::sun::star::lang::Locale& rLocale
                                     )
                                     {
-                                        xSMgr = rxSMgr;
+                                        m_xContext = rxContext;
                                         changeLocale( rLocale );
                                         if ( pPtr )
                                         {
@@ -221,7 +222,7 @@ public:
                                         if ( !bValid )
                                         {
                                             if ( !pPtr )
-                                                pPtr = new CalendarWrapper( xSMgr );
+                                                pPtr = new CalendarWrapper( m_xContext );
                                             pPtr->loadDefaultCalendar( aLocale );
                                             bValid = true;
                                         }
@@ -300,7 +301,7 @@ public:
                                         if ( !bValid )
                                         {
                                             if ( !pPtr )
-                                                pPtr = new ::utl::TransliterationWrapper( xSMgr, nType );
+                                                pPtr = new ::utl::TransliterationWrapper( comphelper::getComponentContext(xSMgr), nType );
                                             pPtr->loadModuleIfNeeded( eLanguage );
                                             bValid = true;
                                         }
@@ -310,7 +311,7 @@ public:
     const   ::utl::TransliterationWrapper*  getForModule( const String& rModule, LanguageType eLang ) const
                                     {
                                         if ( !pPtr )
-                                            pPtr = new ::utl::TransliterationWrapper( xSMgr, nType );
+                                            pPtr = new ::utl::TransliterationWrapper( comphelper::getComponentContext(xSMgr), nType );
                                         pPtr->loadModuleByImplName( rModule, eLang );
                                         bValid = false; // reforce settings change in get()
                                         return pPtr;

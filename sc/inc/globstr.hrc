@@ -594,15 +594,27 @@
 #define STR_COND_CONDITION          469
 #define STR_COND_COLORSCALE         470
 #define STR_COND_DATABAR            471
-#define STR_COND_FORMULA            472
-#define STR_COND_BETWEEN            473
-#define STR_COND_NOTBETWEEN         474
-#define STR_COND_UNIQUE             475
-#define STR_COND_DUPLICATE          476
+#define STR_COND_ICONSET            472
+#define STR_COND_FORMULA            473
+#define STR_COND_BETWEEN            474
+#define STR_COND_NOTBETWEEN         475
+#define STR_COND_UNIQUE             476
+#define STR_COND_DUPLICATE          477
+#define STR_COND_TOP10              478
+#define STR_COND_BOTTOM10           479
+#define STR_COND_TOP_PERCENT        480
+#define STR_COND_BOTTOM_PERCENT     481
+#define STR_COND_ABOVE_AVERAGE      482
+#define STR_COND_BELOW_AVERAGE      483
+#define STR_COND_ERROR              484
+#define STR_COND_NOERROR            485
+#define STR_COND_BEGINS_WITH        486
+#define STR_COND_ENDS_WITH          487
+#define STR_COND_CONTAINS           488
+#define STR_COND_NOT_CONTAINS       489
 
-#define STR_ERR_CONDFORMAT_PROTECTED 477
+#define STR_ERR_CONDFORMAT_PROTECTED 490
 
-#define STR_COUNT                   478
-
+#define STR_COUNT                   491
 
 #endif

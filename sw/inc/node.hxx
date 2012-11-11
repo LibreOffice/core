@@ -91,17 +91,17 @@ class SW_DLLPUBLIC SwNode
 {
     friend class SwNodes;
 
-#ifdef DBG_UTIL
-    static long s_nSerial;
-    long m_nSerial;
-#endif
-
     sal_uInt8 nNodeType;
 
     /// For text nodes: level of auto format. Was put here because we had still free bits.
     sal_uInt8 nAFmtNumLvl : 3;
-    sal_Bool bSetNumLSpace : 1;         ///< For numbering: TRUE: set indent.
-    sal_Bool bIgnoreDontExpand : 1;     ///< for Text Attributes - ignore the flag
+    bool bSetNumLSpace : 1;         ///< For numbering: TRUE: set indent.
+    bool bIgnoreDontExpand : 1;     ///< for Text Attributes - ignore the flag
+
+#ifdef DBG_UTIL
+    static long s_nSerial;
+    long m_nSerial;
+#endif
 
 protected:
     SwStartNode* pStartOfSection;
@@ -133,11 +133,11 @@ public:
     inline sal_uInt8 GetAutoFmtLvl() const     { return nAFmtNumLvl; }
     inline void SetAutoFmtLvl( sal_uInt8 nVal )      { nAFmtNumLvl = nVal; }
 
-    inline sal_Bool IsSetNumLSpace() const  { return bSetNumLSpace; }
-    inline void SetNumLSpace( sal_Bool bFlag )        { bSetNumLSpace = bFlag; }
+    inline bool IsSetNumLSpace() const  { return bSetNumLSpace; }
+    inline void SetNumLSpace( bool bFlag )        { bSetNumLSpace = bFlag; }
 
-    inline sal_Bool IsIgnoreDontExpand() const  { return bIgnoreDontExpand; }
-    inline void SetIgnoreDontExpand( sal_Bool bNew )  { bIgnoreDontExpand = bNew; }
+    inline bool IsIgnoreDontExpand() const  { return bIgnoreDontExpand; }
+    inline void SetIgnoreDontExpand( bool bNew )  { bIgnoreDontExpand = bNew; }
 
     sal_uInt8   GetNodeType() const { return nNodeType; }
 
@@ -440,7 +440,7 @@ public:
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const = 0;
 
     /// Get information from Client.
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const;
 
     /// SS for PoolItems: hard attributation.
 

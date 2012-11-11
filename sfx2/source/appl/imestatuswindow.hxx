@@ -47,7 +47,7 @@ ImeStatusWindow_Impl;
 class ImeStatusWindow: private ImeStatusWindow_Impl
 {
 public:
-    ImeStatusWindow( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > const& rServiceFactory );
+    ImeStatusWindow( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const& rxContext );
 
     /** Set up VCL according to the configuration.
 
@@ -103,8 +103,8 @@ private:
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >
     getConfig();
 
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-        m_xServiceFactory;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        m_xContext;
 
     osl::Mutex m_aMutex;
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >

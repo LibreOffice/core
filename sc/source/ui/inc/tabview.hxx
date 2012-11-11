@@ -192,7 +192,7 @@ private:
     void            UpdateVarZoom();
 
     static void     SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, bool bLayoutRTL );
-    static long     GetScrollBarPos( ScrollBar& rScroll, bool bLayoutRTL );
+    static long     GetScrollBarPos( ScrollBar& rScroll );
 
     void            GetPageMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, SCsCOL& rPageX, SCsROW& rPageY);
     void            GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,

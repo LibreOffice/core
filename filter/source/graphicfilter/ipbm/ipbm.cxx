@@ -380,7 +380,7 @@ sal_Bool PBMReader::ImplReadBody()
                     nCount--;
                     if ( nGrey <= mnMaxVal )
                         nGrey = 255 * nGrey / mnMaxVal;
-                        mpAcc->SetPixel( nHeight, nWidth++, (sal_uInt8)nGrey );
+                    mpAcc->SetPixel( nHeight, nWidth++, (sal_uInt8)nGrey );
                     nGrey = 0;
                     if ( nWidth == mnWidth )
                     {

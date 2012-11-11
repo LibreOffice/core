@@ -568,7 +568,7 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
 /*------------------------------------------------------------------------
     Description: add autotext
 ------------------------------------------------------------------------*/
-sal_Bool SwGlossaryHdl::InsertGlossary(const String &rName)
+bool SwGlossaryHdl::InsertGlossary(const String &rName)
 {
     OSL_ENSURE(pWrtShell->CanInsert(), "illegal");
 
@@ -576,7 +576,7 @@ sal_Bool SwGlossaryHdl::InsertGlossary(const String &rName)
         pCurGrp? pCurGrp: rStatGlossaries.GetGroupDoc(aCurGrp);
 
     if (!pGlos)
-        return sal_False;
+        return false;
 
     SvxMacro aStartMacro(aEmptyStr, aEmptyStr, STARBASIC);
     SvxMacro aEndMacro(aEmptyStr, aEmptyStr, STARBASIC);
@@ -608,7 +608,7 @@ sal_Bool SwGlossaryHdl::InsertGlossary(const String &rName)
 
     if(!pCurGrp)
         rStatGlossaries.PutGroupDoc(pGlos);
-    return sal_True;
+    return true;
 }
 
 /*------------------------------------------------------------------------

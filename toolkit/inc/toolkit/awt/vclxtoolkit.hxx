@@ -21,14 +21,10 @@
 #define _TOOLKIT_AWT_VCLXTOOLKIT_HXX_
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/awt/XSystemChildFactory.hpp>
-#include <com/sun/star/awt/XToolkit2.hpp>
-#include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
+#include <com/sun/star/awt/XToolkitExperimental.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/awt/XExtendedToolkit.hpp>
-#include <com/sun/star/awt/XReschedule.hpp>
 #include <com/sun/star/awt/XMessageBoxFactory.hpp>
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase2.hxx>
 #include "cppuhelper/interfacecontainer.hxx"
 #include <osl/mutex.hxx>
 #include <osl/module.h>
@@ -69,14 +65,9 @@ protected:
 };
 
 class VCLXToolkit : public VCLXToolkit_Impl,
-                    public cppu::WeakComponentImplHelper7<
-                    ::com::sun::star::awt::XToolkit2,
-                    ::com::sun::star::lang::XServiceInfo,
-                    ::com::sun::star::awt::XSystemChildFactory,
-                    ::com::sun::star::awt::XMessageBoxFactory,
-                    ::com::sun::star::awt::XDataTransferProviderAccess,
-                    ::com::sun::star::awt::XExtendedToolkit,
-                    ::com::sun::star::awt::XReschedule >
+                    public cppu::WeakComponentImplHelper2<
+                    ::com::sun::star::awt::XToolkitExperimental,
+                    ::com::sun::star::lang::XServiceInfo >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxClipboard;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxSelection;
@@ -115,10 +106,10 @@ protected:
 
 public:
 
-    VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
+    VCLXToolkit();
     ~VCLXToolkit();
 
-    // ::com::sun::star::awt::XToolkit2
+    // ::com::sun::star::awt::XToolkitExperimental
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >      SAL_CALL createScreenCompatibleDeviceUsingBuffer( sal_Int32 Width, sal_Int32 Height, sal_Int32 ScaleNumerator, sal_Int32 ScaleDenominator, sal_Int32 XOffset, sal_Int32 YOffset, sal_Int64 AddressOfMemoryBufferForSharedArrayWrapper ) throw
 (::com::sun::star::uno::RuntimeException);
 

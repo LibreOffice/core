@@ -74,6 +74,10 @@ public:
     /** Returns the entire text of all text portions. */
     ::rtl::OUString     getText() const;
 
+    /// Text distance from the border (inset attribute of v:textbox), valid only if set.
+    bool borderDistanceSet;
+    int borderDistanceLeft, borderDistanceTop, borderDistanceRight, borderDistanceBottom;
+
 private:
     typedef ::std::vector< TextPortionModel > PortionVector;
 

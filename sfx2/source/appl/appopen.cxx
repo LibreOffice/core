@@ -999,7 +999,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                     try
                     {
                         // get registered protocol handlers from configuration
-                        Reference < XNameAccess > xAccess( ::comphelper::ConfigurationHelper::openConfig( ::comphelper::getProcessServiceFactory(),
+                        Reference < XNameAccess > xAccess( ::comphelper::ConfigurationHelper::openConfig( ::comphelper::getProcessComponentContext(),
                             ::rtl::OUString("org.openoffice.Office.ProtocolHandler/HandlerSet"), ::comphelper::ConfigurationHelper::E_READONLY ), UNO_QUERY );
                         if ( xAccess.is() )
                         {

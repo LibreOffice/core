@@ -700,7 +700,12 @@ const SfxItemSet* ScDocument::GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab 
 ScConditionalFormat* ScDocument::GetCondFormat(
                             SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    sal_uLong nIndex = ((const SfxUInt32Item*)GetAttr(nCol,nRow,nTab,ATTR_CONDITIONAL))->GetValue();
+    sal_uInt32 nIndex = 0;
+    const std::vector<sal_uInt32>& rCondFormats = static_cast<const ScCondFormatItem*>(GetAttr(nCol, nRow, nTab, ATTR_CONDITIONAL))->GetCondFormatData();
+
+    if(!rCondFormats.empty())
+        nIndex = rCondFormats[0];
+
     if (nIndex)
     {
         ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);

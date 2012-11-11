@@ -142,7 +142,6 @@ private:
     mutable SCROW nTableAreaY;
 
     SCTAB           nTab;
-    sal_uInt16          nRecalcLvl;             // recursion level Size-Recalc
     ScDocument*     pDocument;
     utl::TextSearch*    pSearchText;
 
@@ -778,9 +777,6 @@ public:
     xub_StrLen  GetMaxNumberStringLen( sal_uInt16& nPrecision,
                                        SCCOL nCol,
                                        SCROW nRowStart, SCROW nRowEnd ) const;
-
-    void        IncRecalcLevel();
-    void        DecRecalcLevel( bool bUpdateNoteCaptionPos = true );
 
     bool        IsSortCollatorGlobal() const;
     void        InitSortCollator( const ScSortParam& rPar );

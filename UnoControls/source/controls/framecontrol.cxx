@@ -49,8 +49,8 @@ namespace unocontrols{
 //  construct/destruct
 //______________________________________________________________________________________________________________
 
-FrameControl::FrameControl( const Reference< XMultiServiceFactory >& xFactory )
-    : BaseControl                   ( xFactory                                                                              )
+FrameControl::FrameControl( const Reference< XComponentContext >& rxContext)
+    : BaseControl                   ( rxContext                                                                             )
     , OBroadcastHelper              ( m_aMutex                                                                              )
     , OPropertySetHelper            ( *(static_cast< OBroadcastHelper * >(this))  )
     , m_aInterfaceContainer         ( m_aMutex                                                                              )
@@ -467,7 +467,9 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
         xOldFrame = m_xFrame ;
     }
 
-    xNewFrame = Reference< XFrame >  ( impl_getMultiServiceFactory()->createInstance ( "com.sun.star.frame.Frame" ), UNO_QUERY ) ;
+
+
+    xNewFrame = Reference< XFrame >  ( impl_getComponentContext()->getServiceManager()->createInstanceWithContext("com.sun.star.frame.Frame", impl_getComponentContext()), UNO_QUERY ) ;
     Reference< XDispatchProvider >  xDSP ( xNewFrame, UNO_QUERY ) ;
 
     if (xDSP.is())
@@ -478,9 +480,7 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
         //  option
         //xFrame->setName( "WhatYouWant" );
 
-        Reference< XURLTransformer >  xTrans (
-               URLTransformer::create(
-                   ::comphelper::getComponentContext( impl_getMultiServiceFactory() ) ) );
+        Reference< XURLTransformer > xTrans = URLTransformer::create( impl_getComponentContext() );
         // load file
         URL aURL ;
 

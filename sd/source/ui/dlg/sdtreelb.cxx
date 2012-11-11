@@ -309,7 +309,7 @@ sal_Bool SdPageObjsTLB::SelectEntry( const String& rName )
 
     if( rName.Len() )
     {
-        SvLBoxEntry* pEntry = NULL;
+        SvTreeListEntry* pEntry = NULL;
         String aTmp;
 
         for( pEntry = First(); pEntry && !bFound; pEntry = Next( pEntry ) )
@@ -338,7 +338,7 @@ sal_Bool SdPageObjsTLB::HasSelectedChildren( const String& rName )
 
     if( rName.Len() )
     {
-        SvLBoxEntry* pEntry = NULL;
+        SvTreeListEntry* pEntry = NULL;
         String aTmp;
 
         for( pEntry = First(); pEntry && !bFound; pEntry = Next( pEntry ) )
@@ -452,7 +452,7 @@ void SdPageObjsTLB::AddShapeList (
     SdrObject* pShape,
     const ::rtl::OUString& rsName,
     const bool bIsExcluded,
-    SvLBoxEntry* pParentEntry,
+    SvTreeListEntry* pParentEntry,
     const IconProvider& rIconProvider)
 {
     Image aIcon (rIconProvider.maImgPage);
@@ -465,7 +465,7 @@ void SdPageObjsTLB::AddShapeList (
     if (pShape != NULL)
         pUserData = pShape;
 
-    SvLBoxEntry* pEntry = InsertEntry(
+    SvTreeListEntry* pEntry = InsertEntry(
         rsName,
         aIcon,
         aIcon,
@@ -598,7 +598,7 @@ sal_Bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
 
     SdrObject*   pObj = NULL;
     SdPage*      pPage = NULL;
-    SvLBoxEntry* pEntry = First();
+    SvTreeListEntry* pEntry = First();
     String       aName;
 
     // Alle Pages incl. Objekte vergleichen
@@ -665,7 +665,7 @@ String SdPageObjsTLB::GetSelectEntry()
 std::vector<rtl::OUString> SdPageObjsTLB::GetSelectEntryList( const sal_uInt16 nDepth ) const
 {
     std::vector<rtl::OUString> aEntries;
-    SvLBoxEntry* pEntry = FirstSelected();
+    SvTreeListEntry* pEntry = FirstSelected();
 
     while( pEntry )
     {
@@ -686,7 +686,7 @@ std::vector<rtl::OUString> SdPageObjsTLB::GetSelectEntryList( const sal_uInt16 n
 |*
 \************************************************************************/
 
-void SdPageObjsTLB::RequestingChildren( SvLBoxEntry* pFileEntry )
+void SdPageObjsTLB::RequestingChildren( SvTreeListEntry* pFileEntry )
 {
     if( !pFileEntry->HasChildren() )
     {
@@ -694,7 +694,7 @@ void SdPageObjsTLB::RequestingChildren( SvLBoxEntry* pFileEntry )
         {
             SdrObject*   pObj = NULL;
             SdPage*      pPage = NULL;
-            SvLBoxEntry* pPageEntry = NULL;
+            SvTreeListEntry* pPageEntry = NULL;
 
             Image aImgPage     = Image( BitmapEx( SdResId( BMP_PAGE     ) ) );
             Image aImgPageObjs = Image( BitmapEx( SdResId( BMP_PAGEOBJS ) ) );
@@ -852,7 +852,7 @@ void SdPageObjsTLB::CloseBookmarkDoc()
 
 void SdPageObjsTLB::SelectHdl()
 {
-    SvLBoxEntry* pEntry = FirstSelected();
+    SvTreeListEntry* pEntry = FirstSelected();
 
     mbLinkableSelected = sal_True;
 
@@ -878,7 +878,7 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
     if( rKEvt.GetKeyCode().GetCode() == KEY_RETURN )
     {
         // Auskommentierter Code aus svtools/source/contnr/svimpbox.cxx
-        SvLBoxEntry* pCursor = GetCurEntry();
+        SvTreeListEntry* pCursor = GetCurEntry();
         if( pCursor->HasChildren() || pCursor->HasChildrenOnDemand() )
         {
             if( IsExpanded( pCursor ) )
@@ -905,7 +905,7 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
     (void)rPosPixel;
 
     SdNavigatorWin* pNavWin = NULL;
-    SvLBoxEntry* pEntry = GetEntry(rPosPixel);
+    SvTreeListEntry* pEntry = GetEntry(rPosPixel);
 
     if( mpFrame->HasChildWindow( SID_NAVIGATOR ) )
         pNavWin = (SdNavigatorWin*) ( mpFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
@@ -926,12 +926,12 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
 
         // Enable only the entries as drop targets that are children of the
         // page under the mouse.
-        SvLBoxEntry* pParent = GetRootLevelParent(pEntry);
+        SvTreeListEntry* pParent = GetRootLevelParent(pEntry);
         if (pParent != NULL)
         {
             SelectAll(sal_False, sal_False);
             Select(pParent, sal_True);
-            //            for (SvLBoxEntry*pChild=FirstChild(pParent); pChild!=NULL; pChild=NextSibling(pChild))
+            //            for (SvTreeListEntry*pChild=FirstChild(pParent); pChild!=NULL; pChild=NextSibling(pChild))
             //                Select(pChild, sal_True);
             EnableSelectionAsDropTarget(sal_True, sal_True);//sal_False);
         }
@@ -1076,7 +1076,7 @@ sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
     }
     else
     {
-        SvLBoxEntry* pEntry = GetDropTarget(rEvent.maPosPixel);
+        SvTreeListEntry* pEntry = GetDropTarget(rEvent.maPosPixel);
         if (rEvent.mbLeaving || !CheckDragAndDropMode( this, rEvent.mnAction ))
         {
             ImplShowTargetEmphasis( pTargetEntry, sal_False );
@@ -1201,12 +1201,12 @@ bool SdPageObjsTLB::PageBelongsToCurrentShow (const SdPage* pPage) const
 
 
 sal_Bool SdPageObjsTLB::NotifyMoving(
-    SvLBoxEntry* pTarget,
-    SvLBoxEntry* pEntry,
-    SvLBoxEntry*& rpNewParent,
+    SvTreeListEntry* pTarget,
+    SvTreeListEntry* pEntry,
+    SvTreeListEntry*& rpNewParent,
     sal_uLong& rNewChildPos)
 {
-    SvLBoxEntry* pDestination = pTarget;
+    SvTreeListEntry* pDestination = pTarget;
     while (GetParent(pDestination) != NULL && GetParent(GetParent(pDestination)) != NULL)
         pDestination = GetParent(pDestination);
 
@@ -1256,9 +1256,9 @@ sal_Bool SdPageObjsTLB::NotifyMoving(
 
 
 
-SvLBoxEntry* SdPageObjsTLB::GetDropTarget (const Point& rLocation)
+SvTreeListEntry* SdPageObjsTLB::GetDropTarget (const Point& rLocation)
 {
-    SvLBoxEntry* pEntry = SvTreeListBox::GetDropTarget(rLocation);
+    SvTreeListEntry* pEntry = SvTreeListBox::GetDropTarget(rLocation);
     if (pEntry == NULL)
         return NULL;
 
@@ -1276,11 +1276,11 @@ SvLBoxEntry* SdPageObjsTLB::GetDropTarget (const Point& rLocation)
             pEntry = GetParent(pEntry);
 
         // Advance to next sibling.
-        SvLBoxEntry* pNext;
+        SvTreeListEntry* pNext;
         sal_uInt16 nDepth (0);
         while (pEntry != NULL)
         {
-            pNext = dynamic_cast<SvLBoxEntry*>(NextVisible(pEntry, &nDepth));
+            pNext = dynamic_cast<SvTreeListEntry*>(NextVisible(pEntry, &nDepth));
             if (pNext != NULL && nDepth > 0 && nDepth!=0xffff)
                 pEntry = pNext;
             else
@@ -1296,7 +1296,7 @@ SvLBoxEntry* SdPageObjsTLB::GetDropTarget (const Point& rLocation)
 
 
 
-bool SdPageObjsTLB::IsDropAllowed (SvLBoxEntry* pEntry)
+bool SdPageObjsTLB::IsDropAllowed (SvTreeListEntry* pEntry)
 {
     if (pEntry == NULL)
         return false;

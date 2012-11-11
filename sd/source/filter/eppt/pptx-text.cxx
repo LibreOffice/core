@@ -34,7 +34,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptDirection.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/text/FontRelief.hpp>
@@ -1298,13 +1298,9 @@ FontCollection::~FontCollection()
 FontCollection::FontCollection() :
     pVDev ( NULL )
 {
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-        xMSF = ::comphelper::getProcessServiceFactory();
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-        xInterface = xMSF->createInstance( "com.sun.star.i18n.BreakIterator" );
-    if ( xInterface.is() )
-        xPPTBreakIter = com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator >
-            ( xInterface, com::sun::star::uno::UNO_QUERY );
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        xContext = ::comphelper::getProcessComponentContext();
+    xPPTBreakIter = com::sun::star::i18n::BreakIterator::create( xContext );
 }
 
 short FontCollection::GetScriptDirection( const rtl::OUString& rString ) const

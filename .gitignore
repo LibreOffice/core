@@ -10,8 +10,7 @@
 # python generated file
 *.pyc
 
-# where the 'subrepos' and downloads are located
-/clone
+# where the downloads are located
 /src
 
 # the build directories
@@ -41,7 +40,6 @@
 /*/wnt*.obsolete
 /*/callcatcher
 /workdir
-/solver
 /instsetoo_native/util/LibreOffice
 /instsetoo_native/util/LibreOffice_SDK
 
@@ -58,11 +56,11 @@
 /config.parms
 /config_host.mk
 /config_host.mk.last
+/config_host.mk.stamp
 /config_build.mk
 /configure
 /desktop/scripts/soffice.sh
 /makefile.mk
-/post_download
 /bin/repo-list
 /src.downloaded
 /ooo.lst
@@ -78,11 +76,9 @@
 # misc
 /file-lists
 /cross-build-toolset.built
-/set_soenv.stamp
 /warn
 /build.log
 /build_error.log
-/post_download.log
 /install
 /downloaded
 /ID
@@ -101,19 +97,9 @@ TAGS
 /external/*/*.msm
 /moz/zipped/*.zip
 
-# links to the other repositories
-/binfilter
-/dictionaries
-/helpcontent2
-/translations
-
 # compiled python objects for gdb pretty printers
 /solenv/gdb/libreoffice/*.py[co]
 /solenv/gdb/libreoffice/util/*.py[co]
-
-# botstrap generated tool
-/solenv/bin/concat-deps
-/solenv/bin/concat-deps.exe
 
 # test output files
 test/user-template/user/psprint/pspfontcache

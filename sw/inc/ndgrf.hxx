@@ -1,30 +1,22 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
 #ifndef _NDGRF_HXX
 #define _NDGRF_HXX
 #include <sfx2/lnkbase.hxx>
@@ -46,6 +38,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     friend class SwNodes;
 
     GraphicObject aGrfObj;
+    GraphicObject *mpReplacementGraphic;
     ::sfx2::SvBaseLinkRef refLink;       ///< If graphics only as link then pointer is set.
     Size nGrfSize;
     String aNewStrmName;                 /**< SW3/XML: new stream name (either SW3 stream
@@ -138,6 +131,7 @@ public:
     const Graphic&          GetGrf() const      { return aGrfObj.GetGraphic(); }
     const GraphicObject&    GetGrfObj() const   { return aGrfObj; }
           GraphicObject&    GetGrfObj()         { return aGrfObj; }
+    const GraphicObject* GetReplacementGrfObj() const;
 
     virtual SwCntntNode *SplitCntntNode( const SwPosition & );
 
@@ -190,11 +184,11 @@ public:
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
 
     /// Query link-data.
-    sal_Bool IsGrfLink() const                  { return refLink.Is(); }
-    inline sal_Bool IsLinkedFile() const;
-    inline sal_Bool IsLinkedDDE() const;
+    bool IsGrfLink() const                  { return refLink.Is(); }
+    inline bool IsLinkedFile() const;
+    inline bool IsLinkedDDE() const;
     ::sfx2::SvBaseLinkRef GetLink() const    { return refLink; }
-    sal_Bool GetFileFilterNms( String* pFileNm, String* pFilterNm ) const;
+    bool GetFileFilterNms( String* pFileNm, String* pFilterNm ) const;
     void ReleaseLink();
 
     /** Scale an image-map: the image-map becomes zoomed in / out by
@@ -227,11 +221,11 @@ inline const SwGrfNode   *SwNode::GetGrfNode() const
 }
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
-inline sal_Bool SwGrfNode::IsLinkedFile() const
+inline bool SwGrfNode::IsLinkedFile() const
 {
     return refLink.Is() && OBJECT_CLIENT_GRF == refLink->GetObjType();
 }
-inline sal_Bool SwGrfNode::IsLinkedDDE() const
+inline bool SwGrfNode::IsLinkedDDE() const
 {
     return refLink.Is() && OBJECT_CLIENT_DDE == refLink->GetObjType();
 }

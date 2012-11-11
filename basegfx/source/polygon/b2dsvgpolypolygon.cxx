@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -41,9 +32,9 @@ namespace basegfx
     {
         namespace
         {
-            void lcl_skipSpaces(sal_Int32&              io_rPos,
-                                const ::rtl::OUString&  rStr,
-                                const sal_Int32         nLen)
+            void lcl_skipSpaces(sal_Int32&          io_rPos,
+                                const OUString&     rStr,
+                                const sal_Int32     nLen)
             {
                 while( io_rPos < nLen &&
                        sal_Unicode(' ') == rStr[io_rPos] )
@@ -52,9 +43,9 @@ namespace basegfx
                 }
             }
 
-            void lcl_skipSpacesAndCommas(sal_Int32&             io_rPos,
-                                         const ::rtl::OUString& rStr,
-                                         const sal_Int32        nLen)
+            void lcl_skipSpacesAndCommas(sal_Int32&         io_rPos,
+                                         const OUString&    rStr,
+                                         const sal_Int32    nLen)
             {
                 while(io_rPos < nLen
                       && (sal_Unicode(' ') == rStr[io_rPos] || sal_Unicode(',') == rStr[io_rPos]))
@@ -73,18 +64,18 @@ namespace basegfx
                 return bPredicate;
             }
 
-            inline bool lcl_isOnNumberChar(const ::rtl::OUString& rStr, const sal_Int32 nPos, bool bSignAllowed = true)
+            inline bool lcl_isOnNumberChar(const OUString& rStr, const sal_Int32 nPos, bool bSignAllowed = true)
             {
                 return lcl_isOnNumberChar(rStr[nPos],
                                           bSignAllowed);
             }
 
-            bool lcl_getDoubleChar(double&                  o_fRetval,
-                                   sal_Int32&               io_rPos,
-                                   const ::rtl::OUString&   rStr)
+            bool lcl_getDoubleChar(double&              o_fRetval,
+                                   sal_Int32&           io_rPos,
+                                   const OUString&      rStr)
             {
                 sal_Unicode aChar( rStr[io_rPos] );
-                ::rtl::OUStringBuffer sNumberString;
+                OUStringBuffer sNumberString;
                 bool separator_seen=false;
 
                 if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
@@ -133,10 +124,10 @@ namespace basegfx
                 return false;
             }
 
-            bool lcl_importDoubleAndSpaces( double&                 o_fRetval,
-                                            sal_Int32&              io_rPos,
-                                            const ::rtl::OUString&  rStr,
-                                            const sal_Int32         nLen )
+            bool lcl_importDoubleAndSpaces( double&             o_fRetval,
+                                            sal_Int32&          io_rPos,
+                                            const OUString&     rStr,
+                                            const sal_Int32     nLen )
             {
                 if( !lcl_getDoubleChar(o_fRetval, io_rPos, rStr) )
                     return false;
@@ -146,10 +137,10 @@ namespace basegfx
                 return true;
             }
 
-            bool lcl_importFlagAndSpaces(sal_Int32&               o_nRetval,
-                                         sal_Int32&               io_rPos,
-                                         const ::rtl::OUString&   rStr,
-                                         const sal_Int32          nLen)
+            bool lcl_importFlagAndSpaces(sal_Int32&         o_nRetval,
+                                         sal_Int32&         io_rPos,
+                                         const OUString&    rStr,
+                                         const sal_Int32    nLen)
             {
                 sal_Unicode aChar( rStr[io_rPos] );
 
@@ -171,14 +162,14 @@ namespace basegfx
                 return true;
             }
 
-            void lcl_putNumberChar( ::rtl::OUStringBuffer& rStr,
-                                    double                 fValue )
+            void lcl_putNumberChar( OUStringBuffer& rStr,
+                                    double          fValue )
             {
                 rStr.append( fValue );
             }
 
-            void lcl_putNumberCharWithSpace( ::rtl::OUStringBuffer& rStr,
-                                             double                 fValue,
+            void lcl_putNumberCharWithSpace( OUStringBuffer&    rStr,
+                                             double             fValue,
                                              double                 fOldValue,
                                              bool                   bUseRelativeCoordinates )
             {
@@ -206,7 +197,7 @@ namespace basegfx
             }
         }
 
-        bool importFromSvgD(B2DPolyPolygon& o_rPolyPolygon, const ::rtl::OUString&  rSvgDStatement, bool bWrongPositionAfterZ)
+        bool importFromSvgD(B2DPolyPolygon& o_rPolyPolygon, const OUString&  rSvgDStatement, bool bWrongPositionAfterZ)
         {
             o_rPolyPolygon.clear();
             const sal_Int32 nLen(rSvgDStatement.getLength());
@@ -789,7 +780,7 @@ namespace basegfx
         }
 
         bool importFromSvgPoints( B2DPolygon&            o_rPoly,
-                                  const ::rtl::OUString& rSvgPointsAttribute )
+                                  const OUString& rSvgPointsAttribute )
         {
             o_rPoly.clear();
             const sal_Int32 nLen(rSvgPointsAttribute.getLength());
@@ -814,13 +805,13 @@ namespace basegfx
             return true;
         }
 
-        ::rtl::OUString exportToSvgD(
+        OUString exportToSvgD(
             const B2DPolyPolygon& rPolyPolygon,
             bool bUseRelativeCoordinates,
             bool bDetectQuadraticBeziers)
         {
             const sal_uInt32 nCount(rPolyPolygon.count());
-            ::rtl::OUStringBuffer aResult;
+            OUStringBuffer aResult;
             B2DPoint aCurrentSVGPosition(0.0, 0.0); // SVG assumes (0,0) as the initial current point
 
             for(sal_uInt32 i(0); i < nCount; i++)

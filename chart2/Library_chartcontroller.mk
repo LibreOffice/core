@@ -180,7 +180,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/main/ChartDropTargetHelper \
     chart2/source/controller/main/ChartFrameloader \
     chart2/source/controller/main/ChartModelClone \
-    chart2/source/controller/main/ChartRenderer \
     chart2/source/controller/main/ChartTransferable \
     chart2/source/controller/main/ChartWindow \
     chart2/source/controller/main/CommandDispatchContainer \

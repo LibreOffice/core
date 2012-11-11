@@ -99,7 +99,7 @@ public:
     inline SwCharFmt *GetCharFmt()       { return (SwCharFmt*)GetRegisteredIn(); }
     void SetCharFmt( SwCharFmt *pNew );
     /// Get information from Client.
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const;
 
     /// Get and set Modify pointer.
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }

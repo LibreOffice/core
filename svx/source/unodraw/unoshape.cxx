@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/**h***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -711,7 +711,7 @@ uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw
     aRect.Justify();
     Size aSize(aRect.GetSize());
 
-    GDIMetaFile aMtf( pView->GetAllMarkedMetaFile() );
+    GDIMetaFile aMtf( pView->GetMarkedObjMetaFile() );
     if( bMetaFile )
     {
         SvMemoryStream aDestStrm( 65535, 65535 );
@@ -3999,7 +3999,7 @@ SvxShapeText::SvxShapeText( SdrObject* pObject, const SfxItemPropertyMapEntry* p
 : SvxShape( pObject, pPropertyMap, pPropertySet ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject && pObject->GetModel() )
-		SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< cppu::OWeakObject * >( static_cast< SvxShape * >( this ) ) ) );
+        SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< cppu::OWeakObject * >( static_cast< SvxShape * >( this ) ) ) );
 }
 
 //----------------------------------------------------------------------
@@ -4013,7 +4013,7 @@ SvxShapeText::~SvxShapeText() throw ()
 void SvxShapeText::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
     if( pNewObj && (NULL == GetEditSource()))
-		SetEditSource( new SvxTextEditSource( pNewObj, 0, static_cast< cppu::OWeakObject * >( static_cast< SvxShape* >(this) ) ) );
+        SetEditSource( new SvxTextEditSource( pNewObj, 0, static_cast< cppu::OWeakObject * >( static_cast< SvxShape* >(this) ) ) );
 
     SvxShape::Create( pNewObj, pNewPage );
 }
@@ -4247,12 +4247,12 @@ uno::Any SAL_CALL SvxShapeRect::queryAggregation( const uno::Type & rType ) thro
 
 void SAL_CALL SvxShapeRect::acquire() throw()
 {
-	SvxShapeText::acquire();
+    SvxShapeText::acquire();
 }
 
 void SAL_CALL SvxShapeRect::release() throw()
 {
-	SvxShapeText::release();
+    SvxShapeText::release();
 }
 //----------------------------------------------------------------------
 // XServiceInfo

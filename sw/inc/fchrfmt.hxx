@@ -76,7 +76,7 @@ public:
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual sal_Bool    GetInfo( SfxPoolItem& rInfo ) const;
+    virtual bool    GetInfo( SfxPoolItem& rInfo ) const;
 
     void SetCharFmt( SwFmt* pFmt ) { pFmt->Add(this); }
     SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }

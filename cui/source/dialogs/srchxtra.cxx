@@ -171,7 +171,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
 
             // item resources are in svx
             sal_uInt32 nId  = aAttrNames.FindIndex( nSlot );
-            SvLBoxEntry* pEntry = NULL;
+            SvTreeListEntry* pEntry = NULL;
             if ( RESARRAY_INDEX_NOTFOUND != nId )
                 pEntry = aAttrLB.SvTreeListBox::InsertEntry( aAttrNames.GetString(nId) );
             else

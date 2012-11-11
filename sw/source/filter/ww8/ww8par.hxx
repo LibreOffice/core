@@ -656,7 +656,9 @@ public:
         com::sun::star::drawing::XShape > *pShapeRef=0,
         sal_Bool bFloatingCtrl=false );
 private:
+    sal_uInt32 GenerateObjectID();
     SwPaM *pPaM;
+    sal_uInt32 mnObjectId;
 };
 
 class SwMSDffManager : public SvxMSDffManager

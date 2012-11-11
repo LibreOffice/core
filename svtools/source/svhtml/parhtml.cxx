@@ -1115,7 +1115,7 @@ int HTMLParser::_GetNextToken()
                         if( MAX_LEN == sTmpBuffer.getLength() )
                             aToken += String(sTmpBuffer.makeStringAndClear());
                         nNextCh = GetNextChar();
-                    } while( '>' != nNextCh && !HTML_ISSPACE( nNextCh ) &&
+                    } while( '>' != nNextCh && '/' != nNextCh && !HTML_ISSPACE( nNextCh ) &&
                              IsParserWorking() && !rInput.IsEof() );
 
                     if( sTmpBuffer.getLength() )

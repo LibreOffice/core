@@ -79,7 +79,7 @@ import com.sun.star.awt.Size;
 import com.sun.star.awt.XBitmap;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XDevice;
-import com.sun.star.awt.XToolkit2;
+import com.sun.star.awt.XToolkitExperimental;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XController;
@@ -121,7 +121,7 @@ public class DocumentLoader
     XComponentContext context;
     XMultiComponentFactory mcf;
     XComponentLoader componentLoader;
-    XToolkit2 toolkit;
+    XToolkitExperimental toolkit;
     XDevice dummySmallDevice;
     Object doc;
     int pageCount;
@@ -681,7 +681,7 @@ public class DocumentLoader
 
                 Object toolkitService = mcf.createInstanceWithContext
                     ("com.sun.star.awt.Toolkit", context);
-                toolkit = (XToolkit2) UnoRuntime.queryInterface(XToolkit2.class, toolkitService);
+                toolkit = (XToolkitExperimental) UnoRuntime.queryInterface(XToolkitExperimental.class, toolkitService);
 
                 renderable = (XRenderable) UnoRuntime.queryInterface(XRenderable.class, doc);
 

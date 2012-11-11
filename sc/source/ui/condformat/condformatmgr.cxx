@@ -87,8 +87,8 @@ void ScCondFormatManagerWindow::Init()
 
     for(ScConditionalFormatList::iterator itr = mpFormatList->begin(); itr != mpFormatList->end(); ++itr)
     {
-        SvLBoxEntry* pEntry = InsertEntryToColumn( createEntryString(*itr), LIST_APPEND, 0xffff );
-        maMapLBoxEntryToCondIndex.insert(std::pair<SvLBoxEntry*,sal_Int32>(pEntry,itr->GetKey()));
+        SvTreeListEntry* pEntry = InsertEntryToColumn( createEntryString(*itr), LIST_APPEND, 0xffff );
+        maMapLBoxEntryToCondIndex.insert(std::pair<SvTreeListEntry*,sal_Int32>(pEntry,itr->GetKey()));
     }
     SetUpdateMode(true);
 }
@@ -97,7 +97,7 @@ void ScCondFormatManagerWindow::DeleteSelection()
 {
     if(GetSelectionCount())
     {
-        for(SvLBoxEntry* pEntry = FirstSelected(); pEntry != NULL; pEntry = NextSelected(pEntry))
+        for(SvTreeListEntry* pEntry = FirstSelected(); pEntry != NULL; pEntry = NextSelected(pEntry))
         {
             sal_Int32 nIndex = maMapLBoxEntryToCondIndex.find(pEntry)->second;
             mpFormatList->erase(nIndex);
@@ -108,7 +108,7 @@ void ScCondFormatManagerWindow::DeleteSelection()
 
 ScConditionalFormat* ScCondFormatManagerWindow::GetSelection()
 {
-    SvLBoxEntry* pEntry = FirstSelected();
+    SvTreeListEntry* pEntry = FirstSelected();
     if(!pEntry)
         return NULL;
 

@@ -28,6 +28,7 @@
 #include <general.h>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 
@@ -152,7 +153,7 @@ class JobData : private ThreadHelpBase
             We need it for creating of own uno services ... e.g. for
             opening the configuration.
          */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /**
             An instance of this class can be used in two different modes:
@@ -224,7 +225,7 @@ class JobData : private ThreadHelpBase
 
     public:
 
-                 JobData( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
+                 JobData( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                  JobData( const JobData&                                                rCopy );
         virtual ~JobData(                                                                     );
 
@@ -250,10 +251,10 @@ class JobData : private ThreadHelpBase
         void                                         setResult      ( const JobResult&                                    aResult      );
         void                                         disableJob     (                                                                  );
 
-        static css::uno::Sequence< ::rtl::OUString > getEnabledJobsForEvent( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
-                                                                             const ::rtl::OUString&                                        sEvent );
+        static css::uno::Sequence< ::rtl::OUString > getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                                                             const ::rtl::OUString&                                    sEvent );
 
-        static void appendEnabledJobsForEvent( const css::uno::Reference< css::lang::XMultiServiceFactory >&          xSMGR  ,
+        static void appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
                                                const ::rtl::OUString&                                                 sEvent ,
                                                      ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding >& lJobs  );
 

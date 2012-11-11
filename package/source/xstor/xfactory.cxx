@@ -60,15 +60,15 @@ sal_Bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& x
 uno::Sequence< ::rtl::OUString > SAL_CALL OStorageFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory") );
-    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.StorageFactory") );
+    aRet[0] = "com.sun.star.embed.StorageFactory";
+    aRet[1] = "com.sun.star.comp.embed.StorageFactory";
     return aRet;
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OStorageFactory::impl_staticGetImplementationName()
+OUString SAL_CALL OStorageFactory::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.StorageFactory") );
+    return OUString("com.sun.star.comp.embed.StorageFactory");
 }
 
 //-------------------------------------------------------------------------
@@ -147,7 +147,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             throw lang::IllegalArgumentException(); // TODO:
         }
 
-        if ( aURL.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg")) )
+        if ( aURL.equalsIgnoreAsciiCase("vnd.sun.star.pkg") )
         {
             OSL_FAIL( "Packages URL's are not valid for storages!\n" ); // ???
             throw lang::IllegalArgumentException(); // TODO:
@@ -181,17 +181,17 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             if ( !aURL.isEmpty() )
             {
                 aPropsToSet.realloc(1);
-                aPropsToSet[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
+                aPropsToSet[0].Name = "URL";
                 aPropsToSet[0].Value <<= aURL;
             }
 
             for ( sal_Int32 nInd = 0, nNumArgs = 1; nInd < aDescr.getLength(); nInd++ )
             {
-                if ( aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) )
-                  || aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) )
-                  || aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) )
-                  || aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
-                  // || aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Unpacked" ) ) // TODO:
+                if ( aDescr[nInd].Name == "InteractionHandler"
+                  || aDescr[nInd].Name == "Password"
+                  || aDescr[nInd].Name == "RepairPackage"
+                  || aDescr[nInd].Name == "StatusIndicator" )
+                  // || aDescr[nInd].Name == "Unpacked" ) // TODO:
                 {
                     aPropsToSet.realloc( ++nNumArgs );
                     aPropsToSet[nNumArgs-1].Name = aDescr[nInd].Name;
@@ -210,19 +210,19 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                         else if ( aFormatName.equals( OFOPXML_STORAGE_FORMAT_STRING ) )
                             nStorageType = embed::StorageFormats::OFOPXML;
                         else
-                            throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
+                            throw lang::IllegalArgumentException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >(), 1 );
                     }
                     else if ( aDescr[nInd].Value >>= nFormatID )
                     {
                         if ( nFormatID != embed::StorageFormats::PACKAGE
                           && nFormatID != embed::StorageFormats::ZIP
                           && nFormatID != embed::StorageFormats::OFOPXML )
-                            throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
+                            throw lang::IllegalArgumentException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >(), 1 );
 
                         nStorageType = nFormatID;
                     }
                     else
-                        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
+                        throw lang::IllegalArgumentException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >(), 1 );
                 }
                 else
                     OSL_FAIL( "Unacceptable property, will be ignored!\n" );

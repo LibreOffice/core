@@ -257,6 +257,72 @@
  
 --- misc/boost_1_44_0/boost/multi_array.hpp	2012-09-28 13:06:44.796521371 +0100
 +++ misc/build/boost_1_44_0/boost/multi_array.hpp	2012-09-28 13:07:25.119002500 +0100
+@@ -139,20 +139,20 @@
+ 
+   explicit multi_array() :
+     super_type((T*)initial_base_,c_storage_order(),
+-               /*index_bases=*/0, /*extents=*/0) {
++               /*index_bases=*/0, /*extents_=*/0) {
+     allocate_space(); 
+   }
+ 
+   template <class ExtentList>
+   explicit multi_array(
+-      ExtentList const& extents
++      ExtentList const& extents_
+ #ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+       , typename mpl::if_<
+       detail::multi_array::is_multi_array_impl<ExtentList>,
+       int&,int>::type* = 0
+ #endif
+       ) :
+-    super_type((T*)initial_base_,extents) {
++    super_type((T*)initial_base_,extents_) {
+     boost::function_requires<
+       detail::multi_array::CollectionConcept<ExtentList> >();
+     allocate_space();
+@@ -160,19 +160,19 @@
+ 
+     
+   template <class ExtentList>
+-  explicit multi_array(ExtentList const& extents,
++  explicit multi_array(ExtentList const& extents_,
+                        const general_storage_order<NumDims>& so) :
+-    super_type((T*)initial_base_,extents,so) {
++    super_type((T*)initial_base_,extents_,so) {
+     boost::function_requires<
+       detail::multi_array::CollectionConcept<ExtentList> >();
+     allocate_space();
+   }
+ 
+   template <class ExtentList>
+-  explicit multi_array(ExtentList const& extents,
++  explicit multi_array(ExtentList const& extents_,
+                        const general_storage_order<NumDims>& so,
+                        Allocator const& alloc) :
+-    super_type((T*)initial_base_,extents,so), allocator_(alloc) {
++    super_type((T*)initial_base_,extents_,so), allocator_(alloc) {
+     boost::function_requires<
+       detail::multi_array::CollectionConcept<ExtentList> >();
+     allocate_space();
+@@ -381,7 +381,7 @@
+ 
+ 
+   template <typename ExtentList>
+-  multi_array& resize(const ExtentList& extents) {
++  multi_array& resize(const ExtentList& extents_) {
+     boost::function_requires<
+       detail::multi_array::CollectionConcept<ExtentList> >();
+ 
+@@ -390,7 +390,7 @@
+ 
+     for (int i=0; i != NumDims; ++i) {
+       typedef typename gen_type::range range_type;
+-      ranges.ranges_[i] = range_type(0,extents[i]);
++      ranges.ranges_[i] = range_type(0,extents_[i]);
+     }
+     
+     return this->resize(ranges);
 @@ -423,9 +423,9 @@
      // Build index_gen objects to create views with the same shape
  
@@ -270,3 +336,50 @@
  
      std::transform(new_array.index_base_list_.begin(),
                     new_array.index_base_list_.end(),
+--- misc/boost_1_44_0/boost/random/mersenne_twister.hpp
++++ misc/build/boost_1_44_0/boost/random/mersenne_twister.hpp
+@@ -195,16 +195,16 @@
+   }
+ #endif
+ 
+-  friend bool operator==(const mersenne_twister& x, const mersenne_twister& y)
++  friend bool operator==(const mersenne_twister& x_, const mersenne_twister& y_)
+   {
+     for(int j = 0; j < state_size; ++j)
+-      if(x.compute(j) != y.compute(j))
++      if(x_.compute(j) != y_.compute(j))
+         return false;
+     return true;
+   }
+ 
+-  friend bool operator!=(const mersenne_twister& x, const mersenne_twister& y)
+-  { return !(x == y); }
++  friend bool operator!=(const mersenne_twister& x_, const mersenne_twister& y_)
++  { return !(x_ == y_); }
+ #else
+   // Use a member function; Streamable concept not supported.
+   bool operator==(const mersenne_twister& rhs) const
+--- misc/boost_1_44_0/boost/uuid/uuid_io.hpp
++++ misc/build/boost_1_44_0/boost/uuid/uuid_io.hpp
+@@ -59,7 +59,7 @@
+         }
+         
+         if (flags & std::ios_base::left) {
+-            for (std::streamsize i=uuid_width; i<width; i++) {
++            for (std::streamsize s=uuid_width; s<width; ++s) {
+                 os << fill;
+             }
+         }
+--- misc/boost_1_44_0/boost/uuid/name_generator.hpp
++++ misc/build/boost_1_44_0/boost/uuid/name_generator.hpp
+@@ -30,8 +30,8 @@
+ public:
+     typedef uuid result_type;
+ 
+-    explicit name_generator(uuid const& namespace_uuid)
+-        : namespace_uuid(namespace_uuid)
++    explicit name_generator(uuid const& namespace_uuid_)
++        : namespace_uuid(namespace_uuid_)
+     {}
+ 
+     uuid operator()(const char* name) {

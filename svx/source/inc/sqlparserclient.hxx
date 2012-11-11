@@ -46,14 +46,14 @@ namespace svxform
     {
     private:
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     protected:
         mutable ::rtl::Reference< ::connectivity::simple::ISQLParser >  m_xParser;
 
     protected:
         OSQLParserClient(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
         virtual bool ensureLoaded() const;
 
     protected:

@@ -26,9 +26,7 @@
 namespace com { namespace sun { namespace star {
 namespace uno {
     class Exception;
-}
-namespace lang {
-    class XMultiServiceFactory;
+    class XComponentContext;
 }
 namespace script {
     class XEventAttacherManager;
@@ -44,7 +42,7 @@ namespace comphelper
 
 COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >
 createEventAttacherManager(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext )
     throw( ::com::sun::star::uno::Exception );
 
 }

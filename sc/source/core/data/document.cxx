@@ -2411,7 +2411,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                     if ( *itr < aCBFCP.nTabStart )
                         aCBFCP.nTabStart = *itr;
                     aCBFCP.nTabEnd = *itr;
-                    maTabs[*itr]->IncRecalcLevel();
                 }
 
             ScRangeList aLocalRangeList;
@@ -2422,12 +2421,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             }
 
             bInsertingFromOtherDoc = true;  // kein Broadcast/Listener aufbauen bei Insert
-
-            // bei mindestens 64 Zeilen wird in ScColumn::CopyFromClip voralloziert
-            bool bDoDouble = ( nYw < 64 && nAllRow2 - nAllRow1 > 64);
-            bool bOldDouble = ScColumn::bDoubleAlloc;
-            if (bDoDouble)
-                ScColumn::bDoubleAlloc = true;
 
             SCCOL nClipStartCol = aClipRange.aStart.Col();
             SCROW nClipStartRow = aClipRange.aStart.Row();
@@ -2489,12 +2482,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                 } while (nR1 <= nRow2);
             }
 
-            ScColumn::bDoubleAlloc = bOldDouble;
-
             itr = rMark.begin();
-            for (; itr != itrEnd && *itr < nMax; ++itr)
-                if (maTabs[*itr] )
-                    maTabs[*itr]->DecRecalcLevel();
 
             bInsertingFromOtherDoc = false;
 
@@ -2562,7 +2550,6 @@ void ScDocument::CopyMultiRangeFromClip(
             if ( *itr < aCBFCP.nTabStart )
                 aCBFCP.nTabStart = *itr;
             aCBFCP.nTabEnd = *itr;
-            maTabs[*itr]->IncRecalcLevel();
         }
     }
 
@@ -2626,9 +2613,6 @@ void ScDocument::CopyMultiRangeFromClip(
     }
 
     itr = rMark.begin();
-    for (; itr != itrEnd && *itr < nMax; ++itr)
-        if (maTabs[*itr])
-            maTabs[*itr]->DecRecalcLevel();
 
     bInsertingFromOtherDoc = false;
 

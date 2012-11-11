@@ -48,7 +48,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -261,21 +261,9 @@ void ConvDic::Save()
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
     // get XML writer
-    uno::Reference< io::XActiveDataSource > xSaxWriter;
-    if (xServiceFactory.is())
-    {
-        try
-        {
-            xSaxWriter = uno::Reference< io::XActiveDataSource >(
-                    xServiceFactory->createInstance( "com.sun.star.xml.sax.Writer" ), UNO_QUERY );
-        }
-        catch (uno::Exception &)
-        {
-        }
-    }
-    DBG_ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
+    uno::Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(xContext);
 
-    if (xSaxWriter.is() && xStream.is())
+    if (xStream.is())
     {
         // connect XML writer to output stream
         xSaxWriter->setOutputStream( xStream->getOutputStream() );

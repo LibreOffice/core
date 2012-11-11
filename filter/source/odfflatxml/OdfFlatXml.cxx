@@ -50,6 +50,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -185,12 +186,8 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
 
     if (!getDelegate().is())
         {
-            OUString SAX_WRITER_SERVICE(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"));
-            Reference< XDocumentHandler > saxWriter(m_rServiceFactory->createInstance(SAX_WRITER_SERVICE),
-                                                    UNO_QUERY);
+            Reference< XDocumentHandler > saxWriter( Writer::create(comphelper::getComponentContext(m_rServiceFactory)), UNO_QUERY_THROW );
             setDelegate(saxWriter);
-            if (!getDelegate().is())
-                return sal_False;
         }
     // get data source interface ...
     Reference<XActiveDataSource> dataSource(getDelegate(), UNO_QUERY);

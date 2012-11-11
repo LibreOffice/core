@@ -131,8 +131,8 @@ void SwChangeDBDlg::FillDBPopup()
 
     size_t nCount = aDBNameList.size();
     aUsedDBTLB.Clear();
-    SvLBoxEntry *pFirst = 0;
-    SvLBoxEntry *pLast = 0;
+    SvTreeListEntry *pFirst = 0;
+    SvTreeListEntry *pLast = 0;
 
     for(size_t k = 0; k < nCount; k++)
     {
@@ -151,13 +151,13 @@ void SwChangeDBDlg::FillDBPopup()
 
 }
 
-SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
+SvTreeListEntry* SwChangeDBDlg::Insert(const String& rDBName)
 {
     String sDBName(rDBName.GetToken(0, DB_DELIM));
     String sTableName(rDBName.GetToken(1, DB_DELIM));
     sal_IntPtr nCommandType = rDBName.GetToken(2, DB_DELIM).ToInt32();
-    SvLBoxEntry* pParent;
-    SvLBoxEntry* pChild;
+    SvTreeListEntry* pParent;
+    SvTreeListEntry* pChild;
 
     sal_uInt16 nParent = 0;
     sal_uInt16 nChild = 0;
@@ -175,14 +175,14 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
                 if (sTableName == aUsedDBTLB.GetEntryText(pChild))
                     return pChild;
             }
-            SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
+            SvTreeListEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
             pRet->SetUserData((void*)nCommandType);
             return pRet;
         }
     }
     pParent = aUsedDBTLB.InsertEntry(sDBName, aDBImg, aDBImg);
 
-    SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
+    SvTreeListEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
     pRet->SetUserData((void*)nCommandType);
     return pRet;
 }
@@ -207,7 +207,7 @@ void SwChangeDBDlg::UpdateFlds()
 {
     std::vector<String> aDBNames;
     aDBNames.reserve(aUsedDBTLB.GetSelectionCount());
-    SvLBoxEntry* pEntry = aUsedDBTLB.FirstSelected();
+    SvTreeListEntry* pEntry = aUsedDBTLB.FirstSelected();
 
     while( pEntry )
     {
@@ -256,7 +256,7 @@ IMPL_LINK_NOARG(SwChangeDBDlg, TreeSelectHdl)
 {
     sal_Bool bEnable = sal_False;
 
-    SvLBoxEntry* pEntry = aAvailDBTLB.GetCurEntry();
+    SvTreeListEntry* pEntry = aAvailDBTLB.GetCurEntry();
 
     if (pEntry)
     {

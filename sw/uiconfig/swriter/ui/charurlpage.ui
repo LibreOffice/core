@@ -86,6 +86,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="valign">center</property>
                     <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
@@ -101,6 +102,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">●</property>
+                    <property name="width_chars">32</property>
                     <property name="invisible_char_set">True</property>
                   </object>
                   <packing>
@@ -115,6 +117,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">●</property>
+                    <property name="width_chars">32</property>
                     <property name="invisible_char_set">True</property>
                   </object>
                   <packing>
@@ -129,6 +132,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">●</property>
+                    <property name="width_chars">32</property>
                     <property name="invisible_char_set">True</property>
                   </object>
                   <packing>
@@ -145,6 +149,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="valign">center</property>
                     <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
@@ -153,21 +158,6 @@
                     <property name="width">1</property>
                     <property name="height">1</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="targetfrmlb">
@@ -189,6 +179,21 @@
                     <property name="height">1</property>
                   </packing>
                 </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
             </child>
           </object>
@@ -198,7 +203,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Hyperlink</property>
-            <property name="use_markup">True</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
       </object>
@@ -285,7 +292,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Character styles</property>
-            <property name="use_markup">True</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
       </object>

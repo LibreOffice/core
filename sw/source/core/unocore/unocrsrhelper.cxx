@@ -765,7 +765,7 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
         {
             std::set<sal_uInt16> aWhichIds;
             aWhichIds.insert( RES_TXTATR_CHARFMT);
-            pDoc->ResetAttrs(rPam, sal_True, aWhichIds);
+            pDoc->ResetAttrs(rPam, true, aWhichIds);
         }
         break;
     }
@@ -899,7 +899,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
 
             if(!nErrno)
             {
-                aSave++;
+                ++aSave;
                 pUnoCrsr->SetMark();
                 pUnoCrsr->GetMark()->nNode = aSave;
 

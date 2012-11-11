@@ -39,7 +39,7 @@ const char aFalseStr[] = "false";
 
 void
 SAL_CALL exportLibraryContainer(
-    Reference< xml::sax::XExtendedDocumentHandler > const & xOut,
+    Reference< xml::sax::XWriter > const & xOut,
     const LibDescriptorArray* pLibArray )
         SAL_THROW( (Exception) )
 {
@@ -105,7 +105,7 @@ SAL_CALL exportLibraryContainer(
 
 void
 SAL_CALL exportLibrary(
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XWriter > const & xOut,
     const LibDescriptor& rLib )
         SAL_THROW( (::com::sun::star::uno::Exception) )
 {

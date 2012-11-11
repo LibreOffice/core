@@ -1,0 +1,36 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_COM_SUN_STAR_XML_XSLT_XXSLTTRANSFORMER_IDL
+#define INCLUDED_COM_SUN_STAR_XML_XSLT_XXSLTTRANSFORMER_IDL
+
+#include <com/sun/star/io/XActiveDataControl.idl>
+#include <com/sun/star/io/XActiveDataSink.idl>
+#include <com/sun/star/io/XActiveDataSource.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+
+module com { module sun { module star { module xml { module xslt {
+
+/** An interface for XSLT transformers.
+
+    @since LibreOffice 3.7
+ */
+interface XXSLTTransformer
+{
+    interface com::sun::star::io::XActiveDataControl;
+    interface com::sun::star::io::XActiveDataSink;
+    interface com::sun::star::io::XActiveDataSource;
+    interface com::sun::star::lang::XInitialization;
+};
+
+}; }; }; }; };
+
+#endif // INCLUDED_COM_SUN_STAR_XML_XSLT_XXSLTTRANSFORMER_IDL
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

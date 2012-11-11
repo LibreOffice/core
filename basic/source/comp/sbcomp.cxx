@@ -257,7 +257,7 @@ const char* lcl_getSpaces( int nSpaceCount )
     return pSpacesEnd - nSpaceCount;
 }
 
-static rtl::OString lcl_toOStringSkipLeadingWhites( const String& aStr )
+static rtl::OString lcl_toOStringSkipLeadingWhites( const OUString& aStr )
 {
     static sal_Char Buffer[1000];
 
@@ -282,10 +282,11 @@ static rtl::OString lcl_toOStringSkipLeadingWhites( const String& aStr )
 
 String lcl_dumpMethodParameters( SbMethod* pMethod )
 {
-    String aStr;
+    OUString aStr;
     if( pMethod == NULL )
+    {
         return aStr;
-
+    }
     SbxError eOld = SbxBase::GetError();
 
     SbxArray* pParams = pMethod->GetParameters();
@@ -298,30 +299,41 @@ String lcl_dumpMethodParameters( SbMethod* pMethod )
         {
             SbxVariable* pVar = pParams->Get( nParam );
             DBG_ASSERT( pVar, "Parameter?!" );
-            if ( pVar->GetName().Len() )
+            if ( !pVar->GetName().isEmpty() )
+            {
                 aStr += pVar->GetName();
+            }
             else if ( pInfo )
             {
                 const SbxParamInfo* pParam = pInfo->GetParam( nParam );
                 if ( pParam )
+                {
                     aStr += pParam->aName;
+                }
             }
             aStr += '=';
             SbxDataType eType = pVar->GetType();
             if( eType & SbxARRAY )
-                aStr += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
+            {
+                aStr += "...";
+            }
             else if( eType != SbxOBJECT )
+            {
                 aStr += pVar->GetString();
+            }
             if ( nParam < ( pParams->Count() - 1 ) )
-                aStr += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
+            {
+                aStr += ", ";
+            }
         }
         aStr += ')';
     }
 
     SbxBase::ResetError();
     if( eOld != SbxERR_OK )
+    {
         SbxBase::SetError( eOld );
-
+    }
     return aStr;
 }
 
@@ -338,7 +350,7 @@ static bool GbBlockAll = false;
 
 struct FunctionItem
 {
-    String      m_aCompleteFunctionName;
+    OUString    m_aCompleteFunctionName;
     double      m_dTotalTime;
     double      m_dNetTime;
     int         m_nCallCount;
@@ -386,7 +398,9 @@ void lcl_printTimeOutput( void )
         {
             FunctionItem* pFunctionItem = it->second;
             if( pFunctionItem != NULL )
+            {
                 avFunctionItems.push_back( pFunctionItem );
+            }
         }
 
         std::sort( avFunctionItems.begin(), avFunctionItems.end(), compareFunctionNetTime );
@@ -397,7 +411,7 @@ void lcl_printTimeOutput( void )
             FunctionItem* pFunctionItem = *itv;
             if( pFunctionItem != NULL )
             {
-                rtl::OUString aCompleteFunctionName = pFunctionItem->m_aCompleteFunctionName;
+                OUString aCompleteFunctionName = pFunctionItem->m_aCompleteFunctionName;
                 const char* pName = OUStringToOString( aCompleteFunctionName, RTL_TEXTENCODING_ASCII_US ).getStr();
                 int nNameLen = aCompleteFunctionName.getLength();
 
@@ -407,10 +421,12 @@ void lcl_printTimeOutput( void )
                 double dFctNetTimePercent = 100.0 * dFctNetTime / dTotalTime;
                 int nSpaceCount = 30 - nNameLen;
                 if( nSpaceCount < 0 )
+                {
                     nSpaceCount = 2;
+                }
                 sprintf( TimeBuffer, "%s:%sCalled %d times\t%f ms (%f%%) / net %f (%f%%) ms",
-                    pName, lcl_getSpaces( nSpaceCount ), pFunctionItem->m_nCallCount,
-                    dFctTotalTime*1000.0, dFctTotalTimePercent, dFctNetTime*1000.0, dFctNetTimePercent );
+                         pName, lcl_getSpaces( nSpaceCount ), pFunctionItem->m_nCallCount,
+                         dFctTotalTime*1000.0, dFctTotalTimePercent, dFctNetTime*1000.0, dFctNetTimePercent );
                 lcl_lineOut( TimeBuffer );
             }
         }
@@ -427,7 +443,9 @@ void dbg_InitTrace( void )
     {
 #ifdef DBG_TRACE_PROFILING
         if( GbTimerOn )
+        {
             GpTimer->continueTimer();
+        }
 #endif
         GpGlobalFile = fopen( GpTraceFileName, "a+" );
         return;
@@ -435,15 +453,19 @@ void dbg_InitTrace( void )
     GbInitTraceAlreadyCalled = true;
 
     if( const sal_Char* pcIniFileName = ::getenv( "OOO_BASICTRACEINI" ) )
+    {
         lcl_ReadIniFile( pcIniFileName );
+    }
     else if( GpTraceIniFile != NULL )
+    {
         lcl_ReadIniFile( GpTraceIniFile );
-
+    }
     GpGlobalFile = fopen( GpTraceFileName, "w" );
     GbSavTraceOn = GbTraceOn;
     if( !GbTraceOn )
+    {
         lcl_lineOut( "### Program started with trace off ###" );
-
+    }
 #ifdef DBG_TRACE_PROFILING
     GpTimer = new canvas::tools::ElapsedTime();
     GdStartTime = GpTimer->getElapsedTime();
@@ -459,14 +481,19 @@ void dbg_DeInitTrace( void )
 
 #ifdef DBG_TRACE_PROFILING
     while( !GaCallEnterTimeStack.empty() )
+    {
         GaCallEnterTimeStack.pop();
+    }
     while( !GaFunctionItemStack.empty() )
+    {
         GaFunctionItemStack.pop();
-
+    }
     lcl_printTimeOutput();
 
     for( FunctionItemMap::iterator it = GaFunctionItemMap.begin() ; it != GaFunctionItemMap.end() ; ++it )
+    {
         delete it->second;
+    }
     GaFunctionItemMap.clear();
 
     if( GpGlobalFile )
@@ -478,7 +505,9 @@ void dbg_DeInitTrace( void )
     if( GbInitOnlyAtOfficeStart )
     {
         if( GbTimerOn )
+        {
             GpTimer->pauseTimer();
+        }
     }
     else
     {
@@ -489,11 +518,12 @@ void dbg_DeInitTrace( void )
 
 static sal_Int32 GnLastCallLvl = 0;
 
-void dbg_tracePrint( const String& aStr, sal_Int32 nCallLvl, bool bCallLvlRelativeToCurrent )
+void dbg_tracePrint( const OUString& aStr, sal_Int32 nCallLvl, bool bCallLvlRelativeToCurrent )
 {
     if( bCallLvlRelativeToCurrent )
+    {
         nCallLvl += GnLastCallLvl;
-
+    }
     int nIndent = nCallLvl * GnIndentPerCallLevel;
     lcl_lineOut( OUStringToOString( rtl::OUString( aStr ), RTL_TEXTENCODING_ASCII_US ).getStr(), lcl_getSpaces( nIndent ) );
 }
@@ -501,12 +531,14 @@ void dbg_tracePrint( const String& aStr, sal_Int32 nCallLvl, bool bCallLvlRelati
 void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
 {
     if( !GbTraceOn )
+    {
         return;
-
+    }
 #ifdef DBG_TRACE_PROFILING
     if( GbBlockSteps || GbBlockAll )
+    {
         return;
-
+    }
     double dCurTime = 0.0;
     bool bPrintTimeStamp = false;
     if( GbTimerOn )
@@ -528,7 +560,7 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
         pTraceMod = pClassModuleObj->getClassModule();
     }
 
-    String aModuleName = pTraceMod->GetName();
+    OUString aModuleName = pTraceMod->GetName();
     ModuleTraceMap::iterator it = rModuleTraceMap.find( aModuleName );
     if( it == rModuleTraceMap.end() )
     {
@@ -562,8 +594,9 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     const rtl::OString& rStr_STMNT = rTraceTextData.m_aTraceStr_STMNT;
     bool bSTMT = false;
     if( rStr_STMNT.getLength() )
+    {
         bSTMT = true;
-
+    }
     char TimeBuffer[200];
 #ifdef DBG_TRACE_PROFILING
     if( bPrintTimeStamp )
@@ -577,14 +610,16 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     if( bSTMT )
     {
         lcl_lineOut( rStr_STMNT.getStr(), lcl_getSpaces( nIndent ),
-            (bPrintTimeStamp && !GbIncludePCodes) ? TimeBuffer : NULL );
+                     (bPrintTimeStamp && !GbIncludePCodes) ? TimeBuffer : NULL );
     }
 
     if( !GbIncludePCodes )
     {
 #ifdef DBG_TRACE_PROFILING
         if( GbTimerOn )
+        {
             GpTimer->continueTimer();
+        }
 #endif
         return;
     }
@@ -594,12 +629,14 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     if( rStr_PCode.getLength() )
     {
         lcl_lineOut( rStr_PCode.getStr(), lcl_getSpaces( nIndent ),
-            bPrintTimeStamp ? TimeBuffer : NULL );
+                     bPrintTimeStamp ? TimeBuffer : NULL );
     }
 
 #ifdef DBG_TRACE_PROFILING
     if( GbTimerOn )
+    {
         GpTimer->continueTimer();
+    }
 #endif
 }
 
@@ -609,8 +646,9 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
     static const char* pSeparator = "' ================================================================================";
 
     if( !GbTraceOn )
+    {
         return;
-
+    }
 #ifdef DBG_TRACE_PROFILING
     double dCurTime = 0.0;
     double dExecutionTime = 0.0;
@@ -631,16 +669,16 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
         pTraceMod = pClassModuleObj->getClassModule();
     }
 
-    String aCompleteFunctionName = pTraceMod->GetName();
+    OUString aCompleteFunctionName = pTraceMod->GetName();
     if( pMethod != NULL )
     {
-        aCompleteFunctionName.AppendAscii( "::" );
-        String aMethodName = pMethod->GetName();
+        aCompleteFunctionName +=  "::";
+        OUString aMethodName = pMethod->GetName();
         aCompleteFunctionName += aMethodName;
     }
     else
     {
-        aCompleteFunctionName.AppendAscii( "/RunInit" );
+        aCompleteFunctionName += "/RunInit";
     }
 
     bool bOwnBlockSteps = false;
@@ -651,8 +689,9 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
     {
         FunctionItemMap::iterator itFunctionItem = GaFunctionItemMap.find( aCompleteFunctionName );
         if( itFunctionItem != GaFunctionItemMap.end() )
+        {
             pFunctionItem = itFunctionItem->second;
-
+        }
         if( pFunctionItem == NULL )
         {
             DBG_ASSERT( !bLeave, "No FunctionItem in leave!" );
@@ -710,13 +749,17 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
     if( bOwnBlockAll )
     {
         if( GbTimerOn )
+        {
             GpTimer->continueTimer();
+        }
         return;
     }
 #endif
 
     if( nCallLvl > 0 )
+    {
         nCallLvl--;
+    }
     int nIndent = nCallLvl * GnIndentPerCallLevel;
     if( !bLeave && !bOwnBlockSteps )
     {
@@ -724,31 +767,33 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
         lcl_lineOut( pSeparator, lcl_getSpaces( nIndent ) );
     }
 
-    String aStr;
+    OUString aStr;
     if( bLeave )
     {
         if( !bOwnBlockSteps )
         {
             lcl_lineOut( "}", lcl_getSpaces( nIndent ) );
-            aStr.AppendAscii( "' Leaving " );
+            aStr = "' Leaving ";
         }
     }
     else
     {
-        aStr.AppendAscii( "Entering " );
+        aStr = "Entering " ;
     }
     if( !bLeave || !bOwnBlockSteps )
+    {
         aStr += aCompleteFunctionName;
-
+    }
     if( !bOwnBlockSteps && pClassModuleObj != NULL )
     {
-        aStr.AppendAscii( "[this=" );
+        aStr += "[this=";
         aStr += pClassModuleObj->GetName();
-        aStr.AppendAscii( "]" );
+        aStr += "]" ;
     }
     if( !bLeave )
+    {
         aStr += lcl_dumpMethodParameters( pMethod );
-
+    }
     const char* pPostStr = NULL;
 #ifdef DBG_TRACE_PROFILING
     char TimeBuffer[200];
@@ -759,26 +804,35 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
     }
 #endif
     lcl_lineOut( (!bLeave || !bOwnBlockSteps) ? OUStringToOString( rtl::OUString( aStr ), RTL_TEXTENCODING_ASCII_US ).getStr() : "}",
-        lcl_getSpaces( nIndent ), pPostStr );
+                 lcl_getSpaces( nIndent ), pPostStr );
     if( !bLeave )
+    {
         lcl_lineOut( "{", lcl_getSpaces( nIndent ) );
-
+    }
     if( bLeave && !bOwnBlockSteps )
+    {
         lcl_lineOut( "" );
-
+    }
 #ifdef DBG_TRACE_PROFILING
     if( GbTimerOn )
+    {
         GpTimer->continueTimer();
+    }
 #endif
 }
 
-void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool bTraceErrHandled, sal_Int32 nCallLvl )
+void dbg_traceNotifyError( SbError nTraceErr, const OUString& aTraceErrMsg,
+                           bool bTraceErrHandled, sal_Int32 nCallLvl )
 {
     if( !GbTraceOn )
+    {
         return;
+    }
 #ifdef DBG_TRACE_PROFILING
     if( GbBlockSteps || GbBlockAll )
+    {
         return;
+    }
 #endif
     GnLastCallLvl = nCallLvl;
 
@@ -792,9 +846,9 @@ void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool b
 }
 
 void dbg_RegisterTraceTextForPC( SbModule* pModule, sal_uInt32 nPC,
-    const String& aTraceStr_STMNT, const String& aTraceStr_PCode )
+                                 const OUString& aTraceStr_STMNT, const OUString& aTraceStr_PCode )
 {
-    String aModuleName = pModule->GetName();
+    OUString aModuleName = pModule->GetName();
     ModuleTraceMap::iterator it = rModuleTraceMap.find( aModuleName );
     PCToTextDataMap* pInnerMap;
     if( it == rModuleTraceMap.end() )
@@ -829,21 +883,25 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
         return;
     }
 
-    String aCommand = rPar.Get(1)->GetString();
+    OUString aCommand = rPar.Get(1)->GetString();
 
-    if( aCommand.EqualsIgnoreCaseAscii( "TraceOn" ) )
+    if( aCommand.equalsIngoreAsciiCase( "TraceOn" ) )
+    {
         GbTraceOn = true;
-    else
-    if( aCommand.EqualsIgnoreCaseAscii( "TraceOff" ) )
+    }
+    else if( aCommand.equalsIngoreAsciiCase( "TraceOff" ) )
+    {
         GbTraceOn = false;
-    else
-    if( aCommand.EqualsIgnoreCaseAscii( "PCodeOn" ) )
+    }
+    else if( aCommand.equalsIngoreAsciiCase( "PCodeOn" ) )
+    {
         GbIncludePCodes = true;
-    else
-    if( aCommand.EqualsIgnoreCaseAscii( "PCodeOff" ) )
+    }
+    else if( aCommand.equalsIngoreAsciiCase( "PCodeOff" ) )
+    {
         GbIncludePCodes = false;
-    else
-    if( aCommand.EqualsIgnoreCaseAscii( "Print" ) )
+    }
+    else if( aCommand.equalsIngoreAsciiCase( "Print" ) )
     {
         if ( rPar.Count() < 3 )
         {
@@ -855,11 +913,11 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
         if( eOld != SbxERR_OK )
             SbxBase::ResetError();
 
-        String aValStr = rPar.Get(2)->GetString();
+        OUString aValStr = rPar.Get(2)->GetString();
         SbxError eErr = SbxBase::GetError();
         if( eErr != SbxERR_OK )
         {
-            aValStr = String( RTL_CONSTASCII_USTRINGPARAM( "<ERROR converting value to String>" ) );
+            aValStr = "<ERROR converting value to String>";
             SbxBase::ResetError();
         }
 
@@ -871,7 +929,9 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
         lcl_lineOut( Buffer, lcl_getSpaces( nIndent ) );
 
         if( eOld != SbxERR_OK )
+        {
             SbxBase::SetError( eOld );
+        }
     }
 }
 

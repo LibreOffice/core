@@ -872,7 +872,7 @@ String DirEntry::GetExtension( char cSep ) const
     const char *p0 = aName.getStr();
     const char *p1 = p0 + aName.getLength() - 1;
     while ( p1 >= p0 && *p1 != cSep )
-    p1--;
+        p1--;
 
     if ( p1 >= p0 )
     {

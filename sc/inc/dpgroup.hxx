@@ -57,7 +57,7 @@ public:
     bool        HasElement( const ScDPItemData& rData ) const;
     bool        HasCommonElement( const ScDPGroupItem& rOther ) const;
 
-    void        FillGroupFilter( ScDPCacheTable::GroupFilter& rFilter ) const;
+    void        FillGroupFilter( ScDPFilteredCache::GroupFilter& rFilter ) const;
 };
 
 typedef ::std::vector<ScDPGroupItem> ScDPGroupItemVec;
@@ -84,7 +84,7 @@ public:
     long        GetGroupDim() const     { return nGroupDim; }
     const rtl::OUString& GetName() const { return aGroupName; }
 
-    const std::vector< SCROW >&  GetColumnEntries( const ScDPCacheTable&  rCacheTable ) const;
+    const std::vector< SCROW >&  GetColumnEntries( const ScDPFilteredCache&  rCacheTable ) const;
     const ScDPGroupItem* GetGroupForData( const ScDPItemData& rData ) const;  // rData = entry in original dim.
     const ScDPGroupItem* GetGroupForName( const ScDPItemData& rName ) const;  // rName = entry in group dim.
     const ScDPGroupItem* GetGroupByIndex( size_t nIndex ) const;
@@ -145,7 +145,7 @@ class ScDPGroupTableData : public ScDPTableData
     bool        IsNumGroupDimension( long nDimension ) const;
     void GetNumGroupInfo(long nDimension, ScDPNumGroupInfo& rInfo);
 
-    void        ModifyFilterCriteria(::std::vector<ScDPCacheTable::Criterion>& rCriteria);
+    void        ModifyFilterCriteria(::std::vector<ScDPFilteredCache::Criterion>& rCriteria);
 
 public:
                 // takes ownership of pSource
@@ -176,12 +176,12 @@ public:
     virtual bool                    IsRepeatIfEmpty();
 
     virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims);
-    virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims);
+    virtual void                    GetDrillDownData(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria,
                                                      const ::boost::unordered_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
-    virtual const ScDPCacheTable&   GetCacheTable() const;
+    virtual const ScDPFilteredCache&   GetCacheTable() const;
     virtual void ReloadCacheTable();
 
     virtual sal_Bool                    IsBaseForGroup(long nDim) const;

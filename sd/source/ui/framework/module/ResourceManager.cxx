@@ -65,8 +65,7 @@ ResourceManager::ResourceManager (
       mxResourceId(rxResourceId),
       mxMainViewAnchorId(FrameworkHelper::Instance(rxController)->CreateResourceId(
           FrameworkHelper::msCenterPaneURL)),
-      msCurrentMainViewURL(),
-      mbIsEnabled(true)
+      msCurrentMainViewURL()
 {
     Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
     if (xControllerManager.is())
@@ -124,27 +123,6 @@ void SAL_CALL ResourceManager::disposing (void)
         mxConfigurationController = NULL;
     }
 }
-
-
-
-
-void ResourceManager::Enable (void)
-{
-    mbIsEnabled = true;
-    UpdateForMainViewShell();
-}
-
-
-
-
-void ResourceManager::Disable (void)
-{
-    mbIsEnabled = false;
-    UpdateForMainViewShell();
-}
-
-
-
 
 void SAL_CALL ResourceManager::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
@@ -211,8 +189,7 @@ void ResourceManager::UpdateForMainViewShell (void)
     {
         ConfigurationController::Lock aLock (mxConfigurationController);
 
-        if (mbIsEnabled
-            && mpActiveMainViewContainer->find(msCurrentMainViewURL)
+        if (mpActiveMainViewContainer->find(msCurrentMainViewURL)
                != mpActiveMainViewContainer->end())
         {
             // Activate resource.
@@ -253,25 +230,22 @@ void ResourceManager::HandleResourceRequest(
     bool bActivation,
     const Reference<XConfiguration>& rxConfiguration)
 {
-    if (mbIsEnabled)
+    Sequence<Reference<XResourceId> > aCenterViews = rxConfiguration->getResources(
+        FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
+        FrameworkHelper::msViewURLPrefix,
+        AnchorBindingMode_DIRECT);
+    if (aCenterViews.getLength() == 1)
     {
-        Sequence<Reference<XResourceId> > aCenterViews = rxConfiguration->getResources(
-            FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
-            FrameworkHelper::msViewURLPrefix,
-            AnchorBindingMode_DIRECT);
-        if (aCenterViews.getLength() == 1)
+        if (bActivation)
         {
-            if (bActivation)
-            {
-                mpActiveMainViewContainer->insert(aCenterViews[0]->getResourceURL());
-            }
-            else
-            {
-                MainViewContainer::iterator iElement (
-                    mpActiveMainViewContainer->find(aCenterViews[0]->getResourceURL()));
-                if (iElement != mpActiveMainViewContainer->end())
-                    mpActiveMainViewContainer->erase(iElement);
-            }
+            mpActiveMainViewContainer->insert(aCenterViews[0]->getResourceURL());
+        }
+        else
+        {
+            MainViewContainer::iterator iElement (
+                mpActiveMainViewContainer->find(aCenterViews[0]->getResourceURL()));
+            if (iElement != mpActiveMainViewContainer->end())
+                mpActiveMainViewContainer->erase(iElement);
         }
     }
 }

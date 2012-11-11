@@ -892,7 +892,7 @@ Ww1Bookmarks::Ww1Bookmarks(Ww1Fib& rInFib)
 // vor- und zurueckspringen, wobei ein weiterer Index oder ein Bitfeld
 // oder etwas aehnliches zum Merken der bereits abgearbeiteten Bookmarks
 // noetig wird.
-void Ww1Bookmarks::operator ++( int )
+void Ww1Bookmarks::operator++()
 {
     if( bOK )
     {
@@ -1061,7 +1061,7 @@ Ww1Pap::Ww1Pap(Ww1Fib& _rFib)
 void Ww1Pap::Seek(sal_uLong ulSeek)
 {
     while (ulSeek > Where())
-        (*this)++;
+        ++(*this);
 }
 
 // SH: Where hat einen Parameter mitbekommen, der sagt, ob bei Neuanlegen eines
@@ -1085,7 +1085,7 @@ sal_uLong Ww1Pap::Where( sal_Bool bSetIndex )
     return ulRet;
 }
 
-void Ww1Pap::operator++(int)
+void Ww1Pap::operator++()
 {
     if (pPap != NULL)
         if (++nFkpIndex > pPap->Count())
@@ -1160,7 +1160,7 @@ Ww1Chp::Ww1Chp(Ww1Fib& _rFib)
 void Ww1Chp::Seek(sal_uLong ulSeek)
 {
     while (ulSeek > Where())
-        (*this)++;
+        ++(*this);
 }
 
 // SH: Where hat einen Parameter mitbekommen, der sagt, ob bei Neuanlegen eines
@@ -1185,7 +1185,7 @@ sal_uLong Ww1Chp::Where( sal_Bool bSetIndex )
     return ulRet;
 }
 
-void Ww1Chp::operator++(int)
+void Ww1Chp::operator++()
 {
     if (pChp != NULL)
         if (++nFkpIndex > pChp->Count())

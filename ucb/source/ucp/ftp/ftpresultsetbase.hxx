@@ -51,7 +51,7 @@ namespace ftp {
     public:
 
         ResultSetBase(const com::sun::star::uno::Reference<
-                      com::sun::star::lang::XMultiServiceFactory >&  xMSF,
+                      com::sun::star::uno::XComponentContext >& rxContext,
                       const com::sun::star::uno::Reference<
                       com::sun::star::ucb::XContentProvider >&  xProvider,
                       sal_Int32 nOpenMode,
@@ -562,7 +562,7 @@ namespace ftp {
     protected:
 
         com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >  m_xMSF;
+        com::sun::star::uno::XComponentContext >  m_xContext;
         com::sun::star::uno::Reference<
         com::sun::star::ucb::XContentProvider >  m_xProvider;
         sal_Int32                           m_nRow;

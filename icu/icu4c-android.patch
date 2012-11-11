@@ -61,3 +61,14 @@
  #elif U_PLATFORM_IS_LINUX_BASED
  #   define U_TIMEZONE __timezone
  #elif U_PLATFORM_USES_ONLY_WIN32_API
+--- misc/icu/source/common/unicode/platform.h
++++ misc/build/icu/source/common/unicode/platform.h
+@@ -641,7 +641,7 @@
+ #elif defined(U_STATIC_IMPLEMENTATION)
+ #   define U_EXPORT
+ #elif defined(__GNUC__)
+-#   define U_EXPORT __attribute__((visibility("default")))
++#   define U_EXPORT
+ #elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
+    || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550) 
+ #   define U_EXPORT __global

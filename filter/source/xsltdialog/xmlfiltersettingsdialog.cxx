@@ -81,8 +81,8 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResM
     mpFilterListBox->SetSelectHdl( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
     mpFilterListBox->SetDeselectHdl( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
     mpFilterListBox->SetDoubleClickHdl( LINK( this, XMLFilterSettingsDialog, DoubleClickHdl_Impl ) );
-    mpFilterListBox->SetAccessibleName(String( RESID( STR_XML_FILTER_LISTBOX )));
-    maCtrlFilterList.SetAccessibleName(String( RESID( STR_XML_FILTER_LISTBOX )));
+    mpFilterListBox->SetAccessibleName(RESIDSTR(STR_XML_FILTER_LISTBOX));
+    maCtrlFilterList.SetAccessibleName(RESIDSTR(STR_XML_FILTER_LISTBOX));
     mpFilterListBox->SetHelpId( HID_XML_FILTER_LIST );
 
     maPBNew.SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
@@ -196,7 +196,7 @@ void XMLFilterSettingsDialog::ShowWindow()
 
 void XMLFilterSettingsDialog::updateStates()
 {
-    SvLBoxEntry* pSelectedEntry = mpFilterListBox->FirstSelected();
+    SvTreeListEntry* pSelectedEntry = mpFilterListBox->FirstSelected();
 
     bool bHasSelection = pSelectedEntry != NULL;
 
@@ -234,14 +234,14 @@ void XMLFilterSettingsDialog::onNew()
     filter_info_impl aTempInfo;
 
     // create a unique filter name
-    aTempInfo.maFilterName = createUniqueFilterName( String( RESID( STR_DEFAULT_FILTER_NAME ) ) );
+    aTempInfo.maFilterName = createUniqueFilterName(RESIDSTR(STR_DEFAULT_FILTER_NAME));
 
     // init default extension
-    String aDefaultExtension( RESID( STR_DEFAULT_EXTENSION ) );
+    String aDefaultExtension(RESIDSTR(STR_DEFAULT_EXTENSION));
     aTempInfo.maExtension = aDefaultExtension;
 
     // set default ui name
-    aTempInfo.maInterfaceName = createUniqueInterfaceName( String( RESID( STR_DEFAULT_UI_NAME ) ) );
+    aTempInfo.maInterfaceName = createUniqueInterfaceName(RESIDSTR(STR_DEFAULT_UI_NAME));
 
     // set default application
     aTempInfo.maDocumentService = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ));
@@ -261,7 +261,7 @@ void XMLFilterSettingsDialog::onNew()
 void XMLFilterSettingsDialog::onEdit()
 {
     // get selected filter entry
-    SvLBoxEntry* pEntry = mpFilterListBox->FirstSelected();
+    SvTreeListEntry* pEntry = mpFilterListBox->FirstSelected();
     if( pEntry )
     {
         // get its filter info
@@ -791,7 +791,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
 void XMLFilterSettingsDialog::onTest()
 {
     // get the first selected filter
-    SvLBoxEntry* pEntry = mpFilterListBox->FirstSelected();
+    SvTreeListEntry* pEntry = mpFilterListBox->FirstSelected();
     if( pEntry )
     {
         filter_info_impl* pInfo = (filter_info_impl*)pEntry->GetUserData();
@@ -805,13 +805,13 @@ void XMLFilterSettingsDialog::onTest()
 
 void XMLFilterSettingsDialog::onDelete()
 {
-    SvLBoxEntry* pEntry = mpFilterListBox->FirstSelected();
+    SvTreeListEntry* pEntry = mpFilterListBox->FirstSelected();
     if( pEntry )
     {
         filter_info_impl* pInfo = (filter_info_impl*)pEntry->GetUserData();
 
         String aPlaceHolder( RTL_CONSTASCII_USTRINGPARAM("%s") );
-        String aMessage(RESID(STR_WARN_DELETE));
+        String aMessage(RESIDSTR(STR_WARN_DELETE));
         aMessage.SearchAndReplace( aPlaceHolder, pInfo->maFilterName );
 
         WarningBox aWarnBox(this, (WinBits)(WB_YES_NO | WB_DEF_YES),    aMessage );
@@ -901,7 +901,7 @@ void XMLFilterSettingsDialog::onSave()
 
     int nFilters = 0;
 
-    SvLBoxEntry* pEntry = mpFilterListBox->FirstSelected();
+    SvTreeListEntry* pEntry = mpFilterListBox->FirstSelected();
     while( pEntry )
     {
         filter_info_impl* pInfo = (filter_info_impl*)pEntry->GetUserData();
@@ -916,7 +916,7 @@ void XMLFilterSettingsDialog::onSave()
         0 );
 
     String aExtensions( RTL_CONSTASCII_USTRINGPARAM("*.jar") );
-    String aFilterName( RESID( STR_FILTER_PACKAGE ) );
+    String aFilterName(RESIDSTR(STR_FILTER_PACKAGE));
     aFilterName += String( RTL_CONSTASCII_USTRINGPARAM(" (") );
     aFilterName += aExtensions;
     aFilterName += sal_Unicode(')');
@@ -935,13 +935,13 @@ void XMLFilterSettingsDialog::onSave()
         String aMsg;
         if( nFilters > 0 )
         {
-            aMsg = String( RESID( STR_FILTERS_HAVE_BEEN_SAVED ) );
+            aMsg = RESIDSTR(STR_FILTERS_HAVE_BEEN_SAVED);
             aMsg.SearchAndReplace( sPlaceholder, String::CreateFromInt32(nFilters) );
             aMsg.SearchAndReplace( sPlaceholder, aURL.GetName() );
         }
         else
         {
-            aMsg = String( RESID( STR_FILTER_HAS_BEEN_SAVED ) );
+            aMsg = RESIDSTR(STR_FILTER_HAS_BEEN_SAVED);
             aMsg.SearchAndReplace( sPlaceholder, (*aFilters.begin())->maFilterName );
             aMsg.SearchAndReplace( sPlaceholder, aURL.GetName() );
         }
@@ -962,7 +962,7 @@ void XMLFilterSettingsDialog::onOpen()
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
     String aExtensions( RTL_CONSTASCII_USTRINGPARAM("*.jar") );
-    String aFilterName( RESID( STR_FILTER_PACKAGE ) );
+    String aFilterName(RESIDSTR(STR_FILTER_PACKAGE));
     aFilterName += String( RTL_CONSTASCII_USTRINGPARAM(" (") );
     aFilterName += aExtensions;
     aFilterName += sal_Unicode(')');
@@ -999,18 +999,18 @@ void XMLFilterSettingsDialog::onOpen()
         if( nFilters == 0 )
         {
             INetURLObject aURLObj( aURL );
-            aMsg = String( RESID( STR_NO_FILTERS_FOUND ) );
+            aMsg = RESIDSTR(STR_NO_FILTERS_FOUND);
             aMsg.SearchAndReplace( sPlaceholder, aURLObj.GetName() );
         }
         else if( nFilters == 1 )
         {
-            aMsg = String( RESID( STR_FILTER_INSTALLED ) );
+            aMsg = RESIDSTR(STR_FILTER_INSTALLED);
             aMsg.SearchAndReplace( sPlaceholder, aFilterName );
 
         }
         else
         {
-            aMsg = String( RESID( STR_FILTERS_INSTALLED ) );
+            aMsg = RESIDSTR(STR_FILTERS_INSTALLED);
             aMsg.SearchAndReplace( sPlaceholder, String::CreateFromInt32(nFilters) );
         }
 
@@ -1152,7 +1152,7 @@ void XMLFilterSettingsDialog::initFilterList()
                     continue;
 
                 // get filter information from userdata
-                pTempFilter->maXSLTTransformerImpl = aUserData[1];
+                pTempFilter->mbNeedsXSLT2 = aUserData[1].toBoolean();
                 pTempFilter->maImportService = aUserData[2];
                 pTempFilter->maExportService = aUserData[3];
                 pTempFilter->maImportXSLT = aUserData[4];
@@ -1243,7 +1243,7 @@ void XMLFilterSettingsDialog::initFilterList()
         delete pTempFilter;
     }
 
-    SvLBoxEntry* pEntry = mpFilterListBox->GetEntry( 0 );
+    SvTreeListEntry* pEntry = mpFilterListBox->GetEntry( 0 );
     if( pEntry )
         mpFilterListBox->Select( pEntry );
 }
@@ -1359,7 +1359,7 @@ OUString getApplicationUIName( const OUString& rServiceName )
     }
     else
     {
-        OUString aRet = String( RESID( STR_UNKNOWN_APPLICATION ) );
+        OUString aRet = RESIDSTR(STR_UNKNOWN_APPLICATION);
         if( !rServiceName.isEmpty() )
         {
             aRet += OUString( RTL_CONSTASCII_USTRINGPARAM( " (" ));
@@ -1403,8 +1403,8 @@ XMLFilterListBox::XMLFilterListBox( SvxPathControl_Impl * pParent )
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( aBoxSize.Width(), 16 ) );
     mpHeaderBar->SetEndDragHdl( LINK( this, XMLFilterListBox, HeaderEndDrag_Impl ) );
 
-    String aStr1( RESID( STR_COLUMN_HEADER_NAME ) );
-    String aStr2( RESID( STR_COLUMN_HEADER_TYPE ) );
+    OUString aStr1(RESIDSTR(STR_COLUMN_HEADER_NAME));
+    OUString aStr2(RESIDSTR(STR_COLUMN_HEADER_TYPE));
 
     long nTabSize = aBoxSize.Width() / 2;
 
@@ -1504,7 +1504,7 @@ IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
 /** adds a new filter info entry to the ui filter list */
 void XMLFilterListBox::addFilterEntry( const filter_info_impl* pInfo )
 {
-    const XubString aEntryStr( getEntryString( pInfo ) );
+    const OUString aEntryStr( getEntryString( pInfo ) );
     InsertEntryToColumn( aEntryStr, LIST_APPEND, 0xffff, (void*)pInfo );
 }
 
@@ -1516,10 +1516,10 @@ void XMLFilterListBox::changeEntry( const filter_info_impl* pInfo )
     sal_uLong nPos;
     for( nPos = 0; nPos < nCount; nPos++ )
     {
-        SvLBoxEntry* pEntry = GetEntry( nPos );
+        SvTreeListEntry* pEntry = GetEntry( nPos );
         if( (filter_info_impl*)pEntry->GetUserData() == pInfo )
         {
-            XubString aEntryText( getEntryString( pInfo ) );
+            OUString aEntryText( getEntryString( pInfo ) );
             SetEntryText( aEntryText, pEntry );
             break;
         }
@@ -1545,20 +1545,20 @@ String XMLFilterListBox::getEntryString( const filter_info_impl* pInfo ) const
     {
         if( pInfo->maFlags & 2 )
         {
-            aEntryStr += String( RESID( STR_IMPORT_EXPORT ) );
+            aEntryStr += RESIDSTR(STR_IMPORT_EXPORT);
         }
         else
         {
-            aEntryStr += String( RESID( STR_IMPORT_ONLY ) );
+            aEntryStr += RESIDSTR(STR_IMPORT_ONLY);
         }
     }
     else if( pInfo->maFlags & 2 )
     {
-        aEntryStr += String( RESID( STR_EXPORT_ONLY ) );
+        aEntryStr += RESIDSTR(STR_EXPORT_ONLY);
     }
     else
     {
-        aEntryStr += String( RESID( STR_UNDEFINED_FILTER ) );
+        aEntryStr += RESIDSTR(STR_UNDEFINED_FILTER);
     }
 
     return aEntryStr;
@@ -1572,7 +1572,8 @@ filter_info_impl::filter_info_impl()
 :   maFlags(0x00080040),
     maFileFormatVersion(0),
     mnDocumentIconID(0),
-    mbReadonly(sal_False)
+    mbReadonly(sal_False),
+    mbNeedsXSLT2(sal_False)
 {
 }
 
@@ -1597,7 +1598,7 @@ filter_info_impl::filter_info_impl( const filter_info_impl& rInfo ) :
     maFileFormatVersion( rInfo.maFileFormatVersion ),
     mnDocumentIconID( rInfo.mnDocumentIconID ),
     mbReadonly( rInfo.mbReadonly ),
-    maXSLTTransformerImpl( rInfo.maXSLTTransformerImpl )
+    mbNeedsXSLT2( rInfo.mbNeedsXSLT2 )
 {
 }
 
@@ -1621,7 +1622,7 @@ int filter_info_impl::operator==( const filter_info_impl& r ) const
         maImportTemplate != r.maImportTemplate ||
         maFlags != r.maFlags ||
         maFileFormatVersion != r.maFileFormatVersion ||
-        maXSLTTransformerImpl != r.maXSLTTransformerImpl
+        mbNeedsXSLT2 != r.mbNeedsXSLT2
         )
         return false;
 
@@ -1635,7 +1636,7 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
     Sequence< OUString > aUserData(8);
 
     aUserData[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.documentconversion.XSLTFilter" ) );
-    aUserData[1] = maXSLTTransformerImpl;
+    aUserData[1] = OUString::valueOf( mbNeedsXSLT2 );
     aUserData[2] = maImportService;
     aUserData[3] = maExportService;
     aUserData[4] = maImportXSLT;

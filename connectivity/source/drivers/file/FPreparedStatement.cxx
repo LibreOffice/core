@@ -506,7 +506,10 @@ sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Re
                                                     ,eType
                                                     ,sal_False
                                                     ,sal_False
-                                                    ,m_aSQLIterator.isCaseSensitive());
+                                                    ,m_aSQLIterator.isCaseSensitive()
+                                                    ,::rtl::OUString()
+                                                    ,::rtl::OUString()
+                                                    ,::rtl::OUString());
     m_xParamColumns->get().push_back(xParaColumn);
     return m_xParamColumns->get().size();
 }

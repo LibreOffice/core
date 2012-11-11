@@ -94,8 +94,8 @@ namespace connectivity
             }
 
             WpOLEBase(const WpOLEBase<T>& aWrapper)
-                : WpBase(aWrapper)
-                , pInterface(aWrapper.pInterface)
+                : WpBase( aWrapper )
+                , pInterface( aWrapper.pInterface )
             {
             }
 

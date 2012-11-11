@@ -199,16 +199,16 @@ void SwTxtINetFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 }
 
     // erfrage vom Modify Informationen
-sal_Bool SwTxtINetFmt::GetInfo( SfxPoolItem& rInfo ) const
+bool SwTxtINetFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
         &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
     {
-        return sal_True;
+        return true;
     }
 
     static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
-    return sal_False;
+    return false;
 }
 
 sal_Bool SwTxtINetFmt::IsProtect( ) const
@@ -247,16 +247,16 @@ void SwTxtRuby::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     }
 }
 
-sal_Bool SwTxtRuby::GetInfo( SfxPoolItem& rInfo ) const
+bool SwTxtRuby::GetInfo( SfxPoolItem& rInfo ) const
 {
     if( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
         &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
     {
-        return sal_True;
+        return true;
     }
 
     static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
-    return sal_False;
+    return false;
 }
 
 SwCharFmt* SwTxtRuby::GetCharFmt()

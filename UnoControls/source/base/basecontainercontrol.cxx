@@ -39,8 +39,8 @@ namespace unocontrols{
 //  construct/destruct
 //____________________________________________________________________________________________________________
 
-BaseContainerControl::BaseContainerControl( const Reference< XMultiServiceFactory >& xFactory )
-    : BaseControl   ( xFactory  )
+BaseContainerControl::BaseContainerControl( const Reference< XComponentContext >& rxContext )
+    : BaseControl   ( rxContext  )
     , m_aListeners  ( m_aMutex  )
 {
 }

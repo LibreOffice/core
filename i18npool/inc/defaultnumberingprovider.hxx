@@ -45,7 +45,7 @@ class DefaultNumberingProvider : public cppu::WeakImplHelper4
     void impl_loadTranslit();
 public:
     DefaultNumberingProvider(
-        const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xMSF );
+        const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
     ~DefaultNumberingProvider();
 
     //XDefaultNumberingProvider
@@ -85,7 +85,7 @@ public:
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
                 throw( com::sun::star::uno::RuntimeException );
 private:
-    com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xSMgr;
+    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
     com::sun::star::uno::Reference < com::sun::star::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
     TransliterationImpl* translit;
     rtl::OUString SAL_CALL makeNumberingIdentifier( sal_Int16 index )

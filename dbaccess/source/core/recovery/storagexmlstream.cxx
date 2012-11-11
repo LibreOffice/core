@@ -23,6 +23,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <comphelper/componentcontext.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -52,6 +53,8 @@ namespace dbaccess
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::xml::sax::XDocumentHandler;
     using ::com::sun::star::xml::sax::XAttributeList;
+    using ::com::sun::star::xml::sax::XWriter;
+    using ::com::sun::star::xml::sax::Writer;
     using ::com::sun::star::io::XStream;
     using ::com::sun::star::io::XOutputStream;
     using ::com::sun::star::io::XActiveDataSource;
@@ -80,7 +83,7 @@ namespace dbaccess
         :StorageOutputStream( i_rContext, i_rParentStorage, i_rStreamName )
         ,m_pData( new StorageXMLOutputStream_Data )
     {
-        const Reference< XActiveDataSource > xSaxWriter( i_rContext.createComponent( "com.sun.star.xml.sax.Writer" ), UNO_QUERY_THROW );
+        const Reference< XWriter > xSaxWriter = Writer::create( i_rContext.getUNOContext() );
         xSaxWriter->setOutputStream( getOutputStream() );
 
         m_pData->xHandler.set( xSaxWriter, UNO_QUERY_THROW );

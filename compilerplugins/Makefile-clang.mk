@@ -9,8 +9,12 @@
 # Make sure variables in this Makefile do not conflict with other variables (e.g. from gbuild).
 
 # The list of source files.
-CLANGSRC=compileplugin.cxx \
+CLANGSRC= \
+    plugin.cxx \
     bodynotinblock.cxx \
+    lclstaticfix.cxx \
+    postfixincrementfix.cxx \
+    sallogareas.cxx \
     unusedvariablecheck.cxx \
 
 
@@ -39,7 +43,7 @@ CLANGINDIR=$(SRCDIR)/compilerplugins/clang
 # plugin will cause cache misses with ccache.
 CLANGOUTDIR=$(SRCDIR)/compilerplugins/obj
 
-compilerplugins: $(CLANGOUTDIR) $(CLANGOUTDIR)/compileplugin.so
+compilerplugins: $(CLANGOUTDIR) $(CLANGOUTDIR)/plugin.so
 
 compilerplugins-clean:
 	rm -rf $(CLANGOUTDIR)
@@ -52,17 +56,17 @@ CLANGOBJS=
 define clangbuildsrc
 $(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
 	@echo [build CXX] $(subst $(SRCDIR)/,,$(2))
-	$(CXX) $(CLANGCXXFLAGS) $(CLANGDEFS) $(CLANGINCLUDES) $(2) -fPIC -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
+	$(CXX) $(CLANGPLUGIN_CPPFLAGS) $(CLANGCXXFLAGS) $(CLANGDEFS) $(CLANGINCLUDES) -DSRCDIR=$(SRCDIR) $(2) -fPIC -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
 
 -include $(CLANGOUTDIR)/$(1).d
 
-$(CLANGOUTDIR)/compileplugin.so: $(3)
-$(CLANGOUTDIR)/compileplugin.so: CLANGOBJS += $(3)
+$(CLANGOUTDIR)/plugin.so: $(3)
+$(CLANGOUTDIR)/plugin.so: CLANGOBJS += $(3)
 endef
 
 $(foreach src, $(CLANGSRC), $(eval $(call clangbuildsrc,$(src),$(CLANGINDIR)/$(src),$(CLANGOUTDIR)/$(src:.cxx=.o))))
 
-$(CLANGOUTDIR)/compileplugin.so: $(CLANGOBJS)
+$(CLANGOUTDIR)/plugin.so: $(CLANGOBJS)
 	@echo [build LNK] $(subst $(SRCDIR)/,,$@)
 	$(CXX) -shared $(CLANGOBJS) -o $@
 

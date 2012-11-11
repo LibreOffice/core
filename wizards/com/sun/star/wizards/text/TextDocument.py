@@ -34,13 +34,12 @@ from com.sun.star.beans.PropertyState import DIRECT_VALUE
 
 class TextDocument(object):
 
-    xTextDocument = None
-
     def __init__(self, xMSF,listener=None,bShowStatusIndicator=None,
         FrameName=None,_sPreviewURL=None,_moduleIdentifier=None,
         _textDocument=None, xArgs=None):
 
         self.xMSF = xMSF
+        self.xTextDocument = None
 
         if listener is not None:
             if FrameName is not None:
@@ -55,19 +54,19 @@ class TextDocument(object):
                 '''creates an instance of TextDocument by
                 loading a given URL as preview'''
                 self.xFrame = OfficeDocument.createNewFrame(xMSF, listener)
-                TextDocument.xTextDocument = self.loadAsPreview(_sPreviewURL, True)
+                self.xTextDocument = self.loadAsPreview(_sPreviewURL, True)
 
             elif xArgs is not None:
                 '''creates an instance of TextDocument
                 and creates a frame and loads a document'''
                 self.xDesktop = Desktop.getDesktop(xMSF);
                 self.xFrame = OfficeDocument.createNewFrame(xMSF, listener)
-                TextDocument.xTextDocument = OfficeDocument.load(
+                self.xTextDocument = OfficeDocument.load(
                     xFrame, URL, "_self", xArgs);
                 self.xWindowPeer = xFrame.getComponentWindow()
-                self.m_xDocProps = TextDocument.xTextDocument.DocumentProperties
+                self.m_xDocProps = self.xTextDocument.DocumentProperties
                 CharLocale = Helper.getUnoStructValue(
-                    TextDocument.xTextDocument, "CharLocale");
+                    self.xTextDocument, "CharLocale");
                 return
 
             else:
@@ -75,27 +74,27 @@ class TextDocument(object):
                 the desktop's current frame'''
                 self.xDesktop = Desktop.getDesktop(xMSF);
                 self.xFrame = self.xDesktop.getActiveFrame()
-                TextDocument.xTextDocument = self.xFrame.getController().Model
+                self.xTextDocument = self.xFrame.getController().Model
 
         elif _moduleIdentifier is not None:
             try:
                 '''create the empty document, and set its module identifier'''
-                TextDocument.xTextDocument = xMSF.createInstance(
+                self.xTextDocument = xMSF.createInstance(
                     "com.sun.star.text.TextDocument")
-                TextDocument.xTextDocument.initNew()
-                TextDocument.xTextDocument.setIdentifier(
+                self.xTextDocument.initNew()
+                self.xTextDocument.setIdentifier(
                     _moduleIdentifier.Identifier)
                 # load the document into a blank frame
                 xDesktop = Desktop.getDesktop(xMSF)
                 loadArgs = range(1)
                 loadArgs[0] = "Model"
                 loadArgs[0] = -1
-                loadArgs[0] = TextDocument.xTextDocument
+                loadArgs[0] = self.xTextDocument
                 loadArgs[0] = DIRECT_VALUE
                 xDesktop.loadComponentFromURL(
                     "private:object", "_blank", 0, loadArgs)
                 # remember some things for later usage
-                self.xFrame = TextDocument.xTextDocument.CurrentController.Frame
+                self.xFrame = self.xTextDocument.CurrentController.Frame
             except Exception, e:
                 traceback.print_exc()
 
@@ -103,17 +102,17 @@ class TextDocument(object):
             '''creates an instance of TextDocument
             from a given XTextDocument'''
             self.xFrame = _textDocument.CurrentController.Frame
-            TextDocument.xTextDocument = _textDocument
+            self.xTextDocument = _textDocument
         if bShowStatusIndicator:
             self.showStatusIndicator()
         self.init()
 
     def init(self):
         self.xWindowPeer = self.xFrame.getComponentWindow()
-        self.m_xDocProps = TextDocument.xTextDocument.DocumentProperties
+        self.m_xDocProps = self.xTextDocument.DocumentProperties
         self.CharLocale = Helper.getUnoStructValue(
-            TextDocument.xTextDocument, "CharLocale")
-        self.xText = TextDocument.xTextDocument.Text
+            self.xTextDocument, "CharLocale")
+        self.xText = self.xTextDocument.Text
 
     def showStatusIndicator(self):
         self.xProgressBar = self.xFrame.createStatusIndicator()
@@ -140,24 +139,24 @@ class TextDocument(object):
         loadValues[2].Name = "Preview"
         loadValues[2].Value = True
 
-        TextDocument.xTextDocument = OfficeDocument.load(
+        self.xTextDocument = OfficeDocument.load(
             self.xFrame, sDefaultTemplate, "_self", loadValues)
 
         self.DocSize = self.getPageSize()
 
-        myViewHandler = ViewHandler(TextDocument.xTextDocument, TextDocument.xTextDocument)
+        myViewHandler = ViewHandler(self.xTextDocument, self.xTextDocument)
         try:
             myViewHandler.setViewSetting(
                 "ZoomType", ENTIRE_PAGE)
         except Exception, e:
             traceback.print_exc()
-        myFieldHandler = TextFieldHandler(self.xMSF, TextDocument.xTextDocument)
+        myFieldHandler = TextFieldHandler(self.xMSF, self.xTextDocument)
         myFieldHandler.updateDocInfoFields()
-        return TextDocument.xTextDocument
+        return self.xTextDocument
 
     def getPageSize(self):
         try:
-            xNameAccess = TextDocument.xTextDocument.StyleFamilies
+            xNameAccess = self.xTextDocument.StyleFamilies
             xPageStyleCollection = xNameAccess.getByName("PageStyles")
             xPageStyle = xPageStyleCollection.getByName("First Page")
             return Helper.getUnoPropertyValue(xPageStyle, "Size")
@@ -172,40 +171,8 @@ class TextDocument(object):
         xTextCursor = oCursorContainer.createTextCursor()
         return xTextCursor
 
-    # Todo: This method is  unsecure because the last index is not necessarily the last section
-    # Todo: This Routine should be  modified, because I cannot rely on the last Table in the document to be the last in the TextTables sequence
-    # to make it really safe you must acquire the Tablenames before the insertion and after the insertion of the new Table. By comparing the
-    # two sequences of tablenames you can find out the tablename of the last inserted Table
-    # Todo: This method is  unsecure because the last index is not necessarily the last section
-
-    def getCharWidth(self, ScaleString):
-        iScale = 200
-        TextDocument.xTextDocument.lockControllers()
-        iScaleLen = ScaleString.length()
-        xTextCursor = createTextCursor(TextDocument.xTextDocument.Text)
-        xTextCursor.gotoStart(False)
-        com.sun.star.wizards.common.Helper.setUnoPropertyValue(
-            xTextCursor, "PageDescName", "First Page")
-        xTextCursor.String = ScaleString
-        xViewCursor = TextDocument.xTextDocument.CurrentController
-        xTextViewCursor = xViewCursor.ViewCursor
-        xTextViewCursor.gotoStart(False)
-        iFirstPos = xTextViewCursor.Position.X
-        xTextViewCursor.gotoEnd(False)
-        iLastPos = xTextViewCursor.Position.X
-        iScale = (iLastPos - iFirstPos) / iScaleLen
-        xTextCursor.gotoStart(False)
-        xTextCursor.gotoEnd(True)
-        xTextCursor.String = ""
-        unlockallControllers()
-        return iScale
-
-    def unlockallControllers(self):
-        while TextDocument.xTextDocument.hasControllersLocked():
-            TextDocument.xTextDocument.unlockControllers()
-
     def refresh(self):
-        TextDocument.xTextDocument.refresh()
+        self.xTextDocument.refresh()
 
     '''
     This method sets the Author of a Wizard-generated template correctly
@@ -229,10 +196,10 @@ class TextDocument(object):
             day = time.strftime("%d", now)
 
             dateObject = dateTimeObject(int(year), int(month), int(day))
-            du = Helper.DateUtils(self.xMSF, TextDocument.xTextDocument)
+            du = Helper.DateUtils(self.xMSF, self.xTextDocument)
             ff = du.getFormat(DATE_SYS_DDMMYY)
             myDate = du.format(ff, dateObject)
-            xDocProps2 = TextDocument.xTextDocument.DocumentProperties
+            xDocProps2 = self.xTextDocument.DocumentProperties
             xDocProps2.Author = fullname
             xDocProps2.ModifiedBy = fullname
             description = xDocProps2.Description
@@ -270,3 +237,22 @@ class TextDocument(object):
             return xTD.TextFrames.getByName(sFrameName)
 
         return None
+
+    @classmethod
+    def searchFillInItems(self, typeSearch):
+        sd = self.xTextDocument.createSearchDescriptor()
+        
+        if typeSearch == 0:
+            sd.setSearchString("<[^>]+>")
+        elif typeSearch == 1:
+            sd.setSearchString("#[^#]+#")
+            
+        sd.setPropertyValue("SearchRegularExpression", True)
+        sd.setPropertyValue("SearchWords", True)
+        
+        auxList = []
+        allItems = self.xTextDocument.findAll(sd)
+        for i in xrange(allItems.Count):
+            auxList.append(allItems.getByIndex(i))
+            
+        return auxList

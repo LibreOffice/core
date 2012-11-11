@@ -1234,12 +1234,6 @@ void FormulaTokenIterator::Reset()
     pCur->nPC = -1;
 }
 
-const FormulaToken* FormulaTokenIterator::First()
-{
-    Reset();
-    return Next();
-}
-
 const FormulaToken* FormulaTokenIterator::Next()
 {
     const FormulaToken* t = GetNonEndOfPathToken( ++pCur->nPC );

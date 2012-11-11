@@ -37,6 +37,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 
@@ -118,89 +119,83 @@ void SvObjectServerList::FillInsertObjects()
 */
 {
     try{
-    uno::Reference< lang::XMultiServiceFactory > _globalMSFactory= comphelper::getProcessServiceFactory();
-    if( _globalMSFactory.is())
-    {
-        ::rtl::OUString sProviderService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ));
-        uno::Reference< lang::XMultiServiceFactory > sProviderMSFactory(
-            _globalMSFactory->createInstance( sProviderService ), uno::UNO_QUERY );
+        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
 
-        if( sProviderMSFactory.is())
+        uno::Reference< lang::XMultiServiceFactory > sProviderMSFactory =
+            configuration::theDefaultProvider::get(xContext);
+
+        ::rtl::OUString sReaderService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
+        uno::Sequence< uno::Any > aArguments( 1 );
+        beans::PropertyValue aPathProp;
+        aPathProp.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+        aPathProp.Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Embedding/ObjectNames" ));
+        aArguments[0] <<= aPathProp;
+
+        uno::Reference< container::XNameAccess > xNameAccess(
+            sProviderMSFactory->createInstanceWithArguments( sReaderService,aArguments ),
+            uno::UNO_QUERY );
+
+        if( xNameAccess.is())
         {
-            ::rtl::OUString sReaderService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
-            uno::Sequence< uno::Any > aArguments( 1 );
-            beans::PropertyValue aPathProp;
-            aPathProp.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
-            aPathProp.Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Embedding/ObjectNames" ));
-            aArguments[0] <<= aPathProp;
+            uno::Sequence< ::rtl::OUString > seqNames= xNameAccess->getElementNames();
+            sal_Int32 nInd;
 
-            uno::Reference< container::XNameAccess > xNameAccess(
-                sProviderMSFactory->createInstanceWithArguments( sReaderService,aArguments ),
-                uno::UNO_QUERY );
+            ::rtl::OUString aStringProductName( RTL_CONSTASCII_USTRINGPARAM( "%PRODUCTNAME" ) );
+            sal_Int32 nStringProductNameLength = aStringProductName.getLength();
 
-            if( xNameAccess.is())
+            ::rtl::OUString aStringProductVersion( RTL_CONSTASCII_USTRINGPARAM( "%PRODUCTVERSION" ) );
+            sal_Int32 nStringProductVersionLength = aStringProductVersion.getLength();
+
+            for( nInd = 0; nInd < seqNames.getLength(); nInd++ )
             {
-                uno::Sequence< ::rtl::OUString > seqNames= xNameAccess->getElementNames();
-                sal_Int32 nInd;
-
-                ::rtl::OUString aStringProductName( RTL_CONSTASCII_USTRINGPARAM( "%PRODUCTNAME" ) );
-                sal_Int32 nStringProductNameLength = aStringProductName.getLength();
-
-                ::rtl::OUString aStringProductVersion( RTL_CONSTASCII_USTRINGPARAM( "%PRODUCTVERSION" ) );
-                sal_Int32 nStringProductVersionLength = aStringProductVersion.getLength();
-
-                for( nInd = 0; nInd < seqNames.getLength(); nInd++ )
+                uno::Reference< container::XNameAccess > xEntry ;
+                xNameAccess->getByName( seqNames[nInd] ) >>= xEntry;
+                if ( xEntry.is() )
                 {
-                    uno::Reference< container::XNameAccess > xEntry ;
-                    xNameAccess->getByName( seqNames[nInd] ) >>= xEntry;
-                    if ( xEntry.is() )
+                    ::rtl::OUString aUIName;
+                    ::rtl::OUString aClassID;
+                    xEntry->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectUIName" )) ) >>= aUIName;
+                    xEntry->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ClassID" )) ) >>= aClassID;
+
+                    if ( !aUIName.isEmpty() )
                     {
-                        ::rtl::OUString aUIName;
-                        ::rtl::OUString aClassID;
-                        xEntry->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectUIName" )) ) >>= aUIName;
-                        xEntry->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ClassID" )) ) >>= aClassID;
-
-                        if ( !aUIName.isEmpty() )
+                        // replace %PRODUCTNAME
+                        sal_Int32 nIndex = aUIName.indexOf( aStringProductName );
+                        while( nIndex != -1 )
                         {
-                            // replace %PRODUCTNAME
-                            sal_Int32 nIndex = aUIName.indexOf( aStringProductName );
-                            while( nIndex != -1 )
-                            {
-                                aUIName = aUIName.replaceAt(
-                                    nIndex, nStringProductNameLength,
-                                    utl::ConfigManager::getProductName() );
-                                nIndex = aUIName.indexOf( aStringProductName );
-                            }
+                            aUIName = aUIName.replaceAt(
+                                nIndex, nStringProductNameLength,
+                                utl::ConfigManager::getProductName() );
+                            nIndex = aUIName.indexOf( aStringProductName );
+                        }
 
-                            // replace %PRODUCTVERSION
+                        // replace %PRODUCTVERSION
+                        nIndex = aUIName.indexOf( aStringProductVersion );
+                        while( nIndex != -1 )
+                        {
+                            aUIName = aUIName.replaceAt(
+                                nIndex, nStringProductVersionLength,
+                                utl::ConfigManager::getProductVersion() );
                             nIndex = aUIName.indexOf( aStringProductVersion );
-                            while( nIndex != -1 )
-                            {
-                                aUIName = aUIName.replaceAt(
-                                    nIndex, nStringProductVersionLength,
-                                    utl::ConfigManager::getProductVersion() );
-                                nIndex = aUIName.indexOf( aStringProductVersion );
-                            }
                         }
+                    }
 
-                        SvGlobalName aClassName;
-                        if( aClassName.MakeId( String( aClassID )))
-                        {
-                            if( !Get( aClassName ) )
-                                // noch nicht eingetragen
-                                aObjectServerList.push_back( SvObjectServer( aClassName, aUIName ) );
-                        }
+                    SvGlobalName aClassName;
+                    if( aClassName.MakeId( String( aClassID )))
+                    {
+                        if( !Get( aClassName ) )
+                            // noch nicht eingetragen
+                            aObjectServerList.push_back( SvObjectServer( aClassName, aUIName ) );
                     }
                 }
             }
         }
-    }
 
 
 #ifdef WNT
-    SvGlobalName aOleFact( SO3_OUT_CLASSID );
-    String aOleObj( SVT_RESSTR( STR_FURTHER_OBJECT ) );
-    aObjectServerList.push_back( SvObjectServer( aOleFact, aOleObj ) );
+        SvGlobalName aOleFact( SO3_OUT_CLASSID );
+        String aOleObj( SVT_RESSTR( STR_FURTHER_OBJECT ) );
+        aObjectServerList.push_back( SvObjectServer( aOleFact, aOleObj ) );
 #endif
 
     }catch(const container::NoSuchElementException&)

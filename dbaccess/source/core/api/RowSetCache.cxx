@@ -1580,7 +1580,7 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
     sal_Bool bOk = sal_False;
     ::rtl::OUString sSql = _xAnalyzer->getQuery();
     ::rtl::OUString sErrorMsg;
-    ::connectivity::OSQLParser aSqlParser( m_aContext.getLegacyServiceFactory() );
+    ::connectivity::OSQLParser aSqlParser( m_aContext.getUNOContext() );
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::connectivity::OSQLParseNode> pSqlParseNode( aSqlParser.parseTree(sErrorMsg,sSql));
     SAL_WNODEPRECATED_DECLARATIONS_POP

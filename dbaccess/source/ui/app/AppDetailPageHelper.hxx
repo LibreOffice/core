@@ -125,7 +125,7 @@ namespace dbaui
         void fillNames( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer,
                         const ElementType _eType,
                         const sal_uInt16 _nImageId,
-                        SvLBoxEntry* _pParent );
+                        SvTreeListEntry* _pParent );
 
         /** sets the detail page
             @param  _pWindow
@@ -250,7 +250,7 @@ namespace dbaui
             @return
                 the qualified name
         */
-        ::rtl::OUString getQualifiedName( SvLBoxEntry* _pEntry ) const;
+        ::rtl::OUString getQualifiedName( SvTreeListEntry* _pEntry ) const;
 
         /// return the element of currently select entry
         ElementType getElementType() const;
@@ -267,7 +267,7 @@ namespace dbaui
             @return
                 <TRUE/> if the entry is a leaf, otherwise <FALSE/>
         */
-        bool    isLeaf(SvLBoxEntry* _pEntry) const;
+        bool    isLeaf(SvTreeListEntry* _pEntry) const;
 
         /** returns if one of the selected entries is a leaf
             @return
@@ -275,7 +275,7 @@ namespace dbaui
         */
         sal_Bool isALeafSelected() const;
 
-        SvLBoxEntry* getEntry( const Point& _aPosPixel ) const;
+        SvTreeListEntry* getEntry( const Point& _aPosPixel ) const;
 
         /// clears the detail pages
         void clearPages();
@@ -293,7 +293,7 @@ namespace dbaui
             @param  _rxConn
                 If we insert a table, the connection must be set.
         */
-        SvLBoxEntry*  elementAdded(ElementType eType
+        SvTreeListEntry*  elementAdded(ElementType eType
                         ,const ::rtl::OUString& _rName
                         ,const ::com::sun::star::uno::Any& _rObject );
 

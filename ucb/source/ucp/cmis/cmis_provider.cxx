@@ -28,6 +28,7 @@
 
 #include <stdio.h>
 
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/contenthelper.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
@@ -59,12 +60,12 @@ ContentProvider::queryContent(
         URL aUrl( Identifier->getContentIdentifier( ) );
         if ( aUrl.getRepositoryId( ).isEmpty( ) )
         {
-            xContent = new RepoContent( m_xSMgr, this, Identifier );
+            xContent = new RepoContent( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, Identifier );
             registerNewContent( xContent );
         }
         else
         {
-            xContent = new Content( m_xSMgr, this, Identifier );
+            xContent = new Content( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, Identifier );
             registerNewContent( xContent );
         }
     }
@@ -96,8 +97,8 @@ void ContentProvider::registerSession( const rtl::OUString& sBindingUrl, libcmis
 }
 
 ContentProvider::ContentProvider(
-    const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-: ::ucbhelper::ContentProviderImplHelper( rSMgr )
+    const uno::Reference< uno::XComponentContext >& rxContext )
+: ::ucbhelper::ContentProviderImplHelper( rxContext )
 {
 }
 
@@ -115,7 +116,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XServiceInfo,
                       com::sun::star::ucb::XContentProvider );
 
-XSERVICEINFO_IMPL_1( ContentProvider,
+XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                        "com.sun.star.comp.CmisContentProvider" )),
                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(

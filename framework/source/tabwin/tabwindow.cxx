@@ -32,6 +32,7 @@
 #include <threadhelp/resetableguard.hxx>
 
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowDescriptor.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -299,15 +300,14 @@ throw (css::uno::Exception, css::uno::RuntimeException)
     {
         css::beans::PropertyValue                   aPropValue;
         css::uno::Reference< css::awt::XTopWindow > xTopWindow;
-        css::uno::Reference< css::awt::XToolkit >   xToolkit;
+        css::uno::Reference< css::awt::XToolkit2 >  xToolkit;
         css::awt::WindowDescriptor                  aDescriptor;
 
         if ( xSMGR.is() )
         {
             try
             {
-                xToolkit = css::uno::Reference< css::awt::XToolkit >(
-                    xSMGR->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY );
+                xToolkit = css::awt::Toolkit::create( comphelper::getComponentContext(xSMGR) );
             }
             catch ( const css::uno::RuntimeException& )
             {

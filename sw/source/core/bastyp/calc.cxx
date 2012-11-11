@@ -260,7 +260,7 @@ SwCalc::SwCalc( SwDoc& rD )
         ::com::sun::star::lang::Locale aLocale( SvxCreateLocale( eLang ));
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(
                             ::comphelper::getProcessServiceFactory() );
-        pCharClass = new CharClass( xMSF, aLocale );
+        pCharClass = new CharClass( ::comphelper::getProcessComponentContext(), aLocale );
         pLclData = new LocaleDataWrapper( xMSF, aLocale );
     }
 
@@ -421,8 +421,9 @@ SwSbxValue SwCalc::Calculate( const String& rStr )
 String SwCalc::GetStrResult( const SwSbxValue& rVal, sal_Bool bRound )
 {
     if( !rVal.IsDouble() )
-        return rVal.GetString();
-
+    {
+        return rVal.GetOUString();
+    }
     return GetStrResult( rVal.GetDouble(), bRound );
 }
 
@@ -1285,7 +1286,7 @@ SwSbxValue SwCalc::Prim()
             nErg = Prim();
             if( SbxSTRING == nErg.GetType() )
             {
-                nErg.PutBool( 0 == nErg.GetString().Len() );
+                nErg.PutBool( nErg.GetOUString().isEmpty() );
             }
             else if(SbxBOOL == nErg.GetType() )
             {
@@ -1507,7 +1508,7 @@ namespace
                                 const LocaleDataWrapper* const pLclData )
     {
         OSL_ASSERT(pLclData);
-        const xub_Unicode nCurrCmdPos = rCommandPos;
+        const sal_Unicode nCurrCmdPos = rCommandPos;
         rtl_math_ConversionStatus eStatus;
         const sal_Unicode* pEnd;
         rVal = rtl_math_uStringToDouble( rCommand.GetBuffer() + rCommandPos,
@@ -1612,7 +1613,7 @@ SwSbxValue::~SwSbxValue()
 
 sal_Bool SwSbxValue::GetBool() const
 {
-    return SbxSTRING == GetType() ? 0 != GetString().Len()
+    return SbxSTRING == GetType() ? !GetOUString().isEmpty()
                                   : 0 != SbxValue::GetBool();
 }
 
@@ -1622,7 +1623,7 @@ double SwSbxValue::GetDouble() const
     if( SbxSTRING == GetType() )
     {
         xub_StrLen nStt = 0;
-        SwCalc::Str2Double( GetString(), nStt, nRet );
+        SwCalc::Str2Double( GetOUString(), nStt, nRet );
     }
     else if (IsBool())
     {

@@ -1,45 +1,33 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/i18n/WordType.hpp>
 #include <drawinglayer/primitive2d/texteffectprimitive2d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textstrikeoutprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textbreakuphelper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -167,232 +155,47 @@ namespace drawinglayer
             // TODO: Handle Font Emphasis Above/Below
         }
 
-        void TextDecoratedPortionPrimitive2D::impCorrectTextBoundary(::com::sun::star::i18n::Boundary& rNextWordBoundary) const
+        Primitive2DSequence TextDecoratedPortionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // truncate aNextWordBoundary to min/max possible values. This is necessary since the word start may be
-            // before/after getTextPosition() when a long string is the content and getTextPosition()
-            // is right inside a word. Same for end.
-            const sal_Int32 aMinPos(static_cast< sal_Int32 >(getTextPosition()));
-            const sal_Int32 aMaxPos(aMinPos + static_cast< sal_Int32 >(getTextLength()));
-
-            if(rNextWordBoundary.startPos < aMinPos)
+            if(getWordLineMode())
             {
-                rNextWordBoundary.startPos = aMinPos;
-            }
-            else if(rNextWordBoundary.startPos > aMaxPos)
-            {
-                rNextWordBoundary.startPos = aMaxPos;
-            }
+                // support for single word mode; split to single word primitives
+                // using TextBreakupHelper
+                const TextBreakupHelper aTextBreakupHelper(*this);
+                const Primitive2DSequence aBroken(aTextBreakupHelper.getResult(BreakupUnit_word));
 
-            if(rNextWordBoundary.endPos < aMinPos)
-            {
-                rNextWordBoundary.endPos = aMinPos;
-            }
-            else if(rNextWordBoundary.endPos > aMaxPos)
-            {
-                rNextWordBoundary.endPos = aMaxPos;
-            }
-        }
-
-        void TextDecoratedPortionPrimitive2D::impSplitSingleWords(
-            std::vector< Primitive2DReference >& rTarget,
-            basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans) const
-        {
-            // break iterator support
-            // made static so it only needs to be fetched once, even with many single
-            // constructed VclMetafileProcessor2D. It's still incarnated on demand,
-            // but exists for OOo runtime now by purpose.
-            static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xLocalBreakIterator;
-
-            if(!xLocalBreakIterator.is())
-            {
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
-                xLocalBreakIterator.set(xMSF->createInstance("com.sun.star.i18n.BreakIterator"), ::com::sun::star::uno::UNO_QUERY);
-            }
-
-            if(xLocalBreakIterator.is() && getTextLength())
-            {
-                // init word iterator, get first word and truncate to possibilities
-                ::com::sun::star::i18n::Boundary aNextWordBoundary(xLocalBreakIterator->getWordBoundary(
-                    getText(), getTextPosition(), getLocale(), ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True));
-
-                if(aNextWordBoundary.endPos == getTextPosition())
+                if(aBroken.hasElements())
                 {
-                    // backward hit, force next word
-                    aNextWordBoundary = xLocalBreakIterator->getWordBoundary(
-                        getText(), getTextPosition() + 1, getLocale(), ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
-                }
-
-                impCorrectTextBoundary(aNextWordBoundary);
-
-                // prepare new font attributes WITHOUT outline
-                const attribute::FontAttribute aNewFontAttribute(
-                    getFontAttribute().getFamilyName(),
-                    getFontAttribute().getStyleName(),
-                    getFontAttribute().getWeight(),
-                    getFontAttribute().getSymbol(),
-                    getFontAttribute().getVertical(),
-                    getFontAttribute().getItalic(),
-                    getFontAttribute().getMonospaced(),
-                    false,             // no outline anymore, handled locally
-                    getFontAttribute().getRTL(),
-                    getFontAttribute().getBiDiStrong());
-
-                if(aNextWordBoundary.startPos == getTextPosition() && aNextWordBoundary.endPos == getTextLength())
-                {
-                    // it IS only a single word, handle as one word
-                    impCreateGeometryContent(rTarget, rDecTrans, getText(), getTextPosition(), getTextLength(), getDXArray(), aNewFontAttribute);
+                    // was indeed split to several words, use as result
+                    return aBroken;
                 }
                 else
                 {
-                    // prepare TextLayouter
-                    const bool bNoDXArray(getDXArray().empty());
-                    TextLayouterDevice aTextLayouter;
-
-                    if(bNoDXArray)
-                    {
-                        // ..but only completely when no DXArray
-                        aTextLayouter.setFontAttribute(
-                            getFontAttribute(),
-                            rDecTrans.getScale().getX(),
-                            rDecTrans.getScale().getY(),
-                            getLocale());
-                    }
-
-                    // do iterate over single words
-                    while(aNextWordBoundary.startPos != aNextWordBoundary.endPos)
-                    {
-                        // prepare values for new portion
-                        const xub_StrLen nNewTextStart(static_cast< xub_StrLen >(aNextWordBoundary.startPos));
-                        const xub_StrLen nNewTextEnd(static_cast< xub_StrLen >(aNextWordBoundary.endPos));
-
-                        // prepare transform for the single word
-                        basegfx::B2DHomMatrix aNewTransform;
-                        ::std::vector< double > aNewDXArray;
-                        const bool bNewStartIsNotOldStart(nNewTextStart > getTextPosition());
-
-                        if(!bNoDXArray)
-                        {
-                            // prepare new DXArray for the single word
-                            aNewDXArray = ::std::vector< double >(
-                                getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()),
-                                getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextEnd - getTextPosition()));
-                        }
-
-                        if(bNewStartIsNotOldStart)
-                        {
-                            // needs to be moved to a new start position
-                            double fOffset(0.0);
-
-                            if(bNoDXArray)
-                            {
-                                // evaluate using TextLayouter
-                                fOffset = aTextLayouter.getTextWidth(getText(), getTextPosition(), nNewTextStart);
-                            }
-                            else
-                            {
-                                // get from DXArray
-                                const sal_uInt32 nIndex(static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()));
-                                fOffset = getDXArray()[nIndex - 1];
-                            }
-
-                            // need offset without FontScale for building the new transformation. The
-                            // new transformation will be multiplied with the current text transformation
-                            // so FontScale would be double
-                            double fOffsetNoScale(fOffset);
-                            const double fFontScaleX(rDecTrans.getScale().getX());
-
-                            if(!basegfx::fTools::equal(fFontScaleX, 1.0)
-                                && !basegfx::fTools::equalZero(fFontScaleX))
-                            {
-                                fOffsetNoScale /= fFontScaleX;
-                            }
-
-                            // apply needed offset to transformation
-                            aNewTransform.translate(fOffsetNoScale, 0.0);
-
-                            if(!bNoDXArray)
-                            {
-                                // DXArray values need to be corrected with the offset, too. Here,
-                                // take the scaled offset since the DXArray is scaled
-                                const sal_uInt32 nArraySize(aNewDXArray.size());
-
-                                for(sal_uInt32 a(0); a < nArraySize; a++)
-                                {
-                                    aNewDXArray[a] -= fOffset;
-                                }
-                            }
-                        }
-
-                        // add text transformation to new transformation
-                        aNewTransform *= rDecTrans.getB2DHomMatrix();
-
-                        // create geometry content for the single word. Do not forget
-                        // to use the new transformation
-                        basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(aNewTransform);
-
-                        impCreateGeometryContent(rTarget, aDecTrans, getText(), nNewTextStart,
-                            nNewTextEnd - nNewTextStart, aNewDXArray, aNewFontAttribute);
-
-                        if(aNextWordBoundary.endPos >= getTextPosition() + getTextLength())
-                        {
-                            // end reached
-                            aNextWordBoundary.startPos = aNextWordBoundary.endPos;
-                        }
-                        else
-                        {
-                            // get new word portion
-                            const sal_Int32 nLastEndPos(aNextWordBoundary.endPos);
-
-                            aNextWordBoundary = xLocalBreakIterator->getWordBoundary(
-                                getText(), aNextWordBoundary.endPos, getLocale(),
-                                ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
-
-                            if(nLastEndPos == aNextWordBoundary.endPos)
-                            {
-                                // backward hit, force next word
-                                aNextWordBoundary = xLocalBreakIterator->getWordBoundary(
-                                    getText(), nLastEndPos + 1, getLocale(),
-                                    ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
-                            }
-
-                            impCorrectTextBoundary(aNextWordBoundary);
-                        }
-                    }
+                    // no split, was already a single word. Continue to
+                    // decompse local entity
                 }
             }
-        }
-
-        Primitive2DSequence TextDecoratedPortionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
-        {
             std::vector< Primitive2DReference > aNewPrimitives;
             basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(getTextTransform());
             Primitive2DSequence aRetval;
 
             // create basic geometry such as SimpleTextPrimitive, Overline, Underline,
             // Strikeout, etc...
-            if(getWordLineMode())
-            {
-                // support for single word mode
-                impSplitSingleWords(aNewPrimitives, aDecTrans);
-            }
-            else
-            {
-                // prepare new font attributes WITHOUT outline
-                const attribute::FontAttribute aNewFontAttribute(
-                    getFontAttribute().getFamilyName(),
-                    getFontAttribute().getStyleName(),
-                    getFontAttribute().getWeight(),
-                    getFontAttribute().getSymbol(),
-                    getFontAttribute().getVertical(),
-                    getFontAttribute().getItalic(),
-                    false,             // no outline anymore, handled locally
-                    getFontAttribute().getRTL(),
-                    getFontAttribute().getBiDiStrong());
+            // prepare new font attributes WITHOUT outline
+            const attribute::FontAttribute aNewFontAttribute(
+                getFontAttribute().getFamilyName(),
+                getFontAttribute().getStyleName(),
+                getFontAttribute().getWeight(),
+                getFontAttribute().getSymbol(),
+                getFontAttribute().getVertical(),
+                getFontAttribute().getItalic(),
+        getFontAttribute().getMonospaced(),
+                false,             // no outline anymore, handled locally
+                getFontAttribute().getRTL(),
+                getFontAttribute().getBiDiStrong());
 
-                // handle as one word
-                impCreateGeometryContent(aNewPrimitives, aDecTrans, getText(), getTextPosition(), getTextLength(), getDXArray(), aNewFontAttribute);
-            }
+            // handle as one word
+            impCreateGeometryContent(aNewPrimitives, aDecTrans, getText(), getTextPosition(), getTextLength(), getDXArray(), aNewFontAttribute);
 
             // convert to Primitive2DSequence
             const sal_uInt32 nMemberCount(aNewPrimitives.size());
@@ -545,6 +348,16 @@ namespace drawinglayer
         {
         }
 
+        bool TextDecoratedPortionPrimitive2D::decoratedIsNeeded() const
+        {
+            return (TEXT_LINE_NONE != getFontOverline()
+                 || TEXT_LINE_NONE != getFontUnderline()
+                 || TEXT_STRIKEOUT_NONE != getTextStrikeout()
+                 || TEXT_EMPHASISMARK_NONE != getTextEmphasisMark()
+                 || TEXT_RELIEF_NONE != getTextRelief()
+                 || getShadow());
+        }
+
         bool TextDecoratedPortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             if(TextSimplePortionPrimitive2D::operator==(rPrimitive))
@@ -573,15 +386,7 @@ namespace drawinglayer
         // inking area, so add them if needed
         basegfx::B2DRange TextDecoratedPortionPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            const bool bDecoratedIsNeeded(
-                TEXT_LINE_NONE != getFontOverline()
-             || TEXT_LINE_NONE != getFontUnderline()
-             || TEXT_STRIKEOUT_NONE != getTextStrikeout()
-             || TEXT_EMPHASISMARK_NONE != getTextEmphasisMark()
-             || TEXT_RELIEF_NONE != getTextRelief()
-             || getShadow());
-
-            if(bDecoratedIsNeeded)
+            if(decoratedIsNeeded())
             {
                 // decoration is used, fallback to BufferedDecompositionPrimitive2D::getB2DRange which uses
                 // the own local decomposition for computation and thus creates all necessary

@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <drawinglayer/primitive3d/polygontubeprimitive3d.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
@@ -158,6 +149,76 @@ namespace drawinglayer
                 return aLineCapList;
             }
 
+            Primitive3DSequence getLineCapRoundSegments(
+                sal_uInt32 nSegments,
+                const attribute::MaterialAttribute3D& rMaterial)
+            {
+                // static data for buffered tube primitives
+                static Primitive3DSequence aLineCapRoundList;
+                static sal_uInt32 nLineCapRoundSegments(0);
+                static attribute::MaterialAttribute3D aLineMaterial;
+
+                // may exclusively change static data, use mutex
+                ::osl::Mutex m_mutex;
+
+                if(nSegments != nLineCapRoundSegments || !(rMaterial == aLineMaterial))
+                {
+                    nLineCapRoundSegments = nSegments;
+                    aLineMaterial = rMaterial;
+                    aLineCapRoundList = Primitive3DSequence();
+                }
+
+                if(!aLineCapRoundList.hasElements() && nLineCapRoundSegments)
+                {
+                    // calculate new horizontal segments
+                    sal_uInt32 nVerSeg(nSegments / 2);
+
+                    if(nVerSeg < 1)
+                    {
+                        nVerSeg = 1;
+                    }
+
+                    // create half-sphere; upper half of unit sphere
+                    basegfx::B3DPolyPolygon aSphere(
+                        basegfx::tools::createUnitSphereFillPolyPolygon(
+                            nSegments,
+                            nVerSeg,
+                            true,
+                            F_PI2, 0.0,
+                            0.0, F_2PI));
+                    const sal_uInt32 nCount(aSphere.count());
+
+                    if(nCount)
+                    {
+                        // rotate to have sphere cap orientned to negative X-Axis; do not
+                        // forget to transform normals, too
+                        basegfx::B3DHomMatrix aSphereTrans;
+
+                        aSphereTrans.rotate(0.0, 0.0, F_PI2);
+                        aSphere.transform(aSphereTrans);
+                        aSphere.transformNormals(aSphereTrans);
+
+                        // realloc for primitives and create based on polygon snippets
+                        aLineCapRoundList.realloc(nCount);
+
+                        for(sal_uInt32 a(0); a < nCount; a++)
+                        {
+                            const basegfx::B3DPolygon aPartPolygon(aSphere.getB3DPolygon(a));
+                            const basegfx::B3DPolyPolygon aPartPolyPolygon(aPartPolygon);
+
+                            // need to create one primitive per Polygon since the primitive
+                            // is for planar PolyPolygons which is definitely not the case here
+                            aLineCapRoundList[a] = new PolyPolygonMaterialPrimitive3D(
+                                aPartPolyPolygon,
+                                rMaterial,
+                                false);
+                        }
+                    }
+                }
+
+                return aLineCapRoundList;
+            }
+
             Primitive3DSequence getLineJoinSegments(
                 sal_uInt32 nSegments,
                 const attribute::MaterialAttribute3D& rMaterial,
@@ -175,7 +236,7 @@ namespace drawinglayer
                     if(basegfx::B2DLINEJOIN_ROUND == aLineJoin)
                     {
                         // calculate new horizontal segments
-                        const sal_uInt32 nHorSeg((sal_uInt32)((fAngle / F_2PI) * (double)nSegments));
+                        const sal_uInt32 nHorSeg(basegfx::fround((fAngle / F_2PI) * (double)nSegments));
 
                         if(nHorSeg)
                         {
@@ -412,40 +473,88 @@ namespace drawinglayer
             const sal_uInt32 nPointCount(getB3DPolygon().count());
             std::vector< BasePrimitive3D* > aResultVector;
 
-            if(0L != nPointCount)
+            if(nPointCount)
             {
                 if(basegfx::fTools::more(getRadius(), 0.0))
                 {
                     const attribute::MaterialAttribute3D aMaterial(getBColor());
-                    static sal_uInt32 nSegments(8L); // default for 3d line segments, for more quality just raise this value (in even steps)
+                    static sal_uInt32 nSegments(8); // default for 3d line segments, for more quality just raise this value (in even steps)
                     const bool bClosed(getB3DPolygon().isClosed());
                     const bool bNoLineJoin(basegfx::B2DLINEJOIN_NONE == getLineJoin());
-                    const sal_uInt32 nLoopCount(bClosed ? nPointCount : nPointCount - 1L);
-                    basegfx::B3DPoint aLast(getB3DPolygon().getB3DPoint(nPointCount - 1L));
-                    basegfx::B3DPoint aCurr(getB3DPolygon().getB3DPoint(0L));
+                    const sal_uInt32 nLoopCount(bClosed ? nPointCount : nPointCount - 1);
+                    basegfx::B3DPoint aLast(getB3DPolygon().getB3DPoint(nPointCount - 1));
+                    basegfx::B3DPoint aCurr(getB3DPolygon().getB3DPoint(0));
 
-                    for(sal_uInt32 a(0L); a < nLoopCount; a++)
+                    for(sal_uInt32 a(0); a < nLoopCount; a++)
                     {
                         // get next data
-                        const basegfx::B3DPoint aNext(getB3DPolygon().getB3DPoint((a + 1L) % nPointCount));
+                        const basegfx::B3DPoint aNext(getB3DPolygon().getB3DPoint((a + 1) % nPointCount));
                         const basegfx::B3DVector aForw(aNext - aCurr);
                         const double fForwLen(aForw.getLength());
 
                         if(basegfx::fTools::more(fForwLen, 0.0))
                         {
+                            // find out if linecap is active
+                            const bool bFirst(!a);
+                            const bool bLast(a + 1 == nLoopCount);
+                            const bool bLineCapPossible(!bClosed && (bFirst || bLast));
+                            const bool bLineCapRound(bLineCapPossible && com::sun::star::drawing::LineCap_ROUND == getLineCap());
+                            const bool bLineCapSquare(bLineCapPossible && com::sun::star::drawing::LineCap_SQUARE == getLineCap());
+
                             // get rotation from vector, this describes rotation from (1, 0, 0) to aForw
                             basegfx::B3DHomMatrix aRotVector(getRotationFromVector(aForw));
 
-                            // create default transformation with scale and rotate
-                            basegfx::B3DHomMatrix aVectorTrans;
-                            aVectorTrans.scale(fForwLen, getRadius(), getRadius());
-                            aVectorTrans *= aRotVector;
-                            aVectorTrans.translate(aCurr.getX(), aCurr.getY(), aCurr.getZ());
+                            // prepare transformations for tube and cap
+                            basegfx::B3DHomMatrix aTubeTrans;
+                            basegfx::B3DHomMatrix aCapTrans;
 
-                            if(bNoLineJoin || (!bClosed && !a))
+                            // cap gets radius size
+                            aCapTrans.scale(getRadius(), getRadius(), getRadius());
+
+                            if(bLineCapSquare)
+                            {
+                                // when square line cap just prolong line segment in X, maybe 2 x radius when
+                                // first and last (simple line segment)
+                                const double fExtraLength(bFirst && bLast ? getRadius() * 2.0 : getRadius());
+
+                                aTubeTrans.scale(fForwLen + fExtraLength, getRadius(), getRadius());
+
+                                if(bFirst)
+                                {
+                                    // correct start positions for tube and cap when first and square prolonged
+                                    aTubeTrans.translate(-getRadius(), 0.0, 0.0);
+                                    aCapTrans.translate(-getRadius(), 0.0, 0.0);
+                                }
+                            }
+                            else
+                            {
+                                // normal tube size
+                                aTubeTrans.scale(fForwLen, getRadius(), getRadius());
+                            }
+
+                            // rotate and translate tube and cap
+                            aTubeTrans *= aRotVector;
+                            aTubeTrans.translate(aCurr.getX(), aCurr.getY(), aCurr.getZ());
+                            aCapTrans *= aRotVector;
+                            aCapTrans.translate(aCurr.getX(), aCurr.getY(), aCurr.getZ());
+
+                            if(bNoLineJoin || (!bClosed && bFirst))
                             {
                                 // line start edge, build transformed primitiveVector3D
-                                TransformPrimitive3D* pNewTransformedA = new TransformPrimitive3D(aVectorTrans, getLineCapSegments(nSegments, aMaterial));
+                                Primitive3DSequence aSequence;
+
+                                if(bLineCapRound && bFirst)
+                                {
+                                    // LineCapRound used
+                                    aSequence = getLineCapRoundSegments(nSegments, aMaterial);
+                                }
+                                else
+                                {
+                                    // simple closing cap
+                                    aSequence = getLineCapSegments(nSegments, aMaterial);
+                                }
+
+                                TransformPrimitive3D* pNewTransformedA = new TransformPrimitive3D(aCapTrans, aSequence);
                                 aResultVector.push_back(pNewTransformedA);
                             }
                             else
@@ -457,7 +566,14 @@ namespace drawinglayer
                                 {
                                     // line connect non-parallel, aBack, aForw, use getLineJoin()
                                     const double fAngle(acos(aBack.scalar(aForw) / (fForwLen * aBack.getLength()))); // 0.0 .. F_PI2
-                                    Primitive3DSequence aNewList(getLineJoinSegments(nSegments, aMaterial, fAngle, getDegreeStepWidth(), getMiterMinimumAngle(), getLineJoin()));
+                                    Primitive3DSequence aNewList(
+                                        getLineJoinSegments(
+                                            nSegments,
+                                            aMaterial,
+                                            fAngle,
+                                            getDegreeStepWidth(),
+                                            getMiterMinimumAngle(),
+                                            getLineJoin()));
 
                                     // calculate transformation. First, get angle in YZ between nForw projected on (1, 0, 0) and nBack
                                     basegfx::B3DHomMatrix aInvRotVector(aRotVector);
@@ -475,28 +591,61 @@ namespace drawinglayer
                                     aSphereTrans.translate(aCurr.getX(), aCurr.getY(), aCurr.getZ());
 
                                     // line start edge, build transformed primitiveVector3D
-                                    TransformPrimitive3D* pNewTransformedB = new TransformPrimitive3D(aSphereTrans, aNewList);
-                                    aResultVector.push_back(pNewTransformedB);
+                                    aResultVector.push_back(
+                                        new TransformPrimitive3D(
+                                            aSphereTrans,
+                                            aNewList));
                                 }
                             }
 
                             // create line segments, build transformed primitiveVector3D
-                            TransformPrimitive3D* pNewTransformedC = new TransformPrimitive3D(aVectorTrans, getLineTubeSegments(nSegments, aMaterial));
-                            aResultVector.push_back(pNewTransformedC);
+                            aResultVector.push_back(
+                                new TransformPrimitive3D(
+                                    aTubeTrans,
+                                    getLineTubeSegments(nSegments, aMaterial)));
 
-                            if(bNoLineJoin || (!bClosed && ((a + 1L) == nLoopCount)))
+                            if(bNoLineJoin || (!bClosed && bLast))
                             {
-                                // line end edge, first rotate (mirror) and translate, then use use aRotVector
-                                basegfx::B3DHomMatrix aBackTrans;
-                                aBackTrans.rotate(0.0, F_PI, 0.0);
-                                aBackTrans.translate(1.0, 0.0, 0.0);
-                                aBackTrans.scale(fForwLen, getRadius(), getRadius());
-                                aBackTrans *= aRotVector;
-                                aBackTrans.translate(aCurr.getX(), aCurr.getY(), aCurr.getZ());
+                                // line end edge
+                                basegfx::B3DHomMatrix aBackCapTrans;
 
-                                // line end edge, build transformed primitiveVector3D
-                                TransformPrimitive3D* pNewTransformedD = new TransformPrimitive3D(aBackTrans, getLineCapSegments(nSegments, aMaterial));
-                                aResultVector.push_back(pNewTransformedD);
+                                // Mirror (line end) and radius scale
+                                aBackCapTrans.rotate(0.0, F_PI, 0.0);
+                                aBackCapTrans.scale(getRadius(), getRadius(), getRadius());
+
+                                if(bLineCapSquare && bLast)
+                                {
+                                    // correct position when square and prolonged
+                                    aBackCapTrans.translate(fForwLen + getRadius(), 0.0, 0.0);
+                                }
+                                else
+                                {
+                                    // standard position
+                                    aBackCapTrans.translate(fForwLen, 0.0, 0.0);
+                                }
+
+                                // rotate and translate to destination
+                                aBackCapTrans *= aRotVector;
+                                aBackCapTrans.translate(aCurr.getX(), aCurr.getY(), aCurr.getZ());
+
+                                // get primitiveVector3D
+                                Primitive3DSequence aSequence;
+
+                                if(bLineCapRound && bLast)
+                                {
+                                    // LineCapRound used
+                                    aSequence = getLineCapRoundSegments(nSegments, aMaterial);
+                                }
+                                else
+                                {
+                                    // simple closing cap
+                                    aSequence = getLineCapSegments(nSegments, aMaterial);
+                                }
+
+                                aResultVector.push_back(
+                                    new TransformPrimitive3D(
+                                        aBackCapTrans,
+                                        aSequence));
                             }
                         }
 
@@ -528,6 +677,7 @@ namespace drawinglayer
             const basegfx::B3DPolygon& rPolygon,
             const basegfx::BColor& rBColor,
             double fRadius, basegfx::B2DLineJoin aLineJoin,
+            com::sun::star::drawing::LineCap aLineCap,
             double fDegreeStepWidth,
             double fMiterMinimumAngle)
         :   PolygonHairlinePrimitive3D(rPolygon, rBColor),
@@ -535,7 +685,8 @@ namespace drawinglayer
             mfRadius(fRadius),
             mfDegreeStepWidth(fDegreeStepWidth),
             mfMiterMinimumAngle(fMiterMinimumAngle),
-            maLineJoin(aLineJoin)
+            maLineJoin(aLineJoin),
+            maLineCap(aLineCap)
         {
         }
 
@@ -548,7 +699,8 @@ namespace drawinglayer
                 return (getRadius() == rCompare.getRadius()
                     && getDegreeStepWidth() == rCompare.getDegreeStepWidth()
                     && getMiterMinimumAngle() == rCompare.getMiterMinimumAngle()
-                    && getLineJoin() == rCompare.getLineJoin());
+                    && getLineJoin() == rCompare.getLineJoin()
+                    && getLineCap() == rCompare.getLineCap());
             }
 
             return false;

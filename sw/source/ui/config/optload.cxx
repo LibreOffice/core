@@ -527,7 +527,7 @@ sal_Bool SwCaptionOptPage::FillItemSet( SfxItemSet&  )
 
     SaveEntry(aCheckLB.FirstSelected());    // apply current entry
 
-    SvLBoxEntry* pEntry = aCheckLB.First();
+    SvTreeListEntry* pEntry = aCheckLB.First();
 
     while (pEntry)
     {
@@ -609,7 +609,7 @@ void SwCaptionOptPage::SetOptions(const sal_uInt16 nPos,
 
 void SwCaptionOptPage::DelUserData()
 {
-    SvLBoxEntry* pEntry = aCheckLB.First();
+    SvTreeListEntry* pEntry = aCheckLB.First();
 
     while (pEntry)
     {
@@ -621,7 +621,7 @@ void SwCaptionOptPage::DelUserData()
 
 IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
 {
-    SvLBoxEntry* pSelEntry = aCheckLB.FirstSelected();
+    SvTreeListEntry* pSelEntry = aCheckLB.FirstSelected();
 
     if (pSelEntry)
     {
@@ -746,7 +746,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
 
 IMPL_LINK_NOARG(SwCaptionOptPage, SaveEntryHdl)
 {
-    SvLBoxEntry* pEntry = aCheckLB.GetHdlEntry();
+    SvTreeListEntry* pEntry = aCheckLB.GetHdlEntry();
 
     if (pEntry) // save all
         SaveEntry(pEntry);
@@ -754,7 +754,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, SaveEntryHdl)
     return 0;
 }
 
-void SwCaptionOptPage::SaveEntry(SvLBoxEntry* pEntry)
+void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
 {
     if (pEntry)
     {

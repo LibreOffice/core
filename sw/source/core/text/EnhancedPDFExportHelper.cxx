@@ -2064,7 +2064,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             IDocumentMarkAccess* const pMarkAccess = mrSh.GetDoc()->getIDocumentMarkAccess();
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
                 ppMark != pMarkAccess->getBookmarksEnd();
-                ppMark++)
+                ++ppMark)
             {
                 //get the name
                 const ::sw::mark::IMark* pBkmk = ppMark->get();

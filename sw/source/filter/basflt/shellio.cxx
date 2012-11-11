@@ -379,7 +379,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         // #i42634# Moved common code of SwReader::Read() and
         // SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
     // ATM still with Update
-        pDoc->UpdateLinks( sal_True );
+        pDoc->UpdateLinks( true );
 
         // not insert: set the redline mode read from settings.xml
         eOld = static_cast<RedlineMode_t>(

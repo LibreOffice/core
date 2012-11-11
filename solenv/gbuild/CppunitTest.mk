@@ -102,7 +102,7 @@ $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest__get_linktarg
 endef
 
 define gb_CppunitTest__CppunitTest_impl
-$(call gb_LinkTarget_LinkTarget,$(2))
+$(call gb_LinkTarget_LinkTarget,$(2),CppunitTest_$(1))
 $(call gb_LinkTarget_set_targettype,$(2),CppunitTest)
 $(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
 $(call gb_LinkTarget_add_defs,$(2),\

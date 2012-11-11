@@ -48,6 +48,7 @@
 #include <uielement/toolbarmerger.hxx>
 
 #include <com/sun/star/ui/ItemType.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -225,8 +226,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     ::rtl::OUString aModuleIdentifier;
     try
     {
-        Reference< XModuleManager > xModuleManager(
-            m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+        Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
         aModuleIdentifier = xModuleManager->identify( m_xFrame );
     }
     catch ( const Exception& )

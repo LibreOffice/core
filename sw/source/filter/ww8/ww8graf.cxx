@@ -678,10 +678,10 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
                     if (bSymbol == false && bDoingSymbol)
                     {
                         bDoingSymbol = false;
-                        String sTemp;
-                        sTemp.Fill(writer_cast<xub_StrLen>(
-                            nTxtStart - nStartReplace), cReplaceSymbol);
-                        mpDrawEditEngine->QuickInsertText(sTemp,
+                        rtl::OUStringBuffer sTemp;
+                        comphelper::string::padToLength(sTemp,
+                            nTxtStart - nStartReplace, cReplaceSymbol);
+                        mpDrawEditEngine->QuickInsertText(sTemp.makeStringAndClear(),
                             GetESelection(nStartReplace - nStartCp,
                             nTxtStart - nStartCp ) );
                     }

@@ -224,17 +224,21 @@ void SmDocShell::SetFormat(SmFormat& rFormat)
     }
 }
 
-String SmDocShell::GetAccessibleText()
+OUString SmDocShell::GetAccessibleText()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetAccessibleText" );
 
     if (!IsFormulaArranged())
         ArrangeFormula();
-    if (0 == aAccText.Len())
+    if (aAccText.isEmpty())
     {
         OSL_ENSURE( pTree, "Tree missing" );
         if (pTree)
-            pTree->GetAccessibleText( aAccText );
+        {
+            OUStringBuffer aBuf;
+            pTree->GetAccessibleText(aBuf);
+            aAccText = aBuf.makeStringAndClear();
+        }
     }
     return aAccText;
 }
@@ -306,7 +310,7 @@ void SmDocShell::ArrangeFormula()
     SetFormulaArranged(true);
 
     // invalidate accessible text
-    aAccText = String();
+    aAccText = OUString();
 }
 
 

@@ -545,32 +545,13 @@ namespace cairocanvas
             // Font rotation and scaling
             cairo_matrix_t m;
             Font aFont = rOutDev.GetFont();
-            FontMetric aMetric( rOutDev.GetFontMetric(aFont) );
-            long nWidth = 0;
-
-            // width calculation is deep magic and platform/font dependant.
-            // width == 0 means no scaling, and usually width == height means the same.
-            // Other values mean horizontal scaling (narrow or stretching)
-            // see issue #101566
-
-            //proper scale calculation across platforms
-            if (aFont.GetWidth() == 0)
-            {
-                nWidth = aFont.GetHeight();
-            }
-            else
-            {
-                // any scaling needs to be relative to the platform-dependent definition
-                // of height of the font
-                nWidth = aFont.GetWidth() * aFont.GetHeight() / aMetric.GetHeight();
-            }
 
             cairo_matrix_init_identity(&m);
 
             if (aSysLayoutData.orientation)
                 cairo_matrix_rotate(&m, (3600 - aSysLayoutData.orientation) * M_PI / 1800.0);
 
-            cairo_matrix_scale(&m, nWidth, aFont.GetHeight());
+            cairo_matrix_scale(&m, aFont.GetWidth(), aFont.GetHeight());
 
             //faux italics
             if (rSysFontData.bFakeItalic)
@@ -583,11 +564,9 @@ namespace cairocanvas
 #else
 # define TEMP_TRACE_FONT ::rtl::OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr()
 #endif
-            OSL_TRACE("\r\n:cairocanvas::TextLayout::draw(S,O,p,v,r): Size:(%d,%d), W:%d->%d, Pos (%d,%d), G(%d,%d,%d) %s%s%s%s || Name:%s - %s",
+            OSL_TRACE("\r\n:cairocanvas::TextLayout::draw(S,O,p,v,r): Size:(%d,%d), Pos (%d,%d), G(%d,%d,%d) %s%s%s%s || Name:%s - %s",
                       aFont.GetWidth(),
                       aFont.GetHeight(),
-                      aMetric.GetWidth(),
-                      nWidth,
                       (int) rOutpos.X(),
                       (int) rOutpos.Y(),
                       cairo_glyphs.size() > 0 ? cairo_glyphs[0].index : -1,
@@ -609,14 +588,15 @@ namespace cairocanvas
             if (rSysFontData.bFakeBold)
             {
                 double bold_dx = 0.5 * sqrt( 0.7 * aFont.GetHeight() );
-                int total_steps = 2 * ((int) (bold_dx + 0.5));
+                int total_steps = 1 * ((int) (bold_dx + 0.5));
 
                 // loop to draw the text for every half pixel of displacement
                 for (int nSteps = 0; nSteps < total_steps; nSteps++)
                 {
                     for(int nGlyphIdx = 0; nGlyphIdx < (int) cairo_glyphs.size(); nGlyphIdx++)
                     {
-                        cairo_glyphs[nGlyphIdx].x += bold_dx * nSteps / total_steps;
+                        cairo_glyphs[nGlyphIdx].x += (bold_dx * nSteps / total_steps) / 4;
+                        cairo_glyphs[nGlyphIdx].y -= (bold_dx * nSteps / total_steps) / 4;
                     }
                     cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
                 }

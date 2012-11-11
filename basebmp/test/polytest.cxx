@@ -54,7 +54,7 @@ private:
 
         basegfx::tools::importFromSvgD(
             aPoly,
-            rtl::OUString( "M2 2 l7 7 z" ) );
+            OUString( "M2 2 l7 7 z" ) );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -68,7 +68,7 @@ private:
         aPoly.clear();
         basegfx::tools::importFromSvgD(
             aPoly,
-            rtl::OUString( "M7 2 l-6 6 z" ) );
+            OUString( "M7 2 l-6 6 z" ) );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -86,7 +86,7 @@ private:
 
         basegfx::tools::importFromSvgD(
             aPoly,
-            rtl::OUString( "M2 2 h1 l7 7 h-1 z" ) );
+            OUString( "M2 2 h1 l7 7 h-1 z" ) );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -100,7 +100,7 @@ private:
         aPoly.clear();
         basegfx::tools::importFromSvgD(
             aPoly,
-            rtl::OUString( "M7 2 h-1 l-6 6 h1 z" ) );
+            OUString( "M7 2 h-1 l-6 6 h1 z" ) );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -114,7 +114,7 @@ private:
         aPoly.clear();
         basegfx::tools::importFromSvgD(
             aPoly,
-            rtl::OUString( "M0 0 l7 7 h-1 l-5-7 z" ) );
+            OUString( "M0 0 l7 7 h-1 l-5-7 z" ) );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -131,7 +131,7 @@ private:
         basegfx::B2DPolyPolygon aPoly;
 
         basegfx::tools::importFromSvgD( aPoly,
-                                        ::rtl::OUString( "M0 0 h7 v7 h-7 z M2 2 v3 h3 v-3 z" ) );
+                                        OUString( "M0 0 h7 v7 h-7 z M2 2 v3 h3 v-3 z" ) );
 
         rDevice->fillPolyPolygon(
             aPoly,
@@ -149,7 +149,7 @@ private:
         basegfx::B2DPolyPolygon aPoly;
 
         basegfx::tools::importFromSvgD( aPoly,
-                                        ::rtl::OUString( "M0 0 h7 v7 h-7 z M2 2 v3 h3 v-3 z" ) );
+                                        OUString( "M0 0 h7 v7 h-7 z M2 2 v3 h3 v-3 z" ) );
         basegfx::B2DHomMatrix aMat;
         aMat.translate(-3,-3);
         aMat.rotate( 1.7 );
@@ -249,7 +249,7 @@ private:
         // *all* of the four two-pixel lines in that polygon do *not*
         // generate a single pixel, due to the rasterization effect.
         basegfx::tools::importFromSvgD( aPoly,
-                                        ::rtl::OUString( "M2 3 l1 -1 M4 2 l1 1 M2 8 l1 1 M5 8 l-1 1 M2 5 h4 M3 0 v10" ) );
+                                        OUString( "M2 3 l1 -1 M4 2 l1 1 M2 8 l1 1 M5 8 l-1 1 M2 5 h4 M3 0 v10" ) );
         BitmapDeviceSharedPtr pClippedDevice=(
             subsetBitmapDevice( rDevice,
                                 basegfx::B2IBox(3,3,5,9) ));
@@ -272,7 +272,7 @@ private:
         basegfx::B2DPolyPolygon aPoly;
 
         basegfx::tools::importFromSvgD( aPoly,
-                                        ::rtl::OUString( "M0 0 v2 l10 2 v-2 z"
+                                        OUString( "M0 0 v2 l10 2 v-2 z"
                                             "M10 6 v-2 l-10 2 v2 z"
                                             "M1 0 h1 v10 h-1 z"
                                             "M4 0 h1 v10 h-1 z"

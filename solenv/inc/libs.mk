@@ -187,12 +187,6 @@ ZLIB3RDLIB=-lz
 .ELSE
 ZLIB3RDLIB=-lzlib
 .ENDIF
-.IF "$(SYSTEM_MINIZIP)"=="YES"
-MINIZIP3RDLIB=$(MINIZIP_LIBS)
-.ELSE
-# internally, minizip is included in zlib
-MINIZIP3RDLIB=
-.ENDIF
 JPEG3RDLIB=-ljpeg
 .IF "$(SYSTEM_DB)" == "YES"
 BERKELEYLIB=-l$(DB_LIB)
@@ -249,24 +243,6 @@ REDLANDLIB=$(REDLAND_LIBS)
 .ELSE
 REDLANDLIB=-lrdf
 .ENDIF
-
-# #110743#
-# For BinFilters, some libs were added.
-#
-
-BFSVXLIB=-lbf_svx$(DLLPOSTFIX)
-BFSCHLIB=-lbf_ysch
-BFSMLIB=-lbf_ysm
-BFSCLIB=-lbf_sclib
-BFSDLIB=-lbf_sdlib
-BFSWLIB=-lbf_swlib
-BFOFALIB=-lbf_ofa$(DLLPOSTFIX)
-LEGACYSMGRLIB=-llegacy_binfilters$(DLLPOSTFIX)
-BFXMLOFFLIB=-lbf_xo$(DLLPOSTFIX)
-BFGOODIESLIB=-lbf_go$(DLLPOSTFIX)
-BFBASICLIB=-lbf_sb$(DLLPOSTFIX)
-BFSO3LIB=-lbf_so$(DLLPOSTFIX)
-BFSVTOOLLIB=-lbf_svt$(DLLPOSTFIX)
 
 #
 # USED_%NAME%_LIBS
@@ -481,24 +457,6 @@ XSLTLIB = libexslt.lib libxslt.lib $(LIBXML2LIB)
 REDLANDLIB = librdf.lib
 
 JVMFWKLIB = ijvmfwk.lib
-
-# #110743#
-# For BinFilters, some libs were added.
-#
-
-BFSVXLIB=bf_svx.lib
-BFSCHLIB=bf_ysch.lib
-BFSMLIB=bf_ysm.lib
-BFSCLIB=bf_sclib.lib
-BFSDLIB=bf_sdlib.lib
-BFSWLIB=bf_swlib.lib
-BFOFALIB=bf_ofa.lib
-BFXMLOFFLIB=ibf_xo.lib
-BFGOODIESLIB=bf_go.lib
-BFBASICLIB=bf_sb.lib
-BFSO3LIB=bf_so.lib
-LEGACYSMGRLIB=ilegacy_binfilters.lib
-BFSVTOOLLIB=bf_svt.lib
 
 APP3RDLIB= $(LIBPRE) app.lib
 SAMPLE3RDLIB= $(LIBPRE) sample.lib

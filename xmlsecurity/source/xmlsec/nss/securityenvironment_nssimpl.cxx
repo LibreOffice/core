@@ -45,7 +45,7 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <comphelper/docpasswordrequest.hxx>
 #include <xmlsecurity/biginteger.hxx>
-#include <rtl/logfile.h>
+#include <sal/log.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <vector>
 #include "boost/scoped_array.hpp"
@@ -236,7 +236,6 @@ const Sequence< sal_Int8>& SecurityEnvironment_NssImpl :: getUnoTunnelId() {
 
 ::rtl::OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation() throw( ::com::sun::star::uno::RuntimeException )
 {
-    rtl::OUString result;
     ::rtl::OUStringBuffer buff;
     for (CIT_SLOTS is = m_Slots.begin(); is != m_Slots.end(); is++)
     {
@@ -445,7 +444,10 @@ void SecurityEnvironment_NssImpl::updateSlots()
 
             if(pSlot != NULL)
             {
-                RTL_LOGFILE_TRACE2( "XMLSEC: Found a slot: SlotName=%s, TokenName=%s", PK11_GetSlotName(pSlot), PK11_GetTokenName(pSlot) );
+                SAL_INFO(
+                    "xmlsecurity.xmlsec",
+                    "Found a slot: SlotName=" << PK11_GetSlotName(pSlot)
+                        << ", TokenName=" << PK11_GetTokenName(pSlot));
 
 //The following code which is commented out checks if a slot, that is a smart card for example, is
 //              able to generate a symmetric key of type CKM_DES3_CBC. If this fails then this token

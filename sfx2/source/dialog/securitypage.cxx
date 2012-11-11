@@ -200,11 +200,6 @@ SfxSecurityPage_Impl::SfxSecurityPage_Impl( SfxSecurityPage &rTabPage, const Sfx
     m_bEndRedliningWarningDone      ( false )
 {
     m_aChangeProtectionPB.SetText( m_aProtectSTR );
-    // adjust button width if necessary
-    long nBtnTextWidth = 0;
-    long nTemp = m_aChangeProtectionPB.GetCtrlTextWidth( m_aChangeProtectionPB.GetText() );
-    if (nTemp > nBtnTextWidth)
-        nBtnTextWidth = nTemp;
 
     // force toggle hdl called before visual change of checkbox
     m_aRecordChangesCB.SetStyle( m_aRecordChangesCB.GetStyle() | WB_EARLYTOGGLE );

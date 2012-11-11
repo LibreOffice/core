@@ -27,6 +27,13 @@
 #include <rtftok/RTFDocument.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#ifdef DBG_COPYPASTE
+#include <unotools/localfilehelper.hxx>
+#include <tools/stream.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -67,6 +74,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
     {
         MediaDescriptor aMediaDesc( aDescriptor );
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault( "RepairPackage", false );
+        bool bIsNewDoc = aMediaDesc.getUnpackedValueOrDefault( "IsNewDoc", true );
 #ifdef DEBUG_IMPORT
         OUString sURL = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
         ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
@@ -81,14 +89,37 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
         aMediaDesc.addInputStream();
         aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] >>= xInputStream;
 
+#ifdef DBG_COPYPASTE
+        OUString aOutStr;
+        if (utl::LocalFileHelper::ConvertPhysicalNameToURL("/tmp/stream.rtf", aOutStr))
+        {
+            SvStream* pOut = utl::UcbStreamHelper::CreateStream(aOutStr, STREAM_WRITE);
+            SvStream* pIn = utl::UcbStreamHelper::CreateStream(xInputStream);
+            *pOut << *pIn;
+            delete pOut;
+        }
+#endif
+
         uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_FRAME(),
                 uno::Reference<frame::XFrame>());
 
+#ifdef DBG_OLDFILTER
+        uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
+        uno::Reference< uno::XInterface > xIfc( xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.RtfImport" ))), uno::UNO_QUERY_THROW);
+        if (!xIfc.is())
+            return sal_False;
+        uno::Reference< document::XImporter > xImprtr(xIfc, uno::UNO_QUERY_THROW);
+        uno::Reference< document::XFilter > xFltr(xIfc, uno::UNO_QUERY_THROW);
+        if (!xImprtr.is() || !xFltr.is())
+            return sal_False;
+        xImprtr->setTargetDocument(m_xDstDoc);
+        bResult = xFltr->filter(aDescriptor);
+#else
         xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_STATUSINDICATOR(),
                 uno::Reference<task::XStatusIndicator>());
 
         writerfilter::Stream::Pointer_t pStream(
-                new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, writerfilter::dmapper::DOCUMENT_RTF));
+                new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, writerfilter::dmapper::DOCUMENT_RTF, bIsNewDoc));
         writerfilter::rtftok::RTFDocument::Pointer_t const pDocument(
                 writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator));
         pDocument->resolve(*pStream);
@@ -96,8 +127,15 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
 #ifdef DEBUG_IMPORT
         dmapperLogger->endDocument();
 #endif
+#endif
         sal_uInt32 nEndTime = osl_getGlobalTimer();
         SAL_INFO("writerfilter.profile", OSL_THIS_FUNC << " finished in " << nEndTime - nStartTime << " ms");
+    }
+    catch (const io::WrongFormatException& e)
+    {
+        // cannot throw WrongFormatException directly :(
+        throw lang::WrappedTargetRuntimeException("",
+                static_cast<OWeakObject*>(this), uno::makeAny(e));
     }
     catch (const uno::Exception& e)
     {

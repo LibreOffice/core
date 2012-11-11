@@ -84,7 +84,7 @@ public:
         @onerror
     */
 
-    FrameControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+    FrameControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     /**_________________________________________________________________________________________________________
         @short

@@ -120,7 +120,7 @@ PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntr
         pRet.reset( new PropertyMap );
     }
 
-    pRet->insert(  pStyleSheet->pProperties, true );
+    pRet->InsertProps(pStyleSheet->pProperties);
 
     return pRet;
 }
@@ -347,8 +347,8 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 dmapper_logger->endElement();
 #endif
 
-                m_aTableProperties->insert( pMergedProperties );
-                m_aTableProperties->insert( pTableProps );
+                m_aTableProperties->InsertProps(pMergedProperties);
+                m_aTableProperties->InsertProps(pTableProps);
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
                 dmapper_logger->startElement("TableProperties");
@@ -359,7 +359,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
 
         // Set the table default attributes for the cells
-        rInfo.pTableDefaults->insert( m_aTableProperties );
+        rInfo.pTableDefaults->InsertProps(m_aTableProperties);
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
         dmapper_logger->startElement("TableDefaults");
@@ -543,7 +543,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
             if( aCellIterator->get() )
             {
                 if ( rInfo.pTableDefaults->size( ) )
-                    pAllCellProps->insert( rInfo.pTableDefaults );
+                    pAllCellProps->InsertProps(rInfo.pTableDefaults);
 
                 // Fill the cell properties with the ones of the style
                 sal_Int32 nCellStyleMask = 0;
@@ -562,7 +562,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 if ( rInfo.pTableStyle )
                 {
                     PropertyMapPtr pStyleProps = rInfo.pTableStyle->GetProperties( nCellStyleMask + nRowStyleMask );
-                    pAllCellProps->insert( pStyleProps );
+                    pAllCellProps->InsertProps(pStyleProps);
                 }
 
                 // Remove properties from style/row that aren't allowed in cells
@@ -573,7 +573,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     pAllCellProps->erase( aDefaultRepeatIt );
 
                 // Then add the cell properties
-                pAllCellProps->insert( *aCellIterator );
+                pAllCellProps->InsertProps(*aCellIterator);
                 aCellIterator->get( )->swap( *pAllCellProps.get( ) );
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER

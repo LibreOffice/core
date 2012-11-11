@@ -48,7 +48,7 @@
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/XMeaning.hpp>
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -58,7 +58,7 @@ using ::rtl::OUString;
 LookUpComboBox::LookUpComboBox(Window *pParent)
     : ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK)
 {
-    SetBestDropDownLineCount();
+    EnableAutoSize(true);
 
     m_aModifyTimer.SetTimeoutHdl( LINK( this, LookUpComboBox, ModifyTimer_Hdl ) );
     m_aModifyTimer.SetTimeout( 500 );
@@ -130,7 +130,7 @@ void ReplaceEdit::SetText( const XubString& rStr, const Selection& rNewSelection
 
 AlternativesString::AlternativesString(
     ThesaurusAlternativesCtrl &rControl,
-    SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rStr ) :
+    SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& rStr ) :
 
     SvLBoxString( pEntry, nFlags, rStr ),
     m_rControlImpl( rControl )
@@ -140,7 +140,7 @@ AlternativesString::AlternativesString(
 void AlternativesString::Paint(
     const Point& rPos,
     SvTreeListBox& rDev, sal_uInt16,
-    SvLBoxEntry* pEntry )
+    SvTreeListEntry* pEntry )
 {
     AlternativesExtraData* pData = m_rControlImpl.GetExtraData( pEntry );
     Point aPos( rPos );
@@ -187,7 +187,7 @@ void ThesaurusAlternativesCtrl::ClearExtraData()
 }
 
 void ThesaurusAlternativesCtrl::SetExtraData(
-    const SvLBoxEntry *pEntry,
+    const SvTreeListEntry *pEntry,
     const AlternativesExtraData &rData )
 {
     if (!pEntry)
@@ -201,7 +201,7 @@ void ThesaurusAlternativesCtrl::SetExtraData(
 }
 
 AlternativesExtraData * ThesaurusAlternativesCtrl::GetExtraData(
-    const SvLBoxEntry *pEntry )
+    const SvTreeListEntry *pEntry )
 {
     AlternativesExtraData *pRes = NULL;
     UserDataMap_t::iterator aIt( m_aUserData.find( pEntry ) );
@@ -210,9 +210,9 @@ AlternativesExtraData * ThesaurusAlternativesCtrl::GetExtraData(
     return pRes;
 }
 
-SvLBoxEntry * ThesaurusAlternativesCtrl::AddEntry( sal_Int32 nVal, const String &rText, bool bIsHeader )
+SvTreeListEntry * ThesaurusAlternativesCtrl::AddEntry( sal_Int32 nVal, const String &rText, bool bIsHeader )
 {
-    SvLBoxEntry* pEntry = new SvLBoxEntry;
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
     String aText;
     if (bIsHeader && nVal >= 0)
     {
@@ -392,7 +392,7 @@ IMPL_LINK( SvxThesaurusDialog, WordSelectHdl_Impl, ComboBox *, pBox )
 
 IMPL_LINK( SvxThesaurusDialog, AlternativesSelectHdl_Impl, SvxCheckListBox *, pBox )
 {
-    SvLBoxEntry *pEntry = pBox ? pBox->GetCurEntry() : NULL;
+    SvTreeListEntry *pEntry = pBox ? pBox->GetCurEntry() : NULL;
     if (pEntry)
     {
         AlternativesExtraData * pData = m_pAlternativesCT->GetExtraData( pEntry );
@@ -409,7 +409,7 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesSelectHdl_Impl, SvxCheckListBox *, pB
 
 IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvxCheckListBox *, pBox )
 {
-    SvLBoxEntry *pEntry = pBox ? pBox->GetCurEntry() : NULL;
+    SvTreeListEntry *pEntry = pBox ? pBox->GetCurEntry() : NULL;
     if (pEntry)
     {
         AlternativesExtraData * pData = m_pAlternativesCT->GetExtraData( pEntry );

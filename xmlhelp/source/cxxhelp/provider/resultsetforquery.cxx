@@ -26,9 +26,10 @@
  *
  ************************************************************************/
 
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/ucb/Command.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/i18n/XExtendedTransliteration.hpp>
+#include <com/sun/star/i18n/Transliteration.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
@@ -87,25 +88,22 @@ struct HitItem
     }
 };
 
-ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceFactory >&  xMSF,
+ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentContext >& rxContext,
                                       const uno::Reference< XContentProvider >&  xProvider,
                                       sal_Int32 nOpenMode,
                                       const uno::Sequence< beans::Property >& seq,
                                       const uno::Sequence< NumberedSortingInfo >& seqSort,
                                       URLParameter& aURLParameter,
                                       Databases* pDatabases )
-    : ResultSetBase( xMSF,xProvider,nOpenMode,seq,seqSort ),
+    : ResultSetBase( rxContext,xProvider,nOpenMode,seq,seqSort ),
       m_aURLParameter( aURLParameter )
 {
-    Reference< XTransliteration > xTrans(
-        xMSF->createInstance( rtl::OUString( "com.sun.star.i18n.Transliteration" ) ),
-        UNO_QUERY );
+    Reference< XExtendedTransliteration > xTrans = Transliteration::create( rxContext );
     Locale aLocale( aURLParameter.get_language(),
                     rtl::OUString(),
                     rtl::OUString() );
-    if(xTrans.is())
-        xTrans->loadModule(TransliterationModules_UPPERCASE_LOWERCASE,
-                           aLocale );
+    xTrans->loadModule(TransliterationModules_UPPERCASE_LOWERCASE,
+                       aLocale );
 
     vector< vector< rtl::OUString > > queryList;
     {
@@ -120,11 +118,9 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
             vector< rtl::OUString > currentQuery;
             rtl::OUString tmp(query.copy( 0,idx ));
             rtl:: OUString toliterate = tmp;
-            if(xTrans.is()) {
-                Sequence<sal_Int32> aSeq;
-                toliterate = xTrans->transliterate(
-                    tmp,0,tmp.getLength(),aSeq);
-            }
+            Sequence<sal_Int32> aSeq;
+            toliterate = xTrans->transliterate(
+                tmp,0,tmp.getLength(),aSeq);
 
             currentQuery.push_back( toliterate );
             queryList.push_back( currentQuery );

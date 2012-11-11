@@ -74,7 +74,6 @@ class ScCTB : public TBBase
     std::vector< ScTBC > rTBC;
     bool ImportCustomToolBar_Impl( ScCTBWrapper&, CustomToolBarImportHelper& );
 public:
-    ScCTB();
     ScCTB(sal_uInt16);
     ~ScCTB(){}
     void Print( FILE* );

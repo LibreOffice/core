@@ -43,6 +43,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -123,50 +124,49 @@ void    SwOneExampleFrame::CreateControl()
         return ;
     uno::Reference< lang::XMultiServiceFactory >
                                     xMgr = comphelper::getProcessServiceFactory();
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     uno::Reference< uno::XInterface >  xInst = xMgr->createInstance( C2U("com.sun.star.frame.FrameControl") );
     _xControl = uno::Reference< awt::XControl >(xInst, uno::UNO_QUERY);
     if(_xControl.is())
     {
         uno::Reference< awt::XWindowPeer >  xParent( rWindow.GetComponentInterface() );
 
-        uno::Reference< awt::XToolkit >  xToolkit( xMgr->createInstance( C2U("com.sun.star.awt.Toolkit") ), uno::UNO_QUERY );
-        if(xToolkit.is())
-        {
-            _xControl->createPeer( xToolkit, xParent );
+        uno::Reference< awt::XToolkit >  xToolkit( awt::Toolkit::create(xContext), uno::UNO_QUERY_THROW );
 
-            uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
-            xWin->setVisible( sal_False );
-            Size aWinSize(rWindow.GetOutputSizePixel());
-            xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
+        _xControl->createPeer( xToolkit, xParent );
 
-            uno::Reference< beans::XPropertySet >  xPrSet(xInst, uno::UNO_QUERY);
-            uno::Any aURL;
-            // create new doc
-            rtl::OUString sTempURL(cFactory);
-            if(sArgumentURL.Len())
-                sTempURL = sArgumentURL;
-            aURL <<= sTempURL;
+        uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
+        xWin->setVisible( sal_False );
+        Size aWinSize(rWindow.GetOutputSizePixel());
+        xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
 
-            uno::Sequence<beans::PropertyValue> aSeq(3);
-            beans::PropertyValue* pValues = aSeq.getArray();
-            pValues[0].Name = C2U("ReadOnly");
-            sal_Bool bTrue = sal_True;
-            pValues[0].Value.setValue(&bTrue, ::getBooleanCppuType());
-            pValues[1].Name = C2U("OpenFlags");
-            pValues[1].Value <<= C2U("-RB");
-            pValues[2].Name = C2U("Referer");
-            pValues[2].Value <<= C2U("private:user");
-            uno::Any aArgs;
-            aArgs.setValue(&aSeq, ::getCppuType((uno::Sequence<beans::PropertyValue>*)0));
+        uno::Reference< beans::XPropertySet >  xPrSet(xInst, uno::UNO_QUERY);
+        uno::Any aURL;
+        // create new doc
+        rtl::OUString sTempURL(cFactory);
+        if(sArgumentURL.Len())
+            sTempURL = sArgumentURL;
+        aURL <<= sTempURL;
 
-            xPrSet->setPropertyValue( C2U("LoaderArguments"), aArgs );
-            //save and set readonly???
+        uno::Sequence<beans::PropertyValue> aSeq(3);
+        beans::PropertyValue* pValues = aSeq.getArray();
+        pValues[0].Name = C2U("ReadOnly");
+        sal_Bool bTrue = sal_True;
+        pValues[0].Value.setValue(&bTrue, ::getBooleanCppuType());
+        pValues[1].Name = C2U("OpenFlags");
+        pValues[1].Value <<= C2U("-RB");
+        pValues[2].Name = C2U("Referer");
+        pValues[2].Value <<= C2U("private:user");
+        uno::Any aArgs;
+        aArgs.setValue(&aSeq, ::getCppuType((uno::Sequence<beans::PropertyValue>*)0));
 
-            xPrSet->setPropertyValue(C2U("ComponentURL"), aURL);
+        xPrSet->setPropertyValue( C2U("LoaderArguments"), aArgs );
+        //save and set readonly???
 
-            aLoadedTimer.Start();
-            bServiceAvailable = sal_True;
-        }
+        xPrSet->setPropertyValue(C2U("ComponentURL"), aURL);
+
+        aLoadedTimer.Start();
+        bServiceAvailable = sal_True;
     }
 }
 

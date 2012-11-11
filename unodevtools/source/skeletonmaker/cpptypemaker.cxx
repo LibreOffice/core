@@ -19,7 +19,6 @@
 
 #include "codemaker/commoncpp.hxx"
 
-#include "ostringostreaminserter.hxx"
 #include "skeletoncommon.hxx"
 #include "skeletoncpp.hxx"
 

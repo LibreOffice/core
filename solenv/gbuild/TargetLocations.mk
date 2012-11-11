@@ -83,7 +83,8 @@ gb_AsmObject_get_target = $(WORKDIR)/AsmObject/$(1).o
 gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_GenCObject_get_target = $(WORKDIR)/GenCObject/$(1).o
 gb_CliAssembly_get_target = $(WORKDIR)/CliAssembly/$(1).done
-gb_CliAssemblyTarget_get_target = $(WORKDIR)/CliAssemblyTarget/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
+gb_CliAssemblyTarget_get_target = $(WORKDIR)/CliAssemblyTarget/$(1).done
+gb_CliAssemblyTarget_get_assembly_target = $(WORKDIR)/CliAssemblyTarget/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
 gb_CliConfigTarget_get_target = $(WORKDIR)/CliConfigTarget/$(1).config
 gb_CliLibraryTarget_get_target = $(WORKDIR)/CliLibraryTarget/$(1)$(gb_CliLibraryTarget_EXT)
 gb_CliNativeLibraryTarget_get_external_target = $(WORKDIR)/CliNativeLibraryTarget/$(1).external
@@ -179,6 +180,7 @@ gb_UnoApiPartTarget_get_target = $(WORKDIR)/UnoApiPartTarget/$(1)
 gb_UnpackedTarball_get_dir = $(WORKDIR)/UnpackedTarball/$(1)
 gb_UnpackedTarball_get_pristine_dir = $(WORKDIR)/UnpackedTarball/$(1).org
 gb_UnpackedTarball_get_final_target = $(WORKDIR)/UnpackedTarball/$(1).update
+# NOTE: the .done target is hardcoded in solenv/bin/concat-deps.c !
 gb_UnpackedTarball_get_target = $(WORKDIR)/UnpackedTarball/$(1).done
 gb_UnpackedTarball_get_preparation_target = $(WORKDIR)/UnpackedTarball/$(1).prepare
 gb_UnpackedTarget_get_target = $(WORKDIR)/UnpackedTarget/$(1)

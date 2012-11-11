@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
-*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+/*
+ * This file is part of the LibreOffice project.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * OpenOffice.org - a multi-platform office productivity suite
+ * This file incorporates work covered by the following license notice:
  *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <sal/macros.h>
 #include <xmloff/xmltoken.hxx>
@@ -363,6 +354,7 @@ namespace xmloff { namespace token {
         TOKEN( "bubble",                          XML_BUBBLE ),
         TOKEN( "bullet-char",                     XML_BULLET_CHAR ),
         TOKEN( "bullet-relative-size",            XML_BULLET_RELATIVE_SIZE ),
+        TOKEN( "butt",                            XML_BUTT ),
         TOKEN( "button1",                         XML_BUTTON1 ),
         TOKEN( "button2",                         XML_BUTTON2 ),
         TOKEN( "button3",                         XML_BUTTON3 ),
@@ -856,6 +848,7 @@ namespace xmloff { namespace token {
         TOKEN( "foreign-object",                  XML_FOREIGN_OBJECT ),
         TOKEN( "format-change",                   XML_FORMAT_CHANGE ),
         TOKEN( "format-source",                   XML_FORMAT_SOURCE ),
+        TOKEN( "formatting-entry",                XML_FORMATTING_ENTRY ),
         TOKEN( "forms",                           XML_FORMS ),
         TOKEN( "formula",                         XML_FORMULA ),
         TOKEN( "formula-hidden",                  XML_FORMULA_HIDDEN ),
@@ -976,6 +969,8 @@ namespace xmloff { namespace token {
         TOKEN( "hyphenation-remain-char-count",       XML_HYPHENATION_REMAIN_CHAR_COUNT ),
         TOKEN( "i",                               XML_I ),
         TOKEN( "icon",                            XML_ICON ),
+        TOKEN( "icon-set",                        XML_ICON_SET ),
+        TOKEN( "icon-set-type",                   XML_ICON_SET_TYPE ),
         TOKEN( "id",                              XML_ID ),
         TOKEN( "ident",                           XML_IDENT ),
         TOKEN( "identifier",                      XML_IDENTIFIER ),
@@ -1725,6 +1720,7 @@ namespace xmloff { namespace token {
         TOKEN( "stroke",                          XML_STROKE ),
         TOKEN( "stroke-color",                    XML_STROKE_COLOR ),
         TOKEN( "stroke-dash",                     XML_STROKE_DASH ),
+        TOKEN( "stroke-linecap",                  XML_STROKE_LINECAP ),
         TOKEN( "stroke-linejoin",                 XML_STROKE_LINEJOIN ),
         TOKEN( "stroke-opacity",                  XML_STROKE_OPACITY ),
         TOKEN( "stroke-width",                    XML_STROKE_WIDTH ),

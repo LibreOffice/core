@@ -73,6 +73,7 @@ namespace sax_fastparser {
 
     void SAL_CALL FastSaxSerializer::startDocument(  ) throw (SAXException, RuntimeException)
     {
+        assert(mxOutputStream.is()); // cannot do anything without that
         if (!mxOutputStream.is())
             return;
         rtl::ByteSequence aXmlHeader((const sal_Int8*) "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n", 56);
@@ -186,6 +187,7 @@ namespace sax_fastparser {
         throw (::com::sun::star::uno::RuntimeException)
     {
         mxOutputStream = xOutputStream;
+        assert(mxOutputStream.is()); // cannot do anything without that
     }
 
     void SAL_CALL FastSaxSerializer::setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler )

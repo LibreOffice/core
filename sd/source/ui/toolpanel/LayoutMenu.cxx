@@ -174,7 +174,7 @@ static snewfoil_value_info standard[] =
 };
 
 LayoutMenu::LayoutMenu( TreeNode* pParent, ToolPanelViewShell& i_rPanelViewShell )
-    : ValueSet (pParent->GetWindow()),
+    : ValueSet(pParent->GetWindow(), WB_ITEMBORDER),
       TreeNode(pParent),
       DragSourceHelper(this),
       DropTargetHelper(this),

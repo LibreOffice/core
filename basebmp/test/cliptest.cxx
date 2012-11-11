@@ -158,7 +158,7 @@ private:
                                                         true,
                                                         Format::EIGHT_BIT_GREY ));
 
-        ::rtl::OUString aSvg( RTL_CONSTASCII_USTRINGPARAM( "m 0 0h5v10h5v-5h-10z" ));
+        OUString aSvg( "m 0 0h5v10h5v-5h-10z" );
 
         basegfx::B2DPolyPolygon aPoly;
         basegfx::tools::importFromSvgD( aPoly, aSvg );
@@ -198,7 +198,7 @@ public:
                                            true,
                                            Format::THIRTYTWO_BIT_TC_MASK );
 
-        ::rtl::OUString aSvg( RTL_CONSTASCII_USTRINGPARAM( "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" ));
+        OUString aSvg( "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" );
         basegfx::B2DPolyPolygon aPoly;
         basegfx::tools::importFromSvgD( aPoly, aSvg );
         mpClipMask->clear(Color(0));

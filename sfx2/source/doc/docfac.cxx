@@ -224,7 +224,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
         {
             uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
             uno::Reference< uno::XInterface > xConfig = ::comphelper::ConfigurationHelper::openConfig(
-                xFactory, CONF_ROOT, ::comphelper::ConfigurationHelper::E_STANDARD );
+                ::comphelper::getProcessComponentContext(), CONF_ROOT, ::comphelper::ConfigurationHelper::E_STANDARD );
 
             ::rtl::OUString aActualFilter;
             ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, CONF_PATH, PROP_ACTUAL_FILTER ) >>= aActualFilter;

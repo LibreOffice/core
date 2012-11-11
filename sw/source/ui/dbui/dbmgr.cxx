@@ -807,7 +807,7 @@ static void lcl_CopyFollowPageDesc(
         sal_uInt16 nNewDesc = pTargetDoc->MakePageDesc( sNewFollowPageDesc );
         SwPageDesc& rTargetFollowPageDesc = pTargetDoc->GetPageDesc( nNewDesc );
 
-        pTargetDoc->CopyPageDesc( *pFollowPageDesc, rTargetFollowPageDesc, sal_False );
+        pTargetDoc->CopyPageDesc( *pFollowPageDesc, rTargetFollowPageDesc, false );
         SwPageDesc aDesc( rTargetPageDesc );
         aDesc.SetFollow( &rTargetFollowPageDesc );
         pTargetDoc->ChgPageDesc( rTargetPageDesc.GetName(), aDesc );
@@ -1100,7 +1100,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
                                     if(pSourcePageDesc && pTargetPageDesc)
                                     {
-                                        pTargetDoc->CopyPageDesc( *pSourcePageDesc, *pTargetPageDesc, sal_False );
+                                        pTargetDoc->CopyPageDesc( *pSourcePageDesc, *pTargetPageDesc, false );
                                         sModifiedStartingPageDesc = sNewPageDescName;
                                         lcl_CopyFollowPageDesc( *pTargetShell, *pSourcePageDesc, *pTargetPageDesc, nDocNo );
                                     }
@@ -2857,7 +2857,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
 
                 if(pWorkPageDesc && pTargetPageDesc)
                 {
-                    pTargetDoc->CopyPageDesc( *pWorkPageDesc, *pTargetPageDesc, sal_False );
+                    pTargetDoc->CopyPageDesc( *pWorkPageDesc, *pTargetPageDesc, false );
                     sModifiedStartingPageDesc = sNewPageDescName;
                     lcl_CopyFollowPageDesc( *pTargetShell, *pWorkPageDesc, *pTargetPageDesc, nDocNo );
                 }

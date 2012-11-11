@@ -65,36 +65,39 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
         getLangNodeFromRootNode( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& root, ::rtl::OUString& language );
-    void delUserData( SvLBoxEntry* pEntry );
+    void delUserData( SvTreeListEntry* pEntry );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
 
+    void Init();
+
 protected:
-    void                    ExpandTree( SvLBoxEntry* pRootEntry );
-    virtual void            RequestingChildren( SvLBoxEntry* pParent );
+    void                    ExpandTree( SvTreeListEntry* pRootEntry );
+    virtual void            RequestingChildren( SvTreeListEntry* pParent );
     virtual void            ExpandedHdl();
     virtual long            ExpandingHdl();
 public:
     void                    Init( const ::rtl::OUString& language );
-    void  RequestSubEntries(  SvLBoxEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
+    void  RequestSubEntries(  SvTreeListEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
                               ::com::sun::star::uno::Reference< com::sun::star::frame::XModel>& model  );
-                    SFTreeListBox( Window* pParent, const ResId& rRes );
+                    SFTreeListBox(Window* pParent, const ResId& rRes);
+                    SFTreeListBox(Window* pParent);
                     ~SFTreeListBox();
 
     void            ExpandAllTrees();
 
 
 
-    SvLBoxEntry * insertEntry(String const & rText, sal_uInt16 nBitmap,
-                              SvLBoxEntry * pParent,
+    SvTreeListEntry * insertEntry(String const & rText, sal_uInt16 nBitmap,
+                              SvTreeListEntry * pParent,
                               bool bChildrenOnDemand,
                               std::auto_ptr< SFEntry > aUserData,
                               ::rtl::OUString factoryURL );
-    SvLBoxEntry * insertEntry(String const & rText, sal_uInt16 nBitmap,
-                              SvLBoxEntry * pParent,
+    SvTreeListEntry * insertEntry(String const & rText, sal_uInt16 nBitmap,
+                              SvTreeListEntry * pParent,
                               bool bChildrenOnDemand,
                               std::auto_ptr< SFEntry > aUserData );
-    void deleteTree( SvLBoxEntry * pEntry );
+    void deleteTree( SvTreeListEntry * pEntry );
     void deleteAllTree( );
 };
 
@@ -139,16 +142,14 @@ public:
 class SvxScriptOrgDialog : public SfxModalDialog
 {
 protected:
-    FixedText               aScriptsTxt;
-    SFTreeListBox           aScriptsBox;
+    SFTreeListBox*          m_pScriptsBox;
 
-    PushButton              aRunButton;
-    CancelButton            aCloseButton;
-    PushButton              aCreateButton;
-    PushButton              aEditButton;
-    PushButton              aRenameButton;
-    PushButton              aDelButton;
-    HelpButton              aHelpButton;
+    PushButton*             m_pRunButton;
+    PushButton*             m_pCloseButton;
+    PushButton*             m_pCreateButton;
+    PushButton*             m_pEditButton;
+    PushButton*             m_pRenameButton;
+    PushButton*             m_pDelButton;
 
     ::rtl::OUString         m_sLanguage;
     static Selection_hash   m_lastSelection;
@@ -170,12 +171,12 @@ protected:
     void                CheckButtons(  ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node );
 
 
-    void        createEntry( SvLBoxEntry* pEntry );
-    void        renameEntry( SvLBoxEntry* pEntry );
-    void        deleteEntry( SvLBoxEntry* pEntry );
+    void        createEntry( SvTreeListEntry* pEntry );
+    void        renameEntry( SvTreeListEntry* pEntry );
+    void        deleteEntry( SvTreeListEntry* pEntry );
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
-                getBrowseNode( SvLBoxEntry* pEntry );
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getModel( SvLBoxEntry* pEntry );
+                getBrowseNode( SvTreeListEntry* pEntry );
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getModel( SvTreeListEntry* pEntry );
     String      getListOfChildren( ::com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node, int depth );
     void        StoreCurrentSelection();
     void        RestorePreviousSelection();

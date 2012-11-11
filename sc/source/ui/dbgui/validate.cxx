@@ -269,7 +269,7 @@ void lclGetFormulaFromStringList( String& rFmlaStr, const String& rStringList, s
     {
         String aToken( rStringList.GetToken( 0, '\n', nStringIx ) );
         ScGlobal::AddQuotes( aToken, '"' );
-        ScGlobal::AddToken( rFmlaStr, aToken, cFmlaSep );
+        rFmlaStr = ScGlobal::addToken(rFmlaStr, aToken, cFmlaSep);
     }
     if( !rFmlaStr.Len() )
         rFmlaStr.AssignAscii( "\"\"" );
@@ -300,7 +300,7 @@ bool lclGetStringListFromFormula( String& rStringList, const String& rFmlaStr, s
             if( bIsStringList )
             {
                 ScGlobal::EraseQuotes( aToken, '"' );
-                ScGlobal::AddToken( rStringList, aToken, '\n', 1, bTokenAdded );
+                rStringList = ScGlobal::addToken(rStringList, aToken, '\n', 1, bTokenAdded);
                 bTokenAdded = true;
             }
         }

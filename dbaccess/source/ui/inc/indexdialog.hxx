@@ -59,12 +59,12 @@ namespace dbaui
         void SetEndEditHdl(const Link& _rHdl) { m_aEndEditHdl = _rHdl; }
         Link GetEndEditHdl() const { return m_aEndEditHdl; }
 
-        virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect );
+        virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect );
 
         void enableSelectHandler();
         void disableSelectHandler();
 
-        void SelectNoHandlerCall( SvLBoxEntry* pEntry );
+        void SelectNoHandlerCall( SvTreeListEntry* pEntry );
 
         inline void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection)
         {
@@ -72,7 +72,7 @@ namespace dbaui
         }
 
     protected:
-        virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
+        virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );
 
     private:
         using SvTreeListBox::Select;
@@ -102,7 +102,7 @@ namespace dbaui
         HelpButton              m_aHelp;
 
         OIndexCollection*       m_pIndexes;
-        SvLBoxEntry*            m_pPreviousSelection;
+        SvTreeListEntry*            m_pPreviousSelection;
         sal_Bool                m_bEditAgain;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
@@ -136,16 +136,16 @@ namespace dbaui
     protected:
         void fillIndexList();
         void updateToolbox();
-        void updateControls(const SvLBoxEntry* _pEntry);
+        void updateControls(const SvTreeListEntry* _pEntry);
 
     protected:
         DECL_LINK( OnIndexSelected, DbaIndexList* );
         DECL_LINK( OnIndexAction, ToolBox* );
-        DECL_LINK( OnEntryEdited, SvLBoxEntry* );
+        DECL_LINK( OnEntryEdited, SvTreeListEntry* );
         DECL_LINK( OnModified, void* );
         DECL_LINK( OnCloseDialog, void* );
 
-        DECL_LINK( OnEditIndexAgain, SvLBoxEntry* );
+        DECL_LINK( OnEditIndexAgain, SvTreeListEntry* );
 
     private:
         void OnNewIndex();
@@ -154,11 +154,11 @@ namespace dbaui
         void OnSaveIndex();
         void OnResetIndex();
 
-        sal_Bool implCommit(SvLBoxEntry* _pEntry);
+        sal_Bool implCommit(SvTreeListEntry* _pEntry);
         sal_Bool implSaveModified(sal_Bool _bPlausibility = sal_True);
         sal_Bool implCommitPreviouslySelected();
 
-        sal_Bool implDropIndex(SvLBoxEntry* _pEntry, sal_Bool _bRemoveFromCollection);
+        sal_Bool implDropIndex(SvTreeListEntry* _pEntry, sal_Bool _bRemoveFromCollection);
 
         sal_Bool implCheckPlausibility(const ConstIndexesIterator& _rPos);
 

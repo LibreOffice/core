@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "pdfwriter_impl.hxx"
 
@@ -35,7 +25,6 @@
 #include "vcl/metaact.hxx"
 #include "vcl/bmpacc.hxx"
 #include "vcl/graph.hxx"
-#include "vcl/rendergraphicrasterizer.hxx"
 
 #include "svdata.hxx"
 
@@ -195,7 +184,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 {
                     uno::Reference < io::XStream > xStream = new utl::OStreamWrapper( aStrm );
                     uno::Reference< io::XSeekable > xSeekable( xStream, UNO_QUERY_THROW );
-                    uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(ImplGetSVData()->maAppData.mxMSF) );
+                    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
                     uno::Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(xContext) );
                     uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
                     uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
@@ -420,7 +409,11 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     else
                     {
                         const Size  aDstSizeTwip( pDummyVDev->PixelToLogic( pDummyVDev->LogicToPixel( rSize ), MAP_TWIP ) );
-                        sal_Int32   nMaxBmpDPI = i_rContext.m_bOnlyLosslessCompression ? 300 : 72;
+
+                        // i#115962# Always use at least 300 DPI for bitmap conversion of transparence gradients,
+                        // else the quality is not acceptable (see bugdoc as example)
+                        sal_Int32 nMaxBmpDPI(300);
+
                         if( i_rContext.m_nMaxImageResolution > 50 )
                         {
                             if ( nMaxBmpDPI > i_rContext.m_nMaxImageResolution )
@@ -1040,17 +1033,6 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case( META_REFPOINT_ACTION ):
                 {
                     // !!! >>> we don't want to support this actions
-                }
-                break;
-
-                case( META_RENDERGRAPHIC_ACTION ):
-                {
-                    const MetaRenderGraphicAction* pA = static_cast< const MetaRenderGraphicAction* >( pAction );
-                    const ::vcl::RenderGraphicRasterizer aRasterizer( pA->GetRenderGraphic() );
-
-                    implWriteBitmapEx( pA->GetPoint(), pA->GetSize(),
-                                       aRasterizer.Rasterize( pDummyVDev->LogicToPixel( pA->GetSize() ) ),
-                                       pDummyVDev, i_rContext );
                 }
                 break;
 

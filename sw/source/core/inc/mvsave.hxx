@@ -93,7 +93,7 @@ void _SaveCntntIdx( SwDoc* pDoc, sal_uLong nNode, xub_StrLen nCntnt,
                     std::vector<sal_uLong>& rSaveArr, sal_uInt8 nSaveFly = 0 );
 void _RestoreCntntIdx( SwDoc* pDoc, std::vector<sal_uLong>& rSaveArr,
                         sal_uLong nNode, xub_StrLen nOffset = 0,
-                        sal_Bool bAuto = sal_False );
+                        bool bAuto = false );
 void _RestoreCntntIdx( std::vector<sal_uLong>& rSaveArr, const SwNode& rNd,
                         xub_StrLen nLen, xub_StrLen nCorrLen );
 
@@ -104,9 +104,9 @@ struct _SaveFly
 {
     sal_uLong nNdDiff;              /// relative node difference
     SwFrmFmt* pFrmFmt;          /// the fly's frame format
-    sal_Bool bInsertPosition;   /// if true, anchor _at_ insert position
+    bool bInsertPosition;   /// if true, anchor _at_ insert position
 
-    _SaveFly( sal_uLong nNodeDiff, SwFrmFmt* pFmt, sal_Bool bInsert )
+    _SaveFly( sal_uLong nNodeDiff, SwFrmFmt* pFmt, bool bInsert )
         : nNdDiff( nNodeDiff ), pFrmFmt( pFmt ), bInsertPosition( bInsert )
     { }
 };

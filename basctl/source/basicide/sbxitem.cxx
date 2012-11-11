@@ -25,8 +25,8 @@ namespace basctl
 SbxItem::SbxItem (
     sal_uInt16 nWhichItem,
     ScriptDocument const& rDocument,
-    rtl::OUString const& aLibName,
-    rtl::OUString const& aName,
+    OUString const& aLibName,
+    OUString const& aName,
     ItemType eType
 ) :
     SfxPoolItem(nWhichItem),
@@ -39,9 +39,9 @@ SbxItem::SbxItem (
 SbxItem::SbxItem (
     sal_uInt16 nWhichItem,
     ScriptDocument const& rDocument,
-    rtl::OUString const& aLibName,
-    rtl::OUString const& aName,
-    rtl::OUString const& aMethodName,
+    OUString const& aLibName,
+    OUString const& aName,
+    OUString const& aMethodName,
     ItemType eType
 ) :
     SfxPoolItem(nWhichItem),

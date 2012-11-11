@@ -43,6 +43,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <sfx2/sfxuno.hxx>
 #include "dialmgr.hxx"
@@ -1035,34 +1036,27 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl)
         try
         {
             // setup folder picker
-            ::com::sun::star::uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            if( xMgr.is() )
+            com::sun::star::uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            xFolderPicker = FolderPicker::create(xContext);
+
+            String  aDlgPathName( SvtPathOptions().GetGraphicPath() );
+            xFolderPicker->setDisplayDirectory(aDlgPathName);
+
+            aPreviewTimer.Stop();
+
+            com::sun::star::uno::Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
+            if ( xAsyncDlg.is() )
+                xAsyncDlg->startExecuteModal( xDialogListener.get() );
+            else
             {
-                xFolderPicker = ::com::sun::star::uno::Reference< XFolderPicker >(
-                    xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker" ))), UNO_QUERY );
-
-                if ( xFolderPicker.is() )
+                if( xFolderPicker->execute() == RET_OK )
                 {
-                    String  aDlgPathName( SvtPathOptions().GetGraphicPath() );
-                    xFolderPicker->setDisplayDirectory(aDlgPathName);
-
-                    aPreviewTimer.Stop();
-
-                    ::com::sun::star::uno::Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
-                    if ( xAsyncDlg.is() )
-                        xAsyncDlg->startExecuteModal( xDialogListener.get() );
-                    else
-                    {
-                        if( xFolderPicker->execute() == RET_OK )
-                        {
-                            aURL = INetURLObject( xFolderPicker->getDirectory() );
-                            bSearchRecursive = sal_True;    // UI choice no longer possible, windows file picker allows no user controls
-                            SearchFiles();
-                        }
-
-                        nCurFilterPos = aCbbFileType.GetEntryPos( aCbbFileType.GetText() );
-                    }
+                    aURL = INetURLObject( xFolderPicker->getDirectory() );
+                    bSearchRecursive = sal_True;    // UI choice no longer possible, windows file picker allows no user controls
+                    SearchFiles();
                 }
+
+                nCurFilterPos = aCbbFileType.GetEntryPos( aCbbFileType.GetText() );
             }
         }
         catch (const IllegalArgumentException&)

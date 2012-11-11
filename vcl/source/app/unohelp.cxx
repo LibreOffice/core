@@ -1,175 +1,54 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
-
-#include <tools/tempfile.hxx>
-
-#include <osl/file.hxx>
-
-#include <cppuhelper/servicefactory.hxx>
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
 
 #include <svdata.hxx>
 
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
+#include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/registry/ImplementationRegistration.hpp>
-
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-#define DOSTRING( x )                       #x
-#define STRING( x )                         DOSTRING( x )
-
-struct VCLRegServiceInfo
-{
-    const sal_Char*     pLibName;
-    sal_Bool            bHasSUPD;
-};
-
-static VCLRegServiceInfo aVCLComponentsArray[] =
-{
-    {"i18n", sal_True},
-    {"i18npool", sal_True},
-#ifdef UNX
-#ifdef MACOSX
-    {"dtransaqua", sal_True},
-#else
-    {"dtransX11", sal_True},
-#endif
-#endif
-#if defined(WNT)
-    {"sysdtrans", sal_False},
-#endif
-    {"dtrans", sal_False},
-    {"mcnttype", sal_False},
-    {"ftransl", sal_False},
-    {"dnd", sal_False},
-    {NULL, sal_False}
-};
-
-uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFactory()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->maAppData.mxMSF.is() )
-    {
-        pSVData->maAppData.mxMSF = ::comphelper::getProcessServiceFactory();
-    }
-    if ( !pSVData->maAppData.mxMSF.is() )
-    {
-        TempFile aTempFile;
-        OUString aTempFileName;
-        osl::FileBase::getSystemPathFromFileURL( aTempFile.GetName(), aTempFileName );
-        pSVData->maAppData.mpMSFTempFileName = new String(aTempFileName);
-
-        try
-        {
-            pSVData->maAppData.mxMSF = ::cppu::createRegistryServiceFactory( aTempFileName, rtl::OUString(), sal_False );
-            uno::Reference < registry::XImplementationRegistration > xReg(
-                registry::ImplementationRegistration::create( comphelper::getComponentContext(pSVData->maAppData.mxMSF) ) );
-
-            if( xReg.is() )
-            {
-                sal_Int32 nCompCount = 0;
-                while ( aVCLComponentsArray[ nCompCount ].pLibName )
-                {
-                    OUString aComponentPathString = CreateLibraryName( aVCLComponentsArray[ nCompCount ].pLibName,  aVCLComponentsArray[ nCompCount ].bHasSUPD );
-                    if (!aComponentPathString.isEmpty() )
-                    {
-                        try
-                        {
-                            xReg->registerImplementation(
-                                OUString("com.sun.star.loader.SharedLibrary"),aComponentPathString, NULL );
-                        }
-                        catch( ::com::sun::star::uno::Exception & )
-                        {
-                        }
-                    }
-                    nCompCount++;
-                }
-            }
-        }
-        catch( ::com::sun::star::uno::Exception & )
-        {
-            delete pSVData->maAppData.mpMSFTempFileName;
-            pSVData->maAppData.mpMSFTempFileName = NULL;
-        }
-    }
-    return pSVData->maAppData.mxMSF;
-}
-
-
 uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
 {
-    uno::Reference < i18n::XBreakIterator > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
-    if ( xMSF.is() )
-    {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString("com.sun.star.i18n.BreakIterator") );
-        if ( xI.is() )
-        {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XBreakIterator >*)0) );
-            x >>= xB;
-        }
-    }
-    return xB;
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    return i18n::BreakIterator::create(xContext);
 }
 
 uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacterClassification()
 {
-    uno::Reference < i18n::XCharacterClassification > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
-    if ( xMSF.is() )
-    {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString("com.sun.star.i18n.CharacterClassification") );
-        if ( xI.is() )
-        {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCharacterClassification >*)0) );
-            x >>= xB;
-        }
-    }
-    return xB;
+    return i18n::CharacterClassification::create( comphelper::getProcessComponentContext() );
 }
 
 ::rtl::OUString vcl::unohelper::CreateLibraryName( const sal_Char* pModName, sal_Bool bSUPD )
 {
     // create variable library name suffixes
-    OUString aDLLSuffix = OUString::createFromAscii( STRING(DLLPOSTFIX) );
+    OUString aDLLSuffix = OUString::createFromAscii( SAL_STRINGIFY( DLLPOSTFIX ) );
 
     OUString aLibName;
 

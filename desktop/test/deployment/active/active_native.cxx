@@ -31,6 +31,7 @@
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/awt/MessageBoxButtons.hpp"
 #include "com/sun/star/awt/Rectangle.hpp"
+#include "com/sun/star/awt/Toolkit.hpp"
 #include "com/sun/star/awt/XMessageBox.hpp"
 #include "com/sun/star/awt/XMessageBoxFactory.hpp"
 #include "com/sun/star/awt/XWindowPeer.hpp"
@@ -235,13 +236,12 @@ void Dispatch::dispatch(
     css::uno::Sequence< css::beans::PropertyValue > const &)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Reference< css::lang::XMultiComponentFactory > smgr(
-        context_->getServiceManager(), css::uno::UNO_SET_THROW);
+    css::uno::Reference< css::lang::XMultiComponentFactory > smgr( context_->getServiceManager(), css::uno::UNO_SET_THROW);
+    css::uno::Reference< css::awt::XToolkit > toolkit( css::awt::Toolkit::create(context_), css::uno::UNO_SET_THROW);
+
     css::uno::Reference< css::awt::XMessageBox > box(
         css::uno::Reference< css::awt::XMessageBoxFactory >(
-            smgr->createInstanceWithContext(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                  "com.sun.star.awt.Toolkit")), context_),
+            toolkit,
             css::uno::UNO_QUERY_THROW)->createMessageBox(
                 css::uno::Reference< css::awt::XWindowPeer >(
                     css::uno::Reference< css::frame::XFrame >(

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <linguistic/misc.hxx>
@@ -150,7 +149,7 @@ SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nBits, sal_Bool bCheck 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLanguageBox(Window *pParent, VclBuilder::stringmap &)
 {
     SvxLanguageBox *pListBox = new SvxLanguageBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
-    pListBox->SetBestDropDownLineCount();
+    pListBox->EnableAutoSize(true);
     return pListBox;
 }
 

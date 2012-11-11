@@ -70,12 +70,15 @@ PATCH_FILES=\
    xmlsec1-customkeymanage.patch \
    xmlsec1-nssmangleciphers.patch \
    xmlsec1-noverify.patch \
-   xmlsec1-mingw32.patch \
    xmlsec1-mingw-keymgr-mscrypto.patch \
    xmlsec1-vc10.patch \
    xmlsec1-1.2.14_fix_extern_c.patch \
    xmlsec1-android.patch \
    xmlsec1-1.2.14-ansi.patch
+
+.IF "$(GUI)$(COM)"=="WNTGCC"
+   PATCH_FILES+=xmlsec1-mingw32.patch
+.ENDIF
 
 .IF "$(OS)$(CPU)"=="MACOSXP"
 PATCH_FILES+=xmlsec1-1.2.14_old_automake.patch
@@ -116,23 +119,18 @@ CONF_ILIB=-L$(ILIB:s/;/ -L/)
 CONFIGURE_DIR=
 CONFIGURE_ACTION=autoreconf ; ./configure
 
-.IF "$(CROSS_COMPILING)"=="YES"
 BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) MINGW_SYSROOT=$(MINGW_SYSROOT) OBJDUMP="$(OBJDUMP)"
-.ELSE
-BUILD_AND_HOST=--build=i586-pc-mingw32 --host=i586-pc-mingw32 --with-mozilla_ver=1.7.5 --enable-mscrypto OBJDUMP="$(WRAPCMD) objdump"
-.ENDIF
-
-# Note that this is obsolete crack for building *locally* on Windows with MinGW,
-# something we don't see the point in here in LibreOffice
 
 CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --disable-crypto-dl $(BUILD_AND_HOST) CC="$(xmlsec_CC)" LDFLAGS="-Wl,--no-undefined $(CONF_ILIB)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB="$(LIBXML2LIB)" ZLIB3RDLIB=$(ZLIB3RDLIB)
 
 .IF "$(SYSTEM_NSS)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
-BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
+BUILD_ACTION=$(GNUMAKE) -j$(GMAKE_MODULE_PARALLELISM)
 BUILD_DIR=$(CONFIGURE_DIR)
-.ELSE
+
+.ELSE # "$(COM)"!="GCC"
+
 CONFIGURE_DIR=win32
 CONFIGURE_ACTION=cscript configure.js
 .IF "$(product)"!="full" && "$(CCNUMVER)" >= "001399999999"
@@ -142,8 +140,10 @@ CONFIGURE_FLAGS=crypto=$(CRYPTOLIB) xslt=no iconv=no static=no include=$(BASEINC
 .ENDIF
 BUILD_ACTION=nmake
 BUILD_DIR=$(CONFIGURE_DIR)
-.ENDIF
-.ELSE
+.ENDIF # "$(COM)"=="GCC"
+
+.ELSE # "$(OS)"!="WNT"
+
 .IF "$(GUI)"=="UNX"
 
 .IF "$(COM)"=="C52" && "$(CPU)"=="U"

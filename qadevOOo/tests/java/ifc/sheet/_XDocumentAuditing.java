@@ -136,6 +136,11 @@ public class _XDocumentAuditing extends MultiMethodTest {
         dispatch(xModel.getCurrentController().getFrame(), (XMultiServiceFactory)tParam.getMSF(), ".uno:AutoRefreshArrows", props);
     }
 
+    private static boolean maxDelta(int x, int y, int max) {
+        assert max >= 0;
+        return Math.abs(((long) x) - ((long) y)) <= max;
+    }
+
     public void _refreshArrows() {
         boolean result = true;
 
@@ -154,7 +159,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
         Point p1 = pos;
 
         // points have to be the same: if not we have an auto update
-        boolean res = (p0.X == p1.X && p0.Y == p1.Y);
+        boolean res = maxDelta(p0.X, p1.X, 1) && maxDelta(p0.Y, p1.Y, 1);
         result &= res;
         if (!res)
             log.println("Arrow has been refreshed, but this should have been switched off.");
@@ -165,7 +170,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
         Point p2 = pos;
 
         // points have to differ
-        res = (p1.X != p2.X || p1.Y != p2.Y);
+        res = !(maxDelta(p1.X, p2.X, 1) && maxDelta(p1.Y, p2.Y, 1));
         result &= res;
         if (!res)
             log.println("Arrow has not been refreshed.");

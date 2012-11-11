@@ -36,7 +36,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <comphelper/oslfile2streamwrap.hxx>
 #include <vcl/svapp.hxx>
@@ -666,7 +666,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
                 aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DocType_System" ));
                 aSourceData[i++].Value <<= sDTDPath;
 
-                Reference< XDocumentHandler > xWriter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" )) ), UNO_QUERY );
+                Reference< XWriter > xWriter = Writer::create( comphelper::getComponentContext(mxMSF) );
 
                 File aOutputFile( aTempFileURL );
                 aOutputFile.open( osl_File_OpenFlag_Write );
@@ -676,7 +676,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
                 xDocSrc->setOutputStream( xOS );
 
                 Sequence< OUString > aFilterUserData( mpFilterInfo->getFilterUserData() );
-                xImporter->importer( aSourceData, xWriter, aFilterUserData );
+                xImporter->importer( aSourceData, Reference<XDocumentHandler>(xWriter, UNO_QUERY_THROW), aFilterUserData );
             }
 
             displayXMLFile( aTempFileURL );

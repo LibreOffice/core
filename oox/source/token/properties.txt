@@ -34,6 +34,7 @@ BorderStyle
 BorderTransparency
 BorderWidth
 BottomBorder
+BottomBorderDistance
 BottomMargin
 BulletChar
 BulletColor
@@ -263,6 +264,7 @@ LabelPosition
 LabelSeparator
 LayoutInfo
 LeftBorder
+LeftBorderDistance
 LeftMargin
 LeftPageFooterContent
 LeftPageHeaderContent
@@ -384,6 +386,7 @@ RepeatDelay
 Representation
 RightAngledAxes
 RightBorder
+RightBorderDistance
 RightMargin
 RightPageFooterContent
 RightPageHeaderContent
@@ -495,6 +498,7 @@ Title
 Toggle
 TokenIndex
 TopBorder
+TopBorderDistance
 TopMargin
 Transformation
 TransitionDirection

@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <i18npool/mslangid.hxx>
 
@@ -36,7 +27,6 @@
 #include "unotools/confignode.hxx"
 
 #include "vcl/layout.hxx"
-#include "vcl/unohelp.hxx"
 #include "vcl/salgtype.hxx"
 #include "vcl/event.hxx"
 #include "vcl/help.hxx"
@@ -485,8 +475,8 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
     if( !rSettings.GetStyleSettings().GetHighContrastMode() )
     {
         sal_Bool bTmp = sal_False, bAutoHCMode = sal_True;
-        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
-            vcl::unohelper::GetMultiServiceFactory(),
+        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
+            comphelper::getProcessComponentContext(),
             OUString("org.openoffice.Office.Common/Accessibility") );    // note: case sensitive !
         if ( aNode.isValid() )
         {
@@ -726,6 +716,7 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbVexpand = false;
     mpWindowImpl->mbExpand = false;
     mpWindowImpl->mbFill = true;
+    mpWindowImpl->mbSecondary = false;
 
 
     mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // sal_True: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
@@ -4058,9 +4049,9 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
 
         if ( pOldFocusWindow )
         {
-            // Cursor hiden
+            // Cursor hidden
             if ( pOldFocusWindow->mpWindowImpl->mpCursor )
-                pOldFocusWindow->mpWindowImpl->mpCursor->ImplHide();
+                pOldFocusWindow->mpWindowImpl->mpCursor->ImplHide( true );
         }
 
         // !!!!! due to old SV-Office Activate/Deactivate handling
@@ -4545,8 +4536,8 @@ Window::~Window()
         {
             Window* pParent = GetParent();
             Window* pBorderWindow = mpWindowImpl->mpBorderWindow;
-	    // when windows overlap, give focus to the parent
-	    // of the next FrameWindow
+        // when windows overlap, give focus to the parent
+        // of the next FrameWindow
             if ( pBorderWindow )
             {
                 if ( pBorderWindow->ImplIsOverlapWindow() )
@@ -7855,7 +7846,7 @@ void Window::SetCursor( Cursor* pCursor )
     if ( mpWindowImpl->mpCursor != pCursor )
     {
         if ( mpWindowImpl->mpCursor )
-            mpWindowImpl->mpCursor->ImplHide();
+            mpWindowImpl->mpCursor->ImplHide( true );
         mpWindowImpl->mpCursor = pCursor;
         if ( pCursor )
             pCursor->ImplShow();
@@ -8354,55 +8345,52 @@ uno::Reference< XDragSource > Window::GetDragSource()
         {
             try
             {
-                uno::Reference< XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
-                if ( xFactory.is() )
-                {
-                    const SystemEnvData * pEnvData = GetSystemData();
+                uno::Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+                const SystemEnvData * pEnvData = GetSystemData();
 
-                    if( pEnvData )
-                    {
-                        Sequence< Any > aDragSourceAL( 2 ), aDropTargetAL( 2 );
-                        OUString aDragSourceSN, aDropTargetSN;
+                if( pEnvData )
+                {
+                    Sequence< Any > aDragSourceAL( 2 ), aDropTargetAL( 2 );
+                    OUString aDragSourceSN, aDropTargetSN;
 #if defined WNT
-                        aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
-                        aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
-                        aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
-                        aDropTargetAL[ 0 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
+                    aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
+                    aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
+                    aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
+                    aDropTargetAL[ 0 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
 #elif defined QUARTZ
             /* FIXME: Mac OS X specific dnd interface does not exist! *
              * Using Windows based dnd as a temporary solution        */
-                        aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
-                        aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
-                        aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
-                        aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
+                    aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
+                    aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
+                    aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
+                    aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
 #elif defined IOS
             /* What does LibreOffice's use of DND concepts mean on
              * iOS, huh, is this both inter-app DND (which clearly is
              * meaningless), or intra-app? Anyway, use the same code
              * as for MacOSX for now, even if meaningless...
              */
-                        aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
-                        aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
-                        aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
-                        aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
+                    aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
+                    aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
+                    aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
+                    aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
 #elif defined UNX
-                        aDropTargetAL.realloc( 3 );
-                        aDragSourceAL.realloc( 3 );
-                        aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.X11DragSource");
-                        aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.X11DropTarget");
+                    aDropTargetAL.realloc( 3 );
+                    aDragSourceAL.realloc( 3 );
+                    aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.X11DragSource");
+                    aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.X11DropTarget");
 
-                        aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                        aDragSourceAL[ 2 ] = makeAny( vcl::createBmpConverter() );
-                        aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                        aDropTargetAL[ 1 ] = makeAny( (sal_Size)(pEnvData->aShellWindow) );
-                        aDropTargetAL[ 2 ] = makeAny( vcl::createBmpConverter() );
+                    aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                    aDragSourceAL[ 2 ] = makeAny( vcl::createBmpConverter() );
+                    aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                    aDropTargetAL[ 1 ] = makeAny( (sal_Size)(pEnvData->aShellWindow) );
+                    aDropTargetAL[ 2 ] = makeAny( vcl::createBmpConverter() );
 #endif
-                        if( !aDragSourceSN.isEmpty() )
-                            mpWindowImpl->mpFrameData->mxDragSource = uno::Reference< XDragSource > ( xFactory->createInstanceWithArguments( aDragSourceSN, aDragSourceAL ), UNO_QUERY );
+                    if( !aDragSourceSN.isEmpty() )
+                        mpWindowImpl->mpFrameData->mxDragSource = uno::Reference< XDragSource > ( xFactory->createInstanceWithArguments( aDragSourceSN, aDragSourceAL ), UNO_QUERY );
 
-                        if( !aDropTargetSN.isEmpty() )
-                            mpWindowImpl->mpFrameData->mxDropTarget = uno::Reference< XDropTarget > ( xFactory->createInstanceWithArguments( aDropTargetSN, aDropTargetAL ), UNO_QUERY );
-                    }
+                    if( !aDropTargetSN.isEmpty() )
+                        mpWindowImpl->mpFrameData->mxDropTarget = uno::Reference< XDropTarget > ( xFactory->createInstanceWithArguments( aDropTargetSN, aDropTargetAL ), UNO_QUERY );
                 }
             }
 
@@ -8440,32 +8428,29 @@ uno::Reference< XClipboard > Window::GetClipboard()
         {
             try
             {
-                uno::Reference< XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
+                uno::Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
 
-                if( xFactory.is() )
-                {
-                    mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.SystemClipboardExt") ), UNO_QUERY );
+                mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.SystemClipboardExt") ), UNO_QUERY );
 
-                    if( !mpWindowImpl->mpFrameData->mxClipboard.is() )
-                        mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.SystemClipboard") ), UNO_QUERY );
+                if( !mpWindowImpl->mpFrameData->mxClipboard.is() )
+                    mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.SystemClipboard") ), UNO_QUERY );
 
 #if defined(UNX) && !defined(QUARTZ)          // unix clipboard needs to be initialized
-                    if( mpWindowImpl->mpFrameData->mxClipboard.is() )
+                if( mpWindowImpl->mpFrameData->mxClipboard.is() )
+                {
+                    uno::Reference< XInitialization > xInit = uno::Reference< XInitialization >( mpWindowImpl->mpFrameData->mxClipboard, UNO_QUERY );
+
+                    if( xInit.is() )
                     {
-                        uno::Reference< XInitialization > xInit = uno::Reference< XInitialization >( mpWindowImpl->mpFrameData->mxClipboard, UNO_QUERY );
+                        Sequence< Any > aArgumentList( 3 );
+                        aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                        aArgumentList[ 1 ] = makeAny( OUString("CLIPBOARD") );
+                        aArgumentList[ 2 ] = makeAny( vcl::createBmpConverter() );
 
-                        if( xInit.is() )
-                        {
-                            Sequence< Any > aArgumentList( 3 );
-                            aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                            aArgumentList[ 1 ] = makeAny( OUString("CLIPBOARD") );
-                            aArgumentList[ 2 ] = makeAny( vcl::createBmpConverter() );
-
-                            xInit->initialize( aArgumentList );
-                        }
+                        xInit->initialize( aArgumentList );
                     }
-#endif
                 }
+#endif
             }
 
             // createInstance can throw any exception
@@ -8494,30 +8479,27 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
         {
             try
             {
-                uno::Reference< XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
+                uno::Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
 
-                if( xFactory.is() )
-                {
 #if defined(UNX) && !defined(QUARTZ)
-                    Sequence< Any > aArgumentList( 3 );
-                      aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aArgumentList[ 1 ] = makeAny( OUString("PRIMARY") );
-                    aArgumentList[ 2 ] = makeAny( vcl::createBmpConverter() );
+                Sequence< Any > aArgumentList( 3 );
+                aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                aArgumentList[ 1 ] = makeAny( OUString("PRIMARY") );
+                aArgumentList[ 2 ] = makeAny( vcl::createBmpConverter() );
 
-                    mpWindowImpl->mpFrameData->mxSelection = uno::Reference< XClipboard >( xFactory->createInstanceWithArguments(
-                    OUString("com.sun.star.datatransfer.clipboard.SystemClipboard"), aArgumentList ), UNO_QUERY );
+                mpWindowImpl->mpFrameData->mxSelection = uno::Reference< XClipboard >( xFactory->createInstanceWithArguments(
+                                                                                           OUString("com.sun.star.datatransfer.clipboard.SystemClipboard"), aArgumentList ), UNO_QUERY );
 #       else
-                    static uno::Reference< XClipboard > s_xSelection;
+                static uno::Reference< XClipboard > s_xSelection;
 
-                    if ( !s_xSelection.is() )
-                         s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.GenericClipboardExt") ), UNO_QUERY );
+                if ( !s_xSelection.is() )
+                    s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.GenericClipboardExt") ), UNO_QUERY );
 
-                    if ( !s_xSelection.is() )
-                         s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.GenericClipboard") ), UNO_QUERY );
+                if ( !s_xSelection.is() )
+                    s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.GenericClipboard") ), UNO_QUERY );
 
-                    mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
+                mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
 #       endif
-                }
             }
 
             // createInstance can throw any exception
@@ -8915,7 +8897,6 @@ void Window::SetAccessibleName( const String& rName )
    if ( !mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
 
-    DBG_ASSERT( !mpWindowImpl->mpAccessibleInfos->pAccessibleName || !rName.Len(), "AccessibleName already set!" );
     delete mpWindowImpl->mpAccessibleInfos->pAccessibleName;
     mpWindowImpl->mpAccessibleInfos->pAccessibleName = new String( rName );
 }
@@ -9450,54 +9431,50 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
                              const_cast<Window*>(this)->GetComponentInterface(),
                              uno::UNO_QUERY ));
 
-    uno::Reference< XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
+    uno::Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
 
     // Create canvas instance with window handle
     // =========================================
-    if ( xFactory.is() )
-    {
-        static ::vcl::DeleteUnoReferenceOnDeinit<lang::XMultiServiceFactory> xStaticCanvasFactory(
-            uno::Reference<lang::XMultiServiceFactory>(
-                xFactory->createInstance(
-                    OUString( "com.sun.star.rendering.CanvasFactory" ) ),
-                UNO_QUERY ));
-        uno::Reference<lang::XMultiServiceFactory> xCanvasFactory(xStaticCanvasFactory.get());
+    static ::vcl::DeleteUnoReferenceOnDeinit<lang::XMultiServiceFactory> xStaticCanvasFactory(
+        uno::Reference<lang::XMultiServiceFactory>(
+            xFactory->createInstance(
+                OUString( "com.sun.star.rendering.CanvasFactory" ) ),
+            UNO_QUERY ));
+    uno::Reference<lang::XMultiServiceFactory> xCanvasFactory(xStaticCanvasFactory.get());
 
-        if(xCanvasFactory.is())
-        {
+    if(xCanvasFactory.is())
+    {
 #ifdef WNT
-            // see #140456# - if we're running on a multiscreen setup,
-            // request special, multi-screen safe sprite canvas
-            // implementation (not DX5 canvas, as it cannot cope with
-            // surfaces spanning multiple displays). Note: canvas
-            // (without sprite) stays the same)
-            const sal_uInt32 nDisplay = static_cast< WinSalFrame* >( mpWindowImpl->mpFrame )->mnDisplay;
-            if( (nDisplay >= Application::GetScreenCount()) )
-            {
-                xCanvas.set( xCanvasFactory->createInstanceWithArguments(
+        // see #140456# - if we're running on a multiscreen setup,
+        // request special, multi-screen safe sprite canvas
+        // implementation (not DX5 canvas, as it cannot cope with
+        // surfaces spanning multiple displays). Note: canvas
+        // (without sprite) stays the same)
+        const sal_uInt32 nDisplay = static_cast< WinSalFrame* >( mpWindowImpl->mpFrame )->mnDisplay;
+        if( (nDisplay >= Application::GetScreenCount()) )
+        {
+            xCanvas.set( xCanvasFactory->createInstanceWithArguments(
                                  bSpriteCanvas ?
                                  OUString( "com.sun.star.rendering.SpriteCanvas.MultiScreen" ) :
-                                 OUString( "com.sun.star.rendering.Canvas" ),
+                                 OUString( "com.sun.star.rendering.Canvas.MultiScreen" ),
                                  aArg ),
                              UNO_QUERY );
 
-            }
-            else
-            {
+        }
+        else
+        {
 #endif
-                xCanvas.set( xCanvasFactory->createInstanceWithArguments(
-                                 bSpriteCanvas ?
-                                 OUString( "com.sun.star.rendering.SpriteCanvas" ) :
-                                 OUString( "com.sun.star.rendering.Canvas" ),
-                                 aArg ),
-                             UNO_QUERY );
+            xCanvas.set( xCanvasFactory->createInstanceWithArguments(
+                             bSpriteCanvas ?
+                             OUString( "com.sun.star.rendering.SpriteCanvas" ) :
+                             OUString( "com.sun.star.rendering.Canvas" ),
+                             aArg ),
+                         UNO_QUERY );
 
 #ifdef WNT
-            }
-#endif
-
-            mpWindowImpl->mxCanvas = xCanvas;
         }
+#endif
+        mpWindowImpl->mxCanvas = xCanvas;
     }
 
     // no factory??? Empty reference, then.

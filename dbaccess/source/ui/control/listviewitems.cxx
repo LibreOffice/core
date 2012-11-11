@@ -28,7 +28,7 @@ namespace dbaui
     // class OBoldListboxString
     //========================================================================
     //------------------------------------------------------------------------
-    void OBoldListboxString::InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* _pViewData)
+    void OBoldListboxString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* _pViewData)
     {
         SvLBoxString::InitViewData( pView, pEntry, _pViewData );
         if ( !m_bEmphasized )
@@ -50,7 +50,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------
-    void OBoldListboxString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry )
+    void OBoldListboxString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry )
     {
         if (m_bEmphasized)
         {

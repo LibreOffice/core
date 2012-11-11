@@ -265,7 +265,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     const sal_uInt16 nDescId    = rSh.GetCurPageDesc();
     const SwPageDesc& rDesc = rSh.GetPageDesc( nDescId );
 
-    const sal_Bool bVerticalWriting = rSh.IsInVerticalText();
+    const bool bVerticalWriting = rSh.IsInVerticalText();
     const SwFmtHeader& rHeaderFmt = rDesc.GetMaster().GetHeader();
     SwFrmFmt *pHeaderFmt = (SwFrmFmt*)rHeaderFmt.GetHeaderFmt();
 
@@ -294,7 +294,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             SwFrmFmt* pFmt = ((SwFrmFmt*)rSh.GetFlyFrmFmt());
             const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
 
-            sal_Bool bVerticalFrame(sal_False);
+            bool bVerticalFrame(false);
             {
                 sal_Bool bRTL;
                 sal_Bool bVertL2R;
@@ -889,7 +889,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     rSh.GetMousePageDesc(aTabColFromDocPos) : rSh.GetCurPageDesc() );
 
     const SvxFrameDirectionItem& rFrameDir = rDesc.GetMaster().GetFrmDir();
-    const sal_Bool bVerticalWriting = rSh.IsInVerticalText();
+    const bool bVerticalWriting = rSh.IsInVerticalText();
 
     //enable tab stop display on the rulers depending on the writing direction
     WinBits nRulerStyle = pHRuler->GetStyle() & ~WB_EXTRAFIELD;
@@ -1391,7 +1391,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         SvxColumnItem aColItem(nNum);
                         const SwRect &rSizeRect = rSh.GetAnyCurRect(RECT_FLY_PRT_EMBEDDED, pPt);
 
-                        sal_Bool bUseVertical = bFrameHasVerticalColumns || (!bFrmSelection && bVerticalWriting);
+                        bool bUseVertical = bFrameHasVerticalColumns || (!bFrmSelection && bVerticalWriting);
                         const long lWidth = bUseVertical ? rSizeRect.Height() : rSizeRect.Width();
                         const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED, pPt);
                         long nDist2 = ((bUseVertical ? rRect.Height() : rRect.Width()) - lWidth) /2;

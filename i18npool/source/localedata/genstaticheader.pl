@@ -44,6 +44,7 @@ my @FUNCS = qw(
     getSearchOptions
     getTransliterations
     getUnicodeScripts
+    getAllFormats1
     );
 
 print 'extern "C" {
@@ -52,7 +53,13 @@ print 'extern "C" {
 
 foreach my $lang (@ARGV) {
     foreach my $func (@FUNCS) {
-	printf("void %s_%s();\n", $func, $lang);
+        if ($func eq 'getAllFormats1') {
+            if ($lang eq 'en_US') {
+                printf("void %s_%s();\n", $func, $lang);
+            }
+        } else {
+            printf("void %s_%s();\n", $func, $lang);
+        }
     }
 }
 
@@ -70,7 +77,15 @@ foreach my $lang (@ARGV) {
     printf("    {\n");
     printf("        \"%s\",\n", $lang);
     foreach my $func (@FUNCS) {
-	printf("        %s_%s,\n", $func, $lang);
+        if ($func eq 'getAllFormats1') {
+            if ($lang eq 'en_US') {
+                printf("        %s_%s,\n", $func, $lang);
+            } else {
+                printf("        0,\n");
+            }
+        } else {
+            printf("        %s_%s,\n", $func, $lang);
+        }
     }
     printf("    }%s\n", ($lang ne $ARGV[$#ARGV]) ? ',' : '');
 }

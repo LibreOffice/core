@@ -222,7 +222,8 @@ namespace writerfilter {
         enum RTFBmpStyles
         {
             BMPSTYLE_NONE,
-            BMPSTYLE_PNG
+            BMPSTYLE_PNG,
+            BMPSTYLE_JPEG
         };
 
         enum RTFFieldStatus
@@ -251,10 +252,10 @@ namespace writerfilter {
             public:
                 RTFShape();
                 std::vector< std::pair<rtl::OUString, rtl::OUString> > aProperties;
-                int nLeft;
-                int nTop;
-                int nRight;
-                int nBottom;
+                sal_Int32 nLeft;
+                sal_Int32 nTop;
+                sal_Int32 nRight;
+                sal_Int32 nBottom;
                 sal_Int16 nHoriOrientRelation;
                 sal_Int16 nVertOrientRelation;
                 int nWrap;
@@ -272,6 +273,10 @@ namespace writerfilter {
                 bool bHasLineColor;
                 sal_uInt8 nFillColorR, nFillColorG, nFillColorB;
                 bool bHasFillColor;
+                sal_Int32 nDhgt;
+                sal_Int32 nFLine;
+                sal_Int32 nPolyLineCount;
+                uno::Sequence<awt::Point> aPolyLinePoints;
         };
 
         /// Stores the properties of a picture.
@@ -428,8 +433,7 @@ namespace writerfilter {
                 void setDestinationText(rtl::OUString& rString);
                 /// Resolve a picture: If not inline, then anchored.
                 int resolvePict(bool bInline);
-                void runBreak();
-                bool replayShapetext();
+                void replayShapetext();
                 bool getSkipUnknown();
                 void setSkipUnknown(bool bSkipUnknown);
 
@@ -471,6 +475,7 @@ namespace writerfilter {
                 void singleChar(sal_uInt8 nValue, bool bRunProps = false);
                 // Sends run properties to dmapper, taking care of buffering.
                 void runProps();
+                void runBreak();
                 void parBreak();
                 void tableBreak();
                 void checkNeedPap();

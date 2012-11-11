@@ -234,11 +234,11 @@ void RenderGraphicRasterizer::InitializeRasterizer()
 
         maDefaultSizePixel.Width() = maDefaultSizePixel.Height() = 0;
 
-        if( !maRenderGraphic.IsEmpty() )
+        if ( !maRenderGraphic.IsEmpty() )
         {
             rtl::OUString aServiceName;
 
-            if( 0 == maRenderGraphic.GetGraphicDataMimeType().compareToAscii( "image/svg+xml" ) )
+            if( maRenderGraphic.GetGraphicDataMimeType() == "image/svg+xml" )
             {
                 aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VCL_SERVICENAME_RASTERIZER_SVG ) );
             }

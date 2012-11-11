@@ -38,7 +38,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -800,216 +800,209 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
 
         //! pass XIntrospection to ReadFromAddIn
 
-        uno::Reference<lang::XMultiServiceFactory> xManager = comphelper::getProcessServiceFactory();
-        if ( xManager.is() )
+        uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+
+        uno::Reference<beans::XIntrospection> xIntro = beans::Introspection::create( xContext );
+        uno::Any aObject;
+        aObject <<= xAddIn;
+        uno::Reference<beans::XIntrospectionAccess> xAcc = xIntro->inspect(aObject);
+        if (xAcc.is())
         {
-            uno::Reference<beans::XIntrospection> xIntro(
-                                    xManager->createInstance(rtl::OUString("com.sun.star.beans.Introspection")),
-                                    uno::UNO_QUERY );
-            if ( xIntro.is() )
+            uno::Sequence< uno::Reference<reflection::XIdlMethod> > aMethods =
+                    xAcc->getMethods( beans::MethodConcept::ALL );
+            long nNewCount = aMethods.getLength();
+            if ( nNewCount )
             {
-                uno::Any aObject;
-                aObject <<= xAddIn;
-                uno::Reference<beans::XIntrospectionAccess> xAcc = xIntro->inspect(aObject);
-                if (xAcc.is())
+                long nOld = nFuncCount;
+                nFuncCount = nNewCount+nOld;
+                if ( nOld )
                 {
-                    uno::Sequence< uno::Reference<reflection::XIdlMethod> > aMethods =
-                            xAcc->getMethods( beans::MethodConcept::ALL );
-                    long nNewCount = aMethods.getLength();
-                    if ( nNewCount )
+                    ScUnoAddInFuncData** ppNew = new ScUnoAddInFuncData*[nFuncCount];
+                    for (long i=0; i<nOld; i++)
+                        ppNew[i] = ppFuncData[i];
+                    delete[] ppFuncData;
+                    ppFuncData = ppNew;
+                }
+                else
+                    ppFuncData = new ScUnoAddInFuncData*[nFuncCount];
+
+                //! TODO: adjust bucket count?
+                if ( !pExactHashMap )
+                    pExactHashMap = new ScAddInHashMap;
+                if ( !pNameHashMap )
+                    pNameHashMap = new ScAddInHashMap;
+                if ( !pLocalHashMap )
+                    pLocalHashMap = new ScAddInHashMap;
+
+                const uno::Reference<reflection::XIdlMethod>* pArray = aMethods.getConstArray();
+                for (long nFuncPos=0; nFuncPos<nNewCount; nFuncPos++)
+                {
+                    ppFuncData[nFuncPos+nOld] = NULL;
+
+                    uno::Reference<reflection::XIdlMethod> xFunc = pArray[nFuncPos];
+                    if (xFunc.is())
                     {
-                        long nOld = nFuncCount;
-                        nFuncCount = nNewCount+nOld;
-                        if ( nOld )
+                        //  leave out internal functions
+                        uno::Reference<reflection::XIdlClass> xClass =
+                                        xFunc->getDeclaringClass();
+                        sal_Bool bSkip = sal_True;
+                        if ( xClass.is() )
                         {
-                            ScUnoAddInFuncData** ppNew = new ScUnoAddInFuncData*[nFuncCount];
-                            for (long i=0; i<nOld; i++)
-                                ppNew[i] = ppFuncData[i];
-                            delete[] ppFuncData;
-                            ppFuncData = ppNew;
+                            //! XIdlClass needs getType() method!
+                            rtl::OUString sName = xClass->getName();
+                            bSkip = (
+                                IsTypeName( sName,
+                                    getCppuType((uno::Reference<uno::XInterface>*)0) ) ||
+                                IsTypeName( sName,
+                                    getCppuType((uno::Reference<lang::XServiceName>*)0) ) ||
+                                IsTypeName( sName,
+                                    getCppuType((uno::Reference<lang::XServiceInfo>*)0) ) ||
+                                IsTypeName( sName,
+                                    getCppuType((uno::Reference<sheet::XAddIn>*)0) ) );
                         }
-                        else
-                            ppFuncData = new ScUnoAddInFuncData*[nFuncCount];
-
-                        //! TODO: adjust bucket count?
-                        if ( !pExactHashMap )
-                            pExactHashMap = new ScAddInHashMap;
-                        if ( !pNameHashMap )
-                            pNameHashMap = new ScAddInHashMap;
-                        if ( !pLocalHashMap )
-                            pLocalHashMap = new ScAddInHashMap;
-
-                        const uno::Reference<reflection::XIdlMethod>* pArray = aMethods.getConstArray();
-                        for (long nFuncPos=0; nFuncPos<nNewCount; nFuncPos++)
+                        if (!bSkip)
                         {
-                            ppFuncData[nFuncPos+nOld] = NULL;
+                            uno::Reference<reflection::XIdlClass> xReturn =
+                                        xFunc->getReturnType();
+                            if ( !lcl_ValidReturnType( xReturn ) )
+                                bSkip = sal_True;
+                        }
+                        if (!bSkip)
+                        {
+                            rtl::OUString aFuncU = xFunc->getName();
 
-                            uno::Reference<reflection::XIdlMethod> xFunc = pArray[nFuncPos];
-                            if (xFunc.is())
+                            // stored function name: (service name).(function)
+                            rtl::OUStringBuffer aFuncNameBuffer( aServiceName.getLength()+1+aFuncU.getLength());
+                            aFuncNameBuffer.append(aServiceName);
+                            aFuncNameBuffer.append('.');
+                            aFuncNameBuffer.append(aFuncU);
+                            rtl::OUString aFuncName = aFuncNameBuffer.makeStringAndClear();
+
+                            sal_Bool bValid = sal_True;
+                            long nVisibleCount = 0;
+                            long nCallerPos = SC_CALLERPOS_NONE;
+
+                            uno::Sequence<reflection::ParamInfo> aParams =
+                                    xFunc->getParameterInfos();
+                            long nParamCount = aParams.getLength();
+                            const reflection::ParamInfo* pParArr = aParams.getConstArray();
+                            long nParamPos;
+                            for (nParamPos=0; nParamPos<nParamCount; nParamPos++)
                             {
-                                //  leave out internal functions
-                                uno::Reference<reflection::XIdlClass> xClass =
-                                                xFunc->getDeclaringClass();
-                                sal_Bool bSkip = sal_True;
-                                if ( xClass.is() )
+                                if ( pParArr[nParamPos].aMode != reflection::ParamMode_IN )
+                                    bValid = false;
+                                uno::Reference<reflection::XIdlClass> xParClass =
+                                            pParArr[nParamPos].aType;
+                                ScAddInArgumentType eArgType = lcl_GetArgType( xParClass );
+                                if ( eArgType == SC_ADDINARG_NONE )
+                                    bValid = false;
+                                else if ( eArgType == SC_ADDINARG_CALLER )
+                                    nCallerPos = nParamPos;
+                                else
+                                    ++nVisibleCount;
+                            }
+                            if (bValid)
+                            {
+                                sal_uInt16 nCategory = lcl_GetCategory(
+                                        xAddIn->getProgrammaticCategoryName( aFuncU ) );
+
+                                rtl::OString sHelpId = aHelpIdGenerator.GetHelpId( aFuncU );
+
+                                ::rtl::OUString aLocalName;
+                                try
                                 {
-                                    //! XIdlClass needs getType() method!
-                                    rtl::OUString sName = xClass->getName();
-                                    bSkip = (
-                                        IsTypeName( sName,
-                                            getCppuType((uno::Reference<uno::XInterface>*)0) ) ||
-                                        IsTypeName( sName,
-                                            getCppuType((uno::Reference<lang::XServiceName>*)0) ) ||
-                                        IsTypeName( sName,
-                                            getCppuType((uno::Reference<lang::XServiceInfo>*)0) ) ||
-                                        IsTypeName( sName,
-                                            getCppuType((uno::Reference<sheet::XAddIn>*)0) ) );
+                                    aLocalName = xAddIn->
+                                        getDisplayFunctionName( aFuncU );
                                 }
-                                if (!bSkip)
+                                catch(uno::Exception&)
                                 {
-                                    uno::Reference<reflection::XIdlClass> xReturn =
-                                                xFunc->getReturnType();
-                                    if ( !lcl_ValidReturnType( xReturn ) )
-                                        bSkip = sal_True;
+                                    aLocalName = "###";
                                 }
-                                if (!bSkip)
+
+                                ::rtl::OUString aDescription;
+                                try
                                 {
-                                    rtl::OUString aFuncU = xFunc->getName();
+                                    aDescription = xAddIn->
+                                        getFunctionDescription( aFuncU );
+                                }
+                                catch(uno::Exception&)
+                                {
+                                    aDescription = "###";
+                                }
 
-                                    // stored function name: (service name).(function)
-                                    rtl::OUStringBuffer aFuncNameBuffer( aServiceName.getLength()+1+aFuncU.getLength());
-                                    aFuncNameBuffer.append(aServiceName);
-                                    aFuncNameBuffer.append('.');
-                                    aFuncNameBuffer.append(aFuncU);
-                                    rtl::OUString aFuncName = aFuncNameBuffer.makeStringAndClear();
-
-                                    sal_Bool bValid = sal_True;
-                                    long nVisibleCount = 0;
-                                    long nCallerPos = SC_CALLERPOS_NONE;
-
-                                    uno::Sequence<reflection::ParamInfo> aParams =
-                                            xFunc->getParameterInfos();
-                                    long nParamCount = aParams.getLength();
-                                    const reflection::ParamInfo* pParArr = aParams.getConstArray();
-                                    long nParamPos;
+                                ScAddInArgDesc* pVisibleArgs = NULL;
+                                if ( nVisibleCount > 0 )
+                                {
+                                    ScAddInArgDesc aDesc;
+                                    pVisibleArgs = new ScAddInArgDesc[nVisibleCount];
+                                    long nDestPos = 0;
                                     for (nParamPos=0; nParamPos<nParamCount; nParamPos++)
                                     {
-                                        if ( pParArr[nParamPos].aMode != reflection::ParamMode_IN )
-                                            bValid = false;
                                         uno::Reference<reflection::XIdlClass> xParClass =
-                                                    pParArr[nParamPos].aType;
+                                            pParArr[nParamPos].aType;
                                         ScAddInArgumentType eArgType = lcl_GetArgType( xParClass );
-                                        if ( eArgType == SC_ADDINARG_NONE )
-                                            bValid = false;
-                                        else if ( eArgType == SC_ADDINARG_CALLER )
-                                            nCallerPos = nParamPos;
-                                        else
-                                            ++nVisibleCount;
-                                    }
-                                    if (bValid)
-                                    {
-                                        sal_uInt16 nCategory = lcl_GetCategory(
-                                                xAddIn->getProgrammaticCategoryName( aFuncU ) );
-
-                                        rtl::OString sHelpId = aHelpIdGenerator.GetHelpId( aFuncU );
-
-                                        ::rtl::OUString aLocalName;
-                                        try
+                                        if ( eArgType != SC_ADDINARG_CALLER )
                                         {
-                                            aLocalName = xAddIn->
-                                                getDisplayFunctionName( aFuncU );
-                                        }
-                                        catch(uno::Exception&)
-                                        {
-                                            aLocalName = "###";
-                                        }
-
-                                        ::rtl::OUString aDescription;
-                                        try
-                                        {
-                                            aDescription = xAddIn->
-                                                getFunctionDescription( aFuncU );
-                                        }
-                                        catch(uno::Exception&)
-                                        {
-                                            aDescription = "###";
-                                        }
-
-                                        ScAddInArgDesc* pVisibleArgs = NULL;
-                                        if ( nVisibleCount > 0 )
-                                        {
-                                            ScAddInArgDesc aDesc;
-                                            pVisibleArgs = new ScAddInArgDesc[nVisibleCount];
-                                            long nDestPos = 0;
-                                            for (nParamPos=0; nParamPos<nParamCount; nParamPos++)
+                                            rtl::OUString aArgName;
+                                            try
                                             {
-                                                uno::Reference<reflection::XIdlClass> xParClass =
-                                                    pParArr[nParamPos].aType;
-                                                ScAddInArgumentType eArgType = lcl_GetArgType( xParClass );
-                                                if ( eArgType != SC_ADDINARG_CALLER )
-                                                {
-                                                    rtl::OUString aArgName;
-                                                    try
-                                                    {
-                                                        aArgName = xAddIn->
-                                                            getDisplayArgumentName( aFuncU, nParamPos );
-                                                    }
-                                                    catch(uno::Exception&)
-                                                    {
-                                                        aArgName = "###";
-                                                    }
-                                                    rtl::OUString aArgDesc;
-                                                    try
-                                                    {
-                                                        aArgDesc = xAddIn->
-                                                            getArgumentDescription( aFuncU, nParamPos );
-                                                    }
-                                                    catch(uno::Exception&)
-                                                    {
-                                                        aArgName = "###";
-                                                    }
-
-                                                    sal_Bool bOptional =
-                                                        ( eArgType == SC_ADDINARG_VALUE_OR_ARRAY ||
-                                                          eArgType == SC_ADDINARG_VARARGS );
-
-                                                    aDesc.eType = eArgType;
-                                                    aDesc.aName = aArgName;
-                                                    aDesc.aDescription = aArgDesc;
-                                                    aDesc.bOptional = bOptional;
-                                                    //! initialize aInternalName only from config?
-                                                    aDesc.aInternalName = pParArr[nParamPos].aName;
-
-                                                    pVisibleArgs[nDestPos++] = aDesc;
-                                                }
+                                                aArgName = xAddIn->
+                                                    getDisplayArgumentName( aFuncU, nParamPos );
                                             }
-                                            OSL_ENSURE( nDestPos==nVisibleCount, "wrong count" );
+                                            catch(uno::Exception&)
+                                            {
+                                                aArgName = "###";
+                                            }
+                                            rtl::OUString aArgDesc;
+                                            try
+                                            {
+                                                aArgDesc = xAddIn->
+                                                    getArgumentDescription( aFuncU, nParamPos );
+                                            }
+                                            catch(uno::Exception&)
+                                            {
+                                                aArgName = "###";
+                                            }
+
+                                            sal_Bool bOptional =
+                                                ( eArgType == SC_ADDINARG_VALUE_OR_ARRAY ||
+                                                  eArgType == SC_ADDINARG_VARARGS );
+
+                                            aDesc.eType = eArgType;
+                                            aDesc.aName = aArgName;
+                                            aDesc.aDescription = aArgDesc;
+                                            aDesc.bOptional = bOptional;
+                                            //! initialize aInternalName only from config?
+                                            aDesc.aInternalName = pParArr[nParamPos].aName;
+
+                                            pVisibleArgs[nDestPos++] = aDesc;
                                         }
-
-                                        ppFuncData[nFuncPos+nOld] = new ScUnoAddInFuncData(
-                                            aFuncName, aLocalName, aDescription,
-                                            nCategory, sHelpId,
-                                            xFunc, aObject,
-                                            nVisibleCount, pVisibleArgs, nCallerPos );
-
-                                        const ScUnoAddInFuncData* pData =
-                                            ppFuncData[nFuncPos+nOld];
-                                        pExactHashMap->insert(
-                                                ScAddInHashMap::value_type(
-                                                    pData->GetOriginalName(),
-                                                    pData ) );
-                                        pNameHashMap->insert(
-                                                ScAddInHashMap::value_type(
-                                                    pData->GetUpperName(),
-                                                    pData ) );
-                                        pLocalHashMap->insert(
-                                                ScAddInHashMap::value_type(
-                                                    pData->GetUpperLocal(),
-                                                    pData ) );
-
-                                        delete[] pVisibleArgs;
                                     }
+                                    OSL_ENSURE( nDestPos==nVisibleCount, "wrong count" );
                                 }
+
+                                ppFuncData[nFuncPos+nOld] = new ScUnoAddInFuncData(
+                                    aFuncName, aLocalName, aDescription,
+                                    nCategory, sHelpId,
+                                    xFunc, aObject,
+                                    nVisibleCount, pVisibleArgs, nCallerPos );
+
+                                const ScUnoAddInFuncData* pData =
+                                    ppFuncData[nFuncPos+nOld];
+                                pExactHashMap->insert(
+                                        ScAddInHashMap::value_type(
+                                            pData->GetOriginalName(),
+                                            pData ) );
+                                pNameHashMap->insert(
+                                        ScAddInHashMap::value_type(
+                                            pData->GetUpperName(),
+                                            pData ) );
+                                pLocalHashMap->insert(
+                                        ScAddInHashMap::value_type(
+                                            pData->GetUpperLocal(),
+                                            pData ) );
+
+                                delete[] pVisibleArgs;
                             }
                         }
                     }
@@ -1066,119 +1059,112 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
 
     // only get the function information from Introspection
 
-    uno::Reference<lang::XMultiServiceFactory> xManager = comphelper::getProcessServiceFactory();
-    if ( xManager.is() )
+    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+
+    uno::Reference<beans::XIntrospection> xIntro = beans::Introspection::create(xContext);
+    uno::Any aObject;
+    aObject <<= xInterface;
+    uno::Reference<beans::XIntrospectionAccess> xAcc = xIntro->inspect(aObject);
+    if (xAcc.is())
     {
-        uno::Reference<beans::XIntrospection> xIntro(
-                                xManager->createInstance(rtl::OUString("com.sun.star.beans.Introspection")),
-                                uno::UNO_QUERY );
-        if ( xIntro.is() )
+        uno::Sequence< uno::Reference<reflection::XIdlMethod> > aMethods =
+                xAcc->getMethods( beans::MethodConcept::ALL );
+        long nMethodCount = aMethods.getLength();
+        const uno::Reference<reflection::XIdlMethod>* pArray = aMethods.getConstArray();
+        for (long nFuncPos=0; nFuncPos<nMethodCount; nFuncPos++)
         {
-            uno::Any aObject;
-            aObject <<= xInterface;
-            uno::Reference<beans::XIntrospectionAccess> xAcc = xIntro->inspect(aObject);
-            if (xAcc.is())
+            uno::Reference<reflection::XIdlMethod> xFunc = pArray[nFuncPos];
+            if (xFunc.is())
             {
-                uno::Sequence< uno::Reference<reflection::XIdlMethod> > aMethods =
-                        xAcc->getMethods( beans::MethodConcept::ALL );
-                long nMethodCount = aMethods.getLength();
-                const uno::Reference<reflection::XIdlMethod>* pArray = aMethods.getConstArray();
-                for (long nFuncPos=0; nFuncPos<nMethodCount; nFuncPos++)
+                rtl::OUString aFuncU = xFunc->getName();
+
+                // stored function name: (service name).(function)
+                rtl::OUStringBuffer aFuncNameBuffer( rServiceName.getLength()+1+aFuncU.getLength());
+                aFuncNameBuffer.append(rServiceName);
+                aFuncNameBuffer.append('.');
+                aFuncNameBuffer.append(aFuncU);
+                rtl::OUString aFuncName = aFuncNameBuffer.makeStringAndClear();
+
+                // internal names are skipped because no FuncData exists
+                ScUnoAddInFuncData* pOldData = const_cast<ScUnoAddInFuncData*>( GetFuncData( aFuncName ) );
+                if ( pOldData )
                 {
-                    uno::Reference<reflection::XIdlMethod> xFunc = pArray[nFuncPos];
-                    if (xFunc.is())
+                    // Create new (complete) argument info.
+                    // As in ReadFromAddIn, the reflection information is authoritative.
+                    // Local names and descriptions from pOldData are looked up using the
+                    // internal argument name.
+
+                    sal_Bool bValid = sal_True;
+                    long nVisibleCount = 0;
+                    long nCallerPos = SC_CALLERPOS_NONE;
+
+                    uno::Sequence<reflection::ParamInfo> aParams =
+                            xFunc->getParameterInfos();
+                    long nParamCount = aParams.getLength();
+                    const reflection::ParamInfo* pParArr = aParams.getConstArray();
+                    long nParamPos;
+                    for (nParamPos=0; nParamPos<nParamCount; nParamPos++)
                     {
-                        rtl::OUString aFuncU = xFunc->getName();
-
-                        // stored function name: (service name).(function)
-                        rtl::OUStringBuffer aFuncNameBuffer( rServiceName.getLength()+1+aFuncU.getLength());
-                        aFuncNameBuffer.append(rServiceName);
-                        aFuncNameBuffer.append('.');
-                        aFuncNameBuffer.append(aFuncU);
-                        rtl::OUString aFuncName = aFuncNameBuffer.makeStringAndClear();
-
-                        // internal names are skipped because no FuncData exists
-                        ScUnoAddInFuncData* pOldData = const_cast<ScUnoAddInFuncData*>( GetFuncData( aFuncName ) );
-                        if ( pOldData )
+                        if ( pParArr[nParamPos].aMode != reflection::ParamMode_IN )
+                            bValid = false;
+                        uno::Reference<reflection::XIdlClass> xParClass =
+                                    pParArr[nParamPos].aType;
+                        ScAddInArgumentType eArgType = lcl_GetArgType( xParClass );
+                        if ( eArgType == SC_ADDINARG_NONE )
+                            bValid = false;
+                        else if ( eArgType == SC_ADDINARG_CALLER )
+                            nCallerPos = nParamPos;
+                        else
+                            ++nVisibleCount;
+                    }
+                    if (bValid)
+                    {
+                        ScAddInArgDesc* pVisibleArgs = NULL;
+                        if ( nVisibleCount > 0 )
                         {
-                            // Create new (complete) argument info.
-                            // As in ReadFromAddIn, the reflection information is authoritative.
-                            // Local names and descriptions from pOldData are looked up using the
-                            // internal argument name.
-
-                            sal_Bool bValid = sal_True;
-                            long nVisibleCount = 0;
-                            long nCallerPos = SC_CALLERPOS_NONE;
-
-                            uno::Sequence<reflection::ParamInfo> aParams =
-                                    xFunc->getParameterInfos();
-                            long nParamCount = aParams.getLength();
-                            const reflection::ParamInfo* pParArr = aParams.getConstArray();
-                            long nParamPos;
+                            ScAddInArgDesc aDesc;
+                            pVisibleArgs = new ScAddInArgDesc[nVisibleCount];
+                            long nDestPos = 0;
                             for (nParamPos=0; nParamPos<nParamCount; nParamPos++)
                             {
-                                if ( pParArr[nParamPos].aMode != reflection::ParamMode_IN )
-                                    bValid = false;
                                 uno::Reference<reflection::XIdlClass> xParClass =
-                                            pParArr[nParamPos].aType;
+                                    pParArr[nParamPos].aType;
                                 ScAddInArgumentType eArgType = lcl_GetArgType( xParClass );
-                                if ( eArgType == SC_ADDINARG_NONE )
-                                    bValid = false;
-                                else if ( eArgType == SC_ADDINARG_CALLER )
-                                    nCallerPos = nParamPos;
-                                else
-                                    ++nVisibleCount;
-                            }
-                            if (bValid)
-                            {
-                                ScAddInArgDesc* pVisibleArgs = NULL;
-                                if ( nVisibleCount > 0 )
+                                if ( eArgType != SC_ADDINARG_CALLER )
                                 {
-                                    ScAddInArgDesc aDesc;
-                                    pVisibleArgs = new ScAddInArgDesc[nVisibleCount];
-                                    long nDestPos = 0;
-                                    for (nParamPos=0; nParamPos<nParamCount; nParamPos++)
+                                    const ScAddInArgDesc* pOldArgDesc =
+                                        lcl_FindArgDesc( *pOldData, pParArr[nParamPos].aName );
+                                    if ( pOldArgDesc )
                                     {
-                                        uno::Reference<reflection::XIdlClass> xParClass =
-                                            pParArr[nParamPos].aType;
-                                        ScAddInArgumentType eArgType = lcl_GetArgType( xParClass );
-                                        if ( eArgType != SC_ADDINARG_CALLER )
-                                        {
-                                            const ScAddInArgDesc* pOldArgDesc =
-                                                lcl_FindArgDesc( *pOldData, pParArr[nParamPos].aName );
-                                            if ( pOldArgDesc )
-                                            {
-                                                aDesc.aName = pOldArgDesc->aName;
-                                                aDesc.aDescription = pOldArgDesc->aDescription;
-                                            }
-                                            else
-                                                aDesc.aName = aDesc.aDescription = "###";
-
-                                            sal_Bool bOptional =
-                                                ( eArgType == SC_ADDINARG_VALUE_OR_ARRAY ||
-                                                  eArgType == SC_ADDINARG_VARARGS );
-
-                                            aDesc.eType = eArgType;
-                                            aDesc.bOptional = bOptional;
-                                            //! initialize aInternalName only from config?
-                                            aDesc.aInternalName = pParArr[nParamPos].aName;
-
-                                            pVisibleArgs[nDestPos++] = aDesc;
-                                        }
+                                        aDesc.aName = pOldArgDesc->aName;
+                                        aDesc.aDescription = pOldArgDesc->aDescription;
                                     }
-                                    OSL_ENSURE( nDestPos==nVisibleCount, "wrong count" );
+                                    else
+                                        aDesc.aName = aDesc.aDescription = "###";
+
+                                    sal_Bool bOptional =
+                                        ( eArgType == SC_ADDINARG_VALUE_OR_ARRAY ||
+                                          eArgType == SC_ADDINARG_VARARGS );
+
+                                    aDesc.eType = eArgType;
+                                    aDesc.bOptional = bOptional;
+                                    //! initialize aInternalName only from config?
+                                    aDesc.aInternalName = pParArr[nParamPos].aName;
+
+                                    pVisibleArgs[nDestPos++] = aDesc;
                                 }
-
-                                pOldData->SetFunction( xFunc, aObject );
-                                pOldData->SetArguments( nVisibleCount, pVisibleArgs );
-                                pOldData->SetCallerPos( nCallerPos );
-
-                                if ( pFunctionList )
-                                    lcl_UpdateFunctionList( *pFunctionList, *pOldData );
-
-                                delete[] pVisibleArgs;
                             }
+                            OSL_ENSURE( nDestPos==nVisibleCount, "wrong count" );
                         }
+
+                        pOldData->SetFunction( xFunc, aObject );
+                        pOldData->SetArguments( nVisibleCount, pVisibleArgs );
+                        pOldData->SetCallerPos( nCallerPos );
+
+                        if ( pFunctionList )
+                            lcl_UpdateFunctionList( *pFunctionList, *pOldData );
+
+                        delete[] pVisibleArgs;
                     }
                 }
             }

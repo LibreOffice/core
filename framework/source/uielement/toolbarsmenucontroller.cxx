@@ -41,6 +41,7 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -229,7 +230,7 @@ rtl::OUString ToolbarsMenuController::getUINameFromCommand( const rtl::OUString&
     {
         try
         {
-            Reference< XModuleManager > xModuleManager( m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
             m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
             Reference< XNameAccess > xNameAccess( m_xServiceManager->createInstance(
                                                                     SERVICENAME_UICOMMANDDESCRIPTION ),
@@ -831,9 +832,7 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
 
         if ( m_bInitialized )
         {
-            Reference< XModuleManager > xModuleManager( m_xServiceManager->createInstance(
-                                                            SERVICENAME_MODULEMANAGER ),
-                                                        UNO_QUERY );
+            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
             Reference< XNameAccess > xPersistentWindowStateSupplier( m_xServiceManager->createInstance(
                                                                         SERVICENAME_WINDOWSTATECONFIGURATION ),
                                                                      UNO_QUERY );

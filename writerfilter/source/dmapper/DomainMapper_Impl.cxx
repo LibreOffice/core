@@ -76,14 +76,14 @@ using namespace ::rtl;
 namespace writerfilter {
 namespace dmapper{
 
-sal_Bool lcl_IsUsingEnhancedFields( const uno::Reference< lang::XMultiServiceFactory >& rFac )
+sal_Bool lcl_IsUsingEnhancedFields( const uno::Reference< uno::XComponentContext >& rxContext )
 {
     bool bResult(sal_False);
     try
     {
         OUString writerConfig = "org.openoffice.Office.Common";
 
-        uno::Reference< uno::XInterface > xCfgAccess = ::comphelper::ConfigurationHelper::openConfig( rFac, writerConfig, ::comphelper::ConfigurationHelper::E_READONLY );
+        uno::Reference< uno::XInterface > xCfgAccess = ::comphelper::ConfigurationHelper::openConfig( rxContext, writerConfig, ::comphelper::ConfigurationHelper::E_READONLY );
         ::comphelper::ConfigurationHelper::readRelativeKey( xCfgAccess, OUString( "Filter/Microsoft/Import"  ), OUString( "ImportWWFieldsAsEnhancedFields"  ) ) >>= bResult;
 
     }
@@ -155,7 +155,8 @@ DomainMapper_Impl::DomainMapper_Impl(
             DomainMapper& rDMapper,
             uno::Reference < uno::XComponentContext >  xContext,
             uno::Reference< lang::XComponent >  xModel,
-            SourceDocumentType eDocumentType) :
+            SourceDocumentType eDocumentType,
+            bool bIsNewDoc) :
         m_eDocumentType( eDocumentType ),
         m_rDMapper( rDMapper ),
         m_xTextDocument( xModel, uno::UNO_QUERY ),
@@ -182,7 +183,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsLastParaInSection( false ),
         m_bParaSectpr( false ),
         m_bUsingEnhancedFields( false ),
-        m_bSdt(false)
+        m_bSdt(false),
+        m_bIsNewDoc(bIsNewDoc)
 {
     appendTableManager( );
     GetBodyText();
@@ -196,7 +198,7 @@ DomainMapper_Impl::DomainMapper_Impl(
     getTableManager( ).setHandler(m_pTableHandler);
 
     getTableManager( ).startLevel();
-    m_bUsingEnhancedFields = lcl_IsUsingEnhancedFields( uno::Reference< lang::XMultiServiceFactory >( m_xComponentContext->getServiceManager(), uno::UNO_QUERY ) );
+    m_bUsingEnhancedFields = lcl_IsUsingEnhancedFields( m_xComponentContext );
 
 }
 
@@ -3469,7 +3471,9 @@ _PageMar::_PageMar()
 {
     header = footer = ConversionHelper::convertTwipToMM100(sal_Int32(720));
     top = bottom = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
-    right = left = ConversionHelper::convertTwipToMM100( sal_Int32(1800));
+    // This is strange, the RTF spec says it's 1800, but it's clearly 1440 in Word
+    // OOXML seems not to specify a default value
+    right = left = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
     gutter = 0;
 }
 
@@ -3663,6 +3667,7 @@ void DomainMapper_Impl::ApplySettingsTable()
                 xSettings->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_EMBED_FONTS ), uno::makeAny(true) );
             if( m_pSettingsTable->GetEmbedSystemFonts())
                 xSettings->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_EMBED_SYSTEM_FONTS ), uno::makeAny(true) );
+            xSettings->setPropertyValue("AddParaTableSpacing", uno::makeAny(m_pSettingsTable->GetDoNotUseHTMLParagraphAutoSpacing()));
         }
         catch(const uno::Exception&)
         {
@@ -3795,6 +3800,11 @@ sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(OUString aProp)
     }
 
     return nRet;
+}
+
+bool DomainMapper_Impl::IsNewDoc()
+{
+    return m_bIsNewDoc;
 }
 
 }}

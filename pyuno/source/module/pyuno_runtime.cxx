@@ -30,6 +30,7 @@
 #include <typelib/typedescription.hxx>
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 
@@ -59,6 +60,7 @@ using com::sun::star::script::XInvocationAdapterFactory2;
 using com::sun::star::script::XInvocation;
 using com::sun::star::beans::XMaterialHolder;
 using com::sun::star::beans::XIntrospection;
+using com::sun::star::beans::Introspection;
 
 #include <vector>
 
@@ -278,15 +280,7 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
             OUString(  "pyuno: couldn't instantiate invocation adapter factory service" ),
             Reference< XInterface > () );
 
-    c->xIntrospection = Reference< XIntrospection > (
-        ctx->getServiceManager()->createInstanceWithContext(
-            OUString(  "com.sun.star.beans.Introspection"  ),
-            ctx ),
-        UNO_QUERY );
-    if( ! c->xIntrospection.is() )
-        throw RuntimeException(
-            OUString(  "pyuno: couldn't instantiate introspection service" ),
-            Reference< XInterface > () );
+    c->xIntrospection = Introspection::create(ctx);
 
     Any a = ctx->getValueByName(OUString( "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) );
     a >>= c->xTdMgr;

@@ -261,9 +261,7 @@ void SdHtmlOptionsDialog::setSourceDocument( const Reference< XComponent >& xDoc
         throw ( IllegalArgumentException, RuntimeException )
 {
     // try to set the corresponding metric unit
-    String aConfigPath;
-    Reference< XServiceInfo > xServiceInfo
-            ( xDoc, UNO_QUERY );
+    Reference< XServiceInfo > xServiceInfo(xDoc, UNO_QUERY);
     if ( xServiceInfo.is() )
     {
         if ( xServiceInfo->supportsService( "com.sun.star.presentation.PresentationDocument" ) )

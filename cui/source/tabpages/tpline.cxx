@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <editeng/sizeitem.hxx>
 #include <tools/shl.hxx>
@@ -110,6 +101,10 @@ SvxLineTabPage::SvxLineTabPage
     maFLEdgeStyle       ( this, CUI_RES( FL_EDGE_STYLE ) ),
     maFTEdgeStyle       ( this, CUI_RES( FT_EDGE_STYLE ) ),
     maLBEdgeStyle       ( this, CUI_RES( LB_EDGE_STYLE ) ),
+
+    // LineCaps
+    maFTCapStyle        ( this, CUI_RES( FT_CAP_STYLE ) ),
+    maLBCapStyle        ( this, CUI_RES( LB_CAP_STYLE ) ),
 
     pSymbolList(NULL),
     bNewSize(false),
@@ -211,6 +206,10 @@ SvxLineTabPage::SvxLineTabPage
     // #116827#
     Link aEdgeStyle = LINK( this, SvxLineTabPage, ChangeEdgeStyleHdl_Impl );
     maLBEdgeStyle.SetSelectHdl( aEdgeStyle );
+
+    // LineCaps
+    Link aCapStyle = LINK( this, SvxLineTabPage, ChangeCapStyleHdl_Impl );
+    maLBCapStyle.SetSelectHdl( aCapStyle );
 
     // Symbols on a line (eg star charts), MB-handler set
     aSymbolMB.SetSelectHdl(LINK(this, SvxLineTabPage, GraphicHdl_Impl));
@@ -372,8 +371,8 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
                 pObj->SetMergedItemSet(rOutAttrs);
             }
             pView->MarkAll();
-            Bitmap aBitmap(pView->GetAllMarkedBitmap());
-            GDIMetaFile aMeta(pView->GetAllMarkedMetaFile());
+            BitmapEx aBitmapEx(pView->GetMarkedObjBitmapEx());
+            GDIMetaFile aMeta(pView->GetMarkedObjMetaFile());
             pView->UnmarkAll();
             pObj=pPage->RemoveObject(1);
             SdrObject::Free(pObj);
@@ -390,16 +389,16 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
                 aGrfBrushItems.push_back( pInfo );
             }
 
-            Size aSize(aBitmap.GetSizePixel());
+            Size aSize(aBitmapEx.GetSizePixel());
             if(aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
             {
                 sal_Bool bWidth = aSize.Width() > aSize.Height();
                 double nScale = bWidth ?
                                     (double)MAX_BMP_WIDTH / (double)aSize.Width():
                                     (double)MAX_BMP_HEIGHT / (double)aSize.Height();
-                aBitmap.Scale(nScale, nScale);
+                aBitmapEx.Scale(nScale, nScale);
             }
-            Image aImage(aBitmap);
+            Image aImage(aBitmapEx);
             pPopup->InsertItem(pInfo->nItemId,aEmptyStr,aImage);
         }
         pInvisibleSquare=pPage->RemoveObject(0);
@@ -678,6 +677,10 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         maFLEdgeStyle.Hide();
         maFTEdgeStyle.Hide();
         maLBEdgeStyle.Hide();
+
+        // LineCaps
+        maFTCapStyle.Hide();
+        maLBCapStyle.Hide();
     }
 }
 
@@ -944,6 +947,45 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
     }
 
+    // LineCaps
+    nPos = maLBCapStyle.GetSelectEntryPos();
+    if( LISTBOX_ENTRY_NOTFOUND != nPos && nPos != maLBCapStyle.GetSavedValue() )
+    {
+        XLineCapItem* pNew = 0L;
+
+        switch(nPos)
+        {
+            case 0: // Butt (=Flat), default
+            {
+                pNew = new XLineCapItem(com::sun::star::drawing::LineCap_BUTT);
+                break;
+            }
+            case 1: // Round
+            {
+                pNew = new XLineCapItem(com::sun::star::drawing::LineCap_ROUND);
+                break;
+            }
+            case 2: // Square
+            {
+                pNew = new XLineCapItem(com::sun::star::drawing::LineCap_SQUARE);
+                break;
+            }
+        }
+
+        if(pNew)
+        {
+            pOld = GetOldItem( rAttrs, XATTR_LINECAP );
+
+            if(!pOld || !(*(const XLineCapItem*)pOld == *pNew))
+            {
+                rAttrs.Put( *pNew );
+                bModified = sal_True;
+            }
+
+            delete pNew;
+        }
+    }
+
     if(nSymbolType!=SVX_SYMBOLTYPE_UNKNOWN || bNewSize)
     {
         // Was set by selection or the size is different
@@ -1058,6 +1100,30 @@ sal_Bool SvxLineTabPage::FillXLSet_Impl()
         }
     }
 
+    // LineCaps
+    nPos = maLBCapStyle.GetSelectEntryPos();
+    if(LISTBOX_ENTRY_NOTFOUND != nPos)
+    {
+        switch(nPos)
+        {
+            case 0: // Butt (=Flat), default
+            {
+                rXLSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_BUTT));
+                break;
+            }
+            case 1: // Round
+            {
+                rXLSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_ROUND));
+                break;
+            }
+            case 2: // Square
+            {
+                rXLSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_SQUARE));
+                break;
+            }
+        }
+    }
+
     rXLSet.Put( XLineStartWidthItem( GetCoreValue( aMtrStartWidth, ePoolUnit ) ) );
     rXLSet.Put( XLineEndWidthItem( GetCoreValue( aMtrEndWidth, ePoolUnit ) ) );
 
@@ -1161,7 +1227,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
                     pInvisibleSquare->SetMergedItem(XLineTransparenceItem(100));
 
                     pView->MarkAll();
-                    GDIMetaFile aMeta(pView->GetAllMarkedMetaFile());
+                    GDIMetaFile aMeta(pView->GetMarkedObjMetaFile());
 
                     aSymbolGraphic=Graphic(aMeta);
                     aSymbolSize=pObj->GetSnapRect().GetSize();
@@ -1457,6 +1523,28 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         maLBEdgeStyle.SetNoSelection();
     }
 
+    // fdo#43209
+    if(bObjSelected && SFX_ITEM_DEFAULT == rAttrs.GetItemState(XATTR_LINECAP))
+    {
+        maFTCapStyle.Disable();
+        maLBCapStyle.Disable();
+    }
+    else if(SFX_ITEM_DONTCARE != rAttrs.GetItemState(XATTR_LINECAP))
+    {
+        const com::sun::star::drawing::LineCap eLineCap(((const XLineCapItem&)(rAttrs.Get(XATTR_LINECAP))).GetValue());
+
+        switch(eLineCap)
+        {
+            case com::sun::star::drawing::LineCap_ROUND: maLBCapStyle.SelectEntryPos(1); break;
+            case com::sun::star::drawing::LineCap_SQUARE : maLBCapStyle.SelectEntryPos(2); break;
+            default /*com::sun::star::drawing::LineCap_BUTT*/: maLBCapStyle.SelectEntryPos(0); break;
+        }
+    }
+    else
+    {
+        maLBCapStyle.SetNoSelection();
+    }
+
     // Save values
     aLbLineStyle.SaveValue();
     aMtrLineWidth.SaveValue();
@@ -1471,6 +1559,9 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
 
     // #116827#
     maLBEdgeStyle.SaveValue();
+
+    // LineCaps
+    maLBCapStyle.SaveValue();
 
     ClickInvisibleHdl_Impl( this );
 
@@ -1587,6 +1678,15 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeEdgeStyleHdl_Impl)
 }
 
 //------------------------------------------------------------------------
+// fdo#43209
+
+IMPL_LINK( SvxLineTabPage, ChangeCapStyleHdl_Impl, void *, EMPTYARG )
+{
+    ChangePreviewHdl_Impl( this );
+
+    return( 0L );
+}
+//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
 {
@@ -1613,6 +1713,10 @@ IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
             // #116827#
             maFTEdgeStyle.Disable();
             maLBEdgeStyle.Disable();
+
+            // LineCaps
+            maFTCapStyle.Disable();
+            maLBCapStyle.Disable();
         }
     }
     else
@@ -1637,6 +1741,10 @@ IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
             // #116827#
             maFTEdgeStyle.Enable();
             maLBEdgeStyle.Enable();
+
+            // LineCaps
+            maFTCapStyle.Enable();
+            maLBCapStyle.Enable();
         }
     }
     ChangePreviewHdl_Impl( NULL );

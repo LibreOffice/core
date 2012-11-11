@@ -632,9 +632,9 @@ public:
         @param cSep  The character to separate the tokens.
         @param nSepCount  Specifies how often cSep is inserted between two tokens.
         @param bForceSep  true = Always insert separator; false = Only, if not at begin or end. */
-    SC_DLLPUBLIC static void             AddToken(
-                                String& rTokenList, const String& rToken,
-                                sal_Unicode cSep, xub_StrLen nSepCount = 1,
+    SC_DLLPUBLIC static OUString addToken(
+                                const OUString& rTokenList, const OUString& rToken,
+                                sal_Unicode cSep, sal_Int32 nSepCount = 1,
                                 bool bForceSep = false );
 
     /** Returns true, if the first and last character of the string is cQuote. */

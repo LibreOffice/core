@@ -25,6 +25,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 
@@ -88,16 +89,12 @@ SvtAcceleratorConfig_Impl::SvtAcceleratorConfig_Impl( Reference< XInputStream >&
 
 bool SvtAcceleratorConfig_Impl::Commit( Reference< XOutputStream >& rOutputStream )
 {
-    Reference< XDocumentHandler > xWriter;
+    Reference< XWriter > xWriter = Writer::create( ::comphelper::getProcessComponentContext() );
 
-    xWriter = Reference< XDocumentHandler >( ::comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString("com.sun.star.xml.sax.Writer")), UNO_QUERY) ;
-
-    Reference< ::com::sun::star::io::XActiveDataSource> xDataSource( xWriter , UNO_QUERY );
-    xDataSource->setOutputStream( rOutputStream );
+    xWriter->setOutputStream( rOutputStream );
     try
     {
-        OWriteAccelatorDocumentHandler aWriteHandler( aList, xWriter );
+        OWriteAccelatorDocumentHandler aWriteHandler( aList, Reference<XDocumentHandler>(xWriter, UNO_QUERY_THROW) );
         aWriteHandler.WriteAcceleratorDocument();
         rOutputStream->flush();
         return true;

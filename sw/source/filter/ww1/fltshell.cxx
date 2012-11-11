@@ -325,6 +325,8 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
     myEIter aI = maEntries.begin();
     while (aI != maEntries.end())
     {
+        bool bLastEntry = aI == maEntries.end() - 1;
+
         SwFltStackEntry& rEntry = *aI;
         if (rEntry.bOpen)
         {
@@ -350,7 +352,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
             {
                 rEntry.bConsumedByField = consumedByField;
                 rEntry.SetEndPos(rPos);
-                if (nAttrId == rEntry.pAttr->Which())
+                if (bLastEntry && nAttrId == rEntry.pAttr->Which())
                 {
                     //potential candidate for merging with an identical
                     //property beginning at rPos
@@ -377,7 +379,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
             //we advance to the next node, or finish processing the document
             if (rEntry.m_aPtPos.m_nNode.GetIndex() == aFltPos.m_nNode.GetIndex())
             {
-                if (nAttrId == rEntry.pAttr->Which() &&
+                if (bLastEntry && nAttrId == rEntry.pAttr->Which() &&
                     rEntry.m_aPtPos.m_nCntnt == aFltPos.m_nCntnt)
                 {
                     //potential candidate for merging with an identical
@@ -441,12 +443,12 @@ static sal_Bool IterateNumrulePiece( const SwNodeIndex& rEnd,
 {
     while( ( rTmpStart <= rEnd )
            && !( rTmpStart.GetNode().IsTxtNode() ) )    // suche gueltigen Anfang
-        rTmpStart++;
+        ++rTmpStart;
 
     rTmpEnd = rTmpStart;
     while( ( rTmpEnd <= rEnd )
            && ( rTmpEnd.GetNode().IsTxtNode() ) )       // suche gueltiges Ende + 1
-        rTmpEnd++;
+        ++rTmpEnd;
 
     rTmpEnd--;                                      // gueltiges Ende
 
@@ -504,7 +506,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         pDoc->SetNumRule( aTmpPam, *pRul, false );
 
                         aTmpStart = aTmpEnd;    // Start fuer naechstes Teilstueck
-                        aTmpStart++;
+                        ++aTmpStart;
                     }
                 }
                 else
@@ -2037,7 +2039,7 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
 
     nPos = GetDoc().MakePageDesc( ViewShell::GetShellRes()->GetPageDescName(
                                    GetDoc().GetPageDescCnt(), bFollow ? ShellResource::FOLLOW_PAGE : ShellResource::NORMAL_PAGE),
-                                pFirstPageDesc, sal_False );
+                                pFirstPageDesc, false );
 
     pNewPD =  &GetDoc().GetPageDesc(nPos);
     if (bFollow)

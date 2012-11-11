@@ -52,7 +52,7 @@
 #include <comcore.hrc>
 #include <numrule.hxx>
 
-extern sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, xub_StrLen nMySttPos,
+extern bool IsFrameBehind( const SwTxtNode& rMyNd, xub_StrLen nMySttPos,
                            const SwTxtNode& rBehindNd, xub_StrLen nSttPos );
 
 using namespace ::com::sun::star;
@@ -213,9 +213,9 @@ void SwTOXSortTabBase::FillText( SwTxtNode& rNd, const SwIndex& rInsPos,
     rNd.InsertText( sMyTxt, rInsPos );
 }
 
-sal_Bool SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
+bool SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
 {
-    sal_Bool bRet = nPos == rCmp.nPos && nCntPos == rCmp.nCntPos &&
+    bool bRet = nPos == rCmp.nPos && nCntPos == rCmp.nCntPos &&
             (!aTOXSources[0].pNd || !rCmp.aTOXSources[0].pNd ||
             aTOXSources[0].pNd == rCmp.aTOXSources[0].pNd );
 
@@ -247,15 +247,15 @@ sal_Bool SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
     return bRet;
 }
 
-sal_Bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
+bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
 {
     if( nPos < rCmp.nPos )
-        return sal_True;
+        return true;
 
     if( nPos == rCmp.nPos )
     {
         if( nCntPos < rCmp.nCntPos )
-            return sal_True;
+            return true;
 
         if( nCntPos == rCmp.nCntPos )
         {
@@ -267,7 +267,7 @@ sal_Bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
                 if( TOX_SORT_CONTENT == nType && pTxtMark && rCmp.pTxtMark )
                 {
                     if( *pTxtMark->GetStart() < *rCmp.pTxtMark->GetStart() )
-                        return sal_True;
+                        return true;
 
                     if( *pTxtMark->GetStart() == *rCmp.pTxtMark->GetStart() )
                     {
@@ -289,7 +289,7 @@ sal_Bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
                                                sOtherTxt, sOtherTxtReading, rCmp.GetLocale() );
 
                         if( pEnd && !pEndCmp )
-                            return sal_True;
+                            return true;
                     }
                 }
             }
@@ -299,7 +299,7 @@ sal_Bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
                                             *(SwTxtNode*)pFirst, nCntPos );
         }
     }
-    return sal_False;
+    return false;
 }
 
 /*--------------------------------------------------------------------
@@ -324,13 +324,13 @@ SwTOXIndex::SwTOXIndex( const SwTxtNode& rNd,
 //
 
 
-sal_Bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
+bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
 {
     SwTOXIndex& rCmp = (SwTOXIndex&)rCmpBase;
 
     // Respect case taking dependencies into account
     if(GetLevel() != rCmp.GetLevel() || nKeyLevel != rCmp.nKeyLevel)
-        return sal_False;
+        return false;
 
     OSL_ENSURE(pTxtMark, "pTxtMark == 0, No keyword");
 
@@ -342,7 +342,7 @@ sal_Bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
     String sOtherTxtReading;
     rCmp.GetTxt( sOtherTxt, sOtherTxtReading );
 
-    sal_Bool bRet = pTOXIntl->IsEqual( sMyTxt, sMyTxtReading, GetLocale(),
+    bool bRet = pTOXIntl->IsEqual( sMyTxt, sMyTxtReading, GetLocale(),
                                    sOtherTxt, sOtherTxtReading, rCmp.GetLocale() );
 
     // If we don't summarize we need to evaluate the Pos
@@ -355,7 +355,7 @@ sal_Bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
 //
 // operator, only depends on the text
 
-sal_Bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
+bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 {
     SwTOXIndex& rCmp = (SwTOXIndex&)rCmpBase;
 
@@ -369,7 +369,7 @@ sal_Bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
     String sOtherTxtReading;
     rCmp.GetTxt( sOtherTxt, sOtherTxtReading );
 
-    sal_Bool bRet = GetLevel() == rCmp.GetLevel() &&
+    bool bRet = GetLevel() == rCmp.GetLevel() &&
                 pTOXIntl->IsLess( sMyTxt, sMyTxtReading, GetLocale(),
                                   sOtherTxt, sOtherTxtReading, rCmp.GetLocale() );
 
@@ -476,7 +476,7 @@ SwTOXCustom::SwTOXCustom(const String& rStr, const String& rReading,
 }
 
 
-sal_Bool SwTOXCustom::operator==(const SwTOXSortTabBase& rCmpBase)
+bool SwTOXCustom::operator==(const SwTOXSortTabBase& rCmpBase)
 {
     String sMyTxt;
     String sMyTxtReading;
@@ -492,7 +492,7 @@ sal_Bool SwTOXCustom::operator==(const SwTOXSortTabBase& rCmpBase)
 }
 
 
-sal_Bool SwTOXCustom::operator < (const SwTOXSortTabBase& rCmpBase)
+bool SwTOXCustom::operator < (const SwTOXSortTabBase& rCmpBase)
 {
     String sMyTxt;
     String sMyTxtReading;
@@ -826,16 +826,16 @@ void    SwTOXAuthority::FillText( SwTxtNode& rNd,
     rNd.InsertText( sText, rInsPos );
 }
 
-sal_Bool    SwTOXAuthority::operator==( const SwTOXSortTabBase& rCmp)
+bool    SwTOXAuthority::operator==( const SwTOXSortTabBase& rCmp)
 {
     return nType == rCmp.nType &&
             ((SwAuthorityField*)m_rField.GetFld())->GetHandle() ==
                 ((SwAuthorityField*)((SwTOXAuthority&)rCmp).m_rField.GetFld())->GetHandle();
 }
 
-sal_Bool    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
+bool    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwAuthorityField* pField = (SwAuthorityField*)m_rField.GetFld();
     SwAuthorityFieldType* pType = (SwAuthorityFieldType*)
                                                 pField->GetTyp();

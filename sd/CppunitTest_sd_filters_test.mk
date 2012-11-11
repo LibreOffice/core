@@ -96,6 +96,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_filters_test,\
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
     i18npool/util/i18npool \
+    linguistic/source/lng \
     oox/util/oox \
     package/source/xstor/xstor \
     package/util/package2 \
@@ -113,6 +114,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_filters_test,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    xmloff/util/xo \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_filters_test))

@@ -63,20 +63,20 @@ class SwGlTreeListBox : public SvTreeListBox
 {
     const String    sReadonly;
 
-    SvLBoxEntry*  pDragEntry;
+    SvTreeListEntry*  pDragEntry;
 
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rContainer,
-                                            SvLBoxEntry* );
-    virtual sal_Bool    NotifyAcceptDrop( SvLBoxEntry* );
+                                            SvTreeListEntry* );
+    virtual sal_Bool    NotifyAcceptDrop( SvTreeListEntry* );
 
-    virtual sal_Bool    NotifyMoving(   SvLBoxEntry*  pTarget,
-                                    SvLBoxEntry*  pEntry,
-                                    SvLBoxEntry*& rpNewParent,
+    virtual sal_Bool    NotifyMoving(   SvTreeListEntry*  pTarget,
+                                    SvTreeListEntry*  pEntry,
+                                    SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos
                                 );
-    virtual sal_Bool    NotifyCopying(  SvLBoxEntry*  pTarget,
-                                    SvLBoxEntry*  pEntry,
-                                    SvLBoxEntry*& rpNewParent,
+    virtual sal_Bool    NotifyCopying(  SvTreeListEntry*  pTarget,
+                                    SvTreeListEntry*  pEntry,
+                                    SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos);
 public:
     SwGlTreeListBox(Window* pParent, const ResId& rResId);
@@ -148,7 +148,7 @@ class SwGlossaryDlg : public SvxStandardDialog
 
     virtual void    Apply();
     void            Init();
-    SvLBoxEntry*    DoesBlockExist(const String& sBlock, const String& rShort);
+    SvTreeListEntry*    DoesBlockExist(const String& sBlock, const String& rShort);
     void            ShowAutoText(const String& rGroup, const String& rShortName);
     void            ResumeShowAutoText();
 

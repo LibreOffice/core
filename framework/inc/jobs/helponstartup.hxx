@@ -31,7 +31,7 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 
 
 namespace framework{
@@ -57,7 +57,7 @@ class HelpOnStartup : private ThreadHelpBase
 
         //.......................................
         /** @short  such module manager is used to classify new opened documents. */
-        css::uno::Reference< css::frame::XModuleManager > m_xModuleManager;
+        css::uno::Reference< css::frame::XModuleManager2 > m_xModuleManager;
 
         //.......................................
         /** @short  is needed to locate a might open help frame. */

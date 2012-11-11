@@ -660,7 +660,6 @@ void AreaChart::createShapes()
 
             //for the area chart there should be at most one x slot (no side by side stacking available)
             //attention different: xSlots are always interpreted as independent areas one behind the other: @todo this doesn't work why not???
-            aXSlotIter = aZSlotIter->begin();
             for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, ++nX )
             {
                 std::vector<VDataSeries*>& rSeriesList = aXSlotIter->m_aSeriesVector;

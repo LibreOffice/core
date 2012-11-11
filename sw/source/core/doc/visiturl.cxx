@@ -64,7 +64,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
             pDoc->GetDocShell()->GetMedium()->GetName().equals(sURL) )
             (sBkmk = pIURL->GetMark()).Insert( INET_MARK_TOKEN, 0 );
 
-        sal_Bool bAction = sal_False, bUnLockView = sal_False;
+        bool bAction = false, bUnLockView = false;
         const SwFmtINetFmt* pItem;
         const SwTxtINetFmt* pTxtAttr;
         const SwTxtNode* pTxtNd;
@@ -80,7 +80,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
                 if( !bAction && pESh )
                 {
                     pESh->StartAllAction();
-                    bAction = sal_True;
+                    bAction = true;
                     bUnLockView = !pESh->IsViewLocked();
                     pESh->LockView( sal_True );
                 }
@@ -101,9 +101,9 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
 // Check if the URL has been visited before. Via the Doc, if only one Bookmark is set
 // We need to put the Doc's name before it!
-sal_Bool SwDoc::IsVisitedURL( const String& rURL ) const
+bool SwDoc::IsVisitedURL( const String& rURL ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( rURL.Len() )
     {
         INetURLHistory *pHist = INetURLHistory::GetOrCreate();

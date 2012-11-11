@@ -30,7 +30,7 @@ class ResId;
            25 hours or 10 minus 20 seconds being (non-negative) 10 seconds.
 */
 
-class TOOLS_DLLPUBLIC Time
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Time
 {
 private:
     sal_Int32       nTime;

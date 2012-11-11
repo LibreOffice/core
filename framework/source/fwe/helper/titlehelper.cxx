@@ -32,7 +32,7 @@
 
 #include <com/sun/star/frame/UntitledNumbersConst.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
@@ -50,9 +50,9 @@ namespace framework{
 namespace css = ::com::sun::star;
 
 //-----------------------------------------------
-TitleHelper::TitleHelper(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+TitleHelper::TitleHelper(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
     : ::cppu::BaseMutex ()
-    , m_xSMGR           (xSMGR)
+    , m_xContext        (rxContext)
     , m_xOwner          ()
     , m_xUntitledNumbers()
     , m_xSubTitle       ()
@@ -558,24 +558,19 @@ void TitleHelper::impl_appendModuleName (::rtl::OUStringBuffer& sTitle)
     // SYNCHRONIZED ->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-        css::uno::Reference< css::uno::XInterface >            xOwner = m_xOwner.get();
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = m_xSMGR;
+        css::uno::Reference< css::uno::XInterface >        xOwner   = m_xOwner.get();
+        css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
 
     aLock.clear ();
     // <- SYNCHRONIZED
 
     try
     {
-        css::uno::Reference< css::frame::XModuleManager > xModuleManager(
-            xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
-            css::uno::UNO_QUERY_THROW);
-
-        css::uno::Reference< css::container::XNameAccess > xConfig(
-            xModuleManager,
-            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+            css::frame::ModuleManager::create(xContext);
 
         const ::rtl::OUString                 sID     = xModuleManager->identify(xOwner);
-              ::comphelper::SequenceAsHashMap lProps  = xConfig->getByName (sID);
+              ::comphelper::SequenceAsHashMap lProps  = xModuleManager->getByName (sID);
         const ::rtl::OUString                 sUIName = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_UINAME, ::rtl::OUString());
 
         // An UIname property is an optional value !

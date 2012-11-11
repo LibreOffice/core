@@ -43,7 +43,6 @@
 #include <sdrhhcwrap.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
-#include <txatritr.hxx>
 #include <mdiexp.hxx>       // Progress
 #include <edtwin.hxx>
 #include <crsskip.hxx>

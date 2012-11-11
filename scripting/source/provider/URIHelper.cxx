@@ -19,6 +19,7 @@
 
 
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "URIHelper.hxx"
 
@@ -67,11 +68,7 @@ ScriptingFrameworkURIHelper::ScriptingFrameworkURIHelper(
 
     try
     {
-        m_xUriReferenceFactory = uno::Reference< uri::XUriReferenceFactory >(
-            xContext->getServiceManager()->createInstanceWithContext(
-                OUString(
-                    "com.sun.star.uri.UriReferenceFactory"),
-            xContext ), uno::UNO_QUERY_THROW );
+        m_xUriReferenceFactory = uri::UriReferenceFactory::create( xContext );
     }
     catch (uno::Exception&)
     {

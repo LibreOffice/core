@@ -189,6 +189,15 @@
  
  			cairo_cv_xml_use=$use_xml
  			cairo_cv_xml_cache_vars=" BASE REQUIRES CFLAGS NONPKGCONFIG_CFLAGS LIBS NONPKGCONFIG_LIBS NONPKGCONFIG_EXTRA_LIBS"
+@@ -32864,7 +32864,7 @@
+ $_compile_program
+ _ACEOF
+ if ac_fn_c_try_link "$LINENO"; then :
+-  cairo_cc_stderr=`test -f conftest.err && cat conftest.err`
++  cairo_cc_stderr=`test -f conftest.err && grep -v 'ld: warning: object file compiled with -mlong-branch which is no longer needed.' conftest.err`
+ 		 cairo_cc_flag=yes
+ else
+   cairo_cc_stderr=`test -f conftest.err && cat conftest.err`
 --- misc/cairo-1.10.2/src/cairo-deflate-stream.c	2010-06-18 13:47:12.000000000 +0200
 +++ misc/build/cairo-1.10.2/src/cairo-deflate-stream.c	2010-06-18 13:47:12.000000000 +0200
 @@ -37,7 +37,11 @@

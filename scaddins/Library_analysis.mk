@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_internal_comprehensive_api,analysis,\
 ))
 
 $(eval $(call gb_Library_use_libraries,analysis,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \

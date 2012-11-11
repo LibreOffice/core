@@ -1,31 +1,25 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
+#include "sal/config.h"
+
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <tools/rc.h>
 #include <vcl/svapp.hxx>
@@ -158,7 +152,7 @@ static void ImplSkipDelimiters( const sal_Unicode*& rpBuf )
 
 // -----------------------------------------------------------------------
 
-static int ImplIsPatternChar( xub_Unicode cChar, sal_Char cEditMask )
+static int ImplIsPatternChar( sal_Unicode cChar, sal_Char cEditMask )
 {
     sal_Int32 nType = 0;
 
@@ -206,7 +200,7 @@ static int ImplIsPatternChar( xub_Unicode cChar, sal_Char cEditMask )
 
 // -----------------------------------------------------------------------
 
-static xub_Unicode ImplPatternChar( xub_Unicode cChar, sal_Char cEditMask )
+static sal_Unicode ImplPatternChar( sal_Unicode cChar, sal_Char cEditMask )
 {
     if ( ImplIsPatternChar( cChar, cEditMask ) )
     {
@@ -224,7 +218,7 @@ static xub_Unicode ImplPatternChar( xub_Unicode cChar, sal_Char cEditMask )
 
 // -----------------------------------------------------------------------
 
-static int ImplKommaPointCharEqual( xub_Unicode c1, xub_Unicode c2 )
+static int ImplKommaPointCharEqual( sal_Unicode c1, sal_Unicode c2 )
 {
     if ( c1 == c2 )
         return sal_True;
@@ -247,9 +241,9 @@ static XubString ImplPatternReformat( const XubString& rStr,
 
     XubString   aStr    = rStr;
     XubString   aOutStr = rLiteralMask;
-    xub_Unicode cTempChar;
-    xub_Unicode cChar;
-    xub_Unicode cLiteral;
+    sal_Unicode cTempChar;
+    sal_Unicode cChar;
+    sal_Unicode cLiteral;
     sal_Char    cMask;
     xub_StrLen  nStrIndex = 0;
     xub_StrLen  i = 0;
@@ -487,7 +481,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
     Selection   aOldSel     = pEdit->GetSelection();
     KeyCode     aCode       = rKEvt.GetKeyCode();
-    xub_Unicode cChar       = rKEvt.GetCharCode();
+    sal_Unicode cChar       = rKEvt.GetCharCode();
     sal_uInt16      nKeyCode    = aCode.GetCode();
     sal_Bool        bShift      = aCode.IsShift();
     xub_StrLen  nCursorPos  = (xub_StrLen)aOldSel.Max();
@@ -637,7 +631,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
     if ( nNewPos < rEditMask.getLength() )
     {
-        xub_Unicode cPattChar = ImplPatternChar( cChar, rEditMask[nNewPos] );
+        sal_Unicode cPattChar = ImplPatternChar( cChar, rEditMask[nNewPos] );
         if ( cPattChar )
             cChar = cPattChar;
         else
@@ -1069,7 +1063,7 @@ static String ImplGetDateSep( const LocaleDataWrapper& rLocaleDataWrapper, ExtDa
 static sal_Bool ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFieldFormat eFormat,
                                      const LocaleDataWrapper& rLocaleDataWrapper  )
 {
-    xub_Unicode cChar = rKEvt.GetCharCode();
+    sal_Unicode cChar = rKEvt.GetCharCode();
     sal_uInt16 nGroup = rKEvt.GetKeyCode().GetGroup();
     if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
          (nGroup == KEYGROUP_MISC)||
@@ -1577,7 +1571,7 @@ CalendarWrapper& DateFormatter::GetCalendarWrapper() const
 {
     if ( !mpCalendarWrapper )
     {
-        ((DateFormatter*)this)->mpCalendarWrapper = new CalendarWrapper( vcl::unohelper::GetMultiServiceFactory() );
+        ((DateFormatter*)this)->mpCalendarWrapper = new CalendarWrapper( comphelper::getComponentContext( comphelper::getProcessServiceFactory() ) );
         mpCalendarWrapper->loadDefaultCalendar( GetLocale() );
     }
 
@@ -2163,7 +2157,7 @@ static sal_Bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
                                      TimeFieldFormat eFormat,
                                      const LocaleDataWrapper& rLocaleDataWrapper  )
 {
-    xub_Unicode cChar = rKEvt.GetCharCode();
+    sal_Unicode cChar = rKEvt.GetCharCode();
 
     if ( !bStrictFormat )
         return sal_False;

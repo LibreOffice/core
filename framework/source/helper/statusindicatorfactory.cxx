@@ -420,7 +420,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     {
         bool bForceFrontAndFocus(false);
         ::comphelper::ConfigurationHelper::readDirectKey(
-            xSMGR,
+            comphelper::getComponentContext(xSMGR),
             ::rtl::OUString("org.openoffice.Office.Common/View"),
             ::rtl::OUString("NewDocumentHandling"),
             ::rtl::OUString("ForceFocusAndToFront"),
@@ -452,8 +452,7 @@ void StatusIndicatorFactory::impl_createProgress()
         VCLStatusIndicator* pVCLProgress = new VCLStatusIndicator(xSMGR, xWindow);
         xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pVCLProgress), css::uno::UNO_QUERY);
     }
-    else
-    if (xFrame.is())
+    else if (xFrame.is())
     {
         // use frame layouted progress implementation
         css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);

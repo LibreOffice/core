@@ -39,28 +39,28 @@ namespace basctl
 
 
     // help methods for the general use:
-    SbMethod*   CreateMacro( SbModule* pModule, const String& rMacroName );
+    SbMethod*       CreateMacro( SbModule* pModule, const String& rMacroName );
     void            RunMethod( SbMethod* pMethod );
 
-    StarBASIC*  FindBasic( const SbxVariable* pVar );
+    StarBASIC*      FindBasic( const SbxVariable* pVar );
     void            StopBasic();
-    long         HandleBasicError( StarBASIC* pBasic );
+    long            HandleBasicError( StarBASIC* pBasic );
     void            BasicStopped( bool* pbAppWindowDisabled = 0, bool* pbDispatcherLocked = 0, sal_uInt16* pnWaitCount = 0,
                             SfxUInt16Item** ppSWActionCount = 0, SfxUInt16Item** ppSWLockViewCount = 0 );
 
     bool            IsValidSbxName( const String& rName );
 
-    BasicManager*       FindBasicManager( StarBASIC* pLib );
+    BasicManager*   FindBasicManager( StarBASIC* pLib );
 
-    SfxBindings*        GetBindingsPtr();
+    SfxBindings*    GetBindingsPtr();
 
-    SfxDispatcher*      GetDispatcher ();
+    SfxDispatcher*  GetDispatcher ();
 
     void            InvalidateDebuggerSlots();
 
     // libraries
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > GetMergedLibraryNames(
+    ::com::sun::star::uno::Sequence< OUString > GetMergedLibraryNames(
         const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xModLibContainer,
         const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xDlgLibContainer );
 
@@ -68,21 +68,22 @@ namespace basctl
 
         Will show an error message when renaming fails because the new name is already used.
     */
-    bool                 RenameModule(
+    bool            RenameModule(
         Window* pErrorParent, const ScriptDocument& rDocument,
-        const ::rtl::OUString& rLibName, const ::rtl::OUString& rOldName, const ::rtl::OUString& rNewName );
+        const OUString& rLibName, const OUString& rOldName, const OUString& rNewName );
 
     // new methods for macros
 
-    ::rtl::OUString     ChooseMacro( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxLimitToDocument,
-        bool bChooseOnly, const ::rtl::OUString& rMacroDesc );
+    OUString        ChooseMacro(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxLimitToDocument,
+        bool bChooseOnly, const OUString& rMacroDesc );
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > GetMethodNames(
-        const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName )
+    ::com::sun::star::uno::Sequence< OUString > GetMethodNames(
+        const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName )
         throw( ::com::sun::star::container::NoSuchElementException );
 
-    bool                    HasMethod(
-        const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, const ::rtl::OUString& rMethName );
+    bool            HasMethod(
+        const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName, const OUString& rMethName );
 
     // new methods for dialogs
 
@@ -90,14 +91,13 @@ namespace basctl
 
         Will show an error message when renaming fails because the new name is already used.
     */
-    bool                 RenameDialog(
-        Window* pErrorParent, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rOldName, const ::rtl::OUString& rNewName )
+    bool            RenameDialog(
+        Window* pErrorParent, const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rOldName, const OUString& rNewName )
         throw( ::com::sun::star::container::ElementExistException, ::com::sun::star::container::NoSuchElementException );
 
-    bool                 RemoveDialog(
-        const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
+    bool            RemoveDialog( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName );
 
-    void                MarkDocumentModified( const ScriptDocument& rDocument );
+    void            MarkDocumentModified( const ScriptDocument& rDocument );
 
 } // namespace basctl
 

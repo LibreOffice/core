@@ -204,20 +204,20 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    size_t OControlTransferData::onEntryRemoved( SvLBoxEntry* _pEntry )
+    size_t OControlTransferData::onEntryRemoved( SvTreeListEntry* _pEntry )
     {
         m_aSelectedEntries.erase( _pEntry );
         return m_aSelectedEntries.size();
     }
 
     //--------------------------------------------------------------------
-    void OControlTransferData::addSelectedEntry( SvLBoxEntry* _pEntry )
+    void OControlTransferData::addSelectedEntry( SvTreeListEntry* _pEntry )
     {
         m_aSelectedEntries.insert( _pEntry );
     }
 
     //--------------------------------------------------------------------
-    void OControlTransferData::setFocusEntry( SvLBoxEntry* _pFocusEntry )
+    void OControlTransferData::setFocusEntry( SvTreeListEntry* _pFocusEntry )
     {
         m_pFocusEntry = _pFocusEntry;
     }
@@ -229,7 +229,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void OControlTransferData::buildPathFormat(SvTreeListBox* pTreeBox, SvLBoxEntry* pRoot)
+    void OControlTransferData::buildPathFormat(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot)
     {
         m_aControlPaths.realloc(0);
 
@@ -246,9 +246,9 @@ namespace svxform
         {
             // erst mal sammeln wir den Pfad in einem Array ein
             ::std::vector< sal_uInt32 > aCurrentPath;
-            SvLBoxEntry* pCurrentEntry = *loop;
+            SvTreeListEntry* pCurrentEntry = *loop;
 
-            SvLBoxEntry* pLoop = pCurrentEntry;
+            SvTreeListEntry* pLoop = pCurrentEntry;
             while (pLoop != pRoot)
             {
                 aCurrentPath.push_back(pLoop->GetChildListPos());
@@ -270,7 +270,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void OControlTransferData::buildListFromPath(SvTreeListBox* pTreeBox, SvLBoxEntry* pRoot)
+    void OControlTransferData::buildListFromPath(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot)
     {
         ListBoxEntrySet aEmpty;
         m_aSelectedEntries.swap( aEmpty );
@@ -281,7 +281,7 @@ namespace svxform
         {
             sal_Int32 nThisPatLength = pPaths[i].getLength();
             const sal_uInt32* pThisPath = pPaths[i].getConstArray();
-            SvLBoxEntry* pSearch = pRoot;
+            SvTreeListEntry* pSearch = pRoot;
             for (sal_Int32 j=0; j<nThisPatLength; ++j)
                 pSearch = pTreeBox->GetEntry(pSearch, pThisPath[j]);
 

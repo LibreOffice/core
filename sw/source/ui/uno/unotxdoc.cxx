@@ -2246,7 +2246,7 @@ void SwXTextDocument::updateLinks(  ) throw(RuntimeException)
     if( !rLnkMan.GetLinks().empty() )
     {
         UnoActionContext aAction(pDoc);
-        rLnkMan.UpdateAllLinks( sal_False, sal_False, sal_True );
+        rLnkMan.UpdateAllLinks( false, false, true );
     }
 }
 

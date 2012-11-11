@@ -941,6 +941,162 @@ public:
         *pInternalCapacity = &nCapacity;
     }
 
+
+    /**
+       Returns the index within this string of the first occurrence of the
+       specified character, starting the search at the specified index.
+
+       @since LibreOffice 4.0
+
+       @param    ch          character to be located.
+       @param    fromIndex   the index to start the search from.
+                             The index must be greater or equal than 0
+                             and less or equal as the string length.
+       @return   the index of the first occurrence of the character in the
+                 character sequence represented by this string that is
+                 greater than or equal to fromIndex, or
+                 -1 if the character does not occur.
+    */
+    sal_Int32 indexOf( sal_Unicode ch, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        sal_Int32 ret = rtl_ustr_indexOfChar_WithLength( pData->buffer+fromIndex, pData->length-fromIndex, ch );
+        return (ret < 0 ? ret : ret+fromIndex);
+    }
+
+    /**
+       Returns the index within this string of the last occurrence of the
+       specified character, searching backward starting at the end.
+
+       @since LibreOffice 4.0
+
+       @param    ch          character to be located.
+       @return   the index of the last occurrence of the character in the
+                 character sequence represented by this string, or
+                 -1 if the character does not occur.
+    */
+    sal_Int32 lastIndexOf( sal_Unicode ch ) const SAL_THROW(())
+    {
+        return rtl_ustr_lastIndexOfChar_WithLength( pData->buffer, pData->length, ch );
+    }
+
+    /**
+       Returns the index within this string of the last occurrence of the
+       specified character, searching backward starting before the specified
+       index.
+
+       @since LibreOffice 4.0
+
+       @param    ch          character to be located.
+       @param    fromIndex   the index before which to start the search.
+       @return   the index of the last occurrence of the character in the
+                 character sequence represented by this string that
+                 is less than fromIndex, or -1
+                 if the character does not occur before that point.
+    */
+    sal_Int32 lastIndexOf( sal_Unicode ch, sal_Int32 fromIndex ) const SAL_THROW(())
+    {
+        return rtl_ustr_lastIndexOfChar_WithLength( pData->buffer, fromIndex, ch );
+    }
+
+    /**
+       Returns the index within this string of the first occurrence of the
+       specified substring, starting at the specified index.
+
+       If str doesn't include any character, always -1 is
+       returned. This is also the case, if both strings are empty.
+
+       @since LibreOffice 4.0
+
+       @param    str         the substring to search for.
+       @param    fromIndex   the index to start the search from.
+       @return   If the string argument occurs one or more times as a substring
+                 within this string at the starting index, then the index
+                 of the first character of the first such substring is
+                 returned. If it does not occur as a substring starting
+                 at fromIndex or beyond, -1 is returned.
+    */
+    sal_Int32 indexOf( const OUString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        sal_Int32 ret = rtl_ustr_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                        str.pData->buffer, str.pData->length );
+        return (ret < 0 ? ret : ret+fromIndex);
+    }
+
+    /**
+       @overload
+       This function accepts an ASCII string literal as its argument.
+
+       @since LibreOffice 4.0
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        sal_Int32 ret = rtl_ustr_indexOfAscii_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex, literal,
+            internal::ConstCharArrayDetector< T, void >::size - 1);
+        return ret < 0 ? ret : ret + fromIndex;
+    }
+
+    /**
+       Returns the index within this string of the last occurrence of
+       the specified substring, searching backward starting at the end.
+
+       The returned index indicates the starting index of the substring
+       in this string.
+       If str doesn't include any character, always -1 is
+       returned. This is also the case, if both strings are empty.
+
+       @since LibreOffice 4.0
+
+       @param    str         the substring to search for.
+       @return   If the string argument occurs one or more times as a substring
+                 within this string, then the index of the first character of
+                 the last such substring is returned. If it does not occur as
+                 a substring, -1 is returned.
+    */
+    sal_Int32 lastIndexOf( const OUString & str ) const SAL_THROW(())
+    {
+        return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, pData->length,
+                                                   str.pData->buffer, str.pData->length );
+    }
+
+    /**
+       Returns the index within this string of the last occurrence of
+       the specified substring, searching backward starting before the specified
+       index.
+
+       The returned index indicates the starting index of the substring
+       in this string.
+       If str doesn't include any character, always -1 is
+       returned. This is also the case, if both strings are empty.
+
+       @since LibreOffice 4.0
+
+       @param    str         the substring to search for.
+       @param    fromIndex   the index before which to start the search.
+       @return   If the string argument occurs one or more times as a substring
+                 within this string before the starting index, then the index
+                 of the first character of the last such substring is
+                 returned. Otherwise, -1 is returned.
+    */
+    sal_Int32 lastIndexOf( const OUString & str, sal_Int32 fromIndex ) const SAL_THROW(())
+    {
+        return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
+                                                   str.pData->buffer, str.pData->length );
+    }
+
+    /**
+       @overload
+       This function accepts an ASCII string literal as its argument.
+       @since LibreOffice 4.0
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type lastIndexOf( T& literal ) const SAL_THROW(())
+    {
+        return rtl_ustr_lastIndexOfAscii_WithLength(
+            pData->buffer, pData->length, literal, internal::ConstCharArrayDetector< T, void >::size - 1);
+    }
+
 private:
     /**
         A pointer to the data structur which contains the data.

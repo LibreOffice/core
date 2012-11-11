@@ -46,10 +46,10 @@ public:
 
 
 static SbxVariable* Element
-    ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf,
+    ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf,
       SbxClassType, const SbxSimpleCharClass& rCharClass );
 
-static const xub_Unicode* SkipWhitespace( const xub_Unicode* p )
+static const sal_Unicode* SkipWhitespace( const sal_Unicode* p )
 {
     while( *p && ( *p == ' ' || *p == '\t' ) )
         p++;
@@ -59,7 +59,7 @@ static const xub_Unicode* SkipWhitespace( const xub_Unicode* p )
 // Scanning of a symbol. The symbol were inserted in rSym, the return value
 // is the new scan position. The symbol is at errors empty.
 
-static const xub_Unicode* Symbol( const xub_Unicode* p, XubString& rSym, const SbxSimpleCharClass& rCharClass )
+static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym, const SbxSimpleCharClass& rCharClass )
 {
     sal_uInt16 nLen = 0;
     // Did we have a nonstandard symbol?
@@ -67,38 +67,46 @@ static const xub_Unicode* Symbol( const xub_Unicode* p, XubString& rSym, const S
     {
         rSym = ++p;
         while( *p && *p != ']' )
+        {
             p++, nLen++;
+        }
         p++;
     }
     else
     {
         // A symbol had to begin with a alphabetic character or an underline
         if( !rCharClass.isAlpha( *p ) && *p != '_' )
+        {
             SbxBase::SetError( SbxERR_SYNTAX );
+        }
         else
         {
             rSym = p;
             // The it can contain alphabetic characters, numbers or underlines
             while( *p && (rCharClass.isAlphaNumeric( *p ) || *p == '_') )
+            {
                 p++, nLen++;
+            }
             // BASIC-Standard-Suffixes were ignored
             if( *p && (*p == '%' || *p == '&' || *p == '!' || *p == '#' || *p == '$' ) )
+            {
                 p++;
+            }
         }
     }
-    rSym.Erase( nLen );
+    rSym = rSym.copy( 0, nLen );
     return p;
 }
 
 // Qualified name. Element.Element....
 
 static SbxVariable* QualifiedName
-    ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf, SbxClassType t )
+    ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, SbxClassType t )
 {
     static SbxSimpleCharClass aCharClass;
 
     SbxVariableRef refVar;
-    const xub_Unicode* p = SkipWhitespace( *ppBuf );
+    const sal_Unicode* p = SkipWhitespace( *ppBuf );
     if( aCharClass.isAlpha( *p ) || *p == '_' || *p == '[' )
     {
         // Read in the element
@@ -131,44 +139,56 @@ static SbxVariable* QualifiedName
 // a function (with optional parameters).
 
 static SbxVariable* Operand
-    ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf, bool bVar )
+    ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, bool bVar )
 {
     static SbxSimpleCharClass aCharClass;
 
     SbxVariableRef refVar( new SbxVariable );
-    const xub_Unicode* p = SkipWhitespace( *ppBuf );
+    const sal_Unicode* p = SkipWhitespace( *ppBuf );
     if( !bVar && ( aCharClass.isDigit( *p )
-     || ( *p == '.' && aCharClass.isDigit( *( p+1 ) ) )
-     || *p == '-'
-     || *p == '&' ) )
+                   || ( *p == '.' && aCharClass.isDigit( *( p+1 ) ) )
+                   || *p == '-'
+                   || *p == '&' ) )
     {
         // A number could be scanned in directly!
         sal_uInt16 nLen;
-        if( !refVar->Scan( rtl::OUString( p ), &nLen ) )
+        if( !refVar->Scan( OUString( p ), &nLen ) )
+        {
             refVar.Clear();
+        }
         else
+        {
             p += nLen;
+        }
     }
     else if( !bVar && *p == '"' )
     {
         // A string
-        XubString aString;
+        OUString aString;
         p++;
         for( ;; )
         {
             // This is perhaps an error
             if( !*p )
+            {
                 return NULL;
+            }
             // Double quotes are OK
             if( *p == '"' )
+            {
                 if( *++p != '"' )
+                {
                     break;
-            aString += *p++;
+                }
+            }
+            aString += OUString(*p++);
         }
         refVar->PutString( aString );
     }
     else
+    {
         refVar = QualifiedName( pObj, pGbl, &p, SbxCLASS_DONTCARE );
+    }
     *ppBuf = p;
     if( refVar.Is() )
         refVar->AddRef();
@@ -178,14 +198,14 @@ static SbxVariable* Operand
 // Read in of a simple term. The operands +, -, * and /
 // are supported.
 
-static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf )
+static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf )
 {
-    const xub_Unicode* p = *ppBuf;
+    const sal_Unicode* p = *ppBuf;
     SbxVariableRef refVar( Operand( pObj, pGbl, &p, false ) );
     p = SkipWhitespace( p );
     while( refVar.Is() && ( *p == '*' || *p == '/' ) )
     {
-        xub_Unicode cOp = *p++;
+        sal_Unicode cOp = *p++;
         SbxVariableRef refVar2( Operand( pObj, pGbl, &p, false ) );
         if( refVar2.Is() )
         {
@@ -210,14 +230,14 @@ static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode*
     return refVar;
 }
 
-static SbxVariable* PlusMinus( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf )
+static SbxVariable* PlusMinus( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf )
 {
-    const xub_Unicode* p = *ppBuf;
+    const sal_Unicode* p = *ppBuf;
     SbxVariableRef refVar( MulDiv( pObj, pGbl, &p ) );
     p = SkipWhitespace( p );
     while( refVar.Is() && ( *p == '+' || *p == '-' ) )
     {
-        xub_Unicode cOp = *p++;
+        sal_Unicode cOp = *p++;
         SbxVariableRef refVar2( MulDiv( pObj, pGbl, &p ) );
         if( refVar2.Is() )
         {
@@ -242,9 +262,9 @@ static SbxVariable* PlusMinus( SbxObject* pObj, SbxObject* pGbl, const xub_Unico
     return refVar;
 }
 
-static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf )
+static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf )
 {
-    const xub_Unicode* p = *ppBuf;
+    const sal_Unicode* p = *ppBuf;
     SbxVariableRef refVar( Operand( pObj, pGbl, &p, true ) );
     p = SkipWhitespace( p );
     if( refVar.Is() )
@@ -285,17 +305,19 @@ static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode*
 // specified object and the parameter list will be attached if necessary.
 
 static SbxVariable* Element
-    ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf,
+    ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf,
       SbxClassType t, const SbxSimpleCharClass& rCharClass )
 {
-    XubString aSym;
-    const xub_Unicode* p = Symbol( *ppBuf, aSym, rCharClass );
+    OUString aSym;
+    const sal_Unicode* p = Symbol( *ppBuf, aSym, rCharClass );
     SbxVariableRef refVar;
-    if( aSym.Len() )
+    if( !aSym.isEmpty() )
     {
         sal_uInt16 nOld = pObj->GetFlags();
         if( pObj == pGbl )
+        {
             pObj->SetFlag( SBX_GBLSEARCH );
+        }
         refVar = pObj->Find( aSym, t );
         pObj->SetFlags( nOld );
         if( refVar.Is() )
@@ -348,22 +370,26 @@ static SbxVariable* Element
 
 // Mainroutine
 
-SbxVariable* SbxObject::Execute( const XubString& rTxt )
+SbxVariable* SbxObject::Execute( const OUString& rTxt )
 {
     SbxVariable* pVar = NULL;
-    const xub_Unicode* p = rTxt.GetBuffer();
+    const sal_Unicode* p = rTxt.getStr();
     for( ;; )
     {
         p = SkipWhitespace( p );
         if( !*p )
+        {
             break;
+        }
         if( *p++ != '[' )
         {
             SetError( SbxERR_SYNTAX ); break;
         }
         pVar = Assign( this, this, &p );
         if( !pVar )
+        {
             break;
+        }
         p = SkipWhitespace( p );
         if( *p++ != ']' )
         {
@@ -373,17 +399,21 @@ SbxVariable* SbxObject::Execute( const XubString& rTxt )
     return pVar;
 }
 
-SbxVariable* SbxObject::FindQualified( const XubString& rName, SbxClassType t )
+SbxVariable* SbxObject::FindQualified( const OUString& rName, SbxClassType t )
 {
     SbxVariable* pVar = NULL;
-    const xub_Unicode* p = rName.GetBuffer();
+    const sal_Unicode* p = rName.getStr();
     p = SkipWhitespace( p );
     if( !*p )
+    {
         return NULL;;
+    }
     pVar = QualifiedName( this, this, &p, t );
     p = SkipWhitespace( p );
     if( *p )
+    {
         SetError( SbxERR_SYNTAX );
+    }
     return pVar;
 }
 

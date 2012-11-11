@@ -41,6 +41,14 @@
 #include <cmath>
 #endif
 
+#if defined(IOS)
+#if defined(__cplusplus)
+#include <cmath>
+#else
+#include <math.h>
+#endif
+#endif
+
 #if defined __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -65,8 +73,12 @@ extern "C" {
 /* SAL_MATH_FINITE(d): test double d on INFINITY, NaN et al. */
 #if !defined SOLARIS && !defined ANDROID \
                      && defined(__cplusplus) \
-                     && ( defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L )
+                     && ( defined(__GXX_EXPERIMENTAL_CXX0X__) \
+                          || __cplusplus >= 201103L \
+                          || defined(IOS) )
 #define SAL_MATH_FINITE(d) std::isfinite(d)
+#elif defined( IOS )
+#define SAL_MATH_FINITE(d) isfinite(d)
 #elif defined( WNT)
 #define SAL_MATH_FINITE(d) _finite(d)
 #elif defined LINUX || defined UNX

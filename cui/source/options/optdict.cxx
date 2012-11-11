@@ -381,7 +381,7 @@ sal_uInt16 SvxEditDictionaryDialog::GetLBInsertPos(const String &rDicWord)
     sal_uInt16 j;
     for( j = 0; j < aWordsLB.GetEntryCount(); j++ )
     {
-        SvLBoxEntry* pEntry = aWordsLB.GetEntry(j);
+        SvTreeListEntry* pEntry = aWordsLB.GetEntry(j);
         DBG_ASSERT( pEntry, "NULL pointer");
         String aNormEntry( getNormDicEntry_Impl( rDicWord ) );
         StringCompare eCmpRes = (StringCompare)pCollator->
@@ -395,7 +395,7 @@ sal_uInt16 SvxEditDictionaryDialog::GetLBInsertPos(const String &rDicWord)
     return nPos;
 }
 
-void SvxEditDictionaryDialog::RemoveDictEntry(SvLBoxEntry* pEntry)
+void SvxEditDictionaryDialog::RemoveDictEntry(SvTreeListEntry* pEntry)
 {
     sal_uInt16 nLBPos = aAllDictsLB.GetSelectEntryPos();
 
@@ -551,7 +551,7 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
     {
         if(!bFirstSelect)
         {
-            SvLBoxEntry* pEntry = pBox->FirstSelected();
+            SvTreeListEntry* pEntry = pBox->FirstSelected();
             String sTmpShort(pBox->GetEntryText(pEntry, 0));
             // without this the curser is always at the beginning of a word, if the text
             // is set over the ModifyHdl, although you're editing there at the moment
@@ -574,7 +574,7 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
 
 IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
 {
-    SvLBoxEntry* pEntry = aWordsLB.FirstSelected();
+    SvTreeListEntry* pEntry = aWordsLB.FirstSelected();
 
     if(pBtn == &aDeletePB)
     {
@@ -589,7 +589,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
     }
     if(pBtn == &aNewReplacePB || aNewReplacePB.IsEnabled())
     {
-        SvLBoxEntry* _pEntry = aWordsLB.FirstSelected();
+        SvTreeListEntry* _pEntry = aWordsLB.FirstSelected();
         XubString aNewWord(aWordED.GetText());
         String sEntry(aNewWord);
         XubString aReplaceStr(aReplaceED.GetText());
@@ -638,7 +638,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
                 sEntry += aReplaceStr;
             }
 
-            SvLBoxEntry* pNewEntry = NULL;
+            SvTreeListEntry* pNewEntry = NULL;
             if(_pEntry) // entry selected in aWordsLB ie action = modify entry
             {
                 aWordsLB.SetEntryText( sEntry, _pEntry );
@@ -647,7 +647,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
             else
             {
                 _nPos = GetLBInsertPos( aNewWord );
-                SvLBoxEntry* pInsEntry = aWordsLB.InsertEntry(sEntry, 0, sal_False,
+                SvTreeListEntry* pInsEntry = aWordsLB.InsertEntry(sEntry, 0, sal_False,
                             _nPos == USHRT_MAX ? LIST_APPEND : (sal_uInt32)_nPos);
                 pNewEntry = pInsEntry;
             }
@@ -673,7 +673,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
 
 IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
 {
-    SvLBoxEntry* pFirstSel = aWordsLB.FirstSelected();
+    SvTreeListEntry* pFirstSel = aWordsLB.FirstSelected();
     String rEntry = pEdt->GetText();
 
     xub_StrLen nWordLen=rEntry.Len();
@@ -693,7 +693,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
 
             for(sal_uInt16 i = 0; i < aWordsLB.GetEntryCount(); i++)
             {
-                SvLBoxEntry*  pEntry = aWordsLB.GetEntry( i );
+                SvTreeListEntry*  pEntry = aWordsLB.GetEntry( i );
                 String aTestStr( aWordsLB.GetEntryText(pEntry, 0) );
                 eCmpRes = cmpDicEntry_Impl( rEntry, aTestStr );
                 if(CDE_DIFFERENT != eCmpRes)
@@ -740,7 +740,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
         }
         else if(aWordsLB.GetEntryCount()>0)
         {
-            SvLBoxEntry*  pEntry = aWordsLB.GetEntry( 0 );
+            SvTreeListEntry*  pEntry = aWordsLB.GetEntry( 0 );
             bDoNothing=sal_True;
             aWordsLB.MakeVisible(pEntry);
             bDoNothing=sal_False;

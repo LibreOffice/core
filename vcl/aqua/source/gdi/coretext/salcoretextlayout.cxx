@@ -142,8 +142,6 @@ long CoreTextLayout::FillDXArray( sal_Int32* pDXArray ) const
     {
         return GetTextWidth();
     }
-    // check assumptions
-    DBG_ASSERT( !mnTrailingSpaceWidth, "CoreText::FillDXArray() with nTSW!=0" );
 
     // initialize details about the resulting layout
     InitGIA();

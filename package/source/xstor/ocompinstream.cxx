@@ -121,13 +121,13 @@ sal_Int32 SAL_CALL OInputCompStream::readBytes( uno::Sequence< sal_Int8 >& aData
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
     if ( !m_xStream.is() )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "No stream!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "No stream!" );
         throw uno::RuntimeException();
     }
 
@@ -144,13 +144,13 @@ sal_Int32 SAL_CALL OInputCompStream::readSomeBytes( uno::Sequence< sal_Int8 >& a
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
     if ( !m_xStream.is() )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "No stream!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "No stream!" );
         throw uno::RuntimeException();
     }
 
@@ -168,13 +168,13 @@ void SAL_CALL OInputCompStream::skipBytes( sal_Int32 nBytesToSkip )
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
     if ( !m_xStream.is() )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "No stream!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "No stream!" );
         throw uno::RuntimeException();
     }
 
@@ -191,13 +191,13 @@ sal_Int32 SAL_CALL OInputCompStream::available(  )
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
     if ( !m_xStream.is() )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "No stream!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "No stream!" );
         throw uno::RuntimeException();
     }
 
@@ -221,7 +221,7 @@ uno::Reference< io::XInputStream > SAL_CALL OInputCompStream::getInputStream()
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -238,7 +238,7 @@ uno::Reference< io::XOutputStream > SAL_CALL OInputCompStream::getOutputStream()
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -252,7 +252,7 @@ void OInputCompStream::InternalDispose()
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -281,7 +281,7 @@ void SAL_CALL OInputCompStream::dispose(  )
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -309,7 +309,7 @@ void SAL_CALL OInputCompStream::addEventListener( const uno::Reference< lang::XE
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -326,7 +326,7 @@ void SAL_CALL OInputCompStream::removeEventListener( const uno::Reference< lang:
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -343,7 +343,7 @@ sal_Bool SAL_CALL OInputCompStream::hasByID(  const ::rtl::OUString& sID )
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -371,7 +371,7 @@ sal_Bool SAL_CALL OInputCompStream::hasByID(  const ::rtl::OUString& sID )
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -396,7 +396,7 @@ sal_Bool SAL_CALL OInputCompStream::hasByID(  const ::rtl::OUString& sID )
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -421,7 +421,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByI
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -451,7 +451,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -486,7 +486,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -517,7 +517,7 @@ void SAL_CALL OInputCompStream::insertRelationshipByID(  const ::rtl::OUString& 
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -537,7 +537,7 @@ void SAL_CALL OInputCompStream::removeRelationshipByID(  const ::rtl::OUString& 
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -557,7 +557,7 @@ void SAL_CALL OInputCompStream::insertRelationships(  const uno::Sequence< uno::
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -576,7 +576,7 @@ void SAL_CALL OInputCompStream::clearRelationships()
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -594,7 +594,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OInputCompStream::getProperty
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -614,7 +614,7 @@ void SAL_CALL OInputCompStream::setPropertyValue( const ::rtl::OUString& aProper
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -641,13 +641,13 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const ::rtl::OUString& aPr
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
     ::rtl::OUString aPropertyName;
     if ( aProp == "IsEncrypted" )
-        aPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Encrypted" ) );
+        aPropertyName = "Encrypted";
     else
         aPropertyName = aProp;
 
@@ -679,7 +679,7 @@ void SAL_CALL OInputCompStream::addPropertyChangeListener(
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -699,7 +699,7 @@ void SAL_CALL OInputCompStream::removePropertyChangeListener(
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -719,7 +719,7 @@ void SAL_CALL OInputCompStream::addVetoableChangeListener(
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -739,7 +739,7 @@ void SAL_CALL OInputCompStream::removeVetoableChangeListener(
 
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 

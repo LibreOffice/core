@@ -75,7 +75,6 @@ private:
     void Init();
 
 public:
-    ScDataBarSettingsDlg(Window* pParent, ScDocument* pDoc, const ScAddress& rPos);
     ScDataBarSettingsDlg(Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos);
 
     ScDataBarFormatData* GetData();

@@ -25,6 +25,7 @@
  *************************************************************************/
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/resultset.hxx>
 #include <ucbhelper/resultsetmetadata.hxx>
 
@@ -371,7 +372,7 @@ uno::Reference< sdbc::XResultSetMetaData > SAL_CALL ResultSet::getMetaData()
     osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( !m_pImpl->m_xMetaData.is() )
-        m_pImpl->m_xMetaData = new ResultSetMetaData( m_pImpl->m_xSMgr,
+        m_pImpl->m_xMetaData = new ResultSetMetaData( ucbhelper::getComponentContext(m_pImpl->m_xSMgr),
                                                       m_pImpl->m_aProperties );
 
     return m_pImpl->m_xMetaData;

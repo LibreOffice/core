@@ -41,7 +41,7 @@
 #include <vcl/virdev.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <editeng/unolingu.hxx>
@@ -270,14 +270,8 @@ namespace
             mrShadowDecomposition(rShadowDecomposition)
         {
             // prepare BreakIterator
-            Reference < XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-            Reference < XInterface > xInterface = xMSF->createInstance(::rtl::OUString("com.sun.star.i18n.BreakIterator"));
-
-            if(xInterface.is())
-            {
-                Any x = xInterface->queryInterface(::getCppuType((const Reference< XBreakIterator >*)0));
-                x >>= mxBreak;
-            }
+            Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            mxBreak = com::sun::star::i18n::BreakIterator::create(xContext);
         }
 
         void HandlePair(const basegfx::B2DPolygon rPolygonCandidate, const ::std::vector< const impPathTextPortion* >& rTextPortions)

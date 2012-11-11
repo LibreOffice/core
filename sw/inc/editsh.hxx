@@ -234,7 +234,7 @@ public:
 
     /** If Cursor is at the end of a character style in which the DontExpand-flag
      is not yet set, the latter will be set (==> return TRUE). */
-    sal_Bool DontExpandFmt();
+    bool DontExpandFmt();
 
     /** Apply / remove attributes.
      @return attributs in required AttributeSet.
@@ -296,8 +296,8 @@ public:
     sal_uInt16 GetCurLang() const;
 
     /// TABLE
-    sal_uInt16 GetTblFrmFmtCount( sal_Bool bUsed = sal_False ) const;
-    SwFrmFmt& GetTblFrmFmt(sal_uInt16 nFmt, sal_Bool bUsed = sal_False ) const;
+    sal_uInt16 GetTblFrmFmtCount( bool bUsed = false ) const;
+    SwFrmFmt& GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed = false ) const;
     String GetUniqueTblName() const;
 
     /// CHAR
@@ -435,7 +435,7 @@ public:
     sal_Bool                UpdateTableOf(const SwTOXBase& rTOX,
                                         const SfxItemSet* pSet = 0);
     const SwTOXBase*    GetCurTOX() const;
-    const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, sal_Bool bCreate = sal_False );
+    const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, bool bCreate = false );
     void                SetDefaultTOXBase(const SwTOXBase& rBase);
 
     sal_Bool                IsTOXBaseReadonly(const SwTOXBase& rTOXBase) const;
@@ -443,7 +443,7 @@ public:
 
     sal_uInt16              GetTOXCount() const;
     const SwTOXBase*    GetTOX( sal_uInt16 nPos ) const;
-    sal_Bool                DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes = sal_False );
+    bool                DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes = false );
 
     /// After reading file update all content tables.
     void SetUpdateTOX( sal_Bool bFlag = sal_True );
@@ -465,9 +465,9 @@ public:
     void SetOutlineNumRule(const SwNumRule&);
     const SwNumRule* GetOutlineNumRule() const;
 
-    sal_Bool OutlineUpDown( short nOffset = 1 );
+    bool OutlineUpDown( short nOffset = 1 );
 
-    sal_Bool MoveOutlinePara( short nOffset = 1);
+    bool MoveOutlinePara( short nOffset = 1);
 
     sal_Bool IsProtectedOutlinePara() const;
 
@@ -491,18 +491,18 @@ public:
                         const bool bResetIndentAttrs = false );
 
     /// Paragraphs without enumeration but with indents.
-    sal_Bool NoNum();
+    bool NoNum();
 
     /// Delete, split enumeration list.
     void DelNumRules();
 
-    sal_Bool NumUpDown( sal_Bool bDown = sal_True );
+    bool NumUpDown( bool bDown = true );
 
-    sal_Bool MoveParagraph( long nOffset = 1);
-    sal_Bool MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft );
+    bool MoveParagraph( long nOffset = 1);
+    bool MoveNumParas( bool bUpperLower, bool bUpperLeft );
 
     /// Switch on/off of numbering via Delete/Backspace.
-    sal_Bool NumOrNoNum( sal_Bool bDelete = sal_False, sal_Bool bChkStart = sal_True);
+    bool NumOrNoNum( sal_Bool bDelete = sal_False, bool bChkStart = true);
 
     // #i23726#
     // #i90078#
@@ -511,8 +511,8 @@ public:
     void ChangeIndentOfAllListLevels( short nDiff );
     // Adjust method name
     void SetIndent(short nIndent, const SwPosition & rPos);
-    sal_Bool IsFirstOfNumRule() const;
-    sal_Bool IsFirstOfNumRule(const SwPaM & rPaM) const;
+    bool IsFirstOfNumRule() const;
+    bool IsFirstOfNumRule(const SwPaM & rPaM) const;
 
     sal_Bool IsNoNum( sal_Bool bChkStart = sal_True ) const;
 
@@ -532,7 +532,7 @@ public:
     sal_Bool HasNumber() const;
     sal_Bool HasBullet() const;
 
-    String GetUniqueNumRuleName( const String* pChkStr = 0, sal_Bool bAutoNum = sal_True ) const;
+    String GetUniqueNumRuleName( const String* pChkStr = 0, bool bAutoNum = true ) const;
     void ChgNumRuleFmts( const SwNumRule& rRule );
 
     /// Set (and query if) a numbering with StartFlag starts at current PointPos.
@@ -542,7 +542,7 @@ public:
 
     sal_uInt16 GetNodeNumStart( SwPaM* pPaM = NULL ) const;
 
-    sal_Bool ReplaceNumRule( const String& rOldRule, const String& rNewRule );
+    bool ReplaceNumRule( const String& rOldRule, const String& rNewRule );
 
     /** Searches for a text node with a numbering rule.
      in case a list style is found, <sListId> holds the list id, to which the
@@ -872,9 +872,9 @@ public:
 
     /** Adjust left margin via object bar (similar to adjustment of numerations).
      One can either change the margin "by" adding or substracting a given
-     offset or set it "to" this position @param (bModulus = sal_True). */
-    sal_Bool IsMoveLeftMargin( sal_Bool bRight = sal_True, sal_Bool bModulus = sal_True ) const;
-    void MoveLeftMargin( sal_Bool bRight = sal_True, sal_Bool bModulus = sal_True );
+     offset or set it "to" this position @param (bModulus = true). */
+    bool IsMoveLeftMargin( bool bRight = true, bool bModulus = true ) const;
+    void MoveLeftMargin( bool bRight = true, bool bModulus = true );
 
     /// Query NumberFormater from document.
           SvNumberFormatter* GetNumberFormatter();

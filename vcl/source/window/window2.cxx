@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include <limits.h>
@@ -1284,22 +1275,22 @@ Window* Window::ImplGetTopmostFrameWindow()
     return pTopmostParent->mpWindowImpl->mpFrameWindow;
 }
 
-void Window::SetHelpId( const rtl::OString& rHelpId )
+void Window::SetHelpId( const OString& rHelpId )
 {
     mpWindowImpl->maHelpId = rHelpId;
 }
 
-const rtl::OString& Window::GetHelpId() const
+const OString& Window::GetHelpId() const
 {
     return mpWindowImpl->maHelpId;
 }
 
-void Window::SetUniqueId( const rtl::OString& rUniqueId )
+void Window::SetUniqueId( const OString& rUniqueId )
 {
     mpWindowImpl->maUniqId = rUniqueId;
 }
 
-const rtl::OString& Window::GetUniqueId() const
+const OString& Window::GetUniqueId() const
 {
     return mpWindowImpl->maUniqId;
 }
@@ -1925,6 +1916,7 @@ void Window::take_properties(Window &rOther)
     mpWindowImpl->mbVexpand = pWindowImpl->mbVexpand;
     mpWindowImpl->mbExpand = pWindowImpl->mbExpand;
     mpWindowImpl->mbFill = pWindowImpl->mbFill;
+    mpWindowImpl->mbSecondary = pWindowImpl->mbSecondary;
 
     bool bHasBorderWindow = mpWindowImpl->mpBorderWindow;
     bool bOtherHasBorderWindow = pWindowImpl->mpBorderWindow;
@@ -1937,7 +1929,7 @@ void Window::take_properties(Window &rOther)
 
 namespace
 {
-    VclAlign toAlign(const rtl::OString &rValue)
+    VclAlign toAlign(const OString &rValue)
     {
         VclAlign eRet = VCL_ALIGN_FILL;
 
@@ -1953,12 +1945,83 @@ namespace
     }
 }
 
-bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+namespace
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("label")))
-        SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("title")))
-        SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    OString convertMnemonicMarkup(const OString &rIn)
+    {
+        OStringBuffer aRet(rIn);
+        for (sal_Int32 nI = 0; nI < aRet.getLength(); ++nI)
+        {
+            if (aRet[nI] == '_')
+            {
+                if (aRet[nI+1] != '_')
+                    aRet[nI] = '~';
+                else
+                    aRet.remove(nI, 1);
+                ++nI;
+            }
+        }
+        return aRet.makeStringAndClear();
+    }
+}
+
+bool Window::set_font_attribute(const OString &rKey, const OString &rValue)
+{
+    if (rKey == "weight")
+    {
+        Font aFont(GetControlFont());
+        if (rValue == "thin")
+            aFont.SetWeight(WEIGHT_THIN);
+        else if (rValue == "ultralight")
+            aFont.SetWeight(WEIGHT_ULTRALIGHT);
+        else if (rValue == "light")
+            aFont.SetWeight(WEIGHT_LIGHT);
+        else if (rValue == "book")
+            aFont.SetWeight(WEIGHT_SEMILIGHT);
+        else if (rValue == "normal")
+            aFont.SetWeight(WEIGHT_NORMAL);
+        else if (rValue == "medium")
+            aFont.SetWeight(WEIGHT_MEDIUM);
+        else if (rValue == "semibold")
+            aFont.SetWeight(WEIGHT_SEMIBOLD);
+        else if (rValue == "bold")
+            aFont.SetWeight(WEIGHT_BOLD);
+        else if (rValue == "ultrabold")
+            aFont.SetWeight(WEIGHT_ULTRABOLD);
+        else
+            aFont.SetWeight(WEIGHT_BLACK);
+        SetControlFont(aFont);
+    }
+    else if (rKey == "style")
+    {
+        Font aFont(GetControlFont());
+        if (rValue == "normal")
+            aFont.SetItalic(ITALIC_NONE);
+        else if (rValue == "oblique")
+            aFont.SetItalic(ITALIC_OBLIQUE);
+        else if (rValue == "italic")
+            aFont.SetItalic(ITALIC_NORMAL);
+        SetControlFont(aFont);
+    }
+    else
+    {
+        SAL_INFO("vcl.layout", "unhandled font attribute: " << rKey.getStr());
+        return false;
+    }
+    return true;
+}
+
+
+bool Window::set_property(const OString &rKey, const OString &rValue)
+{
+    if (
+         (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("label"))) ||
+         (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("title"))) ||
+         (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("text")))
+       )
+    {
+        SetText(OStringToOUString(convertMnemonicMarkup(rValue), RTL_TEXTENCODING_UTF8));
+    }
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("visible")))
         Show(toBool(rValue));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("sensitive")))
@@ -2009,8 +2072,6 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
             nBits |= WB_WORDBREAK;
         SetStyle(nBits);
     }
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("text")))
-        SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("height-request")))
         set_height_request(rValue.toInt32());
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("width-request")))
@@ -2024,9 +2085,9 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("valign")))
         set_valign(toAlign(rValue));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("tooltip-markup")))
-        SetQuickHelpText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetQuickHelpText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("tooltip-text")))
-        SetQuickHelpText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetQuickHelpText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("border-width")))
         set_border_width(rValue.toInt32());
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("margin-left")))
@@ -2056,6 +2117,11 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
         else if (rValue == "automatic")
             nBits |= WB_AUTOVSCROLL;
         SetStyle(nBits);
+    }
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("use-markup")))
+    {
+        //https://live.gnome.org/GnomeGoals/RemoveMarkupInMessages
+        SAL_WARN_IF(toBool(rValue), "vcl.layout", "Use pango attributes instead of mark-up");
     }
     else
     {
@@ -2319,6 +2385,18 @@ sal_Int32 Window::get_width_request() const
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
     return pWindowImpl->mnWidthRequest;
+}
+
+bool Window::get_secondary() const
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    return pWindowImpl->mbSecondary;
+}
+
+void Window::set_secondary(bool bSecondary)
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    pWindowImpl->mbSecondary = bSecondary;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

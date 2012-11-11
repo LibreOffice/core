@@ -106,7 +106,7 @@ OUString getTextEngineText (ExtTextEngine& rEngine)
 void setTextEngineText (ExtTextEngine& rEngine, OUString const& aStr)
 {
     rEngine.SetText(String());
-    OString aUTF8Str = ::rtl::OUStringToOString( aStr, RTL_TEXTENCODING_UTF8 );
+    OString aUTF8Str = OUStringToOString( aStr, RTL_TEXTENCODING_UTF8 );
     SvMemoryStream aMemStream( (void*)aUTF8Str.getStr(), aUTF8Str.getLength(),
         STREAM_READ | STREAM_SEEK_TO_BEGIN );
     aMemStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
@@ -278,7 +278,7 @@ String EditorWindow::GetWordAtCursor()
             const TextPaM& rSelStart = rSelection.GetStart();
             const TextPaM& rSelEnd = rSelection.GetEnd();
             String aText = pTextEngine->GetText( rSelEnd.GetPara() );
-            CharClass aClass( ::comphelper::getProcessServiceFactory() , Application::GetSettings().GetLocale() );
+            CharClass aClass( ::comphelper::getProcessComponentContext() , Application::GetSettings().GetLocale() );
             xub_StrLen nSelStart = static_cast< xub_StrLen >( rSelStart.GetIndex() );
             xub_StrLen nSelEnd = static_cast< xub_StrLen >( rSelEnd.GetIndex() );
             xub_StrLen nLength = static_cast< xub_StrLen >( aText.Len() );
@@ -358,7 +358,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                             if ( !aHelpText.Len() )     // name is not copied with the passed parameters
                                 aHelpText = aWord;
                             aHelpText += '=';
-                            aHelpText += pVar->GetString();
+                            aHelpText += pVar->GetOUString();
                         }
                     }
                     if ( aHelpText.Len() )
@@ -1363,7 +1363,7 @@ void WatchWindow::AddWatch( const String& rVName )
 
     OUString aWatchStr_( aVar );
     aWatchStr_ += OUString( "\t\t" );
-    SvLBoxEntry* pNewEntry = aTreeListBox.InsertEntry( aWatchStr_, 0, true, LIST_APPEND );
+    SvTreeListEntry* pNewEntry = aTreeListBox.InsertEntry( aWatchStr_, 0, true, LIST_APPEND );
     pNewEntry->SetUserData( pWatchItem );
 
     aTreeListBox.Select(pNewEntry, true);
@@ -1375,7 +1375,7 @@ void WatchWindow::AddWatch( const String& rVName )
 
 bool WatchWindow::RemoveSelectedWatch()
 {
-    SvLBoxEntry* pEntry = aTreeListBox.GetCurEntry();
+    SvTreeListEntry* pEntry = aTreeListBox.GetCurEntry();
     if ( pEntry )
     {
         aTreeListBox.GetModel()->Remove( pEntry );
@@ -1406,7 +1406,7 @@ IMPL_LINK_INLINE_END( WatchWindow, ButtonHdl, ImageButton *, pButton )
 
 IMPL_LINK_NOARG_INLINE_START(WatchWindow, TreeListHdl)
 {
-    SvLBoxEntry* pCurEntry = aTreeListBox.GetCurEntry();
+    SvTreeListEntry* pCurEntry = aTreeListBox.GetCurEntry();
     if ( pCurEntry && pCurEntry->GetUserData() )
         aXEdit.SetText( ((WatchItem*)pCurEntry->GetUserData())->maName );
 
@@ -1567,22 +1567,32 @@ void StackWindow::UpdateCalls()
                 {
                     SbxVariable* pVar = pParams->Get( nParam );
                     DBG_ASSERT( pVar, "Parameter?!" );
-                    if ( pVar->GetName().Len() )
+                    if ( !pVar->GetName().isEmpty() )
+                    {
                         aEntry += pVar->GetName();
+                    }
                     else if ( pInfo )
                     {
                         const SbxParamInfo* pParam = pInfo->GetParam( nParam );
                         if ( pParam )
+                        {
                             aEntry += pParam->aName;
+                        }
                     }
                     aEntry += '=';
                     SbxDataType eType = pVar->GetType();
                     if( eType & SbxARRAY )
+                    {
                         aEntry += OUString( "..." );
+                    }
                     else if( eType != SbxOBJECT )
-                        aEntry += pVar->GetString();
+                    {
+                        aEntry += pVar->GetOUString();
+                    }
                     if ( nParam < ( pParams->Count() - 1 ) )
+                    {
                         aEntry += OUString( ", " );
+                    }
                 }
                 aEntry += ')';
             }
@@ -1724,7 +1734,7 @@ WatchTreeListBox::WatchTreeListBox( Window* pParent, WinBits nWinBits )
 WatchTreeListBox::~WatchTreeListBox()
 {
     // Destroy user data
-    SvLBoxEntry* pEntry = First();
+    SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
         delete (WatchItem*)pEntry->GetUserData();
@@ -1746,7 +1756,7 @@ void WatchTreeListBox::SetTabs()
     }
 }
 
-void WatchTreeListBox::RequestingChildren( SvLBoxEntry * pParent )
+void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
 {
     if( !StarBASIC::IsRunning() )
         return;
@@ -1754,7 +1764,7 @@ void WatchTreeListBox::RequestingChildren( SvLBoxEntry * pParent )
     if( GetChildCount( pParent ) > 0 )
         return;
 
-    SvLBoxEntry* pEntry = pParent;
+    SvTreeListEntry* pEntry = pParent;
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
 
     SbxDimArray* pArray = pItem->mpArray;
@@ -1780,7 +1790,7 @@ void WatchTreeListBox::RequestingChildren( SvLBoxEntry * pParent )
 
             pItem->maMemberList.push_back(String(pVar->GetName()));
             String const& rName = pItem->maMemberList.back();
-            SvLBoxEntry* pChildEntry = SvTreeListBox::InsertEntry( rName, pEntry );
+            SvTreeListEntry* pChildEntry = SvTreeListBox::InsertEntry( rName, pEntry );
             pChildEntry->SetUserData(new WatchItem(rName));
         }
         if( nPropCount > 0 )
@@ -1828,7 +1838,7 @@ void WatchTreeListBox::RequestingChildren( SvLBoxEntry * pParent )
             aDisplayName += aIndexStr;
             pChildItem->maDisplayName = aDisplayName;
 
-            SvLBoxEntry* pChildEntry = SvTreeListBox::InsertEntry( aDisplayName, pEntry );
+            SvTreeListEntry* pChildEntry = SvTreeListBox::InsertEntry( aDisplayName, pEntry );
             nElementCount++;
             pChildEntry->SetUserData( pChildItem );
         }
@@ -1839,7 +1849,7 @@ void WatchTreeListBox::RequestingChildren( SvLBoxEntry * pParent )
     }
 }
 
-SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArrayElement )
+SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rbArrayElement )
 {
     SbxBase* pSBX = NULL;
     rbArrayElement = false;
@@ -1847,7 +1857,7 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArra
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
     String aVName( pItem->maName );
 
-    SvLBoxEntry* pParentEntry = GetParent( pEntry );
+    SvTreeListEntry* pParentEntry = GetParent( pEntry );
     WatchItem* pParentItem = pParentEntry ? (WatchItem*)pParentEntry->GetUserData() : NULL;
     if( pParentItem )
     {
@@ -1879,7 +1889,7 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArra
     return pSBX;
 }
 
-sal_Bool WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+sal_Bool WatchTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 {
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
 
@@ -1904,7 +1914,7 @@ sal_Bool WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     return bEdit;
 }
 
-sal_Bool WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const OUString& rNewText )
+sal_Bool WatchTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
     String aVName( pItem->maName );
@@ -1920,7 +1930,7 @@ sal_Bool WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const OUString& rNe
     return aResult != aEditingRes && ImplBasicEntryEdited(pEntry, aResult);
 }
 
-bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult )
+bool WatchTreeListBox::ImplBasicEntryEdited( SvTreeListEntry* pEntry, const String& rResult )
 {
     bool bArrayElement;
     SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
@@ -1953,12 +1963,12 @@ bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& 
 namespace
 {
 
-void implCollapseModifiedObjectEntry( SvLBoxEntry* pParent, WatchTreeListBox* pThis )
+void implCollapseModifiedObjectEntry( SvTreeListEntry* pParent, WatchTreeListBox* pThis )
 {
     pThis->Collapse( pParent );
 
-    SvLBoxTreeList* pModel = pThis->GetModel();
-    SvLBoxEntry* pDeleteEntry;
+    SvTreeList* pModel = pThis->GetModel();
+    SvTreeListEntry* pDeleteEntry;
     while( (pDeleteEntry = pThis->SvTreeListBox::GetEntry( pParent, 0 )) != NULL )
     {
         implCollapseModifiedObjectEntry( pDeleteEntry, pThis );
@@ -1998,7 +2008,7 @@ String implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eType )
     return aRetStr;
 }
 
-void implEnableChildren( SvLBoxEntry* pEntry, bool bEnable )
+void implEnableChildren( SvTreeListEntry* pEntry, bool bEnable )
 {
     if( bEnable )
     {
@@ -2023,7 +2033,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
     SbxError eOld = SbxBase::GetError();
     setBasicWatchMode( true );
 
-    SvLBoxEntry* pEntry = First();
+    SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
         WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
@@ -2086,11 +2096,13 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                             }
                         }
                         else if( pNewArray == NULL || pOldArray == NULL )
+                        {
                             bArrayChanged = true;
-
+                        }
                         if( pNewArray )
+                        {
                             implEnableChildren( pEntry, true );
-
+                        }
                         // #i37227 Clear always and replace array
                         if( pNewArray != pOldArray )
                         {
@@ -2106,12 +2118,15 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                             }
                         }
                         if( bArrayChanged && pOldArray != NULL )
+                        {
                             bCollapse = true;
-
+                        }
                         aTypeStr = implCreateTypeStringForDimArray( pItem, eType );
                     }
                     else
+                    {
                         aWatchStr += OUString( "<?>" );
+                    }
                 }
                 else if ( (sal_uInt8)eType == (sal_uInt8)SbxOBJECT )
                 {
@@ -2134,7 +2149,9 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                                 }
                             }
                             if( bObjChanged )
+                            {
                                 bCollapse = true;
+                            }
                         }
 
                         pItem->mpObject = pObj;
@@ -2166,23 +2183,33 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     bool bString = ((sal_uInt8)eType == (sal_uInt8)SbxSTRING);
                     OUString aStrStr( "\"" );
                     if( bString )
+                    {
                         aWatchStr += aStrStr;
-                    aWatchStr += pVar->GetString();
+                    }
+                    aWatchStr += pVar->GetOUString();
                     if( bString )
+                    {
                         aWatchStr += aStrStr;
+                    }
                 }
                 if( !aTypeStr.Len() )
                 {
                     if( !pVar->IsFixed() )
+                    {
                         aTypeStr = OUString( "Variant/" );
+                    }
                     aTypeStr += getBasicTypeName( pVar->GetType() );
                 }
             }
             else if( !bArrayElement )
+            {
                 aWatchStr += OUString( "<Out of Scope>" );
+            }
 
             if( bCollapse )
+            {
                 implCollapseModifiedObjectEntry( pEntry, this );
+            }
 
         }
         else if( bBasicStopped )

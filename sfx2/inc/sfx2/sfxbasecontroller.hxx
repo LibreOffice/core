@@ -387,7 +387,7 @@ private:
     SAL_DLLPRIVATE SfxViewFrame& GetViewFrame_Impl() const;
     SAL_DLLPRIVATE void ShowInfoBars( );
 
-    DECL_LINK( CheckOutHandler, PushButton * );
+    DECL_LINK( CheckOutHandler, void * );
 
 //________________________________________________________________________________________________________
 //  private variables

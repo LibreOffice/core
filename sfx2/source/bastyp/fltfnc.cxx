@@ -1147,7 +1147,6 @@ void SfxFilterContainer::ReadFilters_Impl( sal_Bool bUpdate )
                     SfxFilter* pFilter;
                     for ( size_t i = 0, n = rList.size(); i < n; ++i )
                     {
-                        pFilter = NULL;
                         pFilter = rList[ i ];
                         pFilter->nFormatType |= SFX_FILTER_NOTINSTALLED;
                     }

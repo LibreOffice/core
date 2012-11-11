@@ -947,12 +947,12 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
             String aToken( ScStringUtil::GetQuotedToken( aTables, 0, aQuotedPairs, ',', nStringIx ) );
             sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.ToInt32() : 0;
             if( nTabNum > 0 )
-                ScGlobal::AddToken( maTables, ScfTools::GetNameFromHTMLIndex( static_cast< sal_uInt32 >( nTabNum ) ), cSep );
+                maTables = ScGlobal::addToken( maTables, ScfTools::GetNameFromHTMLIndex( static_cast< sal_uInt32 >( nTabNum ) ), cSep );
             else
             {
                 ScGlobal::EraseQuotes( aToken, '"', false );
                 if( aToken.Len() )
-                    ScGlobal::AddToken( maTables, ScfTools::GetNameFromHTMLName( aToken ), cSep );
+                    maTables = ScGlobal::addToken( maTables, ScfTools::GetNameFromHTMLName( aToken ), cSep );
             }
         }
     }

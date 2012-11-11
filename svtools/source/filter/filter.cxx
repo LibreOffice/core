@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
@@ -35,7 +26,7 @@
 #include <vcl/salctype.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
-#include <vcl/svgread.hxx>
+#include <vcl/svgdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
@@ -63,12 +54,14 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/svg/XSVGWriter.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/logfile.hxx>
+#include <vcl/metaact.hxx>
 #include <vector>
 
 #include "SvFilterOptionsDialog.hxx"
@@ -664,37 +657,96 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     }
 
     //--------------------------- SVG ------------------------------------
-    if( !bTest || ( rFormatExtension.CompareToAscii( "SVG", 3 ) == COMPARE_EQUAL ) )
+    if( !bTest )
     {
-        bSomethingTested=sal_True;
-
-        // just a simple test for the extension
-        if( rFormatExtension.CompareToAscii( "SVG", 3 ) == COMPARE_EQUAL )
-            return sal_True;
-
-        sal_uLong nSize = ( nStreamLen > 1024 ) ? 1024 : nStreamLen;
-        std::vector<sal_uInt8> aBuf(nSize);
-
-        rStream.Seek( nStreamPos );
-        rStream.Read( &aBuf[0], nSize );
-
-        // read the first 1024 bytes & check a few magic string
-        // constants (heuristically)
-        sal_Int8 aMagic1[] = {'<', 's', 'v', 'g'};
-        if( std::search(aBuf.begin(), aBuf.end(),
-                        aMagic1, aMagic1+SAL_N_ELEMENTS(aMagic1)) != aBuf.end() )
+        // check for Xml
+        if( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"<?xml", 256, 5 ) // is it xml
+            && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"version", 256, 7 )) // does it have a version (required for xml)
         {
-            rFormatExtension = rtl::OUString("SVG");
-            return sal_True;
-        }
+            bool bIsSvg(false);
 
-        sal_Int8 aMagic2[] = {'D', 'O', 'C', 'T', 'Y', 'P', 'E', ' ', 's', 'v', 'g'};
-        if( std::search(aBuf.begin(), aBuf.end(),
-                        aMagic2, aMagic2+SAL_N_ELEMENTS(aMagic2)) != aBuf.end() )
-        {
-            rFormatExtension = rtl::OUString("SVG");
-            return sal_True;
+            // check for DOCTYPE svg combination
+            if( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"DOCTYPE", 256, 7 ) // 'DOCTYPE' is there
+                && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"svg", 256, 3 )) // 'svg' is there
+            {
+                bIsSvg = true;
+            }
+
+            // check for svg element in 1st 256 bytes
+            if(!bIsSvg && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"<svg", 256, 4 )) // '<svg'
+            {
+                bIsSvg = true;
+            }
+
+            if(!bIsSvg)
+            {
+                // it's a xml, look for '<svg' in full file. Should not happen too
+                // often since the tests above will handle most cases, but can happen
+                // with Svg files containing big comment headers or Svg as the host
+                // language
+                const sal_uLong nSize((nStreamLen > 2048) ? 2048 : nStreamLen);
+                sal_uInt8* pBuf = new sal_uInt8[nSize];
+
+                rStream.Seek(nStreamPos);
+                rStream.Read(pBuf, nSize);
+
+                if(ImplSearchEntry(pBuf, (sal_uInt8*)"<svg", nSize, 4)) // '<svg'
+                {
+                    bIsSvg = true;
+                }
+
+                delete[] pBuf;
+            }
+
+            if(bIsSvg)
+            {
+                rFormatExtension = OUString( "SVG" );
+                return sal_True;
+            }
         }
+        else
+        {
+            // #119176# Svg files which have no xml header at all have shown up,
+            // detect those, too
+            bool bIsSvg(false);
+
+            // check for svg element in 1st 256 bytes
+            if(ImplSearchEntry( sFirstBytes, (sal_uInt8*)"<svg", 256, 4 )) // '<svg'
+            {
+                bIsSvg = true;
+            }
+
+            if(!bIsSvg)
+            {
+                // look for '<svg' in full file. Should not happen too
+                // often since the tests above will handle most cases, but can happen
+                // with Svg files containing big comment headers or Svg as the host
+                // language
+                const sal_uLong nSize((nStreamLen > 2048) ? 2048 : nStreamLen);
+                sal_uInt8* pBuf = new sal_uInt8[nSize];
+
+                rStream.Seek(nStreamPos);
+                rStream.Read(pBuf, nSize);
+
+                if(ImplSearchEntry(pBuf, (sal_uInt8*)"<svg", nSize, 4)) // '<svg'
+                {
+                    bIsSvg = true;
+                }
+
+                delete[] pBuf;
+            }
+
+            if(bIsSvg)
+            {
+                rFormatExtension = OUString( "SVG" );
+                return sal_True;
+            }
+        }
+    }
+    else if( rFormatExtension.CompareToAscii( "SVG", 3 ) == COMPARE_EQUAL )
+    {
+        bSomethingTested = sal_True;
+        return sal_True;
     }
 
     //--------------------------- TGA ------------------------------------
@@ -1559,17 +1611,37 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
             if( rGraphic.GetContext() == (GraphicReader*) 1 )
                 rGraphic.SetContext( NULL );
 
-            vcl::SVGReader  aSVGReader( rIStream );
-            GDIMetaFile     aSVGMtf;
+            const sal_uInt32 nStmPos(rIStream.Tell());
+            const sal_uInt32 nStmLen(rIStream.Seek(STREAM_SEEK_TO_END) - nStmPos);
+            bool bOkay(false);
 
-            if( 0 == aSVGReader.Read( aSVGMtf ).GetActionSize() )
+            if(nStmLen)
             {
-                nStatus = GRFILTER_FILTERERROR;
+                SvgDataArray aNewData(new sal_uInt8[nStmLen]);
+
+                rIStream.Seek(nStmPos);
+                rIStream.Read(aNewData.get(), nStmLen);
+
+                if(!rIStream.GetError())
+                {
+                    SvgDataPtr aSvgDataPtr(
+                        new SvgData(
+                            aNewData,
+                            nStmLen,
+                            rPath));
+
+                    rGraphic = Graphic(aSvgDataPtr);
+                    bOkay = true;
+                }
+            }
+
+            if(bOkay)
+            {
+                eLinkType = GFX_LINK_TYPE_NATIVE_SVG;
             }
             else
             {
-                rGraphic = Graphic( aSVGMtf );
-                eLinkType = GFX_LINK_TYPE_NATIVE_SVG;
+                nStatus = GRFILTER_FILTERERROR;
             }
         }
         else if( aFilterName.EqualsIgnoreCaseAscii( IMP_XBM ) )
@@ -1929,7 +2001,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                     aMTF.SetPrefSize( aGraphic.GetPrefSize() );
                     aMTF.SetPrefMapMode( aGraphic.GetPrefMapMode() );
                 }
-                aMTF.Write( rOStm, GDIMETAFILE_WRITE_REPLACEMENT_RENDERGRAPHIC );
+                aMTF.Write( rOStm );
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
             }
@@ -2046,24 +2118,22 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
             }
             else if( aFilterName.EqualsIgnoreCaseAscii( EXP_SVG ) )
             {
-                sal_Bool bDone = sal_False;
+                bool bDone(false);
 
                 // do we have a native SVG RenderGraphic, whose data can be written directly?
-                if( ( GRAPHIC_GDIMETAFILE == eType ) && aGraphic.IsRenderGraphic() )
+                const SvgDataPtr aSvgDataPtr(rGraphic.getSvgData());
+
+                if(aSvgDataPtr.get() && aSvgDataPtr->getSvgDataArrayLength())
                 {
-                    const ::vcl::RenderGraphic aRenderGraphic( aGraphic.GetRenderGraphic() );
+                    rOStm.Write(aSvgDataPtr->getSvgDataArray().get(), aSvgDataPtr->getSvgDataArrayLength());
 
-                    if( aRenderGraphic.GetGraphicDataLength() &&
-                        aRenderGraphic.GetGraphicDataMimeType().equalsIgnoreAsciiCase(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "image/svg+xml" ) ) ) )
+                    if( rOStm.GetError() )
                     {
-                        rOStm.Write( aRenderGraphic.GetGraphicData().get(),
-                                     aRenderGraphic.GetGraphicDataLength() );
-
-                           if( rOStm.GetError() )
-                        {
-                            nStatus = GRFILTER_IOERROR;
-                        }
+                        nStatus = GRFILTER_IOERROR;
+                    }
+                    else
+                    {
+                        bDone = true;
                     }
                 }
 
@@ -2073,11 +2143,12 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                     try
                     {
                         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+                        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
                         if( xMgr.is() )
                         {
-                            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter( xMgr->createInstance(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" )) ), ::com::sun::star::uno::UNO_QUERY );
+                            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter(
+                                xml::sax::Writer::create( xContext ), uno::UNO_QUERY_THROW);
 
                             ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svg.SVGWriter" )) ), ::com::sun::star::uno::UNO_QUERY );

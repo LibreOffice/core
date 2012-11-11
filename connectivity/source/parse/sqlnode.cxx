@@ -44,6 +44,7 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <com/sun/star/i18n/KParseTokens.hpp>
+#include <com/sun/star/i18n/CharacterClassification.hpp>
 #include "connectivity/dbconversion.hxx"
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -1068,8 +1069,8 @@ OSQLParseNode* OSQLParser::buildNode_STR_NUM(OSQLParseNode*& _pLiteral)
 {
     ::rtl::OUString aValue;
     if(!m_xCharClass.is())
-        m_xCharClass  = Reference<XCharacterClassification>(m_xServiceFactory->createInstance(::rtl::OUString("com.sun.star.i18n.CharacterClassification")),UNO_QUERY);
-    if(m_xCharClass.is() && s_xLocaleData.is())
+        m_xCharClass  = CharacterClassification::create( m_xContext );
+    if( s_xLocaleData.is() )
     {
         try
         {
@@ -1259,13 +1260,13 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 
 //=============================================================================
 //-----------------------------------------------------------------------------
-OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,const IParseContext* _pContext)
+OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const IParseContext* _pContext)
     :m_pContext(_pContext)
     ,m_pParseTree(NULL)
-    ,m_pData( new OSQLParser_Data( _xServiceFactory ) )
+    ,m_pData( new OSQLParser_Data( uno::Reference<lang::XMultiServiceFactory>(rxContext->getServiceManager(), uno::UNO_QUERY_THROW) ) )
     ,m_nFormatKey(0)
     ,m_nDateFormatKey(0)
-    ,m_xServiceFactory(_xServiceFactory)
+    ,m_xContext(rxContext)
 {
 
 
@@ -1286,7 +1287,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
         s_pGarbageCollector = new OSQLParseNodesGarbageCollector();
 
         if(!s_xLocaleData.is())
-            s_xLocaleData = LocaleData::create(comphelper::getComponentContext(m_xServiceFactory));
+            s_xLocaleData = LocaleData::create(m_xContext);
 
         // reset to 0
         memset(OSQLParser::s_nRuleIDs,0,sizeof(OSQLParser::s_nRuleIDs[0]) * (OSQLParseNode::rule_count+1));

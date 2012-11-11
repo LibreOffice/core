@@ -19,7 +19,6 @@
 
 #include "codemaker/commonjava.hxx"
 
-#include "ostringostreaminserter.hxx"
 #include "skeletoncommon.hxx"
 #include "skeletonjava.hxx"
 

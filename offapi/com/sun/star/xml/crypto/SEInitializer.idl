@@ -17,23 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_crypto_seinitializer_idl_
-#define __com_sun_star_xml_crypto_seinitializer_idl_
+#ifndef __com_sun_star_xml_crypto_SEInitializer_idl_
+#define __com_sun_star_xml_crypto_SEInitializer_idl_
 
 #include <com/sun/star/xml/crypto/XSEInitializer.idl>
-#include <com/sun/star/xml/crypto/XCipherContextSupplier.idl>
-#include <com/sun/star/xml/crypto/XDigestContextSupplier.idl>
 
 module com { module sun { module star { module xml { module crypto {
 
 /**
  * Service of SEInitializer
  */
-service SEInitializer {
-    interface ::com::sun::star::xml::crypto::XSEInitializer;
-    interface ::com::sun::star::xml::crypto::XDigestContextSupplier;
-    interface ::com::sun::star::xml::crypto::XCipherContextSupplier;
-};
+service SEInitializer : XSEInitializer;
 
 } ; } ; } ; } ; } ;
 

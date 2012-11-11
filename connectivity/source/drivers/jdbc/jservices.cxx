@@ -75,7 +75,7 @@ struct ProviderRequest
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
-component_getImplementationEnvironment(
+jdbc_component_getImplementationEnvironment(
     char const ** ppEnvTypeName, uno_Environment **)
 {
     // Recent Java 6 VMs make calls to JNI Attach/DetachCurrentThread (which

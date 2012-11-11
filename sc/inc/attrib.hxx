@@ -399,7 +399,6 @@ public:
     TYPEINFO();
 
     explicit ScCondFormatItem();
-    explicit ScCondFormatItem(sal_uInt32 nIndex);
     explicit ScCondFormatItem(const std::vector<sal_uInt32>& nIndex);
 
     virtual ~ScCondFormatItem();

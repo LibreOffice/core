@@ -69,11 +69,9 @@ public:
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 
 protected:
-// for data exchange (TODO: should be changed!)
-//  virtual void        ActivatePage    ( const SfxItemSet& rSet );
+    virtual void        ActivatePage    ( const SfxItemSet& rSet );
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-    virtual void        ActivatePage    ();
     virtual int         DeactivatePage  ( SfxItemSet* pSet = 0);
 
 private:
@@ -130,11 +128,9 @@ public:
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 
 protected:
-// for data exchange (TODO: should be changed!)
-//  virtual void        ActivatePage    ( const SfxItemSet& rSet );
+    virtual void        ActivatePage    ( const SfxItemSet& rSet );
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-    virtual void        ActivatePage    ();
     virtual int         DeactivatePage  ( SfxItemSet* pSet = 0);
 
 private:

@@ -61,8 +61,8 @@
 #include "com/sun/star/ucb/UnsupportedCommandException.hpp"
 #include "com/sun/star/sdbc/XResultSet.hpp"
 #include "com/sun/star/sdbc/XRow.hpp"
-#include "com/sun/star/packages/manifest/XManifestReader.hpp"
-#include "com/sun/star/packages/manifest/XManifestWriter.hpp"
+#include "com/sun/star/packages/manifest/ManifestReader.hpp"
+#include "com/sun/star/packages/manifest/ManifestWriter.hpp"
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/LicenseException.hpp"
 #include "com/sun/star/deployment/PlatformException.hpp"
@@ -1185,10 +1185,8 @@ void BackendImpl::PackageImpl::exportTo(
         // write into pipe:
         Reference<XComponentContext> xContext(
             getMyBackend()->getComponentContext() );
-        Reference<packages::manifest::XManifestWriter> xManifestWriter(
-            xContext->getServiceManager()->createInstanceWithContext(
-                OUSTR("com.sun.star.packages.manifest.ManifestWriter"),
-                xContext ), UNO_QUERY_THROW );
+        Reference<packages::manifest::XManifestWriter> xManifestWriter =
+            packages::manifest::ManifestWriter::create( xContext );
         Reference<io::XOutputStream> xPipe( io::Pipe::create(xContext), UNO_QUERY_THROW );
         xManifestWriter->writeManifestSequence(
             xPipe, comphelper::containerToSequence(manifest) );
@@ -1445,10 +1443,8 @@ void BackendImpl::PackageImpl::scanBundle(
 
     const Reference<XComponentContext> xContext(
         getMyBackend()->getComponentContext() );
-    Reference<packages::manifest::XManifestReader> xManifestReader(
-        xContext->getServiceManager()->createInstanceWithContext(
-            OUSTR("com.sun.star.packages.manifest.ManifestReader"),
-            xContext ), UNO_QUERY_THROW );
+    Reference<packages::manifest::XManifestReader> xManifestReader =
+        packages::manifest::ManifestReader::create( xContext );
     const Sequence< Sequence<beans::PropertyValue> > manifestSeq(
         xManifestReader->readManifestSequence( manifestContent.openStream() ) );
     const OUString packageRootURL( getURL() );

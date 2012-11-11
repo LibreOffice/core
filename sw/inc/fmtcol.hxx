@@ -103,7 +103,7 @@ public:
     inline void SetNextTxtFmtColl(SwTxtFmtColl& rNext);
     SwTxtFmtColl& GetNextTxtFmtColl() const { return *pNextTxtFmtColl; }
 
-    sal_Bool IsAtDocNodeSet() const;
+    bool IsAtDocNodeSet() const;
 
     void SetAttrOutlineLevel( int );
     int  GetAttrOutlineLevel() const;
@@ -117,9 +117,9 @@ public:
 
     /** Override to recognize changes on the <SwNumRuleItem> and register/unregister
      the paragragh style at the corresponding <SwNumRule> instance. */
-    virtual sal_Bool SetFmtAttr( const SfxPoolItem& rAttr );
-    virtual sal_Bool SetFmtAttr( const SfxItemSet& rSet );
-    virtual sal_Bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
+    virtual bool SetFmtAttr( const SfxPoolItem& rAttr );
+    virtual bool SetFmtAttr( const SfxItemSet& rSet );
+    virtual bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
 
     /// Override <ResetAllFmtAttr()> to stay assigned to list level of outline style.
     virtual sal_uInt16 ResetAllFmtAttr();
@@ -256,7 +256,7 @@ public:
     const SwCollCondition* HasCondition( const SwCollCondition& rCond ) const;
     const SwFmtCollConditions& GetCondColls() const     { return aCondColls; }
     void InsertCondition( const SwCollCondition& rCond );
-    sal_Bool RemoveCondition( const SwCollCondition& rCond );
+    bool RemoveCondition( const SwCollCondition& rCond );
 
     void SetConditions( const SwFmtCollConditions& );
 };

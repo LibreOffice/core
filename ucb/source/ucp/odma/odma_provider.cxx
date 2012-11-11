@@ -46,8 +46,8 @@ using namespace odma;
 ODMHANDLE ContentProvider::m_aOdmHandle = NULL;
 
 ContentProvider::ContentProvider(
-                const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-: ::ucbhelper::ContentProviderImplHelper( rSMgr )
+                const uno::Reference< uno::XComponentContext >& rContext )
+: ::ucbhelper::ContentProviderImplHelper( rContext )
 {
 
 }
@@ -139,7 +139,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 
 // @@@ Adjust implementation name. Keep the prefix "com.sun.star.comp."!
 // @@@ Adjust service name.
-XSERVICEINFO_IMPL_1( ContentProvider,
+XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      rtl::OUString( "com.sun.star.comp.odma.ContentProvider" ),
                      rtl::OUString(ODMA_CONTENT_PROVIDER_SERVICE_NAME ) );
 
@@ -246,7 +246,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     if(!aProp.is())
         throw ucb::IllegalIdentifierException();
 
-    xContent = new Content( m_xSMgr, this, xCanonicId ,aProp);
+    xContent = new Content( uno::Reference< lang::XMultiServiceFactory >(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, xCanonicId ,aProp);
     registerNewContent( xContent );
 
     if ( !xContent->getIdentifier().is() )

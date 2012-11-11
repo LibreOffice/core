@@ -28,7 +28,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <sax/tools/converter.hxx>
@@ -841,8 +841,6 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     break;
                 case XML_ATACTION_DECODE_ID:
                     {
-                        OUString aAttrValue;
-
                         const sal_Int32 nLen = rAttrValue.getLength();
                         OUStringBuffer aBuffer;
 
@@ -1064,49 +1062,27 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
             {
                 if( !xCharClass.is() )
                 {
-                    Reference< XMultiServiceFactory > xFactory =
-                        comphelper::getProcessServiceFactory();
-                    if( xFactory.is() )
-                    {
-                        try
-                        {
-                            const_cast < XMLTransformerBase * >(this)
-                                ->xCharClass =
-                                    Reference < XCharacterClassification >(
-                                xFactory->createInstance(
-                                    OUString(
-                        "com.sun.star.i18n.CharacterClassification_Unicode") ),
-                                UNO_QUERY );
-
-                            OSL_ENSURE( xCharClass.is(),
-                    "can't instantiate character clossification component" );
-                        }
-                        catch( com::sun::star::uno::Exception& )
-                        {
-                        }
-                    }
+                    const_cast < XMLTransformerBase * >(this)
+                        ->xCharClass = CharacterClassification::create( comphelper::getProcessComponentContext() );
                 }
-                if( xCharClass.is() )
-                {
-                    sal_Int16 nType = xCharClass->getType( rName, i );
+                sal_Int16 nType = xCharClass->getType( rName, i );
 
-                    switch( nType )
-                    {
-                    case UnicodeType::UPPERCASE_LETTER:     // Lu
-                    case UnicodeType::LOWERCASE_LETTER:     // Ll
-                    case UnicodeType::TITLECASE_LETTER:     // Lt
-                    case UnicodeType::OTHER_LETTER:         // Lo
-                    case UnicodeType::LETTER_NUMBER:        // Nl
-                        bValidChar = sal_True;
-                        break;
-                    case UnicodeType::NON_SPACING_MARK:     // Ms
-                    case UnicodeType::ENCLOSING_MARK:       // Me
-                    case UnicodeType::COMBINING_SPACING_MARK:   //Mc
-                    case UnicodeType::MODIFIER_LETTER:      // Lm
-                    case UnicodeType::DECIMAL_DIGIT_NUMBER: // Nd
-                        bValidChar = i > 0;
-                        break;
-                    }
+                switch( nType )
+                {
+                case UnicodeType::UPPERCASE_LETTER:     // Lu
+                case UnicodeType::LOWERCASE_LETTER:     // Ll
+                case UnicodeType::TITLECASE_LETTER:     // Lt
+                case UnicodeType::OTHER_LETTER:         // Lo
+                case UnicodeType::LETTER_NUMBER:        // Nl
+                    bValidChar = sal_True;
+                    break;
+                case UnicodeType::NON_SPACING_MARK:     // Ms
+                case UnicodeType::ENCLOSING_MARK:       // Me
+                case UnicodeType::COMBINING_SPACING_MARK:   //Mc
+                case UnicodeType::MODIFIER_LETTER:      // Lm
+                case UnicodeType::DECIMAL_DIGIT_NUMBER: // Nd
+                    bValidChar = i > 0;
+                    break;
                 }
             }
         }

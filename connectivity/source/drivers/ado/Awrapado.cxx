@@ -1031,9 +1031,9 @@ sal_Bool WpADOParameter::put_Size(const sal_Int32& _nSize)
     return (SUCCEEDED(pInterface->put_Size(_nSize)));
 }
 
- ::rtl::OUString WpADOColumn::get_Name() const
+::rtl::OUString WpADOColumn::get_Name() const
 {
-     OSL_ENSURE(pInterface,"Interface is null!");
+    OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
     pInterface->get_Name(&aBSTR);
     return aBSTR;
@@ -1561,6 +1561,13 @@ WpBase::WpBase(IDispatch* pInt)
     }
 }
 
+WpBase::WpBase(const WpBase& aWrapper)
+    :pIUnknown(aWrapper.pIUnknown)
+{
+    if (pIUnknown)
+        pIUnknown->AddRef();
+}
+
 //inline
 WpBase& WpBase::operator=(const WpBase& rhs)
 {
@@ -1586,11 +1593,6 @@ WpBase& WpBase::operator=(IDispatch* rhs)
             pIUnknown->AddRef();
     }
     return *this;
-}
-
-WpBase::WpBase(const WpBase& aWrapper)
-{
-    operator=(aWrapper);
 }
 
 WpBase::~WpBase()

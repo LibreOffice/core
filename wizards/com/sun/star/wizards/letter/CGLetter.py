@@ -15,9 +15,8 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from wizards.common.ConfigGroup import *
-from wizards.common.ConfigGroup import *
-from CGPaperElementLocation import CGPaperElementLocation
+from .CGPaperElementLocation import CGPaperElementLocation
+from ..common.ConfigGroup import ConfigGroup
 
 class CGLetter(ConfigGroup):
 
@@ -29,7 +28,6 @@ class CGLetter(ConfigGroup):
         self.cp_PaperCompanyAddressReceiverField = bool()
         self.cp_PaperFooter = bool()
         self.cp_PaperFooterHeight = float()
-        self.cp_Norm = int()
         self.cp_PrintCompanyLogo = bool()
         self.cp_PrintCompanyAddressReceiverField = bool()
         self.cp_PrintLetterSigns = bool()

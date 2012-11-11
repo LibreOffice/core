@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <tools/debug.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -429,6 +420,7 @@ public:
     TYPEINFO();
 
     sal_Bool CreateIfNotThere();
+    const OUString& GetHRef() const { return sHRef; }
 
     XMLTextFrameContext_Impl( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
@@ -463,7 +455,7 @@ public:
     ::com::sun::star::text::TextContentAnchorType GetAnchorType() const { return eAnchorType; }
 
     const ::com::sun::star::uno::Reference <
-        ::com::sun::star::beans::XPropertySet >& GetPropSet() { return xPropSet; }
+        ::com::sun::star::beans::XPropertySet >& GetPropSet() const { return xPropSet; }
 };
 
 TYPEINIT1( XMLTextFrameContext_Impl, SvXMLImportContext );
@@ -756,8 +748,6 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
         xTextImportHelper->InsertTextContent( xTxtCntnt );
     }
 
-    Reference < XShape > xShape( xPropSet, UNO_QUERY );
-
     // #107848#
     // Make adding the shepe to Z-Ordering dependent from if we are
     // inside a inside_deleted_section (redlining). That is necessary
@@ -767,6 +757,8 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
     if(!GetImport().HasTextImport()
         || !GetImport().GetTextImport()->IsInsideDeleteContext())
     {
+        Reference < XShape > xShape( xPropSet, UNO_QUERY );
+
         GetImport().GetShapeImport()->shapeWithZIndexAdded( xShape, nZIndex );
     }
 
@@ -783,6 +775,43 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
         xTextImportHelper->PushListContext();
         mbListContextPushed = true;
     }
+}
+
+
+void XMLTextFrameContext::removeGraphicFromImportContext(const SvXMLImportContext& rContext) const
+{
+    const XMLTextFrameContext_Impl* pXMLTextFrameContext_Impl = dynamic_cast< const XMLTextFrameContext_Impl* >(&rContext);
+
+    if(pXMLTextFrameContext_Impl)
+    {
+        try
+        {
+            // just dispose to delete
+            uno::Reference< lang::XComponent > xComp(pXMLTextFrameContext_Impl->GetPropSet(), UNO_QUERY);
+
+            if(xComp.is())
+            {
+                xComp->dispose();
+            }
+        }
+        catch( uno::Exception& )
+        {
+            OSL_FAIL( "Error in cleanup of multiple graphic object import (!)" );
+        }
+    }
+}
+
+rtl::OUString XMLTextFrameContext::getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const
+{
+    rtl::OUString aRetval;
+    const XMLTextFrameContext_Impl* pXMLTextFrameContext_Impl = dynamic_cast< const XMLTextFrameContext_Impl* >(&rContext);
+
+    if(pXMLTextFrameContext_Impl)
+    {
+        return pXMLTextFrameContext_Impl->GetHRef();
+    }
+
+    return aRetval;
 }
 
 sal_Bool XMLTextFrameContext_Impl::CreateIfNotThere()
@@ -1313,6 +1342,7 @@ XMLTextFrameContext::XMLTextFrameContext(
         const Reference< XAttributeList > & xAttrList,
         TextContentAnchorType eATyp )
 :   SvXMLImportContext( rImport, nPrfx, rLName )
+,   multiImageImportHelper()
 ,   m_xAttrList( new SvXMLAttributeList( xAttrList ) )
 ,   m_pHyperlink( 0 )
     // Implement Title/Description Elements UI (#i73249#)
@@ -1371,6 +1401,9 @@ XMLTextFrameContext::~XMLTextFrameContext()
 
 void XMLTextFrameContext::EndElement()
 {
+    /// solve if multiple image child contexts were imported
+    solveMultipleImages();
+
     SvXMLImportContext *pContext = &m_xImplContext;
     XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
     if( pImpl )
@@ -1468,6 +1501,10 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                 {
                     m_bSupportsReplacement = sal_True;
                 }
+                else if(XML_TEXT_FRAME_GRAPHIC == nFrameType)
+                {
+                    setSupportsMultipleContents(IsXMLToken(rLocalName, XML_IMAGE));
+                }
 
                 if( !pContext )
                 {
@@ -1480,8 +1517,23 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                 }
 
                 m_xImplContext = pContext;
+
+                if(getSupportsMultipleContents() && XML_TEXT_FRAME_GRAPHIC == nFrameType)
+                {
+                    addContent(*m_xImplContext);
+                }
             }
         }
+    }
+    else if(getSupportsMultipleContents() && XML_NAMESPACE_DRAW == p_nPrefix && IsXMLToken(rLocalName, XML_IMAGE))
+    {
+        // read another image
+        pContext = new XMLTextFrameContext_Impl(
+            GetImport(), p_nPrefix, rLocalName, xAttrList,
+            m_eDefaultAnchorType, XML_TEXT_FRAME_GRAPHIC, m_xAttrList);
+
+        m_xImplContext = pContext;
+        addContent(*m_xImplContext);
     }
     else if( m_bSupportsReplacement && !m_xReplImplContext &&
              XML_NAMESPACE_DRAW == p_nPrefix &&

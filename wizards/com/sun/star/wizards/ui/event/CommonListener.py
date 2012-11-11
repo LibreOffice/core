@@ -31,7 +31,6 @@
 #   Danny Brewer         Revised 2004-06-05-01
 #
 import unohelper
-
 from com.sun.star.awt import XActionListener
 
 class ActionListenerProcAdapter( unohelper.Base, XActionListener ):

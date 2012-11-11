@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include <hintids.hxx>
-
+#include <comphelper/string.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <swtypes.hxx>
@@ -675,8 +675,9 @@ bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
     if(!(rAny >>= aParam))
         return false;
 
-    String sToSet;
-    sToSet.Fill(AUTH_FIELD_ISBN, TOX_STYLE_DELIMITER);
+    rtl::OUStringBuffer sBuf;
+    comphelper::string::padToLength(sBuf, AUTH_FIELD_ISBN, TOX_STYLE_DELIMITER);
+    String sToSet(sBuf.makeStringAndClear());
     const PropertyValue* pParam = aParam.getConstArray();
     for(sal_Int32 i = 0; i < aParam.getLength(); i++)
     {

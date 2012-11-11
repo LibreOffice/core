@@ -47,13 +47,14 @@ OIndexColumns::OIndexColumns(   OIndexHelper* _pIndex,
 sdbcx::ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-    ::rtl::OUString aSchema,aTable;
+    ::rtl::OUString aCatalog, aSchema, aTable;
+    ::com::sun::star::uno::Any Catalog(m_pIndex->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)));
+    Catalog >>= aCatalog;
     m_pIndex->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
     m_pIndex->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
 
     Reference< XResultSet > xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getIndexInfo(
-        m_pIndex->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)),
-        aSchema,aTable,sal_False,sal_False);
+        Catalog, aSchema, aTable, sal_False, sal_False);
 
     sal_Bool bAsc = sal_True;
     if ( xResult.is() )
@@ -68,8 +69,7 @@ sdbcx::ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
     }
 
     xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getColumns(
-        m_pIndex->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)),
-        aSchema,aTable,_rName);
+        Catalog, aSchema, aTable, _rName);
 
     sdbcx::ObjectType xRet;
     if ( xResult.is() )
@@ -87,14 +87,15 @@ sdbcx::ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
                 ::rtl::OUString aColumnDef(xRow->getString(13));
 
                 OIndexColumn* pRet = new OIndexColumn(bAsc,
-                                                    _rName,
-                                                    aTypeName,
-                                                    aColumnDef,
-                                                    nNull,
-                                                    nSize,
-                                                    nDec,
-                                                    nDataType,
-                                                    sal_False,sal_False,sal_False,sal_True);
+                                                      _rName,
+                                                      aTypeName,
+                                                      aColumnDef,
+                                                      nNull,
+                                                      nSize,
+                                                      nDec,
+                                                      nDataType,
+                                                      sal_False,sal_False,sal_False,sal_True,
+                                                      aCatalog, aSchema, aTable);
                 xRet = pRet;
                 break;
             }

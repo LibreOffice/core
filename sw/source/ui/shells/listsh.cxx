@@ -158,9 +158,7 @@ void SwListShell::Execute(SfxRequest &rReq)
                 SfxViewFrame * pFrame = GetView().GetViewFrame();
 
                 rReq.Done();
-                rSh.NumUpDown( ( nSlot == FN_NUM_BULLET_DOWN )
-                               ? sal_True
-                               : sal_False );
+                rSh.NumUpDown( nSlot == FN_NUM_BULLET_DOWN );
                 pFrame->GetBindings().Invalidate( SID_TABLE_CELL ); // StatusZeile updaten!
             }
             break;
@@ -189,7 +187,7 @@ void SwListShell::Execute(SfxRequest &rReq)
             if ( bOutline )
                 lcl_OutlineUpDownWithSubPoints( rSh, false, false );
             else
-                rSh.MoveNumParas(sal_False, sal_False);
+                rSh.MoveNumParas(false, false);
             rReq.Done();
             break;
 
@@ -197,7 +195,7 @@ void SwListShell::Execute(SfxRequest &rReq)
             if ( bOutline )
                 lcl_OutlineUpDownWithSubPoints( rSh, true, false );
             else
-                rSh.MoveNumParas(sal_True, sal_False);
+                rSh.MoveNumParas(true, false);
             rReq.Done();
             break;
 
@@ -205,7 +203,7 @@ void SwListShell::Execute(SfxRequest &rReq)
             if ( bOutline )
                 lcl_OutlineUpDownWithSubPoints( rSh, true, true );
             else
-                rSh.MoveNumParas(sal_True, sal_True);
+                rSh.MoveNumParas(true, true);
             rReq.Done();
             break;
 
@@ -213,7 +211,7 @@ void SwListShell::Execute(SfxRequest &rReq)
             if ( bOutline )
                 lcl_OutlineUpDownWithSubPoints( rSh, false, true );
             else
-                rSh.MoveNumParas(sal_False, sal_True);
+                rSh.MoveNumParas(false, true);
             rReq.Done();
             break;
 

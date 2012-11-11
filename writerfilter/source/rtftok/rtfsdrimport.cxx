@@ -71,6 +71,20 @@ void RTFSdrImport::createShape(OUString aStr, uno::Reference<drawing::XShape>& x
     xPropertySet.set(xShape, uno::UNO_QUERY);
 }
 
+void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder)
+{
+    writerfilter::dmapper::DomainMapper& rMapper = (writerfilter::dmapper::DomainMapper&)m_rImport.Mapper();
+    writerfilter::dmapper::GraphicZOrderHelper* pHelper = rMapper.graphicZOrderHelper();
+    xPropertySet->setPropertyValue("ZOrder", uno::makeAny(pHelper->findZOrder(nZOrder)));
+    pHelper->addItem(xPropertySet, nZOrder);
+}
+
+void RTFSdrImport::resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nFLine)
+{
+    if (nFLine == 0)
+        xPropertySet->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
+}
+
 void RTFSdrImport::resolve(RTFShape& rShape)
 {
     int nType = -1;
@@ -139,13 +153,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             }
         }
         else if (i->first == "fLine" && xPropertySet.is())
-        {
-            if (i->second.toInt32() == 0)
-            {
-                aAny <<= drawing::LineStyle_NONE;
-                xPropertySet->setPropertyValue("LineStyle", aAny);
-            }
-        }
+            resolveFLine(xPropertySet, i->second.toInt32());
         else if (i->first == "fillOpacity" && xPropertySet.is())
         {
            int opacity = 100 - (i->second.toInt32())*100/65536;
@@ -281,13 +289,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         else if ( i->first == "geoBottom" )
             aViewBox.Height = i->second.toInt32();
         else if ( i->first == "dhgt" )
-        {
-            writerfilter::dmapper::DomainMapper& rMapper = (writerfilter::dmapper::DomainMapper&)m_rImport.Mapper();
-            writerfilter::dmapper::GraphicZOrderHelper* pHelper = rMapper.graphicZOrderHelper();
-            sal_Int32 nZOrder = i->second.toInt32();
-            xPropertySet->setPropertyValue("ZOrder", uno::makeAny(pHelper->findZOrder(nZOrder)));
-            pHelper->addItem(xPropertySet, nZOrder);
-        }
+            resolveDhgt(xPropertySet, i->second.toInt32());
         else
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle shape property '" <<
                     OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr() << "':'" <<
@@ -353,14 +355,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
 
     // Send it to dmapper
     m_rImport.Mapper().startShape(xShape);
-    m_rImport.Mapper().startParagraphGroup();
-    if (m_rImport.replayShapetext())
-    {
-        m_rImport.Mapper().startCharacterGroup();
-        m_rImport.runBreak();
-        m_rImport.Mapper().endCharacterGroup();
-    }
-    m_rImport.Mapper().endParagraphGroup();
+    m_rImport.replayShapetext();
     m_rImport.Mapper().endShape();
 }
 

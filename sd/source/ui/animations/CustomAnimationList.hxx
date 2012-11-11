@@ -112,7 +112,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxLastTargetShape;
     sal_Int32 mnLastGroupId;
-    SvLBoxEntry* mpLastParentEntry;
+    SvTreeListEntry* mpLastParentEntry;
 
 };
 

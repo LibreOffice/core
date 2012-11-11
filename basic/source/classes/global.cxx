@@ -42,7 +42,7 @@ namespace
     public:
         lclTransliterationWrapper()
             : m_aTransliteration(
-                comphelper::getProcessServiceFactory(),
+                comphelper::getProcessComponentContext(),
                 com::sun::star::i18n::TransliterationModules_IGNORE_CASE )
         {
             const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();

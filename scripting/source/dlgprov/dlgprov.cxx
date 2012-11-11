@@ -21,6 +21,7 @@
 #include "DialogModelProvider.hxx"
 #include "dlgprov.hxx"
 #include "dlgevtatt.hxx"
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/io/XInputStreamProvider.hpp>
@@ -29,7 +30,7 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <com/sun/star/beans/XIntrospection.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -44,7 +45,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 
 #include <com/sun/star/uri/XUriReference.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -285,25 +286,8 @@ static ::rtl::OUString aResourceResolverPropName("ResourceResolver");
         // parse URL
         // TODO: use URL parsing class
         // TODO: decoding of location
-        Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
 
-        if ( !xSMgr.is() )
-        {
-            throw RuntimeException(
-                ::rtl::OUString( "DialogProviderImpl::getDialogModel: Couldn't instantiate MultiComponent factory"  ),
-                    Reference< XInterface >() );
-        }
-
-        Reference< uri::XUriReferenceFactory > xFac (
-            xSMgr->createInstanceWithContext( rtl::OUString(
-            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
-
-        if  ( !xFac.is() )
-        {
-            throw RuntimeException(
-                ::rtl::OUString("DialogProviderImpl::getDialogModel(), could not instatiate UriReferenceFactory."),
-                Reference< XInterface >() );
-        }
+        Reference< uri::XUriReferenceFactory > xFac ( uri::UriReferenceFactory::create( m_xContext )  );
 
         // i75778: Support non-script URLs
         Reference< io::XInputStream > xInput;
@@ -536,10 +520,8 @@ static ::rtl::OUString aResourceResolverPropName("ResourceResolver");
                     }
 
                     // create a peer
-                    Reference< XToolkit> xToolkit( xSMgr->createInstanceWithContext(
-                        ::rtl::OUString( "com.sun.star.awt.Toolkit"  ), m_xContext ), UNO_QUERY );
-                    if ( xToolkit.is() )
-                        xDialogControl->createPeer( xToolkit, xPeer );
+                    Reference< XToolkit> xToolkit( Toolkit::create( m_xContext ), UNO_QUERY_THROW );
+                    xDialogControl->createPeer( xToolkit, xPeer );
                 }
             }
         }
@@ -595,34 +577,20 @@ static ::rtl::OUString aResourceResolverPropName("ResourceResolver");
 
         if( !xIntrospection.is() )
         {
-            Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
-            if ( !xSMgr.is() )
-            {
-                throw RuntimeException(
-                    ::rtl::OUString( "DialogProviderImpl::getIntrospectionAccess: Couldn't instantiate MultiComponent factory"  ),
-                        Reference< XInterface >() );
-            }
-
             // Get introspection service
-            Reference< XInterface > xI = xSMgr->createInstanceWithContext
-                ( rtl::OUString("com.sun.star.beans.Introspection"), m_xContext );
-            if (xI.is())
-                xIntrospection = Reference< XIntrospection >::query( xI );
+            xIntrospection = Introspection::create( m_xContext );
         }
 
-        if( xIntrospection.is() )
+        // Do introspection
+        try
         {
-            // Do introspection
-            try
-            {
-                Any aHandlerAny;
-                aHandlerAny <<= rxHandler;
-                xIntrospectionAccess = xIntrospection->inspect( aHandlerAny );
-            }
-            catch( RuntimeException& )
-            {
-                xIntrospectionAccess.clear();
-            }
+            Any aHandlerAny;
+            aHandlerAny <<= rxHandler;
+            xIntrospectionAccess = xIntrospection->inspect( aHandlerAny );
+        }
+        catch( RuntimeException& )
+        {
+            xIntrospectionAccess.clear();
         }
         return xIntrospectionAccess;
     }

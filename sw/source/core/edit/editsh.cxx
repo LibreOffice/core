@@ -440,7 +440,7 @@ sal_Bool SwEditShell::HasOLEObj( const String &rName ) const
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
     while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
-        aIdx++;
+        ++aIdx;
         SwNode& rNd = aIdx.GetNode();
         if( rNd.IsOLENode() &&
             rName == ((SwOLENode&)rNd).GetChartTblName() &&
@@ -812,12 +812,12 @@ sal_Bool SwEditShell::DelINetAttrWithText()
 
 
 // setzen an den Textzeichenattributen das DontExpand-Flag
-sal_Bool SwEditShell::DontExpandFmt()
+bool SwEditShell::DontExpandFmt()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( !IsTableMode() && GetDoc()->DontExpandFmt( *GetCrsr()->GetPoint() ))
     {
-        bRet = sal_True;
+        bRet = true;
         CallChgLnk();
     }
     return bRet;
@@ -1126,7 +1126,7 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
 
 void SwEditShell::TransliterateText( sal_uInt32 nType )
 {
-    utl::TransliterationWrapper aTrans( ::comphelper::getProcessServiceFactory(), nType );
+    utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), nType );
     StartAllAction();
     SET_CURR_SHELL( this );
 

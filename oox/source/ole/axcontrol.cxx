@@ -194,8 +194,9 @@ bool lclExtractRangeFromName( CellRangeAddress& orRangeAddr, const Reference< XM
         orRangeAddr = xAddressable->getRangeAddress();
         return true;
     }
-    catch(const Exception& )
+    catch (const Exception& e)
     {
+        SAL_WARN("oox", "exception: " << e.Message);
     }
     return false;
 }
@@ -226,8 +227,9 @@ void lclPrepareConverter( PropertySet& rConverter, const Reference< XModel >& rx
             CREATE_OUSTRING( "com.sun.star.table.CellAddressConversion" );
         rConverter.set( xModelFactory->createInstance( aServiceName ) );
     }
-    catch(const Exception& )
+    catch (const Exception& e)
     {
+        SAL_WARN("oox", "exception: " << e.Message);
     }
     rConverter.setProperty( PROP_XLA1Representation, rAddressString );
     rConverter.setProperty( PROP_ReferenceSheet, nRefSheet );
@@ -372,8 +374,9 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
             CREATE_OUSTRING( "com.sun.star.table.CellValueBinding" ), aArgs ), UNO_QUERY_THROW );
         xBindable->setValueBinding( xBinding );
     }
-    catch(const Exception& )
+    catch (const Exception& e)
     {
+        SAL_WARN("oox", "exception: " << e.Message);
     }
 
     // list entry source
@@ -404,8 +407,9 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
             CREATE_OUSTRING( "com.sun.star.table.CellRangeListSource"  ), aArgs ), UNO_QUERY_THROW );
         xEntrySink->setListEntrySource( xEntrySource );
     }
-    catch(const Exception& )
+    catch (const Exception& e)
     {
+        SAL_WARN("oox", "exception: " << e.Message);
     }
 }
 
@@ -1856,7 +1860,7 @@ void AxListBoxModel::convertFromProperties( PropertySet& rPropSet, const Control
     bool bRes = false;
     if ( rPropSet.getProperty( bRes, PROP_MultiSelection ) )
 
-    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+        rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
 
     rConv.convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
@@ -2493,8 +2497,8 @@ HtmlTextBoxModel::HtmlTextBoxModel()
 bool
 HtmlTextBoxModel::importBinaryModel( BinaryInputStream& rInStrm )
 {
-    OUString sStringContents = rInStrm.readUnicodeArray( rInStrm.size() );
 #ifdef DEBUG
+    OUString sStringContents = rInStrm.readUnicodeArray( rInStrm.size() );
     // in msocximex ( where this is ported from, it appears *nothing* is read
     // from the control stream ), surely there is some useful info there ?
     OSL_TRACE("HtmlTextBoxModel::importBinaryModel - string contents of stream :");
@@ -2554,8 +2558,9 @@ bool EmbeddedControl::convertProperties( const Reference< XControlModel >& rxCtr
         {
             aPropMap.setProperty( PROP_GenerateVbaEvents, true);
         }
-        catch(const Exception& )
+        catch (const Exception& e)
         {
+            SAL_WARN("oox", "exception: " << e.Message);
         }
         mxModel->convertProperties( aPropMap, rConv );
         PropertySet aPropSet( rxCtrlModel );
@@ -2606,8 +2611,9 @@ Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl
         if( rControl.convertProperties( xCtrlModel, maControlConv ) )
             return xCtrlModel;
     }
-    catch(const Exception& )
+    catch (const Exception& e)
     {
+        SAL_WARN("oox", "exception creating Control: " << e.Message);
     }
     return Reference< XControlModel >();
 }
@@ -2631,8 +2637,9 @@ Reference< XIndexContainer > EmbeddedForm::createXForm()
                 mxFormIC.set( xForm, UNO_QUERY_THROW );
             }
         }
-        catch(const Exception& )
+        catch (const Exception& e)
         {
+            SAL_WARN("oox", "exception creating Form: " << e.Message);
         }
         // always clear the forms supplier to not try to create the form again
         mxFormsSupp.clear();

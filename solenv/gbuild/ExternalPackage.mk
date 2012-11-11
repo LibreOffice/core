@@ -18,6 +18,9 @@
 # previous version, so the delivered headers will not be updated.
 #
 # Uff, I hope this is at least partially understandable :-)
+#
+# Note: An ExternalPackage object can be used in functions that expect a
+# Package (e.g., gb_LinkTarget_use_package(s)).
 
 $(dir $(call gb_ExternalPackage_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))

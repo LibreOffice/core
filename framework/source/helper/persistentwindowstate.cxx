@@ -37,8 +37,9 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
@@ -118,7 +119,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR ;
+    css::uno::Reference< css::uno::XComponentContext >     xContext = comphelper::getComponentContext(m_xSMGR);
     css::uno::Reference< css::frame::XFrame >              xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     sal_Bool                                               bRestoreWindowState = !m_bWindowStateAlreadySet;
     aReadLock.unlock();
@@ -134,7 +135,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
         return;
 
     // unknown module -> no configuration available!
-    ::rtl::OUString sModuleName = PersistentWindowState::implst_identifyModule(xSMGR, xFrame);
+    ::rtl::OUString sModuleName = PersistentWindowState::implst_identifyModule(xContext, xFrame);
     if (sModuleName.isEmpty())
         return;
 
@@ -144,7 +145,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
             {
                 if (bRestoreWindowState)
                 {
-                    ::rtl::OUString sWindowState = PersistentWindowState::implst_getWindowStateFromConfig(xSMGR, sModuleName);
+                    ::rtl::OUString sWindowState = PersistentWindowState::implst_getWindowStateFromConfig(xContext, sModuleName);
                     PersistentWindowState::implst_setWindowStateOnWindow(xWindow,sWindowState);
                     // SAFE -> ----------------------------------
                     WriteGuard aWriteLock(m_aLock);
@@ -165,7 +166,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
         case css::frame::FrameAction_COMPONENT_DETACHING :
             {
                 ::rtl::OUString sWindowState = PersistentWindowState::implst_getWindowStateFromWindow(xWindow);
-                PersistentWindowState::implst_setWindowStateOnConfig(xSMGR, sModuleName, sWindowState);
+                PersistentWindowState::implst_setWindowStateOnConfig(xContext, sModuleName, sWindowState);
             }
             break;
         default:
@@ -181,14 +182,13 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
 }
 
 //*****************************************************************************************************************
-::rtl::OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
+::rtl::OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                              const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
     ::rtl::OUString sModuleName;
 
-    css::uno::Reference< css::frame::XModuleManager > xModuleManager(
-        xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
-        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+        css::frame::ModuleManager::create( rxContext );
 
     try
     {
@@ -203,8 +203,8 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
 }
 
 //*****************************************************************************************************************
-::rtl::OUString PersistentWindowState::implst_getWindowStateFromConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR      ,
-                                                                       const ::rtl::OUString&                                        sModuleName)
+::rtl::OUString PersistentWindowState::implst_getWindowStateFromConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                                                       const ::rtl::OUString&                                    sModuleName)
 {
     ::rtl::OUString sWindowState;
 
@@ -219,7 +219,7 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
 
     try
     {
-        ::comphelper::ConfigurationHelper::readDirectKey(xSMGR,
+        ::comphelper::ConfigurationHelper::readDirectKey(rxContext,
                                                                                       sPackage,
                                                                                       sRelPath,
                                                                                       sKey,
@@ -234,9 +234,9 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
 }
 
 //*****************************************************************************************************************
-void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR       ,
-                                                          const ::rtl::OUString&                                        sModuleName ,
-                                                          const ::rtl::OUString&                                        sWindowState)
+void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                                          const ::rtl::OUString&                                    sModuleName ,
+                                                          const ::rtl::OUString&                                    sWindowState)
 {
     ::rtl::OUStringBuffer sRelPathBuf(256);
     sRelPathBuf.appendAscii("Office/Factories/*[\"");
@@ -249,7 +249,7 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
 
     try
     {
-        ::comphelper::ConfigurationHelper::writeDirectKey(xSMGR,
+        ::comphelper::ConfigurationHelper::writeDirectKey(rxContext,
                                                           sPackage,
                                                           sRelPath,
                                                           sKey,

@@ -20,8 +20,7 @@
 #ifndef _TYPEDETECTION_EXPORT_HXX
 #define _TYPEDETECTION_EXPORT_HXX
 
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/xml/sax/XWriter.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include "xmlfilterjar.hxx"
@@ -29,15 +28,15 @@
 class TypeDetectionExporter
 {
 public:
-    TypeDetectionExporter( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
+    TypeDetectionExporter( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& mxContext );
 
     void doExport(com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xOS,  const XMLFilterVector& rFilters );
 
 private:
-    void addProperty( com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > xWriter, const rtl::OUString& rName, const rtl::OUString& rValue );
-    void addLocaleProperty( com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > xWriter, const rtl::OUString& rName, const rtl::OUString& rValue );
+    void addProperty( com::sun::star::uno::Reference< com::sun::star::xml::sax::XWriter > xWriter, const rtl::OUString& rName, const rtl::OUString& rValue );
+    void addLocaleProperty( com::sun::star::uno::Reference< com::sun::star::xml::sax::XWriter > xWriter, const rtl::OUString& rName, const rtl::OUString& rValue );
 
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
 };
 
 #endif

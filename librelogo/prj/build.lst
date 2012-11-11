@@ -1,0 +1,2 @@
+librelogo	librelogo	:	TRANSLATIONS:translations offapi officecfg comphelper unotools l10ntools cppu tools cppuhelper sal javaunohelper officecfg DESKTOP:xmlhelp DESKTOP:helpcompiler NULL
+librelogo librelogo\prj    nmake   -    all    librelogo_prj NULL

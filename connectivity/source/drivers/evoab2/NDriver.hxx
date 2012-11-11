@@ -22,6 +22,7 @@
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include "connectivity/CommonTools.hxx"
 #include <osl/module.h>
@@ -79,7 +80,9 @@ namespace connectivity
 
         public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        & getMSFactory(void) const { return m_xFactory; }
+                        & getMSFactory(void) const { return  m_xFactory; }
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                        getComponentContext( ) const { return comphelper::getComponentContext( m_xFactory ); }
 
             // static methods
             static sal_Bool acceptsURL_Stat( const ::rtl::OUString& url );

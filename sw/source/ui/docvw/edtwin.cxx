@@ -31,6 +31,7 @@
 #include <hintids.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
@@ -316,7 +317,7 @@ struct QuickHelpData
     }
 
     // Fills internal structures with hopefully helpful information.
-    void FillStrArr( SwWrtShell& rSh, const String& rWord, sal_Bool bIgnoreCurrentPos );
+    void FillStrArr( SwWrtShell& rSh, const String& rWord, bool bIgnoreCurrentPos );
     void SortAndFilter();
 };
 
@@ -1982,7 +1983,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 }
                             }
                             if ( bCallNumOrNoNum &&
-                                 rSh.NumOrNoNum( !bOnlyBackspaceKey, sal_True ) )
+                                 rSh.NumOrNoNum( !bOnlyBackspaceKey, true ) )
                             {
                                 eKeyState = KS_NumOrNoNum;
                             }
@@ -2386,7 +2387,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 {
                     // insert a blank ahead of the character. this ends up
                     // between the expanded text and the new "non-word-seperator".
-                    aInBuffer.Expand( aInBuffer.Len() + 1, ' ' );
+                    aInBuffer += ' ';
                 }
 
                 sal_Bool bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
@@ -2417,7 +2418,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 }
                 else
                 {
-                    aInBuffer.Expand( aInBuffer.Len() + aKeyEvent.GetRepeat() + 1,aCh );
+                    rtl::OUStringBuffer aBuf(aInBuffer);
+                    comphelper::string::padToLength(aBuf,
+                        aInBuffer.Len() + aKeyEvent.GetRepeat() + 1, aCh);
+                    aInBuffer = aBuf.makeStringAndClear();
                     bFlushCharBuffer = Application::AnyInput( VCL_INPUT_KEYBOARD );
                     bFlushBuffer = !bFlushCharBuffer;
                     if( bFlushCharBuffer )
@@ -2473,11 +2477,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
 
             case KS_NumDown:
-                rSh.NumUpDown( sal_True );
+                rSh.NumUpDown( true );
                 nKS_NUMDOWN_Count = 2;
                 break;
             case KS_NumUp:
-                rSh.NumUpDown( sal_False );
+                rSh.NumUpDown( false );
                 break;
 
             case KS_NumIndentInc:
@@ -4028,7 +4032,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     {
                         if( aLastCallEvent.HasEvent() )
                             rSh.CallEvent( SFX_EVENT_MOUSEOUT_OBJECT,
-                                            aLastCallEvent, sal_True );
+                                            aLastCallEvent, true );
                         // 0 says that the object doesn't have any table
                         if( !rSh.CallEvent( SFX_EVENT_MOUSEOVER_OBJECT,
                                         aSaveCallEvent ))
@@ -4039,7 +4043,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 {
                     // cursor was on an object
                     rSh.CallEvent( SFX_EVENT_MOUSEOUT_OBJECT,
-                                    aLastCallEvent, sal_True );
+                                    aLastCallEvent, true );
                 }
 
                 if( bTstShdwCrsr && bInsWin && !bIsDocReadOnly &&
@@ -4587,7 +4591,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     const SwFrmFmt* pFmt = rSh.GetFmtFromObj( aDocPt );
                     if(PTR_CAST(SwFlyFrmFmt, pFmt))
                     {
-                        rSh.SetFrmFmt( pApplyTempl->aColl.pFrmFmt, sal_False, &aDocPt );
+                        rSh.SetFrmFmt( pApplyTempl->aColl.pFrmFmt, false, &aDocPt );
                         pApplyTempl->bUndo = sal_True;
                         bCallBase = sal_False;
                         if( pApplyTempl->aColl.pFrmFmt )
@@ -5179,7 +5183,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         rSh.GetPrevAutoCorrWord( *pACorr, sWord ) )
                     {
                         // ... request for auto completion help to be shown.
-                        ShowAutoTextCorrectQuickHelp(sWord, &rACfg, pACorr, sal_True);
+                        ShowAutoTextCorrectQuickHelp(sWord, &rACfg, pACorr, true);
                     }
                 }
         }
@@ -5700,7 +5704,7 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
     ClearCntnt();
 }
 
-void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord, sal_Bool bIgnoreCurrentPos )
+void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord, bool bIgnoreCurrentPos )
 {
     enum Capitalization { CASE_LOWER, CASE_UPPER, CASE_SENTENCE, CASE_OTHER };
 
@@ -5827,7 +5831,7 @@ void QuickHelpData::SortAndFilter()
 
 void SwEditWin::ShowAutoTextCorrectQuickHelp(
         const String& rWord, SvxAutoCorrCfg* pACfg, SvxAutoCorrect* pACorr,
-        sal_Bool bFromIME )
+        bool bFromIME )
 {
     SwWrtShell& rSh = rView.GetWrtShell();
     pQuickHlpData->ClearCntnt();

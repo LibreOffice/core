@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include <tools/rc.h>
@@ -46,7 +37,7 @@
 #include <osl/mutex.hxx>
 
 
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <cppuhelper/weak.hxx>
@@ -219,11 +210,11 @@ Edit::Edit( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-void Edit::SetMaxWidthInChars(sal_Int32 nMinWidthInChars)
+void Edit::SetWidthInChars(sal_Int32 nWidthInChars)
 {
-    if (mnMinWidthInChars != nMinWidthInChars)
+    if (mnWidthInChars != nWidthInChars)
     {
-        mnMinWidthInChars = nMinWidthInChars;
+        mnWidthInChars = nWidthInChars;
         queue_resize();
     }
 }
@@ -231,7 +222,12 @@ void Edit::SetMaxWidthInChars(sal_Int32 nMinWidthInChars)
 bool Edit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
     if (rKey == "width-chars")
-        SetMaxWidthInChars(rValue.toInt32());
+        SetWidthInChars(rValue.toInt32());
+    else if (rKey == "max-length")
+    {
+        sal_Int32 nTextLen = rValue.toInt32();
+        SetMaxTextLen(nTextLen == 0 ? EDIT_NOLIMIT : nTextLen);
+    }
     else if (rKey == "editable")
         SetReadOnly(!toBool(rValue));
     else if (rKey == "visibility")
@@ -266,7 +262,7 @@ void Edit::take_properties(Window &rOther)
     maSelection = rOtherEdit.maSelection;
     mnAlign = rOtherEdit.mnAlign;
     mnMaxTextLen = rOtherEdit.mnMaxTextLen;
-    mnMinWidthInChars = rOtherEdit.mnMinWidthInChars;
+    mnWidthInChars = rOtherEdit.mnWidthInChars;
     meAutocompleteAction = rOtherEdit.meAutocompleteAction;
     mcEchoChar = rOtherEdit.mcEchoChar;
     mbModified = rOtherEdit.mbModified;
@@ -341,7 +337,7 @@ void Edit::ImplInitEditData()
     mnXOffset               = 0;
     mnAlign                 = EDIT_ALIGN_LEFT;
     mnMaxTextLen            = EDIT_NOLIMIT;
-    mnMinWidthInChars       = 3;
+    mnWidthInChars          = -1;
     meAutocompleteAction    = AUTOCOMPLETE_KEYINPUT;
     mbModified              = sal_False;
     mbInternModified        = sal_False;
@@ -435,7 +431,7 @@ WinBits Edit::ImplInitStyle( WinBits nStyle )
 sal_Bool Edit::IsCharInput( const KeyEvent& rKeyEvent )
 {
     // In the future we must use new Unicode functions for this
-    xub_Unicode cCharCode = rKeyEvent.GetCharCode();
+    sal_Unicode cCharCode = rKeyEvent.GetCharCode();
     return ((cCharCode >= 32) && (cCharCode != 127) &&
             !rKeyEvent.GetKeyCode().IsMod3() &&
             !rKeyEvent.GetKeyCode().IsMod2() &&
@@ -515,14 +511,14 @@ XubString Edit::ImplGetText() const
 {
     if ( mcEchoChar || (GetStyle() & WB_PASSWORD) )
     {
-        XubString   aText;
-        xub_Unicode cEchoChar;
+        sal_Unicode cEchoChar;
         if ( mcEchoChar )
             cEchoChar = mcEchoChar;
         else
             cEchoChar = '*';
-        aText.Fill( maText.Len(), cEchoChar );
-        return aText;
+        rtl::OUStringBuffer aText;
+        comphelper::string::padToLength(aText, maText.Len(), cEchoChar);
+        return aText.makeStringAndClear();
     }
     else
         return maText;
@@ -733,7 +729,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
                         nIndex++;
                     }
                     i = nIndex;
-		    aClip.Intersect(aRegion);
+            aClip.Intersect(aRegion);
                     if( !aClip.IsEmpty() && nAttr )
                     {
                         Font aFont = GetFont();
@@ -857,18 +853,8 @@ uno::Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
     //!! since we don't want to become incompatible in the next minor update
     //!! where this code will get integrated into, xISC will be a local
     //!! variable instead of a class member!
-    uno::Reference < i18n::XBreakIterator > xBI;
-//    if ( !xBI.is() )
-    {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        uno::Reference < XInterface > xI = xMSF->createInstance( OUString("com.sun.star.i18n.BreakIterator") );
-        if ( xI.is() )
-        {
-            Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XBreakIterator >*)0) );
-            x >>= xBI;
-        }
-    }
-    return xBI;
+    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    return i18n::BreakIterator::create(xContext);
 }
 // -----------------------------------------------------------------------
 
@@ -959,9 +945,9 @@ void Edit::ImplInsertText( const rtl::OUString& rStr, const Selection* pNewSel, 
         // get access to the configuration of this office module
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
             uno::Reference< container::XNameAccess > xModuleCfg( ::comphelper::ConfigurationHelper::openConfig(
-                                    xMSF,
+                                    xContext,
                                     sModule,
                                     ::comphelper::ConfigurationHelper::E_READONLY ),
                                 uno::UNO_QUERY );
@@ -2613,7 +2599,7 @@ void Edit::EnableUpdateData( sal_uLong nTimeout )
 
 // -----------------------------------------------------------------------
 
-void Edit::SetEchoChar( xub_Unicode c )
+void Edit::SetEchoChar( sal_Unicode c )
 {
     mcEchoChar = c;
     if ( mpSubEdit )
@@ -2900,13 +2886,22 @@ void Edit::SetSubEdit( Edit* pEdit )
 
 Size Edit::CalcMinimumSizeForText(const rtl::OUString &rString) const
 {
-    Size aSize ( GetTextWidth( rString ), GetTextHeight() );
-    aSize.Width() += ImplGetExtraOffset() * 2;
-    // do not create edit fields in which one cannot enter anything
-    // a default minimum width should exist for at least 3 characters
-    Size aMinSize ( CalcSize( mnMinWidthInChars ) );
-    if( aSize.Width() < aMinSize.Width() )
-        aSize.Width() = aMinSize.Width();
+    Size aSize;
+    if (mnWidthInChars != -1)
+    {
+        aSize = CalcSize(mnWidthInChars);
+    }
+    else
+    {
+        aSize.Height() = GetTextHeight();
+        aSize.Width() = GetTextWidth(rString);
+        aSize.Width() += ImplGetExtraOffset() * 2;
+        // do not create edit fields in which one cannot enter anything
+        // a default minimum width should exist for at least 3 characters
+        Size aMinSize(CalcSize(3));
+        if (aSize.Width() < aMinSize.Width())
+            aSize.Width() = aMinSize.Width();
+    }
     // add some space between text entry and border
     aSize.Height() += 4;
 

@@ -1192,11 +1192,6 @@ static sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 
     pDoc->DeleteAreaTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, IDF_CONTENTS );
 
-    /*  #164410# Use double allocation, which will speed up import filters
-        using XCellRangeData::setDataArray() significantly. */
-    bool bDoubleAlloc = ScColumn::bDoubleAlloc;
-    ScColumn::bDoubleAlloc = true;
-
     sal_Bool bError = false;
     SCROW nDocRow = nStartRow;
     for (long nRow=0; nRow<nRows; nRow++)
@@ -1247,7 +1242,6 @@ static sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 
         ++nDocRow;
     }
-    ScColumn::bDoubleAlloc = bDoubleAlloc;
 
     sal_Bool bHeight = rDocShell.AdjustRowHeight( nStartRow, nEndRow, nTab );
 

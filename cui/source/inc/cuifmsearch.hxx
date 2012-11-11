@@ -114,7 +114,7 @@ public:
         (of course needed : the string number i in strUsedFields of a context must correspond with the interface number i in the
         arrFields of the context)
     */
-    FmSearchDialog(Window* pParent, const String& strInitialText, const ::std::vector< String >& _rContexts, sal_Int16 nInitialContext,
+    FmSearchDialog(Window* pParent, const OUString& strInitialText, const ::std::vector< String >& _rContexts, sal_Int16 nInitialContext,
         const Link& lnkContextSupplier);
 
     virtual ~FmSearchDialog();
@@ -140,7 +140,7 @@ public:
 protected:
     virtual sal_Bool Close();
 
-    void Init(const String& strVisibleFields, const String& strInitialText);
+    void Init(const OUString& strVisibleFields, const OUString& strInitialText);
     // only to be used out of the constructors
 
     void OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_Int16 nFieldPos);

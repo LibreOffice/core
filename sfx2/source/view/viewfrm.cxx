@@ -23,6 +23,7 @@
 #include <sfx2/infobar.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/frame/DispatchRecorderSupplier.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -56,7 +57,7 @@
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -2327,7 +2328,7 @@ sal_Bool impl_maxOpenDocCountReached()
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
         css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                xSMGR,
+                                ::comphelper::getProcessComponentContext(),
                                 ::rtl::OUString("org.openoffice.Office.Common/"),
                                 ::rtl::OUString("Misc"),
                                 ::rtl::OUString("MaxOpenDocuments"),
@@ -2620,29 +2621,26 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
         String aModuleName;
         String aMacroName;
         String aLocation;
-        Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
-        Reference< com::sun::star::uri::XUriReferenceFactory > xFactory( xSMgr->createInstance(
-            ::rtl::OUString("com.sun.star.uri.UriReferenceFactory") ), UNO_QUERY );
-        if ( xFactory.is() )
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        Reference< com::sun::star::uri::XUriReferenceFactory > xFactory =
+            com::sun::star::uri::UriReferenceFactory::create( xContext );
+        Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl( xFactory->parse( aScriptURL ), UNO_QUERY );
+        if ( xUrl.is() )
         {
-            Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl( xFactory->parse( aScriptURL ), UNO_QUERY );
-            if ( xUrl.is() )
-            {
-                // get name
-                ::rtl::OUString aName = xUrl->getName();
-                sal_Unicode cTok = '.';
-                sal_Int32 nIndex = 0;
-                aLibName = aName.getToken( 0, cTok, nIndex );
-                if ( nIndex != -1 )
-                    aModuleName = aName.getToken( 0, cTok, nIndex );
-                if ( nIndex != -1 )
-                    aMacroName = aName.getToken( 0, cTok, nIndex );
+            // get name
+            ::rtl::OUString aName = xUrl->getName();
+            sal_Unicode cTok = '.';
+            sal_Int32 nIndex = 0;
+            aLibName = aName.getToken( 0, cTok, nIndex );
+            if ( nIndex != -1 )
+                aModuleName = aName.getToken( 0, cTok, nIndex );
+            if ( nIndex != -1 )
+                aMacroName = aName.getToken( 0, cTok, nIndex );
 
-                // get location
-                ::rtl::OUString aLocKey("location");
-                if ( xUrl->hasParameter( aLocKey ) )
-                    aLocation = xUrl->getParameter( aLocKey );
-            }
+            // get location
+            ::rtl::OUString aLocKey("location");
+            if ( xUrl->hasParameter( aLocKey ) )
+                aLocation = xUrl->getParameter( aLocKey );
         }
 
         BasicManager* pBasMgr = 0;
@@ -2836,14 +2834,14 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                 com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xFactory(
                         ::comphelper::getProcessServiceFactory(),
                         com::sun::star::uno::UNO_QUERY);
+                com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext(
+                        ::comphelper::getProcessComponentContext());
 
                 xRecorder = com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder >(
                         xFactory->createInstance(rtl::OUString("com.sun.star.frame.DispatchRecorder")),
                         com::sun::star::uno::UNO_QUERY);
 
-                xSupplier = com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier >(
-                        xFactory->createInstance(rtl::OUString("com.sun.star.frame.DispatchRecorderSupplier")),
-                        com::sun::star::uno::UNO_QUERY);
+                xSupplier = com::sun::star::frame::DispatchRecorderSupplier::create( xContext );
 
                 xSupplier->setDispatchRecorder(xRecorder);
                 xRecorder->startRecording(xFrame);
@@ -3350,7 +3348,7 @@ void SfxViewFrame::ActivateToolPanel_Impl( const ::rtl::OUString& i_rPanelURL )
     pPanelAccess->ActivateToolPanel( i_rPanelURL );
 }
 
-void SfxViewFrame::AppendInfoBar( const rtl::OUString& sMessage, std::vector< PushButton* > aButtons )
+void SfxViewFrame::AppendInfoBar( const rtl::OUString& sId, const rtl::OUString& sMessage, std::vector< PushButton* > aButtons )
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
 
@@ -3361,12 +3359,12 @@ void SfxViewFrame::AppendInfoBar( const rtl::OUString& sMessage, std::vector< Pu
     if ( pChild )
     {
         SfxInfoBarContainerWindow* pInfoBars = ( SfxInfoBarContainerWindow* )pChild->GetWindow();
-        pInfoBars->appendInfoBar( sMessage, aButtons );
+        pInfoBars->appendInfoBar( sId, sMessage, aButtons );
         ShowChildWindow( nId );
     }
 }
 
-void SfxViewFrame::RemoveInfoBar( SfxInfoBarWindow* pInfoBar )
+void SfxViewFrame::RemoveInfoBar( const rtl::OUString& sId )
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
 
@@ -3377,6 +3375,7 @@ void SfxViewFrame::RemoveInfoBar( SfxInfoBarWindow* pInfoBar )
     if ( pChild )
     {
         SfxInfoBarContainerWindow* pInfoBars = ( SfxInfoBarContainerWindow* )pChild->GetWindow();
+        SfxInfoBarWindow* pInfoBar = pInfoBars->getInfoBar( sId );
         pInfoBars->removeInfoBar( pInfoBar );
         ShowChildWindow( nId );
     }

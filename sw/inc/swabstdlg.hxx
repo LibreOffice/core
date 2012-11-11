@@ -357,7 +357,7 @@ public:
     virtual AbstractSwWordCountFloatDlg* CreateSwWordCountDialog(SfxBindings* pBindings,
         SfxChildWindow* pChild, Window *pParent, SfxChildWinInfo* pInfo) = 0;
 
-    virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg ( Window* pParent, int nResId) = 0; // add for SwInsertAbstractDlg
+    virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg(Window* pParent) = 0; // add for SwInsertAbstractDlg
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,
                                                                 SvStream* pStream, int nResId ) = 0;// add for SwAsciiFilterDlg
     virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, int nResId ) = 0;// add for SwInsertBookmarkDlg
@@ -444,8 +444,7 @@ public:
     virtual VclAbstractDialog*          CreateTitlePageDlg ( Window * pParent ) = 0;
     virtual VclAbstractDialog *         CreateVclSwViewDialog( int nResId,
                                                 SwView& rView, sal_Bool bCol = sal_False ) = 0; //add for SwInsRowColDlg, SwLineNumberingDlg
-    virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg( int nResId,
-                                                Window * pParent ) = 0; //add for SwInsertGrfRulerDlg
+    virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg(Window * pParent) = 0; //add for SwInsertGrfRulerDlg
     virtual AbstractInsTableDlg*        CreateInsTableDlg(SwView& rView) = 0; //add for SwInsTableDlg
     virtual AbstractJavaEditDialog*     CreateJavaEditDialog( int nResId,
                                                 Window* pParent, SwWrtShell* pWrtSh ) = 0; //add for SwJavaEditDialog
@@ -475,20 +474,20 @@ public:
                                                 Window* pParent, SwWrtShell& rWrtSh ) = 0; //add for SwEditRegionDlg
     virtual AbstractInsertSectionTabDialog*     CreateInsertSectionTabDialog( int nResId,
                                                     Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh ) = 0; //add for SwInsertSectionTabDialog
-    virtual AbstractMarkFloatDlg*       CreateIndexMarkFloatDlg( int nResId,
+    virtual AbstractMarkFloatDlg*       CreateIndexMarkFloatDlg(
                                                     SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        Window *pParent,
                                                     SfxChildWinInfo* pInfo,
                                                        sal_Bool bNew=sal_True) = 0; //add for SwIndexMarkFloatDlg
-    virtual AbstractMarkFloatDlg*       CreateAuthMarkFloatDlg( int nResId,
+    virtual AbstractMarkFloatDlg*       CreateAuthMarkFloatDlg(
                                                     SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        Window *pParent,
                                                     SfxChildWinInfo* pInfo,
                                                        sal_Bool bNew=sal_True) = 0; //add for SwAuthMarkFloatDlg
-    virtual VclAbstractDialog *         CreateIndexMarkModalDlg( int nResId,
-                                                Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark ) = 0; //add for SwIndexMarkModalDlg
+    virtual VclAbstractDialog *         CreateIndexMarkModalDlg(
+                                                Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark) = 0; //add for SwIndexMarkModalDlg
 
     virtual AbstractMailMergeWizard*    CreateMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rConfigItem) = 0;
 

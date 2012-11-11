@@ -15,14 +15,21 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from AgendaWizardDialog import *
-from AgendaTemplate import *
-from CGAgenda import CGAgenda
-from wizards.ui.PathSelection import PathSelection
-from wizards.ui.event.UnoDataAware import UnoDataAware
-from wizards.ui.event.RadioDataAware import RadioDataAware
-from wizards.common.NoValidPathException import NoValidPathException
-from wizards.common.SystemDialog import SystemDialog
+import traceback
+from .AgendaWizardDialog import AgendaWizardDialog
+from .AgendaWizardDialogConst import HID
+from .AgendaTemplate import AgendaTemplate, FileAccess
+from .TemplateConsts import TemplateConsts
+from .TopicsControl import TopicsControl
+from .CGAgenda import CGAgenda
+from ..ui.PathSelection import PathSelection
+from ..ui.event.UnoDataAware import UnoDataAware
+from ..ui.event.RadioDataAware import RadioDataAware
+from ..common.NoValidPathException import NoValidPathException
+from ..common.SystemDialog import SystemDialog
+from ..common.Desktop import Desktop
+from ..common.HelpIds import HelpIds
+from ..common.Configuration import Configuration
 
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
@@ -43,33 +50,21 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
     def leaveStep(self, OldStep, NewStep):
         pass
 
-    '''
-    used in developement to start the wizard
-    '''
-
     @classmethod
-    def main(self, args):
-        ConnectStr = \
-            "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
+    def main(self):
+        #Call the wizard remotely(see README)
         try:
+            ConnectStr = \
+                "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
             xLocMSF = Desktop.connect(ConnectStr)
-            wizard = AgendaWizardDialogImpl(xLocMSF)
-            wizard.startWizard()
-        except Exception, exception:
-            traceback.print_exc()
+            lw = AgendaWizardDialogImpl(xLocMSF)
+            lw.startWizard(xLocMSF)
+        except Exception as e:
+            print ("Wizard failure exception " + str(type(e)) +
+                   " message " + str(e) + " args " + str(e.args) +
+                   traceback.format_exc())
 
-    '''
-    read the configuration data, open the specified template,
-    initialize the template controller (AgendaTemplate) and
-    set the status of the displayed template to the one
-    read from the configuration.
-    build the dialog.
-    Synchronize the dialog to the same status (read from
-    the configuration).
-    show the dialog.
-    '''
-
-    def startWizard(self):
+    def startWizard(self, xMSF):
         self.running = True
         try:
             #Number of steps on WizardDialog
@@ -77,8 +72,10 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
             # initialize the agenda template
             self.agenda = CGAgenda()
+            self.templateConsts = TemplateConsts
             self.agendaTemplate = AgendaTemplate(
-                self.xMSF, self.agenda, self.resources, self)
+                self.xMSF, self.agenda, self.resources,
+                self.templateConsts, self)
 
             # build the dialog.
             self.drawNaviBar()
@@ -134,8 +131,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         self.myPathSelection.sDefaultDirectory = self.sUserTemplatePath
         self.myPathSelection.sDefaultName = "myAgendaTemplate.ott"
         self.myPathSelection.sDefaultFilter = "writer8_template"
-        self.myPathSelection.addSelectionListener(
-            self.myPathSelectionListener())
+        self.myPathSelection.addSelectionListener(self)
 
     def initializePaths(self):
         try:
@@ -173,7 +169,8 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         self.agenda.readConfiguration(root, "cp_")
 
         self.setControlProperty(
-            "listPageDesign", "StringItemList", tuple(self.agendaTemplates[0]))
+            "listPageDesign", "StringItemList",
+            tuple(self.agendaTemplates.keys()))
         self.checkSavePath()
         UnoDataAware.attachListBox(
             self.agenda, "cp_AgendaType", self.listPageDesign, True).updateUI()
@@ -271,7 +268,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             if AgendaWizardDialogImpl.pageDesign is not SelectedItemPos:
                 AgendaWizardDialogImpl.pageDesign = SelectedItemPos
                 self.agendaTemplate.load(
-                    self.agendaTemplates[1][SelectedItemPos],
+                    self.agendaTemplates.values()[SelectedItemPos],
                     self.topicsControl.scrollfields)
         except Exception:
             traceback.print_exc()
@@ -302,37 +299,37 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         AgendaTemplate.agenda.cp_IncludeMinutes = bool(self.chkMinutes.State)
 
     def chkUseMeetingTypeItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_MEETING_TYPE)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_MEETING_TYPE)
 
     def chkUseReadItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_READ)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_READ)
 
     def chkUseBringItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_BRING)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_BRING)
 
     def chkUseNotesItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_NOTES)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_NOTES)
 
     def chkUseCalledByItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_CALLED_BY)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_CALLED_BY)
 
     def chkUseFacilitatorItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_FACILITATOR)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_FACILITATOR)
 
     def chkUseNoteTakerItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_NOTETAKER)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_NOTETAKER)
 
     def chkUseTimeKeeperItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_TIMEKEEPER)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_TIMEKEEPER)
 
     def chkUseAttendeesItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_PARTICIPANTS)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_PARTICIPANTS)
 
     def chkUseObserversItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_OBSERVERS)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_OBSERVERS)
 
     def chkUseResourcePersonsItemChanged(self):
-        AgendaTemplate.redraw(FILLIN_RESOURCE_PERSONS)
+        AgendaTemplate.redraw(self.templateConsts.FILLIN_RESOURCE_PERSONS)
 
     '''
     convenience method.
@@ -422,7 +419,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                 if fileAccess.exists(self.sPath, True):
                     answer = SystemDialog.showMessageBox(
                         self.xMSF, "MessBox", YES_NO + DEF_NO,
-                        self.resources.resFileExists,
+                        self.resources.resOverwriteWarning,
                         self.xUnoDialog.Peer)
                     if answer == 3:
                         # user said: no, do not overwrite

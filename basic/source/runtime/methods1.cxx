@@ -48,7 +48,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/XCalendar3.hpp>
+#include <com/sun/star/i18n/LocaleCalendar.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
 
 using namespace comphelper;
@@ -64,12 +64,8 @@ static Reference< XCalendar3 > getLocaleCalendar( void )
     static Reference< XCalendar3 > xCalendar;
     if( !xCalendar.is() )
     {
-        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
-        if( xSMgr.is() )
-        {
-            xCalendar = Reference< XCalendar3 >( xSMgr->createInstance
-                ( ::rtl::OUString("com.sun.star.i18n.LocaleCalendar" ) ), UNO_QUERY );
-        }
+        Reference< XComponentContext > xContext = getProcessComponentContext();
+        xCalendar = LocaleCalendar::create(xContext);
     }
 
     static com::sun::star::lang::Locale aLastLocale;
@@ -132,7 +128,7 @@ RTLFUNC(CallByName)
     }
 
     // 2. parameter is ProcedureName
-    String aNameStr = rPar.Get(2)->GetString();
+    OUString aNameStr = rPar.Get(2)->GetOUString();
 
     // 3. parameter is CallType
     sal_Int16 nCallType = rPar.Get(3)->GetInteger();
@@ -147,74 +143,76 @@ RTLFUNC(CallByName)
 
     switch( nCallType )
     {
-        case vbGet:
+    case vbGet:
+        {
+            SbxValues aVals;
+            aVals.eType = SbxVARIANT;
+            pFindVar->Get( aVals );
+
+            SbxVariableRef refVar = rPar.Get(0);
+            refVar->Put( aVals );
+        }
+        break;
+    case vbLet:
+    case vbSet:
+        {
+            if ( nParCount != 5 )
+            {
+                StarBASIC::Error( SbERR_BAD_ARGUMENT );
+                return;
+            }
+            SbxVariableRef pValVar = rPar.Get(4);
+            if( nCallType == vbLet )
             {
                 SbxValues aVals;
                 aVals.eType = SbxVARIANT;
-                pFindVar->Get( aVals );
-
-                SbxVariableRef refVar = rPar.Get(0);
-                refVar->Put( aVals );
+                pValVar->Get( aVals );
+                pFindVar->Put( aVals );
             }
-            break;
-        case vbLet:
-        case vbSet:
+            else
             {
-                if ( nParCount != 5 )
+                SbxVariableRef rFindVar = pFindVar;
+                SbiInstance* pInst = GetSbData()->pInst;
+                SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
+                if( pRT != NULL )
                 {
-                    StarBASIC::Error( SbERR_BAD_ARGUMENT );
-                    return;
-                }
-                SbxVariableRef pValVar = rPar.Get(4);
-                if( nCallType == vbLet )
-                {
-                    SbxValues aVals;
-                    aVals.eType = SbxVARIANT;
-                    pValVar->Get( aVals );
-                    pFindVar->Put( aVals );
-                }
-                else
-                {
-                    SbxVariableRef rFindVar = pFindVar;
-                    SbiInstance* pInst = GetSbData()->pInst;
-                    SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
-                    if( pRT != NULL )
-                        pRT->StepSET_Impl( pValVar, rFindVar, false );
+                    pRT->StepSET_Impl( pValVar, rFindVar, false );
                 }
             }
-            break;
-        case vbMethod:
+        }
+        break;
+    case vbMethod:
+        {
+            SbMethod* pMeth = PTR_CAST(SbMethod,pFindVar);
+            if( pMeth == NULL )
             {
-                SbMethod* pMeth = PTR_CAST(SbMethod,pFindVar);
-                if( pMeth == NULL )
-                {
-                    StarBASIC::Error( SbERR_PROC_UNDEFINED );
-                    return;
-                }
-
-                // Setup parameters
-                SbxArrayRef xArray;
-                sal_uInt16 nMethParamCount = nParCount - 4;
-                if( nMethParamCount > 0 )
-                {
-                    xArray = new SbxArray;
-                    for( sal_uInt16 i = 0 ; i < nMethParamCount ; i++ )
-                    {
-                        SbxVariable* pPar = rPar.Get( i + 4 );
-                        xArray->Put( pPar, i + 1 );
-                    }
-                }
-
-                // Call method
-                SbxVariableRef refVar = rPar.Get(0);
-                if( xArray.Is() )
-                    pMeth->SetParameters( xArray );
-                pMeth->Call( refVar );
-                pMeth->SetParameters( NULL );
+                StarBASIC::Error( SbERR_PROC_UNDEFINED );
+                return;
             }
-            break;
-        default:
-            StarBASIC::Error( SbERR_PROC_UNDEFINED );
+
+            // Setup parameters
+            SbxArrayRef xArray;
+            sal_uInt16 nMethParamCount = nParCount - 4;
+            if( nMethParamCount > 0 )
+            {
+                xArray = new SbxArray;
+                for( sal_uInt16 i = 0 ; i < nMethParamCount ; i++ )
+                {
+                    SbxVariable* pPar = rPar.Get( i + 4 );
+                    xArray->Put( pPar, i + 1 );
+                }
+            }
+
+            // Call method
+            SbxVariableRef refVar = rPar.Get(0);
+            if( xArray.Is() )
+                pMeth->SetParameters( xArray );
+            pMeth->Call( refVar );
+            pMeth->SetParameters( NULL );
+        }
+        break;
+    default:
+        StarBASIC::Error( SbERR_PROC_UNDEFINED );
     }
 }
 
@@ -230,8 +228,9 @@ RTLFUNC(CBool) // JSM
         bVal = pSbxVariable->GetBool();
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-
+    }
     rPar.Get(0)->PutBool(bVal);
 }
 
@@ -247,8 +246,9 @@ RTLFUNC(CByte) // JSM
         nByte = pSbxVariable->GetByte();
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-
+    }
     rPar.Get(0)->PutByte(nByte);
 }
 
@@ -264,8 +264,9 @@ RTLFUNC(CCur)
         nCur = pSbxVariable->GetCurrency();
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-
+    }
     rPar.Get(0)->PutCurrency( nCur );
 }
 
@@ -282,8 +283,9 @@ RTLFUNC(CDec)
         pDec = pSbxVariable->GetDecimal();
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-
+    }
     rPar.Get(0)->PutDecimal( pDec );
 #else
     rPar.Get(0)->PutEmpty();
@@ -303,8 +305,9 @@ RTLFUNC(CDate) // JSM
         nVal = pSbxVariable->GetDate();
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-
+    }
     rPar.Get(0)->PutDate(nVal);
 }
 
@@ -320,10 +323,12 @@ RTLFUNC(CDbl)  // JSM
         if( pSbxVariable->GetType() == SbxSTRING )
         {
             // #41690
-            String aScanStr = pSbxVariable->GetString();
+            OUString aScanStr = pSbxVariable->GetOUString();
             SbError Error = SbxValue::ScanNumIntnl( aScanStr, nVal );
             if( Error != SbxERR_OK )
+            {
                 StarBASIC::Error( Error );
+            }
         }
         else
         {
@@ -331,7 +336,9 @@ RTLFUNC(CDbl)  // JSM
         }
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
 
     rPar.Get(0)->PutDouble(nVal);
 }
@@ -348,8 +355,9 @@ RTLFUNC(CInt)  // JSM
         nVal = pSbxVariable->GetInteger();
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-
+    }
     rPar.Get(0)->PutInteger(nVal);
 }
 
@@ -365,8 +373,9 @@ RTLFUNC(CLng)  // JSM
         nVal = pSbxVariable->GetLong();
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-
+    }
     rPar.Get(0)->PutLong(nVal);
 }
 
@@ -383,10 +392,12 @@ RTLFUNC(CSng)  // JSM
         {
             // #41690
             double dVal = 0.0;
-            String aScanStr = pSbxVariable->GetString();
+            OUString aScanStr = pSbxVariable->GetOUString();
             SbError Error = SbxValue::ScanNumIntnl( aScanStr, dVal, /*bSingle=*/true );
             if( SbxBase::GetError() == SbxERR_OK && Error != SbxERR_OK )
+            {
                 StarBASIC::Error( Error );
+            }
             nVal = (float)dVal;
         }
         else
@@ -395,8 +406,9 @@ RTLFUNC(CSng)  // JSM
         }
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-
+    }
     rPar.Get(0)->PutSingle(nVal);
 }
 
@@ -405,15 +417,16 @@ RTLFUNC(CStr)  // JSM
     (void)pBasic;
     (void)bWrite;
 
-    String aString;
+    OUString aString;
     if ( rPar.Count() == 2 )
     {
         SbxVariable *pSbxVariable = rPar.Get(1);
-        aString = pSbxVariable->GetString();
+        aString = pSbxVariable->GetOUString();
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-
+    }
     rPar.Get(0)->PutString(aString);
 }
 
@@ -429,8 +442,9 @@ RTLFUNC(CVar)  // JSM
         pSbxVariable->Get( aVals );
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-
+    }
     rPar.Get(0)->Put( aVals );
 }
 
@@ -446,8 +460,9 @@ RTLFUNC(CVErr)
         nErrCode = pSbxVariable->GetInteger();
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-
+    }
     rPar.Get(0)->PutErr( nErrCode );
 }
 
@@ -459,12 +474,18 @@ RTLFUNC(Iif) // JSM
     if ( rPar.Count() == 4 )
     {
         if (rPar.Get(1)->GetBool())
+        {
             *rPar.Get(0) = *rPar.Get(2);
+        }
         else
+        {
             *rPar.Get(0) = *rPar.Get(3);
+        }
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
 }
 
 RTLFUNC(GetSystemType)
@@ -473,10 +494,14 @@ RTLFUNC(GetSystemType)
     (void)bWrite;
 
     if ( rPar.Count() != 1 )
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
     else
+    {
         // Removed for SRC595
         rPar.Get(0)->PutInteger( -1 );
+    }
 }
 
 RTLFUNC(GetGUIType)
@@ -485,7 +510,9 @@ RTLFUNC(GetGUIType)
     (void)bWrite;
 
     if ( rPar.Count() != 1 )
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
     else
     {
         // 17.7.2000 Make simple solution for testtool / fat office
@@ -505,7 +532,9 @@ RTLFUNC(Red)
     (void)bWrite;
 
     if ( rPar.Count() != 2 )
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
     else
     {
         sal_uIntPtr nRGB = (sal_uIntPtr)rPar.Get(1)->GetLong();
@@ -521,7 +550,9 @@ RTLFUNC(Green)
     (void)bWrite;
 
     if ( rPar.Count() != 2 )
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
     else
     {
         sal_uIntPtr nRGB = (sal_uIntPtr)rPar.Get(1)->GetLong();
@@ -537,7 +568,9 @@ RTLFUNC(Blue)
     (void)bWrite;
 
     if ( rPar.Count() != 2 )
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
     else
     {
         sal_uIntPtr nRGB = (sal_uIntPtr)rPar.Get(1)->GetLong();
@@ -554,8 +587,10 @@ RTLFUNC(Switch)
 
     sal_uInt16 nCount = rPar.Count();
     if( !(nCount & 0x0001 ))
+    {
         // number of arguments must be odd
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
     sal_uInt16 nCurExpr = 1;
     while( nCurExpr < (nCount-1) )
     {
@@ -587,7 +622,9 @@ void Wait_Impl( bool bDurationBased, SbxArray& rPar )
         nWait = (long)( dSecs * 1000 ); // wait in thousands of sec
     }
     else
+    {
         nWait = rPar.Get(1)->GetLong();
+    }
     if( nWait < 0 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -598,7 +635,9 @@ void Wait_Impl( bool bDurationBased, SbxArray& rPar )
     aTimer.SetTimeout( nWait );
     aTimer.Start();
     while ( aTimer.IsActive() )
+    {
         Application::Yield();
+    }
 }
 
 //i#64882#
@@ -637,7 +676,9 @@ RTLFUNC(GetGUIVersion)
     (void)bWrite;
 
     if ( rPar.Count() != 1 )
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
     else
     {
         // Removed for SRC595
@@ -651,7 +692,9 @@ RTLFUNC(Choose)
     (void)bWrite;
 
     if ( rPar.Count() < 2 )
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
     sal_Int16 nIndex = rPar.Get(1)->GetInteger();
     sal_uInt16 nCount = rPar.Count();
     nCount--;
@@ -670,10 +713,12 @@ RTLFUNC(Trim)
     (void)bWrite;
 
     if ( rPar.Count() < 2 )
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
     else
     {
-        rtl::OUString aStr(comphelper::string::strip(rPar.Get(1)->GetString(), ' '));
+        rtl::OUString aStr(comphelper::string::strip(rPar.Get(1)->GetOUString(), ' '));
         rPar.Get(0)->PutString(aStr);
     }
 }
@@ -727,8 +772,10 @@ RTLFUNC(FreeLibrary)
     (void)bWrite;
 
     if ( rPar.Count() != 2 )
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-    GetSbData()->pInst->GetDllMgr()->FreeDll( rPar.Get(1)->GetString() );
+    }
+    GetSbData()->pInst->GetDllMgr()->FreeDll( rPar.Get(1)->GetOUString() );
 }
 bool IsBaseIndexOne()
 {
@@ -737,7 +784,9 @@ bool IsBaseIndexOne()
     {
         sal_uInt16 res = GetSbData()->pInst->pRun->GetBase();
         if ( res )
+        {
             result = true;
+        }
     }
     return result;
 }
@@ -755,9 +804,13 @@ RTLFUNC(Array)
     if( nArraySize )
     {
         if ( bIncIndex )
+        {
             pArray->AddDim( 1, nArraySize );
+        }
         else
+        {
             pArray->AddDim( 0, nArraySize-1 );
+        }
     }
     else
     {
@@ -775,7 +828,9 @@ RTLFUNC(Array)
         pNew->SetFlag( SBX_WRITE );
         short index = static_cast< short >(i);
         if ( bIncIndex )
+        {
             ++index;
+        }
         pArray->Put( pNew, &index );
     }
 
@@ -817,8 +872,9 @@ RTLFUNC(DimArray)
         }
     }
     else
+    {
         pArray->unoAddDim( 0, -1 );
-
+    }
     SbxVariableRef refVar = rPar.Get(0);
     sal_uInt16 nFlags = refVar->GetFlags();
     refVar->ResetFlag( SBX_FIXED );
@@ -862,13 +918,14 @@ RTLFUNC(FindObject)
         return;
     }
 
-    String aNameStr = rPar.Get(1)->GetString();
+    OUString aNameStr = rPar.Get(1)->GetOUString();
 
     SbxBase* pFind =  StarBASIC::FindSBXInCurrentScope( aNameStr );
     SbxObject* pFindObj = NULL;
     if( pFind )
+    {
         pFindObj = PTR_CAST(SbxObject,pFind);
-
+    }
     SbxVariableRef refVar = rPar.Get(0);
     refVar->PutObject( pFindObj );
 }
@@ -890,14 +947,16 @@ RTLFUNC(FindPropertyObject)
     SbxBase* pObjVar = (SbxObject*)rPar.Get(1)->GetObject();
     SbxObject* pObj = NULL;
     if( pObjVar )
+    {
         pObj = PTR_CAST(SbxObject,pObjVar);
+    }
     if( !pObj && pObjVar && pObjVar->ISA(SbxVariable) )
     {
         SbxBase* pObjVarObj = ((SbxVariable*)pObjVar)->GetObject();
         pObj = PTR_CAST(SbxObject,pObjVarObj);
     }
 
-    String aNameStr = rPar.Get(2)->GetString();
+    OUString aNameStr = rPar.Get(2)->GetOUString();
 
     SbxObject* pFindObj = NULL;
     if( pObj )
@@ -906,8 +965,9 @@ RTLFUNC(FindPropertyObject)
         pFindObj = PTR_CAST(SbxObject,pFindVar);
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_PARAMETER );
-
+    }
 
     SbxVariableRef refVar = rPar.Get(0);
     refVar->PutObject( pFindObj );
@@ -916,7 +976,7 @@ RTLFUNC(FindPropertyObject)
 
 
 static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
-    sal_Bool bBinary, short nBlockLen, sal_Bool bIsArray )
+                                      sal_Bool bBinary, short nBlockLen, sal_Bool bIsArray )
 {
     sal_uIntPtr nFPos = pStrm->Tell();
 
@@ -925,84 +985,100 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
 
     switch( eType )
     {
-        case SbxBOOL:
-        case SbxCHAR:
-        case SbxBYTE:
-                if( bIsVariant )
-                    *pStrm << (sal_uInt16)SbxBYTE; // VarType Id
-                *pStrm << rVar.GetByte();
-                break;
+    case SbxBOOL:
+    case SbxCHAR:
+    case SbxBYTE:
+        if( bIsVariant )
+        {
+            *pStrm << (sal_uInt16)SbxBYTE; // VarType Id
+        }
+        *pStrm << rVar.GetByte();
+        break;
 
-        case SbxEMPTY:
-        case SbxNULL:
-        case SbxVOID:
-        case SbxINTEGER:
-        case SbxUSHORT:
-        case SbxINT:
-        case SbxUINT:
-                if( bIsVariant )
-                    *pStrm << (sal_uInt16)SbxINTEGER; // VarType Id
-                *pStrm << rVar.GetInteger();
-                break;
+    case SbxEMPTY:
+    case SbxNULL:
+    case SbxVOID:
+    case SbxINTEGER:
+    case SbxUSHORT:
+    case SbxINT:
+    case SbxUINT:
+        if( bIsVariant )
+        {
+            *pStrm << (sal_uInt16)SbxINTEGER; // VarType Id
+        }
+        *pStrm << rVar.GetInteger();
+        break;
 
-        case SbxLONG:
-        case SbxULONG:
-                if( bIsVariant )
-                    *pStrm << (sal_uInt16)SbxLONG; // VarType Id
-                *pStrm << rVar.GetLong();
-                break;
-        case SbxSALINT64:
-        case SbxSALUINT64:
-                if( bIsVariant )
-                    *pStrm << (sal_uInt16)SbxSALINT64; // VarType Id
-                *pStrm << (sal_uInt64)rVar.GetInt64();
-                break;
-        case SbxSINGLE:
-                if( bIsVariant )
-                    *pStrm << (sal_uInt16)eType; // VarType Id
-                *pStrm << rVar.GetSingle();
-                break;
+    case SbxLONG:
+    case SbxULONG:
+        if( bIsVariant )
+        {
+            *pStrm << (sal_uInt16)SbxLONG; // VarType Id
+        }
+        *pStrm << rVar.GetLong();
+        break;
+    case SbxSALINT64:
+    case SbxSALUINT64:
+        if( bIsVariant )
+        {
+            *pStrm << (sal_uInt16)SbxSALINT64; // VarType Id
+        }
+        *pStrm << (sal_uInt64)rVar.GetInt64();
+        break;
+    case SbxSINGLE:
+        if( bIsVariant )
+        {
+            *pStrm << (sal_uInt16)eType; // VarType Id
+        }
+        *pStrm << rVar.GetSingle();
+        break;
 
-        case SbxDOUBLE:
-        case SbxCURRENCY:
-        case SbxDATE:
-                if( bIsVariant )
-                    *pStrm << (sal_uInt16)eType; // VarType Id
-                *pStrm << rVar.GetDouble();
-                break;
+    case SbxDOUBLE:
+    case SbxCURRENCY:
+    case SbxDATE:
+        if( bIsVariant )
+        {
+            *pStrm << (sal_uInt16)eType; // VarType Id
+        }
+        *pStrm << rVar.GetDouble();
+        break;
 
-        case SbxSTRING:
-        case SbxLPSTR:
+    case SbxSTRING:
+    case SbxLPSTR:
+        {
+            const OUString& rStr = rVar.GetOUString();
+            if( !bBinary || bIsArray )
+            {
+                if( bIsVariant )
                 {
-                const String& rStr = rVar.GetString();
-                if( !bBinary || bIsArray )
-                {
-                    if( bIsVariant )
-                        *pStrm << (sal_uInt16)SbxSTRING;
-                    pStrm->WriteUniOrByteString( rStr, osl_getThreadTextEncoding() );
+                    *pStrm << (sal_uInt16)SbxSTRING;
                 }
-                else
-                {
-                    // without any length information! without end-identifier!
-                    // What does that mean for Unicode?! Choosing conversion to ByteString...
-                    rtl::OString aByteStr(rtl::OUStringToOString(rStr, osl_getThreadTextEncoding()));
-                    *pStrm << (const char*)aByteStr.getStr();
-                }
-                }
-                break;
+                pStrm->WriteUniOrByteString( rStr, osl_getThreadTextEncoding() );
+            }
+            else
+            {
+                // without any length information! without end-identifier!
+                // What does that mean for Unicode?! Choosing conversion to ByteString...
+                rtl::OString aByteStr(rtl::OUStringToOString(rStr, osl_getThreadTextEncoding()));
+                *pStrm << (const char*)aByteStr.getStr();
+            }
+        }
+        break;
 
-        default:
-                StarBASIC::Error( SbERR_BAD_ARGUMENT );
-                return sal_False;
+    default:
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return sal_False;
     }
 
     if( nBlockLen )
+    {
         pStrm->Seek( nFPos + nBlockLen );
+    }
     return pStrm->GetErrorCode() ? sal_False : sal_True;
 }
 
 static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
-    sal_Bool bBinary, short nBlockLen, sal_Bool bIsArray )
+                                     sal_Bool bBinary, short nBlockLen, sal_Bool bIsArray )
 {
     (void)bBinary;
     (void)bIsArray;
@@ -1024,88 +1100,91 @@ static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
 
     switch( eSrcType )
     {
-        case SbxBOOL:
-        case SbxCHAR:
-        case SbxBYTE:
-                {
-                sal_uInt8 aByte;
-                *pStrm >> aByte;
+    case SbxBOOL:
+    case SbxCHAR:
+    case SbxBYTE:
+        {
+            sal_uInt8 aByte;
+            *pStrm >> aByte;
 
-                if( bBinary && SbiRuntime::isVBAEnabled() && aByte == 1 && pStrm->IsEof() )
-                    aByte = 0;
+            if( bBinary && SbiRuntime::isVBAEnabled() && aByte == 1 && pStrm->IsEof() )
+            {
+                aByte = 0;
+            }
+            rVar.PutByte( aByte );
+        }
+        break;
 
-                rVar.PutByte( aByte );
-                }
-                break;
+    case SbxEMPTY:
+    case SbxNULL:
+    case SbxVOID:
+    case SbxINTEGER:
+    case SbxUSHORT:
+    case SbxINT:
+    case SbxUINT:
+        {
+            sal_Int16 aInt;
+            *pStrm >> aInt;
+            rVar.PutInteger( aInt );
+        }
+        break;
 
-        case SbxEMPTY:
-        case SbxNULL:
-        case SbxVOID:
-        case SbxINTEGER:
-        case SbxUSHORT:
-        case SbxINT:
-        case SbxUINT:
-                {
-                sal_Int16 aInt;
-                *pStrm >> aInt;
-                rVar.PutInteger( aInt );
-                }
-                break;
+    case SbxLONG:
+    case SbxULONG:
+        {
+            sal_Int32 aInt;
+            *pStrm >> aInt;
+            rVar.PutLong( aInt );
+        }
+        break;
+    case SbxSALINT64:
+    case SbxSALUINT64:
+        {
+            sal_uInt32 aInt;
+            *pStrm >> aInt;
+            rVar.PutInt64( (sal_Int64)aInt );
+        }
+        break;
+    case SbxSINGLE:
+        {
+            float nS;
+            *pStrm >> nS;
+            rVar.PutSingle( nS );
+        }
+        break;
 
-        case SbxLONG:
-        case SbxULONG:
-                {
-                sal_Int32 aInt;
-                *pStrm >> aInt;
-                rVar.PutLong( aInt );
-                }
-                break;
-        case SbxSALINT64:
-        case SbxSALUINT64:
-                {
-                sal_uInt32 aInt;
-                *pStrm >> aInt;
-                rVar.PutInt64( (sal_Int64)aInt );
-                }
-                break;
-        case SbxSINGLE:
-                {
-                float nS;
-                *pStrm >> nS;
-                rVar.PutSingle( nS );
-                }
-                break;
+    case SbxDOUBLE:
+    case SbxCURRENCY:
+        {
+            *pStrm >> aDouble;
+            rVar.PutDouble( aDouble );
+        }
+        break;
 
-        case SbxDOUBLE:
-        case SbxCURRENCY:
-                {
-                *pStrm >> aDouble;
-                rVar.PutDouble( aDouble );
-                }
-                break;
+    case SbxDATE:
+        {
+            *pStrm >> aDouble;
+            rVar.PutDate( aDouble );
+        }
+        break;
 
-        case SbxDATE:
-                {
-                *pStrm >> aDouble;
-                rVar.PutDate( aDouble );
-                }
-                break;
+    case SbxSTRING:
+    case SbxLPSTR:
+        {
+            OUString aStr = pStrm->ReadUniOrByteString(osl_getThreadTextEncoding());
+            rVar.PutString( aStr );
+        }
+        break;
 
-        case SbxSTRING:
-        case SbxLPSTR:
-                {
-                String aStr = pStrm->ReadUniOrByteString(osl_getThreadTextEncoding());
-                rVar.PutString( aStr );
-                }
-                break;
-
-        default:
-                StarBASIC::Error( SbERR_BAD_ARGUMENT );
-                return sal_False;
+    default:
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return sal_False;
     }
 
     if( nBlockLen )
+    {
         pStrm->Seek( nFPos + nBlockLen );
+    }
     return pStrm->GetErrorCode() ? sal_False : sal_True;
 }
 
@@ -1237,13 +1316,15 @@ RTLFUNC(Environ)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    String aResult;
+    OUString aResult;
     // should be ANSI but that's not possible under Win16 in the DLL
-    rtl::OString aByteStr(rtl::OUStringToOString(rPar.Get(1)->GetString(),
-        osl_getThreadTextEncoding()));
+    rtl::OString aByteStr(rtl::OUStringToOString(rPar.Get(1)->GetOUString(),
+                                                 osl_getThreadTextEncoding()));
     const char* pEnvStr = getenv(aByteStr.getStr());
     if ( pEnvStr )
+    {
         aResult = rtl::OUString::createFromAscii( pEnvStr );
+    }
     rPar.Get(0)->PutString( aResult );
 }
 
@@ -1349,12 +1430,14 @@ RTLFUNC(ResolvePath)
 
     if ( rPar.Count() == 2 )
     {
-        String aStr = rPar.Get(1)->GetString();
+        OUString aStr = rPar.Get(1)->GetOUString();
         DirEntry aEntry( aStr );
         rPar.Get(0)->PutString( aStr );
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
 }
 
 RTLFUNC(TypeLen)
@@ -1363,70 +1446,73 @@ RTLFUNC(TypeLen)
     (void)bWrite;
 
     if ( rPar.Count() != 2 )
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
     else
     {
         SbxDataType eType = rPar.Get(1)->GetType();
         sal_Int16 nLen = 0;
         switch( eType )
         {
-            case SbxEMPTY:
-            case SbxNULL:
-            case SbxVECTOR:
-            case SbxARRAY:
-            case SbxBYREF:
-            case SbxVOID:
-            case SbxHRESULT:
-            case SbxPOINTER:
-            case SbxDIMARRAY:
-            case SbxCARRAY:
-            case SbxUSERDEF:
-                nLen = 0;
+        case SbxEMPTY:
+        case SbxNULL:
+        case SbxVECTOR:
+        case SbxARRAY:
+        case SbxBYREF:
+        case SbxVOID:
+        case SbxHRESULT:
+        case SbxPOINTER:
+        case SbxDIMARRAY:
+        case SbxCARRAY:
+        case SbxUSERDEF:
+            nLen = 0;
+            break;
+
+        case SbxINTEGER:
+        case SbxERROR:
+        case SbxUSHORT:
+        case SbxINT:
+        case SbxUINT:
+            nLen = 2;
+            break;
+
+        case SbxLONG:
+        case SbxSINGLE:
+        case SbxULONG:
+            nLen = 4;
+            break;
+
+        case SbxDOUBLE:
+        case SbxCURRENCY:
+        case SbxDATE:
+        case SbxSALINT64:
+        case SbxSALUINT64:
+            nLen = 8;
+            break;
+
+        case SbxOBJECT:
+        case SbxVARIANT:
+        case SbxDATAOBJECT:
+            nLen = 0;
+            break;
+
+        case SbxCHAR:
+        case SbxBYTE:
+        case SbxBOOL:
+            nLen = 1;
                 break;
 
-            case SbxINTEGER:
-            case SbxERROR:
-            case SbxUSHORT:
-            case SbxINT:
-            case SbxUINT:
-                nLen = 2;
-                break;
+        case SbxLPSTR:
+        case SbxLPWSTR:
+        case SbxCoreSTRING:
+        case SbxSTRING:
+            nLen = (sal_Int16)rPar.Get(1)->GetOUString().getLength();
+            break;
 
-            case SbxLONG:
-            case SbxSINGLE:
-            case SbxULONG:
-                nLen = 4;
-                break;
-
-            case SbxDOUBLE:
-            case SbxCURRENCY:
-            case SbxDATE:
-            case SbxSALINT64:
-            case SbxSALUINT64:
-                nLen = 8;
-                break;
-
-            case SbxOBJECT:
-            case SbxVARIANT:
-            case SbxDATAOBJECT:
-                nLen = 0;
-                break;
-
-            case SbxCHAR:
-            case SbxBYTE:
-            case SbxBOOL:
-                nLen = 1;
-                break;
-
-            case SbxLPSTR:
-            case SbxLPWSTR:
-            case SbxCoreSTRING:
-            case SbxSTRING:
-                nLen = (sal_Int16)rPar.Get(1)->GetString().Len();
-                break;
-
-            default:
-                nLen = 0;
+        default:
+            nLen = 0;
+            break;
         }
         rPar.Get(0)->PutInteger( nLen );
     }
@@ -1538,8 +1624,9 @@ RTLFUNC(GlobalScope)
 
     SbxObject* p = pBasic;
     while( p->GetParent() )
+    {
         p = p->GetParent();
-
+    }
     SbxVariableRef refVar = rPar.Get(0);
     refVar->PutObject( p );
 }
@@ -1552,17 +1639,23 @@ RTLFUNC(ConvertToUrl)
 
     if ( rPar.Count() == 2 )
     {
-        String aStr = rPar.Get(1)->GetString();
+        OUString aStr = rPar.Get(1)->GetOUString();
         INetURLObject aURLObj( aStr, INET_PROT_FILE );
-        ::rtl::OUString aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+        OUString aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
         if( aFileURL.isEmpty() )
+        {
             ::osl::File::getFileURLFromSystemPath( aFileURL, aFileURL );
+        }
         if( aFileURL.isEmpty() )
+        {
             aFileURL = aStr;
-        rPar.Get(0)->PutString( String(aFileURL) );
+        }
+        rPar.Get(0)->PutString(aFileURL);
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
 }
 
 RTLFUNC(ConvertFromUrl)
@@ -1572,15 +1665,19 @@ RTLFUNC(ConvertFromUrl)
 
     if ( rPar.Count() == 2 )
     {
-        String aStr = rPar.Get(1)->GetString();
-        ::rtl::OUString aSysPath;
+        OUString aStr = rPar.Get(1)->GetOUString();
+        OUString aSysPath;
         ::osl::File::getSystemPathFromFileURL( aStr, aSysPath );
         if( aSysPath.isEmpty() )
+        {
             aSysPath = aStr;
-        rPar.Get(0)->PutString( String(aSysPath) );
+        }
+        rPar.Get(0)->PutString(aSysPath);
     }
     else
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
 }
 
 
@@ -1616,28 +1713,36 @@ RTLFUNC(Join)
     if( pArr )
     {
         if( pArr->GetDims() != 1 )
+        {
             StarBASIC::Error( SbERR_WRONG_DIMS );   // Syntax Error?!
-
-        String aDelim;
+        }
+        OUString aDelim;
         if( nParCount == 3 )
-            aDelim = rPar.Get(2)->GetString();
+        {
+            aDelim = rPar.Get(2)->GetOUString();
+        }
         else
-            aDelim = rtl::OUString(" ");
-
-        String aRetStr;
+        {
+            aDelim = " ";
+        }
+        OUString aRetStr;
         short nLower, nUpper;
         pArr->GetDim( 1, nLower, nUpper );
         for( short i = nLower ; i <= nUpper ; ++i )
         {
-            String aStr = pArr->Get( &i )->GetString();
+            OUString aStr = pArr->Get( &i )->GetOUString();
             aRetStr += aStr;
             if( i != nUpper )
+            {
                 aRetStr += aDelim;
+            }
         }
         rPar.Get(0)->PutString( aRetStr );
     }
     else
+    {
         StarBASIC::Error( SbERR_MUST_HAVE_DIMS );
+    }
 }
 
 
@@ -1653,50 +1758,58 @@ RTLFUNC(Split)
         return;
     }
 
-    String aExpression = rPar.Get(1)->GetString();
+    OUString aExpression = rPar.Get(1)->GetOUString();
     short nArraySize = 0;
     StringVector vRet;
-    if( aExpression.Len() )
+    if( !aExpression.isEmpty() )
     {
-        String aDelim;
+        OUString aDelim;
         if( nParCount >= 3 )
-            aDelim = rPar.Get(2)->GetString();
+        {
+            aDelim = rPar.Get(2)->GetOUString();
+        }
         else
-            aDelim = rtl::OUString(" ");
+        {
+            aDelim = " ";
+        }
 
         sal_Int32 nCount = -1;
         if( nParCount == 4 )
+        {
             nCount = rPar.Get(3)->GetLong();
-
-        xub_StrLen nDelimLen = aDelim.Len();
+        }
+        sal_Int32 nDelimLen = aDelim.getLength();
         if( nDelimLen )
         {
-            xub_StrLen iSearch = STRING_NOTFOUND;
-            xub_StrLen iStart = 0;
+            sal_Int32 iSearch = -1;
+            sal_Int32 iStart = 0;
             do
             {
                 bool bBreak = false;
                 if( nCount >= 0 && nArraySize == nCount - 1 )
-                    bBreak = true;
-
-                iSearch = aExpression.Search( aDelim, iStart );
-                String aSubStr;
-                if( iSearch != STRING_NOTFOUND && !bBreak )
                 {
-                    aSubStr = aExpression.Copy( iStart, iSearch - iStart );
+                    bBreak = true;
+                }
+                iSearch = aExpression.indexOf( aDelim, iStart );
+                OUString aSubStr;
+                if( iSearch >= 0 && !bBreak )
+                {
+                    aSubStr = aExpression.copy( iStart, iSearch - iStart );
                     iStart = iSearch + nDelimLen;
                 }
                 else
                 {
-                    aSubStr = aExpression.Copy( iStart );
+                    aSubStr = aExpression.copy( iStart );
                 }
                 vRet.push_back( aSubStr );
                 nArraySize++;
 
                 if( bBreak )
+                {
                     break;
+                }
             }
-            while( iSearch != STRING_NOTFOUND );
+            while( iSearch >= 0 );
         }
         else
         {
@@ -1761,8 +1874,8 @@ RTLFUNC(MonthName)
     const CalendarItem2* pCalendarItems = aMonthSeq.getConstArray();
     const CalendarItem2& rItem = pCalendarItems[nVal - 1];
 
-    ::rtl::OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
-    rPar.Get(0)->PutString( String(aRetStr) );
+    OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
+    rPar.Get(0)->PutString(aRetStr);
 }
 
 // WeekdayName(weekday, abbreviate, firstdayofweek)
@@ -1799,8 +1912,9 @@ RTLFUNC(WeekdayName)
         }
     }
     if( nFirstDay == 0 )
+    {
         nFirstDay = sal_Int16( xCalendar->getFirstDayOfWeek() + 1 );
-
+    }
     nDay = 1 + (nDay + nDayCount + nFirstDay - 2) % nDayCount;
     if( nDay < 1 || nDay > nDayCount )
     {
@@ -1813,14 +1927,16 @@ RTLFUNC(WeekdayName)
     {
         SbxVariable* pPar2 = rPar.Get(2);
         if( !pPar2->IsErr() )
+        {
             bAbbreviate = pPar2->GetBool();
+        }
     }
 
     const CalendarItem2* pCalendarItems = aDaySeq.getConstArray();
     const CalendarItem2& rItem = pCalendarItems[nDay - 1];
 
-    ::rtl::OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
-    rPar.Get(0)->PutString( String(aRetStr) );
+    OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
+    rPar.Get(0)->PutString( aRetStr );
 }
 
 RTLFUNC(Weekday)
@@ -1830,7 +1946,9 @@ RTLFUNC(Weekday)
 
     sal_uInt16 nParCount = rPar.Count();
     if ( nParCount < 2 )
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
     else
     {
         double aDate = rPar.Get(1)->GetDate();
@@ -1866,13 +1984,13 @@ enum Interval
 struct IntervalInfo
 {
     Interval    meInterval;
-    const char* mpStringCode;
+    const OUString mStringCode;
     double      mdValue;
     bool        mbSimple;
 
-    IntervalInfo( Interval eInterval, const char* pStringCode, double dValue, bool bSimple )
+    IntervalInfo( Interval eInterval, const OUString sStringCode, double dValue, bool bSimple )
         : meInterval( eInterval )
-        , mpStringCode( pStringCode )
+        , mStringCode( sStringCode )
         , mdValue( dValue )
         , mbSimple( bSimple )
     {}
@@ -1890,17 +2008,19 @@ static IntervalInfo pIntervalTable[] =
     IntervalInfo( INTERVAL_H,       "h",        (1.0 /    24.0),    true ),     // Hour
     IntervalInfo( INTERVAL_N,       "n",        (1.0 /  1440.0),    true),      // Minute
     IntervalInfo( INTERVAL_S,       "s",        (1.0 / 86400.0),    true ),     // Second
-    IntervalInfo( INTERVAL_NONE, NULL, 0.0, false )
+    IntervalInfo( INTERVAL_NONE, "", 0.0, false )
 };
 
-IntervalInfo* getIntervalInfo( const String& rStringCode )
+IntervalInfo* getIntervalInfo( const OUString& rStringCode )
 {
     IntervalInfo* pInfo = NULL;
     sal_Int16 i = 0;
-    while( (pInfo = pIntervalTable + i)->mpStringCode != NULL )
+    while( !(pInfo = pIntervalTable + i)->mStringCode.isEmpty() )
     {
-        if( rStringCode.EqualsIgnoreCaseAscii( pInfo->mpStringCode ) )
+        if( rStringCode.equalsIgnoreAsciiCase( pInfo->mStringCode ) )
+        {
             break;
+        }
         i++;
     }
     return pInfo;
@@ -1916,9 +2036,13 @@ inline void implGetDayMonthYear( sal_Int16& rnYear, sal_Int16& rnMonth, sal_Int1
 inline sal_Int16 limitToINT16( sal_Int32 n32 )
 {
     if( n32 > 32767 )
+    {
         n32 = 32767;
+    }
     else if( n32 < -32768 )
+    {
         n32 = -32768;
+    }
     return (sal_Int16)n32;
 }
 
@@ -1934,7 +2058,7 @@ RTLFUNC(DateAdd)
         return;
     }
 
-    String aStringCode = rPar.Get(1)->GetString();
+    OUString aStringCode = rPar.Get(1)->GetOUString();
     IntervalInfo* pInfo = getIntervalInfo( aStringCode );
     if( !pInfo )
     {
@@ -2059,7 +2183,7 @@ RTLFUNC(DateDiff)
         return;
     }
 
-    String aStringCode = rPar.Get(1)->GetString();
+    OUString aStringCode = rPar.Get(1)->GetOUString();
     IntervalInfo* pInfo = getIntervalInfo( aStringCode );
     if( !pInfo )
     {
@@ -2259,7 +2383,7 @@ RTLFUNC(DatePart)
         return;
     }
 
-    String aStringCode = rPar.Get(1)->GetString();
+    OUString aStringCode = rPar.Get(1)->GetOUString();
     IntervalInfo* pInfo = getIntervalInfo( aStringCode );
     if( !pInfo )
     {
@@ -2399,7 +2523,7 @@ RTLFUNC(FormatDateTime)
         return;
     }
 
-    String aRetStr;
+    OUString aRetStr;
     SbxVariableRef pSbxVar = new SbxVariable( SbxSTRING );
     switch( nNamedFormat )
     {
@@ -2410,20 +2534,22 @@ RTLFUNC(FormatDateTime)
 
         // 12/21/2004 11:24:50 AM
         // 21.12.2004 12:13:51
-        case 0:
-            pSbxVar->PutDate( dDate );
-            aRetStr = pSbxVar->GetString();
-            break;
+    case 0:
+        pSbxVar->PutDate( dDate );
+        aRetStr = pSbxVar->GetOUString();
+        break;
 
         // LongDate: Display a date using the long date format specified
         // in your computer's regional settings.
         // Tuesday, December 21, 2004
         // Dienstag, 21. December 2004
-        case 1:
+    case 1:
         {
             SvNumberFormatter* pFormatter = NULL;
             if( GetSbData()->pInst )
+            {
                 pFormatter = GetSbData()->pInst->GetNumberFormatter();
+            }
             else
             {
                 sal_uInt32 n;   // Dummy
@@ -2436,35 +2562,40 @@ RTLFUNC(FormatDateTime)
             pFormatter->GetOutputString( dDate, nIndex, aRetStr, &pCol );
 
             if( !GetSbData()->pInst )
+            {
                 delete pFormatter;
-
+            }
             break;
         }
 
         // ShortDate: Display a date using the short date format specified
         // in your computer's regional settings.
         // 21.12.2004
-        case 2:
-            pSbxVar->PutDate( floor(dDate) );
-            aRetStr = pSbxVar->GetString();
-            break;
+    case 2:
+        pSbxVar->PutDate( floor(dDate) );
+        aRetStr = pSbxVar->GetOUString();
+        break;
 
         // LongTime: Display a time using the time format specified
         // in your computer's regional settings.
         // 11:24:50 AM
         // 12:13:51
-        case 3:
+    case 3:
         // ShortTime: Display a time using the 24-hour format (hh:mm).
         // 11:24
-        case 4:
-            double n;
-            double dTime = modf( dDate, &n );
-            pSbxVar->PutDate( dTime );
-            if( nNamedFormat == 3 )
-                aRetStr = pSbxVar->GetString();
-            else
-                aRetStr = pSbxVar->GetString().Copy( 0, 5 );
-            break;
+    case 4:
+        double n;
+        double dTime = modf( dDate, &n );
+        pSbxVar->PutDate( dTime );
+        if( nNamedFormat == 3 )
+        {
+            aRetStr = pSbxVar->GetOUString();
+        }
+        else
+        {
+            aRetStr = pSbxVar->GetOUString().copy( 0, 5 );
+        }
+        break;
     }
 
     rPar.Get(0)->PutString( aRetStr );
@@ -2554,7 +2685,7 @@ void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const rtl::OUStri
             Reference< XMultiServiceFactory > xFactory( getProcessServiceFactory() );
             if( xFactory.is() )
             {
-                xFunc.set( xFactory->createInstance(::rtl::OUString("com.sun.star.sheet.FunctionAccess")), UNO_QUERY_THROW);
+                xFunc.set( xFactory->createInstance(OUString("com.sun.star.sheet.FunctionAccess")), UNO_QUERY_THROW);
             }
         }
         Any aRet = xFunc->callFunction( sFuncName, aArgs );
@@ -2589,7 +2720,7 @@ RTLFUNC(SYD)
     aParams[ 2 ] <<= makeAny( rPar.Get(3)->GetDouble() );
     aParams[ 3 ] <<= makeAny( rPar.Get(4)->GetDouble() );
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( "SYD" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, OUString( "SYD" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(SLN)
@@ -2612,7 +2743,7 @@ RTLFUNC(SLN)
     aParams[ 1 ] <<= makeAny( rPar.Get(2)->GetDouble() );
     aParams[ 2 ] <<= makeAny( rPar.Get(3)->GetDouble() );
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( "SLN" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, OUString( "SLN" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(Pmt)
@@ -2657,7 +2788,7 @@ RTLFUNC(Pmt)
     aParams[ 3 ] <<= fv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( "Pmt" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, OUString( "Pmt" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(PPmt)
@@ -2704,7 +2835,7 @@ RTLFUNC(PPmt)
     aParams[ 4 ] <<= fv;
     aParams[ 5 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( "PPmt" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, OUString( "PPmt" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(PV)
@@ -2749,7 +2880,7 @@ RTLFUNC(PV)
     aParams[ 3 ] <<= fv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( "PV" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, OUString( "PV" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(NPV)
@@ -2777,7 +2908,7 @@ RTLFUNC(NPV)
 
     aParams[ 1 ] <<= aValues;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( "NPV" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, OUString( "NPV" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(NPer)
@@ -2822,7 +2953,7 @@ RTLFUNC(NPer)
     aParams[ 3 ] <<= fv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( "NPer" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, OUString( "NPer" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(MIRR)
@@ -2853,7 +2984,7 @@ RTLFUNC(MIRR)
     aParams[ 1 ] <<= makeAny( rPar.Get(2)->GetDouble() );
     aParams[ 2 ] <<= makeAny( rPar.Get(3)->GetDouble() );
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( "MIRR" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, OUString( "MIRR" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(IRR)
@@ -2890,7 +3021,7 @@ RTLFUNC(IRR)
     aParams[ 0 ] <<= aValues;
     aParams[ 1 ] <<= guess;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( "IRR" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, OUString( "IRR" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(IPmt)
@@ -2937,7 +3068,7 @@ RTLFUNC(IPmt)
     aParams[ 4 ] <<= fv;
     aParams[ 5 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( "IPmt" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, OUString( "IPmt" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(FV)
@@ -2982,7 +3113,7 @@ RTLFUNC(FV)
     aParams[ 3 ] <<= pv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( "FV" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, OUString( "FV" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(DDB)
@@ -3021,7 +3152,7 @@ RTLFUNC(DDB)
     aParams[ 3 ] <<= period;
     aParams[ 4 ] <<= factor;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( "DDB" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, OUString( "DDB" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(Rate)
@@ -3080,7 +3211,7 @@ RTLFUNC(Rate)
     aParams[ 4 ] <<= type;
     aParams[ 5 ] <<= guess;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( "Rate" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, OUString( "Rate" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(StrReverse)
@@ -3101,7 +3232,7 @@ RTLFUNC(StrReverse)
         return;
     }
 
-    rtl::OUString aStr = comphelper::string::reverseString(pSbxVariable->GetString());
+    rtl::OUString aStr = comphelper::string::reverseString(pSbxVariable->GetOUString());
     rPar.Get(0)->PutString( aStr );
 }
 
@@ -3119,8 +3250,9 @@ RTLFUNC(CompatibilityMode)
     if( pInst )
     {
         if ( nCount == 2 )
+        {
             pInst->EnableCompatibility( rPar.Get(1)->GetBool() );
-
+        }
         bEnabled = pInst->IsCompatibility();
     }
     rPar.Get(0)->PutBool( bEnabled );

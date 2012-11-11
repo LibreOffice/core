@@ -512,6 +512,10 @@ Resource RID_ERRHDL
     {
         Text [ en-US ] = "The password of a shared spreadsheet cannot be set or changed.\nDeactivate sharing mode first.";
     };
+    String ERRCODE_SFX_FORMAT_ROWCOL
+    {
+        Text [ en-US ] = "File format error found at $(ARG1)(row,col).";
+    };
 };
 
 // eof ------------------------------------------------------------------------

@@ -54,8 +54,8 @@ $(eval $(call gb_Library_add_defs,shlxthdl_x64,\
 ))
 
 $(eval $(call gb_Library_use_externals,shlxthdl_x64,\
-	expat_utf16 \
-	zlib \
+	expat_utf16_x64 \
+	zlib_x64 \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,shlxthdl_x64,\

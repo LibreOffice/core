@@ -27,6 +27,7 @@
 #include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
+#include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -62,13 +63,13 @@ using ZipUtils::Inflater;
 
 /** This class is used to read entries from a zip file
  */
-ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XMultiServiceFactory > &xNewFactory, sal_Bool bInitialise )
+ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, sal_Bool bInitialise )
     throw(IOException, ZipException, RuntimeException)
 : aGrabber(xInput)
 , aInflater (sal_True)
 , xStream(xInput)
 , xSeek(xInput, UNO_QUERY)
-, m_xFactory ( xNewFactory )
+, m_xContext ( rxContext )
 , bRecoveryMode( sal_False )
 {
     if (bInitialise)
@@ -83,13 +84,13 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
 
 
 
-ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XMultiServiceFactory > &xNewFactory, sal_Bool bInitialise, sal_Bool bForceRecovery, uno::Reference < XProgressHandler > xProgress )
+ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, sal_Bool bInitialise, sal_Bool bForceRecovery, uno::Reference < XProgressHandler > xProgress )
     throw(IOException, ZipException, RuntimeException)
 : aGrabber(xInput)
 , aInflater (sal_True)
 , xStream(xInput)
 , xSeek(xInput, UNO_QUERY)
-, m_xFactory ( xNewFactory )
+, m_xContext ( rxContext )
 , xProgressHandler( xProgress )
 , bRecoveryMode( bForceRecovery )
 {
@@ -121,18 +122,16 @@ void ZipFile::setInputStream ( uno::Reference < XInputStream > xNewStream )
     aGrabber.setInputStream ( xStream );
 }
 
-uno::Reference< xml::crypto::XDigestContext > ZipFile::StaticGetDigestContextForChecksum( const uno::Reference< lang::XMultiServiceFactory >& xArgFactory, const ::rtl::Reference< EncryptionData >& xEncryptionData )
+uno::Reference< xml::crypto::XDigestContext > ZipFile::StaticGetDigestContextForChecksum( const uno::Reference< uno::XComponentContext >& xArgContext, const ::rtl::Reference< EncryptionData >& xEncryptionData )
 {
     uno::Reference< xml::crypto::XDigestContext > xDigestContext;
     if ( xEncryptionData->m_nCheckAlg == xml::crypto::DigestID::SHA256_1K )
     {
-        uno::Reference< lang::XMultiServiceFactory > xFactory = xArgFactory;
-        if ( !xFactory.is() )
-            xFactory.set( comphelper::getProcessServiceFactory(), uno::UNO_SET_THROW );
+        uno::Reference< uno::XComponentContext > xContext = xArgContext;
+        if ( !xContext.is() )
+            xContext = comphelper::getProcessComponentContext();
 
-        uno::Reference< xml::crypto::XDigestContextSupplier > xDigestContextSupplier(
-            xFactory->createInstance("com.sun.star.xml.crypto.NSSInitializer"),
-            uno::UNO_QUERY_THROW );
+        uno::Reference< xml::crypto::XNSSInitializer > xDigestContextSupplier = xml::crypto::NSSInitializer::create( xContext );
 
         xDigestContext.set( xDigestContextSupplier->getDigestContext( xEncryptionData->m_nCheckAlg, uno::Sequence< beans::NamedValue >() ), uno::UNO_SET_THROW );
     }
@@ -142,7 +141,7 @@ uno::Reference< xml::crypto::XDigestContext > ZipFile::StaticGetDigestContextFor
     return xDigestContext;
 }
 
-uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const uno::Reference< lang::XMultiServiceFactory >& xArgFactory, const ::rtl::Reference< EncryptionData >& xEncryptionData, bool bEncrypt )
+uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const uno::Reference< uno::XComponentContext >& xArgContext, const ::rtl::Reference< EncryptionData >& xEncryptionData, bool bEncrypt )
 {
     uno::Reference< xml::crypto::XCipherContext > xResult;
 
@@ -169,13 +168,11 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
 
         if ( xEncryptionData->m_nEncAlg == xml::crypto::CipherID::AES_CBC_W3C_PADDING )
         {
-            uno::Reference< lang::XMultiServiceFactory > xFactory = xArgFactory;
-            if ( !xFactory.is() )
-                xFactory.set( comphelper::getProcessServiceFactory(), uno::UNO_SET_THROW );
+            uno::Reference< uno::XComponentContext > xContext = xArgContext;
+            if ( !xContext.is() )
+                xContext = comphelper::getProcessComponentContext();
 
-            uno::Reference< xml::crypto::XCipherContextSupplier > xCipherContextSupplier(
-                xFactory->createInstance("com.sun.star.xml.crypto.NSSInitializer"),
-                uno::UNO_QUERY_THROW );
+            uno::Reference< xml::crypto::XNSSInitializer > xCipherContextSupplier = xml::crypto::NSSInitializer::create( xContext );
 
             xResult = xCipherContextSupplier->getCipherContext( xEncryptionData->m_nEncAlg, aDerivedKey, xEncryptionData->m_aInitVector, bEncrypt, uno::Sequence< beans::NamedValue >() );
         }
@@ -381,7 +378,7 @@ sal_Bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rDa
     return bOk;
 }
 
-uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::Reference< uno::XComponentContext >& rxContext,
                                                                 const uno::Reference< XInputStream >& xStream,
                                                                 const ::rtl::Reference< EncryptionData > &rData )
         throw ( packages::WrongPasswordException, ZipIOException, RuntimeException )
@@ -417,11 +414,11 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
 
         xStream->readBytes( aReadBuffer, nSize );
 
-        if ( !StaticHasValidPassword( xFactory, aReadBuffer, rData ) )
+        if ( !StaticHasValidPassword( rxContext, aReadBuffer, rData ) )
             throw packages::WrongPasswordException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
     }
 
-    return new XUnbufferedStream( xFactory, xStream, rData );
+    return new XUnbufferedStream( rxContext, xStream, rData );
 }
 
 #if 0
@@ -439,14 +436,14 @@ void CheckSequence( const uno::Sequence< sal_Int8 >& aSequence )
 }
 #endif
 
-sal_Bool ZipFile::StaticHasValidPassword( const uno::Reference< lang::XMultiServiceFactory >& xFactory, const Sequence< sal_Int8 > &aReadBuffer, const ::rtl::Reference< EncryptionData > &rData )
+sal_Bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentContext >& rxContext, const Sequence< sal_Int8 > &aReadBuffer, const ::rtl::Reference< EncryptionData > &rData )
 {
     if ( !rData.is() || !rData->m_aKey.getLength() )
         return sal_False;
 
     sal_Bool bRet = sal_False;
 
-    uno::Reference< xml::crypto::XCipherContext > xCipher( StaticGetCipher( xFactory, rData, false ), uno::UNO_SET_THROW );
+    uno::Reference< xml::crypto::XCipherContext > xCipher( StaticGetCipher( rxContext, rData, false ), uno::UNO_SET_THROW );
 
     uno::Sequence< sal_Int8 > aDecryptBuffer;
     uno::Sequence< sal_Int8 > aDecryptBuffer2;
@@ -472,7 +469,7 @@ sal_Bool ZipFile::StaticHasValidPassword( const uno::Reference< lang::XMultiServ
         aDecryptBuffer.realloc( n_ConstDigestLength );
 
     uno::Sequence< sal_Int8 > aDigestSeq;
-    uno::Reference< xml::crypto::XDigestContext > xDigestContext( StaticGetDigestContextForChecksum( xFactory, rData ), uno::UNO_SET_THROW );
+    uno::Reference< xml::crypto::XDigestContext > xDigestContext( StaticGetDigestContextForChecksum( rxContext, rData ), uno::UNO_SET_THROW );
 
     xDigestContext->updateDigest( aDecryptBuffer );
     aDigestSeq = xDigestContext->finalizeDigestAndDispose();
@@ -510,7 +507,7 @@ sal_Bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ::rtl::Reference< 
 
         xStream->readBytes( aReadBuffer, nSize );
 
-        bRet = StaticHasValidPassword( m_xFactory, aReadBuffer, rData );
+        bRet = StaticHasValidPassword( m_xContext, aReadBuffer, rData );
     }
 
     return bRet;
@@ -526,7 +523,7 @@ uno::Reference< XInputStream > ZipFile::createUnbufferedStream(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return new XUnbufferedStream ( m_xFactory, aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode );
+    return new XUnbufferedStream ( m_xContext, aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode );
 }
 
 

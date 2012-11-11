@@ -9,7 +9,11 @@ reality...
 the data partition size right in the GUI, that is doomed to producing
 and AVD that doesn't work. Instead start it from the console:
 
-	emulator-arm -avd <Name> -partition-size 500
+	LD_LIBRARY_PATH=$(pwd)/lib emulator-arm -avd <Name> -partition-size 500
+
+In order to have proper acceleration, you need the 32-bit libGL.so:
+
+        sudo zypper in Mesa-libGL-devel-32bit
 
 	Where <Name> is the literal name of the AVD that you entered.
 

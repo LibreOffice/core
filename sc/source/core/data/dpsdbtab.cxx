@@ -29,7 +29,7 @@
 #include "dpsdbtab.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
-#include "dpcachetable.hxx"
+#include "dpfilteredcache.hxx"
 #include "dptabres.hxx"
 #include "document.hxx"
 #include "dpobject.hxx"
@@ -72,9 +72,9 @@ const ScDPCache* ScImportSourceDesc::CreateCache(const ScDPDimensionSaveData* pD
 }
 
 ScDatabaseDPData::ScDatabaseDPData(
-    ScDocument* pDoc, const ScDPCache* pCache) :
+    ScDocument* pDoc, const ScDPCache& rCache) :
     ScDPTableData(pDoc),
-    aCacheTable(pCache)
+    aCacheTable(rCache)
 {
 }
 
@@ -131,25 +131,17 @@ void ScDatabaseDPData::CreateCacheTable()
         // cache table already created.
         return;
 
-    if (!aCacheTable.hasCache())
-    {
-        OSL_FAIL("Cache table should be created with a live data cache instance at all times.");
-        // This better not happen!!  Cache table should be created with a live
-        // data cache instance at all times.
-        return;
-    }
-
     aCacheTable.fillTable();
 }
 
-void ScDatabaseDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)
+void ScDatabaseDPData::FilterCacheTable(const vector<ScDPFilteredCache::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)
 {
     CreateCacheTable();
     aCacheTable.filterByPageDimension(
         rCriteria, (IsRepeatIfEmpty() ? rCatDims : boost::unordered_set<sal_Int32>()));
 }
 
-void ScDatabaseDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
+void ScDatabaseDPData::GetDrillDownData(const vector<ScDPFilteredCache::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     CreateCacheTable();
     sal_Int32 nRowSize = aCacheTable.getRowSize();
@@ -166,7 +158,7 @@ void ScDatabaseDPData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
     CalcResultsFromCacheTable( aCacheTable, rInfo, bAutoShow);
 }
 
-const ScDPCacheTable& ScDatabaseDPData::GetCacheTable() const
+const ScDPFilteredCache& ScDatabaseDPData::GetCacheTable() const
 {
     return aCacheTable;
 }

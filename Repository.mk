@@ -57,10 +57,9 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     pdf2xml \
     pdfunzip \
     propex \
-    rdbmaker \
     regsingleton \
     regsvrex \
-	renewpo \
+    renewpo \
     rsc \
     rscdep \
     saxparser \
@@ -353,6 +352,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     spl \
     sts \
     svgfilter \
+	svgio \
     svl \
     svt \
     svx \
@@ -412,7 +412,7 @@ endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     affine_uno \
-	cli_cppuhelper_native \
+	cli_cppuhelper \
 	cli_uno \
 	gcc3_uno \
 	java_uno \
@@ -468,7 +468,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     pyuno \
     pyuno_wrapper \
     recentfile \
-	librsvg-2-2 \
     scriptframe \
     sdbc2 \
     smoketest \
@@ -562,6 +561,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     ldapbe2 \
     localebe1 \
     lomenubar \
+    losessioninstall \
     macbe1 \
     migrationoo2 \
     migrationoo3 \
@@ -589,8 +589,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     vbaobj \
     vbaswobj \
     vclcanvas \
-    writerfilter_uno \
-    writerfilter_debug \
     $(if $(filter $(GUIBASE),aqua), \
         fps_aqua \
     ) \
@@ -738,7 +736,6 @@ $(eval $(call gb_Helper_register_jars,OOO, \
 	fax \
 	form \
 	htmlsoff \
-	java_accessibility \
 	java_uno_accessbridge \
 	letter \
 	officebean \

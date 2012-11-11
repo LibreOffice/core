@@ -112,6 +112,15 @@
   { $as_echo "$as_me:$LINENO: checking whether byte ordering is bigendian" >&5
  $as_echo_n "checking whether byte ordering is bigendian... " >&6; }
  if test "${ac_cv_c_bigendian+set}" = set; then
+@@ -24552,7 +24552,7 @@
+ 	 test "$cross_compiling" = yes ||
+ 	 $as_test_x conftest$ac_exeext
+        }; then
+-  pixman_cc_stderr=`test -f conftest.err && cat conftest.err`
++  pixman_cc_stderr=`test -f conftest.err && grep -v 'ld: warning: object file compiled with -mlong-branch which is no longer needed.' conftest.err`
+ 		 pixman_cc_flag=yes
+ else
+   $as_echo "$as_me: failed program was:" >&5
 --- misc/pixman-0.24.4/pixman/pixman-utils.c
 +++ misc/build/pixman-0.24.4/pixman/pixman-utils.c
 @@ -27,6 +27,7 @@

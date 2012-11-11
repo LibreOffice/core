@@ -727,7 +727,7 @@ inline System::String^ mapUnoString( rtl_uString const * data)
     return gcnew System::String((__wchar_t*) data->buffer, 0, data->length);
 }
 
-OUString mapCliString(System::String const ^ data)
+OUString mapCliString(System::String ^ data)
 {
 
     if (data != nullptr)

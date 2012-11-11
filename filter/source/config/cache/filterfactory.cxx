@@ -24,6 +24,7 @@
 #include "versions.hxx"
 
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -487,7 +488,7 @@ OUStringList FilterFactory::impl_getListOfInstalledModules() const
     try
     {
         css::uno::Reference< css::container::XNameAccess > xModuleConfig(
-            ::comphelper::ConfigurationHelper::openConfig(xSMGR,
+            ::comphelper::ConfigurationHelper::openConfig( comphelper::getComponentContext(xSMGR),
                                                           CFGPACKAGE_OOO_MODULES,
                                                           ::comphelper::ConfigurationHelper::E_READONLY),
             css::uno::UNO_QUERY_THROW);
@@ -570,7 +571,7 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const ::rtl::OUS
     try
     {
         css::uno::Reference< css::container::XNameAccess > xUISortConfig(
-            ::comphelper::ConfigurationHelper::openConfig(xSMGR,
+            ::comphelper::ConfigurationHelper::openConfig( comphelper::getComponentContext(xSMGR),
                                                           CFGPACKAGE_TD_UISORT,
                                                           ::comphelper::ConfigurationHelper::E_READONLY),
             css::uno::UNO_QUERY_THROW);

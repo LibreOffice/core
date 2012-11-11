@@ -38,9 +38,10 @@
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
@@ -103,6 +104,8 @@ namespace svxform
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::util::XNumberFormatter;
+    using ::com::sun::star::util::XNumberFormatter2;
+    using ::com::sun::star::util::NumberFormatter;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::lang::Locale;
     using ::com::sun::star::sdb::SQLContext;
@@ -550,7 +553,7 @@ TYPEINIT1(FmFilterModel, FmParentData);
 //------------------------------------------------------------------------
 FmFilterModel::FmFilterModel(const Reference< XMultiServiceFactory >& _rxFactory)
               :FmParentData(_rxFactory,NULL, ::rtl::OUString())
-              ,OSQLParserClient(_rxFactory)
+              ,OSQLParserClient(comphelper::getComponentContext(_rxFactory))
               ,m_xORB(_rxFactory)
               ,m_pAdapter(NULL)
               ,m_pCurrentItems(NULL)
@@ -873,7 +876,7 @@ void FmFilterModel::Remove( const ::std::vector<FmFilterData*>::iterator& rPos )
     FmFilterData* pData = *rPos;
     pData->GetParent()->GetChildren().erase( rPos );
 
-    // notify the view, this will remove the actual SvLBoxEntry
+    // notify the view, this will remove the actual SvTreeListEntry
     FmFilterRemovedHint aRemoveHint( pData );
     Broadcast( aRemoveHint );
 
@@ -895,7 +898,7 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
         // obtain a number formatter for this connection
         // TODO: shouldn't this be cached?
         Reference< XNumberFormatsSupplier > xFormatSupplier = aStaticTools.getNumberFormats( xConnection, sal_True );
-        Reference< XNumberFormatter > xFormatter( m_xORB->createInstance( FM_NUMBER_FORMATTER ), UNO_QUERY );
+        Reference< XNumberFormatter > xFormatter( NumberFormatter::create( comphelper::getComponentContext(m_xORB) ), UNO_QUERY_THROW );
         xFormatter->attachNumberFormatsSupplier( xFormatSupplier );
 
         // get the field (database column) which the item is responsible for
@@ -1038,16 +1041,16 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
 class FmFilterItemsString : public SvLBoxString
 {
 public:
-    FmFilterItemsString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,    const XubString& rStr )
+    FmFilterItemsString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,    const XubString& rStr )
         :SvLBoxString(pEntry,nFlags,rStr){}
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
-    virtual void InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData);
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry);
+    virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData);
 };
 
 const int nxDBmp = 12;
 //------------------------------------------------------------------------
-void FmFilterItemsString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* pEntry )
+void FmFilterItemsString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /*nFlags*/, SvTreeListEntry* pEntry )
 {
     FmFilterItems* pRow = (FmFilterItems*)pEntry->GetUserData();
     FmFormItem* pForm = (FmFormItem*)pRow->GetParent();
@@ -1080,7 +1083,7 @@ void FmFilterItemsString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt
 }
 
 //------------------------------------------------------------------------
-void FmFilterItemsString::InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData)
+void FmFilterItemsString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
@@ -1098,21 +1101,21 @@ class FmFilterString : public SvLBoxString
     UniString m_aName;
 
 public:
-    FmFilterString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const XubString& rStr, const UniString& aName)
+    FmFilterString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const XubString& rStr, const UniString& aName)
         :SvLBoxString(pEntry,nFlags,rStr)
         ,m_aName(aName)
     {
         m_aName.AppendAscii(": ");
     }
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
-    virtual void InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData);
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry);
+    virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData);
 };
 
 const int nxD = 4;
 
 //------------------------------------------------------------------------
-void FmFilterString::InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData)
+void FmFilterString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
@@ -1129,7 +1132,7 @@ void FmFilterString::InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvV
 }
 
 //------------------------------------------------------------------------
-void FmFilterString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/ )
+void FmFilterString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /*nFlags*/, SvTreeListEntry* /*pEntry*/ )
 {
     Font aOldFont( rDev.GetFont());
     Font aFont( aOldFont );
@@ -1193,7 +1196,7 @@ void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControl
     m_pModel->Update(xControllers, xCurrent);
 
     // expand the filters for the current controller
-    SvLBoxEntry* pEntry = FindEntry(m_pModel->GetCurrentForm());
+    SvTreeListEntry* pEntry = FindEntry(m_pModel->GetCurrentForm());
     if (pEntry && !IsExpanded(pEntry))
     {
         SelectAll(sal_False);
@@ -1212,7 +1215,7 @@ void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControl
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmFilterNavigator::EditingEntry( SvLBoxEntry* pEntry, Selection& rSelection )
+sal_Bool FmFilterNavigator::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection )
 {
     m_pEditingCurrently = pEntry;
     if (!SvTreeListBox::EditingEntry( pEntry, rSelection ))
@@ -1222,7 +1225,7 @@ sal_Bool FmFilterNavigator::EditingEntry( SvLBoxEntry* pEntry, Selection& rSelec
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
+sal_Bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText )
 {
     DBG_ASSERT(pEntry == m_pEditingCurrently, "FmFilterNavigator::EditedEntry: suspicious entry!");
     m_pEditingCurrently = NULL;
@@ -1269,7 +1272,7 @@ sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUStrin
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK( FmFilterNavigator, OnRemove, SvLBoxEntry*, pEntry )
+IMPL_LINK( FmFilterNavigator, OnRemove, SvTreeListEntry*, pEntry )
 {
     // now remove the entry
     m_pModel->Remove((FmFilterData*) pEntry->GetUserData());
@@ -1294,7 +1297,7 @@ IMPL_LINK_NOARG(FmFilterNavigator, OnDropActionTimer)
             break;
         case DA_EXPANDNODE:
         {
-            SvLBoxEntry* pToExpand = GetEntry(m_aTimerTriggered);
+            SvTreeListEntry* pToExpand = GetEntry(m_aTimerTriggered);
             if (pToExpand && (GetChildCount(pToExpand) > 0) &&  !IsExpanded(pToExpand))
                 // tja, eigentlich muesste ich noch testen, ob die Node nicht schon expandiert ist, aber ich
                 // habe dazu weder in den Basisklassen noch im Model eine Methode gefunden ...
@@ -1341,7 +1344,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
             }
             else
             {   // is it an entry whith children, and not yet expanded?
-                SvLBoxEntry* pDropppedOn = GetEntry(aDropPos);
+                SvTreeListEntry* pDropppedOn = GetEntry(aDropPos);
                 if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
                 {
                     // -> aufklappen
@@ -1379,7 +1382,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
     if (!FindEntry(m_aControlExchange->getFormItem()))
         return DND_ACTION_NONE;
 
-    SvLBoxEntry* pDropTarget = GetEntry(aDropPos);
+    SvTreeListEntry* pDropTarget = GetEntry(aDropPos);
     if (!pDropTarget)
         return DND_ACTION_NONE;
 
@@ -1405,7 +1408,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 // -----------------------------------------------------------------------------
 namespace
 {
-    FmFilterItems* getTargetItems(SvLBoxEntry* _pTarget)
+    FmFilterItems* getTargetItems(SvTreeListEntry* _pTarget)
     {
         FmFilterData*   pData = static_cast<FmFilterData*>(_pTarget->GetUserData());
         FmFilterItems*  pTargetItems = pData->ISA(FmFilterItems)
@@ -1429,14 +1432,14 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     // das Ziel des Drop sowie einige Daten darueber
     Point aDropPos = rEvt.maPosPixel;
-    SvLBoxEntry* pDropTarget = GetEntry( aDropPos );
+    SvTreeListEntry* pDropTarget = GetEntry( aDropPos );
     if (!pDropTarget)
         return DND_ACTION_NONE;
 
     // search the container where to add the items
     FmFilterItems*  pTargetItems = getTargetItems(pDropTarget);
     SelectAll(sal_False);
-    SvLBoxEntry* pEntry = FindEntry(pTargetItems);
+    SvTreeListEntry* pEntry = FindEntry(pTargetItems);
     Select(pEntry, sal_True);
     SetCurEntry(pEntry);
 
@@ -1446,11 +1449,11 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 }
 
 //------------------------------------------------------------------------
-void FmFilterNavigator::InitEntry(SvLBoxEntry* pEntry,
-                                  const XubString& rStr,
+void FmFilterNavigator::InitEntry(SvTreeListEntry* pEntry,
+                                  const OUString& rStr,
                                   const Image& rImg1,
                                   const Image& rImg2,
-                                                                  SvLBoxButtonKind eButtonKind)
+                                  SvLBoxButtonKind eButtonKind)
 {
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pString = NULL;
@@ -1465,7 +1468,7 @@ void FmFilterNavigator::InitEntry(SvLBoxEntry* pEntry,
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmFilterNavigator::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
+sal_Bool FmFilterNavigator::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
 {
     if (bSelect == IsSelected(pEntry))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
         return sal_True;
@@ -1519,23 +1522,23 @@ void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     else if( rHint.ISA(FmFilterTextChangedHint) )
     {
         FmFilterTextChangedHint* pHint = (FmFilterTextChangedHint*)&rHint;
-        SvLBoxEntry* pEntry = FindEntry(pHint->GetData());
+        SvTreeListEntry* pEntry = FindEntry(pHint->GetData());
         if (pEntry)
             SetEntryText( pEntry, pHint->GetData()->GetText());
     }
     else if( rHint.ISA(FmFilterCurrentChangedHint) )
     {
         // invalidate the entries
-        for (SvLBoxEntry* pEntry = First(); pEntry != NULL;
+        for (SvTreeListEntry* pEntry = First(); pEntry != NULL;
              pEntry = Next(pEntry))
             GetModel()->InvalidateEntry( pEntry );
     }
 }
 
 //------------------------------------------------------------------------
-SvLBoxEntry* FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
+SvTreeListEntry* FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
 {
-    SvLBoxEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = NULL;
     if (pItem)
     {
         for (pEntry = First(); pEntry != NULL; pEntry = Next( pEntry ))
@@ -1554,7 +1557,7 @@ void FmFilterNavigator::Insert(FmFilterData* pItem, sal_uLong nPos)
     const FmParentData* pParent = pItem->GetParent() ? pItem->GetParent() : GetFilterModel();
 
     // insert the item
-    SvLBoxEntry* pParentEntry = FindEntry( pParent );
+    SvTreeListEntry* pParentEntry = FindEntry( pParent );
     InsertEntry( pItem->GetText(), pItem->GetImage(), pItem->GetImage(), pParentEntry, sal_False, nPos, pItem );
     if ( pParentEntry )
         Expand( pParentEntry );
@@ -1564,7 +1567,7 @@ void FmFilterNavigator::Insert(FmFilterData* pItem, sal_uLong nPos)
 void FmFilterNavigator::Remove(FmFilterData* pItem)
 {
     // der Entry zu den Daten
-    SvLBoxEntry* pEntry = FindEntry(pItem);
+    SvTreeListEntry* pEntry = FindEntry(pItem);
 
     if (pEntry == m_pEditingCurrently)
         // cancel editing
@@ -1581,7 +1584,7 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
 
     sal_Bool bHandled = sal_True;
     sal_Bool bFoundSomething = sal_False;
-    for (SvLBoxEntry* pEntry = FirstSelected();
+    for (SvTreeListEntry* pEntry = FirstSelected();
          bHandled && pEntry != NULL;
          pEntry = NextSelected(pEntry))
     {
@@ -1665,7 +1668,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
         {
             // die Stelle, an der geklickt wurde
             Point aWhere;
-            SvLBoxEntry* pClicked = NULL;
+            SvTreeListEntry* pClicked = NULL;
             if (rEvt.IsMouseEvent())
             {
                 aWhere = rEvt.GetMousePosPixel();
@@ -1689,7 +1692,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
             }
 
             ::std::vector<FmFilterData*> aSelectList;
-            for (SvLBoxEntry* pEntry = FirstSelected();
+            for (SvTreeListEntry* pEntry = FirstSelected();
                  pEntry != NULL;
                  pEntry = NextSelected(pEntry))
             {
@@ -1758,9 +1761,9 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
         SvTreeListBox::Command( rEvt );
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry* FmFilterNavigator::getNextEntry(SvLBoxEntry* _pStartWith)
+SvTreeListEntry* FmFilterNavigator::getNextEntry(SvTreeListEntry* _pStartWith)
 {
-    SvLBoxEntry* pEntry = _pStartWith ? _pStartWith : LastSelected();
+    SvTreeListEntry* pEntry = _pStartWith ? _pStartWith : LastSelected();
     pEntry = Next(pEntry);
     // we need the next filter entry
     while( pEntry && GetChildCount( pEntry ) == 0 && pEntry != Last() )
@@ -1768,9 +1771,9 @@ SvLBoxEntry* FmFilterNavigator::getNextEntry(SvLBoxEntry* _pStartWith)
     return pEntry;
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry* FmFilterNavigator::getPrevEntry(SvLBoxEntry* _pStartWith)
+SvTreeListEntry* FmFilterNavigator::getPrevEntry(SvTreeListEntry* _pStartWith)
 {
-    SvLBoxEntry* pEntry = _pStartWith ? _pStartWith : FirstSelected();
+    SvTreeListEntry* pEntry = _pStartWith ? _pStartWith : FirstSelected();
     pEntry = Prev(pEntry);
     // check if the previous entry is a filter, if so get the next prev
     if ( pEntry && GetChildCount( pEntry ) != 0 )
@@ -1799,11 +1802,11 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
         if ( !getSelectedFilterItems( aItemList ) )
             break;
 
-        ::std::mem_fun1_t<SvLBoxEntry*,FmFilterNavigator,SvLBoxEntry*> getter = ::std::mem_fun(&FmFilterNavigator::getNextEntry);
+        ::std::mem_fun1_t<SvTreeListEntry*,FmFilterNavigator,SvTreeListEntry*> getter = ::std::mem_fun(&FmFilterNavigator::getNextEntry);
         if ( rKeyCode.GetCode() == KEY_UP )
             getter = ::std::mem_fun(&FmFilterNavigator::getPrevEntry);
 
-        SvLBoxEntry* pTarget = getter( this, NULL );
+        SvTreeListEntry* pTarget = getter( this, NULL );
         if ( !pTarget )
             break;
 
@@ -1871,8 +1874,8 @@ void FmFilterNavigator::DeleteSelection()
 {
     // to avoid the deletion of an entry twice (e.g. deletion of a parent and afterward
     // the deletion of it's child, i have to shrink the selecton list
-    ::std::vector<SvLBoxEntry*> aEntryList;
-    for (SvLBoxEntry* pEntry = FirstSelected();
+    ::std::vector<SvTreeListEntry*> aEntryList;
+    for (SvTreeListEntry* pEntry = FirstSelected();
          pEntry != NULL;
          pEntry = NextSelected(pEntry))
     {
@@ -1888,7 +1891,7 @@ void FmFilterNavigator::DeleteSelection()
     // Remove the selection
     SelectAll(sal_False);
 
-    for (::std::vector<SvLBoxEntry*>::reverse_iterator i = aEntryList.rbegin();
+    for (::std::vector<SvTreeListEntry*>::reverse_iterator i = aEntryList.rbegin();
         // link problems with operator ==
         i.base() != aEntryList.rend().base(); ++i)
     {

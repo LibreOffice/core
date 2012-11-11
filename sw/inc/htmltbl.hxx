@@ -64,12 +64,12 @@ class SwHTMLTableLayoutCnts
     sal_uInt8 nPass1Done;           ///< How many times has Pass 1 been called?
     sal_uInt8 nWidthSet;            ///< How many times has the width been set?
 
-    sal_Bool bNoBreakTag;           ///< <NOBR>-Tag over complete content.
+    bool bNoBreakTag;           ///< <NOBR>-Tag over complete content.
 
 public:
 
     SwHTMLTableLayoutCnts( const SwStartNode* pSttNd, SwHTMLTableLayout* pTab,
-                           sal_Bool bNoBreakTag, SwHTMLTableLayoutCnts* pNxt );
+                           bool bNoBreakTag, SwHTMLTableLayoutCnts* pNxt );
 
     ~SwHTMLTableLayoutCnts();
 
@@ -89,7 +89,7 @@ public:
     void SetPass1Done( sal_uInt8 nRef ) { nPass1Done = nRef; }
     sal_Bool IsPass1Done( sal_uInt8 nRef ) const { return nRef==nPass1Done; }
 
-    sal_Bool HasNoBreakTag() const { return bNoBreakTag; }
+    bool HasNoBreakTag() const { return bNoBreakTag; }
 };
 
 class SwHTMLTableLayoutCell

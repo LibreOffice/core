@@ -681,6 +681,8 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     if (p_prioritize_timer != NULL)
         CheckTimeout();
 
+    const int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
+
     // first, check for already queued events.
     for ( int nFD = 0; nFD < nFDs_; nFD++ )
     {
@@ -688,10 +690,11 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         if ( pEntry->fd )
         {
             DBG_ASSERT( nFD == pEntry->fd, "wrong fd in Yield()" );
-            if ( pEntry->HasPendingEvent() )
+            for( int i = 0; i < nMaxEvents && pEntry->HasPendingEvent(); i++ )
             {
                 pEntry->HandleNextEvent();
-                return;
+                if( ! bHandleAllCurrentEvents )
+                    return;
             }
         }
     }
@@ -778,7 +781,6 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
                 }
                 if ( FD_ISSET( nFD, &ReadFDS ) )
                 {
-                    int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
                     for( int i = 0; pEntry->IsEventQueued() && i < nMaxEvents; i++ )
                     {
                         pEntry->HandleNextEvent();

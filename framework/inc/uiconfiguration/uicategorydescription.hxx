@@ -43,7 +43,7 @@ namespace framework
 class UICategoryDescription :  public UICommandDescription
 {
     public:
-        UICategoryDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        UICategoryDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~UICategoryDescription();
 
         DECLARE_XSERVICEINFO

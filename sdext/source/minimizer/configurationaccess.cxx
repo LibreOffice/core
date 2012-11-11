@@ -21,6 +21,7 @@
 #include "configurationaccess.hxx"
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -33,13 +34,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-static const OUString& GetConfigurationProviderServiceName (void)
-{
-    static const OUString sConfigurationProviderServiceName (
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.configuration.ConfigurationProvider"));
-    return sConfigurationProviderServiceName;
-}
 static const OUString& GetPathToConfigurationRoot (void)
 {
     static const OUString sPathToConfigurationRoot (
@@ -328,28 +322,25 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
     Reference< XInterface > xRoot;
     try
     {
-        Reference< lang::XMultiServiceFactory > xProvider( mxMSF->getServiceManager()->createInstanceWithContext( GetConfigurationProviderServiceName(), mxMSF ), UNO_QUERY );
-        if ( xProvider.is() )
-        {
-            Sequence< Any > aCreationArguments( 2 );
-            aCreationArguments[0] = makeAny( PropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) ), 0,
-                makeAny( GetPathToConfigurationRoot() ),
-                PropertyState_DIRECT_VALUE ) );
-            aCreationArguments[1] = makeAny(beans::PropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "lazywrite" ) ), 0, makeAny( true ),
-                PropertyState_DIRECT_VALUE ) );
-            OUString sAccessService;
-            if ( bReadOnly )
-                sAccessService = OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationAccess" ) );
-            else
-                sAccessService = OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationUpdateAccess" ) );
+        Reference< lang::XMultiServiceFactory > xProvider = configuration::theDefaultProvider::get( mxMSF );
+        Sequence< Any > aCreationArguments( 2 );
+        aCreationArguments[0] = makeAny( PropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) ), 0,
+            makeAny( GetPathToConfigurationRoot() ),
+            PropertyState_DIRECT_VALUE ) );
+        aCreationArguments[1] = makeAny(beans::PropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "lazywrite" ) ), 0, makeAny( true ),
+            PropertyState_DIRECT_VALUE ) );
+        OUString sAccessService;
+        if ( bReadOnly )
+            sAccessService = OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.configuration.ConfigurationAccess" ) );
+        else
+            sAccessService = OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.configuration.ConfigurationUpdateAccess" ) );
 
-            xRoot = xProvider->createInstanceWithArguments(
-                sAccessService, aCreationArguments );
-        }
+        xRoot = xProvider->createInstanceWithArguments(
+            sAccessService, aCreationArguments );
     }
     catch (const Exception&)
     {

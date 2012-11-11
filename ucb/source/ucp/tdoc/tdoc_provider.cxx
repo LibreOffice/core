@@ -51,7 +51,7 @@ using namespace tdoc_ucp;
 
 ContentProvider::ContentProvider(
             const uno::Reference< lang::XMultiServiceFactory >& xSMgr )
-: ::ucbhelper::ContentProviderImplHelper( xSMgr ),
+: ::ucbhelper::ContentProviderImplHelper( comphelper::getComponentContext(xSMgr) ),
   m_xDocsMgr( new OfficeDocumentsManager( comphelper::getComponentContext(xSMgr), this ) ),
   m_xStgElemFac( new StorageElementFactory( xSMgr, m_xDocsMgr ) )
 {
@@ -130,7 +130,7 @@ ContentProvider::queryContent(
 
     // Normalize URI.
     uno::Reference< ucb::XContentIdentifier > xCanonicId
-        = new ::ucbhelper::ContentIdentifier( m_xSMgr, aUri.getUri() );
+        = new ::ucbhelper::ContentIdentifier( aUri.getUri() );
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -141,7 +141,7 @@ ContentProvider::queryContent(
     if ( !xContent.is() )
     {
         // Create a new content.
-        xContent = Content::create( m_xSMgr, this, xCanonicId );
+        xContent = Content::create( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, xCanonicId );
         registerNewContent( xContent );
     }
 
@@ -171,8 +171,7 @@ ContentProvider::createDocumentContent(
             aBuffer.append( aDocId );
 
             uno::Reference< ucb::XContentIdentifier > xId
-                = new ::ucbhelper::ContentIdentifier(
-                    m_xSMgr, aBuffer.makeStringAndClear() );
+                = new ::ucbhelper::ContentIdentifier( aBuffer.makeStringAndClear() );
 
             osl::MutexGuard aGuard( m_aMutex );
 
@@ -183,7 +182,7 @@ ContentProvider::createDocumentContent(
             if ( !xContent.is() )
             {
                 // Create a new content.
-                xContent = Content::create( m_xSMgr, this, xId );
+                xContent = Content::create( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, xId );
             }
 
             if ( xContent.is() )

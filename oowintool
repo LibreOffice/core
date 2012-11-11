@@ -45,20 +45,19 @@ sub print_syntax()
     print "   -w   - windows form\n";
     print "   -u   - unix form (default)\n";
     print " commands:\n";
-    print "   --msvc-ver              - print version of MSVC eg. 6.0\n";
-    print "   --msvc-copy-dlls <dest> - copy msvc[pr]??.dlls into <dest>/msvcp??/\n";
-    print "   --msvc-find-msms-vc100  - exit with 0 if Microsoft_VC100_CRT_x86.msm\n";
-    print "                             is available\n";
-    print "   --msvc-copy-msms <dest> - copy mscrt merge modules to <dest>/msm90/\n";
-    print "   --msvc-copy-msms-64 <ds>- copy the x64 mscrt merge modules to <ds>/msm90/\n";
-    print "   --msvc-productdir       - print productdir\n";
-    print "   --msvs-productdir       - print productdir\n";
-    print "   --dotnetsdk-dir         - print .NET SDK path\n";
-    print "   --csc-compilerdir       - print .NET SDK compiler path\n";
-	print "   --al-home    			  - print AL.exe install dir\n";
-    print "   --windows-sdk-home      - print Windows SDK install dir\n";
-    print "   --jdk-home              - print the jdk install dir\n";
-    print "   --help                  - print this message\n";
+    print "   --msvc-ver                  - print version of MSVC eg. 6.0\n";
+    print "   --msvc-copy-dlls <dest>     - copy msvc[pr]??.dlls into <dest>/msvcp??/\n";
+    print "   --msvc-copy-dlls-64 <dest>  - copy x64 msvc[pr]??.dlls into <dest>/msvcp??/\n";
+    print "   --msvc-copy-msms <dest>     - copy mscrt merge modules to <dest>/msm90/\n";
+    print "   --msvc-copy-msms-64 <ds>    - copy the x64 mscrt merge modules to <ds>/msm90/\n";
+    print "   --msvc-productdir           - print productdir\n";
+    print "   --msvs-productdir           - print productdir\n";
+    print "   --dotnetsdk-dir             - print .NET SDK path\n";
+    print "   --csc-compilerdir           - print .NET SDK compiler path\n";
+    print "   --al-home                   - print AL.exe install dir\n";
+    print "   --windows-sdk-home          - print Windows SDK install dir\n";
+    print "   --jdk-home                  - print the jdk install dir\n";
+    print "   --help                      - print this message\n";
 }
 
 sub cygpath($$$)
@@ -291,13 +290,16 @@ sub msvc_find_version($)
     return undef;
 }
 
-sub msvc_copy_dlls($)
+sub msvc_copy_dlls($$)
 {
     my $dest = shift;
+    my $arch = shift;
     my $ver = msvc_find_version('dll_path');
     defined $ver || return;
     my $srcdir = (cygpath ($ver->{'product_dir'}, 'w', 'u') . '/' .
           $ver->{'dll_path'});
+
+    $srcdir =~ s/x86/amd64/ if ($arch eq 'amd64');
 
     copy_dll ($srcdir, "msvcp" . $ver->{'dll_suffix'} . ".dll",
           $dest . $ver->{'dll_suffix'});
@@ -381,7 +383,11 @@ while (@commands) {
     } elsif ($opt eq '--msvc-copy-dlls') {
         my $dest = shift @commands;
         defined $dest || die "copy-dlls requires a destination directory";
-        msvc_copy_dlls( $dest );
+        msvc_copy_dlls( $dest, 'x86' );
+    } elsif ($opt eq '--msvc-copy-dlls-64') {
+        my $dest = shift @commands;
+        defined $dest || die "copy-dlls requires a destination directory";
+        msvc_copy_dlls( $dest, 'amd64' );
     } elsif ($opt eq '--msvc-find-msms') {
         exit msvc_find_msms();
     } elsif ($opt eq '--msvc-copy-msms') {

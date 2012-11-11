@@ -135,8 +135,9 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
         r >> nSign >> nLen >> nCount;
         nNext += nLen + 8;
         if( r.GetError() == SVSTREAM_OK )
-          switch( nSign )
         {
+            switch( nSign )
+            {
             case B_NAME:
                 aName = r.ReadUniOrByteString(eCharSet);
                 break;
@@ -152,8 +153,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
             {
                 for( sal_uInt16 j = 0 ; j < nCount ; j++ )
                 {
-                    String aTmp = r.ReadUniOrByteString(eCharSet);
-                    aOUSource += aTmp;
+                    aOUSource += r.ReadUniOrByteString(eCharSet);
                 }
                 break;
             }
@@ -208,24 +208,30 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     for( short j = 0; j < nStrings; j++ )
                     {
                         sal_uInt16 nOff2 = (sal_uInt16) pStringOff[ j ];
-                        String aStr( pByteStrings + nOff2, eCharSet );
-                        memcpy( pStrings + nOff2, aStr.GetBuffer(), (aStr.Len() + 1) * sizeof( sal_Unicode ) );
+                        OUString aStr( pByteStrings + nOff2, strlen(pByteStrings + nOff2), eCharSet );
+                        memcpy( pStrings + nOff2, aStr.getStr(), (aStr.getLength() + 1) * sizeof( sal_Unicode ) );
                     }
                     delete[] pByteStrings;
-                } break;
+                }
+                break;
             case B_MODEND:
                 goto done;
             default:
                 break;
+            }
         }
         else
+        {
             break;
+        }
         r.Seek( nNext );
     }
 done:
     r.Seek( nLast );
     if( !SbiGood( r ) )
+    {
         bError = true;
+    }
     return !bError;
 }
 
@@ -248,25 +254,29 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
 
     eCharSet = GetSOStoreTextEncoding( eCharSet );
     if ( bLegacy )
+    {
         r << (sal_Int32) B_LEGACYVERSION;
+    }
     else
+    {
         r << (sal_Int32) B_CURVERSION;
+    }
     r  << (sal_Int32) eCharSet
-      << (sal_Int32) nDimBase
-      << (sal_Int16) nFlags
-      << (sal_Int16) 0
-      << (sal_Int32) 0
-      << (sal_Int32) 0;
+       << (sal_Int32) nDimBase
+       << (sal_Int16) nFlags
+       << (sal_Int16) 0
+       << (sal_Int32) 0
+       << (sal_Int32) 0;
 
     // Name?
-    if( aName.Len() && SbiGood( r ) )
+    if( !aName.isEmpty() && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_NAME, 1 );
         r.WriteUniOrByteString( aName, eCharSet );
         SbiCloseRecord( r, nPos );
     }
     // Comment?
-    if( aComment.Len() && SbiGood( r ) )
+    if( !aComment.isEmpty() && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_COMMENT, 1 );
         r.WriteUniOrByteString( aComment, eCharSet );
@@ -276,13 +286,17 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     if( !aOUSource.isEmpty() && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_SOURCE, 1 );
-        String aTmp;
+        OUString aTmp;
         sal_Int32 nLen = aOUSource.getLength();
         const sal_Int32 nMaxUnitSize = STRING_MAXLEN - 1;
         if( nLen > STRING_MAXLEN )
+        {
             aTmp = aOUSource.copy( 0, nMaxUnitSize );
+        }
         else
+        {
             aTmp = aOUSource;
+        }
         r.WriteUniOrByteString( aTmp, eCharSet );
         SbiCloseRecord( r, nPos );
 
@@ -293,9 +307,8 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
             nPos = SbiOpenRecord( r, B_EXTSOURCE, nUnitCount );
             for( sal_uInt16 i = 0 ; i < nUnitCount ; i++ )
             {
-                sal_Int32 nCopyLen =
-                    (nRemainingLen > nMaxUnitSize) ? nMaxUnitSize : nRemainingLen;
-                String aTmp2 = aOUSource.copy( (i+1) * nMaxUnitSize, nCopyLen );
+                sal_Int32 nCopyLen = (nRemainingLen > nMaxUnitSize) ? nMaxUnitSize : nRemainingLen;
+                OUString aTmp2 = aOUSource.copy( (i+1) * nMaxUnitSize, nCopyLen );
                 nRemainingLen -= nCopyLen;
                 r.WriteUniOrByteString( aTmp2, eCharSet );
             }
@@ -313,10 +326,12 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
             aNewToLegacy.convert();
             pLegacyPCode = (char*)aNewToLegacy.GetBuffer();
             nLegacyCodeSize = aNewToLegacy.GetSize();
-                r.Write( pLegacyPCode, nLegacyCodeSize );
+            r.Write( pLegacyPCode, nLegacyCodeSize );
         }
         else
+        {
             r.Write( pCode, nCodeSize );
+        }
         SbiCloseRecord( r, nPos );
     }
     // String-Pool?
@@ -328,8 +343,9 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         short i;
 
         for( i = 0; i < nStrings && SbiGood( r ); i++ )
+        {
             r << (sal_uInt32) pStringOff[ i ];
-
+        }
         // Then the String-Block
         char* pByteStrings = new char[ nStringSize ];
         for( i = 0; i < nStrings; i++ )
@@ -347,7 +363,9 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     // Set overall length
     SbiCloseRecord( r, nStart );
     if( !SbiGood( r ) )
+    {
         bError = true;
+    }
     return !bError;
 }
 
@@ -372,27 +390,35 @@ void SbiImage::MakeStrings( short nSize )
         memset( pStrings, 0, nStringSize * sizeof( sal_Unicode ) );
     }
     else
+    {
         bError = true;
+    }
 }
 
 // Add a string to StringPool. The String buffer is dynamically
 // growing in 1K-Steps
-void SbiImage::AddString( const String& r )
+void SbiImage::AddString( const OUString& r )
 {
     if( nStringIdx >= nStrings )
+    {
         bError = true;
+    }
     if( !bError )
     {
-        xub_StrLen  len = r.Len() + 1;
+        sal_Int32  len = r.getLength() + 1;
         sal_uInt32 needed = nStringOff + len;
         if( needed > 0xFFFFFF00L )
+        {
             bError = true;  // out of mem!
+        }
         else if( needed > nStringSize )
         {
             sal_uInt32 nNewLen = needed + 1024;
             nNewLen &= 0xFFFFFC00;  // trim to 1K border
             if( nNewLen > 0xFFFFFF00L )
+            {
                 nNewLen = 0xFFFFFF00L;
+            }
             sal_Unicode* p = NULL;
             if( (p = new sal_Unicode[ nNewLen ]) != NULL )
             {
@@ -402,16 +428,20 @@ void SbiImage::AddString( const String& r )
                 nStringSize = sal::static_int_cast< sal_uInt16 >(nNewLen);
             }
             else
+            {
                 bError = true;
+            }
         }
         if( !bError )
         {
             pStringOff[ nStringIdx++ ] = nStringOff;
-            memcpy( pStrings + nStringOff, r.GetBuffer(), len * sizeof( sal_Unicode ) );
+            memcpy( pStrings + nStringOff, r.getStr(), len * sizeof( sal_Unicode ) );
             nStringOff = nStringOff + len;
             // Last String? The update the size of the buffer
             if( nStringIdx >= nStrings )
+            {
                 nStringSize = nStringOff;
+            }
         }
     }
 }
@@ -430,7 +460,9 @@ void SbiImage::AddCode( char* p, sal_uInt32 s )
 void SbiImage::AddType(SbxObject* pObject)
 {
     if( !rTypes.Is() )
+    {
         rTypes = new SbxArray;
+    }
     SbxObject *pCopyObject = new SbxObject(*pObject);
     rTypes->Insert (pCopyObject,rTypes->Count());
 }
@@ -438,7 +470,9 @@ void SbiImage::AddType(SbxObject* pObject)
 void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
 {
     if( !rEnums.Is() )
+    {
         rEnums = new SbxArray;
+    }
     rEnums->Insert( pObject, rEnums->Count() );
 }
 
@@ -450,7 +484,7 @@ void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
 **************************************************************************/
 
 // Note: IDs start with 1
-String SbiImage::GetString( short nId ) const
+OUString SbiImage::GetString( short nId ) const
 {
     if( nId && nId <= nStrings )
     {
@@ -465,18 +499,19 @@ String SbiImage::GetString( short nId ) const
             if( nLen == 1 )
             {
                 // Force length 1 and make char 0 afterwards
-                String aNullCharStr( rtl::OUString(" ") );
-                aNullCharStr.SetChar( 0, 0 );
+                OUString aNullCharStr( (sal_Unicode)0);
                 return aNullCharStr;
             }
         }
         else
-            return rtl::OUString(pStr);
+        {
+            return OUString(pStr);
+        }
     }
-    return rtl::OUString();
+    return OUString();
 }
 
-const SbxObject* SbiImage::FindType (String aTypeName) const
+const SbxObject* SbiImage::FindType (OUString aTypeName) const
 {
     return rTypes.Is() ? (SbxObject*)rTypes->Find(aTypeName,SbxCLASS_OBJECT) : NULL;
 }

@@ -2200,11 +2200,11 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
                 {
                     SwTableNode *pTable = aIdx.GetNode().GetTableNode();
                     aIdx = *aIdx.GetNode().EndOfSectionNode();
-                    aIdx++;
+                    ++aIdx;
                     if ( (aIdx < aEnd) && aIdx.GetNode().IsTxtNode() )
                     {
                         SwTxtNode *pNd = aIdx.GetNode().GetTxtNode();
-                        aIdx++;
+                        ++aIdx;
                         if (aIdx == aEnd && pNd && !pNd->GetTxt().Len())
                         {
                             //An extra pre-created by writer unused paragraph

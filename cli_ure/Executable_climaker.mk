@@ -17,6 +17,10 @@ $(eval $(call gb_Executable_add_cxxflags,climaker,\
 	-wd4715 \
 ))
 
+$(eval $(call gb_Executable_add_ldflags,climaker,\
+		-ignore:4248 \
+))
+
 $(eval $(call gb_Executable_use_internal_bootstrap_api,climaker,\
 	udkapi \
 ))

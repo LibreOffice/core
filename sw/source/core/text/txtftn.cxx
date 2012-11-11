@@ -1517,7 +1517,7 @@ sal_Bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
     if( bFull )
     {
         // zweiter Versuch, wir kuerzen den String:
-        aExpand = rtl::OUString("...");
+        aExpand = OUString("...");
         bFull = SwFldPortion::Format( rInf );
         SetLen( 0 );
         if( bFull  )
@@ -1582,7 +1582,7 @@ void SwQuoVadisPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 SwFldPortion *SwErgoSumPortion::Clone( const XubString &rExpand ) const
 {
-    return new SwErgoSumPortion( rExpand, rtl::OUString() );
+    return new SwErgoSumPortion( rExpand, OUString() );
 }
 
 SwErgoSumPortion::SwErgoSumPortion( const XubString &rExp, const XubString& rStr )

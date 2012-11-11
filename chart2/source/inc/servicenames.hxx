@@ -52,8 +52,6 @@ namespace chart
 #define CHART_ACCESSIBLE_TEXT_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.AccessibleTextComponent" ))
 #define CHART_ACCESSIBLE_TEXT_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleTextComponent" ))
 
-#define CHART_RENDERER_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ChartRenderer" ))
-
 //.............................................................................
 } //namespace chart
 //.............................................................................

@@ -623,22 +623,10 @@ sal_uInt16 AbstractMailMergeWizard_Impl::GetRestartPage() const
     return pDlg->GetRestartPage();
 }
 
-AbstractSwInsertAbstractDlg * SwAbstractDialogFactory_Impl::CreateSwInsertAbstractDlg( Window* pParent,
-                                                                                      int nResId )
+AbstractSwInsertAbstractDlg * SwAbstractDialogFactory_Impl::CreateSwInsertAbstractDlg(Window* pParent)
 {
-    SwInsertAbstractDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_INSERT_ABSTRACT :
-            pDlg = new SwInsertAbstractDlg( pParent);
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSwInsertAbstractDlg_Impl( pDlg );
-    return 0;
+    SwInsertAbstractDlg* pDlg = new SwInsertAbstractDlg( pParent);
+    return new AbstractSwInsertAbstractDlg_Impl(pDlg);
 }
 
 SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
@@ -918,7 +906,6 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclAbstractDialog ( Wind
         case DLG_ROW_HEIGHT :
             pDlg = new SwTableHeightDlg( pParent, rSh);
             break;
-
         case DLG_SORTING :
             pDlg = new SwSortDlg( pParent, rSh);
             break;
@@ -1243,22 +1230,11 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclSwViewDialog( int nRe
     return 0;
 }
 
-AbstractInsertGrfRulerDlg * SwAbstractDialogFactory_Impl::CreateInsertGrfRulerDlg( int nResId,
-                                            Window * pParent ) //add for SwInsertGrfRulerDlg
+//add for SwInsertGrfRulerDlg
+AbstractInsertGrfRulerDlg * SwAbstractDialogFactory_Impl::CreateInsertGrfRulerDlg(Window * pParent)
 {
-    SwInsertGrfRulerDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_INSERT_RULER :
-            pDlg = new SwInsertGrfRulerDlg( pParent );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractInsertGrfRulerDlg_Impl( pDlg );
-    return 0;
+    SwInsertGrfRulerDlg* pDlg = new SwInsertGrfRulerDlg(pParent);
+    return new AbstractInsertGrfRulerDlg_Impl(pDlg);
 }
 
 AbstractInsTableDlg * SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwView& rView) //add for SwInsTableDlg
@@ -1434,47 +1410,26 @@ AbstractInsertSectionTabDialog * SwAbstractDialogFactory_Impl::CreateInsertSecti
     return 0;
 }
 
-AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateIndexMarkFloatDlg( int nResId,
+AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateIndexMarkFloatDlg(
                                                     SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        Window *pParent,
                                                     SfxChildWinInfo* pInfo,
                                                        sal_Bool bNew ) //add for SwIndexMarkFloatDlg
 {
-    SwIndexMarkFloatDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_INSIDXMARK_CJK :
-        case DLG_INSIDXMARK :
-            pDlg = new SwIndexMarkFloatDlg( pBindings, pChild, pParent, pInfo, bNew );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractIndexMarkFloatDlg_Impl( pDlg );
-    return 0;
+    SwIndexMarkFloatDlg* pDlg = new SwIndexMarkFloatDlg(pBindings, pChild, pParent, pInfo, bNew);
+    return new AbstractIndexMarkFloatDlg_Impl(pDlg);
 }
 
-AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDlg( int nResId,
+AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDlg(
                                                     SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        Window *pParent,
                                                     SfxChildWinInfo* pInfo,
-                                                       sal_Bool bNew ) //add for SwAuthMarkFloatDlg
+                                                       sal_Bool bNew) //add for SwAuthMarkFloatDlg
 {
-    SwAuthMarkFloatDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_INSAUTHMARK :
-            pDlg = new SwAuthMarkFloatDlg( pBindings, pChild, pParent, pInfo, bNew );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractAuthMarkFloatDlg_Impl( pDlg );
-    return 0;
+    SwAuthMarkFloatDlg* pDlg = new SwAuthMarkFloatDlg( pBindings, pChild, pParent, pInfo, bNew );
+    return new AbstractAuthMarkFloatDlg_Impl( pDlg );
 }
 
 AbstractSwWordCountFloatDlg * SwAbstractDialogFactory_Impl::CreateSwWordCountDialog(
@@ -1488,24 +1443,11 @@ AbstractSwWordCountFloatDlg * SwAbstractDialogFactory_Impl::CreateSwWordCountDia
 }
 
 //add for SwIndexMarkModalDlg begin
-VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateIndexMarkModalDlg( int nResId,
+VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateIndexMarkModalDlg(
                                                 Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark ) //add for SwIndexMarkModalDlg
 {
-    Dialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_EDIT_IDXMARK_CJK :
-        case DLG_EDIT_IDXMARK :
-            pDlg = new SwIndexMarkModalDlg( pParent, rSh, pCurTOXMark );
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
-    return 0;
+    Dialog* pDlg = new SwIndexMarkModalDlg( pParent, rSh, pCurTOXMark );
+    return new VclAbstractDialog_Impl( pDlg );
 }
 
 //add for SwIndexMarkModalDlg end

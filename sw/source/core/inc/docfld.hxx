@@ -156,8 +156,8 @@ class SwDocUpdtFld
     sal_uLong nNodes;               // if the node count is different
     sal_uInt8 nFldLstGetMode;
 
-    sal_Bool bInUpdateFlds : 1;     // currently there is an UpdateFlds
-    sal_Bool bFldsDirty : 1;        // some fields are invalid
+    bool bInUpdateFlds : 1;     // currently there is an UpdateFlds
+    bool bFldsDirty : 1;        // some fields are invalid
 
     void _MakeFldList( SwDoc& pDoc, int eGetMode );
     void GetBodyNode( const SwTxtFld& , sal_uInt16 nFldWhich );
@@ -171,16 +171,16 @@ public:
 
     void MakeFldList( SwDoc& rDoc, int bAll, int eGetMode );
 
-    void InsDelFldInFldLst( sal_Bool bIns, const SwTxtFld& rFld );
+    void InsDelFldInFldLst( bool bIns, const SwTxtFld& rFld );
 
     void InsertFldType( const SwFieldType& rType );
     void RemoveFldType( const SwFieldType& rType );
 
-    sal_Bool IsInUpdateFlds() const         { return bInUpdateFlds; }
-    void SetInUpdateFlds( sal_Bool b )      { bInUpdateFlds = b; }
+    bool IsInUpdateFlds() const         { return bInUpdateFlds; }
+    void SetInUpdateFlds( bool b )      { bInUpdateFlds = b; }
 
-    sal_Bool IsFieldsDirty() const          { return bFldsDirty; }
-    void SetFieldsDirty( sal_Bool b )       { bFldsDirty = b; }
+    bool IsFieldsDirty() const          { return bFldsDirty; }
+    void SetFieldsDirty( bool b )       { bFldsDirty = b; }
 
     SwHash** GetFldTypeTable() const { return (SwHash**)aFldTypeTable; }
 };

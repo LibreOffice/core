@@ -23,7 +23,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -749,33 +750,27 @@ sal_Int32 GrammarCheckingIterator::GetSuggestedEndOfSentence(
 {
     // internal method; will always be called with locked mutex
 
-    uno::Reference< i18n::XBreakIterator > xBreakIterator;
     if (!m_xBreakIterator.is())
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        if ( xMSF.is() )
-            xBreakIterator = uno::Reference < i18n::XBreakIterator >( xMSF->createInstance(
-                "com.sun.star.i18n.BreakIterator" ), uno::UNO_QUERY );
+        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        m_xBreakIterator = i18n::BreakIterator::create(xContext);
     }
     sal_Int32 nTextLen = rText.getLength();
-    sal_Int32 nEndPosition = nTextLen;
-    if (m_xBreakIterator.is())
+    sal_Int32 nEndPosition;
+    sal_Int32 nTmpStartPos = nSentenceStartPos;
+    do
     {
-        sal_Int32 nTmpStartPos = nSentenceStartPos;
-        do
-        {
+        nEndPosition = nTextLen;
+        if (nTmpStartPos < nTextLen)
+            nEndPosition = m_xBreakIterator->endOfSentence( rText, nTmpStartPos, rLocale );
+        if (nEndPosition < 0)
             nEndPosition = nTextLen;
-            if (nTmpStartPos < nTextLen)
-                nEndPosition = m_xBreakIterator->endOfSentence( rText, nTmpStartPos, rLocale );
-            if (nEndPosition < 0)
-                nEndPosition = nTextLen;
 
-            ++nTmpStartPos;
-        }
-        while (nEndPosition <= nSentenceStartPos && nEndPosition < nTextLen);
-        if (nEndPosition > nTextLen)
-            nEndPosition = nTextLen;
+        ++nTmpStartPos;
     }
+    while (nEndPosition <= nSentenceStartPos && nEndPosition < nTextLen);
+    if (nEndPosition > nTextLen)
+        nEndPosition = nTextLen;
     return nEndPosition;
 }
 
@@ -973,14 +968,9 @@ uno::Reference< util::XChangesBatch > GrammarCheckingIterator::GetUpdateAccess()
         try
         {
             // get configuration provider
-            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider;
-            uno::Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
-            if (xMgr.is())
-            {
-                xConfigurationProvider = uno::Reference< lang::XMultiServiceFactory > (
-                        xMgr->createInstance( "com.sun.star.configuration.ConfigurationProvider" ),
-                        uno::UNO_QUERY_THROW ) ;
-            }
+            uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
+                    configuration::theDefaultProvider::get( xContext );
 
             // get configuration update access
             beans::PropertyValue aValue;

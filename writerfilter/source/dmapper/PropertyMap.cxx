@@ -223,20 +223,18 @@ template<class T>
   }
 };
 
-
-void PropertyMap::insert( const PropertyMapPtr pMap, bool bOverwrite )
+void PropertyMap::InsertProps(const PropertyMapPtr pMap)
 {
     if( pMap.get() )
     {
-        if( bOverwrite )
-            ::std::for_each( pMap->begin(), pMap->end(), removeExistingElements<PropertyMap::value_type>(*this) );
+        ::std::for_each( pMap->begin(), pMap->end(),
+                removeExistingElements<PropertyMap::value_type>(*this) );
         _PropertyMap::insert(pMap->begin(), pMap->end());
         insertTableProperties(pMap.get());
 
         Invalidate();
     }
 }
-
 
 const uno::Reference< text::XFootnote>&  PropertyMap::GetFootnote() const
 {
@@ -970,7 +968,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
         operator[](PropertyDefinition(PROP_GRID_MODE, false)) = uno::makeAny(nGridMode);
 
-        _ApplyProperties( xFollowPageStyle );
+        if (rDM_Impl.IsNewDoc())
+            _ApplyProperties( xFollowPageStyle );
 
         //todo: creating a "First Page" style depends on HasTitlePage und _fFacingPage_
         if( m_bTitlePage )
@@ -979,7 +978,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             PrepareHeaderFooterProperties( true );
             uno::Reference< beans::XPropertySet > xFirstPageStyle = GetPageStyle(
                                 rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), true );
-            _ApplyProperties( xFirstPageStyle );
+            if (rDM_Impl.IsNewDoc())
+                _ApplyProperties( xFirstPageStyle );
 
             sal_Int32 nPaperBin = m_nFirstPaperBin >= 0 ? m_nFirstPaperBin : m_nPaperBin >= 0 ? m_nPaperBin : 0;
             if( nPaperBin )

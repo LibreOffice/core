@@ -52,7 +52,7 @@ class SwFldDokInfPage : public SwFldPage
     NumFormatListBox    aFormatLB;
     CheckBox            aFixedCB;
 
-    SvLBoxEntry*        pSelEntry;
+    SvTreeListEntry*        pSelEntry;
     com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > xCustomPropertySet;
 
     String              aInfoStr;

@@ -27,6 +27,10 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,npsoenv))
 
+$(eval $(call gb_StaticLibrary_use_packages,npsoenv,\
+    sal_inc \
+))
+
 $(eval $(call gb_StaticLibrary_add_exception_objects,npsoenv,\
 	extensions/source/nsplugin/source/so_env \
 ))

@@ -223,7 +223,7 @@ void CertificateViewerDetailsTP::Clear( void )
 {
     maElementML.SetText( OUString() );
     sal_uLong           i = 0;
-    SvLBoxEntry*    pEntry = maElementsLB.GetEntry( i );
+    SvTreeListEntry*    pEntry = maElementsLB.GetEntry( i );
     while( pEntry )
     {
         delete ( Details_UserDatat* ) pEntry->GetUserData();
@@ -237,7 +237,7 @@ void CertificateViewerDetailsTP::Clear( void )
 void CertificateViewerDetailsTP::InsertElement( const OUString& _rField, const OUString& _rValue,
                                                 const OUString& _rDetails, bool _bFixedWidthFont )
 {
-    SvLBoxEntry*    pEntry = maElementsLB.InsertEntry( _rField );
+    SvTreeListEntry*    pEntry = maElementsLB.InsertEntry( _rField );
     maElementsLB.SetEntryText( _rValue, pEntry, 1 );
     pEntry->SetUserData( ( void* ) new Details_UserDatat( _rDetails, _bFixedWidthFont ) );
 }
@@ -335,7 +335,7 @@ void CertificateViewerDetailsTP::ActivatePage()
 
 IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl)
 {
-    SvLBoxEntry*    pEntry = maElementsLB.FirstSelected();
+    SvTreeListEntry*    pEntry = maElementsLB.FirstSelected();
     OUString        aElementText;
     bool            bFixedWidthFont;
     if( pEntry )
@@ -426,7 +426,7 @@ void CertificateViewerCertPathTP::ActivatePage()
         const Reference< security::XCertificate >* pCertPath = aCertPath.getConstArray();
 
         sal_Int32 i, nCnt = aCertPath.getLength();
-        SvLBoxEntry* pParent = NULL;
+        SvTreeListEntry* pParent = NULL;
         for( i = nCnt; i; )
         {
             const Reference< security::XCertificate > rCert = pCertPath[ --i ];
@@ -453,7 +453,7 @@ void CertificateViewerCertPathTP::ActivatePage()
 
 IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl)
 {
-    SvLBoxEntry* pEntry = maCertPathLB.FirstSelected();
+    SvTreeListEntry* pEntry = maCertPathLB.FirstSelected();
     if( pEntry )
     {
         CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, ((CertPath_UserData*)pEntry->GetUserData())->mxCert, false );
@@ -466,7 +466,7 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl)
 IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl)
 {
     OUString sStatus;
-    SvLBoxEntry* pEntry = maCertPathLB.FirstSelected();
+    SvTreeListEntry* pEntry = maCertPathLB.FirstSelected();
     if( pEntry )
     {
         CertPath_UserData* pData = (CertPath_UserData*) pEntry->GetUserData();
@@ -483,7 +483,7 @@ void CertificateViewerCertPathTP::Clear( void )
 {
     maCertStatusML.SetText( OUString() );
     sal_uLong           i = 0;
-    SvLBoxEntry*    pEntry = maCertPathLB.GetEntry( i );
+    SvTreeListEntry*    pEntry = maCertPathLB.GetEntry( i );
     while( pEntry )
     {
         delete ( CertPath_UserData* ) pEntry->GetUserData();
@@ -494,12 +494,12 @@ void CertificateViewerCertPathTP::Clear( void )
     maCertPathLB.Clear();
 }
 
-SvLBoxEntry* CertificateViewerCertPathTP::InsertCert(
-    SvLBoxEntry* _pParent, const OUString& _rName, cssu::Reference< dcss::security::XCertificate > rxCert,
+SvTreeListEntry* CertificateViewerCertPathTP::InsertCert(
+    SvTreeListEntry* _pParent, const OUString& _rName, cssu::Reference< dcss::security::XCertificate > rxCert,
     bool bValid)
 {
     Image aImage = bValid ? maCertImage : maCertNotValidatedImage;
-    SvLBoxEntry* pEntry = maCertPathLB.InsertEntry( _rName, aImage, aImage, _pParent );
+    SvTreeListEntry* pEntry = maCertPathLB.InsertEntry( _rName, aImage, aImage, _pParent );
     pEntry->SetUserData( ( void* ) new CertPath_UserData( rxCert, bValid ) );
 
     return pEntry;

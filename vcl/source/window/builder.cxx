@@ -9,6 +9,7 @@
 
 #include <osl/module.hxx>
 #include <sal/log.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
@@ -33,6 +34,16 @@
 
 namespace
 {
+    sal_uInt16 mapStockToImageResource(OString sType)
+    {
+        sal_uInt16 nRet = 0;
+        if (sType == "gtk-index")
+            nRet = SV_RESID_BITMAP_INDEX;
+        else if (sType == "gtk-refresh")
+            nRet = SV_RESID_BITMAP_REFRESH;
+        return nRet;
+    }
+
     SymbolType mapStockToSymbol(OString sType)
     {
         SymbolType eRet = SYMBOL_NOSYMBOL;
@@ -40,6 +51,10 @@ namespace
             eRet = SYMBOL_NEXT;
         else if (sType == "gtk-media-previous")
             eRet = SYMBOL_PREV;
+        else if (sType == "gtk-goto-first")
+            eRet = SYMBOL_FIRST;
+        else if (sType == "gtk-goto-last")
+            eRet = SYMBOL_LAST;
         else if (sType == "gtk-go-back")
             eRet = SYMBOL_ARROW_LEFT;
         else if (sType == "gtk-go-forward")
@@ -54,13 +69,55 @@ namespace
             eRet = SYMBOL_HELP;
         else if (sType == "gtk-close")
             eRet = SYMBOL_CLOSE;
+        else if (mapStockToImageResource(sType))
+            eRet = SYMBOL_IMAGE;
         return eRet;
+    }
+}
+
+void VclBuilder::loadTranslations(const com::sun::star::lang::Locale &rLocale, const OUString& rUri)
+{
+    for (int i = rLocale.Country.isEmpty() ? 1 : 0; i < 2; ++i)
+    {
+        OUStringBuffer aTransBuf;
+        sal_Int32 nLastSlash = rUri.lastIndexOf('/');
+        if (nLastSlash != -1)
+            aTransBuf.append(rUri.copy(0, nLastSlash));
+        else
+        {
+            aTransBuf.append('.');
+            nLastSlash = 0;
+        }
+        aTransBuf.append("/res/").append(rLocale.Language);
+        switch (i)
+        {
+            case 0:
+                aTransBuf.append('-').append(rLocale.Country);
+                break;
+            default:
+                break;
+        }
+        sal_Int32 nEndName = rUri.lastIndexOf('.');
+        if (nEndName == -1)
+            nEndName = rUri.getLength();
+        aTransBuf.append(rUri.copy(nLastSlash, nEndName-nLastSlash));
+
+        OUString sTransUri = aTransBuf.makeStringAndClear();
+        try
+        {
+            xmlreader::XmlReader reader(sTransUri);
+            handleTranslations(reader);
+        }
+        catch (const ::com::sun::star::uno::Exception &)
+        {
+        }
     }
 }
 
 VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OString sID)
     : m_sID(sID)
     , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
+    , m_sProductName(OUStringToOString(utl::ConfigManager::getProductName(), RTL_TEXTENCODING_UTF8))
     , m_pParent(pParent)
     , m_pParserState(new ParserState)
 {
@@ -73,39 +130,10 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
 
     OUString sUri = sUIDir + sUIFile;
 
-    ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-    for (int i = aLocale.Country.isEmpty() ? 1 : 0; i < 2; ++i)
-    {
-        OUStringBuffer aTransBuf;
-        sal_Int32 nLastSlash = sUri.lastIndexOf('/');
-        if (nLastSlash != -1)
-            aTransBuf.append(sUri.copy(0, nLastSlash));
-        else
-        {
-            aTransBuf.append('.');
-            nLastSlash = 0;
-        }
-        aTransBuf.append("/res/").append(aLocale.Language);
-        switch (i)
-        {
-            case 0:
-                aTransBuf.append('-').append(aLocale.Country);
-                break;
-            default:
-                break;
-        }
-        aTransBuf.append(sUri.copy(nLastSlash));
-
-        OUString sTransUri = aTransBuf.makeStringAndClear();
-        try
-        {
-            xmlreader::XmlReader reader(sTransUri);
-            handleTranslations(reader);
-        }
-        catch (const ::com::sun::star::uno::Exception &)
-        {
-        }
-    }
+    com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+    bool bEN_US = aLocale.Language == "en" && aLocale.Country == "US" && aLocale.Variant.isEmpty();
+    if (!bEN_US)
+        loadTranslations(aLocale, sUri);
 
     xmlreader::XmlReader reader(sUri);
 
@@ -168,13 +196,19 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         PushButton *pTarget = get<PushButton>(aI->m_sID);
         FixedImage *pImage = get<FixedImage>(aI->m_sValue);
         aImagesToBeRemoved.insert(aI->m_sValue);
-        SymbolType eType = mapStockToSymbol(m_pParserState->m_aStockMap[aI->m_sValue]);
+        const OString &rImage = m_pParserState->m_aStockMap[aI->m_sValue];
+        SymbolType eType = mapStockToSymbol(rImage);
         SAL_WARN_IF(!pTarget || !pImage || eType == SYMBOL_NOSYMBOL,
             "vcl", "missing elements of button/image/stock");
+        if (!pTarget || eType == SYMBOL_NOSYMBOL)
+            continue;
+
         //to-do, situation where image isn't a stock image
         if (pTarget && eType != SYMBOL_NOSYMBOL)
         {
             pTarget->SetSymbol(eType);
+            if (eType == SYMBOL_IMAGE)
+                pTarget->SetModeImage(Bitmap(VclResId(mapStockToImageResource(rImage))));
         }
     }
 
@@ -320,6 +354,32 @@ namespace
         return bInconsistent;
     }
 
+    OUString getStockText(const OString &rType)
+    {
+        if (rType == "gtk-ok")
+            return (VclResId(SV_BUTTONTEXT_OK).toString());
+        else if (rType == "gtk-cancel")
+            return (VclResId(SV_BUTTONTEXT_CANCEL).toString());
+        else if (rType == "gtk-help")
+            return (VclResId(SV_BUTTONTEXT_HELP).toString());
+        else if (rType == "gtk-close")
+            return (VclResId(SV_BUTTONTEXT_CLOSE).toString());
+        else if (rType == "gtk-revert-to-saved")
+            return (VclResId(SV_BUTTONTEXT_RESET).toString());
+        else if (rType == "gtk-add")
+            return (VclResId(SV_BUTTONTEXT_ADD).toString());
+        else if (rType == "gtk-delete")
+            return (VclResId(SV_BUTTONTEXT_DELETE).toString());
+        else if (rType == "gtk-remove")
+            return (VclResId(SV_BUTTONTEXT_REMOVE).toString());
+        else if (rType == "gtk-new")
+            return (VclResId(SV_BUTTONTEXT_NEW).toString());
+        else if (rType == "gtk-edit")
+            return (VclResId(SV_BUTTONTEXT_EDIT).toString());
+        SAL_WARN("vcl.layout", "unknown stock type: " << rType.getStr());
+        return OUString();
+    }
+
     Window * extractStockAndBuildButton(Window *pParent, VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
@@ -362,39 +422,10 @@ namespace
                 pBtn->SetSymbol(SYMBOL_PREV);
                 pWindow = pBtn;
             }
-            else if (sType == "gtk-close")
-            {
-                PushButton *pBtn = new PushButton(pParent, nBits);
-                pBtn->SetText(VclResId(SV_BUTTONTEXT_CLOSE).toString());
-                pWindow = pBtn;
-            }
-            else if (sType == "gtk-revert-to-saved")
-            {
-                PushButton *pBtn = new PushButton(pParent, nBits);
-                pBtn->SetText(VclResId(SV_BUTTONTEXT_RESET).toString());
-                pWindow = pBtn;
-            }
-            else if (sType == "gtk-add")
-            {
-                PushButton *pBtn = new PushButton(pParent, nBits);
-                pBtn->SetText(VclResId(SV_BUTTONTEXT_ADD).toString());
-                pWindow = pBtn;
-            }
-            else if (sType == "gtk-delete")
-            {
-                PushButton *pBtn = new PushButton(pParent, nBits);
-                pBtn->SetText(VclResId(SV_BUTTONTEXT_DELETE).toString());
-                pWindow = pBtn;
-            }
-            else if (sType == "gtk-remove")
-            {
-                PushButton *pBtn = new PushButton(pParent, nBits);
-                pBtn->SetText(VclResId(SV_BUTTONTEXT_REMOVE).toString());
-                pWindow = pBtn;
-            }
             else
             {
-                SAL_WARN("vcl.layout", "unknown stock type: " << sType.getStr());
+                pWindow = new PushButton(pParent, nBits);
+                pWindow->SetText(getStockText(sType));
             }
         }
 
@@ -530,7 +561,7 @@ public:
     VclScrolledWindow(Window *pParent)
         : Window(WINDOW_SCROLLWINDOW)
     {
-        ImplInit(pParent, WB_HIDE, NULL);
+        ImplInit(pParent, WB_HIDE | WB_AUTOHSCROLL | WB_AUTOVSCROLL, NULL);
     }
 };
 
@@ -541,6 +572,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OString &id, stringmap &rMap)
 {
     bool bIsPlaceHolder = name.isEmpty();
+    bool bVertical = false;
 
     if (pParent && pParent->GetType() == WINDOW_TABCONTROL)
     {
@@ -565,14 +597,14 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             OString sTabPageId = get_by_window(pParent) +
                 OString("-page") +
                 OString::valueOf(static_cast<sal_Int32>(nNewPageCount));
-            m_aChildren.push_back(WinAndId(sTabPageId, pPage));
+            m_aChildren.push_back(WinAndId(sTabPageId, pPage, false));
             pPage->SetHelpId(m_sHelpRoot + sTabPageId);
 
             //And give the page one container as a child to make it a layout enabled
             //tab page
             VclBin* pContainer = new VclBin(pPage);
             pContainer->Show();
-            m_aChildren.push_back(WinAndId(OString(), pContainer));
+            m_aChildren.push_back(WinAndId(OString(), pContainer, false));
             pContainer->SetHelpId(m_sHelpRoot + sTabPageId + OString("-bin"));
             pParent = pContainer;
 
@@ -593,14 +625,16 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "GtkBox")
     {
-        if (extractOrientation(rMap))
+        bVertical = extractOrientation(rMap);
+        if (bVertical)
             pWindow = new VclVBox(pParent);
         else
             pWindow = new VclHBox(pParent);
     }
     else if (name == "GtkButtonBox")
     {
-        if (extractOrientation(rMap))
+        bVertical = extractOrientation(rMap);
+        if (bVertical)
             pWindow = new VclVButtonBox(pParent);
         else
             pWindow = new VclHButtonBox(pParent);
@@ -672,7 +706,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     {
         extractModel(id, rMap);
         ListBox *pListBox = new ListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
-        pListBox->SetBestDropDownLineCount();
+        pListBox->EnableAutoSize(true);
         pWindow = pListBox;
     }
     else if (name == "GtkComboBoxText")
@@ -681,7 +715,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         if (extractEntry(rMap))
         {
             ComboBox* pComboBox = new ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
-            pComboBox->SetBestDropDownLineCount();
+            pComboBox->EnableAutoSize(true);
             pWindow = pComboBox;
         }
         else
@@ -695,6 +729,12 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "GtkTreeView")
     {
+        //To-Do
+        //a) move svtools SvTreeViewBox into vcl
+        //b) make that the default target for GtkTreeView
+        //c) remove the non-drop down mode of ListBox and convert
+        //   everything over to SvTreeViewBox
+        //d) remove the users of makeSvTreeViewBox
         extractModel(id, rMap);
         pWindow = new ListBox(pParent, WB_LEFT|WB_VCENTER|WB_3DLOOK);
     }
@@ -707,7 +747,8 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "GtkSeparator")
     {
-        if (extractOrientation(rMap))
+        bVertical = extractOrientation(rMap);
+        if (bVertical)
             pWindow = new FixedLine(pParent, WB_VERT);
         else
             pWindow = new FixedLine(pParent, WB_HORZ);
@@ -715,7 +756,8 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkScrollbar")
     {
         extractScrollAdjustment(id, rMap);
-        if (extractOrientation(rMap))
+        bVertical = extractOrientation(rMap);
+        if (bVertical)
             pWindow = new ScrollBar(pParent, WB_VERT);
         else
             pWindow = new ScrollBar(pParent, WB_HORZ);
@@ -795,7 +837,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             pWindow->mpWindowImpl->mpRealParent << "/" <<
             pWindow->mpWindowImpl->mpBorderWindow << ") with helpid " <<
             pWindow->GetHelpId().getStr());
-        m_aChildren.push_back(WinAndId(id, pWindow));
+        m_aChildren.push_back(WinAndId(id, pWindow, bVertical));
     }
     return pWindow;
 }
@@ -810,7 +852,8 @@ namespace
     }
 }
 
-Window *VclBuilder::insertObject(Window *pParent, const OString &rClass, const OString &rID, stringmap &rMap)
+Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
+    const OString &rID, stringmap &rProps, stringmap &rPango)
 {
     Window *pCurrentChild = NULL;
 
@@ -821,7 +864,7 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass, const O
         if (pCurrentChild->IsDialog())
         {
             Dialog *pDialog = (Dialog*)pCurrentChild;
-            pDialog->doDeferredInit(extractResizable(rMap));
+            pDialog->doDeferredInit(extractResizable(rProps));
             m_bToplevelHasDeferredInit = false;
         }
         if (pCurrentChild->GetHelpId().isEmpty())
@@ -839,20 +882,28 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass, const O
         //been seen yet, then make unattached widgets parent-less toplevels
         if (pParent == m_pParent && m_bToplevelHasDeferredInit)
             pParent = NULL;
-        pCurrentChild = makeObject(pParent, rClass, rID, rMap);
+        pCurrentChild = makeObject(pParent, rClass, rID, rProps);
     }
 
     if (pCurrentChild)
     {
-        for (stringmap::iterator aI = rMap.begin(), aEnd = rMap.end(); aI != aEnd; ++aI)
+        for (stringmap::iterator aI = rProps.begin(), aEnd = rProps.end(); aI != aEnd; ++aI)
         {
             const OString &rKey = aI->first;
             const OString &rValue = aI->second;
             pCurrentChild->set_property(rKey, rValue);
         }
+
+        for (stringmap::iterator aI = rPango.begin(), aEnd = rPango.end(); aI != aEnd; ++aI)
+        {
+            const OString &rKey = aI->first;
+            const OString &rValue = aI->second;
+            pCurrentChild->set_font_attribute(rKey, rValue);
+        }
     }
 
-    rMap.clear();
+    rProps.clear();
+    rPango.clear();
 
     if (!pCurrentChild)
         pCurrentChild = m_aChildren.empty() ? pParent : m_aChildren.back().m_pWindow;
@@ -998,8 +1049,27 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, con
         return true;
     if (ePackA > ePackB)
         return false;
+    bool bVerticalContainer = m_pBuilder->get_window_packing_data(pA->GetParent()).m_bVerticalOrient;
+    bool bPackA = pA->get_secondary();
+    bool bPackB = pB->get_secondary();
+    if (!bVerticalContainer)
+    {
+        //for horizontal boxes group secondaries before primaries
+        if (bPackA > bPackB)
+            return true;
+        if (bPackA < bPackB)
+            return false;
+    }
+    else
+    {
+        //for vertical boxes group secondaries after primaries
+        if (bPackA < bPackB)
+            return true;
+        if (bPackA > bPackB)
+            return false;
+    }
     //honour relative box positions with pack group
-    return m_pBuilder->get_window_packing_position(pA) < m_pBuilder->get_window_packing_position(pB);
+    return m_pBuilder->get_window_packing_data(pA).m_nPosition < m_pBuilder->get_window_packing_data(pB).m_nPosition;
 }
 
 void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
@@ -1095,6 +1165,32 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
         if (res == xmlreader::XmlReader::RESULT_DONE)
             break;
     }
+}
+
+void VclBuilder::collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
+{
+    xmlreader::Span span;
+    int nsId;
+
+    OString sProperty;
+    OString sValue;
+
+    while (reader.nextAttribute(&nsId, &span))
+    {
+        if (span.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        {
+            span = reader.getAttributeValue(false);
+            sProperty = OString(span.begin, span.length);
+        }
+        else if (span.equals(RTL_CONSTASCII_STRINGPARAM("value")))
+        {
+            span = reader.getAttributeValue(false);
+            sValue = OString(span.begin, span.length);
+        }
+    }
+
+    if (!sProperty.isEmpty())
+        rMap[sProperty] = sValue;
 }
 
 void VclBuilder::handleAdjustment(const OString &rID, stringmap &rProperties)
@@ -1240,7 +1336,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 
     int nLevel = 1;
 
-    stringmap aProperties;
+    stringmap aProperties, aPangoAttributes;
 
     if (!sPattern.isEmpty())
         aProperties[OString("pattern")] = sPattern;
@@ -1259,7 +1355,10 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
             if (name.equals(RTL_CONSTASCII_STRINGPARAM("child")))
             {
                 if (!pCurrentChild)
-                    pCurrentChild = insertObject(pParent, sClass, sID, aProperties);
+                {
+                    pCurrentChild = insertObject(pParent, sClass, sID,
+                        aProperties, aPangoAttributes);
+                }
                 handleChild(pCurrentChild, reader);
             }
             else
@@ -1267,6 +1366,8 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
                 ++nLevel;
                 if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
                     collectProperty(reader, sID, aProperties);
+                else if (name.equals(RTL_CONSTASCII_STRINGPARAM("attribute")))
+                    collectPangoAttribute(reader, aPangoAttributes);
             }
         }
 
@@ -1286,7 +1387,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     }
 
     if (!pCurrentChild)
-        pCurrentChild = insertObject(pParent, sClass, sID, aProperties);
+        pCurrentChild = insertObject(pParent, sClass, sID, aProperties, aPangoAttributes);
 
     return pCurrentChild;
 }
@@ -1382,6 +1483,10 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
             {
                 set_window_packing_position(pCurrent, sValue.toInt32());
             }
+            else if (sKey == "secondary")
+            {
+                pCurrent->set_secondary(toBool(sValue));
+            }
             else
             {
                 SAL_WARN("vcl.layout", "unknown packing: " << sKey.getStr());
@@ -1435,13 +1540,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rI
     if (!sProperty.isEmpty())
     {
         sProperty = sProperty.replace('_', '-');
-        //replace '_' with '-' except for property values that
-        //refer to widget ids themselves. TO-DO, drop conversion
-        //and just use foo_bar properties throughout ?
-        if (sProperty == "group")
-            rMap[sProperty] = sValue;
-        else
-            rMap[sProperty] = sValue.replace('_', '-');
+        rMap[sProperty] = sValue.replaceAll("%PRODUCTNAME", m_sProductName);
     }
 }
 
@@ -1502,16 +1601,23 @@ OString VclBuilder::get_by_window(const Window *pWindow) const
     return OString();
 }
 
-sal_Int32 VclBuilder::get_window_packing_position(const Window *pWindow) const
+VclBuilder::PackingData VclBuilder::get_window_packing_data(const Window *pWindow) const
 {
+    //We've stored the return of new Control, some of these get
+    //border windows placed around them which are what you get
+    //from GetChild, so scoot up a level if necessary to get the
+    //window whose position value we have
+    const Window *pPropHolder = pWindow->mpWindowImpl->mpClientWindow ?
+        pWindow->mpWindowImpl->mpClientWindow : pWindow;
+
     for (std::vector<WinAndId>::const_iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
     {
-        if (aI->m_pWindow == pWindow)
-            return aI->m_nPosition;
+        if (aI->m_pWindow == pPropHolder)
+            return aI->m_aPackingData;
     }
 
-    return -1;
+    return PackingData();
 }
 
 void VclBuilder::set_window_packing_position(const Window *pWindow, sal_Int32 nPosition)
@@ -1520,7 +1626,7 @@ void VclBuilder::set_window_packing_position(const Window *pWindow, sal_Int32 nP
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
     {
         if (aI->m_pWindow == pWindow)
-            aI->m_nPosition = nPosition;
+            aI->m_aPackingData.m_nPosition = nPosition;
     }
 }
 

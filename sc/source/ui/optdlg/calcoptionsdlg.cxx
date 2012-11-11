@@ -42,10 +42,10 @@ public:
     OptionString(const rtl::OUString& rDesc, const rtl::OUString& rValue) :
         maDesc(rDesc), maValue(rValue) {}
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry);
 };
 
-void OptionString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/)
+void OptionString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /*nFlags*/, SvTreeListEntry* /*pEntry*/)
 {
     Point aPos = rPos;
     rtl::OUString aDesc = maDesc + rtl::OUString(": ");
@@ -135,11 +135,11 @@ void ScCalcOptionsDialog::FillOptionsList()
     maLbSettings.SetUpdateMode(false);
     maLbSettings.Clear();
 
-    SvLBoxTreeList* pModel = maLbSettings.GetModel();
+    SvTreeList* pModel = maLbSettings.GetModel();
 
     {
         // Syntax for INDIRECT function.
-        SvLBoxEntry* pEntry = new SvLBoxEntry;
+        SvTreeListEntry* pEntry = new SvTreeListEntry;
         pEntry->AddItem(new SvLBoxString(pEntry, 0, rtl::OUString()));
         pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), 0));
         OptionString* pItem = new OptionString(
@@ -150,7 +150,7 @@ void ScCalcOptionsDialog::FillOptionsList()
 
     {
         // Treat empty string as zero.
-        SvLBoxEntry* pEntry = new SvLBoxEntry;
+        SvTreeListEntry* pEntry = new SvTreeListEntry;
         pEntry->AddItem(new SvLBoxString(pEntry, 0, rtl::OUString()));
         pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), 0));
         OptionString* pItem = new OptionString(
@@ -235,8 +235,8 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
 
             maLbSettings.SetUpdateMode(false);
 
-            SvLBoxTreeList* pModel = maLbSettings.GetModel();
-            SvLBoxEntry* pEntry = pModel->GetEntry(NULL, 0);
+            SvTreeList* pModel = maLbSettings.GetModel();
+            SvTreeListEntry* pEntry = pModel->GetEntry(NULL, 0);
             if (!pEntry)
                 return;
 
@@ -263,8 +263,8 @@ void ScCalcOptionsDialog::RadioValueChanged()
             maConfig.mbEmptyStringAsZero = maBtnTrue.IsChecked();
             maLbSettings.SetUpdateMode(false);
 
-            SvLBoxTreeList* pModel = maLbSettings.GetModel();
-            SvLBoxEntry* pEntry = pModel->GetEntry(NULL, 1);
+            SvTreeList* pModel = maLbSettings.GetModel();
+            SvTreeListEntry* pEntry = pModel->GetEntry(NULL, 1);
             if (!pEntry)
                 return;
 

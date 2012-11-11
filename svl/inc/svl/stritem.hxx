@@ -31,7 +31,7 @@ public:
 
     SfxStringItem() {}
 
-    SfxStringItem(sal_uInt16 which, const XubString & rValue):
+    SfxStringItem(sal_uInt16 which, const OUString & rValue):
         CntUnencodedStringItem(which, rValue) {}
 
     SfxStringItem(sal_uInt16 nWhich, SvStream & rStream);

@@ -53,9 +53,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_CURL \
 	SYSTEM_DB \
 	SYSTEM_EXPAT \
-	SYSTEM_GDKPIXBUF \
-	SYSTEM_GETTEXT \
-	SYSTEM_GLIB \
 	SYSTEM_GRAPHITE \
 	SYSTEM_HSQLDB \
 	SYSTEM_HUNSPELL \
@@ -63,12 +60,9 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_ICU \
 	SYSTEM_JPEG \
 	SYSTEM_LCMS2 \
-	SYSTEM_LIBCROCO \
 	SYSTEM_LIBEXTTEXTCAT \
-	SYSTEM_LIBGSF \
 	SYSTEM_LIBJPEG \
 	SYSTEM_LIBLANGTAG \
-	SYSTEM_LIBRSVG \
 	SYSTEM_LIBXML \
 	SYSTEM_LIBXSLT \
 	SYSTEM_LPSOLVE \
@@ -114,10 +108,10 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 	MINGW_JPEG_DLL \
 	MINGW_LCMS2_DLL \
 	MINGW_LIBEXSLT_DLL \
+	MINGW_LIBLANGTAG_DLL \
 	MINGW_LIBXML_DLL \
 	MINGW_LIBXSLT_DLL \
 	MINGW_LPSOLVE_DLL \
-	MINGW_MINIZIP_DLL \
 	MINGW_MYTHES_DLL \
 	MINGW_NEON_DLL \
 	MINGW_NSPR4_DLL \
@@ -130,6 +124,7 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 	MINGW_RAPTOR_DLL \
 	MINGW_RASQAL_DLL \
 	MINGW_REDLAND_DLL \
+	MINGW_SMIME3_DLL \
 	MINGW_SQLITE3_DLL \
 	MINGW_SSH2_DLL \
 	MINGW_SSL3_DLL \
@@ -139,9 +134,6 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 ))
 
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	$(if $(filter INTERNAL,$(ENABLE_LIBRSVG)),\
-		-DENABLE_LIBRSVG \
-	) \
 	$(if $(filter gcj,$(JDK)),\
 		-DGCJ \
 	) \
@@ -156,9 +148,6 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	) \
 	$(if $(filter YES,$(SYSTEM_HSQLDB)),\
 		-DHSQLDB_JAR=\""$(call gb_Helper_make_path,$(HSQLDB_JAR))"\" \
-	) \
-	$(if $(filter YES,$(SYSTEM_SAXON)),\
-		-DSAXON_JAR=\""$(call gb_Helper_make_path,$(SAXON_JAR))"\" \
 	) \
 	$(if $(filter-out YES,$(WITH_MOZILLA)),\
 		-DWITHOUT_MOZILLA \

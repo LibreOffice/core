@@ -71,7 +71,14 @@
 #include "appoptio.hxx"
 #include "postit.hxx"
 
+#include "scresid.hxx"
+#include "iconsets.hrc"
+#include "colorscale.hxx"
+
 #include <math.h>
+#include <map>
+#include <utility>
+#include <iostream>
 
 using namespace com::sun::star;
 
@@ -85,6 +92,56 @@ static ColorData nAuthorColor[ SC_AUTHORCOLORCOUNT ] = {
                     COL_LIGHTRED,       COL_LIGHTBLUE,      COL_LIGHTMAGENTA,
                     COL_GREEN,          COL_RED,            COL_BLUE,
                     COL_BROWN,          COL_MAGENTA,        COL_CYAN };
+
+sal_Int32 a3TrafficLights1[] = {
+    BMP_RED_CIRCLE, BMP_YELLOW_CIRCLE, BMP_GREEN_CIRCLE
+};
+
+sal_Int32 a3Arrows[] = {
+    BMP_ARROW_RED_DOWN, BMP_ARROW_YELLOW_RIGHT, BMP_ARROW_GREEN_UP
+};
+
+sal_Int32 a4Arrows[] = {
+    BMP_ARROW_RED_DOWN, BMP_ARROW_YELLOW_DOWN_RIGHT, BMP_ARROW_YELLOW_UP_RIGHT, BMP_ARROW_GREEN_UP
+};
+
+sal_Int32 a5Arrows[] = {
+    BMP_ARROW_RED_DOWN, BMP_ARROW_YELLOW_DOWN_RIGHT, BMP_ARROW_YELLOW_RIGHT, BMP_ARROW_YELLOW_UP_RIGHT, BMP_ARROW_GREEN_UP
+};
+
+sal_Int32 a4TrafficLights[] = {
+    BMP_BLACK_CIRCLE, BMP_RED_CIRCLE, BMP_YELLOW_CIRCLE, BMP_GREEN_CIRCLE
+};
+
+sal_Int32 a5Quarters[] = {
+    BMP_BLACK_CIRCLE_EMPTY, BMP_BLACK_CIRCLE_1_4TH, BMP_BLACK_CIRCLE_HALF, BMP_BLACK_CIRCLE_3_4TH, BMP_BLACK_CIRCLE
+};
+
+sal_Int32 a3Symbols1[] = {
+    BMP_CANCEL, BMP_EXCLAMATION_MARK, BMP_SIGN
+};
+
+struct ScIconSetBitmapMap {
+    ScIconSetType eType;
+    sal_Int32* nBitmaps;
+};
+
+static ScIconSetBitmapMap aBitmapMap[] = {
+    { IconSet_3TrafficLights1, a3TrafficLights1 },
+    { IconSet_3TrafficLights2, a3TrafficLights1 },
+    { IconSet_3Arrows, a3Arrows },
+    { IconSet_3ArrowsGray, a3Arrows },
+    { IconSet_3Symbols, a3Symbols1 },
+    { IconSet_3Symbols2, a3Symbols1 },
+    { IconSet_4Arrows, a4Arrows },
+    { IconSet_4ArrowsGray, a4Arrows },
+    { IconSet_4TrafficLights, a4TrafficLights },
+    { IconSet_5Arrows, a5Arrows },
+    { IconSet_5ArrowsGray, a5Arrows },
+    { IconSet_5Quarters, a5Quarters }
+};
+
+static std::map< sal_Int32, BitmapEx > aIconSetBitmaps;
 
 //  Hilfsklasse, fuer die Farbzuordnung,
 //  um nicht mehrfach hintereinander denselben User aus der Liste zu suchen
@@ -778,6 +835,13 @@ static sal_Bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
 
         if (pInfo1 && (*pInfo1 != *pInfo2))
             return false;
+
+        // each cell with an icon set should be painted the same way
+        const ScIconSetInfo* pIconSet1 = rFirst.pCellInfo[nX+1].pIconSet;
+        const ScIconSetInfo* pIconSet2 = rOther.pCellInfo[nX+1].pIconSet;
+
+        if(pIconSet1 || pIconSet2)
+            return false;
     }
 
     return sal_True;
@@ -870,14 +934,50 @@ void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, OutputDevice* pDev, con
     }
 }
 
+BitmapEx& getIcon( ScIconSetType eType, sal_Int32 nIndex )
+{
+    sal_Int32 nBitmap = -1;
+
+    for(size_t i = 0; i < SAL_N_ELEMENTS(aBitmapMap); ++i)
+    {
+        if(aBitmapMap[i].eType == eType)
+        {
+            nBitmap = *(aBitmapMap[i].nBitmaps + nIndex);
+        }
+    }
+
+    assert( nBitmap != -1 );
+
+    std::map<sal_Int32, BitmapEx>::iterator itr = aIconSetBitmaps.find( nBitmap );
+    if(itr != aIconSetBitmaps.end())
+        return itr->second;
+
+    BitmapEx aBitmap = BitmapEx(ScResId(nBitmap));
+    std::pair<sal_Int32, BitmapEx> aPair( nBitmap, aBitmap );
+    std::pair<std::map<sal_Int32, BitmapEx>::iterator, bool> itrNew = aIconSetBitmaps.insert(aPair);
+    assert(itrNew.second);
+
+    return itrNew.first->second;
+}
+
+void drawIconSets( const ScIconSetInfo* pOldIconSetInfo, OutputDevice* pDev, const Rectangle& rRect )
+{
+    long nSize = 16;
+    ScIconSetType eType = pOldIconSetInfo->eIconSetType;
+    sal_Int32 nIndex = pOldIconSetInfo->nIconIndex;
+    BitmapEx& rIcon = getIcon( eType, nIndex );
+    pDev->DrawBitmapEx( Point( rRect.Left() +2, rRect.Top() + 2 ), Size( nSize, nSize ), rIcon );
+}
+
 void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color*& pOldColor, const SvxBrushItem*& pOldBackground,
-        Rectangle& rRect, long nPosX, long nSignedOneX, OutputDevice* pDev, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo)
+        Rectangle& rRect, long nPosX, long nSignedOneX, OutputDevice* pDev, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo,
+        const ScIconSetInfo* pIconSetInfo, const ScIconSetInfo*& pOldIconSetInfo)
 {
 
     // need to paint if old color scale has been used and now
     // we have a different color or a style based background
     // we can here fall back to pointer comparison
-    if (pOldColor && (pBackground || pOldColor != pColor || pOldDataBarInfo || pDataBarInfo))
+    if (pOldColor && (pBackground || pOldColor != pColor || pOldDataBarInfo || pDataBarInfo || pIconSetInfo || pOldIconSetInfo))
     {
         rRect.Right() = nPosX-nSignedOneX;
         if( !pOldColor->GetTransparency() )
@@ -887,10 +987,13 @@ void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color
         }
         if( pOldDataBarInfo )
             drawDataBars( pOldDataBarInfo, pDev, rRect );
+        if( pOldIconSetInfo )
+            drawIconSets( pOldIconSetInfo, pDev, rRect );
+
         rRect.Left() = nPosX - nSignedOneX;
     }
 
-    if ( pOldBackground && (pColor ||pBackground != pOldBackground || pOldDataBarInfo || pDataBarInfo) )
+    if ( pOldBackground && (pColor ||pBackground != pOldBackground || pOldDataBarInfo || pDataBarInfo || pIconSetInfo || pOldIconSetInfo) )
     {
         rRect.Right() = nPosX-nSignedOneX;
         if (pOldBackground)             // ==0 if hidden
@@ -904,10 +1007,13 @@ void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color
         }
         if( pOldDataBarInfo )
             drawDataBars( pOldDataBarInfo, pDev, rRect );
+        if( pOldIconSetInfo )
+            drawIconSets( pOldIconSetInfo, pDev, rRect );
+
         rRect.Left() = nPosX - nSignedOneX;
     }
 
-    if (!pOldBackground && !pOldColor && pDataBarInfo)
+    if (!pOldBackground && !pOldColor && (pDataBarInfo || pIconSetInfo))
     {
         rRect.Right() = nPosX -nSignedOneX;
         rRect.Left() = nPosX - nSignedOneX;
@@ -931,6 +1037,11 @@ void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color
         pOldDataBarInfo = pDataBarInfo;
     else
         pOldDataBarInfo = NULL;
+
+    if(pIconSetInfo)
+        pOldIconSetInfo = pIconSetInfo;
+    else
+        pOldIconSetInfo = NULL;
 }
 
 }
@@ -992,6 +1103,7 @@ void ScOutputData::DrawBackground()
                 const Color* pOldColor = NULL;
                 const Color* pColor = NULL;
                 const ScDataBarInfo* pOldDataBarInfo = NULL;
+                const ScIconSetInfo* pOldIconSetInfo = NULL;
                 for (SCCOL nX=nX1; nX<=nX2; nX++)
                 {
                     CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
@@ -1032,11 +1144,12 @@ void ScOutputData::DrawBackground()
 
                     pColor = pInfo->pColorScale;
                     const ScDataBarInfo* pDataBarInfo = pInfo->pDataBar;
-                    drawCells( pColor, pBackground, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, pDataBarInfo, pOldDataBarInfo );
+                    const ScIconSetInfo* pIconSetInfo = pInfo->pIconSet;
+                    drawCells( pColor, pBackground, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo );
 
                     nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
                 }
-                drawCells( NULL, NULL, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, NULL, pOldDataBarInfo );
+                drawCells( NULL, NULL, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, NULL, pOldDataBarInfo, NULL, pOldIconSetInfo );
 
                 nArrY += nSkip;
             }

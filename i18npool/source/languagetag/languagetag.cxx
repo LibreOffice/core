@@ -138,14 +138,6 @@ void LiblantagDataRef::setupDataPath()
         lt_db_set_datadir( maDataPath.getStr());
 }
 
-
-// static
-void LanguageTag::overrideDataPath( const rtl::OUString& rPath )
-{
-    theDataRef.presetDataPath( rPath);
-}
-
-
 LanguageTag::LanguageTag( const rtl::OUString & rBcp47LanguageTag, bool bCanonicalize )
     :
         maBcp47( rBcp47LanguageTag),
@@ -293,14 +285,6 @@ bool LanguageTag::canonicalize() const
     dumper aDumper( &mpImplLangtag);
 #endif
 
-    // g_error_free() mocks about NULL, so ...
-    struct myerror
-    {
-        GError* p;
-        myerror() : p(NULL) {}
-        ~myerror() { if (p) g_error_free( p); }
-    } aError;
-
     getBcp47();     // side effect: have maBcp47 in any case
     // Checking empty for system locale before having allocated mpImplLangtag
     // may result in multiple calls of this method because that serves as flag
@@ -313,11 +297,19 @@ bool LanguageTag::canonicalize() const
     }
     if (!mpImplLangtag)
         mpImplLangtag = lt_tag_new();
+
+    // ensure error is free'd
+    struct myerror
+    {
+        lt_error_t* p;
+        myerror() : p(NULL) {}
+        ~myerror() { if (p) lt_error_unref( p); }
+    } aError;
+
     if (lt_tag_parse( MPLANGTAG, OUStringToOString( maBcp47, RTL_TEXTENCODING_UTF8).getStr(), &aError.p))
     {
-        gchar* pTag = lt_tag_canonicalize( MPLANGTAG, &aError.p);
-        SAL_WARN_IF( !pTag || aError.p, "i18npool.langtag", "LanguageTag::canonicalize: could not canonicalize, " <<
-                (aError.p ? aError.p->message : ""));
+        char* pTag = lt_tag_canonicalize( MPLANGTAG, &aError.p);
+        SAL_WARN_IF( !pTag, "i18npool.langtag", "LanguageTag::canonicalize: could not canonicalize " << maBcp47);
         if (pTag)
         {
             OUString aOld( maBcp47);
@@ -328,24 +320,20 @@ bool LanguageTag::canonicalize() const
             {
                 if (!lt_tag_parse( MPLANGTAG, pTag, &aError.p))
                 {
-                    SAL_WARN( "i18npool.langtag", "LanguageTag::canonicalize: could not reparse, " <<
-                            (aError.p ? aError.p->message : ""));
-                    g_free( pTag);
+                    SAL_WARN( "i18npool.langtag", "LanguageTag::canonicalize: could not reparse " << maBcp47);
+                    free( pTag);
                     meIsValid = DECISION_NO;
                     return false;
                 }
             }
-            g_free( pTag);
+            free( pTag);
             meIsValid = DECISION_YES;
             return true;
         }
     }
     else
     {
-        SAL_INFO(
-            "i18npool.langtag",
-            "LanguageTag::canonicalize " << maBcp47 << ": could not parse, "
-                << (aError.p ? aError.p->message : ""));
+        SAL_INFO( "i18npool.langtag", "LanguageTag::canonicalize: could not parse " << maBcp47);
     }
     meIsValid = DECISION_NO;
     return false;
@@ -480,7 +468,7 @@ rtl::OUString LanguageTag::getLanguageFromLangtag() const
     SAL_WARN_IF( !pLangT, "i18npool.langtag", "LanguageTag::getLanguageFromLangtag: pLangT==NULL");
     if (!pLangT)
         return aLanguage;
-    const gchar* pLang = lt_lang_get_tag( pLangT);
+    const char* pLang = lt_lang_get_tag( pLangT);
     SAL_WARN_IF( !pLang, "i18npool.langtag", "LanguageTag::getLanguageFromLangtag: pLang==NULL");
     if (pLang)
         aLanguage = OUString::createFromAscii( pLang);
@@ -499,7 +487,7 @@ rtl::OUString LanguageTag::getScriptFromLangtag() const
     // pScriptT==NULL is valid for default scripts
     if (!pScriptT)
         return aScript;
-    const gchar* pScript = lt_script_get_tag( pScriptT);
+    const char* pScript = lt_script_get_tag( pScriptT);
     SAL_WARN_IF( !pScript, "i18npool.langtag", "LanguageTag::getScriptFromLangtag: pScript==NULL");
     if (pScript)
         aScript = OUString::createFromAscii( pScript);
@@ -518,7 +506,7 @@ rtl::OUString LanguageTag::getRegionFromLangtag() const
     SAL_WARN_IF( !pRegionT, "i18npool.langtag", "LanguageTag::getRegionFromLangtag: pRegionT==NULL");
     if (!pRegionT)
         return aRegion;
-    const gchar* pRegion = lt_region_get_tag( pRegionT);
+    const char* pRegion = lt_region_get_tag( pRegionT);
     SAL_WARN_IF( !pRegion, "i18npool.langtag", "LanguageTag::getRegionFromLangtag: pRegion==NULL");
     if (pRegion)
         aRegion = OUString::createFromAscii( pRegion);

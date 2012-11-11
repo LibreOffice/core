@@ -57,7 +57,7 @@ using namespace ::connectivity::hsqldb;
  * Method:    openStream
  * Signature: (Ljava/lang/String;Ljava/lang/String;I)V
  */
-SAL_DLLPUBLIC_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_openStream
+SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_openStream
   (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name, jint mode)
 {
 #ifdef HSQLDB_DBG
@@ -75,7 +75,7 @@ SAL_DLLPUBLIC_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNat
  * Method:    read
  * Signature: (Ljava/lang/String;Ljava/lang/String;)I
  */
-SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_read__Ljava_lang_String_2Ljava_lang_String_2
+SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_read__Ljava_lang_String_2Ljava_lang_String_2
   (JNIEnv * env, jobject obj_this,jstring key, jstring name)
 {
 #ifdef HSQLDB_DBG
@@ -94,7 +94,7 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNat
  * Method:    read
  * Signature: (Ljava/lang/String;Ljava/lang/String;[BII)I
  */
-SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_read__Ljava_lang_String_2Ljava_lang_String_2_3BII
+SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_read__Ljava_lang_String_2Ljava_lang_String_2_3BII
   (JNIEnv * env, jobject obj_this,jstring key, jstring name, jbyteArray buffer, jint off, jint len)
 {
 #ifdef HSQLDB_DBG
@@ -113,7 +113,7 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNat
  * Method:    close
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
-SAL_DLLPUBLIC_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_close
+SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_close
   (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name)
 {
 #ifdef HSQLDB_DBG
@@ -133,7 +133,7 @@ SAL_DLLPUBLIC_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNat
  * Method:    skip
  * Signature: (Ljava/lang/String;Ljava/lang/String;J)J
  */
-SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_skip
+SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_skip
   (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name, jlong n)
 {
 #ifdef HSQLDB_DBG
@@ -199,7 +199,7 @@ SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNa
  * Method:    available
  * Signature: (Ljava/lang/String;Ljava/lang/String;)I
  */
-SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_available
+SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_available
   (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name)
 {
 #ifdef HSQLDB_DBG
@@ -241,7 +241,7 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNat
  * Method:    read
  * Signature: (Ljava/lang/String;Ljava/lang/String;[B)I
  */
-SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_read__Ljava_lang_String_2Ljava_lang_String_2_3B
+SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_read__Ljava_lang_String_2Ljava_lang_String_2_3B
   (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name, jbyteArray buffer)
 {
 #ifdef HSQLDB_DBG

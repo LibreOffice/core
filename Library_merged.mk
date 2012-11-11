@@ -201,7 +201,6 @@ endif
 
 ifeq ($(ENABLE_LIBLANGTAG),YES)
 $(eval $(call gb_Library_use_externals,merged,\
-	glib \
 	liblangtag \
 ))
 endif

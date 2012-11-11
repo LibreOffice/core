@@ -11,13 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,visio))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,visio,$(VISIO_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,visio,0))
-
-visio_patches :=
-# Somehow draw is very picky about what is a closed path
-visio_patches += libvisio-0.0.19.patch
+$(eval $(call gb_UnpackedTarball_set_patchlevel,visio,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,visio,\
-	$(foreach patch,$(visio_patches),libvisio/$(patch)) \
+	libvisio/libvisio-0.0.20-zlib.patch \
 ))
+
 # vim: set noet sw=4 ts=4:

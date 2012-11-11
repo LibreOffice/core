@@ -119,7 +119,7 @@ class SwEditRegionDlg : public SfxModalDialog
 
     Image  BuildBitmap(sal_Bool bProtect,sal_Bool bHidden);
 
-    void    RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry);
+    void    RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pEntry);
     sal_uInt16  FindArrPos(const SwSectionFmt* pFmt);
 
     DECL_LINK( GetFirstEntryHdl, SvTreeListBox * );

@@ -44,12 +44,13 @@
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/resid.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/menu.hxx>
@@ -1451,23 +1452,20 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
     m_xFormatter = NULL;
     OStaticDataAccessTools aStaticTools;
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = aStaticTools.getNumberFormats(aStaticTools.getRowSetConnection(_xCursor), sal_True);
-    if (xSupplier.is() && m_xServiceFactory.is())
+    if (xSupplier.is())
     {
-        m_xFormatter =  Reference< ::com::sun::star::util::XNumberFormatter >(
-            m_xServiceFactory->createInstance(FM_NUMBER_FORMATTER),
+        m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(
+            ::com::sun::star::util::NumberFormatter::create(comphelper::getComponentContext(m_xServiceFactory)),
             UNO_QUERY);
-        if (m_xFormatter.is())
-        {
-            m_xFormatter->attachNumberFormatsSupplier(xSupplier);
+        m_xFormatter->attachNumberFormatsSupplier(xSupplier);
 
-            // retrieve the datebase of the Numberformatter
-            try
-            {
-                xSupplier->getNumberFormatSettings()->getPropertyValue(rtl::OUString("NullDate")) >>= m_aNullDate;
-            }
-            catch(Exception&)
-            {
-            }
+        // retrieve the datebase of the Numberformatter
+        try
+        {
+            xSupplier->getNumberFormatSettings()->getPropertyValue(rtl::OUString("NullDate")) >>= m_aNullDate;
+        }
+        catch(Exception&)
+        {
         }
     }
 

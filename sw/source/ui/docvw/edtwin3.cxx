@@ -156,12 +156,12 @@ void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect )
         ((SwPagePreView *)pSfxVwSh)->RepaintCoreRect( rRect );
 }
 
-sal_Bool JumpToSwMark( ViewShell* pVwSh, const rtl::OUString& rMark )
+bool JumpToSwMark( ViewShell* pVwSh, const rtl::OUString& rMark )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if( pSfxVwSh && pSfxVwSh->ISA( SwView ) )
         return ((SwView *)pSfxVwSh)->JumpToSwMark( rMark );
-    return sal_False;
+    return false;
 }
 
 void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )

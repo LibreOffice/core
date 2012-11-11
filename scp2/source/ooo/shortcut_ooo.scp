@@ -91,13 +91,6 @@ End
 
 #endif
 
-Shortcut gid_Shortcut_Lib_Libcroco
-    FileID = gid_File_Lib_Libcroco;
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "libcroco-0.6.3.dylib";
-    Styles = (NETWORK, RELATIVE);
-End
-
 #endif
 
 //i44154 -end-

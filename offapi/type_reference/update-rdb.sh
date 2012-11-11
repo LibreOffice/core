@@ -7,23 +7,21 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+set -e
+
 # Basic argument checks
 if [ $# -lt 1 ]
 then
   echo "usage:"
-  echo "    $0 <idl file list>"
+  echo "    make cmd cmd='$0 <idl file list>'"
   echo ""
   echo "example:"
-  echo "    $0 \\"
-  echo "      offapi/com/sun/star/auth/SSOManagerFactory.idl \\"
-  echo "      offapi/com/sun/star/auth/SSOPasswordCache.idl"
+  echo "    make cmd cmd='$0"
+  echo "      offapi/com/sun/star/auth/SSOManagerFactory.idl"
+  echo "      offapi/com/sun/star/auth/SSOPasswordCache.idl'"
   exit 1
 fi
 
-# Load env vars
-source "$(dirname "$0")"/../../config_host.mk 2>/dev/null
-
-set -e
 mkdir tmp
 for i in "$@"; do
   "${OUTDIR_FOR_BUILD?}"/bin/regmerge tmp/out1.rdb /UCR \

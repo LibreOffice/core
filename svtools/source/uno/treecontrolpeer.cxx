@@ -80,7 +80,7 @@ public:
 class ImplContextGraphicItem : public SvLBoxContextBmp
 {
 public:
-    ImplContextGraphicItem( SvLBoxEntry* pEntry,sal_uInt16 nFlags,Image& rI1,Image& rI2, sal_uInt16 nEntryFlagsBmp1)
+    ImplContextGraphicItem( SvTreeListEntry* pEntry,sal_uInt16 nFlags,Image& rI1,Image& rI2, sal_uInt16 nEntryFlagsBmp1)
         : SvLBoxContextBmp( pEntry, nFlags, rI1, rI2, nEntryFlagsBmp1 ) {}
 
     OUString msExpandedGraphicURL;
@@ -95,12 +95,12 @@ public:
     UnoTreeListBoxImpl( TreeControlPeer* pPeer, Window* pParent, WinBits nWinStyle );
     ~UnoTreeListBoxImpl();
 
-    sal_uInt32 insert( SvLBoxEntry* pEntry,SvLBoxEntry* pParent,sal_uLong nPos=LIST_APPEND );
+    sal_uInt32 insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos=LIST_APPEND );
 
-    virtual void    RequestingChildren( SvLBoxEntry* pParent );
+    virtual void    RequestingChildren( SvTreeListEntry* pParent );
 
-    virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
+    virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
+    virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );
 
     DECL_LINK(OnSelectionChangeHdl, void *);
     DECL_LINK(OnExpandingHdl, void *);
@@ -115,15 +115,15 @@ private:
 class UnoTreeListItem : public SvLBoxString
 {
 public:
-                    UnoTreeListItem( SvLBoxEntry* );
+                    UnoTreeListItem( SvTreeListEntry* );
                     UnoTreeListItem();
     virtual         ~UnoTreeListItem();
-    void            InitViewData( SvTreeListBox*,SvLBoxEntry*,SvViewDataItem* );
+    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
     Image           GetImage() const;
     void            SetImage( const Image& rImage );
     OUString        GetGraphicURL() const;
     void            SetGraphicURL( const OUString& rGraphicURL );
-    void            Paint( const Point&, SvTreeListBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
+    void            Paint( const Point&, SvTreeListBox& rDev, sal_uInt16 nFlags,SvTreeListEntry* );
     SvLBoxItem*     Create() const;
     void            Clone( SvLBoxItem* pSource );
 
@@ -134,7 +134,7 @@ private:
 
 // --------------------------------------------------------------------
 
-class UnoTreeListEntry : public SvLBoxEntry
+class UnoTreeListEntry : public SvTreeListEntry
 {
 public:
     UnoTreeListEntry( const Reference< XTreeNode >& xNode, TreeControlPeer* pPeer );
@@ -723,7 +723,7 @@ void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const ::rtl::OUStri
 
         UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
 
-        SvLBoxEntry* pEntry = rTree.First();
+        SvTreeListEntry* pEntry = rTree.First();
         while( pEntry )
         {
             ImplContextGraphicItem* pContextGraphicItem = dynamic_cast< ImplContextGraphicItem* >( pEntry->GetItem( 0 ) );
@@ -761,7 +761,7 @@ void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const ::rtl::OUStr
 
         UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
 
-        SvLBoxEntry* pEntry = rTree.First();
+        SvTreeListEntry* pEntry = rTree.First();
         while( pEntry )
         {
             ImplContextGraphicItem* pContextGraphicItem = dynamic_cast< ImplContextGraphicItem* >( pEntry->GetItem( 0 ) );
@@ -1200,7 +1200,7 @@ OUString TreeControlPeer::getEntryString( const Any& rValue )
                 Sequence< Any > aValues;
                 if( aValue >>= aValues )
                 {
-                    updateEntry( SvLBoxEntry& rEntry, aValues );
+                    updateEntry( SvTreeListEntry& rEntry, aValues );
                     return;
                 }
             }
@@ -1553,7 +1553,7 @@ IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnExpandedHdl)
 
 // --------------------------------------------------------------------
 
-sal_uInt32 UnoTreeListBoxImpl::insert( SvLBoxEntry* pEntry,SvLBoxEntry* pParent,sal_uLong nPos )
+sal_uInt32 UnoTreeListBoxImpl::insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos )
 {
     if( pParent )
         return SvTreeListBox::Insert( pEntry, pParent, nPos );
@@ -1563,7 +1563,7 @@ sal_uInt32 UnoTreeListBoxImpl::insert( SvLBoxEntry* pEntry,SvLBoxEntry* pParent,
 
 // --------------------------------------------------------------------
 
-void UnoTreeListBoxImpl::RequestingChildren( SvLBoxEntry* pParent )
+void UnoTreeListBoxImpl::RequestingChildren( SvTreeListEntry* pParent )
 {
     UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( pParent );
     if( pEntry && pEntry->mxNode.is() && mxPeer.is() )
@@ -1572,14 +1572,14 @@ void UnoTreeListBoxImpl::RequestingChildren( SvLBoxEntry* pParent )
 
 // --------------------------------------------------------------------
 
-sal_Bool UnoTreeListBoxImpl::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+sal_Bool UnoTreeListBoxImpl::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 {
     return mxPeer.is() ? mxPeer->onEditingEntry( dynamic_cast< UnoTreeListEntry* >( pEntry ) ) : false;
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool UnoTreeListBoxImpl::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
+sal_Bool UnoTreeListBoxImpl::EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText )
 {
     return mxPeer.is() ? mxPeer->onEditedEntry( dynamic_cast< UnoTreeListEntry* >( pEntry ), rNewText ) : false;
 }
@@ -1588,7 +1588,7 @@ sal_Bool UnoTreeListBoxImpl::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUStri
 // class UnoTreeListItem
 // ====================================================================
 
-UnoTreeListItem::UnoTreeListItem( SvLBoxEntry* pEntry )
+UnoTreeListItem::UnoTreeListItem( SvTreeListEntry* pEntry )
 : SvLBoxString(pEntry, 0, rtl::OUString())
 {
 }
@@ -1608,7 +1608,7 @@ UnoTreeListItem::~UnoTreeListItem()
 
 // --------------------------------------------------------------------
 
-void UnoTreeListItem::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /* nFlags */, SvLBoxEntry* _pEntry)
+void UnoTreeListItem::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /* nFlags */, SvTreeListEntry* _pEntry)
 {
     Point aPos( rPos );
     if( _pEntry )
@@ -1676,7 +1676,7 @@ void UnoTreeListItem::SetGraphicURL( const OUString& rGraphicURL )
 
 // --------------------------------------------------------------------
 
-void UnoTreeListItem::InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData)
+void UnoTreeListItem::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
@@ -1699,7 +1699,7 @@ void UnoTreeListItem::InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, Sv
 // --------------------------------------------------------------------
 
 UnoTreeListEntry::UnoTreeListEntry( const Reference< XTreeNode >& xNode, TreeControlPeer* pPeer )
-: SvLBoxEntry()
+: SvTreeListEntry()
 , mxNode( xNode )
 , mpPeer( pPeer )
 {

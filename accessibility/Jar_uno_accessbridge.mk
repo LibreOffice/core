@@ -28,7 +28,6 @@
 $(eval $(call gb_Jar_Jar,java_uno_accessbridge))
 
 $(eval $(call gb_Jar_use_jars,java_uno_accessbridge,\
-    java_accessibility \
     jurt \
     ridl \
     unoil \
@@ -45,6 +44,55 @@ $(eval $(call gb_Jar_add_sourcefiles,java_uno_accessbridge,\
     accessibility/bridge/org/openoffice/accessibility/KeyHandler \
     accessibility/bridge/org/openoffice/accessibility/PopupWindow \
     accessibility/bridge/org/openoffice/accessibility/WindowsAccessBridgeAdapter \
+    accessibility/bridge/org/openoffice/java/accessibility/AbstractButton \
+    accessibility/bridge/org/openoffice/java/accessibility/AccessibleActionImpl \
+    accessibility/bridge/org/openoffice/java/accessibility/AccessibleComponentImpl \
+    accessibility/bridge/org/openoffice/java/accessibility/AccessibleEditableTextImpl \
+    accessibility/bridge/org/openoffice/java/accessibility/AccessibleExtendedState \
+    accessibility/bridge/org/openoffice/java/accessibility/AccessibleHypertextImpl \
+    accessibility/bridge/org/openoffice/java/accessibility/AccessibleIconImpl \
+    accessibility/bridge/org/openoffice/java/accessibility/AccessibleKeyBinding \
+    accessibility/bridge/org/openoffice/java/accessibility/AccessibleObjectFactory \
+    accessibility/bridge/org/openoffice/java/accessibility/AccessibleRoleAdapter \
+    accessibility/bridge/org/openoffice/java/accessibility/AccessibleSelectionImpl \
+    accessibility/bridge/org/openoffice/java/accessibility/AccessibleStateAdapter \
+    accessibility/bridge/org/openoffice/java/accessibility/AccessibleTextImpl \
+    accessibility/bridge/org/openoffice/java/accessibility/AccessibleValueImpl \
+    accessibility/bridge/org/openoffice/java/accessibility/Alert \
+    accessibility/bridge/org/openoffice/java/accessibility/Application \
+    accessibility/bridge/org/openoffice/java/accessibility/Button \
+    accessibility/bridge/org/openoffice/java/accessibility/CheckBox \
+    accessibility/bridge/org/openoffice/java/accessibility/ComboBox \
+    accessibility/bridge/org/openoffice/java/accessibility/Component \
+    accessibility/bridge/org/openoffice/java/accessibility/Container \
+    accessibility/bridge/org/openoffice/java/accessibility/DescendantManager \
+    accessibility/bridge/org/openoffice/java/accessibility/Dialog \
+    accessibility/bridge/org/openoffice/java/accessibility/FocusTraversalPolicy \
+    accessibility/bridge/org/openoffice/java/accessibility/Frame \
+    accessibility/bridge/org/openoffice/java/accessibility/Icon \
+    accessibility/bridge/org/openoffice/java/accessibility/Label \
+    accessibility/bridge/org/openoffice/java/accessibility/List \
+    accessibility/bridge/org/openoffice/java/accessibility/Menu \
+    accessibility/bridge/org/openoffice/java/accessibility/MenuContainer \
+    accessibility/bridge/org/openoffice/java/accessibility/MenuItem \
+    accessibility/bridge/org/openoffice/java/accessibility/NativeFrame \
+    accessibility/bridge/org/openoffice/java/accessibility/Paragraph \
+    accessibility/bridge/org/openoffice/java/accessibility/RadioButton \
+    accessibility/bridge/org/openoffice/java/accessibility/ScrollBar \
+    accessibility/bridge/org/openoffice/java/accessibility/Separator \
+    accessibility/bridge/org/openoffice/java/accessibility/Table \
+    accessibility/bridge/org/openoffice/java/accessibility/TextComponent \
+    accessibility/bridge/org/openoffice/java/accessibility/ToggleButton \
+    accessibility/bridge/org/openoffice/java/accessibility/ToolTip \
+    accessibility/bridge/org/openoffice/java/accessibility/Tree \
+    accessibility/bridge/org/openoffice/java/accessibility/Window \
+    accessibility/bridge/org/openoffice/java/accessibility/logging/XAccessibleEventLog \
+    accessibility/bridge/org/openoffice/java/accessibility/logging/XAccessibleHypertextLog \
+    accessibility/bridge/org/openoffice/java/accessibility/logging/XAccessibleTextLog \
+))
+
+$(eval $(call gb_Jar_add_generated_sourcefiles,java_uno_accessbridge,\
+    CustomTarget/accessibility/bridge/org/openoffice/java/accessibility/Build \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

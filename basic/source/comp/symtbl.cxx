@@ -51,12 +51,12 @@ const rtl::OUString& SbiStringPool::Find( sal_uInt32 n ) const
         return aData[n - 1];
 }
 
-short SbiStringPool::Add( const rtl::OUString& rVal, bool bNoCase )
+short SbiStringPool::Add( const OUString& rVal, bool bNoCase )
 {
     sal_uInt32 n = aData.size();
     for( sal_uInt32 i = 0; i < n; ++i )
     {
-        rtl::OUString& p = aData[i];
+        OUString& p = aData[i];
         if( (  bNoCase && p == rVal )
             || ( !bNoCase && p.equalsIgnoreAsciiCase( rVal ) ) )
             return i+1;
@@ -114,7 +114,7 @@ SbiSymDef* SbiSymPool::Next()
 }
 
 
-SbiSymDef* SbiSymPool::AddSym( const String& rName )
+SbiSymDef* SbiSymPool::AddSym( const OUString& rName )
 {
     SbiSymDef* p = new SbiSymDef( rName );
     p->nPos    = aData.size();
@@ -125,7 +125,7 @@ SbiSymDef* SbiSymPool::AddSym( const String& rName )
     return p;
 }
 
-SbiProcDef* SbiSymPool::AddProc( const String& rName )
+SbiProcDef* SbiSymPool::AddProc( const OUString& rName )
 {
     SbiProcDef* p = new SbiProcDef( pParser, rName );
     p->nPos    = aData.size();
@@ -157,38 +157,46 @@ void SbiSymPool::Add( SbiSymDef* pDef )
         {
             // A unique name must be created in the string pool
             // for static variables (Form ProcName:VarName)
-            String aName( pDef->aName );
+            OUString aName( pDef->aName );
             if( pDef->IsStatic() )
             {
                 aName = pParser->aGblStrings.Find( nProcId );
-                aName += ':';
+                aName += ":";
                 aName += pDef->aName;
             }
             pDef->nId = rStrings.Add( aName );
         }
 
         if( !pDef->GetProcDef() )
+        {
             pDef->nProcId = nProcId;
+        }
         pDef->pIn = this;
         aData.insert( aData.begin() + pDef->nPos, pDef );
     }
 }
 
 
-SbiSymDef* SbiSymPool::Find( const String& rName ) const
+SbiSymDef* SbiSymPool::Find( const OUString& rName ) const
 {
     sal_uInt16 nCount = aData.size();
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {
         SbiSymDef* p = aData[ nCount - i - 1 ];
-        if( ( !p->nProcId || ( p->nProcId == nProcId ) )
-         && ( p->aName.EqualsIgnoreCaseAscii( rName ) ) )
+        if( ( !p->nProcId || ( p->nProcId == nProcId)) &&
+            ( p->aName.equalsIgnoreAsciiCase(rName)))
+        {
             return p;
+        }
     }
     if( pParent )
+    {
         return pParent->Find( rName );
+    }
     else
+    {
         return NULL;
+    }
 }
 
 
@@ -198,12 +206,18 @@ SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
     {
         SbiSymDef* p = aData[ i ];
         if( p->nId == n && ( !p->nProcId || ( p->nProcId == nProcId ) ) )
+        {
             return p;
+        }
     }
     if( pParent )
+    {
         return pParent->FindId( n );
+    }
     else
+    {
         return NULL;
+    }
 }
 
 // find via position (from 0)
@@ -211,28 +225,39 @@ SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
 SbiSymDef* SbiSymPool::Get( sal_uInt16 n ) const
 {
     if( n >= aData.size() )
+    {
         return NULL;
+    }
     else
+    {
         return aData[ n ];
+    }
 }
 
-sal_uInt32 SbiSymPool::Define( const String& rName )
+sal_uInt32 SbiSymPool::Define( const OUString& rName )
 {
     SbiSymDef* p = Find( rName );
     if( p )
-    {   if( p->IsDefined() )
+    {
+        if( p->IsDefined() )
+        {
             pParser->Error( SbERR_LABEL_DEFINED, rName );
+        }
     }
     else
+    {
         p = AddSym( rName );
+    }
     return p->Define();
 }
 
-sal_uInt32 SbiSymPool::Reference( const String& rName )
+sal_uInt32 SbiSymPool::Reference( const OUString& rName )
 {
     SbiSymDef* p = Find( rName );
     if( !p )
+    {
         p = AddSym( rName );
+    }
     // to be sure
     pParser->aGen.GenStmnt();
     return p->Reference();
@@ -245,7 +270,9 @@ void SbiSymPool::CheckRefs()
     {
         SbiSymDef* p = aData[ i ];
         if( !p->IsDefined() )
+        {
             pParser->Error( SbERR_UNDEF_LABEL, p->GetName() );
+        }
     }
 }
 
@@ -255,7 +282,7 @@ void SbiSymPool::CheckRefs()
 |*
 ***************************************************************************/
 
-SbiSymDef::SbiSymDef( const String& rName ) : aName( rName )
+SbiSymDef::SbiSymDef( const OUString& rName ) : aName( rName )
 {
     eType    = SbxEMPTY;
     nDims    = 0;
@@ -297,10 +324,12 @@ SbiConstDef* SbiSymDef::GetConstDef()
 }
 
 
-const String& SbiSymDef::GetName()
+const OUString& SbiSymDef::GetName()
 {
     if( pIn )
+    {
         aName = pIn->rStrings.Find( nId );
+    }
     return aName;
 }
 
@@ -309,15 +338,20 @@ void SbiSymDef::SetType( SbxDataType t )
 {
     if( t == SbxVARIANT && pIn )
     {
-        sal_Unicode cu = aName.GetBuffer()[0];
+        sal_Unicode cu = aName[0];
         if( cu < 256 )
         {
-            char ch = (char)aName.GetBuffer()[0];
-            if( ch == '_' ) ch = 'Z';
+            char ch = (char)cu;
+            if( ch == '_' )
+            {
+                ch = 'Z';
+            }
             int ch2 = toupper( ch );
             unsigned char c = (unsigned char)ch2;
             if( c > 0 && c < 128 )
+            {
                 t = pIn->pParser->eDefTypes[ ch2 - 'A' ];
+            }
         }
     }
     eType = t;
@@ -342,7 +376,10 @@ sal_uInt32 SbiSymDef::Define()
 {
     sal_uInt32 n = pIn->pParser->aGen.GetPC();
     pIn->pParser->aGen.GenStmnt();
-    if( nChain ) pIn->pParser->aGen.BackChain( nChain );
+    if( nChain )
+    {
+        pIn->pParser->aGen.BackChain( nChain );
+    }
     nChain = n;
     bChained = true;
     return nChain;
@@ -354,7 +391,9 @@ sal_uInt32 SbiSymDef::Define()
 SbiSymPool& SbiSymDef::GetPool()
 {
     if( !pPool )
+    {
         pPool = new SbiSymPool( pIn->pParser->aGblStrings, SbLOCAL );   // is dumped
+    }
     return *pPool;
 }
 
@@ -371,7 +410,7 @@ SbiSymScope SbiSymDef::GetScope() const
 // 2) pPool: all local variables
 // 3) aLabels: labels
 
-SbiProcDef::SbiProcDef( SbiParser* pParser, const String& rName,
+SbiProcDef::SbiProcDef( SbiParser* pParser, const OUString& rName,
                         bool bProcDecl )
          : SbiSymDef( rName )
          , aParams( pParser->aGblStrings, SbPARAM )  // is dumped
@@ -422,7 +461,9 @@ void SbiProcDef::Match( SbiProcDef* pOld )
         // no type matching - that is done during running
         // but is it maybe called with too little parameters?
         if( !po && !pn->IsOptional() && !pn->IsParamArray() )
+        {
             break;
+        }
         po = pOld->aParams.Next();
     }
 
@@ -453,16 +494,13 @@ void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
 
         // CompleteProcName includes "Property xxx "
         // to avoid conflicts with other symbols
-        String aCompleteProcName;
-        aCompleteProcName.AppendAscii( "Property " );
+        OUString aCompleteProcName = "Property ";
         switch( mePropMode )
         {
-            case PROPERTY_MODE_GET:     aCompleteProcName.AppendAscii( "Get " ); break;
-            case PROPERTY_MODE_LET:     aCompleteProcName.AppendAscii( "Let " ); break;
-            case PROPERTY_MODE_SET:     aCompleteProcName.AppendAscii( "Set " ); break;
-            case PROPERTY_MODE_NONE:
-                OSL_FAIL( "Illegal PropertyMode PROPERTY_MODE_NONE" );
-                break;
+        case PROPERTY_MODE_GET:  aCompleteProcName += "Get "; break;
+        case PROPERTY_MODE_LET:  aCompleteProcName += "Let "; break;
+        case PROPERTY_MODE_SET:  aCompleteProcName += "Set "; break;
+        case PROPERTY_MODE_NONE: OSL_FAIL( "Illegal PropertyMode PROPERTY_MODE_NONE" ); break;
         }
         aCompleteProcName += aName;
         aName = aCompleteProcName;
@@ -471,7 +509,7 @@ void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
 
 
 
-SbiConstDef::SbiConstDef( const String& rName )
+SbiConstDef::SbiConstDef( const OUString& rName )
            : SbiSymDef( rName )
 {
     nVal = 0; eType = SbxINTEGER;
@@ -479,10 +517,10 @@ SbiConstDef::SbiConstDef( const String& rName )
 
 void SbiConstDef::Set( double n, SbxDataType t )
 {
-    aVal.Erase(); nVal = n; eType = t;
+    aVal = ""; nVal = n; eType = t;
 }
 
-void SbiConstDef::Set( const String& n )
+void SbiConstDef::Set( const OUString& n )
 {
     aVal = n; nVal = 0; eType = SbxSTRING;
 }
@@ -498,7 +536,9 @@ SbiConstDef* SbiConstDef::GetConstDef()
 SbiSymbols::~SbiSymbols()
 {
     for( const_iterator it = begin(); it != end(); ++it )
+    {
         delete *it;
+    }
 };
 
 

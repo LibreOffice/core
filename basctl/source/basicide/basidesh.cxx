@@ -790,7 +790,9 @@ void Shell::UpdateWindows()
     if ( bChangeCurWindow )
     {
         if ( !pNextActiveWindow )
+        {
             pNextActiveWindow = FindApplicationWindow();
+        }
         SetCurWindow( pNextActiveWindow, true );
     }
 }
@@ -804,9 +806,13 @@ void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChange
     if ( pWindow_ == pCurWin )
     {
         if ( bAllowChangeCurWindow )
+        {
             SetCurWindow( FindApplicationWindow(), true );
+        }
         else
+        {
             SetCurWindow( NULL, false );
+        }
     }
     if ( bDestroy )
     {
@@ -825,8 +831,10 @@ void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChange
             if ( pWindow_->GetDocument().isInVBAMode() )
             {
                 SbModule* pMod = StarBASIC::GetActiveModule();
-                if ( !pMod || ( pMod && ( !pMod->GetName().Equals(pWindow_->GetName()) ) ) )
+                if ( !pMod || ( pMod && ( !pMod->GetName().equals(pWindow_->GetName()) ) ) )
+                {
                     bStop = false;
+                }
             }
             if ( bStop )
             {

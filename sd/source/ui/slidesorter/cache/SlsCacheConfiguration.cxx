@@ -35,6 +35,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 using namespace ::com::sun::star;
@@ -82,19 +83,14 @@ Timer CacheConfiguration::maReleaseTimer;
 CacheConfiguration::CacheConfiguration (void)
 {
     // Get the cache size from configuration.
-    const ::rtl::OUString sConfigurationProviderServiceName("com.sun.star.configuration.ConfigurationProvider");
     const ::rtl::OUString sPathToImpressConfigurationRoot("/org.openoffice.Office.Impress/");
     const ::rtl::OUString sPathToNode("MultiPaneGUI/SlideSorter/PreviewCache");
 
     try
     {
         // Obtain access to the configuration.
-        Reference<lang::XMultiServiceFactory> xProvider (
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                sConfigurationProviderServiceName),
-            UNO_QUERY);
-        if ( ! xProvider.is())
-            return;
+        Reference<lang::XMultiServiceFactory> xProvider =
+            configuration::theDefaultProvider::get( ::comphelper::getProcessComponentContext() );
 
         // Obtain access to Impress configuration.
         Sequence<Any> aCreationArguments(3);

@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "selectlabeldialog.hxx"
 #include "formresid.hrc"
@@ -124,7 +115,7 @@ namespace pcr
 
             // insert the root
             Image aRootImage = m_aModelImages.GetImage(RID_SVXIMG_FORMS);
-            SvLBoxEntry* pRoot = m_aControlTree.InsertEntry(PcrRes(RID_STR_FORMS), aRootImage, aRootImage);
+            SvTreeListEntry* pRoot = m_aControlTree.InsertEntry(PcrRes(RID_STR_FORMS), aRootImage, aRootImage);
 
             // build the tree
             m_pInitialSelection = NULL;
@@ -162,7 +153,7 @@ namespace pcr
     OSelectLabelDialog::~OSelectLabelDialog()
     {
         // delete the entry datas of the listbox entries
-        SvLBoxEntry* pLoop = m_aControlTree.First();
+        SvTreeListEntry* pLoop = m_aControlTree.First();
         while (pLoop)
         {
             void* pData = pLoop->GetUserData();
@@ -175,7 +166,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_Int32 OSelectLabelDialog::InsertEntries(const Reference< XInterface > & _xContainer, SvLBoxEntry* pContainerEntry)
+    sal_Int32 OSelectLabelDialog::InsertEntries(const Reference< XInterface > & _xContainer, SvTreeListEntry* pContainerEntry)
     {
         Reference< XIndexAccess >  xContainer(_xContainer, UNO_QUERY);
         if (!xContainer.is())
@@ -209,7 +200,7 @@ namespace pcr
                 if (xCont.is() && xCont->getCount())
                 {   // yes -> step down
                     Image aFormImage = m_aModelImages.GetImage( RID_SVXIMG_FORM );
-                    SvLBoxEntry* pCont = m_aControlTree.InsertEntry(sName, aFormImage, aFormImage, pContainerEntry);
+                    SvTreeListEntry* pCont = m_aControlTree.InsertEntry(sName, aFormImage, aFormImage, pContainerEntry);
                     sal_Int32 nContChildren = InsertEntries(xCont, pCont);
                     if (nContChildren)
                     {
@@ -236,7 +227,7 @@ namespace pcr
                 makeStringAndClear();
 
             // all requirements met -> insert
-            SvLBoxEntry* pCurrent = m_aControlTree.InsertEntry(sDisplayName, m_aRequiredControlImage, m_aRequiredControlImage, pContainerEntry);
+            SvTreeListEntry* pCurrent = m_aControlTree.InsertEntry(sDisplayName, m_aRequiredControlImage, m_aRequiredControlImage, pContainerEntry);
             pCurrent->SetUserData(new Reference< XPropertySet > (xAsSet));
             ++nChildren;
 
@@ -254,7 +245,7 @@ namespace pcr
     {
         DBG_ASSERT(pLB == &m_aControlTree, "OSelectLabelDialog::OnEntrySelected : where did this come from ?");
         (void)pLB;
-        SvLBoxEntry* pSelected = m_aControlTree.FirstSelected();
+        SvTreeListEntry* pSelected = m_aControlTree.FirstSelected();
         void* pData = pSelected ? pSelected->GetUserData() : NULL;
 
         if (pData)
@@ -279,7 +270,7 @@ namespace pcr
         {
             DBG_ASSERT(m_bHaveAssignableControl, "OSelectLabelDialog::OnNoAssignmentClicked");
             // search the first assignable entry
-            SvLBoxEntry* pSearch = m_aControlTree.First();
+            SvTreeListEntry* pSearch = m_aControlTree.First();
             while (pSearch)
             {
                 if (pSearch->GetUserData())

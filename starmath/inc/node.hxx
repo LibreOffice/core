@@ -156,7 +156,7 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
 
-    virtual void    GetAccessibleText( String &rText ) const;
+    virtual void    GetAccessibleText( OUStringBuffer &rText ) const;
     sal_Int32       GetAccessibleIndex() const { return nAccIndex; }
     const SmNode *  FindNodeWithAccessibleIndex(xub_StrLen nAccIndex) const;
 
@@ -190,7 +190,7 @@ public:
     /** The tree as dot graph for graphviz, usable for debugging
      * Convert the output to a image using $ dot graph.gv -Tpng > graph.png
      */
-    inline void DumpAsDot(std::ostream &out, String* label = NULL) const{
+    inline void DumpAsDot(std::ostream &out, OUString* label = NULL) const{
         int id = 0;
         DumpAsDot(out, label, -1, id, -1);
     }
@@ -230,7 +230,7 @@ protected:
     }
 private:
     SmStructureNode* aParentNode;
-    void DumpAsDot(std::ostream &out, String* label, int number, int& id, int parent) const;
+    void DumpAsDot(std::ostream &out, OUString* label, int number, int& id, int parent) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -324,7 +324,7 @@ public:
 
     SmStructureNode & operator = ( const SmStructureNode &rNode );
 
-    virtual void  GetAccessibleText( String &rText ) const;
+    virtual void  GetAccessibleText( OUStringBuffer &rText ) const;
 
     void SetSubNode(size_t nIndex, SmNode* pNode)
     {
@@ -378,7 +378,7 @@ protected:
 
 public:
 
-    virtual void  GetAccessibleText( String &rText ) const;
+    virtual void  GetAccessibleText( OUStringBuffer &rText ) const;
 };
 
 
@@ -490,7 +490,7 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
 
-    virtual void  GetAccessibleText( String &rText ) const;
+    virtual void  GetAccessibleText( OUStringBuffer &rText ) const;
     void Accept(SmVisitor* pVisitor);
     /**
       Converts the character from StarMath's private area symbols to a matching Unicode
@@ -561,8 +561,8 @@ protected:
     SmMathSymbolNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     :   SmSpecialNode(eNodeType, rNodeToken, FNT_MATH)
     {
-        xub_Unicode cChar = GetToken().cMathChar;
-        if ((xub_Unicode) '\0' != cChar)
+        sal_Unicode cChar = GetToken().cMathChar;
+        if ((sal_Unicode) '\0' != cChar)
             SetText(rtl::OUString(cChar));
     }
 

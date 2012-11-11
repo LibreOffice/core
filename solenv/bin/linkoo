@@ -5,6 +5,8 @@
 use strict;
 use File::stat;
 use File::Copy;
+use File::Find;
+use File::Spec::Functions qw[splitdir catdir];
 
 #*************************************************************************
 #
@@ -54,6 +56,7 @@ export STAR_RESOURCEPATH=$thisdir/resource
 export SAL_DISABLE_FLOATGRAB=1
 export G_SLICE=always-malloc
 export MALLOC_CHECK_=2
+export MALLOC_PERTURB_=153
 export OOO_DISABLE_RECOVERY=1
 export SAL_ALLOW_LINKOO_SYMLINKS=1
 ';
@@ -72,10 +75,6 @@ my $OOO_INSTALL;
 if ($ENV{'OS'} eq 'MACOSX') {
     print "FIXME: linkoo currently does not work on Mac OS X\n";
     exit(0);
-}
-if ($TARGET eq 'wntgcci.pro') {
-    $windows = 1;
-    $copy = 1;
 }
 
 # process options
@@ -110,8 +109,8 @@ if ($usage || !defined $OOO_INSTALL || !defined $OOO_BUILD) {
     exit (1);
 }
 
-substr ($OOO_INSTALL, 0, 1) eq '/' || die "linkoo requires absolute paths ($OOO_INSTALL does not qualify)";
-substr ($OOO_BUILD, 0, 1)   eq '/' || die "linkoo requires absolute paths ($OOO_BUILD does not qualify)";
+File::Spec->file_name_is_absolute($OOO_INSTALL) || die "linkoo requires absolute paths ($OOO_INSTALL does not qualify)";
+File::Spec->file_name_is_absolute($OOO_BUILD) || die "linkoo requires absolute paths ($OOO_BUILD does not qualify)";
 
 -d $OOO_INSTALL || die "No such directory $OOO_INSTALL";
 -w $OOO_INSTALL || die "You need write access to $OOO_INSTALL";
@@ -119,6 +118,10 @@ substr ($OOO_BUILD, 0, 1)   eq '/' || die "linkoo requires absolute paths ($OOO_
 
 ($TARGET, $LIBVER, $LANG) = sniff_target ($OOO_BUILD);
 
+if ($TARGET =~ /^wntgcci/ || $TARGET =~ /^wntmsci[0-9]+/) {
+    $windows = 1;
+    $copy = 1;
+}
 
 # setup global variables
 my $brand_program_dir = 'program';
@@ -300,23 +303,34 @@ sub scan_one_dir($$$$)
     }
 }
 
+sub get_modules($$)
+{
+    my $build_path = shift;
+    my $target = shift;
+
+    my @modules = ();
+    my $dirh_toplevel;
+    opendir ($dirh_toplevel, $build_path) || die "Can't open '$build_path': $!";
+    while ( my $subdir = readdir ($dirh_toplevel) )
+    {
+        $subdir =~ m/\./ && next; # eg. vcl.old,
+            $subdir eq 'solver' && next; # skip solver dir itself
+        my $test = "$build_path/$subdir/$target";
+        -d $test || next;
+        push @modules, $test;
+    }
+    closedir ($dirh_toplevel);
+
+    return \@modules;
+}
+
 sub scan_and_link_files($$$)
 {
     my $build_path = shift;
     my $installed_files = shift;
     my $target = shift;
 
-    my @modules = ();
-    my $dirh_toplevel;
-    opendir ($dirh_toplevel, $build_path) || die "Can't open '$build_path': $!";
-    while (my $subdir = readdir ($dirh_toplevel)) {
-	$subdir =~ m/\./ && next; # eg. vcl.old,
-    	$subdir eq 'solver' && next; # skip solver dir itself
-	my $test = "$build_path/$subdir/$target";
-	-d $test || next;
-	push @modules, $test;
-    }
-    closedir ($dirh_toplevel);
+    my @modules = get_modules( $build_path, $target );
 
     # Scan the old-style module/$target/lib directories ...
     my %build_files;
@@ -427,6 +441,68 @@ sub link_pagein_files()
     print "\n";
 }
 
+sub link_ui_files()
+{
+    # First find all the en-US .ui files installed
+    my @files = ();
+
+    find( sub
+          {
+              if ( $File::Find::dir !~ /\/res\// && $_ =~ /\.ui$/ )
+              {
+                  push( @files, $File::Find::name );
+              }
+          }, $OOO_INSTALL );
+
+    my @modules = get_modules( $OOO_BUILD, $TARGET );
+
+    # Search the files in the source tree
+    for my $dest ( @files )
+    {
+        my @dest_dirs = splitdir( $dest );
+        my $module_dir = @dest_dirs[-3];
+
+        my $name = @dest_dirs[-1];
+        my $nb_dirs = @dest_dirs - 2;
+        my $dest_dir = catdir( @dest_dirs[0..$nb_dirs] );
+
+        # Find out the file to link to in the source tree
+        my $modulepath = "";
+        my $nb_segments = 3;
+        if ( $dest =~ /\/modules\// )
+        {
+            # Handle the modules/* cases
+            if ( $module_dir =~ /^sw/ || $module_dir eq "sglobal" ) { $modulepath = "sw/uiconfig"; }
+            elsif ( $module_dir eq "smath" ) { $modulepath = "starmath/uiconfig"; }
+            elsif ( $module_dir eq "simpress" || $module_dir eq "sdraw" ) { $modulepath = "sd/uiconfig"; }
+            elsif ( $module_dir eq "scalc" ) { $modulepath = "sc/uiconfig"; }
+            elsif ( $module_dir =~ /^db/ ) { $modulepath = "dbaccess/uiconfig"; }
+            elsif ( $module_dir eq "BasicIDE" ) { $modulepath = "basctl/uiconfig/basicide"; $nb_segments = 2; }
+            elsif ( $module_dir eq "schart" ) { $modulepath = "chart2/uiconfig"; $nb_segments = 2; }
+            elsif ( $module_dir eq "tubes" ) { $modulepath = "tubes/uiconfig"; }
+            elsif ( $module_dir eq "StartModule" ) { $modulepath = "framework/uiconfig/startmodule"; $nb_segments = 2; }
+        }
+        else
+        {
+            $nb_segments = 2;
+            # Handle the <module>/ui/ cases
+            my $module = $module_dir;
+            if ( $module_dir eq "sfx" ) { $module = "sfx2"; }
+            elsif ( $module_dir eq "svt" ) { $module = "svtools"; }
+            elsif ( $module_dir eq "sw" ) { $module = "sw"; $nb_segments = 3; }
+
+            $modulepath = "$module/uiconfig";
+        }
+        my $subpath = catdir( @dest_dirs[-$nb_segments..-2] );
+        my $src_dir = "$OOO_BUILD/$modulepath/$subpath";
+
+        if ( -e "$src_dir/$name" )
+        {
+            do_link ( $src_dir, $dest_dir, $name, $name );
+        }
+    }
+}
+
 evilness ('undo');
 
 my $installed_files = build_installed_list ($OOO_INSTALL);
@@ -434,6 +510,7 @@ my $installed_files = build_installed_list ($OOO_INSTALL);
 scan_and_link_files ($OOO_BUILD, $installed_files, $TARGET);
 link_gdb_py();
 link_pagein_files();
+link_ui_files();
 
 if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
     my $ooenv;

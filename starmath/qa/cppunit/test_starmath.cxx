@@ -115,7 +115,7 @@ Test::Test()
     //of retaining references to the root ServiceFactory as its passed around
     comphelper::setProcessServiceFactory(xSM);
 
-    InitVCL(xSM);
+    InitVCL();
 
     SmGlobals::ensure();
 }
@@ -240,7 +240,7 @@ void Test::tmEditAllClipboard()
 
 void Test::tmEditFailure()
 {
-    m_xDocShRef->SetText("color a b over {a/}");
+    m_xDocShRef->SetText(String("color a b over {a/}"));
 
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
 

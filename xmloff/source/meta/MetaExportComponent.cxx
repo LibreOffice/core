@@ -163,8 +163,8 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
             AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION,
                             ::rtl::OUString::createFromAscii(pVersion) );
 
-            SvXMLElementExport aDocElem( *this, XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,
-                        sal_True, sal_True );
+        SvXMLElementExport aDocElem( *this, XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,
+                    sal_True, sal_True );
 
         // NB: office:meta is now written by _ExportMeta
         _ExportMeta();

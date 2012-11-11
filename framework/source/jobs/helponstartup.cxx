@@ -46,6 +46,7 @@
 //_______________________________________________
 // include interfaces
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 
@@ -90,9 +91,8 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                             see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
                         */
                         // create some needed uno services and cache it
-                        m_xModuleManager = css::uno::Reference< css::frame::XModuleManager >(
-                            m_xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
-                            css::uno::UNO_QUERY_THROW);
+                        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getComponentContext(m_xSMGR);
+                        m_xModuleManager = css::frame::ModuleManager::create( xContext );
 
                         m_xDesktop = css::uno::Reference< css::frame::XFrame >(
                             m_xSMGR->createInstance(SERVICENAME_DESKTOP),
@@ -100,14 +100,14 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
 
                         m_xConfig = css::uno::Reference< css::container::XNameAccess >(
                             ::comphelper::ConfigurationHelper::openConfig(
-                                m_xSMGR,
+                                xContext,
                                 CFG_PACKAGE_MODULES,
                                 ::comphelper::ConfigurationHelper::E_READONLY),
                             css::uno::UNO_QUERY_THROW);
 
                         // ask for office locale
                         ::comphelper::ConfigurationHelper::readDirectKey(
-                            m_xSMGR,
+                            xContext,
                             CFG_PACKAGE_SETUP,
                             CFG_PATH_L10N,
                             CFG_KEY_LOCALE,
@@ -115,7 +115,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
 
                         // detect system
                         ::comphelper::ConfigurationHelper::readDirectKey(
-                            m_xSMGR,
+                            xContext,
                             CFG_PACKAGE_COMMON,
                             CFG_PATH_HELP,
                             CFG_KEY_HELPSYSTEM,
@@ -252,12 +252,9 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     // Classify it.
     // SAFE ->
     ResetableGuard aLock(m_aLock);
-    css::uno::Reference< css::frame::XModuleManager > xModuleManager = m_xModuleManager;
+    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
     aLock.unlock();
     // <- SAFE
-
-    if (!xModuleManager.is())
-        return ::rtl::OUString();
 
     ::rtl::OUString sModuleId;
     try

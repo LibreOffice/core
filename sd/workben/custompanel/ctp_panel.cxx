@@ -23,7 +23,7 @@
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/awt/XToolkit.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -83,10 +83,7 @@ namespace sd { namespace colortoolpanel
             {
                 ENSURE_OR_THROW( i_rContext.is(), "illegal component context" );
                 Reference< XMultiComponentFactory > xFactory( i_rContext->getServiceManager(), UNO_SET_THROW );
-                Reference< XToolkit > xToolkit( xFactory->createInstanceWithContext(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" ) ),
-                    i_rContext
-                ), UNO_QUERY_THROW );
+                Reference< XToolkit2 > xToolkit = Toolkit::create(i_rContext);
 
                 WindowDescriptor aWindow;
                 aWindow.Type = WindowClass_SIMPLE;

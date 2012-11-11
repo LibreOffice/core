@@ -31,7 +31,7 @@
 #include <tools/gen.hxx>
 class SvStream;
 
-class SwRect
+class SAL_WARN_UNUSED SwRect
 {
     Point m_Point;
     Size m_Size;

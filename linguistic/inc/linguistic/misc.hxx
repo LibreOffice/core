@@ -57,7 +57,6 @@ class LocaleDataWrapper;
 #define SN_SPELLCHECKER             "com.sun.star.linguistic2.SpellChecker"
 #define SN_HYPHENATOR               "com.sun.star.linguistic2.Hyphenator"
 #define SN_THESAURUS                "com.sun.star.linguistic2.Thesaurus"
-#define SN_LINGU_SERVCICE_MANAGER   "com.sun.star.linguistic2.LinguServiceManager"
 #define SN_LINGU_PROPERTIES         "com.sun.star.linguistic2.LinguProperties"
 #define SN_DICTIONARY_LIST          "com.sun.star.linguistic2.DictionaryList"
 #define SN_DESKTOP                  "com.sun.star.frame.Desktop"

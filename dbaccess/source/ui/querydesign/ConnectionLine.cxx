@@ -82,7 +82,7 @@ namespace
             @param  _rNewConPos     (in/out) the connection pos
             @param  _rNewDescrPos   (in/out) the description pos
     */
-    void calcPointsYValue(const OTableWindow* _pWin,SvLBoxEntry* _pEntry,Point& _rNewConPos,Point& _rNewDescrPos)
+    void calcPointsYValue(const OTableWindow* _pWin,SvTreeListEntry* _pEntry,Point& _rNewConPos,Point& _rNewDescrPos)
     {
         const OTableWindowListBox* pListBox = _pWin->GetListBox();
         _rNewConPos.Y() = _pWin->GetPosPixel().Y();
@@ -232,8 +232,8 @@ sal_Bool OConnectionLine::RecalcLine()
     if( !pSourceWin || !pDestWin )
         return sal_False;
 
-    SvLBoxEntry* pSourceEntry = pSourceWin->GetListBox()->GetEntryFromText( GetData()->GetSourceFieldName() );
-    SvLBoxEntry* pDestEntry = pDestWin->GetListBox()->GetEntryFromText( GetData()->GetDestFieldName() );
+    SvTreeListEntry* pSourceEntry = pSourceWin->GetListBox()->GetEntryFromText( GetData()->GetSourceFieldName() );
+    SvTreeListEntry* pDestEntry = pDestWin->GetListBox()->GetEntryFromText( GetData()->GetDestFieldName() );
 
     //////////////////////////////////////////////////////////////////////
     // X-Koordinaten bestimmen

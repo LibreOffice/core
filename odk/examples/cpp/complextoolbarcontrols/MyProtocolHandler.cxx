@@ -43,6 +43,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/awt/Toolkitr.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/XMessageBox.hpp>
@@ -53,6 +54,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 
+#include <compphelper/componentcontext.hxx>
 #include <osl/file.hxx>
 
 using namespace com::sun::star::uno;
@@ -77,9 +79,8 @@ ListenerHelper aListenerHelper;
 void BaseDispatch::ShowMessageBox( const Reference< XFrame >& rFrame, const ::rtl::OUString& aTitle, const ::rtl::OUString& aMsgText )
 {
     if ( !mxToolkit.is() )
-        mxToolkit = Reference< XToolkit > ( mxMSF->createInstance(
-            ::rtl::OUString( "com.sun.star.awt.Toolkit" )), UNO_QUERY );
-    if ( rFrame.is() && mxToolkit.is() )
+        mxToolkit = Reference< XToolkit > ( Toolkit::create(comphelper::getComponentContext(mxMSF)), UNO_QUERY_THROW );
+    if ( rFrame.is() )
     {
         // describe window properties.
         WindowDescriptor                aDescriptor;

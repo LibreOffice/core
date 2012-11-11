@@ -25,6 +25,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XControlAccess.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XMessageBoxFactory.hpp>
 #include <com/sun/star/awt/MessageBoxButtons.hpp>
 
@@ -97,7 +98,7 @@ Reference< XWindowPeer > UnoDialog::createWindowPeer( Reference< XWindowPeer > x
     throw ( Exception )
 {
     mxDialogWindow->setVisible( sal_False );
-    Reference< XToolkit > xToolkit( mxMSF->getServiceManager()->createInstanceWithContext( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" ) ), mxMSF ), UNO_QUERY_THROW  );
+    Reference< XToolkit > xToolkit( Toolkit::create( mxMSF ), UNO_QUERY_THROW  );
     if ( !xParentPeer.is() )
         xParentPeer = xToolkit->getDesktopWindow();
     mxReschedule = Reference< XReschedule >( xToolkit, UNO_QUERY );

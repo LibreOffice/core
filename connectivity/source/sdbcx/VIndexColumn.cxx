@@ -71,7 +71,10 @@ OIndexColumn::OIndexColumn( sal_Bool _IsAscending,
                             sal_Bool                _IsAutoIncrement,
                             sal_Bool                _IsRowVersion,
                             sal_Bool                _IsCurrency,
-                            sal_Bool                _bCase
+                            sal_Bool                _bCase,
+                            const ::rtl::OUString& _CatalogName,
+                            const ::rtl::OUString& _SchemaName,
+                            const ::rtl::OUString& _TableName
                         ) : OColumn(_Name,
                             _TypeName,
                             _DefaultValue,
@@ -83,7 +86,10 @@ OIndexColumn::OIndexColumn( sal_Bool _IsAscending,
                             _IsAutoIncrement,
                             _IsRowVersion,
                             _IsCurrency,
-                            _bCase)
+                            _bCase,
+                            _CatalogName,
+                            _SchemaName,
+                            _TableName)
                         ,   m_IsAscending(_IsAscending)
 {
     construct();

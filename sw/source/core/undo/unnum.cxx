@@ -226,7 +226,7 @@ void SwUndoDelNum::AddNode( const SwTxtNode& rNd, sal_Bool )
     }
 }
 
-SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, long nOff, sal_Bool bIsOutlMv )
+SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, long nOff, bool bIsOutlMv )
     : SwUndo( bIsOutlMv ? UNDO_OUTLINE_UD : UNDO_MOVENUM ),
     SwUndRng( rPam ),
     nNewStt( 0 ), nOffset( nOff )
@@ -271,7 +271,7 @@ void SwUndoMoveNum::RepeatImpl(::sw::RepeatContext & rContext)
     }
     else
     {
-        rDoc.MoveParagraph(rContext.GetRepeatPaM(), nOffset, sal_False);
+        rDoc.MoveParagraph(rContext.GetRepeatPaM(), nOffset, false);
     }
 }
 
@@ -338,11 +338,11 @@ void SwUndoNumOrNoNum::RepeatImpl(::sw::RepeatContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     if (mbOldNum && ! mbNewNum)
     {
-        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode, sal_False);
+        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode, false);
     }
     else if ( ! mbOldNum && mbNewNum )
     {
-        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode, sal_True);
+        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode, true);
     }
 }
 

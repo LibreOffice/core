@@ -57,7 +57,8 @@ public:
     explicit            TextBoxContext(
                             ::oox::core::ContextHandler2Helper& rParent,
                             TextBox& rTextBox,
-                            const AttributeList& rAttribs );
+                            const AttributeList& rAttribs,
+                            const GraphicHelper& graphicHelper );
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );

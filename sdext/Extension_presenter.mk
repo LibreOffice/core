@@ -130,7 +130,7 @@ $(eval $(call gb_Extension_add_files,presenter-screen,bitmaps,\
 
 $(eval $(call gb_Extension_add_file,presenter-screen,registry/schema/org/openoffice/Office/extension/PresenterScreen.xcs,$(call gb_XcsTarget_get_target,sdext/source/presenter/registry/schema/org/openoffice/Office/extension/PresenterScreen.xcs)))
 
-$(eval $(call gb_Extension_add_file,presenter-screen,registry/data/org/openoffice/Office/extension/PresenterScreen.xcu,$(call gb_XcuMergeTarget_get_target,sdext/source/presenter/registry/data/org/openoffice/Office/extension/PresenterScreen.xcu)))
+$(eval $(call gb_Extension_add_file,presenter-screen,registry/data/org/openoffice/Office/extension/PresenterScreen.xcu,$(call gb_XcuFile_for_extension,sdext/source/presenter/registry/data/org/openoffice/Office/extension/PresenterScreen.xcu)))
 
 $(eval $(call gb_Extension_add_files,presenter-screen,registry/data/org/openoffice/Office,\
     $(call gb_XcuDataTarget_get_target,sdext/source/presenter/registry/data/org/openoffice/Office/Jobs.xcu) \

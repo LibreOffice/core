@@ -200,7 +200,7 @@ class SwUndoMoveLeftMargin : public SwUndo, private SwUndRng
     const bool m_bModulus;
 
 public:
-    SwUndoMoveLeftMargin( const SwPaM&, sal_Bool bRight, sal_Bool bModulus );
+    SwUndoMoveLeftMargin( const SwPaM&, sal_Bool bRight, bool bModulus );
 
     virtual ~SwUndoMoveLeftMargin();
 

@@ -354,7 +354,7 @@ ViewShell::~ViewShell()
             SwNodeIndex aIdx( *rNds.GetEndOfAutotext().StartOfSectionNode(), 1 );
             while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
             {
-                aIdx++;
+                ++aIdx;
                 if ( 0 != ( pGNd = aIdx.GetNode().GetGrfNode() ) )
                 {
                     if( pGNd->IsAnimated() )

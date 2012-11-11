@@ -101,7 +101,7 @@ class HierarchyContentProvider : public ::ucbhelper::ContentProviderImplHelper,
 public:
     HierarchyContentProvider(
                 const com::sun::star::uno::Reference<
-                    com::sun::star::lang::XMultiServiceFactory >& rXSMgr );
+                    com::sun::star::uno::XComponentContext >& rxContext );
     virtual ~HierarchyContentProvider();
 
     // XInterface

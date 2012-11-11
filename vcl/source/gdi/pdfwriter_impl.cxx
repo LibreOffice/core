@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -1667,7 +1657,28 @@ void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& 
 
 bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffer& rBuffer ) const
 {
-    bool bRet = true;
+    if(LINE_DASH == rInfo.GetStyle() && rInfo.GetDashLen() != rInfo.GetDotLen())
+    {
+        // dashed and non-degraded case, check for implementation limits of dash array
+        // in PDF reader apps (e.g. acroread)
+        if(2 * (rInfo.GetDashCount() + rInfo.GetDotCount()) > 10)
+        {
+            return false;
+        }
+    }
+
+    if(basegfx::B2DLINEJOIN_NONE != rInfo.GetLineJoin())
+    {
+        // LineJoin used, ExtLineInfo required
+        return false;
+    }
+
+    if(com::sun::star::drawing::LineCap_BUTT != rInfo.GetLineCap())
+    {
+        // LineCap used, ExtLineInfo required
+        return false;
+    }
+
     if( rInfo.GetStyle() == LINE_DASH )
     {
         rBuffer.append( "[ " );
@@ -1680,10 +1691,6 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         }
         else
         {
-            // check for implementation limits of dash array
-            // in PDF reader apps (e.g. acroread)
-            if( 2*(rInfo.GetDashCount() + rInfo.GetDotCount()) > 10 )
-                bRet = false;
             for( int n = 0; n < rInfo.GetDashCount(); n++ )
             {
                 appendMappedLength( (sal_Int32)rInfo.GetDashLen(), rBuffer );
@@ -1701,6 +1708,7 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         }
         rBuffer.append( "] 0 d\n" );
     }
+
     if( rInfo.GetWidth() > 1 )
     {
         appendMappedLength( (sal_Int32)rInfo.GetWidth(), rBuffer );
@@ -1712,7 +1720,8 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         appendDouble( 72.0/double(m_pWriter->getReferenceDevice()->ImplGetDPIX()), rBuffer );
         rBuffer.append( " w\n" );
     }
-    return bRet;
+
+    return true;
 }
 
 void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal_Int32 nDelta, OStringBuffer& rBuffer ) const
@@ -3412,18 +3421,15 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
             sal_Int32 nLength3 = nFontLen - nIndex - 1;
             for( it = aSections.begin(); it != aSections.end(); ++it )
             {
-                if( *it >= nIndex  )
-                {
                 // special case: nIndex inside a section marker
-                    if( nIndex >= (*it) && (*it)+5 > nIndex )
-                        nLength3 -= (*it)+5 - nIndex;
-                    else
-                    {
-                        if( *it < nFontLen - 6 )
-                            nLength3 -= 6;
-                        else // the last section 0x8003 is only 2 bytes after all
-                            nLength3 -= (nFontLen - *it);
-                    }
+                if( nIndex >= (*it) && (*it)+6 > nIndex )
+                    nLength3 -= (*it)+6 - nIndex;
+                else if( *it >= nIndex  )
+                {
+                    if( *it < nFontLen - 6 )
+                        nLength3 -= 6;
+                    else // the last section 0x8003 is only 2 bytes after all
+                        nLength3 -= (nFontLen - *it);
                 }
             }
 
@@ -9341,20 +9347,66 @@ void PDFWriterImpl::convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter
     rOut.m_fMiterLimit          = 10;
     rOut.m_aDashArray.clear();
 
-    int nDashes     = rIn.GetDashCount();
-    int nDashLen    = rIn.GetDashLen();
-    int nDistance   = rIn.GetDistance();
+    // add DashDot to DashArray
+    const int nDashes   = rIn.GetDashCount();
+    const int nDashLen  = rIn.GetDashLen();
+    const int nDistance = rIn.GetDistance();
+
     for( int n  = 0; n < nDashes; n++ )
     {
         rOut.m_aDashArray.push_back( nDashLen );
         rOut.m_aDashArray.push_back( nDistance );
     }
-    int nDots       = rIn.GetDotCount();
-    int nDotLen     = rIn.GetDotLen();
+    const int nDots   = rIn.GetDotCount();
+    const int nDotLen = rIn.GetDotLen();
+
     for( int n  = 0; n < nDots; n++ )
     {
         rOut.m_aDashArray.push_back( nDotLen );
         rOut.m_aDashArray.push_back( nDistance );
+    }
+
+    // add LineJoin
+    switch(rIn.GetLineJoin())
+    {
+        case basegfx::B2DLINEJOIN_BEVEL :
+        {
+            rOut.m_eJoin = PDFWriter::joinBevel;
+            break;
+        }
+        default : // basegfx::B2DLINEJOIN_NONE :
+        // Pdf has no 'none' lineJoin, default is miter
+        case basegfx::B2DLINEJOIN_MIDDLE :
+        case basegfx::B2DLINEJOIN_MITER :
+        {
+            rOut.m_eJoin = PDFWriter::joinMiter;
+            break;
+        }
+        case basegfx::B2DLINEJOIN_ROUND :
+        {
+            rOut.m_eJoin = PDFWriter::joinRound;
+            break;
+        }
+    }
+
+    // add LineCap
+    switch(rIn.GetLineCap())
+    {
+        default: /* com::sun::star::drawing::LineCap_BUTT */
+        {
+            rOut.m_eCap = PDFWriter::capButt;
+            break;
+        }
+        case com::sun::star::drawing::LineCap_ROUND:
+        {
+            rOut.m_eCap = PDFWriter::capRound;
+            break;
+        }
+        case com::sun::star::drawing::LineCap_SQUARE:
+        {
+            rOut.m_eCap = PDFWriter::capSquare;
+            break;
+        }
     }
 }
 

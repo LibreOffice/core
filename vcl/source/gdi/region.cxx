@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <limits.h>
 
@@ -1433,6 +1423,13 @@ void Region::Intersect( const Rectangle& rRect )
         // unnecessary banding
         mpImplRegion->mpPolyPoly->Clip( rRect );
 
+        // The clipping above may lead to empty ClipRegion
+        if(!mpImplRegion->mpPolyPoly->Count())
+        {
+            // react on empty ClipRegion; ImplRegion already is unique (see above)
+            delete mpImplRegion;
+            mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
+        }
         return;
     }
     else if( mpImplRegion->mpB2DPolyPoly )
@@ -1445,10 +1442,24 @@ void Region::Intersect( const Rectangle& rRect )
         }
 
         *mpImplRegion->mpB2DPolyPoly =
-        basegfx::tools::clipPolyPolygonOnRange( *mpImplRegion->mpB2DPolyPoly,
-                                                basegfx::B2DRange( rRect.Left(), rRect.Top(),
-                                                                   rRect.Right(), rRect.Bottom() ),
-                                                true, false );
+            basegfx::tools::clipPolyPolygonOnRange(
+                *mpImplRegion->mpB2DPolyPoly,
+                basegfx::B2DRange(
+                    rRect.Left(),
+                    rRect.Top(),
+                    rRect.Right() + 1,
+                    rRect.Bottom() + 1),
+                true,
+                false);
+
+        // The clipping above may lead to empty ClipRegion
+        if(!mpImplRegion->mpB2DPolyPoly->count())
+        {
+            // react on empty ClipRegion; ImplRegion already is unique (see above)
+            delete mpImplRegion;
+            mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
+        }
+
         return;
     }
     else
@@ -2041,10 +2052,18 @@ Rectangle Region::GetBoundRect() const
         return mpImplRegion->mpPolyPoly->GetBoundRect();
     if( mpImplRegion->mpB2DPolyPoly )
     {
-        const basegfx::B2DRange aRange = basegfx::tools::getRange( *mpImplRegion->mpB2DPolyPoly );
-        aRect.SetPos( Point( (int)aRange.getMinX(), (int)aRange.getMinY() ) );
-        aRect.SetSize( Size( (int)aRange.getWidth(), (int)aRange.getHeight() ) );
-        return aRect;
+        const basegfx::B2DRange aRange(basegfx::tools::getRange(*mpImplRegion->mpB2DPolyPoly));
+        if(aRange.isEmpty())
+        {
+            // emulate PolyPolygon::GetBoundRect() when empty polygon
+            return Rectangle();
+        }
+        else
+        {
+            return Rectangle(
+                static_cast<sal_Int32>(floor(aRange.getMinX())), static_cast<sal_Int32>(floor(aRange.getMinY())),
+                static_cast<sal_Int32>(ceil(aRange.getMaxX())), static_cast<sal_Int32>(ceil(aRange.getMaxY())));
+        }
     }
 
     // no band in the list? -> region is empty!

@@ -35,6 +35,7 @@ $(eval $(call gb_Module_add_targets,wizards,\
 	AllLangResTarget_tpl \
 	AllLangResTarget_wzi \
 	Pyuno_fax \
+	Pyuno_letter \
 	Pyuno_commonwizards \
 	Zip_depot \
 	Zip_euro \
@@ -55,9 +56,7 @@ ifeq ($(SOLAR_JAVA),TRUE)
 $(eval $(call gb_Module_add_targets,wizards,\
 	Jar_commonwizards \
 	Jar_agenda \
-	Jar_fax \
 	Jar_form \
-	Jar_letter \
 	Jar_query \
 	Jar_report \
 	Jar_reportbuilder \

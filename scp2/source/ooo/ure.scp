@@ -592,7 +592,7 @@ End
 File gid_File_Lib_Cli_Cppuhelper_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
-    Name = "cli_cppuhelper.dll";
+    Name = "assembly/cli_cppuhelper.dll";
     Dir = SCP2_URE_DL_DIR;
     Assemblyname = "cli_cppuhelper";
     PublicKeyToken = "ce2cb7e279207b9e";

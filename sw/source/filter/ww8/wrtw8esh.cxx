@@ -2775,8 +2775,13 @@ sal_uInt32 SwEscherEx::QueryTextID(
 }
 
 SwMSConvertControls::SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP ) : oox
-::ole::MSConvertOCXControls(  pDSh ? pDSh->GetModel() : NULL ), pPaM( pP )
+::ole::MSConvertOCXControls(  pDSh ? pDSh->GetModel() : NULL ), pPaM( pP ), mnObjectId(0)
 {
+}
+
+sal_uInt32 SwMSConvertControls::GenerateObjectID()
+{
+    return ++mnObjectId;
 }
 
 // in transitioning away old filter for ole/ocx controls, ReadOCXStream has been made pure virtual in
@@ -2821,7 +2826,8 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
 
     //Create a destination storage for the microsoft control
     rtl::OUStringBuffer sStorageName;
-    sStorageName.append('_').append(reinterpret_cast<sal_Int64>(pObj));
+    sal_uInt32 nObjId = GenerateObjectID();
+    sStorageName.append('_').append( static_cast<sal_Int64>( nObjId ));
     SvStorageRef xOleStg = xObjPool->OpenSotStorage(sStorageName.makeStringAndClear(),
                  STREAM_READWRITE|STREAM_SHARE_DENYALL);
 
@@ -2844,7 +2850,7 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
     };
     //Set the obj id into the sprmCPicLocation
     sal_uInt8 *pData = aSpecOLE+2;
-    Set_UInt32(pData,(sal_uInt32)(sal_uIntPtr)pObj);
+    Set_UInt32(pData,nObjId );
 
     String sFld(FieldString(ww::eCONTROL));
     sFld.APPEND_CONST_ASC("Forms.");

@@ -16,6 +16,8 @@ namespace loplugin
 {
 
 /*
+This is a compile check.
+
 Check for unused classes where the compiler cannot decide (e.g. because of
 non-trivial or extern ctors) if a variable is unused if only its ctor/dtor
 are called and nothing else. For example std::vector is a class where
@@ -38,13 +40,10 @@ void UnusedVariableCheck::run()
     TraverseDecl( context.getTranslationUnitDecl());
     }
 
-bool UnusedVariableCheck::VisitNamedDecl( NamedDecl* declaration )
+bool UnusedVariableCheck::VisitVarDecl( VarDecl* var )
     {
-    if( ignoreLocation( declaration ))
+    if( ignoreLocation( var ))
         return true;
-    if( !isa< VarDecl >( declaration ))
-        return true;
-    const VarDecl* var = cast< VarDecl >( declaration );
     if( var->isReferenced() || var->isUsed())
         return true;
     if( var->isDefinedOutsideFunctionOrMethod())
@@ -70,7 +69,7 @@ bool UnusedVariableCheck::VisitNamedDecl( NamedDecl* declaration )
             }
         if( !warn_unused )
             {
-            std::string n = type->getQualifiedNameAsString();
+            string n = type->getQualifiedNameAsString();
             // Check some common non-LO types.
             if( n == "std::string" || n == "std::basic_string"
                 || n == "std::list" || n == "std::__debug::list"

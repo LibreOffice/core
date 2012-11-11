@@ -355,7 +355,7 @@ public:
 
     sal_Bool IsFrmSelected() const;
     sal_Bool GetFlyFrmAttr( SfxItemSet &rSet ) const;
-    sal_Bool SetFlyFrmAttr( SfxItemSet &rSet );
+    bool SetFlyFrmAttr( SfxItemSet &rSet );
     sal_Bool ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet = 0 );
     const SwFrmFmt *NewFlyFrm( const SfxItemSet &rSet, sal_Bool bAnchValid = sal_False,
                          SwFrmFmt *pParent = 0 );
@@ -368,7 +368,7 @@ public:
     sal_Bool IsFrmVertical(const sal_Bool bEnvironment, sal_Bool& bRightToLeft, sal_Bool& bVertL2R) const;
 
     SwFrmFmt* GetCurFrmFmt() const; ///< If frame then frame style, else 0.
-    void SetFrmFmt( SwFrmFmt *pFmt, sal_Bool bKeepOrient = sal_False, Point* pDocPos = 0 ); ///< If frame then set frame style.
+    void SetFrmFmt( SwFrmFmt *pFmt, bool bKeepOrient = false, Point* pDocPos = 0 ); ///< If frame then set frame style.
     const SwFlyFrm *GetCurrFlyFrm() const { return FindFlyFrm(); }
 
     /// Find/delete fly containing the cursor.
@@ -508,8 +508,8 @@ public:
     /** frmatr.hxx. Here no enum because of dependencies.
      bool value only for internal use! Anchor is newly set according
      to current document position. Anchor is not re-set. */
-    void ChgAnchor( int eAnchorId, sal_Bool bSameOnly = sal_False,
-                                   sal_Bool bPosCorr = sal_True );
+    void ChgAnchor( int eAnchorId, bool bSameOnly = false,
+                                   bool bPosCorr = true );
 
     sal_Bool SetDrawingAttr( SfxItemSet &rSet );
 

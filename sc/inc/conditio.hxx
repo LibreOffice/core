@@ -50,16 +50,10 @@ class ScFormulaCell;
 class ScTokenArray;
 
 
-#define SC_COND_GROW 16
-
 //  nOptions Flags
 #define SC_COND_NOBLANKS    1
 
 #define DUMP_FORMAT_INFO 1
-
-
-// ordering of ScConditionMode and ScQueryOp is equal,
-// to facilitate the merging of both in the future
 
 enum ScConditionMode
 {
@@ -74,11 +68,24 @@ enum ScConditionMode
     SC_COND_DUPLICATE,
     SC_COND_NOTDUPLICATE,
     SC_COND_DIRECT,
+    SC_COND_TOP10,
+    SC_COND_BOTTOM10,
+    SC_COND_TOP_PERCENT,
+    SC_COND_BOTTOM_PERCENT,
+    SC_COND_ABOVE_AVERAGE,
+    SC_COND_BELOW_AVERAGE,
+    SC_COND_ERROR,
+    SC_COND_NOERROR,
+    SC_COND_BEGINS_WITH,
+    SC_COND_ENDS_WITH,
+    SC_COND_CONTAINS_TEXT,
+    SC_COND_NOT_CONTAINS_TEXT,
     SC_COND_NONE
 };
 
 class ScConditionalFormat;
 struct ScDataBarInfo;
+struct ScIconSetInfo;
 
 namespace condformat
 {
@@ -87,7 +94,8 @@ enum ScFormatEntryType
 {
     CONDITION,
     COLORSCALE,
-    DATABAR
+    DATABAR,
+    ICONSET
 };
 
 }
@@ -96,10 +104,12 @@ struct ScCondFormatData
 {
     ScCondFormatData():
         pColorScale(NULL),
-        pDataBar(NULL) {}
+        pDataBar(NULL),
+        pIconSet(NULL) {}
 
     Color* pColorScale;
     ScDataBarInfo* pDataBar;
+    ScIconSetInfo* pIconSet;
     rtl::OUString aStyleName;
 };
 
@@ -177,8 +187,8 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
                         bool bTextToReal );
     void    Interpret( const ScAddress& rPos );
 
-    bool    IsValid( double nArg, const ScAddress& rAddr ) const;
-    bool    IsValidStr( const String& rArg, const ScAddress& rAddr ) const;
+    bool    IsValid( double nArg, const ScAddress& rPos ) const;
+    bool    IsValidStr( const rtl::OUString& rArg, const ScAddress& rPos ) const;
 
 public:
             ScConditionEntry( ScConditionMode eOper,
@@ -248,7 +258,17 @@ protected:
 
 private:
 
-    bool IsDuplicate(double nArg, const rtl::OUString& rStr, const ScAddress& rAddr, const ScRangeList& rRanges) const;
+    bool IsDuplicate(double nArg, const rtl::OUString& rStr) const;
+    bool IsTopNElement( double nArg ) const;
+    bool IsTopNPercent( double nArg ) const;
+    bool IsBottomNElement( double nArg ) const;
+    bool IsBottomNPercent( double nArg ) const;
+    bool IsAboveAverage( double nArg ) const;
+    bool IsBelowAverage( double nArg ) const;
+
+    bool IsError( const ScAddress& rPos ) const;
+
+    void FillCache() const;
 
     struct ScConditionEntryCache
     {
@@ -256,6 +276,12 @@ private:
         StringCacheType maStrings;
         typedef std::map<double, sal_Int32, approx_less> ValueCacheType;
         ValueCacheType maValues;
+
+        // cache them for easier access
+        size_t nValueItems;
+
+        ScConditionEntryCache():
+            nValueItems(0) {}
     };
 
     mutable boost::scoped_ptr<ScConditionEntryCache> mpCache;
@@ -309,7 +335,6 @@ class SC_DLLPUBLIC ScConditionalFormat
 
     typedef boost::ptr_vector<ScFormatEntry> CondFormatContainer;
     CondFormatContainer maEntries;
-    bool                bIsUsed;            // temporary at Save
     ScRangeList maRanges;            // Ranges for conditional format
 
 public:
@@ -351,9 +376,6 @@ public:
 
     sal_uInt32      GetKey() const          { return nKey; }
     void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
-
-    void            SetUsed(bool bSet)      { bIsUsed = bSet; }
-    bool            IsUsed() const          { return bIsUsed; }
 
     bool            MarkUsedExternalReferences() const;
 

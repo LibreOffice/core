@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <tools/debug.hxx>
@@ -1224,6 +1215,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sGraphicFilter("GraphicFilter"),
     sGraphicRotation("GraphicRotation"),
     sGraphicURL("GraphicURL"),
+    sReplacementGraphicURL("ReplacementGraphicURL"),
     sHeight("Height"),
     sHoriOrient("HoriOrient"),
     sHoriOrientPosition("HoriOrientPosition"),
@@ -2335,7 +2327,6 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         if (xParameters.is() && xParameters->hasByName("Name"))
                         {
                             const Any aValue = xParameters->getByName("Name");
-                            OUString sValue;
                             aValue >>= sName;
                         }
                         if (sName.isEmpty())
@@ -3139,9 +3130,33 @@ void XMLTextParagraphExport::_exportTextGraphic(
                                   sRet.makeStringAndClear() );
     }
 
+    // original content
+    SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_DRAW, XML_FRAME, sal_False, sal_True);
 
-    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
-                              XML_FRAME, sal_False, sal_True );
+    // replacement graphic for backwards compatibility, but
+    // only for SVG currently
+    OUString sReplacementOrigURL;
+    rPropSet->getPropertyValue( sReplacementGraphicURL ) >>= sReplacementOrigURL;
+
+    if(sReplacementOrigURL.getLength())
+    {
+        const OUString sReplacementURL(GetExport().AddEmbeddedGraphicObject( sReplacementOrigURL ));
+
+        // If there is no url, then then graphic is empty
+        if(sReplacementURL.getLength())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sReplacementURL);
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED);
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
+
+            // xlink:href for replacement, only written for Svg content
+            SvXMLElementExport aElement(GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, sal_False, sal_True);
+
+            // optional office:binary-data
+            GetExport().AddEmbeddedGraphicObjectAsBase64(sReplacementURL);
+        }
+    }
 
     // xlink:href
     OUString sOrigURL;
@@ -3672,14 +3687,6 @@ void XMLTextParagraphExport::exportRuby(
     }
     else
     {
-        // prepare element names
-        OUString aRuby(GetXMLToken(XML_RUBY));
-        OUString sTextRuby(GetExport().GetNamespaceMap().
-                           GetQNameByKey(XML_NAMESPACE_TEXT, aRuby));
-        OUString sRubyBase(GetXMLToken(XML_RUBY_BASE));
-        OUString sTextRubyBase(GetExport().GetNamespaceMap().
-                           GetQNameByKey(XML_NAMESPACE_TEXT, sRubyBase));
-
         if (bStart)
         {
             // ruby start

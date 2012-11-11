@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -109,7 +110,7 @@ ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( cons
     ThreadHelpBase( &Application::GetSolarMutex() )
     , m_bDisposed( false )
 //TODO_AS    , m_bInit( false )
-    , m_xModuleMgr( Reference< XModuleManager >( xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ))
+    , m_xModuleMgr( ModuleManager::create( comphelper::getComponentContext(xServiceManager) ) )
     , m_xServiceManager( xServiceManager )
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {

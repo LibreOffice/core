@@ -2306,16 +2306,4 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData,
                 aCol[nCol].UpdateAreaFunction( rData, *mpHiddenRows, nStartRow, nEndRow );
 }
 
-void ScTable::IncRecalcLevel()
-{
-    ++nRecalcLvl;
-}
-
-void ScTable::DecRecalcLevel(bool bUpdateNoteCaptionPos)
-{
-     if (!--nRecalcLvl)
-         SetDrawPageSize(true, bUpdateNoteCaptionPos);
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

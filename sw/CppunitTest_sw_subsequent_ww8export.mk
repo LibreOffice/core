@@ -69,11 +69,13 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ww8export,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
+    embeddedobj/util/embobj \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
+    linguistic/source/lng \
     package/source/xstor/xstor \
     package/util/package2 \
     sax/source/expatwrap/expwrap \

@@ -83,8 +83,8 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
 {
     SwTabPortion *pTabPor = 0;
 
-    xub_Unicode cFill = 0;
-    xub_Unicode cDec = 0;
+    sal_Unicode cFill = 0;
+    sal_Unicode cDec = 0;
     SvxTabAdjust eAdj;
 
     KSHORT nNewTabPos;
@@ -329,7 +329,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
 // Die Basisklasse wird erstmal ohne alles initialisiert.
 
 
-SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const xub_Unicode cFillChar, const bool bAutoTab )
+SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const sal_Unicode cFillChar, const bool bAutoTab )
     : SwFixPortion( 0, 0 ), nTabPos(nTabPosition), cFill(cFillChar), bAutoTabStop( bAutoTab )
 {
     nLineLength = 1;
@@ -401,7 +401,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
                     static_cast<SwNumberPortion*>(rInf.GetLast())->GetFont();
             pSave.reset( new SwFontSave( rInf, const_cast<SwFont*>(pNumberPortionFont) ) );
         }
-        rtl::OUString aTmp( ' ' );
+        OUString aTmp( ' ' );
         SwTxtSizeInfo aInf( rInf, aTmp );
         nMinimumTabWidth = aInf.GetTxtSize().Width();
     }
@@ -617,7 +617,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( rInf.GetFont()->IsPaintBlank() )
     {
         // tabs with filling / filled tabs
-        UniString aTxt = rtl::OUString(' ');
+        UniString aTxt = OUString(' ');
         const KSHORT nCharWidth = rInf.GetTxtSize( aTxt ).Width();
         // robust:
         if( nCharWidth )
@@ -632,7 +632,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( IsFilled() )
     {
         // tabs with filling / filled tabs
-        UniString aTxt = rtl::OUString(cFill);
+        UniString aTxt = OUString(cFill);
         const KSHORT nCharWidth = rInf.GetTxtSize( aTxt ).Width();
         OSL_ENSURE( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
         // robust:

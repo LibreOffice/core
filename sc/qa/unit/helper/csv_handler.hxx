@@ -44,6 +44,9 @@ rtl::OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRo
     rtl::OUString aString;
     Color* pColor;
     ScBaseCell* pCell = pDoc->GetCell(ScAddress(nCol, nRow, nTab));
+    if(!pCell)
+        return aString;
+
     const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
     const ScPatternAttr* pPattern = pDoc->GetPattern(nCol, nRow, nTab);
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
@@ -93,14 +96,12 @@ enum StringType { PureString, FormulaValue, StringValue };
 class csv_handler
 {
 public:
-
-
-    csv_handler(ScDocument* pDoc, SCTAB nTab, StringType aType = StringValue):
+    csv_handler(ScDocument* pDoc, SCTAB nTab, StringType eType = StringValue):
             mpDoc(pDoc),
             mnCol(0),
             mnRow(0),
             mnTab(nTab),
-            maStringType(aType)  {}
+            meStringType(eType)  {}
 
     void begin_parse() {}
 
@@ -119,7 +120,16 @@ public:
 #if DEBUG_CSV_HANDLER
         std::cout << "Col: " << mnCol << " Row: " << mnRow << std::endl;
 #endif //DEBUG_CSV_HANDLER
-        if (maStringType == PureString)
+        if (n == 0)
+        {
+            // Empty cell.
+            if (!mpDoc->GetString(mnCol, mnRow, mnTab).isEmpty())
+            {
+                // cell in the document is not empty.
+                CPPUNIT_ASSERT_MESSAGE(createErrorMessage(mnCol, mnRow, mnTab).getStr(), false);
+            }
+        }
+        else if (meStringType == PureString)
         {
             rtl::OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
             rtl::OUString aString;
@@ -141,7 +151,7 @@ public:
             if (*pRemainingChars)
             {
                 rtl::OUString aString;
-                switch (maStringType)
+                switch (meStringType)
                 {
                     case StringValue:
                         mpDoc->GetString(mnCol, mnRow, mnTab, aString);
@@ -174,7 +184,6 @@ public:
             }
         }
         ++mnCol;
-
     }
 
 private:
@@ -182,7 +191,7 @@ private:
     SCCOL mnCol;
     SCROW mnRow;
     SCTAB mnTab;
-    StringType maStringType;
+    StringType meStringType;
 };
 
 

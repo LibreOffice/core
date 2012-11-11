@@ -774,7 +774,7 @@ uno::Reference< uno::XInterface > SAL_CALL ContentImplHelper::getParent()
     if ( !aURL.isEmpty() )
     {
         uno::Reference< com::sun::star::ucb::XContentIdentifier > xId(
-            new ContentIdentifier( m_xSMgr, aURL ) );
+            new ContentIdentifier( aURL ) );
         try
         {
             xParent.set( m_xProvider->queryContent( xId ) );

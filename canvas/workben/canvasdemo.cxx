@@ -680,7 +680,7 @@ void DemoApp::Main()
     ::ucb::UniversalContentBroker::create(
         comphelper::getProcessComponentContext() );
 
-    InitVCL( xFactory );
+    InitVCL();
     TestWindow pWindow;
     pWindow.Execute();
     DeInitVCL();

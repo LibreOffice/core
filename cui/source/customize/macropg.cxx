@@ -194,7 +194,7 @@ void _HeaderTabListBox::Enable( bool bEnable, bool bChild )
 //     and it is not read only
 void _SvxMacroTabPage::EnableButtons()
 {
-    const SvLBoxEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
+    const SvTreeListEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
     if ( pE )
     {
         SvLBoxString* pEventMacro = (SvLBoxString*)pE->GetItem( LB_MACROS_ITEMPOS );
@@ -222,7 +222,7 @@ _SvxMacroTabPage::~_SvxMacroTabPage()
 {
     // need to delete the user data
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
-    SvLBoxEntry* pE = rListBox.GetEntry( 0 );
+    SvTreeListEntry* pE = rListBox.GetEntry( 0 );
     while( pE )
     {
         ::rtl::OUString* pEventName = (::rtl::OUString*)pE->GetUserData();
@@ -433,13 +433,13 @@ class IconLBoxString : public SvLBoxString
     int m_nxImageOffset;
 
     public:
-        IconLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& sText,
+        IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& sText,
             Image* pMacroImg, Image* pComponentImg );
-        virtual void Paint(const Point& aPos, SvTreeListBox& aDevice, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
+        virtual void Paint(const Point& aPos, SvTreeListBox& aDevice, sal_uInt16 nFlags, SvTreeListEntry* pEntry );
 };
 
 
-IconLBoxString::IconLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& sText,
+IconLBoxString::IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& sText,
     Image* pMacroImg, Image* pComponentImg )
         : SvLBoxString( pEntry, nFlags, sText )
         , m_pMacroImg( pMacroImg )
@@ -450,7 +450,7 @@ IconLBoxString::IconLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const St
 
 //===============================================
 void IconLBoxString::Paint( const Point& aPos, SvTreeListBox& aDevice,
-                               sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/ )
+                               sal_uInt16 /*nFlags*/, SvTreeListEntry* /*pEntry*/ )
 {
     String aTxt( GetText() );
     if( aTxt.Len() )
@@ -490,7 +490,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
     SvHeaderTabListBox&        rListBox = mpImpl->pEventLB->GetListBox();
     mpImpl->pEventLB->SetUpdateMode( sal_False );
     rListBox.Clear();
-    SvLBoxEntry*    pE = rListBox.GetEntry( 0 );
+    SvTreeListEntry*    pE = rListBox.GetEntry( 0 );
     EventsHash* eventsHash;
     Reference< container::XNameReplace> nameReplace;
     if(bAppEvents)
@@ -538,7 +538,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         String displayName( CUI_RES( displayableEvent->nEventResourceID ) );
 
         displayName += '\t';
-        SvLBoxEntry*    _pE = rListBox.InsertEntry( displayName );
+        SvTreeListEntry*    _pE = rListBox.InsertEntry( displayName );
         ::rtl::OUString* pEventName = new ::rtl::OUString( sEventName );
         _pE->SetUserData( (void*)pEventName );
         String sNew( eventURL );
@@ -565,7 +565,7 @@ IMPL_STATIC_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
 {
     _SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
     SvHeaderTabListBox&        rListBox = pImpl->pEventLB->GetListBox();
-    SvLBoxEntry*            pE = rListBox.FirstSelected();
+    SvTreeListEntry*            pE = rListBox.FirstSelected();
     sal_uLong                    nPos;
 
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
@@ -594,7 +594,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
 {
     _SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
     SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
-    SvLBoxEntry* pE = rListBox.FirstSelected();
+    SvTreeListEntry* pE = rListBox.FirstSelected();
     sal_uLong nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
@@ -844,7 +844,7 @@ SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const Reference< frame::XFram
     InitAndSetHandler( xNameReplace, Reference< container::XNameReplace>(0), Reference< util::XModifiable >(0));
     DisplayAppEvents(true);
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
-    SvLBoxEntry* pE = rListBox.GetEntry( (sal_uLong)nSelectedIndex );
+    SvTreeListEntry* pE = rListBox.GetEntry( (sal_uLong)nSelectedIndex );
     if( pE )
         rListBox.Select(pE);
 }

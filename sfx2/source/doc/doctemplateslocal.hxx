@@ -60,7 +60,7 @@ public:
     void SAL_CALL WriteGroupLocalizationSequence(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aSequence,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )
             throw( ::com::sun::star::uno::Exception );
 
     // XDocumentHandler

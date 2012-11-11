@@ -48,7 +48,6 @@ $(eval $(call gb_Zip_add_files,uretest,\
     uretest/tester.mf.template \
     uretest/types.idl \
     uretest/types.mf.template \
-    uretest/version.map \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

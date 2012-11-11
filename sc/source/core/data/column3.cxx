@@ -65,9 +65,6 @@ extern const ScFormulaCell* pLastFormulaTreeTop;    // in cellform.cxx
 using namespace formula;
 // STATIC DATA -----------------------------------------------------------
 
-bool ScColumn::bDoubleAlloc = false;    // fuer Import: Groesse beim Allozieren verdoppeln
-
-
 void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
 {
     sal_Bool bIsAppended = false;
@@ -770,7 +767,8 @@ bool lclCanCloneValue( ScDocument& rDoc, const ScColumn& rCol, SCROW nRow, bool 
 } // namespace
 
 
-ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos)
+ScBaseCell* ScColumn::CloneCell(
+    SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos) const
 {
     bool bCloneValue    = (nFlags & IDF_VALUE) != 0;
     bool bCloneDateTime = (nFlags & IDF_DATETIME) != 0;
@@ -1498,6 +1496,10 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<ScTy
                     nValue = pFC->GetValue();
             }
             break;
+
+            // skip broadcaster cells
+            case CELLTYPE_NOTE:
+                continue;
 
             default:
                 ;

@@ -35,6 +35,7 @@
 #include <osl/diagnose.h>
 
 #include <algorithm>
+#include <iterator>
 
 #include <o3tl/compat_functional.hxx>
 

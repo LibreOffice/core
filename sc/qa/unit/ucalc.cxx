@@ -62,6 +62,7 @@
 #include "dpsave.hxx"
 #include "dpdimsave.hxx"
 #include "dpcache.hxx"
+#include "dpfilteredcache.hxx"
 #include "calcconfig.hxx"
 #include "interpre.hxx"
 
@@ -82,11 +83,13 @@
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 
 #include <iostream>
+#include <sstream>
 #include <vector>
 
 #define CALC_DEBUG_OUTPUT 0
 
 #include "helper/debughelper.hxx"
+#include "helper/qahelper.hxx"
 
 const int indeterminate = 2;
 
@@ -118,10 +121,12 @@ public:
      */
     void testSheetsFunc();
     void testVolatileFunc();
+    void testFormulaDepTracking();
     void testFuncParam();
     void testNamedRange();
     void testCSV();
     void testMatrix();
+    void testEnterMixedMatrix();
 
     /**
      * Basic test for pivot tables.
@@ -175,6 +180,12 @@ public:
      */
     void testPivotTableCaseInsensitiveStrings();
 
+    /**
+     * Test for pivot table's handling of double-precision numbers that are
+     * very close together.
+     */
+    void testPivotTableNumStability();
+
     void testSheetCopy();
     void testSheetMove();
     void testExternalRef();
@@ -225,6 +236,9 @@ public:
     void testFindAreaPosColRight();
     void testSort();
     void testSortWithFormulaRefs();
+    void testShiftCells();
+    void testDeleteRow();
+    void testDeleteCol();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -233,10 +247,12 @@ public:
     CPPUNIT_TEST(testCellFunctions);
     CPPUNIT_TEST(testSheetsFunc);
     CPPUNIT_TEST(testVolatileFunc);
+    CPPUNIT_TEST(testFormulaDepTracking);
     CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);
     CPPUNIT_TEST(testCSV);
     CPPUNIT_TEST(testMatrix);
+    CPPUNIT_TEST(testEnterMixedMatrix);
     CPPUNIT_TEST(testPivotTable);
     CPPUNIT_TEST(testPivotTableLabels);
     CPPUNIT_TEST(testPivotTableDateLabels);
@@ -250,6 +266,7 @@ public:
     CPPUNIT_TEST(testPivotTableEmptyRows);
     CPPUNIT_TEST(testPivotTableTextNumber);
     CPPUNIT_TEST(testPivotTableCaseInsensitiveStrings);
+    CPPUNIT_TEST(testPivotTableNumStability);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
     CPPUNIT_TEST(testExternalRef);
@@ -275,6 +292,9 @@ public:
     CPPUNIT_TEST(testFindAreaPosColRight);
     CPPUNIT_TEST(testSort);
     CPPUNIT_TEST(testSortWithFormulaRefs);
+    CPPUNIT_TEST(testShiftCells);
+    CPPUNIT_TEST(testDeleteRow);
+    CPPUNIT_TEST(testDeleteCol);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -327,6 +347,45 @@ ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aDa
     printRange(pDoc, aRange, "Range data content");
     return aRange;
 }
+
+/**
+ * Temporarily switch on/off auto calculation mode.
+ */
+class AutoCalcSwitch
+{
+    ScDocument* mpDoc;
+    bool mbOldValue;
+public:
+    AutoCalcSwitch(ScDocument* pDoc, bool bAutoCalc) : mpDoc(pDoc), mbOldValue(pDoc->GetAutoCalc())
+    {
+        mpDoc->SetAutoCalc(bAutoCalc);
+    }
+
+    ~AutoCalcSwitch()
+    {
+        mpDoc->SetAutoCalc(mbOldValue);
+    }
+};
+
+/**
+ * Temporarily set formula grammar.
+ */
+class FormulaGrammarSwitch
+{
+    ScDocument* mpDoc;
+    formula::FormulaGrammar::Grammar meOldGrammar;
+public:
+    FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar) :
+        mpDoc(pDoc), meOldGrammar(pDoc->GetGrammar())
+    {
+        mpDoc->SetGrammar(eGrammar);
+    }
+
+    ~FormulaGrammarSwitch()
+    {
+        mpDoc->SetGrammar(meOldGrammar);
+    }
+};
 
 Test::Test()
     : m_pDoc(0)
@@ -1056,6 +1115,114 @@ void Test::testVolatileFunc()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaDepTracking()
+{
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
+
+    AutoCalcSwitch aACSwitch(m_pDoc, true); // turn on auto calculation.
+
+    // B2 listens on D2.
+    m_pDoc->SetString(1, 1, 0, "=D2");
+    double val = -999.0; // dummy initial value
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Referencing an empty cell should yield zero.", val == 0.0);
+
+    // Changing the value of D2 should trigger recalculation of B2.
+    m_pDoc->SetValue(3, 1, 0, 1.1);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on value change.", val == 1.1);
+
+    // And again.
+    m_pDoc->SetValue(3, 1, 0, 2.2);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on value change.", val == 2.2);
+
+    clearRange(m_pDoc, ScRange(0, 0, 0, 10, 10, 0));
+
+    // Now, let's test the range dependency tracking.
+
+    // B2 listens on D2:E6.
+    m_pDoc->SetString(1, 1, 0, "=SUM(D2:E6)");
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Summing an empty range should yield zero.", val == 0.0);
+
+    // Set value to E3. This should trigger recalc on B2.
+    m_pDoc->SetValue(4, 2, 0, 2.4);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", val == 2.4);
+
+    // Set value to D5 to trigger recalc again.  Note that this causes an
+    // addition of 1.2 + 2.4 which is subject to binary floating point
+    // rounding error.  We need to use approxEqual to assess its value.
+
+    m_pDoc->SetValue(3, 4, 0, 1.2);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 3.6));
+
+    // Change the value of D2 (boundary case).
+    m_pDoc->SetValue(3, 1, 0, 1.0);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 4.6));
+
+    // Change the value of E6 (another boundary case).
+    m_pDoc->SetValue(4, 5, 0, 2.0);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 6.6));
+
+    // Change the value of D6 (another boundary case).
+    m_pDoc->SetValue(3, 5, 0, 3.0);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 9.6));
+
+    // Change the value of E2 (another boundary case).
+    m_pDoc->SetValue(4, 1, 0, 0.4);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 10.0));
+
+    // Change the existing non-empty value cell (E2).
+    m_pDoc->SetValue(4, 1, 0, 2.4);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 12.0));
+
+    clearRange(m_pDoc, ScRange(0, 0, 0, 10, 10, 0));
+
+    // Now, column-based dependency tracking.  We now switch to the R1C1
+    // syntax which is easier to use for repeated relative references.
+
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    val = 0.0;
+    for (SCROW nRow = 1; nRow <= 9; ++nRow)
+    {
+        // Static value in column 1.
+        m_pDoc->SetValue(0, nRow, 0, ++val);
+
+        // Formula in column 2 that references cell to the left.
+        m_pDoc->SetString(1, nRow, 0, "=RC[-1]");
+
+        // Formula in column 3 that references cell to the left.
+        m_pDoc->SetString(2, nRow, 0, "=RC[-1]*2");
+    }
+
+    // Check formula values.
+    val = 0.0;
+    for (SCROW nRow = 1; nRow <= 9; ++nRow)
+    {
+        ++val;
+        CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(1, nRow, 0) == val);
+        CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(2, nRow, 0) == val*2.0);
+    }
+
+    // Intentionally insert a formula in column 1. This will break column 1's
+    // uniformity of consisting only of static value cells.
+    m_pDoc->SetString(0, 4, 0, "=R2C3");
+    CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(0, 4, 0) == 2.0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(1, 4, 0) == 2.0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(2, 4, 0) == 4.0);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncParam()
 {
     rtl::OUString aTabName("foo");
@@ -1349,6 +1516,31 @@ void Test::testMatrix()
     checkMatrixElements<PartiallyFilledEmptyMatrix>(*pMat);
 }
 
+void Test::testEnterMixedMatrix()
+{
+    m_pDoc->InsertTab(0, "foo");
+
+    // Insert the source values in A1:B2.
+    m_pDoc->SetString(0, 0, 0, "A");
+    m_pDoc->SetString(1, 0, 0, "B");
+    double val = 1.0;
+    m_pDoc->SetValue(0, 1, 0, val);
+    val = 2.0;
+    m_pDoc->SetValue(1, 1, 0, val);
+
+    // Create a matrix range in A4:B5 referencing A1:B2.
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0, 3, 1, 4, aMark, "=A1:B2", NULL);
+
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,0,0), m_pDoc->GetString(0,3,0));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(1,0,0), m_pDoc->GetString(1,3,0));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(0,1,0), m_pDoc->GetValue(0,4,0));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(1,1,0), m_pDoc->GetValue(1,4,0));
+
+    m_pDoc->DeleteTab(0);
+}
+
 namespace {
 
 struct DPFieldDef
@@ -1535,22 +1727,6 @@ ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
 
     return refresh(pDPObj);
 }
-
-class AutoCalcSwitch
-{
-    ScDocument* mpDoc;
-    bool mbOldValue;
-public:
-    AutoCalcSwitch(ScDocument* pDoc, bool bAutoCalc) : mpDoc(pDoc), mbOldValue(pDoc->GetAutoCalc())
-    {
-        mpDoc->SetAutoCalc(bAutoCalc);
-    }
-
-    ~AutoCalcSwitch()
-    {
-        mpDoc->SetAutoCalc(mbOldValue);
-    }
-};
 
 }
 
@@ -2283,6 +2459,29 @@ void Test::testPivotTableCache()
         }
     }
 
+    // Now, on to testing the filtered cache.
+
+    {
+        // Non-filtered cache - everything should be visible.
+        ScDPFilteredCache aFilteredCache(aCache);
+        aFilteredCache.fillTable();
+
+        sal_Int32 nRows = aFilteredCache.getRowSize();
+        CPPUNIT_ASSERT_MESSAGE("Wrong dimension.", nRows == 6 && aFilteredCache.getColSize() == 3);
+
+        for (sal_Int32 i = 0; i < nRows; ++i)
+        {
+            if (!aFilteredCache.isRowActive(i))
+            {
+                std::ostringstream os;
+                os << "Row " << i << " should be visible but it isn't.";
+                CPPUNIT_ASSERT_MESSAGE(os.str().c_str(), false);
+            }
+        }
+    }
+
+    // TODO : Add test for filtered caches.
+
     m_pDoc->DeleteTab(0);
 }
 
@@ -3012,6 +3211,111 @@ void Test::testPivotTableCaseInsensitiveStrings()
         bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Case insensitive strings");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
+
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableNumStability()
+{
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    // Raw Data
+    const char* aData[][4] = {
+        { "Name",   "Time Start", "Time End", "Total"          },
+        { "Sam",    "07:48 AM",   "09:00 AM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "09:00 AM",   "10:30 AM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "10:30 AM",   "12:30 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "12:30 PM",   "01:00 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "01:00 PM",   "01:30 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "01:30 PM",   "02:00 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "02:00 PM",   "07:15 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "07:47 AM",   "09:00 AM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "09:00 AM",   "10:00 AM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "10:00 AM",   "11:00 AM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "11:00 AM",   "11:30 AM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "11:30 AM",   "12:45 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "12:45 PM",   "01:15 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "01:15 PM",   "02:30 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "02:30 PM",   "02:45 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "02:45 PM",   "04:30 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "04:30 PM",   "06:00 PM", "=RC[-1]-RC[-2]" },
+        { "Sam",    "06:00 PM",   "07:15 PM", "=RC[-1]-RC[-2]" },
+        { "Mike",   "06:15 AM",   "08:30 AM", "=RC[-1]-RC[-2]" },
+        { "Mike",   "08:30 AM",   "10:03 AM", "=RC[-1]-RC[-2]" },
+        { "Mike",   "10:03 AM",   "12:00 PM", "=RC[-1]-RC[-2]" },
+        { "Dennis", "11:00 AM",   "01:00 PM", "=RC[-1]-RC[-2]" },
+        { "Dennis", "01:00 PM",   "02:00 PM", "=RC[-1]-RC[-2]" }
+    };
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Total", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+    };
+
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
+
+    size_t nRowCount = SAL_N_ELEMENTS(aData);
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, nRowCount);
+
+    // Insert formulas to manually calculate sums for each name.
+    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+1, aDataRange.aStart.Tab(), "=SUMIF(R[-23]C:R[-1]C;\"Dennis\";R[-23]C[3]:R[-1]C[3])");
+    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+2, aDataRange.aStart.Tab(), "=SUMIF(R[-24]C:R[-2]C;\"Mike\";R[-24]C[3]:R[-2]C[3])");
+    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+3, aDataRange.aStart.Tab(), "=SUMIF(R[-25]C:R[-3]C;\"Sam\";R[-25]C[3]:R[-3]C[3])");
+
+    m_pDoc->CalcAll();
+
+    // Get correct sum values.
+    double fDennisTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+1, aDataRange.aStart.Tab());
+    double fMikeTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+2, aDataRange.aStart.Tab());
+    double fSamTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+3, aDataRange.aStart.Tab());
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount(), static_cast<size_t>(1));
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    ScRange aOutRange = refresh(pDPObj);
+
+    // Manually check the total value for each name.
+    //
+    // +--------------+----------------+
+    // | Name         |                |
+    // +--------------+----------------+
+    // | Dennis       | <Dennis total> |
+    // +--------------+----------------+
+    // | Mike         | <Miks total>   |
+    // +--------------+----------------+
+    // | Sam          | <Sam total>    |
+    // +--------------+----------------+
+    // | Total Result | ...            |
+    // +--------------+----------------+
+
+    aPos = aOutRange.aStart;
+    aPos.IncCol();
+    aPos.IncRow();
+    double fTest = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Incorrect value for Dennis.", rtl::math::approxEqual(fTest, fDennisTotal));
+    aPos.IncRow();
+    fTest = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Incorrect value for Mike.", rtl::math::approxEqual(fTest, fMikeTotal));
+    aPos.IncRow();
+    fTest = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Incorrect value for Sam.", rtl::math::approxEqual(fTest, fSamTotal));
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
@@ -3916,19 +4220,23 @@ void Test::testGraphicsInGroup()
 
         //Use a range of rows guaranteed to include all of the square
         m_pDoc->ShowRows(0, 100, 0, false);
+        m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
         m_pDoc->ShowRows(0, 100, 0, true);
+        m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
 
         ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
         CPPUNIT_ASSERT_MESSAGE("That shouldn't change size or positioning", aOrigRect == rNewRect);
 
         m_pDoc->ShowRows(0, 100, 0, false);
+        m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_MESSAGE("Left and Right should be unchanged",
             aOrigRect.nLeft == rNewRect.nLeft && aOrigRect.nRight == rNewRect.nRight);
         CPPUNIT_ASSERT_MESSAGE("Height should be minimum allowed height",
             (rNewRect.nBottom - rNewRect.nTop) <= 1);
         m_pDoc->ShowRows(0, 100, 0, true);
+        m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
     }
 
@@ -3947,6 +4255,7 @@ void Test::testGraphicsInGroup()
 
         // Insert 2 rows at the top.  This should push the circle object down.
         m_pDoc->InsertRow(0, 0, MAXCOL, 0, 0, 2);
+        m_pDoc->SetDrawPageSize(0);
 
         // Make sure the size of the circle is still identical.
         CPPUNIT_ASSERT_MESSAGE("Size of the circle has changed, but shouldn't!",
@@ -3954,6 +4263,7 @@ void Test::testGraphicsInGroup()
 
         // Delete 2 rows at the top.  This should bring the circle object to its original position.
         m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 0, 2);
+        m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_MESSAGE("Failed to move back to its original position.", aOrigRect == rNewRect);
     }
 
@@ -3977,6 +4287,7 @@ void Test::testGraphicsInGroup()
         // Insert 2 rows at the top and delete them immediately.
         m_pDoc->InsertRow(0, 0, MAXCOL, 0, 0, 2);
         m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 0, 2);
+        m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_MESSAGE("Size of a line object changed after row insertion and removal.",
                                aOrigRect == rNewRect);
 
@@ -4071,7 +4382,7 @@ void Test::testPostIts()
     rtl::OUString aTabName2("Table2");
     m_pDoc->InsertTab(0, aTabName);
 
-    ScAddress rAddr(2, 2, 0);
+    ScAddress rAddr(2, 2, 0); // cell C3
     ScPostIt *pNote = m_pDoc->GetNotes(rAddr.Tab())->GetOrCreateNote(rAddr);
     pNote->SetText(rAddr, aHello);
     pNote->SetAuthor(aJimBob);
@@ -4079,28 +4390,50 @@ void Test::testPostIts()
     ScPostIt *pGetNote = m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr);
     CPPUNIT_ASSERT_MESSAGE("note should be itself", pGetNote == pNote );
 
-    bool bInsertRow = m_pDoc->InsertRow( 0, 0, 100, 0, 1, 1 );
+    // Insert one row at row 1.
+    bool bInsertRow = m_pDoc->InsertRow(0, 0, MAXCOL, 0, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("failed to insert row", bInsertRow );
 
     CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == NULL);
-    rAddr.IncRow();
+    rAddr.IncRow(); // cell C4
     CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
-    bool bInsertCol = m_pDoc->InsertCol( 0, 0, 100, 0, 1, 1 );
+    // Insert column at column A.
+    bool bInsertCol = m_pDoc->InsertCol(0, 0, MAXROW, 0, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("failed to insert column", bInsertCol );
 
     CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == NULL);
-    rAddr.IncCol();
+    rAddr.IncCol(); // cell D4
     CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
+    // Insert a new sheet to shift the current sheet to the right.
     m_pDoc->InsertTab(0, aTabName2);
     CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == NULL);
-    rAddr.IncTab();
+    rAddr.IncTab(); // Move to the next sheet.
     CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
     m_pDoc->DeleteTab(0);
     rAddr.IncTab(-1);
     CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
+
+    // Insert cell at C4.  This should NOT shift the note position.
+    bInsertRow = m_pDoc->InsertRow(2, 0, 2, 0, 3, 1);
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert cell at C4.", bInsertRow);
+    CPPUNIT_ASSERT_MESSAGE("Note shouldn't have moved but it has.", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
+
+    // Delete cell at C4.  Again, this should NOT shift the note position.
+    m_pDoc->DeleteRow(2, 0, 2, 0, 3, 1);
+    CPPUNIT_ASSERT_MESSAGE("Note shouldn't have moved but it has.", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
+
+    // Now, with the note at D4, delete cell D3. This should shift the note one cell up.
+    m_pDoc->DeleteRow(3, 0, 3, 0, 2, 1);
+    rAddr.IncRow(-1); // cell D3
+    CPPUNIT_ASSERT_MESSAGE("Note at D4 should have shifted up to D3.", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
+
+    // Delete column C. This should shift the note one cell left.
+    m_pDoc->DeleteCol(0, 0, MAXROW, 0, 2, 1);
+    rAddr.IncCol(-1); // cell C3
+    CPPUNIT_ASSERT_MESSAGE("Note at D3 should have shifted left to C3.", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
     m_pDoc->DeleteTab(0);
 }
@@ -4309,7 +4642,7 @@ void Test::testCopyPaste()
     double aValue = 0;
     m_pDoc->GetValue(1, 0, 0, aValue);
     std::cout << "Value: " << aValue << std::endl;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 8", aValue, 8, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 8", aValue, 8);
 
     //copy Sheet1.A1:C1 to Sheet2.A2:C2
     ScRange aRange(0,0,0,2,0,0);
@@ -4334,7 +4667,7 @@ void Test::testCopyPaste()
     rtl::OUString aString;
     m_pDoc->GetValue(1,1,1, aValue);
     m_pDoc->GetFormula(1,1,1, aString);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("copied formula should return 2", aValue, 2, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("copied formula should return 2", aValue, 2);
     CPPUNIT_ASSERT_MESSAGE("formula string was not copied correctly", aString == aFormulaString);
     m_pDoc->GetValue(0,1,1, aValue);
     CPPUNIT_ASSERT_MESSAGE("copied value should be 1", aValue == 1);
@@ -4352,13 +4685,13 @@ void Test::testCopyPaste()
     //check undo and redo
     pUndo->Undo();
     m_pDoc->GetValue(1,1,1, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", aValue, 0, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", aValue, 0);
     m_pDoc->GetString(2,1,1, aString);
     CPPUNIT_ASSERT_MESSAGE("after undo string should be removed", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
 
     pUndo->Redo();
     m_pDoc->GetValue(1,1,1, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 2 after redo", aValue, 2, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 2 after redo", aValue, 2);
     m_pDoc->GetString(2,1,1, aString);
     CPPUNIT_ASSERT_MESSAGE("Cell Sheet2.C2 should contain: test", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test")));
     m_pDoc->GetFormula(1,1,1, aString);
@@ -4490,42 +4823,42 @@ void Test::testUpdateReference()
 
     double aValue;
     m_pDoc->GetValue(2,0,2, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("formula does not return correct result", aValue, 3, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2,1,2, aValue);
-    CPPUNIT_ASSERT_MESSAGE("formula does not return correct result", aValue == 5);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula does not return correct result", aValue, 5);
 
     //test deleting both sheets: one is not directly before the sheet, the other one is
     m_pDoc->DeleteTab(0);
     m_pDoc->GetValue(2,0,1, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 3, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2,1,1, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 5, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 5);
 
     m_pDoc->DeleteTab(0);
     m_pDoc->GetValue(2,0,0, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 3, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2,1,0, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 5, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 5);
 
     //test adding two sheets
     m_pDoc->InsertTab(0, aSheet2);
     m_pDoc->GetValue(2,0,1, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 3, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2,1,1, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 5, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 5);
 
     m_pDoc->InsertTab(0, aSheet1);
     m_pDoc->GetValue(2,0,2, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 3, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2,1,2, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 5, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 5);
 
     //test new DeleteTabs/InsertTabs methods
     m_pDoc->DeleteTabs(0, 2);
     m_pDoc->GetValue(2, 0, 0, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 3, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2, 1, 0, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 5, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 5);
 
     std::vector<rtl::OUString> aSheets;
     aSheets.push_back(aSheet1);
@@ -4536,9 +4869,9 @@ void Test::testUpdateReference()
     m_pDoc->GetFormula(2,0,2, aFormula);
     std::cout << "formel: " << rtl::OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     std::cout << std::endl << aValue << std::endl;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 3, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2, 1, 2, aValue);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 5, 0.00000001);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 5);
 
     m_pDoc->DeleteTab(3);
     m_pDoc->DeleteTab(2);
@@ -4642,7 +4975,7 @@ void Test::testAutoFill()
 
     m_pDoc->Fill( 0, 0, 0, 0, NULL, aMarkData, 5);
     for (SCROW i = 0; i< 6; ++i)
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i+1.0), m_pDoc->GetValue(0, i, 0), 0.00000001);
+        ASSERT_DOUBLES_EQUAL(static_cast<double>(i+1.0), m_pDoc->GetValue(0, i, 0));
 
     // check that hidden rows are not affected by autofill
     // set values for hidden rows
@@ -4652,10 +4985,10 @@ void Test::testAutoFill()
     m_pDoc->SetRowHidden(1, 2, 0, true);
     m_pDoc->Fill( 0, 0, 0, 0, NULL, aMarkData, 8);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,1,0), 1e-08);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,2,0), 1e-08);
+    ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,1,0));
+    ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,2,0));
     for (SCROW i = 3; i< 8; ++i)
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i-1.0), m_pDoc->GetValue(0, i, 0), 0.00000001);
+        ASSERT_DOUBLES_EQUAL(static_cast<double>(i-1.0), m_pDoc->GetValue(0, i, 0));
 
     m_pDoc->Fill( 0, 0, 0, 8, NULL, aMarkData, 5, FILL_TO_RIGHT );
     for (SCCOL i = 0; i < 5; ++i)
@@ -4664,18 +4997,18 @@ void Test::testAutoFill()
         {
             if (j > 2)
             {
-                CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(j-1+i), m_pDoc->GetValue(i, j, 0), 1e-8);
+                ASSERT_DOUBLES_EQUAL(static_cast<double>(j-1+i), m_pDoc->GetValue(i, j, 0));
             }
             else if (j == 0)
             {
-                CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i+1), m_pDoc->GetValue(i, 0, 0), 1e-8);
+                ASSERT_DOUBLES_EQUAL(static_cast<double>(i+1), m_pDoc->GetValue(i, 0, 0));
             }
             else if (j == 1 || j== 2)
             {
                 if(i == 0)
-                    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,j,0), 1e-8);
+                    ASSERT_DOUBLES_EQUAL(10.0, m_pDoc->GetValue(0,j,0));
                 else
-                    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, m_pDoc->GetValue(i,j,0), 1e-8);
+                    ASSERT_DOUBLES_EQUAL(0.0, m_pDoc->GetValue(i,j,0));
             }
         }
     }
@@ -4712,15 +5045,15 @@ void Test::testCopyPasteFormulas()
 
     // to prevent ScEditableTester in ScDocFunc::MoveBlock
     m_pDoc->SetInTest();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,0,0), 1.0, 1e-08);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,1,0), 1.0, 1e-08);
+    ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,0,0), 1.0);
+    ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,1,0), 1.0);
     ScDocFunc& rDocFunc = m_xDocShRef->GetDocFunc();
     bool bMoveDone = rDocFunc.MoveBlock(ScRange(0,0,0,0,4,0), ScAddress( 10, 10, 0), false, false, false, true);
 
     // check that moving was succesful, mainly for editable tester
     CPPUNIT_ASSERT(bMoveDone);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,10,0), 1.0, 1e-8);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,11,0), 1.0, 1e-8);
+    ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,10,0), 1.0);
+    ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,11,0), 1.0);
     rtl::OUString aFormula;
     m_pDoc->GetFormula(10,10,0, aFormula);
     CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=COLUMN($A$1)"));
@@ -5021,12 +5354,74 @@ void Test::testSort()
 
     pDoc->Sort(0, aSortData, false, NULL);
     double nVal = pDoc->GetValue(1,0,0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, 1.0, 1e-8);
+    ASSERT_DOUBLES_EQUAL(nVal, 1.0);
 
     // check that note is also moved
     pNote = m_pDoc->GetNotes(0)->findByAddress( 1, 0 );
     CPPUNIT_ASSERT(pNote);
 
+    pDoc->DeleteTab(0);
+}
+
+void Test::testShiftCells()
+{
+    m_pDoc->InsertTab(0, "foo");
+
+    OUString aTestVal("Some Text");
+
+    // Text into cell E5.
+    m_pDoc->SetString(4, 3, 0, aTestVal);
+
+    // Insert cell at D5. This should shift the string cell to right.
+    m_pDoc->InsertCol(3, 0, 3, 0, 3, 1);
+    OUString aStr = m_pDoc->GetString(5, 3, 0);
+    CPPUNIT_ASSERT_MESSAGE("We should have a string cell here.", aStr == aTestVal);
+    CPPUNIT_ASSERT_MESSAGE("D5 is supposed to be blank.", m_pDoc->IsBlockEmpty(0, 3, 4, 3, 4));
+
+    // Delete cell D5, to shift the text cell back into D5.
+    m_pDoc->DeleteCol(3, 0, 3, 0, 3, 1);
+    aStr = m_pDoc->GetString(4, 3, 0);
+    CPPUNIT_ASSERT_MESSAGE("We should have a string cell here.", aStr == aTestVal);
+    CPPUNIT_ASSERT_MESSAGE("E5 is supposed to be blank.", m_pDoc->IsBlockEmpty(0, 4, 4, 4, 4));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testDeleteRow()
+{
+    ScDocument* pDoc = m_xDocShRef->GetDocument();
+    rtl::OUString aSheet1("Sheet1");
+    pDoc->InsertTab(0, aSheet1);
+
+    rtl::OUString aHello("Hello");
+    rtl::OUString aJimBob("Jim Bob");
+    ScAddress rAddr(1, 1, 0);
+    ScPostIt* pNote = m_pDoc->GetNotes(rAddr.Tab())->GetOrCreateNote(rAddr);
+    pNote->SetText(rAddr, aHello);
+    pNote->SetAuthor(aJimBob);
+
+    pDoc->DeleteRow(0, 0, MAXCOL, 0, 1, 1);
+
+    CPPUNIT_ASSERT(m_pDoc->GetNotes(0)->empty());
+    pDoc->DeleteTab(0);
+}
+
+void Test::testDeleteCol()
+{
+    ScDocument* pDoc = m_xDocShRef->GetDocument();
+    rtl::OUString aSheet1("Sheet1");
+    pDoc->InsertTab(0, aSheet1);
+
+    rtl::OUString aHello("Hello");
+    rtl::OUString aJimBob("Jim Bob");
+    ScAddress rAddr(1, 1, 0);
+    ScPostIt* pNote = m_pDoc->GetNotes(rAddr.Tab())->GetOrCreateNote(rAddr);
+    pNote->SetText(rAddr, aHello);
+    pNote->SetAuthor(aJimBob);
+
+    pDoc->DeleteCol(0, 0, MAXROW, 0, 1, 1);
+
+    CPPUNIT_ASSERT(m_pDoc->GetNotes(0)->empty());
     pDoc->DeleteTab(0);
 }
 

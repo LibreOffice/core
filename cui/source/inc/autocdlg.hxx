@@ -83,8 +83,8 @@ class OfaACorrCheckListBox : public SvxSimpleTable
 
         sal_Bool            IsChecked(sal_uLong nPos, sal_uInt16 nCol = 0);
         void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked);
-        SvButtonState   GetCheckButtonState( SvLBoxEntry*, sal_uInt16 nCol ) const;
-        void            SetCheckButtonState( SvLBoxEntry*, sal_uInt16 nCol, SvButtonState );
+        SvButtonState   GetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol ) const;
+        void            SetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol, SvButtonState );
 };
 
 // class OfaAutocorrOptionsPage ------------------------------------------
@@ -170,7 +170,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 
         DECL_LINK(SelectHdl, OfaACorrCheckListBox*);
         DECL_LINK(EditHdl, void *);
-        SvLBoxEntry* CreateEntry(String& rTxt, sal_uInt16 nCol);
+        SvTreeListEntry* CreateEntry(String& rTxt, sal_uInt16 nCol);
 
 
         OfaSwAutoFmtOptionsPage( Window* pParent,
@@ -397,7 +397,7 @@ private:
 
     String              ChangeStringExt_Impl( sal_UCS4 );
 
-    SvLBoxEntry* CreateEntry(String& rTxt, sal_uInt16 nCol);
+    SvTreeListEntry* CreateEntry(String& rTxt, sal_uInt16 nCol);
 
                         OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet );
 public:

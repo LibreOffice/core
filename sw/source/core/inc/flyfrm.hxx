@@ -162,7 +162,7 @@ public:
 
     virtual ~SwFlyFrm();
     // get client information
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const;
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
     virtual Size ChgSize( const Size& aNewSize );

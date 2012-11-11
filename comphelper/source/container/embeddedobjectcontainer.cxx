@@ -361,7 +361,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::Get_Impl( con
         // object was not added until now - should happen only by calling this method from "inside"
         //TODO/LATER: it would be good to detect an error when an object should be created already, but isn't (not an "inside" call)
         uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
+                OUString("com.sun.star.embed.EmbeddedObjectCreator") ), uno::UNO_QUERY_THROW );
         uno::Sequence< beans::PropertyValue > aObjDescr( xCopy.is() ? 2 : 1 );
         aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
         aObjDescr[0].Value <<= pImpl->m_xModel.get();

@@ -61,8 +61,6 @@ public:
 
     bool InsertWord( const String& rWord, SwDoc& rDoc );
 
-    sal_Bool GetRange( const String& rWord, sal_uInt16& rStt, sal_uInt16& rEnd ) const;
-
     const String& operator[](size_t n) const
         { return m_WordList[n]->GetAutoCompleteString(); }
 
@@ -93,7 +91,7 @@ public:
 
     // Returns all words matching a given prefix aMatch. If bIgnoreCurrentPos is set, the current
     // position within the tree is ignored and replaced by aMatch.
-    bool GetWordsMatching(String aMatch, std::vector<String>& aWords, sal_Bool bIgnoreCurrentPos) const;
+    bool GetWordsMatching(String aMatch, std::vector<String>& aWords, bool bIgnoreCurrentPos) const;
 };
 
 

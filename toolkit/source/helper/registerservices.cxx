@@ -114,7 +114,7 @@ namespace toolkit
 
 using namespace toolkit;
 
-IMPL_CREATEINSTANCE2( VCLXToolkit )
+IMPL_CREATEINSTANCE( VCLXToolkit )
 IMPL_CREATEINSTANCE( StdTabController )
 IMPL_CREATEINSTANCE( StdTabControllerModel )
 IMPL_CREATEINSTANCE2( UnoButtonControl )

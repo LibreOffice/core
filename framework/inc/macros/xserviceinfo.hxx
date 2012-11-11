@@ -225,6 +225,10 @@ ________________________________________________________________________________
     PRIVATE_DEFINE_XSERVICEINFO_NEWSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
     PRIVATE_DEFINE_SINGLEFACTORY( CLASS )
 
+#define DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )        \
+    PRIVATE_DEFINE_XSERVICEINFO_NEWSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
+    PRIVATE_DEFINE_ONEINSTANCEFACTORY( CLASS )
+
 //*****************************************************************************************************************
 //  public
 //  implementation of service initialize!

@@ -63,6 +63,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_subsequent_ww8import,\
 $(eval $(call gb_CppunitTest_use_ure,sw_subsequent_ww8import))
 
 $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ww8import,\
+	basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
@@ -71,6 +72,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ww8import,\
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
+    linguistic/source/lng \
     package/util/package2 \
     sw/util/msword \
     sw/util/sw \

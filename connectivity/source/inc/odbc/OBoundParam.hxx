@@ -20,6 +20,7 @@
 #define _CONNECTIVITY_OBOUNPARAM_HXX_
 
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
 #include "odbc/odbcbasedllapi.hxx"
 
 namespace connectivity
@@ -31,50 +32,29 @@ namespace connectivity
 
         public:
             OBoundParam()
+                : binaryData(NULL)
+                , paramInputStreamLen(0)
+                , sqlType(::com::sun::star::sdbc::DataType::SQLNULL)
+                , outputParameter(false)
             {
-                paramLength = NULL;
-                binaryData  = NULL;
-                pA1=0;
-                pA2=0;
-                pB1=0;
-                pB2=0;
-                pC1=0;
-                pC2=0;
-                pS1=0;
-                pS2=0;
             }
             ~OBoundParam()
             {
-                delete [] binaryData;
-                delete [] paramLength;
+                free(binaryData);
             }
-            //--------------------------------------------------------------------
-            // initialize
-            // Perform an necessary initialization
-            //--------------------------------------------------------------------
-            void initialize ()
-            {
-                // Allocate storage for the length.  Note - the length is
-                // stored in native format, and will have to be converted
-                // to a Java sal_Int32.  The jdbcodbc 'C' bridge provides an
-                // interface to do this.
-
-                paramLength = new sal_Int8[sizeof(SQLLEN)];
-            }
-
             //--------------------------------------------------------------------
             // allocBindDataBuffer
             // Allocates and returns a new bind data buffer of the specified
             // length
             //--------------------------------------------------------------------
-            sal_Int8* allocBindDataBuffer (sal_Int32 bufLen)
+            void* allocBindDataBuffer (sal_Int32 bufLen)
             {
-                if ( binaryData )
-                    delete [] binaryData;
-                binaryData = new sal_Int8[bufLen];
-
-                // Reset the input stream, we are doing a new bind
+                // Reset the input stream and sequence, we are doing a new bind
                 setInputStream (NULL, 0);
+                aSequence.realloc(0);
+
+                free(binaryData);
+                binaryData = (bufLen > 0) ? malloc(bufLen) : NULL;
 
                 return binaryData;
             }
@@ -83,7 +63,7 @@ namespace connectivity
             // getBindDataBuffer
             // Returns the data buffer to be used when binding to a parameter
             //--------------------------------------------------------------------
-            sal_Int8* getBindDataBuffer ()
+            void* getBindDataBuffer ()
             {
                 return binaryData;
             }
@@ -92,9 +72,9 @@ namespace connectivity
             // getBindLengthBuffer
             // Returns the length buffer to be used when binding to a parameter
             //--------------------------------------------------------------------
-            sal_Int8* getBindLengthBuffer ()
+            SQLLEN* getBindLengthBuffer ()
             {
-                return paramLength;
+                return &paramLength;
             }
 
             //--------------------------------------------------------------------
@@ -176,20 +156,20 @@ namespace connectivity
             // Data attributes
             //====================================================================
 
-            sal_Int8* binaryData;       // Storage area to be used
-                                        // when binding the parameter
+            void  *binaryData;       // Storage area to be used
+                                     // when binding the parameter
 
-            sal_Int8* paramLength;      // Storage area to be used
-                                        // for the bound length of the
-                                        // parameter.  Note that this
-                                        // data is in native format.
+            SQLLEN paramLength;      // Storage area to be used
+                                     // for the bound length of the
+                                     // parameter.  Note that this
+                                     // data is in native format.
 
             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> paramInputStream;
             ::com::sun::star::uno::Sequence< sal_Int8 > aSequence;
                                         // When an input stream is
-                                        // bound to a parameter, the
-                                        // input stream is saved
-                                        // until needed.
+                                        // bound to a parameter, a
+                                        // reference to the input stream is saved
+                                        // until not needed anymore.
 
             sal_Int32 paramInputStreamLen;                // Length of input stream
 
@@ -197,16 +177,6 @@ namespace connectivity
                                                             // register an OUT parameter
 
             sal_Bool outputParameter;   // true for OUTPUT parameters
-
-
-            sal_Int32 pA1;              //pointers
-            sal_Int32 pA2;
-            sal_Int32 pB1;
-            sal_Int32 pB2;
-            sal_Int32 pC1;
-            sal_Int32 pC2;
-            sal_Int32 pS1;
-            sal_Int32 pS2;// reserved for strings(UTFChars)
         };
     }
 }

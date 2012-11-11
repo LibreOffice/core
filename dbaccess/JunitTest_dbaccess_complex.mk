@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_JunitTest_JunitTest,dba_ju_complex))
+$(eval $(call gb_JunitTest_JunitTest,dbaccess_ju_complex))
 
-$(eval $(call gb_JunitTest_use_jars,dba_ju_complex,\
+$(eval $(call gb_JunitTest_use_jars,dbaccess_ju_complex,\
     ConnectivityTools \
     OOoRunner \
     jurt \
@@ -18,17 +18,17 @@ $(eval $(call gb_JunitTest_use_jars,dba_ju_complex,\
     unoil \
 ))
 
-$(eval $(call gb_JunitTest_set_defs,dba_ju_complex,\
+$(eval $(call gb_JunitTest_set_defs,dbaccess_ju_complex,\
     $$(DEFS) \
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/dbaccess/qa/dbaccess \
 ))
 
-$(eval $(call gb_JunitTest_add_classes,dba_ju_complex,\
+$(eval $(call gb_JunitTest_add_classes,dbaccess_ju_complex,\
     complex.dbaccess.Beamer \
     complex.dbaccess.PropertyBag \
 ))
 
-$(eval $(call gb_JunitTest_add_sourcefiles,dba_ju_complex,\
+$(eval $(call gb_JunitTest_add_sourcefiles,dbaccess_ju_complex,\
     dbaccess/qa/complex/dbaccess/ApplicationController \
     dbaccess/qa/complex/dbaccess/Beamer \
     dbaccess/qa/complex/dbaccess/CRMBasedTestCase \

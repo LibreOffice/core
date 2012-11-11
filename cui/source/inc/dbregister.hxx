@@ -27,7 +27,7 @@
 #include "ControlFocusHelper.hxx"
 #include <sfx2/basedlgs.hxx>
 
-class SvLBoxEntry;
+class SvTreeListEntry;
 namespace svx
 {
     class OptHeaderTabListBox;
@@ -53,7 +53,7 @@ namespace svx
 
         HeaderBar*          pHeaderBar;
         ::svx::OptHeaderTabListBox* pPathBox;
-        SvLBoxEntry*        m_pCurEntry;
+        SvTreeListEntry*        m_pCurEntry;
         sal_uLong               m_nOldCount;
         sal_Bool                m_bModified;
 
@@ -85,7 +85,7 @@ namespace svx
             @param  _pEntry
                 The entry to remove if the entry will be changed
         */
-        void openLinkDialog(const String& _sOldName,const String& _sOldLocation,SvLBoxEntry* _pEntry = NULL);
+        void openLinkDialog(const String& _sOldName,const String& _sOldLocation,SvTreeListEntry* _pEntry = NULL);
 
 #endif
 

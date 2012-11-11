@@ -55,8 +55,7 @@ namespace ftp {
     public:
 
         FTPContentProvider(
-            const com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory>& xMSF );
+            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
         ~FTPContentProvider();
 

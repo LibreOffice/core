@@ -30,7 +30,6 @@ $(eval $(call gb_Module_Module,writerfilter))
 $(eval $(call gb_Module_add_targets,writerfilter,\
     CustomTarget_source \
     Library_writerfilter \
-    Library_writerfilter_uno \
     Package_sprmids \
 ))
 

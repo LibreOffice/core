@@ -19,6 +19,7 @@ $(eval $(call gb_Package_add_file,ucbhelper_inc,inc/ucbhelper/contentidentifier.
 $(eval $(call gb_Package_add_file,ucbhelper_inc,inc/ucbhelper/contentinfo.hxx,ucbhelper/contentinfo.hxx))
 $(eval $(call gb_Package_add_file,ucbhelper_inc,inc/ucbhelper/fd_inputstream.hxx,ucbhelper/fd_inputstream.hxx))
 $(eval $(call gb_Package_add_file,ucbhelper_inc,inc/ucbhelper/fileidentifierconverter.hxx,ucbhelper/fileidentifierconverter.hxx))
+$(eval $(call gb_Package_add_file,ucbhelper_inc,inc/ucbhelper/getcomponentcontext.hxx,ucbhelper/getcomponentcontext.hxx))
 $(eval $(call gb_Package_add_file,ucbhelper_inc,inc/ucbhelper/interactionrequest.hxx,ucbhelper/interactionrequest.hxx))
 $(eval $(call gb_Package_add_file,ucbhelper_inc,inc/ucbhelper/interceptedinteraction.hxx,ucbhelper/interceptedinteraction.hxx))
 $(eval $(call gb_Package_add_file,ucbhelper_inc,inc/ucbhelper/macros.hxx,ucbhelper/macros.hxx))

@@ -146,7 +146,7 @@ namespace dbaui
     //---------------------------------------------------------------------
     Dialog* RowsetFilterDialog::createComposerDialog( Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
     {
-        return new DlgFilterCrit( _pParent, m_aContext.getLegacyServiceFactory(), _rxConnection, m_xComposer, _rxColumns );
+        return new DlgFilterCrit( _pParent, m_aContext.getUNOContext(), _rxConnection, m_xComposer, _rxColumns );
     }
 
     //---------------------------------------------------------------------

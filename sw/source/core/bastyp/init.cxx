@@ -810,9 +810,9 @@ CharClass& GetAppCharClass()
 {
     if ( !pAppCharClass )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         pAppCharClass = new CharClass(
-            xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));
+            ::comphelper::getProcessComponentContext(),
+            SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));
     }
     return *pAppCharClass;
 }
@@ -865,9 +865,9 @@ namespace
     public:
         TransWrp()
         {
-            uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-            xTransWrp.reset(new ::utl::TransliterationWrapper( xMSF,
+            xTransWrp.reset(new ::utl::TransliterationWrapper( xContext,
                     i18n::TransliterationModules_IGNORE_CASE |
                     i18n::TransliterationModules_IGNORE_KANA |
                     i18n::TransliterationModules_IGNORE_WIDTH ));

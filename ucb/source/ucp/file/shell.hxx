@@ -48,6 +48,7 @@
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
@@ -159,7 +160,7 @@ namespace fileaccess {
     public:
 
         // MethodenDefinitionen
-        shell( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMultiServiceFactory,
+        shell( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                FileProvider* pProvider,sal_Bool bWithConfig );
 
         virtual ~shell();
@@ -401,7 +402,7 @@ namespace fileaccess {
 
         sal_Bool m_bWithConfig;
         FileProvider*                                                                   m_pProvider;
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xMultiServiceFactory;
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >        m_xContext;
         com::sun::star::uno::Reference< com::sun::star::ucb::XPropertySetRegistry >     m_xFileRegistry;
 
     private:

@@ -41,7 +41,7 @@ namespace rtl
 class ZipOutputStream
 {
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xStream;
 
     ::std::vector < ZipEntry * >            aZipList;
@@ -63,7 +63,7 @@ protected:
 
 public:
     ZipOutputStream(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > &xOStream );
     ~ZipOutputStream();
 

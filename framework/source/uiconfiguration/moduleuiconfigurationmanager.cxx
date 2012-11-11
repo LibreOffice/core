@@ -468,7 +468,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
                         {
                             try
                             {
-                                ToolBoxConfiguration::StoreToolBox( m_xServiceManager, xOutputStream, rElement.xSettings );
+                                ToolBoxConfiguration::StoreToolBox( comphelper::getComponentContext(m_xServiceManager), xOutputStream, rElement.xSettings );
                             }
                             catch ( const ::com::sun::star::lang::WrappedTargetException& )
                             {
@@ -480,7 +480,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
                         {
                             try
                             {
-                                StatusBarConfiguration::StoreStatusBar( m_xServiceManager, xOutputStream, rElement.xSettings );
+                                StatusBarConfiguration::StoreStatusBar( comphelper::getComponentContext(m_xServiceManager), xOutputStream, rElement.xSettings );
                             }
                             catch ( const ::com::sun::star::lang::WrappedTargetException& )
                             {

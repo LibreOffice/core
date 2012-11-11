@@ -31,7 +31,7 @@
 namespace chart
 {
 
-class SeriesEntry : public ::SvLBoxEntry
+class SeriesEntry : public ::SvTreeListEntry
 {
 public:
     virtual ~SeriesEntry();
@@ -53,7 +53,7 @@ public:
     explicit SeriesListBox( Window* pParent, const ResId & rResId );
     ~SeriesListBox( );
 
-    virtual SvLBoxEntry* CreateEntry() const;
+    virtual SvTreeListEntry* CreateEntry() const;
 };
 
 } //  namespace chart

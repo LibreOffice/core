@@ -15,7 +15,7 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from wizards.common.Resource import Resource
+from ..common.Resource import Resource
 
 class LetterWizardDialogResources(Resource):
 
@@ -30,11 +30,10 @@ class LetterWizardDialogResources(Resource):
     def __init__(self, xmsf):
         super(LetterWizardDialogResources,self).__init__(
             xmsf, LetterWizardDialogResources.MODULE_NAME)
+        self.RoadmapLabels = []
+        self.SalutationLabels = []
+        self.GreetingLabels = []
 
-        self.RoadmapLabels = ()
-        self.SalutationLabels = ()
-        self.GreetingLabels = ()
-        self.LanguageLabels = ()
         self.resLetterWizardDialog_title = \
             self.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 1)
@@ -209,28 +208,67 @@ class LetterWizardDialogResources(Resource):
         self.reslblTitle6_value = \
             self.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 58)
-        self.loadRoadmapResources()
-        self.loadSalutationResources()
-        self.loadGreetingResources()
-        self.loadCommonResources()
+                
+        #Create a Dictionary for the constants values.
+        self.dictConstants = {
+        "#subjectconst#" : self.getResText(
+            LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 59)}
 
-    def loadCommonResources(self):
+        #Create a dictionary for localising the bussiness templates
+        self.dictBusinessTemplate = {
+        "Elegant" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 60),
+        "Modern" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 61),
+        "Office" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 62)}
+                
+        #Create a dictionary for localising the official templates
+        self.dictOfficialTemplate = {
+        "Elegant" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 60),
+        "Modern" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 61),
+        "Office" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 62)}
+
+        #Create a dictionary for localising the private templates
+        self.dictPrivateTemplate = {                
+        "Bottle" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 63),
+        "Mail" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 64),
+        "Marine" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 65),
+        "RedLine" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 66)}
+
+        #Common Resources
         self.resOverwriteWarning = \
             self.getResText(
                 LetterWizardDialogResources.RID_RID_COMMON_START + 19)
         self.resTemplateDescription = \
             self.getResText(
                 LetterWizardDialogResources.RID_RID_COMMON_START + 20)
+        
+        self.loadRoadmapResources()
+        self.loadSalutationResources()
+        self.loadGreetingResources()
 
-    def loadRoadmapResources(self):
-        i = 1
+    def loadRoadmapResources(self):       
         for i in xrange(6):
-            self.RoadmapLabels = self.RoadmapLabels + (self.getResText(LetterWizardDialogResources.RID_LETTERWIZARDROADMAP_START + i + 1),)
+            self.RoadmapLabels.append(self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDROADMAP_START + \
+                i + 1))
 
     def loadSalutationResources(self):
         for i in xrange(3):
-            self.SalutationLabels = self.SalutationLabels + (self.getResText(LetterWizardDialogResources.RID_LETTERWIZARDSALUTATION_START + i + 1),)
+            self.SalutationLabels.append(self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDSALUTATION_START + \
+                i + 1))
 
     def loadGreetingResources(self):
         for i in xrange(3):
-            self.GreetingLabels = self.GreetingLabels + (self.getResText(LetterWizardDialogResources.RID_LETTERWIZARDGREETING_START + i + 1),)
+            self.GreetingLabels.append(self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDGREETING_START + \
+                i + 1))

@@ -9,6 +9,27 @@
              {
                  typedef BOOST_STRING_TYPENAME 
                      range_const_iterator<InputT>::type input_iterator_type; 
+--- misc/boost_1_44_0/boost/concept_check.hpp
++++ misc/build/boost_1_44_0/boost/concept_check.hpp
+@@ -136,7 +136,18 @@ namespace boost
+   {
+     BOOST_CONCEPT_USAGE(Assignable) {
+ #if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
++#if defined __clang__
++#if __has_warning("-Wself-assign-field")
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wself-assign-field"
++#endif
++#endif
+       a = a;             // require assignment operator
++#if defined __clang__
++#if __has_warning("-Wself-assign-field")
++#pragma clang diagnostic pop
++#endif
++#endif
+ #endif
+       const_constraints(a);
+     }
 --- misc/boost_1_44_0/boost/date_time/dst_rules.hpp	2008-02-27 21:00:24.000000000 +0100
 +++ misc/build/boost_1_44_0/boost/date_time/dst_rules.hpp	2012-06-06 23:11:03.000000000 +0200
 @@ -371,7 +371,7 @@

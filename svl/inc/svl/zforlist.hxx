@@ -52,7 +52,7 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-#define SV_COUNTRY_LANGUAGE_OFFSET  5000    // Max count of formats per country/language
+#define SV_COUNTRY_LANGUAGE_OFFSET 10000    // Max count of formats per country/language
 #define SV_MAX_ANZ_STANDARD_FORMATE  100    // Max count of builtin default formats per CL
 
 // Format types

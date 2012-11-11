@@ -1973,7 +1973,7 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, String& rOutStr
         comphelper::string::getTokenCount(rOutString, '0') == rOutString.Len())
         rOutString = comphelper::string::stripStart(rOutString, '-');            // nicht -0
 
-    ImpTransliterate( rOutString, NumFor[0].GetNatNum() );
+    rOutString = impTransliterate(rOutString, NumFor[0].GetNatNum());
 }
 
 void SvNumberformat::ImpGetOutputInputLine(double fNumber, String& OutString)
@@ -2377,7 +2377,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
                 }
                 if (rInfo.nCntExp == 0)
                 {
-                    OSL_FAIL("SvNumberformat:: Bruch, nCntExp == 0");
+                    SAL_WARN( "svl.numbers", "SvNumberformat:: Bruch, nCntExp == 0");
                     return false;
                 }
                 sal_uLong nBasis = ((sal_uLong)floor(           // 9, 99, 999 ,...
@@ -2564,7 +2564,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
                     char aBuf[100];
                     sprintf( aBuf, "%.f", fNum );   // simple rounded integer (#100211# - checked)
                     sStr.AssignAscii( aBuf );
-                    ImpTransliterate( sStr, NumFor[nIx].GetNatNum() );
+                    sStr = impTransliterate(sStr, NumFor[nIx].GetNatNum());
                 }
                 if (rInfo.nCntPre > 0 && nFrac == 0)
                 {
@@ -2779,11 +2779,11 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         if (aBuf.getLength() < rInfo.nCntPost)
             padToLength(aBuf, rInfo.nCntPost, '0');
         sSecStr = aBuf.makeStringAndClear();
-        ImpTransliterate( sSecStr, NumFor[nIx].GetNatNum() );
+        sSecStr = impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
         nCntPost = sSecStr.Len();
     }
     else
-        ImpTransliterate( sSecStr, NumFor[nIx].GetNatNum() );
+        sSecStr = impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
 
     xub_StrLen nSecPos = 0;                 // Zum Ziffernweisen
                                             // abarbeiten
@@ -3025,7 +3025,7 @@ sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& r
                     ;   // nothing
             }
     }
-    OSL_FAIL( "ImpUseMonthCase: unhandled keyword index eCodeType");
+    SAL_WARN( "svl.numbers", "ImpUseMonthCase: unhandled keyword index eCodeType");
     return CalendarDisplayCode::LONG_MONTH_NAME;
 }
 
@@ -3241,7 +3241,7 @@ bool SvNumberformat::ImpIsIso8601( const ImpSvNumFor& rNumFor )
     }
     else
     {
-       OSL_FAIL( "SvNumberformat::ImpIsIso8601: no date" );
+       SAL_WARN( "svl.numbers", "SvNumberformat::ImpIsIso8601: no date" );
     }
     return bIsIso;
 }
@@ -3374,13 +3374,14 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
                         CalendarDisplayCode::LONG_YEAR, nNatNum );
                 if (aYear.Len() < 4)
                 {
+                    using namespace comphelper::string;
                     // Ensure that year consists of at least 4 digits, so it
                     // can be distinguished from 2 digits display and edited
                     // without suddenly being hit by the 2-digit year magic.
-                    String aZero;
-                    aZero.Fill( 4 - aYear.Len(), sal_Unicode('0'));
-                    ImpTransliterate( aZero, NumFor[nIx].GetNatNum());
-                    aYear.Insert( aZero, 0);
+                    OUStringBuffer aBuf;
+                    padToLength(aBuf, 4 - aYear.Len(), sal_Unicode('0'));
+                    OUString aZero = impTransliterate(aBuf.makeStringAndClear(), NumFor[nIx].GetNatNum());
+                    aYear.Insert(aZero, 0);
                 }
                 OutString += aYear;
                 if ( bOtherCalendar )
@@ -3498,11 +3499,11 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         if (aBuf.getLength() < rInfo.nCntPost)
             padToLength(aBuf, rInfo.nCntPost, '0');
         sSecStr = aBuf.makeStringAndClear();
-        ImpTransliterate( sSecStr, NumFor[nIx].GetNatNum() );
+        sSecStr = impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
         nCntPost = sSecStr.Len();
     }
     else
-        ImpTransliterate( sSecStr, NumFor[nIx].GetNatNum() );
+        sSecStr = impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
 
     xub_StrLen nSecPos = 0;                     // Zum Ziffernweisen
                                             // abarbeiten
@@ -3710,13 +3711,14 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                         CalendarDisplayCode::LONG_YEAR, nNatNum );
                 if (aYear.Len() < 4)
                 {
+                    using namespace comphelper::string;
                     // Ensure that year consists of at least 4 digits, so it
                     // can be distinguished from 2 digits display and edited
                     // without suddenly being hit by the 2-digit year magic.
-                    String aZero;
-                    aZero.Fill( 4 - aYear.Len(), sal_Unicode('0'));
-                    ImpTransliterate( aZero, NumFor[nIx].GetNatNum());
-                    aYear.Insert( aZero, 0);
+                    OUStringBuffer aBuf;
+                    padToLength(aBuf, 4 - aYear.Len(), sal_Unicode('0'));
+                    OUString aZero = impTransliterate(aBuf.makeStringAndClear(), NumFor[nIx].GetNatNum());
+                    aYear.Insert(aZero, 0);
                 }
                 OutString += aYear;
                 if ( bOtherCalendar )
@@ -3963,8 +3965,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
     }
     if (bSign)
         sStr.Insert('-',0);
-    ImpTransliterate( sStr, NumFor[nIx].GetNatNum() );
-    OutString = sStr;
+    OutString = impTransliterate(sStr, NumFor[nIx].GetNatNum());
     return bRes;
 }
 
@@ -4443,7 +4444,7 @@ DateFormat SvNumberformat::GetDateOrder() const
     }
     else
     {
-       OSL_FAIL( "SvNumberformat::GetDateOrder: no date" );
+       SAL_WARN( "svl.numbers", "SvNumberformat::GetDateOrder: no date" );
     }
     return rLoc().getDateFormat();
 }
@@ -4453,7 +4454,7 @@ sal_uInt32 SvNumberformat::GetExactDateOrder() const
     sal_uInt32 nRet = 0;
     if ( (eType & NUMBERFORMAT_DATE) != NUMBERFORMAT_DATE )
     {
-        OSL_FAIL( "SvNumberformat::GetExactDateOrder: no date" );
+        SAL_WARN( "svl.numbers", "SvNumberformat::GetExactDateOrder: no date" );
         return nRet;
     }
     short const * const pType = NumFor[0].Info().nTypeArray;
@@ -4533,7 +4534,7 @@ static void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
                 rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "[>=" ) );
             break;
             default:
-                OSL_FAIL( "unsupported number format" );
+                SAL_WARN( "svl.numbers", "unsupported number format" );
                 break;
         }
         rStr += String( ::rtl::math::doubleToUString( fLimit,
@@ -4727,7 +4728,7 @@ OUString SvNumberformat::GetMappedFormatstring(
 String SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
         sal_Int32 nVal, sal_uInt16 nMinDigits ) const
 {
-    String aStr;
+    OUString aStr;
     if ( nMinDigits )
     {
         if ( nMinDigits == 2 )
@@ -4749,23 +4750,25 @@ String SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
                 aStr = aValStr;
             else
             {
-                aStr.Fill( nMinDigits - aValStr.Len(), '0' );
-                aStr += aValStr;
+                using namespace comphelper::string;
+                OUStringBuffer aBuf;
+                padToLength(aBuf, nMinDigits - aValStr.Len(), '0' );
+                aBuf.append(aValStr);
+                aStr = aBuf.makeStringAndClear();
             }
         }
     }
     else
         aStr = rtl::OUString::valueOf( nVal );
-    ImpTransliterate( aStr, rNum );
-    return aStr;
+    return impTransliterate(aStr, rNum);
 }
 
-void SvNumberformat::ImpTransliterateImpl( String& rStr,
+OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
         const SvNumberNatNum& rNum ) const
 {
     com::sun::star::lang::Locale aLocale(
             MsLangId::convertLanguageToLocale( rNum.GetLang() ) );
-    rStr = GetFormatter().GetNatNum()->getNativeNumberString( rStr,
+    return GetFormatter().GetNatNum()->getNativeNumberString( rStr,
             aLocale, rNum.GetNatNum() );
 }
 

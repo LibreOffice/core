@@ -167,20 +167,43 @@ $(call gb_LinkTarget_add_libs,$(1),-lz)
 
 endef
 
+# nothing on system
+define gb_LinkTarget__use_zlib_x64
+
+endef
+
 else # !SYSTEM_ZLIB
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	zlib \
+	zlib_x64 \
 ))
 
-define gb_LinkTarget__use_zlib
+define gb_LinkTarget__use_zlib_multiarch
+$(if $(2),,$(call gb_Output_error,gb_LinkTarget__use_zlib_multiarch needs two arguments))
+
+$(call gb_LinkTarget_use_packages,$(1),\
+	zlib_inc \
+)
+
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(OUTDIR)/inc/external/zlib \
 	$$(INCLUDE) \
 )
+
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	zlib \
+	$(2) \
 )
+
+endef
+
+define gb_LinkTarget__use_zlib
+$(call gb_LinkTarget__use_zlib_multiarch,$(1),zlib)
+
+endef
+
+define gb_LinkTarget__use_zlib_x64
+$(call gb_LinkTarget__use_zlib_multiarch,$(1),zlib_x64)
 
 endef
 
@@ -217,6 +240,35 @@ endef
 
 endif # SYSTEM_JPEG
 
+ifeq ($(SYSTEM_MYTHES),YES)
+
+define gb_LinkTarget__use_mythes
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(MYTHES_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(MYTHES_LIBS))
+
+endef
+
+else # !SYSTEM_MYTHES
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	mythes \
+))
+
+define gb_LinkTarget__use_mythes
+$(call gb_LinkTarget_use_package,$(1),\
+	mythes \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	mythes \
+)
+
+endef
+
+endif # SYSTEM_MYTHES
+
 
 ifeq ($(SYSTEM_EXPAT),YES)
 
@@ -237,19 +289,24 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	ascii_expat_xmlparse \
 	expat_xmlparse \
 	expat_xmltok \
+	expat_x64 \
 ))
 
 define gb_LinkTarget__use_expat
 $(if $(2),,$(error gb_LinkTarget__use_expat needs additional parameter))
 
-$(if $(filter-out ascii_expat_xmlparse,$(2)),\
+$(call gb_LinkTarget_set_include,$(1),\
+    -I$(OUTDIR)/inc/external/expat \
+    $$(INCLUDE) \
+)
+
+$(if $(filter-out ascii_expat_xmlparse expat_xmltok,$(2)),\
 	$(call gb_LinkTarget_add_defs,$(1),\
 		-DXML_UNICODE \
 ))
 
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	$(2) \
-	expat_xmltok \
 )
 
 endef
@@ -258,12 +315,17 @@ endif # SYSTEM_EXPAT
 
 # now define 2 wrappers that select which internal static library to use...
 define gb_LinkTarget__use_expat_utf8
-$(call gb_LinkTarget__use_expat,$(1),ascii_expat_xmlparse)
+$(call gb_LinkTarget__use_expat,$(1),ascii_expat_xmlparse expat_xmltok)
 
 endef
 
 define gb_LinkTarget__use_expat_utf16
-$(call gb_LinkTarget__use_expat,$(1),expat_xmlparse)
+$(call gb_LinkTarget__use_expat,$(1),expat_xmlparse expat_xmltok)
+
+endef
+
+define gb_LinkTarget__use_expat_utf16_x64
+$(call gb_LinkTarget__use_expat,$(1),expat_x64)
 
 endef
 
@@ -273,6 +335,33 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	freetype \
 ))
 endif
+
+ifeq ($(SYSTEM_HYPH),YES)
+
+define gb_LinkTarget__use_hyphen
+$(call gb_LinkTarget_add_libs,$(1),$(HYPHEN_LIB))
+
+endef
+
+else # !SYSTEM_HYPH
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	hyphen \
+))
+
+define gb_LinkTarget__use_hyphen
+$(call gb_LinkTarget_use_unpacked,$(1),hyphen)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,hyphen)\
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	hyphen \
+)
+
+endef
+
+endif # SYSTEM_HYPH
 
 ifeq ($(SYSTEM_HUNSPELL),YES)
 
@@ -288,19 +377,20 @@ endef
 else # !SYSTEM_HUNSPELL
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	$(if $(filter MSC,$(COM)),libhunspell,hunspell-1.3) \
+	hunspell \
 ))
 
 define gb_LinkTarget__use_hunspell
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DHUNSPELL_STATIC \
 )
+$(call gb_LinkTarget_use_unpacked,$(1),hunspell)
 $(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,hunspell/src/hunspell)\
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/hunspell \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	$(if $(filter MSC,$(COM)),libhunspell,hunspell-1.3) \
+	hunspell \
 )
 
 endef
@@ -325,6 +415,8 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 
 endef
+
+gb_ExternalProject__use_boost_headers:=
 
 else # !SYSTEM_BOOST
 
@@ -360,6 +452,10 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 
 endef
 
+define gb_ExternalProject__use_boost_headers
+$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_UnpackedTarball_get_target,boost)
+
+endef
 endif # SYSTEM_BOOST
 
 
@@ -397,32 +493,28 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(LIBEXTTEXTCAT_CFLAGS) \
 )
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_LIBEXTTEXTCAT \
+)
 $(call gb_LinkTarget_add_libs,$(1),$(LIBEXTTEXTCAT_LIBS))
 
 endef
 
 else # !SYSTEM_LIBEXTTEXTCAT
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	libexttextcat \
-))
-else
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	exttextcat-1.0 \
+	exttextcat \
 ))
-endif
 
 define gb_LinkTarget__use_libexttextcat
-ifeq ($(OS),WNT)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	libexttextcat \
-)
-else
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	exttextcat-1.0 \
+	exttextcat \
 )
-endif
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,exttextcat/src) \
+	$$(INCLUDE) \
+)
 
 endef
 
@@ -503,41 +595,9 @@ endef
 
 endif # SYSTEM_LIBXSLT
 
-
-ifeq ($(SYSTEM_GLIB),YES)
-
 define gb_LinkTarget__use_glib
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(GLIB_CFLAGS) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),$(GLIB_LIBS))
-
+$(error gb_LinkTarget__use_glib should not be called any more)
 endef
-
-else # !SYSTEM_GLIB
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	glib-2.0 \
-	gmodule-2.0 \
-))
-
-define gb_LinkTarget__use_glib
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/external/glib-2.0 \
-)
-
-$(call gb_LinkTarget_use_libraries,$(1),\
-	glib-2.0 \
-	gmodule-2.0 \
-)
-
-endef
-
-endif # SYSTEM_GLIB
-
 
 ifeq ($(ENABLE_LIBLANGTAG),YES)
 
@@ -563,12 +623,6 @@ define gb_LinkTarget__use_liblangtag
 $(call gb_LinkTarget_use_libraries,$(1),\
 	langtag \
 )
-
-ifeq ($(OS),MACOSX)
-
-$(call gb_LinkTarget_add_libs,$(1),$(foreach replaceme,libglib-2.0.0 libgmodule-2.0.0,-dylib_file @loader_path/$(replaceme).dylib:$(gb_Library_OUTDIRLOCATION)/$(replaceme).dylib))
-
-endif
 
 endef
 
@@ -599,6 +653,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 ))
 
 define gb_LinkTarget__use_neon
+$(call gb_LinkTarget_use_unpacked,$(1),neon)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,neon/src) \
 	$$(INCLUDE) \
@@ -764,20 +819,28 @@ $(call gb_LinkTarget_add_libs,$(1),$(GRAPHITE_LIBS))
 
 endef
 
-else # !SYSTEM_GRAPHITE
+else ifeq ($(SYSTEM_GRAPHITE),NO)
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	graphite2_off \
+	graphite \
 ))
 define gb_LinkTarget__use_graphite
+$(call gb_LinkTarget_use_unpacked,$(1),graphite)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,graphite/include) \
+	$$(INCLUDE) \
+)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-    graphite2_off \
+    graphite \
 )
 
 endef
 
-endif # SYSTEM_GRAPHITE
+else # DISABLED GRAPHITE
 
+gb_LinkTarget__use_graphite :=
+
+endif # SYSTEM_GRAPHITE
 
 ifeq ($(SYSTEM_ICU),YES)
 
@@ -810,7 +873,7 @@ else
 gb_ICU_suffix:=
 endif
 
-# icudata and icui18n is called icudt and icuin when built with MSVC :-(
+# icudata and icui18n is called icudt and icuin when built with MSVC :-/
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	icudt \
@@ -997,12 +1060,15 @@ endef
 else # !SYSTEM_LIBVISIO
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	visiolib \
+	visio-0.0 \
 ))
 
 define gb_LinkTarget__use_visio
+$(call gb_LinkTarget_use_package,$(1),\
+	libvisio \
+)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	visiolib \
+	visio-0.0 \
 )
 
 endef
@@ -1119,13 +1185,20 @@ ifeq ($(SYSTEM_LCMS2),YES)
 define gb_LinkTarget__use_lcms2
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-    $(LCMS2_CFLAGS) \
+	$(LCMS2_CFLAGS) \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(LCMS2_LIBS))
 
 endef
 
+gb_ExternalProject__use_lcms2 :=
+
 else # !SYSTEM_LCMS2
+
+define gb_ExternalProject__use_lcms2
+$(call gb_ExternalProject_use_package,$(1),lcms2)
+
+endef
 
 ifeq ($(OS),ANDROID)
 
@@ -1134,8 +1207,9 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_lcms2
+$(call gb_LinkTarget_use_external_project,$(1),lcms2)
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR)/inc/lcms2 \
+	-I$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
@@ -1151,8 +1225,9 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_lcms2
+$(call gb_LinkTarget_use_external_project,$(1),lcms2)
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR)/inc/lcms2 \
+	-I$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_libraries,$(1),\
@@ -1167,8 +1242,11 @@ endif # SYSTEM_LCMS2
 
 ifeq ($(SYSTEM_LPSOLVE),YES)
 
-define gb_LinkTarget__use_lpsolve55
+define gb_LinkTarget__use_lpsolve
 $(call gb_LinkTarget_add_libs,$(1),-llpsolve55)
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_LPSOLVE \
+)
 
 endef
 
@@ -1178,9 +1256,14 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	lpsolve55 \
 ))
 
-define gb_LinkTarget__use_lpsolve55
+define gb_LinkTarget__use_lpsolve
+$(call gb_LinkTarget_use_unpacked,$(1),lpsolve)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	lpsolve55 \
+)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,lpsolve) \
+	$$(INCLUDE) \
 )
 
 endef
@@ -1205,24 +1288,9 @@ endef
 
 else # ENABLE_GIO
 
-ifeq ($(SYSTEM_GLIB),YES)
-
-gb_LinkTarget__use_gio :=
-
-else # !SYSTEM_GLIB
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	gio-2.0 \
-))
-
 define gb_LinkTarget__use_gio
-$(call gb_LinkTarget_use_libraries,$(1),\
-	gio-2.0 \
-)
 
 endef
-
-endif # SYSTEM_GLIB
 
 endif # ENABLE_GIO
 
@@ -1249,26 +1317,9 @@ endif
 
 endef
 
-ifeq ($(SYSTEM_GLIB),YES)
-
 define gb_LinkTarget__use_gthread
 $(call gb_LinkTarget_add_libs,$(1),$(GTHREAD_LIBS))
-
 endef
-
-else # !SYSTEM_GLIB
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	gthread-2.0 \
-))
-
-define gb_LinkTarget__use_gthread
-$(call gb_LinkTarget_use_libraries,$(1),\
-	gthread-2.0 \
-)
-endef
-
-endif # SYSTEM_GLIB
 
 ifeq ($(ENABLE_CUPS),TRUE)
 
@@ -1355,107 +1406,21 @@ gb_LinkTarget__use_telepathy :=
 
 endif # ENABLE_TELEPATHY
 
-ifeq ($(SYSTEM_LIBCROCO),NO)
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	croco-0.6-3 \
-))
-
 define gb_LinkTarget__use_croco
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/external/libcroco-0.6 \
-)
-
-$(call gb_LinkTarget_use_libraries,$(1),\
-	croco-0.6-3 \
-)
-
+$(error gb_LinkTarget__use_croco should not be used any more)
 endef
-
-else # !SYSTEM_LIBCROCO
-
-gb_LinkTarget__use_croco :=
-
-endif # SYSTEM_LIBCROCO
-
-ifeq ($(SYSTEM_PANGO),NO)
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	pango-1.0 \
-	pangocairo-1.0 \
-))
 
 define gb_LinkTarget__use_pango
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/external/pango-1.0 \
-)
-
-$(call gb_LinkTarget_use_libraries,$(1),\
-	pango-1.0 \
-	pangocairo-1.0 \
-)
-
+$(error gb_LinkTarget__use_pango should not be used any more)
 endef
-
-else # !SYSTEM_PANGO
-
-gb_LinkTarget__use_pango :=
-
-endif # SYSTEM_PANGO
-
-ifeq ($(SYSTEM_LIBGSF),NO)
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	gsf-1 \
-))
 
 define gb_LinkTarget__use_gsf
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/external/libgsf-1 \
-)
-
-$(call gb_LinkTarget_use_libraries,$(1),\
-	gsf-1 \
-)
-
+$(error gb_LinkTarget__use_gsf should not be used any more)
 endef
-
-else # !SYSTEM_LIBGSF
-
-gb_LinkTarget__use_gsf :=
-
-endif # SYSTEM_LIBGSF
-
-ifeq ($(SYSTEM_GDKPIXBUF),NO)
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	gdk_pixbuf-2.0 \
-))
 
 define gb_LinkTarget__use_pixbuf
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/external/gdk-pixbuf-2.0 \
-)
-
-$(call gb_LinkTarget_use_libraries,$(1),\
-	gdk_pixbuf-2.0 \
-)
-
+$(error gb_LinkTarget__use_pixbuf should not be used any more)
 endef
-
-else # !SYSTEM_GDKPIXBUF
-
-gb_LinkTarget__use_pixbuf :=
-
-endif # SYSTEM_GDKPIXBUF
 
 ifeq ($(SYSTEM_DB),YES)
 
@@ -1551,6 +1516,11 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_curl
+$(call gb_LinkTarget_use_external_project,$(1),curl)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,curl/include) \
+	$$(INCLUDE) \
+)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	curl \
 )
@@ -1559,11 +1529,13 @@ endef
 
 endif # SYSTEM_CURL
 
-ifneq ($(VALGRIND_CFLAGS),)
+# strip because of gb_SPACE
+ifneq ($(strip $(VALGRIND_CFLAGS)),)
 
 define gb_LinkTarget__use_valgrind
 $(call gb_LinkTarget_add_defs,$(1),\
-    -DHAVE_VALGRIND_H \
+	-DHAVE_VALGRIND_H \
+	-DHAVE_MEMCHECK_H \
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1668,31 +1640,16 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 
 endif # SYSTEM_CLUCENE
 
-ifeq ($(SYSTEM_GLIB),YES)
 define gb_LinkTarget__use_gobject
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(GOBJECT_LIBS) \
+       $(GOBJECT_LIBS) \
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(GOBJECT_CFLAGS) \
+       $$(INCLUDE) \
+       $(GOBJECT_CFLAGS) \
 )
 endef
-
-else # !SYSTEM_GLIB
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	gobject-2.0 \
-))
-
-define gb_LinkTarget__use_gobject
-$(call gb_LinkTarget_use_libraries,$(1),\
-	gobject-2.0 \
-)
-endef
-
-endif # !SYSTEM_GLIB
 
 ifeq ($(SYSTEM_HSQLDB),YES)
 
@@ -1733,12 +1690,12 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 ))
 
 define gb_LinkTarget__use_openldap
-
+$(call gb_LinkTarget_use_unpacked,$(1),openldap)
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR)/inc/openldap \
+	-I$(call gb_UnpackedTarball_get_dir,openldap/include) \
 	$$(INCLUDE) \
 )
-
+$(call gb_LinkTarget_use_package,$(1),openldap)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	ldap \
 	lber \
@@ -1771,6 +1728,10 @@ endef
 else # !SYSTEM_POSTGRESQL
 
 define gb_LinkTarget__use_postgresql
+
+$(call gb_LinkTarget_use_packages,$(1),\
+	postgresql \
+)
 
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(OUTDIR)/inc/postgresql \
@@ -2101,6 +2062,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 ))
 
 define gb_LinkTarget__use_orcus
+$(call gb_LinkTarget_use_unpacked,$(1),orcus)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,orcus/include) \
 	$$(INCLUDE) \
@@ -2264,23 +2226,6 @@ endef
 
 endif # SYSTEM_HSQLDB
 
-ifeq ($(SYSTEM_SAXON),YES)
-
-define gb_Jar__use_saxon
-$(call gb_Jar_use_system_jar,$(1),$(SAXON_JAR))
-endef
-
-else # !SYSTEM_SAXON
-
-$(eval $(call gb_Helper_register_jars,OOO,\
-	saxon9 \
-))
-
-define gb_Jar__use_saxon
-$(call gb_Jar_use_jar,$(1),saxon9)
-endef
-
-endif # SYSTEM_SAXON
 
 ifeq ($(SYSTEM_BSH),YES)
 

@@ -7,11 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-include $(SRCDIR)/hsqldb/version.mk
-
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,hsqldb))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,hsqldb,17410483b5b5f267aa18b7e00b65e6e0-hsqldb_$(HSQLDB_VERSION).zip))
+$(eval $(call gb_UnpackedTarball_set_tarball,hsqldb,$(HSQLDB_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,hsqldb,\
 	build/build.xml \

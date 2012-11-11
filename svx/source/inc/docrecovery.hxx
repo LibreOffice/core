@@ -60,8 +60,6 @@
 #define RECOVERY_CMD_DO_ENTRY_CLEANUP               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEntryCleanUp"        ))
 
 #define SERVICENAME_PROGRESSFACTORY                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.StatusIndicatorFactory"))
-#define SERVICENAME_RECOVERYCORE                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.AutoRecovery"         ))
-#define SERVICENAME_FOLDERPICKER                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker"    ))
 #define SERVICENAME_DESKTOP                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop"              ))
 
 #define PROP_PARENTWINDOW                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window"           ))
@@ -214,7 +212,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
     private:
 
         /// TODO
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /// TODO
         css::uno::Reference< css::frame::XDispatch > m_xRealCore;
@@ -243,8 +241,8 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
 
         //---------------------------------------
         /** @short  TODO */
-        RecoveryCore(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR         ,
-                           sal_Bool                                                bUsedForSaving);
+        RecoveryCore(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                           sal_Bool                                            bUsedForSaving);
 
         //---------------------------------------
         /** @short  TODO */
@@ -252,7 +250,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
 
         //---------------------------------------
         /** @short  TODO */
-        virtual css::uno::Reference< css::lang::XMultiServiceFactory > getSMGR();
+        virtual css::uno::Reference< css::uno::XComponentContext > getComponentContext();
 
         //---------------------------------------
         /** @short  TODO */
@@ -571,14 +569,14 @@ class RecovDocListEntry : public SvLBoxString
 
         //---------------------------------------
         /** @short TODO */
-        RecovDocListEntry(      SvLBoxEntry* pEntry,
+        RecovDocListEntry(      SvTreeListEntry* pEntry,
                                 sal_uInt16       nFlags,
                           const String&      sText );
 
         //---------------------------------------
         /** @short TODO */
         virtual void Paint(
-            const Point& aPos, SvTreeListBox& aDevice, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
+            const Point& aPos, SvTreeListBox& aDevice, sal_uInt16 nFlags, SvTreeListEntry* pEntry);
 };
 
 //===============================================
@@ -592,11 +590,11 @@ class RecovDocList : public SvxSimpleTable
         Image  m_aYellowCheckImg;
         Image  m_aRedCrossImg;
 
-        String m_aSuccessRecovStr;
-        String m_aOrigDocRecovStr;
-        String m_aRecovFailedStr;
-        String m_aRecovInProgrStr;
-        String m_aNotRecovYetStr;
+        OUString m_aSuccessRecovStr;
+        OUString m_aOrigDocRecovStr;
+        OUString m_aRecovFailedStr;
+        OUString m_aRecovInProgrStr;
+        OUString m_aNotRecovYetStr;
 
     //-------------------------------------------
     // interface
@@ -611,11 +609,11 @@ class RecovDocList : public SvxSimpleTable
 
         //---------------------------------------
         /** @short TODO */
-        virtual void InitEntry(      SvLBoxEntry* pEntry ,
-                               const XubString&   sText  ,
-                               const Image&       aImage1,
-                               const Image&       aImage2,
-                                     SvLBoxButtonKind eButtonKind);
+        virtual void InitEntry(SvTreeListEntry* pEntry,
+                               const OUString& rText,
+                               const Image& rImage1,
+                               const Image& rImage2,
+                               SvLBoxButtonKind eButtonKind);
 };
 
 //===============================================

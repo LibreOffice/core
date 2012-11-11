@@ -35,6 +35,7 @@ class ScColorScaleEntry;
 class ScDataBarFormat;
 struct ScDataBarFormatData;
 class ScConditionalFormat;
+struct ScIconSetFormatData;
 
 class ScXMLConditionalFormatsContext : public SvXMLImportContext
 {
@@ -50,8 +51,6 @@ public:
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-
-    virtual void EndElement();
 };
 
 class ScXMLConditionalFormatContext : public SvXMLImportContext
@@ -72,7 +71,6 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void EndElement();
-
 private:
 
     ScConditionalFormat* mpFormat;
@@ -96,9 +94,6 @@ public:
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-
-    virtual void EndElement();
-
 private:
 
     ScColorScaleFormat* pColorScaleFormat;
@@ -122,14 +117,34 @@ public:
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-
-    virtual void EndElement();
-
 private:
 
     ScDataBarFormat* mpDataBarFormat;
     ScDataBarFormatData* mpFormatData;
 
+};
+
+class ScXMLIconSetFormatContext : public SvXMLImportContext
+{
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+    ScIconSetFormatData* mpFormatData;
+public:
+
+    ScXMLIconSetFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScConditionalFormat* pFormat);
+
+    virtual ~ScXMLIconSetFormatContext() {}
+
+
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+                                     const ::rtl::OUString& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 };
 
 class ScXMLColorScaleFormatEntryContext : public SvXMLImportContext
@@ -144,28 +159,23 @@ public:
                         ScColorScaleFormat* pFormat);
 
     virtual ~ScXMLColorScaleFormatEntryContext() {}
-
-    virtual void EndElement();
-
 private:
 
     ScColorScaleEntry* mpFormatEntry;
 };
 
-class ScXMLDataBarFormatEntryContext : public SvXMLImportContext
+class ScXMLFormattingEntryContext : public SvXMLImportContext
 {
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
-    ScXMLDataBarFormatEntryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLFormattingEntryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        ScDataBarFormatData* pData);
+                        ScColorScaleEntry*& pData);
 
-    virtual ~ScXMLDataBarFormatEntryContext() {}
-
-    virtual void EndElement();
+    virtual ~ScXMLFormattingEntryContext() {}
 };
 
 class ScXMLCondContext : public SvXMLImportContext
@@ -180,8 +190,6 @@ public:
                         ScConditionalFormat* pFormat);
 
     virtual ~ScXMLCondContext() {}
-
-    virtual void EndElement();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

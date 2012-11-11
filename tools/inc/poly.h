@@ -21,7 +21,7 @@
 
 #include <tools/gen.hxx>
 
-class ImplPolygonData
+class SAL_WARN_UNUSED ImplPolygonData
 {
 public:
     Point*          mpPointAry;
@@ -30,7 +30,7 @@ public:
     sal_uIntPtr           mnRefCount;
 };
 
-class ImplPolygon  : public ImplPolygonData
+class SAL_WARN_UNUSED ImplPolygon  : public ImplPolygonData
 {
 public:
                     ImplPolygon( sal_uInt16 nInitSize, sal_Bool bFlags = sal_False );
@@ -48,7 +48,7 @@ public:
 class Polygon;
 typedef Polygon* SVPPOLYGON;
 
-class ImplPolyPolygon
+class SAL_WARN_UNUSED ImplPolyPolygon
 {
 public:
     SVPPOLYGON*     mpPolyAry;

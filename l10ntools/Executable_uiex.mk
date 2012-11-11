@@ -19,6 +19,8 @@ $(eval $(call gb_Executable_use_libraries,uiex,\
     i18nregexp \
 ))
 
+$(eval $(call gb_Executable_use_unpacked,uiex,boost))
+
 $(eval $(call gb_Executable_use_static_libraries,uiex,\
     transex \
 ))

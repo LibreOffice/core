@@ -54,7 +54,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/presentation/TextAnimationType.hpp>
@@ -317,65 +317,61 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
         if( xShape.is() )
         {
             // TODO/LATER: Optimize this, don't create a break iterator each time
-            Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-            Reference < i18n::XBreakIterator > xBI( xMSF->createInstance( "com.sun.star.i18n.BreakIterator" ), UNO_QUERY );
-            DBG_ASSERT( xBI.is(), "sd::CustomAnimationEffect::getNumberOfSubitems(), could not create a 'com.sun.star.i18n.BreakIterator'!" );
+            Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            Reference < i18n::XBreakIterator > xBI = i18n::BreakIterator::create(xContext);
 
-            if( xBI.is() )
+            Reference< XEnumerationAccess > xEA( xShape, UNO_QUERY_THROW );
+            Reference< XEnumeration > xEnumeration( xEA->createEnumeration(), UNO_QUERY_THROW );
+            Locale aLocale;
+            const OUString aStrLocaleName( "CharLocale" );
+            Reference< XTextRange > xParagraph;
+
+            sal_Int32 nPara = 0;
+            while( xEnumeration->hasMoreElements() )
             {
-                Reference< XEnumerationAccess > xEA( xShape, UNO_QUERY_THROW );
-                Reference< XEnumeration > xEnumeration( xEA->createEnumeration(), UNO_QUERY_THROW );
-                Locale aLocale;
-                const OUString aStrLocaleName( "CharLocale" );
-                Reference< XTextRange > xParagraph;
+                xEnumeration->nextElement() >>= xParagraph;
 
-                sal_Int32 nPara = 0;
-                while( xEnumeration->hasMoreElements() )
+                // skip this if its not the only paragraph we want to count
+                if( (nOnlyPara != -1) && (nOnlyPara != nPara ) )
+                    continue;
+
+                if( nIterateType == TextAnimationType::BY_PARAGRAPH )
                 {
-                    xEnumeration->nextElement() >>= xParagraph;
+                    nSubItems++;
+                }
+                else
+                {
+                    const OUString aText( xParagraph->getString() );
+                    Reference< XPropertySet > xSet( xParagraph, UNO_QUERY_THROW );
+                    xSet->getPropertyValue( aStrLocaleName ) >>= aLocale;
 
-                    // skip this if its not the only paragraph we want to count
-                    if( (nOnlyPara != -1) && (nOnlyPara != nPara ) )
-                        continue;
+                    sal_Int32 nPos;
+                    const sal_Int32 nEndPos = aText.getLength();
 
-                    if( nIterateType == TextAnimationType::BY_PARAGRAPH )
+                    if( nIterateType == TextAnimationType::BY_WORD )
                     {
-                        nSubItems++;
+                        for( nPos = 0; nPos < nEndPos; nPos++ )
+                        {
+                            nPos = xBI->getWordBoundary(aText, nPos, aLocale, i18n::WordType::ANY_WORD, sal_True).endPos;
+                            nSubItems++;
+                        }
+                        break;
                     }
                     else
                     {
-                        const OUString aText( xParagraph->getString() );
-                        Reference< XPropertySet > xSet( xParagraph, UNO_QUERY_THROW );
-                        xSet->getPropertyValue( aStrLocaleName ) >>= aLocale;
-
-                        sal_Int32 nPos;
-                        const sal_Int32 nEndPos = aText.getLength();
-
-                        if( nIterateType == TextAnimationType::BY_WORD )
+                        sal_Int32 nDone;
+                        for( nPos = 0; nPos < nEndPos; nPos++ )
                         {
-                            for( nPos = 0; nPos < nEndPos; nPos++ )
-                            {
-                                nPos = xBI->getWordBoundary(aText, nPos, aLocale, i18n::WordType::ANY_WORD, sal_True).endPos;
-                                nSubItems++;
-                            }
-                            break;
-                        }
-                        else
-                        {
-                            sal_Int32 nDone;
-                            for( nPos = 0; nPos < nEndPos; nPos++ )
-                            {
-                                nPos = xBI->nextCharacters(aText, nPos, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 0, nDone);
-                                nSubItems++;
-                            }
+                            nPos = xBI->nextCharacters(aText, nPos, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 0, nDone);
+                            nSubItems++;
                         }
                     }
-
-                    if( nPara == nOnlyPara )
-                        break;
-
-                    nPara++;
                 }
+
+                if( nPara == nOnlyPara )
+                    break;
+
+                nPara++;
             }
         }
     }

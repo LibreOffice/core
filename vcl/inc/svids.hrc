@@ -41,6 +41,8 @@
 #define SV_RESID_BITMAP_SCROLLMSK           1050
 #define SV_RESID_BITMAP_SCROLLBMP           1051
 #define SV_RESID_BITMAP_CLOSEDOC            1052
+#define SV_RESID_BITMAP_INDEX               1053
+#define SV_RESID_BITMAP_REFRESH             1054
 
 #define SV_DISCLOSURE_PLUS                  1060
 #define SV_DISCLOSURE_MINUS                 1061
@@ -151,6 +153,8 @@
 #define SV_BUTTONTEXT_ADD                   10112
 #define SV_BUTTONTEXT_DELETE                10113
 #define SV_BUTTONTEXT_REMOVE                10114
+#define SV_BUTTONTEXT_NEW                   10115
+#define SV_BUTTONTEXT_EDIT                  10116
 
 #define SV_STDTEXT_FIRST                    SV_STDTEXT_SERVICENOTAVAILABLE
 #define SV_STDTEXT_SERVICENOTAVAILABLE      10200

@@ -26,14 +26,14 @@
 #include <vcl/msgbox.hxx>
 #include <tools/config.hxx>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/XControlAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/confignode.hxx>
-#include <vcl/unohelp.hxx>
 #include <i18npool/mslangid.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -61,8 +61,8 @@ ResId padmin::PaResId( sal_uInt32 nId )
         ::com::sun::star::lang::Locale aLocale;
 
         utl::OConfigurationNode aNode =
-            utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
-                    vcl::unohelper::GetMultiServiceFactory(),
+            utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
+                    comphelper::getProcessComponentContext(),
                     OUString("org.openoffice.Setup/L10N") );
         if ( aNode.isValid() )
         {
@@ -275,42 +275,36 @@ void padmin::freePadminRC()
 bool padmin::chooseDirectory( String& rInOutPath )
 {
     bool bRet = false;
-    Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    if( xFactory.is() )
+    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);;
+    Reference< XControlAccess > xCA( xFolderPicker, UNO_QUERY );
+    if( xCA.is() )
     {
-        Reference< XFolderPicker > xFolderPicker( xFactory->createInstance( OUString(  "com.sun.star.ui.dialogs.FolderPicker"  ) ), UNO_QUERY );
-        if( xFolderPicker.is() )
+        try
         {
-            Reference< XControlAccess > xCA( xFolderPicker, UNO_QUERY );
-            if( xCA.is() )
-            {
-                try
-                {
-                    Any aState;
-                    aState <<= sal_False;
-                    xCA->setControlProperty( OUString(  "HelpButton"  ),
-                                             OUString(  "Visible"  ),
-                                             aState );
+            Any aState;
+            aState <<= sal_False;
+            xCA->setControlProperty( OUString(  "HelpButton"  ),
+                                     OUString(  "Visible"  ),
+                                     aState );
 
-                }
-                catch( ... )
-                {
-                }
-            }
-            INetURLObject aObj( rInOutPath, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-            xFolderPicker->setDisplayDirectory( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
-            if( xFolderPicker->execute() == ExecutableDialogResults::OK )
-            {
-                aObj = INetURLObject( xFolderPicker->getDirectory() );
-                rInOutPath = aObj.PathToFileName();
-                bRet = true;
-            }
         }
-#if OSL_DEBUG_LEVEL > 1
-        else
-            fprintf( stderr, "could not get FolderPicker service\n" );
-#endif
+        catch( ... )
+        {
+        }
     }
+    INetURLObject aObj( rInOutPath, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+    xFolderPicker->setDisplayDirectory( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
+    if( xFolderPicker->execute() == ExecutableDialogResults::OK )
+    {
+        aObj = INetURLObject( xFolderPicker->getDirectory() );
+        rInOutPath = aObj.PathToFileName();
+        bRet = true;
+    }
+#if OSL_DEBUG_LEVEL > 1
+    else
+        fprintf( stderr, "could not get FolderPicker service\n" );
+#endif
     return bRet;
 }
 

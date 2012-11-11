@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -55,7 +56,7 @@ using namespace ::com::sun::star::registry                      ;
                                                                                                                                             \
     static Reference< XInterface > SAL_CALL CLASS##_createInstance ( const Reference< XMultiServiceFactory >& rServiceManager ) throw ( Exception ) \
     {                                                                                                                                       \
-        return Reference< XInterface >( *(OWeakObject*)(new CLASS( rServiceManager )) );                                                    \
+        return Reference< XInterface >( *(OWeakObject*)(new CLASS( comphelper::getComponentContext(rServiceManager) )) );                                                    \
     }
 
 //******************************************************************************************************************************

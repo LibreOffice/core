@@ -3085,7 +3085,10 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
                                                                 nType,
                                                                 sal_False,
                                                                 sal_False,
-                                                                xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
+                                                                xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
+                                                                ::rtl::OUString(),
+                                                                ::rtl::OUString(),
+                                                                ::rtl::OUString());
         _rxColumn = pColumn;
         pColumn->setFunction(sal_True);
         pColumn->setRealName(pEntry->GetField());

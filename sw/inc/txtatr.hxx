@@ -105,7 +105,7 @@ public:
     virtual ~SwTxtRuby();
     TYPEINFO();
 
-    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
+    virtual bool GetInfo( SfxPoolItem& rInfo ) const;
 
     SW_DLLPRIVATE void InitRuby(SwTxtNode & rNode);
 

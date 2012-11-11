@@ -30,6 +30,7 @@
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
@@ -68,7 +69,7 @@ using ::com::sun::star::beans::NamedValue;
 
 namespace sd {
 
-extern Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFactory >& xConfigProvider, const OUString& rPath );
+extern Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFactory >& xServiceFactory, const OUString& rPath );
 extern void implImportLabels( const Reference< XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, UStringMap& rStringMap );
 
 TransitionPreset::TransitionPreset( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
@@ -161,8 +162,8 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
             UNO_QUERY );
 
         // import ui strings
-        Reference< XMultiServiceFactory > xConfigProvider(
-            xServiceFactory->createInstance("com.sun.star.configuration.ConfigurationProvider" ), UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xConfigProvider =
+            configuration::theDefaultProvider::get( xContext );
 
         UStringMap aTransitionNameMape;
         const OUString aTransitionPath("/org.openoffice.Office.UI.Effects/UserInterface/Transitions" );

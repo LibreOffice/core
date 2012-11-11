@@ -571,7 +571,7 @@ sal_Bool GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
     do {
         while( aIdx.GetIndex() < nLastNd &&
                 0 == ( pTblNd = aIdx.GetNode().GetTableNode()) )
-            aIdx++;
+            ++aIdx;
         if( pTblNd ) // any further table node?
         {
             if( fnPosTbl == fnMoveForward ) // at the beginning?
@@ -706,18 +706,18 @@ sal_Bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 }
 
 
-sal_Bool SwCrsrShell::IsTblComplex() const
+bool SwCrsrShell::IsTblComplex() const
 {
     SwFrm *pFrm = GetCurrFrm( sal_False );
     if ( pFrm && pFrm->IsInTab() )
         return pFrm->FindTabFrm()->GetTable()->IsTblComplex();
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool SwCrsrShell::IsTblComplexForChart()
+bool SwCrsrShell::IsTblComplexForChart()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // Here we may trigger table formatting so we better do that inside an action
     StartAction();
@@ -786,10 +786,10 @@ String SwCrsrShell::GetBoxNms() const
 }
 
 
-sal_Bool SwCrsrShell::GotoTable( const String& rName )
+bool SwCrsrShell::GotoTable( const String& rName )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves
-    sal_Bool bRet = !pTblCrsr && pCurCrsr->GotoTable( rName );
+    bool bRet = !pTblCrsr && pCurCrsr->GotoTable( rName );
     if( bRet )
     {
         pCurCrsr->GetPtPos() = Point();

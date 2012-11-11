@@ -1,2 +1,2 @@
-ctb	cross_tail_build	::	BERKELEYDB:berkeleydb BOOST:boost CPPUNIT:cppunit EXPAT:expat external ICU:icu LIBLANGTAG:liblangtag LIBXML2:libxml2 LIBXSLT:libxslt sal solenv soltools ZLIB:zlib NULL
+ctb	cross_tail_build	::	BERKELEYDB:berkeleydb BOOST:boost CPPUNIT:cppunit EXPAT:expat external ICU:icu LIBLANGTAG:liblangtag LIBXML2:libxml2 LIBXSLT:libxslt solenv soltools ZLIB:zlib NULL
 ctb tail_build\prj nmake - all ctb_prj   NULL

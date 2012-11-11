@@ -117,10 +117,7 @@ gb_STDLIBS := \
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 
-ifeq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_CXXFLAGS += $(GGDB2)
-gb_LinkTarget_CFLAGS += $(GGDB2)
-endif
+gb_DEBUG_CFLAGS := -g -fno-inline
 
 gb_LinkTarget_INCLUDE +=\
 	$(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
@@ -164,19 +161,21 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(LIBS) \
 		-Wl$(COMMA)-Map$(COMMA)$(dir $(1))$(notdir $(basename $(DLLTARGET)).map) \
 		-Wl$(COMMA)--out-implib$(COMMA)$(1) \
-		-o $(dir $(1))/$(notdir $(DLLTARGET))))
+		-o $(dir $(1))/$(notdir $(DLLTARGET))) \
+		$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 endef
 
 define gb_LinkTarget__command_staticlinklibrary
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
+	rm -f $(1) && \
 	$(gb_AR) -rsu $(1) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
-		$(if $(findstring s,$(MAKEFLAGS)),2> /dev/null))
+		$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 endef
 
 define gb_LinkTarget__command
@@ -262,14 +261,12 @@ gb_Library_ILIBEXT := .lib
 define gb_Library_Library_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
-$(call gb_LinkTarget_add_auxtargets,$(2),\
-	$(patsubst %.dll,%.map,$(3)) \
-)
-
 $(call gb_Library_get_target,$(1)) :| $(OUTDIR)/bin/.dir
 
-$(call gb_Library_get_target,$(1)) \
-$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3)) $(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.map,$(3)))
+$(call gb_Library_add_auxtargets,$(1), \
+	$(OUTDIR)/bin/$(notdir $(3)) \
+	$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.map,$(3))) \
+)
 
 $(call gb_Library_add_default_nativeres,$(1),$(1)/default)
 
@@ -336,6 +333,7 @@ define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
 $(call gb_LinkTarget_add_auxtargets,$(2),\
+	$(3) \
 	$(patsubst %.dll,%.map,$(3)) \
 )
 
@@ -346,7 +344,7 @@ endef
 gb_WinResTarget_POSTFIX :=.o
 
 define gb_WinResTarget__command
-$(call gb_Output_announce,$(2),$(true),RES,3)
+$(call gb_Output_announce,$(2),$(true),RC ,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_RC) \
@@ -362,7 +360,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_WinResTarget__command_dep
-$(call gb_Output_announce,RES:$(2),$(true),DEP,1)
+$(call gb_Output_announce,RC:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(OUTDIR_FOR_BUILD)/bin/makedepend \

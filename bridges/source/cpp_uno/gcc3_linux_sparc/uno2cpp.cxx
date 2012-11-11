@@ -39,10 +39,6 @@
 
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
-
 namespace
 {
 //==================================================================================================

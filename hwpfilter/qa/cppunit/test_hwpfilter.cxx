@@ -45,7 +45,11 @@ namespace
     {
     public:
         virtual void setUp();
-        virtual bool load(const rtl::OUString &, const rtl::OUString &rURL, const rtl::OUString &);
+
+        virtual bool load(const rtl::OUString &,
+            const rtl::OUString &rURL, const rtl::OUString &,
+            unsigned int, unsigned int, unsigned int);
+
         void test();
 
         CPPUNIT_TEST_SUITE(HwpFilterTest);
@@ -66,7 +70,8 @@ namespace
     }
 
     bool HwpFilterTest::load(const rtl::OUString &,
-        const rtl::OUString &rURL, const rtl::OUString &)
+        const rtl::OUString &rURL, const rtl::OUString &,
+        unsigned int, unsigned int, unsigned int)
     {
         uno::Sequence< beans::PropertyValue > aDescriptor(1);
         aDescriptor[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));

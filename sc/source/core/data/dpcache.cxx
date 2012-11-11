@@ -168,6 +168,21 @@ struct Bucket
         maValue(rValue), mnOrderIndex(nOrder), mnDataIndex(nData), mnValueSortIndex(0) {}
 };
 
+#if DEBUG_PIVOT_TABLE
+#include <iostream>
+using std::cout;
+using std::endl;
+
+struct PrintBucket : std::unary_function<Bucket, void>
+{
+    void operator() (const Bucket& v) const
+    {
+        cout << "value: " << v.maValue.GetValue() << "  order index: " << v.mnOrderIndex << "  data index: " << v.mnDataIndex << "  value sort index: " << v.mnValueSortIndex << endl;
+    }
+};
+
+#endif
+
 struct LessByValue : std::binary_function<Bucket, Bucket, bool>
 {
     bool operator() (const Bucket& left, const Bucket& right) const
@@ -192,11 +207,11 @@ struct LessByDataIndex : std::binary_function<Bucket, Bucket, bool>
     }
 };
 
-struct EqualByValue : std::binary_function<Bucket, Bucket, bool>
+struct EqualByOrderIndex : std::binary_function<Bucket, Bucket, bool>
 {
     bool operator() (const Bucket& left, const Bucket& right) const
     {
-        return left.maValue.IsCaseInsEqual(right.maValue);
+        return left.mnOrderIndex == right.mnOrderIndex;
     }
 };
 
@@ -272,7 +287,7 @@ void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
 
     // Unique by value.
     std::vector<Bucket>::iterator itUniqueEnd =
-        std::unique(aBuckets.begin(), aBuckets.end(), EqualByValue());
+        std::unique(aBuckets.begin(), aBuckets.end(), EqualByOrderIndex());
 
     // Copy the unique values into items.
     std::vector<Bucket>::iterator itBeg = aBuckets.begin();
@@ -1100,10 +1115,6 @@ long ScDPCache::GetColumnCount() const
 
 #if DEBUG_PIVOT_TABLE
 
-#include <iostream>
-using std::cout;
-using std::endl;
-
 namespace {
 
 std::ostream& operator<< (::std::ostream& os, const rtl::OUString& str)
@@ -1115,6 +1126,13 @@ void dumpItems(const ScDPCache& rCache, long nDim, const ScDPCache::ItemsType& r
 {
     for (size_t i = 0; i < rItems.size(); ++i)
         cout << "      " << (i+nOffset) << ": " << rCache.GetFormattedString(nDim, rItems[i]) << endl;
+}
+
+void dumpSourceData(const ScDPCache& rCache, long nDim, const ScDPCache::ItemsType& rItems, const ScDPCache::IndexArrayType& rArray)
+{
+    ScDPCache::IndexArrayType::const_iterator it = rArray.begin(), itEnd = rArray.end();
+    for (; it != itEnd; ++it)
+        cout << "      '" << rCache.GetFormattedString(nDim, rItems[*it]) << "'" << endl;
 }
 
 }
@@ -1135,6 +1153,9 @@ void ScDPCache::Dump() const
                 cout << "    group item count: " << fld.mpGroup->maItems.size() << endl;
                 dumpItems(*this, i, fld.mpGroup->maItems, fld.maItems.size());
             }
+
+            cout << "    source data (re-constructed):" << endl;
+            dumpSourceData(*this, i, fld.maItems, fld.maData);
         }
     }
 

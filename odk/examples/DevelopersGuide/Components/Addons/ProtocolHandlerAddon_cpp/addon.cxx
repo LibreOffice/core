@@ -36,11 +36,12 @@
 #include <addon.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/awt/XToolkit.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/XMessageBox.hpp>
@@ -104,9 +105,7 @@ void SAL_CALL Addon::initialize( const Sequence< Any >& aArguments ) throw ( Exc
     }
 
     // Create the toolkit to have access to it later
-    mxToolkit = Reference< XToolkit >( mxMSF->createInstance(
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                            "com.sun.star.awt.Toolkit" ))), UNO_QUERY );
+    mxToolkit = Reference< XToolkit >( Toolkit::create(comphelper::getComponentContext(mxMSF)), UNO_QUERY_THROW );
 }
 
 /**

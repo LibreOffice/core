@@ -39,7 +39,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -1695,22 +1695,18 @@ void SwFldMgr::SetMacroPath(const String& rPath)
     // try to set sMacroName member variable by parsing the macro path
     // using the new URI parsing services
 
-    Reference< XMultiServiceFactory > xSMgr =
-        ::comphelper::getProcessServiceFactory();
+    Reference< XComponentContext > xContext =
+        ::comphelper::getProcessComponentContext();
 
     Reference< uri::XUriReferenceFactory >
-        xFactory( xSMgr->createInstance(
-            ::rtl::OUString( "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
+        xFactory = uri::UriReferenceFactory::create( xContext );
 
-    if ( xFactory.is() )
+    Reference< uri::XVndSunStarScriptUrl >
+        xUrl( xFactory->parse( sMacroPath ), UNO_QUERY );
+
+    if ( xUrl.is() )
     {
-        Reference< uri::XVndSunStarScriptUrl >
-            xUrl( xFactory->parse( sMacroPath ), UNO_QUERY );
-
-        if ( xUrl.is() )
-        {
-            sMacroName = xUrl->getName();
-        }
+        sMacroName = xUrl->getName();
     }
 }
 

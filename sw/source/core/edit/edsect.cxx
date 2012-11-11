@@ -236,7 +236,7 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
                                     StartOfSectionNode()->GetSectionNode())) )
                             _SetSectionAttr( *pSttSectNd->GetSection().GetFmt(),
                                             rSet );
-                        aSIdx++;
+                        ++aSIdx;
                     }
                 }
             }
@@ -387,10 +387,10 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
         if( rCurrentNode.IsCntntNode() &&
             ( pCurrentPos->nContent.GetIndex() ==
               rCurrentNode.GetCntntNode()->Len() ) )
-            aEnd++;
+            ++aEnd;
         while( (aEnd != pInnermostNode->EndOfSectionNode()->GetIndex()) &&
                aEnd.GetNode().IsEndNode() )
-            aEnd++;
+            ++aEnd;
         bool bEnd = ( aEnd == pInnermostNode->EndOfSectionNode()->GetIndex() );
 
         // evalutate result: if both start + end, end is preferred

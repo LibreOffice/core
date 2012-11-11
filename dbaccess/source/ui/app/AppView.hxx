@@ -32,7 +32,7 @@
 namespace com{ namespace sun { namespace star { namespace beans    { class XPropertySet; } } } }
 
 class Control;
-class SvLBoxEntry;
+class SvTreeListEntry;
 class MnemonicGenerator;
 
 namespace dbaui
@@ -141,7 +141,7 @@ namespace dbaui
             @return
                 the qualified name
         */
-        ::rtl::OUString getQualifiedName( SvLBoxEntry* _pEntry ) const;
+        ::rtl::OUString getQualifiedName( SvTreeListEntry* _pEntry ) const;
 
         /** returns if an entry is a leaf
             @param _pEntry
@@ -149,7 +149,7 @@ namespace dbaui
             @return
                 <TRUE/> if the entry is a leaf, otherwise <FALSE/>
         */
-        sal_Bool isLeaf(SvLBoxEntry* _pEntry) const;
+        sal_Bool isLeaf(SvTreeListEntry* _pEntry) const;
 
         /** returns if one of the selected entries is a leaf
             @return
@@ -224,7 +224,7 @@ namespace dbaui
             @param  _rxConn
                 If we insert a table, the connection must be set.
         */
-        SvLBoxEntry* elementAdded(ElementType _eType
+        SvTreeListEntry* elementAdded(ElementType _eType
                         ,const ::rtl::OUString& _rName
                         ,const ::com::sun::star::uno::Any& _rObject );
 
@@ -296,7 +296,7 @@ namespace dbaui
                             const ::rtl::OUString& _sName,
                             sal_Bool _bTable);
 
-        SvLBoxEntry* getEntry( const Point& _aPosPixel ) const;
+        SvTreeListEntry* getEntry( const Point& _aPosPixel ) const;
     };
 }
 #endif // DBAUI_APPVIEW_HXX

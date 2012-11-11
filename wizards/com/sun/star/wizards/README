@@ -1,0 +1,19 @@
+To call a wizard remotely you need to:
+
+-> For testing on core:
+    export URE_BOOTSTRAP="file:///home/'USER'/git/libo/install/program/fundamentalrc"
+    export PYTHONPATH=/home/'USER'/git/libo/install/program
+    #and run LibreOffice in listening mode:
+    ./soffice --"accept=socket,host=localhost,port=2002;urp;"
+      
+-> For testing on installed LibreOffice:
+    export URE_BOOTSTRAP="file:///usr/lib/libreoffice/program/fundamentalrc"
+    export PYTHONPATH=/usr/lib/libreoffice/basis-link/program
+    #and run LibreOffice in listening mode:
+    soffice --"accept=socket,host=localhost,port=2002;urp;"
+      
+-> Launch the wizard from wizards parent folder:
+    python
+    #Fax wizard
+    from wizards.fax.FaxWizardDialogImpl import FaxWizardDialogImpl
+    FaxWizardDialogImpl.main()

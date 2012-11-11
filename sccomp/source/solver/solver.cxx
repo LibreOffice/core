@@ -30,7 +30,11 @@
 #define WINAPI __stdcall
 #define LoadInverseLib FALSE
 #define LoadLanguageLib FALSE
+#ifdef SYSTEM_LPSOLVE
 #include <lpsolve/lp_lib.h>
+#else
+#include <lp_lib.h>
+#endif
 #undef LANGUAGE_NONE
 
 #include "solver.hxx"

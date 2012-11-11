@@ -39,6 +39,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <jvmfwk/framework.h>
 
@@ -207,7 +208,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl)
 
 IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvxSimpleTable *, pList )
 {
-    SvLBoxEntry* pEntry = pList ? m_aJavaList.GetEntry( m_aJavaList.GetCurMousePoint() )
+    SvTreeListEntry* pEntry = pList ? m_aJavaList.GetEntry( m_aJavaList.GetCurMousePoint() )
                                 : m_aJavaList.FirstSelected();
     if ( pEntry )
         m_aJavaList.HandleEntryChecked( pEntry );
@@ -219,7 +220,7 @@ IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvxSimpleTable *, pList )
 IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl)
 {
     // set installation directory info
-    SvLBoxEntry* pEntry = m_aJavaList.FirstSelected();
+    SvTreeListEntry* pEntry = m_aJavaList.FirstSelected();
     DBG_ASSERT( pEntry, "SvxJavaOptionsPage::SelectHdl_Impl(): no entry" );
     String* pLocation = static_cast< String* >( pEntry->GetUserData() );
     DBG_ASSERT( pLocation, "invalid location string" );
@@ -236,9 +237,8 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl)
 {
     try
     {
-        Reference < XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-        xFolderPicker = Reference< XFolderPicker >(
-            xMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FolderPicker") ) ), UNO_QUERY );
+        Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        xFolderPicker = FolderPicker::create(xContext);
 
         String sWorkFolder = SvtPathOptions().GetWorkPath();
         xFolderPicker->setDisplayDirectory( sWorkFolder );
@@ -414,7 +414,7 @@ void SvxJavaOptionsPage::ClearJavaInfo()
 
 void SvxJavaOptionsPage::ClearJavaList()
 {
-    SvLBoxEntry* pEntry = m_aJavaList.First();
+    SvTreeListEntry* pEntry = m_aJavaList.First();
     while ( pEntry )
     {
         String* pLocation = static_cast< String* >( pEntry->GetUserData() );
@@ -457,7 +457,7 @@ void SvxJavaOptionsPage::LoadJREs()
             JavaInfo* pCmpInfo = *parInfo++;
             if ( jfw_areEqualJavaInfo( pCmpInfo, pSelectedJava ) )
             {
-                SvLBoxEntry* pEntry = m_aJavaList.GetEntry(i);
+                SvTreeListEntry* pEntry = m_aJavaList.GetEntry(i);
                 if ( pEntry )
                     m_aJavaList.HandleEntryChecked( pEntry );
                 break;
@@ -480,7 +480,7 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
     sEntry.append('\t');
     if ( ( _pInfo->nFeatures & JFW_FEATURE_ACCESSBRIDGE ) == JFW_FEATURE_ACCESSBRIDGE )
         sEntry.append(m_sAccessibilityText);
-    SvLBoxEntry* pEntry = m_aJavaList.InsertEntry(sEntry.makeStringAndClear());
+    SvTreeListEntry* pEntry = m_aJavaList.InsertEntry(sEntry.makeStringAndClear());
     INetURLObject aLocObj( ::rtl::OUString( _pInfo->sLocation ) );
     String* pLocation = new String( aLocObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
     pEntry->SetUserData( pLocation );
@@ -488,7 +488,7 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
 
 // -----------------------------------------------------------------------
 
-void SvxJavaOptionsPage::HandleCheckEntry( SvLBoxEntry* _pEntry )
+void SvxJavaOptionsPage::HandleCheckEntry( SvTreeListEntry* _pEntry )
 {
     m_aJavaList.Select( _pEntry, sal_True );
     SvButtonState eState = m_aJavaList.GetCheckButtonState( _pEntry );
@@ -496,7 +496,7 @@ void SvxJavaOptionsPage::HandleCheckEntry( SvLBoxEntry* _pEntry )
     if ( SV_BUTTON_CHECKED == eState )
     {
         // we have radio button behavior -> so uncheck the other entries
-        SvLBoxEntry* pEntry = m_aJavaList.First();
+        SvTreeListEntry* pEntry = m_aJavaList.First();
         while ( pEntry )
         {
             if ( pEntry != _pEntry )
@@ -555,7 +555,7 @@ void SvxJavaOptionsPage::AddFolder( const ::rtl::OUString& _rFolder )
         else
             jfw_freeJavaInfo( pInfo );
 
-        SvLBoxEntry* pEntry = m_aJavaList.GetEntry( nPos );
+        SvTreeListEntry* pEntry = m_aJavaList.GetEntry( nPos );
         m_aJavaList.Select( pEntry );
         m_aJavaList.SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
         HandleCheckEntry( pEntry );
@@ -965,9 +965,8 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
 {
-    rtl::OUString sService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker" ) );
-    Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    Reference < XFolderPicker > xFolderPicker( xFactory->createInstance( sService ), UNO_QUERY );
+    Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    Reference < XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);;
 
     String sOldFolder;
     if ( m_aPathList.GetSelectEntryCount() > 0 )

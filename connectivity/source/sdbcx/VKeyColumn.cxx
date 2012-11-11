@@ -71,7 +71,10 @@ OKeyColumn::OKeyColumn( const ::rtl::OUString&  _ReferencedColumn,
                         sal_Bool                _IsAutoIncrement,
                         sal_Bool                _IsRowVersion,
                         sal_Bool                _IsCurrency,
-                        sal_Bool                _bCase
+                        sal_Bool                _bCase,
+                        const ::rtl::OUString& _CatalogName,
+                        const ::rtl::OUString& _SchemaName,
+                        const ::rtl::OUString& _TableName
                         ) : OColumn(_Name,
                             _TypeName,
                             _DefaultValue,
@@ -83,7 +86,10 @@ OKeyColumn::OKeyColumn( const ::rtl::OUString&  _ReferencedColumn,
                             _IsAutoIncrement,
                             _IsRowVersion,
                             _IsCurrency,
-                            _bCase)
+                            _bCase,
+                            _CatalogName,
+                            _SchemaName,
+                            _TableName)
                         ,   m_ReferencedColumn(_ReferencedColumn)
 {
     construct();

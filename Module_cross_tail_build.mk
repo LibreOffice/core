@@ -65,14 +65,12 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	$(if $(filter QADEVOOO,$(BUILD_TYPE)),\
 		qadevOOo \
 	) \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
-		rdbmaker \
-	) \
 	regexp \
 	registry \
 	remotebridges \
 	ridljar \
 	rsc \
+	sal \
 	salhelper \
 	sax \
 	shell \

@@ -72,6 +72,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vcl/msgbox.hxx>
 
 #include <boost/unordered_map.hpp>
 
@@ -1439,55 +1440,43 @@ void SfxBaseController::ShowInfoBars( )
     {
         // CMIS verifications
         REFERENCE< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY );
-        beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues( );
-
-        if ( aCmisProperties.hasElements( ) )
+        if ( xCmisDoc.is( ) )
         {
-            // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
-            bool bFoundCheckedout = false;
-            sal_Bool bCheckedOut = sal_False;
-            for ( sal_Int32 i = 0; i < aCmisProperties.getLength() && !bFoundCheckedout; ++i )
-            {
-                if ( aCmisProperties[i].Name == "cmis:isVersionSeriesCheckedOut" )
-                {
-                    bFoundCheckedout = true;
-                    aCmisProperties[i].Value >>= bCheckedOut;
-                }
-            }
+            beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues( );
 
-            if ( !bCheckedOut )
+            if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
             {
-                // Get the Frame and show the InfoBar if not checked out
-                SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
-                std::vector< PushButton* > aButtons;
-                PushButton* pBtn = new PushButton( &pViewFrame->GetWindow(), SfxResId( BT_CHECKOUT ) );
-                pBtn->SetClickHdl( LINK( this, SfxBaseController, CheckOutHandler ) );
-                aButtons.push_back( pBtn );
-                pViewFrame->AppendInfoBar( SfxResId( STR_NONCHECKEDOUT_DOCUMENT ), aButtons );
+                // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
+                bool bFoundCheckedout = false;
+                sal_Bool bCheckedOut = sal_False;
+                for ( sal_Int32 i = 0; i < aCmisProperties.getLength() && !bFoundCheckedout; ++i )
+                {
+                    if ( aCmisProperties[i].Name == "cmis:isVersionSeriesCheckedOut" )
+                    {
+                        bFoundCheckedout = true;
+                        aCmisProperties[i].Value >>= bCheckedOut;
+                    }
+                }
+
+                if ( !bCheckedOut )
+                {
+                    // Get the Frame and show the InfoBar if not checked out
+                    SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
+                    std::vector< PushButton* > aButtons;
+                    PushButton* pBtn = new PushButton( &pViewFrame->GetWindow(), SfxResId( BT_CHECKOUT ) );
+                    pBtn->SetClickHdl( LINK( this, SfxBaseController, CheckOutHandler ) );
+                    aButtons.push_back( pBtn );
+                    pViewFrame->AppendInfoBar( "checkout", SfxResId( STR_NONCHECKEDOUT_DOCUMENT ), aButtons );
+                }
             }
         }
     }
 }
 
-IMPL_LINK( SfxBaseController, CheckOutHandler, PushButton*, pBtn )
+IMPL_LINK_NOARG ( SfxBaseController, CheckOutHandler )
 {
     if ( m_pData->m_pViewShell )
-    {
-        try
-        {
-            REFERENCE< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY_THROW );
-            xCmisDoc->checkOut( );
-
-            // Remove the info bar
-            SfxInfoBarWindow* pInfoBar = ( SfxInfoBarWindow* )pBtn->GetParent( );
-            SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
-            pViewFrame->RemoveInfoBar( pInfoBar );
-        }
-        catch ( const uno::RuntimeException& )
-        {
-            // TODO Handle the problem in some way?
-        }
-    }
+        m_pData->m_pViewShell->GetObjectShell()->CheckOut( );
     return 0;
 }
 
@@ -1503,7 +1492,7 @@ css::uno::Reference< css::frame::XTitle > SfxBaseController::impl_getTitleHelper
         css::uno::Reference< css::frame::XUntitledNumbers > xUntitledProvider(xModel                                       , css::uno::UNO_QUERY      );
         css::uno::Reference< css::frame::XController >      xThis            (static_cast< css::frame::XController* >(this), css::uno::UNO_QUERY_THROW);
 
-        ::framework::TitleHelper* pHelper                 = new ::framework::TitleHelper(::comphelper::getProcessServiceFactory());
+        ::framework::TitleHelper* pHelper                 = new ::framework::TitleHelper(::comphelper::getProcessComponentContext());
                                   m_pData->m_xTitleHelper = css::uno::Reference< css::frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pHelper), css::uno::UNO_QUERY_THROW);
 
         pHelper->setOwner                   (xThis            );

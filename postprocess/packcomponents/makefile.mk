@@ -195,6 +195,8 @@ my_components += \
     component/scripting/source/dlgprov/dlgprov \
     component/scripting/source/protocolhandler/protocolhandler \
     component/scripting/source/pyprov/mailmerge \
+    component/wizards/com/sun/star/wizards/fax/fax \
+    component/wizards/com/sun/star/wizards/letter/letter \
     component/scripting/source/stringresource/stringresource \
     component/scripting/source/vbaevents/vbaevents \
     component/scripting/util/scriptframe \
@@ -248,7 +250,9 @@ my_components += component/shell/source/backends/gconfbe/gconfbe1
 .END
 
 .IF "$(ENABLE_GIO)" != ""
-my_components += component/ucb/source/ucp/gio/ucpgio
+my_components += \
+    component/shell/source/sessioninstall/losessioninstall \
+    component/ucb/source/ucp/gio/ucpgio
 .END
 
 .IF "$(ENABLE_GNOMEVFS)" != ""
@@ -292,26 +296,17 @@ my_components += component/framework/util/lomenubar
 .IF "$(SOLAR_JAVA)" == "TRUE"
 my_components += \
     component/xmerge/source/bridge/XMergeBridge \
-    component/filter/source/xsltfilter/XSLTFilter.jar \
     component/filter/source/xsltvalidate/XSLTValidate \
     component/scripting/java/ScriptFramework \
     component/scripting/java/ScriptProviderForJava \
     component/wizards/com/sun/star/wizards/agenda/agenda \
-    component/wizards/com/sun/star/wizards/fax/fax \
     component/wizards/com/sun/star/wizards/form/form \
     component/connectivity/source/drivers/hsqldb/hsqldb \
     component/connectivity/source/drivers/jdbc/jdbc \
-    component/wizards/com/sun/star/wizards/letter/letter \
     component/wizards/com/sun/star/wizards/query/query \
     component/wizards/com/sun/star/wizards/report/report \
     component/wizards/com/sun/star/wizards/table/table \
     component/wizards/com/sun/star/wizards/web/web
-.END
-
-.IF "$(WITH_BINFILTER)" != "NO"
-my_components += \
-    bf_migratefilter \
-    bindet
 .END
 
 .IF "$(WITH_MOZILLA)" != "NO"
@@ -390,7 +385,9 @@ my_components += component/connectivity/source/drivers/mozab/mozab
 my_components += component/connectivity/source/drivers/mozab/bootstrap/mozbootstrap
 .END
 .ELIF "$(OS)" != "ANDROID" && "$(OS)" != "IOS"
-my_components += component/connectivity/source/drivers/mork/mork
+my_components += \
+    component/connectivity/source/drivers/mork/mork \
+    component/connectivity/source/drivers/mozab/bootstrap/mozbootstrap
 .END
 
 .IF "$(OS)" != "WNT" && "$(OS)" != "ANDROID" && "$(OS)" != "IOS" && "$(OS)" != "headless"

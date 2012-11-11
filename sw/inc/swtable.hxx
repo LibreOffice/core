@@ -299,11 +299,11 @@ public:
     const SwTableBox* GetTblBox( sal_uLong nSttIdx ) const
                         {   return ((SwTable*)this)->GetTblBox( nSttIdx );  }
 
-    // Returns sal_True if table contains nestings.
-    sal_Bool IsTblComplex() const;
+    // Returns true if table contains nestings.
+    bool IsTblComplex() const;
 
-    // Returns sal_True if table or selection is balanced.
-    sal_Bool IsTblComplexForChart( const String& rSel ) const;
+    // Returns true if table or selection is balanced.
+    bool IsTblComplexForChart( const String& rSel ) const;
 
     // Search all content-bearing boxes of the base line on which this box stands.
     // rBoxes as a return value for immediate use.
@@ -313,7 +313,7 @@ public:
                             SwSelBoxes& rBoxes, sal_Bool bToTop = sal_True ) const;
 
     // Get information from client.
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const;
 
     // Search in format for registered table.
     static SwTable * FindTable( SwFrmFmt const*const pFmt );

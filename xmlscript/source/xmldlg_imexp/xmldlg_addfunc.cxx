@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -65,26 +66,12 @@ Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
     Reference< XModel > const & xDocument )
     SAL_THROW( (Exception) )
 {
-    Reference< lang::XMultiComponentFactory > xSMgr( xContext->getServiceManager() );
-    if (! xSMgr.is())
-    {
-        throw RuntimeException("no service manager available!",
-            Reference< XInterface >() );
-    }
-
-    Reference< xml::sax::XExtendedDocumentHandler > xHandler( xSMgr->createInstanceWithContext(
-        "com.sun.star.xml.sax.Writer", xContext ), UNO_QUERY );
-    OSL_ASSERT( xHandler.is() );
-    if (! xHandler.is())
-    {
-        throw RuntimeException("could not create sax-writer component!",
-            Reference< XInterface >() );
-    }
+    Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
 
     ByteSequence aBytes;
+    xWriter->setOutputStream( createOutputStream( &aBytes ) );
 
-    Reference< io::XActiveDataSource > xSource( xHandler, UNO_QUERY );
-    xSource->setOutputStream( createOutputStream( &aBytes ) );
+    Reference< xml::sax::XExtendedDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
     exportDialogModel( xHandler, xDialogModel, xDocument );
 
     return new InputStreamProvider( aBytes );
@@ -98,13 +85,6 @@ void SAL_CALL importDialogModel(
     Reference< XModel > const & xDocument )
     SAL_THROW( (Exception) )
 {
-    Reference< lang::XMultiComponentFactory > xSMgr( xContext->getServiceManager() );
-    if (! xSMgr.is())
-    {
-        throw RuntimeException("no service manager available!",
-            Reference< XInterface >() );
-    }
-
     Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
     // error handler, entity resolver omitted for this helper function

@@ -1271,7 +1271,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
             }
         }
         // 5010: Tabs und Felder
-        xub_Unicode cChar = rInf.GetHookChar();
+        sal_Unicode cChar = rInf.GetHookChar();
 
         if( cChar )
         {
@@ -1990,7 +1990,7 @@ sal_Bool SwTxtFormatter::AllowRepaintOpt() const
     const xub_StrLen nReformat = GetInfo().GetReformatStart();
     if( bOptimizeRepaint && STRING_LEN != nReformat )
     {
-        const xub_Unicode cCh = GetInfo().GetTxt().GetChar( nReformat );
+        const sal_Unicode cCh = GetInfo().GetTxt().GetChar( nReformat );
         bOptimizeRepaint = ( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
                             || ! GetInfo().HasHint( nReformat );
     }

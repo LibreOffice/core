@@ -34,7 +34,7 @@
 #include <mutexholder.hxx>
 
 namespace com { namespace sun { namespace star {
-    namespace lang { class XMultiServiceFactory; }
+    namespace uno { class XComponentContext; }
     namespace ucb  { class XProgressHandler; }
 } } }
 namespace rtl
@@ -63,7 +63,7 @@ protected:
     ZipUtils::Inflater aInflater;
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
-    const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    const ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
     ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XProgressHandler > xProgressHandler;
 
     sal_Bool bRecoveryMode;
@@ -100,13 +100,13 @@ protected:
 public:
 
     ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
-             const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory,
+             const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > &rxContext,
              sal_Bool bInitialise
              )
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
 
     ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
-             const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory,
+             const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > &rxContext,
              sal_Bool bInitialise,
              sal_Bool bForceRecover,
              ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XProgressHandler > xProgress
@@ -127,11 +127,11 @@ public:
 
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > StaticGetDigestContextForChecksum(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xArgFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xArgContext,
             const ::rtl::Reference< EncryptionData >& xEncryptionData );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > StaticGetCipher(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xArgFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xArgContext,
             const ::rtl::Reference< EncryptionData >& xEncryptionData,
             bool bEncrypt );
 
@@ -150,7 +150,7 @@ public:
                                      const ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > StaticGetDataFromRawStream(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xStream,
             const ::rtl::Reference < EncryptionData > &rData )
         throw ( ::com::sun::star::packages::WrongPasswordException,
@@ -158,7 +158,7 @@ public:
                 ::com::sun::star::uno::RuntimeException );
 
     static sal_Bool StaticHasValidPassword (
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Sequence< sal_Int8 > &aReadBuffer,
             const ::rtl::Reference < EncryptionData > &rData );
 

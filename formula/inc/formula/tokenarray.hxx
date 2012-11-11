@@ -246,7 +246,6 @@ public:
     FormulaTokenIterator( const FormulaTokenArray& );
    ~FormulaTokenIterator();
     void    Reset();
-    const   FormulaToken* First();
     const   FormulaToken* Next();
     const   FormulaToken* PeekNextOperator();
     bool    IsEndOfPath() const;    /// if a jump or subroutine path is done

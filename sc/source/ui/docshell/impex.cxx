@@ -28,6 +28,7 @@
 
 #include "sc.hrc"
 
+#include <comphelper/processfactory.hxx>
 #include <i18npool/mslangid.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
@@ -1272,8 +1273,6 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     rStrm.Seek( nOldPos );
     rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
 
-    ScColumn::DoubleAllocSwitch aAllocSwitch(true);
-
     SCCOL nStartCol = aRange.aStart.Col();
     SCCOL nEndCol = aRange.aEnd.Col();
     SCROW nStartRow = aRange.aStart.Row();
@@ -1294,9 +1293,9 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     // For date recognition
     ::utl::TransliterationWrapper aTransliteration(
-        pDoc->GetServiceManager(), SC_TRANSLITERATION_IGNORECASE );
+        comphelper::getComponentContext(pDoc->GetServiceManager()), SC_TRANSLITERATION_IGNORECASE );
     aTransliteration.loadModuleIfNeeded( eDocLang );
-    CalendarWrapper aCalendar( pDoc->GetServiceManager() );
+    CalendarWrapper aCalendar( comphelper::getComponentContext(pDoc->GetServiceManager()) );
     aCalendar.loadDefaultCalendar(
         MsLangId::convertLanguageToLocale( eDocLang ) );
     ::utl::TransliterationWrapper* pEnglishTransliteration = NULL;
@@ -1304,9 +1303,9 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     if ( eDocLang != LANGUAGE_ENGLISH_US )
     {
         pEnglishTransliteration = new ::utl::TransliterationWrapper (
-            pDoc->GetServiceManager(), SC_TRANSLITERATION_IGNORECASE );
+            comphelper::getComponentContext(pDoc->GetServiceManager()), SC_TRANSLITERATION_IGNORECASE );
         aTransliteration.loadModuleIfNeeded( LANGUAGE_ENGLISH_US );
-        pEnglishCalendar = new CalendarWrapper ( pDoc->GetServiceManager() );
+        pEnglishCalendar = new CalendarWrapper ( comphelper::getComponentContext(pDoc->GetServiceManager()) );
         pEnglishCalendar->loadDefaultCalendar(
             MsLangId::convertLanguageToLocale( LANGUAGE_ENGLISH_US ) );
     }

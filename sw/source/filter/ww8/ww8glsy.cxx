@@ -112,7 +112,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
     while( !( aStart.GetNode().IsStartNode() && SwNormalStartNode ==
            aStart.GetNode().GetStartNode()->GetStartNodeType()) &&
             aStart < aDocEnd )
-        aStart++;
+        ++aStart;
 
     if( aStart < aDocEnd )
     {
@@ -124,7 +124,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
             SwPaM aPam( aStart );
             {
                 SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
-                rIdx++;
+                ++rIdx;
                 if( 0 == ( pCNd = rIdx.GetNode().GetTxtNode() ) )
                 {
                     pCNd = pD->GetNodes().MakeTxtNode( rIdx, pColl );
@@ -139,7 +139,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
                 if(( 0 == ( pCNd = rIdx.GetNode().GetCntntNode() ) )
                         || HasBareGraphicEnd(pD,rIdx))
                 {
-                    rIdx++;
+                    ++rIdx;
                     pCNd = pD->GetNodes().MakeTxtNode( rIdx, pColl );
                     rIdx = *pCNd;
                 }

@@ -146,9 +146,9 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
         aFontHeightLB.InsertEntry(String::CreateFromInt32(nHeight));
 }
 
-SvLBoxEntry* SvxFontSubstTabPage::CreateEntry(String& rFont1, String& rFont2)
+SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(String& rFont1, String& rFont2)
 {
-    SvLBoxEntry* pEntry = new SvLBoxEntry;
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
 
     if( !pCheckButtonData )
         pCheckButtonData = new SvLBoxButtonData( &aCheckLB );
@@ -186,7 +186,7 @@ sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
 
     pConfig->Enable(aUseTableCB.IsChecked());
 
-    SvLBoxEntry* pEntry = aCheckLB.First();
+    SvTreeListEntry* pEntry = aCheckLB.First();
 
     while (pEntry)
     {
@@ -240,7 +240,7 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
         const SubstitutionStruct* pSubs = pConfig->GetSubstitution(i);
         String aTmpStr1(pSubs->sFont);
         String aTmpStr2(pSubs->sReplaceBy);
-        SvLBoxEntry* pEntry = CreateEntry(aTmpStr1, aTmpStr2);
+        SvTreeListEntry* pEntry = CreateEntry(aTmpStr1, aTmpStr2);
         aCheckLB.Insert(pEntry);
         aCheckLB.CheckEntry(pEntry, 0, pSubs->bReplaceAlways);
         aCheckLB.CheckEntry(pEntry, 1, pSubs->bReplaceOnScreenOnly);
@@ -273,7 +273,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
 {
     if (pWin == &aNewDelTBX)
     {
-        SvLBoxEntry* pEntry;
+        SvTreeListEntry* pEntry;
         // nCol is stupidly the nCol'th text column, not counted!
         // Therefor "0" as column.
         sal_uLong nPos = aCheckLB.GetEntryPos(aFont1CB.GetText(), 0);
@@ -309,7 +309,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
                     pEntry = aCheckLB.FirstSelected();
                     while (pEntry)
                     {
-                        SvLBoxEntry* pDelEntry = pEntry;
+                        SvTreeListEntry* pDelEntry = pEntry;
                         pEntry = aCheckLB.NextSelected(pEntry);
                         aCheckLB.RemoveEntry(pDelEntry);
                     }
@@ -321,7 +321,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
 
     if (pWin == &aCheckLB)
     {
-        SvLBoxEntry* pEntry = aCheckLB.FirstSelected();
+        SvTreeListEntry* pEntry = aCheckLB.FirstSelected();
 
         if (aCheckLB.NextSelected(pEntry) == 0)
         {
@@ -336,7 +336,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
 
         if (nPos != 0xffffffff)
         {
-            SvLBoxEntry* pEntry = aCheckLB.GetEntry(nPos);
+            SvTreeListEntry* pEntry = aCheckLB.GetEntry(nPos);
 
             if (pEntry != aCheckLB.FirstSelected())
             {
@@ -378,7 +378,7 @@ void SvxFontSubstTabPage::CheckEnable()
     {
         sal_Bool bApply, bDelete;
 
-        SvLBoxEntry* pEntry = aCheckLB.FirstSelected();
+        SvTreeListEntry* pEntry = aCheckLB.FirstSelected();
 
         String sEntry = aFont1CB.GetText();
         sEntry += '\t';
@@ -480,7 +480,7 @@ void SvxFontSubstCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sa
                                        SvButtonState( SV_BUTTON_UNCHECKED ) );
 }
 
-void SvxFontSubstCheckListBox::CheckEntry(SvLBoxEntry* pEntry, sal_uInt16 nCol, sal_Bool bChecked)
+void SvxFontSubstCheckListBox::CheckEntry(SvTreeListEntry* pEntry, sal_uInt16 nCol, sal_Bool bChecked)
 {
     if ( pEntry )
         SetCheckButtonState(
@@ -495,12 +495,12 @@ sal_Bool SvxFontSubstCheckListBox::IsChecked(sal_uLong nPos, sal_uInt16 nCol)
     return GetCheckButtonState( GetEntry(nPos), nCol ) == SV_BUTTON_CHECKED;
 }
 
-sal_Bool SvxFontSubstCheckListBox::IsChecked(SvLBoxEntry* pEntry, sal_uInt16 nCol)
+sal_Bool SvxFontSubstCheckListBox::IsChecked(SvTreeListEntry* pEntry, sal_uInt16 nCol)
 {
     return GetCheckButtonState( pEntry, nCol ) == SV_BUTTON_CHECKED;
 }
 
-void SvxFontSubstCheckListBox::SetCheckButtonState( SvLBoxEntry* pEntry, sal_uInt16 nCol, SvButtonState eState)
+void SvxFontSubstCheckListBox::SetCheckButtonState( SvTreeListEntry* pEntry, sal_uInt16 nCol, SvButtonState eState)
 {
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
 
@@ -525,7 +525,7 @@ void SvxFontSubstCheckListBox::SetCheckButtonState( SvLBoxEntry* pEntry, sal_uIn
     }
 }
 
-SvButtonState SvxFontSubstCheckListBox::GetCheckButtonState( SvLBoxEntry* pEntry, sal_uInt16 nCol ) const
+SvButtonState SvxFontSubstCheckListBox::GetCheckButtonState( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));

@@ -62,7 +62,10 @@ public:
     SdFiltersTest();
 
     ::sd::DrawDocShellRef loadURL( const rtl::OUString &rURL );
-    virtual bool load( const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
+    virtual bool load( const rtl::OUString &rFilter,
+        const rtl::OUString &rURL, const rtl::OUString &rUserData,
+        unsigned int nFilterFlags, unsigned int nClipboardID,
+        unsigned int nFilterVersion);
 
     virtual void setUp();
     virtual void tearDown();
@@ -179,12 +182,14 @@ void SdFiltersTest::testN778859()
 }
 
 bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData)
+    const rtl::OUString &rUserData, unsigned int nFilterFlags, unsigned int nClipboardID,
+    unsigned int nFilterVersion)
 {
     SfxFilter aFilter(
         rFilter,
-        rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
+        rtl::OUString(), nFilterFlags, nClipboardID, rtl::OUString(), 0, rtl::OUString(),
         rUserData, rtl::OUString() );
+    aFilter.SetVersion(nFilterVersion);
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
     SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
@@ -199,6 +204,10 @@ void SdFiltersTest::testCVEs()
 #ifndef DISABLE_CVE_TESTS
     testDir(rtl::OUString("MS PowerPoint 97"),
             getURLFromSrc("/sd/qa/unit/data/ppt/"),
+            rtl::OUString("sdfilt"));
+
+    testDir(rtl::OUString("draw8"),
+            getURLFromSrc("/sd/qa/unit/data/odg/"),
             rtl::OUString("sdfilt"));
 #endif
 }

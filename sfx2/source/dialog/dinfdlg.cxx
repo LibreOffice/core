@@ -2321,11 +2321,6 @@ CustomPropertiesControl::CustomPropertiesControl( Window* pParent, const ResId& 
     m_aVertScroll.SetPageSize( nVisibleEntries - 1 );
     m_aVertScroll.SetVisibleSize( nVisibleEntries );
 
-    Point aPos = m_aHeaderBar.GetPosPixel();
-    Size aSize = m_aHeaderBar.GetSizePixel();
-    aPos = m_aVertScroll.GetPosPixel();
-    aSize = m_aVertScroll.GetSizePixel();
-
     Link aScrollLink = LINK( this, CustomPropertiesControl, ScrollHdl );
     m_aVertScroll.SetScrollHdl( aScrollLink );
 }

@@ -102,7 +102,7 @@ enum INetProtocol
     INET_PROT_SMB = 31,
     INET_PROT_HID = 32,
     INET_PROT_SFTP = 33,
-    INET_PROT_CMIS_ATOM = 34,
+    INET_PROT_CMIS = 34,
     INET_PROT_END = 35
 };
 

@@ -131,7 +131,8 @@ SfxFormalArgument aFormalArgs[] = {
     SFX_ARGUMENT(SID_DEFAULTFILENAME,"SuggestedSaveAsName",SfxStringItem),
     SFX_ARGUMENT(SID_DEFAULTFILEPATH,"SuggestedSaveAsDir",SfxStringItem),
     SFX_ARGUMENT(SID_DOCINFO_AUTHOR,"VersionAuthor",SfxStringItem),
-    SFX_ARGUMENT(SID_DOCINFO_COMMENTS,"VersionComment",SfxStringItem),
+    SFX_ARGUMENT(SID_DOCINFO_COMMENTS,"VersionComment",SfxBoolItem),
+    SFX_ARGUMENT(SID_DOCINFO_MAJOR,"VersionMajor",SfxStringItem),
     SFX_ARGUMENT(SID_FILE_FILTEROPTIONS,"FilterOptions",SfxStringItem),
     SFX_ARGUMENT(SID_FILTER_NAME,"FilterName",SfxStringItem),
 //    SFX_ARGUMENT(SID_FILE_NAME,"FileName",SfxStringItem),
@@ -1907,7 +1908,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 aQualifiedMethod.Erase( nArgsPos - nHashPos - 1 );
             }
 
-            if ( pBasMgr->HasMacro( aQualifiedMethod ) )
+            if ( pBasMgr->HasMacro( OUString(aQualifiedMethod) ) )
             {
                 Any aOldThisComponent;
                 const bool bSetDocMacroMode = ( pDoc != NULL ) && bIsDocBasic;

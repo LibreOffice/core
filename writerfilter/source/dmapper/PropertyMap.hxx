@@ -105,8 +105,7 @@ public:
     /** Add property, usually overwrites already available attributes. It shouldn't overwrite in case of default attributes
      */
     void Insert( PropertyIds eId, bool bIsTextProperty, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true );
-    using _PropertyMap::insert;
-    void insert(const boost::shared_ptr<PropertyMap> pMap, bool bOverwrite = true);
+    void InsertProps(const boost::shared_ptr<PropertyMap> pMap);
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const;
     void SetFootnote( ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote> xF ) { m_xFootnote = xF; }
@@ -235,6 +234,7 @@ public:
     void SetPageNoRestart( bool bSet ) { m_bPageNoRestart = bSet; }
     void SetPageNumber( sal_Int32 nSet ) { m_nPageNumber = nSet; }
     void SetBreakType( sal_Int32 nSet ) { m_nBreakType = nSet; }
+    sal_Int32 GetBreakType( ) { return m_nBreakType; }
     void SetPaperBin( sal_Int32 nSet );
     void SetFirstPaperBin( sal_Int32 nSet );
 

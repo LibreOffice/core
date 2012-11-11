@@ -345,7 +345,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
 const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
                                                 const SwTOXBase& rTOX,
                                                 const SfxItemSet* pSet,
-                                                sal_Bool bExpand )
+                                                bool bExpand )
 {
     GetIDocumentUndoRedo().StartUndo( UNDO_INSTOX, NULL );
 
@@ -467,7 +467,7 @@ const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase) const
     return pFmt->GetAttrSet();
 }
 
-const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, sal_Bool bCreate )
+const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, bool bCreate )
 {
     SwTOXBase** prBase = 0;
     switch(eTyp)
@@ -510,10 +510,10 @@ void    SwDoc::SetDefaultTOXBase(const SwTOXBase& rBase)
 /*--------------------------------------------------------------------
   Description: Delete table of contents
  --------------------------------------------------------------------*/
-sal_Bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes )
+bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
 {
     // We only delete the TOX, not the Nodes
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
 
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
@@ -592,7 +592,7 @@ sal_Bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes )
         DelSectionFmt( pFmt, bDelNodes );
 
         GetIDocumentUndoRedo().EndUndo( UNDO_CLEARTOXRANGE, NULL );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -680,14 +680,14 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     return aName += String::CreateFromInt32( ++nNum );
 }
 
-sal_Bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
+bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
 {
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ),
                     "no TOXBaseSection!" );
     SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOXBase;
 
     String sTmp = GetUniqueTOXBaseName(*rTOXBase.GetTOXType(), &rName);
-    sal_Bool bRet = sTmp == rName;
+    bool bRet = sTmp == rName;
     if(bRet)
     {
         pTOX->SetTOXName(rName);
@@ -732,9 +732,9 @@ SwTOXBaseSection::~SwTOXBaseSection()
 {
 }
 
-sal_Bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, sal_Bool bAtStart ) const
+bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, bool bAtStart ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwSectionNode* pSectNd = GetFmt()->GetSectionNode();
     if( pSectNd )
     {
@@ -752,7 +752,7 @@ sal_Bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, sal_Bool bAtStart
             if( pCNd ) nC = pCNd->Len();
         }
         rPos.nContent.Assign( pCNd, nC );
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
@@ -1430,7 +1430,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
         case nsSwTOXElement::TOX_OLE:
             if( pNd->IsOLENode() )
             {
-                sal_Bool bInclude = sal_True;
+                bool bInclude = true;
                 if(TOX_OBJECTS == SwTOXBase::GetType())
                 {
                     SwOLENode* pOLENode = pNd->GetOLENode();
@@ -1447,7 +1447,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
                     else
                     {
                         OSL_FAIL("OLE Object no loaded?");
-                        bInclude = sal_False;
+                        bInclude = false;
                     }
                 }
 
@@ -1547,7 +1547,7 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
   Description: Generate String according to the Form and remove the
   special characters 0-31 and 255
  --------------------------------------------------------------------*/
-static String lcl_GetNumString( const SwTOXSortTabBase& rBase, sal_Bool bUsePrefix, sal_uInt8 nLevel )
+static String lcl_GetNumString( const SwTOXSortTabBase& rBase, bool bUsePrefix, sal_uInt8 nLevel )
 {
     String sRet;
 
@@ -1619,7 +1619,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
             case TOKEN_ENTRY:
                 {
                     // for TOC numbering
-                    rTxt.Insert( lcl_GetNumString( rBase, sal_True, MAXLEVEL ));
+                    rTxt.Insert( lcl_GetNumString( rBase, true, MAXLEVEL ));
 
                     SwIndex aIdx( pTOXNd, rTxt.Len() );
                     rBase.FillText( *pTOXNd, aIdx );
@@ -1649,7 +1649,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                     const SwPageDesc* pPageDesc = ((SwFmtPageDesc&)pTOXNd->
                                 SwCntntNode::GetAttr( RES_PAGEDESC )).GetPageDesc();
 
-                    sal_Bool bCallFindRect = sal_True;
+                    bool bCallFindRect = true;
                     long nRightMargin;
                     if( pPageDesc )
                     {
@@ -1657,7 +1657,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                         if( !pFrm || 0 == ( pFrm = pFrm->FindPageFrm() ) ||
                             pPageDesc != ((SwPageFrm*)pFrm)->GetPageDesc() )
                             // we have to go via the PageDesc here
-                            bCallFindRect = sal_False;
+                            bCallFindRect = false;
                     }
 
                     SwRect aNdRect;
@@ -1966,12 +1966,12 @@ void SwTOXBaseSection::UpdatePageNum()
   Description: Replace the PageNumber place holders
  --------------------------------------------------------------------*/
 // search for the page no in the array of main entry page numbers
-static sal_Bool lcl_HasMainEntry( const std::vector<sal_uInt16>* pMainEntryNums, sal_uInt16 nToFind )
+static bool lcl_HasMainEntry( const std::vector<sal_uInt16>* pMainEntryNums, sal_uInt16 nToFind )
 {
     for(sal_uInt16 i = 0; pMainEntryNums && i < pMainEntryNums->size(); ++i)
         if(nToFind == (*pMainEntryNums)[i])
-            return sal_True;
-    return sal_False;
+            return true;
+    return false;
 }
 
 void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
@@ -2035,7 +2035,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
             // Add up all following
             // break up if main entry starts or ends and
             // insert a char style index
-            sal_Bool bMainEntryChanges = lcl_HasMainEntry(pMainEntryNums, nOld)
+            bool bMainEntryChanges = lcl_HasMainEntry(pMainEntryNums, nOld)
                     != lcl_HasMainEntry(pMainEntryNums, rNums[i]);
 
             if(nOld == rNums[i]-1 && !bMainEntryChanges &&
@@ -2294,10 +2294,10 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
     return Range(nStart, nEnd);
 }
 
-sal_Bool SwTOXBase::IsTOXBaseInReadonly() const
+bool SwTOXBase::IsTOXBaseInReadonly() const
 {
     const SwTOXBaseSection *pSect = dynamic_cast<const SwTOXBaseSection*>(this);
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwSectionNode* pSectNode;
     if(pSect && pSect->GetFmt() &&
             0 != (pSectNode = pSect->GetFmt()->GetSectionNode()))
@@ -2327,7 +2327,7 @@ void SwTOXBase::SetAttrSet( const SfxItemSet& rSet )
         pSect->GetFmt()->SetFmtAttr( rSet );
 }
 
-sal_Bool SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
+bool SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
     {
@@ -2337,9 +2337,9 @@ sal_Bool SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
             if( pSect && pSect->GetFmt() )
                 pSect->GetFmt()->GetInfo( rInfo );
         }
-        return sal_False;
+        return false;
     }
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

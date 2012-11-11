@@ -36,7 +36,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
@@ -1106,11 +1106,7 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter")),
             xCtx ),
         UNO_QUERY );
-    xIntrospection = Reference<XIntrospection>(
-        mxSMgr->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection")),
-            xCtx),
-        UNO_QUERY);
+    xIntrospection = Introspection::create(xCtx);
     mxCtx->getValueByName(
         OUString(
             RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection")) )

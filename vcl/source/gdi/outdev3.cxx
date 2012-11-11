@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "i18npool/mslangid.hxx"
 
@@ -81,7 +71,8 @@
 #include "com/sun/star/beans/PropertyValues.hpp"
 #include "com/sun/star/i18n/XBreakIterator.hpp"
 #include "com/sun/star/i18n/WordType.hpp"
-#include "com/sun/star/linguistic2/XLinguServiceManager.hpp"
+#include "com/sun/star/linguistic2/LinguServiceManager.hpp"
+#include <comphelper/processfactory.hxx>
 
 #if defined UNX
 #define GLYPH_FONT_HEIGHT   128
@@ -811,7 +802,7 @@ public:
     int                 mnFaceMatch;
     int                 mnHeightMatch;
     int                 mnWidthMatch;
-    const xub_Unicode*  mpTargetStyleName;
+    const sal_Unicode*  mpTargetStyleName;
 };
 
 bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchStatus& rStatus ) const
@@ -1180,7 +1171,7 @@ PhysicalFontFace* ImplDevFontListData::FindBestFontFace( const FontSelectPattern
 
     // FontName+StyleName should map to FamilyName+StyleName
     const String& rSearchName = rFSD.maTargetName;
-    const xub_Unicode* pTargetStyleName = NULL;
+    const sal_Unicode* pTargetStyleName = NULL;
     if( (rSearchName.Len() > maSearchName.Len())
     &&   rSearchName.Equals( maSearchName, 0, maSearchName.Len() ) )
         pTargetStyleName = rSearchName.GetBuffer() + maSearchName.Len() + 1;
@@ -3413,6 +3404,7 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
 {
     // initialize the members provided by the font request
     mnWidth        = rFontSelData.mnWidth;
+    mnSlant        = rFontSelData.GetSlant();
     mnOrientation  = sal::static_int_cast<short>(rFontSelData.mnOrientation);
 
     // intialize the used font name
@@ -3437,7 +3429,6 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     mnDescent      = 0;
     mnIntLeading   = 0;
     mnExtLeading   = 0;
-    mnSlant        = 0;
     mnMinKashida   = 0;
 
     // reset metrics that are usually derived from the measurements
@@ -4139,7 +4130,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
         cStrikeoutChar = 'X';
     static const int nTestStrLen = 4;
     static const int nMaxStrikeStrLen = 2048;
-    xub_Unicode aChars[nMaxStrikeStrLen+1]; // +1 for valgrind...
+    sal_Unicode aChars[nMaxStrikeStrLen+1]; // +1 for valgrind...
     for( int i = 0; i < nTestStrLen; ++i)
         aChars[i] = cStrikeoutChar;
     const rtl::OUString aStrikeoutTest(aChars, nTestStrLen);
@@ -4928,17 +4919,10 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
         ::rtl::OUString aText( rStr );
         uno::Reference < i18n::XBreakIterator > xBI;
         // get service provider
-        uno::Reference< lang::XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
+        uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-        uno::Reference< linguistic2::XHyphenator > xHyph;
-        if( xSMgr.is() )
-        {
-            uno::Reference< linguistic2::XLinguServiceManager> xLinguMgr(xSMgr->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.LinguServiceManager"))),uno::UNO_QUERY);
-            if ( xLinguMgr.is() )
-            {
-                xHyph = xLinguMgr->getHyphenator();
-            }
-        }
+        uno::Reference< linguistic2::XLinguServiceManager2> xLinguMgr = linguistic2::LinguServiceManager::create(xContext);
+        uno::Reference< linguistic2::XHyphenator > xHyph = xLinguMgr->getHyphenator();
 
         i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, uno::Sequence <beans::PropertyValue>(), 1 );
         i18n::LineBreakUserOptions aUserOptions;
@@ -5983,8 +5967,8 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( String& rStr,
     else if( 0 == (mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) )
     {
         // disable Bidi if no RTL hint and no RTL codes used
-        const xub_Unicode* pStr = rStr.GetBuffer() + nMinIndex;
-        const xub_Unicode* pEnd = rStr.GetBuffer() + nEndIndex;
+        const sal_Unicode* pStr = rStr.GetBuffer() + nMinIndex;
+        const sal_Unicode* pEnd = rStr.GetBuffer() + nEndIndex;
         for( ; pStr < pEnd; ++pStr )
             if( ((*pStr >= 0x0580) && (*pStr < 0x0800))   // middle eastern scripts
             ||  ((*pStr >= 0xFB18) && (*pStr < 0xFE00))   // hebrew + arabic A presentation forms
@@ -6946,13 +6930,17 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
     else
         aRect.Bottom() = aRect.Top()+(nTextHeight*nLines)-1;
 
-    aRect.Right()++; // #99188# get rid of rounding problems when using this rect later
+    // #99188# get rid of rounding problems when using this rect later
+    if (nStyle & TEXT_DRAW_RIGHT)
+        aRect.Left()--;
+    else
+        aRect.Right()++;
     return aRect;
 }
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplIsCharIn( xub_Unicode c, const sal_Char* pStr )
+static sal_Bool ImplIsCharIn( sal_Unicode c, const sal_Char* pStr )
 {
     while ( *pStr )
     {

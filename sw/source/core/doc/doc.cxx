@@ -871,7 +871,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     {
         // move all bookmarks, TOXMarks, FlyAtCnt
         if( !aBkmkArr.empty() )
-            _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, sal_True );
+            _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, true );
 
         if( IsRedlineOn() || (!IsIgnoreRedline() && !pRedlineTbl->empty() ))
         {
@@ -1632,7 +1632,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 
     // just one page is special ...
     if ( 1 == aVec.size() )
-        aVec.insert( aVec.begin() + 1, 0 ); // insert a second empty page
+        aVec.insert( aVec.begin() + 1, (SwPageFrm *)0 ); // insert a second empty page
     else
     {
         // now extend the number of pages to fit a multiple of 4
@@ -1979,7 +1979,7 @@ void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
     }
 }
 
-static sal_Bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
+static bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
     sal_Bool bOnlyWrong = *(sal_Bool*)pArgs;
@@ -2004,10 +2004,10 @@ static sal_Bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
                 pTxtNode->GetGrammarCheck()->SetInvalid( 0, STRING_LEN );
         }
     }
-    return sal_True;
+    return true;
 }
 
-static sal_Bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
+static bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
 //  sal_Bool bOnlyWrong = *(sal_Bool*)pArgs;
@@ -2022,18 +2022,16 @@ static sal_Bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
                 pTxtNode->SetSmartTags( NULL );
         }
     }
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
- * SwDoc::SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong )
- *
  * Re-triggers spelling in the idle handler.
- * If bInvalid is passed with sal_True, the WrongLists in all nodes are invalidated
+ * If bInvalid is passed with true, the WrongLists in all nodes are invalidated
  * and the SpellInvalid flag is set on all pages.
  * bOnlyWrong controls whether only the areas with wrong words are checked or the whole area.
  ************************************************************************/
-void SwDoc::SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong, sal_Bool bSmartTags )
+void SwDoc::SpellItAgainSam( bool bInvalid, bool bOnlyWrong, bool bSmartTags )
 {
     std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080307
     OSL_ENSURE( GetCurrentLayout(), "SpellAgain: Where's my RootFrm?" );
@@ -2086,7 +2084,7 @@ const SwFmtINetFmt* SwDoc::FindINetAttr( const String& rName ) const
     return 0;
 }
 
-void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool bImpress )
+void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress )
 {
     const SwOutlineNodes& rOutNds = GetNodes().GetOutLineNds();
     if( pExtDoc && !rOutNds.empty() )
@@ -2420,12 +2418,12 @@ bool SwDoc::ConvertFieldsToText()
             // skip fields that are currently not in the document
             // e.g. fields in undo or redo array
 
-            sal_Bool bSkip = !pTxtFld ||
+            bool bSkip = !pTxtFld ||
                          !pTxtFld->GetpTxtNode()->GetNodes().IsDocNodes();
 
             if (!bSkip)
             {
-                sal_Bool bInHeaderFooter = IsInHeaderFooter(SwNodeIndex(*pTxtFld->GetpTxtNode()));
+                bool bInHeaderFooter = IsInHeaderFooter(SwNodeIndex(*pTxtFld->GetpTxtNode()));
                 const SwFmtFld& rFmtFld = pTxtFld->GetFld();
                 const SwField*  pField = rFmtFld.GetFld();
 

@@ -31,7 +31,7 @@
 #include <svtools/filectrl.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include <vcl/unohelp.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.h>
 #include <vcl/stdtext.hxx>
@@ -48,7 +48,7 @@ void FileControl::ImplBrowseFile( )
 
         const ::rtl::OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
 
-        Reference< XMultiServiceFactory > xMSF = vcl::unohelper::GetMultiServiceFactory();
+        Reference< XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
         Reference < dialogs::XFilePicker > xFilePicker( xMSF->createInstance( sServiceName ), UNO_QUERY );
         if ( xFilePicker.is() )
         {

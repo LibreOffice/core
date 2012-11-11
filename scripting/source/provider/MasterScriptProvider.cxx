@@ -31,7 +31,7 @@
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #include <com/sun/star/uri/XUriReference.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 
 #include <com/sun/star/deployment/XPackage.hpp>
@@ -259,17 +259,7 @@ throw ( provider::ScriptFrameworkErrorException,
 
     // need to get the language from the string
 
-    Reference< uri::XUriReferenceFactory > xFac (
-         m_xMgr->createInstanceWithContext( rtl::OUString(
-            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
-    if ( !xFac.is() )
-    {
-        ::rtl::OUString message("Failed to instantiate  UriReferenceFactory");
-        throw provider::ScriptFrameworkErrorException(
-            message, Reference< XInterface >(),
-            scriptURI, ::rtl::OUString(),
-            provider::ScriptFrameworkErrorType::UNKNOWN );
-    }
+    Reference< uri::XUriReferenceFactory > xFac ( uri::UriReferenceFactory::create( m_xContext )  );
 
     Reference<  uri::XUriReference > uriRef(
         xFac->parse( scriptURI ), UNO_QUERY );

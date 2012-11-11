@@ -25,26 +25,26 @@
 TYPEINIT1(SbxCollection,SbxObject)
 TYPEINIT1(SbxStdCollection,SbxCollection)
 
-static const char* pCount;
-static const char* pAdd;
-static const char* pItem;
-static const char* pRemove;
+static OUString pCount;
+static OUString pAdd;
+static OUString pItem;
+static OUString pRemove;
 static sal_uInt16 nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
 
 
-SbxCollection::SbxCollection( const XubString& rClass )
+SbxCollection::SbxCollection( const OUString& rClass )
              : SbxObject( rClass )
 {
     if( !nCountHash )
     {
-        pCount  = GetSbxRes( STRING_COUNTPROP );
-        pAdd    = GetSbxRes( STRING_ADDMETH );
-        pItem   = GetSbxRes( STRING_ITEMMETH );
-        pRemove = GetSbxRes( STRING_REMOVEMETH );
-        nCountHash  = MakeHashCode( rtl::OUString::createFromAscii( pCount ) );
-        nAddHash    = MakeHashCode( rtl::OUString::createFromAscii( pAdd ) );
-        nItemHash   = MakeHashCode( rtl::OUString::createFromAscii( pItem ) );
-        nRemoveHash = MakeHashCode( rtl::OUString::createFromAscii( pRemove ) );
+        pCount  = rtl::OUString::createFromAscii(GetSbxRes( STRING_COUNTPROP ));
+        pAdd    = rtl::OUString::createFromAscii(GetSbxRes( STRING_ADDMETH ));
+        pItem   = rtl::OUString::createFromAscii(GetSbxRes( STRING_ITEMMETH ));
+        pRemove = rtl::OUString::createFromAscii(GetSbxRes( STRING_REMOVEMETH ));
+        nCountHash  = MakeHashCode( pCount );
+        nAddHash    = MakeHashCode( pAdd );
+        nItemHash   = MakeHashCode( pItem );
+        nRemoveHash = MakeHashCode( pRemove );
     }
     Initialize();
     // For Access on itself
@@ -77,14 +77,14 @@ void SbxCollection::Initialize()
     SetFlag( SBX_FIXED );
     ResetFlag( SBX_WRITE );
     SbxVariable* p;
-    p = Make( rtl::OUString::createFromAscii( pCount ), SbxCLASS_PROPERTY, SbxINTEGER );
+    p = Make( pCount , SbxCLASS_PROPERTY, SbxINTEGER );
     p->ResetFlag( SBX_WRITE );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( rtl::OUString::createFromAscii( pAdd ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( pAdd, SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( rtl::OUString::createFromAscii( pItem ), SbxCLASS_METHOD, SbxOBJECT );
+    p = Make( pItem , SbxCLASS_METHOD, SbxOBJECT );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( rtl::OUString::createFromAscii( pRemove ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( pRemove, SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
 }
 
@@ -96,7 +96,9 @@ SbxVariable* SbxCollection::FindUserData( sal_uInt32 nData )
         return pObj ? pObj->FindUserData( nData ) : NULL;
     }
     else
+    {
         return SbxObject::FindUserData( nData );
+    }
 }
 
 SbxVariable* SbxCollection::Find( const rtl::OUString& rName, SbxClassType t )
@@ -107,7 +109,9 @@ SbxVariable* SbxCollection::Find( const rtl::OUString& rName, SbxClassType t )
         return pObj ? pObj->Find( rName, t ) : NULL;
     }
     else
+    {
         return SbxObject::Find( rName, t );
+    }
 }
 
 void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
@@ -123,23 +127,35 @@ void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
         SbxArray* pArg = pVar->GetParameters();
         if( bRead || bWrite )
         {
-            XubString aVarName( pVar->GetName() );
+            OUString aVarName( pVar->GetName() );
             if( pVar == this )
+            {
                 CollItem( pArg );
+            }
             else if( pVar->GetHashCode() == nCountHash
-                  && aVarName.EqualsIgnoreCaseAscii( pCount ) )
+                  && aVarName.equalsIgnoreAsciiCase( pCount ) )
+            {
                 pVar->PutLong( pObjs->Count() );
+            }
             else if( pVar->GetHashCode() == nAddHash
-                  && aVarName.EqualsIgnoreCaseAscii( pAdd ) )
+                  && aVarName.equalsIgnoreAsciiCase( pAdd ) )
+            {
                 CollAdd( pArg );
+            }
             else if( pVar->GetHashCode() == nItemHash
-                  && aVarName.EqualsIgnoreCaseAscii( pItem ) )
+                  && aVarName.equalsIgnoreAsciiCase( pItem ) )
+            {
                 CollItem( pArg );
+            }
             else if( pVar->GetHashCode() == nRemoveHash
-                  && aVarName.EqualsIgnoreCaseAscii( pRemove ) )
+                  && aVarName.equalsIgnoreAsciiCase( pRemove ) )
+            {
                 CollRemove( pArg );
+            }
             else
+            {
                 SbxObject::SFX_NOTIFY( rCst, rId1, rHint, rId2 );
+            }
             return;
         }
     }
@@ -151,14 +167,20 @@ void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
 void SbxCollection::CollAdd( SbxArray* pPar_ )
 {
     if( pPar_->Count() != 2 )
+    {
         SetError( SbxERR_WRONG_ARGS );
+    }
     else
     {
         SbxBase* pObj = pPar_->Get( 1 )->GetObject();
         if( !pObj || !( pObj->ISA(SbxObject) ) )
+        {
             SetError( SbxERR_NOTIMP );
+        }
         else
+        {
             Insert( (SbxObject*) pObj );
+        }
     }
 }
 
@@ -167,21 +189,29 @@ void SbxCollection::CollAdd( SbxArray* pPar_ )
 void SbxCollection::CollItem( SbxArray* pPar_ )
 {
     if( pPar_->Count() != 2 )
+    {
         SetError( SbxERR_WRONG_ARGS );
+    }
     else
     {
         SbxVariable* pRes = NULL;
         SbxVariable* p = pPar_->Get( 1 );
         if( p->GetType() == SbxSTRING )
-            pRes = Find( p->GetString(), SbxCLASS_OBJECT );
+        {
+            pRes = Find( p->GetOUString(), SbxCLASS_OBJECT );
+        }
         else
         {
             short n = p->GetInteger();
             if( n >= 1 && n <= (short) pObjs->Count() )
+            {
                 pRes = pObjs->Get( (sal_uInt16) n - 1 );
+            }
         }
         if( !pRes )
+        {
             SetError( SbxERR_BAD_INDEX );
+        }
         pPar_->Get( 0 )->PutObject( pRes );
     }
 }
@@ -211,7 +241,7 @@ sal_Bool SbxCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 
 
 SbxStdCollection::SbxStdCollection
-                    ( const XubString& rClass, const XubString& rElem, sal_Bool b )
+                    ( const OUString& rClass, const OUString& rElem, sal_Bool b )
                   : SbxCollection( rClass ), aElemClass( rElem ),
                     bAddRemoveOk( b )
 {}
@@ -225,10 +255,14 @@ SbxStdCollection& SbxStdCollection::operator=( const SbxStdCollection& r )
 {
     if( &r != this )
     {
-        if( !r.aElemClass.EqualsIgnoreCaseAscii( aElemClass ) )
+        if( !r.aElemClass.equalsIgnoreAsciiCase( aElemClass ) )
+        {
             SetError( SbxERR_CONVERSION );
+        }
         else
+        {
             SbxCollection::operator=( r );
+        }
     }
     return *this;
 }

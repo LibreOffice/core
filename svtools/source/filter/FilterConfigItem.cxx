@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -45,6 +46,7 @@ using namespace ::com::sun::star::uno       ;   // Reference
 using namespace ::com::sun::star::util      ;   // XChangesBatch
 using namespace ::com::sun::star::awt       ;   // Size
 using namespace ::com::sun::star::container ;   //
+using namespace ::com::sun::star::configuration;   //
 using namespace ::com::sun::star::task      ;   // XStatusIndicator
 
 static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, const rtl::OUString& rTree )
@@ -122,50 +124,44 @@ void FilterConfigItem::ImpInitTree( const String& rSubTree )
 {
     bModified = sal_False;
 
-    Reference< XMultiServiceFactory > xSMGR(
-        comphelper::getProcessServiceFactory() );
+    Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-    Reference< XMultiServiceFactory > xCfgProv(
-        xSMGR->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) ) ),
-            UNO_QUERY );
+    Reference< XMultiServiceFactory > xCfgProv = theDefaultProvider::get( xContext );
 
-    if ( xCfgProv.is() )
+    OUString sTree(
+        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.")) +
+        rSubTree);
+    if ( ImpIsTreeAvailable(xCfgProv, sTree) )
     {
-        OUString sTree(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.")) +
-            rSubTree);
-        if ( ImpIsTreeAvailable(xCfgProv, sTree) )
+        Any aAny;
+        // creation arguments: nodepath
+        PropertyValue aPathArgument;
+        aAny <<= sTree;
+        aPathArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+        aPathArgument.Value = aAny;
+
+        // creation arguments: commit mode
+        PropertyValue aModeArgument;
+        sal_Bool bAsyncron = sal_True;
+        aAny <<= bAsyncron;
+        aModeArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "lazywrite" ) );
+        aModeArgument.Value = aAny;
+
+        Sequence< Any > aArguments( 2 );
+        aArguments[ 0 ] <<= aPathArgument;
+        aArguments[ 1 ] <<= aModeArgument;
+
+        try
         {
-            Any aAny;
-            // creation arguments: nodepath
-            PropertyValue aPathArgument;
-            aAny <<= sTree;
-            aPathArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-            aPathArgument.Value = aAny;
-
-            // creation arguments: commit mode
-            PropertyValue aModeArgument;
-            sal_Bool bAsyncron = sal_True;
-            aAny <<= bAsyncron;
-            aModeArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "lazywrite" ) );
-            aModeArgument.Value = aAny;
-
-            Sequence< Any > aArguments( 2 );
-            aArguments[ 0 ] <<= aPathArgument;
-            aArguments[ 1 ] <<= aModeArgument;
-
-            try
-            {
-                xUpdatableView = xCfgProv->createInstanceWithArguments(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) ),
-                        aArguments );
-                if ( xUpdatableView.is() )
-                    xPropSet = Reference< XPropertySet >( xUpdatableView, UNO_QUERY );
-            }
-            catch ( ::com::sun::star::uno::Exception& )
-            {
-                OSL_FAIL( "FilterConfigItem::FilterConfigItem - Could not access configuration Key" );
-            }
+            xUpdatableView = xCfgProv->createInstanceWithArguments(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) ),
+                    aArguments );
+            if ( xUpdatableView.is() )
+                xPropSet = Reference< XPropertySet >( xUpdatableView, UNO_QUERY );
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+            OSL_FAIL( "FilterConfigItem::FilterConfigItem - Could not access configuration Key" );
         }
     }
 }

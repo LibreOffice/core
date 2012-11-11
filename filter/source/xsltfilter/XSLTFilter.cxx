@@ -47,6 +47,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
 
@@ -65,6 +66,8 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#include <com/sun/star/xml/xslt/XSLT2Transformer.hpp>
+#include <com/sun/star/xml/xslt/XSLTTransformer.hpp>
 
 #include <xmloff/attrlist.hxx>
 
@@ -95,14 +98,10 @@ namespace XSLT
      * them to an XSLT transformation service. XSLT transformation errors are
      * reported to XSLTFilter.
      *
-     * Currently, two implementations for the XSLT transformation service exist:
-     * a java based service (see XSLTransformer.java) and  a libxslt based
-     * service (LibXSLTTransformer.cxx).
-     *
-     * The libxslt implementation will be used by default.
-     *
-     * If the value of the 2nd "UserData" parameter of the filter configuration is
-     * not empty, the service name given there will be used.
+     * Currently, our transformation service is libxslt based, so it
+     * only supports XSLT 1.0. There is a possibility to use XSLT 2.0
+     * supporting service from an extension for a specific filter; the
+     * service must support com.sun.star.xml.xslt.XSLT2Transformer.
      */
     class XSLTFilter : public WeakImplHelper4<XImportFilter, XExportFilter,
             XStreamListener, ExtendedDocumentHandlerAdapter>
@@ -115,7 +114,7 @@ namespace XSLT
         // DocumentHandler interface of the css::xml::sax::Writer service
         css::uno::Reference<XOutputStream> m_rOutputStream;
 
-        css::uno::Reference<XActiveDataControl> m_tcontrol;
+        css::uno::Reference<xslt::XXSLTTransformer> m_tcontrol;
 
         oslCondition m_cTransformed;
         sal_Bool m_bTerminated;
@@ -127,6 +126,8 @@ namespace XSLT
         rel2abs(const OUString&);
         OUString
         expandUrl(const OUString&);
+
+        css::uno::Reference<xslt::XXSLTTransformer> impl_createTransformer(const rtl::OUString& rTransformer, const Sequence<Any>& rArgs);
 
     public:
 
@@ -197,6 +198,43 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
             {
             }
         return sExpandedUrl;
+    }
+
+    css::uno::Reference<xslt::XXSLTTransformer>
+    XSLTFilter::impl_createTransformer(const rtl::OUString& rTransformer, const Sequence<Any>& rArgs)
+    {
+        css::uno::Reference<xslt::XXSLTTransformer> xTransformer;
+
+        // check if the filter needs XSLT-2.0-capable transformer
+        // COMPATIBILITY: libreoffice 3.5/3.6 used to save the impl.
+        // name of the XSLT 2.0 transformation service there, so check
+        // for that too (it is sufficient to check that there is _a_
+        // service name there)
+        if (rTransformer.toBoolean() || rTransformer.startsWith("com.sun."))
+        {
+            try
+            {
+                xTransformer = xslt::XSLT2Transformer::create(
+                        comphelper::getComponentContext(m_rServiceFactory), rArgs);
+            }
+            catch (const Exception&)
+            {
+                // TODO: put a dialog telling about the need to install
+                // xslt2-transformer extension here
+                SAL_WARN("filter.xslt", "could not create XSLT 2.0 transformer");
+                throw;
+            }
+        }
+
+        // instantiation of XSLT 2.0 transformer service failed, or the
+        // filter does not need it
+        if (!xTransformer.is())
+        {
+            xTransformer = xslt::XSLTTransformer::create(
+                    comphelper::getComponentContext(m_rServiceFactory), rArgs);
+        }
+
+        return xTransformer;
     }
 
     void
@@ -299,11 +337,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         nv.Value <<= OUString(INetURLObject(aURL).getBase());
         args[2] <<= nv;
 
-        OUString serviceName("com.sun.star.comp.documentconversion.LibXSLTTransformer");
-        if (!msUserData[1].isEmpty())
-            serviceName = msUserData[1];
-
-        m_tcontrol = css::uno::Reference<XActiveDataControl> (m_rServiceFactory->createInstanceWithArguments(serviceName, args), UNO_QUERY);
+        m_tcontrol = impl_createTransformer(msUserData[1], args);
 
         OSL_ASSERT(xHandler.is());
         OSL_ASSERT(xInputStream.is());
@@ -431,11 +465,9 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         if (!getDelegate().is())
             {
                 // get the document writer
-                setDelegate(css::uno::Reference<XExtendedDocumentHandler> (
-                                m_rServiceFactory->createInstance(
-                                        OUString(
-                                                 "com.sun.star.xml.sax.Writer" )),
-                                UNO_QUERY));
+                setDelegate(css::uno::Reference<XExtendedDocumentHandler>(
+                                Writer::create(comphelper::getComponentContext(m_rServiceFactory)),
+                                UNO_QUERY_THROW));
             }
 
         // create transformer
@@ -460,11 +492,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         nv.Value <<= m_aExportBaseUrl;
         args[3] <<= nv;
 
-        OUString serviceName("com.sun.star.comp.documentconversion.LibXSLTTransformer");
-        if (!msUserData[1].isEmpty())
-            serviceName = msUserData[1];
-
-        m_tcontrol = css::uno::Reference<XActiveDataControl> (m_rServiceFactory->createInstanceWithArguments(serviceName, args), UNO_QUERY);
+        m_tcontrol = impl_createTransformer(msUserData[1], args);
 
         OSL_ASSERT(m_rOutputStream.is());
         OSL_ASSERT(m_tcontrol.is());
@@ -537,7 +565,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
     // --------------------------------------
 #define FILTER_SERVICE_NAME "com.sun.star.documentconversion.XSLTFilter"
 #define FILTER_IMPL_NAME "com.sun.star.comp.documentconversion.XSLTFilter"
-#define TRANSFORMER_SERVICE_NAME "com.sun.star.documentconversion.LibXSLTTransformer"
+#define TRANSFORMER_SERVICE_NAME "com.sun.star.xml.xslt.XSLTTransformer"
 #define TRANSFORMER_IMPL_NAME "com.sun.star.comp.documentconversion.LibXSLTTransformer"
 
     static css::uno::Reference<XInterface> SAL_CALL

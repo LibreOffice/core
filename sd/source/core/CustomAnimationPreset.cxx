@@ -30,6 +30,7 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -53,16 +54,11 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 
 using ::rtl::OUString;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::container::XNameAccess;
@@ -320,9 +316,8 @@ void CustomAnimationPresets::importEffects()
             xContext->getValueByName("/singletons/com.sun.star.util.theMacroExpander"),
             UNO_QUERY );
 
-        Reference< XMultiServiceFactory > xConfigProvider(
-            xServiceFactory->createInstance("com.sun.star.configuration.ConfigurationProvider" ),
-            UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xConfigProvider =
+            configuration::theDefaultProvider::get( xContext );
 
         // read path to transition effects files from config
         Any propValue = uno::makeAny(
@@ -404,12 +399,10 @@ void CustomAnimationPresets::importResources()
     try
     {
         // Get service factory
-        Reference< XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
-        DBG_ASSERT( xServiceFactory.is(), "sd::CustomAnimationPresets::import(), got no service manager" );
-        if( !xServiceFactory.is() )
-            return;
+        Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-        Reference< XMultiServiceFactory > xConfigProvider( xServiceFactory->createInstance("com.sun.star.configuration.ConfigurationProvider" ), UNO_QUERY );
+        Reference< XMultiServiceFactory > xConfigProvider =
+             configuration::theDefaultProvider::get( xContext );
 
         const OUString aPropertyPath("/org.openoffice.Office.UI.Effects/UserInterface/Properties" );
         implImportLabels( xConfigProvider, aPropertyPath, maPropertyNameMap );

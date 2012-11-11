@@ -114,7 +114,7 @@ namespace
         return is_subrange(s.first, s.second, b, e);
     }
 
-    int findSameDirLimit(const xub_Unicode* buffer, int charCount, bool rtl)
+    int findSameDirLimit(const sal_Unicode* buffer, int charCount, bool rtl)
     {
         UErrorCode status = U_ZERO_ERROR;
         UBiDi *ubidi = ubidi_openSized(charCount, 0, &status);

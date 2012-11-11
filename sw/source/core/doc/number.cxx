@@ -353,7 +353,7 @@ sal_Int16   SwNumFmt::GetVertOrient() const
 void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
 {
     sal_Bool bDocIsModified = pDoc->IsModified();
-    sal_Bool bFnd = sal_False;
+    bool bFnd = false;
     const SwNumRule* pRule;
     for( sal_uInt16 n = pDoc->GetNumRuleTbl().size(); !bFnd && n; )
     {
@@ -368,7 +368,7 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
                 {
                     lcl_SetRuleChgd( *(*aIter), i );
                 }
-                bFnd = sal_True;
+                bFnd = true;
                 break;
             }
     }
@@ -749,7 +749,7 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
 
     if ( rNodeNum.GetLevelInListTree() >= 0 )
     {
-        sal_Bool bOldHadPrefix = sal_True;
+        bool bOldHadPrefix = true;
         bool bFirstIteration = true;
         ::rtl::OUString sOldPrefix;
 
@@ -773,7 +773,6 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                 String aPrevStr = MakeNumString( pWorkingNodeNum->GetNumberVector(),
                                                  sal_True, sal_False, MAXLEVEL,
                                                  &aExtremities);
-                int        nLen = aPrevStr.Len();
                 int        nStrip = 0;
                 sal_Unicode        c;
 
@@ -789,7 +788,6 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                 {
                     aPrevStr.Erase( 0, nStrip );
                     aExtremities.nPrefixChars -= nStrip;
-                    nLen -= nStrip;
                 }
 
                 if ((bFirstIteration || bOldHadPrefix) &&

@@ -551,7 +551,7 @@ void SwNavigationPI::MakeMark()
     ::std::vector< ::rtl::OUString > vNavMarkNames;
     for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
         ppMark != pMarkAccess->getMarksEnd();
-        ppMark++)
+        ++ppMark)
         if( IDocumentMarkAccess::GetType(**ppMark) == IDocumentMarkAccess::NAVIGATOR_REMINDER )
             vNavMarkNames.push_back(ppMark->get()->GetName());
     ::std::sort(vNavMarkNames.begin(), vNavMarkNames.end());
@@ -601,7 +601,7 @@ void SwNavigationPI::_ZoomOut()
             aContentTree.ShowTree();
             aDocListBox.Show();
         }
-        SvLBoxEntry* pFirst = aContentTree.FirstSelected();
+        SvTreeListEntry* pFirst = aContentTree.FirstSelected();
         if(pFirst)
             aContentTree.Select(pFirst, sal_True); // toolbox enablen
         pConfig->SetSmall( sal_False );
@@ -628,7 +628,7 @@ void SwNavigationPI::_ZoomIn()
         ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel(Size(
                             aMinOutSizePixel.Width(), aSz.Height()));
         pFloat->SetOutputSizePixel(aSz);
-        SvLBoxEntry* pFirst = aContentTree.FirstSelected();
+        SvTreeListEntry* pFirst = aContentTree.FirstSelected();
         if(pFirst)
             aContentTree.Select(pFirst, sal_True); // toolbox enablen
         pConfig->SetSmall( sal_True );

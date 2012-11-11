@@ -32,6 +32,7 @@
 #include <threadhelp/resetableguard.hxx>
 
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -71,7 +72,7 @@ AddonsToolBoxFactory::AddonsToolBoxFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
     , m_xServiceManager( xServiceManager )
-    , m_xModuleManager( xServiceManager->createInstance(SERVICENAME_MODULEMANAGER),UNO_QUERY )
+    , m_xModuleManager( ModuleManager::create( comphelper::getComponentContext(xServiceManager) ) )
 {
 }
 

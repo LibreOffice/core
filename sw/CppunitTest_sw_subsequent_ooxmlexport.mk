@@ -65,6 +65,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_subsequent_ooxmlexport,\
 $(eval $(call gb_CppunitTest_use_ure,sw_subsequent_ooxmlexport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ooxmlexport,\
+	basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     embeddedobj/util/embobj \
@@ -72,6 +73,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ooxmlexport,\
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
     i18npool/util/i18npool \
+    linguistic/source/lng \
     oox/util/oox \
     package/source/xstor/xstor \
     package/util/package2 \

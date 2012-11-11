@@ -249,6 +249,7 @@ typedef void *                   sal_Handle;
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #   define SAL_DLLPUBLIC_EXPORT    __declspec(dllexport)
+#   define SAL_JNI_EXPORT          __declspec(dllexport)
 #if defined(_MSC_VER)
 #   define SAL_DLLPUBLIC_IMPORT    __declspec(dllimport)
 #else
@@ -261,21 +262,33 @@ typedef void *                   sal_Handle;
 #elif defined SAL_UNX
 #   if   defined(__SUNPRO_CC) && (__SUNPRO_CC >= 0x550)
 #     define SAL_DLLPUBLIC_EXPORT  __global
+#     define SAL_JNI_EXPORT        __global
 #     define SAL_DLLPUBLIC_IMPORT
 #     define SAL_DLLPRIVATE        __hidden
 #     define SAL_DLLPUBLIC_TEMPLATE
 #   elif defined(__SUNPRO_C ) && (__SUNPRO_C  >= 0x550)
 #     define SAL_DLLPUBLIC_EXPORT  __global
+#     define SAL_JNI_EXPORT        __global
 #     define SAL_DLLPUBLIC_IMPORT
 #     define SAL_DLLPRIVATE        __hidden
 #     define SAL_DLLPUBLIC_TEMPLATE
 #   elif defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
-#     define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("default")))
-#     define SAL_DLLPUBLIC_IMPORT  __attribute__ ((visibility("default")))
-#     define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
-#     define SAL_DLLPUBLIC_TEMPLATE __attribute__ ((visibility("default")))
+#     if defined(DISABLE_DYNLOADING)
+#       define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("hidden")))
+#       define SAL_JNI_EXPORT        __attribute__ ((visibility("default")))
+#       define SAL_DLLPUBLIC_IMPORT  __attribute__ ((visibility("hidden")))
+#       define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
+#       define SAL_DLLPUBLIC_TEMPLATE __attribute__ ((visibility("hidden")))
+#     else
+#       define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("default")))
+#       define SAL_JNI_EXPORT        __attribute__ ((visibility("default")))
+#       define SAL_DLLPUBLIC_IMPORT  __attribute__ ((visibility("default")))
+#       define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
+#       define SAL_DLLPUBLIC_TEMPLATE __attribute__ ((visibility("default")))
+#     endif
 #   else
 #     define SAL_DLLPUBLIC_EXPORT
+#     define SAL_JNI_EXPORT
 #     define SAL_DLLPUBLIC_IMPORT
 #     define SAL_DLLPRIVATE
 #     define SAL_DLLPUBLIC_TEMPLATE

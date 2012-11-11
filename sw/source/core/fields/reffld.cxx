@@ -101,7 +101,7 @@ static void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
 }
 
 
-sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
+bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
                     const SwTxtNode& rBehindNd, sal_uInt16 nSttPos )
 {
     const SwTxtFrm *pMyFrm = (SwTxtFrm*)rMyNd.getLayoutFrm( rMyNd.GetDoc()->GetCurrentLayout(), 0,0,sal_False),
@@ -113,7 +113,7 @@ sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
         pMyFrm = (SwTxtFrm*)pMyFrm->GetFollow();
 
     if( !pFrm || !pMyFrm || pFrm == pMyFrm )
-        return sal_False;
+        return false;
 
     std::vector<const SwFrm*> aRefArr, aArr;
     ::lcl_GetLayTree( pFrm, aRefArr );
@@ -145,7 +145,7 @@ sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
     const SwFrm* pFldFrm = aArr[ nCnt ];
 
     // unterschiedliche Frames, dann ueberpruefe deren Y-/X-Position
-    sal_Bool bRefIsLower = sal_False;
+    bool bRefIsLower = false;
     if( ( FRM_COLUMN | FRM_CELL ) & pFldFrm->GetType() ||
         ( FRM_COLUMN | FRM_CELL ) & pRefFrm->GetType() )
     {

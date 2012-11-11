@@ -63,7 +63,7 @@ namespace dbaui
     using namespace ::svx;
 
     // -----------------------------------------------------------------------------
-    TransferableHelper* SbaTableQueryBrowser::implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection )
+    TransferableHelper* SbaTableQueryBrowser::implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection )
     {
         try
         {
@@ -98,7 +98,7 @@ namespace dbaui
     sal_Int8 SbaTableQueryBrowser::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )
     {
         // check if we're a table or query container
-        SvLBoxEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rEvt.maPosPixel );
+        SvTreeListEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rEvt.maPosPixel );
 
         if ( pHitEntry ) // no drop if no entry was hit ....
         {
@@ -120,7 +120,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Int8 SbaTableQueryBrowser::executeDrop( const ExecuteDropEvent& _rEvt )
     {
-        SvLBoxEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rEvt.maPosPixel );
+        SvTreeListEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rEvt.maPosPixel );
         EntryType eEntryType = getEntryType( pHitEntry );
         if (!isContainer(eEntryType))
         {
@@ -182,7 +182,7 @@ namespace dbaui
     {
         // get the affected list entry
         // ensure that the entry which the user clicked at is selected
-        SvLBoxEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rPosPixel );
+        SvTreeListEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rPosPixel );
         if (!pHitEntry)
             // no drag of no entry was hit ....
             return sal_False;
@@ -203,19 +203,19 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     IMPL_LINK(SbaTableQueryBrowser, OnCopyEntry, void*, /*NOTINTERESIN*/)
     {
-        SvLBoxEntry* pSelected = m_pTreeView->getListBox().FirstSelected();
+        SvTreeListEntry* pSelected = m_pTreeView->getListBox().FirstSelected();
         if( isEntryCopyAllowed( pSelected ) )
             copyEntry( pSelected );
         return 0;
     }
     // -----------------------------------------------------------------------------
-    sal_Bool SbaTableQueryBrowser::isEntryCopyAllowed(SvLBoxEntry* _pEntry) const
+    sal_Bool SbaTableQueryBrowser::isEntryCopyAllowed(SvTreeListEntry* _pEntry) const
     {
         EntryType eType = getEntryType(_pEntry);
         return  ( eType == etTableOrView || eType == etQuery );
     }
     // -----------------------------------------------------------------------------
-    void SbaTableQueryBrowser::copyEntry(SvLBoxEntry* _pEntry)
+    void SbaTableQueryBrowser::copyEntry(SvTreeListEntry* _pEntry)
     {
         TransferableHelper* pTransfer = NULL;
         Reference< XTransferable> aEnsureDelete;
@@ -237,7 +237,7 @@ namespace dbaui
             SharedConnection xDestConnection;
             if ( ensureConnection( m_aAsyncDrop.pDroppedAt, xDestConnection ) && xDestConnection.is() )
             {
-                SvLBoxEntry* pDataSourceEntry = m_pTreeView->getListBox().GetRootLevelParent(m_aAsyncDrop.pDroppedAt);
+                SvTreeListEntry* pDataSourceEntry = m_pTreeView->getListBox().GetRootLevelParent(m_aAsyncDrop.pDroppedAt);
                 m_aTableCopyHelper.asyncCopyTagTable( m_aAsyncDrop, getDataSourceAcessor( pDataSourceEntry ), xDestConnection );
             }
         }
@@ -252,7 +252,7 @@ namespace dbaui
         if (m_pTreeModel)
         {
             // clear the user data of the tree model
-            SvLBoxEntry* pEntryLoop = m_pTreeModel->First();
+            SvTreeListEntry* pEntryLoop = m_pTreeModel->First();
             while (pEntryLoop)
             {
                 DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pEntryLoop->GetUserData());

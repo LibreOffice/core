@@ -519,7 +519,7 @@ bool sw_HideObj( const SwTxtFrm& _rFrm,
               pIDSA->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
              _rFrm.IsInDocBody() && !_rFrm.FindNextCnt() )
         {
-            const xub_Unicode cAnchorChar =
+            const sal_Unicode cAnchorChar =
                         _rFrm.GetTxtNode()->GetTxt().GetChar( _nObjAnchorPos );
             if ( cAnchorChar == CH_TXTATR_BREAKWORD )
             {
@@ -533,7 +533,7 @@ bool sw_HideObj( const SwTxtFrm& _rFrm,
                     if ( pFrmFmt->Which() == RES_FLYFRMFMT )
                     {
                         SwNodeIndex nCntntIndex = *(pFrmFmt->GetCntnt().GetCntntIdx());
-                        nCntntIndex++;
+                        ++nCntntIndex;
                         if ( nCntntIndex.GetNode().IsNoTxtNode() )
                         {
                             bRet = false;
@@ -1352,13 +1352,13 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     } // switch
 
     if( bSetFldsDirty )
-        GetNode()->getIDocumentFieldsAccess()->SetFieldsDirty( sal_True, GetNode(), 1 );
+        GetNode()->getIDocumentFieldsAccess()->SetFieldsDirty( true, GetNode(), 1 );
 
     if ( bRecalcFtnFlag )
         CalcFtnFlag();
 }
 
-sal_Bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
+bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
 {
     if ( RES_VIRTPAGENUM_INFO == rHnt.Which() && IsInDocBody() && ! IsFollow() )
     {
@@ -1371,7 +1371,7 @@ sal_Bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
                 //Das sollte er sein (kann allenfalls temporaer anders sein,
                 //                    sollte uns das beunruhigen?)
                 rInfo.SetInfo( pPage, this );
-                return sal_False;
+                return false;
             }
             if ( pPage->GetPhyPageNum() < rInfo.GetOrigPage()->GetPhyPageNum() &&
                  (!rInfo.GetPage() || pPage->GetPhyPageNum() > rInfo.GetPage()->GetPhyPageNum()))
@@ -1381,7 +1381,7 @@ sal_Bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
             }
         }
     }
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************

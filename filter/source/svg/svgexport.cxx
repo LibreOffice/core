@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
- /*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "svgwriter.hxx"
 #include "svgfontexport.hxx"
@@ -35,6 +25,7 @@
 
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <rtl/bootstrap.hxx>
 #include <svtools/miscopt.hxx>
@@ -51,15 +42,10 @@
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/animationexport.hxx>
 
-
 #include <boost/preprocessor/repetition/repeat.hpp>
-
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
-
-
-
 
 // -------------------------------
 // - ooo elements and attributes -
@@ -639,7 +625,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     {
         if( mSelectedPages.hasElements() && mMasterPageTargets.hasElements() )
         {
-            Reference< XDocumentHandler > xDocHandler( implCreateExportDocumentHandler( xOStm ) );
+            Reference< XDocumentHandler > xDocHandler( implCreateExportDocumentHandler( xOStm ), UNO_QUERY );
 
             if( xDocHandler.is() )
             {
@@ -714,24 +700,14 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
 // -----------------------------------------------------------------------------
 
-Reference< XDocumentHandler > SVGFilter::implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm )
+Reference< XWriter > SVGFilter::implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm )
 {
-    Reference< XMultiServiceFactory >   xMgr( ::comphelper::getProcessServiceFactory() );
-    Reference< XDocumentHandler >       xSaxWriter;
+    Reference< XWriter >       xSaxWriter;
 
-    if( xMgr.is() && rxOStm.is() )
+    if( rxOStm.is() )
     {
-        xSaxWriter = Reference< XDocumentHandler >( xMgr->createInstance( B2UCONST( "com.sun.star.xml.sax.Writer" ) ), UNO_QUERY );
-
-        if( xSaxWriter.is() )
-        {
-            Reference< XActiveDataSource > xActiveDataSource( xSaxWriter, UNO_QUERY );
-
-            if( xActiveDataSource.is() )
-                xActiveDataSource->setOutputStream( rxOStm );
-            else
-                xSaxWriter = NULL;
-        }
+        xSaxWriter = Writer::create( ::comphelper::getProcessComponentContext() );
+        xSaxWriter->setOutputStream( rxOStm );
     }
 
     return xSaxWriter;
@@ -1359,7 +1335,7 @@ sal_Bool SVGFilter::implExportTextEmbeddedBitmaps()
                     // specifying the wanted position, they will result
                     // misplaced.
                     pAction->Move( -aPt.X(), -aPt.Y() );
-                    mpSVGWriter->WriteMetaFile( aTopLeft, aSize, aMtf, SVGWRITER_WRITE_ALL, NULL );
+                    mpSVGWriter->WriteMetaFile( aTopLeft, aSize, aMtf, 0xffffffff, NULL );
                     // We reset to the original values so that when the <use>
                     // element is created the x, y attributes are correct.
                     pAction->Move( aPt.X(), aPt.Y() );
@@ -1827,7 +1803,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                     {
                         SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
                         mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
-                                                    SVGWRITER_WRITE_ALL,
+                                                    0xffffffff,
                                                     pElementId,
                                                     &rxShape,
                                                     pEmbeddedBitmapsMtf );
@@ -1987,7 +1963,6 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
 
                                     // We create a set of bitmaps embedded into text shape.
                                     GDIMetaFile   aMtf;
-                                    const Point   aNullPt;
                                     const Size    aSize( pObj->GetCurrentBoundRect().GetSize() );
                                     MetaAction*   pAction;
                                     sal_Bool bIsTextShapeStarted = sal_False;

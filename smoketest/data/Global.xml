@@ -105,16 +105,10 @@ Global bMakeSaveOpen8Test as boolean, bMakeMacrosTest as boolean
 
 global sExtensionURL as string
 
-global oBinFilterComp as Object
-
 Dim gDlgState as Integer
 
 Sub SetGlobalDoc
     gOutputDoc = ThisComponent
-    REM need to have the binfilter component, and SRC_ROOT set to find sample docs
-    if Environ(&quot;SRC_ROOT&quot;) &lt;&gt; &quot;&quot; then
-        oBinFilterComp = createUnoService( &quot;com.sun.star.comp.office.BF_MigrateFilter&quot; )
-    End If
 end Sub
 
 Sub ClearStatus
@@ -534,10 +528,8 @@ Sub SetGlobalOptionsDialog ()
     REM create dialog control
     gOptionsDialog = CreateUnoDialog( oInputStreamProvider )
 
-    if isNull(oBinFilterComp) then
-        oControl = gOptionsDialog.getControl(&quot;cbOpen50Test&quot;)
-        oControl.Model.setPropertyValue(&quot;Enabled&quot;, FALSE)
-    end If
+    oControl = gOptionsDialog.getControl(&quot;cbOpen50Test&quot;)
+    oControl.Model.setPropertyValue(&quot;Enabled&quot;, FALSE)
 
 end Sub
 
@@ -596,11 +588,7 @@ Sub GetOptions
     gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).setState( -( GetUserFieldState (cUserFieldTestDatabase, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).setState( -( GetUserFieldState (cUserFieldTestExtension, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSaveXML, gOutputDoc)))
-    if not isNull(oBinFilterComp) then
-        gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpen50, gOutPutDoc)))
-    else
-        gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).setState(0)
-    end If
+    gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).setState(0)
     gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSave8, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbMacrosTest&quot;).setState( -( GetUserFieldState (cUserFieldTestMacros, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbTerminateAfterTest&quot;).setState( -( GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutputDoc)))
@@ -619,11 +607,7 @@ Sub ReadOptions
     bMakeDBTest = GetUserFieldState (cUserFieldTestDatabase, gOutputDoc)
     bMakeExtensionTest = GetUserFieldState (cUserFieldTestExtension, gOutputDoc)
     bMakeSaveOpenXMLTest = GetUserFieldState (cUserFieldTestOpenSaveXML, gOutputDoc)
-    if not isNull(oBinFilterComp) then
-        bMakeOpen50Test = GetUserFieldState (cUserFieldTestOpen50, gOutPutDoc)
-    else
-        bMakeOpen50Test = false
-    End If
+    bMakeOpen50Test = false
     bMakeSaveOpen8Test = GetUserFieldState (cUserFieldTestOpenSave8, gOutputDoc)
     bMakeMacrosTest = GetUserFieldState (cUserFieldTestMacros, gOutputDoc)
     bMakeTerminateAfterTest = GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutputDoc)
@@ -647,12 +631,7 @@ Sub SetDefaultOptions
         bMakeExtensionTest = true
     End If
     bMakeSaveOpenXMLTest = true
-    REM Disable StarOffice 5.0 tests in case binfilter has not been included
-    if not isNull(oBinFilterComp) then
-        bMakeOpen50Test = true
-    else
-        bMakeOpen50Test = false
-    End If
+    bMakeOpen50Test = false
     bMakeSaveOpen8Test = true
     bMakeMacrosTest = true
     bMakeTerminateAfterTest = false

@@ -152,7 +152,7 @@ class SwPageNumberFieldType : public SwFieldType
 {
     sal_Int16   nNumberingType;
     sal_uInt16          nNum, nMax;
-    sal_Bool            bVirtuell;
+    bool            bVirtuell;
 
 public:
     SwPageNumberFieldType();

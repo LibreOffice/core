@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="StartModuleWindowState" oor:package="org.openoffice.Office.UI">
+    <node oor:name="UIElements">
+        <node oor:name="States">
+            <node oor:name="private:resource/toolbar/addon_LibreLogo.OfficeToolBar" oor:op="replace">
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Logo</value>
+                </prop>
+        <prop oor:name="Visible" oor:type="xs:boolean">
+            <value>false</value>
+        </prop>
+                <prop oor:name="Locked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+            </node>
+        </node>
+    </node>
+</oor:component-data>

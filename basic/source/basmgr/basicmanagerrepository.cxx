@@ -41,6 +41,7 @@
 #include <unotools/eventlisteneradapter.hxx>
 
 #include <rtl/instance.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <map>
 
@@ -284,12 +285,13 @@ namespace basic
 
         // Determine Directory
         SvtPathOptions aPathCFG;
-        String aAppBasicDir( aPathCFG.GetBasicPath() );
-        if ( !aAppBasicDir.Len() )
+        OUString aAppBasicDir( aPathCFG.GetBasicPath() );
+        if ( aAppBasicDir.isEmpty() )
+        {
             aPathCFG.SetBasicPath(rtl::OUString("$(prog)"));
-
+        }
         // soffice.new search only in user dir => first dir
-        String aAppFirstBasicDir = aAppBasicDir.GetToken(1);
+        OUString aAppFirstBasicDir = aAppBasicDir.getToken(1, ';');
 
         // Create basic and load it
         // AppBasicDir is now a PATH
@@ -300,8 +302,8 @@ namespace basic
         setApplicationBasicManager( pBasicManager );
 
         // The first dir in the path as destination:
-        String aFileName( aAppBasic.getName() );
-        aAppBasic = INetURLObject( aAppBasicDir.GetToken(1) );
+        OUString aFileName( aAppBasic.getName() );
+        aAppBasic = INetURLObject( aAppBasicDir.getToken(1, ';') );
         DBG_ASSERT(aAppBasic.GetProtocol() != INET_PROT_NOT_VALID,
             rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Invalid URL: \"")).
             append(rtl::OUStringToOString(aAppBasicDir,
@@ -327,10 +329,8 @@ namespace basic
 
         // StarDesktop
         Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
-        pBasicManager->SetGlobalUNOConstant(
-            "StarDesktop",
-            makeAny( xSMgr->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ) )
-         );
+        pBasicManager->SetGlobalUNOConstant( "StarDesktop",
+                                             makeAny( xSMgr->createInstance("com.sun.star.frame.Desktop")));
 
         // (BasicLibraries and DialogLibraries have automatically been added in SetLibraryContainerInfo)
 
@@ -401,12 +401,16 @@ namespace basic
         try
         {
             // ensure there's a standard library in the basic container
-            ::rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+            OUString aStdLibName( "Standard" );
             if ( !_rxBasicLibraries->hasByName( aStdLibName ) )
+            {
                 _rxBasicLibraries->createLibrary( aStdLibName );
+            }
             // as well as in the dialog container
             if ( !_rxDialogLibraries->hasByName( aStdLibName ) )
+            {
                 _rxDialogLibraries->createLibrary( aStdLibName );
+            }
         }
         catch( const Exception& )
         {
@@ -422,9 +426,10 @@ namespace basic
         _out_rpBasicManager = 0;
         Reference< XStorage > xStorage;
         if ( !impl_getDocumentStorage_nothrow( _rxDocumentModel, xStorage ) )
+        {
             // the document is not able to provide the storage it is based on.
             return;
-
+        }
         Reference< XPersistentLibraryContainer > xBasicLibs;
         Reference< XPersistentLibraryContainer > xDialogLibs;
         if ( !impl_getDocumentLibraryContainers_nothrow( _rxDocumentModel, xBasicLibs, xDialogLibs ) )
@@ -436,11 +441,11 @@ namespace basic
             // load BASIC-manager
             SfxErrorContext aErrContext( ERRCTX_SFX_LOADBASIC,
                 ::comphelper::DocumentInfo::getDocumentTitle( _rxDocumentModel ) );
-            String aAppBasicDir = SvtPathOptions().GetBasicPath();
+            OUString aAppBasicDir = SvtPathOptions().GetBasicPath();
 
             // Storage and BaseURL are only needed by binary documents!
-            SotStorageRef xDummyStor = new SotStorage( ::rtl::OUString() );
-            _out_rpBasicManager = new BasicManager( *xDummyStor, String() /* TODO/LATER: xStorage */,
+            SotStorageRef xDummyStor = new SotStorage( OUString() );
+            _out_rpBasicManager = new BasicManager( *xDummyStor, OUString() /* TODO/LATER: xStorage */,
                                                                 pAppBasic,
                                                                 &aAppBasicDir, sal_True );
             if ( !_out_rpBasicManager->GetErrors().empty() )

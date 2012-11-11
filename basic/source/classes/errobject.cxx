@@ -173,7 +173,7 @@ void ErrObject::setData( const uno::Any& Number, const uno::Any& Source, const u
 }
 
 // SbxErrObject
-SbxErrObject::SbxErrObject( const String& rName, const Any& rUnoObj )
+SbxErrObject::SbxErrObject( const OUString& rName, const Any& rUnoObj )
     : SbUnoObject( rName, rUnoObj )
     , m_pErrObject( NULL )
 {
@@ -202,15 +202,17 @@ SbxErrObject::getUnoErrObject()
 SbxVariableRef
 SbxErrObject::getErrObject()
 {
-    static SbxVariableRef pGlobErr = new SbxErrObject( String(  RTL_CONSTASCII_USTRINGPARAM("Err")), uno::makeAny( uno::Reference< vba::XErrObject >( new ErrObject() ) ) );
+    static SbxVariableRef pGlobErr = new SbxErrObject( OUString("Err"), uno::makeAny( uno::Reference< vba::XErrObject >( new ErrObject() ) ) );
     return pGlobErr;
 }
 
-void SbxErrObject::setNumberAndDescription( ::sal_Int32 _number, const ::rtl::OUString& _description )
+void SbxErrObject::setNumberAndDescription( ::sal_Int32 _number, const OUString& _description )
     throw (uno::RuntimeException)
 {
     if( m_pErrObject != NULL )
+    {
         m_pErrObject->setData( uno::makeAny( _number ), uno::Any(), uno::makeAny( _description ), uno::Any(), uno::Any() );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

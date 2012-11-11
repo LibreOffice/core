@@ -91,7 +91,7 @@ UnoInterfaceProxy * UnoInterfaceProxy::create(
     bridges::cpp_uno::shared::Bridge * pBridge,
     com::sun::star::uno::XInterface * pCppI,
     typelib_InterfaceTypeDescription * pTypeDescr,
-    rtl::OUString const & rOId) SAL_THROW(())
+    OUString const & rOId) SAL_THROW(())
 {
     return new UnoInterfaceProxy(pBridge, pCppI, pTypeDescr, rOId);
 }
@@ -99,7 +99,7 @@ UnoInterfaceProxy * UnoInterfaceProxy::create(
 UnoInterfaceProxy::UnoInterfaceProxy(
     bridges::cpp_uno::shared::Bridge * pBridge_,
     com::sun::star::uno::XInterface * pCppI_,
-    typelib_InterfaceTypeDescription * pTypeDescr_, rtl::OUString const & rOId_)
+    typelib_InterfaceTypeDescription * pTypeDescr_, OUString const & rOId_)
     SAL_THROW(())
     : nRef( 1 )
     , pBridge( pBridge_ )

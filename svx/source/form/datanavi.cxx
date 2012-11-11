@@ -170,7 +170,7 @@ namespace svxform
     }
     void DataTreeListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
     {
-        SvLBoxEntry* pSelected = FirstSelected();
+        SvTreeListEntry* pSelected = FirstSelected();
         if ( !pSelected )
             // no drag without an entry
             return;
@@ -258,7 +258,7 @@ namespace svxform
         m_pXFormsPage->DoMenuAction( _nSelectedPopupEntry );
     }
 
-    void DataTreeListBox::RemoveEntry( SvLBoxEntry* _pEntry )
+    void DataTreeListBox::RemoveEntry( SvTreeListEntry* _pEntry )
     {
         if ( _pEntry )
         {
@@ -272,7 +272,7 @@ namespace svxform
         sal_uIntPtr i, nCount = GetEntryCount();
         for ( i = 0; i < nCount; ++i )
         {
-            SvLBoxEntry* pEntry = GetEntry(i);
+            SvTreeListEntry* pEntry = GetEntry(i);
             if ( pEntry )
                 delete static_cast< ItemNode* >( pEntry->GetUserData() );
         }
@@ -361,7 +361,7 @@ namespace svxform
     }
     //------------------------------------------------------------------------
     void XFormsPage::AddChildren(
-        SvLBoxEntry* _pParent, const ImageList& _rImgLst,
+        SvTreeListEntry* _pParent, const ImageList& _rImgLst,
         const Reference< css::xml::dom::XNode >& _xNode )
     {
         DBG_ASSERT( m_xUIHelper.is(), "XFormsPage::AddChildren(): invalid UIHelper" );
@@ -397,7 +397,7 @@ namespace svxform
                     if ( !sName.isEmpty() )
                     {
                         ItemNode* pNode = new ItemNode( xChild );
-                        SvLBoxEntry* pEntry = m_aItemList.InsertEntry(
+                        SvTreeListEntry* pEntry = m_aItemList.InsertEntry(
                             sName, aExpImg, aCollImg, _pParent, sal_False, LIST_APPEND, pNode );
                         if ( xChild->hasAttributes() )
                         {
@@ -456,7 +456,7 @@ namespace svxform
                         Reference< XSet > xSubmissions( xModel->getSubmissions(), UNO_QUERY );
                         xSubmissions->insert( makeAny( xNewSubmission ) );
                         Reference< XPropertySet > xNewPropSet( xNewSubmission, UNO_QUERY );
-                        SvLBoxEntry* pEntry = AddEntry( xNewPropSet );
+                        SvTreeListEntry* pEntry = AddEntry( xNewPropSet );
                         m_aItemList.Select( pEntry, sal_True );
                         bIsDocModified = true;
                     }
@@ -469,7 +469,7 @@ namespace svxform
             else
             {
                 DataItemType eType = DITElement;
-                SvLBoxEntry* pEntry = m_aItemList.FirstSelected();
+                SvTreeListEntry* pEntry = m_aItemList.FirstSelected();
                 ItemNode* pNode = NULL;
                 Reference< css::xml::dom::XNode > xParentNode;
                 Reference< XPropertySet > xNewBinding;
@@ -582,7 +582,7 @@ namespace svxform
                 {
                     if ( RET_OK == nReturn )
                     {
-                        SvLBoxEntry* pNewEntry = AddEntry( pNode, bIsElement );
+                        SvTreeListEntry* pNewEntry = AddEntry( pNode, bIsElement );
                         m_aItemList.MakeVisible( pNewEntry );
                         m_aItemList.Select( pNewEntry, sal_True );
                         bIsDocModified = true;
@@ -609,7 +609,7 @@ namespace svxform
                 {
                     if ( RET_OK == nReturn )
                     {
-                        SvLBoxEntry* pNewEntry = AddEntry( xNewBinding );
+                        SvTreeListEntry* pNewEntry = AddEntry( xNewBinding );
                         m_aItemList.Select( pNewEntry, sal_True );
                         bIsDocModified = true;
                     }
@@ -634,7 +634,7 @@ namespace svxform
         case TBI_ITEM_EDIT:
         {
             bHandled = true;
-            SvLBoxEntry* pEntry = m_aItemList.FirstSelected();
+            SvTreeListEntry* pEntry = m_aItemList.FirstSelected();
             if ( pEntry )
             {
                 if ( DGTSubmission == m_eGroup && m_aItemList.GetParent( pEntry ) )
@@ -759,9 +759,9 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    SvLBoxEntry* XFormsPage::AddEntry( ItemNode* _pNewNode, bool _bIsElement )
+    SvTreeListEntry* XFormsPage::AddEntry( ItemNode* _pNewNode, bool _bIsElement )
     {
-        SvLBoxEntry* pParent = m_aItemList.FirstSelected();
+        SvTreeListEntry* pParent = m_aItemList.FirstSelected();
         const ImageList& rImageList = m_pNaviWin->GetItemImageList();
         sal_uInt16 nImageID = ( _bIsElement ) ? IID_ELEMENT : IID_ATTRIBUTE;
         Image aImage = rImageList.GetImage( nImageID );
@@ -965,9 +965,9 @@ namespace svxform
     };
 
     //------------------------------------------------------------------------
-    SvLBoxEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )
+    SvTreeListEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )
     {
-        SvLBoxEntry* pEntry = NULL;
+        SvTreeListEntry* pEntry = NULL;
         const ImageList& rImageList = m_pNaviWin->GetItemImageList();
         Image aImage = rImageList.GetImage( IID_ELEMENT );
 
@@ -1038,7 +1038,7 @@ namespace svxform
     //------------------------------------------------------------------------
     void XFormsPage::EditEntry( const Reference< XPropertySet >& _rEntry )
     {
-        SvLBoxEntry* pEntry = NULL;
+        SvTreeListEntry* pEntry = NULL;
         rtl::OUString sTemp;
 
         if ( DGTSubmission == m_eGroup )
@@ -1062,7 +1062,7 @@ namespace svxform
                 String sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_BIND );
                 sEntry += String( sTemp );
                 sal_uIntPtr nPos = 0;
-                SvLBoxEntry* pChild = m_aItemList.GetEntry( pEntry, nPos++ );
+                SvTreeListEntry* pChild = m_aItemList.GetEntry( pEntry, nPos++ );
                 m_aItemList.SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REF );
@@ -1096,7 +1096,7 @@ namespace svxform
     bool XFormsPage::RemoveEntry()
     {
         bool bRet = false;
-        SvLBoxEntry* pEntry = m_aItemList.FirstSelected();
+        SvTreeListEntry* pEntry = m_aItemList.FirstSelected();
         if ( pEntry &&
              ( DGTInstance != m_eGroup || m_aItemList.GetParent( pEntry ) ) )
         {
@@ -1121,7 +1121,7 @@ namespace svxform
                     aQBox.SetMessText( sMessText );
                     if ( aQBox.Execute() == RET_YES )
                     {
-                        SvLBoxEntry* pParent = m_aItemList.GetParent( pEntry );
+                        SvTreeListEntry* pParent = m_aItemList.GetParent( pEntry );
                         DBG_ASSERT( pParent, "XFormsPage::RemoveEntry(): no parent entry" );
                         ItemNode* pParentNode = static_cast< ItemNode* >( pParent->GetUserData() );
                         DBG_ASSERT( pParentNode && pParentNode->m_xNode.is(), "XFormsPage::RemoveEntry(): no parent XNode" );
@@ -1427,7 +1427,7 @@ namespace svxform
         sal_Bool bEnableEdit = sal_False;
         sal_Bool bEnableRemove = sal_False;
 
-        SvLBoxEntry* pEntry = m_aItemList.FirstSelected();
+        SvTreeListEntry* pEntry = m_aItemList.FirstSelected();
         if ( pEntry )
         {
             bEnableAdd = sal_True;
@@ -3211,7 +3211,7 @@ namespace svxform
         else if ( &m_aEditNamespaceBtn == pBtn )
         {
             ManageNamespaceDialog aDlg( this, m_pConditionDlg, true );
-            SvLBoxEntry* pEntry = m_aNamespacesList.FirstSelected();
+            SvTreeListEntry* pEntry = m_aNamespacesList.FirstSelected();
             DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
             String sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
             aDlg.SetNamespace(
@@ -3229,7 +3229,7 @@ namespace svxform
         }
         else if ( &m_aDeleteNamespaceBtn == pBtn )
         {
-            SvLBoxEntry* pEntry = m_aNamespacesList.FirstSelected();
+            SvTreeListEntry* pEntry = m_aNamespacesList.FirstSelected();
             DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
             ::rtl::OUString sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
             m_aRemovedList.push_back( sPrefix );
@@ -3257,7 +3257,7 @@ namespace svxform
             sal_Int32 nEntryCount = m_aNamespacesList.GetEntryCount();
             for( i = 0; i < nEntryCount; ++i )
             {
-                SvLBoxEntry* pEntry = m_aNamespacesList.GetEntry(i);
+                SvTreeListEntry* pEntry = m_aNamespacesList.GetEntry(i);
                 ::rtl::OUString sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
                 ::rtl::OUString sURL( m_aNamespacesList.GetEntryText( pEntry, 1 ) );
 

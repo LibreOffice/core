@@ -296,7 +296,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
 public:
-                    ValueSet( Window* pParent, WinBits nWinStyle = WB_ITEMBORDER, bool bDisableTransientChildren = false );
+                    ValueSet( Window* pParent, WinBits nWinStyle, bool bDisableTransientChildren = false );
                     ValueSet( Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
                     ~ValueSet();
 

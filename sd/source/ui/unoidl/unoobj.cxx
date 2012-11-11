@@ -632,6 +632,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     SetMasterDepend( ::cppu::any2bool(aValue) );
                     break;
 
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
                 case WID_LEGACYFRAGMENT:
                     {
                         uno::Reference< io::XInputStream > xInputStream;
@@ -644,6 +645,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                         }
                     }
                     break;
+#endif
                 case WID_ANIMPATH:
                 {
                     uno::Reference< drawing::XShape > xShape( aValue, uno::UNO_QUERY );

@@ -19,15 +19,10 @@
 #ifndef __com_sun_star_awt_Toolkit_idl__
 #define __com_sun_star_awt_Toolkit_idl__
 
-#include <com/sun/star/awt/XToolkit.idl>
-#include <com/sun/star/awt/XDataTransferProviderAccess.idl>
-#include <com/sun/star/awt/XSystemChildFactory.idl>
-#include <com/sun/star/awt/XMessageBoxFactory.idl>
-
+#include <com/sun/star/awt/XToolkit2.idl>
 
 
 module com {  module sun {  module star {  module awt {
-
 
 /** describes a toolkit that creates windows on a screen.
 
@@ -36,17 +31,7 @@ module com {  module sun {  module star {  module awt {
     of the toolkit should be one-way. Too many synchronous calls kill the
     remote performance.</p>
  */
-published service Toolkit
-{
-    interface XToolkit;
-
-    [optional] interface com::sun::star::awt::XDataTransferProviderAccess;
-
-    [optional] interface com::sun::star::awt::XSystemChildFactory;
-
-    [optional] interface com::sun::star::awt::XMessageBoxFactory;
-
-};
+published service Toolkit : XToolkit2;
 
 
 }; }; }; };

@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "taborder.hxx"
 #include "taborder.hrc"
@@ -225,7 +216,7 @@ namespace pcr
         }
 
         // select first entry
-        SvLBoxEntry* pFirstEntry = aLB_Controls.GetEntry( 0 );
+        SvTreeListEntry* pFirstEntry = aLB_Controls.GetEntry( 0 );
         if ( pFirstEntry )
             aLB_Controls.Select( pFirstEntry );
     }
@@ -284,7 +275,7 @@ namespace pcr
 
         for (sal_uLong i=0; i < nEntryCount; i++)
         {
-            SvLBoxEntry* pEntry = aLB_Controls.GetEntry(i);
+            SvTreeListEntry* pEntry = aLB_Controls.GetEntry(i);
 
             for( sal_Int32 j=0; j<aControlModels.getLength(); j++ )
             {
@@ -326,7 +317,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void TabOrderListBox::ModelHasMoved( SvListEntry* _pSource )
+    void TabOrderListBox::ModelHasMoved( SvTreeListEntry* _pSource )
     {
         SvTreeListBox::ModelHasMoved( _pSource );
 
@@ -346,16 +337,16 @@ namespace pcr
             // move entries
             if( nRelPos < 0 )
             {
-                SvLBoxEntry* pFirstSelected = FirstSelected();
+                SvTreeListEntry* pFirstSelected = FirstSelected();
                 if( !pFirstSelected ) return;
                 sal_uLong nFirstSelPos = GetModel()->GetAbsPos( pFirstSelected );
                 if( nFirstSelPos == 0 ) return;
 
-                SvLBoxEntry* pSelEntry = pFirstSelected;
+                SvTreeListEntry* pSelEntry = pFirstSelected;
                 while( pSelEntry )
                 {
                     sal_uLong nSelEntryPos = GetModel()->GetAbsPos( pSelEntry );
-                    SvLBoxEntry* pSelEntryPrev = GetEntry( nSelEntryPos-1 );
+                    SvTreeListEntry* pSelEntryPrev = GetEntry( nSelEntryPos-1 );
                     aSelEntryPrevText = GetEntryText( pSelEntryPrev );
                     aImage = GetExpandedEntryBmp(pSelEntryPrev);
                     void*  pData = pSelEntryPrev->GetUserData();
@@ -369,7 +360,7 @@ namespace pcr
 
             else if( nRelPos > 0 )
             {
-                SvLBoxEntry* pLastSelected = LastSelected();
+                SvTreeListEntry* pLastSelected = LastSelected();
                 if( !pLastSelected ) return;
                 sal_uLong nLastSelPos = GetModel()->GetAbsPos( pLastSelected );
 
@@ -381,11 +372,11 @@ namespace pcr
 #endif
 
 
-                SvLBoxEntry* pSelEntry = pLastSelected;
+                SvTreeListEntry* pSelEntry = pLastSelected;
                 while( pSelEntry )
                 {
                     sal_uLong nSelEntryPos = GetModel()->GetAbsPos( pSelEntry );
-                    SvLBoxEntry* pSelEntryNext = GetEntry( nSelEntryPos+1 );
+                    SvTreeListEntry* pSelEntryNext = GetEntry( nSelEntryPos+1 );
                     void* pData = pSelEntryNext->GetUserData();
 
                     aSelEntryNextText = GetEntryText( pSelEntryNext );

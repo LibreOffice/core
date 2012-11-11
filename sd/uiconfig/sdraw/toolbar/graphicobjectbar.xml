@@ -14,4 +14,10 @@
  <toolbar:toolbaritem xlink:href=".uno:FillShadow" toolbar:helpid="helpid:10299"  />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Crop" toolbar:helpid="helpid:10883"  />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AdvancedMode" toolbar:helpid="helpid:27095"  toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:helpid="helpid:27085"  toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:TransformDialog" toolbar:helpid="helpid:10087"  toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="helpid:10130"  toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:helpid="helpid:27022"  toolbar:style="dropdown" />
 </toolbar:toolbar>

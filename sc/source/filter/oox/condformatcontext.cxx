@@ -88,7 +88,7 @@ ContextHandlerRef DataBarContext::onCreateContext( sal_Int32 nElement, const Att
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( cfRule ):
-            return (nElement == XLS_TOKEN( colorScale )) ? this : 0;
+            return (nElement == XLS_TOKEN( dataBar )) ? this : 0;
         case XLS_TOKEN( dataBar ):
             if (nElement == XLS_TOKEN( cfvo ))
                 return this;
@@ -118,6 +118,42 @@ void DataBarContext::onStartElement( const AttributeList& rAttribs )
 
 // ============================================================================
 
+IconSetContext::IconSetContext( CondFormatContext& rFragment, CondFormatRuleRef xRule ) :
+    WorksheetContextBase( rFragment ),
+    mxRule( xRule )
+{
+}
+
+ContextHandlerRef IconSetContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+{
+    switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( cfRule ):
+            return (nElement == XLS_TOKEN( iconSet )) ? this : 0;
+        case XLS_TOKEN( iconSet ):
+            if (nElement == XLS_TOKEN( cfvo ))
+                return this;
+            else
+                return 0;
+    }
+    return 0;
+}
+
+void IconSetContext::onStartElement( const AttributeList& rAttribs )
+{
+    switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( iconSet ):
+            mxRule->getIconSet()->importAttribs( rAttribs );
+        break;
+        case XLS_TOKEN( cfvo ):
+            mxRule->getIconSet()->importCfvo( rAttribs );
+        break;
+    }
+}
+
+// ============================================================================
+
 CondFormatContext::CondFormatContext( WorksheetFragmentBase& rFragment ) :
     WorksheetContextBase( rFragment )
 {
@@ -136,6 +172,8 @@ ContextHandlerRef CondFormatContext::onCreateContext( sal_Int32 nElement, const 
                 return new ColorScaleContext( *this, mxRule );
             else if (nElement == XLS_TOKEN( dataBar ) )
                 return new DataBarContext( *this, mxRule );
+            else if (nElement == XLS_TOKEN( iconSet ) )
+                return new IconSetContext( *this, mxRule );
             else if (nElement == XLS_TOKEN( extLst ) )
                 return new ExtLstLocalContext( *this, mxRule->getDataBar()->getDataBarFormatData() );
             else

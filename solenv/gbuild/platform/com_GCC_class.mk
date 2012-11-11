@@ -38,13 +38,10 @@ $(call gb_Output_announce,$(2),$(true),ASM,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && cd $(SRCDIR) && \
 	$(gb_CC) \
-		$(DEFS) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		$(T_CFLAGS) \
 		-c $(3) \
-		-o $(1) \
-		-I$(dir $(3)) \
-		$(INCLUDE)) && \
+		-o $(1)) \
+		$(INCLUDE) && \
 	echo "$(1) : $(3)" > $(4)
 endef
 
@@ -55,6 +52,7 @@ define gb_CObject__command
 $(call gb_Output_announce,$(2).c,$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && cd $(SRCDIR) && \
+	$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS_SETUP)) \
 	$(gb_CC) \
 		$(DEFS) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
@@ -71,6 +69,22 @@ $(call gb_Helper_abbreviate_dirs,\
 		)
 endef
 
+# Used to run a compiler plugin tool.
+# $(call gb_CObject__tool_command,relative-source,source)
+define gb_CObject__tool_command
+$(call gb_Output_announce,$(1).c,$(true),C  ,3)
+$(call gb_Helper_abbreviate_dirs,\
+        ICECC=no \
+	$(gb_CC) \
+		$(DEFS) \
+		$(T_CFLAGS) \
+		-c $(2) \
+		-I$(dir $(2)) \
+		$(INCLUDE) \
+		$(gb_COMPILER_PLUGINS) \
+		)
+endef
+
 # CxxObject class
 
 # $(call gb_CxxObject__command,object,relative-source,source,dep-file)
@@ -78,6 +92,7 @@ define gb_CxxObject__command
 $(call gb_Output_announce,$(2).cxx,$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && cd $(SRCDIR) && \
+	$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS_SETUP)) \
 	$(gb_CXX) \
 		$(DEFS) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
@@ -89,8 +104,24 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(1) \
 	    $(gb_cxx_dep_generation_options) \
 		-I$(dir $(3)) \
-		$(INCLUDE_STL) $(INCLUDE) \
+		$(INCLUDE) \
 	    $(gb_cxx_dep_copy) \
+		)
+endef
+
+# Used to run a compiler plugin tool.
+# $(call gb_CxxObject__tool_command,relative-source,source)
+define gb_CxxObject__tool_command
+$(call gb_Output_announce,$(1).cxx,$(true),CXX,3)
+$(call gb_Helper_abbreviate_dirs,\
+        ICECC=no \
+	$(gb_CXX) \
+		$(DEFS) \
+		$(T_CXXFLAGS) \
+		-c $(2) \
+		-I$(dir $(2)) \
+		$(INCLUDE) \
+		$(gb_COMPILER_PLUGINS) \
 		)
 endef
 

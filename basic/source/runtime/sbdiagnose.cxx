@@ -31,7 +31,7 @@
 static DbgChannelId nRestoreChannelId = 0;
 static DbgChannelId nAssertionChannelId = 0;
 static StarBASICRef xAssertionChannelBasic;
-static String sCaptureFunctionName;
+static OUString sCaptureFunctionName;
 static bool bReportingAssertion = false;
 
 void ResetCapturedAssertions()
@@ -42,7 +42,7 @@ void ResetCapturedAssertions()
     }
     nRestoreChannelId = 0;
     xAssertionChannelBasic = NULL;
-    sCaptureFunctionName = String();
+    sCaptureFunctionName = OUString();
     bReportingAssertion = false;
 }
 
@@ -56,7 +56,9 @@ void DbgReportAssertion( const sal_Char* i_assertionMessage )
 
     // prevent infinite recursion
     if ( bReportingAssertion )
+    {
         return;
+    }
     ::comphelper::FlagRestorationGuard aGuard( bReportingAssertion, true );
 
     SbxArrayRef const xArguments( new SbxArray( SbxVARIANT ) );
@@ -66,7 +68,9 @@ void DbgReportAssertion( const sal_Char* i_assertionMessage )
 
     ErrCode const nError = xAssertionChannelBasic->Call( sCaptureFunctionName, xArguments );
     if ( ( nError & SbERR_METHOD_NOT_FOUND ) != 0 )
+    {
         ResetCapturedAssertions();
+    }
 }
 
 #endif
@@ -86,8 +90,8 @@ RTLFUNC(CaptureAssertions)
 #ifdef DBG_UTIL
     DBG_TESTSOLARMUTEX();
 
-    String const sFunctionName = rPar.Get(1)->GetString();
-    if ( sFunctionName.Len() == 0 )
+    OUString const sFunctionName = rPar.Get(1)->GetOUString();
+    if ( sFunctionName.isEmpty() )
     {
         ResetCapturedAssertions();
         return;

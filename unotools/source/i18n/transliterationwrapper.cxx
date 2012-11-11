@@ -24,6 +24,7 @@
 
 #include "instance.hxx"
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <com/sun/star/i18n/Transliteration.hpp>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
@@ -31,14 +32,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::utl;
 
 TransliterationWrapper::TransliterationWrapper(
-                    const Reference< XMultiServiceFactory > & xSF,
+                    const Reference< XComponentContext > & rxContext,
                     sal_uInt32 nTyp )
-    : xSMgr( xSF ), nType( nTyp ), nLanguage( 0 ), bFirstCall( sal_True )
+    : xTrans( Transliteration::create(rxContext) ), nType( nTyp ),
+      nLanguage( 0 ), bFirstCall( sal_True )
 {
-    xTrans = Reference< XExtendedTransliteration > (
-        intl_createInstance( xSMgr, "com.sun.star.i18n.Transliteration",
-                             "TransliterationWrapper" ), UNO_QUERY );
-    DBG_ASSERT( xTrans.is(), "TransliterationWrapper: no Transliteraion available" );
 }
 
 
@@ -66,7 +64,7 @@ String TransliterationWrapper::transliterate(
         }
         catch( Exception&  )
         {
-            SAL_WARN( "unotools", "transliterate: Exception caught!" );
+            SAL_WARN( "unotools.i18n", "transliterate: Exception caught!" );
         }
     }
     return sRet;
@@ -90,7 +88,7 @@ String TransliterationWrapper::transliterate(
         }
         catch( Exception&  )
         {
-            SAL_WARN( "unotools", "transliterate: Exception caught!" );
+            SAL_WARN( "unotools.i18n", "transliterate: Exception caught!" );
         }
     }
     return sRet;

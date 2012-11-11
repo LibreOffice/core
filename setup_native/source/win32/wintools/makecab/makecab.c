@@ -235,7 +235,6 @@ FNFCISTATUS(fnStatus) /*(UINT typeStatus, ULONG cb1, ULONG cb2, void FAR *pv)*/
     case statusCabinet:
         printf("\rWriting cabinet file (%d of approx. %d bytes)", cb1, cb2);
         return cb2;
-        break;
     }
 
     return 0;

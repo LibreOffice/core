@@ -132,7 +132,7 @@ void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, sal_Bool bReadon
     UpdateSection( GetSectionFmtPos( *rTOXSect.GetFmt()  ), aSectionData, 0 );
 }
 
-const SwTOXBase*    SwEditShell::GetDefaultTOXBase( TOXTypes eTyp, sal_Bool bCreate )
+const SwTOXBase*    SwEditShell::GetDefaultTOXBase( TOXTypes eTyp, bool bCreate )
 {
     return GetDoc()->GetDefaultTOXBase( eTyp, bCreate );
 }
@@ -157,7 +157,7 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 
     // Einfuegen des Verzeichnisses
     const SwTOXBaseSection* pTOX = pDoc->InsertTableOf(
-                                        *GetCrsr()->GetPoint(), rTOX, pSet, sal_True );
+                                        *GetCrsr()->GetPoint(), rTOX, pSet, true );
     OSL_ENSURE(pTOX, "Kein aktuelles Verzeichnis");
 
     // Formatierung anstossen
@@ -231,7 +231,7 @@ const SwTOXBase* SwEditShell::GetCurTOX() const
     return GetDoc()->GetCurTOX( *GetCrsr()->GetPoint() );
 }
 
-sal_Bool SwEditShell::DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes )
+bool SwEditShell::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
 {
     return GetDoc()->DeleteTOX( (SwTOXBase&)rTOXBase, bDelNodes );
 }

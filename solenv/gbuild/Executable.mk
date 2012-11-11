@@ -37,11 +37,6 @@ $(call gb_Executable_get_clean_target,%) :
 		rm -f $(call gb_Executable_get_target,$*) \
 			$(AUXTARGETS))
 
-$(call gb_Executable_get_target,%) :
-	$(call gb_Helper_abbreviate_dirs,\
-		$(call gb_Deliver_deliver,$<,$@) \
-			$(foreach target,$(AUXTARGETS), && $(call gb_Deliver_deliver,$(dir $<)/$(notdir $(target)),$(target))))
-
 define gb_Executable_Executable
 ifeq (,$$(findstring $(1),$$(gb_Executable_KNOWN)))
 $$(eval $$(call gb_Output_info,Currently known executables: $(sort $(gb_Executable_KNOWN)),ALL))
@@ -52,12 +47,13 @@ $(call gb_Executable__Executable_impl,$(1),Executable/$(1)$(gb_Executable_EXT))
 endef
 
 define gb_Executable__Executable_impl
-$(call gb_LinkTarget_LinkTarget,$(2))
+$(call gb_LinkTarget_LinkTarget,$(2),Executable_$(1))
 $(call gb_LinkTarget_set_targettype,$(2),Executable)
 $(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
 $(call gb_Executable_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
 	| $(dir $(call gb_Executable_get_target,$(1))).dir
 $(call gb_Executable_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
+$(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Executable_Executable_platform,$(1),$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_Executable_get_target,$(1)),$(call gb_Executable_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
@@ -68,6 +64,15 @@ define gb_Executable_set_targettype_gui
 $(call gb_LinkTarget_get_target,Executable/$(1)$(gb_Executable_EXT)) : TARGETGUI := $(2)
 endef
 
+# The auxtarget is delivered via the rule in Package.mk.
+# gb_Executable_add_auxtarget executable outdirauxtarget
+define gb_Executable_add_auxtarget
+$(call gb_LinkTarget_add_auxtarget,$(call gb_Executable_get_linktargetname,$(1)),$(dir $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktargetname,$(1))))/$(notdir $(2)))
+$(call gb_Executable_get_target,$(1)) : $(2)
+$(2) : $(dir $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktargetname,$(1))))/$(notdir $(2))
+$(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS += $(2)
+
+endef
 
 define gb_Executable_forward_to_Linktarget
 gb_Executable_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Executable_get_linktargetname,$$(1)),$$(2),$$(3),Executable_$$(1))

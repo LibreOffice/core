@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
-
 #include "osl/diagnose.h"
 
 #include "com/sun/star/task/XInteractionAbort.hpp"
@@ -1126,7 +1121,7 @@ sal_Bool DAVResourceAccess::detectRedirectCycle(
 void DAVResourceAccess::resetUri()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    if ( m_aRedirectURIs.size() > 0 )
+    if ( ! m_aRedirectURIs.empty() )
     {
         std::vector< SerfUri >::const_iterator it  = m_aRedirectURIs.begin();
 

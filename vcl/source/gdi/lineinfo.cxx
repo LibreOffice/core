@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
@@ -50,7 +41,8 @@ ImplLineInfo::ImplLineInfo() :
     mnDotCount  ( 0 ),
     mnDotLen    ( 0 ),
     mnDistance  ( 0 ),
-    meLineJoin  ( basegfx::B2DLINEJOIN_ROUND )
+    meLineJoin  ( basegfx::B2DLINEJOIN_ROUND ),
+    meLineCap   ( com::sun::star::drawing::LineCap_BUTT )
 {
 }
 
@@ -65,7 +57,8 @@ ImplLineInfo::ImplLineInfo( const ImplLineInfo& rImplLineInfo ) :
     mnDotCount  ( rImplLineInfo.mnDotCount ),
     mnDotLen    ( rImplLineInfo.mnDotLen ),
     mnDistance  ( rImplLineInfo.mnDistance ),
-    meLineJoin  ( rImplLineInfo.meLineJoin )
+    meLineJoin  ( rImplLineInfo.meLineJoin ),
+    meLineCap   ( rImplLineInfo.meLineCap )
 {
 }
 
@@ -80,7 +73,8 @@ inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
         && mnDotCount == rB.mnDotCount
         && mnDotLen == rB.mnDotLen
         && mnDistance == rB.mnDistance
-        && meLineJoin == rB.meLineJoin);
+        && meLineJoin == rB.meLineJoin
+        && meLineCap == rB.meLineCap);
 }
 
 // ------------
@@ -232,6 +226,27 @@ void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
 
 // -----------------------------------------------------------------------
 
+void LineInfo::SetLineCap(com::sun::star::drawing::LineCap eLineCap)
+{
+    DBG_CHKTHIS( LineInfo, NULL );
+    if(eLineCap != mpImplLineInfo->meLineCap)
+    {
+        ImplMakeUnique();
+        mpImplLineInfo->meLineCap = eLineCap;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool LineInfo::IsDefault() const
+{
+    return( !mpImplLineInfo->mnWidth
+        && ( LINE_SOLID == mpImplLineInfo->meStyle )
+        && ( com::sun::star::drawing::LineCap_BUTT == mpImplLineInfo->meLineCap));
+}
+
+// -----------------------------------------------------------------------
+
 SvStream& operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
@@ -260,6 +275,12 @@ SvStream& operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
         rIStm >> nTmp16; rImplLineInfo.meLineJoin = (basegfx::B2DLineJoin) nTmp16;
     }
 
+    if( aCompat.GetVersion() >= 4 )
+    {
+        // version 4
+        rIStm >> nTmp16; rImplLineInfo.meLineCap = (com::sun::star::drawing::LineCap) nTmp16;
+    }
+
     return rIStm;
 }
 
@@ -267,7 +288,7 @@ SvStream& operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 
 SvStream& operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
 {
-    VersionCompat aCompat( rOStm, STREAM_WRITE, 3 );
+    VersionCompat aCompat( rOStm, STREAM_WRITE, 4 );
 
     //#fdo39428 SvStream no longer supports operator<<(long)
     // version 1
@@ -280,6 +301,9 @@ SvStream& operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
 
     // since version3
     rOStm << (sal_uInt16) rImplLineInfo.meLineJoin;
+
+    // since version4
+    rOStm << (sal_uInt16) rImplLineInfo.meLineCap;
 
     return rOStm;
 }
@@ -357,14 +381,13 @@ void LineInfo::applyToB2DPolyPolygon(
                 o_rFillPolyPolygon.append(basegfx::tools::createAreaGeometry(
                     io_rLinePolyPolygon.getB2DPolygon(a),
                     fHalfLineWidth,
-                    GetLineJoin()));
+                    GetLineJoin(),
+                    GetLineCap()));
             }
 
             io_rLinePolyPolygon.clear();
         }
     }
 }
-
-// -----------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

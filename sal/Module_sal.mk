@@ -47,6 +47,8 @@ $(eval $(call gb_Module_add_targets,sal,\
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,sal,\
 		Executable_osl_process_child \
+))
+$(eval $(call gb_Module_add_check_targets,sal,\
 		CppunitTest_sal_osl_process \
 ))
 endif
@@ -63,6 +65,7 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_sal_osl_security \
 	CppunitTest_sal_osl_thread \
 	CppunitTest_sal_rtl_alloc \
+	CppunitTest_sal_rtl_bootstrap \
 	CppunitTest_sal_rtl_cipher \
 	CppunitTest_sal_rtl_crc32 \
 	CppunitTest_sal_rtl_doublelock \

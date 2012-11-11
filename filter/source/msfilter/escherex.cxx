@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "eschesdo.hxx"
 #include <filter/msfilter/escherex.hxx>
@@ -54,6 +45,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/BezierPoint.hpp>
@@ -849,6 +841,35 @@ void EscherPropertyContainer::CreateLineProperties(
         AddOpt( ESCHER_Prop_lineEndArrowhead, eLineEnd );
         nLineFlags |= 0x100010;
     }
+
+    // support LineCaps
+    if(EscherPropertyValueHelper::GetPropertyValue(aAny, rXPropSet, String(RTL_CONSTASCII_USTRINGPARAM("LineCap")), sal_False))
+    {
+        ::com::sun::star::drawing::LineCap aLineCap(com::sun::star::drawing::LineCap_BUTT);
+
+        if(aAny >>= aLineCap)
+        {
+            switch (aLineCap)
+            {
+                default: /* com::sun::star::drawing::LineCap_BUTT */
+                {
+                    AddOpt(ESCHER_Prop_lineEndCapStyle, ESCHER_LineEndCapFlat);
+                    break;
+                }
+                case com::sun::star::drawing::LineCap_ROUND:
+                {
+                    AddOpt(ESCHER_Prop_lineEndCapStyle, ESCHER_LineEndCapRound);
+                    break;
+                }
+                case com::sun::star::drawing::LineCap_SQUARE:
+                {
+                    AddOpt(ESCHER_Prop_lineEndCapStyle, ESCHER_LineEndCapSquare);
+                    break;
+                }
+            }
+        }
+    }
+
     if ( EscherPropertyValueHelper::GetPropertyValue(
         aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineStyle"  ) ), sal_False ) )
     {
@@ -4091,7 +4112,8 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
                 }
                 else if ( nGluePointType == com::sun::star::drawing::EnhancedCustomShapeGluePointType::SEGMENTS )
                 {
-                    SdrObject* pPoly = pCustoShape->DoConvertToPolyObj( sal_True );
+                    // FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+                    SdrObject* pPoly = pCustoShape->DoConvertToPolyObj( sal_True /*, true */ );
                     if ( pPoly && pPoly->ISA( SdrPathObj ) )
                     {
                         sal_Int16 a, b, nIndex = 0;

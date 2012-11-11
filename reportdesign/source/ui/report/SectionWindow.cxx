@@ -122,13 +122,10 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         const uno::Reference< report::XSection> xCurrentSection = m_aReportSection.getSection();
         if ( _rEvent.PropertyName.equals(PROPERTY_HEIGHT) )
         {
-            static bool t4 = true;
-        if ( t4 )
             m_pParent->getView()->SetUpdateMode(sal_False);
             //Resize();
             m_pParent->getView()->notifySizeChanged();
             m_pParent->resize(*this);
-            if ( t4 )
             m_pParent->getView()->SetUpdateMode(sal_True);
             // getViewsWindow()->getView()->getReportView()->getController().resetZoomType();
         }

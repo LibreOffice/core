@@ -56,11 +56,13 @@ define gb_CliAssemblyTarget__command
 $(call gb_Output_announce,$(2),$(true),AL ,2)
 $(call gb_Helper_abbreviate_dirs,\
 	al \
-		-out:$(1) \
+		-nologo \
+		-out:$(CLI_ASSEMBLY_OUTFILE) \
 		-version:$(CLI_ASSEMBLY_VERSION) \
 		-keyfile:$(call gb_Helper_windows_path,$(CLI_ASSEMBLY_KEYFILE)) \
 		-link:$(CLI_ASSEMBLY_CONFIGFILE) \
-		$(if $(CLI_ASSEMBLY_PLATFORM),-platform:$(CLI_ASSEMBLY_PLATFORM)) \
+		$(if $(CLI_ASSEMBLY_PLATFORM),-platform:$(CLI_ASSEMBLY_PLATFORM)) && \
+	touch $(1) \
 )
 endef
 
@@ -73,23 +75,29 @@ $(dir $(call gb_CliAssemblyTarget_get_target,%))%/.dir :
 $(call gb_CliAssemblyTarget_get_target,%) :
 	$(if $(strip $(CLI_ASSEMBLY_VERSION)),,$(call gb_Output_error,assembly version not set))
 	$(if $(strip $(CLI_ASSEMBLY_CONFIGFILE)),,$(call gb_Output_error,assembly configuration file not set))
+	$(if $(strip $(CLI_ASSEMBLY_OUTFILE)),,$(call gb_Output_error,assembly name not set))
 	$(call gb_CliAssemblyTarget__command,$@,$*,$<)
+
+$(call gb_CliAssemblyTarget_get_assembly_target,%) :
+	touch $@
 
 .PHONY : $(call gb_CliAssemblyTarget_get_clean_target,%)
 $(call gb_CliAssemblyTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),AL ,2)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_CliAssemblyTarget_get_target,$*) \
+		rm -f $(call gb_CliAssemblyTarget_get_target,$*) $(CLI_ASSEMBLY_OUTFILE) \
 	)
 
 # Create a CLI assembly
 define gb_CliAssemblyTarget_CliAssemblyTarget
 $(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_CONFIGFILE :=
 $(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_KEYFILE := $(gb_CliAssemblyTarget_KEYFILE_DEFAULT)
+$(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_OUTFILE :=
 $(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_PLATFORM :=
 $(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_VERSION :=
 
-$(call gb_CliAssemblyTarget_get_target,$(1)) : $$(CLI_ASSEMBLY_KEYFILE)
+$(call gb_CliAssemblyTarget_get_clean_target,$(1)) : CLI_ASSEMBLY_OUTFILE :=
+
 $(call gb_CliAssemblyTarget_get_target,$(1)) :| $(dir $(call gb_CliAssemblyTarget_get_target,$(1))).dir
 
 endef
@@ -102,6 +110,15 @@ endef
 
 define gb_CliAssemblyTarget_set_keyfile
 $(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_KEYFILE := $(2)
+$(call gb_CliAssemblyTarget_get_target,$(1)) : $(2)
+
+endef
+
+define gb_CliAssemblyTarget_set_name
+$(call gb_CliAssemblyTarget_get_target,$(1)) \
+$(call gb_CliAssemblyTarget_get_clean_target,$(1)) : \
+	CLI_ASSEMBLY_OUTFILE := $(call gb_CliAssemblyTarget_get_assembly_target,$(2))
+$(call gb_CliAssemblyTarget_get_assembly_target,$(2)) : $(call gb_CliAssemblyTarget_get_target,$(1))
 
 endef
 
@@ -142,9 +159,14 @@ $(call gb_CliAssembly_get_clean_target,$(1)) : $(call gb_Package_get_clean_targe
 
 endef
 
+define gb_CliAssembly__add_file
+$(call gb_Package_add_file,$(1)_assembly,bin/$(notdir $(2)),$(subst $(WORKDIR)/,,$(2)))
+
+endef
+
 define gb_CliAssembly__set_configfile_impl
 $(call gb_CliAssemblyTarget_set_configfile,$(1),$(2))
-$(call gb_Package_add_file,$(1)_assembly,bin/$(notdir $(2)),$(subst $(WORKDIR)/,,$(2)))
+$(call gb_CliAssembly__add_file,$(1),$(2))
 
 endef
 
@@ -171,7 +193,8 @@ endef
 
 define gb_CliAssembly_set_policy
 $(call gb_CliAssemblyTarget_set_version,$(1),$(3))
-$(call gb_Package_add_file,$(1)_assembly,bin/$(2)$(gb_CliAssembly_POLICYEXT),$(subst $(WORKDIR)/,,$(call gb_CliAssemblyTarget_get_target,$(1))))
+$(call gb_CliAssemblyTarget_set_name,$(1),$(2))
+$(call gb_CliAssembly__add_file,$(1),$(call gb_CliAssemblyTarget_get_assembly_target,$(2)))
 
 endef
 

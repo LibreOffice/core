@@ -88,7 +88,9 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nN
         return retValue;
 
     icu::UnicodeString sFormatWithNoOrdinal;
-    xNumberFormat->format((int32_t)nNumber, sFormatWithNoOrdinal, NULL, nCode);
+    icu::Formattable ftmNumber((int32_t)nNumber);
+    icu::FieldPosition icuPosA;
+    xNumberFormat->format(ftmNumber, sFormatWithNoOrdinal, icuPosA, nCode);
     if (!U_SUCCESS(nCode))
         return retValue;
 
@@ -103,8 +105,8 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nN
 
         // format the string
         icu::UnicodeString sFormatWithOrdinal;
-        icu::FieldPosition icuPos;
-        formatter.format( (int32_t)nNumber, ruleSet, sFormatWithOrdinal, icuPos, nCode );
+        icu::FieldPosition icuPosB;
+        formatter.format((int32_t)nNumber, ruleSet, sFormatWithOrdinal, icuPosB, nCode);
 
         if (!U_SUCCESS(nCode))
             continue;

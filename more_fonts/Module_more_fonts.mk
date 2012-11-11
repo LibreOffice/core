@@ -11,16 +11,24 @@ $(eval $(call gb_Module_Module,more_fonts))
 
 $(eval $(call gb_Module_add_targets,more_fonts,\
 	Package_conf \
-	Package_dejavu \
-	Package_gentium \
-	Package_liberation \
-	Package_liberation_narrow \
-	Package_libertineg \
+	ExternalPackage_dejavu \
+	ExternalPackage_gentium \
+	ExternalPackage_liberation \
+	ExternalPackage_liberation_narrow \
+	ExternalPackage_libertineg \
+	ExternalPackage_opensans \
+	ExternalPackage_ptserif \
+	ExternalPackage_sourcecode \
+	ExternalPackage_sourcesans \
 	UnpackedTarball_dejavu \
 	UnpackedTarball_gentium \
 	UnpackedTarball_liberation \
 	UnpackedTarball_liberation_narrow \
 	UnpackedTarball_libertineg \
+	UnpackedTarball_opensans \
+	UnpackedTarball_ptserif \
+	UnpackedTarball_sourcecode \
+	UnpackedTarball_sourcesans \
 ))
 
 # vim: set noet sw=4 ts=4:

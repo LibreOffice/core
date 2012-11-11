@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <accessibility/extended/textwindowaccessibility.hxx>
 #include "comphelper/accessibleeventnotifier.hxx"
 #include "unotools/accessiblerelationsethelper.hxx"
@@ -2124,12 +2123,19 @@ void Document::handleSelectionChangeNotification()
 
 void Document::notifySelectionChange( sal_Int32 nFirst, sal_Int32 nLast )
 {
-    if ( nFirst < nLast )
+    nFirst = std::max( nFirst, sal_Int32( 0 ) );
+    nLast = std::min( nLast, sal_Int32( m_xParagraphs->size() ) );
+    Paragraphs::iterator iFirst(m_xParagraphs->begin() + nFirst);
+    Paragraphs::iterator iLast(m_xParagraphs->begin() + nLast);
+    if ( iFirst < m_aVisibleBegin )
+        iFirst = m_aVisibleBegin;
+    if ( iLast > m_aVisibleEnd )
+        iLast = m_aVisibleEnd;
+    if ( iFirst < iLast )
     {
-        Paragraphs::iterator aEnd( ::std::min( m_xParagraphs->begin() + nLast, m_aVisibleEnd ) );
-        for ( Paragraphs::iterator aIt = ::std::max( m_xParagraphs->begin() + nFirst, m_aVisibleBegin ); aIt < aEnd; ++aIt )
+        for ( Paragraphs::iterator i = iFirst; i != iLast; i++ )
         {
-            ::rtl::Reference< ParagraphImpl > xParagraph( getParagraph( aIt ) );
+            ::rtl::Reference< ParagraphImpl > xParagraph( getParagraph( i ) );
             if ( xParagraph.is() )
             {
                 xParagraph->notifyEvent(

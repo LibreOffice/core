@@ -118,7 +118,7 @@ SwPageNumberFieldType::SwPageNumberFieldType()
     nNumberingType( SVX_NUM_ARABIC ),
     nNum( 0 ),
     nMax( USHRT_MAX ),
-    bVirtuell( sal_False )
+    bVirtuell( false )
 {
 }
 
@@ -162,7 +162,7 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc, sal_uInt16 nPage,
     if( pNumFmt )
         nNumberingType = *pNumFmt;
 
-    bVirtuell = sal_False;
+    bVirtuell = false;
     if( bVirt )
     {
         // dann muss das Flag ueberprueft werden, denn das Layout setzt
@@ -178,7 +178,7 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc, sal_uInt16 nPage,
                 if( pNd )
                 {
                     if ( SwIterator<SwFrm,SwCntntNode>::FirstElement(*pNd) )
-                        bVirtuell = sal_True;
+                        bVirtuell = true;
                 }
                 else if( pDesc->GetDefinedIn()->ISA( SwFmt ))
                 {

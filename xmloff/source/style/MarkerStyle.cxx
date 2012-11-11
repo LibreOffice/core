@@ -183,9 +183,6 @@ sal_Bool XMLMarkerStyleExport::exportXML(
 
         if(rValue >>= aBezier)
         {
-            OUString aStrValue;
-            OUStringBuffer aOut;
-
             /////////////////
             // Name
             sal_Bool bEncoded = sal_False;

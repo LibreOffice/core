@@ -56,22 +56,22 @@ friend class SfxOrganizeDlg_Impl;
     DECL_LINK( OnAsyncExecuteDrop, ExecuteDropEvent* );
 
 protected:
-    virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection & );
-    virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
-    virtual sal_Bool NotifyMoving(SvLBoxEntry *pSource,
-                            SvLBoxEntry* pTarget,
-                            SvLBoxEntry *&pNewParent, sal_uIntPtr &);
-    virtual sal_Bool NotifyCopying(SvLBoxEntry *pSource,
-                            SvLBoxEntry* pTarget,
-                            SvLBoxEntry *&pNewParent, sal_uIntPtr &);
-    virtual void RequestingChildren( SvLBoxEntry* pParent );
+    virtual sal_Bool EditingEntry( SvTreeListEntry* pEntry, Selection & );
+    virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );
+    virtual sal_Bool NotifyMoving(SvTreeListEntry *pSource,
+                            SvTreeListEntry* pTarget,
+                            SvTreeListEntry *&pNewParent, sal_uIntPtr &);
+    virtual sal_Bool NotifyCopying(SvTreeListEntry *pSource,
+                            SvTreeListEntry* pTarget,
+                            SvTreeListEntry *&pNewParent, sal_uIntPtr &);
+    virtual void RequestingChildren( SvTreeListEntry* pParent );
     virtual long ExpandingHdl();
-    virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
+    virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
 
         using SvTreeListBox::ExecuteDrop;
     // new d&d
-    virtual DragDropMode    NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* );
-    virtual sal_Bool            NotifyAcceptDrop( SvLBoxEntry* );
+    virtual DragDropMode    NotifyStartDrag( TransferDataContainer&, SvTreeListEntry* );
+    virtual sal_Bool            NotifyAcceptDrop( SvTreeListEntry* );
     virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
     virtual void            DragFinished( sal_Int8 nDropAction );
@@ -96,27 +96,27 @@ public:
     virtual PopupMenu*  CreateContextMenu();
 
 private:
-    sal_Bool IsStandard_Impl( SvLBoxEntry *) const;
+    sal_Bool IsStandard_Impl( SvTreeListEntry *) const;
     sal_Bool MoveOrCopyTemplates(SvTreeListBox *pSourceBox,
-                            SvLBoxEntry *pSource,
-                            SvLBoxEntry* pTarget,
-                            SvLBoxEntry *&pNewParent,
+                            SvTreeListEntry *pSource,
+                            SvTreeListEntry* pTarget,
+                            SvTreeListEntry *&pNewParent,
                             sal_uIntPtr &rIdx,
                             sal_Bool bCopy);
     sal_Bool MoveOrCopyContents(SvTreeListBox *pSourceBox,
-                            SvLBoxEntry *pSource,
-                            SvLBoxEntry* pTarget,
-                            SvLBoxEntry *&pNewParent,
+                            SvTreeListEntry *pSource,
+                            SvTreeListEntry* pTarget,
+                            SvTreeListEntry *&pNewParent,
                             sal_uIntPtr &rIdx,
                             sal_Bool bCopy);
     inline sal_uInt16       GetDocLevel() const;
     SfxObjectShellRef   GetObjectShell( const Path& );
     sal_Bool                IsUniqName_Impl( const String &rText,
-                                         SvLBoxEntry* pParent, SvLBoxEntry* pEntry = 0 ) const;
-    sal_uInt16              GetLevelCount_Impl( SvLBoxEntry* pParent ) const;
+                                         SvTreeListEntry* pParent, SvTreeListEntry* pEntry = 0 ) const;
+    sal_uInt16              GetLevelCount_Impl( SvTreeListEntry* pParent ) const;
 
-    SvLBoxEntry*        InsertEntryByBmpType( const XubString& rText, BMPTYPE eBmpType,
-                            SvLBoxEntry* pParent = NULL, sal_Bool bChildrenOnDemand = sal_False,
+    SvTreeListEntry*        InsertEntryByBmpType( const XubString& rText, BMPTYPE eBmpType,
+                            SvTreeListEntry* pParent = NULL, sal_Bool bChildrenOnDemand = sal_False,
                             sal_uIntPtr nPos = LIST_APPEND, void* pUserData = NULL );
 };
 

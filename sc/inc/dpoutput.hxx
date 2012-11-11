@@ -38,7 +38,7 @@
 #include "global.hxx"
 #include "address.hxx"
 
-#include "dpcachetable.hxx"
+#include "dpfilteredcache.hxx"
 #include "dptypes.hxx"
 
 #include <vector>

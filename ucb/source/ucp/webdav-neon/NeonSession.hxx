@@ -225,8 +225,8 @@ public:
 
     const rtl::OUString & getHostName() const { return m_aHostName; }
 
-    const ::uno::Reference< ::lang::XMultiServiceFactory > getMSF()
-    { return m_xFactory->getServiceFactory(); }
+    const ::uno::Reference< ::uno::XComponentContext > getComponentContext()
+    { return m_xFactory->getComponentContext(); }
 
     const void * getRequestData() const { return m_pRequestData; }
 

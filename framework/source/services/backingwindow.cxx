@@ -62,6 +62,7 @@
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/system/SystemShellExecute.hpp"
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
 #include "com/sun/star/task/XJobExecutor.hpp"
@@ -163,23 +164,20 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
 
     try
     {
-        Reference<lang::XMultiServiceFactory> xConfig( comphelper::getProcessServiceFactory()->createInstance(SERVICENAME_CFGPROVIDER),UNO_QUERY);
-        if( xConfig.is() )
+        Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
+        Sequence<Any> args(1);
+        PropertyValue val(
+            rtl::OUString( "nodepath" ),
+            0,
+            Any(rtl::OUString( "/org.openoffice.Office.Common/Help/StartCenter")),
+            PropertyState_DIRECT_VALUE);
+        args.getArray()[0] <<= val;
+        Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,args), UNO_QUERY);
+        if( xNameAccess.is() )
         {
-            Sequence<Any> args(1);
-            PropertyValue val(
-                rtl::OUString( "nodepath" ),
-                0,
-                Any(rtl::OUString( "/org.openoffice.Office.Common/Help/StartCenter")),
-                PropertyState_DIRECT_VALUE);
-            args.getArray()[0] <<= val;
-            Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,args), UNO_QUERY);
-            if( xNameAccess.is() )
-            {
-                //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-                Any value( xNameAccess->getByName(rtl::OUString("StartCenterHideExternalLinks")) );
-                mnHideExternalLinks = value.get<sal_Int32>();
-            }
+            //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
+            Any value( xNameAccess->getByName(rtl::OUString("StartCenterHideExternalLinks")) );
+            mnHideExternalLinks = value.get<sal_Int32>();
         }
     }
     catch (const Exception&)
@@ -886,30 +884,27 @@ IMPL_LINK_NOARG(BackingWindow, ToolboxHdl)
     {
         try
         {
-            Reference<lang::XMultiServiceFactory> xConfig( comphelper::getProcessServiceFactory()->createInstance(SERVICENAME_CFGPROVIDER),UNO_QUERY);
-            if( xConfig.is() )
+            Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
+            Sequence<Any> args(1);
+            PropertyValue val(
+                rtl::OUString( "nodepath" ),
+                0,
+                Any(rtl::OUString::createFromAscii(pNodePath)),
+                PropertyState_DIRECT_VALUE);
+            args.getArray()[0] <<= val;
+            Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,args), UNO_QUERY);
+            if( xNameAccess.is() )
             {
-                Sequence<Any> args(1);
-                PropertyValue val(
-                    rtl::OUString( "nodepath" ),
-                    0,
-                    Any(rtl::OUString::createFromAscii(pNodePath)),
-                    PropertyState_DIRECT_VALUE);
-                args.getArray()[0] <<= val;
-                Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,args), UNO_QUERY);
-                if( xNameAccess.is() )
-                {
-                    rtl::OUString sURL;
-                    //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-                    Any value( xNameAccess->getByName(rtl::OUString::createFromAscii(pNode)) );
-                    sURL = value.get<rtl::OUString> ();
-                    localizeWebserviceURI(sURL);
+                rtl::OUString sURL;
+                //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
+                Any value( xNameAccess->getByName(rtl::OUString::createFromAscii(pNode)) );
+                sURL = value.get<rtl::OUString> ();
+                localizeWebserviceURI(sURL);
 
-                    Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                        com::sun::star::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
-                    //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
-                    xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
-                }
+                Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+                    com::sun::star::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
+                //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
+                xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
             }
         }
         catch (const Exception&)

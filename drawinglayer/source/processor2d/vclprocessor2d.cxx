@@ -1,31 +1,23 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
+#include <comphelper/string.hxx>
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
@@ -33,7 +25,6 @@
 #include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <drawinglayer/primitive2d/rendergraphicprimitive2d.hxx>
 #include <vclhelperbitmaptransform.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <vclhelperbitmaprender.hxx>
@@ -54,10 +45,13 @@
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <tools/diagnose_ex.h>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/metric.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
-#include <vcl/rendergraphicrasterizer.hxx>
+#include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
+#include <basegfx/color/bcolor.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include "getdigitlanguage.hxx"
 
@@ -79,6 +73,34 @@
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace
+{
+    sal_uInt32 calculateStepsForSvgGradient(const basegfx::BColor& rColorA, const basegfx::BColor& rColorB, double fDelta, double fDiscreteUnit)
+    {
+        // use color distance, assume to do every color step
+        sal_uInt32 nSteps(basegfx::fround(rColorA.getDistance(rColorB) * 255.0));
+
+        if(nSteps)
+        {
+            // calc discrete length to change color each disctete unit (pixel)
+            const sal_uInt32 nDistSteps(basegfx::fround(fDelta / fDiscreteUnit));
+
+            nSteps = std::min(nSteps, nDistSteps);
+        }
+
+        // reduce quality to 3 discrete units or every 3rd color step for rendering
+        nSteps /= 2;
+
+        // roughly cut when too big or too small (not full quality, reduce complexity)
+        nSteps = std::min(nSteps, sal_uInt32(255));
+        nSteps = std::max(nSteps, sal_uInt32(1));
+
+        return nSteps;
+    }
+} // end of anonymous namespace
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -270,9 +292,9 @@ namespace drawinglayer
                         if ( nWidth )
                             nChars = nWidthToFill / nWidth;
 
-                        String aFilled;
-                        aFilled.Fill( (sal_uInt16)nChars, aText.GetChar( 0 ) );
-                        aText = aFilled;
+                        rtl::OUStringBuffer aFilled;
+                        comphelper::string::padToLength(aFilled, (sal_uInt16)nChars, aText.GetChar(0));
+                        aText = aFilled.makeStringAndClear();
                         nPos = 0;
                         nLen = nChars;
                     }
@@ -444,75 +466,6 @@ namespace drawinglayer
                     }
 
                     RenderBitmapPrimitive2D_self(*mpOutputDevice, aBitmapEx, aLocalTransform);
-                }
-            }
-        }
-
-        void VclProcessor2D::RenderRenderGraphicPrimitive2D(const primitive2d::RenderGraphicPrimitive2D& rRenderGraphicCandidate)
-        {
-            // create local transform
-            basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rRenderGraphicCandidate.getTransform());
-            vcl::RenderGraphic aRenderGraphic(rRenderGraphicCandidate.getRenderGraphic());
-            bool bPainted(false);
-
-            if(maBColorModifierStack.count())
-            {
-                // !!! TODO
-                // aRenderGraphic = impModifyRenderGraphic(maBColorModifierStack, aRenderGraphic);
-
-                if(aRenderGraphic.IsEmpty())
-                {
-                    // color gets completely replaced, get it
-                    const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(basegfx::BColor()));
-                    basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
-                    aPolygon.transform(aLocalTransform);
-
-                    mpOutputDevice->SetFillColor(Color(aModifiedColor));
-                    mpOutputDevice->SetLineColor();
-                    mpOutputDevice->DrawPolygon(aPolygon);
-
-                    bPainted = true;
-                }
-            }
-
-            if(!bPainted)
-            {
-                // decompose matrix to check for shear, rotate and mirroring
-                basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
-                aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-                basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
-
-                if( basegfx::fTools::equalZero( fRotate ) )
-                {
-                    aOutlineRange.transform( aLocalTransform );
-                }
-                else
-                {
-                    // !!! TODO
-                    // if rotated, create the unrotated output rectangle for the GraphicManager paint
-                    /*
-                    const basegfx::B2DHomMatrix aSimpleObjectMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
-                        fabs(aScale.getX()), fabs(aScale.getY()),
-                        aTranslate.getX(), aTranslate.getY()));
-
-                    aOutlineRange.transform(aSimpleObjectMatrix);
-                    */
-                }
-
-                // prepare dest coordinates
-                const Point                         aPoint( basegfx::fround(aOutlineRange.getMinX() ),
-                                                            basegfx::fround(aOutlineRange.getMinY() ) );
-                const Size                          aSize( basegfx::fround(aOutlineRange.getWidth() ),
-                                                           basegfx::fround(aOutlineRange.getHeight() ) );
-                const Size                          aSizePixel( mpOutputDevice->LogicToPixel( aSize ) );
-                const vcl::RenderGraphicRasterizer  aRasterizer( aRenderGraphic );
-                const BitmapEx                      aBitmapEx( aRasterizer.Rasterize( aSizePixel, fRotate, fShearX ) );
-
-                if( !aBitmapEx.IsEmpty() )
-                {
-                    mpOutputDevice->DrawBitmapEx( aPoint, aSize, aBitmapEx );
                 }
             }
         }
@@ -1257,26 +1210,30 @@ namespace drawinglayer
                     const bool bAntiAliased(getOptionsDrawinglayer().IsAntiAliasing());
                     aHairlinePolyPolygon.transform(maCurrentTransformation);
 
-                    for(sal_uInt32 a(0); a < nCount; a++)
+                    if(bAntiAliased)
                     {
-                        basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
-
-                        if(bAntiAliased)
+                        if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 1.0))
                         {
-                            if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 1.0))
+                            // line in range ]0.0 .. 1.0[
+                            // paint as simple hairline
+                            for(sal_uInt32 a(0); a < nCount; a++)
                             {
-                                // line in range ]0.0 .. 1.0[
-                                // paint as simple hairline
-                                mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
-                                bDone = true;
+                                mpOutputDevice->DrawPolyLine(aHairlinePolyPolygon.getB2DPolygon(a), 0.0);
                             }
-                            else if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 2.0))
+
+                            bDone = true;
+                        }
+                        else if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 2.0))
+                        {
+                            // line in range [1.0 .. 2.0[
+                            // paint as 2x2 with dynamic line distance
+                            basegfx::B2DHomMatrix aMat;
+                            const double fDistance(fDiscreteLineWidth - 1.0);
+                            const double fHalfDistance(fDistance * 0.5);
+
+                            for(sal_uInt32 a(0); a < nCount; a++)
                             {
-                                // line in range [1.0 .. 2.0[
-                                // paint as 2x2 with dynamic line distance
-                                basegfx::B2DHomMatrix aMat;
-                                const double fDistance(fDiscreteLineWidth - 1.0);
-                                const double fHalfDistance(fDistance * 0.5);
+                                basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
 
                                 aMat.set(0, 2, -fHalfDistance);
                                 aMat.set(1, 2, -fHalfDistance);
@@ -1297,14 +1254,20 @@ namespace drawinglayer
                                 aMat.set(1, 2, 0.0);
                                 aCandidate.transform(aMat);
                                 mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
-                                bDone = true;
                             }
-                            else if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 3.0))
+
+                            bDone = true;
+                        }
+                        else if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 3.0))
+                        {
+                            // line in range [2.0 .. 3.0]
+                            // paint as cross in a 3x3  with dynamic line distance
+                            basegfx::B2DHomMatrix aMat;
+                            const double fDistance((fDiscreteLineWidth - 1.0) * 0.5);
+
+                            for(sal_uInt32 a(0); a < nCount; a++)
                             {
-                                // line in range [2.0 .. 3.0]
-                                // paint as cross in a 3x3  with dynamic line distance
-                                basegfx::B2DHomMatrix aMat;
-                                const double fDistance((fDiscreteLineWidth - 1.0) * 0.5);
+                                basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
 
                                 mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
 
@@ -1327,26 +1290,36 @@ namespace drawinglayer
                                 aMat.set(1, 2, fDistance);
                                 aCandidate.transform(aMat);
                                 mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
-                                bDone = true;
                             }
-                            else
-                            {
-                                // #i101491# line width above 3.0
-                            }
+
+                            bDone = true;
                         }
                         else
                         {
-                            if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 1.5))
+                            // #i101491# line width above 3.0
+                        }
+                    }
+                    else
+                    {
+                        if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 1.5))
+                        {
+                            // line width below 1.5, draw the basic hairline polygon
+                            for(sal_uInt32 a(0); a < nCount; a++)
                             {
-                                // line width below 1.5, draw the basic hairline polygon
-                                mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
-                                bDone = true;
+                                mpOutputDevice->DrawPolyLine(aHairlinePolyPolygon.getB2DPolygon(a), 0.0);
                             }
-                            else if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 2.5))
+
+                            bDone = true;
+                        }
+                        else if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 2.5))
+                        {
+                            // line width is in range ]1.5 .. 2.5], use four hairlines
+                            // drawn in a square
+                            for(sal_uInt32 a(0); a < nCount; a++)
                             {
-                                // line width is in range ]1.5 .. 2.5], use four hairlines
-                                // drawn in a square
+                                basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
                                 basegfx::B2DHomMatrix aMat;
+
                                 mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
 
                                 aMat.set(0, 2, 1.0);
@@ -1366,23 +1339,32 @@ namespace drawinglayer
                                 aCandidate.transform(aMat);
 
                                 mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
-                                bDone = true;
                             }
-                            else
-                            {
-                                // #i101491# line width is above 2.5
-                            }
-                        }
 
-                        if(!bDone && rPolygonStrokeCandidate.getB2DPolygon().count() > 1000)
-                        {
-                            // #i101491# If the polygon complexity uses more than a given amount, do
-                            // use OuputDevice::DrawPolyLine directly; this will avoid buffering all
-                            // decompositions in primtives (memory) and fallback to old line painting
-                            // for very complex polygons, too
-                            mpOutputDevice->DrawPolyLine(aCandidate, fDiscreteLineWidth, rLineAttribute.getLineJoin());
                             bDone = true;
                         }
+                        else
+                        {
+                            // #i101491# line width is above 2.5
+                        }
+                    }
+
+                    if(!bDone && rPolygonStrokeCandidate.getB2DPolygon().count() > 1000)
+                    {
+                        // #i101491# If the polygon complexity uses more than a given amount, do
+                        // use OuputDevice::DrawPolyLine directly; this will avoid buffering all
+                        // decompositions in primtives (memory) and fallback to old line painting
+                        // for very complex polygons, too
+                        for(sal_uInt32 a(0); a < nCount; a++)
+                        {
+                            mpOutputDevice->DrawPolyLine(
+                                aHairlinePolyPolygon.getB2DPolygon(a),
+                                fDiscreteLineWidth,
+                                rLineAttribute.getLineJoin(),
+                                rLineAttribute.getLineCap());
+                        }
+
+                        bDone = true;
                     }
                 }
             }
@@ -1434,6 +1416,100 @@ namespace drawinglayer
                         // fallback visualisation using full transformation (e.g. rotation)
                         process(rEpsPrimitive2D.get2DDecomposition(getViewInformation2D()));
                     }
+                }
+            }
+        }
+
+        void VclProcessor2D::RenderSvgLinearAtomPrimitive2D(const primitive2d::SvgLinearAtomPrimitive2D& rCandidate)
+        {
+            const double fDelta(rCandidate.getOffsetB() - rCandidate.getOffsetA());
+
+            if(basegfx::fTools::more(fDelta, 0.0))
+            {
+                const basegfx::BColor aColorA(maBColorModifierStack.getModifiedColor(rCandidate.getColorA()));
+                const basegfx::BColor aColorB(maBColorModifierStack.getModifiedColor(rCandidate.getColorB()));
+                const double fDiscreteUnit((getViewInformation2D().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
+
+                // use color distance and discrete lengths to calculate step count
+                const sal_uInt32 nSteps(calculateStepsForSvgGradient(aColorA, aColorB, fDelta, fDiscreteUnit));
+
+                // prepare loop and polygon
+                double fStart(0.0);
+                double fStep(fDelta / nSteps);
+                const basegfx::B2DPolygon aPolygon(
+                    basegfx::tools::createPolygonFromRect(
+                        basegfx::B2DRange(
+                            rCandidate.getOffsetA() - fDiscreteUnit,
+                            0.0,
+                            rCandidate.getOffsetA() + fStep + fDiscreteUnit,
+                            1.0)));
+
+                // switch off line painting
+                mpOutputDevice->SetLineColor();
+
+                // loop and paint
+                for(sal_uInt32 a(0); a < nSteps; a++, fStart += fStep)
+                {
+                    basegfx::B2DPolygon aNew(aPolygon);
+
+                    aNew.transform(maCurrentTransformation * basegfx::tools::createTranslateB2DHomMatrix(fStart, 0.0));
+                    mpOutputDevice->SetFillColor(Color(basegfx::interpolate(aColorA, aColorB, fStart/fDelta)));
+                    mpOutputDevice->DrawPolyPolygon(basegfx::B2DPolyPolygon(aNew));
+                }
+            }
+        }
+
+        void VclProcessor2D::RenderSvgRadialAtomPrimitive2D(const primitive2d::SvgRadialAtomPrimitive2D& rCandidate)
+        {
+            const double fDeltaScale(rCandidate.getScaleB() - rCandidate.getScaleA());
+
+            if(basegfx::fTools::more(fDeltaScale, 0.0))
+            {
+                const basegfx::BColor aColorA(maBColorModifierStack.getModifiedColor(rCandidate.getColorA()));
+                const basegfx::BColor aColorB(maBColorModifierStack.getModifiedColor(rCandidate.getColorB()));
+                const double fDiscreteUnit((getViewInformation2D().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
+
+                // use color distance and discrete lengths to calculate step count
+                const sal_uInt32 nSteps(calculateStepsForSvgGradient(aColorA, aColorB, fDeltaScale, fDiscreteUnit));
+
+                // switch off line painting
+                mpOutputDevice->SetLineColor();
+
+                // prepare loop (outside to inside)
+                double fEndScale(rCandidate.getScaleB());
+                double fStepScale(fDeltaScale / nSteps);
+
+                for(sal_uInt32 a(0); a < nSteps; a++, fEndScale -= fStepScale)
+                {
+                    const double fUnitScale(fEndScale/fDeltaScale);
+                    basegfx::B2DHomMatrix aTransform;
+
+                    if(rCandidate.isTranslateSet())
+                    {
+                        const basegfx::B2DVector aTranslate(
+                            basegfx::interpolate(
+                                rCandidate.getTranslateA(),
+                                rCandidate.getTranslateB(),
+                                fUnitScale));
+
+                        aTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                            fEndScale,
+                            fEndScale,
+                            aTranslate.getX(),
+                            aTranslate.getY());
+                    }
+                    else
+                    {
+                        aTransform = basegfx::tools::createScaleB2DHomMatrix(
+                            fEndScale,
+                            fEndScale);
+                    }
+
+                    basegfx::B2DPolygon aNew(basegfx::tools::createPolygonFromUnitCircle());
+
+                    aNew.transform(maCurrentTransformation * aTransform);
+                    mpOutputDevice->SetFillColor(Color(basegfx::interpolate(aColorA, aColorB, fUnitScale)));
+                    mpOutputDevice->DrawPolyPolygon(basegfx::B2DPolyPolygon(aNew));
                 }
             }
         }

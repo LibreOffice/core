@@ -238,7 +238,7 @@ String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrig
                     ScRange aRange;
                     if( pRangeData->IsReference( aRange ) && !aRangeList.In( aRange ) )
                     {
-                        ScGlobal::AddToken( aNewName, aToken, ';' );
+                        aNewName = ScGlobal::addToken(aNewName, aToken, ';');
                         aRangeList.Append( aRange );
                     }
                 }
@@ -247,7 +247,7 @@ String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrig
             }
         }
         else
-            ScGlobal::AddToken( aNewName, aToken, ';' );
+            aNewName = ScGlobal::addToken(aNewName, aToken, ';');
     }
     return aNewName;
 }

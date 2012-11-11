@@ -795,9 +795,8 @@ SwLayoutFrm *SwFrm::GetPrevFtnLeaf( MakePageType eMakeFtn )
 {
     //Der Vorgaenger fuer eine Fussnote ist falls moeglich der Master
     //in der Fussnoteneigenen Verkettung.
-    SwLayoutFrm *pRet = 0;
     SwFtnFrm *pFtn = FindFtnFrm();
-    pRet = pFtn->GetMaster();
+    SwLayoutFrm *pRet = pFtn->GetMaster();
 
     SwFtnBossFrm* pOldBoss = FindFtnBossFrm();
     SwPageFrm *pOldPage = pOldBoss->FindPageFrm();

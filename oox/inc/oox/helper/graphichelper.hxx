@@ -149,14 +149,14 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicProvider > mxGraphicProvider;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnitConversion > mxUnitConversion;
-    ::com::sun::star::awt::DeviceInfo maDeviceInfo; /// Current output device info.
-    SystemPalette       maSystemPalette;            /// Maps system colors (XML tokens) to RGB color values.
-    StorageRef          mxStorage;                  /// Storage containing embedded graphics.
-    mutable GraphicObjectDeque maGraphicObjects;    /// Caches all created graphic objects to keep them alive.
-    mutable EmbeddedGraphicMap maEmbeddedGraphics;  /// Maps all embedded graphics by their storage path.
-    const ::rtl::OUString maGraphicObjScheme;       /// The URL scheme name for graphic objects.
-    double              mfPixelPerHmmX;             /// Number of screen pixels per 1/100 mm in X direction.
-    double              mfPixelPerHmmY;             /// Number of screen pixels per 1/100 mm in Y direction.
+    ::com::sun::star::awt::DeviceInfo maDeviceInfo; ///< Current output device info.
+    SystemPalette       maSystemPalette;            ///< Maps system colors (XML tokens) to RGB color values.
+    StorageRef          mxStorage;                  ///< Storage containing embedded graphics.
+    mutable GraphicObjectDeque maGraphicObjects;    ///< Caches all created graphic objects to keep them alive.
+    mutable EmbeddedGraphicMap maEmbeddedGraphics;  ///< Maps all embedded graphics by their storage path.
+    const ::rtl::OUString maGraphicObjScheme;       ///< The URL scheme name for graphic objects.
+    double              mfPixelPerHmmX;             ///< Number of screen pixels per 1/100 mm in X direction.
+    double              mfPixelPerHmmY;             ///< Number of screen pixels per 1/100 mm in Y direction.
 };
 
 // ============================================================================

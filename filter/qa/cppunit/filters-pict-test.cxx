@@ -34,7 +34,9 @@ class PictFilterTest
 public:
     PictFilterTest() : BootstrapFixture(true, false) {}
 
-    virtual bool load(const rtl::OUString &, const rtl::OUString &rURL, const rtl::OUString &);
+    virtual bool load(const rtl::OUString &,
+        const rtl::OUString &rURL, const rtl::OUString &,
+        unsigned int, unsigned int, unsigned int);
 
     /**
      * Ensure CVEs remain unbroken
@@ -47,7 +49,8 @@ public:
 };
 
 bool PictFilterTest::load(const rtl::OUString &,
-    const rtl::OUString &rURL, const rtl::OUString &)
+    const rtl::OUString &rURL, const rtl::OUString &,
+    unsigned int, unsigned int, unsigned int)
 {
     SvFileStream aFileStream(rURL, STREAM_READ);
     Graphic aGraphic;

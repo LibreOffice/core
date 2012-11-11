@@ -25,6 +25,8 @@ rtl::OUString getTextForType(ScCondFormatEntryType eType)
             return ScGlobal::GetRscString(STR_COND_DATABAR);
         case FORMULA:
             return ScGlobal::GetRscString(STR_COND_FORMULA);
+        case ICONSET:
+            return ScGlobal::GetRscString(STR_COND_ICONSET);
         default:
             break;
     }
@@ -56,6 +58,32 @@ rtl::OUString getExpression(sal_Int32 nIndex)
             return ScGlobal::GetRscString(STR_COND_DUPLICATE);
         case 9:
             return ScGlobal::GetRscString(STR_COND_UNIQUE);
+        case 10:
+            assert(false);
+        case 11:
+            return ScGlobal::GetRscString(STR_COND_TOP10);
+        case 12:
+            return ScGlobal::GetRscString(STR_COND_BOTTOM10);
+        case 13:
+            return ScGlobal::GetRscString(STR_COND_TOP_PERCENT);
+        case 14:
+            return ScGlobal::GetRscString(STR_COND_BOTTOM_PERCENT);
+        case 15:
+            return ScGlobal::GetRscString(STR_COND_ABOVE_AVERAGE);
+        case 16:
+            return ScGlobal::GetRscString(STR_COND_BELOW_AVERAGE);
+        case 17:
+            return ScGlobal::GetRscString(STR_COND_ERROR);
+        case 18:
+            return ScGlobal::GetRscString(STR_COND_NOERROR);
+        case 19:
+            return ScGlobal::GetRscString(STR_COND_BEGINS_WITH);
+        case 20:
+            return ScGlobal::GetRscString(STR_COND_ENDS_WITH);
+        case 21:
+            return ScGlobal::GetRscString(STR_COND_CONTAINS);
+        case 22:
+            return ScGlobal::GetRscString(STR_COND_NOT_CONTAINS);
     }
     return rtl::OUString();
 }
@@ -91,7 +119,7 @@ rtl::OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rForm
                             aBuffer.append(rtl::OUString(" and "));
                             aBuffer.append(pEntry->GetExpression(rPos, 1));
                         }
-                        else if(eMode <= SC_COND_NOTEQUAL)
+                        else if(eMode <= SC_COND_NOTEQUAL || eMode >= SC_COND_BEGINS_WITH)
                         {
                             aBuffer.append(pEntry->GetExpression(rPos, 0));
                         }
@@ -104,6 +132,9 @@ rtl::OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rForm
                 break;
             case condformat::COLORSCALE:
                 aBuffer.append(getTextForType(COLORSCALE));
+                break;
+            case condformat::ICONSET:
+                aBuffer.append(getTextForType(ICONSET));
                 break;
         }
     }
@@ -118,7 +149,7 @@ rtl::OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sa
     if(eType == CONDITION)
     {
         aBuffer.append(getExpression(nIndex));
-        if(nIndex <= 7)
+        if(nIndex <= 7 || nIndex >= 19)
         {
             aBuffer.append(" ").append(aStr1);
             if(nIndex == 6 || nIndex == 7)

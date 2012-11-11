@@ -62,21 +62,6 @@ inline bool IsAmbiguousScriptNonZero( sal_uInt8 nScript )
              nScript != 0 );
 }
 
-// ----------------------------------------------------------------------------
-
-ScColumn::DoubleAllocSwitch::DoubleAllocSwitch(bool bNewVal) :
-    mbOldVal(ScColumn::bDoubleAlloc)
-{
-    ScColumn::bDoubleAlloc = bNewVal;
-}
-
-ScColumn::DoubleAllocSwitch::~DoubleAllocSwitch()
-{
-    ScColumn::bDoubleAlloc = mbOldVal;
-}
-
-// ----------------------------------------------------------------------------
-
 ScColumn::ScColumn() :
     nCol( 0 ),
     pAttrArray( NULL ),
@@ -1187,7 +1172,7 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
 }
 
 
-void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKeepScenarioFlags)
+void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKeepScenarioFlags) const
 {
     pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray,
                             bKeepScenarioFlags ? (SC_MF_ALL & ~SC_MF_SCENARIO) : SC_MF_ALL );
@@ -1230,8 +1215,9 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKee
 }
 
 
-void ScColumn::CopyToColumn(SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
-                                ScColumn& rColumn, const ScMarkData* pMarkData, bool bAsLink )
+void ScColumn::CopyToColumn(
+    SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked, ScColumn& rColumn,
+    const ScMarkData* pMarkData, bool bAsLink) const
 {
     if (bMarked)
     {
@@ -1324,8 +1310,9 @@ void ScColumn::CopyToColumn(SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bM
 }
 
 
-void ScColumn::UndoToColumn(SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
-                                ScColumn& rColumn, const ScMarkData* pMarkData )
+void ScColumn::UndoToColumn(
+    SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked, ScColumn& rColumn,
+    const ScMarkData* pMarkData) const
 {
     if (nRow1 > 0)
         CopyToColumn( 0, nRow1-1, IDF_FORMULA, false, rColumn );
@@ -1487,86 +1474,78 @@ void ScColumn::SwapCol(ScColumn& rCol)
     }
 }
 
-
 void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 {
     pAttrArray->MoveTo(nStartRow, nEndRow, *rCol.pAttrArray);
 
-    if ( !maItems.empty() )
-    {
-        ::std::vector<SCROW> aRows;
-        bool bConsecutive = true;
-        SCSIZE i;
-        Search( nStartRow, i);  // i points to start row or position thereafter
-        SCSIZE nStartPos = i;
-        for ( ; i < maItems.size() && maItems[i].nRow <= nEndRow; ++i)
-        {
-            SCROW nRow = maItems[i].nRow;
-            aRows.push_back( nRow);
-            rCol.Insert( nRow, maItems[i].pCell);
-            if (nRow != maItems[i].nRow)
-            {   // Listener inserted
-                bConsecutive = false;
-                Search( nRow, i);
-            }
-        }
-        SCSIZE nStopPos = i;
-        if (nStartPos < nStopPos)
-        {
-            // Create list of ranges of cell entry positions
-            typedef ::std::pair<SCSIZE,SCSIZE> PosPair;
-            typedef ::std::vector<PosPair> EntryPosPairs;
-            EntryPosPairs aEntries;
-            if (bConsecutive)
-                aEntries.push_back( PosPair(nStartPos, nStopPos));
-            else
-            {
-                bool bFirst = true;
-                nStopPos = 0;
-                for (::std::vector<SCROW>::const_iterator it( aRows.begin());
-                        it != aRows.end() && nStopPos < maItems.size(); ++it,
-                        ++nStopPos)
-                {
-                    if (!bFirst && *it != maItems[nStopPos].nRow)
-                    {
-                        aEntries.push_back( PosPair(nStartPos, nStopPos));
-                        bFirst = true;
-                    }
-                    if (bFirst && Search( *it, nStartPos))
-                    {
-                        bFirst = false;
-                        nStopPos = nStartPos;
-                    }
-                }
-                if (!bFirst && nStartPos < nStopPos)
-                    aEntries.push_back( PosPair(nStartPos, nStopPos));
-            }
-            // Broadcast changes
-            ScAddress aAdr( nCol, 0, nTab );
-            ScHint aHint( SC_HINT_DYING, aAdr, NULL );  // areas only
-            ScAddress& rAddress = aHint.GetAddress();
-            ScNoteCell* pNoteCell = new ScNoteCell;     // Dummy like in DeleteRange
+    if (maItems.empty())
+        // No cells to move.
+        return;
 
-            // must iterate backwards, because indexes of following cells become invalid
-            for (EntryPosPairs::reverse_iterator it( aEntries.rbegin());
-                    it != aEntries.rend(); ++it)
+    ::std::vector<SCROW> aRows;
+    SCSIZE i;
+    Search( nStartRow, i);  // i points to start row or position thereafter
+    SCSIZE nStartPos = i;
+    // First, copy the cell instances to the new column.
+    for ( ; i < maItems.size() && maItems[i].nRow <= nEndRow; ++i)
+    {
+        SCROW nRow = maItems[i].nRow;
+        aRows.push_back( nRow);
+        rCol.Insert( nRow, maItems[i].pCell);
+    }
+    SCSIZE nStopPos = i;
+    if (nStartPos < nStopPos)
+    {
+        // Create list of ranges of cell entry positions
+        typedef ::std::pair<SCSIZE,SCSIZE> PosPair;
+        typedef ::std::vector<PosPair> EntryPosPairs;
+        EntryPosPairs aEntries;
+        {
+            bool bFirst = true;
+            nStopPos = 0;
+            for (::std::vector<SCROW>::const_iterator it( aRows.begin());
+                    it != aRows.end() && nStopPos < maItems.size(); ++it,
+                    ++nStopPos)
             {
-                nStartPos = (*it).first;
-                nStopPos = (*it).second;
-                for (i=nStartPos; i<nStopPos; ++i)
-                    maItems[i].pCell = pNoteCell;
-                for (i=nStartPos; i<nStopPos; ++i)
+                if (!bFirst && *it != maItems[nStopPos].nRow)
                 {
-                    rAddress.SetRow( maItems[i].nRow );
-                    pDocument->AreaBroadcast( aHint );
+                    aEntries.push_back( PosPair(nStartPos, nStopPos));
+                    bFirst = true;
                 }
-                maItems.erase(maItems.begin() + nStartPos, maItems.begin() + nStopPos - 1);
+                if (bFirst && Search( *it, nStartPos))
+                {
+                    bFirst = false;
+                    nStopPos = nStartPos;
+                }
             }
-            pNoteCell->Delete();
+            if (!bFirst && nStartPos < nStopPos)
+                aEntries.push_back( PosPair(nStartPos, nStopPos));
         }
+        // Broadcast changes
+        ScAddress aAdr( nCol, 0, nTab );
+        ScHint aHint( SC_HINT_DYING, aAdr, NULL );  // areas only
+        ScAddress& rAddress = aHint.GetAddress();
+        ScNoteCell* pNoteCell = new ScNoteCell;     // Dummy like in DeleteRange
+
+        // must iterate backwards, because indexes of following cells become invalid
+        for (EntryPosPairs::reverse_iterator it( aEntries.rbegin());
+                it != aEntries.rend(); ++it)
+        {
+            nStartPos = (*it).first;
+            nStopPos = (*it).second;
+            for (i=nStartPos; i<nStopPos; ++i)
+                maItems[i].pCell = pNoteCell; // Assign the dumpy cell instance to all slots.
+            for (i=nStartPos; i<nStopPos; ++i)
+            {
+                rAddress.SetRow( maItems[i].nRow );
+                pDocument->AreaBroadcast( aHint );
+            }
+            // Erase the slots containing pointers to the dummy cell instance.
+            maItems.erase(maItems.begin() + nStartPos, maItems.begin() + nStopPos);
+        }
+        pNoteCell->Delete(); // Delete the dummy cell instance.
     }
 }
-
 
 bool ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
              SCCOL nCol2, SCROW nRow2, SCTAB nTab2, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
@@ -2120,14 +2099,14 @@ bool ScColumn::HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst) const
 }
 
 
-SCsROW ScColumn::SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
-                                bool bUp, bool bInSelection, const ScMarkData& rMark )
+SCsROW ScColumn::SearchStyle(
+    SCsROW nRow, const ScStyleSheet* pSearchStyle, bool bUp, bool bInSelection,
+    const ScMarkData& rMark) const
 {
     if (bInSelection)
     {
         if (rMark.IsMultiMarked())
-            return pAttrArray->SearchStyle( nRow, pSearchStyle, bUp,
-                                    (ScMarkArray*) rMark.GetArray()+nCol );     //! const
+            return pAttrArray->SearchStyle(nRow, pSearchStyle, bUp, rMark.GetArray()+nCol);
         else
             return -1;
     }
@@ -2136,14 +2115,15 @@ SCsROW ScColumn::SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
 }
 
 
-bool ScColumn::SearchStyleRange( SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle,
-                                    bool bUp, bool bInSelection, const ScMarkData& rMark )
+bool ScColumn::SearchStyleRange(
+    SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
+    bool bInSelection, const ScMarkData& rMark) const
 {
     if (bInSelection)
     {
         if (rMark.IsMultiMarked())
-            return pAttrArray->SearchStyleRange( rRow, rEndRow, pSearchStyle, bUp,
-                                    (ScMarkArray*) rMark.GetArray()+nCol );     //! const
+            return pAttrArray->SearchStyleRange(
+                rRow, rEndRow, pSearchStyle, bUp, rMark.GetArray() + nCol);
         else
             return false;
     }

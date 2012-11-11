@@ -27,6 +27,8 @@ module com { module sun { module star { module xml {
 /** This service describes a container for XML namespaces.
 
     <p>Each namespace is accessed with its prefix and the URL is stored as a string.
+
+    @deprecated This appears to be unused.
 */
 published service NamespaceContainer
 {

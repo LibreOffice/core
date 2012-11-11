@@ -32,7 +32,7 @@
 #include "dptabres.hxx"
 #include "document.hxx"
 #include "cell.hxx"
-#include "dpcachetable.hxx"
+#include "dpfilteredcache.hxx"
 #include "dpobject.hxx"
 #include "globstr.hrc"
 #include "rangenam.hxx"
@@ -51,12 +51,12 @@ using ::std::vector;
 
 // -----------------------------------------------------------------------
 
-ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache* pCache) :
+ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache& rCache) :
     ScDPTableData(pD),
     aQuery ( rDesc.GetQueryParam() ),
     bIgnoreEmptyRows( false ),
     bRepeatIfEmpty(false),
-    aCacheTable(pCache)
+    aCacheTable(rCache)
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
     for (SCSIZE j = 0; j < nEntryCount; ++j)
@@ -182,25 +182,17 @@ void ScSheetDPData::CreateCacheTable()
         // already cached.
         return;
 
-    if (!aCacheTable.hasCache())
-    {
-        OSL_FAIL("Cache table should be created with a live data cache instance at all times.");
-        // This better not happen!!  The cache table should be created with a
-        // live data cache at all times.
-        return;
-    }
-
     aCacheTable.fillTable(aQuery, bIgnoreEmptyRows, bRepeatIfEmpty);
 }
 
-void ScSheetDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)
+void ScSheetDPData::FilterCacheTable(const vector<ScDPFilteredCache::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)
 {
     CreateCacheTable();
     aCacheTable.filterByPageDimension(
         rCriteria, (IsRepeatIfEmpty() ? rCatDims : boost::unordered_set<sal_Int32>()));
 }
 
-void ScSheetDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
+void ScSheetDPData::GetDrillDownData(const vector<ScDPFilteredCache::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     CreateCacheTable();
     sal_Int32 nRowSize = aCacheTable.getRowSize();
@@ -217,7 +209,7 @@ void ScSheetDPData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
     CalcResultsFromCacheTable(aCacheTable, rInfo, bAutoShow);
 }
 
-const ScDPCacheTable& ScSheetDPData::GetCacheTable() const
+const ScDPFilteredCache& ScSheetDPData::GetCacheTable() const
 {
     return aCacheTable;
 }

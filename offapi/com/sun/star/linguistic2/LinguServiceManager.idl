@@ -19,23 +19,14 @@
 #ifndef __com_sun_star_linguistic2_LinguServiceManager_idl__
 #define __com_sun_star_linguistic2_LinguServiceManager_idl__
 
-#include <com/sun/star/lang/XComponent.idl>
-
+#include <com/sun/star/linguistic2/XLinguServiceManager2.idl>
 
 module com { module sun { module star { module linguistic2 {
-
- published interface XLinguServiceManager;
- published interface XAvailableLocales;
 
 /** offers linguistic functionality. Is to be used to access spell checker,
     hyphenator and thesaurus.
 */
-published service LinguServiceManager
-{
-    interface com::sun::star::linguistic2::XLinguServiceManager;
-    interface com::sun::star::linguistic2::XAvailableLocales;
-    interface com::sun::star::lang::XComponent;
-};
+published service LinguServiceManager : XLinguServiceManager2;
 
 
 }; }; }; };

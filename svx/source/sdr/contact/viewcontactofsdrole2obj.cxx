@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdoole2.hxx>
@@ -41,6 +31,8 @@
 #include <vcl/svapp.hxx>
 #include <svx/sdr/primitive2d/sdrolecontentprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <svx/charthelper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -67,7 +59,7 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters() const
+        basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform() const
         {
             // take unrotated snap rect (direct model data) for position and size
             const Rectangle& rRectangle = GetOle2Obj().GetGeoRect();
@@ -77,9 +69,18 @@ namespace sdr
             const GeoStat& rGeoStat(GetOle2Obj().GetGeoStat());
             const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
             const double fRotate(rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0);
-            const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                aObjectRange.getWidth(), aObjectRange.getHeight(), fShearX, fRotate,
-                aObjectRange.getMinX(), aObjectRange.getMinY()));
+
+            return basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                aObjectRange.getWidth(), aObjectRange.getHeight(),
+                fShearX,
+                fRotate,
+                aObjectRange.getMinX(), aObjectRange.getMinY());
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters() const
+        {
+            // get object transformation
+            const basegfx::B2DHomMatrix aObjectMatrix(createObjectTransform());
 
             // Prepare attribute settings, will be used soon anyways
             const SfxItemSet& rItemSet = GetOle2Obj().GetMergedItemSet();
@@ -87,28 +88,58 @@ namespace sdr
                 drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
                     rItemSet,
                     GetOle2Obj().getText(0)));
+            drawinglayer::primitive2d::Primitive2DReference xContent;
 
-            // #i102063# embed OLE content in an own primitive; this will be able to decompose accessing
-            // the weak SdrOle2 reference and will also implement getB2DRange() for fast BoundRect
-            // calculations without OLE Graphic access (which may trigger e.g. chart recalculation).
-            // It will also take care of HighContrast and ScaleContent
-            const drawinglayer::primitive2d::Primitive2DReference xOleContent(
-                new drawinglayer::primitive2d::SdrOleContentPrimitive2D(
+            if(GetOle2Obj().IsChart())
+            {
+                // try to get chart primitives and chart range directly from xChartModel
+                basegfx::B2DRange aChartContentRange;
+                const drawinglayer::primitive2d::Primitive2DSequence aChartSequence(
+                    ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
+                        GetOle2Obj().getXModel(),
+                        aChartContentRange));
+                const double fWidth(aChartContentRange.getWidth());
+                const double fHeight(aChartContentRange.getHeight());
+
+                if(aChartSequence.hasElements()
+                    && basegfx::fTools::more(fWidth, 0.0)
+                    && basegfx::fTools::more(fHeight, 0.0))
+                {
+                    // create embedding transformation
+                    basegfx::B2DHomMatrix aEmbed(
+                        basegfx::tools::createTranslateB2DHomMatrix(
+                            -aChartContentRange.getMinX(),
+                            -aChartContentRange.getMinY()));
+
+                    aEmbed.scale(1.0 / fWidth, 1.0 / fHeight);
+                    aEmbed = aObjectMatrix * aEmbed;
+                    xContent = new drawinglayer::primitive2d::TransformPrimitive2D(
+                        aEmbed,
+                        aChartSequence);
+                }
+            }
+
+            if(!xContent.is())
+            {
+                // #i102063# embed OLE content in an own primitive; this will be able to decompose accessing
+                // the weak SdrOle2 reference and will also implement getB2DRange() for fast BoundRect
+                // calculations without OLE Graphic access (which may trigger e.g. chart recalculation).
+                // It will also take care of HighContrast and ScaleContent
+                xContent = new drawinglayer::primitive2d::SdrOleContentPrimitive2D(
                     GetOle2Obj(),
                     aObjectMatrix,
 
                     // #i104867# add GraphicVersion number to be able to check for
                     // content change in the primitive later
-                    GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion()
-                ));
+                    GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion() );
+            }
 
             // create primitive. Use Ole2 primitive here. Prepare attribute settings, will
             // be used soon anyways. Always create primitives to allow the decomposition of
             // SdrOle2Primitive2D to create needed invisible elements for HitTest and/or BoundRect
-            const drawinglayer::primitive2d::Primitive2DSequence xOLEContent(&xOleContent, 1);
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::SdrOle2Primitive2D(
-                    xOLEContent,
+                    drawinglayer::primitive2d::Primitive2DSequence(&xContent, 1),
                     aObjectMatrix,
                     aAttribute));
 

@@ -96,7 +96,7 @@ public:
     void SAL_CALL WriteRelationsInfoSequence(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > >& aSequence,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )
             throw( ::com::sun::star::uno::Exception );
 
     // writes two entries of type sequence<StringPair>
@@ -109,7 +109,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aDefaultsSequence,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aOverridesSequence,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )
             throw( ::com::sun::star::uno::Exception );
 
     // XDocumentHandler

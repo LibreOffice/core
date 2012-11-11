@@ -334,9 +334,9 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
     bool bGoingUp = !bFwd;          // false for forward, true for backward
     do {
 
-         bool bGoingFwdOrBwd = false, bGoingDown = false;
+         bool bGoingFwdOrBwd = false;
 
-         bGoingDown = ( !bGoingUp && ( 0 != (p = lcl_GetLower( pFrm, bFwd ) ) ) );
+         bool bGoingDown = ( !bGoingUp && ( 0 != (p = lcl_GetLower( pFrm, bFwd ) ) ) );
          if ( !bGoingDown )
          {
              // I cannot go down, because either I'm currently going up or
@@ -394,9 +394,9 @@ const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
     sal_Bool bGoingUp = sal_False;
     do {
         const SwFrm *p = 0;
-        sal_Bool bGoingFwdOrBwd = sal_False, bGoingDown = sal_False;
+        sal_Bool bGoingFwdOrBwd = sal_False;
 
-        bGoingDown = ( !bGoingUp && ( 0 != ( p = lcl_GetLower( pFrm, true ) ) ) );
+        sal_Bool bGoingDown = ( !bGoingUp && ( 0 != ( p = lcl_GetLower( pFrm, true ) ) ) );
         if ( !bGoingDown )
         {
             bGoingFwdOrBwd = ( 0 != ( p = lcl_FindLayoutFrame( pFrm, bFwd ) ) );

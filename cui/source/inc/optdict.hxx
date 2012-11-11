@@ -151,7 +151,7 @@ private:
     void            SetDicReadonly_Impl( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XDictionary >  &xDic );
 
-    void            RemoveDictEntry(SvLBoxEntry* pEntry);
+    void            RemoveDictEntry(SvTreeListEntry* pEntry);
     sal_uInt16          GetLBInsertPos(const String &rDicWord);
 
 #endif

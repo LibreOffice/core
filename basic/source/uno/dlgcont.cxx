@@ -20,6 +20,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -125,20 +126,9 @@ bool writeOasis2OOoLibraryElement(
 
     Reference< xml::sax::XParser > xParser =  xml::sax::Parser::create(xContext);
 
-    Reference< xml::sax::XExtendedDocumentHandler > xWriter(
-        xSMgr->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.xml.sax.Writer" ) ),
-            xContext ),
-        UNO_QUERY );
+    Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
 
-    Reference< io::XActiveDataSource > xSource( xWriter, UNO_QUERY );
-    xSource->setOutputStream( xOutput );
-
-    if ( !xWriter.is() )
-    {
-        return sal_False;
-    }
+    xWriter->setOutputStream( xOutput );
 
     Sequence<Any> aArgs( 1 );
     aArgs[0] <<= xWriter;

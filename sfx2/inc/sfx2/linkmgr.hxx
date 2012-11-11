@@ -137,9 +137,9 @@ public:
 
     SvLinkSourceRef CreateObj( SvBaseLink* );
 
-    void        UpdateAllLinks( sal_Bool bAskUpdate = sal_True,
-                                sal_Bool bCallErrHdl = sal_True,
-                                sal_Bool bUpdateGrfLinks = sal_False,
+    void        UpdateAllLinks( bool bAskUpdate = true,
+                                bool bCallErrHdl = true,
+                                bool bUpdateGrfLinks = false,
                                 Window* pParentWin = 0 );
 
     // Call for list of links (eg for link-dialog)

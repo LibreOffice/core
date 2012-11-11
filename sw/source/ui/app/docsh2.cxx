@@ -982,7 +982,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            AbstractSwInsertAbstractDlg* pDlg = pFact->CreateSwInsertAbstractDlg(0, DLG_INSERT_ABSTRACT );
+            AbstractSwInsertAbstractDlg* pDlg = pFact->CreateSwInsertAbstractDlg(0);
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if(RET_OK == pDlg->Execute())
             {
@@ -992,7 +992,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SfxObjectShellLock xDocSh( new SwDocShell( pSmryDoc, SFX_CREATE_MODE_STANDARD));
                 xDocSh->DoInitNew( 0 );
 
-                sal_Bool bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
+                bool bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
                 pDoc->Summary( pSmryDoc, nLevel, nPara, bImpress );
                 if( bImpress )
                 {
@@ -1124,8 +1124,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
             break;
             case SID_SPELLCHECKER_CHANGED:
-                //! sal_False, sal_True, sal_True is on the save side but a probably overdone
-                SW_MOD()->CheckSpellChanges(sal_False, sal_True, sal_True, sal_False );
+                //! false, true, true is on the save side but a probably overdone
+                SW_MOD()->CheckSpellChanges(false, true, true, false );
             break;
 
         case SID_MAIL_PREPAREEXPORT:

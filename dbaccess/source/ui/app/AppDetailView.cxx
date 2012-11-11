@@ -98,7 +98,7 @@ void OCreationList::Paint( const Rectangle& _rRect )
 }
 
 // -----------------------------------------------------------------------------
-void OCreationList::PreparePaint( SvLBoxEntry* _pEntry )
+void OCreationList::PreparePaint( SvTreeListEntry* _pEntry )
 {
     Wallpaper aEntryBackground( m_aOriginalBackgroundColor );
     if ( _pEntry )
@@ -128,7 +128,7 @@ void OCreationList::PreparePaint( SvLBoxEntry* _pEntry )
 // -----------------------------------------------------------------------------
 void OCreationList::SelectSearchEntry( const void* _pEntry )
 {
-    SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pEntry ) );
+    SvTreeListEntry* pEntry = const_cast< SvTreeListEntry* >( static_cast< const SvTreeListEntry* >( _pEntry ) );
     OSL_ENSURE( pEntry, "OCreationList::SelectSearchEntry: invalid entry!" );
 
     if ( pEntry )
@@ -141,7 +141,7 @@ void OCreationList::SelectSearchEntry( const void* _pEntry )
 // -----------------------------------------------------------------------------
 void OCreationList::ExecuteSearchEntry( const void* _pEntry ) const
 {
-    SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pEntry ) );
+    SvTreeListEntry* pEntry = const_cast< SvTreeListEntry* >( static_cast< const SvTreeListEntry* >( _pEntry ) );
     OSL_ENSURE( pEntry, "OCreationList::ExecuteSearchEntry: invalid entry!" );
     OSL_ENSURE( pEntry == GetCurEntry(), "OCreationList::ExecuteSearchEntry: SelectSearchEntry should have been called before!" );
 
@@ -150,7 +150,7 @@ void OCreationList::ExecuteSearchEntry( const void* _pEntry ) const
 }
 
 // -----------------------------------------------------------------------------
-Rectangle OCreationList::GetFocusRect( SvLBoxEntry* _pEntry, long _nLine )
+Rectangle OCreationList::GetFocusRect( SvTreeListEntry* _pEntry, long _nLine )
 {
     Rectangle aRect = SvTreeListBox::GetFocusRect( _pEntry, _nLine );
     aRect.Left() = 0;
@@ -220,7 +220,7 @@ void OCreationList::MouseMove( const MouseEvent& rMEvt )
     }
     else if ( !rMEvt.IsSynthetic() )
     {
-        SvLBoxEntry* pEntry = GetEntry( rMEvt.GetPosPixel() );
+        SvTreeListEntry* pEntry = GetEntry( rMEvt.GetPosPixel() );
 
         if ( m_pMouseDownEntry )
         {
@@ -253,7 +253,7 @@ void OCreationList::MouseMove( const MouseEvent& rMEvt )
 // -----------------------------------------------------------------------------
 void OCreationList::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    SvLBoxEntry* pEntry = GetEntry( rMEvt.GetPosPixel() );
+    SvTreeListEntry* pEntry = GetEntry( rMEvt.GetPosPixel() );
     bool bExecute = false;
     // Was the mouse released over the active entry?
     // (i.e. the entry which was under the mouse when the button went down)
@@ -278,7 +278,7 @@ void OCreationList::MouseButtonUp( const MouseEvent& rMEvt )
         onSelected( pEntry );
 }
 // -----------------------------------------------------------------------------
-bool OCreationList::setCurrentEntryInvalidate( SvLBoxEntry* _pEntry )
+bool OCreationList::setCurrentEntryInvalidate( SvTreeListEntry* _pEntry )
 {
     if ( GetCurEntry() != _pEntry )
     {
@@ -304,7 +304,7 @@ void OCreationList::updateHelpText()
     m_rTaskWindow.setHelpText( nHelpTextId );
 }
 // -----------------------------------------------------------------------------
-void OCreationList::onSelected( SvLBoxEntry* _pEntry ) const
+void OCreationList::onSelected( SvTreeListEntry* _pEntry ) const
 {
     OSL_ENSURE( _pEntry, "OCreationList::onSelected: invalid entry!" );
     URL aCommand;
@@ -319,15 +319,15 @@ void OCreationList::KeyInput( const KeyEvent& rKEvt )
     {
         if ( rCode.GetCode() == KEY_RETURN )
         {
-            SvLBoxEntry* pEntry = GetCurEntry() ? GetCurEntry() : FirstSelected();
+            SvTreeListEntry* pEntry = GetCurEntry() ? GetCurEntry() : FirstSelected();
             if ( pEntry )
                 onSelected( pEntry );
             return;
         }
     }
-    SvLBoxEntry* pOldCurrent = GetCurEntry();
+    SvTreeListEntry* pOldCurrent = GetCurEntry();
     SvTreeListBox::KeyInput(rKEvt);
-    SvLBoxEntry* pNewCurrent = GetCurEntry();
+    SvTreeListEntry* pNewCurrent = GetCurEntry();
 
     if ( pOldCurrent != pNewCurrent )
     {
@@ -439,7 +439,7 @@ void OTasksWindow::setHelpText(sal_uInt16 _nId)
 IMPL_LINK(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, /*_pTreeBox*/)
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
-    SvLBoxEntry* pEntry = m_aCreation.GetHdlEntry();
+    SvTreeListEntry* pEntry = m_aCreation.GetHdlEntry();
     if ( pEntry )
         m_aHelpText.SetText( ModuleRes( reinterpret_cast< TaskEntry* >( pEntry->GetUserData() )->nHelpID ) );
     return 1L;
@@ -498,7 +498,7 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
 
         for ( TaskEntryList::const_iterator pTask = _rList.begin(); pTask != aEnd; ++pTask, ++pImages )
         {
-            SvLBoxEntry* pEntry = m_aCreation.InsertEntry( pTask->sTitle );
+            SvTreeListEntry* pEntry = m_aCreation.InsertEntry( pTask->sTitle );
             pEntry->SetUserData( reinterpret_cast< void* >( new TaskEntry( *pTask ) ) );
 
             Image aImage = Image( *pImages );
@@ -523,7 +523,7 @@ void OTasksWindow::Clear()
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
     m_aCreation.resetLastActive();
-    SvLBoxEntry* pEntry = m_aCreation.First();
+    SvTreeListEntry* pEntry = m_aCreation.First();
     while ( pEntry )
     {
         delete reinterpret_cast< TaskEntry* >( pEntry->GetUserData() );
@@ -764,13 +764,13 @@ void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPane
 }
 
 // -----------------------------------------------------------------------------
-::rtl::OUString OApplicationDetailView::getQualifiedName( SvLBoxEntry* _pEntry ) const
+::rtl::OUString OApplicationDetailView::getQualifiedName( SvTreeListEntry* _pEntry ) const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->getQualifiedName( _pEntry );
 }
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationDetailView::isLeaf(SvLBoxEntry* _pEntry) const
+sal_Bool OApplicationDetailView::isLeaf(SvTreeListEntry* _pEntry) const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->isLeaf(_pEntry);
@@ -857,7 +857,7 @@ void OApplicationDetailView::selectElements(const Sequence< ::rtl::OUString>& _a
     m_pControlHelper->selectElements( _aNames );
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry* OApplicationDetailView::getEntry( const Point& _aPoint ) const
+SvTreeListEntry* OApplicationDetailView::getEntry( const Point& _aPoint ) const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->getEntry(_aPoint);
@@ -882,7 +882,7 @@ void OApplicationDetailView::paste()
     m_pControlHelper->paste();
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry*  OApplicationDetailView::elementAdded(ElementType _eType,const ::rtl::OUString& _rName, const Any& _rObject )
+SvTreeListEntry*  OApplicationDetailView::elementAdded(ElementType _eType,const ::rtl::OUString& _rName, const Any& _rObject )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->elementAdded(_eType,_rName, _rObject );

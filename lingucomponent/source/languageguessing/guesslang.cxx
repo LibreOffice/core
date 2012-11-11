@@ -40,7 +40,11 @@
 
 #include <sal/macros.h>
 
+#ifdef SYSTEM_LIBEXTTEXTCAT
 #include <libexttextcat/textcat.h>
+#else
+#include <textcat.h>
+#endif
 
 using namespace ::rtl;
 using namespace ::osl;

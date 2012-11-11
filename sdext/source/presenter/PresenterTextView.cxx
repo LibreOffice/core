@@ -26,6 +26,7 @@
 
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/CTLScriptType.hpp>
@@ -90,11 +91,7 @@ PresenterTextView::PresenterTextView (
         return;
 
     // Create the break iterator that we use to break text into lines.
-    mxBreakIterator = Reference<i18n::XBreakIterator>(
-        xFactory->createInstanceWithContext(
-            A2S("com.sun.star.i18n.BreakIterator"),
-            rxContext),
-        UNO_QUERY_THROW);
+    mxBreakIterator = i18n::BreakIterator::create(rxContext);
 
     // Create the script type detector that is used to split paragraphs into
     // portions of the same text direction.

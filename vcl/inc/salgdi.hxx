@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef _SV_SALGDI_HXX
 #define _SV_SALGDI_HXX
@@ -128,7 +119,12 @@ protected:
     virtual void        drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry ) = 0;
     virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) = 0;
     virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) = 0;
-    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency, const ::basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin ) = 0;
+    virtual bool        drawPolyLine(
+        const ::basegfx::B2DPolygon&,
+        double fTransparency,
+        const ::basegfx::B2DVector& rLineWidths,
+        basegfx::B2DLineJoin,
+        com::sun::star::drawing::LineCap) = 0;
     virtual sal_Bool    drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
     virtual sal_Bool    drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
     virtual sal_Bool    drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry ) = 0;
@@ -371,7 +367,15 @@ public:
                                              PCONSTSALPOINT* pPtAry,
                                              const OutputDevice *pOutDev );
     bool                    DrawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency, const OutputDevice* );
-    bool                    DrawPolyLine( const basegfx::B2DPolygon&, double fTransparency, const basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin, const OutputDevice* );
+
+    bool DrawPolyLine(
+        const basegfx::B2DPolygon& i_rPolygon,
+        double i_fTransparency,
+        const basegfx::B2DVector& i_rLineWidth,
+        basegfx::B2DLineJoin i_eLineJoin,
+        com::sun::star::drawing::LineCap i_eLineCap,
+        const OutputDevice* i_pOutDev);
+
     sal_Bool                DrawPolyLineBezier( sal_uLong nPoints,
                                                 const SalPoint* pPtAry,
                                                 const sal_uInt8* pFlgAry,

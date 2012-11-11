@@ -112,7 +112,7 @@ public:
     sal_Int16   nDirFlags;
     short   nCurDirPos;
 
-    String sFullNameToBeChecked;
+    OUString sFullNameToBeChecked;
     WildCard* pWildCard;
 
     Sequence< ::rtl::OUString > aDirSeq;
@@ -148,10 +148,10 @@ class SbiInstance
     sal_uInt32      nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx;
 
     SbError         nErr;
-    String          aErrorMsg;      // last error message for $ARG
-    sal_uInt16          nErl;           // current error line
-    sal_Bool            bReschedule;    // Flag: sal_True = Reschedule in main loop
-    sal_Bool            bCompatibility; // Flag: sal_True = VBA runtime compatibility mode
+    OUString        aErrorMsg;      // last error message for $ARG
+    sal_Int32       nErl;           // current error line
+    sal_Bool        bReschedule;    // Flag: sal_True = Reschedule in main loop
+    sal_Bool        bCompatibility; // Flag: sal_True = VBA runtime compatibility mode
 
     ComponentVector_t ComponentVector;
 public:
@@ -168,17 +168,17 @@ public:
    ~SbiInstance();
 
     void Error( SbError );                      // trappable Error
-    void Error( SbError, const String& rMsg );  // trappable Error with message
-    void ErrorVB( sal_Int32 nVBNumber, const String& rMsg );
-    void setErrorVB( sal_Int32 nVBNumber, const String& rMsg );
+    void Error( SbError, const OUString& rMsg );  // trappable Error with message
+    void ErrorVB( sal_Int32 nVBNumber, const OUString& rMsg );
+    void setErrorVB( sal_Int32 nVBNumber, const OUString& rMsg );
     void FatalError( SbError );                 // non-trappable Error
-    void FatalError( SbError, const String& );  // non-trappable Error
+    void FatalError( SbError, const OUString& );  // non-trappable Error
     void Abort();                               // with current error code
 
     void    Stop();
     SbError GetErr()                { return nErr; }
-    String  GetErrorMsg()           { return aErrorMsg; }
-    xub_StrLen GetErl()             { return nErl; }
+    OUString  GetErrorMsg()           { return aErrorMsg; }
+    sal_Int32 GetErl()             { return nErl; }
     void    EnableReschedule( sal_Bool bEnable ) { bReschedule = bEnable; }
     sal_Bool    IsReschedule( void ) { return bReschedule; }
     void    EnableCompatibility( sal_Bool bEnable ) { bCompatibility = bEnable; }
@@ -257,7 +257,7 @@ class SbiRuntime
     const sal_uInt8*   pRestart;         // restart-address
     const sal_uInt8*   pErrCode;         // restart-adresse RESUME NEXT
     const sal_uInt8*   pErrStmnt;        // Restart-Adresse RESUMT 0
-    String        aLibName;         // Lib-name for declare-call
+    OUString        aLibName;         // Lib-name for declare-call
     SbxArrayRef   refParams;        // current procedure parameters
     SbxArrayRef   refLocals;        // local variable
     SbxArrayRef   refArgv;
@@ -329,12 +329,12 @@ class SbiRuntime
     void SetParameters( SbxArray* );
 
     // HAS TO BE IMPLEMENTED SOME TIME
-    void DllCall( const String&, const String&, SbxArray*, SbxDataType, bool );
+    void DllCall( const OUString&, const OUString&, SbxArray*, SbxDataType, bool );
 
     // #56204 swap out DIM-functionality into help method (step0.cxx)
     void DimImpl( SbxVariableRef refVar );
 
-    bool implIsClass( SbxObject* pObj, const ::rtl::OUString& aClass );
+    bool implIsClass( SbxObject* pObj, const OUString& aClass );
 
     void StepSETCLASS_impl( sal_uInt32 nOp1, bool bHandleDflt = false );
 
@@ -366,7 +366,7 @@ class SbiRuntime
     void StepGOSUB( sal_uInt32 ),   StepRETURN( sal_uInt32 );
     void StepTESTFOR( sal_uInt32 ), StepCASETO( sal_uInt32 ),   StepERRHDL( sal_uInt32 );
     void StepRESUME( sal_uInt32 ),  StepSETCLASS( sal_uInt32 ), StepVBASETCLASS( sal_uInt32 ),  StepTESTCLASS( sal_uInt32 ), StepLIB( sal_uInt32 );
-    bool checkClass_Impl( const SbxVariableRef& refVal, const ::rtl::OUString& aClass, bool bRaiseErrors, bool bDefault = true );
+    bool checkClass_Impl( const SbxVariableRef& refVal, const OUString& aClass, bool bRaiseErrors, bool bDefault = true );
     void StepCLOSE( sal_uInt32 ),   StepPRCHAR( sal_uInt32 ),   StepARGTYP( sal_uInt32 );
     // all opcodes with two operands
     void StepRTL( sal_uInt32, sal_uInt32 ),     StepPUBLIC( sal_uInt32, sal_uInt32 ),   StepPUBLIC_P( sal_uInt32, sal_uInt32 );
@@ -377,7 +377,7 @@ class SbiRuntime
     void StepPARAM( sal_uInt32, sal_uInt32),    StepCREATE( sal_uInt32, sal_uInt32 );
     void StepCALL( sal_uInt32, sal_uInt32 ),    StepCALLC( sal_uInt32, sal_uInt32 );
     void StepCASEIS( sal_uInt32, sal_uInt32 ),  StepSTMNT( sal_uInt32, sal_uInt32 );
-    SbxVariable* StepSTATIC_Impl( String& aName, SbxDataType& t );
+    SbxVariable* StepSTATIC_Impl( OUString& aName, SbxDataType& t );
     void StepOPEN( sal_uInt32, sal_uInt32 ),    StepSTATIC( sal_uInt32, sal_uInt32 );
     void StepTCREATE(sal_uInt32,sal_uInt32),    StepDCREATE(sal_uInt32,sal_uInt32);
     void StepGLOBAL_P( sal_uInt32, sal_uInt32 ),StepFIND_G( sal_uInt32, sal_uInt32 );
@@ -389,16 +389,16 @@ public:
     void          SetVBAEnabled( bool bEnabled );
     sal_uInt16      GetImageFlag( sal_uInt16 n ) const;
     sal_uInt16      GetBase();
-    xub_StrLen  nLine,nCol1,nCol2;
+    sal_Int32  nLine,nCol1,nCol2;
     SbiRuntime* pNext;               // Stack-Chain
 
     SbiRuntime( SbModule*, SbMethod*, sal_uInt32 );
    ~SbiRuntime();
     void Error( SbError, bool bVBATranslationAlreadyDone = false );     // set error if != 0
-    void Error( SbError, const String& );       // set error if != 0
+    void Error( SbError, const OUString& );       // set error if != 0
     void FatalError( SbError );                 // error handling = standard, set error
-    void FatalError( SbError, const String& );  // error handling = standard, set error
-    static sal_Int32 translateErrorToVba( SbError nError, String& rMsg );
+    void FatalError( SbError, const OUString& );  // error handling = standard, set error
+    static sal_Int32 translateErrorToVba( SbError nError, OUString& rMsg );
     void DumpPCode();
     bool Step();                    // single step (one opcode)
     void Stop()            { bRun = false;   }
@@ -413,7 +413,7 @@ public:
 
     SbiForStack* FindForStackItemForCollection( class BasicCollection* pCollection );
 
-    SbxBase* FindElementExtern( const String& rName );
+    SbxBase* FindElementExtern( const OUString& rName );
     static bool isVBAEnabled();
 
 };
@@ -451,20 +451,20 @@ bool hasUno( void );
 // Converts possibly relative paths to absolute paths
 // according to the setting done by ChDir/ChDrive
 // (Implemented in methods.cxx)
-String getFullPath( const String& aRelPath );
+OUString getFullPath( const OUString& aRelPath );
 
 // Implementation of StepRENAME with UCB
 // (Implemented in methods.cxx, so step0.cxx
 // has not to be infected with UNO)
-void implStepRenameUCB( const String& aSource, const String& aDest );
+void implStepRenameUCB( const OUString& aSource, const OUString& aDest );
 
 //*** OSL file access ***
 // #87427 OSL need File URLs, so map to getFullPath
-inline String getFullPathUNC( const String& aRelPath )
+inline OUString getFullPathUNC( const OUString& aRelPath )
 {
     return getFullPath( aRelPath );
 }
-void implStepRenameOSL( const String& aSource, const String& aDest );
+void implStepRenameOSL( const OUString& aSource, const OUString& aDest );
 bool IsBaseIndexOne();
 
 #endif

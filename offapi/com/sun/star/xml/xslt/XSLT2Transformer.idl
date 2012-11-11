@@ -1,0 +1,30 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_COM_SUN_STAR_XML_XSLT_XSLT2TRANSFORMER_IDL
+#define INCLUDED_COM_SUN_STAR_XML_XSLT_XSLT2TRANSFORMER_IDL
+
+#include <com/sun/star/xml/xslt/XXSLTTransformer.idl>
+
+module com { module sun { module star { module xml { module xslt {
+
+/** Get XSLT filter transformer supporting XSLT 2.0.
+
+    @since LibreOffice 3.7
+ */
+service XSLT2Transformer : XXSLTTransformer
+{
+    create([in] sequence<any> args);
+};
+
+}; }; }; }; };
+
+#endif // INCLUDED_COM_SUN_STAR_XML_XSLT_XSLT2TRANSFORMER_IDL
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

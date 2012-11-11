@@ -139,7 +139,6 @@ As part of the base system this product also includes code from the following
 projects which are licensed under the Apache license:
 - serf
 - redland
-- StAX
 
 The notices from these projects are following:
 
@@ -152,10 +151,6 @@ redland
 This product includes Redland software (http://librdf.org/)
 developed at the Institute for Learning and Research Technology,
 University of Bristol, UK (http://www.bristol.ac.uk/).
-
-
-StAX
-[no notices]
 
 ____
 

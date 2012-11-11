@@ -96,7 +96,7 @@ Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw
     ::rtl::OUStringBuffer aIdentifier;
     aIdentifier.appendAscii( "private:" );
     aIdentifier.append( impl_getHierarchicalName( true ) );
-    return new ::ucbhelper::ContentIdentifier( m_aContext.getLegacyServiceFactory(), aIdentifier.makeStringAndClear() );
+    return new ::ucbhelper::ContentIdentifier( aIdentifier.makeStringAndClear() );
 }
 
 ::rtl::OUString OContentHelper::impl_getHierarchicalName( bool _includingRootContainer ) const

@@ -26,6 +26,9 @@
  * instead of those above.
  */
 
+#ifndef SC_DEBUG_HELPER_HXX
+#define SC_DEBUG_HELPER_HXX
+
 /**
  * Print nicely formatted sheet content to stdout.  Indispensable when
  * debugging the unit test code involving testing of sheet contents.
@@ -160,5 +163,7 @@ public:
 private:
     MatrixType maMatrix;
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

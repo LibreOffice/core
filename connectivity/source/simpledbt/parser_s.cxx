@@ -35,8 +35,8 @@ namespace connectivity
     //= OSimpleSQLParser
     //================================================================
     //----------------------------------------------------------------
-    OSimpleSQLParser::OSimpleSQLParser(const Reference< XMultiServiceFactory >& _rxServiceFactory,const IParseContext* _pContext)
-        :m_aFullParser(_rxServiceFactory,_pContext)
+    OSimpleSQLParser::OSimpleSQLParser(const Reference< XComponentContext >& rxContext, const IParseContext* _pContext)
+        :m_aFullParser(rxContext, _pContext)
     {
     }
 

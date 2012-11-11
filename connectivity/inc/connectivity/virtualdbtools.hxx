@@ -335,7 +335,7 @@ namespace connectivity
         public:
             /// creates a simple version of the class OSQLParser
             virtual ::rtl::Reference< ISQLParser > createSQLParser(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceFactory,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                 const IParseContext* _pContext
                 ) const = 0;
 

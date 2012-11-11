@@ -143,7 +143,7 @@ bool IsSystemFileLockingUsed()
     {
 
         uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
-                            ::comphelper::getProcessServiceFactory(),
+                            ::comphelper::getProcessComponentContext(),
                             ::rtl::OUString( "/org.openoffice.Office.Common"  ),
                             ::comphelper::ConfigurationHelper::E_STANDARD );
         if ( !xCommonConfig.is() )
@@ -170,7 +170,7 @@ bool IsOOoLockFileUsed()
     {
 
         uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
-                            ::comphelper::getProcessServiceFactory(),
+                            ::comphelper::getProcessComponentContext(),
                             ::rtl::OUString( "/org.openoffice.Office.Common"  ),
                             ::comphelper::ConfigurationHelper::E_STANDARD );
         if ( !xCommonConfig.is() )
@@ -262,6 +262,7 @@ public:
     bool m_bTriedStorage:1;
     bool m_bRemote:1;
     bool m_bInputStreamIsReadOnly:1;
+    bool m_bInCheckIn:1;
 
     OUString m_aName;
     OUString m_aLogicName;
@@ -313,6 +314,9 @@ public:
 
     SfxMedium_Impl( SfxMedium* pAntiImplP );
     ~SfxMedium_Impl();
+
+    OUString getFilterMimeType()
+    { return m_pFilter == 0 ? OUString() : m_pFilter->GetMimeType(); }
 };
 
 //------------------------------------------------------------------
@@ -336,6 +340,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     m_bTriedStorage(false),
     m_bRemote(false),
     m_bInputStreamIsReadOnly(false),
+    m_bInCheckIn(false),
     m_pSet(NULL),
     m_pURLObj(NULL),
     m_pFilter(NULL),
@@ -632,7 +637,20 @@ SvStream* SfxMedium::GetOutStream()
 
         if ( pImp->pTempFile )
         {
-            pImp->m_pOutStream = new SvFileStream( pImp->m_aName, STREAM_STD_READWRITE );
+            // try to re-use XOutStream from xStream if that exists;
+            // opening new SvFileStream in this situation may fail on
+            // Windows with ERROR_SHARING_VIOLATION
+            if (pImp->xStream.is())
+            {
+                assert(pImp->xStream->getOutputStream().is()); // need that...
+                pImp->m_pOutStream = utl::UcbStreamHelper::CreateStream(
+                        pImp->xStream, false);
+            }
+            else
+            {
+                pImp->m_pOutStream = new SvFileStream(
+                        pImp->m_aName, STREAM_STD_READWRITE);
+            }
             CloseStorage();
         }
     }
@@ -1924,23 +1942,31 @@ void SfxMedium::Transfer_Impl()
             ::ucbhelper::Content aSourceContent;
             ::ucbhelper::Content aTransferContent;
 
-            // Get the parent URL from the XChild if possible: why would the URL necessarily have
-            // a hierarchical path? It's not the case for CMIS.
             ::ucbhelper::Content aDestContent;
             ::ucbhelper::Content::create( aDestURL, xComEnv, comphelper::getProcessComponentContext(), aDestContent );
-            Reference< ::com::sun::star::container::XChild> xChild( aDestContent.get(), uno::UNO_QUERY );
-            rtl::OUString sParentUrl;
-            if ( xChild.is( ) )
+            if ( !IsInCheckIn( ) )
             {
-                Reference< ::com::sun::star::ucb::XContent > xParent( xChild->getParent( ), uno::UNO_QUERY );
-                if ( xParent.is( ) )
+                // Get the parent URL from the XChild if possible: why would the URL necessarily have
+                // a hierarchical path? It's not always the case for CMIS.
+                Reference< ::com::sun::star::container::XChild> xChild( aDestContent.get(), uno::UNO_QUERY );
+                rtl::OUString sParentUrl;
+                if ( xChild.is( ) )
                 {
-                    sParentUrl = xParent->getIdentifier( )->getContentIdentifier();
+                    Reference< ::com::sun::star::ucb::XContent > xParent( xChild->getParent( ), uno::UNO_QUERY );
+                    if ( xParent.is( ) )
+                    {
+                        sParentUrl = xParent->getIdentifier( )->getContentIdentifier();
+                    }
                 }
-            }
 
-            if ( !sParentUrl.isEmpty() )
-                aDest = INetURLObject( sParentUrl );
+                if ( !sParentUrl.isEmpty() )
+                    aDest = INetURLObject( sParentUrl );
+            }
+            else
+            {
+                // For checkin, we need the object URL, not the parent folder
+                aDest = INetURLObject( aDestURL );
+            }
 
             // LongName wasn't defined anywhere, only used here... get the Title instead
             // as it's less probably empty
@@ -1996,8 +2022,25 @@ void SfxMedium::Transfer_Impl()
 
                 try
                 {
-                    if (!aTransferContent.transferContent( aSourceContent, ::ucbhelper::InsertOperation_COPY, aFileName, nNameClash ))
+                    rtl::OUString aMimeType = pImp->getFilterMimeType();
+                    ::ucbhelper::InsertOperation eOperation = ::ucbhelper::InsertOperation_COPY;
+                    bool bMajor = false;
+                    rtl::OUString sComment;
+                    if ( IsInCheckIn( ) )
+                    {
+                        eOperation = ::ucbhelper::InsertOperation_CHECKIN;
+                        SFX_ITEMSET_ARG( GetItemSet(), pMajor, SfxBoolItem, SID_DOCINFO_MAJOR, false );
+                        bMajor = pMajor && pMajor->GetValue( );
+                        SFX_ITEMSET_ARG( GetItemSet(), pComments, SfxStringItem, SID_DOCINFO_COMMENTS, false );
+                        if ( pComments )
+                            sComment = pComments->GetValue( );
+                    }
+                    rtl::OUString sResultURL;
+                    if (!aTransferContent.transferContent( aSourceContent, eOperation,
+                                aFileName, nNameClash, aMimeType, bMajor, sComment, &sResultURL ))
                         pImp->m_eError = ERRCODE_IO_GENERAL;
+                    else if ( !sResultURL.isEmpty( ) )  // Likely to happen only for checkin
+                        SwitchDocumentToFile( sResultURL );
                 }
                 catch ( const ::com::sun::star::ucb::CommandAbortedException& )
                 {
@@ -2060,10 +2103,12 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
     {
         try
         {
+            rtl::OUString sMimeType = pImp->getFilterMimeType();
             if( aBackupCont.transferContent( aOriginalContent,
                                             ::ucbhelper::InsertOperation_COPY,
                                             aBackupName,
-                                            NameClash::OVERWRITE ) )
+                                            NameClash::OVERWRITE,
+                                            sMimeType ) )
             {
                 pImp->m_aBackupURL = aBackObj.GetMainURL( INetURLObject::NO_DECODE );
                 pImp->m_bRemoveBackup = true;
@@ -2146,10 +2191,12 @@ void SfxMedium::DoBackup_Impl()
                 try
                 {
                     // do the transfer ( copy source file to backup dir )
+                    rtl::OUString sMimeType = pImp->getFilterMimeType();
                     bSuccess = aContent.transferContent( aSourceContent,
                                                         ::ucbhelper::InsertOperation_COPY,
                                                         aFileName,
-                                                        NameClash::OVERWRITE );
+                                                        NameClash::OVERWRITE,
+                                                        sMimeType );
                     if( bSuccess )
                     {
                         pImp->m_aBackupURL = aDest.GetMainURL( INetURLObject::NO_DECODE );
@@ -3276,7 +3323,8 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
                 if ( !aFileName.isEmpty() && aTmpURLObj.removeSegment() )
                 {
                     ::ucbhelper::Content aTargetContent( aTmpURLObj.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext() );
-                    if ( aTargetContent.transferContent( pImp->aContent, ::ucbhelper::InsertOperation_COPY, aFileName, NameClash::OVERWRITE ) )
+                    rtl::OUString sMimeType = pImp->getFilterMimeType();
+                    if ( aTargetContent.transferContent( pImp->aContent, ::ucbhelper::InsertOperation_COPY, aFileName, NameClash::OVERWRITE, sMimeType ) )
                     {
                         SetWritableForUserOnly( aTmpURL );
                         bTransferSuccess = true;
@@ -3686,6 +3734,16 @@ sal_Bool SfxMedium::SwitchDocumentToFile( const rtl::OUString& aURL )
     }
 
     return bResult;
+}
+
+void SfxMedium::SetInCheckIn( bool bInCheckIn )
+{
+    pImp->m_bInCheckIn = bInCheckIn;
+}
+
+bool SfxMedium::IsInCheckIn( )
+{
+    return pImp->m_bInCheckIn;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

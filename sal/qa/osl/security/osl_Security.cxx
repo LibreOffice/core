@@ -642,7 +642,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
             continue;
         if( argsCount >= 3 )
         {
-            SAL_WARN( "sal", "Too many test arguments" );
+            SAL_WARN( "sal.osl", "Too many test arguments" );
             continue;
         }
         args[ argsCount++ ] = arg;

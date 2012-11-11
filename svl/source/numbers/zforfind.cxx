@@ -30,6 +30,7 @@
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
+#include <com/sun/star/i18n/LocaleCalendar.hpp>
 #include <unotools/digitgroupingiterator.hxx>
 
 #include <svl/zforlist.hxx>         // NUMBERFORMAT_XXX
@@ -886,7 +887,7 @@ bool ImpSvNumberInputScan::GetTimeRef(
     {
         nHour = 0;
         bRet = false;
-        SAL_WARN( "svl.items", "ImpSvNumberInputScan::GetTimeRef: bad number index");
+        SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetTimeRef: bad number index");
     }
     if (nDecPos == 2 && nAnz == 2)                  // 45.5
         nMinute = 0;
@@ -1082,7 +1083,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
     else if (!sDateAcceptancePatterns.getLength())
     {
         sDateAcceptancePatterns = pFormatter->GetLocaleData()->getDateAcceptancePatterns();
-        SAL_WARN_IF( !sDateAcceptancePatterns.getLength(), "nf.date", "ImpSvNumberInputScan::IsAcceptedDatePattern: no date acceptance patterns");
+        SAL_WARN_IF( !sDateAcceptancePatterns.getLength(), "svl.numbers", "ImpSvNumberInputScan::IsAcceptedDatePattern: no date acceptance patterns");
         nAcceptedDatePattern = (sDateAcceptancePatterns.getLength() ? -2 : -1);
     }
 
@@ -1300,7 +1301,7 @@ DateFormat ImpSvNumberInputScan::GetDateOrder()
                     break;
             }
     }
-    SAL_WARN( "nf.date", "ImpSvNumberInputScan::GetDateOrder: undefined, falling back to locale's default");
+    SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetDateOrder: undefined, falling back to locale's default");
     return pFormatter->GetLocaleData()->getDateFormat();
 }
 
@@ -1379,7 +1380,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
                 }
             break;
             default:
-                OSL_FAIL( "ImpSvNumberInputScan::GetDateRef: unknown NfEvalDateFormat" );
+                SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetDateRef: unknown NfEvalDateFormat" );
                 DateFmt = YMD;
                 bFormatTurn = false;
         }
@@ -1550,7 +1551,7 @@ input for the following reasons:
                                 default:
                                     bHadExact = false;
                             }
-                            SAL_WARN_IF( !bHadExact, "nf.date", "ImpSvNumberInputScan::GetDateRef: error in exact date order");
+                            SAL_WARN_IF( !bHadExact, "svl.numbers", "ImpSvNumberInputScan::GetDateRef: error in exact date order");
                         }
                         else
                             bHadExact = false;
@@ -1766,11 +1767,9 @@ input for the following reasons:
     sal_Int16 nDaySet, nMonthSet, nYearSet, nHourSet, nMinuteSet, nSecondSet;
     sal_Int16 nZO, nDST1, nDST2, nDST, nZOmillis, nDST1millis, nDST2millis, nDSTmillis;
     sal_Int32 nZoneInMillis, nDST1InMillis, nDST2InMillis;
-    uno::Reference< lang::XMultiServiceFactory > xSMgr =
-        ::comphelper::getProcessServiceFactory();
-    uno::Reference< ::com::sun::star::i18n::XCalendar3 > xCal(
-            xSMgr->createInstance( "com.sun.star.i18n.LocaleCalendar" ),
-            uno::UNO_QUERY );
+    uno::Reference< uno::XComponentContext > xContext =
+        ::comphelper::getProcessComponentContext();
+    uno::Reference< i18n::XCalendar3 > xCal = i18n::LocaleCalendar::create(xContext);
     for ( const entry* p = cals; p->lan; ++p )
     {
         aLocale.Language = ::rtl::OUString::createFromAscii( p->lan );
@@ -3230,7 +3229,7 @@ bool ImpSvNumberInputScan::IsNumberFormat(
             break;
 
             default:
-                SAL_WARN( "svl.items", "Some number recognized but what's it?" );
+                SAL_WARN( "svl.numbers", "Some number recognized but what's it?" );
                 fOutNumber = 0.0;
                 break;
         }

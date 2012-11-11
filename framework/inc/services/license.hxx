@@ -69,10 +69,10 @@ namespace framework
                     public  ::cppu::OWeakObject                   // => XWeak, XInterface
     {
     private:
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
         sal_Bool m_bTerminate;
     public:
-        License( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMGR );
+        License( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~License();
 
         /** declaration of XInterface, XTypeProvider, XServiceInfo */

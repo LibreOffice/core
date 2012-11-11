@@ -1,32 +1,25 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
+#include "sal/config.h"
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
 #include "tools/debug.hxx"
@@ -37,7 +30,6 @@
 #include "vcl/field.hxx"
 #include "vcl/event.hxx"
 #include "vcl/svapp.hxx"
-#include "vcl/unohelp.hxx"
 
 #include "svids.hrc"
 #include "svdata.hxx"
@@ -80,7 +72,7 @@ static sal_Bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
         return sal_False;
     else
     {
-        xub_Unicode cChar = rKEvt.GetCharCode();
+        sal_Unicode cChar = rKEvt.GetCharCode();
         sal_uInt16      nGroup = rKEvt.GetKeyCode().GetGroup();
 
         if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
@@ -103,10 +95,9 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
 {
     XubString   aStr = rStr;
     XubString   aStr1;
-    XubString   aStr2;
+    rtl::OUStringBuffer aStr2;
     sal_Bool        bNegative = sal_False;
     xub_StrLen  nDecPos;
-    xub_StrLen  i;
 
     // react on empty string
     if ( !rStr.Len() )
@@ -120,7 +111,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
     if ( nDecPos != STRING_NOTFOUND )
     {
         aStr1 = aStr.Copy( 0, nDecPos );
-        aStr2 = aStr.Copy( nDecPos+1 );
+        aStr2.append(aStr.Copy(nDecPos+1));
     }
     else
         aStr1 = aStr;
@@ -132,7 +123,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
             bNegative = sal_True;
         if ( !bNegative )
         {
-            for ( i=0; i < aStr.Len(); i++ )
+            for (xub_StrLen i=0; i < aStr.Len(); i++ )
             {
                 if ( (aStr.GetChar( i ) >= '0') && (aStr.GetChar( i ) <= '9') )
                     break;
@@ -149,7 +140,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
             if ( (nFormat == 3) || (nFormat == 6)  ||
                  (nFormat == 7) || (nFormat == 10) )
             {
-                for ( i = (xub_StrLen)(aStr.Len()-1); i > 0; i++ )
+                for (xub_StrLen i = (xub_StrLen)(aStr.Len()-1); i > 0; i++ )
                 {
                     if ( (aStr.GetChar( i ) >= '0') && (aStr.GetChar( i ) <= '9') )
                         break;
@@ -169,22 +160,22 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
     }
 
     // remove all unwanted charaters
-    for ( i=0; i < aStr1.Len(); )
+    for (xub_StrLen i=0; i < aStr1.Len(); )
     {
         if ( (aStr1.GetChar( i ) >= '0') && (aStr1.GetChar( i ) <= '9') )
             i++;
         else
             aStr1.Erase( i, 1 );
     }
-    for ( i=0; i < aStr2.Len(); )
+    for (sal_Int32 i=0; i < aStr2.getLength(); )
     {
-        if ( (aStr2.GetChar( i ) >= '0') && (aStr2.GetChar( i ) <= '9') )
-            i++;
+        if ((aStr2[i] >= '0') && (aStr2[i] <= '9'))
+            ++i;
         else
-            aStr2.Erase( i, 1 );
+            aStr2.remove(i, 1);
     }
 
-    if ( !aStr1.Len() && !aStr2.Len() )
+    if ( !aStr1.Len() && !aStr2.getLength() )
         return sal_False;
 
     if ( !aStr1.Len() )
@@ -193,22 +184,22 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
         aStr1.Insert( '-', 0 );
 
     // prune and round fraction
-    sal_Bool bRound = sal_False;
-    if ( aStr2.Len() > nDecDigits )
+    bool bRound = false;
+    if (aStr2.getLength() > nDecDigits)
     {
-        if ( aStr2.GetChar( nDecDigits ) >= '5' )
-            bRound = sal_True;
-        aStr2.Erase( nDecDigits );
+        if (aStr2[nDecDigits] >= '5')
+            bRound = true;
+        string::truncateToLength(aStr2, nDecDigits);
     }
-    if ( aStr2.Len() < nDecDigits )
-        aStr2.Expand( nDecDigits, '0' );
+    if (aStr2.getLength() < nDecDigits)
+        string::padToLength(aStr2, nDecDigits, '0');
 
     aStr  = aStr1;
-    aStr += aStr2;
+    aStr += aStr2.makeStringAndClear();
 
     // check range
     double nValue = rtl::OUString(aStr).toDouble();
-    if ( bRound )
+    if (bRound)
     {
         if ( !bNegative )
             nValue++;
@@ -318,7 +309,7 @@ LocaleDataWrapper& FormatterBase::ImplGetLocaleDataWrapper() const
 {
     if ( !mpLocaleDataWrapper )
     {
-        ((FormatterBase*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( vcl::unohelper::GetMultiServiceFactory(), GetLocale() );
+        ((FormatterBase*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( comphelper::getProcessServiceFactory(), GetLocale() );
     }
     return *mpLocaleDataWrapper;
 }
@@ -950,12 +941,12 @@ namespace
         sal_Int32 nTextLen;
 
         nTextLen = rtl::OUString::valueOf(rFormatter.GetMin()).getLength();
-        comphelper::string::padToLength(aBuf, nTextLen, '9');
+        string::padToLength(aBuf, nTextLen, '9');
         Size aMinTextSize = rSpinField.CalcMinimumSizeForText(
             rFormatter.CreateFieldText(aBuf.makeStringAndClear().toInt64()));
 
         nTextLen = rtl::OUString::valueOf(rFormatter.GetMax()).getLength();
-        comphelper::string::padToLength(aBuf, nTextLen, '9');
+        string::padToLength(aBuf, nTextLen, '9');
         Size aMaxTextSize = rSpinField.CalcMinimumSizeForText(
             rFormatter.CreateFieldText(aBuf.makeStringAndClear().toInt64()));
 
@@ -967,7 +958,7 @@ namespace
         if (nDigits)
         {
             sBuf.append('.');
-            comphelper::string::padToLength(aBuf, aBuf.getLength() + nDigits, '9');
+            string::padToLength(aBuf, aBuf.getLength() + nDigits, '9');
         }
         aMaxTextSize = rSpinField.CalcMinimumSizeForText(sBuf.makeStringAndClear());
         aRet.Width() = std::min(aRet.Width(), aMaxTextSize.Width());
@@ -1110,7 +1101,7 @@ static rtl::OUString ImplMetricGetUnitText(const rtl::OUString& rStr)
     rtl::OUStringBuffer aStr;
     for (sal_Int32 i = rStr.getLength()-1; i >= 0; --i)
     {
-        xub_Unicode c = rStr[i];
+        sal_Unicode c = rStr[i];
         if ( (c == '\'') || (c == '\"') || (c == '%' ) || unicode::isAlpha(c) || unicode::isControl(c) )
             aStr.insert(0, c);
         else

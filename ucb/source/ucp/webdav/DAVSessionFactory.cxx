@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
 #include "DAVSessionFactory.hxx"
 #include "SerfSession.hxx"
 #include "SerfUri.hxx"

@@ -45,7 +45,7 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-class SvLBoxEntry;
+class SvTreeListEntry;
 class ThesaurusAlternativesCtrl;
 
 class AlternativesString : public SvLBoxString
@@ -54,9 +54,9 @@ class AlternativesString : public SvLBoxString
 public:
 
     AlternativesString( ThesaurusAlternativesCtrl &rControl,
-        SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rStr );
+        SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& rStr );
 
-    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
+    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry);
 };
 
 #endif

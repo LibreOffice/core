@@ -34,10 +34,9 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <sal/types.h>
 #include <osl/mutex.hxx>
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <sfx2/sfxuno.hxx>
@@ -142,7 +141,6 @@ class ModelCollectionEnumeration : public ModelCollectionMutexBase
     // member
     //-------------------------------------------------------------------------
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xSMGR;
         TModelList m_lModels;
         TModelList::iterator m_pEnumerationIt;
 
@@ -150,7 +148,7 @@ class ModelCollectionEnumeration : public ModelCollectionMutexBase
     // native interface
     //-------------------------------------------------------------------------
     public:
-        ModelCollectionEnumeration(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMGR);
+        ModelCollectionEnumeration();
         virtual ~ModelCollectionEnumeration();
         void setModelList(const TModelList& rList);
 
@@ -172,22 +170,20 @@ class ModelCollectionEnumeration : public ModelCollectionMutexBase
 //=============================================================================
 //TODO: remove support of obsolete document::XEventBroadcaster/Listener
 class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
-                           , public ::cppu::WeakImplHelper4< ::com::sun::star::lang::XServiceInfo
+                           , public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo
                                                            , ::com::sun::star::frame::XGlobalEventBroadcaster
-                                                           , ::com::sun::star::document::XEventBroadcaster
                                                            , ::com::sun::star::document::XEventListener
                                                             >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xSMGR;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xEvents;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::document::XEventListener > m_xJobExecutorListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener > m_xJobExecutorListener;
     OINTERFACECONTAINERHELPER m_aLegacyListeners;
     OINTERFACECONTAINERHELPER m_aDocumentListeners;
     TModelList m_lModels;
     GlobalEventConfig* pImp;
 
 public:
-    SfxGlobalEvents_Impl(const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xSMGR);
+    SfxGlobalEvents_Impl(const com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >& rxContext);
     virtual ~SfxGlobalEvents_Impl();
 
     SFX_DECL_XSERVICEINFO

@@ -48,6 +48,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <officecfg/Office/Common.hxx>
 #include "optHeaderTabListbox.hxx"
 #include <readonlyimage.hxx>
@@ -335,7 +336,7 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
                 String aValue( sTmpPath );
                 aStr += '\t';
                 aStr += Convert_Impl( aValue );
-                SvLBoxEntry* pEntry = pPathBox->InsertEntry( aStr );
+                SvTreeListEntry* pEntry = pPathBox->InsertEntry( aStr );
                 if ( bReadOnly )
                 {
                     pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->m_aLockImage );
@@ -391,7 +392,7 @@ void SvxPathTabPage::FillUserData()
 IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl)
 {
     sal_uInt16 nSelCount = 0;
-    SvLBoxEntry* pEntry = pPathBox->FirstSelected();
+    SvTreeListEntry* pEntry = pPathBox->FirstSelected();
 
     //the entry image indicates whether the path is write protected
     Image aEntryImage;
@@ -413,7 +414,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl)
 
 IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
 {
-    SvLBoxEntry* pEntry = pPathBox->FirstSelected();
+    SvTreeListEntry* pEntry = pPathBox->FirstSelected();
     while ( pEntry )
     {
         PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pEntry->GetUserData();
@@ -469,7 +470,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
 
 void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
 {
-    SvLBoxEntry* pEntry = pPathBox->GetCurEntry();
+    SvTreeListEntry* pEntry = pPathBox->GetCurEntry();
     if ( !pEntry )
     {
         SAL_WARN( "cui.options", "SvxPathTabPage::ChangeCurrentEntry(): no entry" );
@@ -534,7 +535,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
 
 IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
 {
-    SvLBoxEntry* pEntry = pPathBox->GetCurEntry();
+    SvTreeListEntry* pEntry = pPathBox->GetCurEntry();
     sal_uInt16 nPos = ( pEntry != NULL ) ? ( (PathUserData_Impl*)pEntry->GetUserData() )->nRealId : 0;
     String sInternal, sUser, sWritable;
     if ( pEntry )
@@ -610,10 +611,8 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
     {
         try
         {
-            rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
-            Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-            xFolderPicker = ::com::sun::star::uno::Reference< XFolderPicker >(
-                xFactory->createInstance( aService ), UNO_QUERY );
+            Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            xFolderPicker = FolderPicker::create(xContext);;
 
             INetURLObject aURL( sWritable, INET_PROT_FILE );
             xFolderPicker->setDisplayDirectory( aURL.GetMainURL( INetURLObject::NO_DECODE ) );

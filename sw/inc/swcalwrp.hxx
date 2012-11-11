@@ -32,8 +32,8 @@ class SwCalendarWrapper : public CalendarWrapper
 
 public:
     SwCalendarWrapper( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory > & xMSF = ::comphelper::getProcessServiceFactory() )
-        : CalendarWrapper( xMSF ), nLang( LANGUAGE_SYSTEM )
+                    ::com::sun::star::uno::XComponentContext > & rxContext = ::comphelper::getProcessComponentContext() )
+        : CalendarWrapper( rxContext ), nLang( LANGUAGE_SYSTEM )
     {}
 
     void LoadDefaultCalendar( sal_uInt16 nLang );

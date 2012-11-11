@@ -594,8 +594,8 @@ public:
     inline const  SwPaM* GetTblCrs() const;
     inline        SwPaM* GetTblCrs();
 
-    sal_Bool IsTblComplex() const;
-    sal_Bool IsTblComplexForChart();
+    bool IsTblComplex() const;
+    bool IsTblComplexForChart();
     // get current table selection as text
     String GetBoxNms() const;
 
@@ -603,7 +603,7 @@ public:
     sal_Bool GoNextCell( sal_Bool bAppendLine = sal_True );
     sal_Bool GoPrevCell();
     // go to this box (if available and inside of table)
-    sal_Bool GotoTable( const String& rName );
+    bool GotoTable( const String& rName );
 
     // select a table row, column or box (based on the current cursor)
     sal_Bool SelTblRow() { return _SelTblRowOrCol( true  ); }
@@ -612,10 +612,10 @@ public:
 
     sal_Bool SelTbl();
 
-    sal_Bool GotoNextNum();
-    sal_Bool GotoPrevNum();
+    bool GotoNextNum();
+    bool GotoPrevNum();
 
-    sal_Bool GotoOutline( const String& rName );
+    bool GotoOutline( const String& rName );
     // to the next/previous or the given OutlineNode
     void GotoOutline( sal_uInt16 nIdx );
     // find the "outline position" in the nodes array of the current chapter
@@ -752,7 +752,7 @@ public:
 
     sal_Bool BasicActionPend() const    { return nBasicActionCnt != nStartAction; }
 
-    sal_Bool GotoRegion( const String& rName );
+    bool GotoRegion( const String& rName );
 
     // show the current selection
     virtual void MakeSelVisible();
@@ -782,7 +782,7 @@ public:
     sal_Bool IsPageAtPos( const Point &rPt ) const;
 
     sal_Bool SelectTxtAttr( sal_uInt16 nWhich, sal_Bool bExpand, const SwTxtAttr* pAttr = 0 );
-    sal_Bool GotoINetAttr( const SwTxtINetFmt& rAttr );
+    bool GotoINetAttr( const SwTxtINetFmt& rAttr );
     const SwFmtINetFmt* FindINetAttr( const String& rName ) const;
 
     sal_Bool CheckTblBoxCntnt( const SwPosition* pPos = 0 );
@@ -805,7 +805,7 @@ public:
     const SwRedline* GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect = sal_False );
 
     // is cursor or the point in/over a vertical formatted text?
-    sal_Bool IsInVerticalText( const Point* pPt = 0 ) const;
+    bool IsInVerticalText( const Point* pPt = 0 ) const;
     // is cursor or the point in/over a right to left formatted text?
     sal_Bool IsInRightToLeftText( const Point* pPt = 0 ) const;
 

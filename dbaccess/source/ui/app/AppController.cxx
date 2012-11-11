@@ -2436,7 +2436,7 @@ Any OApplicationController::getCurrentSelection( Control& _rControl ) const
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationController::requestQuickHelp( const SvLBoxEntry* /*_pEntry*/, String& /*_rText*/ ) const
+sal_Bool OApplicationController::requestQuickHelp( const SvTreeListEntry* /*_pEntry*/, String& /*_rText*/ ) const
 {
     return sal_False;
 }
@@ -2485,7 +2485,7 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
                 sal_Int8 nAction = OComponentTransferable::canExtractComponentDescriptor(_rFlavors,eType == E_FORM) ? DND_ACTION_COPY : DND_ACTION_NONE;
                 if ( nAction != DND_ACTION_NONE )
                 {
-                    SvLBoxEntry* pHitEntry = pView->getEntry(_rEvt.maPosPixel);
+                    SvTreeListEntry* pHitEntry = pView->getEntry(_rEvt.maPosPixel);
                     ::rtl::OUString sName;
                     if ( pHitEntry )
                     {
@@ -2553,7 +2553,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     else if ( OComponentTransferable::canExtractComponentDescriptor(aDroppedData.GetDataFlavorExVector(),m_aAsyncDrop.nType == E_FORM) )
     {
         m_aAsyncDrop.aDroppedData = OComponentTransferable::extractComponentDescriptor(aDroppedData);
-        SvLBoxEntry* pHitEntry = pView->getEntry(_rEvt.maPosPixel);
+        SvTreeListEntry* pHitEntry = pView->getEntry(_rEvt.maPosPixel);
         if ( pHitEntry )
             m_aAsyncDrop.aUrl = pView->getQualifiedName( pHitEntry );
 

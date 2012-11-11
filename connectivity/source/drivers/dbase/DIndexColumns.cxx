@@ -59,7 +59,10 @@ sdbcx::ObjectType ODbaseIndexColumns::createObject(const ::rtl::OUString& _rName
                                                     ,sal_False
                                                     ,sal_False
                                                     ,sal_False
-                                                    ,pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
+                                                    ,pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()
+                                                    ,getString(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOGNAME)))
+                                                    ,getString(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME)))
+                                                    ,getString(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME))));
 
     return xRet;
 }

@@ -39,6 +39,7 @@ $(eval $(call gb_Library_set_include,i18nsearch,\
 $(eval $(call gb_Library_use_sdk_api,i18nsearch))
 
 $(eval $(call gb_Library_use_libraries,i18nsearch,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	i18nregexp \

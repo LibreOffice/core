@@ -25,6 +25,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <iterator>
 #include <functional>
 
 using namespace ::com::sun::star;

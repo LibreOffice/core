@@ -29,8 +29,8 @@
 #include <PackageConstants.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
-#include <com/sun/star/packages/manifest/XManifestReader.hpp>
-#include <com/sun/star/packages/manifest/XManifestWriter.hpp>
+#include <com/sun/star/packages/manifest/ManifestReader.hpp>
+#include <com/sun/star/packages/manifest/ManifestWriter.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -212,139 +212,134 @@ void ZipPackage::parseManifest()
                     uno::Reference < XActiveDataSink > xSink ( xTunnel, UNO_QUERY );
                     if ( xSink.is() )
                     {
-                        OUString sManifestReader ("com.sun.star.packages.manifest.ManifestReader");
-                        uno::Reference < XManifestReader > xReader ( m_xFactory->createInstance( sManifestReader ), UNO_QUERY );
-                        if ( xReader.is() )
+                        uno::Reference < XManifestReader > xReader = ManifestReader::create( comphelper::getComponentContext( m_xFactory ) );
+
+                        const OUString sPropFullPath ("FullPath");
+                        const OUString sPropVersion ("Version");
+                        const OUString sPropMediaType ("MediaType");
+                        const OUString sPropInitialisationVector ("InitialisationVector");
+                        const OUString sPropSalt ("Salt");
+                        const OUString sPropIterationCount ("IterationCount");
+                        const OUString sPropSize ("Size");
+                        const OUString sPropDigest ("Digest");
+                        const OUString sPropDerivedKeySize ("DerivedKeySize");
+                        const OUString sPropDigestAlgorithm ("DigestAlgorithm");
+                        const OUString sPropEncryptionAlgorithm ("EncryptionAlgorithm");
+                        const OUString sPropStartKeyAlgorithm ("StartKeyAlgorithm");
+
+                        uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
+                        sal_Int32 nLength = aManifestSequence.getLength();
+                        const uno::Sequence < PropertyValue > *pSequence = aManifestSequence.getConstArray();
+                        ZipPackageStream *pStream = NULL;
+                        ZipPackageFolder *pFolder = NULL;
+
+                        for ( sal_Int32 i = 0; i < nLength ; i++, pSequence++ )
                         {
-                            const OUString sPropFullPath ("FullPath");
-                            const OUString sPropVersion ("Version");
-                            const OUString sPropMediaType ("MediaType");
-                            const OUString sPropInitialisationVector ("InitialisationVector");
-                            const OUString sPropSalt ("Salt");
-                            const OUString sPropIterationCount ("IterationCount");
-                            const OUString sPropSize ("Size");
-                            const OUString sPropDigest ("Digest");
-                            const OUString sPropDerivedKeySize ("DerivedKeySize");
-                            const OUString sPropDigestAlgorithm ("DigestAlgorithm");
-                            const OUString sPropEncryptionAlgorithm ("EncryptionAlgorithm");
-                            const OUString sPropStartKeyAlgorithm ("StartKeyAlgorithm");
-
-                            uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
-                            sal_Int32 nLength = aManifestSequence.getLength();
-                            const uno::Sequence < PropertyValue > *pSequence = aManifestSequence.getConstArray();
-                            ZipPackageStream *pStream = NULL;
-                            ZipPackageFolder *pFolder = NULL;
-
-                            for ( sal_Int32 i = 0; i < nLength ; i++, pSequence++ )
+                            OUString sPath, sMediaType, sVersion;
+                            const PropertyValue *pValue = pSequence->getConstArray();
+                            const Any *pSalt = NULL, *pVector = NULL, *pCount = NULL, *pSize = NULL, *pDigest = NULL, *pDigestAlg = NULL, *pEncryptionAlg = NULL, *pStartKeyAlg = NULL, *pDerivedKeySize = NULL;
+                            for ( sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
                             {
-                                OUString sPath, sMediaType, sVersion;
-                                const PropertyValue *pValue = pSequence->getConstArray();
-                                const Any *pSalt = NULL, *pVector = NULL, *pCount = NULL, *pSize = NULL, *pDigest = NULL, *pDigestAlg = NULL, *pEncryptionAlg = NULL, *pStartKeyAlg = NULL, *pDerivedKeySize = NULL;
-                                for ( sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
-                                {
-                                    if ( pValue[j].Name.equals( sPropFullPath ) )
-                                        pValue[j].Value >>= sPath;
-                                    else if ( pValue[j].Name.equals( sPropVersion ) )
-                                        pValue[j].Value >>= sVersion;
-                                    else if ( pValue[j].Name.equals( sPropMediaType ) )
-                                        pValue[j].Value >>= sMediaType;
-                                    else if ( pValue[j].Name.equals( sPropSalt ) )
-                                        pSalt = &( pValue[j].Value );
-                                    else if ( pValue[j].Name.equals( sPropInitialisationVector ) )
-                                        pVector = &( pValue[j].Value );
-                                    else if ( pValue[j].Name.equals( sPropIterationCount ) )
-                                        pCount = &( pValue[j].Value );
-                                    else if ( pValue[j].Name.equals( sPropSize ) )
-                                        pSize = &( pValue[j].Value );
-                                    else if ( pValue[j].Name.equals( sPropDigest ) )
-                                        pDigest = &( pValue[j].Value );
-                                    else if ( pValue[j].Name.equals( sPropDigestAlgorithm ) )
-                                        pDigestAlg = &( pValue[j].Value );
-                                    else if ( pValue[j].Name.equals( sPropEncryptionAlgorithm ) )
-                                        pEncryptionAlg = &( pValue[j].Value );
-                                    else if ( pValue[j].Name.equals( sPropStartKeyAlgorithm ) )
-                                        pStartKeyAlg = &( pValue[j].Value );
-                                    else if ( pValue[j].Name.equals( sPropDerivedKeySize ) )
-                                        pDerivedKeySize = &( pValue[j].Value );
-                                }
-
-                                if ( !sPath.isEmpty() && hasByHierarchicalName ( sPath ) )
-                                {
-                                    aAny = getByHierarchicalName( sPath );
-                                    uno::Reference < XUnoTunnel > xUnoTunnel;
-                                    aAny >>= xUnoTunnel;
-                                    sal_Int64 nTest=0;
-                                    if ( (nTest = xUnoTunnel->getSomething( ZipPackageFolder::static_getImplementationId() )) != 0 )
-                                    {
-                                        pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
-                                        pFolder->SetMediaType ( sMediaType );
-                                        pFolder->SetVersion ( sVersion );
-                                    }
-                                    else
-                                    {
-                                        pStream = reinterpret_cast < ZipPackageStream* > ( xUnoTunnel->getSomething( ZipPackageStream::static_getImplementationId() ));
-                                        pStream->SetMediaType ( sMediaType );
-                                        pStream->SetFromManifest( sal_True );
-
-                                        if ( pSalt && pVector && pCount && pSize && pDigest && pDigestAlg && pEncryptionAlg )
-                                        {
-                                            uno::Sequence < sal_Int8 > aSequence;
-                                            sal_Int64 nSize = 0;
-                                            sal_Int32 nCount = 0, nDigestAlg = 0, nEncryptionAlg = 0;
-                                            sal_Int32 nDerivedKeySize = 16, nStartKeyAlg = xml::crypto::DigestID::SHA1;
-
-                                            pStream->SetToBeEncrypted ( sal_True );
-
-                                            *pSalt >>= aSequence;
-                                            pStream->setSalt ( aSequence );
-
-                                            *pVector >>= aSequence;
-                                            pStream->setInitialisationVector ( aSequence );
-
-                                            *pCount >>= nCount;
-                                            pStream->setIterationCount ( nCount );
-
-                                            *pSize >>= nSize;
-                                            pStream->setSize ( nSize );
-
-                                            *pDigest >>= aSequence;
-                                            pStream->setDigest ( aSequence );
-
-                                            *pDigestAlg >>= nDigestAlg;
-                                            pStream->SetImportedChecksumAlgorithm( nDigestAlg );
-
-                                            *pEncryptionAlg >>= nEncryptionAlg;
-                                            pStream->SetImportedEncryptionAlgorithm( nEncryptionAlg );
-
-                                            if ( pDerivedKeySize )
-                                                *pDerivedKeySize >>= nDerivedKeySize;
-                                            pStream->SetImportedDerivedKeySize( nDerivedKeySize );
-
-                                            if ( pStartKeyAlg )
-                                                *pStartKeyAlg >>= nStartKeyAlg;
-                                            pStream->SetImportedStartKeyAlgorithm( nStartKeyAlg );
-
-                                            pStream->SetToBeCompressed ( sal_True );
-                                            pStream->SetToBeEncrypted ( sal_True );
-                                            pStream->SetIsEncrypted ( sal_True );
-                                            if ( !m_bHasEncryptedEntries && pStream->getName() == "content.xml" )
-                                            {
-                                                m_bHasEncryptedEntries = sal_True;
-                                                m_nStartKeyGenerationID = nStartKeyAlg;
-                                                m_nChecksumDigestID = nDigestAlg;
-                                                m_nCommonEncryptionID = nEncryptionAlg;
-                                            }
-                                        }
-                                        else
-                                            m_bHasNonEncryptedEntries = sal_True;
-                                    }
-                                }
+                                if ( pValue[j].Name.equals( sPropFullPath ) )
+                                    pValue[j].Value >>= sPath;
+                                else if ( pValue[j].Name.equals( sPropVersion ) )
+                                    pValue[j].Value >>= sVersion;
+                                else if ( pValue[j].Name.equals( sPropMediaType ) )
+                                    pValue[j].Value >>= sMediaType;
+                                else if ( pValue[j].Name.equals( sPropSalt ) )
+                                    pSalt = &( pValue[j].Value );
+                                else if ( pValue[j].Name.equals( sPropInitialisationVector ) )
+                                    pVector = &( pValue[j].Value );
+                                else if ( pValue[j].Name.equals( sPropIterationCount ) )
+                                    pCount = &( pValue[j].Value );
+                                else if ( pValue[j].Name.equals( sPropSize ) )
+                                    pSize = &( pValue[j].Value );
+                                else if ( pValue[j].Name.equals( sPropDigest ) )
+                                    pDigest = &( pValue[j].Value );
+                                else if ( pValue[j].Name.equals( sPropDigestAlgorithm ) )
+                                    pDigestAlg = &( pValue[j].Value );
+                                else if ( pValue[j].Name.equals( sPropEncryptionAlgorithm ) )
+                                    pEncryptionAlg = &( pValue[j].Value );
+                                else if ( pValue[j].Name.equals( sPropStartKeyAlgorithm ) )
+                                    pStartKeyAlg = &( pValue[j].Value );
+                                else if ( pValue[j].Name.equals( sPropDerivedKeySize ) )
+                                    pDerivedKeySize = &( pValue[j].Value );
                             }
 
-                            bManifestParsed = sal_True;
+                            if ( !sPath.isEmpty() && hasByHierarchicalName ( sPath ) )
+                            {
+                                aAny = getByHierarchicalName( sPath );
+                                uno::Reference < XUnoTunnel > xUnoTunnel;
+                                aAny >>= xUnoTunnel;
+                                sal_Int64 nTest=0;
+                                if ( (nTest = xUnoTunnel->getSomething( ZipPackageFolder::static_getImplementationId() )) != 0 )
+                                {
+                                    pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
+                                    pFolder->SetMediaType ( sMediaType );
+                                    pFolder->SetVersion ( sVersion );
+                                }
+                                else
+                                {
+                                    pStream = reinterpret_cast < ZipPackageStream* > ( xUnoTunnel->getSomething( ZipPackageStream::static_getImplementationId() ));
+                                    pStream->SetMediaType ( sMediaType );
+                                    pStream->SetFromManifest( sal_True );
+
+                                    if ( pSalt && pVector && pCount && pSize && pDigest && pDigestAlg && pEncryptionAlg )
+                                    {
+                                        uno::Sequence < sal_Int8 > aSequence;
+                                        sal_Int64 nSize = 0;
+                                        sal_Int32 nCount = 0, nDigestAlg = 0, nEncryptionAlg = 0;
+                                        sal_Int32 nDerivedKeySize = 16, nStartKeyAlg = xml::crypto::DigestID::SHA1;
+
+                                        pStream->SetToBeEncrypted ( sal_True );
+
+                                        *pSalt >>= aSequence;
+                                        pStream->setSalt ( aSequence );
+
+                                        *pVector >>= aSequence;
+                                        pStream->setInitialisationVector ( aSequence );
+
+                                        *pCount >>= nCount;
+                                        pStream->setIterationCount ( nCount );
+
+                                        *pSize >>= nSize;
+                                        pStream->setSize ( nSize );
+
+                                        *pDigest >>= aSequence;
+                                        pStream->setDigest ( aSequence );
+
+                                        *pDigestAlg >>= nDigestAlg;
+                                        pStream->SetImportedChecksumAlgorithm( nDigestAlg );
+
+                                        *pEncryptionAlg >>= nEncryptionAlg;
+                                        pStream->SetImportedEncryptionAlgorithm( nEncryptionAlg );
+
+                                        if ( pDerivedKeySize )
+                                            *pDerivedKeySize >>= nDerivedKeySize;
+                                        pStream->SetImportedDerivedKeySize( nDerivedKeySize );
+
+                                        if ( pStartKeyAlg )
+                                            *pStartKeyAlg >>= nStartKeyAlg;
+                                        pStream->SetImportedStartKeyAlgorithm( nStartKeyAlg );
+
+                                        pStream->SetToBeCompressed ( sal_True );
+                                        pStream->SetToBeEncrypted ( sal_True );
+                                        pStream->SetIsEncrypted ( sal_True );
+                                        if ( !m_bHasEncryptedEntries && pStream->getName() == "content.xml" )
+                                        {
+                                            m_bHasEncryptedEntries = sal_True;
+                                            m_nStartKeyGenerationID = nStartKeyAlg;
+                                            m_nChecksumDigestID = nDigestAlg;
+                                            m_nCommonEncryptionID = nEncryptionAlg;
+                                        }
+                                    }
+                                    else
+                                        m_bHasNonEncryptedEntries = sal_True;
+                                }
+                            }
                         }
-                        else
-                            throw uno::RuntimeException(OSL_LOG_PREFIX "No manifes parser!", uno::Reference< uno::XInterface >() );
+
+                        bManifestParsed = sal_True;
                     }
 
                     // now hide the manifest.xml file from user
@@ -735,7 +730,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             if ( m_xContentStream.is() )
             {
                 // the stream must be seekable, if it is not it will be wrapped
-                m_xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( m_xContentStream, m_xFactory );
+                m_xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( m_xContentStream, comphelper::getComponentContext( m_xFactory ) );
                 m_xContentSeek = uno::Reference < XSeekable > ( m_xContentStream, UNO_QUERY );
                 if ( ! m_xContentSeek.is() )
                     throw com::sun::star::uno::Exception (OSL_LOG_PREFIX "The package component _requires_ an XSeekable interface!",
@@ -758,7 +753,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
         {
             try
             {
-                m_pZipFile = new ZipFile ( m_xContentStream, m_xFactory, sal_True, m_bForceRecovery, xProgressHandler );
+                m_pZipFile = new ZipFile ( m_xContentStream, comphelper::getComponentContext(m_xFactory), sal_True, m_bForceRecovery, xProgressHandler );
                 getZipFileContents();
             }
             catch ( IOException & )
@@ -1017,48 +1012,35 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
 void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Sequence < PropertyValue > >& aManList )
 {
     // Write the manifest
-    uno::Reference < XOutputStream > xManOutStream;
-    uno::Reference < XManifestWriter > xWriter ( m_xFactory->createInstance("com.sun.star.packages.manifest.ManifestWriter"), UNO_QUERY );
-    if ( xWriter.is() )
+    uno::Reference < XManifestWriter > xWriter = ManifestWriter::create( comphelper::getComponentContext(m_xFactory) );
+    ZipEntry * pEntry = new ZipEntry;
+    ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
+    uno::Reference < XOutputStream > xManOutStream( *pBuffer, UNO_QUERY );
+
+    pEntry->sPath = "META-INF/manifest.xml";
+    pEntry->nMethod = DEFLATED;
+    pEntry->nCrc = -1;
+    pEntry->nSize = pEntry->nCompressedSize = -1;
+    pEntry->nTime = ZipOutputStream::getCurrentDosTime();
+
+    // Convert vector into a uno::Sequence
+    uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
+    sal_Int32 nInd = 0;
+    for ( vector < uno::Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
+         aIter != aEnd;
+         ++aIter, ++nInd )
     {
-        ZipEntry * pEntry = new ZipEntry;
-        ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
-        xManOutStream = uno::Reference < XOutputStream > ( *pBuffer, UNO_QUERY );
-
-        pEntry->sPath = "META-INF/manifest.xml";
-        pEntry->nMethod = DEFLATED;
-        pEntry->nCrc = -1;
-        pEntry->nSize = pEntry->nCompressedSize = -1;
-        pEntry->nTime = ZipOutputStream::getCurrentDosTime();
-
-        // Convert vector into a uno::Sequence
-        uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
-        sal_Int32 nInd = 0;
-        for ( vector < uno::Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
-             aIter != aEnd;
-             ++aIter, ++nInd )
-        {
-            aManifestSequence[nInd] = ( *aIter );
-        }
-        xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
-
-        sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
-        pBuffer->realloc( nBufferLength );
-
-        // the manifest.xml is never encrypted - so pass an empty reference
-        aZipOut.putNextEntry( *pEntry, NULL );
-        aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
-        aZipOut.closeEntry();
+        aManifestSequence[nInd] = ( *aIter );
     }
-    else
-    {
-                OSL_FAIL( "Couldn't get a ManifestWriter!" );
-        IOException aException;
-        throw WrappedTargetException(
-                OSL_LOG_PREFIX "Couldn't get a ManifestWriter!",
-                static_cast < OWeakObject * > ( this ),
-                makeAny( aException ) );
-    }
+    xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
+
+    sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
+    pBuffer->realloc( nBufferLength );
+
+    // the manifest.xml is never encrypted - so pass an empty reference
+    aZipOut.putNextEntry( *pEntry, NULL );
+    aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
+    aZipOut.closeEntry();
 }
 
 //--------------------------------------------------------
@@ -1104,7 +1086,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     aOverridesSequence.realloc( nSeqLength );
 
     ::comphelper::OFOPXMLHelper::WriteContentSequence(
-            xConTypeOutStream, aDefaultsSequence, aOverridesSequence, m_xFactory );
+            xConTypeOutStream, aDefaultsSequence, aOverridesSequence, comphelper::getComponentContext(m_xFactory) );
 
     sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
     pBuffer->realloc( nBufferLength );
@@ -1126,7 +1108,7 @@ void ZipPackage::ConnectTo( const uno::Reference< io::XInputStream >& xInStream 
     if ( m_pZipFile )
         m_pZipFile->setInputStream( m_xContentStream );
     else
-        m_pZipFile = new ZipFile ( m_xContentStream, m_xFactory, sal_False );
+        m_pZipFile = new ZipFile ( m_xContentStream, comphelper::getComponentContext(m_xFactory), sal_False );
 }
 
 //--------------------------------------------------------
@@ -1175,7 +1157,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
     }
 
     // Hand it to the ZipOutputStream:
-    ZipOutputStream aZipOut( m_xFactory, xTempOut );
+    ZipOutputStream aZipOut( comphelper::getComponentContext(m_xFactory), xTempOut );
     aZipOut.setMethod( DEFLATED );
     aZipOut.setLevel( DEFAULT_COMPRESSION );
 

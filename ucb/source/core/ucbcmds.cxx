@@ -43,14 +43,14 @@
 #include <com/sun/star/ucb/CommandEnvironment.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
-#include <com/sun/star/ucb/GlobalTransferCommandArgument.hpp>
-#include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#include <com/sun/star/ucb/GlobalTransferCommandArgument2.hpp>
+#include <com/sun/star/ucb/InsertCommandArgument2.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
-#include <com/sun/star/ucb/TransferInfo.hpp>
+#include <com/sun/star/ucb/TransferInfo2.hpp>
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -80,14 +80,14 @@ struct TransferCommandContext
     uno::Reference< ucb::XCommandProcessor >     xProcessor;
     uno::Reference< ucb::XCommandEnvironment >   xEnv;
     uno::Reference< ucb::XCommandEnvironment >   xOrigEnv;
-    ucb::GlobalTransferCommandArgument           aArg;
+    ucb::GlobalTransferCommandArgument2          aArg;
 
     TransferCommandContext(
         const uno::Reference< lang::XMultiServiceFactory > & rxSMgr,
         const uno::Reference< ucb::XCommandProcessor > & rxProcessor,
         const uno::Reference< ucb::XCommandEnvironment > & rxEnv,
         const uno::Reference< ucb::XCommandEnvironment > & rxOrigEnv,
-        const ucb::GlobalTransferCommandArgument & rArg )
+        const ucb::GlobalTransferCommandArgument2 & rArg )
     : xSMgr( rxSMgr ), xProcessor( rxProcessor ), xEnv( rxEnv ),
       xOrigEnv( rxOrigEnv ), aArg( rArg ) {}
 };
@@ -246,6 +246,13 @@ CommandProcessorInfo::CommandProcessorInfo()
         = ucb::CommandInfo(
             rtl::OUString( GLOBALTRANSFER_NAME ), // Name
             GLOBALTRANSFER_HANDLE, // Handle
+            getCppuType(
+                static_cast<
+                    ucb::GlobalTransferCommandArgument * >( 0 ) ) ); // ArgType
+    (*m_pInfo)[ 2 ]
+        = ucb::CommandInfo(
+            rtl::OUString( CHECKIN_NAME ), // Name
+            CHECKIN_HANDLE, // Handle
             getCppuType(
                 static_cast<
                     ucb::GlobalTransferCommandArgument * >( 0 ) ) ); // ArgType
@@ -1171,7 +1178,7 @@ void handleNameClashRename(
                 }
             }
 
-            ucb::InsertCommandArgument aArg;
+            ucb::InsertCommandArgument2 aArg;
             aArg.Data = xInputStream;
             aArg.ReplaceExisting = sal_False;
 
@@ -1354,8 +1361,9 @@ void globalTransfer_(
     //
     //////////////////////////////////////////////////////////////////////
 
-    ucb::InsertCommandArgument aArg;
+    ucb::InsertCommandArgument2 aArg;
     aArg.Data = xInputStream;
+    aArg.MimeType = rContext.aArg.MimeType;
 
     switch ( rContext.aArg.NameClash )
     {
@@ -1599,13 +1607,14 @@ void globalTransfer_(
 
             if ( xResultSet->first() )
             {
-                ucb::GlobalTransferCommandArgument aTransArg(
-                        rContext.aArg.Operation,      // Operation
+                ucb::GlobalTransferCommandArgument2 aTransArg(
+                        rContext.aArg.Operation,
                         rtl::OUString(),              // SourceURL; filled later
                         xNew->getIdentifier()
                             ->getContentIdentifier(), // TargetURL
                         rtl::OUString(),              // NewTitle;
-                        rContext.aArg.NameClash );    // NameClash
+                        rContext.aArg.NameClash,
+                        rContext.aArg.MimeType );
 
                 TransferCommandContext aSubCtx(
                         rContext.xSMgr,
@@ -1685,7 +1694,7 @@ UniversalContentBroker::getCommandInfo()
 
 //=========================================================================
 void UniversalContentBroker::globalTransfer(
-            const ucb::GlobalTransferCommandArgument & rArg,
+            const ucb::GlobalTransferCommandArgument2 & rArg,
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     throw( uno::Exception )
 {
@@ -1764,12 +1773,13 @@ void UniversalContentBroker::globalTransfer(
             // Unreachable
         }
 
-        ucb::TransferInfo aTransferArg(
+        ucb::TransferInfo2 aTransferArg(
             ( rArg.Operation
                 == ucb::TransferCommandOperation_MOVE ), // MoveData
-            rArg.SourceURL,   // SourceURL
-            rArg.NewTitle,    // NewTitle
-            rArg.NameClash ); // NameClash
+            rArg.SourceURL,
+            rArg.NewTitle,
+            rArg.NameClash,
+            rArg.MimeType );
 
         bool bRetry;
         do
@@ -1779,7 +1789,7 @@ void UniversalContentBroker::globalTransfer(
             try
             {
                 ucb::Command aCommand(
-                    rtl::OUString("transfer"), // Name
+                    rtl::OUString( "transfer" ), // Name
                     -1,                                           // Handle
                     uno::makeAny( aTransferArg ) );               // Argument
 
@@ -1808,11 +1818,12 @@ void UniversalContentBroker::globalTransfer(
                     // NameClash::ERROR.
                     try
                     {
-                        ucb::TransferInfo aTransferArg1(
+                        ucb::TransferInfo2 aTransferArg1(
                             aTransferArg.MoveData,
                             aTransferArg.SourceURL,
                             aTransferArg.NewTitle,
-                            ucb::NameClash::ERROR );
+                            ucb::NameClash::ERROR,
+                            aTransferArg.MimeType );
 
                         ucb::Command aCommand1(
                             rtl::OUString("transfer"),
@@ -2022,6 +2033,90 @@ void UniversalContentBroker::globalTransfer(
             throw;
         }
     }
+}
+
+uno::Any UniversalContentBroker::checkIn( const ucb::CheckinArgument& rArg,
+            const uno::Reference< ucb::XCommandEnvironment >& xEnv ) throw ( uno::Exception )
+{
+    uno::Any aRet;
+    // Use own command environment with own interaction handler intercepting
+    // some interaction requests that shall not be handled by the user-supplied
+    // interaction handler.
+    uno::Reference< ucb::XCommandEnvironment > xLocalEnv;
+    if (xEnv.is())
+    {
+        uno::Reference< uno::XComponentContext > xCtx(
+            comphelper::getComponentContext( m_xSMgr ) );
+
+            xLocalEnv.set( ucb::CommandEnvironment::create(
+               xCtx,
+               new InteractionHandlerProxy( xEnv->getInteractionHandler() ),
+               xEnv->getProgressHandler() ) );
+    }
+
+    uno::Reference< ucb::XContent > xTarget;
+    uno::Reference< ucb::XContentIdentifier > xId
+            = createContentIdentifier( rArg.TargetURL );
+    if ( xId.is() )
+    {
+        try
+        {
+            xTarget = queryContent( xId );
+        }
+        catch ( ucb::IllegalIdentifierException const & )
+        {
+        }
+    }
+
+    if ( !xTarget.is() )
+    {
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
+                                  rtl::OUString( "Uri" ), -1,
+                                  uno::makeAny( rArg.TargetURL ),
+                                  beans::PropertyState_DIRECT_VALUE ) );
+        ucbhelper::cancelCommandExecution(
+            ucb::IOErrorCode_CANT_READ,
+            uno::Sequence< uno::Any >( &aProps, 1 ),
+            xEnv,
+            rtl::OUString( "Can't instanciate target object!" ),
+            this );
+        // Unreachable
+    }
+
+    uno::Reference< ucb::XCommandProcessor > xCommandProcessor(
+                                                xTarget, uno::UNO_QUERY );
+    if ( !xCommandProcessor.is() )
+    {
+        uno::Any aProps
+            = uno::makeAny(
+                     beans::PropertyValue(
+                         rtl::OUString( "Uri" ), -1,
+                         uno::makeAny( rArg.TargetURL ),
+                         beans::PropertyState_DIRECT_VALUE ) );
+        ucbhelper::cancelCommandExecution(
+            ucb::IOErrorCode_CANT_READ,
+            uno::Sequence< uno::Any >( &aProps, 1 ),
+            xEnv,
+            rtl::OUString( "Target content is not a XCommandProcessor!" ),
+            this );
+        // Unreachable
+    }
+
+    try
+    {
+        ucb::Command aCommand(
+            rtl::OUString( "checkin" ), -1,
+            uno::makeAny( rArg ) );
+
+        aRet = xCommandProcessor->execute( aCommand, 0, xLocalEnv );
+    }
+    catch ( ucb::UnsupportedCommandException const & )
+    {
+        // 'checkin' command is not supported by commandprocessor:
+        // ignore.
+    }
+    return aRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

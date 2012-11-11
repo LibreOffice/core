@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
-
 #include <ne_locks.h>
 #include <ne_uri.h>
 #include "rtl/ustring.hxx"
@@ -196,7 +191,7 @@ void SerfLockStore::removeLock( SerfLock * pLock )
     m_aLockInfoMap.erase( pLock );
     ne_lockstore_remove( m_pSerfLockStore, pLock );
 
-    if ( m_aLockInfoMap.size() == 0 )
+    if ( m_aLockInfoMap.empty() )
         stopTicker();
 }
 

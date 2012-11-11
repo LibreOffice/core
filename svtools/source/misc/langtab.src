@@ -353,6 +353,15 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Mari, Meadow" ; LANGUAGE_USER_MARI_MEADOW ; > ;
         < "Papiamento (Curaçao)" ; LANGUAGE_USER_PAPIAMENTU_CURACAO ; > ;
         < "Papiamento (Bonaire)" ; LANGUAGE_USER_PAPIAMENTU_BONAIRE ; > ;
+        < "Khanty" ; LANGUAGE_USER_KHANTY ; > ;
+        < "Livonian" ; LANGUAGE_USER_LIVONIAN ; > ;
+        < "Moksha" ; LANGUAGE_USER_MOKSHA ; > ;
+        < "Mari, Hill" ; LANGUAGE_USER_MARI_HILL ; > ;
+        < "Nganasan" ; LANGUAGE_USER_NGANASAN ; > ;
+        < "Olonets" ; LANGUAGE_USER_OLONETS ; > ;
+        < "Veps" ; LANGUAGE_USER_VEPS ; > ;
+        < "Võro" ; LANGUAGE_USER_VORO ; > ;
+        < "Nenets" ; LANGUAGE_USER_NENETS ; > ;
     };
 };
 

@@ -32,6 +32,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
+#include <comphelper/processfactory.hxx>
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 
@@ -73,7 +74,8 @@ OCommonStatement::OCommonStatement(OConnection* _pConnection )
     ,m_xDBMetaData(_pConnection->getMetaData())
     ,m_pTable(NULL)
     ,m_pConnection(_pConnection)
-    ,m_aParser(_pConnection->getDriver()->getMSFactory())
+    ,m_aParser(::comphelper::getComponentContext(
+                _pConnection->getDriver()->getMSFactory()))
     ,m_pSQLIterator( new OSQLParseTreeIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL ) )
     ,m_pParseTree(NULL)
     ,rBHelper(OCommonStatement_IBASE::rBHelper)

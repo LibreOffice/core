@@ -36,6 +36,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -80,7 +81,7 @@ class ConfigurationHelper
 
             @descr  TODO
 
-            @param  xSMGR
+            @param  rxContext
                     this method need an uno service manager for internal work.
 
             @param  sPackage
@@ -100,7 +101,7 @@ class ConfigurationHelper
                     force opening of the configuration access in special mode.
                     see enum EOpenMode for further informations.
          */
-        static css::uno::Reference< css::uno::XInterface > openConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR     ,
+        static css::uno::Reference< css::uno::XInterface > openConfig(const css::uno::Reference< css::uno::XComponentContext >&     rxContext,
                                                                       const ::rtl::OUString&                                        sPackage  ,
                                                                       const ::rtl::OUString&                                        sRelPath  ,
                                                                             sal_Int32                                               nOpenFlags)
@@ -109,8 +110,8 @@ class ConfigurationHelper
 
             try
             {
-                css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
-                    xSMGR->createInstance(SERVICENAME_CFGPROVIDER), css::uno::UNO_QUERY_THROW);
+                css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider =
+                    css::configuration::theDefaultProvider::get( rxContext );
 
                 ::rtl::OUStringBuffer sPath(1024);
                 sPath.append(sPackage      );

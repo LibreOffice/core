@@ -36,6 +36,8 @@ $(eval $(call gb_Executable_use_libraries,ulfex,\
     i18nregexp \
 ))
 
+$(eval $(call gb_Executable_use_unpacked,ulfex,boost))
+
 $(eval $(call gb_Executable_use_static_libraries,ulfex,\
     transex \
 ))

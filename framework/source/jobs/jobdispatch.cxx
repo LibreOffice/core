@@ -38,7 +38,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
@@ -129,10 +129,8 @@ void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< css::uno::Any >
         {
             lArguments[a] >>= m_xFrame;
 
-            css::uno::Reference< css::frame::XModuleManager > xModuleManager(
-                m_xSMGR->createInstance(
-                    SERVICENAME_MODULEMANAGER ),
-                css::uno::UNO_QUERY_THROW );
+            css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+                css::frame::ModuleManager::create(comphelper::getComponentContext(m_xSMGR));
             try
             {
                 m_sModuleIdentifier = xModuleManager->identify( m_xFrame );
@@ -273,7 +271,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&             
     // filter disabled jobs using it's time stamp values.
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
-    css::uno::Sequence< ::rtl::OUString > lJobs = JobData::getEnabledJobsForEvent(m_xSMGR, sEvent);
+    css::uno::Sequence< ::rtl::OUString > lJobs = JobData::getEnabledJobsForEvent(comphelper::getComponentContext(m_xSMGR), sEvent);
     aReadLock.unlock();
     /* } SAFE */
 
@@ -290,7 +288,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&             
         /* SAFE { */
         aReadLock.lock();
 
-        JobData aCfg(m_xSMGR);
+        JobData aCfg(comphelper::getComponentContext(m_xSMGR));
         aCfg.setEvent(sEvent, lJobs[j]);
         aCfg.setEnvironment(JobData::E_DISPATCH);
         const bool bIsEnabled=aCfg.hasCorrectContext(m_sModuleIdentifier);
@@ -354,7 +352,7 @@ void JobDispatch::impl_dispatchService( /*IN*/ const ::rtl::OUString&           
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-    JobData aCfg(m_xSMGR);
+    JobData aCfg(comphelper::getComponentContext(m_xSMGR));
     aCfg.setService(sService);
     aCfg.setEnvironment(JobData::E_DISPATCH);
 
@@ -405,7 +403,7 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const ::rtl::OUString&             
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-    JobData aCfg(m_xSMGR);
+    JobData aCfg(comphelper::getComponentContext(m_xSMGR));
     aCfg.setAlias(sAlias);
     aCfg.setEnvironment(JobData::E_DISPATCH);
 

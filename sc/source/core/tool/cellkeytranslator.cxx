@@ -179,7 +179,7 @@ void ScCellKeywordTranslator::transKeyword(rtl::OUString& rName, const Locale* p
 }
 
 ScCellKeywordTranslator::ScCellKeywordTranslator() :
-    maTransWrapper( ::comphelper::getProcessServiceFactory(),
+    maTransWrapper( ::comphelper::getProcessComponentContext(),
                     i18n::TransliterationModules_LOWERCASE_UPPERCASE )
 {
     init();

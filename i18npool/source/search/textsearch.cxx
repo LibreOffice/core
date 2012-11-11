@@ -33,12 +33,15 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
+#include <com/sun/star/i18n/Transliteration.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
@@ -75,8 +78,8 @@ static const sal_Int32 COMPLEX_TRANS_MASK =
     // Above 2 transliteration is simple but need to take effect in
     // complex transliteration
 
-TextSearch::TextSearch(const Reference < XMultiServiceFactory > & rxMSF)
-        : xMSF( rxMSF )
+TextSearch::TextSearch(const Reference < XComponentContext > & rxContext)
+        : m_xContext( rxContext )
         , pJumpTable( 0 )
         , pJumpTable2( 0 )
         , pRegExp( 0 )
@@ -111,19 +114,12 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     {
         if( !xTranslit.is() )
         {
-            Reference < XInterface > xI = xMSF->createInstance(
-                    OUString(
-                        "com.sun.star.i18n.Transliteration"));
-            if ( xI.is() )
-                xI->queryInterface( ::getCppuType(
-                            (const Reference< XExtendedTransliteration >*)0))
-                    >>= xTranslit;
+            xTranslit.set( Transliteration::create( m_xContext ) );
         }
         // Load transliteration module
-        if( xTranslit.is() )
-            xTranslit->loadModule(
-                    (TransliterationModules)( aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK ),
-                    aSrchPara.Locale);
+        xTranslit->loadModule(
+                (TransliterationModules)( aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK ),
+                aSrchPara.Locale);
     }
     else if( xTranslit.is() )
         xTranslit = 0;
@@ -133,29 +129,17 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     {
         if( !xTranslit2.is() )
         {
-            Reference < XInterface > xI = xMSF->createInstance(
-                    OUString(
-                        "com.sun.star.i18n.Transliteration"));
-            if ( xI.is() )
-                xI->queryInterface( ::getCppuType(
-                            (const Reference< XExtendedTransliteration >*)0))
-                    >>= xTranslit2;
+            xTranslit2.set( Transliteration::create( m_xContext ) );
         }
         // Load transliteration module
-        if( xTranslit2.is() )
-            xTranslit2->loadModule(
-                    (TransliterationModules)( aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK ),
-                    aSrchPara.Locale);
+        xTranslit2->loadModule(
+                (TransliterationModules)( aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK ),
+                aSrchPara.Locale);
     }
 
     if ( !xBreak.is() )
     {
-        Reference < XInterface > xI = xMSF->createInstance(
-                OUString("com.sun.star.i18n.BreakIterator"));
-        if( xI.is() )
-            xI->queryInterface( ::getCppuType(
-                        (const Reference< XBreakIterator >*)0))
-                >>= xBreak;
+        xBreak = BreakIterator::create(m_xContext);
     }
 
     sSrchStr = aSrchPara.searchString;
@@ -410,21 +394,13 @@ bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
     {
         if ( !xCharClass.is() )
         {
-            Reference < XInterface > xI = xMSF->createInstance(
-                    OUString("com.sun.star.i18n.CharacterClassification"));
-            if( xI.is() )
-                xI->queryInterface( ::getCppuType(
-                            (const Reference< XCharacterClassification >*)0))
-                    >>= xCharClass;
+             xCharClass = CharacterClassification::create( m_xContext );
         }
-        if ( xCharClass.is() )
-        {
-            sal_Int32 nCType = xCharClass->getCharacterType( rStr, nPos,
-                    aSrchPara.Locale );
-            if( 0 != (( KCharacterType::DIGIT | KCharacterType::ALPHA |
-                            KCharacterType::LETTER ) & nCType ) )
-                bRet = 0;
-        }
+        sal_Int32 nCType = xCharClass->getCharacterType( rStr, nPos,
+                aSrchPara.Locale );
+        if( 0 != (( KCharacterType::DIGIT | KCharacterType::ALPHA |
+                        KCharacterType::LETTER ) & nCType ) )
+            bRet = 0;
     }
     return bRet;
 }
@@ -974,7 +950,7 @@ SAL_CALL TextSearch_CreateInstance(
 {
     return ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface >(
-                (::cppu::OWeakObject*) new TextSearch( rxMSF ) );
+                (::cppu::OWeakObject*) new TextSearch( comphelper::getComponentContext(rxMSF) ) );
 }
 
 extern "C"

@@ -145,7 +145,7 @@ private:
 
 protected:
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
+        ::com::sun::star::uno::XComponentContext >     m_xContext;
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::beans::Property >            m_aProps;
     sal_Bool m_bReadOnly;
@@ -163,7 +163,7 @@ public:
       */
     ResultSetMetaData(
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::Property >& rProps,
             sal_Bool bReadOnly = sal_True );
@@ -183,7 +183,7 @@ public:
       */
     ResultSetMetaData(
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::Property >& rProps,
             const std::vector< ResultSetColumnData >& rColumnData );

@@ -460,7 +460,7 @@ ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocume
 
     UpdateView();
 
-    SvLBoxEntry* pEntry = maLbConflicts.First();
+    SvTreeListEntry* pEntry = maLbConflicts.First();
     if ( pEntry != NULL )
     {
         maLbConflicts.Select( pEntry );
@@ -519,7 +519,7 @@ String ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocumen
 
 void ScConflictsDlg::HandleListBoxSelection( bool bSelectHandle )
 {
-    SvLBoxEntry* pSelEntry = maLbConflicts.GetCurEntry();
+    SvTreeListEntry* pSelEntry = maLbConflicts.GetCurEntry();
     if ( !pSelEntry )
     {
         pSelEntry = maLbConflicts.FirstSelected();
@@ -529,7 +529,7 @@ void ScConflictsDlg::HandleListBoxSelection( bool bSelectHandle )
         return;
     }
 
-    SvLBoxEntry* pRootEntry = maLbConflicts.GetRootLevelParent( pSelEntry );
+    SvTreeListEntry* pRootEntry = maLbConflicts.GetRootLevelParent( pSelEntry );
     if ( pRootEntry )
     {
         if ( bSelectHandle )
@@ -540,7 +540,7 @@ void ScConflictsDlg::HandleListBoxSelection( bool bSelectHandle )
         {
             maLbConflicts.Select( pRootEntry );
         }
-        SvLBoxEntry* pEntry = maLbConflicts.FirstChild( pRootEntry );
+        SvTreeListEntry* pEntry = maLbConflicts.FirstChild( pRootEntry );
         while ( pEntry )
         {
             if ( !maLbConflicts.IsSelected( pEntry ) )
@@ -591,7 +591,7 @@ IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl)
     ScTabView* pTabView = mpViewData->GetView();
     pTabView->DoneBlockMode();
     sal_Bool bContMark = false;
-    SvLBoxEntry* pEntry = maLbConflicts.FirstSelected();
+    SvTreeListEntry* pEntry = maLbConflicts.FirstSelected();
     while ( pEntry )
     {
         if ( pEntry != maLbConflicts.GetRootLevelParent( pEntry ) )
@@ -619,7 +619,7 @@ IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl)
     return 0;
 }
 
-void ScConflictsDlg::SetConflictAction( SvLBoxEntry* pRootEntry, ScConflictAction eConflictAction )
+void ScConflictsDlg::SetConflictAction( SvTreeListEntry* pRootEntry, ScConflictAction eConflictAction )
 {
     RedlinData* pUserData = static_cast< RedlinData* >( pRootEntry ? pRootEntry->GetUserData() : NULL );
     ScConflictsListEntry* pConflictEntry = static_cast< ScConflictsListEntry* >( pUserData ? pUserData->pData : NULL );
@@ -631,8 +631,8 @@ void ScConflictsDlg::SetConflictAction( SvLBoxEntry* pRootEntry, ScConflictActio
 
 void ScConflictsDlg::KeepHandler( bool bMine )
 {
-    SvLBoxEntry* pEntry = maLbConflicts.FirstSelected();
-    SvLBoxEntry* pRootEntry = ( pEntry ? maLbConflicts.GetRootLevelParent( pEntry ) : NULL );
+    SvTreeListEntry* pEntry = maLbConflicts.FirstSelected();
+    SvTreeListEntry* pRootEntry = ( pEntry ? maLbConflicts.GetRootLevelParent( pEntry ) : NULL );
     if ( !pRootEntry )
     {
         return;
@@ -650,8 +650,8 @@ void ScConflictsDlg::KeepHandler( bool bMine )
 
 void ScConflictsDlg::KeepAllHandler( bool bMine )
 {
-    SvLBoxEntry* pEntry = maLbConflicts.First();
-    SvLBoxEntry* pRootEntry = ( pEntry ? maLbConflicts.GetRootLevelParent( pEntry ) : NULL );
+    SvTreeListEntry* pEntry = maLbConflicts.First();
+    SvTreeListEntry* pRootEntry = ( pEntry ? maLbConflicts.GetRootLevelParent( pEntry ) : NULL );
     if ( !pRootEntry )
     {
         return;
@@ -770,7 +770,7 @@ void ScConflictsDlg::UpdateView()
         {
             RedlinData* pRootUserData = new RedlinData();
             pRootUserData->pData = static_cast< void* >( pConflictEntry );
-            SvLBoxEntry* pRootEntry = maLbConflicts.InsertEntry( GetConflictString( *aItr ), pRootUserData );
+            SvTreeListEntry* pRootEntry = maLbConflicts.InsertEntry( GetConflictString( *aItr ), pRootUserData );
 
             ScChangeActionList::const_iterator aEndShared = aItr->maSharedActions.end();
             for ( ScChangeActionList::const_iterator aItrShared = aItr->maSharedActions.begin(); aItrShared != aEndShared; ++aItrShared )

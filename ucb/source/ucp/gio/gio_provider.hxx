@@ -32,7 +32,7 @@ class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
 public:
     ContentProvider( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::lang::XMultiServiceFactory >& rSMgr );
+                        ::com::sun::star::uno::XComponentContext >& rxContext );
     virtual ~ContentProvider();
 
     // XInterface

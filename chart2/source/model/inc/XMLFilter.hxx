@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/xml/sax/XWriter.hpp>
 #include <osl/mutex.hxx>
 
 // for APPHELPER_... macros
@@ -138,7 +139,7 @@ private:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::embed::XStorage > & xStorage,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::io::XActiveDataSource >& xActiveDataSource,
+            ::com::sun::star::xml::sax::XWriter >& xActiveDataSource,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > & xFactory,
         const ::com::sun::star::uno::Sequence<

@@ -48,11 +48,11 @@ class SvxFontSubstCheckListBox : public SvxSimpleTable
         inline void     SetUserData(sal_uLong nPos, void *pData ) { GetEntry(nPos)->SetUserData(pData); }
 
         sal_Bool            IsChecked(sal_uLong nPos, sal_uInt16 nCol = 0);
-        sal_Bool            IsChecked(SvLBoxEntry* pEntry, sal_uInt16 nCol = 0);
+        sal_Bool            IsChecked(SvTreeListEntry* pEntry, sal_uInt16 nCol = 0);
         void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked);
-        void            CheckEntry(SvLBoxEntry* pEntry, sal_uInt16 nCol, sal_Bool bChecked);
-        SvButtonState   GetCheckButtonState( SvLBoxEntry*, sal_uInt16 nCol ) const;
-        void            SetCheckButtonState( SvLBoxEntry*, sal_uInt16 nCol, SvButtonState );
+        void            CheckEntry(SvTreeListEntry* pEntry, sal_uInt16 nCol, sal_Bool bChecked);
+        SvButtonState   GetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol ) const;
+        void            SetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol, SvButtonState );
 };
 
 // class SvxFontSubstTabPage ----------------------------------------------------
@@ -92,7 +92,7 @@ class SvxFontSubstTabPage : public SfxTabPage
     DECL_LINK(SelectHdl, Window *pWin = 0);
     DECL_LINK(NonPropFontsHdl, CheckBox* pBox);
 
-    SvLBoxEntry*    CreateEntry(String& rFont1, String& rFont2);
+    SvTreeListEntry*    CreateEntry(String& rFont1, String& rFont2);
     void            CheckEnable();
 
 

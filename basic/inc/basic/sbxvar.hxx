@@ -21,7 +21,6 @@
 #define SBXVAR_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <basic/sbxcore.hxx>
 #include "basicdllapi.h"
@@ -46,7 +45,7 @@ struct SbxValues
         float           nSingle;
         double          nDouble;
 
-        rtl::OUString*  pOUString;
+        OUString*       pOUString;
         SbxDecimal*     pDecimal;
 
         SbxBase*        pObj;
@@ -81,7 +80,7 @@ struct SbxValues
     SbxValues( unsigned int _nUInt ): nUInt( _nUInt ), eType(SbxUINT) {}
     SbxValues( float _nSingle ): nSingle( _nSingle ), eType(SbxSINGLE) {}
     SbxValues( double _nDouble ): nDouble( _nDouble ), eType(SbxDOUBLE) {}
-    SbxValues( const ::rtl::OUString* _pString ): pOUString( (::rtl::OUString*)_pString ), eType(SbxSTRING) {}
+    SbxValues( const OUString* _pString ): pOUString( (OUString*)_pString ), eType(SbxSTRING) {}
     SbxValues( SbxBase* _pObj ): pObj( _pObj ), eType(SbxOBJECT) {}
     SbxValues( sal_Unicode* _pChar ): pChar( _pChar ), eType(SbxLPSTR) {}
     SbxValues( void* _pData ): pData( _pData ), eType(SbxPOINTER) {}
@@ -95,8 +94,8 @@ class BASIC_DLLPUBLIC SbxValue : public SbxBase
     BASIC_DLLPRIVATE SbxValue* TheRealValue() const;
 protected:
     SbxValues aData; // Data
-    ::rtl::OUString aPic;  // Picture-String
-    String          aToolString;  // tool string copy
+    OUString aPic;  // Picture-String
+    OUString aToolString;  // tool string copy
 
     virtual void Broadcast( sal_uIntPtr );      // Broadcast-Call
     virtual ~SbxValue();
@@ -160,15 +159,14 @@ public:
     double      GetDouble() const;
     double      GetDate() const;
 
-    sal_Bool   GetBool() const;
-    const String&   GetString() const;
-    const String&   GetCoreString() const;
-    rtl::OUString   GetOUString() const;
+    sal_Bool    GetBool() const;
+    const OUString&   GetCoreString() const;
+    OUString    GetOUString() const;
 
     SbxBase*    GetObject() const;
     sal_uInt8   GetByte() const;
-    sal_uInt16 GetUShort() const;
-    sal_uInt32 GetULong() const;
+    sal_uInt16  GetUShort() const;
+    sal_uInt32  GetULong() const;
 
     sal_Bool PutInteger( sal_Int16 );
     sal_Bool PutLong( sal_Int32 );
@@ -177,10 +175,10 @@ public:
     sal_Bool PutDate( double );
     sal_Bool PutBool( sal_Bool );
     sal_Bool PutErr( sal_uInt16 );
-    sal_Bool PutStringExt( const ::rtl::OUString& );     // with extended analysis (International, "sal_True"/"sal_False")
+    sal_Bool PutStringExt( const OUString& );     // with extended analysis (International, "sal_True"/"sal_False")
     sal_Bool PutInt64( sal_Int64 );
     sal_Bool PutUInt64( sal_uInt64 );
-    sal_Bool PutString( const ::rtl::OUString& );
+    sal_Bool PutString( const OUString& );
     sal_Bool PutChar( sal_Unicode );
     sal_Bool PutByte( sal_uInt8 );
     sal_Bool PutUShort( sal_uInt16 );
@@ -194,15 +192,15 @@ public:
     sal_Bool fillAutomationDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
     sal_Bool PutCurrency( const sal_Int64& );
             // Interface for CDbl in Basic
-    static SbxError ScanNumIntnl( const String& rSrc, double& nVal, bool bSingle = false );
+    static SbxError ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle = false );
 
     sal_Bool PutObject( SbxBase* );
 
     virtual sal_Bool Convert( SbxDataType );
     virtual sal_Bool Compute( SbxOperator, const SbxValue& );
     virtual sal_Bool Compare( SbxOperator, const SbxValue& ) const;
-    sal_Bool Scan( const String&, sal_uInt16* = NULL );
-    void Format( String&, const String* = NULL ) const;
+    sal_Bool Scan( const OUString&, sal_uInt16* = NULL );
+    void Format( OUString&, const OUString* = NULL ) const;
 
     // The following operators are definied for easier handling.
     // TODO: Ensure error conditions (overflow, conversions)
@@ -291,9 +289,9 @@ class BASIC_DLLPUBLIC SbxVariable : public SbxValue
 
     SbxVariableImpl* mpSbxVariableImpl; // Impl data
     SfxBroadcaster*  pCst;              // Broadcaster, if needed
-    String           maName;            // Name, if available
+    OUString         maName;            // Name, if available
     SbxArrayRef      mpPar;             // Parameter-Array, if set
-    sal_uInt16           nHash;             // Hash-ID for search
+    sal_uInt16       nHash;             // Hash-ID for search
 
     BASIC_DLLPRIVATE SbxVariableImpl* getImpl( void );
 
@@ -314,8 +312,8 @@ public:
 
     void Dump( SvStream&, sal_Bool bDumpAll=sal_False );
 
-    virtual void SetName( const String& );
-    virtual const String& GetName( SbxNameType = SbxNAME_NONE ) const;
+    virtual void SetName( const OUString& );
+    virtual const OUString& GetName( SbxNameType = SbxNAME_NONE ) const;
     sal_uInt16 GetHashCode() const          { return nHash; }
 
     virtual void SetModified( sal_Bool );
@@ -342,13 +340,13 @@ public:
     SbxObject* GetParent();
     virtual void SetParent( SbxObject* );
 
-    const String& GetDeclareClassName( void );
-    void SetDeclareClassName( const String& );
+    const OUString& GetDeclareClassName( void );
+    void SetDeclareClassName( const OUString& );
     void SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener,
-        StarBASIC* pParentBasic );
+                         StarBASIC* pParentBasic );
     void ClearComListener( void );
 
-    static sal_uInt16 MakeHashCode( const String& rName );
+    static sal_uInt16 MakeHashCode( const OUString& rName );
 };
 
 SV_DECL_REF(SbxVariable)

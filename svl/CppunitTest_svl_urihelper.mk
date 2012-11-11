@@ -52,3 +52,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svl_urihelper, \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,svl_urihelper))
+
+$(eval $(call gb_CppunitTest_use_components,svl_urihelper,\
+    i18npool/util/i18npool \
+))

@@ -106,7 +106,7 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
             ::std::map<sal_Int32, sal_uInt16> aBookmarkIdx;
             for(IDocumentMarkAccess::const_iterator_t ppBookmark = ppBookmarkStart;
                 ppBookmark != pMarkAccess->getBookmarksEnd();
-                ppBookmark++)
+                ++ppBookmark)
             {
                 if(IDocumentMarkAccess::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
                 {

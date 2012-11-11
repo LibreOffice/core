@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
 
@@ -42,15 +43,15 @@ class HierarchyDataSource : public cppu::OWeakObject,
 {
     osl::Mutex m_aMutex;
     com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
+        com::sun::star::uno::XComponentContext > m_xContext;
     com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > m_xConfigProvider;
     cppu::OInterfaceContainerHelper * m_pDisposeEventListeners;
 
 public:
     HierarchyDataSource( const com::sun::star::uno::Reference<
-                            com::sun::star::lang::XMultiServiceFactory > &
-                                rxServiceMgr );
+                            com::sun::star::uno::XComponentContext > &
+                                rxContext );
     virtual ~HierarchyDataSource();
 
     // XInterface

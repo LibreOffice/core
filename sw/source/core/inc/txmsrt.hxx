@@ -87,7 +87,7 @@ public:
                        const String& rTxt2, const String& rTxtReading2,
                        const ::com::sun::star::lang::Locale& rLocale2 ) const;
 
-    inline sal_Bool IsEqual( const String& rTxt1, const String& rTxtReading1,
+    inline bool IsEqual( const String& rTxt1, const String& rTxtReading1,
                          const ::com::sun::star::lang::Locale& rLocale1,
                          const String& rTxt2, const String& rTxtReading2,
                          const ::com::sun::star::lang::Locale& rLocale2 ) const
@@ -96,7 +96,7 @@ public:
                              rTxt2, rTxtReading2, rLocale2 );
     }
 
-    inline sal_Bool IsLess( const String& rTxt1, const String& rTxtReading1,
+    inline bool IsLess( const String& rTxt1, const String& rTxtReading1,
                         const ::com::sun::star::lang::Locale& rLocale1,
                         const String& rTxt2, const String& rTxtReading2,
                         const ::com::sun::star::lang::Locale& rLocale2 ) const
@@ -142,8 +142,8 @@ struct SwTOXSortTabBase
 
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0) const;
     virtual sal_uInt16  GetLevel()  const = 0;
-    virtual sal_Bool    operator==( const SwTOXSortTabBase& );
-    virtual sal_Bool    operator<( const SwTOXSortTabBase& );
+    virtual bool    operator==( const SwTOXSortTabBase& );
+    virtual bool    operator<( const SwTOXSortTabBase& );
 
     virtual String  GetURL() const;
 
@@ -191,8 +191,8 @@ struct SwTOXIndex : public SwTOXSortTabBase
 
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const;
     virtual sal_uInt16  GetLevel() const;
-    virtual sal_Bool    operator==( const SwTOXSortTabBase& );
-    virtual sal_Bool    operator<( const SwTOXSortTabBase& );
+    virtual bool    operator==( const SwTOXSortTabBase& );
+    virtual bool    operator<( const SwTOXSortTabBase& );
 
 private:
     virtual void GetText_Impl( String&, String& ) const;
@@ -208,8 +208,8 @@ struct SwTOXCustom : public SwTOXSortTabBase
     virtual ~SwTOXCustom() {}
 
     virtual sal_uInt16 GetLevel() const;
-    virtual sal_Bool   operator==( const SwTOXSortTabBase& );
-    virtual sal_Bool   operator<( const SwTOXSortTabBase& );
+    virtual bool   operator==( const SwTOXSortTabBase& );
+    virtual bool   operator<( const SwTOXSortTabBase& );
 
 private:
     virtual void GetText_Impl( String&, String& ) const;
@@ -286,8 +286,8 @@ public:
 
     SwFmtFld& GetFldFmt() {return m_rField;}
 
-    virtual sal_Bool    operator==( const SwTOXSortTabBase& );
-    virtual sal_Bool    operator<( const SwTOXSortTabBase& );
+    virtual bool    operator==( const SwTOXSortTabBase& );
+    virtual bool    operator<( const SwTOXSortTabBase& );
     virtual sal_uInt16  GetLevel() const;
 };
 

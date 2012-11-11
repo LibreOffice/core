@@ -11,6 +11,8 @@ $(eval $(call gb_ExternalProject_ExternalProject,liborcus))
 
 $(eval $(call gb_ExternalProject_use_unpacked,liborcus,orcus))
 
+$(eval $(call gb_ExternalProject_use_external,liborcus,boost_headers))
+
 $(eval $(call gb_ExternalProject_register_targets,liborcus,\
 	build \
 ))
@@ -30,7 +32,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export BOOST_LIB_DIR=$(OUTDIR)/lib \
 	&& $(COMPATH)/../Common7/Tools/vcupgrade.exe liborcus-static-nozip.vcproj \
-	&& MSBuild.exe liborcus-static-nozip.vcxproj /p:Configuration=Release /p:OutDir=Release /p:TargetName=orcus /p:WholeProgramOptimization=no \
+	&& MSBuild.exe liborcus-static-nozip.vcxproj /p:Configuration=Release /p:OutDir=Release/ /p:TargetName=orcus /p:WholeProgramOptimization=no \
 	&& touch $@
 endif
 	
@@ -48,7 +50,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		--disable-spreadsheet-model \
 		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(OUTDIR)/inc/external) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	&& $(GNUMAKE) \
+	&& $(MAKE) \
 	&& touch $@
 
 endif

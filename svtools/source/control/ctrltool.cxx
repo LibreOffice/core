@@ -116,7 +116,6 @@ class ImplFontListNameInfo
 private:
     XubString               maSearchName;
     ImplFontListFontInfo*   mpFirst;
-    sal_uInt16                  mnType;
 
                             ImplFontListNameInfo( const XubString& rSearchName ) :
                                 maSearchName( rSearchName )
@@ -262,12 +261,6 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
 {
     rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
 
-    sal_uInt16 nType;
-    if ( pDevice->GetOutDevType() != OUTDEV_PRINTER )
-        nType = FONTLIST_FONTNAMETYPE_SCREEN;
-    else
-        nType = FONTLIST_FONTNAMETYPE_PRINTER;
-
     // Alle Fonts vom Device abfragen
     int n = pDevice->GetDevFontCount();
     sal_uInt16  i;
@@ -294,7 +287,6 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
                 pData = new ImplFontListNameInfo( aSearchName );
                 pData->mpFirst      = pNewInfo;
                 pNewInfo->mpNext    = NULL;
-                pData->mnType       = 0;
 
                 if (nIndex < maEntries.size())
                     maEntries.insert(maEntries.begin()+nIndex,pData);
@@ -346,13 +338,6 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
                         pData->mpFirst = pNewInfo;
                 }
             }
-        }
-
-        if ( pData )
-        {
-            pData->mnType |= nType;
-            if ( aFontInfo.GetType() != TYPE_RASTER )
-                pData->mnType |= FONTLIST_FONTNAMETYPE_SCALABLE;
         }
     }
 }
@@ -677,15 +662,6 @@ const FontInfo& FontList::GetFontName( sal_uInt16 nFont ) const
     DBG_ASSERT( nFont < GetFontNameCount(), "FontList::GetFontName(): nFont >= Count" );
 
     return *(maEntries[nFont].mpFirst);
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt16 FontList::GetFontNameType( sal_uInt16 nFont ) const
-{
-    DBG_ASSERT( nFont < GetFontNameCount(), "FontList::GetFontNameType(): nFont >= Count" );
-
-    return maEntries[nFont].mnType;
 }
 
 // -----------------------------------------------------------------------

@@ -28,9 +28,13 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
 #ifdef ENABLE_SDREMOTE
     FreeResource();
 
+#ifdef ENABLE_BLUETOOTH
     mPreviouslyDiscoverable = RemoteServer::isBluetoothDiscoverable();
     if ( !mPreviouslyDiscoverable )
         RemoteServer::setBluetoothDiscoverable( true );
+#else
+	RemoteServer::setBluetoothDiscoverable( false );
+#endif
 
     vector<ClientInfo*> aClients( RemoteServer::getClients() );
 
@@ -57,7 +61,7 @@ IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
 {
 //     setBusy( true );
     // Fixme: Try and connect
-#ifdef ENABLE_SDREMOTE
+#if defined(ENABLE_SDREMOTE) && defined(ENABLE_BLUETOOTH) 
     long aSelected = mClientBox.GetActiveEntryIndex();
     if ( aSelected < 0 )
         return 1;
@@ -75,7 +79,7 @@ IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
 
 IMPL_LINK_NOARG( RemoteDialog, CloseHdl )
 {
-#ifdef ENABLE_SDREMOTE
+#if defined(ENABLE_SDREMOTE) && defined(ENABLE_BLUETOOTH)
     if ( !mPreviouslyDiscoverable )
     {
         RemoteServer::setBluetoothDiscoverable( false );

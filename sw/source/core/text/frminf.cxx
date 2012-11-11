@@ -43,7 +43,7 @@ xub_StrLen SwTxtMargin::GetTxtStart() const
 
     for( i = nTmpPos; i < nEnd; ++i )
     {
-        const xub_Unicode aChar = rTxt.GetChar( i );
+        const sal_Unicode aChar = rTxt.GetChar( i );
         if( CH_TAB != aChar && ' ' != aChar )
             return i;
     }
@@ -62,7 +62,7 @@ xub_StrLen SwTxtMargin::GetTxtEnd() const
     long i;
     for( i = nEnd - 1; i >= nTmpPos; --i )
     {
-        xub_Unicode aChar = rTxt.GetChar( static_cast<xub_StrLen>(i) );
+        sal_Unicode aChar = rTxt.GetChar( static_cast<xub_StrLen>(i) );
         if( CH_TAB != aChar && CH_BREAK != aChar && ' ' != aChar )
             return static_cast<xub_StrLen>(i + 1);
     }
@@ -347,7 +347,7 @@ KSHORT SwTxtFrmInfo::GetBigIndent( xub_StrLen& rFndPos,
 
     // Is on front of a non-space
     const XubString& rTxt = aInf.GetTxt();
-    xub_Unicode aChar = rTxt.GetChar( rFndPos );
+    sal_Unicode aChar = rTxt.GetChar( rFndPos );
     if( CH_TAB == aChar || CH_BREAK == aChar || ' ' == aChar ||
         (( CH_TXTATR_BREAKWORD == aChar || CH_TXTATR_INWORD == aChar ) &&
             aInf.HasHint( rFndPos ) ) )

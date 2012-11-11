@@ -514,10 +514,11 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
             OSL_ENSURE( nAccIndex >= 0, "invalid accessible index" );
             OSL_ENSURE( nIndex >= nAccIndex, "index out of range" );
 
-            String    aNodeText;
-            pNode->GetAccessibleText( aNodeText );
+            OUStringBuffer aBuf;
+            pNode->GetAccessibleText(aBuf);
+            OUString aNodeText = aBuf.makeStringAndClear();
             sal_Int32 nNodeIndex = nIndex - nAccIndex;
-            if (0 <= nNodeIndex  &&  nNodeIndex < aNodeText.Len())
+            if (0 <= nNodeIndex  &&  nNodeIndex < aNodeText.getLength())
             {
                 // get appropriate rectangle
                 Point aOffset(pNode->GetTopLeft() - pTree->GetTopLeft());
@@ -525,9 +526,9 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
                 aTLPos.X() -= 0;
                 Size  aSize (pNode->GetSize());
 
-                sal_Int32 *pXAry = new sal_Int32[ aNodeText.Len() ];
+                sal_Int32 *pXAry = new sal_Int32[ aNodeText.getLength() ];
                 pWin->SetFont( pNode->GetFont() );
-                pWin->GetTextArray( aNodeText, pXAry, 0, aNodeText.Len() );
+                pWin->GetTextArray( aNodeText, pXAry, 0, aNodeText.getLength() );
                 aTLPos.X()    += nNodeIndex > 0 ? pXAry[nNodeIndex - 1] : 0;
                 aSize.Width()  = nNodeIndex > 0 ? pXAry[nNodeIndex] - pXAry[nNodeIndex - 1] : pXAry[nNodeIndex];
                 delete[] pXAry;
@@ -600,22 +601,23 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
             if (aRect.IsInside( aPos ))
             {
                 OSL_ENSURE( pNode->IsVisible(), "node is not a leaf" );
-                String aTxt;
-                pNode->GetAccessibleText( aTxt );
-                OSL_ENSURE( aTxt.Len(), "no accessible text available" );
+                OUStringBuffer aBuf;
+                pNode->GetAccessibleText(aBuf);
+                OUString aTxt = aBuf.makeStringAndClear();
+                OSL_ENSURE( !aTxt.isEmpty(), "no accessible text available" );
 
                 long nNodeX = pNode->GetLeft();
 
-                sal_Int32 *pXAry = new sal_Int32[ aTxt.Len() ];
+                sal_Int32 *pXAry = new sal_Int32[ aTxt.getLength() ];
                 pWin->SetFont( pNode->GetFont() );
-                pWin->GetTextArray( aTxt, pXAry, 0, aTxt.Len() );
-                for (sal_Int32 i = 0;  i < aTxt.Len()  &&  nRes == -1;  ++i)
+                pWin->GetTextArray( aTxt, pXAry, 0, aTxt.getLength() );
+                for (sal_Int32 i = 0;  i < aTxt.getLength()  &&  nRes == -1;  ++i)
                 {
                     if (pXAry[i] + nNodeX > aPos.X())
                         nRes = i;
                 }
                 delete[] pXAry;
-                OSL_ENSURE( nRes >= 0  &&  nRes < aTxt.Len(), "index out of range" );
+                OSL_ENSURE( nRes >= 0  &&  nRes < aTxt.getLength(), "index out of range" );
                 OSL_ENSURE( pNode->GetAccessibleIndex() >= 0,
                         "invalid accessible index" );
 

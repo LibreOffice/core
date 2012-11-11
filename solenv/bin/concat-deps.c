@@ -97,9 +97,11 @@
 #ifdef __windows
 #define FILE_O_RDONLY     _O_RDONLY
 #define FILE_O_BINARY     _O_BINARY
+#define PATHNCMP strncasecmp /* MSVC converts paths to lower-case sometimes? */
 #else /* not windaube */
 #define FILE_O_RDONLY     O_RDONLY
 #define FILE_O_BINARY     0
+#define PATHNCMP strncmp
 #endif /* not windaube */
 
 #ifndef TRUE
@@ -111,7 +113,7 @@
 
 int internal_boost = 0;
 static char* base_dir;
-static char* out_dir;
+static char* work_dir;
 
 #ifdef __GNUC__
 #define clz __builtin_clz
@@ -711,18 +713,12 @@ static inline void eat_space(char ** token)
 }
 
 /*
- * Find substring in bounded length string
- */
-static inline const char *find_substr(const char *key, int key_len,
-                                      const char *substr, int substr_len)
-{
-}
-
-/*
  * Prune LibreOffice specific duplicate dependencies to improve
  * gnumake startup time, and shrink the disk-space footprint.
  */
-static inline int elide_dependency(const char* key, int key_len, int *boost_count)
+static inline int
+elide_dependency(const char* key, int key_len,
+        int *boost_count, const char **unpacked_end)
 {
 #if 0
     {
@@ -736,25 +732,49 @@ static inline int elide_dependency(const char* key, int key_len, int *boost_coun
 #endif
 
     /* .hdl files are always matched by .hpp */
-    if (key_len > 4 && !strncmp(key + key_len - 4, ".hdl", 4))
+    if (key_len > 4 && !PATHNCMP(key + key_len - 4, ".hdl", 4))
         return 1;
 
     /* boost brings a plague of header files */
-    if (internal_boost)
+    int i;
+    int boost = 0;
+    int unpacked = 0;
+    /* walk down path elements */
+    for (i = 0; i < key_len - 1; i++)
     {
-        int i;
-        int hit = 0;
-        /* walk down path elements */
-        for (i = 0; i < key_len - 1; i++)
+        if (key[i] == '/')
         {
-            if (key[i] == '/')
+            if (internal_boost)
             {
-                if (!strncmp(key + i + 1, "solver/", 7))
-                    hit++;
-                if (hit > 0 && !strncmp(key + i + 1, "inc/external/boost/", 19))
+                if (0 == boost)
+                {
+                    if (!PATHNCMP(key + i + 1, "solver/", 7))
+                    {
+                        boost++;
+                        continue;
+                    }
+                }
+                else if (!PATHNCMP(key + i + 1, "inc/external/boost/", 19))
                 {
                     if (boost_count)
                         (*boost_count)++;
+                    return 1;
+                }
+            }
+            if (0 == unpacked)
+            {
+                if (!PATHNCMP(key + i + 1, "workdir/", 8))
+                {
+                    unpacked = 1;
+                    continue;
+                }
+            }
+            else
+            {
+                if (!PATHNCMP(key + i + 1, "UnpackedTarball/", 16))
+                {
+                    if (unpacked_end)
+                        *unpacked_end = strchr(key + i + 17, '/');
                     return 1;
                 }
             }
@@ -765,13 +785,23 @@ static inline int elide_dependency(const char* key, int key_len, int *boost_coun
 }
 
 /*
- * We collapse tens of internal boost headers to a single one, such
+ * We collapse tens of internal boost headers to the unpacked target, such
  * that you can re-compile / install boost and all is well.
  */
 static void emit_single_boost_header(void)
 {
-#define BOOST_HEADER "/inc/external/boost/bind.hpp"
-    fprintf(stdout, "%s" BOOST_HEADER " ", out_dir);
+#define BOOST_TARGET "/UnpackedTarball/boost.done"
+    fprintf(stdout, "%s" BOOST_TARGET " ", work_dir);
+}
+
+static void emit_unpacked_target(char const*const token, char const*const end)
+{
+    /* is there some obvious way to printf N characters that i'm missing? */
+    size_t size = end - token + 1;
+    char tmp[size];
+    snprintf(tmp, size, "%s", token);
+    fputs(tmp, stdout);
+    fputs(".done ", stdout);
 }
 
 /* prefix paths to absolute */
@@ -780,19 +810,34 @@ static inline void print_fullpaths(char* line)
     char* token;
     char* end;
     int boost_count = 0;
+    const char * unpacked_end = 0; /* end of UnpackedTarget match (if any) */
+    /* for UnpackedTarget the target is GenC{,xx}Object, dont mangle! */
+    int target_seen = 0;
 
     token = line;
     eat_space(&token);
     while (*token)
     {
         end = token;
-        while (*end && (' ' != *end) && ('\t' != *end)) {
+        /* hard to believe that in this day and age drive letters still exist */
+        if (*end && (':' == *(end+1)) &&
+            (('\\' == *(end+2)) || ('/' == *(end+2))) && isalpha(*end))
+        {
+            end = end + 3; /* only one cross, err drive letter per filename */
+        }
+        while (*end && (' ' != *end) && ('\t' != *end) && (':' != *end)) {
             ++end;
         }
         int token_len = end - token;
-        if(elide_dependency(token, token_len, &boost_count))
+        if (target_seen &&
+            elide_dependency(token, token_len, &boost_count, &unpacked_end))
         {
-            if (boost_count == 1)
+            if (unpacked_end)
+            {
+                emit_unpacked_target(token, unpacked_end);
+                unpacked_end = 0;
+            }
+            else if (boost_count == 1)
                 emit_single_boost_header();
             else
             {
@@ -803,22 +848,38 @@ static inline void print_fullpaths(char* line)
                     end = token + 2;
             }
         }
-        else if(*token == ':' || *token == '\\' || *token == '/' ||
-                *token == '$' || ':' == token[1])
-        {
-            fwrite(token, token_len, 1, stdout);
-            fputc(' ', stdout);
-        }
         else
         {
-            fwrite(token, end - token, 1, stdout);
+            if (fwrite(token, token_len, 1, stdout) != 1)
+                abort();
             fputc(' ', stdout);
         }
         token = end;
         eat_space(&token);
+        if (!target_seen)
+        {
+            if (':' == *token)
+            {
+                target_seen = 1;
+                fputc(':', stdout);
+                ++token;
+                eat_space(&token);
+            }
+        }
     }
 }
 
+static inline char * eat_space_at_end(char * end)
+{
+    assert('\0' == *end);
+    char * real_end = end - 1;
+    while (' ' == *real_end || '\t' == *real_end || '\n' == *real_end
+                || ':' == *real_end)
+    {    /* eat colon and whitespace at end */
+         --real_end;
+    }
+    return real_end;
+}
 
 static int _process(struct hash* dep_hash, char* fn)
 {
@@ -842,6 +903,12 @@ off_t size;
     {
         base = cursor_out = cursor = end = buffer;
         end += size;
+
+        /* first eat unneeded space at the beginning of file
+         */
+        while(cursor < end && (*cursor == ' ' || *cursor == '\\'))
+            ++cursor;
+
         while(cursor < end)
         {
             if(*cursor == '\\')
@@ -874,9 +941,9 @@ off_t size;
                              * these are the one for which we want to filter
                              * duplicate out
                              */
-                            int key_len = cursor_out - base;
-                            if(!elide_dependency(base,key_len - 1, NULL) &&
-                               hash_store(dep_hash, base, key_len))
+                            int key_len = eat_space_at_end(cursor_out) - base;
+                            if (!elide_dependency(base,key_len + 1, NULL, NULL)
+                                && hash_store(dep_hash, base, key_len))
                             {
                                 /* DO NOT modify base after it has been added
                                    as key by hash_store */
@@ -890,6 +957,7 @@ off_t size;
                             print_fullpaths(base);
                             putc('\n', stdout);
                         }
+                        last_ns = ' '; // cannot hurt to reset it
                     }
                     cursor += 1;
                     base = cursor_out = cursor;
@@ -900,6 +968,7 @@ off_t size;
                      * i.e not a complete rule yet
                      */
                     *cursor_out++ = *cursor++;
+                    continuation = 0; // cancel current one (empty lines!)
                 }
             }
             else
@@ -918,7 +987,9 @@ off_t size;
         {
             if(last_ns == ':')
             {
-                if(hash_store(dep_hash, base, (int)(cursor_out - base)))
+                int key_len = eat_space_at_end(cursor_out) - base;
+                if (!elide_dependency(base,key_len + 1, NULL, NULL) &&
+                    hash_store(dep_hash, base, key_len))
                 {
                     puts(base);
                     putc('\n', stdout);
@@ -967,7 +1038,7 @@ const char *env_str;
         _usage();
         return 1;
     }
-    if(get_var(&base_dir, "SRCDIR") || get_var(&out_dir, "OUTDIR"))
+    if(get_var(&base_dir, "SRCDIR") || get_var(&work_dir, "WORKDIR"))
         return 1;
 
     env_str = getenv("SYSTEM_BOOST");

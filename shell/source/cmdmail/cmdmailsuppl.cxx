@@ -28,6 +28,7 @@
 #include "cmdmailmsg.hxx"
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -57,6 +58,7 @@ using namespace cppu;
 using namespace com::sun::star::system::SimpleMailClientFlags;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::configuration;
 
 #define COMP_IMPL_NAME  "com.sun.star.comp.system.SimpleCommandMail2"
 
@@ -80,14 +82,7 @@ namespace // private
 CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
     WeakImplHelper3< XSimpleMailClientSupplier, XSimpleMailClient, XServiceInfo >()
 {
-    Reference< XMultiComponentFactory > xServiceManager = xContext->getServiceManager();
-
-    if ( xServiceManager.is() ) {
-        m_xConfigurationProvider = Reference< XMultiServiceFactory > (
-            xServiceManager->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")), xContext ),
-            UNO_QUERY );
-    }
+    m_xConfigurationProvider = theDefaultProvider::get(xContext);
 }
 
 //-------------------------------------------------

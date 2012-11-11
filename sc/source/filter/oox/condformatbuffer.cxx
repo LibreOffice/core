@@ -141,7 +141,43 @@ void lclAppendProperty( ::std::vector< PropertyValue >& orProps, const OUString&
     orProps.back().Value <<= rValue;
 }
 
-} // namespace
+//------------------------------------------------------------------------------
+
+void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttribs )
+{
+    rtl::OUString aType = rAttribs.getString( XML_type, rtl::OUString() );
+
+    double nVal = rAttribs.getDouble( XML_val, 0.0 );
+    pEntry->mnVal = nVal;
+    if (aType == "num")
+    {
+        // nothing to do
+    }
+    else if( aType == "min" )
+    {
+        pEntry->mbMin = true;
+    }
+    else if( aType == "max" )
+    {
+        pEntry->mbMax = true;
+    }
+    else if( aType == "percent" )
+    {
+        pEntry->mbPercent = true;
+    }
+    else if( aType == "percentile" )
+    {
+        pEntry->mbPercentile = true;
+    }
+    else if( aType == "formula" )
+    {
+        rtl::OUString aFormula = rAttribs.getString( XML_val, rtl::OUString() );
+        pEntry->maFormula = aFormula;
+    }
+
+}
+
+}
 
 ColorScaleRule::ColorScaleRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
@@ -155,35 +191,7 @@ void ColorScaleRule::importCfvo( const AttributeList& rAttribs )
     if(mnCfvo >= maColorScaleRuleEntries.size())
         maColorScaleRuleEntries.push_back(ColorScaleRuleModelEntry());
 
-    rtl::OUString aType = rAttribs.getString( XML_type, rtl::OUString() );
-
-    double nVal = rAttribs.getDouble( XML_val, 0.0 );
-    maColorScaleRuleEntries[mnCfvo].mnVal = nVal;
-    if (aType == "num")
-    {
-        // nothing to do
-    }
-    else if( aType == "min" )
-    {
-        maColorScaleRuleEntries[mnCfvo].mbMin = true;
-    }
-    else if( aType == "max" )
-    {
-        maColorScaleRuleEntries[mnCfvo].mbMax = true;
-    }
-    else if( aType == "percent" )
-    {
-        maColorScaleRuleEntries[mnCfvo].mbPercent = true;
-    }
-    else if( aType == "percentile" )
-    {
-        maColorScaleRuleEntries[mnCfvo].mbPercentile = true;
-    }
-    else if( aType == "formula" )
-    {
-        rtl::OUString aFormula = rAttribs.getString( XML_val, rtl::OUString() );
-        maColorScaleRuleEntries[mnCfvo].maFormula = aFormula;
-    }
+    SetCfvoData( &maColorScaleRuleEntries[mnCfvo], rAttribs );
 
     ++mnCfvo;
 }
@@ -260,7 +268,7 @@ void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, 
 }
 
 // ============================================================================
-//
+
 DataBarRule::DataBarRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
     mpFormat(new ScDataBarFormatData)
@@ -297,35 +305,8 @@ void DataBarRule::importCfvo( const AttributeList& rAttribs )
         mpUpperLimit.reset(new ColorScaleRuleModelEntry);
         pEntry = mpUpperLimit.get();
     }
-    rtl::OUString aType = rAttribs.getString( XML_type, rtl::OUString() );
 
-    double nVal = rAttribs.getDouble( XML_val, 0.0 );
-    pEntry->mnVal = nVal;
-    if (aType == "num")
-    {
-        // nothing to do
-    }
-    else if( aType == "min" )
-    {
-        pEntry->mbMin = true;
-    }
-    else if( aType == "max" )
-    {
-        pEntry->mbMax = true;
-    }
-    else if( aType == "percent" )
-    {
-        pEntry->mbPercent = true;
-    }
-    else if( aType == "percentile" )
-    {
-        pEntry->mbPercentile = true;
-    }
-    else if( aType == "formula" )
-    {
-        rtl::OUString aFormula = rAttribs.getString( XML_val, rtl::OUString() );
-        pEntry->maFormula = aFormula;
-    }
+    SetCfvoData( pEntry, rAttribs );
 }
 
 void DataBarRule::importAttribs( const AttributeList& rAttribs )
@@ -341,6 +322,49 @@ void DataBarRule::SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScA
     mpFormat->mpUpperLimit.reset( pUpperEntry );
     mpFormat->mpLowerLimit.reset( pLowerEntry );
     pFormat->SetDataBarData(mpFormat);
+}
+
+// ============================================================================
+
+IconSetRule::IconSetRule( const CondFormat& rFormat ):
+    WorksheetHelper( rFormat ),
+    mpFormatData( new ScIconSetFormatData )
+{
+}
+
+void IconSetRule::importCfvo( const AttributeList& rAttribs )
+{
+    ColorScaleRuleModelEntry aNewEntry;
+    SetCfvoData(&aNewEntry, rAttribs);
+
+    maEntries.push_back(aNewEntry);
+}
+
+void IconSetRule::importAttribs( const AttributeList& rAttribs )
+{
+    maIconSetType = rAttribs.getString( XML_iconSet, rtl::OUString("3TrafficLights1") );
+}
+
+void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScAddress& rPos )
+{
+    for(size_t i = 0; i < maEntries.size(); ++i)
+    {
+        ScColorScaleEntry* pModelEntry = ConvertToModel( maEntries[i], pDoc, rPos );
+        mpFormatData->maEntries.push_back(pModelEntry);
+    }
+
+    ScIconSetType eIconSetType = IconSet_3TrafficLights1;
+    ScIconSetMap* pIconSetMap = ScIconSetFormat::getIconSetMap();
+    for(size_t i = 0; pIconSetMap[i].pName; ++i)
+    {
+        if(rtl::OUString::createFromAscii(pIconSetMap[i].pName) == maIconSetType)
+        {
+            eIconSetType = pIconSetMap[i].eType;
+            break;
+        }
+    }
+    mpFormatData->eIconSetType = eIconSetType;
+    pFormat->SetIconSetData(mpFormatData);
 }
 
 // ============================================================================
@@ -615,7 +639,7 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
 
 void CondFormatRule::finalizeImport()
 {
-    sal_Int32 eOperator = ::com::sun::star::sheet::ConditionOperator2::NONE;
+    ScConditionMode eOperator = SC_COND_NONE;
 
     /*  Replacement formula for unsupported rule types (text comparison rules,
         time period rules, cell type rules). The replacement formulas below may
@@ -639,31 +663,33 @@ void CondFormatRule::finalizeImport()
     switch( maModel.mnType )
     {
         case XML_cellIs:
-            eOperator = CondFormatBuffer::convertToApiOperator( maModel.mnOperator );
+            eOperator = static_cast<ScConditionMode>(CondFormatBuffer::convertToInternalOperator( maModel.mnOperator ));
         break;
         case XML_duplicateValues:
-            eOperator = CondFormatBuffer::convertToApiOperator( XML_duplicateValues );
-            aReplaceFormula = " ";
+            eOperator = SC_COND_DUPLICATE;
+        break;
+        case XML_uniqueValues:
+            eOperator = SC_COND_NOTDUPLICATE;
         break;
         case XML_expression:
-            eOperator = ::com::sun::star::sheet::ConditionOperator2::FORMULA;
+            eOperator = SC_COND_DIRECT;
         break;
         case XML_containsText:
             OSL_ENSURE( maModel.mnOperator == XML_containsText, "CondFormatRule::finalizeImport - unexpected operator" );
-            aReplaceFormula = "NOT(ISERROR(SEARCH(#T,#B)))";
+            eOperator = SC_COND_CONTAINS_TEXT;
         break;
         case XML_notContainsText:
             // note: type XML_notContainsText vs. operator XML_notContains
             OSL_ENSURE( maModel.mnOperator == XML_notContains, "CondFormatRule::finalizeImport - unexpected operator" );
-            aReplaceFormula = "ISERROR(SEARCH(#T,#B))";
+            eOperator = SC_COND_NOT_CONTAINS_TEXT;
         break;
         case XML_beginsWith:
             OSL_ENSURE( maModel.mnOperator == XML_beginsWith, "CondFormatRule::finalizeImport - unexpected operator" );
-            aReplaceFormula = "LEFT(#B,#L)=#T";
+            eOperator = SC_COND_BEGINS_WITH;
         break;
         case XML_endsWith:
             OSL_ENSURE( maModel.mnOperator == XML_endsWith, "CondFormatRule::finalizeImport - unexpected operator" );
-            aReplaceFormula = "RIGHT(#B,#L)=#T";
+            eOperator = SC_COND_ENDS_WITH;
         break;
         case XML_timePeriod:
             switch( maModel.mnTimePeriod )
@@ -709,20 +735,32 @@ void CondFormatRule::finalizeImport()
             aReplaceFormula = "LEN(TRIM(#B))>0";
         break;
         case XML_containsErrors:
-            aReplaceFormula = "ISERROR(#B)";
+            eOperator = SC_COND_ERROR;
         break;
         case XML_notContainsErrors:
-            aReplaceFormula = "NOT(ISERROR(#B))";
+            eOperator = SC_COND_NOERROR;
         break;
         case XML_top10:
-            if( maModel.mbPercent )
-                aReplaceFormula = "RANK(#B,#R,#M)/COUNT(#R)<=#K%";
+            if(maModel.mbPercent)
+            {
+                if(maModel.mbBottom)
+                    eOperator = SC_COND_BOTTOM_PERCENT;
+                else
+                    eOperator = SC_COND_TOP_PERCENT;
+            }
             else
-                aReplaceFormula = "RANK(#B,#R,#M)<=#K";
+            {
+                if(maModel.mbBottom)
+                    eOperator = SC_COND_BOTTOM10;
+                else
+                    eOperator = SC_COND_TOP10;
+            }
         break;
         case XML_aboveAverage:
-            if( maModel.mnStdDev == 0 )
-                aReplaceFormula = "#B#CAVERAGE(#R)";
+            if(maModel.mbAboveAverage)
+                eOperator = SC_COND_ABOVE_AVERAGE;
+            else
+                eOperator = SC_COND_BELOW_AVERAGE;
         break;
         case XML_colorScale:
         break;
@@ -741,36 +779,6 @@ void CondFormatRule::finalizeImport()
                         aAddress = FormulaProcessorBase::generateAddress2dString( mrCondFormat.getRanges().getBaseAddress(), false );
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aAddress );
                 break;
-                case 'R':       // range list of conditional formatting
-                    if( aRanges.isEmpty() )
-                        aRanges = FormulaProcessorBase::generateRangeList2dString( mrCondFormat.getRanges(), true, ',', true );
-                    aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aRanges );
-                break;
-                case 'T':       // comparison text
-                    if( aText.isEmpty() )
-                        // quote the comparison text, and handle embedded quote characters
-                        aText = FormulaProcessorBase::generateApiString( maModel.maText );
-                    aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aText );
-                break;
-                case 'L':       // length of comparison text
-                    aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2,
-                        OUString::valueOf( maModel.maText.getLength() ) );
-                break;
-                case 'K':       // top-10 rank
-                    aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2,
-                        OUString::valueOf( maModel.mnRank ) );
-                break;
-                case 'M':       // top-10 top/bottom flag
-                    aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2,
-                        OUString::valueOf( static_cast< sal_Int32 >( maModel.mbBottom ? 1 : 0 ) ) );
-                break;
-                case 'C':       // average comparison operator
-                    if( aComp.isEmpty() )
-                        aComp = maModel.mbAboveAverage ?
-                            (maModel.mbEqualAverage ? OUString( ">=" ) : OUString( ">" ) ) :
-                            (maModel.mbEqualAverage ? OUString( "<=" ) : OUString( "<" ) );
-                    aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aComp );
-                break;
                 default:
                     OSL_FAIL( "CondFormatRule::finalizeImport - unknown placeholder" );
             }
@@ -779,14 +787,31 @@ void CondFormatRule::finalizeImport()
         // set the replacement formula
         maModel.maFormulas.clear();
         appendFormula( aReplaceFormula );
-        if( eOperator != ::com::sun::star::sheet::ConditionOperator2::DUPLICATE )
-            eOperator = ::com::sun::star::sheet::ConditionOperator2::FORMULA;
+        eOperator = SC_COND_DIRECT;
     }
 
     CellAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
     ScAddress aPos;
     ScUnoConversion::FillScAddress( aPos, aBaseAddr );
-    if( (eOperator != ::com::sun::star::sheet::ConditionOperator2::NONE) && !maModel.maFormulas.empty() )
+
+    if( eOperator == SC_COND_ERROR || eOperator == SC_COND_NOERROR )
+    {
+        ScDocument& rDoc = getScDocument();
+        OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, NULL, NULL, &rDoc, aPos, aStyleName );
+        mpFormat->AddEntry(pNewEntry);
+    }
+    else if( eOperator == SC_COND_BEGINS_WITH || eOperator == SC_COND_ENDS_WITH ||
+            eOperator == SC_COND_CONTAINS_TEXT || eOperator == SC_COND_NOT_CONTAINS_TEXT )
+    {
+        ScDocument& rDoc = getScDocument();
+        ScTokenArray aTokenArray;
+        aTokenArray.AddString(maModel.maText);
+        OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArray, NULL, &rDoc, aPos, aStyleName );
+        mpFormat->AddEntry(pNewEntry);
+    }
+    else if( (eOperator != SC_COND_NONE) && !maModel.maFormulas.empty() )
     {
         ScDocument& rDoc = getScDocument();
         boost::scoped_ptr<ScTokenArray> pTokenArray2;
@@ -799,8 +824,36 @@ void CondFormatRule::finalizeImport()
         ScTokenArray aTokenArray;
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, maModel.maFormulas[ 0 ] );
-        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry(ScCondFormatEntry::GetModeFromApi(eOperator),
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry(eOperator,
                                             &aTokenArray, pTokenArray2.get(), &rDoc, aPos, aStyleName);
+        mpFormat->AddEntry(pNewEntry);
+    }
+    else if ( eOperator == SC_COND_TOP10 || eOperator == SC_COND_BOTTOM10 ||
+            eOperator == SC_COND_TOP_PERCENT || eOperator == SC_COND_BOTTOM_PERCENT )
+    {
+        ScDocument& rDoc = getScDocument();
+        ScTokenArray aTokenArray;
+        aTokenArray.AddDouble( maModel.mnRank );
+        OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArray, NULL, &rDoc, aPos, aStyleName );
+        mpFormat->AddEntry(pNewEntry);
+    }
+    else if( eOperator == SC_COND_ABOVE_AVERAGE || eOperator == SC_COND_BELOW_AVERAGE )
+    {
+        ScDocument& rDoc = getScDocument();
+        ScTokenArray aTokenArrayEqual;
+        aTokenArrayEqual.AddDouble( maModel.mbEqualAverage );
+        ScTokenArray aTokenArrayDev;
+        aTokenArrayDev.AddDouble( maModel.mnStdDev );
+        OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArrayEqual, &aTokenArrayDev, &rDoc, aPos, aStyleName );
+        mpFormat->AddEntry(pNewEntry);
+    }
+    else if( eOperator == SC_COND_DUPLICATE || eOperator == SC_COND_NOTDUPLICATE )
+    {
+        ScDocument& rDoc = getScDocument();
+        OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, NULL, NULL, &rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
     else if( mpColor )
@@ -821,6 +874,14 @@ void CondFormatRule::finalizeImport()
         mpDataBar->SetData( pFormatEntry, &rDoc, aPos );
 
     }
+    else if(mpIconSet)
+    {
+        ScDocument& rDoc = getScDocument();
+        ScIconSetFormat* pFormatEntry = new ScIconSetFormat(&rDoc);
+
+        mpFormat->AddEntry(pFormatEntry);
+        mpIconSet->SetData( pFormatEntry, &rDoc, aPos );
+    }
 }
 
 ColorScaleRule* CondFormatRule::getColorScale()
@@ -837,6 +898,14 @@ DataBarRule* CondFormatRule::getDataBar()
         mpDataBar.reset( new DataBarRule(mrCondFormat) );
 
     return mpDataBar.get();
+}
+
+IconSetRule* CondFormatRule::getIconSet()
+{
+    if(!mpIconSet)
+        mpIconSet.reset( new IconSetRule(mrCondFormat) );
+
+    return mpIconSet.get();
 }
 
 // ============================================================================
@@ -951,6 +1020,24 @@ sal_Int32 CondFormatBuffer::convertToApiOperator( sal_Int32 nToken )
         case XML_notBetween:            return ConditionOperator2::NOT_BETWEEN;
         case XML_notEqual:              return ConditionOperator2::NOT_EQUAL;
         case XML_duplicateValues:       return ConditionOperator2::DUPLICATE;
+    }
+    return ConditionOperator2::NONE;
+}
+
+sal_Int32 CondFormatBuffer::convertToInternalOperator( sal_Int32 nToken )
+{
+    switch( nToken )
+    {
+        case XML_between:               return SC_COND_BETWEEN;
+        case XML_equal:                 return SC_COND_EQUAL;
+        case XML_greaterThan:           return SC_COND_GREATER;
+        case XML_greaterThanOrEqual:    return SC_COND_EQGREATER;
+        case XML_lessThan:              return SC_COND_LESS;
+        case XML_lessThanOrEqual:       return SC_COND_EQLESS;
+        case XML_notBetween:            return SC_COND_NOTBETWEEN;
+        case XML_notEqual:              return SC_COND_NOTEQUAL;
+        case XML_duplicateValues:       return SC_COND_DUPLICATE;
+        case XML_uniqueValues:          return SC_COND_NOTDUPLICATE;
     }
     return ConditionOperator2::NONE;
 }

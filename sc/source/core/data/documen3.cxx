@@ -2088,16 +2088,4 @@ void ScDocument::ExtendPrintArea( OutputDevice* pDev, SCTAB nTab,
         maTabs[nTab]->ExtendPrintArea( pDev, nStartCol, nStartRow, rEndCol, nEndRow );
 }
 
-void ScDocument::IncSizeRecalcLevel( SCTAB nTab )
-{
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        maTabs[nTab]->IncRecalcLevel();
-}
-
-void ScDocument::DecSizeRecalcLevel( SCTAB nTab, bool bUpdateNoteCaptionPos )
-{
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        maTabs[nTab]->DecRecalcLevel( bUpdateNoteCaptionPos );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

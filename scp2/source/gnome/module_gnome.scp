@@ -55,6 +55,7 @@ Module gid_Module_Optional_Gnome
 #endif
 #ifdef ENABLE_GIO
       gid_File_Lib_GIO,
+      gid_File_Lib_Losessioninstall,
 #endif
 #ifdef ENABLE_GCONF
       gid_File_Lib_Gconfbe,

@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <tools/solar.h>
 #include <tools/stream.hxx>
@@ -46,7 +36,6 @@
 #include <svtools/fltcall.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
-#include <vcl/rendergraphicrasterizer.hxx>
 #include "strings.hrc"
 
 #include <math.h>
@@ -1367,7 +1356,6 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                             case META_BMPSCALEPART_ACTION :
                                             case META_BMPEXSCALE_ACTION :
                                             case META_BMPEXSCALEPART_ACTION :
-                                            case META_RENDERGRAPHIC_ACTION :
                                             {
                                                 nBitmapCount++;
                                                 nBitmapAction = nCurAction;
@@ -1424,23 +1412,6 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         }
                     }
                 }
-            }
-            break;
-
-            case( META_RENDERGRAPHIC_ACTION ):
-            {
-                const MetaRenderGraphicAction*          pA = (const MetaRenderGraphicAction*) pMA;
-                const ::vcl::RenderGraphicRasterizer    aRasterizer( pA->GetRenderGraphic() );
-                const BitmapEx                          aBmpEx( aRasterizer.Rasterize( rVDev.LogicToPixel( pA->GetSize() ) ) );
-                Bitmap                                  aBmp( aBmpEx.GetBitmap() );
-
-                if ( mbGrayScale )
-                    aBmp.Convert( BMP_CONVERSION_8BIT_GREYS );
-
-                Bitmap  aMask( aBmpEx.GetMask() );
-                Size    aSize( pA->GetSize() );
-
-                ImplBmp( &aBmp, &aMask, pA->GetPoint(), aSize.Width(), aSize.Height() );
             }
             break;
         }
@@ -2419,6 +2390,7 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
         l_aDashArray.push_back( 2 );
     const double fLWidth(( ( rLineInfo.GetWidth() + 1 ) + ( rLineInfo.GetWidth() + 1 ) ) * 0.5);
     SvtGraphicStroke::JoinType aJoinType(SvtGraphicStroke::joinMiter);
+    SvtGraphicStroke::CapType aCapType(SvtGraphicStroke::capButt);
 
     switch(rLineInfo.GetLineJoin())
     {
@@ -2437,8 +2409,26 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
             aJoinType = SvtGraphicStroke::joinRound;
             break;
     }
+    switch(rLineInfo.GetLineCap())
+    {
+        default: /* com::sun::star::drawing::LineCap_BUTT */
+        {
+            aCapType = SvtGraphicStroke::capButt;
+            break;
+        }
+        case com::sun::star::drawing::LineCap_ROUND:
+        {
+            aCapType = SvtGraphicStroke::capRound;
+            break;
+        }
+        case com::sun::star::drawing::LineCap_SQUARE:
+        {
+            aCapType = SvtGraphicStroke::capSquare;
+            break;
+        }
+    }
 
-    ImplWriteLineInfo( fLWidth, fMiterLimit, SvtGraphicStroke::capButt, aJoinType, l_aDashArray );
+    ImplWriteLineInfo( fLWidth, fMiterLimit, aCapType, aJoinType, l_aDashArray );
 }
 
 //---------------------------------------------------------------------------------

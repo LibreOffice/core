@@ -163,7 +163,7 @@ namespace connectivity
                                     m_xFormatter;   // current number formatter
         sal_Int32                   m_nFormatKey;   // numberformat, which should be used
         sal_Int32                   m_nDateFormatKey;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification> m_xCharClass;
         static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData4>       s_xLocaleData;
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData>      xDummy; // can be deleted after 627
@@ -183,7 +183,7 @@ namespace connectivity
     public:
         // if NULL, a default context will be used
         // the context must live as long as the parser
-        OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,const IParseContext* _pContext = NULL);
+        OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const IParseContext* _pContext = NULL);
         ~OSQLParser();
 
         // Parsing an SQLStatement

@@ -1,0 +1,10 @@
+--- misc/boost_1_44_0/boost/date_time/tz_db_base.hpp
+--- misc/build/boost_1_44_0/boost/date_time/tz_db_base.hpp
+@@ -170,7 +170,6 @@
+       /*! May throw data_not_accessible, or bad_field_count exceptions */
+       void load_from_file(const std::string& pathspec)
+       {
+-        string_type in_str;
+         std::string  buff;
+         
+         std::ifstream ifs(pathspec.c_str());

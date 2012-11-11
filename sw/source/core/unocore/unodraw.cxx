@@ -790,7 +790,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                     pDoc->ChgAnchor(
                         pPage->GetDrawView()->GetMarkedObjectList(),
                         FLY_AT_PARA/*int eAnchorId*/,
-                        sal_True, sal_False );
+                        true, false );
 
                     pPage->GetDrawView()->UnmarkAll();
                     if(pContact)
@@ -824,7 +824,7 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & xShapeG
             pDoc->UnGroupSelection( *pPage->GetDrawView() );
             pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkedObjectList(),
                         FLY_AT_PARA/*int eAnchorId*/,
-                        sal_True, sal_False );
+                        true, false );
             pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
         }
         pPage->RemovePageView();
@@ -1257,7 +1257,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                         sal_Int32 nAnchor = 0;
                         cppu::enum2int( nAnchor, aValue );
                         pDoc->ChgAnchor( aList, (RndStdIds)nAnchor,
-                                                sal_False, sal_True );
+                                                false, true );
                     }
                     else
                     {

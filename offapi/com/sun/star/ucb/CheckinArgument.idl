@@ -1,0 +1,60 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef __com_sun_star_ucb_CheckinArgument_idl__
+#define __com_sun_star_ucb_CheckinArgument_idl__
+
+
+
+module com { module sun { module star { module ucb {
+
+/** contains information needed to checkin a document.
+
+    <p>The checkin command is always called on the target private
+    working copy document.</p>
+*/
+struct CheckinArgument
+{
+    /** Tells whether to create a new major or minor version during the
+        checkin.
+    */
+    boolean MajorVersion;
+
+    /** Contains the version comment to set during the checkin.
+    */
+    string VersionComment;
+
+    /** contains the URL of the source of the action (e.g. the URL of
+        the temporary file to checkin).
+    */
+    string SourceURL;
+
+    /** contains the URL of the private working copy to checkin.
+    */
+    string TargetURL;
+
+    /** contains the title of the transferred object, if it is different
+        from the original one.
+
+        <p>If this field is filled, for example, a file will be renamed
+        while it is being checked in.</p>
+    */
+    string NewTitle;
+
+    /** contains the Mime-Type of the content to check-in as it may be
+        different from the original one.
+    */
+    string MimeType;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

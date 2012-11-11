@@ -84,11 +84,11 @@ static void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, ViewShell* 
     // Scrollbars on / off
     if(bVScrollChanged)
     {
-        pView->ShowVScrollbar(pNewPref->IsViewVScrollBar());
+        pView->EnableVScrollbar(pNewPref->IsViewVScrollBar());
     }
     if(bHScrollChanged)
     {
-        pView->ShowHScrollbar( pNewPref->IsViewHScrollBar() || pNewPref->getBrowseMode() );
+        pView->EnableHScrollbar( pNewPref->IsViewHScrollBar() || pNewPref->getBrowseMode() );
     }
     //if only the position of the vertical ruler has been changed initiate an update
     if(bVAlignChanged && !bHScrollChanged && !bVScrollChanged)
@@ -163,8 +163,8 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     {
         if(!bViewOnly)
             pPref->SetUIOptions( rUsrPref );
-        pPPView->ShowVScrollbar(pPref->IsViewVScrollBar());
-        pPPView->ShowHScrollbar(pPref->IsViewHScrollBar());
+        pPPView->EnableVScrollbar(pPref->IsViewVScrollBar());
+        pPPView->EnableHScrollbar(pPref->IsViewHScrollBar());
         if(!bViewOnly)
         {
             pPref->SetPagePrevRow(rUsrPref.GetPagePrevRow());
@@ -613,11 +613,11 @@ void SwModule::ApplyLinkMode(sal_Int32 nNewLinkMode)
     pUsrPref->SetUpdateLinkMode(nNewLinkMode);
 }
 
-void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
-        sal_Bool bIsSpellWrongAgain, sal_Bool bIsSpellAllAgain, sal_Bool bSmartTags )
+void SwModule::CheckSpellChanges( bool bOnlineSpelling,
+        bool bIsSpellWrongAgain, bool bIsSpellAllAgain, bool bSmartTags )
 {
-    sal_Bool bOnlyWrong = bIsSpellWrongAgain && !bIsSpellAllAgain;
-    sal_Bool bInvalid = bOnlyWrong || bIsSpellAllAgain;
+    bool bOnlyWrong = bIsSpellWrongAgain && !bIsSpellAllAgain;
+    bool bInvalid = bOnlyWrong || bIsSpellAllAgain;
     if( bOnlineSpelling || bInvalid )
     {
         TypeId aType = TYPE(SwDocShell);

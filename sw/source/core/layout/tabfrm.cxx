@@ -3278,7 +3278,7 @@ void SwTabFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 |*    SwTabFrm::GetInfo()
 |*
 |*************************************************************************/
-sal_Bool SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
+bool SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
 {
     if ( RES_VIRTPAGENUM_INFO == rHnt.Which() && IsInDocBody() && !IsFollow() )
     {
@@ -3291,7 +3291,7 @@ sal_Bool SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
                 //Here it should be (can temporary be different, should we be
                 //                    concerned about this?)
                 rInfo.SetInfo( pPage, this );
-                return sal_False;
+                return false;
             }
             if ( pPage->GetPhyPageNum() < rInfo.GetOrigPage()->GetPhyPageNum() &&
                  (!rInfo.GetPage() || pPage->GetPhyPageNum() > rInfo.GetPage()->GetPhyPageNum()))
@@ -3301,7 +3301,7 @@ sal_Bool SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
             }
         }
     }
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -5524,10 +5524,9 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
         return (Frm().*fnRect->fnGetHeight)();
     }
 
-    SwRowFrm* pFirstRow = 0;
     SwTwips nTmpHeight = 0;
 
-    pFirstRow = GetFirstNonHeadlineRow();
+    SwRowFrm* pFirstRow = GetFirstNonHeadlineRow();
     OSL_ENSURE( !IsFollow() || pFirstRow, "FollowTable without Lower" );
 
     // NEW TABLES

@@ -55,7 +55,7 @@ class SW_DLLPUBLIC SwFmt : public SwModify
     sal_uInt16 nPoolHelpId;       ///< HelpId for this Pool-style.
     sal_uInt8 nPoolHlpFileId;     ///< FilePos to Doc to these style helps.
     sal_Bool   bWritten : 1;      ///< TRUE: already written.
-    sal_Bool   bAutoFmt : 1;      /**< FALSE: it is a template.
+    bool   bAutoFmt : 1;      /**< FALSE: it is a template.
                                        default is true! */
     sal_Bool   bFmtInDTOR : 1;    /**< TRUE: Format becomes deleted. In order to be able
                                        to recognize this in FmtChg-message!! */
@@ -81,7 +81,7 @@ public:
 
 
     /// Query format information.
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const;
 
     /// Copy attributes even among documents.
     void CopyAttrs( const SwFmt&, sal_Bool bReplace=sal_True );
@@ -98,9 +98,9 @@ public:
                                           sal_Bool bInParents = sal_True ) const;
     inline SfxItemState GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent = sal_True,
                                     const SfxPoolItem **ppItem = 0 ) const;
-    virtual sal_Bool SetFmtAttr( const SfxPoolItem& rAttr );
-    virtual sal_Bool SetFmtAttr( const SfxItemSet& rSet );
-    virtual sal_Bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
+    virtual bool SetFmtAttr( const SfxPoolItem& rAttr );
+    virtual bool SetFmtAttr( const SfxItemSet& rSet );
+    virtual bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
 
     /** Takes all hints from Delta-Array,
         @return count of deleted hints. */
@@ -161,8 +161,8 @@ public:
     void   ResetWritten()    { bWritten = sal_False; }
 
     /// Query / set AutoFmt-flag.
-    sal_Bool IsAuto() const                 { return bAutoFmt; }
-    void SetAuto( sal_Bool bNew = sal_False )   { bAutoFmt = bNew; }
+    bool IsAuto() const                 { return bAutoFmt; }
+    void SetAuto( bool bNew = false )   { bAutoFmt = bNew; }
 
     /// Query / set bAutoUpdateFmt-flag.
     sal_Bool IsAutoUpdateFmt() const                { return bAutoUpdateFmt; }

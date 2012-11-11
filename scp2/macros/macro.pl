@@ -261,7 +261,7 @@ sub args_require_build
         # changed script - run always
         return 1 if (stat($0))[9] > (stat("$destfile"))[9] ;
 
-        # changed set_soenv.stamp - run always
+        # changed config timestamp - run always
         if (-f "$config_stamp") {
             return 1 if (stat($config_stamp))[9] > (stat($destfile))[9];
         }

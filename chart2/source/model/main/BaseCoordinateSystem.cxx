@@ -29,6 +29,7 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 
 #include <algorithm>
+#include <iterator>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <rtl/math.hxx>

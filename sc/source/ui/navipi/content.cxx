@@ -164,7 +164,7 @@ void ScContentTree::InitRoot( sal_uInt16 nType )
     String aName( ScResId( SCSTR_CONTENT_ROOT + nType ) );
     // wieder an die richtige Position:
     sal_uInt16 nPos = nRootType ? 0 : pPosList[nType]-1;
-    SvLBoxEntry* pNew = InsertEntry( aName, rImage, rImage, NULL, false, nPos );
+    SvTreeListEntry* pNew = InsertEntry( aName, rImage, rImage, NULL, false, nPos );
 
     pRootNodes[nType] = pNew;
 }
@@ -182,7 +182,7 @@ void ScContentTree::ClearType(sal_uInt16 nType)
         ClearAll();
     else
     {
-        SvLBoxEntry* pParent = pRootNodes[nType];
+        SvTreeListEntry* pParent = pRootNodes[nType];
         if ( !pParent || GetChildCount(pParent) )       // nicht, wenn ohne Children schon da
         {
             if (pParent)
@@ -200,7 +200,7 @@ void ScContentTree::InsertContent( sal_uInt16 nType, const String& rValue )
         return;
     }
 
-    SvLBoxEntry* pParent = pRootNodes[nType];
+    SvTreeListEntry* pParent = pRootNodes[nType];
     if (pParent)
         InsertEntry( rValue, pParent );
     else
@@ -209,7 +209,7 @@ void ScContentTree::InsertContent( sal_uInt16 nType, const String& rValue )
     }
 }
 
-void ScContentTree::GetEntryIndexes( sal_uInt16& rnRootIndex, sal_uLong& rnChildIndex, SvLBoxEntry* pEntry ) const
+void ScContentTree::GetEntryIndexes( sal_uInt16& rnRootIndex, sal_uLong& rnChildIndex, SvTreeListEntry* pEntry ) const
 {
     rnRootIndex = SC_CONTENT_ROOT;
     rnChildIndex = SC_CONTENT_NOCHILD;
@@ -217,7 +217,7 @@ void ScContentTree::GetEntryIndexes( sal_uInt16& rnRootIndex, sal_uLong& rnChild
     if( !pEntry )
         return;
 
-    SvLBoxEntry* pParent = GetParent( pEntry );
+    SvTreeListEntry* pParent = GetParent( pEntry );
     bool bFound = false;
     for( sal_uInt16 nRoot = 1; !bFound && (nRoot < SC_CONTENT_COUNT); ++nRoot )
     {
@@ -233,7 +233,7 @@ void ScContentTree::GetEntryIndexes( sal_uInt16& rnRootIndex, sal_uLong& rnChild
 
             // search the entry in all child entries of the parent
             sal_uLong nEntry = 0;
-            SvLBoxEntry* pIterEntry = FirstChild( pParent );
+            SvTreeListEntry* pIterEntry = FirstChild( pParent );
             while( !bFound && pIterEntry )
             {
                 if ( pEntry == pIterEntry )
@@ -250,7 +250,7 @@ void ScContentTree::GetEntryIndexes( sal_uInt16& rnRootIndex, sal_uLong& rnChild
     }
 }
 
-sal_uLong ScContentTree::GetChildIndex( SvLBoxEntry* pEntry ) const
+sal_uLong ScContentTree::GetChildIndex( SvTreeListEntry* pEntry ) const
 {
     sal_uInt16 nRoot;
     sal_uLong nChild;
@@ -279,7 +279,7 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl)
 {
     sal_uInt16 nType;
     sal_uLong nChild;
-    SvLBoxEntry* pEntry = GetCurEntry();
+    SvTreeListEntry* pEntry = GetCurEntry();
     GetEntryIndexes( nType, nChild, pEntry );
 
     if( pEntry && (nType != SC_CONTENT_ROOT) && (nChild != SC_CONTENT_NOCHILD) )
@@ -370,7 +370,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                 break;
             case 0:
             {
-                SvLBoxEntry* pEntry = GetCurEntry();
+                SvTreeListEntry* pEntry = GetCurEntry();
                 if( pEntry )
                 {
                     sal_uInt16 nType;
@@ -518,12 +518,12 @@ void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
     if( rHEvt.GetMode() & HELPMODE_QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
-        SvLBoxEntry* pEntry = GetEntry( aPos );
+        SvTreeListEntry* pEntry = GetEntry( aPos );
         if ( pEntry )
         {
             sal_Bool bRet = false;
             String aHelpText;
-            SvLBoxEntry* pParent = GetParent(pEntry);
+            SvTreeListEntry* pParent = GetParent(pEntry);
             if ( !pParent )                                 // Top-Level ?
             {
                 aHelpText = String::CreateFromInt32( GetChildCount(pEntry) );
@@ -916,11 +916,11 @@ sal_Bool ScContentTree::NoteStringsChanged()
     if (!pDoc)
         return false;
 
-    SvLBoxEntry* pParent = pRootNodes[SC_CONTENT_NOTE];
+    SvTreeListEntry* pParent = pRootNodes[SC_CONTENT_NOTE];
     if (!pParent)
         return false;
 
-    SvLBoxEntry* pEntry = FirstChild( pParent );
+    SvTreeListEntry* pEntry = FirstChild( pParent );
 
     bool bEqual = true;
     SCTAB nTabCount = pDoc->GetTableCount();
@@ -956,11 +956,11 @@ sal_Bool ScContentTree::DrawNamesChanged( sal_uInt16 nType )
     if (!pDoc)
         return false;
 
-    SvLBoxEntry* pParent = pRootNodes[nType];
+    SvTreeListEntry* pParent = pRootNodes[nType];
     if (!pParent)
         return false;
 
-    SvLBoxEntry* pEntry = FirstChild( pParent );
+    SvTreeListEntry* pEntry = FirstChild( pParent );
 
     // iterate in flat mode for groups
     SdrIterMode eIter = ( nType == SC_CONTENT_DRAWING ) ? IM_FLAT : IM_DEEPNOGROUPS;
@@ -1120,7 +1120,7 @@ void ScContentTree::DoDrag()
 
     sal_uInt16 nType;
     sal_uLong nChild;
-    SvLBoxEntry* pEntry = GetCurEntry();
+    SvTreeListEntry* pEntry = GetCurEntry();
     GetEntryIndexes( nType, nChild, pEntry );
 
     if( pEntry &&
@@ -1329,10 +1329,10 @@ void ScContentTree::ToggleRoot()        // nach Selektion
     sal_uInt16 nNew = SC_CONTENT_ROOT;
     if ( nRootType == SC_CONTENT_ROOT )
     {
-        SvLBoxEntry* pEntry = GetCurEntry();
+        SvTreeListEntry* pEntry = GetCurEntry();
         if (pEntry)
         {
-            SvLBoxEntry* pParent = GetParent(pEntry);
+            SvTreeListEntry* pParent = GetParent(pEntry);
             for (sal_uInt16 i=1; i<SC_CONTENT_COUNT; i++)
                 if ( pEntry == pRootNodes[i] || pParent == pRootNodes[i] )
                     nNew = i;
@@ -1462,7 +1462,7 @@ void ScContentTree::ApplySettings()
                 // select
                 if( nRootSel == nEntry )
                 {
-                    SvLBoxEntry* pEntry = NULL;
+                    SvTreeListEntry* pEntry = NULL;
                     if( bExp && (nChildSel != SC_CONTENT_NOCHILD) )
                         pEntry = GetEntry( pRootNodes[ nEntry ], nChildSel );
                     Select( pEntry ? pEntry : pRootNodes[ nEntry ] );

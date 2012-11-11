@@ -31,6 +31,7 @@
 #include "common.h"
 #include <Windows.h>
 #include <com/sun/star/lang/SystemDependent.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XSystemChildFactory.hpp>
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
@@ -283,36 +284,32 @@ HRESULT DocumentHolder::InPlaceActivate(
             HWND                          hWndxWinParent(0);
             uno::Reference<awt::XWindow>  xWin;
 
-            static const ::rtl::OUString aToolkitServiceName(
-                RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.awt.Toolkit" ) );
-            uno::Reference<awt::XSystemChildFactory> xToolkit(
-                m_xFactory->createInstance(aToolkitServiceName ),uno::UNO_QUERY);
+            uno::Reference<awt::XToolkit2> xToolkit =
+                awt::Toolkit::create(comphelper::getComponentContext(m_xFactory));
 
-            if(xToolkit.is()) {
-                // create system window wrapper for hwnd
-                if( !m_pCHatchWin )
-                    m_pCHatchWin = new winwrap::CHatchWin(
-                        m_hInstance,this);
+            // create system window wrapper for hwnd
+            if( !m_pCHatchWin )
+                m_pCHatchWin = new winwrap::CHatchWin(
+                    m_hInstance,this);
 
-                if(m_pCHatchWin->Init(hWndSite,/*ID_HATCHWINDOW*/2000, NULL)) {
-                    m_pCHatchWin->RectsSet(&rcPos,&rcClip); //set visible area
-                    hWndxWinParent = m_pCHatchWin->Window();
-                    ShowWindow(hWndxWinParent,SW_SHOW);  //Make visible.
-                }
-                else {
-                    // no success initializing hatch window
-                    delete m_pCHatchWin, m_pCHatchWin = 0;
-                    hWndxWinParent = hWndSite;
-                }
-
-                aAny <<= sal_Int32(hWndxWinParent);
-                xWin = uno::Reference<awt::XWindow>(
-                    xToolkit->createSystemChild(
-                        aAny,
-                        aProcessIdent,
-                        lang::SystemDependent::SYSTEM_WIN32),
-                    uno::UNO_QUERY);
+            if(m_pCHatchWin->Init(hWndSite,/*ID_HATCHWINDOW*/2000, NULL)) {
+                m_pCHatchWin->RectsSet(&rcPos,&rcClip); //set visible area
+                hWndxWinParent = m_pCHatchWin->Window();
+                ShowWindow(hWndxWinParent,SW_SHOW);  //Make visible.
             }
+            else {
+                // no success initializing hatch window
+                delete m_pCHatchWin, m_pCHatchWin = 0;
+                hWndxWinParent = hWndSite;
+            }
+
+            aAny <<= sal_Int32(hWndxWinParent);
+            xWin = uno::Reference<awt::XWindow>(
+                xToolkit->createSystemChild(
+                    aAny,
+                    aProcessIdent,
+                    lang::SystemDependent::SYSTEM_WIN32),
+                uno::UNO_QUERY);
 
             if(xWin.is()) {
                 xWin->setPosSize(
@@ -1301,12 +1298,9 @@ DocumentHolder::getContainerWindow(
 
     uno::Reference<awt::XWindow> xWin(0);
 
-    static const ::rtl::OUString aToolkitServiceName(
-        RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.awt.Toolkit" ) );
-    uno::Reference<awt::XSystemChildFactory> xToolkit(
-        m_xFactory->createInstance(aToolkitServiceName ),uno::UNO_QUERY);
+    uno::Reference<awt::XToolkit2> xToolkit = awt::Toolkit::create( comphelper::getComponentContext(m_xFactory) );
 
-    if(xToolkit.is() && m_pIOleIPFrame) {
+    if(m_pIOleIPFrame) {
         HWND hWnd;
         m_pIOleIPFrame->GetWindow(&hWnd);
 

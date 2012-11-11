@@ -54,7 +54,7 @@ protected:
 typedef BigPtrEntry* ElementPtr;
 
 
-typedef sal_Bool (*FnForEach)( const ElementPtr&, void* pArgs );
+typedef bool (*FnForEach)( const ElementPtr&, void* pArgs );
 
 // 1000 entries per Block = a bit less then 4K
 #define MAXENTRY 1000
@@ -75,13 +75,14 @@ struct BlockInfo {                  // block info:
 
 class SW_DLLPUBLIC BigPtrArray
 {
-    BlockInfo** ppInf;              // block info
+    BlockInfo**     ppInf;              // block info
     sal_uLong       nSize;              ///< number of elements
     sal_uInt16      nMaxBlock;          ///< current max. number of blocks
     sal_uInt16      nBlock;             ///< number of blocks
-    sal_uInt16      nCur;               ///< last block
+    mutable
+        sal_uInt16  nCur;               ///< last used block
 
-    sal_uInt16      Index2Block( sal_uLong ) const; ///< block search
+    sal_uInt16  Index2Block( sal_uLong ) const; ///< block search
     BlockInfo*  InsBlock( sal_uInt16 );         ///< insert block
     void        BlockDel( sal_uInt16 );         ///< some blocks were deleted
     void        UpdIndex( sal_uInt16 );         ///< recalculate indices

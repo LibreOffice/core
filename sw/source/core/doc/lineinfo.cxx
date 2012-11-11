@@ -107,7 +107,7 @@ SwLineNumberInfo& SwLineNumberInfo::operator=(const SwLineNumberInfo &rCpy)
     return *this;
 }
 
-sal_Bool SwLineNumberInfo::operator==( const SwLineNumberInfo& rInf ) const
+bool SwLineNumberInfo::operator==( const SwLineNumberInfo& rInf ) const
 {
     return  GetRegisteredIn() == rInf.GetRegisteredIn() &&
             aType.GetNumberingType() == rInf.GetNumType().GetNumberingType() &&

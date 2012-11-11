@@ -23,7 +23,6 @@
 #include "rtl/ustrbuf.hxx"
 #include "unodevtools/typemanager.hxx"
 #include "unodevtools/options.hxx"
-#include "ostringostreaminserter.hxx"
 #include "skeletonjava.hxx"
 #include "skeletoncpp.hxx"
 

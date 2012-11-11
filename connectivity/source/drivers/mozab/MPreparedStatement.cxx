@@ -443,7 +443,10 @@ size_t OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Refere
                                                     ,sal_False
                                                     ,sal_False
                                                     ,sal_False
-                                                    ,m_pSQLIterator->isCaseSensitive());
+                                                    ,m_pSQLIterator->isCaseSensitive()
+                                                    ,::rtl::OUString()
+                                                    ,::rtl::OUString()
+                                                    ,::rtl::OUString());
     m_xParamColumns->get().push_back(xParaColumn);
     return nParameter;
 }

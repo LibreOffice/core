@@ -37,7 +37,7 @@ namespace dbaui
         sal_Bool    m_bEmphasized;
 
     public:
-        OBoldListboxString(SvLBoxEntry* _pEntry, sal_uInt16 _nFlags, const XubString& _rStr)
+        OBoldListboxString(SvTreeListEntry* _pEntry, sal_uInt16 _nFlags, const XubString& _rStr)
             :SvLBoxString(_pEntry, _nFlags, _rStr)
             ,m_bEmphasized(sal_False)
         {
@@ -45,8 +45,8 @@ namespace dbaui
 
         virtual sal_uInt16 IsA();
 
-        virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
-        virtual void InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* _pViewData);
+        virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry);
+        virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* _pViewData);
 
         sal_Bool    isEmphasized() const { return m_bEmphasized; }
         void        emphasize(sal_Bool _bEmphasize) { m_bEmphasized = _bEmphasize; }

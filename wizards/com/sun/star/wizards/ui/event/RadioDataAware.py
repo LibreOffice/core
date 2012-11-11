@@ -16,9 +16,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import time
-from .DataAware import *
-from .DataAware import *
-from .UnoDataAware import *
+from .CommonListener import ItemListenerProcAdapter
+from .DataAware import DataAware
 
 class RadioDataAware(DataAware):
 

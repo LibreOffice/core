@@ -57,22 +57,26 @@ static OpTable aOpTable [] = {
 // Output of an element
 void SbiExprNode::Gen( RecursiveMode eRecMode )
 {
+    sal_uInt16 nStringId;
+
     if( IsConstant() )
     {
         switch( GetType() )
         {
-            case SbxEMPTY:   pGen->Gen( _EMPTY ); break;
-            case SbxINTEGER: pGen->Gen( _CONST,  (short) nVal ); break;
-            case SbxSTRING:
-            {
-                sal_uInt16 nStringId = pGen->GetParser()->aGblStrings.Add( aStrVal, sal_True );
-                pGen->Gen( _SCONST, nStringId ); break;
-            }
-            default:
-            {
-                sal_uInt16 nStringId = pGen->GetParser()->aGblStrings.Add( nVal, eType );
-                pGen->Gen( _NUMBER, nStringId );
-            }
+        case SbxEMPTY:
+            pGen->Gen( _EMPTY );
+            break;
+        case SbxINTEGER:
+            pGen->Gen( _CONST,  (short) nVal );
+            break;
+        case SbxSTRING:
+            nStringId = pGen->GetParser()->aGblStrings.Add( aStrVal, sal_True );
+            pGen->Gen( _SCONST, nStringId );
+            break;
+        default:
+            nStringId = pGen->GetParser()->aGblStrings.Add( nVal, eType );
+            pGen->Gen( _NUMBER, nStringId );
+            break;
         }
     }
     else if( IsOperand() )
@@ -92,10 +96,14 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
                 else if( eRecMode == UNDEFINED )
                 {
                     if( aVar.pPar && aVar.pPar->IsBracket() )
+                    {
                          bTreatFunctionAsParam = false;
+                    }
                 }
                 if( !bTreatFunctionAsParam )
+                {
                     eOp = aVar.pDef->IsGlobal() ? _FIND_G : _FIND;
+                }
             }
         }
         // special treatment for WITH
@@ -114,7 +122,9 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
 
             SbiProcDef* pProc = aVar.pDef->GetProcDef();
             if ( pGen->GetParser()->bClassModule )
+            {
                 eOp = _FIND_CM;
+            }
             else if ( aVar.pDef->IsStatic() || (pProc && pProc->IsStatic()) )
             {
                 eOp = _FIND_STATIC;
@@ -123,7 +133,9 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
         for( SbiExprNode* p = this; p; p = p->aVar.pNext )
         {
             if( p == this && pWithParent_ != NULL )
+            {
                 pWithParent_->Gen();
+            }
             p->GenElement( eOp );
             eOp = _ELEM;
         }
@@ -141,7 +153,9 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
     {
         pLeft->Gen();
         if( pRight )
+        {
             pRight->Gen();
+        }
         for( OpTable* p = aOpTable; p->eTok != NIL; p++ )
         {
             if( p->eTok == eTok )
@@ -202,7 +216,7 @@ void SbiExprList::Gen()
         for( SbiExpression* pExpr = pFirst; pExpr; pExpr = pExpr->pNext,nCount++ )
         {
             pExpr->Gen();
-            if( pExpr->GetName().Len() )
+            if( !pExpr->GetName().isEmpty() )
             {
                 // named arg
                 sal_uInt16 nSid = pParser->aGblStrings.Add( pExpr->GetName() );
@@ -247,12 +261,16 @@ void SbiExpression::Gen( RecursiveMode eRecMode )
     // If pExpr == .-term in With, approximately Gen for Basis-Object
     pExpr->Gen( eRecMode );
     if( bByVal )
+    {
         pParser->aGen.Gen( _BYVAL );
+    }
     if( bBased )
     {
         sal_uInt16 uBase = pParser->nBase;
         if( pParser->IsCompatible() )
+        {
             uBase |= 0x8000;        // #109275 Flag compatiblity
+        }
         pParser->aGen.Gen( _BASED, uBase );
         pParser->aGen.Gen( _ARGV );
     }

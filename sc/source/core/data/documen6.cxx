@@ -29,9 +29,10 @@
 #include "scitems.hxx"
 #include <editeng/scripttypeitem.hxx>
 
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/processfactory.hxx>
 
 #include "document.hxx"
 #include "cell.hxx"
@@ -42,8 +43,6 @@
 #include "attrib.hxx"
 
 using namespace com::sun::star;
-
-#define SC_BREAKITER_SERVICE    "com.sun.star.i18n.BreakIterator"
 
 //
 //  this file is compiled with exceptions enabled
@@ -58,10 +57,7 @@ const uno::Reference< i18n::XBreakIterator >& ScDocument::GetBreakIterator()
         pScriptTypeData = new ScScriptTypeData;
     if ( !pScriptTypeData->xBreakIter.is() )
     {
-        uno::Reference< uno::XInterface > xInterface = xServiceManager->createInstance(
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_BREAKITER_SERVICE )) );
-        pScriptTypeData->xBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
-        OSL_ENSURE( pScriptTypeData->xBreakIter.is(), "can't get BreakIterator" );
+        pScriptTypeData->xBreakIter = i18n::BreakIterator::create( comphelper::getComponentContext(xServiceManager) );
     }
     return pScriptTypeData->xBreakIter;
 }

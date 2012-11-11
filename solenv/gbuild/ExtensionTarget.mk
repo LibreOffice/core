@@ -30,6 +30,8 @@
 # platform
 #  gb_ExtensionTarget_LICENSEFILE_DEFAULT
 
+gb_ExtensionTarget__get_preparation_target = $(WORKDIR)/ExtensionTarget/$(1).prepare
+
 gb_ExtensionTarget_ZIPCOMMAND := zip $(if $(findstring s,$(MAKEFLAGS)),-q)
 gb_ExtensionTarget_XRMEXTARGET := $(call gb_Executable_get_target_for_build,xrmex)
 gb_ExtensionTarget_XRMEXCOMMAND := \
@@ -77,8 +79,14 @@ $(call gb_ExtensionTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),OXT,3)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f -r $(call gb_ExtensionTarget_get_workdir,$*) && \
-		rm -f $(call gb_ExtensionTarget_get_target,$*) \
+		rm -f $(call gb_ExtensionTarget__get_preparation_target,$*) \
+			  $(call gb_ExtensionTarget_get_target,$*) \
 	)
+
+# preparation target to delay adding files produced by e.g. UnpackedTarball
+$(call gb_ExtensionTarget__get_preparation_target,%) :
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && touch $@)
 
 ifeq ($(strip $(gb_WITH_LANG)),)
 $(call gb_ExtensionTarget_get_workdir,%)/description.xml :
@@ -95,7 +103,7 @@ $(call gb_ExtensionTarget_get_workdir,%)/description.xml : $(gb_ExtensionTarget_
 		mkdir -p $(call gb_ExtensionTarget_get_workdir,$*) && \
 		$(gb_ExtensionTarget_XRMEXCOMMAND) \
 			-p $(PRJNAME) \
-			-i $(call gb_Helper_symlinked_native,$(filter %.xml,$^)) \
+			-i $(filter %.xml,$^) \
 			-o $@ \
 			-m $${MERGEINPUT} \
 			-l all) && \
@@ -112,9 +120,9 @@ $(call gb_ExtensionTarget_get_target,%) : \
 		mkdir -p $(call gb_ExtensionTarget_get_rootdir,$*)/META-INF \
 			$(if $(LICENSE),$(call gb_ExtensionTarget_get_rootdir,$*)/registration) && \
 		$(call gb_ExtensionTarget__subst_platform,$(call gb_ExtensionTarget_get_workdir,$*)/description.xml,$(call gb_ExtensionTarget_get_rootdir,$*)/description.xml) && \
-		$(call gb_ExtensionTarget__subst_platform,$(LOCATION)/manifest.xml,$(call gb_ExtensionTarget_get_rootdir,$*)/META-INF/manifest.xml) && \
+		$(call gb_ExtensionTarget__subst_platform,$(LOCATION)/META-INF/manifest.xml,$(call gb_ExtensionTarget_get_rootdir,$*)/META-INF/manifest.xml) && \
 		$(if $(LICENSE),cp -f $(LICENSE) $(call gb_ExtensionTarget_get_rootdir,$*)/registration &&) \
-		$(if $(and $(gb_WITH_LANG),$(DESCRIPTION)),cp $(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(call gb_ExtensionTarget_get_workdir,$*)/description-$(lang).txt) $(call gb_ExtensionTarget_get_rootdir,$*) &&) \
+		$(if $(and $(gb_ExtensionTarget_TRANS_LANGS),$(DESCRIPTION)),cp $(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(call gb_ExtensionTarget_get_workdir,$*)/description-$(lang).txt) $(call gb_ExtensionTarget_get_rootdir,$*) &&) \
 		cd $(call gb_ExtensionTarget_get_rootdir,$*) && \
 		$(gb_ExtensionTarget_ZIPCOMMAND) -rX --filesync \
 			$(call gb_ExtensionTarget_get_target,$*) \
@@ -124,6 +132,8 @@ $(call gb_ExtensionTarget_get_target,%) : \
 # register target and clean target
 # add deliverable
 # add dependency for outdir target to workdir target (pattern rule for delivery is in Package.mk)
+#
+# gb_ExtensionTarget_ExtensionTarget extension srcdir
 define gb_ExtensionTarget_ExtensionTarget
 $(call gb_ExtensionTarget_get_target,$(1)) : DESCRIPTION :=
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES := META-INF description.xml
@@ -131,7 +141,11 @@ $(call gb_ExtensionTarget_get_target,$(1)) : LICENSE :=
 $(call gb_ExtensionTarget_get_target,$(1)) : LOCATION := $(SRCDIR)/$(2)
 $(call gb_ExtensionTarget_get_target,$(1)) : PLATFORM := $(PLATFORMID)
 $(call gb_ExtensionTarget_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
-$(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $(SRCDIR)/$(2)/description.xml
+$(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : \
+	$(SRCDIR)/$(2)/description.xml
+$(call gb_ExtensionTarget_get_workdir,$(1))/description.xml :| \
+	$(call gb_ExtensionTarget__get_preparation_target,$(1))
+
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_ExtensionTarget_get_target,$(1)) : \
 	POFILES := $(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
@@ -148,6 +162,14 @@ define gb_ExtensionTarget_use_default_license
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += registration
 $(call gb_ExtensionTarget_get_target,$(1)) : LICENSE := $(gb_ExtensionTarget_LICENSEFILE_DEFAULT)
 $(call gb_ExtensionTarget_get_target,$(1)) : $(gb_ExtensionTarget_LICENSEFILE_DEFAULT)
+
+endef
+
+define gb_ExtensionTarget_add_license
+$(call gb_ExtensionTarget_get_target,$(1)) : FILES += registration
+$(call gb_ExtensionTarget_get_target,$(1)) : LICENSE := $(2)
+$(call gb_ExtensionTarget_get_target,$(1)) : $(2)
+$(2) :| $(call gb_ExtensionTarget__get_preparation_target,$(1))
 
 endef
 
@@ -169,6 +191,7 @@ endef
 define gb_ExtensionTarget_add_file
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(2)
 $(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2)
+$(3) :| $(call gb_ExtensionTarget__get_preparation_target,$(1))
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(3)
 	mkdir -p $$(dir $$@) && \
 	cp -f $(if $(4),$(4),$(3)) $$@
@@ -224,6 +247,8 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
 	$(gb_POLOCATION)/$(4)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
 endif
 $(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2)
+$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) \
+		:| $(call gb_ExtensionTarget__get_preparation_target,$(1))
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(3) \
 		$(gb_ExtensionTarget_PROPMERGETARGET)
 	$$(call gb_Output_announce,$(2),$(true),PRP,3)
@@ -404,12 +429,21 @@ define gb_ExtensionTarget__add_compiled_help_dependency_onelang
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += help/$(2)
 $(call gb_ExtensionTarget_get_target,$(1)) : \
         $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(2).done
+$(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(2).done \
+	:| $(call gb_ExtensionTarget__get_preparation_target,$(1))
 
 endef
 
 
+define gb_ExtensionTarget_use_unpacked
+$(call gb_ExtensionTarget__get_preparation_target,$(1)) \
+	:| $(call gb_UnpackedTarball_get_final_target,$(2))
+
+endef
+
 define gb_ExtensionTarget_use_package
-$(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_Package_get_target,$(2))
+$(call gb_ExtensionTarget__get_preparation_target,$(1)) \
+	:| $(call gb_Package_get_target,$(2))
 
 endef
 

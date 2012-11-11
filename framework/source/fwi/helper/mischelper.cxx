@@ -29,7 +29,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <tools/debug.hxx>
@@ -94,7 +94,7 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
             if ( !_rIni )
             {
                 _rIni = sal_True;
-                Reference< XModuleManager > xModuleManager( _xServiceFactory->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+                Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(_xServiceFactory) );
 
                 try
                 {

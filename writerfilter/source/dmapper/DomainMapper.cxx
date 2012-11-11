@@ -86,11 +86,12 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
                             uno::Reference< io::XInputStream > xInputStream,
                             uno::Reference< lang::XComponent > xModel,
                             bool bRepairStorage,
-                            SourceDocumentType eDocumentType ) :
+                            SourceDocumentType eDocumentType,
+                            bool bIsNewDoc ) :
 LoggedProperties(dmapper_logger, "DomainMapper"),
 LoggedTable(dmapper_logger, "DomainMapper"),
 LoggedStream(dmapper_logger, "DomainMapper"),
-    m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType )),
+    m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType, bIsNewDoc )),
     mnBackgroundColor(0), mbIsHighlightSet(false)
 {
     // #i24363# tab stops relative to indent
@@ -832,11 +833,11 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     vertical text flow (0x01), or
                     two lines in one layout (0x02).
                 For 0x01, if the higher byte of YYYY is zero, the text is not scaled to fit the line height,
-                    in oposite case, it is to be scaled.
-                For 0x02, the higher byte of YYYY is determinig the prefix and suffix of the run:
+                    in opposite case, it is to be scaled.
+                For 0x02, the higher byte of YYYY is determining the prefix and suffix of the run:
                     no brackets (0x00) ,
                     () round brackets (0x01),
-                    [] square backets (0x02),
+                    [] square brackets (0x02),
                     <> angle brackets (0x03) and
                     {} curly brackets (0x04).
                 ???? is different and we do not know its signification
@@ -1806,7 +1807,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
             pCellColorHandler->setOutputFormat( CellColorHandler::Paragraph );
             pProperties->resolve(*pCellColorHandler);
-            rContext->insert( pCellColorHandler->getProperties(), true );
+            rContext->InsertProps(pCellColorHandler->getProperties());
         }
     }
     break;
@@ -2284,7 +2285,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
                 pCellColorHandler->setOutputFormat( CellColorHandler::Character );
                 pProperties->resolve(*pCellColorHandler);
-                rContext->insert( pCellColorHandler->getProperties(), true );
+                rContext->InsertProps(pCellColorHandler->getProperties());
             }
             break;
         }
@@ -2392,9 +2393,17 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
         {
-            // Ignore continous section break at the end of the document
+            // Ignore continous section break at the end of the document, if the previous section had the same type as well
             // It makes the importer loose margin settings with no benefit
-            if (m_pImpl->GetParaSectpr() || nIntValue != 0)
+            SectionPropertyMap* pLastContext = m_pImpl->GetLastSectionContext();
+            int nPrevBreakType = 0;
+            bool bHasPrevSection = false;
+            if (pLastContext)
+            {
+                bHasPrevSection = true;
+                nPrevBreakType = pLastContext->GetBreakType();
+            }
+            if (m_pImpl->GetParaSectpr() || nIntValue != 0 || (bHasPrevSection && nPrevBreakType != nIntValue))
                 pSectionContext->SetBreakType( nIntValue );
         }
         break;

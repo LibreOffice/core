@@ -322,7 +322,7 @@ rtl_arena_hash_rescale (
         old_size  = arena->m_hash_size;
 
         // SAL_INFO(
-        //  "sal",
+        //  "sal.rtl",
         //  "rtl_arena_hash_rescale(" << arena->m_name << "): nseg: "
         //      << (arena->m_stats.m_alloc - arena->m_stats.m_free) << " (ave: "
         //      << ((arena->m_stats.m_alloc - arena->m_stats.m_free)
@@ -804,7 +804,7 @@ rtl_arena_deactivate (
 
     /* check for leaked segments */
     // SAL_INFO(
-    //  "sal",
+    //  "sal.rtl",
     //  "rtl_arena_deactivate(" << arena->m_name << "): allocs: "
     //      << arena->m_stats.m_alloc << ", frees: " << arena->m_stats.m_free
     //      << "; total: " << arena->m_stats.m_mem_total << ", used: "
@@ -814,7 +814,7 @@ rtl_arena_deactivate (
         sal_Size i, n;
 
         // SAL_INFO(
-        //  "sal",
+        //  "sal.rtl",
         //  "rtl_arena_deactivate(" << arena->m_name << "): cleaning up "
         //      << (arena->m_stats.m_alloc - arena->m_stats.m_free)
         //      << " leaked segment(s) [" << arena->m_stats.m_mem_alloc
@@ -1308,7 +1308,7 @@ rtl_arena_init()
         );
         assert(gp_arena_arena != 0);
     }
-    // SAL_INFO("sal", "rtl_arena_init completed");
+    // SAL_INFO("sal.rtl", "rtl_arena_init completed");
 }
 
 /* ================================================================= */
@@ -1326,7 +1326,7 @@ rtl_arena_fini()
         for (arena = head->m_arena_next; arena != head; arena = arena->m_arena_next)
         {
             // SAL_INFO(
-            //  "sal",
+            //  "sal.rtl",
             //  "rtl_arena_fini(" << arena->m_name << "): allocs: "
             //      << arena->m_stats.m_alloc << ", frees: "
             //      << arena->m_stats.m_free << "; total: "
@@ -1335,7 +1335,7 @@ rtl_arena_fini()
         }
         RTL_MEMORY_LOCK_RELEASE(&(g_arena_list.m_lock));
     }
-    // SAL_INFO("sal", "rtl_arena_fini completed");
+    // SAL_INFO("sal.rtl", "rtl_arena_fini completed");
 }
 
 /* ================================================================= */

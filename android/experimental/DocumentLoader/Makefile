@@ -49,7 +49,7 @@ properties:
 link-so:
 # Build the single .so for this app
 	mkdir -p $(OBJLOCAL)
-	$(CXX) -Wl,--stats -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -o $(OBJLOCAL)/liblo-native-code.so -I$(OUTDIR)/inc native-code.cxx -L$(OUTDIR)/lib $(WHOLELIBS) $(LIBS) -lgnustl_static -landroid -llog -lz
+	$(CXX) -Wl,-Map,liblo-native-code.map -Wl,--gc-sections -Wl,--stats -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -o $(OBJLOCAL)/liblo-native-code.so -I$(OUTDIR)/inc native-code.cxx -L$(OUTDIR)/lib $(WHOLELIBS) $(LIBS) -lgnustl_static -landroid -llog -lz
 	mkdir -p $(SODEST)
 	cp $(OBJLOCAL)/liblo-native-code.so $(SODEST)
 	$(STRIP) --strip-debug $(SODEST)/liblo-native-code.so

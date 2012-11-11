@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <svsys.h>
+#include "comphelper/processfactory.hxx"
 #include "tools/debug.hxx"
 
 #include "i18npool/mslangid.hxx"
@@ -37,7 +38,6 @@
 #include "vcl/i18nhelp.hxx"
 #include "vcl/configsettings.hxx"
 #include "vcl/gradient.hxx"
-#include "vcl/unohelp.hxx"
 #include "vcl/bitmapex.hxx"
 
 #include "unotools/fontcfg.hxx"
@@ -337,11 +337,12 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnUseImagesInMenus          = rData.mnUseImagesInMenus;
     mbPreferredUseImagesInMenus = rData.mbPreferredUseImagesInMenus;
     mnSkipDisabledInMenus       = rData.mnSkipDisabledInMenus;
-    mbHideDisabledMenuItems              = rData.mbHideDisabledMenuItems;
-    mnAcceleratorsInContextMenus    = rData.mnAcceleratorsInContextMenus;
+    mbHideDisabledMenuItems     = rData.mbHideDisabledMenuItems;
+    mbAcceleratorsInContextMenus = rData.mbAcceleratorsInContextMenus;
+    mbPrimaryButtonWarpsSlider  = rData.mbPrimaryButtonWarpsSlider;
     mnToolbarIconSize           = rData.mnToolbarIconSize;
     mnSymbolsStyle              = rData.mnSymbolsStyle;
-    mnPreferredSymbolsStyle         = rData.mnPreferredSymbolsStyle;
+    mnPreferredSymbolsStyle     = rData.mnPreferredSymbolsStyle;
     mpFontOptions               = rData.mpFontOptions;
 }
 
@@ -425,10 +426,11 @@ void ImplStyleData::SetStandardStyles()
     mnUseSystemUIFonts          = 1;
     mnUseFlatBorders            = 0;
     mnUseFlatMenues             = 0;
-    mbPreferredUseImagesInMenus         = sal_True;
+    mbPreferredUseImagesInMenus = sal_True;
     mnSkipDisabledInMenus       = (sal_uInt16)sal_False;
     mbHideDisabledMenuItems     = sal_False;
-    mnAcceleratorsInContextMenus    = sal_True;
+    mbAcceleratorsInContextMenus = sal_True;
+    mbPrimaryButtonWarpsSlider = sal_False;
 
     Gradient aGrad( GradientStyle_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
     maWorkspaceGradient = Wallpaper( aGrad );
@@ -852,7 +854,8 @@ sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mbPreferredUseImagesInMenus == rSet.mpData->mbPreferredUseImagesInMenus) &&
          (mpData->mnSkipDisabledInMenus     == rSet.mpData->mnSkipDisabledInMenus)      &&
          (mpData->mbHideDisabledMenuItems   == rSet.mpData->mbHideDisabledMenuItems)    &&
-         (mpData->mnAcceleratorsInContextMenus  == rSet.mpData->mnAcceleratorsInContextMenus)       &&
+         (mpData->mbAcceleratorsInContextMenus  == rSet.mpData->mbAcceleratorsInContextMenus)&&
+         (mpData->mbPrimaryButtonWarpsSlider == rSet.mpData->mbPrimaryButtonWarpsSlider) &&
          (mpData->maFontColor               == rSet.mpData->maFontColor ))
         return sal_True;
     else
@@ -1511,8 +1514,8 @@ bool AllSettings::GetLayoutRTL() const
     if( nUIMirroring == -1 )
     {
         nUIMirroring = 0; // ask configuration only once
-        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
-            vcl::unohelper::GetMultiServiceFactory(),
+        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
+            comphelper::getProcessComponentContext(),
             OUString("org.openoffice.Office.Common/I18N/CTL") );    // note: case sensitive !
         if ( aNode.isValid() )
         {
@@ -1585,7 +1588,7 @@ LanguageType AllSettings::GetUILanguage() const
 const LocaleDataWrapper& AllSettings::GetLocaleDataWrapper() const
 {
     if ( !mpData->mpLocaleDataWrapper )
-        ((AllSettings*)this)->mpData->mpLocaleDataWrapper = new LocaleDataWrapper( vcl::unohelper::GetMultiServiceFactory(), GetLocale() );
+        ((AllSettings*)this)->mpData->mpLocaleDataWrapper = new LocaleDataWrapper( comphelper::getProcessServiceFactory(), GetLocale() );
     return *mpData->mpLocaleDataWrapper;
 }
 
@@ -1594,7 +1597,7 @@ const LocaleDataWrapper& AllSettings::GetLocaleDataWrapper() const
 const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
 {
     if ( !mpData->mpUILocaleDataWrapper )
-        ((AllSettings*)this)->mpData->mpUILocaleDataWrapper = new LocaleDataWrapper( vcl::unohelper::GetMultiServiceFactory(), GetUILocale() );
+        ((AllSettings*)this)->mpData->mpUILocaleDataWrapper = new LocaleDataWrapper( comphelper::getProcessServiceFactory(), GetUILocale() );
     return *mpData->mpUILocaleDataWrapper;
 }
 
@@ -1603,7 +1606,7 @@ const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
 const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
 {
     if ( !mpData->mpI18nHelper ) {
-        ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> aFactory(vcl::unohelper::GetMultiServiceFactory());
+        ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> aFactory(comphelper::getProcessServiceFactory());
         ((AllSettings*)this)->mpData->mpI18nHelper = new vcl::I18nHelper( aFactory, GetLocale() );
     }
     return *mpData->mpI18nHelper;
@@ -1614,7 +1617,7 @@ const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
 const vcl::I18nHelper& AllSettings::GetUILocaleI18nHelper() const
 {
     if ( !mpData->mpUII18nHelper ) {
-        ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> aFactory(vcl::unohelper::GetMultiServiceFactory());
+        ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> aFactory(comphelper::getProcessServiceFactory());
         ((AllSettings*)this)->mpData->mpUII18nHelper = new vcl::I18nHelper( aFactory, GetUILocale() );
     }
     return *mpData->mpUII18nHelper;

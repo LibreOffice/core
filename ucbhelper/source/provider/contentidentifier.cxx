@@ -47,13 +47,11 @@ namespace ucbhelper
 
 struct ContentIdentifier_Impl
 {
-    Reference< XMultiServiceFactory > m_xSMgr;
     OUString                          m_aContentId;
     OUString                          m_aProviderScheme;
     osl::Mutex                        m_aMutex;
 
-    ContentIdentifier_Impl( const Reference< XMultiServiceFactory >& rSMgr,
-                              const OUString& rURL );
+    ContentIdentifier_Impl( const OUString& rURL );
 };
 
 //=========================================================================
@@ -62,10 +60,7 @@ struct ContentIdentifier_Impl
 //
 //=========================================================================
 
-ContentIdentifier_Impl::ContentIdentifier_Impl(
-                  const Reference< XMultiServiceFactory >& rSMgr,
-                  const OUString& rURL )
-: m_xSMgr( rSMgr )
+ContentIdentifier_Impl::ContentIdentifier_Impl(const OUString& rURL )
 {
     // Normalize URL scheme ( it's case insensitive ).
 
@@ -86,18 +81,9 @@ ContentIdentifier_Impl::ContentIdentifier_Impl(
 //
 //=========================================================================
 
-ContentIdentifier::ContentIdentifier(
-                        const Reference< XMultiServiceFactory >& rxSMgr,
-                        const OUString& rURL )
-{
-    m_pImpl = new ContentIdentifier_Impl( rxSMgr, rURL );
-}
-
-//=========================================================================
 ContentIdentifier::ContentIdentifier( const OUString& rURL )
 {
-    m_pImpl = new ContentIdentifier_Impl(
-                    Reference< XMultiServiceFactory >(), rURL );
+    m_pImpl = new ContentIdentifier_Impl( rURL );
 }
 
 //=========================================================================

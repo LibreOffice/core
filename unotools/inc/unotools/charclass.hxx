@@ -34,8 +34,8 @@
 
 class String;
 namespace com { namespace sun { namespace star {
-    namespace lang {
-        class XMultiServiceFactory;
+    namespace uno {
+        class XComponentContext;
     }
 }}}
 
@@ -70,13 +70,12 @@ class UNOTOOLS_DLLPUBLIC CharClass : private boost::noncopyable
 {
     ::com::sun::star::lang::Locale  aLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >    xCC;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
     mutable ::osl::Mutex        aMutex;
 
 public:
     /// Preferred ctor with service manager specified
     CharClass(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSF,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
         const ::com::sun::star::lang::Locale& rLocale);
 
     /// Depricated ctor, tries to get a process service manager or to load the

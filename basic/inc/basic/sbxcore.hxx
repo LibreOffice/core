@@ -28,8 +28,6 @@
 #include "basicdllapi.h"
 
 class SvStream;
-class String;
-namespace rtl { class OUString; }
 
 // The following Macro defines four (five) necessary methods within a
 // SBX object. LoadPrivateData() and StorePrivateData() must be implemented.
@@ -68,10 +66,10 @@ protected:
     SBX_DECL_PERSIST(0,0,0);
 public:
     TYPEINFO();
-    inline void     SetFlags( sal_uInt16 n );
+    inline void         SetFlags( sal_uInt16 n );
     inline sal_uInt16   GetFlags() const;
-    inline void     SetFlag( sal_uInt16 n );
-    inline void     ResetFlag( sal_uInt16 n );
+    inline void         SetFlag( sal_uInt16 n );
+    inline void         ResetFlag( sal_uInt16 n );
     inline sal_Bool     IsSet( sal_uInt16 n ) const;
     inline sal_Bool     IsReset( sal_uInt16 n ) const;
     inline sal_Bool     CanRead() const;
@@ -81,17 +79,17 @@ public:
     inline sal_Bool     IsHidden() const;
     inline sal_Bool     IsVisible() const;
 
-    virtual sal_Bool IsFixed() const;
-    virtual void SetModified( sal_Bool );
+    virtual sal_Bool    IsFixed() const;
+    virtual void        SetModified( sal_Bool );
 
-    virtual SbxDataType  GetType()  const;
+    virtual SbxDataType GetType()  const;
     virtual SbxClassType GetClass() const;
 
     virtual void Clear();
 
     static SbxBase* Load( SvStream& );
-    static void Skip( SvStream& );
-    sal_Bool Store( SvStream& );
+    static void     Skip( SvStream& );
+    sal_Bool        Store( SvStream& );
     virtual sal_Bool LoadCompleted();
     virtual sal_Bool StoreCompleted();
 

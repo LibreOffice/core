@@ -482,6 +482,15 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_PITJANTJATJARA,        "pjt", "AU" },
     { LANGUAGE_USER_ERZYA,                 "myv", "RU" },
     { LANGUAGE_USER_MARI_MEADOW,           "mhr", "RU" },
+    { LANGUAGE_USER_KHANTY,                "kca", "RU" },
+    { LANGUAGE_USER_LIVONIAN,              "liv", "RU" },
+    { LANGUAGE_USER_MOKSHA,                "mdf", "RU" },
+    { LANGUAGE_USER_MARI_HILL,             "mrj", "RU" },
+    { LANGUAGE_USER_NGANASAN,              "nio", "RU" },
+    { LANGUAGE_USER_OLONETS,               "olo", "RU" },
+    { LANGUAGE_USER_VEPS,                  "vep", "RU" },
+    { LANGUAGE_USER_VORO,                  "vro", "EE" },
+    { LANGUAGE_USER_NENETS,                "yrk", "RU" },
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };

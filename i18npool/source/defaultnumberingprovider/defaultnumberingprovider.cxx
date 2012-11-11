@@ -20,6 +20,7 @@
 #include <defaultnumberingprovider.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <localedata.hxx>
 #include <nativenumbersupplier.hxx>
@@ -259,7 +260,7 @@ static sal_Unicode table_PersianWord_decadeX[][8]={
 };
 
 
-DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XMultiServiceFactory >& xMSF ) : xSMgr(xMSF),translit(NULL)
+DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XComponentContext >& rxContext ) : m_xContext(rxContext),translit(NULL)
 {
 
 }
@@ -272,7 +273,7 @@ DefaultNumberingProvider::~DefaultNumberingProvider()
 void DefaultNumberingProvider::impl_loadTranslit()
 {
     if ( !translit )
-        translit = new TransliterationImpl(comphelper::getComponentContext(xSMgr));
+        translit = new TransliterationImpl(m_xContext);
 }
 
 Sequence< Reference<container::XIndexAccess> >
@@ -934,8 +935,8 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_SR, S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_PERSIAN,   NULL, LANG_CTL},
         {style::NumberingType::CHARS_PERSIAN_WORD,   NULL, LANG_CTL},
-        {style::NumberingType::CHARS_GREEK_LOWER_LETTER,   C_GR_A ", " C_GR_B ", ... (gr)", LANG_ALL},
-        {style::NumberingType::CHARS_GREEK_UPPER_LETTER,   S_GR_A ", " S_GR_B ", ... (gr)", LANG_ALL},
+        {style::NumberingType::CHARS_GREEK_UPPER_LETTER,   C_GR_A ", " C_GR_B ", ... (gr)", LANG_ALL},
+        {style::NumberingType::CHARS_GREEK_LOWER_LETTER,   S_GR_A ", " S_GR_B ", ... (gr)", LANG_ALL},
 };
 static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
 
@@ -966,11 +967,8 @@ sal_Bool SAL_CALL
 DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(RuntimeException)
 {
     if (! xHierarchicalNameAccess.is()) {
-        Reference< XInterface > xInterface;
-
-        xInterface = xSMgr->createInstance(OUString("com.sun.star.configuration.ConfigurationProvider"));
         Reference< XMultiServiceFactory > xConfigProvider =
-                Reference< XMultiServiceFactory >(xInterface, UNO_QUERY );
+            configuration::theDefaultProvider::get(m_xContext);
 
         if (! xConfigProvider.is())
             throw RuntimeException();
@@ -981,7 +979,7 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(Runti
         aPath.Value <<= OUString("/org.openoffice.Office.Common/I18N"),
         aArgs[0] <<= aPath;
 
-        xInterface = xConfigProvider->createInstanceWithArguments(
+        Reference<XInterface> xInterface = xConfigProvider->createInstanceWithArguments(
             OUString("com.sun.star.configuration.ConfigurationAccess"), aArgs);
 
         xHierarchicalNameAccess.set(xInterface, UNO_QUERY);

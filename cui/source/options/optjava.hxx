@@ -26,7 +26,7 @@
 #include <vcl/timer.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/simptabl.hxx>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>
 #include "radiobtnbox.hxx"
 
@@ -73,7 +73,7 @@ private:
                             m_aAddedInfos;
 
     ::com::sun::star::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker > xFolderPicker;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
     DECL_LINK(EnableHdl_Impl, void *);
     DECL_LINK(              CheckHdl_Impl, SvxSimpleTable * );
@@ -90,7 +90,7 @@ private:
     void                    ClearJavaList();
     void                    LoadJREs();
     void                    AddJRE( JavaInfo* _pInfo );
-    void                    HandleCheckEntry( SvLBoxEntry* _pEntry );
+    void                    HandleCheckEntry( SvTreeListEntry* _pEntry );
     void                    AddFolder( const ::rtl::OUString& _rFolder );
 
 public:

@@ -49,7 +49,7 @@ private:
 
     using SvTreeListBox::InsertEntry;
     // Avoid ambiguity with new InsertEntry:
-    virtual SvLBoxEntry*    InsertEntry( const XubString& rText, SvLBoxEntry* pParent,
+    virtual SvTreeListEntry*    InsertEntry( const XubString& rText, SvTreeListEntry* pParent,
                                          sal_Bool bChildrenOnDemand,
                                          sal_uIntPtr nPos, void* pUserData,
                                          SvLBoxButtonKind eButtonKind );
@@ -75,7 +75,7 @@ public:
     sal_uInt16          GetCheckedEntryCount() const;
     void            CheckEntryPos       ( sal_uInt16 nPos, sal_Bool bCheck = sal_True );
     sal_Bool            IsChecked           ( sal_uInt16 nPos ) const;
-    void            ToggleCheckButton   ( SvLBoxEntry* pEntry );
+    void            ToggleCheckButton   ( SvTreeListEntry* pEntry );
 
     void*           SetEntryData        ( sal_uInt16 nPos, void* pNewData );
     void*           GetEntryData        ( sal_uInt16 nPos ) const;

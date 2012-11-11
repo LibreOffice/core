@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #include "oox/vml/vmlformatting.hxx"
 
 #include <rtl/strbuf.hxx>
@@ -274,6 +273,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     Point aCurrentPoint;
     sal_Int32 nTokenStart = 0;
     sal_Int32 nTokenLen = 0;
+    sal_Int32 nParamCount = 0;
     enum VML_State { START, MOVE_REL, MOVE_ABS, BEZIER_REL, BEZIER_ABS,
                      LINE_REL, LINE_ABS, CLOSE, END };
     VML_State state = START;
@@ -298,25 +298,32 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
                 nTokenLen = 0;
             }
 
+            if (rPath[ i ] == ',' )
+            {
+                nParamCount--;
+            }
+
             // Upon finding the next command code, deal with stored
-            // coordinates for previous command
-            if ( rPath[ i ] != ',' )
+            // coordinates for previous command and reset parameters counter if needed.
+            // See http://www.w3.org/TR/NOTE-VML#_Toc416858382 for params count reference
+            if ( rPath[ i ] != ',' || nParamCount == 0)
             {
                 switch ( state )
                 {
-                case MOVE_REL:
+                case MOVE_REL: // 2* params -> param count reset
+                    rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
+                    rFlagLists.back().push_back( PolygonFlags_NORMAL );
+                    aCurrentPoint = rPointLists.back().back();
+                    nParamCount = 2 * 2;
+                    break;
+
+                case MOVE_ABS: // 2 params -> no param count reset
                     rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
                     break;
 
-                case MOVE_ABS:
-                    rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
-                    rFlagLists.back().push_back( PolygonFlags_NORMAL );
-                    aCurrentPoint = rPointLists.back().back();
-                    break;
-
-                case BEZIER_REL:
+                case BEZIER_REL: // 6* params -> param count reset
                     rPointLists.back().push_back( Point( aCurrentPoint.X + aCoordList[ 0 ],
                                             aCurrentPoint.Y + aCoordList[ 1 ] ) );
                     rPointLists.back().push_back( Point( aCurrentPoint.X + aCoordList[ 2 ],
@@ -327,9 +334,10 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
                     rFlagLists.back().push_back( PolygonFlags_CONTROL );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
+                    nParamCount = 2 * 6;
                     break;
 
-                case BEZIER_ABS:
+                case BEZIER_ABS: // 6* params -> param count reset
                     rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
                     rPointLists.back().push_back( Point( aCoordList[ 2 ], aCoordList[ 3 ] ) );
                     rPointLists.back().push_back( Point( aCoordList[ 4 ], aCoordList[ 5 ] ) );
@@ -337,28 +345,31 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
                     rFlagLists.back().push_back( PolygonFlags_CONTROL );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
+                    nParamCount = 2 * 6;
                     break;
 
-                case LINE_REL:
+                case LINE_REL: // 2* params -> param count reset
                     rPointLists.back().push_back( Point( aCurrentPoint.X + aCoordList[ 0 ],
                                             aCurrentPoint.Y + aCoordList[ 1 ] ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
+                    nParamCount = 2 * 2;
                     break;
 
-                case LINE_ABS:
+                case LINE_ABS: // 2* params -> param count reset
                     rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
+                    nParamCount = 2 * 2;
                     break;
 
-                case CLOSE:
+                case CLOSE: // 0 param
                     rPointLists.back().push_back( rPointLists.back()[ 0 ] );
                     rFlagLists.back().push_back( rFlagLists.back()[ 0 ] );
                     aCurrentPoint = rPointLists.back().back();
                     break;
 
-                case END:
+                case END: // 0 param
                     rPointLists.push_back( ::std::vector< Point >() );
                     rFlagLists.push_back( ::std::vector< PolygonFlags >() );
                     break;
@@ -373,12 +384,12 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
             // Move on to current command state
             switch ( rPath[ i ] )
             {
-            case 't': state = MOVE_REL; nTokenLen = 0; break;
-            case 'm': state = MOVE_ABS; nTokenLen = 0; break;
-            case 'v': state = BEZIER_REL; nTokenLen = 0; break;
-            case 'c': state = BEZIER_ABS; nTokenLen = 0; break;
-            case 'r': state = LINE_REL; nTokenLen = 0; break;
-            case 'l': state = LINE_ABS; nTokenLen = 0; break;
+            case 't': state = MOVE_REL; nTokenLen = 0; nParamCount = 2 * 2; break;
+            case 'm': state = MOVE_ABS; nTokenLen = 0; nParamCount = 2 * 2; break;
+            case 'v': state = BEZIER_REL; nTokenLen = 0; nParamCount = 2 * 6; break;
+            case 'c': state = BEZIER_ABS; nTokenLen = 0; nParamCount = 2 * 6; break;
+            case 'r': state = LINE_REL; nTokenLen = 0; nParamCount = 2 * 2; break;
+            case 'l': state = LINE_ABS; nTokenLen = 0; nParamCount = 2 * 2; break;
             case 'x': state = CLOSE; nTokenLen = 0; break;
             case 'e': state = END; break;
             }

@@ -2034,13 +2034,13 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
                                            nTTyp );
                     {
                         SwNodeIndex aContentIdx = *pNdIdx;
-                        aContentIdx++;
+                        ++aContentIdx;
                         if ( aContentIdx.GetNode().IsTableNode() )
                         {
                             bool bContainsOnlyTables = true;
                             do {
                                 aContentIdx = *(aContentIdx.GetNode().EndOfSectionNode());
-                                aContentIdx++;
+                                ++aContentIdx;
                                 if ( !aContentIdx.GetNode().IsTableNode() &&
                                      aContentIdx.GetIndex() != pNdIdx->GetNode().EndOfSectionIndex() )
                                 {

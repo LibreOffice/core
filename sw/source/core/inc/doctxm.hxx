@@ -95,7 +95,7 @@ public:
     void UpdatePageNum();               // insert page numbering
     TYPEINFO();                         // for rtti
 
-    sal_Bool SetPosAtStartEnd( SwPosition& rPos, sal_Bool bAtStart = sal_True ) const;
+    bool SetPosAtStartEnd( SwPosition& rPos, bool bAtStart = true ) const;
 };
 
 struct SwDefTOXBase_Impl

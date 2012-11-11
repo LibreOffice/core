@@ -46,6 +46,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svl/itempool.hxx>
@@ -461,9 +462,8 @@ void SvxSearchDialog::Construct_Impl()
         try
         {
             uno::Reference< lang::XMultiServiceFactory >  xMgr = getProcessServiceFactory();
-            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(xMgr->createInstance(
-                    ::rtl::OUString(  "com.sun.star.configuration.ConfigurationProvider")),
-                    uno::UNO_QUERY);
+            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
+                    configuration::theDefaultProvider::get( comphelper::getComponentContext(xMgr) );
             uno::Sequence< uno::Any > aArgs(1);
             ::rtl::OUString sPath( "/org.openoffice.Office.Common/SearchOptions/");
             aArgs[0] <<= sPath;

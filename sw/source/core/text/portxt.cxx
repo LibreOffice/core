@@ -521,7 +521,7 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
         if( nHoleLen == GetLen() )
             nBlankSize = Width();
         else
-            nBlankSize = nHoleLen * rInf.GetTxtSize(rtl::OUString(' ')).Width();
+            nBlankSize = nHoleLen * rInf.GetTxtSize(OUString(' ')).Width();
         Width( Width() - nBlankSize );
         rInf.X( rInf.X() - nBlankSize );
         SetLen( GetLen() - nHoleLen );
@@ -559,13 +559,13 @@ void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetTxt().GetChar(rInf.GetIdx()))
     {
         rInf.DrawBackBrush( *this );
-        const rtl::OUString aTxt(CH_TXT_ATR_SUBST_FIELDEND);
+        const OUString aTxt(CH_TXT_ATR_SUBST_FIELDEND);
         rInf.DrawText( aTxt, *this, 0, aTxt.getLength(), false );
     }
     else if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDSTART==rInf.GetTxt().GetChar(rInf.GetIdx()))
     {
         rInf.DrawBackBrush( *this );
-        const rtl::OUString aTxt(CH_TXT_ATR_SUBST_FIELDSTART);
+        const OUString aTxt(CH_TXT_ATR_SUBST_FIELDSTART);
         rInf.DrawText( aTxt, *this, 0, aTxt.getLength(), false );
     }
     else if( GetLen() )
@@ -728,7 +728,7 @@ void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
     // #i16816# tagged pdf support
     if( rInf.GetVsh() && rInf.GetVsh()->GetViewOptions()->IsPDFExport() )
     {
-        const rtl::OUString aTxt( ' ' );
+        const OUString aTxt( ' ' );
         rInf.DrawText( aTxt, *this, 0, 1, false );
     }
 }
@@ -768,19 +768,19 @@ sal_Bool SwFieldMarkPortion::Format( SwTxtFormatInfo & )
 
 namespace {
     static sal_Int32 getCurrentListIndex( IFieldmark* pBM,
-            ::rtl::OUString* io_pCurrentText = NULL )
+            OUString* io_pCurrentText = NULL )
     {
         const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
         sal_Int32 nCurrentIdx = 0;
-        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)));
+        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)));
         if(pResult != pParameters->end())
             pResult->second >>= nCurrentIdx;
         if(io_pCurrentText)
         {
-            const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)));
+            const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)));
             if(pListEntries != pParameters->end())
             {
-                uno::Sequence< ::rtl::OUString > vListEntries;
+                uno::Sequence< OUString > vListEntries;
                 pListEntries->second >>= vListEntries;
                 if(nCurrentIdx < vListEntries.getLength())
                     *io_pCurrentText = vListEntries[nCurrentIdx];
@@ -814,7 +814,7 @@ void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
         }
         else if ( pBM->GetFieldname( ) == ODF_FORMDROPDOWN )
         { // a list...
-            rtl::OUString aTxt;
+            OUString aTxt;
             getCurrentListIndex( pBM, &aTxt );
             rInf.DrawViewOpt( *this, POR_FLD );
             rInf.DrawText( aTxt, *this, 0, aTxt.getLength(), false );
@@ -845,7 +845,7 @@ sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
         }
         else if ( pBM->GetFieldname( ) == ODF_FORMDROPDOWN )
         {
-            ::rtl::OUString aTxt;
+            OUString aTxt;
             getCurrentListIndex( pBM, &aTxt );
             SwPosSize aPosSize = rInf.GetTxtSize( aTxt );
             Width( aPosSize.Width(  ) );

@@ -1146,7 +1146,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                 case RES_DBNUMSETFLD:
                 case RES_DBNEXTSETFLD:
                     if( !pDoc->IsNewFldLst() && GetNodes().IsDocNodes() )
-                        pDoc->InsDelFldInFldLst( sal_False, *(SwTxtFld*)pAttr );
+                        pDoc->InsDelFldInFldLst( false, *(SwTxtFld*)pAttr );
                     break;
                 case RES_DDEFLD:
                     if( GetNodes().IsDocNodes() &&
@@ -2122,7 +2122,7 @@ lcl_CollectHintSpans(const SwpHints& i_rHints, const sal_uInt16 nLength,
             {
                 // insert dummy span covering the gap
                 o_rSpanMap.insert(AttrSpanMap_t::value_type(
-                            AttrSpan_t(nLastEnd, aSpan.first), 0));
+                    AttrSpan_t(nLastEnd, aSpan.first), (const SwTxtAttr *)0));
             }
 
             nLastEnd = aSpan.second;
@@ -2133,7 +2133,7 @@ lcl_CollectHintSpans(const SwpHints& i_rHints, const sal_uInt16 nLength,
     if (nLastEnd != nLength && nLength != 0)
     {
         o_rSpanMap.insert(
-            AttrSpanMap_t::value_type(AttrSpan_t(nLastEnd, nLength), 0));
+            AttrSpanMap_t::value_type(AttrSpan_t(nLastEnd, nLength), (const SwTxtAttr *)0));
     }
 }
 
@@ -2627,9 +2627,9 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
                 case RES_DBNEXTSETFLD:
                     {
                         if( bDelFirst )
-                            pDoc->InsDelFldInFldLst( sal_False, *(SwTxtFld*)pHint );
+                            pDoc->InsDelFldInFldLst( false, *(SwTxtFld*)pHint );
                         if( rNode.GetNodes().IsDocNodes() )
-                            pDoc->InsDelFldInFldLst( sal_True, *(SwTxtFld*)pHint );
+                            pDoc->InsDelFldInFldLst( true, *(SwTxtFld*)pHint );
                     }
                     break;
                 case RES_DDEFLD:

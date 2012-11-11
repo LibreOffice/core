@@ -41,7 +41,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/awt/WindowDescriptor.hpp>
-#include <com/sun/star/awt/XToolkit.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -150,11 +150,7 @@ namespace slideshow
                     // create an awt window to contain the applet
                     // ==========================================
 
-                    uno::Reference< awt::XToolkit > xToolkit(
-                        xFactory->createInstanceWithContext(
-                            ::rtl::OUString("com.sun.star.awt.Toolkit" ),
-                            mxComponentContext ),
-                        uno::UNO_QUERY_THROW );
+                    uno::Reference< awt::XToolkit2 > xToolkit = awt::Toolkit::create(mxComponentContext);
 
                     awt::WindowDescriptor aOwnWinDescriptor( awt::WindowClass_SIMPLE,
                                                              ::rtl::OUString(),

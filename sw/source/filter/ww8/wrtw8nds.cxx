@@ -1556,9 +1556,8 @@ void WW8AttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rS
     if ( pTextNodeInfo.get() != NULL )
     {
 #ifdef DBG_UTIL
-        ::std::clog << pTextNodeInfo->toString() << ::std::endl;
+        SAL_INFO( "sw.ww8", pTextNodeInfo->toString());
 #endif
-
         TableInfoCell( pTextNodeInfoInner );
     }
 
@@ -1744,9 +1743,7 @@ void MSWordExportBase::GetSortedBookmarks( const SwTxtNode& rNode, xub_StrLen nA
 
 void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 {
-#ifdef DBG_UTIL
-    ::std::clog << "<OutWW8_SwTxtNode>" << ::std::endl;
-#endif
+    SAL_INFO( "sw.ww8", "<OutWW8_SwTxtNode>" );
 
     ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo( mpTableInfo->getTableNodeInfo( &rNode ) );
 
@@ -2056,7 +2053,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     if ( pTextNodeInfo.get() != NULL )
     {
 #ifdef DBG_UTIL
-        ::std::clog << pTextNodeInfo->toString() << ::std::endl;
+        SAL_INFO( "sw.ww8", pTextNodeInfo->toString());
 #endif
 
         AttrOutput().TableInfoCell( pTextNodeInfoInner );
@@ -2357,9 +2354,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     AttrOutput().EndParagraph( pTextNodeInfoInner );
 
-#ifdef DBG_UTIL
-    ::std::clog << "</OutWW8_SwTxtNode>" << ::std::endl;
-#endif
+    SAL_INFO( "sw.ww8", "</OutWW8_SwTxtNode>" );
 }
 
 void WW8AttributeOutput::TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeInfo )

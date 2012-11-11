@@ -85,6 +85,14 @@ ifneq ($(HAVE_THREADSAFE_STATICS),TRUE)
 gb_CXXFLAGS_COMMON += -fno-threadsafe-statics
 endif
 
+ifeq ($(strip $(gb_GCOV)),YES)
+gb_CFLAGS_COMMON += -fprofile-arcs -ftest-coverage
+gb_CXXFLAGS_COMMON += -fprofile-arcs -ftest-coverage
+gb_LinkTarget_LDFLAGS += -fprofile-arcs -lgcov
+gb_COMPILERDEFAULTOPTFLAGS := -O0
+endif
+
+
 ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
 gb_VISIBILITY_FLAGS := -DHAVE_GCC_VISIBILITY_FEATURE -fvisibility=hidden
 ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
@@ -110,7 +118,7 @@ gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
 	-fexceptions
 
-ifeq ($(gb_PRODUCT),$(true))
+ifeq ($(gb_ENABLE_DBGUTIL),$(false))
 # Clang doesn't have this option
 ifeq ($(HAVE_GCC_FNO_ENFORCE_EH_SPECS),TRUE)
 gb_LinkTarget_EXCEPTIONFLAGS += \
@@ -150,13 +158,19 @@ gb_DEBUG_CFLAGS := $(GGDB2) $(FINLINE_LIMIT0) $(FNO_INLINE)
 gb_DEBUG_CXXFLAGS := $(FNO_DEFAULT_INLINE)
 
 
-gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
-gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
+gb_LinkTarget_INCLUDE := $(subst -I. , ,$(SOLARINC))
 
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
-gb_COMPILER_PLUGINS :=-Xclang -load -Xclang $(SRCDIR)/compilerplugins/obj/compileplugin.so -Xclang -add-plugin -Xclang loplugin
+ifeq ($(COMPILER_PLUGIN_TOOL),)
+gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(SRCDIR)/compilerplugins/obj/plugin.so -Xclang -add-plugin -Xclang loplugin
+else
+gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(SRCDIR)/compilerplugins/obj/plugin.so -Xclang -plugin -Xclang loplugin -Xclang -plugin-arg-loplugin -Xclang $(COMPILER_PLUGIN_TOOL)
+endif
+# extra EF variable to make the command line shorter (just like is done with $(SRCDIR) etc.)
+gb_COMPILER_PLUGINS_SETUP := EF=$(SRCDIR)/sal/inc/sal/log-areas.dox && ICECC_EXTRAFILES=$$EF CCACHE_EXTRAFILES=$$EF
 else
 gb_COMPILER_PLUGINS :=
+gb_COMPILER_PLUGINS_SETUP :=
 endif
 
 # Executable class
@@ -186,8 +200,6 @@ endef
 define gb_Helper_make_url
 file://$(strip $(1))
 endef
-
-gb_Helper_symlinked_native = $(1)
 
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
 gb_Helper_OUTDIR_FOR_BUILDLIBDIR := $(OUTDIR_FOR_BUILD)/lib

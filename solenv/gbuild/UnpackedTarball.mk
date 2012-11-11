@@ -73,6 +73,9 @@ $(call gb_UnpackedTarget_get_target,%).tgz :
 $(call gb_UnpackedTarget_get_target,%).zip :
 	$(call gb_UnpackedTarget__command,unzip,$@,$*)
 
+$(call gb_UnpackedTarget_get_target,%).oxt :
+	$(call gb_UnpackedTarget__command,unzip,$@,$*)
+
 .PHONY : $(call gb_UnpackedTarget_get_clean_target,%)
 $(call gb_UnpackedTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UPK,1)
@@ -177,6 +180,7 @@ $(call gb_UnpackedTarball_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),PAT,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf \
+			$(call gb_UnpackedTarball_get_final_target,$*) \
 			$(call gb_UnpackedTarball_get_target,$*) \
 			$(call gb_UnpackedTarball_get_preparation_target,$*) \
 			$(call gb_UnpackedTarball_get_dir,$*) \

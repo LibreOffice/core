@@ -217,7 +217,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
     xub_StrLen nPorLen = 0;
     // do not call the break iterator nCutPos is a blank
-    xub_Unicode cCutChar = rInf.GetTxt().GetChar( nCutPos );
+    sal_Unicode cCutChar = rInf.GetTxt().GetChar( nCutPos );
     if( CH_BLANK == cCutChar || CH_FULL_BLANK == cCutChar )
     {
         nBreakPos = nCutPos;
@@ -258,7 +258,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // the field portion, we trigger an underflow.
 
         xub_StrLen nOldIdx = rInf.GetIdx();
-        xub_Unicode cFldChr = 0;
+        sal_Unicode cFldChr = 0;
 
 #if OSL_DEBUG_LEVEL > 0
         XubString aDebugString;

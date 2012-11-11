@@ -38,8 +38,8 @@ class SdPageListControl : public SvTreeListBox
 private:
     SvLBoxButtonData*   m_pCheckButton;
 
-    SvLBoxEntry* InsertPage( const String& rPageName );
-    void InsertTitle( SvLBoxEntry* pEntry, const String& rTitle );
+    SvTreeListEntry* InsertPage( const String& rPageName );
+    void InsertTitle( SvTreeListEntry* pEntry, const String& rTitle );
 
 public:
     SdPageListControl( Window* pParent, const ResId& rResId );

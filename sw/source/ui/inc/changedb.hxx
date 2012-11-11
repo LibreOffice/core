@@ -72,7 +72,7 @@ class SwChangeDBDlg: public SvxStandardDialog
     virtual void    Apply();
     void            UpdateFlds();
     void            FillDBPopup();
-    SvLBoxEntry*    Insert(const String& rDBName);
+    SvTreeListEntry*    Insert(const String& rDBName);
     void            ShowDBName(const SwDBData& rDBData);
 
 public:

@@ -53,7 +53,7 @@ enum PolyFlags
 };
 #endif
 
-class PolyOptimizeData
+class SAL_WARN_UNUSED PolyOptimizeData
 {
 private:
 
@@ -66,8 +66,8 @@ public:
                     PolyOptimizeData( sal_uIntPtr nAbsolut ) : eType( DATA_ABSOLUT ), mnAbsolut( nAbsolut ) {}
                     PolyOptimizeData( sal_uInt16 nPercent ) : eType( DATA_PERCENT ), mnPercent( nPercent ) {}
 
-    sal_uIntPtr     GetAbsValue() const { DBG_ASSERT( eType == DATA_ABSOLUT, "Wrong data type" ); return mnAbsolut; }
-    sal_uInt16      GetPercentValue() const { DBG_ASSERT( eType == DATA_PERCENT, "Wrong data type" ); return mnPercent; }
+    sal_uIntPtr     GetAbsValue() const { (void) eType; DBG_ASSERT( eType == DATA_ABSOLUT, "Wrong data type" ); return mnAbsolut; }
+    sal_uInt16      GetPercentValue() const { (void) eType; DBG_ASSERT( eType == DATA_PERCENT, "Wrong data type" ); return mnPercent; }
 };
 
 class SvStream;
@@ -81,7 +81,7 @@ namespace basegfx
     class B2DPolyPolygon;
 }
 
-class TOOLS_DLLPUBLIC Polygon
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Polygon
 {
 private:
     ImplPolygon*        mpImplPolygon;
@@ -194,7 +194,7 @@ public:
     explicit Polygon(const ::basegfx::B2DPolygon& rPolygon);
 };
 
-class TOOLS_DLLPUBLIC PolyPolygon
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED PolyPolygon
 {
 private:
     ImplPolyPolygon*    mpImplPolyPolygon;

@@ -60,9 +60,8 @@ public:
     SvtURLBox       maEDImportTemplate;
     PushButton      maPBImportTemplate;
 
-    FixedText       maFTTransformationService;
-    RadioButton		maRBTransformationServiceLibXSLT;
-    RadioButton		maRBTransformationServiceSaxonJ;
+    FixedText       maFTNeedsXSLT2;
+    CheckBox	    maCBNeedsXSLT2;
 
 private:
     void SetURL( SvtURLBox& rURLBox, const rtl::OUString& rURL );

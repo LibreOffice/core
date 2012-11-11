@@ -38,7 +38,7 @@ class LocalizationMgr
     Shell*                                                      m_pShell;
 
     ScriptDocument                                              m_aDocument;
-    ::rtl::OUString                                             m_aLibName;
+    OUString                                                    m_aLibName;
 
     ::com::sun::star::lang::Locale                              m_aLocaleBeforeBasicStart;
 
@@ -53,7 +53,7 @@ class LocalizationMgr
         COPY_RESOURCES
     };
     static sal_Int32 implHandleControlResourceProperties( ::com::sun::star::uno::Any aControlAny,
-            const ::rtl::OUString& aDialogName, const ::rtl::OUString& aCtrlName,
+            const OUString& aDialogName, const OUString& aCtrlName,
             ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >
             xStringResourceManager, ::com::sun::star::uno::Reference< ::com::sun::star::resource::
             XStringResourceResolver > xSourceStringResolver, HandleResourceMode eMode );
@@ -69,7 +69,7 @@ class LocalizationMgr
     void implEnableDisableResourceForAllLibraryDialogs( HandleResourceMode eMode );
 
 public:
-    LocalizationMgr(Shell*, ScriptDocument const&, rtl::OUString const& aLibName,
+    LocalizationMgr(Shell*, ScriptDocument const&, OUString const& aLibName,
         const ::com::sun::star::uno::Reference
             < ::com::sun::star::resource::XStringResourceManager >& xStringResourceManager );
     ::com::sun::star::uno::Reference
@@ -97,21 +97,21 @@ public:
     void handleBasicStopped( void );
 
     static void setControlResourceIDsForNewEditorObject( DlgEditor* pEditor,
-        ::com::sun::star::uno::Any aControlAny, const ::rtl::OUString& aCtrlName );
+        ::com::sun::star::uno::Any aControlAny, const OUString& aCtrlName );
 
     static void renameControlResourceIDsForEditorObject( DlgEditor* pEditor,
-        ::com::sun::star::uno::Any aControlAny, const ::rtl::OUString& aNewCtrlName );
+        ::com::sun::star::uno::Any aControlAny, const OUString& aNewCtrlName );
 
     static void deleteControlResourceIDsForDeletedEditorObject( DlgEditor* pEditor,
-        ::com::sun::star::uno::Any aControlAny, const ::rtl::OUString& aCtrlName );
+        ::com::sun::star::uno::Any aControlAny, const OUString& aCtrlName );
 
-    static void setStringResourceAtDialog( const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aDlgName,
+    static void setStringResourceAtDialog( const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aDlgName,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
 
-    static void renameStringResourceIDs( const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aDlgName,
+    static void renameStringResourceIDs( const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aDlgName,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
 
-    static void removeResourceForDialog( const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aDlgName,
+    static void removeResourceForDialog( const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aDlgName,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >
@@ -128,13 +128,13 @@ public:
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > xStringResourceManager );
 
     static void copyResourcesForPastedEditorObject( DlgEditor* pEditor,
-        ::com::sun::star::uno::Any aControlAny, const ::rtl::OUString& aCtrlName,
+        ::com::sun::star::uno::Any aControlAny, const OUString& aCtrlName,
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::
         XStringResourceResolver > xSourceStringResolver );
 
     static void copyResourceForDroppedDialog(
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel,
-        const ::rtl::OUString& aDialogName,
+        const OUString& aDialogName,
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > xStringResourceManager,
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver > xSourceStringResolver );
 

@@ -38,14 +38,20 @@
 
 # enable if: no "-TARGET" defined AND [module is enabled OR "TARGET" defined]
 gb_LinkTarget__debug_enabled = \
- $(and $(if $(filter -$(1),$(ENABLE_DEBUG_FOR)),,$(true)),\
+ $(and $(if $(filter -$(1),$(ENABLE_DEBUGINFO_FOR)),,$(true)),\
        $(or $(gb_Module_CURRENTMODULE_DEBUG_ENABLED),\
-            $(filter $(1),$(ENABLE_DEBUG_FOR))))
+            $(filter $(1),$(ENABLE_DEBUGINFO_FOR))))
 
 # debug flags, if ENABLE_DEBUG is set and the LinkTarget is named
-# in the list of libraries of ENABLE_DEBUG_FOR
+# in the list of libraries of ENABLE_DEBUGINFO_FOR
 gb_LinkTarget__get_debugcflags=$(if $(call gb_LinkTarget__debug_enabled,$(1)),$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS))
 gb_LinkTarget__get_debugcxxflags=$(if $(call gb_LinkTarget__debug_enabled,$(1)),$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUG_CFLAGS) $(gb_DEBUG_CXXFLAGS),$(gb_COMPILEROPTFLAGS))
+
+# similar for LDFLAGS, use linker optimization flags in non-debug case,
+# but moreover strip debug from libraries for which debuginfo is not wanted
+# (some libraries reuse .o files from other libraries, notably unittests)
+gb_LinkTarget__get_stripldflags=$(if $(strip $(CFLAGS)$(CXXFLAGS)$(OBJCFLAGS)$(OBJCXXFLAGS)$(LDFLAGS)),,$(gb_LINKERSTRIPDEBUGFLAGS))
+gb_LinkTarget__get_debugldflags=$(if $(call gb_LinkTarget__debug_enabled,$(1)),,$(gb_LINKEROPTFLAGS) $(call gb_LinkTarget__get_stripldflags,$(1)))
 
 # generic cflags/cxxflags to use (optimization flags, debug flags)
 # user supplied CFLAGS/CXXFLAGS override default debug/optimization flags
@@ -53,6 +59,7 @@ gb_LinkTarget__get_cflags=$(if $(CFLAGS),$(CFLAGS),$(call gb_LinkTarget__get_deb
 gb_LinkTarget__get_objcflags=$(if $(OBJCFLAGS),$(OBJCFLAGS),$(call gb_LinkTarget__get_debugcflags,$(1)))
 gb_LinkTarget__get_cxxflags=$(if $(CXXFLAGS),$(CXXFLAGS),$(call gb_LinkTarget__get_debugcxxflags,$(1)))
 gb_LinkTarget__get_objcxxflags=$(if $(OBJCXXFLAGS),$(OBJCXXFLAGS),$(call gb_LinkTarget__get_debugcxxflags,$(1)))
+gb_LinkTarget__get_ldflags=$(if $(LDFLAGS),$(LDFLAGS),$(call gb_LinkTarget__get_debugldflags,$(1)))
 
 # Overview of dependencies and tasks of LinkTarget
 #
@@ -114,6 +121,9 @@ gb_Object__command_dep = \
  $(call gb_Output_error,gb_Object__command_dep is only for gb_FULLDEPS)
 endif
 
+# This one only exists to force .c/.cxx "rebuilds" when running a compiler tool.
+.PHONY: force_compiler_tool_run
+force_compiler_tool_run:
 
 # CObject class
 
@@ -121,8 +131,13 @@ gb_CObject_get_source = $(1)/$(2).c
 # defined by platform
 #  gb_CObject__command
 
+ifneq ($(COMPILER_PLUGIN_TOOL),)
+$(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%) force_compiler_tool_run
+	$(call gb_CObject__tool_command,$*,$<)
+else
 $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%)
 	$(call gb_CObject__command,$@,$*,$<,$(call gb_CObject_get_dep_target,$*))
+endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_CObject_get_dep_target,%) :
@@ -138,8 +153,13 @@ gb_CxxObject_get_source = $(1)/$(2).cxx
 # defined by platform
 #  gb_CxxObject__command
 
+ifneq ($(COMPILER_PLUGIN_TOOL),)
+$(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%) force_compiler_tool_run
+	$(call gb_CxxObject__tool_command,$*,$<)
+else
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%)
 	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_CxxObject_get_dep_target,$*))
+endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_CxxObject_get_dep_target,%) :
@@ -252,6 +272,11 @@ gb_ObjCxxObject_get_source = $(1)/$(2).mm
 # defined by platform
 #  gb_ObjCxxObject__command
 
+ifneq ($(COMPILER_PLUGIN_TOOL),)
+$(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%) force_compiler_tool_run
+	$(call gb_ObjCxxObject__tool_command,$*,$<)
+else
+
 $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%)
 	$(call gb_ObjCxxObject__command,$@,$*,$<,$(call gb_ObjCxxObject_get_dep_target,$*))
 
@@ -260,6 +285,7 @@ $(call gb_ObjCxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_ObjCxxObject_get_target,$*)))
 
+endif
 endif
 
 
@@ -270,6 +296,11 @@ gb_ObjCObject_get_source = $(1)/$(2).m
 # defined by platform
 #  gb_ObjCObject__command
 
+ifneq ($(COMPILER_PLUGIN_TOOL),)
+$(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%) force_compiler_tool_run
+	$(call gb_ObjCObject__tool_command,$*,$<)
+else
+
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
 	$(call gb_ObjCObject__command,$@,$*,$<,$(call gb_ObjCObject_get_dep_target,$*))
 
@@ -278,6 +309,7 @@ $(call gb_ObjCObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_ObjCObject_get_target,$*)))
 
+endif
 endif
 
 
@@ -310,7 +342,6 @@ endef
 #  gb_LinkTarget_CXXFLAGS
 #  gb_LinkTarget_LDFLAGS
 #  gb_LinkTarget_INCLUDE
-#  gb_LinkTarget_INCLUDE_STL
 
 .PHONY : $(call gb_LinkTarget_get_clean_target,%)
 $(call gb_LinkTarget_get_clean_target,%) :
@@ -355,7 +386,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(8),$(call gb_GenCObject_get_dep_target,$(object))) \
 		$(foreach object,$(9),$(call gb_GenCxxObject_get_dep_target,$(object))) \
 		) && \
-	$(SOLARENV)/bin/concat-deps $${RESPONSEFILE} > $(1)) && \
+	$(call gb_Executable_get_target_for_build,concat-deps) $${RESPONSEFILE} > $(1)) && \
 	rm -f $${RESPONSEFILE}
 
 endef
@@ -482,8 +513,7 @@ $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $$
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_STL)
-$(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS := $$(gb_LinkTarget_LDFLAGS) $(LDFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS := $$(gb_LinkTarget_LDFLAGS) $(call gb_LinkTarget__get_ldflags,$(2))
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : LIBS :=
@@ -515,7 +545,6 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJC
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_YACCFLAGS := $$(gb_LinkTarget_YYACFLAGS) $(YACCFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $$(call gb_LinkTarget_rtl_defs,$(1)) $(CPPFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
-$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_STL)
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS :=
@@ -533,7 +562,6 @@ define gb_LinkTarget_set_soversion_script
 $(call gb_LinkTarget_get_target,$(1)) : $(3)
 $(call gb_LinkTarget_get_target,$(1)) : SOVERSION := $(2)
 $(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT := $(3)
-$(call gb_LinkTarget_add_auxtargets,$(1),$(call gb_LinkTarget_get_target,$(1)).$(2))
 
 endef
 
@@ -627,25 +655,24 @@ endif
 endef
 
 define gb_LinkTarget_set_include_stl
-$(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : INCLUDE_STL := $(2)
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE_STL := $(2)
-endif
-
+$$(call gb_Output_error,\
+ gb_LinkTarget_set_include_stl: removed, why is anybody calling it?)
 endef
 
 define gb_LinkTarget_add_ldflags
 $(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS += $(2)
+
 endef
 
 # real use in RepositoryExternal.mk
 define gb_LinkTarget_set_ldflags
 $(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS := $(2)
+
 endef
 
 define gb_LinkTarget_add_libs
 $(call gb_LinkTarget_get_target,$(1)) : LIBS += $(2)
+
 endef
 
 # remove platform specific standard libraries for linktarget $(1)
@@ -653,6 +680,7 @@ endef
 # exceptional cases this disable method may be used
 define gb_LinkTarget_disable_standard_system_libs
 $(call gb_LinkTarget_get_target,$(1)) : LIBS := $$(filter-out $$(gb_STDLIBS),$$(LIBS))
+
 endef
 
 define gb_LinkTarget_add_api
@@ -1019,6 +1047,12 @@ define gb_LinkTarget_add_generated_cobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_c_object,$(1),$(obj),$(3),$(4)))
 endef
 
+#only useful for building x64 libraries on windows
+define gb_LinkTarget_add_x64_generated_cobjects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_c_object,$(1),$(obj),$(3),$(4)))
+$(foreach obj,$(2),$(eval $(call gb_GenCObject_get_target,$(obj)) : COBJECT_X64 := YES))
+endef
+
 define gb_LinkTarget_add_generated_cxxobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(obj),$(3)))
 endef
@@ -1034,16 +1068,19 @@ endef
 define gb_LinkTarget_set_targettype
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE := $(2)
+
 endef
 
 define gb_LinkTarget_set_x64
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 := $(2)
+
 endef
 
 define gb_LinkTarget_set_dlltarget
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DLLTARGET := $(2)
+
 endef
 
 define gb_LinkTarget_set_auxtargets
@@ -1051,8 +1088,19 @@ $$(call gb_Output_error,\
  gb_LinkTarget_set_auxtargets: use gb_LinkTarget_add_auxtargets instead.)
 endef
 
-define gb_LinkTarget_add_auxtargets
+# Add a file that is built by the LinkTarget command and define
+# a dummy touch rule for it so it can be tracked via dependencies.
+# gb_LinkTarget_add_auxtarget linktarget auxtarget
+define gb_LinkTarget_add_auxtarget
+$(2) : $(call gb_LinkTarget_get_target,$(1))
+	touch $$@
+
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS += $(2)
+
+endef
+
+define gb_LinkTarget_add_auxtargets
+$(foreach aux,$(2),$(call gb_LinkTarget_add_auxtarget,$(1),$(aux)))
 
 endef
 
@@ -1088,6 +1136,7 @@ endef
 define gb_LinkTarget_add_sdi_headers
 $(call gb_LinkTarget__add_internal_headers,$(1),$(foreach sdi,$(2),$(call gb_SdiTarget_get_target,$(sdi))))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach sdi,$(2),$(call gb_SdiTarget_get_clean_target,$(sdi)))
+
 endef
 
 define gb_LinkTarget_add_external_headers
@@ -1111,6 +1160,14 @@ define gb_LinkTarget_use_unpacked
 $(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_UnpackedTarball_get_final_target,$(2))
 
 endef
+
+# Use artifacts from ExternalProject (i. e. configure) of an external project
+# example in expat: StaticLibrary depends on ExternalProject outcome
+define gb_LinkTarget_use_external_project
+$(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_ExternalProject_get_target,$(2))
+
+endef
+
 
 # this forwards to functions that must be defined in RepositoryExternal.mk.
 # $(eval $(call gb_LinkTarget_use_external,library,external))

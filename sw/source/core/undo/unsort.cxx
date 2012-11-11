@@ -61,7 +61,7 @@ SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
 }
 
 SwUndoSort::SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode& rTblNd,
-                        const SwSortOptions& rOpt, sal_Bool bSaveTable )
+                        const SwSortOptions& rOpt, bool bSaveTable )
     : SwUndo(UNDO_SORT_TBL), pUndoTblAttr( 0 ), pRedlData( 0 )
 {
     nSttNode = nStt;

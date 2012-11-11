@@ -148,10 +148,13 @@ public:
     SCsROW  GetNextUnprotected( SCsROW nRow, bool bUp ) const;
 
             /// May return -1 if not found
-    SCsROW  SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
-                            bool bUp, ScMarkArray* pMarkArray = NULL );
-    bool    SearchStyleRange( SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle,
-                            bool bUp, ScMarkArray* pMarkArray = NULL );
+    SCsROW SearchStyle(
+        SCsROW nRow, const ScStyleSheet* pSearchStyle, bool bUp,
+        const ScMarkArray* pMarkArray = NULL) const;
+
+    bool SearchStyleRange(
+        SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
+        const ScMarkArray* pMarkArray = NULL) const;
 
     bool    ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
     bool    RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
@@ -188,8 +191,8 @@ public:
     void    DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex );
     void    DeleteArea( SCROW nStartRow, SCROW nEndRow );
     void    MoveTo( SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray );
-    void    CopyArea( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray,
-                        sal_Int16 nStripFlags = 0 );
+    void    CopyArea(
+        SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray, sal_Int16 nStripFlags = 0) const;
 
     void    DeleteHardAttr( SCROW nStartRow, SCROW nEndRow );
 };

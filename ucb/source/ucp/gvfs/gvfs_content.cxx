@@ -504,7 +504,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     g_warning( "createNewContent (%d)", (int) create_document );
 #endif
 
-        rtl::OUString aURL = getOUURI();
+    rtl::OUString aURL = getOUURI();
 
     if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
         aURL += rtl::OUString("/");
@@ -513,14 +513,14 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     // This looks problematic to me cf. webdav
     aURL += rtl::OUString::createFromAscii( name );
 
-        uno::Reference< ucb::XContentIdentifier > xId
-        ( new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL ) );
+    uno::Reference< ucb::XContentIdentifier > xId
+        ( new ::ucbhelper::ContentIdentifier( aURL ) );
 
-        try {
+    try {
         return new ::gvfs::Content( m_xSMgr, m_pProvider, xId, !create_document );
     } catch ( ucb::ContentCreationException & ) {
         return uno::Reference< ucb::XContent >();
-        }
+    }
 }
 
 rtl::OUString Content::getParentURL()
@@ -853,8 +853,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         if ( setMask & GNOME_VFS_SET_FILE_INFO_NAME ) {
             uno::Reference< ucb::XContentIdentifier > xNewId
-                = new ::ucbhelper::ContentIdentifier(
-                    m_xSMgr, makeNewURL( newInfo.name ) );
+                = new ::ucbhelper::ContentIdentifier( makeNewURL( newInfo.name ) );
 
             aGuard.clear();
             if (!exchangeIdentity( xNewId ) )
@@ -1031,8 +1030,6 @@ void Content::destroy( sal_Bool bDeletePhysical )
     throw( uno::Exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
-    rtl::OUString aURL = getOUURI();
-
     uno::Reference< ucb::XContent > xThis = this;
 
     deleted();
@@ -1102,7 +1099,7 @@ sal_Bool Content::exchangeIdentity(
                              xNewId->getContentIdentifier() );
             uno::Reference< ucb::XContentIdentifier >
                 xNewChildId
-                = new ::ucbhelper::ContentIdentifier( m_xSMgr, aNewChildURL );
+                = new ::ucbhelper::ContentIdentifier( aNewChildURL );
 
             if ( !xChild->exchangeIdentity( xNewChildId ) )
                 return sal_False;
@@ -1397,7 +1394,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 rtl::OUString
 Content::getOUURI ()
 {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     return m_xIdentifier->getContentIdentifier();
 }
 

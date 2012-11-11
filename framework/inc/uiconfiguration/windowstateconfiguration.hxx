@@ -46,7 +46,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
@@ -75,7 +75,7 @@ class WindowStateConfiguration :  private ThreadHelpBase                        
                                   public ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameAccess, css::lang::XServiceInfo>
 {
     public:
-        WindowStateConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        WindowStateConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~WindowStateConfiguration();
 
         //  XInterface, XTypeProvider, XServiceInfo
@@ -110,10 +110,10 @@ class WindowStateConfiguration :  private ThreadHelpBase                        
                                  ::std::equal_to< ::rtl::OUString > > ModuleToWindowStateConfigHashMap;
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>         m_xContext;
         ModuleToWindowStateFileMap                                                          m_aModuleToFileHashMap;
         ModuleToWindowStateConfigHashMap                                                    m_aModuleToWindowStateHashMap;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > m_xModuleManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >        m_xModuleManager;
 };
 
 } // namespace framework

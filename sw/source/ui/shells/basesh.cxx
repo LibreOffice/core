@@ -628,7 +628,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 if( !rSh.GetLinkManager().GetLinks().empty() )
                 {
                     rSh.StartAllAction();
-                    rSh.GetLinkManager().UpdateAllLinks( sal_False, sal_True, sal_True );
+                    rSh.GetLinkManager().UpdateAllLinks( false, true, true );
                     rSh.EndAllAction();
                 }
                 SfxDispatcher &rDis = *rTempView.GetViewFrame()->GetDispatcher();
@@ -1122,10 +1122,9 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             {
                 if( !rSh.GetLinkManager().GetLinks().empty() )
                 {
-                    sal_Bool bUpdateGrf = sal_False, bCallErrHdl = sal_False;
                     rSh.EnterStdMode();
                     rSh.StartAllAction();
-                    rSh.GetLinkManager().UpdateAllLinks( sal_False, bCallErrHdl, bUpdateGrf );
+                    rSh.GetLinkManager().UpdateAllLinks( false, false, false );
                     rSh.EndAllAction();
                 }
             }
@@ -2136,9 +2135,9 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
                         aFont.SetCharSet(((const SvxFontItem*)pI)->GetCharSet());
                     }
 
-                    sal_Bool bVertical = rSh.IsInVerticalText();
+                    bool bVertical = rSh.IsInVerticalText();
                     aFont.SetOrientation(bVertical ? 2700 : 0);
-                    aFont.SetVertical(bVertical);
+                    aFont.SetVertical(bVertical ? sal_True : sal_False);
                     GetView().GetEditWin().SetInputContext( InputContext( aFont, INPUTCONTEXT_TEXT |
                                                         INPUTCONTEXT_EXTTEXTINPUT ) );
                 }

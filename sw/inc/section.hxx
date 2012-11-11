@@ -323,7 +323,7 @@ public:
     virtual void MakeFrms();
 
     // Get information from Format.
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const;
 
     SwSection* GetSection() const;
     inline SwSectionFmt* GetParent() const;

@@ -83,7 +83,7 @@ void test::BootstrapFixture::setUp()
     aLocalOptions.SetLocaleConfigString( aLangISO );
     aLocalOptions.SetUILocaleConfigString( aLangISO );
 
-    InitVCL(m_xSFactory);
+    InitVCL();
     if (Application::IsHeadlessModeRequested())
         Application::EnableHeadlessMode(true);
 

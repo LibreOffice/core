@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <vcl/metaact.hxx>
 #include <svtools/filter.hxx>
@@ -43,8 +33,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/rendergraphicrasterizer.hxx>
-
 #include <tools/bigint.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -224,7 +212,6 @@ void PictWriter::CountActionsAndBitmaps(const GDIMetaFile & rMTF)
             case META_BMPEX_ACTION:
             case META_BMPEXSCALE_ACTION:
             case META_BMPEXSCALEPART_ACTION:
-            case META_RENDERGRAPHIC_ACTION:
                 nNumberOfBitmaps++;
             break;
         }
@@ -254,7 +241,7 @@ Polygon PictWriter::PolyPolygonToPolygon(const PolyPolygon & rPolyPoly)
         nSize2=aPoly2.GetSize();
 
         // At first we look for a point in aPoly1 (referenced by nBestIdx1) and a
-        // point in aPoly2 (referenced by nBestid2), which 
+        // point in aPoly2 (referenced by nBestid2), which
         // Zunaechst werden ein Punkt in aPoly1 (referenziert durch nBestIdx1) und ein
         // Punkt in aPoly2 (referenziert durch nBestIdx2) gesucht, die moeglichst dicht
         // beieinander liegen. Da dies mit quadratischem Aufwand einher geht, und somit
@@ -2148,18 +2135,6 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                     aTmpMtf.Move( nMoveX, nMoveY );
 
                 WriteOpcodes( aTmpMtf );
-            }
-            break;
-
-            case( META_RENDERGRAPHIC_ACTION ):
-            {
-                const MetaRenderGraphicAction*          pA = (const MetaRenderGraphicAction*) pMA;
-                const ::vcl::RenderGraphicRasterizer    aRasterizer( pA->GetRenderGraphic() );
-                VirtualDevice                           aVirDev;
-                const Bitmap                            aBmp( Graphic( aRasterizer.Rasterize(
-                                                            aVirDev.LogicToPixel( pA->GetSize() ) ) ).GetBitmap() );
-
-                WriteOpcode_BitsRect( pA->GetPoint(), pA->GetSize(), aBmp );
             }
             break;
         }

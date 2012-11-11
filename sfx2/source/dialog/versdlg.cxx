@@ -261,7 +261,7 @@ void SfxVersionDialog::Init_Impl()
             aEntry += pInfo->aAuthor;
             aEntry += '\t';
             aEntry += ConvertWhiteSpaces_Impl( pInfo->aComment );
-            SvLBoxEntry *pEntry = aVersionBox.InsertEntry( aEntry );
+            SvTreeListEntry *pEntry = aVersionBox.InsertEntry( aEntry );
             pEntry->SetUserData( pInfo );
         }
     }
@@ -290,7 +290,7 @@ void SfxVersionDialog::Open_Impl()
 {
     SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
 
-    SvLBoxEntry *pEntry = aVersionBox.FirstSelected();
+    SvTreeListEntry *pEntry = aVersionBox.FirstSelected();
     sal_uIntPtr nPos = aVersionBox.GetModel()->GetRelPos( pEntry );
     SfxInt16Item aItem( SID_VERSION, (short)nPos+1 );
     SfxStringItem aTarget( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
@@ -368,7 +368,7 @@ IMPL_LINK_NOARG(SfxVersionDialog, SelectHdl_Impl)
 IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
 {
     SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
-    SvLBoxEntry *pEntry = aVersionBox.FirstSelected();
+    SvTreeListEntry *pEntry = aVersionBox.FirstSelected();
 
     if ( pButton == &aSaveCheckBox )
     {

@@ -53,7 +53,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/customize/cfg.src \
     cui/source/customize/eventdlg.src \
     cui/source/customize/macropg.src \
-    cui/source/customize/selector.src \
     cui/source/dialogs/about.src \
     cui/source/dialogs/colorpicker.src \
     cui/source/dialogs/commonlingui.src \
@@ -67,7 +66,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/dialogs/hlmarkwn.src \
     cui/source/dialogs/hyperdlg.src \
     cui/source/dialogs/iconcdlg.src \
-    cui/source/dialogs/insrc.src \
     cui/source/dialogs/multipat.src \
     cui/source/dialogs/newtabledlg.src \
     cui/source/dialogs/passwdomdlg.src \

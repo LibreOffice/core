@@ -24,15 +24,17 @@
 
  *************************************************************************/
 #include <osl/diagnose.h>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/ucb/GlobalTransferCommandArgument.hpp>
+#include <com/sun/star/ucb/GlobalTransferCommandArgument2.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentProviderSupplier.hpp>
 #include <com/sun/star/ucb/XParameterizedContentProvider.hpp>
 #include <com/sun/star/ucb/XContentProviderFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -654,8 +656,35 @@ Any SAL_CALL UniversalContentBroker::execute(
         // globalTransfer
         //////////////////////////////////////////////////////////////////
 
-        GlobalTransferCommandArgument aTransferArg;
+        GlobalTransferCommandArgument2 aTransferArg;
         if ( !( aCommand.Argument >>= aTransferArg ) )
+        {
+            GlobalTransferCommandArgument aArg;
+            if ( !( aCommand.Argument >>= aArg ) )
+            {
+                ucbhelper::cancelCommandExecution(
+                    makeAny( IllegalArgumentException(
+                                    OUString( "Wrong argument type!" ),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 ) ),
+                    Environment );
+                // Unreachable
+            }
+
+            // Copy infos into the new stucture
+            aTransferArg.Operation = aArg.Operation;
+            aTransferArg.SourceURL = aArg.SourceURL;
+            aTransferArg.TargetURL = aArg.TargetURL;
+            aTransferArg.NewTitle = aArg.NewTitle;
+            aTransferArg.NameClash = aArg.NameClash;
+        }
+
+        globalTransfer( aTransferArg, Environment );
+    }
+    else if ( ( aCommand.Handle == CHECKIN_HANDLE ) || aCommand.Name == CHECKIN_NAME )
+    {
+        ucb::CheckinArgument aCheckinArg;
+        if ( !( aCommand.Argument >>= aCheckinArg ) )
         {
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
@@ -665,8 +694,7 @@ Any SAL_CALL UniversalContentBroker::execute(
                 Environment );
             // Unreachable
         }
-
-        globalTransfer( aTransferArg, Environment );
+        aRet <<= checkIn( aCheckinArg, Environment );
     }
     else
     {
@@ -852,11 +880,8 @@ bool UniversalContentBroker::getContentProviderData(
 
     try
     {
-        uno::Reference< lang::XMultiServiceFactory > xConfigProv(
-                m_xSMgr->createInstance(
-                    OUString(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
-                uno::UNO_QUERY_THROW );
+        uno::Reference< lang::XMultiServiceFactory > xConfigProv =
+                configuration::theDefaultProvider::get( comphelper::getComponentContext(m_xSMgr) );
 
         OUStringBuffer aFullPath;
         aFullPath.appendAscii( CONFIG_CONTENTPROVIDERS_KEY "/['" );

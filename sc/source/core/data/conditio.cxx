@@ -768,10 +768,11 @@ static bool lcl_GetCellContent( ScBaseCell* pCell, bool bIsStr1, double& rArg, r
     return bVal;
 }
 
-bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, const ScAddress& rAddr, const ScRangeList& rRanges ) const
+void ScConditionEntry::FillCache() const
 {
     if(!mpCache)
     {
+        const ScRangeList& rRanges = pCondFormat->GetRange();
         mpCache.reset(new ScConditionEntryCache);
         size_t nListCount = rRanges.size();
         for( size_t i = 0; i < nListCount; i++ )
@@ -798,7 +799,7 @@ bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, cons
                     double nVal = 0.0;
                     ScBaseCell *pCell = NULL;
 
-                    mpDoc->GetCell( c, r, rAddr.Tab(), pCell );
+                    mpDoc->GetCell( c, r, nTab, pCell );
                     if( !pCell )
                         continue;
 
@@ -814,10 +815,17 @@ bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, cons
                         std::pair<ScConditionEntryCache::ValueCacheType::iterator, bool> aResult = mpCache->maValues.insert(std::pair<double, sal_Int32>(nVal, (sal_Int32)1));
                         if(!aResult.second)
                             aResult.first->second++;
+
+                        ++(mpCache->nValueItems);
                     }
                 }
         }
     }
+}
+
+bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr ) const
+{
+    FillCache();
 
     if(rStr.isEmpty())
     {
@@ -845,19 +853,165 @@ bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, cons
                 return false;
         }
     }
+}
 
+bool ScConditionEntry::IsTopNElement( double nArg ) const
+{
+    FillCache();
+
+    if(mpCache->nValueItems <= nVal1)
+        return true;
+
+    size_t nCells = 0;
+    for(ScConditionEntryCache::ValueCacheType::const_reverse_iterator itr = mpCache->maValues.rbegin(),
+            itrEnd = mpCache->maValues.rend(); itr != itrEnd; ++itr)
+    {
+        if(itr->first <= nArg)
+            return true;
+        if(nCells >= nVal1)
+            return false;
+        nCells += itr->second;
+    }
+
+    return true;
+}
+
+bool ScConditionEntry::IsBottomNElement( double nArg ) const
+{
+    FillCache();
+
+    if(mpCache->nValueItems <= nVal1)
+        return true;
+
+    size_t nCells = 0;
+    for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
+            itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
+    {
+        if(itr->first >= nArg)
+            return true;
+        if(nCells >= nVal1)
+            return false;
+        nCells += itr->second;
+    }
+
+    return true;
+}
+
+bool ScConditionEntry::IsTopNPercent( double nArg ) const
+{
+    FillCache();
+
+    size_t nCells = 0;
+    size_t nLimitCells = static_cast<size_t>(mpCache->nValueItems*nVal1/100);
+    for(ScConditionEntryCache::ValueCacheType::const_reverse_iterator itr = mpCache->maValues.rbegin(),
+            itrEnd = mpCache->maValues.rend(); itr != itrEnd; ++itr)
+    {
+        if(itr->first <= nArg)
+            return true;
+        if(nCells >= nLimitCells)
+            return false;
+        nCells += itr->second;
+    }
+
+    return true;
+}
+
+bool ScConditionEntry::IsBottomNPercent( double nArg ) const
+{
+    FillCache();
+
+    size_t nCells = 0;
+    size_t nLimitCells = static_cast<size_t>(mpCache->nValueItems*nVal1/100);
+    for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
+            itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
+    {
+        if(itr->first >= nArg)
+            return true;
+        if(nCells >= nLimitCells)
+            return false;
+        nCells += itr->second;
+    }
+
+    return true;
+}
+
+bool ScConditionEntry::IsBelowAverage( double nArg ) const
+{
+    FillCache();
+
+    double nSum = 0;
+    for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
+            itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
+    {
+        nSum += itr->first * itr->second;
+    }
+
+    if(nVal1)
+        return (nArg <= nSum/mpCache->nValueItems);
+    else
+        return (nArg < nSum/mpCache->nValueItems);
+}
+
+bool ScConditionEntry::IsAboveAverage( double nArg ) const
+{
+    FillCache();
+
+    double nSum = 0;
+    for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
+            itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
+    {
+        nSum += itr->first * itr->second;
+    }
+
+    if(nVal1)
+        return (nArg >= nSum/mpCache->nValueItems);
+    else
+        return (nArg > nSum/mpCache->nValueItems);
+}
+
+bool ScConditionEntry::IsError( const ScAddress& rPos ) const
+{
+    ScBaseCell* pCell = mpDoc->GetCell(rPos);
+    if(!pCell)
+        return false;
+
+    switch(pCell->GetCellType())
+    {
+        case CELLTYPE_VALUE:
+            return false;
+        case CELLTYPE_FORMULA:
+        {
+            ScFormulaCell* pFormulaCell = static_cast<ScFormulaCell*>(pCell);
+            if(pFormulaCell->GetErrCode())
+                return true;
+        }
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+            return false;
+        default:
+            break;
+    }
     return false;
 }
 
-bool ScConditionEntry::IsValid( double nArg, const ScAddress& rAddr ) const
+bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
 {
     //  Interpret muss schon gerufen sein
 
     if ( bIsStr1 )
     {
-        // wenn auf String getestet wird, bei Zahlen immer sal_False, ausser bei "ungleich"
-
-        return ( eOp == SC_COND_NOTEQUAL );
+        switch( eOp )
+        {
+            case SC_COND_BEGINS_WITH:
+            case SC_COND_ENDS_WITH:
+            case SC_COND_CONTAINS_TEXT:
+            case SC_COND_NOT_CONTAINS_TEXT:
+                break;
+            case SC_COND_NOTEQUAL:
+                return true;
+            default:
+                return false;
+        }
     }
 
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
@@ -911,14 +1065,78 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rAddr ) const
         case SC_COND_NOTDUPLICATE:
             if( pCondFormat )
             {
-                const ScRangeList& aRanges = pCondFormat->GetRange();
-                bValid = IsDuplicate( nArg, rtl::OUString(), rAddr, aRanges );
+                bValid = IsDuplicate( nArg, rtl::OUString() );
                 if( eOp == SC_COND_NOTDUPLICATE )
                     bValid = !bValid;
             }
             break;
         case SC_COND_DIRECT:
             bValid = !::rtl::math::approxEqual( nComp1, 0.0 );
+            break;
+        case SC_COND_TOP10:
+            bValid = IsTopNElement( nArg );
+            break;
+        case SC_COND_BOTTOM10:
+            bValid = IsBottomNElement( nArg );
+            break;
+        case SC_COND_TOP_PERCENT:
+            bValid = IsTopNPercent( nArg );
+            break;
+        case SC_COND_BOTTOM_PERCENT:
+            bValid = IsBottomNPercent( nArg );
+            break;
+        case SC_COND_ABOVE_AVERAGE:
+            bValid = IsAboveAverage( nArg );
+            break;
+        case SC_COND_BELOW_AVERAGE:
+            bValid = IsBelowAverage( nArg );
+            break;
+        case SC_COND_ERROR:
+        case SC_COND_NOERROR:
+            bValid = IsError( rPos );
+            if( eOp == SC_COND_NOERROR )
+                bValid = !bValid;
+            break;
+        case SC_COND_BEGINS_WITH:
+            if(!aStrVal1.Len())
+            {
+                rtl::OUString aStr = rtl::OUString::valueOf(nVal1);
+                rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
+                bValid = aStr2.indexOf(aStr) == 0;
+            }
+            else
+            {
+                rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
+                bValid = aStr2.indexOf(aStrVal1) == 0;
+            }
+        case SC_COND_ENDS_WITH:
+            if(!aStrVal1.Len())
+            {
+                rtl::OUString aStr = rtl::OUString::valueOf(nVal1);
+                rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
+                bValid = aStr2.endsWith(aStr) == 0;
+            }
+            else
+            {
+                rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
+                bValid = aStr2.endsWith(aStrVal1) == 0;
+            }
+        case SC_COND_CONTAINS_TEXT:
+        case SC_COND_NOT_CONTAINS_TEXT:
+            if(!aStrVal1.Len())
+            {
+                rtl::OUString aStr = rtl::OUString::valueOf(nVal1);
+                rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
+                bValid = aStr2.indexOf(aStr) != -1;
+            }
+            else
+            {
+                rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
+                bValid = aStr2.indexOf(aStrVal1) != -1;
+            }
+
+            if( eOp == SC_COND_NOT_CONTAINS_TEXT )
+                bValid = !bValid;
             break;
         default:
             OSL_FAIL("unbekannte Operation bei ScConditionEntry");
@@ -927,7 +1145,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rAddr ) const
     return bValid;
 }
 
-bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rAddr ) const
+bool ScConditionEntry::IsValidStr( const rtl::OUString& rArg, const ScAddress& rPos ) const
 {
     bool bValid = false;
     //  Interpret muss schon gerufen sein
@@ -937,10 +1155,9 @@ bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rAddr ) 
 
     if ( eOp == SC_COND_DUPLICATE || eOp == SC_COND_NOTDUPLICATE )
     {
-        if( pCondFormat && rArg.Len() )
+        if( pCondFormat && !rArg.isEmpty() )
         {
-            const ScRangeList& aRanges = pCondFormat->GetRange();
-            bValid = IsDuplicate( 0.0, rArg, rAddr, aRanges );
+            bValid = IsDuplicate( 0.0, rArg );
             if( eOp == SC_COND_NOTDUPLICATE )
                 bValid = !bValid;
             return bValid;
@@ -949,14 +1166,14 @@ bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rAddr ) 
 
     //  Wenn Bedingung Zahl enthaelt, immer FALSE, ausser bei "ungleich"
 
-    if ( !bIsStr1 )
+    if ( !bIsStr1 && (eOp != SC_COND_ERROR && eOp != SC_COND_NOERROR) )
         return ( eOp == SC_COND_NOTEQUAL );
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
         if ( !bIsStr2 )
             return false;
 
-    String aUpVal1( aStrVal1 );     //! als Member? (dann auch in Interpret setzen)
-    String aUpVal2( aStrVal2 );
+    rtl::OUString aUpVal1( aStrVal1 );     //! als Member? (dann auch in Interpret setzen)
+    rtl::OUString aUpVal2( aStrVal2 );
 
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
         if ( ScGlobal::GetCollator()->compareString( aUpVal1, aUpVal2 )
@@ -975,6 +1192,31 @@ bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rAddr ) 
         case SC_COND_NOTEQUAL:
             bValid = (ScGlobal::GetCollator()->compareString(
                 rArg, aUpVal1 ) != COMPARE_EQUAL);
+        break;
+        case SC_COND_TOP_PERCENT:
+        case SC_COND_BOTTOM_PERCENT:
+        case SC_COND_TOP10:
+        case SC_COND_BOTTOM10:
+        case SC_COND_ABOVE_AVERAGE:
+        case SC_COND_BELOW_AVERAGE:
+            return false;
+        case SC_COND_ERROR:
+        case SC_COND_NOERROR:
+            bValid = IsError( rPos );
+            if(eOp == SC_COND_NOERROR)
+                bValid = !bValid;
+        break;
+        case SC_COND_BEGINS_WITH:
+            bValid = rArg.indexOf(aUpVal1) == 0;
+        break;
+        case SC_COND_ENDS_WITH:
+            bValid = rArg.endsWith(aUpVal1);
+        break;
+        case SC_COND_CONTAINS_TEXT:
+        case SC_COND_NOT_CONTAINS_TEXT:
+            bValid = rArg.indexOf(aUpVal1) != -1;
+            if(eOp == SC_COND_NOT_CONTAINS_TEXT)
+                bValid = !bValid;
         break;
         default:
         {
@@ -1500,6 +1742,11 @@ ScCondFormatData ScConditionalFormat::GetData( ScBaseCell* pCell, const ScAddres
         {
             const ScDataBarFormat& rEntry = static_cast<const ScDataBarFormat&>(*itr);
             aData.pDataBar = rEntry.GetDataBarInfo(rPos);
+        }
+        else if(itr->GetType() == condformat::ICONSET && !aData.pIconSet)
+        {
+            const ScIconSetFormat& rEntry = static_cast<const ScIconSetFormat&>(*itr);
+            aData.pIconSet = rEntry.GetIconSetInfo(rPos);
         }
     }
     return aData;

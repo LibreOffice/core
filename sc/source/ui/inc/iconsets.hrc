@@ -1,0 +1,31 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+
+#define BMP_GREEN_CIRCLE 999
+#define BMP_YELLOW_CIRCLE 998
+#define BMP_RED_CIRCLE 997
+#define BMP_BLACK_CIRCLE 991
+#define BMP_BLACK_CIRCLE_EMPTY 990
+#define BMP_BLACK_CIRCLE_HALF 989
+#define BMP_BLACK_CIRCLE_1_4TH 988
+#define BMP_BLACK_CIRCLE_3_4TH 987
+#define BMP_ARROW_GREEN_UP 996
+#define BMP_ARROW_RED_DOWN 995
+#define BMP_ARROW_YELLOW_RIGHT 994
+#define BMP_ARROW_YELLOW_UP_RIGHT 993
+#define BMP_ARROW_YELLOW_DOWN_RIGHT 992
+#define BMP_GREEN_TRIANGLE_UP 986
+#define BMP_BLACK_MINUS 985
+#define BMP_RED_TRIANGLE_DOWN 984
+#define BMP_SIGN 983
+#define BMP_EXCLAMATION_MARK 982
+#define BMP_CANCEL 981
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,7 +24,7 @@
 
 class SvStream;
 
-class TOOLS_DLLPUBLIC Fraction
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Fraction
 {
 private:
     long            nNumerator;

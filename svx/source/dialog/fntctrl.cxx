@@ -33,7 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <unicode/uchar.h>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
@@ -87,6 +87,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using ::com::sun::star::i18n::XBreakIterator;
+using ::com::sun::star::i18n::BreakIterator;
 
 // -----------------------------------------------------------------------
 // small helper functions to set fonts
@@ -176,7 +177,6 @@ class FontPrevWin_Impl
     bool m_bCTLEnabled;
 
 
-    void                _CheckScript();
 public:
     inline FontPrevWin_Impl() :
         pPrinter( NULL ), bDelPrinter( sal_False ),
@@ -213,12 +213,6 @@ public:
                             //  sets the 100%-Font-Widths
 };
 
-void FontPrevWin_Impl::CheckScript()
-{
-    if( aText != aScriptText )
-        _CheckScript();
-}
-
 inline void FontPrevWin_Impl::Invalidate100PercentFontWidth()
 {
     n100PercentFontWidth = n100PercentFontWidthCJK = n100PercentFontWidthCTL = -1;
@@ -237,15 +231,19 @@ inline sal_Bool FontPrevWin_Impl::Is100PercentFontWidthValid() const
 // class FontPrevWin_Impl -----------------------------------------------
 
 /*
- * void FontPrevWin_Impl::_CheckScript()
  * evalutates the scripttypes of the actual string.
  * Afterwards the positions of script change are notified in aScriptChg,
  * the scripttypes in aScriptType.
  * The aTextWidth array will be filled with zero.
  */
-
-void FontPrevWin_Impl::_CheckScript()
+void FontPrevWin_Impl::CheckScript()
 {
+    assert(aText.Len()); // must have a preview text here!
+    if (aText == aScriptText)
+    {
+        return; // already initialized
+    }
+
     aScriptText = aText;
 
     aScriptChg.clear();
@@ -254,54 +252,50 @@ void FontPrevWin_Impl::_CheckScript()
 
     if( !xBreak.is() )
     {
-        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        xBreak = Reference< XBreakIterator >(xMSF->createInstance(
-                ::rtl::OUString("com.sun.star.i18n.BreakIterator") ),UNO_QUERY);
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        xBreak = BreakIterator::create(xContext);
     }
-    if( xBreak.is() )
+    sal_uInt16 nScript = xBreak->getScriptType( aText, 0 );
+    sal_uInt16 nChg = 0;
+    if( com::sun::star::i18n::ScriptType::WEAK == nScript )
     {
-        sal_uInt16 nScript = xBreak->getScriptType( aText, 0 );
-        sal_uInt16 nChg = 0;
-        if( com::sun::star::i18n::ScriptType::WEAK == nScript )
-        {
-            nChg = (xub_StrLen)xBreak->endOfScript( aText, nChg, nScript );
-            if( nChg < aText.Len() )
-                nScript = xBreak->getScriptType( aText, nChg );
-            else
-                nScript = com::sun::star::i18n::ScriptType::LATIN;
-        }
+        nChg = (xub_StrLen)xBreak->endOfScript( aText, nChg, nScript );
+        if( nChg < aText.Len() )
+            nScript = xBreak->getScriptType( aText, nChg );
+        else
+            nScript = com::sun::star::i18n::ScriptType::LATIN;
+    }
 
-        do
+    do
+    {
+        nChg = (xub_StrLen)xBreak->endOfScript( aText, nChg, nScript );
+        if (nChg < aText.Len() && nChg > 0 &&
+            (com::sun::star::i18n::ScriptType::WEAK ==
+             xBreak->getScriptType(aText, nChg - 1)))
         {
-            nChg = (xub_StrLen)xBreak->endOfScript( aText, nChg, nScript );
-            if (nChg < aText.Len() && nChg > 0 &&
-                (com::sun::star::i18n::ScriptType::WEAK ==
-                 xBreak->getScriptType(aText, nChg - 1)))
+            int8_t nType = u_charType(aText.GetChar(nChg) );
+            if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
+                nType == U_COMBINING_SPACING_MARK )
             {
-                int8_t nType = u_charType(aText.GetChar(nChg) );
-                if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
-                    nType == U_COMBINING_SPACING_MARK )
-                {
-                    aScriptChg.push_back( nChg - 1 );
-                }
-                else
-                {
-                    aScriptChg.push_back( nChg );
-                }
+                aScriptChg.push_back( nChg - 1 );
             }
             else
             {
                 aScriptChg.push_back( nChg );
             }
-            aScriptType.push_back( nScript );
-            aTextWidth.push_back( 0 );
+        }
+        else
+        {
+            aScriptChg.push_back( nChg );
+        }
+        aScriptType.push_back( nScript );
+        aTextWidth.push_back( 0 );
 
-            if( nChg < aText.Len() )
-                nScript = xBreak->getScriptType( aText, nChg );
-            else
-                break;
-        } while( sal_True );
-    }
+        if( nChg < aText.Len() )
+            nScript = xBreak->getScriptType( aText, nChg );
+        else
+            break;
+    } while( sal_True );
 }
 
 /*

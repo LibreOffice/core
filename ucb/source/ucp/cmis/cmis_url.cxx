@@ -103,7 +103,7 @@ namespace cmis
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );
-        sUrl = "vnd.libreoffice.cmis+atom://" + sEncodedBinding;
+        sUrl = "vnd.libreoffice.cmis://" + sEncodedBinding;
 
         if ( !m_sPath.isEmpty( ) )
         {

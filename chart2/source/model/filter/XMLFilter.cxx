@@ -38,6 +38,7 @@
 #include <sot/storage.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -590,10 +591,7 @@ sal_Int32 XMLFilter::impl_Export(
         if( ! xServiceFactory.is())
             return ERRCODE_SFX_GENERAL;
 
-        uno::Reference< io::XActiveDataSource > xSaxWriter( xServiceFactory->createInstance(
-                C2U("com.sun.star.xml.sax.Writer")), uno::UNO_QUERY );
-        if ( !xSaxWriter.is() )
-            return ERRCODE_SFX_GENERAL;
+        uno::Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(m_xContext);
 
         bool bOasis = true;
         isOasisFormat( rMediaDescriptor, bOasis );
@@ -716,7 +714,7 @@ sal_Int32 XMLFilter::impl_ExportStream(
     const OUString & rStreamName,
     const OUString & rServiceName,
     const Reference< embed::XStorage > & xStorage,
-    const uno::Reference< io::XActiveDataSource >& xActiveDataSource,
+    const uno::Reference< xml::sax::XWriter >& xActiveDataSource,
     const Reference< lang::XMultiServiceFactory >& xServiceFactory,
     const Sequence< uno::Any > & rFilterProperties )
 {

@@ -824,7 +824,7 @@ const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
             break;
         case SC_COND_NONE:
         default:
-            pRet = "";
+            pRet = "equal";
             break;
     }
     return pRet;
@@ -832,9 +832,69 @@ const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
 
 const char* GetTypeString(ScConditionMode eMode)
 {
-    if (eMode == SC_COND_DIRECT)
-        return "expression";
-    return "cellIs";
+    switch(eMode)
+    {
+        case SC_COND_DIRECT:
+            return "expression";
+        case SC_COND_TOP10:
+        case SC_COND_TOP_PERCENT:
+        case SC_COND_BOTTOM10:
+        case SC_COND_BOTTOM_PERCENT:
+            return "top10";
+        case SC_COND_ABOVE_AVERAGE:
+        case SC_COND_BELOW_AVERAGE:
+            return "aboveAverage";
+        case SC_COND_NOTDUPLICATE:
+            return "uniqueValues";
+        case SC_COND_DUPLICATE:
+            return "duplicateValues";
+        case SC_COND_ERROR:
+            return "containsErrors";
+        case SC_COND_NOERROR:
+            return "notContainsErrors";
+        case SC_COND_BEGINS_WITH:
+            return "beginsWith";
+        case SC_COND_ENDS_WITH:
+            return "endsWith";
+        case SC_COND_CONTAINS_TEXT:
+            return "containsText";
+        case SC_COND_NOT_CONTAINS_TEXT:
+            return "notContainsText";
+        default:
+            return "cellIs";
+    }
+}
+
+bool IsTopBottomRule(ScConditionMode eMode)
+{
+    switch(eMode)
+    {
+        case SC_COND_TOP10:
+        case SC_COND_BOTTOM10:
+        case SC_COND_TOP_PERCENT:
+        case SC_COND_BOTTOM_PERCENT:
+            return true;
+        default:
+            break;
+    }
+
+    return false;
+}
+
+bool IsTextRule(ScConditionMode eMode)
+{
+    switch(eMode)
+    {
+        case SC_COND_BEGINS_WITH:
+        case SC_COND_ENDS_WITH:
+        case SC_COND_CONTAINS_TEXT:
+        case SC_COND_NOT_CONTAINS_TEXT:
+            return true;
+        default:
+            break;
+    }
+
+    return false;
 }
 
 }
@@ -842,21 +902,53 @@ const char* GetTypeString(ScConditionMode eMode)
 void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
 {
     bool bFmla2 = false;
+    ScConditionMode eOperation = mrFormatEntry.GetOperation();
+    sal_Int32 nAboveAverage = eOperation == SC_COND_ABOVE_AVERAGE;
+    sal_Int32 nBottom = eOperation == SC_COND_BOTTOM10
+        || eOperation == SC_COND_BOTTOM_PERCENT;
+    sal_Int32 nPercent = eOperation == SC_COND_TOP_PERCENT ||
+        eOperation == SC_COND_BOTTOM_PERCENT;
+    rtl::OString aRank("0");
+    if(IsTopBottomRule(eOperation))
+    {
+        // position and formula grammar are not important
+        // we only store a number there
+        aRank = XclXmlUtils::ToOString(mrFormatEntry.GetExpression(ScAddress(0,0,0), 0));
+    }
+    rtl::OString aText;
+    if(IsTextRule(eOperation))
+    {
+        // we need to write the text without quotes
+        // we have to actually get the string from
+        // the token array for that
+        ScTokenArray* pTokenArray = mrFormatEntry.CreateTokenArry(0);
+        if(pTokenArray->GetLen())
+            aText = XclXmlUtils::ToOString(pTokenArray->First()->GetString());
+    }
+
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_cfRule,
             XML_type, GetTypeString( mrFormatEntry.GetOperation() ),
             XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
             XML_operator, GetOperatorString( mrFormatEntry.GetOperation(), bFmla2 ),
+            XML_aboveAverage, OString::valueOf( nAboveAverage ).getStr(),
+            XML_bottom, OString::valueOf( nBottom ).getStr(),
+            XML_percent, OString::valueOf( nPercent ).getStr(),
+            XML_rank, aRank.getStr(),
+            XML_text, aText.getStr(),
             XML_dxfId, OString::valueOf( GetDxfs().GetDxfId( mrFormatEntry.GetStyle() ) ).getStr(),
             FSEND );
-    rWorksheet->startElement( XML_formula, FSEND );
-    rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 0 ) ));
-    rWorksheet->endElement( XML_formula );
-    if (bFmla2)
+    if(!IsTextRule(eOperation) && !IsTopBottomRule(eOperation))
     {
         rWorksheet->startElement( XML_formula, FSEND );
-        rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 1 ) ));
+        rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 0 ) ));
         rWorksheet->endElement( XML_formula );
+        if (bFmla2)
+        {
+            rWorksheet->startElement( XML_formula, FSEND );
+            rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 1 ) ));
+            rWorksheet->endElement( XML_formula );
+        }
     }
     // OOXTODO: XML_extLst
     rWorksheet->endElement( XML_cfRule );
@@ -971,7 +1063,7 @@ void XclExpColScaleCol::SaveXml( XclExpXmlStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, XclExtLstRef xExtLst ) :
+XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, XclExtLstRef xExtLst, sal_Int32& rIndex ) :
     XclExpRecord( EXC_ID_CONDFMT ),
     XclExpRoot( rRoot )
 {
@@ -983,11 +1075,13 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
             if( const ScFormatEntry* pFormatEntry = rCondFormat.GetEntry( nIndex ) )
             {
                 if(pFormatEntry->GetType() == condformat::CONDITION)
-                    maCFList.AppendNewRecord( new XclExpCF( GetRoot(), static_cast<const ScCondFormatEntry&>(*pFormatEntry), nIndex ) );
+                    maCFList.AppendNewRecord( new XclExpCF( GetRoot(), static_cast<const ScCondFormatEntry&>(*pFormatEntry), ++rIndex ) );
                 else if(pFormatEntry->GetType() == condformat::COLORSCALE)
-                    maCFList.AppendNewRecord( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*pFormatEntry), nIndex ) );
+                    maCFList.AppendNewRecord( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*pFormatEntry), ++rIndex ) );
                 else if(pFormatEntry->GetType() == condformat::DATABAR)
-                    maCFList.AppendNewRecord( new XclExpDataBar( GetRoot(), static_cast<const ScDataBarFormat&>(*pFormatEntry), nIndex, xExtLst ) );
+                    maCFList.AppendNewRecord( new XclExpDataBar( GetRoot(), static_cast<const ScDataBarFormat&>(*pFormatEntry), ++rIndex, xExtLst ) );
+                else if(pFormatEntry->GetType() == condformat::ICONSET)
+                    maCFList.AppendNewRecord( new XclExpIconSet( GetRoot(), static_cast<const ScIconSetFormat&>(*pFormatEntry), ++rIndex ) );
             }
         aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
     }
@@ -1173,6 +1267,63 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
 
 }
 
+XclExpIconSet::XclExpIconSet( const XclExpRoot& rRoot, const ScIconSetFormat& rFormat, sal_Int32 nPriority ):
+    XclExpRecord(),
+    XclExpRoot( rRoot ),
+    mrFormat( rFormat ),
+    mnPriority( nPriority )
+{
+    const ScRange* pRange = rFormat.GetRange().front();
+    ScAddress aAddr = pRange->aStart;
+    for(ScIconSetFormat::const_iterator itr = rFormat.begin();
+            itr != rFormat.end(); ++itr)
+    {
+        // exact position is not important, we allow only absolute refs
+
+        XclExpCfvoList::RecordRefType xCfvo( new XclExpCfvo( GetRoot(), *itr, aAddr ) );
+        maCfvoList.AppendRecord( xCfvo );
+    }
+}
+
+namespace {
+
+const char* getIconSetName( ScIconSetType eType )
+{
+    ScIconSetMap* pMap = ScIconSetFormat::getIconSetMap();
+    for(; pMap->pName; ++pMap)
+    {
+        if(pMap->eType == eType)
+            return pMap->pName;
+    }
+
+    return "";
+}
+
+}
+
+void XclExpIconSet::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+    rWorksheet->startElement( XML_cfRule,
+            XML_type, "iconSet",
+            XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
+            FSEND );
+
+    const char* pIconSetName = getIconSetName(mrFormat.GetIconSetData()->eIconSetType);
+    rWorksheet->startElement( XML_iconSet,
+            XML_iconSet, pIconSetName,
+            FSEND );
+
+    maCfvoList.SaveXml( rStrm );
+
+    rWorksheet->endElement( XML_iconSet );
+    rWorksheet->endElement( XML_cfRule );
+
+    // OOXTODO: XML_extLst
+
+}
+
 // ----------------------------------------------------------------------------
 
 XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot, XclExtLstRef xExtLst ) :
@@ -1180,10 +1331,11 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot, XclExtL
 {
     if( const ScConditionalFormatList* pCondFmtList = GetDoc().GetCondFormList(GetCurrScTab()) )
     {
+        sal_Int32 nIndex = 0;
         for( ScConditionalFormatList::const_iterator itr = pCondFmtList->begin();
                         itr != pCondFmtList->end(); ++itr)
         {
-            XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), *itr, xExtLst ) );
+            XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), *itr, xExtLst, nIndex ));
             if( xCondfmtRec->IsValid() )
                 maCondfmtList.AppendRecord( xCondfmtRec );
         }
@@ -1600,7 +1752,7 @@ XclExpWebQuery::XclExpWebQuery(
         mbEntireDoc = ScfTools::IsHTMLDocName( aToken );
         bExitLoop = mbEntireDoc || ScfTools::IsHTMLTablesName( aToken );
         if( !bExitLoop && ScfTools::GetHTMLNameFromName( aToken, aAppendTable ) )
-            ScGlobal::AddToken( aNewTables, aAppendTable, ',' );
+            aNewTables = ScGlobal::addToken( aNewTables, aAppendTable, ',' );
     }
 
     if( !bExitLoop )    // neither HTML_all nor HTML_tables found

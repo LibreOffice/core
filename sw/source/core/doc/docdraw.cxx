@@ -210,7 +210,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     SwDrawFrmFmt *pFmt = 0L;
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-    sal_Bool bNoGroup = ( 0 == pObj->GetUpGroup() );
+    bool bNoGroup = ( 0 == pObj->GetUpGroup() );
     SwDrawContact* pNewContact = 0;
     if( bNoGroup )
     {
@@ -399,15 +399,15 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
 |*
 |*************************************************************************/
 
-sal_Bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
+bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
 {
-    sal_Bool bCallBase = sal_False;
+    bool bCallBase = false;
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     if( rMrkList.GetMarkCount() )
     {
         GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
         sal_uInt16 i;
-        sal_Bool bDelMarked = sal_True;
+        bool bDelMarked = true;
 
         if( 1 == rMrkList.GetMarkCount() )
         {
@@ -419,7 +419,7 @@ sal_Bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 if( pFrmFmt )
                 {
                     DelLayoutFmt( pFrmFmt );
-                    bDelMarked = sal_False;
+                    bDelMarked = false;
                 }
             }
         }
@@ -484,7 +484,7 @@ sal_Bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                     GetIDocumentUndoRedo().AppendUndo( pUndo );
                 }
             }
-            bCallBase = sal_True;
+            bCallBase = true;
         }
         SetModified();
 

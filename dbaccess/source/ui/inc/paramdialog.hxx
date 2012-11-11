@@ -88,7 +88,7 @@ namespace dbaui
         OParameterDialog(Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & _rParamContainer,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > & _rxConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
         ~OParameterDialog();
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >

@@ -106,7 +106,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                VclAbstractDialog* pDlg = pFact->CreateIndexMarkModalDlg( DLG_EDIT_IDXMARK, pMDI, GetShell(), aMgr.GetCurTOXMark() );
+                VclAbstractDialog* pDlg = pFact->CreateIndexMarkModalDlg(pMDI, GetShell(), aMgr.GetCurTOXMark());
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 pDlg->Execute();
                 delete pDlg;
@@ -167,7 +167,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             const SwTOXBase* pBase = rSh.GetCurTOX();
             OSL_ENSURE(pBase, "no TOXBase to remove");
             if( pBase )
-                rSh.DeleteTOX(*pBase, sal_True);
+                rSh.DeleteTOX(*pBase, true);
         }
         break;
         default:

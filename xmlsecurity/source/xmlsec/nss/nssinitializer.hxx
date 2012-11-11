@@ -20,33 +20,31 @@
 #ifndef _NSSINITIALIZER_HXX
 #define _NSSINITIALIZER_HXX
 
-#include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
-#include <com/sun/star/xml/crypto/XCipherContextSupplier.hpp>
+#include <com/sun/star/xml/crypto/XNSSInitializer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 #define NSS_SERVICE_NAME "com.sun.star.xml.crypto.NSSInitializer"
 
-class ONSSInitializer : public cppu::WeakImplHelper3
+class ONSSInitializer : public cppu::WeakImplHelper2
 <
-    ::com::sun::star::xml::crypto::XDigestContextSupplier,
-    ::com::sun::star::xml::crypto::XCipherContextSupplier,
+    ::com::sun::star::xml::crypto::XNSSInitializer,
     ::com::sun::star::lang::XServiceInfo
 >
 {
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     ONSSInitializer()
     {}
 
 public:
-    ONSSInitializer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF );
+    ONSSInitializer( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext );
     virtual ~ONSSInitializer();
 
-    bool initNSS( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &xMSF );
+    bool initNSS( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext );
 
     /* XDigestContextSupplier */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > SAL_CALL getDigestContext( ::sal_Int32 nDigestID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aParams ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);

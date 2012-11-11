@@ -144,7 +144,7 @@ void PlacesListBox::RemovePlace( sal_uInt16 nPos )
             mbUpdated = true;
         }
         maPlaces.erase( maPlaces.begin() + nPos );
-        SvLBoxEntry* pEntry = mpImpl->GetEntry( nPos );
+        SvTreeListEntry* pEntry = mpImpl->GetEntry( nPos );
         mpImpl->RemoveEntry( pEntry );
     }
 }

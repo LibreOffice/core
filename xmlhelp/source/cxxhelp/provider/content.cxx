@@ -45,6 +45,7 @@
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
 #include <osl/diagnose.h>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -209,7 +210,7 @@ class ResultSetForRootFactory
 {
 private:
 
-    uno::Reference< lang::XMultiServiceFactory > m_xSMgr;
+    uno::Reference< uno::XComponentContext >     m_xContext;
     uno::Reference< ucb::XContentProvider >      m_xProvider;
     sal_Int32                                    m_nOpenMode;
     uno::Sequence< beans::Property >             m_seq;
@@ -221,14 +222,14 @@ private:
 public:
 
     ResultSetForRootFactory(
-        const uno::Reference< lang::XMultiServiceFactory >& xSMgr,
+        const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< ucb::XContentProvider >&  xProvider,
         sal_Int32 nOpenMode,
         const uno::Sequence< beans::Property >& seq,
         const uno::Sequence< ucb::NumberedSortingInfo >& seqSort,
         URLParameter aURLParameter,
         Databases* pDatabases )
-        : m_xSMgr( xSMgr ),
+        : m_xContext( xContext ),
           m_xProvider( xProvider ),
           m_nOpenMode( nOpenMode ),
           m_seq( seq ),
@@ -240,7 +241,7 @@ public:
 
     ResultSetBase* createResultSet()
     {
-        return new ResultSetForRoot( m_xSMgr,
+        return new ResultSetForRoot( m_xContext,
                                      m_xProvider,
                                      m_nOpenMode,
                                      m_seq,
@@ -257,7 +258,7 @@ class ResultSetForQueryFactory
 {
 private:
 
-    uno::Reference< lang::XMultiServiceFactory > m_xSMgr;
+    uno::Reference< uno::XComponentContext >     m_xContext;
     uno::Reference< ucb::XContentProvider >      m_xProvider;
     sal_Int32                                    m_nOpenMode;
     uno::Sequence< beans::Property >             m_seq;
@@ -269,14 +270,14 @@ private:
 public:
 
     ResultSetForQueryFactory(
-        const uno::Reference< lang::XMultiServiceFactory >& xSMgr,
+        const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Reference< ucb::XContentProvider >&  xProvider,
         sal_Int32 nOpenMode,
         const uno::Sequence< beans::Property >& seq,
         const uno::Sequence< ucb::NumberedSortingInfo >& seqSort,
         URLParameter aURLParameter,
         Databases* pDatabases )
-        : m_xSMgr( xSMgr ),
+        : m_xContext( rxContext ),
           m_xProvider( xProvider ),
           m_nOpenMode( nOpenMode ),
           m_seq( seq ),
@@ -288,7 +289,7 @@ public:
 
     ResultSetBase* createResultSet()
     {
-        return new ResultSetForQuery( m_xSMgr,
+        return new ResultSetForQuery( m_xContext,
                                       m_xProvider,
                                       m_nOpenMode,
                                       m_seq,
@@ -401,7 +402,7 @@ uno::Any SAL_CALL Content::execute(
                     aOpenCommand,
                     Environment,
                     new ResultSetForRootFactory(
-                        m_xSMgr,
+                        comphelper::getComponentContext(m_xSMgr),
                         m_xProvider.get(),
                         aOpenCommand.Mode,
                         aOpenCommand.Properties,
@@ -419,7 +420,7 @@ uno::Any SAL_CALL Content::execute(
                     aOpenCommand,
                     Environment,
                     new ResultSetForQueryFactory(
-                        m_xSMgr,
+                        comphelper::getComponentContext(m_xSMgr),
                         m_xProvider.get(),
                         aOpenCommand.Mode,
                         aOpenCommand.Properties,

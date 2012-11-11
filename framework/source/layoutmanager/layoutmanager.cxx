@@ -44,6 +44,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
@@ -62,7 +63,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XDispatchHelper.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
@@ -137,7 +138,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         , m_bPreserveContentSize( false )
         , m_bMenuBarCloser( false )
         , m_pInplaceMenuBar( NULL )
-        , m_xModuleManager( Reference< XModuleManager >( xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ))
+        , m_xModuleManager( ModuleManager::create( comphelper::getComponentContext(xServiceManager) ))
         , m_xUIElementFactoryManager( Reference< ui::XUIElementFactory >(
                 xServiceManager->createInstance( SERVICENAME_UIELEMENTFACTORYMANAGER ), UNO_QUERY ))
         , m_xPersistentWindowStateSupplier( Reference< XNameAccess >(
@@ -163,7 +164,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
     m_aStatusBarElement.m_aType = rtl::OUString( "statusbar" );
     m_aStatusBarElement.m_aName = m_aStatusBarAlias;
 
-    m_pToolbarManager = new ToolbarLayoutManager( xServiceManager, m_xUIElementFactoryManager, this );
+    m_pToolbarManager = new ToolbarLayoutManager( comphelper::getComponentContext(xServiceManager), m_xUIElementFactoryManager, this );
     m_xToolbarManager = uno::Reference< ui::XUIConfigurationListener >( static_cast< OWeakObject* >( m_pToolbarManager ), uno::UNO_QUERY );
 
     Application::AddEventListener( LINK( this, LayoutManager, SettingsChanged ) );
@@ -516,7 +517,7 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
         GlobalSettings* pGlobalSettings( 0 );
         if ( m_pGlobalSettings == 0 )
         {
-            m_pGlobalSettings = new GlobalSettings( m_xSMGR );
+            m_pGlobalSettings = new GlobalSettings( comphelper::getComponentContext(m_xSMGR) );
             bGetSettingsState = sal_True;
         }
         pGlobalSettings = m_pGlobalSettings;
@@ -1638,7 +1639,7 @@ throw (RuntimeException)
         uno::Reference< lang::XMultiServiceFactory > xSMGR( m_xSMGR );
         aWriteLock.unlock();
 
-        impl_setDockingWindowVisibility( xSMGR, xFrame, aElementName, false );
+        impl_setDockingWindowVisibility( comphelper::getComponentContext(xSMGR), xFrame, aElementName, false );
         bMustBeLayouted = false;
         bNotify         = false;
     }
@@ -1859,7 +1860,7 @@ throw (RuntimeException)
         uno::Reference< lang::XMultiServiceFactory > xSMGR( m_xSMGR );
         aReadGuard.unlock();
 
-        impl_setDockingWindowVisibility( xSMGR, xFrame, aElementName, true );
+        impl_setDockingWindowVisibility( comphelper::getComponentContext(xSMGR), xFrame, aElementName, true );
     }
     else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("toolpanel")))
     {
@@ -1949,7 +1950,7 @@ throw (RuntimeException)
         uno::Reference< lang::XMultiServiceFactory > xSMGR( m_xSMGR );
         aReadGuard.unlock();
 
-        impl_setDockingWindowVisibility( xSMGR, xFrame, aElementName, false );
+        impl_setDockingWindowVisibility( comphelper::getComponentContext(xSMGR), xFrame, aElementName, false );
     }
 
     if ( bMustLayout )
@@ -2669,8 +2670,7 @@ IMPL_LINK_NOARG(LayoutManager, MenuBarClose)
     if ( !xProvider.is())
         return 0;
 
-    uno::Reference< frame::XDispatchHelper > xDispatcher(
-        xSMGR->createInstance(SERVICENAME_DISPATCHHELPER), uno::UNO_QUERY_THROW);
+    uno::Reference< frame::XDispatchHelper > xDispatcher = frame::DispatchHelper::create( comphelper::getComponentContext( xSMGR ) );
 
     xDispatcher->executeDispatch(
         xProvider,

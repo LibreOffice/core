@@ -45,6 +45,7 @@
 #include "com/sun/star/document/XExporter.hpp"
 #include "com/sun/star/document/XFilter.hpp"
 #include "com/sun/star/xml/sax/Parser.hpp"
+#include "com/sun/star/xml/sax/Writer.hpp"
 #include "com/sun/star/xml/dom/XDocument.hpp"
 #include "com/sun/star/xml/dom/XElement.hpp"
 #include "com/sun/star/xml/dom/DocumentBuilder.hpp"
@@ -2003,13 +2004,9 @@ SfxDocumentMetaData::storeToStorage(
     if (!xOutStream.is()) throw css::uno::RuntimeException();
     css::uno::Reference<css::lang::XMultiComponentFactory> xMsf (
         m_xContext->getServiceManager());
-    css::uno::Reference<css::io::XActiveDataSource> xSaxWriter(
-        xMsf->createInstanceWithContext(::rtl::OUString(
-                "com.sun.star.xml.sax.Writer"), m_xContext),
-        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::xml::sax::XWriter> xSaxWriter(
+        css::xml::sax::Writer::create(m_xContext));
     xSaxWriter->setOutputStream(xOutStream);
-    css::uno::Reference<css::xml::sax::XDocumentHandler> xDocHandler (
-        xSaxWriter, css::uno::UNO_QUERY_THROW);
 
     const sal_uInt64 version = SotStorage::GetVersion( xStorage );
     // Oasis is also the default (0)
@@ -2022,7 +2019,7 @@ SfxDocumentMetaData::storeToStorage(
     css::uno::Reference<css::beans::XPropertySet> xPropArg =
         getURLProperties(Medium);
     css::uno::Sequence< css::uno::Any > args(2);
-    args[0] <<= xDocHandler;
+    args[0] <<= xSaxWriter;
     args[1] <<= xPropArg;
 
     css::uno::Reference<css::document::XExporter> xExp(

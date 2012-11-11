@@ -1,0 +1,78 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef __com_sun_star_graphic_XPrimitive2DRenderer_idl__
+#define __com_sun_star_graphic_XPrimitive2DRenderer_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/rendering/XBitmap.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/geometry/RealRectangle2D.idl>
+
+module com {  module sun {  module star {  module graphic {
+
+interface XPrimitive2D;
+
+/** XPrimitive2DRenderer interface
+
+    This interface allows to convert from a sequence of XPrimitive2Ds
+    to a XBitmap
+ */
+interface XPrimitive2DRenderer : ::com::sun::star::uno::XInterface
+{
+    /** return rasterized version of given XPrimitive2D
+
+        @param Primitive2DSequence
+            The graphic content description
+
+        @param aViewInformationSequence
+            The ViewInformation2D
+
+        @param DPI_X
+            The horizontal resolution of the callers device in pixel per inch. This
+            value is needed to calculate the correct dimensions of the graphic to be
+            rasterized. If a value of <value>0</value> is given, a horizontal default
+            resolution of 72 DPI is used.
+
+        @param DPI_Y
+            The vertical resolution of the callers device in pixel per inch. This
+            value is needed to calculate the correct dimensions of the graphic to be
+            rasterized. If a value of <value>0</value> is given, a vertical default
+            resolution of 72 DPI is used.
+
+        @param Range
+            The range in 1/100th mm of the graphic to be rasterized
+
+        @param MaximumQuadraticPixels
+            The maximum allowed number of pixels to be used to allow limiting the
+            possible size of used pixels. The AspectRatio is preserved, the result
+            gets limited to given number. If a value of 0 is given, a default of
+            500000 is used.
+     */
+    com::sun::star::rendering::XBitmap rasterize(
+        [in] sequence< XPrimitive2D > Primitive2DSequence,
+        [in] sequence< ::com::sun::star::beans::PropertyValue > aViewInformationSequence,
+        [in] unsigned long DPI_X,
+        [in] unsigned long DPI_Y,
+        [in] ::com::sun::star::geometry::RealRectangle2D Range,
+        [in] unsigned long MaximumQuadraticPixels);
+};
+
+}; }; }; };
+
+#endif

@@ -57,6 +57,7 @@
 #include <com/sun/star/awt/XItemList.hpp>
 
 #include <comphelper/numbers.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
@@ -102,7 +103,7 @@ namespace frm
     OFilterControl::OFilterControl( const Reference< XMultiServiceFactory >& _rxORB )
         :UnoControl( _rxORB )
         ,m_aTextListeners( *this )
-        ,m_aParser( _rxORB )
+        ,m_aParser( comphelper::getComponentContext(_rxORB) )
         ,m_nControlClass( FormComponentType::TEXTFIELD )
         ,m_bFilterList( sal_False )
         ,m_bMultiLine( sal_False )
@@ -348,7 +349,7 @@ namespace frm
                         sItemText = itemPos->second;
                         if ( !sItemText.isEmpty() )
                         {
-                            ::dbtools::OPredicateInputController aPredicateInput( maContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
+                            ::dbtools::OPredicateInputController aPredicateInput( maContext.getUNOContext(), m_xConnection, getParseContext() );
                             ::rtl::OUString sErrorMessage;
                             OSL_VERIFY( aPredicateInput.normalizePredicateString( sItemText, m_xField, &sErrorMessage ) );
                         }
@@ -533,7 +534,7 @@ namespace frm
             aNewText.trim();
             if ( !aNewText.isEmpty() )
             {
-                ::dbtools::OPredicateInputController aPredicateInput( maContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
+                ::dbtools::OPredicateInputController aPredicateInput( maContext.getUNOContext(), m_xConnection, getParseContext() );
                 ::rtl::OUString sErrorMessage;
                 if ( !aPredicateInput.normalizePredicateString( aNewText, m_xField, &sErrorMessage ) )
                 {

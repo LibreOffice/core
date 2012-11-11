@@ -56,7 +56,7 @@ class ScContentTree : public SvTreeListBox
 {
     ScNavigatorDlg*     pParentWindow;
     ImageList           aEntryImages;
-    SvLBoxEntry*        pRootNodes[SC_CONTENT_COUNT];
+    SvTreeListEntry*        pRootNodes[SC_CONTENT_COUNT];
     sal_uInt16              nRootType;          // set as Root
     String              aManualDoc;         // Switched in Navigator (Title)
     sal_Bool                bHiddenDoc;         // Hidden active?
@@ -97,12 +97,12 @@ class ScContentTree : public SvTreeListBox
         @param rnRootIndex  Root index of specified entry is returned.
         @param rnChildIndex  Index of the entry inside its root is returned (or SC_CONTENT_NOCHILD if entry is root).
         @param pEntry  The entry to examine. */
-    void    GetEntryIndexes( sal_uInt16& rnRootIndex, sal_uLong& rnChildIndex, SvLBoxEntry* pEntry ) const;
+    void    GetEntryIndexes( sal_uInt16& rnRootIndex, sal_uLong& rnChildIndex, SvTreeListEntry* pEntry ) const;
 
     /** Returns the child index of the specified listbox entry.
         @param pEntry  The entry to examine or NULL for the selected entry.
         @return  Index of the entry inside its root or SC_CONTENT_NOCHILD if entry is root. */
-    sal_uLong   GetChildIndex( SvLBoxEntry* pEntry ) const;
+    sal_uLong   GetChildIndex( SvTreeListEntry* pEntry ) const;
 
     void    DoDrag();
 

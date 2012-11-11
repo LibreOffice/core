@@ -79,7 +79,7 @@ struct SwPosition;
 // --------------------
 
 typedef SwNode * SwNodePtr;
-typedef sal_Bool (*FnForEach_SwNodes)( const SwNodePtr&, void* pArgs );
+typedef bool (*FnForEach_SwNodes)( const SwNodePtr&, void* pArgs );
 typedef struct _xmlTextWriter *xmlTextWriterPtr;
 
 struct CompareSwOutlineNodes

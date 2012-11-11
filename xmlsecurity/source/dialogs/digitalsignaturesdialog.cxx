@@ -39,7 +39,7 @@
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
-#include <com/sun/star/packages/manifest/XManifestReader.hpp>
+#include <com/sun/star/packages/manifest/ManifestReader.hpp>
 
 
 #include <rtl/ustrbuf.hxx>
@@ -268,9 +268,8 @@ void DigitalSignaturesDialog::SetStorage( const com::sun::star::uno::Reference <
     mxStore = rxStore;
     maSignatureHelper.SetStorage( mxStore, m_sODFVersion);
 
-    Reference < css::packages::manifest::XManifestReader > xReader(
-        mxCtx->getServiceManager()->createInstanceWithContext(
-        OUSTR("com.sun.star.packages.manifest.ManifestReader"), mxCtx), UNO_QUERY_THROW);
+    Reference < css::packages::manifest::XManifestReader > xReader =
+        css::packages::manifest::ManifestReader::create(mxCtx);
 
     //Get the manifest.xml
     Reference < css::embed::XStorage > xSubStore(rxStore->openStorageElement(
@@ -378,9 +377,10 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, OKButtonHdl)
         embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, false );
     uno::Reference< io::XOutputStream > xOutputStream(
         aStreamHelper.xSignatureStream, uno::UNO_QUERY );
-    uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler =
+    uno::Reference< com::sun::star::xml::sax::XWriter> xSaxWriter =
         maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
+    uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, UNO_QUERY_THROW);
     size_t nInfos = maCurrentSignatureInformations.size();
     for( size_t n = 0 ; n < nInfos ; ++n )
         maSignatureHelper.ExportSignature(
@@ -471,10 +471,11 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl)
                 css::embed::ElementModes::WRITE|css::embed::ElementModes::TRUNCATE, true);
             Reference< css::io::XOutputStream > xOutputStream(
                 aStreamHelper.xSignatureStream, UNO_QUERY_THROW);
-            Reference< css::xml::sax::XDocumentHandler> xDocumentHandler =
+            Reference< css::xml::sax::XWriter> xSaxWriter =
                 maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
             // Export old signatures...
+            uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, UNO_QUERY_THROW);
             size_t nInfos = maCurrentSignatureInformations.size();
             for ( size_t n = 0; n < nInfos; n++ )
                 maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[n]);
@@ -534,9 +535,10 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl)
                 css::embed::ElementModes::WRITE | css::embed::ElementModes::TRUNCATE, true);
             Reference< css::io::XOutputStream > xOutputStream(
                 aStreamHelper.xSignatureStream, UNO_QUERY_THROW);
-            Reference< css::xml::sax::XDocumentHandler> xDocumentHandler =
+            Reference< css::xml::sax::XWriter> xSaxWriter =
                 maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
+            uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, UNO_QUERY_THROW);
             size_t nInfos = maCurrentSignatureInformations.size();
             for( size_t n = 0 ; n < nInfos ; ++n )
                 maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[ n ] );
@@ -679,7 +681,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 aImage = maSigsValidImg.GetImage();
             }
 
-            SvLBoxEntry* pEntry = maSignaturesLB.InsertEntry( OUString(), aImage, aImage );
+            SvTreeListEntry* pEntry = maSignaturesLB.InsertEntry( OUString(), aImage, aImage );
             maSignaturesLB.SetEntryText( aSubject, pEntry, 1 );
             maSignaturesLB.SetEntryText( aIssuer, pEntry, 2 );
             maSignaturesLB.SetEntryText( aDateTimeStr, pEntry, 3 );

@@ -42,32 +42,37 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
-    CPPUNIT_TEST(testEmptySvgFamilyName);
-    CPPUNIT_TEST(testHideAllSections);
-    CPPUNIT_TEST(testOdtBorders);
+    CPPUNIT_TEST(run);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    /// Load an ODF file and make the document available via mxComponent.
-    void load(const OUString& rURL);
+    void run();
 };
 
-void Test::load(const OUString& rFilename)
+void Test::run()
 {
-    mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/odfimport/data/") + rFilename);
+    MethodEntry<Test> aMethods[] = {
+        {"empty-svg-family-name.odt", &Test::testEmptySvgFamilyName},
+        {"fdo53210.odt", &Test::testHideAllSections},
+        {"borders_ooo33.odt", &Test::testOdtBorders},
+    };
+    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
+    {
+        MethodEntry<Test>& rEntry = aMethods[i];
+        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/odfimport/data/") + OUString::createFromAscii(rEntry.pName));
+        (this->*rEntry.pMethod)();
+    }
 }
 
 void Test::testEmptySvgFamilyName()
 {
     // .odt import did crash on the empty font list (which I think is valid according SVG spec)
-    load( "empty-svg-family-name.odt" );
 }
 
 void Test::testHideAllSections()
 {
     // This document has a section that is conditionally hidden, but has no empty paragraph after it.
-    load("fdo53210.odt");
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xMasters = xTextFieldsSupplier->getTextFieldMasters();
     // Set _CS_Allgemein to 0
@@ -79,7 +84,6 @@ void Test::testHideAllSections()
 
 void Test::testOdtBorders()
 {
-    load("borders_ooo33.odt");
     AllBordersMap map;
     uno::Sequence< table::BorderLine > tempSequence(4);
 

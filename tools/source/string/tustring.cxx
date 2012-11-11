@@ -267,35 +267,6 @@ STRING& STRING::Fill( xub_StrLen nCount, STRCODE cFillChar )
     return *this;
 }
 
-STRING& STRING::Expand( xub_StrLen nCount, STRCODE cExpandChar )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    // return if string doesn't need expanding
-    sal_Int32 nLen = mpData->mnLen;
-    if ( nCount <= nLen )
-        return *this;
-
-    // allocate string of new size
-    STRINGDATA* pNewData = ImplAllocData( nCount );
-
-    // copy from old string
-    memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
-
-    // and expand using the given character
-    STRCODE* pStr = pNewData->maStr;
-    pStr += nLen;
-    for (sal_Int32 i = nCount - nLen; i > 0; --i) {
-        *pStr++ = cExpandChar;
-    }
-
-    // free old string
-    STRING_RELEASE((STRING_TYPE *)mpData);
-    mpData = pNewData;
-
-    return *this;
-}
-
 STRCODE* STRING::GetBufferAccess()
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

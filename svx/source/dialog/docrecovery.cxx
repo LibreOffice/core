@@ -53,9 +53,10 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/frame/AutoRecovery.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <osl/file.hxx>
@@ -134,9 +135,9 @@ short TabDialog4Recovery::Execute()
 }
 
 //===============================================
-RecoveryCore::RecoveryCore(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR         ,
-                                 sal_Bool                                                bUsedForSaving)
-    : m_xSMGR           ( xSMGR        )
+RecoveryCore::RecoveryCore(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                 sal_Bool                                            bUsedForSaving)
+    : m_xContext        ( rxContext    )
     , m_pListener       ( 0            )
     , m_bListenForSaving(bUsedForSaving)
 {
@@ -150,9 +151,9 @@ RecoveryCore::~RecoveryCore()
 }
 
 //===============================================
-css::uno::Reference< css::lang::XMultiServiceFactory > RecoveryCore::getSMGR()
+css::uno::Reference< css::uno::XComponentContext > RecoveryCore::getComponentContext()
 {
-    return m_xSMGR;
+    return m_xContext;
 }
 
 //===============================================
@@ -211,9 +212,9 @@ sal_Bool RecoveryCore::isBrokenTempEntry(const TURLInfo& rInfo)
 }
 
 //===============================================
-void RecoveryCore::saveBrokenTempEntries(const ::rtl::OUString& sPath)
+void RecoveryCore::saveBrokenTempEntries(const OUString& rPath)
 {
-    if (sPath.isEmpty())
+    if (rPath.isEmpty())
         return;
 
     if (!m_xRealCore.is())
@@ -225,7 +226,7 @@ void RecoveryCore::saveBrokenTempEntries(const ::rtl::OUString& sPath)
     lCopyArgs[0].Name    = PROP_DISPATCHASYNCHRON;
     lCopyArgs[0].Value <<= sal_False;
     lCopyArgs[1].Name    = PROP_SAVEPATH;
-    lCopyArgs[1].Value <<= sPath;
+    lCopyArgs[1].Value <<= rPath;
     lCopyArgs[2].Name    = PROP_ENTRYID;
     // lCopyArgs[2].Value will be changed during next loop ...
 
@@ -249,9 +250,9 @@ void RecoveryCore::saveBrokenTempEntries(const ::rtl::OUString& sPath)
 }
 
 //===============================================
-void RecoveryCore::saveAllTempEntries(const ::rtl::OUString& sPath)
+void RecoveryCore::saveAllTempEntries(const OUString& rPath)
 {
-    if (sPath.isEmpty())
+    if (rPath.isEmpty())
         return;
 
     if (!m_xRealCore.is())
@@ -263,7 +264,7 @@ void RecoveryCore::saveAllTempEntries(const ::rtl::OUString& sPath)
     lCopyArgs[0].Name    = PROP_DISPATCHASYNCHRON;
     lCopyArgs[0].Value <<= sal_False;
     lCopyArgs[1].Name    = PROP_SAVEPATH;
-    lCopyArgs[1].Value <<= sPath;
+    lCopyArgs[1].Value <<= rPath;
     lCopyArgs[2].Name    = PROP_ENTRYID;
     // lCopyArgs[2].Value will be changed during next loop ...
 
@@ -506,12 +507,12 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
 
     aNew.ID          = lInfo.getUnpackedValueOrDefault(STATEPROP_ID         , (sal_Int32)0     );
     aNew.DocState    = lInfo.getUnpackedValueOrDefault(STATEPROP_STATE      , (sal_Int32)0     );
-    aNew.OrgURL      = lInfo.getUnpackedValueOrDefault(STATEPROP_ORGURL     , ::rtl::OUString());
-    aNew.TempURL     = lInfo.getUnpackedValueOrDefault(STATEPROP_TEMPURL    , ::rtl::OUString());
-    aNew.FactoryURL  = lInfo.getUnpackedValueOrDefault(STATEPROP_FACTORYURL , ::rtl::OUString());
-    aNew.TemplateURL = lInfo.getUnpackedValueOrDefault(STATEPROP_TEMPLATEURL, ::rtl::OUString());
-    aNew.DisplayName = lInfo.getUnpackedValueOrDefault(STATEPROP_TITLE      , ::rtl::OUString());
-    aNew.Module      = lInfo.getUnpackedValueOrDefault(STATEPROP_MODULE     , ::rtl::OUString());
+    aNew.OrgURL      = lInfo.getUnpackedValueOrDefault(STATEPROP_ORGURL     , OUString());
+    aNew.TempURL     = lInfo.getUnpackedValueOrDefault(STATEPROP_TEMPURL    , OUString());
+    aNew.FactoryURL  = lInfo.getUnpackedValueOrDefault(STATEPROP_FACTORYURL , OUString());
+    aNew.TemplateURL = lInfo.getUnpackedValueOrDefault(STATEPROP_TEMPLATEURL, OUString());
+    aNew.DisplayName = lInfo.getUnpackedValueOrDefault(STATEPROP_TITLE      , OUString());
+    aNew.Module      = lInfo.getUnpackedValueOrDefault(STATEPROP_MODULE     , OUString());
 
     // search for already existing items and update her nState value ...
     TURLList::iterator pIt;
@@ -576,14 +577,14 @@ void RecoveryCore::impl_startListening()
     // listening already initialized ?
     if (m_xRealCore.is())
         return;
-    m_xRealCore = css::uno::Reference< css::frame::XDispatch >(m_xSMGR->createInstance(SERVICENAME_RECOVERYCORE), css::uno::UNO_QUERY_THROW);
+    m_xRealCore = css::frame::AutoRecovery::create(m_xContext);
 
     css::util::URL aURL;
     if (m_bListenForSaving)
         aURL.Complete = RECOVERY_CMD_DO_EMERGENCY_SAVE;
     else
         aURL.Complete = RECOVERY_CMD_DO_RECOVERY;
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
     xParser->parseStrict(aURL);
 
     /* Note: addStatusListener() call us synchronous back ... so we
@@ -603,7 +604,7 @@ void RecoveryCore::impl_stopListening()
         aURL.Complete = RECOVERY_CMD_DO_EMERGENCY_SAVE;
     else
         aURL.Complete = RECOVERY_CMD_DO_RECOVERY;
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
     xParser->parseStrict(aURL);
 
     m_xRealCore->removeStatusListener(static_cast< css::frame::XStatusListener* >(this), aURL);
@@ -616,7 +617,7 @@ css::util::URL RecoveryCore::impl_getParsedURL(const ::rtl::OUString& sURL)
     css::util::URL aURL;
     aURL.Complete = sURL;
 
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
     xParser->parseStrict(aURL);
 
     return aURL;
@@ -833,8 +834,8 @@ SaveProgressDialog::SaveProgressDialog(Window*       pParent,
     , m_pCore       ( pCore                                                      )
 {
     FreeResource();
-    PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, pCore->getSMGR() );
-                    m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
+    PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, css::uno::Reference<css::lang::XMultiServiceFactory>(pCore->getComponentContext()->getServiceManager(), css::uno::UNO_QUERY_THROW) );
+    m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
 }
 
 //===============================================
@@ -883,7 +884,7 @@ void SaveProgressDialog::end()
 }
 
 //===============================================
-RecovDocListEntry::RecovDocListEntry(      SvLBoxEntry* pEntry,
+RecovDocListEntry::RecovDocListEntry(      SvTreeListEntry* pEntry,
                                            sal_uInt16       nFlags,
                                      const String&      sText )
     : SvLBoxString( pEntry, nFlags, sText )
@@ -894,10 +895,10 @@ RecovDocListEntry::RecovDocListEntry(      SvLBoxEntry* pEntry,
 void RecovDocListEntry::Paint(const Point&       aPos   ,
                                     SvTreeListBox&      aDevice,
                                     sal_uInt16       /*nFlags */,
-                                    SvLBoxEntry* pEntry )
+                                    SvTreeListEntry* pEntry )
 {
     const Image*        pImg  = 0;
-    const String*       pTxt  = 0;
+    const OUString*     pTxt  = 0;
           RecovDocList* pList = static_cast< RecovDocList* >(&aDevice);
 
     TURLInfo* pInfo  = (TURLInfo*)pEntry->GetUserData();
@@ -970,13 +971,13 @@ RecovDocList::~RecovDocList()
 }
 
 //===============================================
-void RecovDocList::InitEntry(      SvLBoxEntry* pEntry ,
-                             const XubString&   sText  ,
-                             const Image&       aImage1,
-                             const Image&       aImage2,
-                                   SvLBoxButtonKind eButtonKind)
+void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
+                             const OUString& rText,
+                             const Image& rImage1,
+                             const Image& rImage2,
+                             SvLBoxButtonKind eButtonKind)
 {
-    SvTabListBox::InitEntry(pEntry, sText, aImage1, aImage2, eButtonKind);
+    SvTabListBox::InitEntry(pEntry, rText, rImage1, rImage2, eButtonKind);
     DBG_ASSERT( TabCount() == 2, "*RecovDocList::InitEntry(): structure missmatch" );
 
     SvLBoxString*       pCol = (SvLBoxString*)pEntry->GetItem(2);
@@ -1036,7 +1037,7 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
 
     sal_Bool bCrashRepEnabled( sal_False );
     css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                pCore->getSMGR(),
+                                pCore->getComponentContext(),
                                 CFG_PACKAGE_RECOVERY,
                                 CFG_PATH_CRASHREPORTER,
                                 CFG_ENTRY_ENABLED,
@@ -1044,8 +1045,8 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     aVal >>= bCrashRepEnabled;
     m_bRecoveryOnly = !bCrashRepEnabled;
 
-    PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, pCore->getSMGR() );
-                    m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
+    PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, css::uno::Reference<css::lang::XMultiServiceFactory>(pCore->getComponentContext()->getServiceManager(), css::uno::UNO_QUERY_THROW) );
+    m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     Wallpaper aBackground( rStyleSettings.GetWindowColor() );
@@ -1074,12 +1075,12 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
         String sName( rInfo.DisplayName );
         sName += '\t';
         sName += impl_getStatusString( rInfo );
-        SvLBoxEntry* pEntry = m_aFileListLB.InsertEntry(sName, rInfo.StandardImage, rInfo.StandardImage);
+        SvTreeListEntry* pEntry = m_aFileListLB.InsertEntry(sName, rInfo.StandardImage, rInfo.StandardImage);
         pEntry->SetUserData((void*)&rInfo);
     }
 
     // mark first item
-    SvLBoxEntry* pFirst = m_aFileListLB.First();
+    SvTreeListEntry* pFirst = m_aFileListLB.First();
     if (pFirst)
         m_aFileListLB.SetCursor(pFirst, sal_True);
 }
@@ -1332,7 +1333,7 @@ void RecoveryDialog::updateItems()
     sal_uIntPtr i = 0;
     for ( i=0; i<c; ++i )
     {
-        SvLBoxEntry* pEntry = m_aFileListLB.GetEntry(i);
+        SvTreeListEntry* pEntry = m_aFileListLB.GetEntry(i);
         if ( !pEntry )
             continue;
 
@@ -1356,7 +1357,7 @@ void RecoveryDialog::stepNext(TURLInfo* pItem)
     sal_uIntPtr i = 0;
     for (i=0; i<c; ++i)
     {
-        SvLBoxEntry* pEntry = m_aFileListLB.GetEntry(i);
+        SvTreeListEntry* pEntry = m_aFileListLB.GetEntry(i);
         if (!pEntry)
             continue;
 
@@ -1548,8 +1549,8 @@ IMPL_LINK_NOARG(BrokenRecoveryDialog, SaveButtonHdl)
 //===============================================
 void BrokenRecoveryDialog::impl_askForSavePath()
 {
-    css::uno::Reference< css::ui::dialogs::XFolderPicker > xFolderPicker(
-        m_pCore->getSMGR()->createInstance(SERVICENAME_FOLDERPICKER), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker =
+        css::ui::dialogs::FolderPicker::create( m_pCore->getComponentContext() );
 
     INetURLObject aURL(m_sSavePath, INET_PROT_FILE);
     xFolderPicker->setDisplayDirectory(aURL.GetMainURL(INetURLObject::NO_DECODE));

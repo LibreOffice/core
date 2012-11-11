@@ -47,14 +47,14 @@ struct SwRedlineDataChild
 {
     const SwRedlineData*        pChild;     // link to original stacked data
     const SwRedlineDataChild*   pNext;      // link to stacked data
-    SvLBoxEntry*                pTLBChild;  // corresponding TreeListBox entry
+    SvTreeListEntry*                pTLBChild;  // corresponding TreeListBox entry
 };
 
 struct SwRedlineDataParent
 {
     const SwRedlineData*        pData;      // RedlineDataPtr
     const SwRedlineDataChild*   pNext;      // link to stacked data
-    SvLBoxEntry*                pTLBParent; // corresponding TreeListBox entry
+    SvTreeListEntry*                pTLBParent; // corresponding TreeListBox entry
     String                      sComment;   // redline comment
 
     inline sal_Bool operator==( const SwRedlineDataParent& rObj ) const
@@ -72,7 +72,7 @@ typedef SwRedlineDataChild* SwRedlineDataChildPtr;
 typedef boost::ptr_vector<SwRedlineDataChild> SwRedlineDataChildArr;
 
 
-typedef SvLBoxEntry* SvLBoxEntryPtr;
+typedef SvTreeListEntry* SvLBoxEntryPtr;
 typedef std::vector<SvLBoxEntryPtr> SvLBoxEntryArr;
 
 class SW_DLLPUBLIC SwRedlineAcceptDlg
@@ -122,7 +122,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
 
     SW_DLLPRIVATE String            GetRedlineText(const SwRedline& rRedln, DateTime &rDateTime, sal_uInt16 nStack = 0);
     SW_DLLPRIVATE const String& GetActionText(const SwRedline& rRedln, sal_uInt16 nStack = 0);
-    SW_DLLPRIVATE sal_uInt16            GetRedlinePos( const SvLBoxEntry& rEntry) const;
+    SW_DLLPRIVATE sal_uInt16            GetRedlinePos( const SvTreeListEntry& rEntry) const;
 
 public:
     SwRedlineAcceptDlg(Dialog *pParent, sal_Bool bAutoFmt = sal_False);

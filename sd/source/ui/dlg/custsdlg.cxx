@@ -360,7 +360,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
         for( SdCustomShow::PageVec::iterator it = rpCustomShow->PagesVector().begin();
              it != rpCustomShow->PagesVector().end(); ++it )
         {
-            SvLBoxEntry* pEntry = aLbCustomPages.InsertEntry( (*it)->GetName() );
+            SvTreeListEntry* pEntry = aLbCustomPages.InsertEntry( (*it)->GetName() );
             pEntry->SetUserData( (SdPage*) (*it) );
         }
     }
@@ -414,7 +414,7 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
         if( nCount > 0 )
         {
             sal_uLong nPosCP = LIST_APPEND;
-            SvLBoxEntry* pEntry = aLbCustomPages.FirstSelected();
+            SvTreeListEntry* pEntry = aLbCustomPages.FirstSelected();
             if( pEntry )
                 nPosCP = aLbCustomPages.GetModel()->GetAbsPos( pEntry ) + 1L;
 
@@ -438,7 +438,7 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
     else if( p == &aBtnRemove )
     {
         //sal_uInt16 nPos = aLbCustomPages.GetSelectEntryPos();
-        SvLBoxEntry* pEntry = aLbCustomPages.FirstSelected();
+        SvTreeListEntry* pEntry = aLbCustomPages.FirstSelected();
         if( pEntry )
         {
             sal_uLong nPos = aLbCustomPages.GetModel()->GetAbsPos( pEntry );
@@ -470,7 +470,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
 {
     sal_Bool bDifferent = sal_False;
     SdPage* pPage = NULL;
-    SvLBoxEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = NULL;
 
     // Anzahl vergleichen
     if( rpCustomShow->PagesVector().size() != aLbCustomPages.GetEntryCount() )

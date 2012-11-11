@@ -79,7 +79,7 @@ void SwTmpEndPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( rInf.OnWin() && rInf.GetOpt().IsParagraph() )
     {
         SwDefFontSave aSave( rInf );
-        const rtl::OUString aTmp( CH_PAR );
+        const OUString aTmp( CH_PAR );
         rInf.DrawText( aTmp, *this );
     }
 }
@@ -588,7 +588,7 @@ sal_Bool SwControlCharPortion::Format( SwTxtFormatInfo &rInf )
 KSHORT SwControlCharPortion::GetViewWidth( const SwTxtSizeInfo& rInf ) const
 {
     if( !mnViewWidth )
-        mnViewWidth = rInf.GetTxtSize(rtl::OUString(' ')).Width();
+        mnViewWidth = rInf.GetTxtSize(OUString(' ')).Width();
 
     return mnViewWidth;
 }

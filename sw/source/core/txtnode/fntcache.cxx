@@ -632,7 +632,7 @@ void SwFntObj::SetDevFont( const ViewShell *pSh, OutputDevice& rOut )
  *
  *************************************************************************/
 
-static sal_uInt8 lcl_WhichPunctuation( xub_Unicode cChar )
+static sal_uInt8 lcl_WhichPunctuation( sal_Unicode cChar )
 {
     if ( ( cChar < 0x3001 || cChar > 0x3002 ) &&
             ( cChar < 0x3008 || cChar > 0x3011 ) &&
@@ -655,8 +655,8 @@ static sal_uInt8 lcl_WhichPunctuation( xub_Unicode cChar )
 
 static sal_Bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
 {
-    const rtl::OUString aStr1( xub_Unicode( 0x3008 ) );
-    const rtl::OUString aStr2( xub_Unicode( 0x307C ) );
+    const rtl::OUString aStr1( sal_Unicode( 0x3008 ) );
+    const rtl::OUString aStr2( sal_Unicode( 0x307C ) );
     const long nWidth1 = rOut.GetTextWidth( aStr1 );
     const long nWidth2 = rOut.GetTextWidth( aStr2 );
     return nWidth1 == nWidth2;
@@ -991,7 +991,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             long nNextFix;
 
             // punctuation characters are not centered
-            xub_Unicode cChar = rInf.GetText().GetChar( rInf.GetIdx() );
+            sal_Unicode cChar = rInf.GetText().GetChar( rInf.GetIdx() );
             sal_uInt8 nType = lcl_WhichPunctuation( cChar );
             switch ( nType )
             {
@@ -1558,7 +1558,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             nCnt = nCnt - rInf.GetIdx();
         nCnt = Min( nCnt, rInf.GetLen() );
         long nKernSum = rInf.GetKern();
-        xub_Unicode cChPrev = rInf.GetText().GetChar( rInf.GetIdx() );
+        sal_Unicode cChPrev = rInf.GetText().GetChar( rInf.GetIdx() );
 
         // In case of a single underlined space in justified text,
         // have to output 2 spaces:
@@ -1582,7 +1582,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
         else
         {
-            xub_Unicode nCh;
+            sal_Unicode nCh;
 
             // In case of Pair Kerning the printer influence on the positioning
             // grows
@@ -1936,9 +1936,9 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             else
                 nCnt = nCnt - rInf.GetIdx();
             nCnt = Min (nCnt, nLn);
-            xub_Unicode nChPrev = rInf.GetText().GetChar( rInf.GetIdx() );
+            sal_Unicode nChPrev = rInf.GetText().GetChar( rInf.GetIdx() );
 
-            xub_Unicode nCh;
+            sal_Unicode nCh;
 
             // In case of Pair Kerning the printer influence on the positioning
             // grows

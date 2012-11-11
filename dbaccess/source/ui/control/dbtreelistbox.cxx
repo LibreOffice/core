@@ -108,39 +108,40 @@ DBTreeListBox::~DBTreeListBox()
     implStopSelectionTimer();
 }
 //------------------------------------------------------------------------
-SvLBoxEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvLBoxEntry* pStart, const IEntryFilter* _pFilter ) const
+SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvTreeListEntry* pStart, const IEntryFilter* _pFilter ) const
 {
-    SvLBoxTreeList* myModel = GetModel();
-    SvTreeEntryList* pChildren = myModel->GetChildList(pStart);
-    SvLBoxEntry* pEntry = NULL;
-    if ( pChildren )
+    SvTreeList* myModel = GetModel();
+    std::pair<SvTreeListEntries::iterator,SvTreeListEntries::iterator> aIters =
+        myModel->GetChildIterators(pStart);
+
+    SvTreeListEntry* pEntry = NULL;
+    SvTreeListEntries::iterator it = aIters.first, itEnd = aIters.second;
+    for (; it != itEnd; ++it)
     {
-        size_t nCount = pChildren->size();
-        for (size_t i = 0; i < nCount; ++i)
+        pEntry = &(*it);
+        const SvLBoxString* pItem = static_cast<const SvLBoxString*>(
+            pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
+
+        if (pItem && pItem->GetText().equals(aName))
         {
-            pEntry = static_cast<SvLBoxEntry*>((*pChildren)[ i ]);
-            SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
-            if ( pItem->GetText().equals(aName) )
-            {
-                if ( !_pFilter || _pFilter->includeEntry( pEntry ) )
-                    // found
-                    break;
-            }
-            pEntry = NULL;
+            if (!_pFilter || _pFilter->includeEntry(pEntry))
+                // found
+                break;
         }
+        pEntry = NULL;
     }
 
     return pEntry;
 }
 
 // -------------------------------------------------------------------------
-void DBTreeListBox::EnableExpandHandler(SvLBoxEntry* _pEntry)
+void DBTreeListBox::EnableExpandHandler(SvTreeListEntry* _pEntry)
 {
     LINK(this, DBTreeListBox, OnResetEntry).Call(_pEntry);
 }
 
 // -------------------------------------------------------------------------
-void DBTreeListBox::RequestingChildren( SvLBoxEntry* pParent )
+void DBTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
 {
     if (m_aPreExpandHandler.IsSet())
     {
@@ -155,7 +156,7 @@ void DBTreeListBox::RequestingChildren( SvLBoxEntry* pParent )
 }
 
 // -------------------------------------------------------------------------
-void DBTreeListBox::InitEntry( SvLBoxEntry* _pEntry, const XubString& aStr, const Image& _rCollEntryBmp, const Image& _rExpEntryBmp, SvLBoxButtonKind eButtonKind)
+void DBTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& aStr, const Image& _rCollEntryBmp, const Image& _rExpEntryBmp, SvLBoxButtonKind eButtonKind)
 {
     SvTreeListBox::InitEntry( _pEntry, aStr, _rCollEntryBmp,_rExpEntryBmp, eButtonKind);
     SvLBoxItem* pTextItem(_pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
@@ -204,7 +205,7 @@ void DBTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 // -------------------------------------------------------------------------
-IMPL_LINK(DBTreeListBox, OnResetEntry, SvLBoxEntry*, pEntry)
+IMPL_LINK(DBTreeListBox, OnResetEntry, SvTreeListEntry*, pEntry)
 {
     // set the flag which allows if the entry can be expanded
     pEntry->SetFlags( (pEntry->GetFlags() & ~(SV_ENTRYFLAG_NO_NODEBMP | SV_ENTRYFLAG_HAD_CHILDREN)) | SV_ENTRYFLAG_CHILDREN_ON_DEMAND );
@@ -213,29 +214,31 @@ IMPL_LINK(DBTreeListBox, OnResetEntry, SvLBoxEntry*, pEntry)
     return 0L;
 }
 // -----------------------------------------------------------------------------
-void DBTreeListBox::ModelHasEntryInvalidated( SvListEntry* _pEntry )
+void DBTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* _pEntry )
 {
     SvTreeListBox::ModelHasEntryInvalidated( _pEntry );
 
-    if ( m_aSelectedEntries.find( _pEntry ) != m_aSelectedEntries.end() )
+    SvTreeListEntry* pLBEntry = static_cast<SvTreeListEntry*>(_pEntry);
+    if (m_aSelectedEntries.find(pLBEntry) != m_aSelectedEntries.end())
     {
-        SvLBoxItem* pTextItem = static_cast< SvLBoxEntry* >( _pEntry )->GetFirstItem( SV_ITEM_ID_BOLDLBSTRING );
+        SvLBoxItem* pTextItem = pLBEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
         if ( pTextItem && !static_cast< OBoldListboxString* >( pTextItem )->isEmphasized() )
         {
             implStopSelectionTimer();
-            m_aSelectedEntries.erase( _pEntry );
+            m_aSelectedEntries.erase(pLBEntry);
                 // ehm - why?
         }
     }
 }
 // -------------------------------------------------------------------------
-void DBTreeListBox::ModelHasRemoved( SvListEntry* _pEntry )
+void DBTreeListBox::ModelHasRemoved( SvTreeListEntry* _pEntry )
 {
     SvTreeListBox::ModelHasRemoved(_pEntry);
-    if ( m_aSelectedEntries.find( _pEntry ) != m_aSelectedEntries.end() )
+    SvTreeListEntry* pLBEntry = static_cast<SvTreeListEntry*>(_pEntry);
+    if (m_aSelectedEntries.find(pLBEntry) != m_aSelectedEntries.end())
     {
         implStopSelectionTimer();
-        m_aSelectedEntries.erase( _pEntry );
+        m_aSelectedEntries.erase(pLBEntry);
     }
 }
 
@@ -245,9 +248,9 @@ sal_Int8 DBTreeListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     sal_Int8 nDropOption = DND_ACTION_NONE;
     if ( m_pActionListener )
     {
-        SvLBoxEntry* pDroppedEntry = GetEntry(_rEvt.maPosPixel);
+        SvTreeListEntry* pDroppedEntry = GetEntry(_rEvt.maPosPixel);
         // check if drag is on child entry, which is not allowed
-        SvLBoxEntry* pParent = NULL;
+        SvTreeListEntry* pParent = NULL;
         if ( _rEvt.mnAction & DND_ACTION_MOVE )
         {
             if ( !m_pDragedEntry ) // no entry to move
@@ -317,7 +320,7 @@ void DBTreeListBox::RequestHelp( const HelpEvent& rHEvt )
     if( rHEvt.GetMode() & HELPMODE_QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
-        SvLBoxEntry* pEntry = GetEntry( aPos );
+        SvTreeListEntry* pEntry = GetEntry( aPos );
         if( pEntry )
         {
             String sQuickHelpText;
@@ -400,12 +403,12 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput(rKEvt);
 }
 // -----------------------------------------------------------------------------
-sal_Bool DBTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& /*_aSelection*/)
+sal_Bool DBTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& /*_aSelection*/)
 {
     return m_aEditingHandler.Call(pEntry) != 0;
 }
 // -----------------------------------------------------------------------------
-sal_Bool DBTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
+sal_Bool DBTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText )
 {
     DBTreeEditedEntry aEntry;
     aEntry.pEntry = pEntry;
@@ -431,7 +434,7 @@ sal_Bool DBTreeListBox::DoubleClickHdl()
 // -----------------------------------------------------------------------------
 void scrollWindow(DBTreeListBox* _pListBox, const Point& _rPos,sal_Bool _bUp)
 {
-    SvLBoxEntry* pEntry = _pListBox->GetEntry( _rPos );
+    SvTreeListEntry* pEntry = _pListBox->GetEntry( _rPos );
     if( pEntry && pEntry != _pListBox->Last() )
     {
         _pListBox->ScrollOutputArea( _bUp ? -1 : 1 );

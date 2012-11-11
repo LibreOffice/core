@@ -534,7 +534,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                                         pTxtNd->GetMinMaxSize( aIdx.GetIndex(), nMinFrm,
                                                                                         nMaxFrm, nAbsMinCnts );
                                 }
-                                aIdx++;
+                                ++aIdx;
                         }
 
                         if( bOnlyOneNode )

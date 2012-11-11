@@ -28,33 +28,24 @@ class ValueSet;
 
 class SwInsertGrfRulerDlg  : public SfxModalDialog
 {
-    FixedLine       aSelectionFL;
-    OKButton        aOkPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
+    OKButton*        m_pOkPB;
+    SwRulerValueSet* m_pExampleVS;
 
-    std::vector<String> aGrfNames;
-    String          sSimple;
-    String          sRulers;
-    sal_uInt16          nSelPos;
-
-    SwRulerValueSet* pExampleVS;
+    std::vector<OUString> m_aGrfNames;
+    OUString m_sSimple;
 
 protected:
-    DECL_LINK(SelectHdl, ValueSet*);
     DECL_LINK(DoubleClickHdl, void *);
 
 public:
-    SwInsertGrfRulerDlg( Window* pParent );
+    SwInsertGrfRulerDlg(Window* pParent);
     ~SwInsertGrfRulerDlg();
 
-    String          GetGraphicName();
-    sal_Bool            IsSimpleLine() {return nSelPos == 1;}
-    sal_Bool            HasImages() const {return !aGrfNames.empty();}
+    OUString GetGraphicName() const;
+    bool IsSimpleLine() const;
+    bool HasImages() const {return !m_aGrfNames.empty();}
 };
 
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

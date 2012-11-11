@@ -39,38 +39,27 @@ class SwWrtShell;
 
 class SwEndNoteOptionPage : public SfxTabPage
 {
-    FixedLine       aNumFL;
-    FixedText       aNumTypeFT;
-    SwNumberingTypeListBox   aNumViewBox;
-    FixedText       aOffsetLbl;
-    NumericField    aOffsetFld;
-    FixedText       aNumCountFT;
-    ListBox         aNumCountBox;
-    FixedText       aPrefixFT;
-    Edit            aPrefixED;
-    FixedText       aSuffixFT;
-    Edit            aSuffixED;
-    FixedText       aPosFT;
-    RadioButton     aPosPageBox;
-    RadioButton     aPosChapterBox;
+    SwNumberingTypeListBox* m_pNumViewBox;
+    FixedText* m_pOffsetLbl;
+    NumericField* m_pOffsetFld;
+    ListBox* m_pNumCountBox;
+    Edit* m_pPrefixED;
+    Edit* m_pSuffixED;
+    FixedText* m_pPosFT;
+    RadioButton* m_pPosPageBox;
+    RadioButton* m_pPosChapterBox;
 
-    FixedLine        aTemplFL;
-    FixedText       aParaTemplLbl;
-    ListBox         aParaTemplBox;
-    FixedText       aPageTemplLbl;
-    ListBox         aPageTemplBox;
+    VclContainer *m_pStylesContainer;
 
-    FixedLine        aCharTemplFL;
-    FixedText       aFtnCharAnchorTemplLbl;
-    ListBox         aFtnCharAnchorTemplBox;
-    FixedText       aFtnCharTextTemplLbl;
-    ListBox         aFtnCharTextTemplBox;
+    ListBox* m_pParaTemplBox;
+    FixedText* m_pPageTemplLbl;
+    ListBox* m_pPageTemplBox;
 
-    FixedLine aContFL;
-    FixedText aContLbl;
-    Edit aContEdit;
-    FixedText aContFromLbl;
-    Edit aContFromEdit;
+    ListBox* m_pFtnCharAnchorTemplBox;
+    ListBox* m_pFtnCharTextTemplBox;
+
+    Edit* m_pContEdit;
+    Edit* m_pContFromEdit;
 
     String aNumDoc;
     String aNumPage;

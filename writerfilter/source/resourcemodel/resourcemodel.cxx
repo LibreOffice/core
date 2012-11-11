@@ -87,7 +87,7 @@ public:
 
     virtual string getType() const { return "TableProps"; }
     void reset() {}
-    void insert(Pointer_t /* pTablePropsRef */) {}
+    void InsertProps(Pointer_t /* pTablePropsRef */) {}
 };
 
 typedef TablePropsRef::Pointer_t TablePropsRef_t;

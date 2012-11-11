@@ -53,6 +53,7 @@
 #include <vcl/graph.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 
@@ -62,15 +63,10 @@ using namespace ::com::sun::star;
 //  class VCLUnoHelper
 //  ----------------------------------------------------
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit> VCLUnoHelper::CreateToolkit()
+uno::Reference< ::com::sun::star::awt::XToolkit> VCLUnoHelper::CreateToolkit()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( szServiceName2_Toolkit ) );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit> xToolkit;
-    if ( xI.is() )
-        xToolkit = ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>( xI, ::com::sun::star::uno::UNO_QUERY );
-
+    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference< awt::XToolkit> xToolkit( awt::Toolkit::create(xContext), uno::UNO_QUERY_THROW );
     return xToolkit;
 }
 

@@ -47,7 +47,7 @@ class SdNavigatorWin;
 class SdrObject;
 class SdrObjList;
 class SdPage;
-class SvLBoxEntry;
+class SvTreeListEntry;
 
 namespace sd {
 class DrawDocShell;
@@ -150,7 +150,7 @@ protected:
     virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
 
-    virtual void            RequestingChildren( SvLBoxEntry* pParent );
+    virtual void            RequestingChildren( SvTreeListEntry* pParent );
 
     void                    DoDrag();
     void                    OnDragFinished( sal_uInt8 nDropAction );
@@ -179,13 +179,13 @@ protected:
         associated list box entries.
     */
     virtual sal_Bool NotifyMoving(
-        SvLBoxEntry*  pTarget,
-        SvLBoxEntry*  pEntry,
-        SvLBoxEntry*& rpNewParent,
+        SvTreeListEntry*  pTarget,
+        SvTreeListEntry*  pEntry,
+        SvTreeListEntry*& rpNewParent,
         sal_uLong&        rNewChildPos);
 
     using Window::GetDropTarget;
-    virtual SvLBoxEntry* GetDropTarget (const Point& rLocation);
+    virtual SvTreeListEntry* GetDropTarget (const Point& rLocation);
 
 public:
 
@@ -238,7 +238,7 @@ private:
     /** Return <TRUE/> when the current transferable may be dropped at the
         given list box entry.
     */
-    bool IsDropAllowed (SvLBoxEntry* pEntry);
+    bool IsDropAllowed (SvTreeListEntry* pEntry);
 
     /** This inner class is defined in sdtreelb.cxx and is basically a
         container for the icons used in the list box for the entries.
@@ -265,7 +265,7 @@ private:
         SdrObject* pShape,
         const ::rtl::OUString& rsName,
         const bool bIsExcluded,
-        SvLBoxEntry* pParentEntry,
+        SvTreeListEntry* pParentEntry,
         const IconProvider& rIconProvider);
 
     /** Add the given object to a transferable object so that the object can

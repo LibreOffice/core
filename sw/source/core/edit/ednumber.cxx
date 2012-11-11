@@ -144,9 +144,9 @@ const SwNumRule* SwEditShell::GetOutlineNumRule() const
 
 // Absaetze ohne Numerierung, aber mit Einzuegen
 
-sal_Bool SwEditShell::NoNum()
+bool SwEditShell::NoNum()
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
@@ -241,11 +241,11 @@ void SwEditShell::DelNumRules()
 // Hoch-/Runterstufen
 
 
-sal_Bool SwEditShell::NumUpDown( sal_Bool bDown )
+bool SwEditShell::NumUpDown( bool bDown )
 {
     StartAllAction();
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() == pCrsr )         // keine Mehrfachselektion ?
         bRet = GetDoc()->NumUpDown( *pCrsr, bDown );
@@ -270,9 +270,9 @@ sal_Bool SwEditShell::NumUpDown( sal_Bool bDown )
     return bRet;
 }
 // -> #i23726#
-sal_Bool SwEditShell::IsFirstOfNumRule() const
+bool SwEditShell::IsFirstOfNumRule() const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     SwPaM * pCrsr = GetCrsr();
     if (pCrsr->GetNext() == pCrsr)
@@ -283,9 +283,9 @@ sal_Bool SwEditShell::IsFirstOfNumRule() const
     return bResult;
 }
 
-sal_Bool SwEditShell::IsFirstOfNumRule(const SwPaM & rPaM) const
+bool SwEditShell::IsFirstOfNumRule(const SwPaM & rPaM) const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     SwPosition aPos(*rPaM.GetPoint());
     bResult = GetDoc()->IsFirstOfNumRule(aPos);
@@ -354,7 +354,7 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
 }
 // <- #i23725#
 
-sal_Bool SwEditShell::MoveParagraph( long nOffset )
+bool SwEditShell::MoveParagraph( long nOffset )
 {
     StartAllAction();
 
@@ -366,7 +366,7 @@ sal_Bool SwEditShell::MoveParagraph( long nOffset )
         pCrsr->DeleteMark();
     }
 
-    sal_Bool bRet = GetDoc()->MoveParagraph( *pCrsr, nOffset );
+    bool bRet = GetDoc()->MoveParagraph( *pCrsr, nOffset );
 
     GetDoc()->SetModified();
     EndAllAction();
@@ -393,11 +393,11 @@ void SwEditShell::GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower 
     aCrsr.SetMark();
     if( pCrsr->HasMark() )
         *aCrsr.GetPoint() = *pCrsr->End();
-    GetDoc()->GotoNextNum( *aCrsr.GetPoint(), sal_False,
+    GetDoc()->GotoNextNum( *aCrsr.GetPoint(), false,
                             &rUpper, &rLower );
 }
 
-sal_Bool SwEditShell::MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft )
+bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
 {
     StartAllAction();
 
@@ -411,7 +411,7 @@ sal_Bool SwEditShell::MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft )
 
     sal_Bool bRet = sal_False;
     sal_uInt8 nUpperLevel, nLowerLevel;
-    if( GetDoc()->GotoNextNum( *aCrsr.GetPoint(), sal_False,
+    if( GetDoc()->GotoNextNum( *aCrsr.GetPoint(), false,
                                 &nUpperLevel, &nLowerLevel ))
     {
         if( bUpperLower )
@@ -423,7 +423,7 @@ sal_Bool SwEditShell::MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft )
             if( bUpperLeft )        // verschiebe nach oben
             {
                 SwPosition aPos( *aCrsr.GetMark() );
-                if( GetDoc()->GotoPrevNum( aPos, sal_False ) )
+                if( GetDoc()->GotoPrevNum( aPos, false ) )
                     nOffset = aPos.nNode.GetIndex() -
                             aCrsr.GetMark()->nNode.GetIndex();
                 else
@@ -490,11 +490,11 @@ sal_Bool SwEditShell::MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft )
     return bRet;
 }
 
-sal_Bool SwEditShell::OutlineUpDown( short nOffset )
+bool SwEditShell::OutlineUpDown( short nOffset )
 {
     StartAllAction();
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() == pCrsr )         // keine Mehrfachselektion ?
         bRet = GetDoc()->OutlineUpDown( *pCrsr, nOffset );
@@ -514,10 +514,10 @@ sal_Bool SwEditShell::OutlineUpDown( short nOffset )
 }
 
 
-sal_Bool SwEditShell::MoveOutlinePara( short nOffset )
+bool SwEditShell::MoveOutlinePara( short nOffset )
 {
     StartAllAction();
-    sal_Bool bRet = GetDoc()->MoveOutlinePara( *GetCrsr(), nOffset );
+    bool bRet = GetDoc()->MoveOutlinePara( *GetCrsr(), nOffset );
     EndAllAction();
     return bRet;
 }
@@ -597,9 +597,9 @@ sal_Bool SwEditShell::IsOutlineCopyable( sal_uInt16 nIdx ) const
 }
 
 
-sal_Bool SwEditShell::NumOrNoNum( sal_Bool bNumOn, sal_Bool bChkStart )
+bool SwEditShell::NumOrNoNum( sal_Bool bNumOn, bool bChkStart )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
         ( !bChkStart || !pCrsr->GetPoint()->nContent.GetIndex()) )
@@ -680,7 +680,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
             aRangeArr.SetPam( n, aPam );
             GetDoc()->SetNumRule( aPam, rRule,
                                   bCreateNewList, sContinuedListId,
-                                  sal_True, bResetIndentAttrs );
+                                  true, bResetIndentAttrs );
             GetDoc()->SetCounted( aPam, true );
           }
     }
@@ -688,7 +688,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     {
         GetDoc()->SetNumRule( *pCrsr, rRule,
                               bCreateNewList, sContinuedListId,
-                              sal_True, bResetIndentAttrs );
+                              true, bResetIndentAttrs );
         GetDoc()->SetCounted( *pCrsr, true );
     }
     GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
@@ -696,7 +696,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     EndAllAction();
 }
 
-String SwEditShell::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) const
+String SwEditShell::GetUniqueNumRuleName( const String* pChkStr, bool bAutoNum ) const
 {
     return GetDoc()->GetUniqueNumRuleName( pChkStr, bAutoNum );
 }
@@ -708,10 +708,10 @@ void SwEditShell::ChgNumRuleFmts( const SwNumRule& rRule )
     EndAllAction();
 }
 
-sal_Bool SwEditShell::ReplaceNumRule( const String& rOldRule, const String& rNewRule )
+bool SwEditShell::ReplaceNumRule( const String& rOldRule, const String& rNewRule )
 {
     StartAllAction();
-    sal_Bool bRet = GetDoc()->ReplaceNumRule( *GetCrsr()->GetPoint(), rOldRule, rNewRule );
+    bool bRet = GetDoc()->ReplaceNumRule( *GetCrsr()->GetPoint(), rOldRule, rNewRule );
     EndAllAction();
     return bRet;
 }

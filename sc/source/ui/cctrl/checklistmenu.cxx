@@ -914,6 +914,9 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc) 
     maTabStopCtrls.push_back(&maBtnUnselectSingle);
     maTabStopCtrls.push_back(&maBtnOk);
     maTabStopCtrls.push_back(&maBtnCancel);
+
+    // Enable type-ahead search in the check list box.
+    maChecks.SetStyle(maChecks.GetStyle() | WB_QUICK_SEARCH);
 }
 
 ScCheckListMenuWindow::~ScCheckListMenuWindow()
@@ -1354,7 +1357,18 @@ void ScCheckListMenuWindow::launch(const Rectangle& rRect)
         // We need to have at least one member selected.
         maBtnOk.Enable(maChecks.GetCheckedEntryCount() != 0);
 
-    StartPopupMode(rRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
+    Rectangle aRect(rRect);
+    if (maWndSize.Width() < aRect.GetWidth())
+    {
+        // Target rectangle (i.e. cell width) is wider than the window.
+        // Simulate right-aligned launch by modifying the target rectangle
+        // size.
+        long nDiff = aRect.GetWidth() - maWndSize.Width();
+        aRect.Left() += nDiff;
+    }
+
+    StartPopupMode(aRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
+    cycleFocus(); // Set initial focus to the check list box.
 }
 
 void ScCheckListMenuWindow::close(bool bOK)

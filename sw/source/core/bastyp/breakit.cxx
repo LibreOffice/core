@@ -31,11 +31,13 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <editeng/unolingu.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <unicode/uchar.h>
 #include <unotools/localedatawrapper.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 
@@ -75,9 +77,7 @@ SwBreakIt::~SwBreakIt()
 void SwBreakIt::createBreakIterator() const
 {
     if ( m_xMSF.is() && !xBreak.is() )
-        xBreak.set(m_xMSF->createInstance(::rtl::OUString(
-                     RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator"))),
-                   uno::UNO_QUERY);
+        xBreak.set( i18n::BreakIterator::create(comphelper::getComponentContext(m_xMSF)) );
 }
 
 void SwBreakIt::_GetLocale( const LanguageType aLang )

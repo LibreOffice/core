@@ -88,6 +88,10 @@ CONFIGURE_FLAGS += \
     --prefix=/@.__________________________________________________$(EXTRPATH)
 .END
 
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+
 .IF "$(OS)$(CPU)"=="MACOSXP"
 CXXFLAGS+=-malign-natural
 .EXPORT: CXXFLAGS
@@ -101,10 +105,6 @@ LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
 
 CONFIGURE_ACTION=./configure
 CONFIGURE_FLAGS+=--without-x --enable-multithreaded --enable-exceptions LIBS=-lgdi32
-
-.IF "$(CROSS_COMPILING)"=="YES"
-CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
-.ENDIF
 
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .ELSE

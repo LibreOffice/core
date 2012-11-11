@@ -1049,7 +1049,7 @@ String SwPaM::GetTxt() const
     {
         if (! bFirst)
         {
-            aNodeIndex++;
+            ++aNodeIndex;
         }
 
         bFirst = false;

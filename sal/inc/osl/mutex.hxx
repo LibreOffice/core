@@ -38,7 +38,7 @@ namespace osl
 {
     /** A mutual exclusion synchronization object
     */
-    class Mutex {
+    class SAL_WARN_UNUSED Mutex {
 
     public:
         /** Create a thread-local mutex.

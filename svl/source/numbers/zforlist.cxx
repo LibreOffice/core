@@ -234,9 +234,9 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
     aLocale = MsLangId::convertLanguageToLocale( eLang );
-    pCharClass = new CharClass( xServiceManager, aLocale );
+    pCharClass = new CharClass( comphelper::getComponentContext(xServiceManager), aLocale );
     xLocaleData.init( xServiceManager, aLocale, eLang );
-    xCalendar.init( xServiceManager, aLocale );
+    xCalendar.init( comphelper::getComponentContext(xServiceManager), aLocale );
     xTransliteration.init( xServiceManager, eLang,
         ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE );
     xNatNum.init( xServiceManager );
@@ -509,13 +509,16 @@ bool SvNumberFormatter::PutEntry(String& rString,
             SvNumberformat* pStdFormat =
                      GetFormatEntry(CLOffset + ZF_STANDARD);
             sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey();
-            if (nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
+            if (nPos+1 - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
             {
-                OSL_FAIL("SvNumberFormatter:: Zu viele Formate pro CL");
+                SAL_WARN( "svl.numbers", "SvNumberFormatter::PutEntry: too many formats for CL");
                 delete p_Entry;
             }
             else if (!aFTable.insert(make_pair( nPos+1,p_Entry)).second)
+            {
+                SAL_WARN( "svl.numbers", "SvNumberFormatter::PutEntry: dup position");
                 delete p_Entry;
+            }
             else
             {
                 bCheck = true;
@@ -714,7 +717,10 @@ bool SvNumberFormatter::Load( SvStream& rStream )
                 pEnt->SetLastInsertKey(pEntry->GetLastInsertKey());
         }
         if (!aFTable.insert(make_pair( nPos, pEntry)).second)
+        {
+            SAL_WARN( "svl.numbers", "SvNumberFormatter::Load: dup position");
             delete pEntry;
+        }
         rStream >> nPos;
     }
 
@@ -829,7 +835,7 @@ String SvNumberFormatter::GetKeyword( LanguageType eLnge, sal_uInt16 nIndex )
     if ( nIndex < NF_KEYWORD_ENTRIES_COUNT )
         return rTable[nIndex];
 
-    OSL_FAIL("GetKeyword: invalid index");
+    SAL_WARN( "svl.numbers", "GetKeyword: invalid index");
     return String();
 }
 
@@ -1843,6 +1849,10 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
             aMsg += rCode.Code;
             LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
         }
+        else
+        {
+            SAL_WARN( "svl.numbers", "SvNumberFormatter::ImpInsertFormat: dup position");
+        }
         delete pFormat;
         return NULL;
     }
@@ -2203,7 +2213,10 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     if ( !aFTable.insert(make_pair(
             CLOffset + SetIndexTable( NF_BOOLEAN, ZF_STANDARD_LOGICAL ),
             pNewFormat)).second)
+    {
+        SAL_WARN( "svl.numbers", "SvNumberFormatter::ImpGenerateFormats: dup position Boolean");
         delete pNewFormat;
+    }
 
     // Text
     aFormatCode = '@';
@@ -2214,7 +2227,10 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     if ( !aFTable.insert(make_pair(
             CLOffset + SetIndexTable( NF_TEXT, ZF_STANDARD_TEXT ),
             pNewFormat)).second)
+    {
+        SAL_WARN( "svl.numbers", "SvNumberFormatter::ImpGenerateFormats: dup position Text");
         delete pNewFormat;
+    }
 
 
 
@@ -2904,7 +2920,10 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
 //              pNewEntry = new SvNumberformat(*pFormat);   // Copy is not sufficient!
                 pNewEntry = new SvNumberformat( *pFormat, *pFormatScanner );
                 if (!aFTable.insert(make_pair( nNewKey, pNewEntry)).second)
+                {
+                    SAL_WARN( "svl.numbers", "SvNumberFormatter::MergeFormatter: dup position");
                     delete pNewEntry;
+                }
             }
             if (nNewKey != nOldKey)                     // new index
             {
@@ -2926,14 +2945,16 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
                         GetFormatEntry(nCLOffset + ZF_STANDARD);
                 sal_uInt32 nPos = nCLOffset + pStdFormat->GetLastInsertKey();
                 nNewKey = nPos+1;
-                if (nPos - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
+                if (nNewKey - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
                 {
-                    OSL_FAIL(
-                        "SvNumberFormatter:: Zu viele Formate pro CL");
+                    SAL_WARN( "svl.numbers", "SvNumberFormatter::MergeFormatter: too many formats for CL");
                     delete pNewEntry;
                 }
                 else if (!aFTable.insert(make_pair( nNewKey, pNewEntry)).second)
+                {
+                    SAL_WARN( "svl.numbers", "SvNumberFormatter::MergeFormatter: dup position");
                     delete pNewEntry;
+                }
                 else
                     pStdFormat->SetLastInsertKey((sal_uInt16) (nNewKey - nCLOffset));
             }
@@ -3880,7 +3901,7 @@ void NfCurrencyEntry::CompletePositiveFormatString(OUStringBuffer& rStr,
         }
         break;
         default:
-            OSL_FAIL("NfCurrencyEntry::CompletePositiveFormatString: unknown option");
+            SAL_WARN( "svl.numbers", "NfCurrencyEntry::CompletePositiveFormatString: unknown option");
         break;
     }
 }
@@ -4002,7 +4023,7 @@ void NfCurrencyEntry::CompleteNegativeFormatString(OUStringBuffer& rStr,
         }
         break;
         default:
-            OSL_FAIL("NfCurrencyEntry::CompleteNegativeFormatString: unknown option");
+            SAL_WARN( "svl.numbers", "NfCurrencyEntry::CompleteNegativeFormatString: unknown option");
         break;
     }
 }
@@ -4031,7 +4052,7 @@ sal_uInt16 NfCurrencyEntry::GetEffectivePositiveFormat(
             case 3:                                         // 1 $
             break;
             default:
-                OSL_FAIL("NfCurrencyEntry::GetEffectivePositiveFormat: unknown option");
+                SAL_WARN( "svl.numbers", "NfCurrencyEntry::GetEffectivePositiveFormat: unknown option");
             break;
         }
         return nIntlFormat;
@@ -4072,7 +4093,7 @@ static sal_uInt16 lcl_MergeNegativeParenthesisFormat( sal_uInt16 nIntlFormat, sa
             nSign = 2;
         break;
         default:
-            OSL_FAIL("lcl_MergeNegativeParenthesisFormat: unknown option");
+            SAL_WARN( "svl.numbers", "lcl_MergeNegativeParenthesisFormat: unknown option");
         break;
     }
 
@@ -4185,7 +4206,7 @@ sal_uInt16 NfCurrencyEntry::GetEffectiveNegativeFormat( sal_uInt16 nIntlFormat,
                 nIntlFormat = 8;                            // -1 $
             break;
             default:
-                OSL_FAIL("NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
+                SAL_WARN( "svl.numbers", "NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
             break;
         }
 #endif
@@ -4247,7 +4268,7 @@ sal_uInt16 NfCurrencyEntry::GetEffectiveNegativeFormat( sal_uInt16 nIntlFormat,
                     nIntlFormat, nCurrFormat );
             break;
             default:
-                OSL_FAIL("NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
+                SAL_WARN( "svl.numbers", "NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
             break;
         }
     }

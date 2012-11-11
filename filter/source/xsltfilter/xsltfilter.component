@@ -23,6 +23,6 @@
     <service name="com.sun.star.documentconversion.XSLTFilter"/>
   </implementation>
   <implementation name="com.sun.star.comp.documentconversion.LibXSLTTransformer">
-    <service name="com.sun.star.documentconversion.LibXSLTTransformer"/>
+    <service name="com.sun.star.xml.xslt.XSLTTransformer"/>
   </implementation>
 </component>

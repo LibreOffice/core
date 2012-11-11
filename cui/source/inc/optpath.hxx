@@ -30,7 +30,7 @@ class HeaderBar;
 #endif
 #include "ControlFocusHelper.hxx"
 
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>
 
 // forward ---------------------------------------------------------------
@@ -59,7 +59,7 @@ private:
     OptPath_Impl*               pImpl;
 
     ::com::sun::star::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker > xFolderPicker;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
 #ifdef _SVX_OPTPATH_CXX
     void        ChangeCurrentEntry( const String& _rFolder );

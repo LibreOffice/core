@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006"
+        xmlns:d="http://openoffice.org/extensions/description/2006"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+    <identifier value="org.openoffice.comp.pyuno.LibreLogo" />
+    <display-name>
+        <name lang="en-US">LibreLogo</name>
+    </display-name>
+    <version value="0.2rc2" />
+    <publisher>
+        <name lang="en-US" xlink:href="http://www.numbertext.org/logo">László Németh</name>
+        <name lang="hu" xlink:href="http://www.numbertext.org/logo">Németh László</name>
+    </publisher>
+    <extension-description>
+        <src lang="en-US" xlink:href="description-en-US.txt" />
+    </extension-description>
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.2" d:name="OpenOffice.org 3.2" />
+    </dependencies>
+</description>

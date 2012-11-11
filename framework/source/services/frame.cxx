@@ -54,6 +54,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -599,7 +600,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     m_pWindowCommandDispatch = new WindowCommandDispatch(xSMGR, this);
 
     // Initialize title functionality
-    TitleHelper* pTitleHelper = new TitleHelper(xSMGR);
+    TitleHelper* pTitleHelper = new TitleHelper( comphelper::getComponentContext(xSMGR) );
     m_xTitleHelper = css::uno::Reference< css::frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pTitleHelper), css::uno::UNO_QUERY_THROW);
     pTitleHelper->setOwner(xThis);
 }
@@ -2926,15 +2927,12 @@ void Frame::implts_startWindowListening()
         {
             xTopWindow->addTopWindowListener( xTopWindowListener );
 
-            css::uno::Reference< css::awt::XDataTransferProviderAccess > xTransfer( xFactory->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY );
-            if( xTransfer.is() == sal_True )
+            css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( comphelper::getComponentContext(xFactory) );
+            css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget( xContainerWindow );
+            if( xDropTarget.is() == sal_True )
             {
-                css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xTransfer->getDropTarget( xContainerWindow );
-                if( xDropTarget.is() == sal_True )
-                {
-                    xDropTarget->addDropTargetListener( xDragDropListener );
-                    xDropTarget->setActive( sal_True );
-                }
+                xDropTarget->addDropTargetListener( xDragDropListener );
+                xDropTarget->setActive( sal_True );
             }
         }
     }
@@ -2969,15 +2967,12 @@ void Frame::implts_stopWindowListening()
         {
             xTopWindow->removeTopWindowListener( xTopWindowListener );
 
-            css::uno::Reference< css::awt::XDataTransferProviderAccess > xTransfer( xFactory->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY );
-            if( xTransfer.is() == sal_True )
+            css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( comphelper::getComponentContext(xFactory) );
+            css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget( xContainerWindow );
+            if( xDropTarget.is() == sal_True )
             {
-                css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xTransfer->getDropTarget( xContainerWindow );
-                if( xDropTarget.is() == sal_True )
-                {
-                    xDropTarget->removeDropTargetListener( xDragDropListener );
-                    xDropTarget->setActive( sal_False );
-                }
+                xDropTarget->removeDropTargetListener( xDragDropListener );
+                xDropTarget->setActive( sal_False );
             }
         }
     }

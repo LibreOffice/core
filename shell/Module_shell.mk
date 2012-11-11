@@ -32,6 +32,14 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Library_localebe \
 ))
 
+ifeq ($(OS),LINUX)
+ifeq ($(ENABLE_GIO),TRUE)
+$(eval $(call gb_Module_add_targets,shell,\
+	Library_losessioninstall \
+))
+endif
+endif
+
 ifeq ($(ENABLE_GCONF),TRUE)
 $(eval $(call gb_Module_add_targets,shell,\
 	Library_gconfbe \

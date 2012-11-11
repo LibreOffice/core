@@ -32,11 +32,19 @@
 #include <sstream>
 #include <iostream>
 
+#ifdef SYSTEM_LIBEXTTEXTCAT
 #include <libexttextcat/textcat.h>
 #include <libexttextcat/common.h>
 #include <libexttextcat/constants.h>
 #include <libexttextcat/fingerprint.h>
 #include <libexttextcat/utf8misc.h>
+#else
+#include <textcat.h>
+#include <common.h>
+#include <constants.h>
+#include <fingerprint.h>
+#include <utf8misc.h>
+#endif
 
 #include <sal/types.h>
 

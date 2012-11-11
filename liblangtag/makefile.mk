@@ -12,7 +12,7 @@ PRJNAME=liblangtag
 TARGET=liblangtag
 
 LIBLANGTAG_MAJOR=0
-LIBLANGTAG_MINOR=2
+LIBLANGTAG_MINOR=4
 LIBLANGTAG_MICRO=0
 # Currently liblangtag.so.0.1.0 is generated instead of 0.2.0, presumably a bug?
 # For new versions adapt symlink in prj/d.lst
@@ -31,23 +31,26 @@ LIBLANGTAG_MICRO=0
 	@echo "Not building liblangtag."
 .ENDIF
 
-TARFILE_NAME=liblangtag-$(LIBLANGTAG_MAJOR).$(LIBLANGTAG_MINOR)
-TARFILE_MD5=fa6a2f85bd28baab035b2c95e722713f
+TARFILE_NAME=liblangtag-$(LIBLANGTAG_MAJOR).$(LIBLANGTAG_MINOR).$(LIBLANGTAG_MICRO)
+TARFILE_MD5=54e578c91b1b68e69c72be22adcb2195
 
-# liblangtag 132170753ea9cbd63cda8f3a80498c144f75b8ba
-PATCH_FILES=liblangtag-0.2-0001-Fix-a-memory-leak.patch
-# liblangtag cf8dfcf1604e534f4c9eccbd9a05571c8a9dc74d
-PATCH_FILES+=liblangtag-0.2-0002-Fix-invalid-memory-access.patch
-PATCH_FILES+=liblangtag-0.2-configure.patch
-PATCH_FILES+=liblangtag-0.2-datadir.patch
-PATCH_FILES+=liblangtag-0.2-msvc-warning.patch
-PATCH_FILES+=liblangtag-0.2-reg2xml-encoding-problem.patch
-PATCH_FILES+=liblangtag-0.2-xmlCleanupParser.patch
-    # addressed upstream as <https://github.com/tagoh/liblangtag/pull/7> "Do not
-    # call xmlCleanupParser from liblangtag"
+ADDITIONAL_FILES=\
+	msvs2008$/liblangtag.sln msvs2008$/liblangtag.vcproj \
+	msvs2010$/liblangtag.sln msvs2010$/liblangtag.vcxproj
 
+PATCH_FILES=liblangtag-0.4.0-msvc-warning.patch
+PATCH_FILES+=liblangtag-0.4.0-configure-atomic-cflag-pollution.patch
+PATCH_FILES+=liblangtag-0.4.0-windows.patch
+PATCH_FILES+=liblangtag-0.4.0-reg2xml-encoding-problem.patch
+PATCH_FILES+=liblangtag-0.4.0-windows2.patch
+PATCH_FILES+=liblangtag-0.4.0-msvcprojects.patch
+.IF "$(OS)" == "MACOSX"
+PATCH_FILES=liblangtag-0.4.0-mac.patch
+PATCH_FILES+=liblangtag-0.4.0-configure-atomic-cflag-pollution.patch
+.END
 CONFIGURE_DIR=.
 BUILD_DIR=$(CONFIGURE_DIR)
+CONFIGURE_FLAGS= --disable-modules --disable-test
 
 .IF "$(OS)" == "MACOSX"
 my_prefix = @.__________________________________________________$(EXTRPATH)
@@ -72,39 +75,25 @@ CONFIGURE_FLAGS+= --disable-introspection
 CONFIGURE_FLAGS+= LIBXML2_CFLAGS='-I$(SOLARINCDIR)/external'
 .IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
 CONFIGURE_FLAGS+= LIBXML2_LIBS='$(SOLARLIBDIR)/libxml2.lib'
+CC!:=$(CC) -MD -nologo
+.IF "$(debug)"=="TRUE"
+CC!:=$(CC) -Zi
+.ENDIF
 .ELSE
 CONFIGURE_FLAGS+= LIBXML2_LIBS='-L$(SOLARLIBDIR) -lxml2'
 .ENDIF
 .ELSE
 .IF "$(OS)" == "MACOSX"
-CONFIGURE_FLAGS+= LIBXML2_CFLAGS='$(LIBXML_CFLAGS)' LIBXML2_LIBS='$(LIBXML_LIBS)'
+CONFIGURE_FLAGS+= LIBXML2_CFLAGS='$(LIBXML_CFLAGS)' LIBXML2_LIBS='$(LIBXML_LIBS)' --disable-modules
 .ENDIF
-.ENDIF
-
-.IF "$(SYSTEM_GLIB)"!="YES"
-# we're cheating here.. pkg-config wouldn't find anything useful, see configure patch
-CONFIGURE_FLAGS+= LIBO_GLIB_CHEAT=YES
-CONFIGURE_FLAGS+= GLIB_CFLAGS='-I$(SOLARINCDIR)/external/glib-2.0'
-.IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
-CONFIGURE_FLAGS+= GLIB_LIBS='$(SOLARLIBDIR)/gio-2.0.lib $(SOLARLIBDIR)/gobject-2.0.lib $(SOLARLIBDIR)/gthread-2.0.lib $(SOLARLIBDIR)/gmodule-2.0.lib $(SOLARLIBDIR)/glib-2.0.lib'
-.ELSE
-CONFIGURE_FLAGS+= GLIB_LIBS='-L$(SOLARLIBDIR) -lgio-2.0 -lgobject-2.0 -lgthread-2.0 -lgmodule-2.0 -lglib-2.0'
-.IF "$(OS)" == "MACOSX"
-EXTRA_LINKFLAGS+=-Wl,-dylib_file,@loader_path/libglib-2.0.0.dylib:$(SOLARLIBDIR)/libglib-2.0.0.dylib
-.ENDIF
-.ENDIF
-CONFIGURE_FLAGS+= GLIB_GENMARSHAL=glib-genmarshal
-CONFIGURE_FLAGS+= GLIB_MKENUMS=glib-mkenums
-CONFIGURE_FLAGS+= GOBJECT_QUERY=gobject-query
-CONFIGURE_FLAGS+= --disable-glibtest
 .ENDIF
 
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure
 
-BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) && \
+BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) $(eq,$(VERBOSE),TRUE V=1) && \
 			 $(AUGMENT_LIBRARY_PATH) $(GNUMAKE) install DESTDIR=$(my_destdir)
 
-.IF "$(SYSTEM_LIBXML)"!="YES" || "$(SYSTEM_GLIB)"!="YES"
+.IF "$(SYSTEM_LIBXML)"!="YES"
 .IF "$(OS)"=="FREEBSD" || "$(OS)"=="LINUX"
 CONFIGURE_FLAGS+= \
  LDFLAGS=-Wl,-z,origin\ -Wl,-rpath,\'\$$\$$ORIGIN:\$$\$$ORIGIN/../ure-link/lib\'
@@ -118,27 +107,28 @@ CONFIGURE_FLAGS+= LDFLAGS=-Wl,-R\'\$$\$$ORIGIN:\$$\$$ORIGIN/../ure-link/lib\'
 
 CONFIGURE_FLAGS+= LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
 
-.IF "$(CROSS_COMPILING)"=="YES"
-CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
-PATCH_FILES+=liblangtag-0.2-mingw.patch
-# There's a tool used only at build time to create the .xml file, and this does not work
-# with cross-compiling. The file for this case is from a normal (non-cross) build.
-PATCH_FILES+=liblangtag-0.2-mingw-genfile.patch
-.ENDIF
+PATCH_FILES+=liblangtag-0.4.0-mingw.patch
 
 .ELSE	# "$(COM)"=="GCC"
 
-PATCH_FILES+=liblangtag-0.2-msc-configure.patch
+PATCH_FILES+=liblangtag-0.4.0-msc-configure.patch
+PATCH_FILES+=liblangtag-0.4.0-cross.patch
 
 .ENDIF	# "$(COM)"=="GCC"
 .ENDIF	# "$(GUI)"=="WNT"
 
+.IF "$(CROSS_COMPILING)"=="YES"
+# There's a tool used only at build time to create the .xml file, and this does not work
+# with cross-compiling. The file for this case is from a normal (non-cross) build.
+PATCH_FILES+=liblangtag-0.4.0-cross.patch
+CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
 
 OUT2INC += $(my_install_relative)/include/liblangtag/*
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-OUT2BIN += $(my_install_relative)/bin/liblangtag-0.dll
+OUT2BIN += $(my_install_relative)/bin/liblangtag-1.dll
 OUT2LIB += $(my_install_relative)/lib/liblangtag.dll.a
 .ELSE
 OUT2LIB += $(my_install_relative)/lib/langtag.lib*

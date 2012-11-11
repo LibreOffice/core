@@ -480,7 +480,7 @@ public:
     //             3.Level Position (x+y)
     void     Sort();
     sal_uIntPtr    GetHdlCount() const                       { return aList.size(); }
-    SdrHdl*  GetHdl(sal_uIntPtr nNum) const                  { return aList[nNum]; }
+    SdrHdl*  GetHdl(sal_uIntPtr nNum) const                  { return nNum != CONTAINER_ENTRY_NOTFOUND ? aList[nNum] : NULL; }
     sal_uIntPtr    GetHdlNum(const SdrHdl* pHdl) const;
     void     SetHdlSize(sal_uInt16 nSiz);
     sal_uInt16   GetHdlSize() const                        { return nHdlSize; }

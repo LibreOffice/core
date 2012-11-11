@@ -133,7 +133,7 @@ KSHORT SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
             !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings() )
     {
         if( !nViewWidth )
-            pThis->nViewWidth = rInf.GetTxtSize(rtl::OUString(' ')).Width();
+            pThis->nViewWidth = rInf.GetTxtSize(OUString(' ')).Width();
     }
     else
         pThis->nViewWidth = 0;
@@ -242,7 +242,9 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
         const sal_uInt8 nFldDir = ( IsNumberPortion() || IsFtnNumPortion() ) ?
                              rSI.GetDefaultDir() :
                              rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
-        if ( UBIDI_RTL == nFldDir )
+
+        bool bPerformUBA = UBIDI_LTR != nFldDir ? true : i18n::ScriptType::COMPLEX == nScript;
+        if (bPerformUBA)
         {
             UErrorCode nError = U_ZERO_ERROR;
             UBiDi* pBidi = ubidi_openSized( aTxt.Len(), 0, &nError );
@@ -272,8 +274,16 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
                 }
             }
 
-            if ( nCurrDir == UBIDI_RTL )
+            if (nCurrDir == UBIDI_RTL)
+            {
                 nTmp = SW_CTL;
+                //If we decided that this range was RTL after all and the
+                //previous range was complex but clipped to the start of this
+                //range, then extend it to be complex over the additional RTL
+                //range
+                if (nScript == i18n::ScriptType::COMPLEX)
+                    nNextScriptChg = nNextDirChg;
+            }
         }
 
         // #i98418#
@@ -780,7 +790,7 @@ static sal_Char const sDoubleSpace[] = "  ";
  *                      class SwBulletPortion
  *************************************************************************/
 
-SwBulletPortion::SwBulletPortion( const xub_Unicode cBullet,
+SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
                                   const XubString& rBulletFollowedBy,
                                   SwFont *pFont,
                                   const sal_Bool bLft,

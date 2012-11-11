@@ -77,7 +77,7 @@ SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 }
 
 
-sal_Bool SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
+bool SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
 {
     return  aPageDescDep.GetRegisteredIn() ==
                                 rInfo.aPageDescDep.GetRegisteredIn() &&
@@ -231,7 +231,7 @@ SwFtnInfo& SwFtnInfo::operator=(const SwFtnInfo& rInfo)
 }
 
 
-sal_Bool SwFtnInfo::operator==( const SwFtnInfo& rInfo ) const
+bool SwFtnInfo::operator==( const SwFtnInfo& rInfo ) const
 {
     return  ePos == rInfo.ePos &&
             eNum == rInfo.eNum &&
@@ -275,17 +275,17 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
             GetIDocumentUndoRedo().AppendUndo( new SwUndoFootNoteInfo(rOld) );
         }
 
-        sal_Bool bFtnPos  = rInfo.ePos != rOld.ePos;
-        sal_Bool bFtnDesc = rOld.ePos == FTNPOS_CHAPTER &&
+        bool bFtnPos  = rInfo.ePos != rOld.ePos;
+        bool bFtnDesc = rOld.ePos == FTNPOS_CHAPTER &&
                             rInfo.GetPageDesc( *this ) != rOld.GetPageDesc( *this );
-        sal_Bool bExtra   = rInfo.aQuoVadis != rOld.aQuoVadis ||
+        bool bExtra   = rInfo.aQuoVadis != rOld.aQuoVadis ||
                             rInfo.aErgoSum != rOld.aErgoSum ||
                             rInfo.aFmt.GetNumberingType() != rOld.aFmt.GetNumberingType() ||
                             rInfo.GetPrefix() != rOld.GetPrefix() ||
                             rInfo.GetSuffix() != rOld.GetSuffix();
         SwCharFmt *pOldChrFmt = rOld.GetCharFmt( *this ),
                   *pNewChrFmt = rInfo.GetCharFmt( *this );
-        sal_Bool bFtnChrFmts = pOldChrFmt != pNewChrFmt;
+        bool bFtnChrFmts = pOldChrFmt != pNewChrFmt;
 
         *pFtnInfo = rInfo;
 
@@ -346,7 +346,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
-        sal_Bool bNumChg  = rInfo.nFtnOffset != GetEndNoteInfo().nFtnOffset;
+        bool bNumChg  = rInfo.nFtnOffset != GetEndNoteInfo().nFtnOffset;
         // this seems to be an optimization: UpdateAllFtn() is only called
         // if the offset changes; if the offset is the same,
         // but type/prefix/suffix changes, just set new numbers.
@@ -356,11 +356,11 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
                 ||  (rInfo.GetPrefix() != GetEndNoteInfo().GetPrefix())
                 ||  (rInfo.GetSuffix() != GetEndNoteInfo().GetSuffix())
                 );
-        sal_Bool bFtnDesc = rInfo.GetPageDesc( *this ) !=
+        bool bFtnDesc = rInfo.GetPageDesc( *this ) !=
                             GetEndNoteInfo().GetPageDesc( *this );
         SwCharFmt *pOldChrFmt = GetEndNoteInfo().GetCharFmt( *this ),
                   *pNewChrFmt = rInfo.GetCharFmt( *this );
-        sal_Bool bFtnChrFmts = pOldChrFmt != pNewChrFmt;
+        bool bFtnChrFmts = pOldChrFmt != pNewChrFmt;
 
         *pEndNoteInfo = rInfo;
 
@@ -429,8 +429,8 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
 
     SwTxtFtn* pTxtFtn;
     sal_uLong nIdx;
-    sal_Bool bChg = sal_False;
-    sal_Bool bTypeChgd = sal_False;
+    bool bChg = false;
+    bool bTypeChgd = false;
     sal_uInt16 n = nPos;        // save
     while( nPos < rFtnArr.size() &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ nPos++ ] )))
@@ -443,7 +443,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
             if( rFtn.GetNumStr() != rNumStr ||
                 rFtn.IsEndNote() != bIsEndNote )
             {
-                bChg = sal_True;
+                bChg = true;
                 if ( pUndo )
                 {
                     pUndo->GetHistory().Add( *pTxtFtn );
@@ -453,7 +453,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                 if( rFtn.IsEndNote() != bIsEndNote )
                 {
                     ((SwFmtFtn&)rFtn).SetEndNote( bIsEndNote );
-                    bTypeChgd = sal_True;
+                    bTypeChgd = true;
                     pTxtFtn->CheckCondColl();
                     //#i11339# dispose UNO wrapper when a footnote is changed to an endnote or vice versa
                     SwPtrMsgPoolItem aMsgHint( RES_FOOTNOTE_DELETED, (void*)&pTxtFtn->GetAttr() );
@@ -474,7 +474,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
             if( rFtn.GetNumStr() != rNumStr ||
                 rFtn.IsEndNote() != bIsEndNote )
             {
-                bChg = sal_True;
+                bChg = true;
                 if ( pUndo )
                 {
                     pUndo->GetHistory().Add( *pTxtFtn );
@@ -484,7 +484,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                 if( rFtn.IsEndNote() != bIsEndNote )
                 {
                     ((SwFmtFtn&)rFtn).SetEndNote( bIsEndNote );
-                    bTypeChgd = sal_True;
+                    bTypeChgd = true;
                     pTxtFtn->CheckCondColl();
                 }
             }

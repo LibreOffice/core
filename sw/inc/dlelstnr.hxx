@@ -31,7 +31,7 @@
 namespace com { namespace sun { namespace star {
     namespace linguistic2 {
         class XDictionaryList;
-        class XLinguServiceManager;
+        class XLinguServiceManager2;
         class XProofreadingIterator;
     }
     namespace frame {
@@ -56,7 +56,7 @@ class SwLinguServiceEventListener :
     com::sun::star::uno::Reference<
         com::sun::star::frame::XDesktop >                       xDesktop;
     com::sun::star::uno::Reference<
-        com::sun::star::linguistic2::XLinguServiceManager >     xLngSvcMgr;
+        com::sun::star::linguistic2::XLinguServiceManager2 >    xLngSvcMgr;
     com::sun::star::uno::Reference<
         com::sun::star::linguistic2::XProofreadingIterator >    xGCIterator;
 

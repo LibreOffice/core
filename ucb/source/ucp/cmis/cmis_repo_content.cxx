@@ -378,7 +378,7 @@ namespace cmis
                     rtl_UriCharClassRelSegment,
                     rtl_UriEncodeKeepEscapes,
                     RTL_TEXTENCODING_UTF8 );
-            sUrl = "vnd.libreoffice.cmis+atom://" + sEncodedBinding;
+            sUrl = "vnd.libreoffice.cmis://" + sEncodedBinding;
 
             uno::Reference< ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( sUrl );
             uno::Reference< ucb::XContent > xContent = new Content( m_xSMgr, m_pProvider, xId );

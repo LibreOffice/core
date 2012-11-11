@@ -3591,16 +3591,14 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                         nSize += nWrapperSize;
                         for (; m_nExtraSpaces > 1; --m_nExtraSpaces)
                         {
-                            if (m_rSink.getColumn()
-                                    >= m_rSink.getLineLengthLimit())
+                            if (m_rSink.getColumn() >= m_rSink.getLineLengthLimit())
                                 m_rSink << INetMIMEOutputSink::endl;
                             m_rSink << ' ';
                         }
                         if (m_nExtraSpaces == 1)
                         {
-                            if (m_rSink.getColumn() + nSize
-                                    >= m_rSink.getLineLengthLimit())
-                            m_rSink << INetMIMEOutputSink::endl;
+                            if (m_rSink.getColumn() + nSize >= m_rSink.getLineLengthLimit())
+                                m_rSink << INetMIMEOutputSink::endl;
                             m_rSink << ' ';
                         }
                         m_rSink << "=?" << pCharsetName << "?Q?";

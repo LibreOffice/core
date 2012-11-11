@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
@@ -75,17 +66,22 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 
 #include <svtools/embedhlp.hxx>
-#include <svtools/chartprettypainter.hxx>
+#include <svx/charthelper.hxx>
 #include <dview.hxx> // #i99665#
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace com::sun::star;
 
 extern void ClrContourCache( const SdrObject *pObj ); // TxtFly.Cxx
 
 
-inline sal_Bool GetRealURL( const SwGrfNode& rNd, String& rTxt )
+inline bool GetRealURL( const SwGrfNode& rNd, String& rTxt )
 {
-    sal_Bool bRet = rNd.GetFileFilterNms( &rTxt, 0 );
+    bool bRet = rNd.GetFileFilterNms( &rTxt, 0 );
     if( bRet )
         rTxt = URIHelper::removePassword( rTxt, INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
@@ -94,7 +90,7 @@ inline sal_Bool GetRealURL( const SwGrfNode& rNd, String& rTxt )
 
 static void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
                            const ViewShell &rSh, const SwNoTxtFrm *pFrm,
-                           sal_Bool bDefect )
+                           bool bDefect )
 {
     static Font *pFont = 0;
     if ( !pFont )
@@ -112,7 +108,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
     const SwFmtURL &rURL = pFrm->FindFlyFrm()->GetFmt()->GetURL();
     if( rURL.GetURL().Len() || rURL.GetMap() )
     {
-        sal_Bool bVisited = sal_False;
+        bool bVisited = false;
         if ( rURL.GetMap() )
         {
             ImageMap *pMap = (ImageMap*)rURL.GetMap();
@@ -121,7 +117,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
                 IMapObject *pObj = pMap->GetIMapObject( i );
                 if( rSh.GetDoc()->IsVisitedURL( pObj->GetURL() ) )
                 {
-                    bVisited = sal_True;
+                    bVisited = true;
                     break;
                 }
             }
@@ -138,7 +134,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
     pFont->SetUnderline( eUnderline );
     pFont->SetColor( aCol );
 
-    const BitmapEx& rBmp = ViewShell::GetReplacementBitmap( bDefect != sal_False );
+    const BitmapEx& rBmp = ViewShell::GetReplacementBitmap( bDefect );
     Graphic::DrawEx( rSh.GetOut(), rText, *pFont, rBmp, rRect.Pos(), rRect.SSize() );
 }
 
@@ -253,7 +249,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 GetRealURL( *(SwGrfNode*)pNd, aTxt );
             if( !aTxt.Len() )
                 aTxt = FindFlyFrm()->GetFmt()->GetName();
-            lcl_PaintReplacement( Frm(), aTxt, *pSh, this, sal_False );
+            lcl_PaintReplacement( Frm(), aTxt, *pSh, this, false );
         }
         return;
     }
@@ -267,7 +263,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     OutputDevice *pOut = pSh->GetOut();
     pOut->Push();
-    sal_Bool bClip = sal_True;
+    bool bClip = true;
     PolyPolygon aPoly;
 
     SwNoTxtNode& rNoTNd = *(SwNoTxtNode*)GetNode();
@@ -284,7 +280,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
        )
     {
         pOut->SetClipRegion( aPoly );
-        bClip = sal_False;
+        bClip = false;
     }
 
     SwRect aOrigPaint( rRect );
@@ -373,7 +369,7 @@ static void lcl_CalcRect( Point& rPt, Size& rDim, sal_uInt16 nMirror )
 *************************************************************************/
 
 void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
-                             sal_Bool ) const
+                             bool ) const
 {
     // Currently only used for scaling, cropping and mirroring the contour of graphics!
     // Everything else is handled by GraphicObject
@@ -636,7 +632,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         SwCntntFrm::Modify( pOld, pNew );
     }
 
-    sal_Bool bComplete = sal_True;
+    bool bComplete = true;
 
     switch( nWhich )
     {
@@ -646,7 +642,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     case RES_GRF_REREAD_AND_INCACHE:
         if( ND_GRFNODE == GetNode()->GetNodeType() )
         {
-            bComplete = sal_False;
+            bComplete = false;
             SwGrfNode* pNd = (SwGrfNode*) GetNode();
 
             ViewShell *pVSh = 0;
@@ -701,7 +697,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     case RES_LINKED_GRAPHIC_STREAM_ARRIVED:
         if ( GetNode()->GetNodeType() == ND_GRFNODE )
         {
-            bComplete = sal_False;
+            bComplete = false;
             SwGrfNode* pNd = (SwGrfNode*) GetNode();
 
             CLEARCACHE( pNd )
@@ -774,6 +770,92 @@ static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInAr
     }
 }
 
+bool paintUsingPrimitivesHelper(
+    OutputDevice& rOutputDevice,
+    const drawinglayer::primitive2d::Primitive2DSequence& rSequence,
+    const basegfx::B2DRange& rSourceRange,
+    const basegfx::B2DRange& rTargetRange,
+    const sal_Int32 nLeftCrop = 0,
+    const sal_Int32 nTopCrop = 0,
+    const sal_Int32 nRightCrop = 0,
+    const sal_Int32 nBottomCrop = 0,
+    const bool bMirrorX = false,
+    const bool bMirrorY = false)
+{
+    const double fSourceWidth(rSourceRange.getWidth());
+    const double fSourceHeight(rSourceRange.getHeight());
+
+    if(rSequence.hasElements() && !basegfx::fTools::equalZero(fSourceWidth) && !basegfx::fTools::equalZero(fSourceHeight))
+    {
+        // copy target range and apply evtl. cropping
+        basegfx::B2DRange aTargetRange(rTargetRange);
+
+        if(nLeftCrop || nTopCrop || nRightCrop || nBottomCrop)
+        {
+            // calculate original TargetRange
+            const double fFactor100thmmToTwips(72.0 / 127.0);
+
+            aTargetRange = basegfx::B2DRange(
+                aTargetRange.getMinX() - (nLeftCrop * fFactor100thmmToTwips),
+                aTargetRange.getMinY() - (nTopCrop * fFactor100thmmToTwips),
+                aTargetRange.getMaxX() + (nRightCrop * fFactor100thmmToTwips),
+                aTargetRange.getMaxY() + (nBottomCrop * fFactor100thmmToTwips));
+        }
+
+        const double fTargetWidth(aTargetRange.getWidth());
+        const double fTargetHeight(aTargetRange.getHeight());
+
+        if(!basegfx::fTools::equalZero(fTargetWidth) && !basegfx::fTools::equalZero(fTargetHeight))
+        {
+            // map graphic range to target range. This will automatically include
+            // tme mapping from Svg 1/100th mm content to twips since the target
+            // range is twips already
+            basegfx::B2DHomMatrix aMappingTransform(
+                basegfx::tools::createTranslateB2DHomMatrix(
+                    -rSourceRange.getMinX(),
+                    -rSourceRange.getMinY()));
+
+            aMappingTransform.scale(fTargetWidth / fSourceWidth, fTargetHeight / fSourceHeight);
+            aMappingTransform.translate(aTargetRange.getMinX(), aTargetRange.getMinY());
+
+            // apply mirrorings
+            if(bMirrorX || bMirrorY)
+            {
+                aMappingTransform.translate(-aTargetRange.getCenterX(), -aTargetRange.getCenterY());
+                aMappingTransform.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0); // #119176# small typo with X/Y
+                aMappingTransform.translate(aTargetRange.getCenterX(), aTargetRange.getCenterY());
+            }
+
+            // Fill ViewInformation. Use MappingTransform here, so there is no need to
+            // embed the primitives to it. Use original TargetRange here so there is also
+            // no need to embed the primitives to a MaskPrimitive for cropping. This works
+            // only in this case where the graphic object cannot be rotated, though.
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
+                aMappingTransform,
+                rOutputDevice.GetViewTransformation(),
+                aTargetRange,
+                0,
+                0.0,
+                uno::Sequence< beans::PropertyValue >());
+
+            // get a primitive processor for rendering
+            drawinglayer::processor2d::BaseProcessor2D* pProcessor2D =
+                drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
+                                                rOutputDevice, aViewInformation2D);
+
+            if(pProcessor2D)
+            {
+                // render and cleanup
+                pProcessor2D->process(rSequence);
+                delete pProcessor2D;
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 // Paint the graphic.
 // We require either a QuickDraw-Bitmap or a graphic here. If we do not have
 // either, we return a replacement.
@@ -791,7 +873,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     const sal_Bool bPrn = pOut == rNoTNd.getIDocumentDeviceAccess()->getPrinter( false ) ||
                           pOut->GetConnectMetaFile();
 
-    const bool bIsChart = pOLENd && ChartPrettyPainter::IsChart( pOLENd->GetOLEObj().GetObject() );
+    const bool bIsChart = pOLENd && ChartHelper::IsChart( pOLENd->GetOLEObj().GetObject() );
 
     // calculate aligned rectangle from parameter <rGrfArea>.
     //     Use aligned rectangle <aAlignedGrfArea> instead of <rGrfArea> in
@@ -824,7 +906,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput | ANTIALIASING_ENABLE_B2DDRAW );
         }
 
-        sal_Bool bForceSwap = sal_False, bContinue = sal_True;
+        bool bForceSwap = false, bContinue = true;
         GraphicObject& rGrfObj = pGrfNd->GetGrfObj();
 
         GraphicAttr aGrfAttr;
@@ -856,8 +938,8 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 String aTxt( pGrfNd->GetTitle() );
                 if ( !aTxt.Len() )
                     GetRealURL( *pGrfNd, aTxt );
-                ::lcl_PaintReplacement( aAlignedGrfArea, aTxt, *pShell, this, sal_False );
-                bContinue = sal_False;
+                ::lcl_PaintReplacement( aAlignedGrfArea, aTxt, *pShell, this, false );
+                bContinue = false;
             }
             else if( rGrfObj.IsCached( pOut, aAlignedGrfArea.Pos(),
                                     aAlignedGrfArea.SSize(), &aGrfAttr ))
@@ -865,17 +947,17 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 rGrfObj.DrawWithPDFHandling( *pOut,
                                              aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
                                              &aGrfAttr );
-                bContinue = sal_False;
+                bContinue = false;
             }
         }
 
         if( bContinue )
         {
             const sal_Bool bSwapped = rGrfObj.IsSwappedOut();
-            const sal_Bool bSwappedIn = 0 != pGrfNd->SwapIn( bPrn );
+            const bool bSwappedIn = 0 != pGrfNd->SwapIn( bPrn );
             if( bSwappedIn && rGrfObj.GetGraphic().IsSupportedGraphic())
             {
-                const sal_Bool bAnimate = rGrfObj.IsAnimated() &&
+                const bool bAnimate = rGrfObj.IsAnimated() &&
                                          !pShell->IsPreView() &&
                                          !pShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
                 // #i9684# Stop animation during printing/pdf export
@@ -902,9 +984,37 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                                         0, GRFMGR_DRAW_STANDARD, pVout );
                 }
                 else
-                    rGrfObj.DrawWithPDFHandling( *pOut,
-                                                 aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
-                                                 &aGrfAttr );
+                {
+                    const SvgDataPtr& rSvgDataPtr = rGrfObj.GetGraphic().getSvgData();
+                    bool bDone(false);
+
+                    if(rSvgDataPtr.get())
+                    {
+                        // Graphic is Svg and can be painted as primitives (vector graphic)
+                        const basegfx::B2DRange aTargetRange(
+                            aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),
+                            aAlignedGrfArea.Right(), aAlignedGrfArea.Bottom());
+                        const bool bCropped(aGrfAttr.IsCropped());
+
+                        bDone = paintUsingPrimitivesHelper(
+                            *pOut,
+                            rSvgDataPtr->getPrimitive2DSequence(),
+                            rSvgDataPtr->getRange(),
+                            aTargetRange,
+                            bCropped ? aGrfAttr.GetLeftCrop() : 0,
+                            bCropped ? aGrfAttr.GetTopCrop() : 0,
+                            bCropped ? aGrfAttr.GetRightCrop() : 0,
+                            bCropped ? aGrfAttr.GetBottomCrop() : 0,
+                            aGrfAttr.GetMirrorFlags() & BMP_MIRROR_HORZ,
+                            aGrfAttr.GetMirrorFlags() & BMP_MIRROR_VERT);
+                    }
+
+                    if(!bDone)
+                    {
+                        // fallback paint, uses replacement image
+                        rGrfObj.DrawWithPDFHandling(*pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), &aGrfAttr);
+                    }
+                }
             }
             else
             {
@@ -927,12 +1037,12 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 if ( nResId )
                     aText = SW_RESSTR( nResId );
 
-                ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, sal_True );
+                ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, true );
             }
 
             // When printing, we must not collect the graphics
             if( bSwapped && bPrn )
-                bForceSwap = sal_True;
+                bForceSwap = true;
         }
 
         if( bForceSwap )
@@ -941,16 +1051,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         if ( pShell->Imp()->GetDrawView()->IsAntiAliasing() )
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput );
     }
-    else if( bIsChart
-        // Charts must be painted resolution dependent!! #i82893#, #i75867#
-        && ChartPrettyPainter::ShouldPrettyPaintChartOnThisDevice( pOut )
-        && svt::EmbeddedObjectRef::TryRunningState( pOLENd->GetOLEObj().GetOleRef() )
-        && ChartPrettyPainter::DoPrettyPaintChart( uno::Reference< frame::XModel >(
-            pOLENd->GetOLEObj().GetOleRef()->getComponent(), uno::UNO_QUERY), pOut, aAlignedGrfArea.SVRect() ) )
-    {
-        (void)(0);// all was done in if statement
-    }
-    else if( pOLENd )
+    else // bIsChart || pOLENd
     {
         // Fix for bug fdo#33781
         const sal_uInt16 nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
@@ -966,49 +1067,87 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             pOut->SetAntialiasing( nNewAntialiasingAtOutput );
         }
 
-        Point aPosition(aAlignedGrfArea.Pos());
-        Size aSize(aAlignedGrfArea.SSize());
+        bool bDone(false);
 
-        // We do not have a printer in the BrowseMode and thus no JobSetup, so we create one ...
-        const JobSetup* pJobSetup = pOLENd->getIDocumentDeviceAccess()->getJobsetup();
-        sal_Bool bDummyJobSetup = 0 == pJobSetup;
-        if( bDummyJobSetup )
-            pJobSetup = new JobSetup();
-
-        // #i42323#
-        //TODO/LATER: is it a problem that the JopSetup isn't used?
-        //xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
-
-        Graphic* pGraphic = pOLENd->GetGraphic();
-
-        if ( pGraphic && pGraphic->GetType() != GRAPHIC_NONE )
+        if(bIsChart)
         {
-            pGraphic->Draw( pOut, aPosition, aSize );
+            const uno::Reference< frame::XModel > aXModel(pOLENd->GetOLEObj().GetOleRef()->getComponent(), uno::UNO_QUERY);
 
-            // shade the representation if the object is activated outplace
-            uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
-            if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::ACTIVE )
+            if(aXModel.is())
             {
-                ::svt::EmbeddedObjectRef::DrawShading( Rectangle( aPosition, aSize ), pOut );
+                basegfx::B2DRange aSourceRange;
+
+                const drawinglayer::primitive2d::Primitive2DSequence aSequence(
+                    ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
+                        aXModel,
+                        aSourceRange));
+
+                if(aSequence.hasElements() && !aSourceRange.isEmpty())
+                {
+                    const basegfx::B2DRange aTargetRange(
+                        aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),
+                        aAlignedGrfArea.Right(), aAlignedGrfArea.Bottom());
+
+                    bDone = paintUsingPrimitivesHelper(
+                        *pOut,
+                        aSequence,
+                        aSourceRange,
+                        aTargetRange);
+                }
             }
         }
-        else
-            ::svt::EmbeddedObjectRef::DrawPaintReplacement( Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), pOut );
 
-        if( bDummyJobSetup )
-            delete pJobSetup;  // ... and clean it up again
-
-        sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
-        if ( !bPrn && pShell->ISA( SwCrsrShell ) &&
-                nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
+        if(!bDone && pOLENd)
         {
-            const SwFlyFrm *pFly = FindFlyFrm();
-            OSL_ENSURE( pFly, "OLE not in FlyFrm" );
-            ((SwFEShell*)pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
+            Point aPosition(aAlignedGrfArea.Pos());
+            Size aSize(aAlignedGrfArea.SSize());
+
+            // Im BrowseModus gibt es nicht unbedingt einen Drucker und
+            // damit kein JobSetup, also legen wir eines an ...
+            const JobSetup* pJobSetup = pOLENd->getIDocumentDeviceAccess()->getJobsetup();
+            sal_Bool bDummyJobSetup = 0 == pJobSetup;
+            if( bDummyJobSetup )
+                pJobSetup = new JobSetup();
+
+            // #i42323#
+            // The reason for #114233# is gone, so i remove it again
+            //TODO/LATER: is it a problem that the JobSetup isn't used?
+            //xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
+
+            Graphic* pGraphic = pOLENd->GetGraphic();
+            if ( pGraphic && pGraphic->GetType() != GRAPHIC_NONE )
+            {
+                pGraphic->Draw( pOut, aPosition, aSize );
+
+                // shade the representation if the object is activated outplace
+                uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
+                if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::ACTIVE )
+                {
+                    ::svt::EmbeddedObjectRef::DrawShading( Rectangle( aPosition, aSize ), pOut );
+                }
+            }
+            else
+                ::svt::EmbeddedObjectRef::DrawPaintReplacement( Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), pOut );
+
+            if( bDummyJobSetup )
+                delete pJobSetup;
+
+            sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
+            if ( !bPrn && pShell->ISA( SwCrsrShell ) &&
+                    nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
+            {
+                const SwFlyFrm *pFly = FindFlyFrm();
+                assert( pFly != NULL );
+                ((SwFEShell*)pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
+            }
         }
 
-        if ( pShell->Imp()->GetDrawView()->IsAntiAliasing() )
+        // see #i99665#
+        if ( pOLENd->IsChart() &&
+                pShell->Imp()->GetDrawView()->IsAntiAliasing() )
+        {
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput );
+        }
     }
 }
 

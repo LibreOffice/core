@@ -25,8 +25,8 @@
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
 
 namespace com { namespace sun { namespace star {
-    namespace lang {
-        class XMultiServiceFactory;
+    namespace uno {
+        class XComponentContext;
     }
 }}}
 
@@ -35,8 +35,6 @@ namespace utl
 
 class UNOTOOLS_DLLPUBLIC TransliterationWrapper
 {
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::i18n::XExtendedTransliteration > xTrans;
     ::com::sun::star::lang::Locale aLocale;
@@ -53,7 +51,7 @@ class UNOTOOLS_DLLPUBLIC TransliterationWrapper
 
 public:
     TransliterationWrapper( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory > & xSF,
+                    ::com::sun::star::uno::XComponentContext > & rxContext,
                     sal_uInt32 nType );
 
     ~TransliterationWrapper();

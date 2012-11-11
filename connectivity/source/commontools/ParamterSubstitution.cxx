@@ -86,8 +86,7 @@ namespace connectivity
         {
             try
             {
-                uno::Reference< XMultiServiceFactory> xFac(m_xContext->getServiceManager(),uno::UNO_QUERY_THROW);
-                OSQLParser aParser( xFac );
+                OSQLParser aParser( m_xContext );
                 ::rtl::OUString sErrorMessage;
                 ::rtl::OUString sNewSql;
                 OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sText);

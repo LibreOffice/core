@@ -42,7 +42,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <rtl/ref.hxx>
@@ -51,14 +51,12 @@
 
 #include <com/sun/star/uno/Any.hxx>
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
-#include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/xml/xslt/XXSLTTransformer.hpp>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -66,7 +64,6 @@ using namespace ::osl;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 
 using ::std::list;
 using ::std::map;
@@ -90,8 +87,7 @@ namespace XSLT
      *
      * See Reader below.
      */
-    class LibXSLTTransformer : public WeakImplHelper4<XActiveDataSink,
-            XActiveDataSource, XActiveDataControl, XInitialization>
+    class LibXSLTTransformer : public WeakImplHelper1<com::sun::star::xml::xslt::XXSLTTransformer>
     {
     private:
         static const char* const PARAM_SOURCE_URL;
@@ -102,7 +98,7 @@ namespace XSLT
         static const char* const PARAM_DOCTYPE_PUBLIC;
 
         // the UNO ServiceFactory
-        com::sun::star::uno::Reference<XMultiServiceFactory> m_rServiceFactory;
+        com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_rServiceFactory;
 
         com::sun::star::uno::Reference<XInputStream> m_rInputStream;
 
@@ -129,7 +125,7 @@ namespace XSLT
     public:
 
         // ctor...
-        LibXSLTTransformer(const com::sun::star::uno::Reference<XMultiServiceFactory> &r);
+        LibXSLTTransformer(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &r);
 
         // XActiveDataSink
         virtual void SAL_CALL
@@ -169,7 +165,7 @@ namespace XSLT
         ::std::map<const char*, OString> SAL_CALL
         getParameters();
 
-        virtual com::sun::star::uno::Reference<XMultiServiceFactory> SAL_CALL
+        virtual com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> SAL_CALL
         getServiceFactory() {
             return m_rServiceFactory;
         }

@@ -840,7 +840,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
             // find all DDE-Bookmarks
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
                 ppMark != pMarkAccess->getMarksEnd();
-                ppMark++)
+                ++ppMark)
             {
                 if(IDocumentMarkAccess::DDE_BOOKMARK == IDocumentMarkAccess::GetType(**ppMark))
                     vDdeMarks.push_back(ppMark->get());

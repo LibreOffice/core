@@ -37,6 +37,7 @@ $(eval $(call gb_Executable_use_libraries,helpex,\
 ))
 
 $(eval $(call gb_Executable_use_external,helpex,expat_utf8))
+$(eval $(call gb_Executable_use_unpacked,helpex,boost))
 
 $(eval $(call gb_Executable_use_static_libraries,helpex,\
     transex \

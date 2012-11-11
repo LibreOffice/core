@@ -15,7 +15,7 @@ $(eval $(call gb_ExternalProject_register_targets,languagetool,\
 	build \
 ))
 
-$(call gb_ExternalProject_get_state_target,languagetool,build) :
+$(call gb_ExternalProject_get_state_target,languagetool,build) : $(call gb_Jar_get_outdir_target,juh)
 	cd "$(call gb_UnpackedTarball_get_dir,languagetool)" && \
 	$(ICECREAM_RUN) "$(ANT)" \
 		-q \

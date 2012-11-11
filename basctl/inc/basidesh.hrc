@@ -69,10 +69,10 @@
 #define RID_STR_RUNTIMEERROR            ( RID_BASICIDE_START + 22 )
 #define RID_STR_COMPILEERROR            ( RID_BASICIDE_START + 23 )
 #define RID_STR_STDDIALOGNAME           ( RID_BASICIDE_START + 24 )
-#define RID_STR_STDMACRONAME            ( RID_BASICIDE_START + 25 )
+
 #define RID_STR_STDMODULENAME           ( RID_BASICIDE_START + 27 )
 #define RID_STR_ALL                     ( RID_BASICIDE_START + 28 )
-#define RID_STR_CLOSE                   ( RID_BASICIDE_START + 29 )
+
 #define RID_STR_PAGE                    ( RID_BASICIDE_START + 30 )
 #define RID_STR_BADSBXNAME              ( RID_BASICIDE_START + 31 )
 #define RID_STR_STDLIBNAME              ( RID_BASICIDE_START + 32 )

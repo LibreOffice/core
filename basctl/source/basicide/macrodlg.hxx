@@ -49,24 +49,22 @@ public:
     };
 
 private:
-    FixedText               aMacroNameTxt;
-    Edit                    aMacroNameEdit;
-    FixedText               aMacroFromTxT;
-    FixedText               aMacrosSaveInTxt;
-    TreeListBox             aBasicBox;
-    FixedText               aMacrosInTxt;
-    String                  aMacrosInTxtBaseStr;
-    SvTreeListBox           aMacroBox;
+    Edit*                   m_pMacroNameEdit;
+    FixedText*              m_pMacroFromTxT;
+    FixedText*              m_pMacrosSaveInTxt;
+    TreeListBox*            m_pBasicBox;
+    FixedText*              m_pMacrosInTxt;
+    String                  m_aMacrosInTxtBaseStr;
+    SvTreeListBox*          m_pMacroBox;
 
-    PushButton              aRunButton;
-    CancelButton            aCloseButton;
-    PushButton              aAssignButton;
-    PushButton              aEditButton;
-    PushButton              aNewDelButton;
-    PushButton              aOrganizeButton;
-    HelpButton              aHelpButton;
-    PushButton              aNewLibButton;
-    PushButton              aNewModButton;
+    PushButton*             m_pRunButton;
+    PushButton*             m_pCloseButton;
+    PushButton*             m_pAssignButton;
+    PushButton*             m_pEditButton;
+    PushButton*             m_pDelButton;
+    PushButton*             m_pOrganizeButton;
+    PushButton*             m_pNewLibButton;
+    PushButton*             m_pNewModButton;
 
     bool                    bNewDelIsDel;
     bool                    bForceStoreBasic;
@@ -80,7 +78,7 @@ private:
     DECL_LINK( ButtonHdl, Button * );
 
     void                CheckButtons();
-    void                SaveSetCurEntry( SvTreeListBox& rBox, SvLBoxEntry* pEntry );
+    void                SaveSetCurEntry( SvTreeListBox& rBox, SvTreeListEntry* pEntry );
     void                UpdateFields();
 
     void                EnableButton( Button& rButton, bool bEnable );

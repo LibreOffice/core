@@ -126,7 +126,7 @@ Control RID_COND_ENTRY
     ListBox LB_CELLIS_TYPE
     {
         Pos = MAP_APPFONT( 90, 15 );
-        Size = MAP_APPFONT( 80, 40 );
+        Size = MAP_APPFONT( 80, 80 );
         Border = TRUE;
         DropDown = TRUE;
         StringList [ en-US ] =
@@ -141,6 +141,18 @@ Control RID_COND_ENTRY
             "not between";
             "duplicate";
             "not duplicate";
+            "top 10 elements";
+            "bottom 10 elements";
+            "top 10 percent";
+            "bottom 10 percent";
+            "above average";
+            "below average";
+            "Error";
+            "No Error";
+            "Begins with";
+            "Ends with";
+            "Contains";
+            "Not Contains";
         };
     };
     Edit ED_VAL1

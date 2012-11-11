@@ -27,6 +27,7 @@
  * instead of those above.
  */
 
+#include <comphelper/documentconstants.hxx>
 #include <rtl/ustring.hxx>
 #include "unotest/detail/unotestdllapi.hxx"
 
@@ -56,21 +57,33 @@ public:
         //root dir of test files, must contain pass, fail, indeterminate
         const rtl::OUString &rURL,
         //additional filter data for SfxFilter
-        const rtl::OUString &rUserData);
+        const rtl::OUString &rUserData = rtl::OUString(),
+        //SfxFilterFlags for SfxFilter
+        unsigned int nFilterFlags = SFX_FILTER_IMPORT,
+        //Clipboard id for SfxFilter
+        unsigned int nClipboardID = 0,
+        //additional filter version for SfxFilter
+        unsigned int nFilterVersion = 0);
 
     virtual bool load(
         const rtl::OUString &rFilter,
         const rtl::OUString &rURL,
-        const rtl::OUString &rUserData) = 0;
+        const rtl::OUString &rUserData,
+        unsigned int nFilterFlags,
+        unsigned int nClipboardID,
+        unsigned int nFilterVersion) = 0;
 
 protected:
     ~FiltersTest() {}
 
     void recursiveScan(
+        filterStatus nExpected,
         const rtl::OUString &rFilter,
         const rtl::OUString &rURL,
         const rtl::OUString &rUserData,
-        filterStatus nExpected);
+        unsigned int nFilterFlags,
+        unsigned int nClipboardID,
+        unsigned int nFilterVersion);
 };
 
 }

@@ -80,59 +80,47 @@ endif
 
 include $(GBUILDDIR)/Output.mk
 
-
-ifneq ($(strip $(PRODUCT)$(product)),)
-gb_PRODUCT := $(true)
-else
-gb_PRODUCT := $(false)
-endif
-
 gb_TIMELOG := 0
 ifneq ($(strip $(TIMELOG)$(timelog)),)
 gb_TIMELOG := 1
 endif
 
+# This used to be PRODUCT="" (for the same meaning as ENABLE_DBGUTIL="TRUE"),
+# but the product meaning is now only confusing.
+ifneq ($(ENABLE_DBGUTIL),)
+gb_ENABLE_DBGUTIL := $(true)
+else
+gb_ENABLE_DBGUTIL := $(false)
+endif
+
 gb_DEBUGLEVEL := 0
 ifneq ($(strip $(DEBUG)),)
 gb_DEBUGLEVEL := 1
+# make DEBUG=true should force -g
 ifeq ($(origin DEBUG),command line)
-ENABLE_DEBUG_FOR := all
+ENABLE_DEBUGINFO_FOR := all
 endif
 endif
 ifneq ($(strip $(debug)),)
 gb_DEBUGLEVEL := 1
 ifeq ($(origin debug),command line)
-ENABLE_DEBUG_FOR := all
+ENABLE_DEBUGINFO_FOR := all
 endif
 endif
-ifeq ($(gb_PRODUCT),$(false))
+ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 gb_DEBUGLEVEL := 1
 endif
 
 ifneq ($(strip $(DBGLEVEL)),)
 gb_DEBUGLEVEL := $(strip $(DBGLEVEL))
 ifeq ($(origin DBGLEVEL),command line)
-ENABLE_DEBUG_FOR := all
+ENABLE_DEBUGINFO_FOR := all
 endif
 endif
 ifneq ($(strip $(dbglevel)),)
 gb_DEBUGLEVEL := $(strip $(dbglevel))
 ifeq ($(origin dbglevel),command line)
-ENABLE_DEBUG_FOR := all
-endif
-endif
-
-ifeq ($(or $(ENABLE_SYMBOLS),$(enable_symbols)),FALSE)
-gb_SYMBOL := $(false)
-else
-ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)),)
-gb_SYMBOL := $(true)
-else
-ifneq ($(gb_DEBUGLEVEL),0)
-gb_SYMBOL := $(true)
-else
-gb_SYMBOL := $(false)
-endif
+ENABLE_DEBUGINFO_FOR := all
 endif
 endif
 
@@ -244,7 +232,7 @@ gb_GLOBALDEFS := \
 	$(gb_CPUDEFS) \
 
 
-ifeq ($(gb_PRODUCT),$(false))
+ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 gb_GLOBALDEFS += -DDBG_UTIL \
 
 ifneq ($(COM),MSC)

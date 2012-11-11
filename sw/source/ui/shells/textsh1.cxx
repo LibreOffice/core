@@ -1444,7 +1444,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
                 nHtmlMode &= HTMLMODE_ON|HTMLMODE_SOME_STYLES;
                 if( (nHtmlMode == HTMLMODE_ON) || !rSh.IsMoveLeftMargin(
-                                        SID_INC_INDENT == nWhich, sal_True ))
+                                        SID_INC_INDENT == nWhich, true ))
                     rSet.DisableItem( nWhich );
             }
             break;
@@ -1456,7 +1456,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 nHtmlMode &= HTMLMODE_ON|HTMLMODE_SOME_STYLES;
                 if( (nHtmlMode == HTMLMODE_ON) ||
                     !rSh.IsMoveLeftMargin( FN_INC_INDENT_OFFSET == nWhich,
-                                            sal_False ))
+                                            false ))
                     rSet.DisableItem( nWhich );
             }
             break;

@@ -32,16 +32,16 @@ namespace svxform
     //= OSQLParserClient
     //====================================================================
     //--------------------------------------------------------------------
-    OSQLParserClient::OSQLParserClient(const Reference< XMultiServiceFactory >& _rxORB)
+    OSQLParserClient::OSQLParserClient(const Reference< XComponentContext >& rxContext)
     {
-        m_xORB = _rxORB;
+        m_xContext = rxContext;
     }
     //--------------------------------------------------------------------
     bool OSQLParserClient::ensureLoaded() const
     {
         if ( !ODbtoolsClient::ensureLoaded() )
             return false;
-         m_xParser = getFactory()->createSQLParser(m_xORB,getParseContext());
+         m_xParser = getFactory()->createSQLParser(m_xContext,getParseContext());
         return m_xParser.is();
     }
 

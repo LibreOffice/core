@@ -144,7 +144,7 @@ public:
         @onerror    -
     */
 
-    BaseControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+    BaseControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -1049,7 +1049,7 @@ protected:
         @onerror    -
     */
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > impl_getMultiServiceFactory();
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > impl_getComponentContext();
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -1217,7 +1217,7 @@ private:
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xFactory              ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xComponentContext     ;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xDelegator            ;
     OMRCListenerMultiplexerHelper*                  m_pMultiplexer          ;   // multiplex events
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xMultiplexer          ;

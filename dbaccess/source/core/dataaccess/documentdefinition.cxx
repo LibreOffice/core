@@ -1287,10 +1287,9 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
                 pDocuSave = new ODocumentSaveContinuation;
                 pRequest->addContinuation(pDocuSave);
             }
-            OInteraction< XInteractionApprove >* pApprove = NULL;
             if ( _bApprove )
             {
-                pApprove = new OInteraction< XInteractionApprove >;
+                OInteraction< XInteractionApprove >* pApprove = new OInteraction< XInteractionApprove >;
                 pRequest->addContinuation(pApprove);
             }
 

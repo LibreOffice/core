@@ -55,7 +55,7 @@ SAL_IMPLEMENT_MAIN()
 
     comphelper::setProcessServiceFactory(xSFactory);
 
-    InitVCL(xSFactory);
+    InitVCL();
 
     {
         SvtLanguageTable aTable;

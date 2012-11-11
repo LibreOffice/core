@@ -166,27 +166,18 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     // XSLT transformation service --------------------------------------------------------
 
-    FixedText FT_XML_TRANSFORM_SERVICE
+    CheckBox CB_XML_NEEDS_XSLT2
     {
+        HelpID = HID_XML_FILTER_NEEDS_XSLT2;
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 5 * ROW_HEIGHT + 5 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
-        Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text [ en-US ]  = "XSLT Transformation Service";
+        Size                = MAP_APPFONT ( 12, 12 ) ;
     };
 
-    RadioButton RB_XML_TRANSFORM_SERVICE_LIBXSLT
+    FixedText FT_XML_NEEDS_XSLT2
     {
-        HelpID = HID_XML_FILTER_TRANSFORM_SERVICE_LIBXSLT;
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X , SECOND_ROW_Y + 5 * ROW_HEIGHT + 5 * SPACING + EDIT_OFFSET ) ;
-        Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH, 12 ) ;
-        Text[ en-US ] = "~Builtin (LibXSLT)";
-    };
-
-    RadioButton RB_XML_TRANSFORM_SERVICE_SAXON_J
-    {
-        HelpID = HID_XML_FILTER_TRANSFORM_SERVICE_SAXON_J;
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X , SECOND_ROW_Y + 6 * ROW_HEIGHT + 6 * SPACING + EDIT_OFFSET ) ;
-        Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH, 12 ) ;
-        Text[ en-US ] = "~Saxon/J";
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X + 3 * SPACING , SECOND_ROW_Y + 5 * ROW_HEIGHT + 5 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
+        Size                = MAP_APPFONT ( 2 * FIRST_ROW_WIDTH , 8 ) ; // guess width
+        Text [ en-US ]  = "The filter needs XSLT 2.0 processor";
     };
 
 };

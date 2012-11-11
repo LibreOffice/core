@@ -17,7 +17,6 @@
 #
 import uno
 import traceback
-from .NoValidPathException import NoValidPathException
 
 from com.sun.star.frame.FrameSearchFlag import ALL, PARENT
 from com.sun.star.util import URL
@@ -130,39 +129,3 @@ class Desktop(object):
     def getUniqueName(self, xElementContainer, sElementName):
         sIncSuffix = self.getIncrementSuffix(xElementContainer, sElementName)
         return sElementName + sIncSuffix
-
-class OfficePathRetriever:
-
-    def OfficePathRetriever(self, xMSF):
-        try:
-            TemplatePath = FileAccess.getOfficePath(xMSF,
-                "Template", "share", "/wizard")
-            UserTemplatePath = FileAccess.getOfficePath(xMSF,
-                "Template", "user", "")
-            BitmapPath = FileAccess.combinePaths(xMSF, TemplatePath,
-                "/../wizard/bitmap")
-            WorkPath = FileAccess.getOfficePath(xMSF,
-                "Work", "", "")
-        except NoValidPathException, nopathexception:
-            pass
-
-    @classmethod
-    def getTemplatePath(self, _xMSF):
-        sTemplatePath = ""
-        try:
-            sTemplatePath = FileAccess.getOfficePath(_xMSF,
-                "Template", "share", "/wizard")
-        except NoValidPathException, nopathexception:
-            pass
-        return sTemplatePath
-
-    @classmethod
-    def getBitmapPath(self, _xMSF):
-        sBitmapPath = ""
-        try:
-            sBitmapPath = FileAccess.combinePaths(_xMSF,
-                getTemplatePath(_xMSF), "/../wizard/bitmap")
-        except NoValidPathException, nopathexception:
-            pass
-
-        return sBitmapPath

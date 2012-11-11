@@ -18,7 +18,7 @@
 import traceback
 from com.sun.star.lang import Locale
 from com.sun.star.util.NumberFormat import \
-	DATE, LOGICAL, DATETIME, TEXT, NUMBER
+    DATE, LOGICAL, DATETIME, TEXT, NUMBER
 
 class NumberFormatter(object):
 

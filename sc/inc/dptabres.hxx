@@ -30,7 +30,7 @@
 #define SC_DPTABRES_HXX
 
 #include "global.hxx"
-#include "dpcachetable.hxx"
+#include "dpfilteredcache.hxx"
 
 #include <tools/string.hxx>
 #include <com/sun/star/sheet/MemberResult.hpp>
@@ -656,7 +656,7 @@ public:
     ~ScDPResultVisibilityData();
 
     void addVisibleMember(const String& rDimName, const ScDPItemData& rMemberItem);
-    void fillFieldFilters(::std::vector<ScDPCacheTable::Criterion>& rFilters) const;
+    void fillFieldFilters(::std::vector<ScDPFilteredCache::Criterion>& rFilters) const;
 
 private:
     struct MemberHash

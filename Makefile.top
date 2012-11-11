@@ -62,7 +62,9 @@ cppcanvas\
 cppu\
 cppuhelper\
 cpputools\
+ct2n\
 cui\
+curl\
 dbaccess\
 desktop\
 dictionaries \
@@ -71,18 +73,25 @@ dtrans\
 editeng\
 embeddedobj\
 embedserv\
+epm\
 eventattacher\
+expat\
 extensions\
 extras\
 fileaccess\
 filter\
+fontconfig\
 forms\
 formula\
 fpicker\
 framework\
+freetype\
+graphite\
 helpcompiler\
 hsqldb\
+hunspell\
 hwpfilter\
+hyphen\
 i18npool\
 i18nutil\
 idl\
@@ -96,12 +105,14 @@ jvmaccess\
 jvmfwk\
 l10ntools\
 languagetool\
+lcms2\
 libcdr\
 libcmis\
+libexttextcat\
 libmspub\
 liborcus\
 libpng\
-librsvg\
+librelogo\
 libvisio\
 libwpd\
 libwpg\
@@ -109,8 +120,10 @@ libwps\
 lingucomponent\
 linguistic\
 lotuswordpro\
+lpsolve\
 mdds\
 more_fonts\
+mythes\
 neon\
 nlpsolver\
 np_sdk\
@@ -119,13 +132,14 @@ offapi\
 officecfg\
 oovbaapi\
 oox\
+openldap\
 package\
 packimages\
 padmin\
+postgresql\
 psprint_config\
 pyuno\
 qadevOOo\
-rdbmaker\
 readlicense_oo\
 regexp\
 registry\
@@ -139,7 +153,6 @@ sal\
 salhelper\
 sane\
 sax\
-saxon\
 sc\
 scaddins\
 sccomp\
@@ -157,6 +170,7 @@ sot\
 starmath\
 stoc\
 store\
+svgio\
 svl\
 svtools\
 svx\
@@ -199,58 +213,35 @@ xmlreader\
 xmlscript\
 xmlsecurity\
 xsltml\
+zlib\
 
 dmake_modules:=\
 berkeleydb\
-binfilter \
 cairo\
 cppunit\
 crashrep\
-ct2n\
-curl\
-epm\
-expat\
 external\
-fontconfig\
-freetype\
-gdk-pixbuf\
-gettext\
-glib\
-graphite\
 helpcontent2 \
-hunspell\
-hyphen\
 icu\
 instsetoo_native\
-libcroco\
-libexttextcat\
-libgsf\
 liblangtag\
 libxml2\
 libxmlsec\
 libxslt\
-lcms2\
-lpsolve\
 migrationanalysis\
 moz\
 mysqlc\
 mysqlcppconn\
-mythes\
 nss\
 odk\
-openldap\
 openssl\
-pango\
-postgresql\
 postprocess\
 python\
 redland\
 setup_native\
-stax\
 stlport\
 sysui\
 xpdf\
-zlib\
 
 export gb_TAILBUILDTARGET=all slowcheck
 
@@ -258,7 +249,7 @@ define gbuild_module_rules
 .PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).subsequentcheck $(1).deliver
 
 $(1): bootstrap fetch
-	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) gb_PARTIALBUILD=T
+	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) gb_PARTIALBUILD=T
 
 $(1).all: bootstrap fetch
 	$$(if $$(filter $(1),$$(shell $(GNUMAKE) -r -f $(SRCDIR)/tail_build/Makefile showmodules)), \
@@ -267,16 +258,16 @@ $(1).all: bootstrap fetch
 	, \
 		cd $(1) && unset MAKEFLAGS && \
 	) \
-	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+	$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
 
 $(1).build:
-	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) build gb_PARTIALBUILD=T
+	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) build gb_PARTIALBUILD=T
 
 $(1).check:
-	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) check gb_PARTIALBUILD=T
+	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) check gb_PARTIALBUILD=T
 
 $(1).clean:
-	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) clean gb_PARTIALBUILD=T
+	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) clean gb_PARTIALBUILD=T
 
 $(1).subsequentcheck:
 	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) subsequentcheck gb_PARTIALBUILD=T
@@ -295,11 +286,11 @@ define dmake_module_rules
 
 $(1): bootstrap fetch
 	cd $(1) && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) -- -P$(GMAKE_PARALLELISM)
+        $(SOLARENV)/bin/build.pl -P$(PARALLELISM) -- -P$(PARALLELISM)
 
 $(1).all: bootstrap fetch
 	cd $(1) && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+        $(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
 
 $(1).deliver: $(1)
 	cd $(1) && $(SOLARENV)/bin/deliver.pl
@@ -336,7 +327,7 @@ clean: clean-host clean-build
 
 clean-host:
 ifeq ($(BUILD_DMAKE),YES)
-	if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(GMAKE_PARALLELISM) -C dmake clean; fi
+	if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(PARALLELISM) -C dmake clean; fi
 endif
 	rm -fr $(DEVINSTALLDIR)
 	rm -fr $(OUTDIR)
@@ -358,14 +349,12 @@ include $(SRCDIR)/compilerplugins/Makefile.mk
 #
 distclean : clean compilerplugins-clean
 ifeq ($(BUILD_DMAKE),YES)
-	(if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(GMAKE_PARALLELISM) -C dmake distclean; fi) && \
+	(if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(PARALLELISM) -C dmake distclean; fi) && \
 	rm -f solenv/*/bin/dmake*
 endif
 	rm -fr config_host.mk config_build.mk aclocal.m4 autom4te.cache \
-    bin/repo-list config.log config.status configure \
-	ooo.lst post_download post_download.log \
-	config_host.mk.last set_soenv.stamp src.downloaded warn \
-	solenv/bin/concat-deps.exe solenv/bin/concat-deps
+	config.log config.status configure ooo.lst \
+	config_host.mk.last config_host.mk.stamp src.downloaded warn
 	find $(SOLARENV)/gdb -name "*.pyc" -exec rm {} \;
 
 #
@@ -383,7 +372,7 @@ ifneq ($(filter-out clean distclean,$(MAKECMDGOALS)),)
 #
 fetch: src.downloaded
 
-src.downloaded : Makefile.top download ooo.lst bin/repo-list
+src.downloaded : Makefile.top download ooo.lst
 ifeq ($(DO_FETCH_TARBALLS),YES)
 	@./download $(SRCDIR)/ooo.lst && touch $@
 else
@@ -395,7 +384,7 @@ endif
 #
 bootstrap: $(WORKDIR)/bootstrap compilerplugins
 
-$(WORKDIR)/bootstrap: solenv/bin/concat-deps.c
+$(WORKDIR)/bootstrap:
 	@cd $(SRCDIR) && ./bootstrap
 	@mkdir -p $(dir $@) && touch $@
 
@@ -416,26 +405,31 @@ ifeq ($(DISABLE_DBCONNECTIVITY),TRUE)
 	cd connectivity && sed -e 's/^\(export [A-Z0-9_]*=\)\(.*\)$$/\1"\2"/' <../config_host.mk >conftmp.sh && . conftmp.sh && rm conftmp.sh && $(SOLARENV)/bin/deliver.pl
 endif
 	cd packimages && unset MAKEFLAGS && \
-		$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM) && \
-		$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
+		$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM) && \
+		$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 
 build: build-packimages
 ifeq ($(OS_FOR_BUILD),WNT)
 	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl
 else
 	cd instsetoo_native && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) -- -P$(GMAKE_PARALLELISM)
+        $(SOLARENV)/bin/build.pl -P$(PARALLELISM) -- -P$(PARALLELISM)
 endif
 ifeq ($(OS),ANDROID)
-	cd android && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
+	cd android && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 endif
 
 build-nocheck : export SKIP_TESTS := YES
 build-nocheck : build
 
 cross-toolset: bootstrap fetch
-	cd cross_toolset && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
-
+	cd cross_toolset && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifneq (WNT,$(OS))
+# We need to build nss for nsinstall... See NSINSTALL=... in nss/makefile.mk
+	$(GNUMAKE) gb_Side=build nss
+endif
+endif
 
 #
 # Install
@@ -474,6 +468,13 @@ endif
 
 dev-install-nocheck : export SKIP_TESTS := YES
 dev-install-nocheck : dev-install
+
+dev-update:
+ifeq ($(DISABLE_LINKOO),TRUE)
+	@linkoo --copy $(DEVINSTALLDIR)/opt $(SRCDIR)
+else
+	@linkoo $(DEVINSTALLDIR)/opt $(SRCDIR)
+endif
 
 install-tb:
 	@rm -rf $(DEVINSTALLDIR)
@@ -547,16 +548,16 @@ findunusedcode:
 check: dev-install subsequentcheck
 
 subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),dev-install)
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
+	$(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
 unitcheck:
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
 slowcheck:
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
 debugrun:
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
 endif # not clean or distclean
 

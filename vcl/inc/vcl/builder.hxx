@@ -28,16 +28,28 @@ public:
     typedef std::map<OString, OString> stringmap;
     typedef Window* (*customMakeWidget)(Window *pParent, stringmap &rVec);
 private:
+
+    struct PackingData
+    {
+        bool m_bVerticalOrient;
+        sal_Int32 m_nPosition;
+        PackingData(bool bVerticalOrient = false, sal_Int32 nPosition = -1)
+            : m_bVerticalOrient(bVerticalOrient)
+            , m_nPosition(nPosition)
+        {
+        }
+    };
+
     struct WinAndId
     {
         OString m_sID;
         Window *m_pWindow;
-        sal_Int32 m_nPosition;
+        PackingData m_aPackingData;
         bool m_bOwned;
-        WinAndId(const OString &rId, Window *pWindow)
+        WinAndId(const OString &rId, Window *pWindow, bool bVertical)
             : m_sID(rId)
             , m_pWindow(pWindow)
-            , m_nPosition(-1)
+            , m_aPackingData(bVertical)
             , m_bOwned(true)
         {
         }
@@ -116,10 +128,12 @@ private:
         std::set<Window*> m_aRedundantParentWidgets;
     };
 
+    void loadTranslations(const com::sun::star::lang::Locale &rLocale, const OUString &rUri);
     OString getTranslation(const OString &rId, const OString &rProperty) const;
 
     OString m_sID;
     OString m_sHelpRoot;
+    OString m_sProductName;
     Window *m_pParent;
     bool m_bToplevelHasDeferredInit;
     ParserState *m_pParserState;
@@ -165,7 +179,9 @@ public:
     //taking ownership of it
     bool replace(OString sID, Window &rReplacement);
 private:
-    Window *insertObject(Window *pParent, const OString &rClass, const OString &rID, stringmap &rVec);
+    Window *insertObject(Window *pParent, const OString &rClass, const OString &rID,
+        stringmap &rProps, stringmap &rPangoAttributes);
+
     Window *makeObject(Window *pParent, const OString &rClass, const OString &rID, stringmap &rVec);
     bool extractGroup(const OString &id, stringmap &rVec);
     bool extractModel(const OString &id, stringmap &rVec);
@@ -181,13 +197,14 @@ private:
     void handlePacking(Window *pCurrent, xmlreader::XmlReader &reader);
     void applyPackingProperty(Window *pCurrent, xmlreader::XmlReader &reader);
     void collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rVec);
+    void collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
 
     void handleListStore(xmlreader::XmlReader &reader, const OString &rID);
     void handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 nRowIndex);
     void handleAdjustment(const OString &rID, stringmap &rProperties);
     void handleTabChild(Window *pParent, xmlreader::XmlReader &reader);
 
-    sal_Int32 get_window_packing_position(const Window *pWindow) const;
+    PackingData get_window_packing_data(const Window *pWindow) const;
     void set_window_packing_position(const Window *pWindow, sal_Int32 nPosition);
 
     //Helpers to retrofit all the existing code the the builder

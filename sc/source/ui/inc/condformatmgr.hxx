@@ -51,7 +51,7 @@ private:
     ScDocument* mpDoc;
     ScConditionalFormatList* mpFormatList;
     const ScAddress& mrPos;
-    std::map<SvLBoxEntry*, sal_Int32> maMapLBoxEntryToCondIndex;
+    std::map<SvTreeListEntry*, sal_Int32> maMapLBoxEntryToCondIndex;
 
     DECL_LINK( HeaderEndDragHdl, void* );
 

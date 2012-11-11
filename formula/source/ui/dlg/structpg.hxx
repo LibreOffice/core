@@ -51,10 +51,10 @@ public:
                     StructListBox(Window* pParent, const ResId& rResId );
 
     /** Inserts an entry with static image (no difference between collapsed/expanded). */
-    SvLBoxEntry*    InsertStaticEntry(
+    SvTreeListEntry*    InsertStaticEntry(
                         const XubString& rText,
                         const Image& rEntryImg,
-                        SvLBoxEntry* pParent = NULL,
+                        SvTreeListEntry* pParent = NULL,
                         sal_uLong nPos = LIST_APPEND,
                         IFormulaToken* pToken = NULL );
 
@@ -86,18 +86,18 @@ private:
 
 protected:
 
-    IFormulaToken*      GetFunctionEntry(SvLBoxEntry* pEntry);
+    IFormulaToken*      GetFunctionEntry(SvTreeListEntry* pEntry);
 
 public:
 
                     StructPage( Window* pParent);
 
     void            ClearStruct();
-    virtual SvLBoxEntry*    InsertEntry(const XubString& rText, SvLBoxEntry* pParent,
+    virtual SvTreeListEntry*    InsertEntry(const XubString& rText, SvTreeListEntry* pParent,
                                 sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=NULL);
 
-    virtual String          GetEntryText(SvLBoxEntry* pEntry) const;
-    virtual SvLBoxEntry*    GetParent(SvLBoxEntry* pEntry) const;
+    virtual String          GetEntryText(SvTreeListEntry* pEntry) const;
+    virtual SvTreeListEntry*    GetParent(SvTreeListEntry* pEntry) const;
 
     void            SetSelectionHdl( const Link& rLink ) { aSelLink = rLink; }
     const Link&     GetSelectionHdl() const { return aSelLink; }

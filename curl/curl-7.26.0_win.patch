@@ -1,4 +1,4 @@
---- misc/curl-7.26.0/Makefile.msvc.names	2011-03-19 09:17:12.000000000 -0600
+--- curl-7.26.0/Makefile.msvc.names	2011-03-19 09:17:12.000000000 -0600
 +++ misc/build/curl-7.26.0/Makefile.msvc.names	2012-07-02 07:20:39.323448800 -0600
 @@ -43,7 +43,7 @@
  !ENDIF
@@ -32,3 +32,21 @@
  !ENDIF
  
  # --------------------------------------
+--- curl/lib/Makefile.vc9	2012-05-24 12:07:02.000000000 -0400
++++ curl/lib/Makefile.vc9	2012-10-29 11:53:44.658809300 -0400
+@@ -117,7 +117,7 @@
+ ZLIBLIBSDLL= zdll.lib
+ ZLIBLIBS   = zlib.lib
+ WINLIBS    = ws2_32.lib wldap32.lib
+-CFLAGS     = $(CFLAGS)
++CFLAGS     = $(CFLAGS) $(EXCFLAGS)
+ 
+ CFGSET     = FALSE
+ 
+@@ -620,5 +620,5 @@
+ release-dll-ssl-dll\libcurl.res \
+ release-dll-zlib-dll\libcurl.res \
+ release-dll-ssl-dll-zlib-dll\libcurl.res: libcurl.rc
+-	rc /dDEBUGBUILD=0 /Fo $@ libcurl.rc
++	rc $(SOLARINC) /dDEBUGBUILD=0 /Fo $@ libcurl.rc
+ !ENDIF  # End of case where a config was provided.

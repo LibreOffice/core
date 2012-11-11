@@ -1,0 +1,32 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef __com_sun_star_ucb_GlobalTransferCommandArgument2_idl__
+#define __com_sun_star_ucb_GlobalTransferCommandArgument2_idl__
+
+#include <com/sun/star/ucb/GlobalTransferCommandArgument.idl>
+
+
+module com { module sun { module star { module ucb {
+
+/** This struct extends the one for transfers arguments by adding a Mime
+    type property to it.
+  */
+struct GlobalTransferCommandArgument2 : GlobalTransferCommandArgument
+{
+    /** contains the MIME type of the source object.
+      */
+    string MimeType;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

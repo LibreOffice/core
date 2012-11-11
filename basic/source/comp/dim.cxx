@@ -124,7 +124,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                     Error( SbERR_SYNTAX );
                 else
                 {
-                    String aCompleteName = aSym;
+                    OUString aCompleteName = aSym;
 
                     // #52709 DIM AS NEW for Uno with full-qualified name
                     if( Peek() == DOT )
@@ -154,7 +154,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                         break;
                     }
 
-                    // Take over in the String pool
+                    // Take over in the string pool
                     rDef.SetTypeId( aGblStrings.Add( aCompleteName ) );
 
                     if( rDef.IsNew() && pProc == NULL )
@@ -390,9 +390,11 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
         {
             if( !bCompatible && !pDef->IsNew() )
             {
-                String aTypeName( aGblStrings.Find( pDef->GetTypeId() ) );
+                OUString aTypeName( aGblStrings.Find( pDef->GetTypeId() ) );
                 if( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) == NULL )
+                {
                     Error( SbERR_UNDEF_TYPE, aTypeName );
+                }
             }
 
             if( bConst )
@@ -595,9 +597,11 @@ void SbiParser::DefType( bool bPrivate )
         if( pElem )
         {
             SbxArray *pTypeMembers = pType->GetProperties();
-            String aElemName = pElem->GetName();
+            OUString aElemName = pElem->GetName();
             if( pTypeMembers->Find( aElemName, SbxCLASS_DONTCARE) )
+            {
                 Error (SbERR_VAR_DEFINED);
+            }
             else
             {
                 SbxDataType eElemType = pElem->GetType();
@@ -644,7 +648,7 @@ void SbiParser::DefType( bool bPrivate )
                     sal_uInt16 nElemTypeId = pElem->GetTypeId();
                     if( nElemTypeId != 0 )
                     {
-                        String aTypeName( aGblStrings.Find( nElemTypeId ) );
+                        OUString aTypeName( aGblStrings.Find( nElemTypeId ) );
                         SbxObject* pTypeObj = static_cast< SbxObject* >( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) );
                         if( pTypeObj != NULL )
                         {
@@ -680,7 +684,7 @@ void SbiParser::DefEnum( bool bPrivate )
     if (!TestSymbol())
         return;
 
-    String aEnumName = aSym;
+    OUString aEnumName = aSym;
     if( rEnumArray->Find(aEnumName,SbxCLASS_OBJECT) )
     {
         Error( SbERR_VAR_DEFINED, aSym );
@@ -689,8 +693,9 @@ void SbiParser::DefEnum( bool bPrivate )
 
     SbxObject *pEnum = new SbxObject( aEnumName );
     if( bPrivate )
+    {
         pEnum->SetFlag( SBX_PRIVATE );
-
+    }
     SbiSymDef* pElem;
     SbiDimList* pDim;
     bool bDone = false;
@@ -812,7 +817,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
     bool bFunc = ( eCurTok == FUNCTION );
     bool bProp = ( eCurTok == GET || eCurTok == SET || eCurTok == LET );
     if( !TestSymbol() ) return NULL;
-    String aName( aSym );
+    OUString aName( aSym );
     SbxDataType eType = eScanType;
     SbiProcDef* pDef = new SbiProcDef( this, aName, true );
     pDef->SetType( eType );
@@ -824,112 +829,166 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
     {
         Next();
         if( Next() == FIXSTRING )
+        {
             pDef->GetLib() = aSym;
+        }
         else
+        {
             Error( SbERR_SYNTAX );
+        }
     }
     if( Peek() == ALIAS )
     {
         Next();
         if( Next() == FIXSTRING )
+        {
             pDef->GetAlias() = aSym;
+        }
         else
+        {
             Error( SbERR_SYNTAX );
+        }
     }
     if( !bDecl )
     {
         // CDECL, LIB and ALIAS are invalid
-        if( pDef->GetLib().Len() )
+        if( !pDef->GetLib().isEmpty() )
+        {
             Error( SbERR_UNEXPECTED, LIB );
-        if( pDef->GetAlias().Len() )
+        }
+        if( !pDef->GetAlias().isEmpty() )
+        {
             Error( SbERR_UNEXPECTED, ALIAS );
+        }
         if( pDef->IsCdecl() )
+        {
             Error( SbERR_UNEXPECTED, _CDECL_ );
+        }
         pDef->SetCdecl( false );
-        pDef->GetLib().Erase();
-        pDef->GetAlias().Erase();
+        pDef->GetLib() = "";
+        pDef->GetAlias() = "";
     }
-    else if( !pDef->GetLib().Len() )
+    else if( pDef->GetLib().isEmpty() )
     {
         // ALIAS and CDECL only together with LIB
-        if( pDef->GetAlias().Len() )
+        if( !pDef->GetAlias().isEmpty() )
+        {
             Error( SbERR_UNEXPECTED, ALIAS );
+        }
         if( pDef->IsCdecl() )
+        {
             Error( SbERR_UNEXPECTED, _CDECL_ );
+        }
         pDef->SetCdecl( false );
-        pDef->GetAlias().Erase();
+        pDef->GetAlias() = "";
     }
     // Brackets?
     if( Peek() == LPAREN )
     {
         Next();
         if( Peek() == RPAREN )
+        {
             Next();
+        }
         else
-          for(;;) {
-            bool bByVal = false;
-            bool bOptional = false;
-            bool bParamArray = false;
-            while( Peek() == BYVAL || Peek() == BYREF || Peek() == _OPTIONAL_ )
+        {
+            for(;;)
             {
-                if      ( Peek() == BYVAL )     Next(), bByVal = true;
-                else if ( Peek() == BYREF )     Next(), bByVal = false;
-                else if ( Peek() == _OPTIONAL_ )    Next(), bOptional = true;
-            }
-            if( bCompatible && Peek() == PARAMARRAY )
-            {
-                if( bByVal || bOptional )
-                    Error( SbERR_UNEXPECTED, PARAMARRAY );
-                Next();
-                bParamArray = true;
-            }
-            SbiSymDef* pPar = VarDecl( NULL, false, false );
-            if( !pPar )
-                break;
-            if( bByVal )
-                pPar->SetByVal();
-            if( bOptional )
-                pPar->SetOptional();
-            if( bParamArray )
-                pPar->SetParamArray();
-            pDef->GetParams().Add( pPar );
-            SbiToken eTok = Next();
-            if( eTok != COMMA && eTok != RPAREN )
-            {
-                bool bError2 = true;
-                if( bOptional && bCompatible && eTok == EQ )
+                bool bByVal = false;
+                bool bOptional = false;
+                bool bParamArray = false;
+                while( Peek() == BYVAL || Peek() == BYREF || Peek() == _OPTIONAL_ )
                 {
-                    SbiConstExpression* pDefaultExpr = new SbiConstExpression( this );
-                    SbxDataType eType2 = pDefaultExpr->GetType();
-
-                    sal_uInt16 nStringId;
-                    if( eType2 == SbxSTRING )
-                        nStringId = aGblStrings.Add( pDefaultExpr->GetString() );
-                    else
-                        nStringId = aGblStrings.Add( pDefaultExpr->GetValue(), eType2 );
-
-                    pPar->SetDefaultId( nStringId );
-                    delete pDefaultExpr;
-
-                    eTok = Next();
-                    if( eTok == COMMA || eTok == RPAREN )
-                        bError2 = false;
+                    if( Peek() == BYVAL )
+                    {
+                        bByVal = true;
+                    }
+                    else if ( Peek() == BYREF )
+                    {
+                        bByVal = false;
+                    }
+                    else if ( Peek() == _OPTIONAL_ )
+                    {
+                        bOptional = true;
+                    }
+                    Next();
                 }
-                if( bError2 )
+                if( bCompatible && Peek() == PARAMARRAY )
                 {
-                    Error( SbERR_EXPECTED, RPAREN );
+                    if( bByVal || bOptional )
+                    {
+                        Error( SbERR_UNEXPECTED, PARAMARRAY );
+                    }
+                    Next();
+                    bParamArray = true;
+                }
+                SbiSymDef* pPar = VarDecl( NULL, false, false );
+                if( !pPar )
+                {
+                    break;
+                }
+                if( bByVal )
+                {
+                    pPar->SetByVal();
+                }
+                if( bOptional )
+                {
+                    pPar->SetOptional();
+                }
+                if( bParamArray )
+                {
+                    pPar->SetParamArray();
+                }
+                pDef->GetParams().Add( pPar );
+                SbiToken eTok = Next();
+                if( eTok != COMMA && eTok != RPAREN )
+                {
+                    bool bError2 = true;
+                    if( bOptional && bCompatible && eTok == EQ )
+                    {
+                        SbiConstExpression* pDefaultExpr = new SbiConstExpression( this );
+                        SbxDataType eType2 = pDefaultExpr->GetType();
+
+                        sal_uInt16 nStringId;
+                        if( eType2 == SbxSTRING )
+                        {
+                            nStringId = aGblStrings.Add( pDefaultExpr->GetString() );
+                        }
+                        else
+                        {
+                            nStringId = aGblStrings.Add( pDefaultExpr->GetValue(), eType2 );
+                        }
+                        pPar->SetDefaultId( nStringId );
+                        delete pDefaultExpr;
+
+                        eTok = Next();
+                        if( eTok == COMMA || eTok == RPAREN )
+                        {
+                            bError2 = false;
+                        }
+                    }
+                    if( bError2 )
+                    {
+                        Error( SbERR_EXPECTED, RPAREN );
+                        break;
+                    }
+                }
+                if( eTok == RPAREN )
+                {
                     break;
                 }
             }
-            if( eTok == RPAREN )
-                break;
         }
     }
     TypeDecl( *pDef );
     if( eType != SbxVARIANT && pDef->GetType() != eType )
+    {
         Error( SbERR_BAD_DECLARATION, aName );
+    }
     if( pDef->GetType() == SbxVARIANT && !( bFunc || bProp ) )
+    {
         pDef->SetType( SbxEMPTY );
+    }
     return pDef;
 }
 
@@ -944,7 +1003,9 @@ void SbiParser::DefDeclare( bool bPrivate )
 {
     Next();
     if( eCurTok != SUB && eCurTok != FUNCTION )
+    {
       Error( SbERR_UNEXPECTED, eCurTok );
+    }
     else
     {
         bool bFunction = (eCurTok == FUNCTION);
@@ -952,8 +1013,10 @@ void SbiParser::DefDeclare( bool bPrivate )
         SbiProcDef* pDef = ProcDecl( true );
         if( pDef )
         {
-            if( !pDef->GetLib().Len() )
+            if( pDef->GetLib().isEmpty() )
+            {
                 Error( SbERR_EXPECTED, LIB );
+            }
             // Is it already there?
             SbiSymDef* pOld = aPublics.Find( pDef->GetName() );
             if( pOld )
@@ -967,17 +1030,20 @@ void SbiParser::DefDeclare( bool bPrivate )
                     pDef = NULL;
                 }
                 else
+                {
                     pDef->Match( p );
+                }
             }
             else
+            {
                 aPublics.Add( pDef );
-
+            }
             if ( pDef )
             {
                 pDef->SetPublic( !bPrivate );
 
                 // New declare handling
-                if( pDef->GetLib().Len() > 0 )
+                if( !pDef->GetLib().isEmpty())
                 {
                     if( bNewGblDefs && nGblChain == 0 )
                     {
@@ -996,8 +1062,9 @@ void SbiParser::DefDeclare( bool bPrivate )
 
                     SbxDataType eType = pDef->GetType();
                     if( bFunction )
+                    {
                         aGen.Gen( _PARAM, 0, sal::static_int_cast< sal_uInt16 >( eType ) );
-
+                    }
                     if( nParCount > 1 )
                     {
                         aGen.Gen( _ARGC );
@@ -1025,15 +1092,20 @@ void SbiParser::DefDeclare( bool bPrivate )
 
                     SbiOpcode eOp = pDef->IsCdecl() ? _CALLC : _CALL;
                     sal_uInt16 nId = pDef->GetId();
-                    if( pDef->GetAlias().Len() )
+                    if( !pDef->GetAlias().isEmpty() )
+                    {
                         nId = ( nId & 0x8000 ) | aGblStrings.Add( pDef->GetAlias() );
+                    }
                     if( nParCount > 1 )
+                    {
                         nId |= 0x8000;
+                    }
                     aGen.Gen( eOp, nId, sal::static_int_cast< sal_uInt16 >( eType ) );
 
                     if( bFunction )
+                    {
                         aGen.Gen( _PUT );
-
+                    }
                     aGen.Gen( _LEAVE );
                 }
             }
@@ -1047,14 +1119,19 @@ void SbiParser::Attribute()
     while( Next() != EQ )
     {
         if( Next() != DOT)
+        {
             break;
+        }
     }
 
     if( eCurTok != EQ )
+    {
         Error( SbERR_SYNTAX );
+    }
     else
+    {
         SbiExpression aValue( this );
-
+    }
     // Don't generate any code - just discard it.
 }
 
@@ -1086,19 +1163,29 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     {
         Next();
         if( eCurTok == GET )
+        {
             ePropertyMode = PROPERTY_MODE_GET;
+        }
         else if( eCurTok == LET )
+        {
             ePropertyMode = PROPERTY_MODE_LET;
+        }
         else if( eCurTok == SET )
+        {
             ePropertyMode = PROPERTY_MODE_SET;
+        }
         else
+        {
             Error( SbERR_EXPECTED, "Get or Let or Set" );
+        }
     }
 
     SbiToken eExit = eCurTok;
     SbiProcDef* pDef = ProcDecl( false );
     if( !pDef )
+    {
         return;
+    }
     pDef->setPropertyMode( ePropertyMode );
 
     // Is the Proc already declared?
@@ -1137,10 +1224,13 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
         }
     }
     else
+    {
         aPublics.Add( pDef ), pProc = pDef;
-
+    }
     if( !pProc )
+    {
         return;
+    }
     pProc->SetPublic( !bPrivate );
 
     // Now we set the search hierarchy for symbols as well as the
@@ -1148,16 +1238,20 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     aPublics.SetProcId( pProc->GetId() );
     pProc->GetParams().SetParent( &aPublics );
     if( bStatic )
-        {
+    {
         if ( bVBASupportOn )
+        {
             pProc->SetStatic( sal_True );
+        }
         else
+        {
             Error( SbERR_NOT_IMPLEMENTED ); // STATIC SUB ...
         }
-     else
+    }
+    else
     {
         pProc->SetStatic( sal_False );
-        }
+    }
     // Normal case: Local variable->parameter->global variable
     pProc->GetLocals().SetParent( &pProc->GetParams() );
     pPool = &pProc->GetLocals();
@@ -1186,30 +1280,35 @@ void SbiParser::Static()
 
 void SbiParser::DefStatic( bool bPrivate )
 {
+    SbiSymPool* p;
+
     switch( Peek() )
     {
-        case SUB:
-        case FUNCTION:
-        case PROPERTY:
-            // End global chain if necessary (not done in
-            // SbiParser::Parse() under these conditions
-            if( bNewGblDefs && nGblChain == 0 )
-            {
-                nGblChain = aGen.Gen( _JUMP, 0 );
-                bNewGblDefs = false;
-            }
-            Next();
-            DefProc( true, bPrivate );
-            break;
-        default: {
-            if( !pProc )
-                Error( SbERR_NOT_IN_SUBR );
-            // Reset the Pool, so that STATIC-Declarations go into the
-            // global Pool
-            SbiSymPool* p = pPool; pPool = &aPublics;
-            DefVar( _STATIC, true );
-            pPool = p;
-            } break;
+    case SUB:
+    case FUNCTION:
+    case PROPERTY:
+        // End global chain if necessary (not done in
+        // SbiParser::Parse() under these conditions
+        if( bNewGblDefs && nGblChain == 0 )
+        {
+            nGblChain = aGen.Gen( _JUMP, 0 );
+            bNewGblDefs = false;
+        }
+        Next();
+        DefProc( true, bPrivate );
+        break;
+    default:
+        if( !pProc )
+        {
+            Error( SbERR_NOT_IN_SUBR );
+        }
+        // Reset the Pool, so that STATIC-Declarations go into the
+        // global Pool
+        p = pPool;
+        pPool = &aPublics;
+        DefVar( _STATIC, true );
+        pPool = p;
+        break;
     }
 }
 

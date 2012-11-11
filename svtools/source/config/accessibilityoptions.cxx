@@ -123,7 +123,7 @@ SvtAccessibilityOptions_Impl::SvtAccessibilityOptions_Impl()
     {
         m_xCfg = css::uno::Reference< css::container::XNameAccess >(
             ::comphelper::ConfigurationHelper::openConfig(
-            comphelper::getProcessServiceFactory(),
+            comphelper::getProcessComponentContext(),
             s_sAccessibility,
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY);

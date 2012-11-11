@@ -45,8 +45,9 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
@@ -58,7 +59,7 @@ class UICommandDescription :  private ThreadHelpBase                        ,   
                                                               com::sun::star::container::XNameAccess >
 {
     public:
-        UICommandDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        UICommandDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~UICommandDescription();
 
         //  XInterface, XTypeProvider, XServiceInfo
@@ -92,16 +93,16 @@ public:
                                  ::std::equal_to< ::rtl::OUString > > UICommandsHashMap;
 
     protected:
-        UICommandDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool  );
+        UICommandDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext, bool  );
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > impl_createConfigAccess(const ::rtl::OUString& _sName);
         void impl_fillElements(const sal_Char* _pName);
         sal_Bool                                                                            m_bConfigRead;
         rtl::OUString                                                                       m_aPrivateResourceURL;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ModuleToCommandFileMap                                                              m_aModuleToCommandFileMap;
         UICommandsHashMap                                                                   m_aUICommandsHashMap;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xGenericUICommands;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >         m_xModuleManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >        m_xModuleManager;
 };
 
 } // namespace framework

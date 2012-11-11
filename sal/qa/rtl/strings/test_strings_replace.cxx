@@ -37,18 +37,6 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
-namespace rtl {
-
-template< typename charT, typename traits > std::basic_ostream<charT, traits> &
-operator <<(
-    std::basic_ostream<charT, traits> & stream, rtl::OString const & string)
-{
-    return stream << string.getStr();
-        // best effort; potentially loses data due to embedded null characters
-}
-
-}
-
 namespace {
 
 class Test: public CppUnit::TestFixture {

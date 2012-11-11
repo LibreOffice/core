@@ -53,11 +53,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
-using ::rtl::OUString;
 
-static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
-static ::rtl::OUString aDecorationPropName( RTL_CONSTASCII_USTRINGPARAM( "Decoration" ));
-static ::rtl::OUString aTitlePropName( RTL_CONSTASCII_USTRINGPARAM( "Title" ));
+static OUString aResourceResolverPropName( "ResourceResolver" );
+static OUString aDecorationPropName( "Decoration" );
+static OUString aTitlePropName( "Title" );
 
 
 //============================================================================
@@ -90,7 +89,7 @@ void DlgEditor::ShowDialog()
     uno::Reference< lang::XMultiServiceFactory >  xMSF = getProcessServiceFactory();
 
     // create a dialog
-    uno::Reference< awt::XControl > xDlg( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), uno::UNO_QUERY );
+    uno::Reference< awt::XControl > xDlg( xMSF->createInstance( "com.sun.star.awt.UnoControlDialog" ), uno::UNO_QUERY );
 
     // clone the dialog model
     uno::Reference< util::XCloneable > xC( m_xUnoControlDialogModel, uno::UNO_QUERY );
@@ -123,7 +122,7 @@ void DlgEditor::ShowDialog()
             if( !bDecoration )
             {
                 xNewDlgModPropSet->setPropertyValue( aDecorationPropName, makeAny( true ) );
-                xNewDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( ::rtl::OUString() ) );
+                xNewDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( OUString() ) );
             }
         }
         catch(const UnknownPropertyException& )
@@ -134,7 +133,7 @@ void DlgEditor::ShowDialog()
     xDlg->setModel( xDlgMod );
 
     // create a peer
-    uno::Reference< awt::XToolkit> xToolkit( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), uno::UNO_QUERY );
+    uno::Reference< awt::XToolkit> xToolkit( xMSF->createInstance( "com.sun.star.awt.ExtToolkit" ), uno::UNO_QUERY );
     xDlg->createPeer( xToolkit, rWindow.GetComponentInterface() );
 
     uno::Reference< awt::XDialog > xD( xDlg, uno::UNO_QUERY );
@@ -206,18 +205,18 @@ DlgEditor::DlgEditor (
 
     SdrLayerAdmin& rAdmin = pDlgEdModel->GetLayerAdmin();
     rAdmin.NewLayer( rAdmin.GetControlLayerName() );
-    rAdmin.NewLayer( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HiddenLayer")) );
+    rAdmin.NewLayer( OUString( "HiddenLayer" ) );
 
     pDlgEdModel->InsertPage(pDlgEdPage);
 
     // set clipboard data flavors
-    m_ClipboardDataFlavors[0].MimeType =             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.dialog" ));
-    m_ClipboardDataFlavors[0].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Dialog 6.0" ));
+    m_ClipboardDataFlavors[0].MimeType =             "application/vnd.sun.xml.dialog" ;
+    m_ClipboardDataFlavors[0].HumanPresentableName = "Dialog 6.0" ;
     m_ClipboardDataFlavors[0].DataType =             ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     m_ClipboardDataFlavorsResource[0] =                      m_ClipboardDataFlavors[0];
-    m_ClipboardDataFlavorsResource[1].MimeType =             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.dialogwithresource" ));
-    m_ClipboardDataFlavorsResource[1].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Dialog 8.0" ));
+    m_ClipboardDataFlavorsResource[1].MimeType =             "application/vnd.sun.xml.dialogwithresource" ;
+    m_ClipboardDataFlavorsResource[1].HumanPresentableName = "Dialog 8.0" ;
     m_ClipboardDataFlavorsResource[1].DataType =             ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aPaintTimer.SetTimeout( 1 );
@@ -230,7 +229,7 @@ DlgEditor::DlgEditor (
     pDlgEdPage->SetSize( rWindow.PixelToLogic( Size(DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN) ) );
 
     pDlgEdView->ShowSdrPage(pDlgEdView->GetModel()->GetPage(0));
-    pDlgEdView->SetLayerVisible( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HiddenLayer")), false );
+    pDlgEdView->SetLayerVisible( OUString( "HiddenLayer" ), false );
     pDlgEdView->SetMoveSnapOnlyTopLeft(true);
     pDlgEdView->SetWorkArea( Rectangle( Point( 0, 0 ), pDlgEdPage->GetSize() ) );
 
@@ -371,8 +370,8 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
     if ( xNameAcc.is() )
     {
         // get sequence of control names
-        Sequence< ::rtl::OUString > aNames = xNameAcc->getElementNames();
-        const ::rtl::OUString* pNames = aNames.getConstArray();
+        Sequence< OUString > aNames = xNameAcc->getElementNames();
+        const OUString* pNames = aNames.getConstArray();
         sal_Int32 nCtrls = aNames.getLength();
 
         // create a map of tab indices and control names, sorted by tab index
@@ -380,7 +379,7 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
         for ( sal_Int32 i = 0; i < nCtrls; ++i )
         {
             // get name
-            ::rtl::OUString aName( pNames[i] );
+            OUString aName( pNames[i] );
 
             // get tab index
             sal_Int16 nTabIndex = -1;
@@ -437,7 +436,7 @@ Reference< util::XNumberFormatsSupplier > const & DlgEditor::GetNumberFormatsSup
     {
         Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         Reference< util::XNumberFormatsSupplier > xSupplier( xMSF->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier") ) ), UNO_QUERY );
+            "com.sun.star.util.NumberFormatsSupplier" ), UNO_QUERY );
 
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if ( !m_xSupplier.is() )
@@ -716,7 +715,7 @@ void DlgEditor::Copy()
 
         if (pDlgEdObj && !dynamic_cast<DlgEdForm*>(pDlgEdObj))
         {
-            ::rtl::OUString aName;
+            OUString aName;
             Reference< beans::XPropertySet >  xMarkPSet(pDlgEdObj->GetUnoControlModel(), uno::UNO_QUERY);
             if (xMarkPSet.is())
             {
@@ -874,9 +873,8 @@ void DlgEditor::Paste()
             {
                 // create clipboard dialog model from xml
                 Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
-                Reference< container::XNameContainer > xClipDialogModel( xMSF->createInstance
-                    ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ),
-                        uno::UNO_QUERY );
+                Reference< container::XNameContainer > xClipDialogModel( xMSF->createInstance(
+                    "com.sun.star.awt.UnoControlDialogModel" ), uno::UNO_QUERY );
 
                 bool bSourceIsLocalized = false;
                 Sequence< sal_Int8 > DialogModelBytes;
@@ -936,7 +934,7 @@ void DlgEditor::Paste()
                     {
                         Reference< lang::XMultiServiceFactory > xSMgr = getProcessServiceFactory();
                         xStringResourcePersistence = Reference< resource::XStringResourcePersistence >( xSMgr->createInstance
-                            ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.resource.StringResource" )) ), UNO_QUERY );
+                            ( "com.sun.star.resource.StringResource" ), UNO_QUERY );
                         if( xStringResourcePersistence.is() )
                             xStringResourcePersistence->importBinary( aResData );
                     }
@@ -956,7 +954,7 @@ void DlgEditor::Paste()
                         pCtrlObj->SetUnoControlModel( xCtrlModel ); // set control model
 
                         // set new name
-                        ::rtl::OUString aOUniqueName( pCtrlObj->GetUniqueName() );
+                        OUString aOUniqueName( pCtrlObj->GetUniqueName() );
                         Reference< beans::XPropertySet > xPSet( xCtrlModel , UNO_QUERY );
                         Any aUniqueName;
                         aUniqueName <<= aOUniqueName;
@@ -1037,7 +1035,7 @@ void DlgEditor::Delete()
         if ( pDlgEdObj && !dynamic_cast<DlgEdForm*>(pDlgEdObj) )
         {
             // get name from property
-            ::rtl::OUString aName;
+            OUString aName;
             uno::Reference< beans::XPropertySet >  xPSet(pDlgEdObj->GetUnoControlModel(), uno::UNO_QUERY);
             if (xPSet.is())
             {
@@ -1127,7 +1125,7 @@ namespace Print
     long const nBorder = 300;
 }
 
-void lcl_PrintHeader( Printer* pPrinter, const ::rtl::OUString& rTitle ) // not working yet
+void lcl_PrintHeader( Printer* pPrinter, const OUString& rTitle ) // not working yet
 {
 
     pPrinter->Push();
@@ -1171,14 +1169,14 @@ sal_Int32 DlgEditor::countPages( Printer* )
     return 1;
 }
 
-void DlgEditor::printPage( sal_Int32 nPage, Printer* pPrinter, const ::rtl::OUString& rTitle )
+void DlgEditor::printPage( sal_Int32 nPage, Printer* pPrinter, const OUString& rTitle )
 {
     if( nPage == 0 )
         Print( pPrinter, rTitle );
 }
 
 
-void DlgEditor::Print( Printer* pPrinter, const ::rtl::OUString& rTitle )    // not working yet
+void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not working yet
 {
     {
         MapMode aOldMap( pPrinter->GetMapMode());

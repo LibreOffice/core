@@ -44,6 +44,8 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML, bool bImplicitMe
     m_nRow(0),
     m_nCell(),
     m_nGridSpan(1),
+    m_nGridBefore(0),
+    m_nGridAfter(0),
     m_nCellBorderIndex(0),
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
@@ -142,7 +144,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     pProperties->resolve( *pTDefTableHandler );
 
                     TablePropertyMapPtr pRowPropMap( new TablePropertyMap );
-                    pRowPropMap->insert( pTDefTableHandler->getRowProperties() );
+                    pRowPropMap->InsertProps(pTDefTableHandler->getRowProperties());
                     insertRowProps( pRowPropMap );
                     if( !m_nTableWidth )
                     {
@@ -171,7 +173,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     BorderHandlerPtr pBorderHandler( new BorderHandler(m_bOOXML) );
                     pProperties->resolve(*pBorderHandler);
                     TablePropertyMapPtr pCellPropMap( new TablePropertyMap() );
-                    pCellPropMap->insert( pBorderHandler->getProperties() );
+                    pCellPropMap->InsertProps(pBorderHandler->getProperties());
                     cellPropsByCell( m_nCellBorderIndex, pCellPropMap );
                     ++m_nCellBorderIndex;
                 }
@@ -308,6 +310,12 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                         m_sTableVertAnchor = pHandler->getVertAnchor();
                     }
                 }
+                break;
+            case NS_ooxml::LN_CT_TrPrBase_gridBefore:
+                m_nGridBefore = nIntValue;
+                break;
+            case NS_ooxml::LN_CT_TrPrBase_gridAfter:
+                m_nGridAfter = nIntValue;
                 break;
             default:
                 bRet = false;
@@ -452,12 +460,12 @@ void DomainMapperTableManager::endOfRowAction()
     double nFullWidth = m_nTableWidth;
     //the positions have to be distibuted in a range of 10000
     const double nFullWidthRelative = 10000.;
-    if( pTableGrid->size() == nGrids && m_nCell.back( ) > 0 )
+    if( pTableGrid->size() == ( m_nGridBefore + nGrids + m_nGridAfter ) && m_nCell.back( ) > 0 )
     {
         uno::Sequence< text::TableColumnSeparator > aSeparators( m_nCell.back( ) - 1 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         sal_Int16 nLastRelPos = 0;
-        sal_uInt32 nBorderGridIndex = 0;
+        sal_uInt32 nBorderGridIndex = m_nGridBefore;
 
         ::std::vector< sal_Int32 >::const_iterator aSpansIter = pCurrentSpans->begin( );
         for( sal_uInt32 nBorder = 0; nBorder < m_nCell.back( ) - 1; ++nBorder )
@@ -470,7 +478,7 @@ void DomainMapperTableManager::endOfRowAction()
             }while( --nGridCount );
 
             sal_Int16 nRelPos =
-                sal::static_int_cast< sal_Int16 >(fGridWidth * nFullWidthRelative / nFullWidth );
+                sal::static_int_cast< sal_Int16 >( floor( fGridWidth * nFullWidthRelative / nFullWidth  + 0.5 ) );
 
             pSeparators[nBorder].Position =  nRelPos + nLastRelPos;
             pSeparators[nBorder].IsVisible = sal_True;
@@ -521,6 +529,8 @@ void DomainMapperTableManager::endOfRowAction()
     m_nCellBorderIndex = 0;
     pCurrentSpans->clear();
 
+    m_nGridBefore = m_nGridAfter = 0;
+
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement();
 #endif
@@ -569,7 +579,7 @@ void DomainMapperTableManager::CopyTextProperties(PropertyMapPtr pContext, Style
         OSL_ENSURE( pStyleSheetEntry, "table style not found" );
         lcl_CopyTextProperties(m_pTableStyleTextProperies, pStyleSheetEntry.get( ), pStyleSheetTable);
     }
-    pContext->insert( m_pTableStyleTextProperies );
+    pContext->InsertProps(m_pTableStyleTextProperies);
 }
 
 

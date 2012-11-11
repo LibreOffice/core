@@ -43,6 +43,7 @@
 #include "migration.hxx"
 
 #include <svtools/javacontext.hxx>
+#include <com/sun/star/frame/AutoRecovery.hpp>
 #include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
@@ -65,7 +66,7 @@
 #include <com/sun/star/configuration/InstallationIncompleteException.hpp>
 #include <com/sun/star/configuration/backend/BackendSetupException.hpp>
 #include <com/sun/star/configuration/backend/BackendAccessException.hpp>
-#include <com/sun/star/task/XJobExecutor.hpp>
+#include <com/sun/star/task/JobExecutor.hpp>
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
@@ -2357,11 +2358,8 @@ void Desktop::OpenClients()
     {
         try
         {
-            Reference< XDispatch > xRecovery(
-                    ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.frame.AutoRecovery") ),
-                    ::com::sun::star::uno::UNO_QUERY_THROW );
-
-            Reference< css::util::XURLTransformer > xParser( css::util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
+            Reference< XDispatch > xRecovery = css::frame::AutoRecovery::create( ::comphelper::getProcessComponentContext() );
+            Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create( ::comphelper::getProcessComponentContext() );
 
             css::util::URL aCmd;
             aCmd.Complete = ::rtl::OUString("vnd.sun.star.autorecovery:/disableRecovery");
@@ -2895,9 +2893,8 @@ void Desktop::DoFirstRunInitializations()
 {
     try
     {
-        Reference< XJobExecutor > xExecutor( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString("com.sun.star.task.JobExecutor") ), UNO_QUERY );
-        if( xExecutor.is() )
-            xExecutor->trigger( ::rtl::OUString("onFirstRunInitialization") );
+        Reference< XJobExecutor > xExecutor = JobExecutor::create( ::comphelper::getProcessComponentContext() );
+        xExecutor->trigger( ::rtl::OUString("onFirstRunInitialization") );
     }
     catch(const ::com::sun::star::uno::Exception&)
     {

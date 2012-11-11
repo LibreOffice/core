@@ -56,19 +56,6 @@ namespace dbaui
     //==================================================================
 
     //------------------------------------------------------------------------------
-    #define INIT_MEMBERS()                                          \
-        :ModalDialog( pParent, ModuleRes(DLG_PARAMETERS))           \
-        ,m_aNamesFrame  (this, ModuleRes(FL_PARAMS))                    \
-        ,m_aAllParams   (this, ModuleRes(LB_ALLPARAMS))                 \
-        ,m_aValueFrame  (this, ModuleRes(FT_VALUE))                     \
-        ,m_aParam       (this, ModuleRes(ET_PARAM))                     \
-        ,m_aTravelNext  (this, ModuleRes(BT_TRAVELNEXT))                \
-        ,m_aOKBtn       (this, ModuleRes(BT_OK))                        \
-        ,m_aCancelBtn   (this, ModuleRes(BT_CANCEL))                    \
-        ,m_nCurrentlySelected(LISTBOX_ENTRY_NOTFOUND)               \
-        ,m_xConnection(_rxConnection)                               \
-        ,m_aPredicateInput( _rxORB, _rxConnection, getParseContext() )  \
-        ,m_bNeedErrorOnCurrent(sal_True)                            \
 
 
     //------------------------------------------------------------------------------
@@ -76,13 +63,24 @@ DBG_NAME(OParameterDialog)
 
     OParameterDialog::OParameterDialog(
             Window* pParent, const Reference< XIndexAccess > & rParamContainer,
-            const Reference< XConnection > & _rxConnection, const Reference< XMultiServiceFactory >& _rxORB)
-        INIT_MEMBERS()
+            const Reference< XConnection > & _rxConnection, const Reference< XComponentContext >& rxContext)
+        :ModalDialog( pParent, ModuleRes(DLG_PARAMETERS))
+        ,m_aNamesFrame  (this, ModuleRes(FL_PARAMS))
+        ,m_aAllParams   (this, ModuleRes(LB_ALLPARAMS))
+        ,m_aValueFrame  (this, ModuleRes(FT_VALUE))
+        ,m_aParam       (this, ModuleRes(ET_PARAM))
+        ,m_aTravelNext  (this, ModuleRes(BT_TRAVELNEXT))
+        ,m_aOKBtn       (this, ModuleRes(BT_OK))
+        ,m_aCancelBtn   (this, ModuleRes(BT_CANCEL))
+        ,m_nCurrentlySelected(LISTBOX_ENTRY_NOTFOUND)
+        ,m_xConnection(_rxConnection)
+        ,m_aPredicateInput( rxContext, _rxConnection, getParseContext() )
+        ,m_bNeedErrorOnCurrent(sal_True)
     {
         DBG_CTOR(OParameterDialog,NULL);
 
-        if (_rxORB.is())
-            m_xFormatter = Reference< XNumberFormatter>( NumberFormatter::create(comphelper::getComponentContext(_rxORB)), UNO_QUERY_THROW);
+        if (rxContext.is())
+            m_xFormatter = Reference< XNumberFormatter>( NumberFormatter::create( rxContext ), UNO_QUERY_THROW);
         else {
             OSL_FAIL("OParameterDialog::OParameterDialog: need a service factory!");
         }

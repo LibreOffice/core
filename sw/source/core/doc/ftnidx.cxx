@@ -121,7 +121,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     SwUpdFtnEndNtAtEnd aNumArr;
 
     // unless we have per-document numbering, only look at endnotes here
-    const sal_Bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
+    const bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
 
     sal_uInt16 nPos, nFtnNo = 1, nEndNo = 1;
     sal_uLong nUpdNdIdx = rStt.GetIndex();
@@ -225,8 +225,8 @@ void SwFtnIdxs::UpdateAllFtn()
 
     }
 
-    // We use sal_Bool here, so that we also iterate through the Endnotes with a chapter setting.
-    const sal_Bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
+    // We use bool here, so that we also iterate through the Endnotes with a chapter setting.
+    const bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
     sal_uInt16 nFtnNo = 0, nEndNo = 0;
     for( sal_uInt16 nPos = 0; nPos < size(); ++nPos )
     {

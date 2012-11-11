@@ -823,7 +823,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     }
 
     // check if char fits into rectangle
-    const rtl::OUString aTmp( cChar );
+    const OUString aTmp( cChar );
     aFontSize = rInf.GetTxtSize( aTmp ).SvLSize();
     while ( aFontSize.Width() > nMaxWidth )
     {
@@ -1100,7 +1100,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
             if(pFieldmark) {
                 OSL_TRACE("Found Fieldmark");
 #if OSL_DEBUG_LEVEL > 1
-                rtl::OUString str = pFieldmark->ToString( );
+                OUString str = pFieldmark->ToString( );
                 fprintf( stderr, "%s\n", rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr( ) );
 #endif
             }
@@ -1123,7 +1123,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
                         SwTxtAttr* pTxtAttr = pNd->GetTxtAttrForCharAt(nEndIdx, RES_TXTATR_FIELD);
                         const SwFmtFld& rPostItField = pTxtAttr->GetFld();
                         // Look up the author name
-                        const rtl::OUString& rAuthor = rPostItField.GetFld()->GetPar1();
+                        const OUString& rAuthor = rPostItField.GetFld()->GetPar1();
                         sal_uInt16 nIndex = pNd->GetDoc()->InsertRedlineAuthor(rAuthor);
                         pOutDev->SetFillColor( SwPostItMgr::GetColorLight(nIndex) );
                         pOutDev->SetLineColor( SwPostItMgr::GetColorAnchor(nIndex) );
@@ -1482,17 +1482,17 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
     //
     // Used for decimal tab handling:
     //
-    const xub_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
-    const xub_Unicode cThousandSep  = ',' == cTabDec ? '.' : ',';
+    const sal_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
+    const sal_Unicode cThousandSep  = ',' == cTabDec ? '.' : ',';
     // #i45951# German (Switzerland) uses ' as thousand separator
-    const xub_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\'';
+    const sal_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\'';
 
     bool bNumFound = false;
     const bool bTabCompat = GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
 
     for( ; i < nEnd; ++i )
     {
-        const xub_Unicode cPos = GetChar( i );
+        const sal_Unicode cPos = GetChar( i );
         switch( cPos )
         {
         case CH_TXTATR_BREAKWORD:
@@ -1558,7 +1558,7 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
     // to become the hook:
     if ( i == nEnd && i < GetTxt().Len() && bNumFound )
     {
-        const xub_Unicode cPos = GetChar( i );
+        const sal_Unicode cPos = GetChar( i );
         if ( cPos != cTabDec && cPos != cThousandSep && cPos !=cThousandSep2 && ( 0x2F >= cPos || cPos >= 0x3A ) )
         {
             cHookChar = GetChar( i );
@@ -1636,7 +1636,7 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
                 else if( !pTempList && nPos < pOldSmartTagList->Count() && nListPos < nIdx && aTxt.Len() )
                 {
                     pTempList = new SwWrongList( WRONGLIST_SMARTTAG );
-                    pTempList->Insert( rtl::OUString(), 0, 0, aTxt.Len(), 0 );
+                    pTempList->Insert( OUString(), 0, 0, aTxt.Len(), 0 );
                     ((SwTxtPaintInfo*)pInf)->SetSmartTags( pTempList );
                 }
                 else
@@ -1652,7 +1652,7 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
                 else if( !pTempList && nPos < pOldGrammarCheckList->Count() && nListPos < nIdx && aTxt.Len() )
                 {
                     pTempList = new SwWrongList( WRONGLIST_GRAMMAR );
-                    pTempList->Insert( rtl::OUString(), 0, 0, aTxt.Len(), 0 );
+                    pTempList->Insert( OUString(), 0, 0, aTxt.Len(), 0 );
                     ((SwTxtPaintInfo*)pInf)->SetGrammarCheckList( pTempList );
                 }
                 else

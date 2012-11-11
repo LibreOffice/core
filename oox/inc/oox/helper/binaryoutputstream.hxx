@@ -143,10 +143,10 @@ public:
                         getXOutputStream() const { return mxOutStrm; }
 
 private:
-    StreamDataSequence  maBuffer;       /// Data buffer used in writeMemory() function.
+    StreamDataSequence  maBuffer;       ///< Data buffer used in writeMemory() function.
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
-                        mxOutStrm;      /// Reference to the output stream.
-    bool                mbAutoClose;    /// True = automatically close stream on destruction.
+                        mxOutStrm;      ///< Reference to the output stream.
+    bool                mbAutoClose;    ///< True = automatically close stream on destruction.
 };
 
 // ============================================================================

@@ -24,9 +24,7 @@
 #include <unotools/calendarwrapper.hxx>
 #include <instance.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
-#include <com/sun/star/i18n/XCalendar3.hpp>
-
-#define CALENDAR_SERVICENAME "com.sun.star.i18n.LocaleCalendar"
+#include <com/sun/star/i18n/LocaleCalendar.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -37,13 +35,12 @@ const double MILLISECONDS_PER_DAY = 1000.0 * 60.0 * 60.0 * 24.0;
 
 
 CalendarWrapper::CalendarWrapper(
-            const Reference< lang::XMultiServiceFactory > & xSF
+            const Reference< uno::XComponentContext > & rxContext
             )
         :
-        xSMgr( xSF ),
         aEpochStart( Date( 1, 1, 1970 ) )
 {
-    xC = Reference< XCalendar3 >( intl_createInstance( xSMgr, CALENDAR_SERVICENAME, "CalendarWrapper" ), uno::UNO_QUERY );
+    xC = LocaleCalendar::create(rxContext);
 }
 
 CalendarWrapper::~CalendarWrapper()

@@ -245,7 +245,6 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     Add( new XclExpUInt16Record( EXC_ID_FNGROUPCOUNT, 14 ) );
 
     // erst Namen- und Tabellen-Eintraege aufbauen
-    String          aName;
 
     for( nC = 0 ; nC < nScTabCount ; nC++ )
         if( rTabInfo.IsExportTab( nC ) )

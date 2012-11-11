@@ -163,7 +163,7 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl(const OUString& rConfigRoot)
     {
         m_xCfg = css::uno::Reference< css::container::XNameAccess >(
             ::comphelper::ConfigurationHelper::openConfig(
-            comphelper::getProcessServiceFactory(),
+            comphelper::getProcessComponentContext(),
             ROOTNODE_PRINTOPTION,
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY);

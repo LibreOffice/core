@@ -94,9 +94,9 @@ namespace connectivity
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
     //----------------------------------------------------------------
-    ::rtl::Reference< simple::ISQLParser > ODataAccessToolsFactory::createSQLParser(const Reference< XMultiServiceFactory >& _rxServiceFactory,const IParseContext* _pContext) const
+    ::rtl::Reference< simple::ISQLParser > ODataAccessToolsFactory::createSQLParser(const Reference< XComponentContext >& rxContext, const IParseContext* _pContext) const
     {
-        return new OSimpleSQLParser(_rxServiceFactory,_pContext);
+        return new OSimpleSQLParser(rxContext, _pContext);
     }
 
 //........................................................................

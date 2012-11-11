@@ -1,32 +1,24 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
 #include <svx/dialogs.hrc>
@@ -288,6 +280,150 @@ sal_uInt16 XLineJointItem::GetValueCount() const
 {
     // don't forget to update the api interface also
     return 5;
+}
+
+//-----------------------
+// class XLineCapItem -
+//-----------------------
+
+TYPEINIT1_AUTOFACTORY(XLineCapItem, SfxEnumItem);
+
+// -----------------------------------------------------------------------------
+
+XLineCapItem::XLineCapItem(com::sun::star::drawing::LineCap eLineCap)
+:   SfxEnumItem(XATTR_LINECAP, sal::static_int_cast< sal_uInt16 >(eLineCap))
+{
+}
+
+// -----------------------------------------------------------------------------
+
+XLineCapItem::XLineCapItem( SvStream& rIn )
+:   SfxEnumItem(XATTR_LINECAP, rIn)
+{
+}
+
+// -----------------------------------------------------------------------------
+
+sal_uInt16 XLineCapItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
+{
+    return 1;
+}
+
+// -----------------------------------------------------------------------------
+
+SfxPoolItem* XLineCapItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
+{
+    XLineCapItem* pRet = new XLineCapItem( rIn );
+
+    if(nVer < 1)
+        pRet->SetValue(com::sun::star::drawing::LineCap_BUTT);
+
+    return pRet;
+}
+
+// -----------------------------------------------------------------------------
+
+SfxPoolItem* XLineCapItem::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new XLineCapItem( *this );
+}
+
+// -----------------------------------------------------------------------------
+
+SfxItemPresentation XLineCapItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
+                                                     SfxMapUnit /*ePresUnit*/, XubString& rText, const IntlWrapper*) const
+{
+    rText.Erase();
+
+    switch( ePres )
+    {
+        case SFX_ITEM_PRESENTATION_NONE: return ePres;
+
+        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SFX_ITEM_PRESENTATION_NAMELESS:
+        {
+            sal_uInt16 nId = 0;
+
+            switch( GetValue() )
+            {
+                default: /*com::sun::star::drawing::LineCap_BUTT*/
+                    nId = RID_SVXSTR_LINECAP_BUTT;
+                break;
+
+                case(com::sun::star::drawing::LineCap_ROUND):
+                    nId = RID_SVXSTR_LINECAP_ROUND;
+                break;
+
+                case(com::sun::star::drawing::LineCap_SQUARE):
+                    nId = RID_SVXSTR_LINECAP_SQUARE;
+                break;
+            }
+
+            if( nId )
+                rText = SVX_RESSTR( nId );
+
+            return ePres;
+        }
+        default:
+            return SFX_ITEM_PRESENTATION_NONE;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+bool XLineCapItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+{
+    const com::sun::star::drawing::LineCap eCap(GetValue());
+    rVal <<= eCap;
+    return true;
+}
+
+// -----------------------------------------------------------------------------
+
+bool XLineCapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+{
+    com::sun::star::drawing::LineCap eUnoCap;
+
+    if(!(rVal >>= eUnoCap))
+    {
+        // also try an int (for Basic)
+        sal_Int32 nLJ(0);
+
+        if(!(rVal >>= nLJ))
+        {
+            return false;
+        }
+
+        eUnoCap = (com::sun::star::drawing::LineCap)nLJ;
+    }
+
+    OSL_ENSURE(com::sun::star::drawing::LineCap_BUTT == eUnoCap
+        || com::sun::star::drawing::LineCap_ROUND == eUnoCap
+        || com::sun::star::drawing::LineCap_SQUARE == eUnoCap, "Unknown enum value in XATTR_LINECAP (!)");
+
+    SetValue(sal::static_int_cast< sal_uInt16 >(eUnoCap));
+
+    return true;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_uInt16 XLineCapItem::GetValueCount() const
+{
+    // don't forget to update the api interface also
+    return 3;
+}
+
+// -----------------------------------------------------------------------------
+
+com::sun::star::drawing::LineCap XLineCapItem::GetValue() const
+{
+    const com::sun::star::drawing::LineCap eRetval((com::sun::star::drawing::LineCap)SfxEnumItem::GetValue());
+    OSL_ENSURE(com::sun::star::drawing::LineCap_BUTT == eRetval
+        || com::sun::star::drawing::LineCap_ROUND == eRetval
+        || com::sun::star::drawing::LineCap_SQUARE == eRetval, "Unknown enum value in XATTR_LINECAP (!)");
+
+    return eRetval;
 }
 
 //------------------------------

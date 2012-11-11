@@ -112,15 +112,11 @@ void SwFldRefPage::SaveSelectedTxtNode()
     mnSavedSelectedPos = 0;
     if ( aSelectionToolTipLB.IsVisible() )
     {
-        SvLBoxEntry* pEntry = aSelectionToolTipLB.GetCurEntry();
+        SvTreeListEntry* pEntry = aSelectionToolTipLB.GetCurEntry();
         if ( pEntry )
         {
             const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
-            SwWrtShell *pSh = GetWrtShell();
-            if ( !pSh )
-            {
-                pSh = ::GetActiveWrtShell();
-            }
+
             if ( nTypeId == REFFLDFLAG_HEADING )
             {
                 mnSavedSelectedPos = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pEntry->GetUserData()));
@@ -493,7 +489,7 @@ void SwFldRefPage::UpdateSubType()
             IDocumentMarkAccess* const pMarkAccess = pSh->getIDocumentMarkAccess();
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
                 ppMark != pMarkAccess->getBookmarksEnd();
-                ppMark++)
+                ++ppMark)
             {
                 const ::sw::mark::IMark* pBkmk = ppMark->get();
                 if(IDocumentMarkAccess::BOOKMARK == IDocumentMarkAccess::GetType(*pBkmk))
@@ -536,7 +532,7 @@ void SwFldRefPage::UpdateSubType()
             const IDocumentOutlineNodes* pIDoc( pSh->getIDocumentOutlineNodesAccess() );
             pIDoc->getOutlineNodes( maOutlineNodes );
             bool bCertainTxtNodeSelected( false );
-            SvLBoxEntry* pEntry = 0;
+            SvTreeListEntry* pEntry = 0;
             sal_uInt16 nOutlIdx = 0;
             for ( nOutlIdx = 0; nOutlIdx < maOutlineNodes.size(); ++nOutlIdx )
             {
@@ -566,7 +562,7 @@ void SwFldRefPage::UpdateSubType()
             const IDocumentListItems* pIDoc( pSh->getIDocumentListItemsAccess() );
             pIDoc->getNumItems( maNumItems );
             bool bCertainTxtNodeSelected( false );
-            SvLBoxEntry* pEntry = 0;
+            SvTreeListEntry* pEntry = 0;
             sal_uInt16 nNumItemIdx = 0;
             for ( nNumItemIdx = 0; nNumItemIdx < maNumItems.size(); ++nNumItemIdx )
             {
@@ -877,7 +873,7 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
         // #i83479#
         else if ( nTypeId == REFFLDFLAG_HEADING )
         {
-            SvLBoxEntry* pEntry = aSelectionToolTipLB.GetCurEntry();
+            SvTreeListEntry* pEntry = aSelectionToolTipLB.GetCurEntry();
             OSL_ENSURE( pEntry,
                     "<SwFldRefPage::FillItemSet(..)> - no entry selected in selection tool tip listbox!" );
             if ( pEntry )
@@ -897,7 +893,7 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
         }
         else if ( nTypeId == REFFLDFLAG_NUMITEM )
         {
-            SvLBoxEntry* pEntry = aSelectionToolTipLB.GetCurEntry();
+            SvTreeListEntry* pEntry = aSelectionToolTipLB.GetCurEntry();
             OSL_ENSURE( pEntry,
                     "<SwFldRefPage::FillItemSet(..)> - no entry selected in selection tool tip listbox!" );
             if ( pEntry )

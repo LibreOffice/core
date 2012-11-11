@@ -399,7 +399,7 @@ sal_Bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) 
 
 void SwHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    rtl::OUString aString( '-' );
+    OUString aString( '-' );
     rPH.Special( GetLen(), aString, GetWhichPor() );
 }
 
@@ -467,7 +467,7 @@ KSHORT SwSoftHyphPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
     {
         if( !nViewWidth )
             ((SwSoftHyphPortion*)this)->nViewWidth
-                = rInf.GetTxtSize(rtl::OUString('-')).Width();
+                = rInf.GetTxtSize(OUString('-')).Width();
     }
     else
         ((SwSoftHyphPortion*)this)->nViewWidth = 0;
@@ -626,7 +626,7 @@ sal_Bool SwSoftHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTx
 
 void SwSoftHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    const rtl::OUString aString( '-' );
+    const OUString aString( '-' );
     const sal_uInt16 nWhich = ! Width() ?
                           POR_SOFTHYPH_COMP :
                           GetWhichPor();

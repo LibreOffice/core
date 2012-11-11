@@ -366,6 +366,7 @@ bool includeProject(rtl::OUString const & project) {
         "framework",
         "helpcontent2",
         "instsetoo_native",
+        "librelogo",
         "mysqlc",
         "nlpsolver",
         "officecfg",

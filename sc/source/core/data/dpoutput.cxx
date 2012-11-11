@@ -36,7 +36,7 @@
 
 #include "dpoutput.hxx"
 #include "dptabsrc.hxx"
-#include "dpcachetable.hxx"
+#include "dpfilteredcache.hxx"
 #include "document.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"

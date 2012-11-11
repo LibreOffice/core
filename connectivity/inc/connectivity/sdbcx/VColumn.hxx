@@ -63,6 +63,10 @@ namespace connectivity
             sal_Bool        m_IsRowVersion;
             sal_Bool        m_IsCurrency;
 
+            ::rtl::OUString m_CatalogName;
+            ::rtl::OUString m_SchemaName;
+            ::rtl::OUString m_TableName;
+
             using OColumnDescriptor_BASE::rBHelper;
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
@@ -74,17 +78,20 @@ namespace connectivity
 
             OColumn(    sal_Bool _bCase);
             OColumn(    const ::rtl::OUString& _Name,
-                                const ::rtl::OUString& _TypeName,
-                                const ::rtl::OUString& _DefaultValue,
-                                const ::rtl::OUString& _Description,
-                                sal_Int32       _IsNullable,
-                                sal_Int32       _Precision,
-                                sal_Int32       _Scale,
-                                sal_Int32       _Type,
-                                sal_Bool        _IsAutoIncrement,
-                                sal_Bool        _IsRowVersion,
-                                sal_Bool        _IsCurrency,
-                                sal_Bool        _bCase);
+                        const ::rtl::OUString& _TypeName,
+                        const ::rtl::OUString& _DefaultValue,
+                        const ::rtl::OUString& _Description,
+                        sal_Int32       _IsNullable,
+                        sal_Int32       _Precision,
+                        sal_Int32       _Scale,
+                        sal_Int32       _Type,
+                        sal_Bool        _IsAutoIncrement,
+                        sal_Bool        _IsRowVersion,
+                        sal_Bool        _IsCurrency,
+                        sal_Bool        _bCase,
+                        const ::rtl::OUString& _CatalogName,
+                        const ::rtl::OUString& _SchemaName,
+                        const ::rtl::OUString& _TableName);
 
             DECLARE_SERVICE_INFO();
             //XInterface

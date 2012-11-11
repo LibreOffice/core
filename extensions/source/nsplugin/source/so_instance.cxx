@@ -31,7 +31,7 @@
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
-#include <com/sun/star/awt/XSystemChildFactory.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -132,15 +132,11 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 
     try
     {
+        Reference< beans::XPropertySet > xFactoryProperties( mxRemoteMSF, uno::UNO_QUERY );
+        Reference< uno::XComponentContext > xContext( xFactoryProperties->getPropertyValue( "DefaultContext" ), UNO_QUERY );
+
         // try to create netscape plugin window
-        Reference< awt::XToolkit > xToolkit(
-            mxRemoteMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")) ),
-            uno::UNO_QUERY );
-        if( !xToolkit.is() )
-        {
-            debug_fprintf(NSP_LOG_APPEND, "Can not create Toolkit!\n");
-            return sal_False;
-        }
+        Reference< awt::XToolkit2 > xToolkit( awt::Toolkit::create(xContext) );
 
         // prepare parameters for plugin window
         css::uno::Any hwndParent = css::uno::makeAny((sal_Int32)hParent);
@@ -151,18 +147,11 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         sal_Int16 nWindowType = css::lang::SystemDependent::SYSTEM_WIN32;
 #endif //end of WNT
 
-        Reference< awt::XSystemChildFactory > xToolkitSystemChildFactory(xToolkit, uno::UNO_QUERY);
-        if (!xToolkitSystemChildFactory.is())
-        {
-            debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, get xToolkitSystemChildFactory failure.\n");
-            return sal_False;
-        }
-
         debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  try to create plugin container window HWIN:%ld.\n", hParent);
 
         // create the plugin window
         Reference< awt::XWindowPeer > xNewWinPeer =
-            xToolkitSystemChildFactory->createSystemChild( hwndParent,
+            xToolkit->createSystemChild( hwndParent,
                 css::uno::Sequence<sal_Int8>(), nWindowType );
         if ( !xNewWinPeer.is() )
         {
@@ -240,8 +229,6 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         }
 
         //create stream for the document
-        Reference< uno::XComponentContext > xContext(
-            comphelper::getComponentContext( mxRemoteMSF ) );
         Reference< ucb::XSimpleFileAccess2 > xSimpleFileAccess( ucb::SimpleFileAccess::create(xContext) );
         Reference<io::XInputStream> xInputStream = xSimpleFileAccess->openFileRead( m_sURL );
 

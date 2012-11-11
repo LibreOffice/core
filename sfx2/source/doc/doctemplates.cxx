@@ -39,6 +39,7 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
@@ -1406,7 +1407,7 @@ sal_Bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const ::rtl::OU
         if ( !xOutStream.is() )
             throw uno::RuntimeException();
 
-        DocTemplLocaleHelper::WriteGroupLocalizationSequence( xOutStream, aUINames, mxFactory );
+        DocTemplLocaleHelper::WriteGroupLocalizationSequence( xOutStream, aUINames, comphelper::getComponentContext(mxFactory));
         try {
             // the SAX writer might close the stream
             xOutStream->closeOutput();
@@ -1418,7 +1419,8 @@ sal_Bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const ::rtl::OU
         aTargetContent.transferContent( aSourceContent,
                                         InsertOperation_COPY,
                                         ::rtl::OUString( "groupuinames.xml"  ),
-                                        ucb::NameClash::OVERWRITE );
+                                        ucb::NameClash::OVERWRITE,
+                                        ::rtl::OUString( "text/xml" ) );
         bResult = sal_True;
     }
     catch ( uno::Exception& )
@@ -1837,10 +1839,8 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         // get the actual filter name
         ::rtl::OUString aFilterName;
 
-        uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-                xFactory->createInstance(
-                    ::rtl::OUString("com.sun.star.configuration.ConfigurationProvider") ),
-                uno::UNO_QUERY_THROW );
+        uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
+                configuration::theDefaultProvider::get( comphelper::getComponentContext(xFactory) );
 
         uno::Sequence< uno::Any > aArgs( 1 );
         beans::PropertyValue aPathProp;
@@ -2062,7 +2062,8 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
         if( ! aTargetGroup.transferContent( aSourceContent,
                                                 InsertOperation_COPY,
                                                 aNewTemplateTargetName,
-                                                NameClash::OVERWRITE ) )
+                                                NameClash::OVERWRITE,
+                                                aType ) )
             return sal_False;
 
         // allow to edit the added template

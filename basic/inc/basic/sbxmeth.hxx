@@ -28,7 +28,7 @@ class BASIC_DLLPUBLIC SbxMethod : public SbxVariable
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_METHOD,1);
     TYPEINFO();
-    SbxMethod( const String& r, SbxDataType t );
+    SbxMethod( const OUString& r, SbxDataType t );
     SbxMethod( const SbxMethod& r );
     ~SbxMethod();
     SbxMethod& operator=( const SbxMethod& r ) { SbxVariable::operator=( r ); return *this; }

@@ -19,7 +19,7 @@
 #ifndef _RESULTSETFORQUERY_HXX
 #define _RESULTSETFORQUERY_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
@@ -36,7 +36,7 @@ namespace chelp {
     {
     public:
 
-        ResultSetForQuery( const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>&  xMSF,
+        ResultSetForQuery( const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& rxContext,
                            const com::sun::star::uno::Reference<com::sun::star::ucb::XContentProvider>&  xProvider,
                            sal_Int32 nOpenMode,
                            const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& seq,

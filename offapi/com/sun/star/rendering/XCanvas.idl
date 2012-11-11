@@ -499,7 +499,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the parameters is not within the allowed range.
      */
-    XCanvasFont             createFont( [in] FontRequest aFontRequest, [in] sequence< ::com::sun::star::beans::PropertyValue > aExtraFontProperties, [in] ::com::sun::star::geometry::Matrix2D aFontMatrix )
+    XCanvasFont         createFont( [in] FontRequest aFontRequest, [in] sequence< ::com::sun::star::beans::PropertyValue > aExtraFontProperties, [in] ::com::sun::star::geometry::Matrix2D aFontMatrix )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
@@ -522,7 +522,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         or if one of the <type>FontInfo</type> members is not within
         the permitted range.
      */
-    sequence< FontInfo >    queryAvailableFonts( [in] FontInfo aFilter, [in] sequence< ::com::sun::star::beans::PropertyValue > aFontProperties )
+    sequence< FontInfo > queryAvailableFonts( [in] FontInfo aFilter, [in] sequence< ::com::sun::star::beans::PropertyValue > aFontProperties )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
@@ -560,7 +560,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         if one of the view and render state parameters are outside the
         specified range.
      */
-    XCachedPrimitive        drawText( [in] StringContext aText, [in] XCanvasFont xFont, [in] ViewState aViewState, [in] RenderState aRenderState, [in] byte nTextDirection )
+    XCachedPrimitive    drawText( [in] StringContext aText, [in] XCanvasFont xFont, [in] ViewState aViewState, [in] RenderState aRenderState, [in] byte nTextDirection )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
@@ -591,7 +591,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         if one of the view and render state parameters are outside the
         specified range.
      */
-    XCachedPrimitive        drawTextLayout( [in] XTextLayout xLayoutetText, [in] ViewState aViewState, [in] RenderState aRenderState )
+    XCachedPrimitive    drawTextLayout( [in] XTextLayout xLayoutetText, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
@@ -623,7 +623,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         if a texture bitmap was volatile, and the content was
         destroyed before the rendering could take place.
      */
-    XCachedPrimitive        drawBitmap( [in] XBitmap xBitmap, [in] ViewState aViewState, [in] RenderState aRenderState )
+    XCachedPrimitive    drawBitmap( [in] XBitmap xBitmap, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 
@@ -662,7 +662,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         if a texture bitmap was volatile, and the content was
         destroyed before the rendering could take place.
      */
-    XCachedPrimitive        drawBitmapModulated( [in] XBitmap xBitmap, [in] ViewState aViewState, [in] RenderState aRenderState )
+    XCachedPrimitive    drawBitmapModulated( [in] XBitmap xBitmap, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 

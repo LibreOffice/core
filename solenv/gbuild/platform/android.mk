@@ -10,11 +10,8 @@
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 # Link with -lgnustl_static
 gb_STDLIBS := \
-	gnustl_static
-
-gb_Library_PLAINLIBS_NONE := \
-	android \
-	gnustl_static \
+	-lgnustl_static \
+	-lm
 
 else
 # Link almost everything with -lgnustl_shared
@@ -70,12 +67,6 @@ gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
 
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
-
-gb_Library_PLAINLIBS_NONE += \
-	jpeg \
-	m \
-	pthread \
-	z \
 
 endif
 

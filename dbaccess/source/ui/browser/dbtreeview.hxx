@@ -24,7 +24,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-class SvLBoxTreeList;
+class SvTreeList;
 namespace dbaui
 {
     class DBTreeListBox;
@@ -47,7 +47,7 @@ namespace dbaui
         ~DBTreeView();
 
         /** sets a handler which is called when an list box entry is to be expanded.
-            <p>When calling the link, the parameter is an SvLBoxEntry marking the entry to be expanded.
+            <p>When calling the link, the parameter is an SvTreeListEntry marking the entry to be expanded.
             </p>
         */
         void    SetPreExpandHandler(const Link& _rHdl);
@@ -56,7 +56,7 @@ namespace dbaui
         void    setCopyHandler(const Link& _rHdl);
 
 
-        void                setModel(SvLBoxTreeList* _pTreeModel);
+        void                setModel(SvTreeList* _pTreeModel);
         void                setSelChangeHdl(const Link& _rHdl);
 
         DBTreeListBox&      getListBox() const { return *m_pTreeListBox; }

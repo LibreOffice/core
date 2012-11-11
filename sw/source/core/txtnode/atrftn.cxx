@@ -388,7 +388,7 @@ void SwTxtFtn::CopyFtn(SwTxtFtn & rDest, SwTxtNode & rDestNode) const
         // before:   Src: SxxxE,  Dst: SnE
         // now:      Src: SxxxE,  Dst: SnxxxE
         // after:    Src: SxxxE,  Dst: SxxxE
-        aStart++;
+        ++aStart;
         rDstNodes.Delete( aStart, nDestLen );
     }
 

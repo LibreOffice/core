@@ -50,6 +50,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/xml/sax/XWriter.hpp>
 
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
@@ -308,7 +309,7 @@ private:
     sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
 
     sal_Bool                            implExport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
-    Reference< XDocumentHandler >       implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
+    Reference< XWriter >                implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
 
     sal_Bool                            implGetPagePropSet( const Reference< XDrawPage > & rxPage );
     sal_Bool                            implGenerateMetaData();

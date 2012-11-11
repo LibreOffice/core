@@ -1,55 +1,40 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <string.h>
-
 #include <boost/ptr_container/ptr_vector.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-
-#include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/process.h>
-#include "tools/debug.hxx"
-#include "tools/resary.hxx"
-
-#include "unotools/fontcfg.hxx"
-
-#include "cppuhelper/implbase1.hxx"
-
-#include "uno/current_context.hxx"
+#include <tools/debug.hxx>
+#include <tools/resary.hxx>
+#include <unotools/fontcfg.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <comphelper/string.hxx>
+#include <uno/current_context.hxx>
 
 #include "vcl/configsettings.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/wrkwin.hxx"
 #include "vcl/msgbox.hxx"
-#include "vcl/unohelp.hxx"
 #include "vcl/button.hxx" // for Button::GetStandardText
 #include "vcl/dockwin.hxx"  // for DockingManager
 #include "salinst.hxx"
@@ -61,7 +46,6 @@
 #include "svids.hrc"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/awt/XExtendedToolkit.hpp"
 #include "com/sun/star/java/JavaNotConfiguredException.hpp"
 #include "com/sun/star/java/JavaVMCreationFailureException.hpp"
@@ -140,22 +124,6 @@ void ImplDeInitSVData()
         delete pSVData->maGDIData.mpDefaultFontConfiguration;
     if( pSVData->maGDIData.mpFontSubstConfiguration )
         delete pSVData->maGDIData.mpFontSubstConfiguration;
-
-    if ( pSVData->maAppData.mpMSFTempFileName )
-    {
-        if ( pSVData->maAppData.mxMSF.is() )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pSVData->maAppData.mxMSF, ::com::sun::star::uno::UNO_QUERY );
-            xComp->dispose();
-            pSVData->maAppData.mxMSF = NULL;
-        }
-
-        ::rtl::OUString aFileUrl;
-        ::osl::File::getFileURLFromSystemPath( *pSVData->maAppData.mpMSFTempFileName, aFileUrl );
-        osl::File::remove( aFileUrl );
-        delete pSVData->maAppData.mpMSFTempFileName;
-        pSVData->maAppData.mpMSFTempFileName = NULL;
-    }
 
     if( pSVData->maCtrlData.mpFieldUnitStrings )
         delete pSVData->maCtrlData.mpFieldUnitStrings, pSVData->maCtrlData.mpFieldUnitStrings = NULL;
@@ -353,7 +321,7 @@ bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
         ImplSVData* pSVData = ImplGetSVData();
         if( ! pSVData->mxAccessBridge.is() )
         {
-            css::uno::Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
+            css::uno::Reference< XMultiServiceFactory > xFactory(comphelper::getProcessServiceFactory());
 
             if( xFactory.is() )
             {

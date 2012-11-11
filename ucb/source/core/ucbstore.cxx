@@ -31,13 +31,16 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <comphelper/processfactory.hxx>
 #include "ucbstore.hxx"
 
 using namespace com::sun::star::beans;
+using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
@@ -1037,12 +1040,8 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
                 try
                 {
                     m_pImpl->m_xConfigProvider
-                        = Reference< XMultiServiceFactory >(
-                            m_xSMgr->createInstance(
-                                OUString(
-                                    "com.sun.star.configuration."
-                                    "ConfigurationProvider" ) ),
-                            UNO_QUERY_THROW );
+                        = theDefaultProvider::get(
+                            comphelper::getComponentContext( m_xSMgr ) );
                 }
                 catch (const Exception&)
                 {

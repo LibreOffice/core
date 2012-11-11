@@ -16,6 +16,8 @@ namespace loplugin
 {
 
 /*
+This is a compile check.
+
 Check for two statements that are both indented to look like a body of if/while/for
 but are not inside a compound statement and thus the second one is unrelated.
 */

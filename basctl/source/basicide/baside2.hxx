@@ -191,17 +191,17 @@ class WatchTreeListBox : public SvHeaderTabListBox
     String aEditingRes;
 
 protected:
-    virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const OUString& rNewText );
+    virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  );
+    virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
-    bool            ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult );
-    SbxBase*        ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArrayElement );
+    bool            ImplBasicEntryEdited( SvTreeListEntry* pEntry, const String& rResult );
+    SbxBase*        ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rbArrayElement );
 
 public:
     WatchTreeListBox( Window* pParent, WinBits nWinBits );
     ~WatchTreeListBox();
 
-    void            RequestingChildren( SvLBoxEntry * pParent );
+    void            RequestingChildren( SvTreeListEntry * pParent );
     void            UpdateWatches( bool bBasicStopped = false );
 
     using           SvTabListBox::SetTabs;

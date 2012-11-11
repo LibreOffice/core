@@ -494,9 +494,11 @@ namespace XSLT
     }
 
     void
-    LibXSLTTransformer::initialize(const Sequence<Any>& params)
+    LibXSLTTransformer::initialize(const Sequence<Any>& args)
             throw (RuntimeException)
     {
+        Sequence<Any> params;
+        args[0] >>= params;
         xmlSubstituteEntitiesDefault(0);
         m_parameters.clear();
         for (int i = 0; i < params.getLength(); i++)

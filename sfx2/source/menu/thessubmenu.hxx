@@ -22,7 +22,7 @@
 #define _THESSUBMENU_HXX_
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
 
 #include <vcl/menu.hxx>
 #include <sfx2/mnuitem.hxx>
@@ -31,7 +31,7 @@ namespace css = ::com::sun::star;
 
 class SfxThesSubMenuHelper
 {
-    css::uno::Reference< css::linguistic2::XLinguServiceManager >   m_xLngMgr;
+    css::uno::Reference< css::linguistic2::XLinguServiceManager2 >  m_xLngMgr;
     css::uno::Reference< css::linguistic2::XThesaurus >             m_xThesarus;
 
 private:

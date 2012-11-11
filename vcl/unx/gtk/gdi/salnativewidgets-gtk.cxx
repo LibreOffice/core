@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include "vcl/svapp.hxx"
@@ -1794,6 +1785,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     {
         unsigned int sliderHeight = slider_width + (trough_border * 2);
         vShim = (pixmapRect.GetHeight() - sliderHeight) / 2;
+        bool bRTLSwap = button11BoundRect.Left() > button22BoundRect.Left();
 
         scrollbarRect.Move( 0, vShim );
         scrollbarRect.SetSize( Size( scrollbarRect.GetWidth(), sliderHeight ) );
@@ -1801,8 +1793,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         scrollbarWidget = GTK_SCROLLBAR( gWidgetData[m_nXScreen].gScrollHorizWidget );
         scrollbarOrientation = GTK_ORIENTATION_HORIZONTAL;
         scrollbarTag = scrollbarTagH;
-        button1Type = GTK_ARROW_LEFT;
-        button2Type = GTK_ARROW_RIGHT;
+        button1Type = bRTLSwap? GTK_ARROW_RIGHT: GTK_ARROW_LEFT;
+        button2Type = bRTLSwap? GTK_ARROW_LEFT: GTK_ARROW_RIGHT;
 
         if ( has_backward )
         {
@@ -2845,7 +2837,6 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
     GtkShadowType    shadowType;
     gint            x, y, w, h;
     gint            g_x=0, g_y=0, g_w=10, g_h=10;
-    bool            bPaintButton = true;
     GtkWidget*      pButtonWidget = gWidgetData[m_nXScreen].gToolbarButtonWidget;
     GdkRectangle    clipRect;
 
@@ -2897,7 +2888,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
     // handle button
     else if( nPart == PART_BUTTON )
     {
-        bPaintButton = (nState & CTRL_STATE_PRESSED)
+        bool bPaintButton = (nState & CTRL_STATE_PRESSED)
             || (nState & CTRL_STATE_ROLLOVER);
         if( aValue.getTristateVal() == BUTTONVALUE_ON )
         {
@@ -3448,7 +3439,6 @@ sal_Bool GtkSalGraphics::NWPaintGTKSlider(
                          : GTK_WIDGET(gWidgetData[m_nXScreen].gVScale);
     const gchar* pDetail = (nPart == PART_TRACK_HORZ_AREA) ? "hscale" : "vscale";
     GtkOrientation eOri = (nPart == PART_TRACK_HORZ_AREA) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
-    GtkStateType eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE;
     gint slider_width = 10;
     gint slider_length = 10;
     gint trough_border = 0;
@@ -3458,7 +3448,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKSlider(
                           "trough-border", &trough_border,
                           NULL);
 
-    eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE;
+    GtkStateType eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE;
     if( nPart == PART_TRACK_HORZ_AREA )
     {
         gtk_paint_box( pWidget->style,
@@ -3997,9 +3987,15 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aMouseSettings.SetMenuDelay( iMenuPopupDelay );
     rSettings.SetMouseSettings( aMouseSettings );
 
-    gboolean showmenuicons = true;
-    g_object_get( pSettings, "gtk-menu-images", &showmenuicons, (char *)NULL );
-    aStyleSet.SetPreferredUseImagesInMenus( showmenuicons );
+    gboolean showmenuicons = true, primarybuttonwarps = false;
+    g_object_get( pSettings,
+        "gtk-menu-images", &showmenuicons,
+#if GTK_CHECK_VERSION(2,24,13)
+        "gtk-primary-button-warps-slider", &primarybuttonwarps,
+#endif
+        (char *)NULL );
+    aStyleSet.SetPreferredUseImagesInMenus(showmenuicons);
+    aStyleSet.SetPrimaryButtonWarpsSlider(primarybuttonwarps);
 
     // set scrollbar settings
     gint slider_width = 14;
@@ -4024,13 +4020,12 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );
 
-    const cairo_font_options_t* pNewOptions = NULL;
 #if !GTK_CHECK_VERSION(2,9,0)
     static cairo_font_options_t* (*gdk_screen_get_font_options)(GdkScreen*) =
         (cairo_font_options_t*(*)(GdkScreen*))osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_font_options" );
     if( gdk_screen_get_font_options != NULL )
 #endif
-        pNewOptions = gdk_screen_get_font_options( pScreen );
+        const cairo_font_options_t* pNewOptions = gdk_screen_get_font_options( pScreen );
     aStyleSet.SetCairoFontOptions( pNewOptions );
 
     // finally update the collected settings

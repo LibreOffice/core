@@ -1148,11 +1148,11 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 *************************************************************************/
 
     // erfrage vom Modify Informationen
-sal_Bool SwFlyFrm::GetInfo( SfxPoolItem & rInfo ) const
+bool SwFlyFrm::GetInfo( SfxPoolItem & rInfo ) const
 {
     if( RES_AUTOFMT_DOCNODE == rInfo.Which() )
-        return sal_False;   // es gibt einen FlyFrm also wird er benutzt
-    return sal_True;        // weiter suchen
+        return false;   // es gibt einen FlyFrm also wird er benutzt
+    return true;        // weiter suchen
 }
 
 /*************************************************************************
@@ -2652,7 +2652,7 @@ sal_Bool SwFlyFrm::GetContour( PolyPolygon&   rContour,
             SwRect aClip;
             SwRect aOrig;
             Lower()->Calc();
-            ((SwNoTxtFrm*)Lower())->GetGrfArea( aClip, &aOrig, sal_False );
+            ((SwNoTxtFrm*)Lower())->GetGrfArea( aClip, &aOrig, false );
             // OD 16.04.2003 #i13147# - copy method code <SvxContourDlg::ScaleContour(..)>
             // in order to avoid that graphic has to be loaded for contour scale.
             //SvxContourDlg::ScaleContour( rContour, aGrf, MAP_TWIP, aOrig.SSize() );

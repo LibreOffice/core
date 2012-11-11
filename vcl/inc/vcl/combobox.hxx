@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef _SV_COMBOBOX_HXX
 #define _SV_COMBOBOX_HXX
@@ -52,7 +43,7 @@ private:
     ImplBtn*                    mpBtn;
     ImplListBoxFloatingWindow*  mpFloatWin;
     sal_uInt16                      mnDDHeight;
-    xub_Unicode                 mcMultiSep;
+    sal_Unicode                 mcMultiSep;
     sal_Bool                        mbDDAutoSize        : 1;
     sal_Bool                        mbSyntheticModify   : 1;
     sal_Bool                        mbMatchCase         : 1;
@@ -115,7 +106,6 @@ public:
 
     void            SetDropDownLineCount( sal_uInt16 nLines );
     sal_uInt16      GetDropDownLineCount() const;
-    void            SetBestDropDownLineCount() { SetDropDownLineCount(16); }
 
     void            EnableAutoSize( sal_Bool bAuto );
     sal_Bool            IsAutoSizeEnabled() const               { return mbDDAutoSize; }
@@ -157,8 +147,8 @@ public:
 
     void            EnableMultiSelection( sal_Bool bMulti );
     sal_Bool            IsMultiSelectionEnabled() const;
-    void            SetMultiSelectionSeparator( xub_Unicode cSep ) { mcMultiSep = cSep; }
-    xub_Unicode     GetMultiSelectionSeparator() const { return mcMultiSep; }
+    void            SetMultiSelectionSeparator( sal_Unicode cSep ) { mcMultiSep = cSep; }
+    sal_Unicode     GetMultiSelectionSeparator() const { return mcMultiSep; }
 
     void            SetSelectHdl( const Link& rLink )       { maSelectHdl = rLink; }
     const Link&     GetSelectHdl() const                    { return maSelectHdl; }
@@ -172,8 +162,8 @@ public:
     Size            CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
-    void            SetMRUEntries( const XubString& rEntries, xub_Unicode cSep = ';' );
-    XubString       GetMRUEntries( xub_Unicode cSep = ';' ) const;
+    void            SetMRUEntries( const XubString& rEntries, sal_Unicode cSep = ';' );
+    XubString       GetMRUEntries( sal_Unicode cSep = ';' ) const;
     void            SetMaxMRUCount( sal_uInt16 n );
     sal_uInt16          GetMaxMRUCount() const;
 

@@ -37,14 +37,14 @@ class BASIC_DLLPUBLIC SbMethod : public SbxMethod
     friend class SbJScriptMethod;
     friend class SbIfaceMapperMethod;
 
-    SbxVariable* mCaller;                   // caller
-    SbModule* pMod;
+    SbxVariable*  mCaller;                   // caller
+    SbModule*     pMod;
     sal_uInt16    nDebugFlags;
     sal_uInt16    nLine1, nLine2;
     sal_uInt32    nStart;
     sal_Bool      bInvalid;
-    SbxArrayRef refStatics;
-    BASIC_DLLPRIVATE SbMethod( const String&, SbxDataType, SbModule* );
+    SbxArrayRef   refStatics;
+    BASIC_DLLPRIVATE SbMethod( const OUString&, SbxDataType, SbModule* );
     BASIC_DLLPRIVATE SbMethod( const SbMethod& );
     virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
     virtual sal_Bool StoreData( SvStream& ) const;
@@ -54,17 +54,17 @@ public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMETHOD,2);
     TYPEINFO();
     virtual SbxInfo* GetInfo();
-    SbxArray* GetStatics();
-    void      ClearStatics();
-    SbModule* GetModule()                { return pMod;        }
-    sal_uInt32    GetId() const              { return nStart;      }
-    sal_uInt16    GetDebugFlags()            { return nDebugFlags; }
-    void      SetDebugFlags( sal_uInt16 n )  { nDebugFlags = n;    }
-    void      GetLineRange( sal_uInt16&, sal_uInt16& );
+    SbxArray*  GetStatics();
+    void       ClearStatics();
+    SbModule*  GetModule()                { return pMod;        }
+    sal_uInt32 GetId() const              { return nStart;      }
+    sal_uInt16 GetDebugFlags()            { return nDebugFlags; }
+    void       SetDebugFlags( sal_uInt16 n )  { nDebugFlags = n;    }
+    void       GetLineRange( sal_uInt16&, sal_uInt16& );
 
     // Interface to execute a method from the applications
     virtual ErrCode Call( SbxValue* pRet = NULL,  SbxVariable* pCaller = NULL );
-    virtual void Broadcast( sal_uIntPtr nHintId );
+    virtual void    Broadcast( sal_uIntPtr nHintId );
 };
 
 SV_DECL_IMPL_REF(SbMethod)
@@ -77,7 +77,7 @@ class BASIC_DLLPUBLIC SbIfaceMapperMethod : public SbMethod
 
 public:
     TYPEINFO();
-    SbIfaceMapperMethod( const String& rName, SbMethod* pImplMeth )
+    SbIfaceMapperMethod( const OUString& rName, SbMethod* pImplMeth )
         : SbMethod( rName, pImplMeth->GetType(), NULL )
         , mxImplMeth( pImplMeth )
     {}

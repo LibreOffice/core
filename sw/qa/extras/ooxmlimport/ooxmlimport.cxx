@@ -37,6 +37,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
+#include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -96,7 +97,6 @@ public:
     void testN779834();
     void testN779627();
     void testN779941();
-    void testN779957();
     void testFdo55187();
     void testN780563();
     void testN780853();
@@ -105,70 +105,80 @@ public:
     void testN782061();
     void testN782345();
     void testN783638();
+    void testFdo52208();
+    void testN785767();
+    void testN773061();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
-    CPPUNIT_TEST(testN751054);
-    CPPUNIT_TEST(testN751117);
-    CPPUNIT_TEST(testN751017);
-    CPPUNIT_TEST(testN750935);
-    CPPUNIT_TEST(testN757890);
-    CPPUNIT_TEST(testFdo49940);
-    CPPUNIT_TEST(testN751077);
-    CPPUNIT_TEST(testN705956_1);
-    CPPUNIT_TEST(testN705956_2);
-    CPPUNIT_TEST(testN747461);
-    CPPUNIT_TEST(testN750255);
-    CPPUNIT_TEST(testN652364);
-    CPPUNIT_TEST(testN760764);
-    CPPUNIT_TEST(testN764005);
-    CPPUNIT_TEST(testSmartart);
-    CPPUNIT_TEST(testN764745);
-    CPPUNIT_TEST(testN766477);
-    CPPUNIT_TEST(testN758883);
-    CPPUNIT_TEST(testN766481);
-    CPPUNIT_TEST(testN766487);
-    CPPUNIT_TEST(testN693238);
-    CPPUNIT_TEST(testNumbering1);
-    CPPUNIT_TEST(testBnc773061);
-    CPPUNIT_TEST(testAllGapsWord);
-    CPPUNIT_TEST(testN775906);
-    CPPUNIT_TEST(testN775899);
-    CPPUNIT_TEST(testN777345);
-    CPPUNIT_TEST(testN777337);
-    CPPUNIT_TEST(testN778836);
-    CPPUNIT_TEST(testN778140);
-    CPPUNIT_TEST(testN778828);
-    CPPUNIT_TEST(testInk);
-    CPPUNIT_TEST(testN779834);
-    CPPUNIT_TEST(testN779627);
-    CPPUNIT_TEST(testN779941);
-    CPPUNIT_TEST(testN779957);
-    CPPUNIT_TEST(testFdo55187);
-    CPPUNIT_TEST(testN780563);
-    CPPUNIT_TEST(testN780853);
-    CPPUNIT_TEST(testN780843);
-    CPPUNIT_TEST(testShadow);
-    CPPUNIT_TEST(testN782061);
-    CPPUNIT_TEST(testN782345);
-    CPPUNIT_TEST(testN783638);
+    CPPUNIT_TEST(run);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    /// Load an OOXML file and make the document available via mxComponent.
-    void load(const OUString& rURL);
+    void run();
 };
 
-void Test::load(const OUString& rFilename)
+void Test::run()
 {
-    mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ooxmlimport/data/") + rFilename);
+    MethodEntry<Test> aMethods[] = {
+        {"n751054.docx", &Test::testN751054},
+        {"n751117.docx", &Test::testN751117},
+        {"n751017.docx", &Test::testN751017},
+        {"n750935.docx", &Test::testN750935},
+        {"n757890.docx", &Test::testN757890},
+        {"fdo49940.docx", &Test::testFdo49940},
+        {"n751077.docx", &Test::testN751077},
+        {"n705956-1.docx", &Test::testN705956_1},
+        {"n705956-2.docx", &Test::testN705956_2},
+        {"n747461.docx", &Test::testN747461},
+        {"n750255.docx", &Test::testN750255},
+        {"n652364.docx", &Test::testN652364},
+        {"n760764.docx", &Test::testN760764},
+        {"n764005.docx", &Test::testN764005},
+        {"smartart.docx", &Test::testSmartart},
+        {"n764745-alignment.docx", &Test::testN764745},
+        {"n766477.docx", &Test::testN766477},
+        {"n758883.docx", &Test::testN758883},
+        {"n766481.docx", &Test::testN766481},
+        {"n766487.docx", &Test::testN766487},
+        {"n693238.docx", &Test::testN693238},
+        {"numbering1.docx", &Test::testNumbering1},
+        {"bnc773061.docx", &Test::testBnc773061},
+        {"all_gaps_word.docx", &Test::testAllGapsWord},
+        {"n775906.docx", &Test::testN775906},
+        {"n775899.docx", &Test::testN775899},
+        {"n777345.docx", &Test::testN777345},
+        {"n777337.docx", &Test::testN777337},
+        {"n778836.docx", &Test::testN778836},
+        {"n778140.docx", &Test::testN778140},
+        {"n778828.docx", &Test::testN778828},
+        {"ink.docx", &Test::testInk},
+        {"n779834.docx", &Test::testN779834},
+        {"n779627.docx", &Test::testN779627},
+        {"n779941.docx", &Test::testN779941},
+        {"fdo55187.docx", &Test::testFdo55187},
+        {"n780563.docx", &Test::testN780563},
+        {"n780853.docx", &Test::testN780853},
+        {"n780843.docx", &Test::testN780843},
+        {"imgshadow.docx", &Test::testShadow},
+        {"n782061.docx", &Test::testN782061},
+        {"n782345.docx", &Test::testN782345},
+        {"n783638.docx", &Test::testN783638},
+        {"fdo52208.docx", &Test::testFdo52208},
+        {"n785767.docx", &Test::testN785767},
+        {"n773061.docx", &Test::testN773061},
+    };
+    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
+    {
+        MethodEntry<Test>& rEntry = aMethods[i];
+        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ooxmlimport/data/") + OUString::createFromAscii(rEntry.pName));
+        (this->*rEntry.pMethod)();
+    }
 }
 
 void Test::testN751054()
 {
-    load("n751054.docx");
-
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
@@ -179,8 +189,6 @@ void Test::testN751054()
 
 void Test::testN751117()
 {
-    load("n751117.docx");
-
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
 
@@ -205,7 +213,6 @@ void Test::testN751117()
 
 void Test::testN751017()
 {
-    load("n751017.docx");
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xMasters(xTextFieldsSupplier->getTextFieldMasters());
     // Make sure we have a variable named foo.
@@ -252,7 +259,6 @@ void Test::testN751017()
 
 void Test::testN750935()
 {
-    load("n750935.docx");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
@@ -275,8 +281,6 @@ void Test::testN750935()
 
 void Test::testN757890()
 {
-    load("n757890.docx");
-
     // The w:pStyle token affected the text outside the textbox.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
@@ -297,8 +301,6 @@ void Test::testN757890()
 
 void Test::testFdo49940()
 {
-    load("fdo49940.docx");
-
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -310,8 +312,6 @@ void Test::testFdo49940()
 
 void Test::testN751077()
 {
-    load( "n751077.docx" );
-
 /*
 enum = ThisComponent.Text.createEnumeration
 enum.NextElement
@@ -328,7 +328,6 @@ xray para.PageStyleName
 
 void Test::testN705956_1()
 {
-    load( "n705956-1.docx" );
 /*
 Get the first image in the document and check it's the one image in the document.
 It should be also anchored inline (as character).
@@ -356,7 +355,6 @@ xray image.AnchorType
 
 void Test::testN705956_2()
 {
-    load( "n705956-2.docx" );
 /*
 <v:shapetype> must be global, reachable even from <v:shape> inside another <w:pict>
 image = ThisComponent.DrawPage.getByIndex(0)
@@ -375,7 +373,6 @@ xray image.FillColor
 
 void Test::testN747461()
 {
-    load( "n747461.docx" );
 /*
 The document contains 3 images (Red, Black, Green, in this order), with explicit
 w:relativeHeight (300, 0, 225763766). Check that they are in the right ZOrder
@@ -409,7 +406,6 @@ after they are loaded.
 
 void Test::testN750255()
 {
-    load( "n750255.docx" );
 
 /*
 Column break without columns on the page is a page break, so check those paragraphs
@@ -435,8 +431,6 @@ xray para2.PageStyleName
 
 void Test::testN652364()
 {
-    load( "n652364.docx" );
-
 /*
 Related to 750255 above, column break with columns on the page however should be a column break.
 enum = ThisComponent.Text.createEnumeration
@@ -461,8 +455,6 @@ xray para2.PageStyleName
 
 void Test::testN760764()
 {
-    load("n760764.docx");
-
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum(xParaEnumAccess->createEnumeration());
@@ -480,8 +472,6 @@ void Test::testN760764()
 
 void Test::testN764005()
 {
-    load("n764005.docx");
-
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
@@ -497,8 +487,6 @@ void Test::testN764005()
 
 void Test::testSmartart()
 {
-    load("smartart.docx");
-
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount()); // One groupshape in the doc
@@ -523,7 +511,6 @@ void Test::testSmartart()
 
 void Test::testN764745()
 {
-    load( "n764745-alignment.docx" );
 /*
 shape = ThisComponent.DrawPage.getByIndex(0)
 xray shape.AnchorType
@@ -563,7 +550,6 @@ void Test::testN766477()
      * oRun = oRuns.nextElement
      * xray oRun.Bookmark.Parameters.ElementNames(0) 'Checkbox_Checked
      */
-    load("n766477.docx");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum(xParaEnumAccess->createEnumeration());
@@ -578,8 +564,6 @@ void Test::testN766477()
 
 void Test::testN758883()
 {
-    load("n758883.docx");
-
     /*
      * The problem was that direct formatting of the paragraph was not applied
      * to the numbering. This is easier to test using a layout dump.
@@ -637,7 +621,6 @@ void Test::testN766481()
      * oPara = oParas.nextElement
      * xray oParas.hasMoreElements ' should be false
      */
-    load("n766481.docx");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum(xParaEnumAccess->createEnumeration());
@@ -659,7 +642,6 @@ void Test::testN766487()
      * oPara = oParas.nextElement
      * xray oPara.ParaFirstLineIndent ' -635, was 0
      */
-    load("n766487.docx");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum(xParaEnumAccess->createEnumeration());
@@ -684,7 +666,6 @@ void Test::testN693238()
      *
      * xray ThisComponent.StyleFamilies.PageStyles.Default.LeftMargin ' was 2000, should be 635
      */
-    load("n693238.docx");
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue("LeftMargin") >>= nValue;
@@ -693,7 +674,6 @@ void Test::testN693238()
 
 void Test::testNumbering1()
 {
-    load( "numbering1.docx" );
 /* <w:numPr> in the paragraph itself was overriden by <w:numpr> introduced by the paragraph's <w:pStyle>
 enum = ThisComponent.Text.createEnumeration
 para = enum.NextElement
@@ -740,7 +720,6 @@ note that the indexes may get off as the implementation evolves, C++ code seache
 
 void Test::testBnc773061()
 {
-    load( "bnc773061.docx" );
     uno::Reference< text::XTextRange > paragraph = getParagraph( 1 );
     uno::Reference< text::XTextRange > normal = getRun( paragraph, 1, "Normal " );
     uno::Reference< text::XTextRange > raised = getRun( paragraph, 2, "Raised" );
@@ -755,7 +734,6 @@ void Test::testBnc773061()
 
 void Test::testAllGapsWord()
 {
-    load("all_gaps_word.docx");
     BorderTest borderTest;
     borderTest.testTheBorders(mxComponent);
 }
@@ -770,8 +748,6 @@ void Test::testN775906()
      * xray oPara.ParaFirstLineIndent ' was 0
      * xray oPara.ParaLeftMargin ' was 0
      */
-    load("n775906.docx");
-
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-635), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1905), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
 }
@@ -787,8 +763,6 @@ void Test::testN775899()
      * oPara.supportsService("com.sun.star.text.TextTable") 'was a fake paragraph
      * oParas.hasMoreElements 'was true
      */
-    load("n775899.docx");
-
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
@@ -805,8 +779,6 @@ void Test::testN775899()
 void Test::testN777345()
 {
     // The problem was that v:imagedata inside v:rect was ignored.
-    load("n777345.docx");
-
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<document::XEmbeddedObjectSupplier2> xSupplier(xDraws->getByIndex(0), uno::UNO_QUERY);
@@ -826,8 +798,6 @@ void Test::testN777337()
      * xray oFirst.TopMargin
      * xray oFirst.BottomMargin
      */
-    load("n777337.docx");
-
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("First Page"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1702), getProperty<sal_Int32>(xPropertySet, "TopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1702), getProperty<sal_Int32>(xPropertySet, "BottomMargin"));
@@ -839,8 +809,6 @@ void Test::testN778836()
      * The problem was that the paragraph inherited margins from the numbering
      * and parent paragraph styles and the result was incorrect.
      */
-    load("n778836.docx");
-
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(0), "ParaRightMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3810), getProperty<sal_Int32>(getParagraph(0), "ParaLeftMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-635), getProperty<sal_Int32>(getParagraph(0), "ParaFirstLineIndent"));
@@ -852,8 +820,6 @@ void Test::testN778140()
      * The problem was that the paragraph top/bottom margins were incorrect due
      * to unhandled w:doNotUseHTMLParagraphAutoSpacing.
      */
-    load("n778140.docx");
-
     CPPUNIT_ASSERT_EQUAL(sal_Int32(176), getProperty<sal_Int32>(getParagraph(0), "ParaTopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(176), getProperty<sal_Int32>(getParagraph(0), "ParaBottomMargin"));
 }
@@ -864,8 +830,6 @@ void Test::testN778828()
      * The problem was that a page break after a continous section break caused
      * double page break on title page.
      */
-    load("n778828.docx");
-
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
@@ -880,7 +844,6 @@ void Test::testInk()
      *
      * xray ThisComponent.DrawPage(0).supportsService("com.sun.star.drawing.OpenBezierShape")
      */
-    load("ink.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xDraws->getByIndex(0), uno::UNO_QUERY);
@@ -890,7 +853,6 @@ void Test::testInk()
 void Test::testN779834()
 {
     // This document simply crashed the importer.
-    load("n779834.docx");
 }
 
 void Test::testN779627()
@@ -899,7 +861,6 @@ void Test::testN779627()
      * The problem was that the table left position was based on the tableCellMar left value
      * even for nested tables, while it shouldn't.
      */
-    load("n779627.docx");
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTableProperties(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -930,7 +891,6 @@ void Test::testN779627()
 void Test::testFdo55187()
 {
     // 0x010d was imported as a newline.
-    load("fdo55187.docx");
     getParagraph(1, OUString("lupčka", 7, RTL_TEXTENCODING_UTF8));
 }
 
@@ -939,7 +899,6 @@ void Test::testN780563()
     /*
      * Make sure we have the table in the fly frame created
      */
-    load("n780563.docx");
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount( ));
@@ -952,7 +911,6 @@ void Test::testN780853()
      *
      * xray ThisComponent.TextTables.Count 'was 0
      */
-    load("n780853.docx");
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
@@ -971,7 +929,6 @@ void Test::testN780843()
      * oStyle = ThisComponent.StyleFamilies.PageStyles.getByName(sStyle)
      * xray oStyle.FooterText.String ' was "hidden footer"
      */
-    load("n780843.docx");
     uno::Reference< text::XTextRange > xPara = getParagraph(3);
     OUString aStyleName = getProperty<OUString>(xPara, "PageStyleName");
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(aStyleName), uno::UNO_QUERY);
@@ -985,7 +942,6 @@ void Test::testShadow()
      * The problem was that drop shadows on inline images were not being
      * imported and applied.
      */
-    load("imgshadow.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(1), uno::UNO_QUERY);
@@ -1000,8 +956,6 @@ void Test::testN782061()
     /*
      * The problem was that the character escapement in the second run was -58.
      */
-    load("n782061.docx");
-
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-9), getProperty<sal_Int32>(getRun(getParagraph(1), 2), "CharEscapement"));
 }
 
@@ -1010,8 +964,6 @@ void Test::testN782345()
     /*
      * The problem was that the page break was inserted before the 3rd para, instead of before the 2nd para.
      */
-    load("n782345.docx");
-
     CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
 }
 
@@ -1020,7 +972,6 @@ void Test::testN779941()
     /*
      * Make sure top/bottom margins of tables are set to 0 (problem was: bottom margin set to 0.35cm)
      */
-    load("n779941.docx");
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTableProperties(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -1038,56 +989,46 @@ void Test::testN779941()
     }
 }
 
-void Test::testN779957()
-{
-    /*
-     * n779957.docx contains 4 tables. This test verifies their X position.
-     * We compare cursor position in LibreOffice to table indentation in Office, because it's
-     * where text starts in tables.
-     */
-    sal_Int32 xCoordsFromOffice[] = { 2500, -1000, 0, 0 };
-    sal_Int32 cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
-
-    load("n779957.docx");
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
-
-    for (int i=0; i<4; i++) {
-        uno::Reference<text::XTextTable> xTable1 (xTables->getByIndex(i), uno::UNO_QUERY);
-        // Verify X coord
-        uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(), uno::UNO_QUERY);
-        xCtrl->select(uno::makeAny(xTable1));
-        uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xCtrl, uno::UNO_QUERY);
-        uno::Reference<text::XTextViewCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-        awt::Point pos = xCursor->getPosition();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect X coord computed from docx",
-            xCoordsFromOffice[i], pos.X, 1);
-
-        // Verify left margin of 1st cell :
-        //  * Office left margins are measured relative to the right of the border
-        //  * LO left spacing is measured from the center of the border
-        uno::Reference<table::XCell> xCell = xTable1->getCellByName("A1");
-        uno::Reference< beans::XPropertySet > xPropSet(xCell, uno::UNO_QUERY_THROW);
-        sal_Int32 aLeftMargin = -1;
-        xPropSet->getPropertyValue("LeftBorderDistance") >>= aLeftMargin;
-        uno::Any aLeftBorder = xPropSet->getPropertyValue("LeftBorder");
-        table::BorderLine2 aLeftBorderLine;
-        aLeftBorder >>= aLeftBorderLine;
-        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect left spacing computed from docx cell margin",
-            cellLeftMarginFromOffice[i], aLeftMargin - 0.5 * aLeftBorderLine.LineWidth, 1);
-    }
-}
-
 void Test::testN783638()
 {
     // The problem was that the margins of inline images were not zero.
-    load("n783638.docx");
-
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPropertySet, "LeftMargin"));
+}
+
+void Test::testFdo52208()
+{
+    // The problem was that the document had 2 pages instead of 1.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+}
+
+void Test::testN785767()
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // Check the A1 and B1 cells, the width of both of them was the default value (10000 / 9, as there were 9 cells in the row).
+    CPPUNIT_ASSERT_MESSAGE("A1 must not have default width", sal_Int16(10000 / 9) != getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position);
+    CPPUNIT_ASSERT_MESSAGE("B1 must not have default width", sal_Int16(10000 / 9) != getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position);
+}
+
+void Test::testN773061()
+{
+// xray ThisComponent.TextFrames(0).LeftBorderDistance
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( getProperty< sal_Int32 >( xFrame, "LeftBorderDistance" ), sal_Int32( 0 ));
+    CPPUNIT_ASSERT_EQUAL( getProperty< sal_Int32 >( xFrame, "TopBorderDistance" ), sal_Int32( 0 ));
+    CPPUNIT_ASSERT_EQUAL( getProperty< sal_Int32 >( xFrame, "RightBorderDistance" ), sal_Int32( 0 ));
+    CPPUNIT_ASSERT_EQUAL( getProperty< sal_Int32 >( xFrame, "BottomBorderDistance" ), sal_Int32( 0 ));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

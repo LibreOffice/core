@@ -449,6 +449,13 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     {
         PropertySet( xShape ).setAnyProperty( PROP_FrameIsAutomaticHeight, makeAny( maTypeModel.mbAutoHeight ) );
         PropertySet( xShape ).setAnyProperty( PROP_SizeType, makeAny( maTypeModel.mbAutoHeight ? SizeType::MIN : SizeType::FIX ) );
+        if( getTextBox()->borderDistanceSet )
+        {
+            PropertySet( xShape ).setAnyProperty( PROP_LeftBorderDistance, makeAny( sal_Int32( getTextBox()->borderDistanceLeft )));
+            PropertySet( xShape ).setAnyProperty( PROP_TopBorderDistance, makeAny( sal_Int32( getTextBox()->borderDistanceTop )));
+            PropertySet( xShape ).setAnyProperty( PROP_RightBorderDistance, makeAny( sal_Int32( getTextBox()->borderDistanceRight )));
+            PropertySet( xShape ).setAnyProperty( PROP_BottomBorderDistance, makeAny( sal_Int32( getTextBox()->borderDistanceBottom )));
+        }
     }
     else
     {
@@ -463,7 +470,9 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             if ( maTypeModel.maWidthRelative.isEmpty() || maTypeModel.maWidthRelative == "page" )
             {
                 sal_Int16 nWidth = maTypeModel.maWidthPercent.toInt32() / 10;
-                PropertySet( xShape ).setAnyProperty(PROP_RelativeWidth, makeAny( nWidth ) );
+                // Only apply if nWidth != 0
+                if ( nWidth )
+                    PropertySet( xShape ).setAnyProperty(PROP_RelativeWidth, makeAny( nWidth ) );
             }
         }
         if ( !maTypeModel.maHeightPercent.isEmpty( ) )
@@ -472,7 +481,9 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             if ( maTypeModel.maHeightRelative.isEmpty() || maTypeModel.maHeightRelative == "page" )
             {
                 sal_Int16 nHeight = maTypeModel.maHeightPercent.toInt32() / 10;
-                PropertySet( xShape ).setAnyProperty(PROP_RelativeHeight, makeAny( nHeight ) );
+                // Only apply if nHeight != 0
+                if ( nHeight )
+                    PropertySet( xShape ).setAnyProperty(PROP_RelativeHeight, makeAny( nHeight ) );
             }
         }
     }

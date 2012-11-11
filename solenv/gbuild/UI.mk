@@ -12,7 +12,7 @@
 gb_UILocalizeTarget_WORKDIR := $(WORKDIR)/UILocalizeTarget
 
 gb_UILocalizeTarget_TARGET := $(call gb_Executable_get_target_for_build,uiex)
-gb_UILocalizeTarget_COMMAND := $(gb_Helper_set_ldpath) $(gb_UILocalizeTarget_TARGET)
+gb_UILocalizeTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_UILocalizeTarget_TARGET)
 
 define gb_UILocalizeTarget__command
 $(call gb_Output_announce,$(2),$(true),UIX,1)
@@ -50,7 +50,7 @@ $(call gb_UILocalizeTarget_get_target,$(1)) : UI_FILE := $(SRCDIR)/$(2).ui
 $(call gb_UILocalizeTarget_get_target,$(1)) : UI_LANG := $(3)
 
 $(call gb_UILocalizeTarget_get_target,$(1)) : $(foreach lang,$(gb_UITarget_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(2))).po)
-$(call gb_UILocalizeTarget_get_target,$(1)) : $$(UI_FILE)
+$(call gb_UILocalizeTarget_get_target,$(1)) : $(SRCDIR)/$(2).ui
 $(call gb_UILocalizeTarget_get_target,$(1)) :| $(dir $(call gb_UILocalizeTarget_get_target,$(1))).dir
 
 endef
@@ -159,7 +159,7 @@ $$(eval $$(call gb_Module_register_target,$(call gb_UI_get_target,$(1)),$(call g
 endef
 
 # gb_UI__get_outdir_filename target file lang?
-gb_UI__get_outdir_filename = xml/uiconfig/$(1)/ui/$(if $(3),res/$(3)/)$(notdir $(2)).ui
+gb_UI__get_outdir_filename = xml/uiconfig/$(1)/ui/$(if $(3),res/$(3)/)$(notdir $(2))$(if $(3),,.ui)
 
 # gb_UI__add_uifile target package destfile srcfile lang?
 define gb_UI__package_uifile

@@ -24,6 +24,7 @@
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/beans/NamedValue.hpp"
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"
+#include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
@@ -64,14 +65,7 @@ private:
 
 css::uno::Reference< css::lang::XMultiServiceFactory >
 getConfigurationProvider() {
-    return css::uno::Reference< css::lang::XMultiServiceFactory >(
-        (css::uno::Reference< css::lang::XMultiServiceFactory >(
-            comphelper::getProcessServiceFactory(), css::uno::UNO_SET_THROW)->
-         createInstance(
-             rtl::OUString(
-                 RTL_CONSTASCII_USTRINGPARAM(
-                     "com.sun.star.configuration.ConfigurationProvider")))),
-        css::uno::UNO_QUERY_THROW);
+    return css::configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
 }
 
 rtl::OUString getConfigurationString(

@@ -656,7 +656,7 @@ void SwUndoResetAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pTNd )
         {
             SwIndex aIdx( pTNd, nSttCntnt );
-            pTNd->DontExpandFmt( aIdx, sal_False );
+            pTNd->DontExpandFmt( aIdx, false );
         }
     }
 
@@ -674,10 +674,10 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
         rDoc.RstTxtAttrs(rPam);
         break;
     case RES_TXTFMTCOLL:
-        rDoc.ResetAttrs(rPam, sal_False, m_Ids );
+        rDoc.ResetAttrs(rPam, false, m_Ids );
         break;
     case RES_CONDTXTFMTCOLL:
-        rDoc.ResetAttrs(rPam, sal_True, m_Ids );
+        rDoc.ResetAttrs(rPam, true, m_Ids );
 
         break;
     case RES_TXTATR_TOXMARK:
@@ -1021,7 +1021,7 @@ void SwUndoDefaultAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoMoveLeftMargin::SwUndoMoveLeftMargin(
-            const SwPaM& rPam, sal_Bool bFlag, sal_Bool bMod )
+            const SwPaM& rPam, sal_Bool bFlag, bool bMod )
     : SwUndo( bFlag ? UNDO_INC_LEFTMARGIN : UNDO_DEC_LEFTMARGIN )
     , SwUndRng( rPam )
     , m_pHistory( new SwHistory )
@@ -1168,7 +1168,7 @@ void SwUndoDontExpandFmt::UndoImpl(::sw::UndoRedoContext & rContext)
     SwPosition& rPos = *pPam->GetPoint();
     rPos.nNode = m_nNodeIndex;
     rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(), m_nContentIndex);
-    pDoc->DontExpandFmt( rPos, sal_False );
+    pDoc->DontExpandFmt( rPos, false );
 }
 
 void SwUndoDontExpandFmt::RedoImpl(::sw::UndoRedoContext & rContext)

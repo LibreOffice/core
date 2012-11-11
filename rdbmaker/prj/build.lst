@@ -1,2 +1,0 @@
-rm	rdbmaker	:	cppuhelper NULL
-rm	rdbmaker\prj						nmake		-	all	rm_prj NULL

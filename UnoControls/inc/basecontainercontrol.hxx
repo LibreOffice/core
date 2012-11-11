@@ -78,7 +78,7 @@ public:
         @onerror    -
     */
 
-       BaseContainerControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+       BaseContainerControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     /**_______________________________________________________________________________________________________
         @short      -

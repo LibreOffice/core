@@ -1320,7 +1320,8 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
             else if ((SvxCellHorJustify)((const SvxHorJustifyItem&)pPattern->
                         GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SVX_HOR_JUSTIFY_BLOCK)
                 bFound = true;
-            else if (((const SfxUInt32Item&)pPattern->GetItem( ATTR_CONDITIONAL )).GetValue())
+
+            else if (!static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData().empty())
                 bFound = true;
             else if (((const SfxInt32Item&)pPattern->GetItem( ATTR_ROTATE_VALUE )).GetValue())
                 bFound = true;
@@ -2230,8 +2231,8 @@ void ScAttrArray::MoveTo(SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray
 
 // copy between documents (Clipboard)
 
-void ScAttrArray::CopyArea( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray,
-                                sal_Int16 nStripFlags )
+void ScAttrArray::CopyArea(
+    SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray, sal_Int16 nStripFlags) const
 {
     nStartRow -= nDy;   // Source
     nEndRow -= nDy;
@@ -2339,8 +2340,9 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttr
 }
 
 
-SCsROW ScAttrArray::SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
-                                    bool bUp, ScMarkArray* pMarkArray )
+SCsROW ScAttrArray::SearchStyle(
+    SCsROW nRow, const ScStyleSheet* pSearchStyle, bool bUp,
+    const ScMarkArray* pMarkArray) const
 {
     bool bFound = false;
 
@@ -2402,8 +2404,9 @@ SCsROW ScAttrArray::SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
 }
 
 
-bool ScAttrArray::SearchStyleRange( SCsROW& rRow, SCsROW& rEndRow,
-                        const ScStyleSheet* pSearchStyle, bool bUp, ScMarkArray* pMarkArray )
+bool ScAttrArray::SearchStyleRange(
+    SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
+    const ScMarkArray* pMarkArray) const
 {
     SCsROW nStartRow = SearchStyle( rRow, pSearchStyle, bUp, pMarkArray );
     if (VALIDROW(nStartRow))

@@ -960,7 +960,7 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
         SwNodeIndex aStartIdx(*pStartNode);
         do
         {
-            aStartIdx++;
+            ++aStartIdx;
             SwNode& rCurrentNode = aStartIdx.GetNode();
             if(rCurrentNode.GetNodeType() == ND_SECTIONNODE
                 ||rCurrentNode.GetNodeType() == ND_TABLENODE)

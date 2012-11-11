@@ -53,8 +53,8 @@ $(eval $(call gb_StaticLibrary_add_defs,shlxthandler_common_x64,\
 ))
 
 $(eval $(call gb_StaticLibrary_use_externals,shlxthandler_common_x64,\
-	expat_utf16 \
-	zlib \
+	expat_utf16_x64 \
+	zlib_x64 \
 ))
 
 $(eval $(call gb_StaticLibrary_add_x64_generated_exception_objects,shlxthandler_common_x64,\

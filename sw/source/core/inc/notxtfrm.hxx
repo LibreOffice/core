@@ -63,7 +63,7 @@ public:
                      SwCrsrMoveState* = 0) const;
 
     const Size &GetGrfSize() const  { return GetSize(); }
-    void GetGrfArea( SwRect &rRect, SwRect * = 0, sal_Bool bMirror = sal_True ) const;
+    void GetGrfArea( SwRect &rRect, SwRect * = 0, bool bMirror = true ) const;
 
     sal_Bool IsTransparent() const;
 

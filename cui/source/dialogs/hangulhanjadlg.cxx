@@ -985,7 +985,7 @@ namespace svx
         while( nCnt )
         {
             Reference< XConversionDictionary >  xDict = m_aDictList[ n ];
-            SvLBoxEntry*                        pEntry = m_aDictsLB.SvTreeListBox::GetEntry( n );
+            SvTreeListEntry*                        pEntry = m_aDictsLB.SvTreeListBox::GetEntry( n );
 
             DBG_ASSERT( xDict.is(), "-HangulHanjaOptionsDialog::OkHdl(): someone is evaporated..." );
             DBG_ASSERT( pEntry, "-HangulHanjaOptionsDialog::OkHdl(): no one there in list?" );
@@ -1071,7 +1071,7 @@ namespace svx
 
     IMPL_LINK_NOARG(HangulHanjaOptionsDialog, EditDictHdl)
     {
-        SvLBoxEntry*    pEntry = m_aDictsLB.FirstSelected();
+        SvTreeListEntry*    pEntry = m_aDictsLB.FirstSelected();
         DBG_ASSERT( pEntry, "+HangulHanjaEditDictDialog::EditDictHdl(): call of edit should not be possible with no selection!" );
         if( pEntry )
         {
@@ -1165,7 +1165,7 @@ namespace svx
 
     HangulHanjaOptionsDialog::~HangulHanjaOptionsDialog()
     {
-        SvLBoxEntry*    pEntry = m_aDictsLB.First();
+        SvTreeListEntry*    pEntry = m_aDictsLB.First();
         String*         pDel;
         while( pEntry )
         {
@@ -1181,7 +1181,7 @@ namespace svx
 
     void HangulHanjaOptionsDialog::AddDict( const String& _rName, bool _bChecked )
     {
-        SvLBoxEntry*    pEntry = m_aDictsLB.SvTreeListBox::InsertEntry( _rName );
+        SvTreeListEntry*    pEntry = m_aDictsLB.SvTreeListBox::InsertEntry( _rName );
         m_aDictsLB.SetCheckButtonState( pEntry, _bChecked? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
         pEntry->SetUserData( new String( _rName ) );
     }

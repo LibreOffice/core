@@ -44,7 +44,7 @@ namespace connectivity
 
         // IDataAccessToolsFactory
         virtual ::rtl::Reference< simple::ISQLParser >  createSQLParser(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const IParseContext* _pContext
         ) const;
 

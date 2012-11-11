@@ -2048,7 +2048,7 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
     {
         pTemp->MovePara(fnParaCurr, fnParaEnd);
     }
-    rDoc.ResetAttrs(*pTemp, sal_True, rWhichIds);
+    rDoc.ResetAttrs(*pTemp, true, rWhichIds);
 }
 
 void SwUnoCursorHelper::SetPropertyToDefault(
@@ -2079,7 +2079,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         aWhichIds.insert( pEntry->nWID );
         if (pEntry->nWID < RES_PARATR_BEGIN)
         {
-            rDoc.ResetAttrs(rPaM, sal_True, aWhichIds);
+            rDoc.ResetAttrs(rPaM, true, aWhichIds);
         }
         else
         {
@@ -2346,7 +2346,7 @@ throw (uno::RuntimeException)
     }
     if (!aWhichIds.empty())
     {
-        rUnoCursor.GetDoc()->ResetAttrs(rUnoCursor, sal_True, aWhichIds);
+        rUnoCursor.GetDoc()->ResetAttrs(rUnoCursor, true, aWhichIds);
     }
 }
 
@@ -2416,7 +2416,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         }
         if (!aWhichIds.empty())
         {
-            rDoc.ResetAttrs(rUnoCursor, sal_True, aWhichIds);
+            rDoc.ResetAttrs(rUnoCursor, true, aWhichIds);
         }
     }
 }

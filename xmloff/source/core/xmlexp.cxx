@@ -2207,7 +2207,6 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
         {
         }
     }
-    OUString sRet = sValue;
     if( xUriRef.is() )//no conversion for empty values or for fragments
     {
         //conversion for matching schemes only

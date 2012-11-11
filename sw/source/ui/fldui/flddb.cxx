@@ -401,7 +401,7 @@ void SwFldDBPage::CheckInsert()
     sal_Bool bInsert = sal_True;
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
-    SvLBoxEntry* pEntry = aDatabaseTLB.GetCurEntry();
+    SvTreeListEntry* pEntry = aDatabaseTLB.GetCurEntry();
 
     if (pEntry)
     {
@@ -427,8 +427,8 @@ void SwFldDBPage::CheckInsert()
 
 IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
 {
-    SvLBoxEntry* pColEntry;
-    SvLBoxEntry* pEntry = pColEntry = pBox->GetCurEntry();
+    SvTreeListEntry* pColEntry;
+    SvTreeListEntry* pEntry = pColEntry = pBox->GetCurEntry();
     if (pEntry)
     {
         sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());

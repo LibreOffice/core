@@ -414,7 +414,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if( mpBA && ( mbMuted != bSet ) )
+    if (mpBA && (mbMuted != static_cast<bool>(bSet)))
     {
         mbMuted = bSet;
         mpBA->put_Volume( mbMuted ? -10000 : mnUnmutedVolume );

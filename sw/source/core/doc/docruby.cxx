@@ -62,7 +62,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
 {
     const SwPaM *_pStartCrsr = (SwPaM*)rPam.GetNext(),
                 *__pStartCrsr = _pStartCrsr;
-    sal_Bool bCheckEmpty = &rPam != _pStartCrsr;
+    bool bCheckEmpty = &rPam != _pStartCrsr;
     do {
         const SwPosition* pStt = _pStartCrsr->Start(),
                         * pEnd = pStt == _pStartCrsr->GetPoint()
@@ -114,7 +114,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
 
     const SwPaM *_pStartCrsr = (SwPaM*)rPam.GetNext(),
                 *__pStartCrsr = _pStartCrsr;
-    sal_Bool bCheckEmpty = &rPam != _pStartCrsr;
+    bool bCheckEmpty = &rPam != _pStartCrsr;
     do {
         const SwPosition* pStt = _pStartCrsr->Start(),
                         * pEnd = pStt == _pStartCrsr->GetPoint()
@@ -143,7 +143,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         }
                         else
                         {
-                            ResetAttrs( aPam, sal_True, aDelArr );
+                            ResetAttrs( aPam, true, aDelArr );
                         }
                     }
 
@@ -254,7 +254,7 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
         }
     }
 
-    sal_Bool bAlphaNum = sal_False;
+    bool bAlphaNum = false;
     long nWordEnd = nEnd;
     CharClass& rCC = GetAppCharClass();
     while(  nStart < nEnd )
@@ -274,14 +274,14 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
         }
 
         sal_Int32 nChType = rCC.getType( *pTxt, nStart );
-        sal_Bool bIgnoreChar = sal_False, bIsAlphaNum = sal_False, bChkNxtWrd = sal_False;
+        bool bIgnoreChar = false, bIsAlphaNum = false, bChkNxtWrd = false;
         switch( nChType )
         {
         case UnicodeType::UPPERCASE_LETTER:
         case UnicodeType::LOWERCASE_LETTER:
         case UnicodeType::TITLECASE_LETTER:
         case UnicodeType::DECIMAL_DIGIT_NUMBER:
-                bChkNxtWrd = bIsAlphaNum = sal_True;
+                bChkNxtWrd = bIsAlphaNum = true;
                 break;
 
         case UnicodeType::SPACE_SEPARATOR:
@@ -289,15 +289,15 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
 /*??*/  case UnicodeType::PRIVATE_USE:
         case UnicodeType::START_PUNCTUATION:
         case UnicodeType::END_PUNCTUATION:
-            bIgnoreChar = sal_True;
+            bIgnoreChar = true;
             break;
 
 
         case UnicodeType::OTHER_LETTER:
-            bChkNxtWrd = sal_True;
+            bChkNxtWrd = true;
 
         default:
-                bIsAlphaNum = sal_False;
+                bIsAlphaNum = false;
                 break;
         }
 

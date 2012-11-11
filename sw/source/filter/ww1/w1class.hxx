@@ -168,7 +168,7 @@ public:
             if (ulCountBytes > ulNew)
                 ulCountBytes = ulNew;
         }
-    void operator++(int)
+    void operator++()
     {
         OSL_ENSURE(ulSeek+1<ulCountBytes, "Ww1PlainText");
         ulSeek++;
@@ -1138,7 +1138,7 @@ public:
         if (grpfIhdt & 0x0020) nFirstFootL = nextIhdd++;
         OSL_ENSURE(nextIhdd<=Count(), "Ww1HeaderFooter");
     }
-    sal_Bool operator++(int)
+    sal_Bool operator++()
     {
         sal_Bool bRet = sal_True;
         eHeaderFooterMode = (HeaderFooterMode)((short)eHeaderFooterMode + 1);
@@ -1231,7 +1231,7 @@ public:
     {}
     // innerhalb des textes
     sal_uLong Where()       { return Where(nPlcIndex); }
-    void operator++(int)
+    void operator++()
     {
         OSL_ENSURE(nPlcIndex+1 <= Count(), "Ww1Fields");
         nPlcIndex++;
@@ -1303,7 +1303,7 @@ public:
             delete pPos[0];
     }
     sal_uLong Where() const     { return pPos[nIsEnd]->WhereCP(nPlcIdx[nIsEnd]); }
-    void operator++(int);
+    void operator++();
     sal_Bool GetError() const   { return !bOK; }
     long GetHandle() const;
     sal_Bool GetIsEnd() const   { return ( nIsEnd ) ? sal_True : sal_False; }
@@ -1333,7 +1333,7 @@ public:
             ulRet = Ww1PlcFootnoteRef::Where(nPlcIndex);
         return ulRet;
     }
-    void operator++(int)
+    void operator++()
     {
         OSL_ENSURE(nPlcIndex+1 <= Count(), "Ww1Footnotes");
         nPlcIndex++;
@@ -1352,7 +1352,7 @@ public:
     : Ww1PlcSep(rFibL), aHdd(rFibL, grpfIhdt), nPlcIndex(0) {}
 
     Ww1HeaderFooter& GetHdd()   { return aHdd; }
-    void operator++(int)        { nPlcIndex++; }
+    void operator++()        { nPlcIndex++; }
     sal_uInt8* GetData()            { return Ww1PlcSep::GetData(nPlcIndex); }
     // innerhalb des textes
     sal_uLong Where()               { return Ww1PlcSep::Where(nPlcIndex); }
@@ -1393,7 +1393,7 @@ public:
     Ww1Pap(Ww1Fib& rFib);
     ~Ww1Pap()   { delete pPap; }
     sal_uLong Where( sal_Bool bSetIndex = sal_True ); // innerhalb des textes
-    void operator++(int);
+    void operator++();
     sal_Bool FillStart(sal_uInt8*& pB, sal_uInt16& nSize)
     {
         UpdateIdx();
@@ -1460,7 +1460,7 @@ public:
     Ww1Chp( Ww1Fib& rFib );
     ~Ww1Chp()   { delete pChp; }
     sal_uLong Where( sal_Bool bSetIndex = sal_True ); // innerhalb des textes
-    void operator++(int);
+    void operator++();
     sal_Bool FillStart(W1_CHP& rChp)
     {
         UpdateIdx();

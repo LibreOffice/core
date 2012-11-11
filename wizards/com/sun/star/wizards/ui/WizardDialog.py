@@ -19,7 +19,7 @@ import uno
 import traceback
 from abc import ABCMeta, abstractmethod
 from .UnoDialog2 import UnoDialog2, Desktop, PropertyNames, UIConsts, \
-	ItemListenerProcAdapter
+    ItemListenerProcAdapter
 from .event.CommonListener import TerminateListenerProcAdapter
 from ..common.Helper import Helper
 from ..common.Resource import Resource

@@ -256,66 +256,95 @@ SwDoc::SwDoc()
     pStyleAccess( 0 ),
     pLayoutCache( 0 ),
     pUnoCallBack(new SwModify(0)),
-    mpGrammarContact( 0 ),
+    mpGrammarContact(createGrammarContact()),
     aChartDataProviderImplRef(),
     pChartControllerHelper( 0 ),
     mpListItemsList( new tImplSortedNodeNumList() ), // #i83479#
     m_pXmlIdRegistry(),
     nAutoFmtRedlnCommentNo( 0 ),
     nLinkUpdMode( GLOBALSETTING ),
-     eFldUpdMode( AUTOUPD_GLOBALSETTING ),
+    eFldUpdMode( AUTOUPD_GLOBALSETTING ),
     eRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE)),
     eChrCmprType( CHARCOMPRESS_NONE ),
     mReferenceCount(0),
     mIdleBlockCount(0),
     nLockExpFld( 0 ),
+    mbGlossDoc(false),
+    mbModified(false),
+    mbDtor(false),
+    mbPageNums(false),
+    mbLoaded(false),
+    mbUpdateExpFld(false),
+    mbNewDoc(false),
+    mbNewFldLst(true),
+    mbCopyIsMove(false),
+    mbVisibleLinks(true),
+    mbInReading(false),
+    mbInXMLImport(false),
+    mbUpdateTOX(false),
+    mbInLoadAsynchron(false),
+    mbHTMLMode(false),
+    mbInCallModified(false),
+    mbIsGlobalDoc(false),
+    mbGlblDocSaveLinks(false),
+    mbIsLabelDoc(false),
+    mbIsAutoFmtRedline(false),
+    mbOLEPrtNotifyPending(false),
+    mbAllOLENotify(false),
+    mbIsRedlineMove(false),
+    mbInsOnlyTxtGlssry(false),
+    mbContains_MSVBasic(false),
+    mbPurgeOLE(true),
+    mbKernAsianPunctuation(false),
     mbReadlineChecked(false),
-    mbLinksUpdated( sal_False ), //#i38810#
+    mbLinksUpdated( false ), //#i38810#
     mbClipBoard( false ),
     mbColumnSelection( false ),
+#ifdef DBG_UTIL
+    mbXMLExport(false),
+#endif
+
+    mbApplyWorkaroundForB6375613(false),
+
+    // COMPATIBILITY FLAGS START
+
+    mbAddFlyOffsets(false),
+    mbUseHiResolutionVirtualDevice(true),
+    mbMathBaselineAlignment(false), // default for *old* documents is 'off'
+    mbStylesNoDefault(false),
+    mbFloattableNomargins(false),
+    mEmbedFonts(false),
+    mEmbedSystemFonts(false),
+    mbOldNumbering(false),
+    mbIgnoreFirstLineIndentInNumbering(false),
+    mbDoNotResetParaAttrsForNumFont(false),
+    mbTableRowKeep(false),
+    mbIgnoreTabsAndBlanksForLineCalculation(false),
+    mbDoNotCaptureDrawObjsOnPage(false),
+    mbOutlineLevelYieldsOutlineRule(false),
+    mbClipAsCharacterAnchoredWriterFlyFrames(false),
+    mbUnixForceZeroExtLeading(false),
+    mbOldPrinterMetrics(false),
+    mbTabRelativeToIndent(true),
     mbProtectForm(false), // i#78591#
+    mbInvertBorderSpacing (false),
+    mbCollapseEmptyCellPara(true),
+    mbTabAtLeftIndentForParagraphsInList(false), //#i89181#
+    mbSmallCapsPercentage66(false),
+    mbTabOverflow(true),
+    mbUnbreakableNumberings(false),
+    mbClippedPictures(false),
+    mbBackgroundParaOverDrawings(false),
     mbLastBrowseMode( false ),
     n32DummyCompatabilityOptions1(0),
     n32DummyCompatabilityOptions2(0),
-    mbStartIdleTimer(sal_False),
+
+    // COMPATIBILITY FLAGS END
+
+    mbStartIdleTimer(false),
     mbSetDrawDefaults(false)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
-
-    mbGlossDoc =
-    mbModified =
-    mbDtor =
-    mbPageNums =
-    mbLoaded =
-    mbUpdateExpFld =
-    mbNewDoc =
-    mbCopyIsMove =
-    mbInReading =
-    mbInXMLImport =
-    mbUpdateTOX =
-    mbInLoadAsynchron =
-    mbHTMLMode =
-    mbInCallModified =
-    mbIsGlobalDoc =
-    mbGlblDocSaveLinks =
-    mbIsLabelDoc =
-    mbIsAutoFmtRedline =
-    mbOLEPrtNotifyPending =
-    mbAllOLENotify =
-    mbIsRedlineMove =
-    mbInsOnlyTxtGlssry =
-    mbContains_MSVBasic =
-    mbKernAsianPunctuation =
-#ifdef DBG_UTIL
-    mbXMLExport =
-#endif
-    mbApplyWorkaroundForB6375613 =
-                            false;
-
-    mbNewFldLst =
-    mbVisibleLinks =
-    mbPurgeOLE =
-                            true;
 
     //
     // COMPATIBILITY FLAGS START
@@ -335,39 +364,12 @@ SwDoc::SwDoc()
     mbUseFormerObjectPos                = aOptions.IsUseObjectPositioning();
     mbUseFormerTextWrapping             = aOptions.IsUseOurTextWrapping();
     mbConsiderWrapOnObjPos              = aOptions.IsConsiderWrappingStyle();
-    mbMathBaselineAlignment                 = false;        // default for *old* documents is 'off'
-    mbStylesNoDefault                       = false;
-    mbAddFlyOffsets                         = false;        // hidden
-    mbOldNumbering                          = false;        // hidden
-    mbUseHiResolutionVirtualDevice          = true;         // hidden
-    mbIgnoreFirstLineIndentInNumbering      = false;        // hidden
+
     mbDoNotJustifyLinesWithManualBreak      = !aOptions.IsExpandWordSpace();
-    mbDoNotResetParaAttrsForNumFont         = false;        // hidden
-    mbOutlineLevelYieldsOutlineRule         = false;        // hidden
-    mbTableRowKeep                          = false;        // hidden
-    mbIgnoreTabsAndBlanksForLineCalculation = false;        // hidden
-    mbDoNotCaptureDrawObjsOnPage            = false;        // hidden
-    mbClipAsCharacterAnchoredWriterFlyFrames= false;        // hidden
-    mbUnixForceZeroExtLeading               = false;        // hidden
-    mbOldPrinterMetrics                     = false;        // hidden
-    mbTabRelativeToIndent                   = true;         // hidden
-    mbTabAtLeftIndentForParagraphsInList    = false;        // hidden #i89181#
-    mbInvertBorderSpacing                   = false;        // hidden
-    mbCollapseEmptyCellPara                 = true;        // hidden
-    mbSmallCapsPercentage66                 = false;        // hidden
-    mbTabOverflow                           = true;
-    mbUnbreakableNumberings                 = false;
-    mbFloattableNomargins                   = false;
-    mbClippedPictures                       = false;
-    mbBackgroundParaOverDrawings            = false;
-    mEmbedFonts                             = false;
-    mEmbedSystemFonts                       = false;
 
     //
     // COMPATIBILITY FLAGS END
     //
-
-    mpGrammarContact = ::createGrammarContact();
 
     /*
      * DefaultFormats and DefaultFormatCollections (FmtColl)
@@ -530,7 +532,7 @@ SwDoc::~SwDoc()
     delete pLayouter;
     pLayouter = 0L;
 
-    // Deactivate Undo notification from the Draw
+    // Deactivate Undo notification from Draw
     if( pDrawModel )
     {
         DrawNotifyUndoHdl();
@@ -539,7 +541,7 @@ SwDoc::~SwDoc()
 
     delete pPgPViewPrtData;
 
-    mbDtor = sal_True;
+    mbDtor = true;
 
     delete pRedlineTbl;
     delete pUnoCrsrTbl;
@@ -558,7 +560,7 @@ SwDoc::~SwDoc()
             pLinkMgr->Remove( 0, pLinkMgr->GetLinks().size() );
     }
 
-    // The ChapterNumbers/Numbers need to be deleted before the Templates
+    // The ChapterNumbers/Numbers need to be deleted before the styles
     // or we update all the time!
     m_pNodes->pOutlineNds->clear();
     SwNodes & rUndoNodes( GetUndoManager().GetUndoNodes() );
@@ -603,12 +605,10 @@ SwDoc::~SwDoc()
     BOOST_FOREACH( SwSectionFmt* pFmt, *pSectionFmtTbl )
         lcl_DelFmtIndizes( pFmt );
 
-    // The formattings that come hereafter depend on the default formattings.
-    // [Destroy] these only after destroying the FmtIndices, because the content
+    // The formats/styles that follow depend on the default formats.
+    // Destroy these only after destroying the FmtIndices, because the content
     // of headers/footers has to be deleted as well. If in the headers/footers
     // there are still Flys registered at that point, we have a problem.
-    // (This comment might have been translated incorrectly. Blame the bad
-    // German original)
     BOOST_FOREACH(SwPageDesc *pPageDesc, aPageDescs)
         delete pPageDesc;
     aPageDescs.clear();
@@ -631,7 +631,7 @@ SwDoc::~SwDoc()
 
     // Optimization: Based on the fact that Standard is always 2nd in the
     // array, we should delete it as the last. With this we avoid
-    // remangling the Formats all the time!
+    // reparenting the Formats all the time!
     if( 2 < pTxtFmtCollTbl->size() )
         DeleteAndDestroy(*pTxtFmtCollTbl, 2, pTxtFmtCollTbl->size());
     DeleteAndDestroy(*pTxtFmtCollTbl, 1, pTxtFmtCollTbl->size());
@@ -641,8 +641,6 @@ SwDoc::~SwDoc()
             "DefaultGrfCollection must always be at the start" );
 
     DeleteAndDestroy(*pGrfFmtCollTbl, 1, pGrfFmtCollTbl->size());
-    // Is the result anyway - no _DEL array!
-    //  pGrfFmtCollTbl->Remove( 0, n );
     delete pGrfFmtCollTbl;
 
     /*
@@ -654,7 +652,6 @@ SwDoc::~SwDoc()
     pFrmFmtTbl->erase( pFrmFmtTbl->begin() );
     pCharFmtTbl->erase( pCharFmtTbl->begin() );
 
-    // Delete for pPrt
     DELETEZ( pPrt );
     DELETEZ( pNewDBMgr );
 
@@ -665,15 +662,14 @@ SwDoc::~SwDoc()
 
     // Only now destroy the Model, the drawing objects - which are also
     // contained in the Undo - need to remove their attributes from the
-    // Model. Also, DrawContacts could exist before that.
+    // Model. Also, DrawContacts could exist before this.
     ReleaseDrawModel();
     // Destroy DrawModel before the LinkManager, because it's always set
     // in the DrawModel.
     DELETEZ( pLinkMgr );
 
-    // Clear the Tables before deleting them, or we crash due to
-    // definition dependencies.
-    // We also convert the arrays (due to includes) to pointers.
+    // Clear the Tables before deleting the defaults, or we crash due to
+    // dependencies on defaults.
     delete pFrmFmtTbl;
     delete pSpzFrmFmtTbl;
 
@@ -802,7 +798,7 @@ void SwDoc::ClearDoc()
     GetIDocumentUndoRedo().DelAllUndoObj();
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
-    // Deactivate Undo notification from the Draw
+    // Deactivate Undo notification from Draw
     if( pDrawModel )
     {
         DrawNotifyUndoHdl();
@@ -830,7 +826,7 @@ void SwDoc::ClearDoc()
     SwPageDesc* pDummyPgDsc = aPageDescs[ nDummyPgDsc ];
 
     SwNodeIndex aSttIdx( *GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
-    // create the first one over and over again (without Attribute/Templates etc.
+    // create the first one over and over again (without attributes/style etc.
     SwTxtNode* pFirstNd = GetNodes().MakeTxtNode( aSttIdx, pDfltTxtFmtColl );
 
     if( pCurrentView )  //swmod 071029//swmod 071225
@@ -875,7 +871,7 @@ void SwDoc::ClearDoc()
 
     // Optimization: Based on the fact that Standard is always 2nd in the
     // array, we should delete it as the last. With this we avoid
-    // remangling the Formats all the time!
+    // reparenting the Formats all the time!
     if( 2 < pTxtFmtCollTbl->size() )
         DeleteAndDestroy(*pTxtFmtCollTbl, 2, pTxtFmtCollTbl->size());
     DeleteAndDestroy(*pTxtFmtCollTbl, 1, pTxtFmtCollTbl->size());
@@ -961,7 +957,7 @@ IGrammarContact* getGrammarContact( const SwTxtNode& rTxtNode )
 
 // #i42634# Moved common code of SwReader::Read() and SwDocShell::UpdateLinks()
 // to new SwDoc::UpdateLinks():
-void SwDoc::UpdateLinks( sal_Bool bUI )
+void SwDoc::UpdateLinks( bool bUI )
 {
     SfxObjectCreateMode eMode;
     sal_uInt16 nLinkMode = getLinkUpdateMode( true );
@@ -976,13 +972,13 @@ void SwDoc::UpdateLinks( sal_Bool bUI )
             !GetDocShell()->IsPreview() )
         {
             ViewShell* pVSh = 0;
-            sal_Bool bAskUpdate = nLinkMode == MANUAL;
-            sal_Bool bUpdate = sal_True;
+            bool bAskUpdate = nLinkMode == MANUAL;
+            bool bUpdate = true;
             switch(nUpdateDocMode)
             {
-                case document::UpdateDocMode::NO_UPDATE:   bUpdate = sal_False;break;
-                case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = sal_False; break;
-                case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = sal_True; break;
+                case document::UpdateDocMode::NO_UPDATE:   bUpdate = false;break;
+                case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = false; break;
+                case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = true; break;
             }
             if( bUpdate && (bUI || !bAskUpdate) )
             {
@@ -994,10 +990,10 @@ void SwDoc::UpdateLinks( sal_Bool bUI )
                     ViewShell aVSh( *this, 0, 0 );
 
                     SET_CURR_SHELL( &aVSh );
-                    GetLinkManager().UpdateAllLinks( bAskUpdate , sal_True, sal_False, pDlgParent );
+                    GetLinkManager().UpdateAllLinks( bAskUpdate , true, false, pDlgParent );
                 }
                 else
-                    GetLinkManager().UpdateAllLinks( bAskUpdate, sal_True, sal_False, pDlgParent );
+                    GetLinkManager().UpdateAllLinks( bAskUpdate, true, false, pDlgParent );
             }
         }
     }
@@ -1200,7 +1196,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 }
 
 /*-------------------------------------------------------------------------
-    copy document content - code from SwFEShell::Paste( SwDoc* , sal_Bool  )
+    copy document content - code from SwFEShell::Paste( SwDoc* )
   -----------------------------------------------------------------------*/
 void SwDoc::Paste( const SwDoc& rSource )
 {
@@ -1232,7 +1228,7 @@ void SwDoc::Paste( const SwDoc& rSource )
             rSource.CopyRange( aCpyPam, rInsPos, true );
 
             {
-                aIndexBefore++;
+                ++aIndexBefore;
                 SwPaM aPaM(SwPosition(aIndexBefore),
                            SwPosition(rInsPos.nNode));
 
@@ -1252,10 +1248,7 @@ void SwDoc::Paste( const SwDoc& rSource )
         {
             for ( sal_uInt16 i = 0; i < rSource.GetSpzFrmFmts()->size(); ++i )
             {
-                sal_Bool bInsWithFmt = sal_True;
                 const SwFrmFmt& rCpyFmt = *(*rSource.GetSpzFrmFmts())[i];
-                if( bInsWithFmt  )
-                {
                     SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
                     if (FLY_AT_PAGE == aAnchor.GetAnchorId())
                     {
@@ -1264,7 +1257,6 @@ void SwDoc::Paste( const SwDoc& rSource )
                     else
                         continue;
                     this->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
-                }
             }
         }
     }

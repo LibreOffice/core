@@ -533,6 +533,8 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
                 return aLibTable[i].getTransliterations;
             else if( strcmp(pFunction, "getUnicodeScripts") == 0 )
                 return aLibTable[i].getUnicodeScripts;
+            else if( strcmp(pFunction, "getAllFormats1") == 0 )
+                return aLibTable[i].getAllFormats1;
 #endif
         }
     }

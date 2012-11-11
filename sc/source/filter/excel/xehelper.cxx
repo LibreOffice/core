@@ -320,7 +320,7 @@ rtl::OUString XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlFie
             aUrlRepr = *pRepr;
 
         // add URL to note text
-        ScGlobal::AddToken( maUrlList, rUrlField.GetURL(), '\n' );
+        maUrlList = ScGlobal::addToken( maUrlList, rUrlField.GetURL(), '\n' );
     }
 
     // no hyperlink representation from Excel HLINK record -> use it from text field
@@ -879,7 +879,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
             aSel.nStartPos = aSel.nEndPos;
         }
 
-        ScGlobal::AddToken( aText, aParaText, '\n' );
+        aText = ScGlobal::addToken( aText, aParaText, '\n' );
         if( nParaHeight == 0 )
             nParaHeight = aFontData.mnHeight * 20;  // points -> twips
         nHeight += nParaHeight;

@@ -22,7 +22,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/script/XEventAttacher2.hpp>
 #include <com/sun/star/script/Converter.hpp>
@@ -395,8 +395,7 @@ Reference< XIntrospection > EventAttacherImpl::getIntrospection() throw( Excepti
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xIntrospection.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString("com.sun.star.beans.Introspection") ) );
-        m_xIntrospection = Reference< XIntrospection >( xIFace, UNO_QUERY );
+        m_xIntrospection = Introspection::create( comphelper::getComponentContext(m_xSMgr) );
     }
     return m_xIntrospection;
 }

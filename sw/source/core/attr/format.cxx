@@ -386,7 +386,7 @@ sal_Bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
     return sal_True;
 }
 
-sal_Bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
+bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
 {
     if ( IsInCache() || IsInSwFntCache() )
     {
@@ -396,14 +396,14 @@ sal_Bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
 
     // if Modify is locked then no modifications will be sent;
     // but call Modify always for FrmFmts
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const sal_uInt16 nFmtWhich = Which();
     if( IsModifyLocked() ||
         ( !GetDepends() &&
           (RES_GRFFMTCOLL == nFmtWhich  ||
            RES_TXTFMTCOLL == nFmtWhich ) ) )
     {
-        if( 0 != ( bRet = (0 != aSet.Put( rAttr ))) )
+        if( ( bRet = (0 != aSet.Put( rAttr ))) )
             aSet.SetModifyAtAttr( this );
         // #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL && rAttr.Which() == RES_PARATR_NUMRULE )
@@ -431,10 +431,10 @@ sal_Bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
     return bRet;
 }
 
-sal_Bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
+bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
 {
     if( !rSet.Count() )
-        return sal_False;
+        return false;
 
     if ( IsInCache() )
     {
@@ -445,14 +445,14 @@ sal_Bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
 
     // if Modify is locked then no modifications will be sent;
     // but call Modify always for FrmFmts
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const sal_uInt16 nFmtWhich = Which();
     if ( IsModifyLocked() ||
          ( !GetDepends() &&
            ( RES_GRFFMTCOLL == nFmtWhich ||
              RES_TXTFMTCOLL == nFmtWhich ) ) )
     {
-        if( 0 != ( bRet = (0 != aSet.Put( rSet ))) )
+        if( ( bRet = (0 != aSet.Put( rSet ))) )
             aSet.SetModifyAtAttr( this );
         // #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL )
@@ -478,10 +478,10 @@ sal_Bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
 }
 
 // remove Hint using nWhich from array with delta
-sal_Bool SwFmt::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
+bool SwFmt::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 {
     if( !aSet.Count() )
-        return sal_False;
+        return false;
 
     if( !nWhich2 || nWhich2 < nWhich1 )
         nWhich2 = nWhich1; // then set to 1st ID, only this item
@@ -500,7 +500,7 @@ sal_Bool SwFmt::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 
     SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
               aNew( *aSet.GetPool(), aSet.GetRanges() );
-    sal_Bool bRet = 0 != aSet.ClearItem_BC( nWhich1, nWhich2, &aOld, &aNew );
+    bool bRet = 0 != aSet.ClearItem_BC( nWhich1, nWhich2, &aOld, &aNew );
     if( bRet )
     {
         SwAttrSetChg aChgOld( aSet, aOld );
@@ -539,10 +539,9 @@ sal_uInt16 SwFmt::ResetAllFmtAttr()
     return aNew.Count();
 }
 
-sal_Bool SwFmt::GetInfo( SfxPoolItem& rInfo ) const
+bool SwFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
-    sal_Bool bRet = SwModify::GetInfo( rInfo );
-    return bRet;
+    return SwModify::GetInfo( rInfo );
 }
 
 void SwFmt::DelDiffs( const SfxItemSet& rSet )

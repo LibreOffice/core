@@ -74,13 +74,22 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
             switch(pEntry->GetType())
             {
                 case condformat::CONDITION:
-                    maEntries.push_back(new ScConditionFrmtEntry( this, mpDoc, maPos, static_cast<const ScCondFormatEntry*>( pEntry ) ) );
+                    {
+                        const ScCondFormatEntry* pConditionEntry = static_cast<const ScCondFormatEntry*>( pEntry );
+                        if(pConditionEntry->GetOperation() != SC_COND_DIRECT)
+                            maEntries.push_back(new ScConditionFrmtEntry( this, mpDoc, maPos, pConditionEntry ) );
+                        else
+                            maEntries.push_back(new ScFormulaFrmtEntry( this, mpDoc, maPos, pConditionEntry ) );
+
+                    }
                     break;
                 case condformat::COLORSCALE:
                     maEntries.push_back(new ScColorScale3FrmtEntry( this, mpDoc, maPos, static_cast<const ScColorScaleFormat*>( pEntry ) ) );
                     break;
                 case condformat::DATABAR:
                     maEntries.push_back(new ScDataBarFrmtEntry( this, mpDoc, maPos, static_cast<const ScDataBarFormat*>( pEntry ) ) );
+                    break;
+                case condformat::ICONSET:
                     break;
             }
         }
@@ -102,6 +111,7 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
                 break;
         }
     }
+    RecalcAll();
     if (!maEntries.empty())
         maEntries.begin()->SetActive();
 

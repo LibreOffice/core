@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 using namespace ::com::sun::star;
@@ -44,8 +45,7 @@ PresenterConfigurationAccess::PresenterConfigurationAccess (
 {
     try
     {
-        Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager());
-        if (xFactory.is())
+        if (rxContext.is())
         {
             Sequence<Any> aCreationArguments(3);
             aCreationArguments[0] = makeAny(beans::PropertyValue(
@@ -70,11 +70,8 @@ PresenterConfigurationAccess::PresenterConfigurationAccess (
             else
                 sAccessService = A2S("com.sun.star.configuration.ConfigurationUpdateAccess");
 
-            Reference<lang::XMultiServiceFactory> xProvider (
-                xFactory->createInstanceWithContext(
-                    A2S("com.sun.star.configuration.ConfigurationProvider"),
-                    rxContext),
-                UNO_QUERY_THROW);
+            Reference<lang::XMultiServiceFactory> xProvider =
+                configuration::theDefaultProvider::get( rxContext );
             mxRoot = xProvider->createInstanceWithArguments(
                 sAccessService, aCreationArguments);
             maNode <<= mxRoot;

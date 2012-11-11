@@ -210,6 +210,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SwScrollbar         *pHScrollbar,   // MDI control elements
                         *pVScrollbar;
 
+    bool                mbHScrollbarEnabled;
+    bool                mbVScrollbarEnabled;
+
     Window              *pScrollFill;   // dummy window for filling the lower right edge
                                         // when both scrollbars are active
 
@@ -506,6 +509,9 @@ public:
     void            ShowVScrollbar(sal_Bool bShow);
     sal_Bool        IsVScrollbarVisible()const;
 
+    void            EnableHScrollbar(bool bEnable);
+    void            EnableVScrollbar(bool bEnable);
+
     int             CreateVLineal();
     int             KillVLineal();
     int             CreateTab();
@@ -606,7 +612,7 @@ public:
     sal_Bool IsCrsrAtTop() const                    { return bTopCrsr; }
     sal_Bool IsCrsrAtCenter() const                 { return bCenterCrsr; }
 
-    sal_Bool JumpToSwMark( const String& rMark );
+    bool JumpToSwMark( const String& rMark );
 
     long InsertDoc( sal_uInt16 nSlotId, const String& rFileName,
                     const String& rFilterName, sal_Int16 nVersion = 0 );

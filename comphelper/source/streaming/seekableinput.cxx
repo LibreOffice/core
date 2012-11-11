@@ -55,11 +55,11 @@ void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& xIn,
 //---------------------------------------------------------------------------
 OSeekableInputWrapper::OSeekableInputWrapper(
             const uno::Reference< io::XInputStream >& xInStream,
-            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-: m_xFactory( xFactory )
+            const uno::Reference< uno::XComponentContext >& rxContext )
+: m_xContext( rxContext )
 , m_xOriginalStream( xInStream )
 {
-    if ( !m_xFactory.is() )
+    if ( !m_xContext.is() )
         throw uno::RuntimeException();
 }
 
@@ -71,7 +71,7 @@ OSeekableInputWrapper::~OSeekableInputWrapper()
 //---------------------------------------------------------------------------
 uno::Reference< io::XInputStream > OSeekableInputWrapper::CheckSeekableCanWrap(
                             const uno::Reference< io::XInputStream >& xInStream,
-                            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+                            const uno::Reference< uno::XComponentContext >& rxContext )
 {
     // check that the stream is seekable and just wrap it if it is not
     uno::Reference< io::XSeekable > xSeek( xInStream, uno::UNO_QUERY );
@@ -80,7 +80,7 @@ uno::Reference< io::XInputStream > OSeekableInputWrapper::CheckSeekableCanWrap(
 
     uno::Reference< io::XInputStream > xNewStream(
             static_cast< io::XInputStream* >(
-                new OSeekableInputWrapper( xInStream, xFactory ) ) );
+                new OSeekableInputWrapper( xInStream, rxContext ) ) );
     return xNewStream;
 }
 
@@ -89,11 +89,11 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
 {
     if ( !m_xCopyInput.is() )
     {
-        if ( !m_xFactory.is() )
+        if ( !m_xContext.is() )
             throw uno::RuntimeException();
 
         uno::Reference< io::XOutputStream > xTempOut(
-                io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+                io::TempFile::create(m_xContext),
                 uno::UNO_QUERY_THROW );
 
         copyInputToOutput_Impl( m_xOriginalStream, xTempOut );

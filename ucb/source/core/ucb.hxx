@@ -21,6 +21,7 @@
 #define _UCB_HXX
 
 
+#include <com/sun/star/ucb/CheckinArgument.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -49,7 +50,7 @@ namespace cppu { class OInterfaceContainerHelper; }
 
 namespace com { namespace sun { namespace star { namespace ucb {
     class XCommandInfo;
-    struct GlobalTransferCommandArgument;
+    struct GlobalTransferCommandArgument2;
 } } } }
 
 class UniversalContentBroker :
@@ -176,10 +177,14 @@ private:
 
     void
     globalTransfer(
-            const com::sun::star::ucb::GlobalTransferCommandArgument & rArg,
+            const com::sun::star::ucb::GlobalTransferCommandArgument2 & rArg,
             const com::sun::star::uno::Reference<
                  com::sun::star::ucb::XCommandEnvironment >& xEnv )
         throw( com::sun::star::uno::Exception );
+
+    com::sun::star::uno::Any checkIn( const com::sun::star::ucb::CheckinArgument& rArg,
+            const com::sun::star::uno::Reference<
+                 com::sun::star::ucb::XCommandEnvironment >& xEnv ) throw( com::sun::star::uno::Exception );
 
 
     bool configureUcb()

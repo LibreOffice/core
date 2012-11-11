@@ -16,27 +16,25 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from .FaxWizardDialog import FaxWizardDialog, Helper, PropertyNames, uno
+from .FaxWizardDialog import FaxWizardDialog, Helper, PropertyNames, uno, HID
 from .CGFaxWizard import CGFaxWizard
 from .FaxDocument import FaxDocument
-from .FaxWizardDialogConst import HID
 from ..ui.PathSelection import PathSelection
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
 from ..text.TextFieldHandler import TextFieldHandler
 from ..text.TextDocument import TextDocument
 from ..text.ViewHandler import ViewHandler
+from ..text.TextElement import TextElement
 from ..common.Configuration import Configuration
 from ..common.SystemDialog import SystemDialog
 from ..common.NoValidPathException import NoValidPathException
 from ..common.HelpIds import HelpIds
 from ..common.FileAccess import FileAccess
 from ..common.Desktop import Desktop
-from ..common.TextElement import TextElement
 from ..document.OfficeDocument import OfficeDocument
 
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
-from com.sun.star.uno import RuntimeException
 from com.sun.star.util import CloseVetoException
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.document.UpdateDocMode import FULL_UPDATE
@@ -56,19 +54,18 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     RM_FOOTER = 4
     RM_FINALSETTINGS = 5
 
-    lstBusinessStylePos = None
-    lstPrivateStylePos = None
-
     def __init__(self, xmsf):
         super(FaxWizardDialogImpl, self).__init__(xmsf)
+        self.lstBusinessStylePos = None
+        self.lstPrivateStylePos = None
         self.bSaveSuccess = False
         self.filenameChanged = False
         self.UserTemplatePath = ""
         self.sTemplatePath = ""
 
     @classmethod
-    def main(self, args):
-        #Call the wizard remotely
+    def main(self):
+        #Call the wizard remotely(see README)
         try:
             ConnectStr = \
                 "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
@@ -76,9 +73,9 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             lw = FaxWizardDialogImpl(xLocMSF)
             lw.startWizard(xLocMSF)
         except Exception as e:
-			print ("Wizard failure exception " + str(type(e)) +
-				   " message " + str(e) + " args " + str(e.args) +
-				   traceback.format_exc())
+            print ("Wizard failure exception " + str(type(e)) +
+                   " message " + str(e) + " args " + str(e.args) +
+                   traceback.format_exc())
 
     def startWizard(self, xMSF):
         self.running = True
@@ -150,9 +147,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def finishWizard(self):
         self.switchToStep(self.getCurrentStep(), self.nMaxStep)
-        self.myFaxDoc.setWizardTemplateDocInfo( \
-            self.resources.resFaxWizardDialog_title,
-            self.resources.resTemplateDescription)
         endWizard = True
         try:
             fileAccess = FileAccess(self.xMSF)
@@ -237,28 +231,13 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def drawConstants(self):
         '''Localise the template'''
-        constRangeList = self.searchFillInItems(1)
+        constRangeList = TextDocument.searchFillInItems(1)
         
-        for i in xrange(constRangeList.Count):
-            item = constRangeList.getByIndex(i)
-            text = item.String.lower()
-            aux = TextElement(item, self.resources.dictConstants[text],
-                "hint", self.xMSF)
+        for i in constRangeList:
+            text = i.String.lower()
+            aux = TextElement(i, self.resources.dictConstants[text])
             aux.write()
             
-    def searchFillInItems(self, typeSearch):
-        sd = TextDocument.xTextDocument.createSearchDescriptor()
-        
-        if typeSearch == 0:
-            sd.setSearchString("<[^>]+>")
-        elif typeSearch == 1:
-            sd.setSearchString("#[^#]+#")
-            
-        sd.setPropertyValue("SearchRegularExpression", True)
-        sd.setPropertyValue("SearchWords", True)
-        
-        return TextDocument.xTextDocument.findAll(sd)
-
     def insertRoadmap(self):
         self.addRoadmap()
         self.insertRoadMapItems(
@@ -437,7 +416,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.optPrivateFaxItemChanged()
 
     def optBusinessFaxItemChanged(self):
-        FaxWizardDialogImpl.lstPrivateStylePos = None
+        self.lstPrivateStylePos = None
         self.setControlProperty("lblBusinessStyle",
             PropertyNames.PROPERTY_ENABLED, True)
         self.setControlProperty("lstBusinessStyle",
@@ -453,8 +432,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def lstBusinessStyleItemChanged(self):
         selectedItemPos = self.lstBusinessStyle.SelectedItemPos
         #avoid to load the same item again
-        if FaxWizardDialogImpl.lstBusinessStylePos is not selectedItemPos:
-            FaxWizardDialogImpl.lstBusinessStylePos = selectedItemPos
+        if self.lstBusinessStylePos != selectedItemPos:
+            self.lstBusinessStylePos = selectedItemPos
             TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview(
                 self.BusinessFiles.values()[selectedItemPos], False)
             self.initializeElements()
@@ -462,7 +441,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.drawConstants()
 
     def optPrivateFaxItemChanged(self):
-        FaxWizardDialogImpl.lstBusinessStylePos = None
+        self.lstBusinessStylePos = None
         self.setControlProperty("lblBusinessStyle",
             PropertyNames.PROPERTY_ENABLED, False)
         self.setControlProperty("lstBusinessStyle",
@@ -478,14 +457,15 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def lstPrivateStyleItemChanged(self):
         selectedItemPos = self.lstPrivateStyle.SelectedItemPos
         #avoid to load the same item again
-        if FaxWizardDialogImpl.lstPrivateStylePos is not selectedItemPos:
-            FaxWizardDialogImpl.lstPrivateStylePos = selectedItemPos
+        if self.lstPrivateStylePos != selectedItemPos:
+            self.lstPrivateStylePos = selectedItemPos
             TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview(
                 self.PrivateFiles.values()[selectedItemPos], False)
             self.initializeElements()
             self.setElements()
 
     def txtTemplateNameTextChanged(self):
+        # Change Template Title in Properties
         xDocProps = TextDocument.xTextDocument.DocumentProperties
         xDocProps.Title = self.txtTemplateName.Text
 
@@ -706,7 +686,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             FaxWizardDialogImpl.RM_SENDERRECEIVER)
         Helper.setUnoPropertyValue(BPaperItem,
             PropertyNames.PROPERTY_ENABLED, False)
-
 
     def validatePath(self):
         if self.myPathSelection.usedPathPicker:

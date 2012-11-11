@@ -570,7 +570,7 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
 //*****************************************************************************************************************
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  ( SubstitutePathVariables                     ,
                                           ::cppu::OWeakObject                         ,
-                                          SERVICENAME_SUBSTITUTEPATHVARIABLES         ,
+                                          "com.sun.star.util.PathSubstitution",
                                           IMPLEMENTATIONNAME_SUBSTITUTEPATHVARIABLES    )
 
 DEFINE_INIT_SERVICE                     (   SubstitutePathVariables, {} )
@@ -698,7 +698,7 @@ rtl::OUString SubstitutePathVariables::GetWorkPath() const
     try
     {
         ::comphelper::ConfigurationHelper::readDirectKey(
-                            m_xServiceManager,
+                            comphelper::getComponentContext(m_xServiceManager),
                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths")),
                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Paths/Work")),
                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WritePath")),
@@ -723,7 +723,7 @@ rtl::OUString SubstitutePathVariables::GetWorkVariableValue() const
     try
     {
         ::comphelper::ConfigurationHelper::readDirectKey(
-                            m_xServiceManager,
+                            comphelper::getComponentContext(m_xServiceManager),
                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths")),
                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Variables")),
                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Work")),

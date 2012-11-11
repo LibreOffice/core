@@ -41,27 +41,14 @@ $(call gb_CustomTarget_get_workdir,officecfg/registry)/officecfg_qa_allheaders.h
 	$(foreach file,$(officecfg_XCSFILES),\
 		&& echo "#include <officecfg/$(file).hxx>" >> $@)
 
-define officecfg_TARGET
-$(call gb_CustomTarget_get_workdir,officecfg/registry)/$(if $(1),$(1)/$(if $(2),$(2)/))%.hxx: \
-            $(SRCDIR)/officecfg/registry/schema/org/openoffice/$(if $(1),$(1)/$(if $(2),$(2)/))%.xcs \
+# pass the stem as space separated path elements and get a set of --stringparam ns<level> <element> in return
+officecfg_xsltparams=$(if $(filter-out $(lastword $1),$1),$(call officecfg_xsltparams,$(filter-out $(lastword $1),$1))) --stringparam ns$(words $1) $(lastword $1)
+
+$(call gb_CustomTarget_get_workdir,officecfg/registry)/%.hxx: \
+            $(SRCDIR)/officecfg/registry/schema/org/openoffice/%.xcs \
             $(SRCDIR)/officecfg/registry/cppheader.xsl | $(gb_XSLTPROCTARGET)
-	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),$(true),XSL,1)
-	$$(call gb_Helper_abbreviate_dirs, \
-        mkdir -p $$(dir $$@) && \
-        $$(gb_XSLTPROC) --nonet --stringparam ns1 \
-            $(if $(1), \
-                $(1) --stringparam ns2 $(if $(2),$(2) --stringparam ns3)) $$* \
-            -o $$@ $(SRCDIR)/officecfg/registry/cppheader.xsl $$<)
-
-endef
-
-# Sort longer paths before their prefixes, as at least GNU Make 3.81 on Mac OS X
-# appears to let % span sub-directories, so that the above rule would produce
-# unexpected results; sorting this way seems to avoid the problem:
-$(eval $(call officecfg_TARGET,Office,DataAccess))
-$(eval $(call officecfg_TARGET,Office,OOoImprovement))
-$(eval $(call officecfg_TARGET,Office,UI))
-$(eval $(call officecfg_TARGET,Office))
-$(eval $(call officecfg_TARGET,TypeDetection))
-$(eval $(call officecfg_TARGET,ucb))
-$(eval $(call officecfg_TARGET))
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XSL,1)
+	$(call gb_Helper_abbreviate_dirs, \
+	mkdir -p $(dir $@) && \
+	$(gb_XSLTPROC) --nonet $(call officecfg_xsltparams,$(subst /, ,$*)) \
+	    -o $@ $(SRCDIR)/officecfg/registry/cppheader.xsl $<)

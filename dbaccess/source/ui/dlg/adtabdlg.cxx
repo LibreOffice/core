@@ -96,15 +96,15 @@ TableListFacade::~TableListFacade()
 
 String TableListFacade::getSelectedName( String& _out_rAliasName ) const
 {
-    SvLBoxEntry* pEntry = m_rTableList.FirstSelected();
+    SvTreeListEntry* pEntry = m_rTableList.FirstSelected();
     if ( !pEntry )
         return String();
 
     ::rtl::OUString aCatalog, aSchema, aTableName;
-    SvLBoxEntry* pSchema = m_rTableList.GetParent(pEntry);
+    SvTreeListEntry* pSchema = m_rTableList.GetParent(pEntry);
     if(pSchema && pSchema != m_rTableList.getAllObjectsEntry())
     {
-        SvLBoxEntry* pCatalog = m_rTableList.GetParent(pSchema);
+        SvTreeListEntry* pCatalog = m_rTableList.GetParent(pSchema);
         if(pCatalog && pCatalog != m_rTableList.getAllObjectsEntry())
             aCatalog = m_rTableList.GetEntryText(pCatalog);
         aSchema = m_rTableList.GetEntryText(pSchema);
@@ -200,7 +200,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
         }
 
         m_rTableList.UpdateTableList( m_xConnection, sTables, sViews );
-        SvLBoxEntry* pEntry = m_rTableList.First();
+        SvTreeListEntry* pEntry = m_rTableList.First();
         while( pEntry && m_rTableList.GetModel()->HasChildren( pEntry ) )
         {
             m_rTableList.Expand( pEntry );
@@ -217,7 +217,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
 
 bool TableListFacade::isLeafSelected() const
 {
-    SvLBoxEntry* pEntry = m_rTableList.FirstSelected();
+    SvTreeListEntry* pEntry = m_rTableList.FirstSelected();
     return pEntry && !m_rTableList.GetModel()->HasChildren( pEntry );
 }
 
@@ -306,7 +306,7 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
 String QueryListFacade::getSelectedName( String& _out_rAliasName ) const
 {
     String sSelected;
-    SvLBoxEntry* pEntry = m_rQueryList.FirstSelected();
+    SvTreeListEntry* pEntry = m_rQueryList.FirstSelected();
     if ( pEntry )
         sSelected = _out_rAliasName = m_rQueryList.GetEntryText( pEntry );
     return sSelected;
@@ -314,7 +314,7 @@ String QueryListFacade::getSelectedName( String& _out_rAliasName ) const
 
 bool QueryListFacade::isLeafSelected() const
 {
-    SvLBoxEntry* pEntry = m_rQueryList.FirstSelected();
+    SvTreeListEntry* pEntry = m_rQueryList.FirstSelected();
     return pEntry && !m_rQueryList.GetModel()->HasChildren( pEntry );
 }
 

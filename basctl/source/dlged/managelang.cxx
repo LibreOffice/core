@@ -56,7 +56,7 @@ bool localesAreEqual( const Locale& rLocaleLeft, const Locale& rLocaleRight )
 }
 
 namespace {
-    long getLongestWordWidth( const ::rtl::OUString& rText, const Window& rWin )
+    long getLongestWordWidth( const OUString& rText, const Window& rWin )
     {
         long nWidth = 0;
         Reference< XBreakIterator > xBreakIter( vcl::unohelper::CreateBreakIterator() );
@@ -68,7 +68,7 @@ namespace {
         while ( aBoundary.startPos != aBoundary.endPos )
         {
             nStartPos = aBoundary.endPos;
-            ::rtl::OUString sWord(rText.copy(aBoundary.startPos, aBoundary.endPos - aBoundary.startPos));
+            OUString sWord(rText.copy(aBoundary.startPos, aBoundary.endPos - aBoundary.startPos));
             long nTemp = rWin.GetCtrlTextWidth( sWord );
             if ( nTemp > nWidth )
                 nWidth = nTemp;
@@ -112,9 +112,9 @@ void ManageLanguageDialog::Init()
 {
     // get current IDE
     Shell* pShell = GetShell();
-    ::rtl::OUString sLibName = pShell->GetCurLibName();
+    OUString sLibName = pShell->GetCurLibName();
     // set dialog title with library name
-    ::rtl::OUString sText = GetText();
+    OUString sText = GetText();
     sText = sText.replaceAll("$1", sLibName);
     SetText( sText );
     // set handler
@@ -129,7 +129,7 @@ void ManageLanguageDialog::Init()
 
 void ManageLanguageDialog::CalcInfoSize()
 {
-    ::rtl::OUString sInfoStr = m_aInfoFT.GetText();
+    OUString sInfoStr = m_aInfoFT.GetText();
     long nInfoWidth = m_aInfoFT.GetSizePixel().Width();
     long nLongWord = getLongestWordWidth( sInfoStr, m_aInfoFT );
     long nTxtWidth = m_aInfoFT.GetCtrlTextWidth( sInfoStr ) + nLongWord;
@@ -171,13 +171,13 @@ void ManageLanguageDialog::FillLanguageBox()
         {
             bool bIsDefault = localesAreEqual( aDefaultLocale, pLocale[i] );
             LanguageType eLangType = SvxLocaleToLanguage( pLocale[i] );
-            ::rtl::OUStringBuffer sLanguageBuf(aLangTable.GetString( eLangType ));
+            OUStringBuffer sLanguageBuf(aLangTable.GetString( eLangType ));
             if ( bIsDefault )
             {
                 sLanguageBuf.append(' ');
                 sLanguageBuf.append(m_sDefLangStr);
             }
-            ::rtl::OUString sLanguage(sLanguageBuf.makeStringAndClear());
+            OUString sLanguage(sLanguageBuf.makeStringAndClear());
             sal_uInt16 nPos = m_aLanguageLB.InsertEntry( sLanguage );
             m_aLanguageLB.SetEntryData( nPos, new LanguageEntry( sLanguage, pLocale[i], bIsDefault ) );
         }
@@ -346,7 +346,7 @@ void SetDefaultLanguageDialog::FillLanguageBox()
 
 void SetDefaultLanguageDialog::CalcInfoSize()
 {
-    ::rtl::OUString sInfoStr = m_aInfoFT.GetText();
+    OUString sInfoStr = m_aInfoFT.GetText();
     long nInfoWidth = m_aInfoFT.GetSizePixel().Width();
     long nLongWord = getLongestWordWidth( sInfoStr, m_aInfoFT );
     long nTxtWidth = m_aInfoFT.GetCtrlTextWidth( sInfoStr ) + nLongWord;

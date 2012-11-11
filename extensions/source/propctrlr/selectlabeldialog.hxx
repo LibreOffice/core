@@ -51,11 +51,11 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xControlModel;
         ::rtl::OUString m_sRequiredService;
         Image           m_aRequiredControlImage;
-        SvLBoxEntry*    m_pInitialSelection;
+        SvTreeListEntry*    m_pInitialSelection;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xInitialLabelControl;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xSelectedControl;
-        SvLBoxEntry*    m_pLastSelected;
+        SvTreeListEntry*    m_pLastSelected;
         sal_Bool        m_bHaveAssignableControl;
 
     public:
@@ -65,7 +65,7 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  GetSelected() const { return m_aNoAssignment.IsChecked() ? ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > () : m_xSelectedControl; }
 
     protected:
-        sal_Int32 InsertEntries(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xContainer, SvLBoxEntry* pContainerEntry);
+        sal_Int32 InsertEntries(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xContainer, SvTreeListEntry* pContainerEntry);
 
         DECL_LINK(OnEntrySelected, SvTreeListBox*);
         DECL_LINK(OnNoAssignmentClicked, Button*);

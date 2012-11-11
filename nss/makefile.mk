@@ -62,7 +62,14 @@ PATCH_FILES=nss.patch nss.aix.patch nss-config.patch \
 PATCH_FILES+=nss_macosx.patch
 .ENDIF # "$(OS)"=="MACOSX"
 
-.IF "$(debug)" != ""
+# For a MSVC build, not exporting BUILD_OPT causes the produced DLLs
+# to use the debug CRT. (The exact mechanism that causes this to
+# happen is a bit of a mystery...) That is confusing and wrong, as
+# nothing in LO otherwise uses that. It also makes testing a build
+# much harder for me at least, as I do that in a fairly pristine
+# virtual machine with no MSVC debugging runtime available. (The
+# normal CRT is bundled in the LO installer.)
+.IF "$(debug)" != "" && "$(OS)$(COM)" != "WNTMSC"
 .ELSE
 BUILD_OPT=1
 .EXPORT: BUILD_OPT
@@ -74,7 +81,17 @@ my_prefix=/@.__________________________________________________$(EXTRPATH)
 my_prefix=$(OUTDIR)
 .END
 
-CONFIGURE_ACTION=mozilla/nsprpub/configure --prefix=$(my_prefix) --includedir=$(OUTDIR)/inc/mozilla/nspr ; \
+CONFIGURE_ACTION=mozilla/nsprpub/configure --prefix=$(my_prefix) --includedir=$(OUTDIR)/inc/mozilla/nspr
+
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_ACTION+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+
+.IF "$(OS)$(COM)$(CPUNAME)"=="WNTMSCX86_64"
+CONFIGURE_ACTION+=--enable-64bit
+.ENDIF
+
+CONFIGURE_ACTION+= ; \
     sed -e 's\#@prefix@\#$(OUTDIR)\#' -e 's\#@includedir@\#$(OUTDIR)/inc/mozilla/nss\#' -e 's\#@MOD_MAJOR_VERSION@\#$(VER_MAJOR)\#' -e 's\#@MOD_MINOR_VERSION@\#$(VER_MINOR)\#' -e 's\#@MOD_PATCH_VERSION@\#$(VER_PATCH)\#' mozilla/security/nss/nss-config.in > mozilla/security/nss/nss-config ; \
     chmod a+x mozilla/security/nss/nss-config
 
@@ -114,6 +131,24 @@ OUT2BIN=config/nspr-config mozilla/security/nss/nss-config
 
 BUILD_DIR=mozilla/security/nss
 BUILD_ACTION= $(GNUMAKE) nss_build_all -j1
+
+.IF "$(CROSS_COMPILING)"=="YES"
+
+.IF "$(OS)-$(CPUNAME)"="MACOSX-POWERPC"
+# Hardcode this for now... need to add more when/if cross-compiling to
+# other desktop OSes, yeah, this is silly, but the nss build mechanism
+# is a bit messy, I could not figure out how to get it to get CPU_ARCH
+# automatically when cross-compiling
+BUILD_ACTION+= CPU_ARCH=ppc
+.ENDIF
+
+# When cross-compiling need to use a nsinstall built for the build
+# platform, so yeah, whole nss built for the build platform just for
+# that... But oh well, nss is small compared to LO;)
+BUILD_ACTION+= NSINSTALL=$(SRC_ROOT)/nss/$(INPATH_FOR_BUILD)/misc/build/$(TARFILE_ROOTDIR)/mozilla/security/coreconf/nsinstall/out/nsinstall
+
+.ENDIF
+
 #Note: with the new version the libfreebl3.so gets built in a way that does
 # not conflict with the system one on Linux automatically;
 # it is no longer necessary to add a workaround for #i105566# && moz#513024#
@@ -140,7 +175,11 @@ BUILD_ACTION += NSS_USE_SYSTEM_SQLITE=1
 
 .IF "$(COM)"=="GCC"
 
-PATCH_FILES+=nss.patch.mingw
+PATCH_FILES += \
+	       nspr-4.9-build.patch \
+	       nss-3.13.3-build.patch \
+	       nss.patch.mingw \
+
 
 PATH!:=$(MOZILLABUILD)/bin:$(PATH)
 
@@ -151,25 +190,29 @@ nss_CC+=-shared-libgcc
 nss_CXX+=-shared-libgcc
 .ENDIF
 
-nss_LIBS=
+nss_LIBS=-ladvapi32 -lws2_32 -lmswsock -lwinmm
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
 nss_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
+nss_LDFLAGS=
+
+OS_TARGET=WINNT
+.EXPORT : OS_TARGET
 
 BUILD_DIR=mozilla/security/nss
-BUILD_ACTION=NS_USE_GCC=1 CC="$(nss_CC)" CXX="$(nss_CXX)" OS_LIBS="$(nss_LIBS)" OS_TARGET=WIN95 _WIN32_IE=0x500 PATH="$(PATH)" DEFINES=-D_WIN32_IE=0x500 $(GNUMAKE) nss_build_all
+BUILD_ACTION=$(GNUMAKE) NS_USE_GCC=1 CC="$(nss_CC)" CXX="$(nss_CXX)" OS_LIBS="$(nss_LIBS)" PATH="$(PATH)" NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --enable-shared --disable-static" LDFLAGS="$(nss_LDFLAGS)" RANLIB="$(RANLIB)" RC="$(WINDRES)" OS_RELEASE=5.0 NSINSTALL="$(PYTHON_FOR_BUILD) $(SRC_ROOT)/nss/nsinstall.py" IMPORT_LIB_SUFFIX=dll.a nss_build_all
 
 OUT2LIB= \
-    mozilla/dist/out/lib/libnspr4.a \
-    mozilla/dist/out/lib/libnss3.a \
-    mozilla/dist/out/lib/libnssdbm3.a \
-    mozilla/dist/out/lib/libnssutil3.a \
-    mozilla/dist/out/lib/libplc4.a \
-    mozilla/dist/out/lib/libplds4.a \
-    mozilla/dist/out/lib/libsmime3.a \
-    mozilla/dist/out/lib/libsoftokn3.a \
-    mozilla/dist/out/lib/libsqlite3.a \
-    mozilla/dist/out/lib/libssl3.a
+    mozilla/nsprpub/out/pr/src/libnspr4.dll.a \
+    mozilla/dist/out/lib/libnss3.dll.a \
+    mozilla/dist/out/lib/libnssdbm3.dll.a \
+    mozilla/dist/out/lib/libnssutil3.dll.a \
+    mozilla/nsprpub/out/lib/libc/src/libplc4.dll.a \
+    mozilla/nsprpub/out/lib/ds/libplds4.dll.a \
+    mozilla/dist/out/lib/libsmime3.dll.a \
+    mozilla/dist/out/lib/libsoftokn3.dll.a \
+    mozilla/dist/out/lib/libsqlite3.dll.a \
+    mozilla/dist/out/lib/libssl3.dll.a
 
 .ELSE			# "$(COM)"=="GCC"
 MOZ_MSVCVERSION= 9
@@ -185,9 +228,14 @@ OS_TARGET=WIN95
 
 #To build nss one has to call "make nss_build_all" in 
 #mozilla/security/nss
+
+.IF "$(CPUNAME)"=="X86_64"
+PASS_USE_64=USE_64=1
+.ENDIF
+
 NSS_BUILD_DIR=$(ABS_PACKAGE_DIR)/$(TARFILE_ROOTDIR)/mozilla/security/nss
 BUILD_ACTION= PATH="$(moz_build)/msys/bin:$(moz_build)/moztools/bin:$(PATH)" && $(MOZILLABUILD)/msys/bin/bash -i \
-    -c "cd $(NSS_BUILD_DIR) && make nss_build_all"
+    -c "cd $(NSS_BUILD_DIR) && make $(PASS_USE_64) nss_build_all"
 
 OUT2LIB= \
      mozilla/dist/out/lib/nspr4.lib \

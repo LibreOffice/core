@@ -436,7 +436,8 @@ OSL_TRACE("column type: %c",aDBFColumn.db_typ);
                                                     sal_False,
                                                     bIsRowVersion,
                                                     bIsCurrency,
-                                                    bCase);
+                                                    bCase,
+                                                    m_CatalogName, getSchema(), getName());
         m_aColumns->get().push_back(xCol);
     } // for (; i < nFieldCount; i++)
     OSL_ENSURE(i,"No columns in table!");
@@ -1505,7 +1506,7 @@ sal_Bool ODbaseTable::InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const Ref
     sal_uInt32 nTempPos = m_nFilePos;
 
     m_nFilePos = (sal_uIntPtr)m_aHeader.db_anz + 1;
-    sal_Bool bInsertRow = UpdateBuffer( rRow, NULL, _xCols );
+    sal_Bool bInsertRow = UpdateBuffer( rRow, NULL, _xCols, true );
     if ( bInsertRow )
     {
         sal_uInt32 nFileSize = 0, nMemoFileSize = 0;
@@ -1567,7 +1568,7 @@ sal_Bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,con
         m_pMemoStream->Seek(STREAM_SEEK_TO_END);
         nMemoFileSize = m_pMemoStream->Tell();
     }
-    if (!UpdateBuffer(rRow, pOrgRow,_xCols) || !WriteBuffer())
+    if (!UpdateBuffer(rRow, pOrgRow, _xCols, false) || !WriteBuffer())
     {
         if (HasMemoFields() && m_pMemoStream)
             m_pMemoStream->SetStreamSize(nMemoFileSize);    // restore old size
@@ -1668,7 +1669,7 @@ static double toDouble(const rtl::OString& rString)
 }
 
 //------------------------------------------------------------------
-sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const Reference<XIndexAccess>& _xCols)
+sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, const Reference<XIndexAccess>& _xCols, const bool bForceAllFields)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::UpdateBuffer" );
     OSL_ENSURE(m_pBuffer,"Buffer is NULL!");
@@ -1814,10 +1815,13 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
 
 
         ++nPos; // the row values start at 1
-        // If the variable is bound at all?
-        if ( !rRow.get()[nPos]->isBound() )
+        const ORowSetValue &thisColVal = rRow.get()[nPos]->get();
+        const bool thisColIsBound = thisColVal.isBound();
+        const bool thisColIsNull = !thisColIsBound || thisColVal.isNull();
+        // don't overwrite non-bound columns
+        if ( ! (bForceAllFields || thisColIsBound) )
         {
-            // No - the next field.
+            // No - don't overwrite this field, it has not changed.
             nByteOffset += nLen;
             continue;
         }
@@ -1828,19 +1832,19 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
             ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
             OSL_ENSURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
             // Update !!
-            if (pOrgRow.is() && !rRow.get()[nPos]->getValue().isNull() )
-                pIndex->Update(m_nFilePos,*(pOrgRow->get())[nPos],*rRow.get()[nPos]);
+            if (pOrgRow.is() && !thisColIsNull)
+                pIndex->Update(m_nFilePos, *(pOrgRow->get())[nPos], thisColVal);
             else
-                pIndex->Insert(m_nFilePos,*rRow.get()[nPos]);
+                pIndex->Insert(m_nFilePos, thisColVal);
         }
 
         char* pData = (char *)(m_pBuffer + nByteOffset);
-        if (rRow.get()[nPos]->getValue().isNull())
+        if (thisColIsNull)
         {
             if ( bSetZero )
-                memset(pData,0,nLen);   // Clear to NULL
+                memset(pData,0,nLen);   // Clear to NULL char ('\0')
             else
-                memset(pData,' ',nLen); // Clear to NULL
+                memset(pData,' ',nLen); // Clear to space/blank ('\0x20')
             nByteOffset += nLen;
             OSL_ENSURE( nByteOffset <= m_nBufferSize ,"ByteOffset > m_nBufferSize!");
             continue;
@@ -1853,7 +1857,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
                 case DataType::TIMESTAMP:
                     {
                         sal_Int32 nJulianDate = 0, nJulianTime = 0;
-                        lcl_CalcJulDate(nJulianDate,nJulianTime,rRow.get()[nPos]->getValue());
+                        lcl_CalcJulDate(nJulianDate,nJulianTime, thisColVal);
                         // Exactly 8 bytes to copy:
                         memcpy(pData,&nJulianDate,4);
                         memcpy(pData+4,&nJulianTime,4);
@@ -1862,10 +1866,10 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
                 case DataType::DATE:
                 {
                     ::com::sun::star::util::Date aDate;
-                    if(rRow.get()[nPos]->getValue().getTypeKind() == DataType::DOUBLE)
-                        aDate = ::dbtools::DBTypeConversion::toDate(rRow.get()[nPos]->getValue().getDouble());
+                    if(thisColVal.getTypeKind() == DataType::DOUBLE)
+                        aDate = ::dbtools::DBTypeConversion::toDate(thisColVal.getDouble());
                     else
-                        aDate = rRow.get()[nPos]->getValue();
+                        aDate = thisColVal;
                     char s[9];
                     snprintf(s,
                         sizeof(s),
@@ -1879,13 +1883,13 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
                 } break;
                 case DataType::INTEGER:
                     {
-                        sal_Int32 nValue = rRow.get()[nPos]->getValue();
+                        sal_Int32 nValue = thisColVal;
                         memcpy(pData,&nValue,nLen);
                     }
                     break;
                 case DataType::DOUBLE:
                     {
-                        const double d = rRow.get()[nPos]->getValue();
+                        const double d = thisColVal;
                         m_pColumns->getByIndex(i) >>= xCol;
 
                         if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency is treated separately
@@ -1905,7 +1909,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
                 {
                     memset(pData,' ',nLen); // Clear to NULL
 
-                    const double n = rRow.get()[nPos]->getValue();
+                    const double n = thisColVal;
 
                     // one, because const_cast GetFormatPrecision on SvNumberFormat is not constant,
                     // even though it really could and should be
@@ -1937,7 +1941,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
                     }
                 } break;
                 case DataType::BIT:
-                    *pData = rRow.get()[nPos]->getValue().getBool() ? 'T' : 'F';
+                    *pData = thisColVal.getBool() ? 'T' : 'F';
                     break;
                 case DataType::LONGVARBINARY:
                 case DataType::LONGVARCHAR:
@@ -1949,7 +1953,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
 
                     // Next initial character restore again:
                     pData[nLen] = cNext;
-                    if (!m_pMemoStream || !WriteMemo(rRow.get()[nPos]->get(), nBlockNo))
+                    if (!m_pMemoStream || !WriteMemo(thisColVal, nBlockNo))
                         break;
 
                     rtl::OString aBlock(rtl::OString::valueOf(static_cast<sal_Int32>(nBlockNo)));
@@ -1965,7 +1969,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
                 {
                     memset(pData,' ',nLen); // Clear to NULL
 
-                    ::rtl::OUString sStringToWrite( rRow.get()[nPos]->getValue().getString() );
+                    ::rtl::OUString sStringToWrite( thisColVal.getString() );
 
                     // convert the string, using the connection's encoding
                     ::rtl::OString sEncoded;
@@ -2002,7 +2006,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool ODbaseTable::WriteMemo(ORowSetValue& aVariable, sal_uIntPtr& rBlockNr)
+sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_uIntPtr& rBlockNr)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::WriteMemo" );
     // if the BlockNo 0 is given, the block will be appended at the end

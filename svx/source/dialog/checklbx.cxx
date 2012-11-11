@@ -111,7 +111,7 @@ void SvxCheckListBox::SelectEntryPos( sal_uInt16 nPos, sal_Bool bSelect )
 
 sal_uInt16 SvxCheckListBox::GetSelectEntryPos() const
 {
-    SvLBoxEntry* pEntry = GetCurEntry();
+    SvTreeListEntry* pEntry = GetCurEntry();
 
     if ( pEntry )
         return (sal_uInt16)GetModel()->GetAbsPos( pEntry );
@@ -122,7 +122,7 @@ sal_uInt16 SvxCheckListBox::GetSelectEntryPos() const
 
 String SvxCheckListBox::GetText( sal_uInt16 nPos ) const
 {
-    SvLBoxEntry* pEntry = GetEntry( nPos );
+    SvTreeListEntry* pEntry = GetEntry( nPos );
 
     if ( pEntry )
         return GetEntryText( pEntry );
@@ -190,7 +190,7 @@ void* SvxCheckListBox::GetEntryData( sal_uInt16 nPos ) const
 
 // -----------------------------------------------------------------------
 
-void SvxCheckListBox::ToggleCheckButton( SvLBoxEntry* pEntry )
+void SvxCheckListBox::ToggleCheckButton( SvTreeListEntry* pEntry )
 {
     if ( pEntry )
     {
@@ -208,7 +208,7 @@ void SvxCheckListBox::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() )
     {
         const Point aPnt = rMEvt.GetPosPixel();
-        SvLBoxEntry* pEntry = GetEntry( aPnt );
+        SvTreeListEntry* pEntry = GetEntry( aPnt );
 
         if ( pEntry )
         {
@@ -228,7 +228,7 @@ void SvxCheckListBox::MouseButtonDown( const MouseEvent& rMEvt )
 
                 // check if the entry below the mouse changed during the base method call. This is possible if,
                 // for instance, a handler invoked by the base class tampers with the list entries.
-                const SvLBoxEntry* pNewEntry = GetEntry( aPnt );
+                const SvTreeListEntry* pNewEntry = GetEntry( aPnt );
                 if ( pNewEntry != pEntry )
                     return;
 
@@ -249,7 +249,7 @@ void SvxCheckListBox::KeyInput( const KeyEvent& rKEvt )
 
     if ( rKey.GetCode() == KEY_RETURN || rKey.GetCode() == KEY_SPACE )
     {
-        SvLBoxEntry* pEntry = GetCurEntry();
+        SvTreeListEntry* pEntry = GetCurEntry();
 
         if ( pEntry )
         {
@@ -265,7 +265,7 @@ void SvxCheckListBox::KeyInput( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
-SvLBoxEntry* SvxCheckListBox::InsertEntry( const XubString& rText, SvLBoxEntry* pParent, sal_Bool bChildrenOnDemand, sal_uIntPtr nPos, void* pUserData, SvLBoxButtonKind eButtonKind )
+SvTreeListEntry* SvxCheckListBox::InsertEntry( const XubString& rText, SvTreeListEntry* pParent, sal_Bool bChildrenOnDemand, sal_uIntPtr nPos, void* pUserData, SvLBoxButtonKind eButtonKind )
 {
     return SvTreeListBox::InsertEntry( rText, pParent, bChildrenOnDemand, nPos, pUserData, eButtonKind );
 }

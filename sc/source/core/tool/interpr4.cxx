@@ -2998,9 +2998,13 @@ void ScInterpreter::ScExternal()
                                 uno::Reference<table::XCellRange> xObj =
                                         ScCellRangeObj::CreateRangeFromDoc( pDok, aRange );
                                 if (xObj.is())
+                                {
                                     aParam <<= xObj;
+                                }
                                 else
+                                {
                                     SetError(errIllegalParameter);
+                                }
                             }
                             break;
                         default:
@@ -3017,8 +3021,9 @@ void ScInterpreter::ScExternal()
         }
 
         while (nPar-- > 0)
+        {
             Pop();                  // in case of error, remove remaining args
-
+        }
         if ( !GetError() )
         {
             aCall.ExecuteCall();
@@ -3026,8 +3031,9 @@ void ScInterpreter::ScExternal()
             if ( aCall.HasVarRes() )                        // handle async functions
             {
                 if ( pMyFormulaCell->GetCode()->IsRecalcModeNormal() )
+                {
                     pMyFormulaCell->GetCode()->SetRecalcModeOnLoad();
-
+                }
                 uno::Reference<sheet::XVolatileResult> xRes = aCall.GetVarRes();
                 ScAddInListener* pLis = ScAddInListener::Get( xRes );
                 if ( !pLis )
@@ -3039,23 +3045,31 @@ void ScInterpreter::ScExternal()
                 {
                     pMyFormulaCell->StartListening( *pLis );
                     if ( !pLis->HasDocument( pDok ) )
+                    {
                         pLis->AddDocument( pDok );
+                    }
                 }
 
                 aCall.SetResult( pLis->GetResult() );       // use result from async
             }
 
             if ( aCall.GetErrCode() )
+            {
                 PushError( aCall.GetErrCode() );
+            }
             else if ( aCall.HasMatrix() )
             {
                 ScMatrixRef xMat = aCall.GetMatrix();
                 PushMatrix( xMat );
             }
             else if ( aCall.HasString() )
+            {
                 PushString( aCall.GetString() );
+            }
             else
+            {
                 PushDouble( aCall.GetValue() );
+            }
         }
         else                // error...
             PushError( GetError());
@@ -3063,7 +3077,9 @@ void ScInterpreter::ScExternal()
     else
     {
         while( nParamCount-- > 0)
+        {
             Pop();
+        }
         PushError( errNoAddin );
     }
 }
@@ -3091,24 +3107,27 @@ static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCe
     BasicManager* pBasMgr = pDok->GetDocumentShell()->GetBasicManager();
 
     uno::Reference< uno::XInterface > xIf;
-    if ( pBasMgr && pBasMgr->GetName().Len() )
+    if ( pBasMgr && !pBasMgr->GetName().isEmpty() )
     {
         String sProj = String( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-        if ( pDok->GetDocumentShell()->GetBasicManager()->GetName().Len() )
+        if ( !pDok->GetDocumentShell()->GetBasicManager()->GetName().isEmpty() )
+        {
             sProj = pDok->GetDocumentShell()->GetBasicManager()->GetName();
+        }
         StarBASIC* pBasic = pDok->GetDocumentShell()->GetBasicManager()->GetLib( sProj );
         if ( pBasic )
         {
             SbModule* pMod = pBasic->FindModule( sCodeName );
             if ( pMod )
+            {
                 xIf = pMod->GetUnoModule();
+            }
         }
     }
     return uno::makeAny( xIf );
 }
 
-static bool
-lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPar )
+static bool lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPar )
 {
     bool bOk = false;
     try
@@ -3186,10 +3205,13 @@ void ScInterpreter::ScMacro()
     aMacroStr += pMethod->GetName();
     String aBasicStr;
     if (pObject->GetParent())
+    {
         aBasicStr = pObject->GetParent()->GetName();    // Dokumentenbasic
+    }
     else
+    {
         aBasicStr = SFX_APP()->GetName();               // Applikationsbasic
-
+    }
     //  Parameter-Array zusammenbauen
 
     SbxArrayRef refPar = new SbxArray;
@@ -3216,7 +3238,9 @@ void ScInterpreter::ScMacro()
                     bOk = lcl_setVBARange( aRange, pDok, pPar );
                 }
                 else
+                {
                     bOk = SetSbxVariable( pPar, aAdr );
+                }
             }
             break;
             case svDoubleRef:
@@ -3283,15 +3307,21 @@ void ScInterpreter::ScMacro()
                             nIdx[ 1 ] = static_cast<sal_Int32>(nMatCol+1);
                             SbxVariable* p = refArray->Get32( nIdx );
                             if (pMat->IsString(nMatCol, nMatRow))
+                            {
                                 p->PutString( pMat->GetString(nMatCol, nMatRow) );
+                            }
                             else
+                            {
                                 p->PutDouble( pMat->GetDouble(nMatCol, nMatRow));
+                            }
                         }
                     }
                     pPar->PutObject( refArray );
                 }
                 else
+                {
                     SetError( errIllegalParameter );
+                }
             }
             break;
             default:
@@ -3317,11 +3347,17 @@ void ScInterpreter::ScMacro()
 
         SbxDataType eResType = refRes->GetType();
         if( pVar->GetError() )
+        {
             SetError( errNoValue);
+        }
         if ( eRet != ERRCODE_NONE )
+        {
             PushNoValue();
+        }
         else if( eResType >= SbxINTEGER && eResType <= SbxDOUBLE )
+        {
             PushDouble( refRes->GetDouble() );
+        }
         else if ( eResType & SbxARRAY )
         {
             SbxBase* pElemObj = refRes->GetObject();
@@ -3368,21 +3404,31 @@ void ScInterpreter::ScMacro()
                             pV = pDimArray->Get32( nIdx );
                             eType = pV->GetType();
                             if ( eType >= SbxINTEGER && eType <= SbxDOUBLE )
+                            {
                                 pMat->PutDouble( pV->GetDouble(), i, j );
+                            }
                             else
-                                pMat->PutString( pV->GetString(), i, j );
+                            {
+                                pMat->PutString( pV->GetOUString(), i, j );
+                            }
                         }
                     }
                     PushMatrix( pMat );
                 }
                 else
+                {
                     PushIllegalArgument();
+                }
             }
             else
+            {
                 PushNoValue();
+            }
         }
         else
-            PushString( refRes->GetString() );
+        {
+            PushString( refRes->GetOUString() );
+        }
     }
 
     if (bVolatileMacro && meVolatileType == NOT_VOLATILE)

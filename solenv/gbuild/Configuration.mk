@@ -95,7 +95,7 @@ endef
 $(call gb_XcsTarget_get_target,%) : \
 	    $(gb_XcsTarget_XSLT_SchemaVal) $(gb_XcsTarget_XSLT_Sanity) \
 		$(gb_XcsTarget_XSLT_SchemaTrim) $(gb_XcsTarget_DTD_Schema)
-	$(call gb_XcsTarget__command,$@,$*,$(call gb_Helper_symlinked_native,$(filter %.xcs,$^)))
+	$(call gb_XcsTarget__command,$@,$*,$(filter %.xcs,$^))
 
 $(call gb_XcsTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCS,1)
@@ -142,7 +142,7 @@ endef
 
 $(call gb_XcuDataTarget_get_target,%) : $(gb_XcuDataTarget_XSLT_DataVal) \
 		$(gb_XcuTarget_XSLT_AllLang) $(gb_XcuDataTarget_DTD_ComponentUpdate)
-	$(call gb_XcuDataTarget__command,$@,$*,$(call gb_Helper_symlinked_native,$(filter %.xcu,$^)))
+	$(call gb_XcuDataTarget__command,$@,$*,$(filter %.xcu,$^))
 
 $(call gb_XcuDataTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCU,2)
@@ -185,7 +185,7 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 $(call gb_XcuModuleTarget_get_target,%) : $(gb_XcuTarget_XSLT_AllLang)
-	$(call gb_XcuModuleTarget__command,$@,$*,$(call gb_Helper_symlinked_native,$(filter %.xcu,$^)),$(filter %.xcs,$^))
+	$(call gb_XcuModuleTarget__command,$@,$*,$(filter %.xcu,$^),$(filter %.xcs,$^))
 
 $(call gb_XcuModuleTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCU,3)
@@ -303,7 +303,7 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 $(call gb_XcuResTarget_get_target,%) : $(gb_XcuTarget_XSLT_AllLang)
-	$(call gb_XcuResTarget__command,$@,$*,$(call gb_Helper_symlinked_native,$(filter %.xcu,$^)))
+	$(call gb_XcuResTarget__command,$@,$*,$(filter %.xcu,$^))
 
 $(call gb_XcuResTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCU,6)
@@ -399,6 +399,7 @@ $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuDataTarget_get_clean_target,$(2)/$(3))
 $(call gb_XcuDataTarget_get_target,$(2)/$(3)) : \
 	$(call gb_Configuration__get_source,$(1),$(2)/$(3)) \
+	$(call gb_Configuration_get_preparation_target,$(1)) \
 	$(call gb_XcsTarget_for_XcuTarget,$(3))
 $(call gb_XcuDataTarget_get_target,$(2)/$(3)) : XCUFILE := $(3)
 $(call gb_XcuDataTarget_get_clean_target,$(2)/$(3)) : XCUFILE := $(3)
@@ -431,6 +432,7 @@ $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuModuleTarget_get_clean_target,$(2)/$(3))
 $(call gb_XcuModuleTarget_get_target,$(2)/$(3)) : \
 	$(call gb_XcuDataSource_for_XcuModuleTarget,$(1),$(2)/$(3)) \
+	$(call gb_Configuration_get_preparation_target,$(1)) \
 	$(call gb_XcsTarget_for_XcuModuleTarget,$(3))
 $(call gb_XcuModuleTarget_get_clean_target,$(2)/$(3)) : XCUFILE := $(3)
 ifeq ($(strip $(gb_Configuration_NODELIVER_$(1))),)
@@ -517,5 +519,13 @@ define gb_Configuration_use_configuration
 $(call gb_Configuration_get_preparation_target,$(1)) : $(call gb_Configuration_get_target,$(2))
 
 endef
+
+# apparently extensions package the XcuMergeTarget directly...
+# trivial convenience function to get the right file:
+ifeq ($(gb_WITH_LANG),)
+gb_XcuFile_for_extension = $(call gb_Configuration__get_source,,$(1))
+else
+gb_XcuFile_for_extension = $(call gb_XcuMergeTarget_get_target,$(1))
+endif
 
 # vim: set noet sw=4 ts=4:

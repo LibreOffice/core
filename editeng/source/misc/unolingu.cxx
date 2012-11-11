@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include <map>
@@ -38,6 +29,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
@@ -73,16 +65,10 @@ using namespace ::com::sun::star::linguistic2;
 
 #define CSS com::sun::star
 
-static uno::Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
+static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 {
-    uno::Reference< XLinguServiceManager > xRes;
-    uno::Reference< XMultiServiceFactory >  xMgr = getProcessServiceFactory();
-    if (xMgr.is())
-    {
-        xRes = uno::Reference< XLinguServiceManager > ( xMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.linguistic2.LinguServiceManager" ) ) ), UNO_QUERY ) ;
-    }
+    uno::Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    uno::Reference< XLinguServiceManager2 > xRes = LinguServiceManager::create(xContext);
     return xRes;
 }
 
@@ -155,9 +141,8 @@ void ThesDummy_Impl::GetThes_Impl()
 {
     if (!xThes.is())
     {
-        uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
-        if (xLngSvcMgr.is())
-            xThes = xLngSvcMgr->getThesaurus();
+        uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        xThes = xLngSvcMgr->getThesaurus();
 
         if (xThes.is())
         {
@@ -261,9 +246,8 @@ void SpellDummy_Impl::GetSpell_Impl()
 {
     if (!xSpell.is())
     {
-        uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
-        if (xLngSvcMgr.is())
-            xSpell = uno::Reference< XSpellChecker1 >( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
+        uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        xSpell = uno::Reference< XSpellChecker1 >( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
     }
 }
 
@@ -373,9 +357,8 @@ void HyphDummy_Impl::GetHyph_Impl()
 {
     if (!xHyph.is())
     {
-        uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
-        if (xLngSvcMgr.is())
-            xHyph = xLngSvcMgr->getHyphenator();
+        uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        xHyph = xLngSvcMgr->getHyphenator();
     }
 }
 
@@ -536,7 +519,7 @@ void LinguMgrExitLstnr::AtExit()
 
 LinguMgrExitLstnr *             LinguMgr::pExitLstnr    = 0;
 sal_Bool                        LinguMgr::bExiting      = sal_False;
-uno::Reference< XLinguServiceManager >  LinguMgr::xLngSvcMgr    = 0;
+uno::Reference< XLinguServiceManager2 >  LinguMgr::xLngSvcMgr    = 0;
 uno::Reference< XSpellChecker1 >    LinguMgr::xSpell        = 0;
 uno::Reference< XHyphenator >       LinguMgr::xHyph         = 0;
 uno::Reference< XThesaurus >        LinguMgr::xThes         = 0;
@@ -546,7 +529,7 @@ uno::Reference< XDictionary >       LinguMgr::xIgnoreAll    = 0;
 uno::Reference< XDictionary >       LinguMgr::xChangeAll    = 0;
 
 
-uno::Reference< XLinguServiceManager > LinguMgr::GetLngSvcMgr()
+uno::Reference< XLinguServiceManager2 > LinguMgr::GetLngSvcMgr()
 {
     if (bExiting)
         return 0;

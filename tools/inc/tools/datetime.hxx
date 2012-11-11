@@ -24,7 +24,7 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
-class TOOLS_DLLPUBLIC DateTime : public Date, public Time
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED DateTime : public Date, public Time
 {
 public:
     enum DateTimeInitSystem

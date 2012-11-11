@@ -47,7 +47,7 @@ namespace framework
 class GlobalSettings
 {
     public:
-        GlobalSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSrvMgr );
+        GlobalSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         ~GlobalSettings();
 
         enum UIElementType
@@ -72,7 +72,7 @@ class GlobalSettings
         GlobalSettings(const GlobalSettings&);
         GlobalSettings& operator=(const GlobalSettings& );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xSrvMgr;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 };
 
 } // namespace framework

@@ -1,0 +1,9 @@
+solver means "Solar Version", a weird name with only historical significance now
+
+It has no relation to the verb "to solve".
+
+solver is the directory tree into which header files for inter-module
+use and build results (libraries, shared libraries, executables) are
+copied ("delivered") during the build, and from where they are then
+picked up when constructing an installer (Windows), a RPM or deb
+package (Linux) or an app bundle (Mac).

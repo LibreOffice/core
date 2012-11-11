@@ -140,7 +140,7 @@ String ConvertToUIName_Impl( SvxMacro *pMacro )
 void _SfxMacroTabPage::EnableButtons()
 {
     // don't do anything as long as the eventbox is empty
-    const SvLBoxEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
+    const SvTreeListEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
     if ( pE )
     {
         // get bound macro
@@ -182,7 +182,7 @@ void _SfxMacroTabPage::AddEvent( const String & rEventName, sal_uInt16 nEventId 
         sTmp += sNew;
     }
 
-    SvLBoxEntry* pE = mpImpl->pEventLB->GetListBox().InsertEntry( sTmp );
+    SvTreeListEntry* pE = mpImpl->pEventLB->GetListBox().InsertEntry( sTmp );
     pE->SetUserData( reinterpret_cast< void* >( sal::static_int_cast< sal_IntPtr >( nEventId )) );
 }
 
@@ -249,7 +249,7 @@ void _SfxMacroTabPage::Reset( const SfxItemSet& rSet )
     FillEvents();
 
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
-    SvLBoxEntry* pE = rListBox.GetEntry( 0 );
+    SvTreeListEntry* pE = rListBox.GetEntry( 0 );
     if( pE )
         rListBox.SetCurEntry( pE );
 }
@@ -263,7 +263,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
 {
     _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
     SvHeaderTabListBox&     rListBox = pImpl->pEventLB->GetListBox();
-    SvLBoxEntry*            pE = rListBox.FirstSelected();
+    SvTreeListEntry*            pE = rListBox.FirstSelected();
     sal_uLong                   nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
@@ -304,7 +304,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 {
     _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
     SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
-    SvLBoxEntry* pE = rListBox.FirstSelected();
+    SvTreeListEntry* pE = rListBox.FirstSelected();
     sal_uLong nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
@@ -420,7 +420,7 @@ void _SfxMacroTabPage::FillEvents()
     // get events from the table and fill the EventListBox respectively
     for( sal_uLong n = 0 ; n < nEntryCnt ; ++n )
     {
-        SvLBoxEntry*    pE = rListBox.GetEntry( n );
+        SvTreeListEntry*    pE = rListBox.GetEntry( n );
         if( pE )
         {
             SvLBoxString*   pLItem = ( SvLBoxString* ) pE->GetItem( LB_MACROS_ITEMPOS );

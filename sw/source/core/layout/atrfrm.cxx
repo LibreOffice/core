@@ -220,7 +220,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                                 aIdx = nEnd-1;
                         }
                     }
-                    aIdx++;
+                    ++aIdx;
                     pNode = & aIdx.GetNode();
                 }
             }
@@ -2933,7 +2933,7 @@ SwAnchoredObject* SwFlyFrmFmt::GetAnchoredObj( const Point* pPoint, const sal_Bo
 }
 
 
-sal_Bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
+bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
     {
@@ -2941,7 +2941,7 @@ sal_Bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
         {
             ((SwPtrMsgPoolItem&)rInfo).pObject = SwIterator<SwFrm,SwFmt>::FirstElement( *this );
         }
-        return sal_False;
+        return false;
 
     default:
         return SwFrmFmt::GetInfo( rInfo );

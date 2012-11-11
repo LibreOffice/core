@@ -131,14 +131,6 @@
         Styles  = (PACKED); \
     End
 
-#define BINFILTER_RES_FILE(id,name) \
-    File id \
-        TXT_FILE_BODY; \
-        Name    = STRING(CONCAT3(name,en-US,.res)); \
-        Dir     = gid_Dir_Resource; \
-        Styles  = (PACKED); \
-    End
-
 #define STD_FILTER_FILE(id,name) \
     File id \
         PACKED_LIB_FILE_BODY; \

@@ -1923,7 +1923,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         Reference< XConnection> xCon(xFormSet->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
         if(bFilter)
         {
-            DlgFilterCrit aDlg( getBrowserView(), getORB(), xCon, xParser, xSup->getColumns() );
+            DlgFilterCrit aDlg( getBrowserView(), comphelper::getComponentContext(getORB()), xCon, xParser, xSup->getColumns() );
             String aFilter;
             if ( !aDlg.Execute() )
                 return; // if so we don't need to update the grid

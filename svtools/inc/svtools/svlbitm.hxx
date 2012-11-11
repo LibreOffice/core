@@ -37,7 +37,7 @@
 #include <vcl/image.hxx>
 #include <svtools/treelistbox.hxx>
 
-class SvLBoxEntry;
+class SvTreeListEntry;
 
 
 #define SV_BMP_UNCHECKED        0
@@ -79,11 +79,11 @@ public:
     // weil Buttons nicht von LinkHdl abgeleitet sind
     void                    CallLink();
 
-    void                    StoreButtonState( SvLBoxEntry* pEntry, sal_uInt16 nItemFlags );
+    void                    StoreButtonState( SvTreeListEntry* pEntry, sal_uInt16 nItemFlags );
     SvButtonState           ConvertToButtonState( sal_uInt16 nItemFlags ) const;
 
     inline SvButtonState    GetActButtonState() const;
-    SvLBoxEntry*            GetActEntry() const;
+    SvTreeListEntry*            GetActEntry() const;
 
     Image aBmps[24];  // Indizes siehe Konstanten BMP_ ....
 
@@ -119,14 +119,14 @@ class SVT_DLLPUBLIC SvLBoxString : public SvLBoxItem
 protected:
     rtl::OUString maText;
 public:
-                    SvLBoxString(SvLBoxEntry*, sal_uInt16 nFlags, const rtl::OUString& rStr);
+                    SvLBoxString(SvTreeListEntry*, sal_uInt16 nFlags, const rtl::OUString& rStr);
                     SvLBoxString();
     virtual         ~SvLBoxString();
     virtual sal_uInt16  IsA();
-    virtual void    InitViewData(SvTreeListBox*, SvLBoxEntry*, SvViewDataItem*);
+    virtual void    InitViewData(SvTreeListBox*, SvTreeListEntry*, SvViewDataItem*);
     rtl::OUString   GetText() const { return maText; }
     void            SetText( const rtl::OUString& rText ) { maText = rText; }
-    virtual void    Paint( const Point&, SvTreeListBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
+    virtual void    Paint( const Point&, SvTreeListBox& rDev, sal_uInt16 nFlags,SvTreeListEntry* );
     virtual SvLBoxItem* Create() const;
     virtual void    Clone( SvLBoxItem* pSource );
 };
@@ -138,8 +138,8 @@ public:
                     SvLBoxBmp();
     virtual         ~SvLBoxBmp();
     virtual sal_uInt16  IsA();
-    virtual void    InitViewData( SvTreeListBox*,SvLBoxEntry*,SvViewDataItem* );
-    virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
+    virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
+    virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvTreeListEntry* );
     virtual SvLBoxItem* Create() const;
     virtual void    Clone( SvLBoxItem* pSource );
 };
@@ -165,15 +165,15 @@ public:
                     // (which cannot be modified via UI), or a static image
                     // (see SV_BMP_STATICIMAGE; nFlags are effectively ignored
                     // for that kind).
-                    SvLBoxButton( SvLBoxEntry* pEntry,
+                    SvLBoxButton( SvTreeListEntry* pEntry,
                                   SvLBoxButtonKind eTheKind, sal_uInt16 nFlags,
                                   SvLBoxButtonData* pBData );
                     SvLBoxButton();
     virtual         ~SvLBoxButton();
-    virtual void    InitViewData( SvTreeListBox*,SvLBoxEntry*,SvViewDataItem* );
+    virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
     virtual sal_uInt16  IsA();
-    virtual sal_Bool    ClickHdl(SvTreeListBox* pView, SvLBoxEntry* );
-    virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
+    virtual sal_Bool    ClickHdl(SvTreeListBox* pView, SvTreeListEntry* );
+    virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvTreeListEntry* );
     virtual SvLBoxItem* Create() const;
     virtual void    Clone( SvLBoxItem* pSource );
     sal_uInt16          GetButtonFlags() const { return nItemFlags; }
@@ -225,13 +225,13 @@ class SVT_DLLPUBLIC SvLBoxContextBmp : public SvLBoxItem
 {
     SvLBoxContextBmp_Impl*  m_pImpl;
 public:
-                    SvLBoxContextBmp( SvLBoxEntry*,sal_uInt16 nFlags,Image,Image,
+                    SvLBoxContextBmp( SvTreeListEntry*,sal_uInt16 nFlags,Image,Image,
                                     sal_uInt16 nEntryFlagsBmp1);
                     SvLBoxContextBmp();
     virtual         ~SvLBoxContextBmp();
     virtual sal_uInt16  IsA();
-    virtual void    InitViewData( SvTreeListBox*,SvLBoxEntry*,SvViewDataItem* );
-    virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
+    virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
+    virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvTreeListEntry* );
     virtual SvLBoxItem* Create() const;
     virtual void    Clone( SvLBoxItem* pSource );
 

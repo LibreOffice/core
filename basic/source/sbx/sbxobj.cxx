@@ -26,23 +26,23 @@ TYPEINIT1(SbxMethod,SbxVariable)
 TYPEINIT1(SbxProperty,SbxVariable)
 TYPEINIT2(SbxObject,SbxVariable,SfxListener)
 
-static const char* pNameProp;               // Name-Property
-static const char* pParentProp;             // Parent-Property
+static OUString pNameProp;          // Name-Property
+static OUString pParentProp;        // Parent-Property
 
 static sal_uInt16 nNameHash = 0, nParentHash = 0;
 
 
 
-SbxObject::SbxObject( const XubString& rClass )
+SbxObject::SbxObject( const OUString& rClass )
          : SbxVariable( SbxOBJECT ), aClassName( rClass )
 {
     aData.pObj = this;
     if( !nNameHash )
     {
-        pNameProp = GetSbxRes( STRING_NAMEPROP );
-        pParentProp = GetSbxRes( STRING_PARENTPROP );
-        nNameHash = MakeHashCode( rtl::OUString::createFromAscii( pNameProp ) );
-        nParentHash = MakeHashCode( rtl::OUString::createFromAscii( pParentProp ) );
+        pNameProp = ::rtl::OUString::createFromAscii(GetSbxRes( STRING_NAMEPROP ));
+        pParentProp = ::rtl::OUString::createFromAscii(GetSbxRes( STRING_PARENTPROP ));
+        nNameHash = MakeHashCode( pNameProp );
+        nParentHash = MakeHashCode( pParentProp );
     }
     SbxObject::Clear();
     SbxObject::SetName( rClass );
@@ -83,7 +83,9 @@ static void CheckParentsOnDelete( SbxObject* pObj, SbxArray* p )
     {
         SbxVariableRef& rRef = p->GetRef( i );
         if( rRef->IsBroadcaster() )
+        {
             pObj->EndListening( rRef->GetBroadcaster(), sal_True );
+        }
         // Did the element have more then one reference and still a Listener?
         if( rRef->GetRefCount() > 1 )
         {
@@ -119,9 +121,9 @@ void SbxObject::Clear()
     pProps     = new SbxArray;
     pObjs      = new SbxArray( SbxOBJECT );
     SbxVariable* p;
-    p = Make( rtl::OUString::createFromAscii( pNameProp ), SbxCLASS_PROPERTY, SbxSTRING );
+    p = Make( pNameProp, SbxCLASS_PROPERTY, SbxSTRING );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( rtl::OUString::createFromAscii( pParentProp ), SbxCLASS_PROPERTY, SbxOBJECT );
+    p = Make( pParentProp, SbxCLASS_PROPERTY, SbxOBJECT );
     p->ResetFlag( SBX_WRITE );
     p->SetFlag( SBX_DONTSTORE );
     pDfltProp  = NULL;
@@ -140,43 +142,52 @@ void SbxObject::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
         SbxVariable* pVar = p->GetVar();
         if( bRead || bWrite )
         {
-            XubString aVarName( pVar->GetName() );
+            OUString aVarName( pVar->GetName() );
             sal_uInt16 nHash_ = MakeHashCode( aVarName );
-            if( nHash_ == nNameHash
-             && aVarName.EqualsIgnoreCaseAscii( pNameProp ) )
+            if( nHash_ == nNameHash && aVarName.equalsIgnoreAsciiCase( pNameProp ) )
             {
                 if( bRead )
+                {
                     pVar->PutString( GetName() );
+                }
                 else
-                    SetName( pVar->GetString() );
+                {
+                    SetName( pVar->GetOUString() );
+                }
             }
-            else if( nHash_ == nParentHash
-             && aVarName.EqualsIgnoreCaseAscii( pParentProp ) )
+            else if( nHash_ == nParentHash && aVarName.equalsIgnoreAsciiCase( pParentProp ) )
             {
                 SbxObject* p_ = GetParent();
                 if( !p_ )
+                {
                     p_ = this;
+                }
                 pVar->PutObject( p_ );
             }
         }
     }
 }
 
-sal_Bool SbxObject::IsClass( const rtl::OUString& rName ) const
+sal_Bool SbxObject::IsClass( const OUString& rName ) const
 {
-    return sal_Bool( aClassName.EqualsIgnoreCaseAscii( rName ) );
+    return sal_Bool( aClassName.equalsIgnoreAsciiCase( rName ) );
 }
 
 SbxVariable* SbxObject::FindUserData( sal_uInt32 nData )
 {
     if( !GetAll( SbxCLASS_DONTCARE ) )
+    {
         return NULL;
-
+    }
     SbxVariable* pRes = pMethods->FindUserData( nData );
     if( !pRes )
+    {
         pRes = pProps->FindUserData( nData );
+    }
     if( !pRes )
+    {
         pRes = pObjs->FindUserData( nData );
+    }
     // Search in the parents?
     if( !pRes && IsSet( SBX_GBLSEARCH ) )
     {
@@ -198,46 +209,52 @@ SbxVariable* SbxObject::FindUserData( sal_uInt32 nData )
     return pRes;
 }
 
-SbxVariable* SbxObject::Find( const rtl::OUString& rName, SbxClassType t )
+SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
 {
 #ifdef DBG_UTIL
     static sal_uInt16 nLvl = 0;
-    static const char* pCls[] =
-    { "DontCare","Array","Value","Variable","Method","Property","Object" };
+    static const char* pCls[] = { "DontCare","Array","Value","Variable","Method","Property","Object" };
     rtl::OString aNameStr1(rtl::OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
     rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
     DbgOutf( "SBX: Search %.*s %s %s in %s",
-        nLvl++, "                              ",
-        ( t >= SbxCLASS_DONTCARE && t <= SbxCLASS_OBJECT )
-         ? pCls[ t-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr1.getStr() );
+             nLvl++, "                              ",
+             ( t >= SbxCLASS_DONTCARE && t <= SbxCLASS_OBJECT )
+             ? pCls[ t-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr1.getStr() );
 #endif
 
     if( !GetAll( t ) )
+    {
         return NULL;
+    }
     SbxVariable* pRes = NULL;
     pObjs->SetFlag( SBX_EXTSEARCH );
     if( t == SbxCLASS_DONTCARE )
     {
         pRes = pMethods->Find( rName, SbxCLASS_METHOD );
         if( !pRes )
+        {
             pRes = pProps->Find( rName, SbxCLASS_PROPERTY );
+        }
         if( !pRes )
+        {
             pRes = pObjs->Find( rName, t );
+        }
     }
     else
     {
         SbxArray* pArray = NULL;
         switch( t )
         {
-            case SbxCLASS_VARIABLE:
-            case SbxCLASS_PROPERTY: pArray = pProps;    break;
-            case SbxCLASS_METHOD:   pArray = pMethods;  break;
-            case SbxCLASS_OBJECT:   pArray = pObjs;     break;
-            default:
-                DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
+        case SbxCLASS_VARIABLE:
+        case SbxCLASS_PROPERTY: pArray = pProps;    break;
+        case SbxCLASS_METHOD:   pArray = pMethods;  break;
+        case SbxCLASS_OBJECT:   pArray = pObjs;     break;
+        default: DBG_ASSERT( !this, "Ungueltige SBX-Klasse" ); break;
         }
         if( pArray )
+        {
             pRes = pArray->Find( rName, t );
+        }
     }
     // ExtendedsSearch in the Object-Array?
     // For objects and DontCare is the array of objects already
@@ -279,14 +296,16 @@ SbxVariable* SbxObject::Find( const rtl::OUString& rName, SbxClassType t )
 // The whole thing recursive, because Call() might be overloaded
 // Qualified names are allowed
 
-sal_Bool SbxObject::Call( const XubString& rName, SbxArray* pParam )
+sal_Bool SbxObject::Call( const OUString& rName, SbxArray* pParam )
 {
     SbxVariable* pMeth = FindQualified( rName, SbxCLASS_DONTCARE);
     if( pMeth && pMeth->ISA(SbxMethod) )
     {
         // FindQualified() might have been stroked!
         if( pParam )
+        {
             pMeth->SetParameters( pParam );
+        }
         pMeth->Broadcast( SBX_HINT_DATAWANTED );
         pMeth->SetParameters( NULL );
         return sal_True;
@@ -297,18 +316,22 @@ sal_Bool SbxObject::Call( const XubString& rName, SbxArray* pParam )
 
 SbxProperty* SbxObject::GetDfltProperty()
 {
-    if ( !pDfltProp && aDfltPropName.Len() )
+    if ( !pDfltProp && !aDfltPropName.isEmpty() )
     {
         pDfltProp = (SbxProperty*) Find( aDfltPropName, SbxCLASS_PROPERTY );
         if( !pDfltProp )
+        {
             pDfltProp = (SbxProperty*) Make( aDfltPropName, SbxCLASS_PROPERTY, SbxVARIANT );
+        }
     }
     return pDfltProp;
 }
-void SbxObject::SetDfltProperty( const XubString& rName )
+void SbxObject::SetDfltProperty( const OUString& rName )
 {
     if ( rName != aDfltPropName )
+    {
         pDfltProp = NULL;
+    }
     aDfltPropName = rName;
     SetModified( sal_True );
 }
@@ -322,12 +345,11 @@ SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
     SbxArray* pArray = NULL;
     if( pVar ) switch( pVar->GetClass() )
     {
-        case SbxCLASS_VARIABLE:
-        case SbxCLASS_PROPERTY: pArray = pProps;    break;
-        case SbxCLASS_METHOD:   pArray = pMethods;  break;
-        case SbxCLASS_OBJECT:   pArray = pObjs;     break;
-        default:
-            DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
+    case SbxCLASS_VARIABLE:
+    case SbxCLASS_PROPERTY: pArray = pProps;    break;
+    case SbxCLASS_METHOD:   pArray = pMethods;  break;
+    case SbxCLASS_OBJECT:   pArray = pObjs;     break;
+    default: DBG_ASSERT( !this, "Ungueltige SBX-Klasse" ); break;
     }
     if( pArray )
     {
@@ -336,12 +358,14 @@ SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
         pArray->ResetFlag( SBX_EXTSEARCH );
         SbxVariable* pOld = pArray->Find( pVar->GetName(), pVar->GetClass() );
         if( pOld )
-          for( sal_uInt16 i = 0; i < pArray->Count(); i++ )
         {
-            SbxVariableRef& rRef = pArray->GetRef( i );
-            if( (SbxVariable*) rRef == pOld )
+            for( sal_uInt16 i = 0; i < pArray->Count(); i++ )
             {
-                nArrayIdx = i; break;
+                SbxVariableRef& rRef = pArray->GetRef( i );
+                if( (SbxVariable*) rRef == pOld )
+                {
+                    nArrayIdx = i; break;
+                }
             }
         }
     }
@@ -351,21 +375,22 @@ SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
 // If a new object will be established, this object will be indexed,
 // if an object of this name exists already.
 
-SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataType dt )
+SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataType dt )
 {
     // Is the object already available?
     SbxArray* pArray = NULL;
     switch( ct )
     {
-        case SbxCLASS_VARIABLE:
-        case SbxCLASS_PROPERTY: pArray = pProps;    break;
-        case SbxCLASS_METHOD:   pArray = pMethods;  break;
-        case SbxCLASS_OBJECT:   pArray = pObjs;     break;
-        default:
-            DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
+    case SbxCLASS_VARIABLE:
+    case SbxCLASS_PROPERTY: pArray = pProps;    break;
+    case SbxCLASS_METHOD:   pArray = pMethods;  break;
+    case SbxCLASS_OBJECT:   pArray = pObjs;     break;
+    default: DBG_ASSERT( !this, "Ungueltige SBX-Klasse" ); break;
     }
     if( !pArray )
+    {
         return NULL;
+    }
     // Collections may contain objects of the same name
     if( !( ct == SbxCLASS_OBJECT && ISA(SbxCollection) ) )
     {
@@ -378,17 +403,18 @@ SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataTy
     SbxVariable* pVar = NULL;
     switch( ct )
     {
-        case SbxCLASS_VARIABLE:
-        case SbxCLASS_PROPERTY:
-            pVar = new SbxProperty( rName, dt );
-            break;
-        case SbxCLASS_METHOD:
-            pVar = new SbxMethod( rName, dt );
-            break;
-        case SbxCLASS_OBJECT:
-            pVar = CreateObject( rName );
-            break;
-        default: break;
+    case SbxCLASS_VARIABLE:
+    case SbxCLASS_PROPERTY:
+        pVar = new SbxProperty( rName, dt );
+        break;
+    case SbxCLASS_METHOD:
+        pVar = new SbxMethod( rName, dt );
+        break;
+    case SbxCLASS_OBJECT:
+        pVar = CreateObject( rName );
+        break;
+    default:
+        break;
     }
     pVar->SetParent( this );
     pArray->Put( pVar, pArray->Count() );
@@ -399,7 +425,7 @@ SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataTy
     return pVar;
 }
 
-SbxObject* SbxObject::MakeObject( const XubString& rName, const XubString& rClass )
+SbxObject* SbxObject::MakeObject( const OUString& rName, const OUString& rClass )
 {
     // Is the object already available?
     if( !ISA(SbxCollection) )
@@ -436,40 +462,49 @@ void SbxObject::Insert( SbxVariable* pVar )
             // Then this element exists already
             // There are objects of the same name allowed at collections
             if( pArray == pObjs && ISA(SbxCollection) )
+            {
                 nIdx = pArray->Count();
+            }
             else
             {
                 SbxVariable* pOld = pArray->Get( nIdx );
                 // already inside: overwrite
                 if( pOld == pVar )
+                {
                     return;
-
+                }
                 EndListening( pOld->GetBroadcaster(), sal_True );
                 if( pVar->GetClass() == SbxCLASS_PROPERTY )
                 {
                     if( pOld == pDfltProp )
+                    {
                         pDfltProp = (SbxProperty*) pVar;
+                    }
                 }
             }
         }
         StartListening( pVar->GetBroadcaster(), sal_True );
         pArray->Put( pVar, nIdx );
         if( pVar->GetParent() != this )
+        {
             pVar->SetParent( this );
+        }
         SetModified( sal_True );
         Broadcast( SBX_HINT_OBJECTCHANGED );
 #ifdef DBG_UTIL
-    static const char* pCls[] =
-    { "DontCare","Array","Value","Variable","Method","Property","Object" };
-    XubString aVarName( pVar->GetName() );
-    if ( !aVarName.Len() && pVar->ISA(SbxObject) )
-        aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
-    rtl::OString aNameStr1(rtl::OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
-    rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
-    DbgOutf( "SBX: Insert %s %s in %s",
-        ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
-          pVar->GetClass() <= SbxCLASS_OBJECT )
-            ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr1.getStr() );
+        static const char* pCls[] =
+            { "DontCare","Array","Value","Variable","Method","Property","Object" };
+        OUString aVarName( pVar->GetName() );
+        if ( aVarName.isEmpty() && pVar->ISA(SbxObject) )
+        {
+            aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
+        }
+        rtl::OString aNameStr1(rtl::OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
+        rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
+        DbgOutf( "SBX: Insert %s %s in %s",
+                 ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
+                   pVar->GetClass() <= SbxCLASS_OBJECT )
+                 ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr1.getStr() );
 #endif
     }
 }
@@ -483,12 +518,11 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
     {
         switch( pVar->GetClass() )
         {
-            case SbxCLASS_VARIABLE:
-            case SbxCLASS_PROPERTY: pArray = pProps;    break;
-            case SbxCLASS_METHOD:   pArray = pMethods;  break;
-            case SbxCLASS_OBJECT:   pArray = pObjs;     break;
-            default:
-                DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
+        case SbxCLASS_VARIABLE:
+        case SbxCLASS_PROPERTY: pArray = pProps;    break;
+        case SbxCLASS_METHOD:   pArray = pMethods;  break;
+        case SbxCLASS_OBJECT:   pArray = pObjs;     break;
+        default: DBG_ASSERT( !this, "Ungueltige SBX-Klasse" ); break;
         }
     }
     if( pArray )
@@ -496,25 +530,29 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
         StartListening( pVar->GetBroadcaster(), sal_True );
         pArray->Put( pVar, pArray->Count() );
         if( pVar->GetParent() != this )
+        {
             pVar->SetParent( this );
+        }
         SetModified( sal_True );
 #ifdef DBG_UTIL
-    static const char* pCls[] =
-    { "DontCare","Array","Value","Variable","Method","Property","Object" };
-    XubString aVarName( pVar->GetName() );
-    if ( !aVarName.Len() && pVar->ISA(SbxObject) )
-        aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
-    rtl::OString aNameStr1(rtl::OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
-    rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
-    DbgOutf( "SBX: Insert %s %s in %s",
-        ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
-          pVar->GetClass() <= SbxCLASS_OBJECT )
-            ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr1.getStr() );
+        static const char* pCls[] =
+            { "DontCare","Array","Value","Variable","Method","Property","Object" };
+        OUString aVarName( pVar->GetName() );
+        if ( aVarName.isEmpty() && pVar->ISA(SbxObject) )
+        {
+            aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
+        }
+        rtl::OString aNameStr1(rtl::OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
+        rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
+        DbgOutf( "SBX: Insert %s %s in %s",
+                 ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
+                   pVar->GetClass() <= SbxCLASS_OBJECT )
+                 ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr1.getStr() );
 #endif
     }
 }
 
-void SbxObject::Remove( const XubString& rName, SbxClassType t )
+void SbxObject::Remove( const OUString& rName, SbxClassType t )
 {
     Remove( SbxObject::Find( rName, t ) );
 }
@@ -526,20 +564,28 @@ void SbxObject::Remove( SbxVariable* pVar )
     if( pArray && nIdx < pArray->Count() )
     {
 #ifdef DBG_UTIL
-    XubString aVarName( pVar->GetName() );
-    if ( !aVarName.Len() && pVar->ISA(SbxObject) )
-        aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
-    rtl::OString aNameStr1(rtl::OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
-    rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
+        OUString aVarName( pVar->GetName() );
+        if ( aVarName.isEmpty() && pVar->ISA(SbxObject) )
+        {
+            aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
+        }
+        rtl::OString aNameStr1(rtl::OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
+        rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
 #endif
         SbxVariableRef pVar_ = pArray->Get( nIdx );
         if( pVar_->IsBroadcaster() )
+        {
             EndListening( pVar_->GetBroadcaster(), sal_True );
+        }
         if( (SbxVariable*) pVar_ == pDfltProp )
+        {
             pDfltProp = NULL;
+        }
         pArray->Remove( nIdx );
         if( pVar_->GetParent() == this )
+        {
             pVar_->SetParent( NULL );
+        }
         SetModified( sal_True );
         Broadcast( SBX_HINT_OBJECTCHANGED );
     }
@@ -549,7 +595,9 @@ static sal_Bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
 {
     SbxArrayRef p = (SbxArray*) SbxBase::Load( rStrm );
     if( !p.Is() )
+    {
         return sal_False;
+    }
     for( sal_uInt16 i = 0; i < p->Count(); i++ )
     {
         SbxVariableRef& r = p->GetRef( i );
@@ -571,36 +619,47 @@ sal_Bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     // Help for the read in of old objects: just TRUE back,
     // LoadPrivateData() had to set the default status up
     if( !nVer )
+    {
         return sal_True;
-
+    }
     pDfltProp = NULL;
     if( !SbxVariable::LoadData( rStrm, nVer ) )
+    {
         return sal_False;
+    }
     // If  it contains no alien object, insert ourselves
     if( aData.eType == SbxOBJECT && !aData.pObj )
+    {
         aData.pObj = this;
+    }
     sal_uInt32 nSize;
-    XubString aDfltProp;
-    aClassName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
-        RTL_TEXTENCODING_ASCII_US);
-    aDfltProp = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
-        RTL_TEXTENCODING_ASCII_US);
+    OUString aDfltProp;
+    aClassName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm, RTL_TEXTENCODING_ASCII_US);
+    aDfltProp = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm, RTL_TEXTENCODING_ASCII_US);
     sal_uIntPtr nPos = rStrm.Tell();
     rStrm >> nSize;
     if( !LoadPrivateData( rStrm, nVer ) )
+    {
         return sal_False;
+    }
     sal_uIntPtr nNewPos = rStrm.Tell();
     nPos += nSize;
     DBG_ASSERT( nPos >= nNewPos, "SBX: Zu viele Daten eingelesen" );
     if( nPos != nNewPos )
+    {
         rStrm.Seek( nPos );
-    if( !LoadArray( rStrm, this, pMethods )
-     || !LoadArray( rStrm, this, pProps )
-     || !LoadArray( rStrm, this, pObjs ) )
+    }
+    if( !LoadArray( rStrm, this, pMethods ) ||
+        !LoadArray( rStrm, this, pProps ) ||
+        !LoadArray( rStrm, this, pObjs ) )
+    {
         return sal_False;
+    }
     // Set properties
-    if( aDfltProp.Len() )
+    if( !aDfltProp.isEmpty() )
+    {
         pDfltProp = (SbxProperty*) pProps->Find( aDfltProp, SbxCLASS_PROPERTY );
+    }
     SetModified( sal_False );
     return sal_True;
 }
@@ -608,118 +667,137 @@ sal_Bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 sal_Bool SbxObject::StoreData( SvStream& rStrm ) const
 {
     if( !SbxVariable::StoreData( rStrm ) )
+    {
         return sal_False;
-    XubString aDfltProp;
+    }
+    OUString aDfltProp;
     if( pDfltProp )
+    {
         aDfltProp = pDfltProp->GetName();
+    }
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aClassName, RTL_TEXTENCODING_ASCII_US);
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aDfltProp, RTL_TEXTENCODING_ASCII_US);
     sal_uIntPtr nPos = rStrm.Tell();
     rStrm << (sal_uInt32) 0L;
     if( !StorePrivateData( rStrm ) )
+    {
         return sal_False;
+    }
     sal_uIntPtr nNew = rStrm.Tell();
     rStrm.Seek( nPos );
     rStrm << (sal_uInt32) ( nNew - nPos );
     rStrm.Seek( nNew );
     if( !pMethods->Store( rStrm ) )
+    {
         return sal_False;
+    }
     if( !pProps->Store( rStrm ) )
+    {
         return sal_False;
+    }
     if( !pObjs->Store( rStrm ) )
+    {
         return sal_False;
+    }
     ((SbxObject*) this)->SetModified( sal_False );
     return sal_True;
 }
 
-XubString SbxObject::GenerateSource( const XubString &rLinePrefix,
-                                  const SbxObject* )
+OUString SbxObject::GenerateSource( const OUString &rLinePrefix,
+                                    const SbxObject* )
 {
     // Collect the properties in a String
-    XubString aSource;
+    OUString aSource;
     SbxArrayRef xProps( GetProperties() );
     bool bLineFeed = false;
     for ( sal_uInt16 nProp = 0; nProp < xProps->Count(); ++nProp )
     {
         SbxPropertyRef xProp = (SbxProperty*) xProps->Get(nProp);
-        XubString aPropName( xProp->GetName() );
-        if ( xProp->CanWrite()
-         && !( xProp->GetHashCode() == nNameHash
-            && aPropName.EqualsIgnoreCaseAscii( pNameProp ) ) )
+        OUString aPropName( xProp->GetName() );
+        if ( xProp->CanWrite() &&
+             !( xProp->GetHashCode() == nNameHash &&
+                aPropName.equalsIgnoreAsciiCase(pNameProp)))
         {
             // Insert a break except in front of the first property
             if ( bLineFeed )
-                aSource.AppendAscii( "\n" );
+            {
+                aSource += "\n";
+            }
             else
+            {
                 bLineFeed = true;
-
+            }
             aSource += rLinePrefix;
-            aSource += '.';
+            aSource += ".";
             aSource += aPropName;
-            aSource.AppendAscii( " = " );
+            aSource += " = ";
 
             // Display the property value textual
             switch ( xProp->GetType() )
             {
-                case SbxEMPTY:
-                case SbxNULL:
-                    // no value
-                    break;
+            case SbxEMPTY:
+            case SbxNULL:
+                // no value
+                break;
 
-                case SbxSTRING:
-                {
-                    // Strings in quotation mark
-                    aSource.AppendAscii( "\"" );
-                    aSource += xProp->GetString();
-                    aSource.AppendAscii( "\"" );
-                    break;
-                }
+            case SbxSTRING:
+                // Strings in quotation mark
+                aSource += "\"";
+                aSource += xProp->GetOUString();
+                aSource += "\"";
+                break;
 
-                default:
-                {
-                    // miscellaneous, such as e.g.numerary directly
-                    aSource += xProp->GetString();
-                    break;
-                }
+            default:
+                // miscellaneous, such as e.g.numerary directly
+                aSource += xProp->GetOUString();
+                break;
             }
         }
     }
     return aSource;
 }
 
-static sal_Bool CollectAttrs( const SbxBase* p, XubString& rRes )
+static sal_Bool CollectAttrs( const SbxBase* p, OUString& rRes )
 {
-    XubString aAttrs;
+    OUString aAttrs;
     if( p->IsHidden() )
-        aAttrs.AssignAscii( "Hidden" );
+    {
+        aAttrs = "Hidden";
+    }
     if( p->IsSet( SBX_EXTSEARCH ) )
     {
-        if( aAttrs.Len() )
-            aAttrs += ',';
-        aAttrs.AppendAscii( "ExtSearch" );
+        if( !aAttrs.isEmpty() )
+        {
+            aAttrs += ",";
+        }
+        aAttrs += "ExtSearch";
     }
     if( !p->IsVisible() )
     {
-        if( aAttrs.Len() )
-            aAttrs += ',';
-        aAttrs.AppendAscii( "Invisible" );
+        if( !aAttrs.isEmpty() )
+        {
+            aAttrs += ",";
+        }
+        aAttrs += "Invisible";
     }
     if( p->IsSet( SBX_DONTSTORE ) )
     {
-        if( aAttrs.Len() )
-            aAttrs += ',';
-        aAttrs.AppendAscii( "DontStore" );
+        if( !aAttrs.isEmpty() )
+        {
+            aAttrs += ",";
+        }
+        aAttrs += "DontStore";
     }
-    if( aAttrs.Len() )
+    if( !aAttrs.isEmpty() )
     {
-        rRes.AssignAscii( " (" );
+        rRes = " (";
         rRes += aAttrs;
-        rRes += ')';
+        rRes += ")";
         return sal_True;
     }
     else
     {
-        rRes.Erase();
+        rRes = "";
         return sal_False;
     }
 }
@@ -734,14 +812,16 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
         return;
     }
     ++nLevel;
-    String aIndent;
+    OUString aIndent("");
     for ( sal_uInt16 n = 1; n < nLevel; ++n )
-        aIndent.AppendAscii( "    " );
-
+    {
+        aIndent += "    ";
+    }
     // if necessary complete the object
     if ( bFill )
+    {
         GetAll( SbxCLASS_DONTCARE );
-
+    }
     // Output the data of the object itself
     rtl::OString aNameStr(rtl::OUStringToOString(GetName(), RTL_TEXTENCODING_ASCII_US));
     rtl::OString aClassNameStr(rtl::OUStringToOString(aClassName, RTL_TEXTENCODING_ASCII_US));
@@ -760,13 +840,15 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
               << "=='" << ( aParentNameStr.isEmpty() ? "<unnamed>" : aParentNameStr.getStr()  ) << "'";
     }
     else
+    {
         rStrm << "no parent ";
+    }
     rStrm << " )" << endl;
     rtl::OString aIndentNameStr(rtl::OUStringToOString(aIndent, RTL_TEXTENCODING_ASCII_US));
     rStrm << aIndentNameStr.getStr() << "{" << endl;
 
     // Flags
-    XubString aAttrs;
+    OUString aAttrs;
     if( CollectAttrs( this, aAttrs ) )
     {
         rtl::OString aAttrStr(rtl::OUStringToOString(aAttrs, RTL_TEXTENCODING_ASCII_US));
@@ -781,14 +863,18 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
         SbxVariable* pVar = r;
         if( pVar )
         {
-            XubString aLine( aIndent );
-            aLine.AppendAscii( "  - " );
+            OUString aLine( aIndent );
+            aLine += "  - ";
             aLine += pVar->GetName( SbxNAME_SHORT_TYPES );
-            XubString aAttrs2;
+            OUString aAttrs2;
             if( CollectAttrs( pVar, aAttrs2 ) )
+            {
                 aLine += aAttrs2;
+            }
             if( !pVar->IsA( TYPE(SbxMethod) ) )
-                aLine.AppendAscii( "  !! Not a Method !!" );
+            {
+                aLine += "  !! Not a Method !!";
+            }
             write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aLine, RTL_TEXTENCODING_ASCII_US);
 
             // Output also the object at object-methods
@@ -801,7 +887,9 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
                 ((SbxObject*) pVar->GetValues_Impl().pObj)->Dump( rStrm, bFill );
             }
             else
+            {
                 rStrm << endl;
+            }
         }
     }
 
@@ -814,14 +902,18 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
             SbxVariable* pVar = r;
             if( pVar )
             {
-                XubString aLine( aIndent );
-                aLine.AppendAscii( "  - " );
+                OUString aLine( aIndent );
+                aLine += "  - ";
                 aLine += pVar->GetName( SbxNAME_SHORT_TYPES );
-                XubString aAttrs3;
+                OUString aAttrs3;
                 if( CollectAttrs( pVar, aAttrs3 ) )
+                {
                     aLine += aAttrs3;
+                }
                 if( !pVar->IsA( TYPE(SbxProperty) ) )
-                    aLine.AppendAscii( "  !! Not a Property !!" );
+                {
+                    aLine += "  !! Not a Property !!";
+                }
                 write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aLine, RTL_TEXTENCODING_ASCII_US);
 
                 // output also the object at object properties
@@ -834,7 +926,9 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
                     ((SbxObject*) pVar->GetValues_Impl().pObj)->Dump( rStrm, bFill );
                 }
                 else
+                {
                     rStrm << endl;
+                }
             }
         }
     }
@@ -850,9 +944,13 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
             {
                 rStrm << aIndentNameStr.getStr() << "  - Sub";
                 if ( pVar->ISA(SbxObject) )
+                {
                     ((SbxObject*) pVar)->Dump( rStrm, bFill );
+                }
                 else if ( pVar->ISA(SbxVariable) )
+                {
                     ((SbxVariable*) pVar)->Dump( rStrm, bFill );
+                }
             }
         }
     }
@@ -861,7 +959,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
     --nLevel;
 }
 
-SbxMethod::SbxMethod( const String& r, SbxDataType t )
+SbxMethod::SbxMethod( const OUString& r, SbxDataType t )
     : SbxVariable( t )
 {
     SetName( r );
@@ -881,7 +979,7 @@ SbxClassType SbxMethod::GetClass() const
     return SbxCLASS_METHOD;
 }
 
-SbxProperty::SbxProperty( const String& r, SbxDataType t )
+SbxProperty::SbxProperty( const OUString& r, SbxDataType t )
     : SbxVariable( t )
 {
     SetName( r );

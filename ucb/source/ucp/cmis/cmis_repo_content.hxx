@@ -60,7 +60,7 @@ namespace ucbhelper
 
 namespace cmis
 {
-#define CMIS_REPO_TYPE   "application/vnd.sun.staroffice.cmis-repository"
+#define CMIS_REPO_TYPE   "application/vnd.libreoffice.cmis-repository"
 
 class ContentProvider;
 class RepoContent : public ::ucbhelper::ContentImplHelper,

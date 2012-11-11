@@ -44,7 +44,7 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
@@ -77,7 +77,7 @@ class JobExecutor : public  css::lang::XTypeProvider
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
 
         /** reference to the module info service */
-        css::uno::Reference< css::frame::XModuleManager > m_xModuleManager;
+        css::uno::Reference< css::frame::XModuleManager2 > m_xModuleManager;
 
         /** cached list of all registered event names of cfg for call optimization. */
         OUStringList m_lEvents;

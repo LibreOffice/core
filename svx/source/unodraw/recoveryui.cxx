@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 
 #include <vcl/svapp.hxx>
@@ -261,7 +262,7 @@ RecoveryUI::EJob RecoveryUI::impl_classifyJob(const css::util::URL& aURL)
 sal_Bool RecoveryUI::impl_doEmergencySave()
 {
     // create core service, which implements the real "emergency save" algorithm.
-    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xSMGR, sal_True);
+    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(comphelper::getComponentContext(m_xSMGR), sal_True);
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
 
     // create all needed dialogs for this operation
@@ -290,7 +291,7 @@ void RecoveryUI::impl_doRecovery()
 
     sal_Bool bCrashRepEnabled(sal_False);
     css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                m_xSMGR,
+                                comphelper::getComponentContext(m_xSMGR),
                                 CFG_PACKAGE_RECOVERY,
                                 CFG_PATH_CRASHREPORTER,
                                 CFG_ENTRY_ENABLED,
@@ -299,7 +300,7 @@ void RecoveryUI::impl_doRecovery()
     bRecoveryOnly = !bCrashRepEnabled;
 
     // create core service, which implements the real "emergency save" algorithm.
-    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xSMGR, sal_False);
+    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(comphelper::getComponentContext(m_xSMGR), sal_False);
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
 
     // create all needed dialogs for this operation

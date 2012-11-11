@@ -61,7 +61,7 @@ protected:
 
 public:
     XUnbufferedStream(
-                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
                  SotMutexHolderRef aMutexHolder,
                  ZipEntry & rEntry,
                  com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
@@ -73,7 +73,7 @@ public:
 
     // allows to read package raw stream
     XUnbufferedStream(
-                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
                  const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xRawStream,
                  const ::rtl::Reference< EncryptionData >& rData );
 

@@ -69,17 +69,16 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     BASIC_DLLPRIVATE void implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic );
 
 protected:
-    sal_Bool            CError( SbError, const ::rtl::OUString&, xub_StrLen, xub_StrLen, xub_StrLen );
+    sal_Bool            CError( SbError, const OUString&, sal_Int32, sal_Int32, sal_Int32 );
 private:
-    BASIC_DLLPRIVATE sal_Bool           RTError( SbError, xub_StrLen, xub_StrLen, xub_StrLen );
-    BASIC_DLLPRIVATE sal_Bool           RTError( SbError, const String& rMsg, xub_StrLen, xub_StrLen, xub_StrLen );
-    BASIC_DLLPRIVATE sal_uInt16             BreakPoint( xub_StrLen nLine, xub_StrLen nCol1, xub_StrLen nCol2 );
-    BASIC_DLLPRIVATE sal_uInt16             StepPoint( xub_StrLen nLine, xub_StrLen nCol1, xub_StrLen nCol2 );
+    BASIC_DLLPRIVATE sal_Bool           RTError( SbError, sal_Int32, sal_Int32, sal_Int32 );
+    BASIC_DLLPRIVATE sal_Bool           RTError( SbError, const OUString& rMsg, sal_Int32, sal_Int32, sal_Int32 );
+    BASIC_DLLPRIVATE sal_uInt16         BreakPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
+    BASIC_DLLPRIVATE sal_uInt16         StepPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
     virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
     virtual sal_Bool StoreData( SvStream& ) const;
 
 protected:
-
     virtual sal_Bool    ErrorHdl();
     virtual sal_uInt16  BreakHdl();
     virtual ~StarBASIC();
@@ -107,45 +106,45 @@ public:
     void            SetLibInfo( BasicLibInfo* p )   { pLibInfo = p;     }
 
     // Compiler-Interface
-    SbModule*       MakeModule( const String& rName, const String& rSrc );
-    SbModule*       MakeModule32( const String& rName, const ::rtl::OUString& rSrc );
-    SbModule*       MakeModule32( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, const ::rtl::OUString& rSrc );
-    sal_Bool            Compile( SbModule* );
+    SbModule*       MakeModule( const OUString& rName, const OUString& rSrc );
+    SbModule*       MakeModule32( const OUString& rName, const OUString& rSrc );
+    SbModule*       MakeModule32( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, const OUString& rSrc );
+    sal_Bool        Compile( SbModule* );
     static void     Stop();
     static void     Error( SbError );
-    static void     Error( SbError, const String& rMsg );
+    static void     Error( SbError, const OUString& rMsg );
     static void     FatalError( SbError );
-    static void     FatalError( SbError, const String& rMsg );
+    static void     FatalError( SbError, const OUString& rMsg );
     static bool     IsRunning();
     static SbError  GetErrBasic();
     // #66536 make additional message accessible by RTL function Error
-    static String   GetErrorMsg();
-    static xub_StrLen GetErl();
+    static OUString GetErrorMsg();
+    static sal_Int32 GetErl();
 
-    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
-    virtual sal_Bool Call( const String&, SbxArray* = NULL );
+    virtual SbxVariable* Find( const OUString&, SbxClassType );
+    virtual sal_Bool Call( const OUString&, SbxArray* = NULL );
 
     SbxArray*       GetModules() { return pModules; }
     SbxObject*      GetRtl()     { return pRtl;     }
-    SbModule*       FindModule( const String& );
+    SbModule*       FindModule( const OUString& );
     // Run init code of all modules (including the inserted Doc-Basics)
     void            InitAllModules( StarBASIC* pBasicNotToInit = NULL );
     void            DeInitAllModules( void );
     void            ClearAllModuleVars( void );
 
     // Calls for error and break handler
-    static sal_uInt16   GetLine();
-    static sal_uInt16   GetCol1();
-    static sal_uInt16   GetCol2();
+    static sal_uInt16 GetLine();
+    static sal_uInt16 GetCol1();
+    static sal_uInt16 GetCol2();
     static void     SetErrorData( SbError nCode, sal_uInt16 nLine,
                                   sal_uInt16 nCol1, sal_uInt16 nCol2 );
 
     // Specific to error handler
-    static void     MakeErrorText( SbError, const ::rtl::OUString& aMsg );
-    static const    String& GetErrorText();
+    static void     MakeErrorText( SbError, const OUString& aMsg );
+    static const    OUString& GetErrorText();
     static SbError  GetErrorCode();
     static bool     IsCompilerError();
-    static sal_uInt16   GetVBErrorCode( SbError nError );
+    static sal_uInt16 GetVBErrorCode( SbError nError );
     static SbError  GetSfxFromVBError( sal_uInt16 nError );
     bool            IsBreak() const             { return bBreak; }
 
@@ -160,7 +159,7 @@ public:
 
     SbxArrayRef     getUnoListeners( void );
 
-    static SbxBase* FindSBXInCurrentScope( const String& rName );
+    static SbxBase* FindSBXInCurrentScope( const OUString& rName );
     static SbMethod* GetActiveMethod( sal_uInt16 nLevel = 0 );
     static SbModule* GetActiveModule();
     void SetVBAEnabled( bool bEnabled );
@@ -168,7 +167,7 @@ public:
 
     SbxObjectRef getRTL( void ) { return pRtl; }
     bool IsDocBasic() { return bDocBasic; }
-    SbxVariable* VBAFind( const rtl::OUString& rName, SbxClassType t );
+    SbxVariable* VBAFind( const OUString& rName, SbxClassType t );
     bool GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut );
     void QuitAndExitApplication();
     bool IsQuitApplication() { return bQuit; };

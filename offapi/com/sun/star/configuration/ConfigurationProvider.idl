@@ -46,6 +46,8 @@ module com { module sun { module star { module configuration {
  may be given default values during creation of this service. In particular
  this applies to the parameters <code>"Locale"</code> and <code>"EnableAsync"</code>.
  </p>
+
+ @deprecated Use <type>theDefaultProvider</type> instead.
  */
 published service ConfigurationProvider
 {

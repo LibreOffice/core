@@ -1283,7 +1283,7 @@ sal_Bool SwHTMLParser::HasCurrentParaBookmarks( sal_Bool bIgnoreStack ) const
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
         for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
             ppMark != pMarkAccess->getMarksEnd();
-            ppMark++)
+            ++ppMark)
         {
             const ::sw::mark::IMark* pBookmark = ppMark->get();
             sal_uLong nBookNdIdx = pBookmark->GetMarkPos().nNode.GetIndex();
@@ -1351,7 +1351,7 @@ void SwHTMLParser::StripTrailingPara()
             IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
                 ppMark != pMarkAccess->getMarksEnd();
-                ppMark++)
+                ++ppMark)
             {
                 ::sw::mark::IMark* pMark = ppMark->get();
                 sal_uLong nBookNdIdx = pMark->GetMarkPos().nNode.GetIndex();

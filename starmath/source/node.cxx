@@ -520,7 +520,7 @@ const SmNode * SmNode::FindRectClosestTo(const Point &rPoint) const
     return pResult;
 }
 
-void SmNode::GetAccessibleText( String &/*rText*/ ) const
+void SmNode::GetAccessibleText( OUStringBuffer &/*rText*/ ) const
 {
     OSL_FAIL( "SmNode: GetAccessibleText not overloaded" );
 }
@@ -530,12 +530,12 @@ const SmNode * SmNode::FindNodeWithAccessibleIndex(xub_StrLen nAccIdx) const
     const SmNode *pResult = 0;
 
     sal_Int32 nIdx = GetAccessibleIndex();
-    String aTxt;
+    OUStringBuffer aTxt;
     if (nIdx >= 0)
         GetAccessibleText( aTxt );  // get text if used in following 'if' statement
 
     if (nIdx >= 0
-        &&  nIdx <= nAccIdx  &&  nAccIdx < nIdx + aTxt.Len())
+        &&  nIdx <= nAccIdx  &&  nAccIdx < nIdx + aTxt.getLength())
         pResult = this;
     else
     {
@@ -556,18 +556,18 @@ const SmNode * SmNode::FindNodeWithAccessibleIndex(xub_StrLen nAccIdx) const
 }
 
 #ifdef DEBUG_ENABLE_DUMPASDOT
-void SmNode::DumpAsDot(std::ostream &out, String* label, int number, int& id, int parent) const
+void SmNode::DumpAsDot(std::ostream &out, OUString* label, int number, int& id, int parent) const
 {
     //If this is the root start the file
     if(number == -1){
         out<<"digraph {"<<std::endl;
         if(label){
             out<<"labelloc = \"t\";"<<std::endl;
-            String eq(*label);
+            OUString eq(*label);
             //CreateTextFromNode(eq);
-            eq.SearchAndReplaceAll(String::CreateFromAscii("\n"), String::CreateFromAscii(" "));
-            eq.SearchAndReplaceAll(String::CreateFromAscii("\\"), String::CreateFromAscii("\\\\"));
-            eq.SearchAndReplaceAll(String::CreateFromAscii("\""), String::CreateFromAscii("\\\""));
+            eq = eq.replaceAll("\n", " ");
+            eq = eq.replaceAll("\\", "\\\\");
+            eq = eq.replaceAll("\"", "\\\"");
             out<<"label= \"Equation: \\\"";
             out<< rtl::OUStringToOString(eq, RTL_TEXTENCODING_UTF8).getStr();
             out<<"\\\"\";"<<std::endl;
@@ -749,7 +749,7 @@ SmNode * SmStructureNode::GetSubNode(sal_uInt16 nIndex)
 }
 
 
-void SmStructureNode::GetAccessibleText( String &rText ) const
+void SmStructureNode::GetAccessibleText( OUStringBuffer &rText ) const
 {
     sal_uInt16 nNodes = GetNumSubNodes();
     for (sal_uInt16 i = 0;  i < nNodes;  ++i)
@@ -758,7 +758,7 @@ void SmStructureNode::GetAccessibleText( String &rText ) const
         if (pNode)
         {
             if (pNode->IsVisible())
-                ((SmStructureNode *) pNode)->nAccIndex = rText.Len();
+                ((SmStructureNode *) pNode)->nAccIndex = rText.getLength();
             pNode->GetAccessibleText( rText );
         }
     }
@@ -787,9 +787,9 @@ SmNode * SmVisibleNode::GetSubNode(sal_uInt16 /*nIndex*/)
 
 ///////////////////////////////////////////////////////////////////////////
 
-void SmGraphicNode::GetAccessibleText( String &rText ) const
+void SmGraphicNode::GetAccessibleText( OUStringBuffer &rText ) const
 {
-    rText += GetToken().aText;
+    rText.append(GetToken().aText);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -1750,7 +1750,7 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         aTmpSize.Width() *= 182;
         aTmpSize.Width() /= 267;
 
-        xub_Unicode cChar = pLeft->GetToken().cMathChar;
+        sal_Unicode cChar = pLeft->GetToken().cMathChar;
         if (cChar != MS_LINE  &&  cChar != MS_DLINE)
             pLeft ->GetFont().SetSize(aTmpSize);
 
@@ -2440,9 +2440,9 @@ void SmTextNode::CreateTextFromNode(String &rText)
 }
 
 
-void SmTextNode::GetAccessibleText( String &rText ) const
+void SmTextNode::GetAccessibleText( OUStringBuffer &rText ) const
 {
-    rText += aText;
+    rText.append(aText);
 }
 
 void SmTextNode::AdjustFontDesc()
@@ -2651,8 +2651,8 @@ SmNode * SmMatrixNode::GetLeftMost()
 SmMathSymbolNode::SmMathSymbolNode(const SmToken &rNodeToken)
 :   SmSpecialNode(NMATH, rNodeToken, FNT_MATH)
 {
-    xub_Unicode cChar = GetToken().cMathChar;
-    if ((xub_Unicode) '\0' != cChar)
+    sal_Unicode cChar = GetToken().cMathChar;
+    if ((sal_Unicode) '\0' != cChar)
         SetText(rtl::OUString(cChar));
 }
 

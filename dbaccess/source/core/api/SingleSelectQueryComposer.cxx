@@ -234,7 +234,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
                                const ::comphelper::ComponentContext& _rContext )
     :OSubComponent(m_aMutex,_xConnection)
     ,OPropertyContainer(m_aBHelper)
-    ,m_aSqlParser( _rContext.getLegacyServiceFactory() )
+    ,m_aSqlParser( _rContext.getUNOContext() )
     ,m_aSqlIterator( _xConnection, _rxTables, m_aSqlParser, NULL )
     ,m_aAdditiveIterator( _xConnection, _rxTables, m_aSqlParser, NULL )
     ,m_aElementaryParts( (size_t)SQLPartCount )
@@ -1290,9 +1290,12 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
     if(m_pTables && m_pTables->getCount() > 1)
     {
         ::rtl::OUString aCatalog,aSchema,aTable,aComposedName,aColumnName;
-        column->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
-        column->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
-        column->getPropertyValue(PROPERTY_TABLENAME)    >>= aTable;
+        if(column->getPropertySetInfo()->hasPropertyByName(PROPERTY_CATALOGNAME))
+            column->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
+        if(column->getPropertySetInfo()->hasPropertyByName(PROPERTY_SCHEMANAME))
+            column->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
+        if(column->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME))
+            column->getPropertyValue(PROPERTY_TABLENAME)    >>= aTable;
         column->getPropertyValue(PROPERTY_NAME)         >>= aColumnName;
 
         Sequence< ::rtl::OUString> aNames(m_pTables->getElementNames());
@@ -1515,14 +1518,14 @@ namespace
 void SAL_CALL OSingleSelectQueryComposer::setStructuredFilter( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, ::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::setStructuredFilter" );
-    OPredicateInputController aPredicateInput(m_aContext.getLegacyServiceFactory(),m_xConnection);
+    OPredicateInputController aPredicateInput(m_aContext.getUNOContext(),m_xConnection);
     setFilter(lcl_getCondition(filter,aPredicateInput,getColumns()));
 }
 
 void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingClause( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::setStructuredHavingClause" );
-    OPredicateInputController aPredicateInput(m_aContext.getLegacyServiceFactory(),m_xConnection);
+    OPredicateInputController aPredicateInput(m_aContext.getUNOContext(),m_xConnection);
     setHavingClause(lcl_getCondition(filter,aPredicateInput,getColumns()));
 }
 

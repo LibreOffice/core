@@ -1515,19 +1515,19 @@ SwTableBox* SwTable::GetTblBox( sal_uLong nSttIdx )
     return pRet;
 }
 
-sal_Bool SwTable::IsTblComplex() const
+bool SwTable::IsTblComplex() const
 {
-    // Returns sal_True for complex tables, i.e. tables that contain nestings,
+    // Returns true for complex tables, i.e. tables that contain nestings,
     // like containing boxes not part of the first line, e.g. results of
     // splits/merges which lead to more complex structures.
     for (size_t n = 0; n < m_TabSortContentBoxes.size(); ++n)
     {
         if (m_TabSortContentBoxes[ n ]->GetUpper()->GetUpper())
         {
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -1951,7 +1951,7 @@ sal_uLong SwTableBox::GetSttIdx() const
 }
 
     // retrieve informations from the client
-sal_Bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
+bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
     {
@@ -1966,7 +1966,7 @@ sal_Bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
                 ((SwAutoFmtGetDocNode&)rInfo).pCntntNode =
                                 GetFrmFmt()->GetDoc()->GetNodes().GoNext( &aIdx );
             }
-            return sal_False;
+            return false;
         }
         break;
     }
@@ -1983,9 +1983,9 @@ sal_Bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
         {
             ((SwPtrMsgPoolItem&)rInfo).pObject = SwIterator<SwFrm,SwFmt>::FirstElement( *GetFrmFmt() );
         }
-        return sal_False;
+        return false;
     }
-    return sal_True;
+    return true;
 }
 
 SwTable * SwTable::FindTable( SwFrmFmt const*const pFmt )
@@ -2101,7 +2101,7 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
             // Reset DontExpand-Flags before exchange, to retrigger expansion
             {
                 SwIndex aResetIdx( aIdx, n );
-                pTNd->DontExpandFmt( aResetIdx, sal_False, sal_False );
+                pTNd->DontExpandFmt( aResetIdx, false, false );
             }
 
             if( !pDoc->IsIgnoreRedline() && !pDoc->GetRedlineTbl().empty() )
@@ -2154,7 +2154,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
                 // exchange text
                 SwIndex aIdx( pTNd, sTxt.Len() );
                 // Reset DontExpand-Flags before exchange, to retrigger expansion
-                pTNd->DontExpandFmt( aIdx, sal_False, sal_False );
+                pTNd->DontExpandFmt( aIdx, false, false );
                 aIdx = 0;
                 pTNd->EraseText( aIdx, STRING_LEN,
                         IDocumentContentOperations::INS_EMPTYEXPAND );

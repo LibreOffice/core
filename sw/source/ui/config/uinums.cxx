@@ -560,7 +560,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
             if( IsPoolUserFmt( nCharPoolId ) )
             {
                 pFmt = rSh.MakeCharFmt( sCharFmtName );
-                pFmt->SetAuto( sal_False );
+                pFmt->SetAuto( false );
             }
             else
                 pFmt = rSh.GetCharFmtFromPool( nCharPoolId );

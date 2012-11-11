@@ -290,15 +290,15 @@ struct   ar_args *arg;
 
 #if ASCARCH
 #if defined(_AIX)
-   fread( (char *)&flhdr, sizeof(flhdr), 1, f );
+   if( fread( (char *)&flhdr, sizeof(flhdr), 1, f ) != 1 ) return (-1);
    if( strncmp(flhdr.fl_magic,AIAMAG, SAIAMAG) != 0 ) return(-1);
    fseek(f, atol(flhdr.fl_fstmoff), 0 ); /* postition to first member */
 #else
-   fread( magic, sizeof(magic), 1, f );
+   if( fread( magic, sizeof(magic), 1, f ) != 1 ) return( -1 );
    if( strncmp(magic, ARMAG, SARMAG) != 0 ) return( -1 );
 #endif
 #else
-   fread( (char*)&word, sizeof(word), 1, f );
+   if( fread( (char*)&word, sizeof(word), 1, f ) != 1 ) return( -1 );
    if( word != ARMAG ) return( -1 );
 #endif
 

@@ -90,7 +90,7 @@ public:
     void insertProperties(PropertiesPointer pProps)
     {
         if( mpProps.get() )
-            mpProps->insert(pProps);
+            mpProps->InsertProps(pProps);
         else
             mpProps = pProps;
     }
@@ -182,7 +182,7 @@ public:
             if( !mpProperties.get() )
                 mpProperties = pProperties;
             else
-                mpProperties->insert( pProperties );
+                mpProperties->InsertProps(pProperties);
         }
     }
 

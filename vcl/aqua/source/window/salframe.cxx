@@ -1146,7 +1146,7 @@ rtl::OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 
 // -----------------------------------------------------------------------
 
-static void getAppleScrollBarVariant(void)
+static void getAppleScrollBarVariant(StyleSettings &rSettings)
 {
     bool bIsScrollbarDoubleMax = true; // default is DoubleMax
 
@@ -1183,7 +1183,7 @@ static void getAppleScrollBarVariant(void)
         if( jumpStr )
         {
             if( CFGetTypeID( jumpStr ) == CFBooleanGetTypeID() )
-                ImplGetSVData()->maNWFData.mbScrollbarJumpPage = (jumpStr == kCFBooleanTrue);
+                rSettings.SetPrimaryButtonWarpsSlider(jumpStr == kCFBooleanTrue);
             CFRelease( jumpStr );
         }
         CFRelease( jumpScroll );
@@ -1324,7 +1324,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     // no mnemonics on aqua
     aStyleSettings.SetOptions( aStyleSettings.GetOptions() | STYLE_OPTION_NOMNEMONICS );
 
-    getAppleScrollBarVariant();
+    getAppleScrollBarVariant(aStyleSettings);
 
     // set scrollbar size
     aStyleSettings.SetScrollBarSize( static_cast<long int>([NSScroller scrollerWidth]) );

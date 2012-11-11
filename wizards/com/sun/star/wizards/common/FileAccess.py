@@ -307,7 +307,7 @@ class FileAccess(object):
             return False
 
     @classmethod
-    def getFolderTitles(self, xMSF, FilterName, FolderName, resDict):
+    def getFolderTitles(self, xMSF, FilterName, FolderName, resDict=None):
         #Returns and ordered dict containing the template's name and path
         
         LocLayoutFiles = {}
@@ -326,11 +326,14 @@ class FileAccess(object):
                 fileName = self.getFilename(i)
                 if FilterName is None or fileName.startswith(FilterName):
                     xDocInterface.loadFromMedium(i, tuple())
-                    if xDocInterface.Title in resDict:
-                        # localise string at runtime
-                        title = resDict[xDocInterface.Title]
-                    else:
+                    if resDict is None:
                         title = xDocInterface.Title
+                    else:
+                        if xDocInterface.Title in resDict:
+                            # localise string at runtime
+                            title = resDict[xDocInterface.Title]
+                        else:
+                            title = xDocInterface.Title
                     LocLayoutFiles[title] = i
 
         except Exception, exception:

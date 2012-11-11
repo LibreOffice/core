@@ -198,21 +198,9 @@ TabPage RID_SVXPAGE_KEYBOARD
 
 Resource RID_SVXPAGE_CONFIGGROUPBOX
 {
-    String STR_MYMACROS
-    {
-        Text [ en-US ] = "My Macros";
-    };
-    String STR_PRODMACROS
-    {
-        Text [ en-US ] = "%PRODUCTNAME Macros";
-    };
     String STR_BASICMACROS
     {
         Text [ en-US ] = "BASIC Macros" ;
-    };
-    String STR_DLG_MACROS
-    {
-      Text [ en-US ] = "%PRODUCTNAME Macros" ;
     };
     String STR_HUMAN_APPNAME
     {
@@ -221,26 +209,6 @@ Resource RID_SVXPAGE_CONFIGGROUPBOX
     String STR_GROUP_STYLES
     {
         Text [ en-US ] = "Styles" ;
-    };
-    Image IMG_HARDDISK
-    {
-        ImageBitmap = Bitmap { File = "harddisk_16.bmp" ; };
-        MASKCOLOR
-    };
-    Image IMG_LIB
-    {
-        ImageBitmap = Bitmap { File = "im30820.png"; };
-        MASKCOLOR
-    };
-    Image IMG_MACRO
-    {
-        ImageBitmap = Bitmap { File = "im30821.png"; };
-        MASKCOLOR
-    };
-    Image IMG_DOC
-    {
-        ImageBitmap = Bitmap { File = "im30826.png"; };
-        MASKCOLOR
     };
     Image BMP_COLLAPSED
     {

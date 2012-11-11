@@ -15,10 +15,10 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from wizards.text.TextDocument import *
-from wizards.text.TextDocument import *
-from wizards.text.TextSectionHandler import TextSectionHandler
-from wizards.common.PropertyNames import PropertyNames
+from ..text.TextDocument import TextDocument, traceback, Helper, \
+    TextFieldHandler, Configuration
+from ..text.TextSectionHandler import TextSectionHandler
+from ..common.PropertyNames import PropertyNames
 
 from com.sun.star.table import BorderLine
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
