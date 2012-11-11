@@ -9,7 +9,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,exttextcat))
 
-$(eval $(call gb_StaticLibrary_use_unpacked,exttextcat,libexttextcat))
+$(eval $(call gb_StaticLibrary_use_unpacked,exttextcat,exttextcat))
 
 $(eval $(call gb_StaticLibrary_set_warnings_not_errors,exttextcat))
 
