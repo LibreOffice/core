@@ -27,6 +27,8 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,codemaker_java))
 
+$(eval $(call gb_StaticLibrary_use_unpacked,codemaker_java,boost))
+
 $(eval $(call gb_StaticLibrary_use_packages,codemaker_java,\
     codemaker_inc \
 	registry_inc \
