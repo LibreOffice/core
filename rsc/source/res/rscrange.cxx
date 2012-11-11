@@ -275,7 +275,7 @@ ERRTYPE RscLongRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
     if( nMax < nValue || nMin > nValue )
         return( ERR_RSCRANGE_OUTDEFSET );
     void * pData = &((RscLongRangeInst*)rInst.pData)->nValue;
-    memmove( pData, &nValue, sizeof( sal_Int32 ) );
+    memcpy( pData, &nValue, sizeof( sal_Int32 ) );
     ((RscLongRangeInst *)rInst.pData)->bDflt = sal_False;
     return( ERR_OK );
 }
@@ -323,7 +323,7 @@ RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
         else
             lDflt = nMin;
         void * pData = &((RscLongRangeInst*)aInst.pData)->nValue;
-        memmove( pData, &lDflt, sizeof( sal_Int32 ) );
+        memcpy( pData, &lDflt, sizeof( sal_Int32 ) );
         ((RscLongRangeInst *)aInst.pData)->bDflt = sal_True;
     }
 

@@ -102,7 +102,7 @@ sal_Bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
             if (!pNewItems)
                 return false;
             nLimit = sal::static_int_cast<sal_uInt16>( nLimit + nDelta );
-            memmove(pNewItems, pItems, nCount * sizeof(ScDataObject*));
+            memcpy(pNewItems, pItems, nCount * sizeof(ScDataObject*));
             delete[] pItems;
             pItems = pNewItems;
         }

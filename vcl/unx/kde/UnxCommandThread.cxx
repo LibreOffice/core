@@ -159,7 +159,7 @@ void SAL_CALL UnxFilePickerCommandThread::run()
             nBufferSize *= 2;
             sal_Char *pNewBuffer = new sal_Char[nBufferSize];
             if ( pEntryBegin < pBufferEnd )
-                memmove( pNewBuffer, pEntryBegin, pWhereToReadEnd - pEntryBegin );
+                memcpy( pNewBuffer, pEntryBegin, pWhereToReadEnd - pEntryBegin );
 
             delete[] pBuffer;
             pBuffer = pNewBuffer;

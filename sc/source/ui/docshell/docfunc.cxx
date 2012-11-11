@@ -3161,7 +3161,7 @@ sal_Bool ScDocFunc::SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOL
         }
 
         pUndoRanges = new SCCOLROW[ 2*nRangeCnt ];
-        memmove( pUndoRanges, pRanges, 2*nRangeCnt*sizeof(SCCOLROW) );
+        memcpy( pUndoRanges, pRanges, 2*nRangeCnt*sizeof(SCCOLROW) );
 
         ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
         if (pTable)

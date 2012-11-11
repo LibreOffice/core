@@ -63,7 +63,7 @@ void ScReferenceList::AddEntry( SCCOL nCol, SCROW nRow, SCTAB nTab )
     pData = new ScReferenceEntry[ nFullSize+1 ];
     if (pOldData)
     {
-        memmove( pData, pOldData, nCount * sizeof(ScReferenceEntry) );
+        memcpy( pData, pOldData, nCount * sizeof(ScReferenceEntry) );
         delete[] pOldData;
     }
     while (nCount < nFullSize)
@@ -87,7 +87,7 @@ static void lcl_AddString( String**& pData, T& nCount, const String& rInsert )
     pData = new String*[ nCount+1 ];
     if (pOldData)
     {
-        memmove( pData, pOldData, nCount * sizeof(String*) );
+        memcpy( pData, pOldData, nCount * sizeof(String*) );
         delete[] pOldData;
     }
     pData[nCount] = new String(rInsert);

@@ -93,7 +93,7 @@ void SfxPtrArr::Append( void* aElem )
         if ( pData )
         {
             DBG_ASSERT( nUsed <= nNewSize, "" );
-            memmove( pNewData, pData, sizeof(void*)*nUsed );
+            memcpy( pNewData, pData, sizeof(void*)*nUsed );
             delete [] pData;
         }
         nUnused = sal::static_int_cast< sal_uInt8 >(nNewSize-nUsed);
@@ -139,11 +139,11 @@ sal_uInt16 SfxPtrArr::Remove( sal_uInt16 nPos, sal_uInt16 nLen )
         if ( nPos > 0 )
         {
             DBG_ASSERT( nPos <= nNewSize, "" );
-            memmove( pNewData, pData, sizeof(void*)*nPos );
+            memcpy( pNewData, pData, sizeof(void*)*nPos );
         }
         if ( nNewUsed != nPos )
-            memmove( pNewData+nPos, pData+nPos+nLen,
-                     sizeof(void*)*(nNewUsed-nPos) );
+            memcpy( pNewData+nPos, pData+nPos+nLen,
+                    sizeof(void*)*(nNewUsed-nPos) );
         delete [] pData;
         pData = pNewData;
         nUsed = nNewUsed;
@@ -210,7 +210,7 @@ void SfxPtrArr::Insert( sal_uInt16 nPos, void* rElem )
         if ( pData )
         {
             DBG_ASSERT( nUsed < nNewSize, "" );
-            memmove( pNewData, pData, sizeof(void*)*nUsed );
+            memcpy( pNewData, pData, sizeof(void*)*nUsed );
             delete [] pData;
         }
         nUnused = sal::static_int_cast< sal_uInt8 >(nNewSize-nUsed);

@@ -2066,7 +2066,7 @@ void ScViewFunc::SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOLROW
         }
 
         pUndoRanges = new SCCOLROW[ 2*nRangeCnt ];
-        memmove( pUndoRanges, pRanges, 2*nRangeCnt*sizeof(SCCOLROW) );
+        memcpy( pUndoRanges, pRanges, 2*nRangeCnt*sizeof(SCCOLROW) );
 
         //! outlines from all tab?
         ScOutlineTable* pTable = pDoc->GetOutlineTable( nCurTab );
