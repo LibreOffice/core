@@ -336,21 +336,21 @@ bool SendHTTPRequest(
 
                 if ( pszProxyServer )
                     sprintf( buffer,
-                    "POST http://%s:%d/soap/servlet/rpcrouter HTTP/1.0\r\n"
+                    "POST http://%s:%u/soap/servlet/rpcrouter HTTP/1.0\r\n"
                         "Content-Type: text/xml; charset=\"utf-8\"\r\n"
-                        "Content-Length: %d\r\n"
+                        "Content-Length: %u\r\n"
                         "SOAPAction: \"\"\r\n\r\n",
                         pszServer,
                         uPort,
-                        static_cast<int>(length)
+                        length
                         );
                 else
                     sprintf( buffer,
                         "POST /soap/servlet/rpcrouter HTTP/1.0\r\n"
                         "Content-Type: text/xml; charset=\"utf-8\"\r\n"
-                        "Content-Length: %d\r\n"
+                        "Content-Length: %u\r\n"
                         "SOAPAction: \"\"\r\n\r\n",
-                        static_cast<int>(length)
+                        length
                         );
 
                 if ( g_bDebugMode )

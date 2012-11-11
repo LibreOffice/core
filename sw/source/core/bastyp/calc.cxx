@@ -1691,7 +1691,7 @@ void main()
 
         ch = aArr[ ii ] ? 'X' : ' ';
         aArr[ ii ] = 1;
-        printf( "%-20s -> %3d [%c]\n", sNTypeTab[ n ], ii, ch );
+        printf( "%-20s -> %3u [%c]\n", sNTypeTab[ n ], ii, ch );
     }
 }
 

@@ -442,8 +442,8 @@ process_class_file(const char *pfilename, const struct growable *pfilt)
 
 #ifdef DEBUG
     printf("Magic: %x\n", nmagic);
-    printf("Major %d, Minor %d\n", nmajor, nminor);
-    printf("Const_pool_count %d\n", ncnt);
+    printf("Major %u, Minor %u\n", nmajor, nminor);
+    printf("Const_pool_count %u\n", ncnt);
 #else
     (void)nmajor;
     (void)nminor;

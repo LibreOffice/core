@@ -47,8 +47,9 @@ void trim(char * str)
 void ddfLogProgress(DDFLOGLEVEL lvl, char * desc, unsigned int progress)
 {
     if (DdfVerb < lvl) return;
-    if (progress == 0) printf("  %s: %3d%%", desc, progress);
-    else if (progress > 0 && progress < 100) printf("\r  %s: %3d%%", desc, progress);
+
+    if (progress == 0) printf("  %s: 0%%", desc);
+    else if (progress > 0 && progress < 100) printf("\r  %s: %3u%%", desc, progress);
     else if (progress == 100) printf("\r  %s: 100%%\n", desc);
     fflush(stdout);
 }
