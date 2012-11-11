@@ -628,7 +628,8 @@ void FuText::ImpSetAttributesFitCommon(SdrTextObj* pTxtObj)
 sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn = sal_False;
-
+    SdrObject* pObj;
+    SdrPageView* pPV;
     if (aDragTimer.IsActive())
     {
         aDragTimer.Stop();
@@ -702,6 +703,16 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             Abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
             Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
         {
+            /*************************************************************
+            * If a user wants to click on an object in front of a masked
+            * one, he releases the mouse button immediately
+            **************************************************************/
+            if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
+            {
+                mpView->UnmarkAllObj();
+                mpView->MarkObj(pObj,pPV,false,false);
+                return (bReturn);
+            }
             // toggle to rotation mode
             mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_OBJECT_ROTATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
         }
