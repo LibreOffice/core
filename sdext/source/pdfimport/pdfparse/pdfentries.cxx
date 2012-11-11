@@ -134,6 +134,11 @@ PDFValue::~PDFValue()
 {
 }
 
+const char* PDFValue::getEntryWithoutContainerErrorMessage() const
+{
+    return "value without container";
+}
+
 PDFComment::~PDFComment()
 {
 }
@@ -146,6 +151,11 @@ bool PDFComment::emit( EmitContext& rWriteContext ) const
 PDFEntry* PDFComment::clone() const
 {
     return new PDFComment( m_aComment );
+}
+
+const char* PDFComment::getEntryWithoutContainerErrorMessage() const
+{
+    return "comment without container";
 }
 
 PDFName::~PDFName()
@@ -478,11 +488,22 @@ bool PDFContainer::emitSubElements( EmitContext& rWriteContext ) const
     return true;
 }
 
+bool PDFContainer::insertNewValue(PDFEntry* pNewValue, const char*&)
+{
+    m_aSubElements.push_back( pNewValue );
+    return true;
+}
+
 void PDFContainer::cloneSubElements( std::vector<PDFEntry*>& rNewSubElements ) const
 {
     int nEle = m_aSubElements.size();
     for( int i = 0; i < nEle; i++ )
         rNewSubElements.push_back( m_aSubElements[i]->clone() );
+}
+
+const char* PDFContainer::getEntryWithoutContainerErrorMessage() const
+{
+    return "container without container";
 }
 
 PDFObject* PDFContainer::findObject( unsigned int nNumber, unsigned int nGeneration ) const
@@ -626,6 +647,11 @@ bool PDFStream::emit( EmitContext& rWriteContext ) const
 PDFEntry* PDFStream::clone() const
 {
     return new PDFStream( m_nBeginOffset, m_nEndOffset, NULL );
+}
+
+const char* PDFStream::getEntryWithoutContainerErrorMessage() const
+{
+    return "value without container";
 }
 
 unsigned int PDFStream::getDictLength( const PDFContainer* pContainer ) const
@@ -912,6 +938,22 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
     return bRet;
 }
 
+bool PDFObject::insertNewValue(PDFEntry* pNewValue, const char*& pMsg)
+{
+    bool inserted = false;
+    if( m_pObject == NULL )
+    {
+        m_pObject = pNewValue;
+        m_aSubElements.push_back( pNewValue );
+        inserted = true;
+    }
+    else
+    {
+        pMsg = "second value for object";
+    }
+    return inserted;
+}
+
 PDFEntry* PDFObject::clone() const
 {
     PDFObject* pNewOb = new PDFObject( m_nNumber, m_nGeneration );
@@ -1002,6 +1044,20 @@ bool PDFTrailer::emit( EmitContext& rWriteContext ) const
     if( ! rWriteContext.write( aOffset.getStr(), aOffset.getLength() ) )
         return false;
     return rWriteContext.write( "\n%%EOF\n", 7 );
+}
+
+bool PDFTrailer::insertNewValue(PDFEntry* pNewValue, const char*&)
+{
+    bool inserted = false;
+    PDFDict* pDict;
+    if( (m_pDict == NULL) &&
+        (pDict = dynamic_cast<PDFDict*>(pNewValue)) != NULL)
+    {
+        m_pDict = pDict;
+        m_aSubElements.push_back( pNewValue );
+        inserted = true;
+    }
+    return inserted;
 }
 
 PDFEntry* PDFTrailer::clone() const
@@ -1438,6 +1494,11 @@ PDFFileImplData* PDFFile::impl_getData() const
     return m_pData;
 }
 
+bool PDFFile::insertNewValue(PDFEntry*, const char*&)
+{
+    return false;
+}
+
 bool PDFFile::emit( EmitContext& rWriteContext ) const
 {
     setEmitData(  rWriteContext, new EmitImplData( this ) );
@@ -1469,6 +1530,11 @@ PDFPart::~PDFPart()
 bool PDFPart::emit( EmitContext& rWriteContext ) const
 {
     return emitSubElements( rWriteContext );
+}
+
+bool PDFPart::insertNewValue(PDFEntry*, const char*&)
+{
+    return false;
 }
 
 PDFEntry* PDFPart::clone() const

@@ -60,6 +60,7 @@ struct PDFEntry
 
     virtual bool emit( EmitContext& rWriteContext ) const = 0;
     virtual PDFEntry* clone() const = 0;
+    virtual const char* getEntryWithoutContainerErrorMessage() const = 0;
 
     protected:
     EmitImplData* getEmitData( EmitContext& rContext ) const;
@@ -75,6 +76,7 @@ struct PDFComment : public PDFEntry
     virtual ~PDFComment();
     virtual bool emit( EmitContext& rWriteContext ) const;
     virtual PDFEntry* clone() const;
+    virtual const char* getEntryWithoutContainerErrorMessage() const;
 };
 
 struct PDFValue : public PDFEntry
@@ -82,6 +84,7 @@ struct PDFValue : public PDFEntry
     // abstract base class for simple values
     PDFValue() : PDFEntry() {}
     virtual ~PDFValue();
+    virtual const char* getEntryWithoutContainerErrorMessage() const;
 };
 
 struct PDFName : public PDFValue
@@ -164,6 +167,8 @@ struct PDFContainer : public PDFEntry
     virtual ~PDFContainer();
     virtual bool emitSubElements( EmitContext& rWriteContext ) const;
     virtual void cloneSubElements( std::vector<PDFEntry*>& rNewSubElements ) const;
+    virtual bool insertNewValue(PDFEntry* pNewValue, const char*& pMsg);
+    virtual const char* getEntryWithoutContainerErrorMessage() const;
 
     PDFObject* findObject( unsigned int nNumber, unsigned int nGeneration ) const;
     PDFObject* findObject( PDFObjectRef* pRef ) const
@@ -209,6 +214,7 @@ struct PDFStream : public PDFEntry
     virtual ~PDFStream();
     virtual bool emit( EmitContext& rWriteContext ) const;
     virtual PDFEntry* clone() const;
+    virtual const char* getEntryWithoutContainerErrorMessage() const;
 
     unsigned int getDictLength( const PDFContainer* pObjectContainer = NULL ) const; // get contents of the "Length" entry of the dict
 };
@@ -220,6 +226,7 @@ struct PDFTrailer : public PDFContainer
     PDFTrailer() : PDFContainer(), m_pDict( NULL ) {}
     virtual ~PDFTrailer();
     virtual bool emit( EmitContext& rWriteContext ) const;
+    virtual bool insertNewValue(PDFEntry* pNewValue, const char*& pMsg);
     virtual PDFEntry* clone() const;
 };
 
@@ -241,6 +248,7 @@ struct PDFFile : public PDFContainer
     virtual ~PDFFile();
 
     virtual bool emit( EmitContext& rWriteContext ) const;
+    virtual bool insertNewValue(PDFEntry* pNewValue, const char*& pMsg);
     virtual PDFEntry* clone() const;
 
     bool isEncrypted() const;
@@ -270,6 +278,7 @@ struct PDFObject : public PDFContainer
     : m_pObject( NULL ), m_pStream( NULL ), m_nNumber( nNr ), m_nGeneration( nGen ) {}
     virtual ~PDFObject();
     virtual bool emit( EmitContext& rWriteContext ) const;
+    virtual bool insertNewValue(PDFEntry* pNewValue, const char*& pMsg);
     virtual PDFEntry* clone() const;
 
     // writes only the contained stream, deflated if necessary
@@ -288,6 +297,7 @@ struct PDFPart : public PDFContainer
     PDFPart() : PDFContainer() {}
     virtual ~PDFPart();
     virtual bool emit( EmitContext& rWriteContext ) const;
+    virtual bool insertNewValue(PDFEntry* pNewValue, const char*& pMsg);
     virtual PDFEntry* clone() const;
 };
 
