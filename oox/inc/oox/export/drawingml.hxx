@@ -27,6 +27,9 @@
 #include <com/sun/star/uno/XReference.hpp>
 #include <tools/poly.hxx>
 #include <filter/msfilter/escherex.hxx>
+#ifndef PPTX_EXPORT_ROTATE_CLOCKWISIFY
+#define PPTX_EXPORT_ROTATE_CLOCKWISIFY(input) (21600000-input*600)
+#endif
 
 class Graphic;
 class String;

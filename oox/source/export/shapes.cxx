@@ -735,7 +735,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
+    WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, pShape->GetRotateAngle());
     if( nAdjustmentValuesIndex != -1 )
     {
         sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
@@ -766,6 +766,7 @@ ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
 
     FSHelperPtr pFS = GetFS();
 
+    SdrObject* pShape = (SdrObject*) GetSdrObjectFromXShape( xShape );
     pFS->startElementNS( mnXmlNamespace, XML_sp, FSEND );
 
     // TODO: arc, section, cut, connector
@@ -782,7 +783,7 @@ ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a );
+    WriteShapeTransformation( xShape, XML_a,0,0,pShape->GetRotateAngle());
     WritePresetShape( "ellipse" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
@@ -816,6 +817,7 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
     DBG(printf("graphicObject without text\n"));
 
     OUString sGraphicURL;
+    SdrObject* pShape = (SdrObject*) GetSdrObjectFromXShape( xShape );
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
     if( !xShapeProps.is() || !( xShapeProps->getPropertyValue( S( "GraphicURL" ) ) >>= sGraphicURL ) )
     {
@@ -862,7 +864,7 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a );
+    WriteShapeTransformation( xShape, XML_a,0,0,pShape->GetRotateAngle());
     WritePresetShape( "rect" );
     // graphic object can come with the frame (bnc#654525)
     WriteOutline( xShapeProps );
@@ -1033,6 +1035,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 
     FSHelperPtr pFS = GetFS();
 
+    SdrObject* pShape = (SdrObject*) GetSdrObjectFromXShape( xShape );
     pFS->startElementNS( mnXmlNamespace, XML_sp, FSEND );
 
     sal_Int32 nRadius = 0;
@@ -1060,7 +1063,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a );
+    WriteShapeTransformation( xShape, XML_a,0,0,pShape->GetRotateAngle());
     WritePresetShape( "rect" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
@@ -1216,6 +1219,7 @@ ShapeExport& ShapeExport::WriteTableShape( Reference< XShape > xShape )
 
     OSL_TRACE("write table shape");
 
+    SdrObject* pShape = (SdrObject*) GetSdrObjectFromXShape( xShape );
     pFS->startElementNS( mnXmlNamespace, XML_graphicFrame, FSEND );
 
     pFS->startElementNS( mnXmlNamespace, XML_nvGraphicFramePr, FSEND );
@@ -1233,7 +1237,7 @@ ShapeExport& ShapeExport::WriteTableShape( Reference< XShape > xShape )
                           FSEND );
     pFS->endElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
 
-    WriteShapeTransformation( xShape, mnXmlNamespace );
+    WriteShapeTransformation( xShape, mnXmlNamespace,pShape->GetRotateAngle());
     WriteTable( xShape );
 
     pFS->endElementNS( mnXmlNamespace, XML_graphicFrame );
@@ -1245,6 +1249,7 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
 {
     FSHelperPtr pFS = GetFS();
 
+    SdrObject* pShape = (SdrObject*) GetSdrObjectFromXShape( xShape );
     pFS->startElementNS( mnXmlNamespace, XML_sp, FSEND );
 
     // non visual shape properties
@@ -1256,7 +1261,7 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a );
+    WriteShapeTransformation( xShape, XML_a,0,0,pShape->GetRotateAngle());
     WritePresetShape( "rect" );
     WriteBlipFill( Reference< XPropertySet >(xShape, UNO_QUERY ), S( "GraphicURL" ) );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );

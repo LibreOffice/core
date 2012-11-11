@@ -630,8 +630,9 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32
         aSize.Width = 1000;
     if ( aSize.Height < 0 )
         aSize.Height = 1000;
-
-    WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, nRotation );
+    aPos.X-=(1-cos(nRotation*F_PI18000))*aSize.Width/2-sin(nRotation*F_PI18000)*aSize.Height/2;
+    aPos.Y-=(1-cos(nRotation*F_PI18000))*aSize.Height/2+sin(nRotation*F_PI18000)*aSize.Width/2;
+    WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, PPTX_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
 }
 
 void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIsField )
