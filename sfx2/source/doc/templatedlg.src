@@ -140,7 +140,7 @@ ModelessDialog DLG_TEMPLATE_MANAGER
         Pos = MAP_APPFONT(160,5);
         Size = MAP_APPFONT(50,14);
         TabStop = TRUE;
-        Text [en-US] = "Spreedsheets";
+        Text [en-US] = "Spreadsheets";
     };
 
     PushButton BTN_SELECT_DRAWS
