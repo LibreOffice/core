@@ -64,6 +64,8 @@ PATCH_FILES=\
 .IF "$(OS)"=="ANDROID"
 PATCH_FILES+=\
     icu4c-android.patch
+icu_CFLAGS+=-fvisibility=hidden
+icu_CXXFLAGS+=-fvisibility=hidden
 .ELSE
 PATCH_FILES+=\
     icu4c-rpath.patch
