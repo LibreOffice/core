@@ -2306,14 +2306,14 @@
 				</prop>
 			</group>
                         <prop oor:name="EmptyPages" oor:type="xs:boolean" oor:nillable="false">
-                                <!-- UIHints: Tools - Options - Text document - Print - Other - Print automatically inserted blank pages -->
+			  <!-- UIHints: Tools - Options - Text document - Print - Other - Print automatically inserted blank pages -->
                                 <info>
                                         <author>FME</author>
                                         <desc>Contains settings for printing of empty pages.</desc>
                                         <desc>Specifies that automatically inserted empty pages are printed.</desc>
                                         <label>Print automatically inserted blank pages</label>
                                 </info>
-                                <value>true</value>
+                                <value>false</value>
                         </prop>
                 </group>
 		<group oor:name="Table">
