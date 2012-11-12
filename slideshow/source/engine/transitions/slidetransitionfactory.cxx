@@ -1092,13 +1092,14 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                     {
                         // black page:
                         boost::optional<SlideSharedPtr> leavingSlide;
+                        boost::optional<RGBColor> aFadeColor;
 
                         switch( nTransitionSubType )
                         {
                             case animations::TransitionSubType::CROSSFADE:
                                 // crossfade needs no further setup,
-                                // just blend new slide over existing
-                                // background.
+                                // just blend new slide over current
+                                // slide.
                                 break;
 
                                 // TODO(F1): Implement toColor/fromColor fades
@@ -1112,6 +1113,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                                     // effect really needs it.
                                     leavingSlide.reset( pLeavingSlide );
                                 }
+                                aFadeColor = rTransitionFadeColor;
                                 break;
 
                             default:
@@ -1124,8 +1126,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                                 new FadingSlideChange(
                                     leavingSlide,
                                     pEnteringSlide,
-                                    comphelper::make_optional(
-                                        rTransitionFadeColor),
+                                    aFadeColor,
                                     pSoundPlayer,
                                     rViewContainer,
                                     rScreenUpdater,
