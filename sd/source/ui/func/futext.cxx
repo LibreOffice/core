@@ -801,10 +801,10 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
          Abs(aMDPos.Y() - aPnt.Y()) < nDrgLog1 &&
          !rMEvt.IsShift() && !rMEvt.IsMod2() )
     {
-        SdrPageView* pPV = mpView->GetSdrPageView();
+        SdrPageView* pPV2 = mpView->GetSdrPageView();
         SdrViewEvent aVEvt;
         mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
-        mpView->MarkObj(aVEvt.pRootObj, pPV);
+        mpView->MarkObj(aVEvt.pRootObj, pPV2);
     }
 
     if ( !mxTextObj.is() && mpView )
