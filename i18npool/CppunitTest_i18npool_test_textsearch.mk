@@ -30,7 +30,7 @@ $(eval $(call gb_CppunitTest_use_libraries,i18npool_test_textsearch,\
 	cppuhelper \
 	sal \
 	icuuc \
-	icui18n \
+	$(if $(filter MSC,$(COM)),icuin,icui18n) \
 	unotest \
 	$(gb_UWINAPI) \
 ))

@@ -43,7 +43,7 @@ $(eval $(call gb_Library_use_libraries,i18nsearch,\
 	cppu \
 	cppuhelper \
 	icuuc \
-	icui18n \
+	$(if $(filter MSC,$(COM)),icuin,icui18n) \
 	sal \
 	$(gb_UWINAPI) \
 ))
