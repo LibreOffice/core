@@ -685,28 +685,6 @@ bool IosSalGraphics::drawPolyLine(
     {
         return false;
     }
-    // setup cap attribute
-    CGLineCap aCGLineCap(kCGLineCapButt);
-
-    switch(eLineCap)
-    {
-        default: // com::sun::star::drawing::LineCap_BUTT:
-        {
-            aCGLineCap = kCGLineCapButt;
-            break;
-        }
-        case com::sun::star::drawing::LineCap_ROUND:
-        {
-            aCGLineCap = kCGLineCapRound;
-            break;
-        }
-        case com::sun::star::drawing::LineCap_SQUARE:
-        {
-            aCGLineCap = kCGLineCapSquare;
-            break;
-        }
-    }
-
     // setup line attributes
     CGLineJoin aCGLineJoin = kCGLineJoinMiter;
     switch( eLineJoin )
