@@ -36,8 +36,7 @@
 
 typedef boost::unordered_map
 <
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySetInfo >,
+    PropertySetInfoKey,
     sal_Bool,
     PropertySetInfoHash,
     PropertySetInfoHash

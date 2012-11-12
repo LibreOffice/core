@@ -30,6 +30,7 @@
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
@@ -228,7 +229,7 @@ public:
 
 typedef boost::unordered_map
 <
-    Reference< XPropertySetInfo >,
+    PropertySetInfoKey,
     FilterPropertiesInfo_Impl *,
     PropertySetInfoHash,
     PropertySetInfoHash
@@ -628,12 +629,24 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
 
     FilterPropertiesInfo_Impl *pFilterInfo = 0;
 
-    if( pCache )
+    Reference < XTypeProvider > xTypeProv( xPropSet, UNO_QUERY );
+    Sequence< sal_Int8 > aImplId;
+    if( xTypeProv.is() )
     {
-        FilterPropertiesInfos_Impl::iterator aIter =
-            pCache->find( xInfo );
-        if( aIter != pCache->end() )
-            pFilterInfo = (*aIter).second;
+        aImplId = xTypeProv->getImplementationId();
+        if( aImplId.getLength() == 16 )
+        {
+            if( pCache )
+            {
+                // The key must not be created outside this block, because it
+                // keeps a reference to the property set info.
+                PropertySetInfoKey aKey( xInfo, aImplId );
+                FilterPropertiesInfos_Impl::iterator aIter =
+                    pCache->find( aKey );
+                if( aIter != pCache->end() )
+                    pFilterInfo = (*aIter).second;
+            }
+        }
     }
 
     sal_Bool bDelInfo = sal_False;
@@ -660,22 +673,31 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
             }
         }
 
-        // Check whether the property set info is destroyed if it is
-        // assigned to a weak reference only. If it is destroyed, then
-        // every instance of getPropertySetInfo returns a new object.
-        // Such property set infos must not be cached.
-        WeakReference < XPropertySetInfo > xWeakInfo( xInfo );
-        xInfo = 0;
-        xInfo = xWeakInfo;
-        if( xInfo.is() )
+        if( xTypeProv.is() && aImplId.getLength() == 16 )
         {
-            if( !pCache )
-                ((SvXMLExportPropertyMapper *)this)->pCache =
-                    new FilterPropertiesInfos_Impl;
-            (*pCache)[xInfo] = pFilterInfo;
+            // Check whether the property set info is destroyed if it is
+            // assigned to a weak reference only. If it is destroyed, then
+            // every instance of getPropertySetInfo returns a new object.
+            // Such property set infos must not be cached.
+            WeakReference < XPropertySetInfo > xWeakInfo( xInfo );
+            xInfo = 0;
+            xInfo = xWeakInfo;
+            if( xInfo.is() )
+            {
+                if( !pCache )
+                    ((SvXMLExportPropertyMapper *)this)->pCache =
+                        new FilterPropertiesInfos_Impl;
+                PropertySetInfoKey aKey( xInfo, aImplId );
+                (*pCache)[aKey] = pFilterInfo;
+            }
+            else
+                bDelInfo = sal_True;
         }
         else
+        {
+            OSL_FAIL("here is no TypeProvider or the ImplId is wrong");
             bDelInfo = sal_True;
+        }
     }
 
     if( pFilterInfo->GetPropertyCount() )

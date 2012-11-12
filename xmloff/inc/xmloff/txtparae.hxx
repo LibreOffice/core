@@ -21,7 +21,6 @@
 #define _XMLOFF_TEXTPARAE_HXX_
 
 #include "sal/config.h"
-
 #include "xmloff/dllapi.h"
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
