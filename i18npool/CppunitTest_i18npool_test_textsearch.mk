@@ -25,12 +25,15 @@ $(eval $(call gb_CppunitTest_use_components,i18npool_test_textsearch,\
 	i18npool/util/i18npool \
 ))
 
+$(eval $(call gb_Library_use_externals,i18nsearch,\
+	$(if $(filter MSC,$(COM)),icuin,icui18n) \
+	icuuc \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,i18npool_test_textsearch,\
 	cppu \
 	cppuhelper \
 	sal \
-	icuuc \
-	$(if $(filter MSC,$(COM)),icuin,icui18n) \
 	unotest \
 	$(gb_UWINAPI) \
 ))
