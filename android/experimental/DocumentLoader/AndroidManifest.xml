@@ -3,14 +3,15 @@
       package="org.libreoffice.android.examples"
       android:versionCode="1"
       android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="9" />
+      <uses-sdk android:minSdkVersion="9"
+                android:targetSdkVersion="14"/>
     <application android:label="LO Experimental DocumentLoader"
                  android:debuggable="true"
                  android:largeHeap="true"
                  android:hardwareAccelerated="true">
         <activity android:name=".DocumentLoader"
                   android:label="LO DocumentLoader"
-                  android:configChanges="orientation|keyboardHidden">
+                  android:configChanges="keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
