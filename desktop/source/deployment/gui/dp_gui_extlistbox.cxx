@@ -573,7 +573,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
         pEntry->m_pPublisher->SetBackground();
         pEntry->m_pPublisher->SetPaintTransparent( true );
         pEntry->m_pPublisher->SetURL( pEntry->m_sPublisherURL );
-        pEntry->m_pPublisher->SetDescription( pEntry->m_sPublisher );
+        pEntry->m_pPublisher->SetText( pEntry->m_sPublisher );
         Size aSize = FixedText::CalcMinimumTextSize( pEntry->m_pPublisher );
         pEntry->m_pPublisher->SetSizePixel( aSize );
 

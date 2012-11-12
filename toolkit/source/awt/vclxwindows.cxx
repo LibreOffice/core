@@ -2955,8 +2955,8 @@ void VCLXFixedHyperlink::setText( const ::rtl::OUString& Text ) throw(::com::sun
     SolarMutexGuard aGuard;
 
     FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
-    if ( pBase )
-        pBase->SetDescription( Text );
+    if (pBase)
+        pBase->SetText(Text);
 }
 
 ::rtl::OUString VCLXFixedHyperlink::getText() throw(::com::sun::star::uno::RuntimeException)
@@ -3084,7 +3084,7 @@ void VCLXFixedHyperlink::setProperty( const ::rtl::OUString& PropertyName, const
             {
                 ::rtl::OUString sNewLabel;
                 if ( Value >>= sNewLabel )
-                    pBase->SetDescription( sNewLabel );
+                    pBase->SetText(sNewLabel);
                 break;
             }
 

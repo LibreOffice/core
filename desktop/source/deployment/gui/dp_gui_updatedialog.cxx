@@ -966,7 +966,7 @@ void UpdateDialog::clearDescription()
     String sEmpty;
     m_PublisherLabel.Hide();
     m_PublisherLink.Hide();
-    m_PublisherLink.SetDescription( sEmpty );
+    m_PublisherLink.SetText( sEmpty );
     m_PublisherLink.SetURL( sEmpty );
     m_ReleaseNotesLabel.Hide();
     m_ReleaseNotesLink.Hide();
@@ -1015,7 +1015,7 @@ bool UpdateDialog::showDescription(std::pair< rtl::OUString, rtl::OUString > con
     {
         m_PublisherLabel.Show();
         m_PublisherLink.Show();
-        m_PublisherLink.SetDescription( sPub );
+        m_PublisherLink.SetText( sPub );
         m_PublisherLink.SetURL( sURL );
         bPublisher = true;
     }
@@ -1054,7 +1054,7 @@ bool UpdateDialog::showDescription( const String& rDescription, bool bWithPublis
         m_descriptions.SetPosSizePixel( aNewPos, aNewSize );
     }
     m_descriptions.Show();
-    m_descriptions.SetDescription( rDescription );
+    m_descriptions.SetText( rDescription );
     return true;
 }
 
