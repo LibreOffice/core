@@ -197,14 +197,11 @@ public:
 
     sal_uInt32 GetPos() const                       { return nPos; }
 
-    void SetLeftBorder( sal_Bool bBorder )          { bLeftBorder = bBorder; }
     sal_Bool HasLeftBorder() const                  { return bLeftBorder; }
 
-    void SetRightBorder( sal_Bool bBorder )         { bRightBorder = bBorder; }
     sal_Bool HasRightBorder() const                 { return bRightBorder; }
 
     void SetOutWidth( sal_Bool bSet )               { bOutWidth = bSet; }
-    sal_Bool GetOutWidth() const                    { return bOutWidth; }
 
     inline int operator==( const SwWriteTableCol& rCol ) const;
     inline int operator<( const SwWriteTableCol& rCol ) const;
