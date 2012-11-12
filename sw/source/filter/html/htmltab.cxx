@@ -298,7 +298,7 @@ class HTMLTableRow
 
 public:
 
-    sal_Bool bBottomBorder;                 // Is there a line after the row?
+    bool bBottomBorder;                 // Is there a line after the row?
 
     HTMLTableRow( sal_uInt16 nCells=0 );    // cells of the row are empty
 
@@ -354,7 +354,7 @@ class HTMLTableColumn
 
 public:
 
-    sal_Bool bLeftBorder;                   // is there a line before the column
+    bool bLeftBorder;                   // is there a line before the column
 
     HTMLTableColumn();
 
@@ -435,15 +435,15 @@ class HTMLTable
     SvxBorderLine aBorderLine;      // die Linie fuer die Umrandung
     SvxBorderLine aInhLeftBorderLine;   // die Linie fuer die Umrandung
     SvxBorderLine aInhRightBorderLine;  // die Linie fuer die Umrandung
-    sal_Bool bTopBorder;                // besitzt die Tabelle oben eine Linie
-    sal_Bool bRightBorder;              // besitzt die Tabelle rechts eine Linie
-    sal_Bool bTopAlwd;                  // duerfen die Raender gesetzt werden?
-    sal_Bool bRightAlwd;
-    sal_Bool bFillerTopBorder;          // bekommt eine linke/rechter Filler-
-    sal_Bool bFillerBottomBorder;       // Zelle eine obere/untere Umrandung?
-    sal_Bool bInhLeftBorder;
-    sal_Bool bInhRightBorder;
-    sal_Bool bBordersSet;               // die Umrandung wurde bereits gesetzt
+    bool bTopBorder;                // besitzt die Tabelle oben eine Linie
+    bool bRightBorder;              // besitzt die Tabelle rechts eine Linie
+    bool bTopAlwd;                  // duerfen die Raender gesetzt werden?
+    bool bRightAlwd;
+    bool bFillerTopBorder;          // bekommt eine linke/rechter Filler-
+    bool bFillerBottomBorder;       // Zelle eine obere/untere Umrandung?
+    bool bInhLeftBorder;
+    bool bInhRightBorder;
+    bool bBordersSet;               // die Umrandung wurde bereits gesetzt
     sal_Bool bForceFrame;
     sal_Bool bTableAdjustOfTag;         // stammt nTableAdjust aus <TABLE>?
     sal_uInt32 nHeadlineRepeat;         // repeating rows
@@ -452,7 +452,7 @@ class HTMLTable
     sal_Bool bMakeTopSubTable;
     sal_Bool bHasToFly;
     sal_Bool bFixedCols;
-    sal_Bool bColSpec;                  // Gab es COL(GROUP)-Elemente?
+    bool bColSpec;                  // Gab es COL(GROUP)-Elemente?
     sal_Bool bPrcWidth;                 // Breite ist eine %-Angabe
 
     SwHTMLParser *pParser;          // der aktuelle Parser
@@ -536,7 +536,7 @@ class HTMLTable
     void SetBorders();
 
     // wurde die Umrandung der Tabelle schon gesetzt
-    sal_Bool BordersSet() const { return bBordersSet; }
+    bool BordersSet() const { return bBordersSet; }
 
     const SvxBrushItem *GetBGBrush() const { return pBGBrush; }
     const SvxBrushItem *GetInhBGBrush() const { return pInhBGBrush; }
@@ -641,7 +641,7 @@ public:
 
     SwHTMLTableLayout *CreateLayoutInfo();
 
-    sal_Bool HasColTags() const { return bColSpec; }
+    bool HasColTags() const { return bColSpec; }
 
     sal_uInt16 IncGrfsThatResize() { return pSwTable ? ((SwTable *)pSwTable)->IncGrfsThatResize() : 0; }
 
@@ -824,7 +824,7 @@ HTMLTableRow::HTMLTableRow( sal_uInt16 nCells ):
     eAdjust(SVX_ADJUST_END),
     eVertOri(text::VertOrientation::TOP),
     pBGBrush(0),
-    bBottomBorder(sal_False)
+    bBottomBorder(false)
 {
     for( sal_uInt16 i=0; i<nCells; i++ )
     {
@@ -919,7 +919,7 @@ HTMLTableColumn::HTMLTableColumn():
     bIsEndOfGroup(sal_False),
     nWidth(0), bRelWidth(sal_False),
     eAdjust(SVX_ADJUST_END), eVertOri(text::VertOrientation::TOP),
-    bLeftBorder(sal_False)
+    bLeftBorder(false)
 {
     for( sal_uInt16 i=0; i<6; i++ )
         aFrmFmts[i] = 0;
@@ -989,11 +989,11 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     pPrevStNd = 0;
     pSwTable = 0;
 
-    bTopBorder = sal_False; bRightBorder = sal_False;
-    bTopAlwd = sal_True; bRightAlwd = sal_True;
-    bFillerTopBorder = sal_False; bFillerBottomBorder = sal_False;
-    bInhLeftBorder = sal_False; bInhRightBorder = sal_False;
-    bBordersSet = sal_False;
+    bTopBorder = false; bRightBorder = false;
+    bTopAlwd = true; bRightAlwd = true;
+    bFillerTopBorder = false; bFillerBottomBorder = false;
+    bInhLeftBorder = false; bInhRightBorder = false;
+    bBordersSet = false;
     bForceFrame = sal_False;
     nHeadlineRepeat = 0;
 
@@ -1082,7 +1082,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     nHSpace = (sal_uInt16)nPWidth;
     nVSpace = (sal_uInt16)nPHeight;
 
-    bColSpec = sal_False;
+    bColSpec = false;
 
     pBGBrush = pParser->CreateBrushItem(
                     pOptions->bBGColor ? &(pOptions->aBGColor) : 0,
@@ -1934,14 +1934,14 @@ void HTMLTable::InheritBorders( const HTMLTable *pParent,
     //
     if( 0==nRow && pParent->bTopBorder && bFirstPara )
     {
-        bTopBorder = sal_True;
-        bFillerTopBorder = sal_True; // auch Filler bekommt eine Umrandung
+        bTopBorder = true;
+        bFillerTopBorder = true; // auch Filler bekommt eine Umrandung
         aTopBorderLine = pParent->aTopBorderLine;
     }
     if( (*pParent->pRows)[nRow+nRowSpan-1].bBottomBorder && bLastPara )
     {
-        (*pRows)[nRows-1].bBottomBorder = sal_True;
-        bFillerBottomBorder = sal_True; // auch Filler bekommt eine Umrandung
+        (*pRows)[nRows-1].bBottomBorder = true;
+        bFillerBottomBorder = true; // auch Filler bekommt eine Umrandung
         aBottomBorderLine =
             nRow+nRowSpan==pParent->nRows ? pParent->aBottomBorderLine
                                           : pParent->aBorderLine;
@@ -1983,7 +1983,7 @@ void HTMLTable::InheritVertBorders( const HTMLTable *pParent,
 
     if( nCol+nColSpan==pParent->nCols && pParent->bRightBorder )
     {
-        bInhRightBorder = sal_True; // erstmal nur merken
+        bInhRightBorder = true; // erstmal nur merken
         aInhRightBorderLine = pParent->aRightBorderLine;
         nInhRightBorderWidth =
             GetBorderWidth( aInhRightBorderLine, sal_True ) + MIN_BORDER_DIST;
@@ -1991,7 +1991,7 @@ void HTMLTable::InheritVertBorders( const HTMLTable *pParent,
 
     if( ((*pParent->pColumns)[nCol]).bLeftBorder )
     {
-        bInhLeftBorder = sal_True;  // erstmal nur merken
+        bInhLeftBorder = true;  // erstmal nur merken
         aInhLeftBorderLine = 0==nCol ? pParent->aLeftBorderLine
                                      : pParent->aBorderLine;
         nInhLeftBorderWidth =
@@ -2017,25 +2017,25 @@ void HTMLTable::SetBorders()
         if( HTML_TR_ALL==eRules || HTML_TR_COLS==eRules ||
             ((HTML_TR_ROWS==eRules || HTML_TR_GROUPS==eRules) &&
              ((*pColumns)[i-1]).IsEndOfGroup()) )
-            ((*pColumns)[i]).bLeftBorder = sal_True;
+            ((*pColumns)[i]).bLeftBorder = true;
 
     for( i=0; i<nRows-1; i++ )
         if( HTML_TR_ALL==eRules || HTML_TR_ROWS==eRules ||
             ((HTML_TR_COLS==eRules || HTML_TR_GROUPS==eRules) &&
              (*pRows)[i].IsEndOfGroup()) )
-            (*pRows)[i].bBottomBorder = sal_True;
+            (*pRows)[i].bBottomBorder = true;
 
     if( bTopAlwd && (HTML_TF_ABOVE==eFrame || HTML_TF_HSIDES==eFrame ||
                      HTML_TF_BOX==eFrame) )
-        bTopBorder = sal_True;
+        bTopBorder = true;
     if( HTML_TF_BELOW==eFrame || HTML_TF_HSIDES==eFrame ||
         HTML_TF_BOX==eFrame )
-        (*pRows)[nRows-1].bBottomBorder = sal_True;
+        (*pRows)[nRows-1].bBottomBorder = true;
     if( (HTML_TF_RHS==eFrame || HTML_TF_VSIDES==eFrame ||
                       HTML_TF_BOX==eFrame) )
-        bRightBorder = sal_True;
+        bRightBorder = true;
     if( HTML_TF_LHS==eFrame || HTML_TF_VSIDES==eFrame || HTML_TF_BOX==eFrame )
-        ((*pColumns)[0]).bLeftBorder = sal_True;
+        ((*pColumns)[0]).bLeftBorder = true;
 
     for( i=0; i<nRows; i++ )
     {
@@ -2066,7 +2066,7 @@ void HTMLTable::SetBorders()
         }
     }
 
-    bBordersSet = sal_True;
+    bBordersSet = true;
 }
 
 sal_uInt16 HTMLTable::GetBorderWidth( const SvxBorderLine& rBLine,
@@ -2359,7 +2359,7 @@ void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nColWidth, sal_Bool bRel
         pCol->SetVertOri( eVertOrient );
     }
 
-    bColSpec = sal_True;
+    bColSpec = true;
 
     nCurCol = nColsReq;
 }
@@ -2504,7 +2504,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
                 // linke Umrandung von auesserer Tabelle uebernehmen
                 if( bInhRightBorder )
                 {
-                    bRightBorder = sal_True;
+                    bRightBorder = true;
                     aRightBorderLine = aInhRightBorderLine;
                 }
             }
@@ -2520,7 +2520,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             bInhLeftBorder )
         {
             // ggf. rechte Umrandung von auesserer Tabelle uebernehmen
-            ((*pColumns)[0]).bLeftBorder = sal_True;
+            ((*pColumns)[0]).bLeftBorder = true;
             aLeftBorderLine = aInhLeftBorderLine;
         }
     }

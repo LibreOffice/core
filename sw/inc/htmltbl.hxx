@@ -100,15 +100,15 @@ class SwHTMLTableLayoutCell
     sal_uInt16 nColSpan;               ///< COLSPAN of cell.
     sal_uInt16 nWidthOption;           ///< Given width of cell in Twip or %.
 
-    sal_Bool bPrcWidthOption : 1;      ///< nWidth is %-value.
-    sal_Bool bNoWrapOption : 1;        ///< NOWRAP-option.
+    bool bPrcWidthOption : 1;      ///< nWidth is %-value.
+    bool bNoWrapOption : 1;        ///< NOWRAP-option.
 
 public:
 
     SwHTMLTableLayoutCell( SwHTMLTableLayoutCnts *pCnts,
                          sal_uInt16 nRSpan, sal_uInt16 nCSpan,
-                         sal_uInt16 nWidthOpt, sal_Bool bPrcWdthOpt,
-                         sal_Bool nNWrapOpt );
+                         sal_uInt16 nWidthOpt, bool bPrcWdthOpt,
+                         bool nNWrapOpt );
 
     ~SwHTMLTableLayoutCell();
 
@@ -124,9 +124,9 @@ public:
     sal_uInt16 GetColSpan() const { return nColSpan; }
 
     sal_uInt16 GetWidthOption() const { return nWidthOption; }
-    sal_Bool IsPrcWidthOption() const { return bPrcWidthOption; }
+    bool IsPrcWidthOption() const { return bPrcWidthOption; }
 
-    sal_Bool HasNoWrapOption() const { return bNoWrapOption; }
+    bool HasNoWrapOption() const { return bNoWrapOption; }
 };
 
 class SwHTMLTableLayoutColumn
@@ -144,27 +144,27 @@ class SwHTMLTableLayoutColumn
 
     sal_uInt16 nWidthOption;                ///< Options of <COL> or <TD>/<TH>.
 
-    sal_Bool bRelWidthOption : 1;
-    sal_Bool bLeftBorder : 1;
+    bool bRelWidthOption : 1;
+    bool bLeftBorder : 1;
 
 public:
 
-    SwHTMLTableLayoutColumn( sal_uInt16 nColWidthOpt, sal_Bool bRelColWidthOpt,
-                             sal_Bool bLBorder );
+    SwHTMLTableLayoutColumn( sal_uInt16 nColWidthOpt, bool bRelColWidthOpt,
+                             bool bLBorder );
 
     ~SwHTMLTableLayoutColumn() {}
 
-    inline void MergeCellWidthOption( sal_uInt16 nWidth, sal_Bool bPrc );
-    inline void SetWidthOption( sal_uInt16 nWidth, sal_Bool bRelWidth, sal_Bool bTest );
+    inline void MergeCellWidthOption( sal_uInt16 nWidth, bool bPrc );
+    inline void SetWidthOption( sal_uInt16 nWidth, bool bRelWidth, bool bTest );
 
     sal_uInt16 GetWidthOption() const { return nWidthOption; }
-    sal_Bool IsRelWidthOption() const { return bRelWidthOption; }
+    bool IsRelWidthOption() const { return bRelWidthOption; }
 
     inline void MergeMinMaxNoAlign( sal_uLong nMin, sal_uLong nMax, sal_uLong nAbsMin );
     sal_uLong GetMinNoAlign() const { return nMinNoAlign; }
     sal_uLong GetMaxNoAlign() const { return nMaxNoAlign; }
     sal_uLong GetAbsMinNoAlign() const { return nAbsMinNoAlign; }
-    inline void ClearPass1Info( sal_Bool bWidthOpt );
+    inline void ClearPass1Info( bool bWidthOpt );
 
     inline void SetMinMax( sal_uLong nMin, sal_uLong nMax );
     void SetMax( sal_uLong nVal ) { nMax = nVal; }
@@ -179,7 +179,7 @@ public:
     void SetRelColWidth( sal_uInt16 nWidth ) { nRelColWidth = nWidth; }
     sal_uInt16 GetRelColWidth() const { return nRelColWidth; }
 
-    sal_Bool HasLeftBorder() const { return bLeftBorder; }
+    bool HasLeftBorder() const { return bLeftBorder; }
 };
 
 class SwHTMLTableLayout
@@ -230,10 +230,10 @@ class SwHTMLTableLayout
 
     SvxAdjust eTableAdjust;             ///< Alignment of table.
 
-    sal_Bool bColsOption : 1;           ///< Table has a COLS-option.
-    sal_Bool bColTags : 1;              ///< Tabelle has COL/COLGRP-tags.
-    sal_Bool bPrcWidthOption : 1;       ///< Width is given in percent.
-    sal_Bool bUseRelWidth : 1;          ///< SwTable gets relative width.
+    bool bColsOption : 1;           ///< Table has a COLS-option.
+    bool bColTags : 1;              ///< Tabelle has COL/COLGRP-tags.
+    bool bPrcWidthOption : 1;       ///< Width is given in percent.
+    bool bUseRelWidth : 1;          ///< SwTable gets relative width.
 
     sal_Bool bMustResize : 1;           ///< Table width must be defined.
     sal_Bool bExportable : 1;           ///< Layout may be used for export.
@@ -263,8 +263,8 @@ class SwHTMLTableLayout
 public:
 
     SwHTMLTableLayout( const SwTable *pSwTbl,
-                       sal_uInt16 nRows, sal_uInt16 nCols, sal_Bool bColsOpt, sal_Bool ColTgs,
-                       sal_uInt16 nWidth, sal_Bool bPrcWidth, sal_uInt16 nBorderOpt,
+                       sal_uInt16 nRows, sal_uInt16 nCols, bool bColsOpt, bool ColTgs,
+                       sal_uInt16 nWidth, bool bPrcWidth, sal_uInt16 nBorderOpt,
                        sal_uInt16 nCellPad, sal_uInt16 nCellSp, SvxAdjust eAdjust,
                        sal_uInt16 nLMargin, sal_uInt16 nRMargin, sal_uInt16 nBWidth,
                        sal_uInt16 nLeftBWidth, sal_uInt16 nRightBWidth,
@@ -309,8 +309,8 @@ public:
 
     inline long GetBrowseWidthMin() const;
 
-    sal_Bool HasColsOption() const { return bColsOption; }
-    sal_Bool HasColTags() const { return bColTags; }
+    bool HasColsOption() const { return bColsOption; }
+    bool HasColTags() const { return bColTags; }
 
     sal_Bool IsTopTable() const  { return pSwTable != 0; }
 
@@ -347,7 +347,7 @@ public:
 
     /// For Export.
     sal_uInt16 GetWidthOption() const { return nWidthOption; }
-    sal_Bool   HasPrcWidthOption() const { return bPrcWidthOption; }
+    bool   HasPrcWidthOption() const { return bPrcWidthOption; }
 
     sal_uInt16 GetCellPadding() const { return nCellPadding; }
     sal_uInt16 GetCellSpacing() const { return nCellSpacing; }
@@ -384,19 +384,19 @@ inline void SwHTMLTableLayoutColumn::MergeMinMaxNoAlign( sal_uLong nCMin,
         nAbsMinNoAlign = nAbsMin;
 }
 
-inline void SwHTMLTableLayoutColumn::ClearPass1Info( sal_Bool bWidthOpt )
+inline void SwHTMLTableLayoutColumn::ClearPass1Info( bool bWidthOpt )
 {
     nMinNoAlign = nMaxNoAlign = nAbsMinNoAlign = MINLAY;
     nMin = nMax = 0;
     if( bWidthOpt )
     {
         nWidthOption = 0;
-        bRelWidthOption = sal_False;
+        bRelWidthOption = false;
     }
 }
 
 inline void SwHTMLTableLayoutColumn::MergeCellWidthOption(
-    sal_uInt16 nWidth, sal_Bool bRel )
+    sal_uInt16 nWidth, bool bRel )
 {
     if( !nWidthOption ||
         (bRel==bRelWidthOption && nWidthOption < nWidth) )
@@ -430,7 +430,7 @@ inline SwHTMLTableLayoutColumn *SwHTMLTableLayout::GetColumn( sal_uInt16 nCol ) 
 }
 
 inline void SwHTMLTableLayoutColumn::SetWidthOption(
-    sal_uInt16 nWidth, sal_Bool bRelWidth, sal_Bool bTest )
+    sal_uInt16 nWidth, bool bRelWidth, bool bTest )
 {
     if( bTest && bRelWidthOption==bRelWidth )
     {

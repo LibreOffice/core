@@ -285,7 +285,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     SwWriteTableCol *pCol = aCols[nCol];
 #endif
 
-    sal_Bool bOutWidth = sal_True;
+    bool bOutWidth = true;
 
     const SwStartNode* pSttNd = pBox->GetSttNd();
     sal_Bool bHead = sal_False;
@@ -353,7 +353,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             {
                 nWidth = pCell->GetWidthOpt();
                 if( !nWidth )
-                    bOutWidth = sal_False;
+                    bOutWidth = false;
             }
         }
         else
@@ -396,7 +396,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             sOut.append(static_cast<sal_Int32>(aPixelSz.Width()));
         }
         if( !bLayoutExport && nColSpan==1 )
-            pCol->SetOutWidth( sal_False );
+            pCol->SetOutWidth( false );
     }
 
     if( nHeight )
@@ -788,7 +788,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             sOutStr.append('<').append(OOO_STRING_SVTOOLS_HTML_col);
 
             sal_uInt32 nWidth;
-            sal_Bool bRel;
+            bool bRel;
             if( bLayoutExport )
             {
                 bRel = pColumn->HasRelWidthOpt();
@@ -967,14 +967,14 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
 
     // text::HoriOrientation::NONE und text::HoriOrientation::FULL Tabellen benoetigen relative Breiten
     sal_uInt16 nNewDefListLvl = 0;
-    sal_Bool bRelWidths = sal_False;
+    bool bRelWidths = false;
     sal_Bool bCheckDefList = sal_False;
     switch( eTabHoriOri )
     {
     case text::HoriOrientation::FULL:
         // Tabellen mit automatischer Ausrichtung werden zu Tabellen
         // mit 100%-Breite
-        bRelWidths = sal_True;
+        bRelWidths = true;
         nWidth = 100;
         eTabHoriOri = text::HoriOrientation::LEFT;
         break;
@@ -991,7 +991,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
                 nWidth = pFmt->FindLayoutRect(sal_True).Width();
                 if( !nWidth )
                 {
-                    bRelWidths = sal_True;
+                    bRelWidths = true;
                     nWidth = 100;
                 }
 
@@ -1000,7 +1000,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
             {
                 // Ohne rechten Rand bleibt die %-Breite erhalten
                 nWidth = nPrcWidth;
-                bRelWidths = sal_True;
+                bRelWidths = true;
             }
             else
             {
@@ -1023,7 +1023,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
         // Breite direkt uebernommen werden.
         if( nPrcWidth )
         {
-            bRelWidths = sal_True;
+            bRelWidths = true;
             nWidth = nPrcWidth;
         }
         break;

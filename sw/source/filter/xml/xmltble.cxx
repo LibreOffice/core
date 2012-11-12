@@ -625,7 +625,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                     nColAbsWidth += (nBaseWidth/2UL);
                     nColAbsWidth /= nBaseWidth;
                 }
-                pColumn->SetWidthOpt( nColAbsWidth, sal_False );
+                pColumn->SetWidthOpt( nColAbsWidth, false );
             }
 
             SwXMLTableColumnsSortByWidth_Impl::const_iterator it = rExpCols.find( pColumn );

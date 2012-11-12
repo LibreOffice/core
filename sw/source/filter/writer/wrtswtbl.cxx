@@ -695,7 +695,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
                         SwWriteTableCol *pCol = aCols[nOldCol];
                         OSL_ENSURE(pCol, "No TableCol found, panic!");
                         if (pCol)
-                            pCol->bLeftBorder = sal_False;
+                            pCol->bLeftBorder = false;
                     }
 
                     if (!(nBorderMask & 8))
@@ -703,16 +703,16 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
                         SwWriteTableCol *pCol = aCols[nCol];
                         OSL_ENSURE(pCol, "No TableCol found, panic!");
                         if (pCol)
-                            pCol->bRightBorder = sal_False;
+                            pCol->bRightBorder = false;
                     }
 
                     if (!(nBorderMask & 1))
-                        pRow->bTopBorder = sal_False;
+                        pRow->bTopBorder = false;
                     else if (!pRow->nTopBorder || nTopBorder < pRow->nTopBorder)
                         pRow->nTopBorder = nTopBorder;
 
                     if (!(nBorderMask & 2))
-                        pEndRow->bBottomBorder = sal_False;
+                        pEndRow->bBottomBorder = false;
                     else if (
                                 !pEndRow->nBottomBorder ||
                                 nBottomBorder < pEndRow->nBottomBorder
@@ -740,7 +740,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
 }
 
 SwWriteTable::SwWriteTable(const SwTableLines& rLines, long nWidth,
-    sal_uInt32 nBWidth, sal_Bool bRel, sal_uInt16 nMaxDepth, sal_uInt16 nLSub, sal_uInt16 nRSub, sal_uInt32 nNumOfRowsToRepeat)
+    sal_uInt32 nBWidth, bool bRel, sal_uInt16 nMaxDepth, sal_uInt16 nLSub, sal_uInt16 nRSub, sal_uInt32 nNumOfRowsToRepeat)
     : nBorderColor((sal_uInt32)-1), nCellSpacing(0), nCellPadding(0), nBorder(0),
     nInnerBorder(0), nBaseWidth(nBWidth), nHeadEndRow(USHRT_MAX),
      nLeftSub(nLSub), nRightSub(nRSub), nTabWidth(nWidth), bRelWidths(bRel),
@@ -862,18 +862,18 @@ SwWriteTable::SwWriteTable( const SwHTMLTableLayout *pLayoutInfo )
 
             SwWriteTableCol *pCol = aCols[nCol];
             if( !(nBorderMask & 4) )
-                pCol->bLeftBorder = sal_False;
+                pCol->bLeftBorder = false;
 
             pCol = aCols[nCol+nColSpan-1];
             if( !(nBorderMask & 8) )
-                pCol->bRightBorder = sal_False;
+                pCol->bRightBorder = false;
 
             if( !(nBorderMask & 1) )
-                pRow->bTopBorder = sal_False;
+                pRow->bTopBorder = false;
 
             SwWriteTableRow *pEndRow = aRows[nRow+nRowSpan-1];
             if( !(nBorderMask & 2) )
-                pEndRow->bBottomBorder = sal_False;
+                pEndRow->bBottomBorder = false;
 
             // Die Hoehe braucht nur einmal geschieben werden
             if( nHeight )

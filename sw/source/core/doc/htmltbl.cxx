@@ -108,8 +108,8 @@ const SwStartNode *SwHTMLTableLayoutCnts::GetStartNode() const
 
 SwHTMLTableLayoutCell::SwHTMLTableLayoutCell( SwHTMLTableLayoutCnts *pCnts,
                                           sal_uInt16 nRSpan, sal_uInt16 nCSpan,
-                                          sal_uInt16 nWidth, sal_Bool bPrcWidth,
-                                          sal_Bool bNWrapOpt ) :
+                                          sal_uInt16 nWidth, bool bPrcWidth,
+                                          bool bNWrapOpt ) :
     pContents( pCnts ),
     nRowSpan( nRSpan ), nColSpan( nCSpan ),
     nWidthOption( nWidth ), bPrcWidthOption( bPrcWidth ),
@@ -126,8 +126,8 @@ SwHTMLTableLayoutCell::~SwHTMLTableLayoutCell()
 
 
 SwHTMLTableLayoutColumn::SwHTMLTableLayoutColumn( sal_uInt16 nWidth,
-                                                  sal_Bool bRelWidth,
-                                                  sal_Bool bLBorder ) :
+                                                  bool bRelWidth,
+                                                  bool bLBorder ) :
     nMinNoAlign(MINLAY), nMaxNoAlign(MINLAY), nAbsMinNoAlign(MINLAY),
     nMin(0), nMax(0),
     nAbsColWidth(0), nRelColWidth(0),
@@ -183,8 +183,8 @@ typedef SwHTMLTableLayoutCell *SwHTMLTableLayoutCellPtr;
 
 SwHTMLTableLayout::SwHTMLTableLayout(
                         const SwTable * pSwTbl,
-                        sal_uInt16 nRws, sal_uInt16 nCls, sal_Bool bColsOpt, sal_Bool bColTgs,
-                        sal_uInt16 nWdth, sal_Bool bPrcWdth, sal_uInt16 nBorderOpt,
+                        sal_uInt16 nRws, sal_uInt16 nCls, bool bColsOpt, bool bColTgs,
+                        sal_uInt16 nWdth, bool bPrcWdth, sal_uInt16 nBorderOpt,
                         sal_uInt16 nCellPad, sal_uInt16 nCellSp, SvxAdjust eAdjust,
                         sal_uInt16 nLMargin, sal_uInt16 nRMargin,
                         sal_uInt16 nBWidth, sal_uInt16 nLeftBWidth,
@@ -207,7 +207,7 @@ SwHTMLTableLayout::SwHTMLTableLayout(
     nDelayedResizeAbsAvail( 0 ), nLastResizeAbsAvail( 0 ),
     nPass1Done( 0 ), nWidthSet( 0 ), eTableAdjust( eAdjust ),
     bColsOption( bColsOpt ), bColTags( bColTgs ),
-    bPrcWidthOption( bPrcWdth ), bUseRelWidth( sal_False ),
+    bPrcWidthOption( bPrcWdth ), bUseRelWidth( false ),
     bMustResize( sal_True ), bExportable( sal_True ), bBordersChanged( sal_False ),
     bMustNotResize( sal_False ), bMustNotRecalc( sal_False )
 {
@@ -469,7 +469,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
 
     ClearPass1Info();
 
-    sal_Bool bFixRelWidths = sal_False;
+    bool bFixRelWidths = false;
     sal_uInt16 i;
 
     SwHTMLTableLayoutConstraints *pConstraints = 0;
@@ -779,7 +779,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
 
         nMin += pColumn->GetMin();
         nMax += pColumn->GetMax();
-        bFixRelWidths |= pColumn->IsRelWidthOption();
+        if (pColumn->IsRelWidthOption()) bFixRelWidths = true;
     }
 
     // Now process the constraints
@@ -960,7 +960,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                     if( nRel+nColWidth > 100 )
                     {
                         nColWidth = 100 - nRel;
-                        pColumn->SetWidthOption( nColWidth, sal_True, sal_False );
+                        pColumn->SetWidthOption( nColWidth, true, false );
                     }
                     nRelMax += pColumn->GetMax();
                     nRel = nRel + nColWidth;
@@ -994,7 +994,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                         // the next column gets the rest
                         sal_uInt16 nColWidth =
                             (sal_uInt16)((pColumn->GetMax() * nRelLeft) / nFixMax);
-                        pColumn->SetWidthOption( nColWidth, sal_True, sal_False );
+                        pColumn->SetWidthOption( nColWidth, true, false );
                     }
                 }
             }
@@ -1142,7 +1142,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
 
     // Step 2: Calculate the absolute table width.
     sal_uInt16 nAbsTabWidth = 0;
-    bUseRelWidth = sal_False;
+    bUseRelWidth = false;
     if( nWidthOption )
     {
         if( bPrcWidthOption )
@@ -1170,7 +1170,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
                 ( /*MayBeInFlyFrame() ||*/ (sal_uLong)nAbsTabWidth > nMin ) )
             {
                 nRelAvail = USHRT_MAX;
-                bUseRelWidth = sal_True;
+                bUseRelWidth = true;
             }
         }
         else
@@ -1645,7 +1645,7 @@ void SwHTMLTableLayout::SetWidths( sal_Bool bCallPass2, sal_uInt16 nAbsAvail,
         ((SwTable *)pSwTable)->LockModify();
         SwFmtFrmSize aFrmSize( pFrmFmt->GetFrmSize() );
         aFrmSize.SetWidth( nRelTabWidth );
-        sal_Bool bRel = bUseRelWidth &&
+        bool bRel = bUseRelWidth &&
                     text::HoriOrientation::FULL!=pFrmFmt->GetHoriOrient().GetHoriOrient();
         aFrmSize.SetWidthPercent( (sal_uInt8)(bRel ? nWidthOption : 0) );
         pFrmFmt->SetFmtAttr( aFrmSize );
