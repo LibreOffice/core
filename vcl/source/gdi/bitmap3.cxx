@@ -855,33 +855,39 @@ sal_Bool Bitmap::ImplConvertGhosted()
 
 sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
 {
+    bool bRetval(false);
+
+#ifdef DBG_UTIL
+    const sal_uInt16 nStartCount(GetBitCount());
+#endif
+
     if(basegfx::fTools::equalZero(rScaleX) || basegfx::fTools::equalZero(rScaleY))
     {
         // no scale
-        return true;
+        bRetval = true;
     }
 
     if(basegfx::fTools::equal(rScaleX, 1.0) && basegfx::fTools::equal(rScaleY, 1.0))
     {
         // no scale
-        return true;
+        bRetval = true;
     }
 
     switch(nScaleFlag)
     {
         case BMP_SCALE_NONE :
         {
-            return false;
+            bRetval = false;
             break;
         }
         case BMP_SCALE_FAST :
         {
-            return ImplScaleFast( rScaleX, rScaleY );
+            bRetval = ImplScaleFast( rScaleX, rScaleY );
             break;
         }
         case BMP_SCALE_INTERPOLATE :
         {
-            return ImplScaleInterpolate( rScaleX, rScaleY );
+            bRetval = ImplScaleInterpolate( rScaleX, rScaleY );
             break;
         }
         case BMP_SCALE_SUPER :
@@ -889,12 +895,12 @@ sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32
             if(GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
             {
                 // fallback to ImplScaleFast
-                return ImplScaleFast( rScaleX, rScaleY );
+                bRetval = ImplScaleFast( rScaleX, rScaleY );
             }
             else
             {
                 // #i121233# use method from symphony
-                return ImplScaleSuper( rScaleX, rScaleY );
+                bRetval = ImplScaleSuper( rScaleX, rScaleY );
             }
             break;
         }
@@ -902,33 +908,40 @@ sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32
         {
             const Lanczos3Kernel kernel;
 
-            return ImplScaleConvolution( rScaleX, rScaleY, kernel );
+            bRetval = ImplScaleConvolution( rScaleX, rScaleY, kernel );
             break;
         }
         case BMP_SCALE_BICUBIC :
         {
             const BicubicKernel kernel;
 
-            return ImplScaleConvolution( rScaleX, rScaleY, kernel );
+            bRetval = ImplScaleConvolution( rScaleX, rScaleY, kernel );
             break;
         }
         case BMP_SCALE_BILINEAR :
         {
             const BilinearKernel kernel;
 
-            return ImplScaleConvolution( rScaleX, rScaleY, kernel );
+            bRetval = ImplScaleConvolution( rScaleX, rScaleY, kernel );
             break;
         }
         case BMP_SCALE_BOX :
         {
             const BoxKernel kernel;
 
-            return ImplScaleConvolution( rScaleX, rScaleY, kernel );
+            bRetval = ImplScaleConvolution( rScaleX, rScaleY, kernel );
             break;
         }
     }
 
-    return false;
+#ifdef DBG_UTIL
+    if(bRetval && nStartCount != GetBitCount())
+    {
+        OSL_ENSURE(false, "Bitmap::Scale has changed the ColorDepth, this should *not* happen (!)");
+    }
+#endif
+
+    return bRetval;
 }
 
 // ------------------------------------------------------------------------
