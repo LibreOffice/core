@@ -38,6 +38,18 @@ $(eval $(call gb_Library_set_include,i18nsearch,\
 
 $(eval $(call gb_Library_use_sdk_api,i18nsearch))
 
+ifeq ($(OS)$(COM),WNTMSC)
+$(eval $(call gb_Library_use_externals,i18nsearch,\
+	icuin \
+	icuuc \
+))
+else
+$(eval $(call gb_Library_use_externals,i18nsearch,\
+	icui18n \
+	icuuc \
+))
+endif
+
 $(eval $(call gb_Library_use_libraries,i18nsearch,\
 	comphelper \
 	cppu \
