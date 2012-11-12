@@ -20,7 +20,7 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 	$(if $(filter MSC,$(COM)),&& export LIB="$(ILIB)") \
 	&& ./configure --disable-modules --disable-test --disable-introspection \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	$(if $(filter NO,$(SYSTEM_LIBXML)),LIBXML2_CFLAGS="-I$(OUTDIR)/external" \
+	$(if $(filter NO,$(SYSTEM_LIBXML)),LIBXML2_CFLAGS="-I$(OUTDIR)/inc/external" \
 	$(if $(filter MSC,$(COM)),LIBXML2_LIBS="$(OUTDIR)/lib/libxml2.lib",LIBXML2_LIBS="-L$(OUTDIR)/lib -lxml2"),\
 	$(if $(filter MACOSX,$(OS)),LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" LIBXML2_LIBS="$(LIBXML_LIBS)")) \
 	$(if $(filter MSC,$(COM)),CC="$(CC) -MD -nologo \
