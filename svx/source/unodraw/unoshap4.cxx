@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
@@ -73,12 +64,13 @@ using namespace ::com::sun::star::beans;
 
 ///////////////////////////////////////////////////////////////////////
 SvxOle2Shape::SvxOle2Shape( SdrObject* pObject ) throw()
-: SvxShape( pObject, getSvxMapProvider().GetMap(SVXMAP_OLE2), getSvxMapProvider().GetPropertySet(SVXMAP_OLE2, SdrObject::GetGlobalDrawObjectItemPool())  )
+: SvxShapeText( pObject, getSvxMapProvider().GetMap(SVXMAP_OLE2),
+                getSvxMapProvider().GetPropertySet(SVXMAP_OLE2,SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
 SvxOle2Shape::SvxOle2Shape( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ()
-: SvxShape( pObject, pPropertyMap, pPropertySet  )
+: SvxShapeText( pObject, pPropertyMap, pPropertySet  )
 {
 }
 
@@ -88,7 +80,7 @@ SvxOle2Shape::~SvxOle2Shape() throw()
 
 ::com::sun::star::uno::Any SAL_CALL SvxOle2Shape::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return SvxShape::queryAggregation( rType );
+	return SvxShapeText::queryAggregation( rType );
 }
 
 //XPropertySet
@@ -197,7 +189,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
         break;
     }
     default:
-        return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
+        return SvxShapeText::setPropertyValueImpl( rName, pProperty, rValue );
     }
 
     throw IllegalArgumentException();
@@ -399,7 +391,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
         break;
     }
     default:
-        return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
+        return SvxShapeText::getPropertyValueImpl( rName, pProperty, rValue );
     }
 
     return true;
@@ -417,7 +409,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     ::comphelper::IEmbeddedHelper*     pPersist = mpModel->GetPersist();
     ::rtl::OUString              aPersistName;
     OUString            aTmpStr;
-    if( getPropertyValue( OUString( UNO_NAME_OLE2_PERSISTNAME ) ) >>= aTmpStr )
+    if( SvxShape::getPropertyValue( UNO_NAME_OLE2_PERSISTNAME ) >>= aTmpStr )
         aPersistName = aTmpStr;
 
     //TODO/LATER: how to cope with creation failure?!
@@ -448,7 +440,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
         }
 
         // connect the object after the visual area is set
-        setPropertyValue( OUString( UNO_NAME_OLE2_PERSISTNAME ), Any( aTmpStr = aPersistName ) );
+        SvxShape::setPropertyValue( UNO_NAME_OLE2_PERSISTNAME, Any( aTmpStr = aPersistName ) );
 
         // the object is inserted during setting of PersistName property usually
         if( pOle2Obj->IsEmpty() )
@@ -511,7 +503,7 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
         }
 
         // connect the object after the visual area is set
-        setPropertyValue( OUString( UNO_NAME_OLE2_PERSISTNAME ), uno::makeAny( aPersistName ) );
+        SvxShape::setPropertyValue( UNO_NAME_OLE2_PERSISTNAME, uno::makeAny( aPersistName ) );
 
         // the object is inserted during setting of PersistName property usually
         if ( pOle2Obj->IsEmpty() )
@@ -677,7 +669,7 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const ::rtl::OUString& aProperty
 
 void SAL_CALL SvxPluginShape::setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    SvxOle2Shape::setPropertyValues( aPropertyNames, rValues );
+	SvxShape::setPropertyValues( aPropertyNames, rValues );
     resetModifiedState();
 }
 
@@ -750,7 +742,7 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const ::rtl::OUString& aPropertyN
 
 void SAL_CALL SvxFrameShape::setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    SvxOle2Shape::setPropertyValues( aPropertyNames, rValues );
+	SvxShape::setPropertyValues( aPropertyNames, rValues );
     resetModifiedState();
 }
 

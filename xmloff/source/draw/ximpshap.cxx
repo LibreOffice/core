@@ -2699,11 +2699,7 @@ void SdXMLObjectShapeContext::EndElement()
     // #i67705#
     const sal_uInt16 nGeneratorVersion(GetImport().getGeneratorVersion());
 
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
     if(nGeneratorVersion < SvXMLImport::OOo_34x)
-#else
-    if(nGeneratorVersion < SvXMLImport::OOo_Current)
-#endif
     {
         // #i118485#
         // If it's an old file from us written before OOo3.4, we need to correct

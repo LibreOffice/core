@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <string.h>
 
@@ -164,7 +155,60 @@ void SAL_CALL SvXMLImportEventListener::disposing( const lang::EventObject& )
     }
 }
 
-//==============================================================================
+namespace
+{
+    class DocumentInfo
+    {
+        private:
+            sal_uInt16 mnGeneratorVersion;
+
+        public:
+            DocumentInfo( const SvXMLImport& rImport )
+                : mnGeneratorVersion( SvXMLImport::ProductVersionUnknown )
+            {
+                sal_Int32 nUPD, nBuild;
+                if ( rImport.getBuildIds( nUPD, nBuild ) )
+                {
+                    if ( nUPD >= 640 && nUPD <= 645 )
+                    {
+                        mnGeneratorVersion = SvXMLImport::OOo_1x;
+                    }
+                    else if ( nUPD == 680 )
+                    {
+                        mnGeneratorVersion = SvXMLImport::OOo_2x;
+                    }
+                    else if ( nUPD == 300 && nBuild <= 9379 )
+                    {
+                        mnGeneratorVersion = SvXMLImport::OOo_30x;
+                    }
+                    else if ( nUPD == 310 )
+                    {
+                        mnGeneratorVersion = SvXMLImport::OOo_31x;
+                    }
+                    else if ( nUPD == 320 )
+                    {
+                        mnGeneratorVersion = SvXMLImport::OOo_32x;
+                    }
+                    else if ( nUPD == 330 )
+                    {
+                        mnGeneratorVersion = SvXMLImport::OOo_33x;
+                    }
+                    else if ( nUPD == 340 )
+                    {
+                        mnGeneratorVersion = SvXMLImport::OOo_34x;
+                    }
+                }
+            }
+
+            ~DocumentInfo()
+            {}
+
+            const sal_uInt16 getGeneratorVersion() const
+            {
+                return mnGeneratorVersion;
+            }
+    };
+}
 
 class SAL_DLLPRIVATE SvXMLImport_Impl
 {
@@ -194,16 +238,20 @@ public:
 
     std::auto_ptr< xmloff::RDFaImportHelper > mpRDFaHelper;
 
-    SvXMLImport_Impl() :
-        hBatsFontConv( 0 ), hMathFontConv( 0 ),
-        mbOwnGraphicResolver( false ),
-        mbOwnEmbeddedResolver( false ),
-        mStreamName(),
+    std::auto_ptr< DocumentInfo > mpDocumentInfo;
+
+    SvXMLImport_Impl()
+        : hBatsFontConv( 0 )
+        , hMathFontConv( 0 )
+        , mbOwnGraphicResolver( false )
+        , mbOwnEmbeddedResolver( false )
+        , mStreamName()
         // Convert drawing object positions from OOo file format to OASIS (#i28749#)
-        mbShapePositionInHoriL2R( sal_False ),
-        mbTextDocInOOoFileFormat( sal_False ),
-        mxComponentContext( ::comphelper::getProcessComponentContext() ),
-        mpRDFaHelper() // lazy
+        , mbShapePositionInHoriL2R( sal_False )
+        , mbTextDocInOOoFileFormat( sal_False )
+        , mxComponentContext( ::comphelper::getProcessComponentContext() )
+        , mpRDFaHelper() // lazy
+        , mpDocumentInfo() // lazy
     {
         OSL_ENSURE(mxComponentContext.is(), "SvXMLImport: no ComponentContext");
         if (!mxComponentContext.is()) throw uno::RuntimeException();
@@ -217,7 +265,17 @@ public:
             DestroyFontToSubsFontConverter( hMathFontConv );
     }
 
-    ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
+    const sal_uInt16 getGeneratorVersion( const SvXMLImport& rImport )
+    {
+        if ( !mpDocumentInfo.get() )
+        {
+            mpDocumentInfo.reset( new DocumentInfo( rImport ) );
+        }
+
+        return mpDocumentInfo->getGeneratorVersion();
+    }
+
+    ::comphelper::UnoInterfaceToUniqueIdentifierMapper maInterfaceToIdentifierMapper;
 };
 
 class SvXMLImportContexts_Impl : public std::vector<SvXMLImportContext *> {};
@@ -1808,18 +1866,9 @@ bool SvXMLImport::getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const
 
 sal_uInt16 SvXMLImport::getGeneratorVersion() const
 {
-    sal_Int32 nUPD, nBuild;
-
-    if( getBuildIds( nUPD, nBuild ) )
-    {
-        if( nUPD == 680 )
-            return OOo_2x;
-
-        if( nUPD >= 640 && nUPD <= 645 )
-            return OOo_1x;
-    }
-
-    return OOo_Current;
+    // --> ORW
+    return mpImpl->getGeneratorVersion( *this );
+    // <--
 }
 
 bool SvXMLImport::isGraphicLoadOnDemandSupported() const

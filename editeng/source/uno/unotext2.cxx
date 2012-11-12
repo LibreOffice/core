@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -40,6 +31,10 @@
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
+
+#define QUERYINT( xint ) \
+    if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
+        return uno::makeAny(uno::Reference< xint >(this))
 
 // ====================================================================
 // SvxUnoTextContentEnumeration
@@ -104,7 +99,7 @@ uno::Any SvxUnoTextContentEnumeration::nextElement(void) throw( container::NoSuc
 // ====================================================================
 
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nPara ) throw()
-:	SvxUnoTextContent_Base(rText)
+:   SvxUnoTextRangeBase(rText)
 ,   mnParagraph(nPara)
 ,   mrParentText(rText)
 ,   maDisposeListeners(maDisposeContainerMutex)
@@ -116,7 +111,11 @@ SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nP
 }
 
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw()
-:	SvxUnoTextContent_Base(rContent)
+:   SvxUnoTextRangeBase(rContent)
+,   text::XTextContent()
+,   container::XEnumerationAccess()
+,   lang::XTypeProvider()
+,   cppu::OWeakAggObject()
 ,   mrParentText(rContent.mrParentText)
 ,   maDisposeListeners(maDisposeContainerMutex)
 ,   mbDisposing( false )
@@ -128,6 +127,89 @@ SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw(
 
 SvxUnoTextContent::~SvxUnoTextContent() throw()
 {
+}
+
+// uno::XInterface
+uno::Any SAL_CALL SvxUnoTextContent::queryAggregation( const uno::Type & rType ) throw( uno::RuntimeException )
+{
+    QUERYINT( text::XTextRange );
+    else QUERYINT( beans::XMultiPropertyStates );
+    else QUERYINT( beans::XPropertySet );
+    else QUERYINT( beans::XMultiPropertySet );
+    else QUERYINT( beans::XPropertyState );
+    else QUERYINT( text::XTextContent );
+    else QUERYINT( text::XTextRangeCompare );
+    else QUERYINT( lang::XComponent );
+    else QUERYINT( container::XEnumerationAccess );
+    else QUERYINT( container::XElementAccess );
+    else QUERYINT( lang::XServiceInfo );
+    else QUERYINT( lang::XTypeProvider );
+    else QUERYINT( lang::XUnoTunnel );
+    else
+        return OWeakAggObject::queryAggregation( rType );
+}
+
+uno::Any SAL_CALL SvxUnoTextContent::queryInterface( const uno::Type & rType ) throw( uno::RuntimeException )
+{
+    return OWeakAggObject::queryInterface(rType);
+}
+
+void SAL_CALL SvxUnoTextContent::acquire() throw( )
+{
+    OWeakAggObject::acquire();
+}
+
+void SAL_CALL SvxUnoTextContent::release() throw( )
+{
+    OWeakAggObject::release();
+}
+
+// XTypeProvider
+
+namespace
+{
+    struct theSvxUnoTextContentTypes :
+        public rtl::StaticWithInit<uno::Sequence<uno::Type>, theSvxUnoTextContentTypes>
+    {
+        uno::Sequence<uno::Type> operator () ()
+        {
+            uno::Sequence< uno::Type > aTypeSequence;
+
+            aTypeSequence.realloc( 11 ); // !DANGER! keep this updated
+            uno::Type* pTypes = aTypeSequence.getArray();
+
+            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertyStates >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeCompare >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextContent >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);
+
+            return aTypeSequence;
+        }
+    };
+}
+
+uno::Sequence< uno::Type > SAL_CALL SvxUnoTextContent::getTypes()
+    throw (uno::RuntimeException)
+{
+    return theSvxUnoTextContentTypes::get();
+}
+
+namespace
+{
+    class theSvxUnoTextContentImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextContentImplementationId > {};
+}
+
+uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextContent::getImplementationId()
+    throw (uno::RuntimeException)
+{
+    return theSvxUnoTextContentImplementationId::get().getSeq();
 }
 
 // text::XTextRange
@@ -382,18 +464,6 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
 // class SvxUnoTextCursor
 // ====================================================================
 
-SvxUnoTextCursor_Base::SvxUnoTextCursor_Base(SvxUnoTextCursor_Base const & base)
-    throw ():
-    SvxUnoTextCursor_Base0(base)
-{}
-
-SvxUnoTextCursor_Base::SvxUnoTextCursor_Base(SvxUnoTextRangeBase const & base)
-    throw ():
-    SvxUnoTextCursor_Base0(base)
-{}
-
-SvxUnoTextCursor_Base::~SvxUnoTextCursor_Base() throw () {}
-
 uno::Reference< uno::XInterface > SvxUnoTextCursor_NewInstance()
 {
     SvxUnoText aText;
@@ -403,19 +473,105 @@ uno::Reference< uno::XInterface > SvxUnoTextCursor_NewInstance()
 }
 
 SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextBase& rText ) throw()
-:	SvxUnoTextCursor_Base(rText),
+:   SvxUnoTextRangeBase(rText),
     mxParentText( const_cast<SvxUnoTextBase*>(&rText) )
 {
 }
 
 SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextCursor& rCursor ) throw()
-:	SvxUnoTextCursor_Base(rCursor)
+:   SvxUnoTextRangeBase(rCursor)
+,   text::XTextCursor()
+,   lang::XTypeProvider()
+,   cppu::OWeakAggObject()
 ,   mxParentText(rCursor.mxParentText)
 {
 }
 
 SvxUnoTextCursor::~SvxUnoTextCursor() throw()
 {
+}
+
+// Comment out automatically - [getIdlClass(es) or queryInterface]
+// Please use the XTypeProvider!
+//sal_Bool SvxUnoTextCursor::queryInterface( uno::Uik aUIK, Reference< uno::XInterface > & xRef)
+uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const uno::Type & rType )
+    throw(uno::RuntimeException)
+{
+    if( rType == ::getCppuType((const uno::Reference< text::XTextRange >*)0) )
+        return uno::makeAny(uno::Reference< text::XTextRange >((text::XText*)(this)));
+    else QUERYINT( text::XTextCursor );
+    else QUERYINT( beans::XMultiPropertyStates );
+    else QUERYINT( beans::XPropertySet );
+    else QUERYINT( beans::XMultiPropertySet );
+    else QUERYINT( beans::XPropertyState );
+    else QUERYINT( text::XTextRangeCompare );
+    else QUERYINT( lang::XServiceInfo );
+    else QUERYINT( lang::XTypeProvider );
+    else QUERYINT( lang::XUnoTunnel );
+    else
+        return OWeakAggObject::queryAggregation( rType );
+}
+
+uno::Any SAL_CALL SvxUnoTextCursor::queryInterface( const uno::Type & rType )
+    throw(uno::RuntimeException)
+{
+    return OWeakAggObject::queryInterface(rType);
+}
+
+void SAL_CALL SvxUnoTextCursor::acquire() throw ( )
+{
+    OWeakAggObject::acquire();
+}
+
+void SAL_CALL SvxUnoTextCursor::release() throw ( )
+{
+    OWeakAggObject::release();
+}
+
+namespace
+{
+    struct theSvxUnoTextCursorTypes :
+        public rtl::StaticWithInit<uno::Sequence<uno::Type>, theSvxUnoTextCursorTypes>
+    {
+        uno::Sequence<uno::Type> operator () ()
+        {
+            uno::Sequence< uno::Type > aTypeSequence;
+
+            aTypeSequence.realloc( 10 ); // !DANGER! keep this updated
+            uno::Type* pTypes = aTypeSequence.getArray();
+
+            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextCursor >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertyStates >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeCompare >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);
+
+            return aTypeSequence;
+        }
+    };
+}
+
+// XTypeProvider
+uno::Sequence< uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
+    throw(uno::RuntimeException)
+{
+    return theSvxUnoTextCursorTypes::get();
+}
+
+namespace
+{
+    class theSvxUnoTextCursorImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextCursorImplementationId > {};
+}
+
+uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextCursor::getImplementationId()
+    throw (uno::RuntimeException)
+{
+    return theSvxUnoTextCursorImplementationId::get().getSeq();
 }
 
 // text::XTextCursor

@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/**h***********************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -760,7 +751,6 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
     switch( mpImpl->mnObjId )
     {
     // shapes without text
-    case OBJ_OLE2:
     case OBJ_PAGE:
     case OBJ_FRAME:
     case OBJ_OLE2_PLUGIN:
@@ -992,6 +982,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
     case OBJ_TEXT:
     case OBJ_CAPTION:
     case OBJ_TABLE:
+	case OBJ_OLE2: // #i118485# Moved to shapes with text
     default:
         {
             static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypeSequence;
@@ -3605,9 +3596,22 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 {
                         static uno::Sequence< OUString > SvxShape_Ole2Services;
 
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_Ole2Services, 2,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_Ole2Services, 12,
                             sUNO_service_drawing_OLE2Shape,
-                            sUNO_service_drawing_Shape);
+                            sUNO_service_drawing_Shape,
+
+                            // #i118485# Added Text, Shadow and Rotation
+                            sUNO_service_drawing_Text,
+                            sUNO_service_drawing_TextProperties,
+                            sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
+                            sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
+
+                            sUNO_service_drawing_ShadowProperties,
+                            sUNO_service_drawing_RotationDescriptor);
 
                         pSeq = &SvxShape_Ole2Services;
                 }
@@ -3991,7 +3995,7 @@ SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
 : SvxShape( pObject, getSvxMapProvider().GetMap(SVXMAP_TEXT), getSvxMapProvider().GetPropertySet(SVXMAP_TEXT, SdrObject::GetGlobalDrawObjectItemPool()) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject && pObject->GetModel() )
-        SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< cppu::OWeakObject * >( static_cast< SvxShape * >( this ) ) ) );
+        SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< uno::XWeak * >( this ) ) );
 }
 
 //----------------------------------------------------------------------
@@ -3999,7 +4003,7 @@ SvxShapeText::SvxShapeText( SdrObject* pObject, const SfxItemPropertyMapEntry* p
 : SvxShape( pObject, pPropertyMap, pPropertySet ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject && pObject->GetModel() )
-        SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< cppu::OWeakObject * >( static_cast< SvxShape * >( this ) ) ) );
+        SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< uno::XWeak * >( this ) ) );
 }
 
 //----------------------------------------------------------------------
@@ -4013,8 +4017,7 @@ SvxShapeText::~SvxShapeText() throw ()
 void SvxShapeText::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
     if( pNewObj && (NULL == GetEditSource()))
-        SetEditSource( new SvxTextEditSource( pNewObj, 0, static_cast< cppu::OWeakObject * >( static_cast< SvxShape* >(this) ) ) );
-
+        SetEditSource( new SvxTextEditSource( pNewObj, 0, static_cast< uno::XWeak* >(this) ) );
     SvxShape::Create( pNewObj, pNewPage );
 }
 
@@ -4247,12 +4250,12 @@ uno::Any SAL_CALL SvxShapeRect::queryAggregation( const uno::Type & rType ) thro
 
 void SAL_CALL SvxShapeRect::acquire() throw()
 {
-    SvxShapeText::acquire();
+    OWeakAggObject::acquire();
 }
 
 void SAL_CALL SvxShapeRect::release() throw()
 {
-    SvxShapeText::release();
+    OWeakAggObject::release();
 }
 //----------------------------------------------------------------------
 // XServiceInfo
