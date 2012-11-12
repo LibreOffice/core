@@ -17,15 +17,16 @@ $(eval $(call gb_ExternalProject_register_targets,langtag,\
 
 $(call gb_ExternalProject_get_state_target,langtag,build):
 	cd $(EXTERNAL_WORKDIR) \
-	$(if $(filter MSC,$(COM)),&& export LIB="$(ILIB)") \
+	$(if $(filter MSC,$(COM)), \
+		&& export LIB="$(ILIB)" \
+		CC="$(CC) -MD -nologo \
+			$(if $(filter TRUE,$(ENABLE_DEBUG)),-Zi) \
+			$(SOLARINC)") \
 	&& ./configure --disable-modules --disable-test --disable-introspection \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	$(if $(filter NO,$(SYSTEM_LIBXML)),LIBXML2_CFLAGS="-I$(OUTDIR)/inc/external" \
 	$(if $(filter MSC,$(COM)),LIBXML2_LIBS="$(OUTDIR)/lib/libxml2.lib",LIBXML2_LIBS="-L$(OUTDIR)/lib -lxml2"),\
 	$(if $(filter MACOSX,$(OS)),LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" LIBXML2_LIBS="$(LIBXML_LIBS)")) \
-	$(if $(filter MSC,$(COM)),CC="$(CC) -MD -nologo \
-	$(if $(filter TRUE,$(ENABLE_DEBUG)),-Zi)") \
-	$(if $(filter MSC,$(COM)),CFLAGS="$(SOLARINC)") \
 	$(if $(filter-out LINUX FREEBSD,$(OS)),,LDFLAGS="-Wl,-z,origin -Wl,-rpath,$$ORIGIN:$$ORIGIN/../ure-link/lib") \
 	$(if $(filter-out SOLARIS,$(OS)),,LDFLAGS="-Wl,-z,origin -Wl,-R,$$ORIGIN:$$ORIGIN/../ure-link/lib") \
 	$(if $(filter-out WNTGCC,$(GUI)$(COM)),,LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2") \
