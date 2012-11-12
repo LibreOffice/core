@@ -163,7 +163,7 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
     {
         for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
         {
-            if ( aSortData.maKeyState[i].bDoSort )
+            if ( i < aSortData.maKeyState.size() && aSortData.maKeyState[i].bDoSort )
             {
                 maSortKeyItems[i].aLbSort.SelectEntryPos( GetFieldSelPos(
                                     aSortData.maKeyState[i].nField ) );
