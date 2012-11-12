@@ -1100,9 +1100,10 @@ void ServiceManager::insert(css::uno::Any const & aElement)
 // implement XServiceInfo"); the old OServiceManager::insert
 // (stoc/source/servicemanager/servicemanager.cxx) silently did not add such
 // broken factories to its m_ImplementationNameMap, so ignore them here for
-// backwards compatibility of live-insertion of extensions, too (can go again
-// for incompatible LO 4):
-#if SUPD < 400
+// backwards compatibility of live-insertion of extensions, too.
+
+// (The plan was that this warning would go away (and we would do the
+// throw instead) for the incompatible LO 4, but we changed our mind):
     css::uno::Reference< css::lang::XSingleComponentFactory > legacy;
     if ((aElement >>= legacy) && legacy.is()) {
         SAL_WARN(
@@ -1110,7 +1111,7 @@ void ServiceManager::insert(css::uno::Any const & aElement)
             "Ignored XSingleComponentFactory not implementing XServiceInfo");
         return;
     }
-#endif
+
     throw css::lang::IllegalArgumentException(
         "Bad insert element", static_cast< cppu::OWeakObject * >(this), 0);
 }
