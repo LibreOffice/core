@@ -20,7 +20,9 @@ else
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.1.0.0.dylib,liblangtag/.libs/liblangtag.1.0.0.dylib))
 else
-$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.so,liblangtag/.libs/liblangtag.so.1.0.0))
+$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.so.1.0.0,liblangtag/.libs/liblangtag.so.1.0.0))
+$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.so.1,liblangtag/.libs/liblangtag.so.1))
+$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.so,liblangtag/.libs/liblangtag.so))
 endif
 endif
 
