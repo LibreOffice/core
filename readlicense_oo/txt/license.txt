@@ -27,7 +27,7 @@
 
        Third Party Code Additional Copyright Notices and License Terms
 
-                                   Libraries
+   Libraries
 
 Apache Commons
 
@@ -962,9 +962,8 @@ libexttextcat
 
 liblangtag
 
-   The following software may be included in this product: liblangtag
-   Grammar Checker. Use of any of this software is governed by the terms
-   of the license below:
+   The following software may be included in this product: liblangtag. Use
+   of any of this software is governed by the terms of the license below:
 
    See LGPL Version 3 below
 
@@ -1575,13 +1574,6 @@ OpenSSL
    or derivative of this code cannot be changed. i.e. this code cannot
    simply be copied and put under another distribution license [including
    the GNU Public License.]
-
-pango
-
-   The following software may be included in this product: pango. Use of
-   any of this software is governed by the terms of the license below:
-
-   See LGPL Version 2 below
 
 Pentaho Reporting Flow Engine
 
@@ -2487,71 +2479,6 @@ zlib
    3. This notice may not be removed or altered from any source
    distribution.
 
-   LibreOffice uses unzip.c from zlib's contrib/minizip directory. This file
-   was derived from Info-ZIP's unzip.c, which is under the Info-ZIP License:
-   
-   This is version 2007-Mar-4 of the Info-ZIP license.
-   The definitive version of this document should be available at
-   ftp://ftp.info-zip.org/pub/infozip/license.html indefinitely and
-   a copy at http://www.info-zip.org/pub/infozip/license.html.
-
-
-   Copyright (c) 1990-2007 Info-ZIP.  All rights reserved.
-
-   For the purposes of this copyright and license, "Info-ZIP" is defined as
-   the following set of individuals:
-
-      Mark Adler, John Bush, Karl Davis, Harald Denker, Jean-Michel Dubois,
-      Jean-loup Gailly, Hunter Goatley, Ed Gordon, Ian Gorman, Chris Herborth,
-      Dirk Haase, Greg Hartwig, Robert Heath, Jonathan Hudson, Paul Kienitz,
-      David Kirschbaum, Johnny Lee, Onno van der Linden, Igor Mandrichenko,
-      Steve P. Miller, Sergio Monesi, Keith Owens, George Petrov, Greg Roelofs,
-      Kai Uwe Rommel, Steve Salisbury, Dave Smith, Steven M. Schweda,
-      Christian Spieler, Cosmin Truta, Antoine Verheijen, Paul von Behren,
-      Rich Wales, Mike White.
-
-   This software is provided "as is," without warranty of any kind, express
-   or implied.  In no event shall Info-ZIP or its contributors be held liable
-   for any direct, indirect, incidental, special or consequential damages
-   arising out of the use of or inability to use this software.
-
-   Permission is granted to anyone to use this software for any purpose,
-   including commercial applications, and to alter it and redistribute it
-   freely, subject to the above disclaimer and the following restrictions:
-
-    1. Redistributions of source code (in whole or in part) must retain
-       the above copyright notice, definition, disclaimer, and this list
-       of conditions.
-
-    2. Redistributions in binary form (compiled executables and libraries)
-       must reproduce the above copyright notice, definition, disclaimer,
-       and this list of conditions in documentation and/or other materials
-       provided with the distribution.  The sole exception to this condition
-       is redistribution of a standard UnZipSFX binary (including SFXWiz) as
-       part of a self-extracting archive; that is permitted without inclusion
-       of this license, as long as the normal SFX banner has not been removed
-       from the binary or disabled.
-
-    3. Altered versions--including, but not limited to, ports to new operating
-       systems, existing ports with new graphical interfaces, versions with
-       modified or added functionality, and dynamic, shared, or static library
-       versions not from Info-ZIP--must be plainly marked as such and must not
-       be misrepresented as being the original source or, if binaries,
-       compiled from the original source.  Such altered versions also must not
-       be misrepresented as being Info-ZIP releases--including, but not
-       limited to, labeling of the altered versions with the names "Info-ZIP"
-       (or any variation thereof, including, but not limited to, different
-       capitalizations), "Pocket UnZip," "WiZ" or "MacZip" without the
-       explicit permission of Info-ZIP.  Such altered versions are further
-       prohibited from misrepresentative use of the Zip-Bugs or Info-ZIP
-       e-mail addresses or the Info-ZIP URL(s), such as to imply Info-ZIP
-       will provide support for the altered versions.
-
-    4. Info-ZIP retains the right to use the names "Info-ZIP," "Zip," "UnZip,"
-       "UnZipSFX," "WiZ," "Pocket UnZip," "Pocket Zip," and "MacZip" for its
-       own source and binary releases.
-
-
                                    Extensions
 
    Only third party extensions are listed here whose source code is not in
@@ -2674,8 +2601,9 @@ OpenOffice.org Blogger – Metaweblog support
 
 Solver for Nonlinear Programming
 
-   The following software may be included in this product: zlib. Use of
-   any of this software is governed by the terms of the license below:
+   The following software may be included in this product: Solver for
+   Nonlinear Programming. Use of any of this software is governed by the
+   terms of the license below:
 
    Copyright 2009 by Sun Microsystems, Inc.
 
@@ -2845,88 +2773,10 @@ Gentium
    with Reserved Font Names "Gentium" and "SIL".
 
    This Font Software is licensed under the SIL Open Font License, Version
-   1.1. This license is copied below, and is also available with a FAQ at:
-   http://scripts.sil.org/OFL
+   1.1. This license is copied below, and is also available with a
+   FAQ at: http://scripts.sil.org/OFL
 
-  SIL OPEN FONT LICENSE Version 1.1 - 1 February 2007
-
-   PREAMBLE The goals of the Open Font License (OFL) are to stimulate
-   worldwide development of collaborative font projects, to support the
-   font creation efforts of academic and linguistic communities, and to
-   provide a free and open framework in which fonts may be shared and
-   improved in partnership with others.
-
-   The OFL allows the licensed fonts to be used, studied, modified and
-   redistributed freely as long as they are not sold by themselves. The
-   fonts, including any derivative works, can be bundled, embedded,
-   redistributed and/or sold with any software provided that the font
-   names of derivative works are changed. The fonts and derivatives,
-   however, cannot be released under any other type of license. The
-   requirement for fonts to remain under this license does not apply to
-   any document created using the fonts or their derivatives.
-
-   DEFINITIONS "Font Software" refers to the set of files released by the
-   Copyright Holder(s) under this license and clearly marked as such. This
-   may include source files, build scripts and documentation.
-
-   "Reserved Font Name" refers to any names specified as such after the
-   copyright statement(s).
-
-   "Original Version" refers to the collection of Font Software components
-   as distributed by the Copyright Holder(s).
-
-   "Modified Version" refers to any derivative made by adding to,
-   deleting, or substituting -- in part or in whole -- any of the
-   components of the Original Version, by changing formats or by porting
-   the Font Software to a new environment.
-
-   "Author" refers to any designer, engineer, programmer, technical writer
-   or other person who contributed to the Font Software.
-
-   PERMISSION & CONDITIONS Permission is hereby granted, free of charge,
-   to any person obtaining a copy of the Font Software, to use, study,
-   copy, merge, embed, modify, redistribute, and sell modified and
-   unmodified copies of the Font Software, subject to the following
-   conditions:
-
-   1) Neither the Font Software nor any of its individual components, in
-   Original or Modified Versions, may be sold by itself.
-
-   2) Original or Modified Versions of the Font Software may be bundled,
-   redistributed and/or sold with any software, provided that each copy
-   contains the above copyright notice and this license. These can be
-   included either as stand-alone text files, human-readable headers or in
-   the appropriate machine-readable metadata fields within text or binary
-   files as long as those fields can be easily viewed by the user.
-
-   3) No Modified Version of the Font Software may use the Reserved Font
-   Name(s) unless explicit written permission is granted by the
-   corresponding Copyright Holder. This restriction only applies to the
-   primary font name as presented to the users.
-
-   4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
-   Software shall not be used to promote, endorse or advertise any
-   Modified Version, except to acknowledge the contribution(s) of the
-   Copyright Holder(s) and the Author(s) or with their explicit written
-   permission.
-
-   5) The Font Software, modified or unmodified, in part or in whole, must
-   be distributed entirely under this license, and must not be distributed
-   under any other license. The requirement for fonts to remain under this
-   license does not apply to any document created using the Font Software.
-
-   TERMINATION This license becomes null and void if any of the above
-   conditions are not met.
-
-   DISCLAIMER THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
-   ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY
-   WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-   NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO
-   EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR
-   OTHER LIABILITY, INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL,
-   OR CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-   OTHERWISE, ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT
-   SOFTWARE OR FROM OTHER DEALINGS IN THE FONT SOFTWARE.
+   See SIL Open Font License, Version 1.1 below
 
 Liberation
 
@@ -3124,6 +2974,64 @@ Linux Libertine G and Linux Biolinum G
    OR CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR
    OTHERWISE, ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT
    SOFTWARE OR FROM OTHER DEALINGS IN THE FONT SOFTWARE.
+
+Open Sans
+
+   The following software may be included in this product: Open Sans
+   fonts. Use of any of this software is governed by the terms of the
+   license below:
+
+   See Apache License Version 2.0 below
+
+PT Serif
+
+   The following software may be included in this product: PT Serif fonts.
+   Use of any of this software is governed by the terms of the license
+   below:
+
+   Copyright (c) 2010, ParaType Ltd.
+   (http://www.paratype.com/public), with Reserved Font Names "PT
+   Sans", "PT Serif" and "ParaType".
+
+   This Font Software is licensed under the SIL Open Font License, Version
+   1.1. This license is copied below, and is also available with a
+   FAQ at: http://scripts.sil.org/OFL
+
+   See SIL Open Font License, Version 1.1 below
+
+Source Code Pro
+
+   The following software may be included in this product: Source Code Pro
+   fonts. Use of any of this software is governed by the terms of the
+   license below:
+
+   Copyright 2010, 2012 Adobe Systems Incorporated
+   (http://www.adobe.com/), with Reserved Font Name 'Source'. All
+   Rights Reserved. Source is a trademark of Adobe Systems Incorporated in
+   the United States and/or other countries.
+
+   This Font Software is licensed under the SIL Open Font License, Version
+   1.1. This license is copied below, and is also available with a
+   FAQ at: http://scripts.sil.org/OFL
+
+   See SIL Open Font License, Version 1.1 below
+
+Source Sans Pro
+
+   The following software may be included in this product: Source Sans Pro
+   fonts. Use of any of this software is governed by the terms of the
+   license below:
+
+   Copyright 2010, 2012 Adobe Systems Incorporated
+   (http://www.adobe.com/), with Reserved Font Name 'Source'. All
+   Rights Reserved. Source is a trademark of Adobe Systems Incorporated in
+   the United States and/or other countries.
+
+   This Font Software is licensed under the SIL Open Font License, Version
+   1.1. This license is copied below, and is also available with a
+   FAQ at: http://scripts.sil.org/OFL
+
+   See SIL Open Font License, Version 1.1 below
 
                                   Dictionaries
 
@@ -4942,6 +4850,7 @@ Spanish
    The following software may be included in this product: Spanish
    spelling dictionary. Use of any of this software is governed by the
    terms of the licenses (or any later versions) below:
+
    See GPL version 3 below
 
    See LGPL Version 3 below
@@ -8260,6 +8169,86 @@ Exhibit B - “Incompatible With Secondary Licenses” Notice
 
      This Source Code Form is “Incompatible With Secondary Licenses”, as
      defined by the Mozilla Public License, v. 2.0.
+
+             SIL Open Font License Version 1.1 – 26 February 2007
+
+   PREAMBLE The goals of the Open Font License (OFL) are to stimulate
+   worldwide development of collaborative font projects, to support the
+   font creation efforts of academic and linguistic communities, and to
+   provide a free and open framework in which fonts may be shared and
+   improved in partnership with others.
+
+   The OFL allows the licensed fonts to be used, studied, modified and
+   redistributed freely as long as they are not sold by themselves. The
+   fonts, including any derivative works, can be bundled, embedded,
+   redistributed and/or sold with any software provided that the font
+   names of derivative works are changed. The fonts and derivatives,
+   however, cannot be released under any other type of license. The
+   requirement for fonts to remain under this license does not apply to
+   any document created using the fonts or their derivatives.
+
+   DEFINITIONS "Font Software" refers to the set of files released by the
+   Copyright Holder(s) under this license and clearly marked as such. This
+   may include source files, build scripts and documentation.
+
+   "Reserved Font Name" refers to any names specified as such after the
+   copyright statement(s).
+
+   "Original Version" refers to the collection of Font Software components
+   as distributed by the Copyright Holder(s).
+
+   "Modified Version" refers to any derivative made by adding to,
+   deleting, or substituting – in part or in whole -- any of the
+   components of the Original Version, by changing formats or by porting
+   the Font Software to a new environment.
+
+   "Author" refers to any designer, engineer, programmer, technical writer
+   or other person who contributed to the Font Software.
+
+   PERMISSION & CONDITIONS Permission is hereby granted, free of charge,
+   to any person obtaining a copy of the Font Software, to use, study,
+   copy, merge, embed, modify, redistribute, and sell modified and
+   unmodified copies of the Font Software, subject to the following
+   conditions:
+
+   1) Neither the Font Software nor any of its individual components, in
+   Original or Modified Versions, may be sold by itself.
+
+   2) Original or Modified Versions of the Font Software may be bundled,
+   redistributed and/or sold with any software, provided that each copy
+   contains the above copyright notice and this license. These can be
+   included either as stand-alone text files, human-readable headers or in
+   the appropriate machine-readable metadata fields within text or binary
+   files as long as those fields can be easily viewed by the user.
+
+   3) No Modified Version of the Font Software may use the Reserved Font
+   Name(s) unless explicit written permission is granted by the
+   corresponding Copyright Holder. This restriction only applies to the
+   primary font name as presented to the users.
+
+   4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
+   Software shall not be used to promote, endorse or advertise any
+   Modified Version, except to acknowledge the contribution(s) of the
+   Copyright Holder(s) and the Author(s) or with their explicit written
+   permission.
+
+   5) The Font Software, modified or unmodified, in part or in whole, must
+   be distributed entirely under this license, and must not be distributed
+   under any other license. The requirement for fonts to remain under this
+   license does not apply to any document created using the Font Software.
+
+   TERMINATION This license becomes null and void if any of the above
+   conditions are not met.
+
+   DISCLAIMER THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+   ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY
+   WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+   NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO
+   EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR
+   OTHER LIABILITY, INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL,
+   OR CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+   OTHERWISE, ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT
+   SOFTWARE OR FROM OTHER DEALINGS IN THE FONT SOFTWARE.
 
                                  Apache License
 
