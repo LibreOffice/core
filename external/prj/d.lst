@@ -28,8 +28,6 @@ mkdir: %_DEST%\inc\external\wine
 
 ..\dbghelp\dbghelp.dll %_DEST%\bin\dbghelp.dll
 
-..\gdiplus\gdiplus.dll %_DEST%\bin\gdiplus.dll
-
 ..\msvcp80\msvcm80*.dll %_DEST%\bin
 ..\msvcp80\msvcp80*.dll %_DEST%\bin
 ..\msvcp80\msvcr80*.dll %_DEST%\bin

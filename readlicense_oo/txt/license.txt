@@ -1632,26 +1632,6 @@ Pixman
    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-Platform SDK Redistributable: GDI+
-
-   The following software may be included in this product: Platform SDK
-   Redistributable: GDI+ (gdiplus.dll). Use of any of this software is
-   governed by the terms of the license below:
-
-   PLEASE NOTE: Microsoft Corporation (or based on where you live, one of
-   its affiliates) licenses this supplement to you. The supplement is
-   identified for use with one or more Microsoft operating system products
-   (the 'software'). You may use a copy of this supplement with each
-   validly licensed copy of the software. You may not use it if you do not
-   have a license for the software. The license terms for the software
-   apply to your use of this supplement. To read the license terms, go to
-   www.microsoft.com/useterms.
-
-   Microsoft provides support services for the supplement as described at
-   www.support. microsoft.com/common/international.aspx.
-
-   EULAID:HFX_RM.1_GDR_NRL_EN
-
 PostgreSQL
 
    The following software may be included in this product: PostgreSQL. Use

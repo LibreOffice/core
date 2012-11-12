@@ -645,15 +645,6 @@ STD_LIB_FILE( gid_File_Lib_Fwl , fwl)
 
 STD_LIB_FILE( gid_File_Lib_Fwm , fwm)
 
-#ifdef ENABLE_DIRECTX
-File gid_File_Lib_Gdiplus
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "gdiplus.dll";
-End
-#endif
-
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory.uno )
 
 STD_LIB_FILE( gid_File_Lib_Helplinker, helplinker)
