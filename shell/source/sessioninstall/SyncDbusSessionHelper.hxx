@@ -33,11 +33,11 @@ namespace shell { namespace sessioninstall
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
             virtual void SAL_CALL InstallMimeTypes( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* mime_types */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
-            virtual void SAL_CALL InstallFontconfigRessources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* resources */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
+            virtual void SAL_CALL InstallFontconfigResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* resources */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
-            virtual void SAL_CALL InstalliGStreamerRessources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* resources */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
+            virtual void SAL_CALL InstalliGStreamerResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* resources */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
-            virtual void SAL_CALL InstallRessources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* types */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* resources */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
+            virtual void SAL_CALL InstallResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* types */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* resources */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
             virtual void SAL_CALL RemovePackageByFiles( SAL_UNUSED_PARAMETER ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* files */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented

@@ -63,21 +63,21 @@ interface XModify : com::sun::star::uno::XInterface
      * @since LibreOffice 3.7
      */
 
-    void InstallFontconfigRessources( [in] unsigned long xid, [in] sequence< string > resources, [in] string interaction);
+    void InstallFontconfigResources( [in] unsigned long xid, [in] sequence< string > resources, [in] string interaction);
 
     /**
      * Installs GStreamer resources ( [in] usually codecs) from a configured software source.
      * @since LibreOffice 3.7
      */
 
-    void InstalliGStreamerRessources( [in] unsigned long xid, [in] sequence< string > resources, [in] string interaction);
+    void InstalliGStreamerResources( [in] unsigned long xid, [in] sequence< string > resources, [in] string interaction);
 
     /**
      * Installs resources of a given type from a configured software source.
      * @since LibreOffice 3.7
      */
 
-    void InstallRessources( [in] unsigned long xid, [in] sequence< string > types, [in] sequence< string > resources, [in] string interaction);
+    void InstallResources( [in] unsigned long xid, [in] sequence< string > types, [in] sequence< string > resources, [in] string interaction);
 
     /**
      * Removes sequence< string > packages that provide the given local sequence< string > files.
