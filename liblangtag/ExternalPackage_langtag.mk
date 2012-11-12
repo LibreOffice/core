@@ -18,7 +18,9 @@ $(eval $(call gb_ExternalPackage_add_file,langtag,lib/langtag.lib,liblangtag/.li
 endif
 else
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.1.0.0.dylib,liblangtag/.libs/liblangtag.1.0.0.dylib))
+$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.1.0.0.dylib,liblangtag/.libs/liblangtag.dylib))
+$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.1.dylib,liblangtag/.libs/liblangtag.1.dylib))
+$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.dylib,liblangtag/.libs/liblangtag.dylib))
 else
 $(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.so.1.0.0,liblangtag/.libs/liblangtag.so.1.0.0))
 $(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.so.1,liblangtag/.libs/liblangtag.so.1))
