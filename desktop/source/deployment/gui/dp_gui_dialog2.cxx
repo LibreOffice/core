@@ -152,8 +152,10 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
     DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
 
 public:
-                    ExtBoxWithBtns_Impl( ExtMgrDialog* pParent, TheExtensionManager *pManager );
+                    ExtBoxWithBtns_Impl(Window* pParent);
                    ~ExtBoxWithBtns_Impl();
+
+    void InitFromDialog(ExtMgrDialog *pParentDialog);
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
@@ -166,15 +168,23 @@ public:
     void            enableButtons( bool bEnable );
 };
 
-//------------------------------------------------------------------------------
-ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl( ExtMgrDialog* pParent, TheExtensionManager *pManager ) :
-    ExtensionBox_Impl( pParent, pManager ),
-    m_bInterfaceLocked( false ),
-    m_pOptionsBtn( NULL ),
-    m_pEnableBtn( NULL ),
-    m_pRemoveBtn( NULL ),
-    m_pParent( pParent )
+ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl(Window* pParent)
+    : ExtensionBox_Impl(pParent)
+    , m_bInterfaceLocked(false)
+    , m_pOptionsBtn(NULL)
+    , m_pEnableBtn(NULL)
+    , m_pRemoveBtn(NULL)
+    , m_pParent(NULL)
 {
+}
+
+//------------------------------------------------------------------------------
+void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
+{
+    setExtensionManager(pParentDialog->getExtensionManager());
+
+    m_pParent = pParentDialog;
+
     m_pOptionsBtn = new PushButton( this, WB_TABSTOP );
     m_pEnableBtn = new PushButton( this, WB_TABSTOP );
     m_pRemoveBtn = new PushButton( this, WB_TABSTOP );
@@ -201,6 +211,12 @@ ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl( ExtMgrDialog* pParent, TheExtensionMan
     SetExtraSize( aSize.Height() + 2 * TOP_OFFSET );
 
     SetScrollHdl( LINK( this, ExtBoxWithBtns_Impl, ScrollHdl ) );
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeExtBoxWithBtns(Window *pParent, VclBuilder::stringmap &)
+{
+    return new ExtBoxWithBtns_Impl(pParent);
 }
 
 //------------------------------------------------------------------------------
@@ -700,79 +716,53 @@ void DialogHelper::PostUserEvent( const Link& rLink, void* pCaller )
 //------------------------------------------------------------------------------
 //                             ExtMgrDialog
 //------------------------------------------------------------------------------
-ExtMgrDialog::ExtMgrDialog( Window *pParent, TheExtensionManager *pManager ) :
-    ModelessDialog( pParent, getResId( RID_DLG_EXTENSION_MANAGER ) ),
-    DialogHelper( pManager->getContext(), (Dialog*) this ),
-    m_aAddBtn( this,        getResId( RID_EM_BTN_ADD ) ),
-    m_aUpdateBtn( this,     getResId( RID_EM_BTN_CHECK_UPDATES ) ),
-    m_aCloseBtn( this,      getResId( RID_EM_BTN_CLOSE ) ),
-    m_aHelpBtn( this,       getResId( RID_EM_BTN_HELP ) ),
-    m_aDivider( this ),
-    m_aDivider2(this),
-    m_aTypeOfExtTxt( this , getResId( RID_EM_FT_TYPE_EXTENSIONS ) ),
-    m_aBundledCbx(this,     getResId (RID_EM_CBX_BUNDLED)),
-    m_aSharedCbx(this,      getResId (RID_EM_CBX_SHARED)),
-    m_aUserCbx (this,       getResId (RID_EM_CBX_USER)),
-    m_aGetExtensions( this, getResId( RID_EM_FT_GET_EXTENSIONS ) ),
-    m_aProgressText( this,  getResId( RID_EM_FT_PROGRESS ) ),
-    m_aProgressBar( this,   WB_BORDER + WB_3DLOOK ),
-    m_aCancelBtn( this,     getResId( RID_EM_BTN_CANCEL ) ),
-    m_sAddPackages(         getResourceString( RID_STR_ADD_PACKAGES ) ),
-    m_bHasProgress(         false ),
-    m_bProgressChanged(     false ),
-    m_bStartProgress(       false ),
-    m_bStopProgress(        false ),
-    m_bEnableWarning(       false ),
-    m_bDisableWarning(      false ),
-    m_bDeleteWarning(       false ),
-    m_nProgress(            0 ),
-    m_pManager( pManager )
+ExtMgrDialog::ExtMgrDialog(Window *pParent, TheExtensionManager *pManager)
+    : ModelessDialog(pParent, "ExtensionManagerDialog", "desktop/ui/ExtensionManager.ui")
+    , DialogHelper(pManager->getContext(), (Dialog*) this)
+    , m_sAddPackages(getResourceString(RID_STR_ADD_PACKAGES))
+    , m_bHasProgress(false)
+    , m_bProgressChanged(false)
+    , m_bStartProgress(false)
+    , m_bStopProgress(false)
+    , m_bEnableWarning(false)
+    , m_bDisableWarning(false)
+    , m_bDeleteWarning(false)
+    , m_nProgress(0)
+    , m_pManager(pManager)
 {
-    // free local resources (RID < 256):
-    FreeResource();
+    get(m_pExtensionBox, "extensions");
+    get(m_pAddBtn, "add");
+    get(m_pUpdateBtn, "update");
+    get(m_pCloseBtn, "close");
+    get(m_pBundledCbx, "bundled");
+    get(m_pSharedCbx, "shared");
+    get(m_pUserCbx, "user");
+    get(m_pGetExtensions, "getextensions");
+    get(m_pProgressText, "progressft");
+    get(m_pProgressBar, "progressbar");
+    get(m_pCancelBtn, "cancel");
 
-    m_pExtensionBox = new ExtBoxWithBtns_Impl( this, pManager );
+    m_pExtensionBox->InitFromDialog(this);
     m_pExtensionBox->SetHyperlinkHdl( LINK( this, ExtMgrDialog, HandleHyperlink ) );
 
-    m_aAddBtn.SetClickHdl( LINK( this, ExtMgrDialog, HandleAddBtn ) );
-    m_aUpdateBtn.SetClickHdl( LINK( this, ExtMgrDialog, HandleUpdateBtn ) );
-    m_aGetExtensions.SetClickHdl( LINK( this, ExtMgrDialog, HandleHyperlink ) );
-    m_aCancelBtn.SetClickHdl( LINK( this, ExtMgrDialog, HandleCancelBtn ) );
+    m_pAddBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleAddBtn ) );
+    m_pCloseBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleCloseBtn ) );
 
-    m_aBundledCbx.SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
-    m_aSharedCbx.SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
-    m_aUserCbx.SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
+    m_pUpdateBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleUpdateBtn ) );
+    m_pGetExtensions->SetClickHdl( LINK( this, ExtMgrDialog, HandleHyperlink ) );
+    m_pCancelBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleCancelBtn ) );
 
-    // resize update button
-    Size aBtnSize = m_aUpdateBtn.GetSizePixel();
-    String sTitle = m_aUpdateBtn.GetText();
-    long nWidth = m_aUpdateBtn.GetCtrlTextWidth( sTitle );
-    nWidth += 2 * m_aUpdateBtn.GetTextHeight();
-    if ( nWidth > aBtnSize.Width() )
-        m_aUpdateBtn.SetSizePixel( Size( nWidth, aBtnSize.Height() ) );
+    m_pBundledCbx->SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
+    m_pSharedCbx->SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
+    m_pUserCbx->SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
 
-    // minimum size:
-    SetMinOutputSizePixel(
-        Size( // width:
-              (3 * m_aHelpBtn.GetSizePixel().Width()) +
-                   m_aUpdateBtn.GetSizePixel().Width() +
-              (5 * RSC_SP_DLG_INNERBORDER_LEFT ),
-              // height:
-              (1 * m_aHelpBtn.GetSizePixel().Height()) +
-              (1 * m_aGetExtensions.GetSizePixel().Height()) +
-              (1 * m_pExtensionBox->GetMinOutputSizePixel().Height()) +
-              (3 * RSC_SP_DLG_INNERBORDER_TOP) ) );
+    m_pBundledCbx->Check( true );
+    m_pSharedCbx->Check( true );
+    m_pUserCbx->Check( true );
 
-    m_aDivider.Show();
-    m_aDivider2.Show();
+    m_pProgressBar->Hide();
 
-    m_aBundledCbx.Check( true );
-    m_aSharedCbx.Check( true );
-    m_aUserCbx.Check( true );
-
-    m_aProgressBar.Hide();
-
-    m_aUpdateBtn.Enable( false );
+    m_pUpdateBtn->Enable(false);
 
     m_aTimeoutTimer.SetTimeout( 500 ); // mSec
     m_aTimeoutTimer.SetTimeoutHdl( LINK( this, ExtMgrDialog, TimeOutHdl ) );
@@ -782,13 +772,12 @@ ExtMgrDialog::ExtMgrDialog( Window *pParent, TheExtensionManager *pManager ) :
 ExtMgrDialog::~ExtMgrDialog()
 {
     m_aTimeoutTimer.Stop();
-    delete m_pExtensionBox;
 }
 
 //------------------------------------------------------------------------------
 void ExtMgrDialog::setGetExtensionsURL( const ::rtl::OUString &rURL )
 {
-    m_aGetExtensions.SetURL( rURL );
+    m_pGetExtensions->SetURL( rURL );
 }
 
 //------------------------------------------------------------------------------
@@ -797,19 +786,19 @@ long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage 
 {
 
     const SolarMutexGuard aGuard;
-    m_aUpdateBtn.Enable( true );
+    m_pUpdateBtn->Enable(true);
 
     m_pExtensionBox->removeEntry(xPackage);
 
-    if (m_aBundledCbx.IsChecked() && xPackage->getRepositoryName().equals( BUNDLED_PACKAGE_MANAGER ))
+    if (m_pBundledCbx->IsChecked() && xPackage->getRepositoryName().equals( BUNDLED_PACKAGE_MANAGER ))
     {
        return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
     }
-    else if (m_aSharedCbx.IsChecked() && xPackage->getRepositoryName().equals( SHARED_PACKAGE_MANAGER ))
+    else if (m_pSharedCbx->IsChecked() && xPackage->getRepositoryName().equals( SHARED_PACKAGE_MANAGER ))
     {
         return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
     }
-    else if (m_aUserCbx.IsChecked() && xPackage->getRepositoryName().equals( USER_PACKAGE_MANAGER ))
+    else if (m_pUserCbx->IsChecked() && xPackage->getRepositoryName().equals( USER_PACKAGE_MANAGER ))
     {
         return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
     }
@@ -1009,6 +998,13 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn)
     return 1;
 }
 
+IMPL_LINK_NOARG(ExtMgrDialog, HandleCloseBtn)
+{
+    Close();
+    return 1;
+}
+
+
 // ------------------------------------------------------------------------------
 IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface )
 {
@@ -1020,8 +1016,8 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface )
 
     if ( m_bStopProgress )
     {
-        if ( m_aProgressBar.IsVisible() )
-            m_aProgressBar.SetValue( 100 );
+        if ( m_pProgressBar->IsVisible() )
+            m_pProgressBar->SetValue( 100 );
         m_xAbortChannel.clear();
 
         OSL_TRACE( " startProgress handler: stop" );
@@ -1031,9 +1027,9 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface )
         OSL_TRACE( " startProgress handler: start" );
     }
 
-    m_aCancelBtn.Enable( bLockInterface );
-    m_aAddBtn.Enable( !bLockInterface );
-    m_aUpdateBtn.Enable( !bLockInterface && m_pExtensionBox->getItemCount() );
+    m_pCancelBtn->Enable( bLockInterface );
+    m_pAddBtn->Enable( !bLockInterface );
+    m_pUpdateBtn->Enable( !bLockInterface && m_pExtensionBox->getItemCount() );
     m_pExtensionBox->enableButtons( !bLockInterface );
 
     clearEventID();
@@ -1136,30 +1132,30 @@ IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl)
     {
         m_bHasProgress = false;
         m_bStopProgress = false;
-        m_aProgressText.Hide();
-        m_aProgressBar.Hide();
-        m_aCancelBtn.Hide();
+        m_pProgressText->Hide();
+        m_pProgressBar->Hide();
+        m_pCancelBtn->Hide();
     }
     else
     {
         if ( m_bProgressChanged )
         {
             m_bProgressChanged = false;
-            m_aProgressText.SetText( m_sProgressText );
+            m_pProgressText->SetText(m_sProgressText);
         }
 
         if ( m_bStartProgress )
         {
             m_bStartProgress = false;
             m_bHasProgress = true;
-            m_aProgressBar.Show();
-            m_aProgressText.Show();
-            m_aCancelBtn.Enable();
-            m_aCancelBtn.Show();
+            m_pProgressBar->Show();
+            m_pProgressText->Show();
+            m_pCancelBtn->Enable();
+            m_pCancelBtn->Show();
         }
 
-        if ( m_aProgressBar.IsVisible() )
-            m_aProgressBar.SetValue( (sal_uInt16) m_nProgress );
+        if ( m_pProgressBar->IsVisible() )
+            m_pProgressBar->SetValue( (sal_uInt16) m_nProgress );
 
         m_aTimeoutTimer.Start();
     }
@@ -1167,126 +1163,6 @@ IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl)
     return 1;
 }
 
-//------------------------------------------------------------------------------
-// VCL::Window / Dialog
-void ExtMgrDialog::Resize()
-{
-    Size aTotalSize( GetOutputSizePixel() );
-    Size aBtnSize( m_aHelpBtn.GetSizePixel() );
-    Size aUpdBtnSize( m_aUpdateBtn.GetSizePixel() );
-    long offsetX;
-
-// last row of the box, lower 4 buttons
-
-    Point aPos( RSC_SP_DLG_INNERBORDER_LEFT,
-                aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_BOTTOM - aBtnSize.Height() );
-
-    m_aHelpBtn.SetPosPixel( aPos );
-
-    aPos.X() = aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_RIGHT - aBtnSize.Width();
-    m_aCloseBtn.SetPosPixel( aPos );
-
-    aPos.X() -= ( RSC_SP_CTRL_X + aUpdBtnSize.Width() );
-    m_aUpdateBtn.SetPosPixel( aPos );
-
-    aPos.X() -= ( RSC_SP_CTRL_GROUP_X + aBtnSize.Width() );
-    m_aAddBtn.SetPosPixel( aPos );
-
-// horizontal line above lower buttons
-
-    Size aDivSize( aTotalSize.Width(), LINE_SIZE );
-    aPos = Point( 0, aPos.Y() - LINE_SIZE - RSC_SP_DLG_INNERBORDER_BOTTOM );
-    m_aDivider.SetPosSizePixel( aPos, aDivSize );
-
-// text "get more extensions"
-
-    Size aFTSize( m_aGetExtensions.CalcMinimumSize() );
-//    aPos = Point( RSC_SP_DLG_INNERBORDER_LEFT, aPos.Y() - RSC_CD_FIXEDTEXT_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM );
-    aPos = Point( RSC_SP_DLG_INNERBORDER_LEFT, aPos.Y() - RSC_CD_PUSHBUTTON_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM );
-
-    m_aGetExtensions.SetPosSizePixel( aPos, aFTSize );
-
-// installation progress bar + cancel button , on the right of the text to get extensions
-
-    aPos.X() = aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_RIGHT - aBtnSize.Width();
-    m_aCancelBtn.SetPosPixel( Point( aPos.X(), aPos.Y() - ((aBtnSize.Height()-aFTSize.Height())/2) ) );
-
-    // Calc progress height
-    long nProgressHeight = aFTSize.Height();
-
-    if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
-    {
-        ImplControlValue aValue;
-        Rectangle aControlRegion( Point( 0, 0 ), m_aProgressBar.GetSizePixel() );
-        Rectangle aNativeControlRegion, aNativeContentRegion;
-        if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
-                                                 CTRL_STATE_ENABLED, aValue, rtl::OUString(),
-                                                 aNativeControlRegion, aNativeContentRegion ) != sal_False )
-        {
-            nProgressHeight = aNativeControlRegion.GetHeight();
-        }
-    }
-
-    if ( nProgressHeight < PROGRESS_HEIGHT )
-        nProgressHeight = PROGRESS_HEIGHT;
-
-    aPos.X() -= ( RSC_SP_CTRL_GROUP_Y + PROGRESS_WIDTH );
-    m_aProgressBar.SetPosSizePixel( Point( aPos.X(), aPos.Y() - ((nProgressHeight-aFTSize.Height())/2) ),
-                                    Size( PROGRESS_WIDTH, nProgressHeight ) );
-
-    Rectangle aRect1( m_aGetExtensions.GetPosPixel(), m_aGetExtensions.GetSizePixel() );
-    Rectangle aRect2( m_aProgressBar.GetPosPixel(), m_aProgressBar.GetSizePixel() );
-
-    aFTSize.Width() = ( aRect2.Left() - aRect1.Right() ) - 2*RSC_SP_DLG_INNERBORDER_LEFT;
-    aPos.X() = aRect1.Right() + RSC_SP_DLG_INNERBORDER_LEFT;
-    m_aProgressText.SetPosSizePixel( aPos, aFTSize );
-
-// checkboxes + text "type of extensions"
-
-    long nWidth = m_aBundledCbx.GetCtrlTextWidth( m_aBundledCbx.GetText() );
-    Size aBCBSize(m_aBundledCbx.GetSizePixel());
-    aBCBSize.Width() = nWidth + 30;
-    m_aBundledCbx.SetSizePixel( aBCBSize );
-
-    nWidth = m_aSharedCbx.GetCtrlTextWidth( m_aSharedCbx.GetText() );
-    Size aSCBSize(m_aSharedCbx.GetSizePixel());
-    aSCBSize.Width() = nWidth + 30;
-    m_aSharedCbx.SetSizePixel( aSCBSize );
-
-    nWidth = m_aUserCbx.GetCtrlTextWidth( m_aUserCbx.GetText() );
-    Size aUCBSize(m_aUserCbx.GetSizePixel());
-    aUCBSize.Width() = nWidth + 30;
-    m_aUserCbx.SetSizePixel( aUCBSize );
-
-    offsetX = 0.5*(aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT - 3*RSC_SP_CTRL_GROUP_X - aBCBSize.Width() - aSCBSize.Width() - aUCBSize.Width() );
-
-    aPos = Point(offsetX, aPos.Y() - RSC_CD_CHECKBOX_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM);
-    m_aBundledCbx.SetPosPixel( aPos );
-    aPos.X() += aBCBSize.Width() + 3 * RSC_SP_CTRL_GROUP_X;
-    m_aSharedCbx.SetPosPixel( aPos );
-    aPos.X() += aSCBSize.Width() + 3 * RSC_SP_CTRL_GROUP_X;
-    m_aUserCbx.SetPosPixel( aPos );
-
-    Size aFTTypeOfExtSize(m_aTypeOfExtTxt.GetSizePixel());
-    aPos = Point(RSC_SP_DLG_INNERBORDER_LEFT , aPos.Y() - RSC_CD_FIXEDTEXT_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM);
-
-    m_aTypeOfExtTxt.SetPosSizePixel(aPos, aFTTypeOfExtSize);
-
-    aPos.X() = RSC_SP_DLG_INNERBORDER_LEFT + aFTTypeOfExtSize.Width();
-    aPos.Y() = aPos.Y() + RSC_CD_FIXEDTEXT_HEIGHT;
-    aDivSize.Width() = aTotalSize.Width() - aFTTypeOfExtSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT;
-    m_aDivider2.SetPosSizePixel( aPos , aDivSize );
-
-// extension listbox
-
-    Size aSize( aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT,
-                aTotalSize.Height() - aBtnSize.Height() - LINE_SIZE - aBtnSize.Height()
-                - aBCBSize.Height() - aFTTypeOfExtSize.Height()
-                - RSC_SP_DLG_INNERBORDER_TOP - 5*RSC_SP_DLG_INNERBORDER_BOTTOM );
-
-    m_pExtensionBox->SetSizePixel(aSize );
-
-}
 //------------------------------------------------------------------------------
 // VCL::Window / Dialog
 
@@ -1303,12 +1179,12 @@ long ExtMgrDialog::Notify( NotifyEvent& rNEvt )
         if ( nKeyCode == KEY_TAB )
         {
             if ( aKeyCode.IsShift() ) {
-                if ( m_aAddBtn.HasFocus() ) {
+                if ( m_pAddBtn->HasFocus() ) {
                     m_pExtensionBox->GrabFocus();
                     bHandled = true;
                 }
             } else {
-                if ( m_aGetExtensions.HasFocus() ) {
+                if ( m_pGetExtensions->HasFocus() ) {
                     m_pExtensionBox->GrabFocus();
                     bHandled = true;
                 }

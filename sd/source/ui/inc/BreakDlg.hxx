@@ -34,7 +34,7 @@
 #include <svx/dlgctrl.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
-#include <svtools/prgsbar.hxx>
+#include <vcl/prgsbar.hxx>
 #include <vcl/edit.hxx>
 #include <svtools/stdctrl.hxx>
 #include <sfx2/basedlgs.hxx>

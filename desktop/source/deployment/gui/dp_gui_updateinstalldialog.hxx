@@ -24,7 +24,7 @@
 #include "vcl/button.hxx"
 #include "vcl/fixed.hxx"
 #include "vcl/dialog.hxx"
-#include "svtools/prgsbar.hxx"
+#include "vcl/prgsbar.hxx"
 #include "rtl/ref.hxx"
 #include <vector>
 

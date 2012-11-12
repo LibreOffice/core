@@ -178,8 +178,10 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     void checkIndex(sal_Int32 pos) const;
 
 
+    void Init();
 public:
-                    ExtensionBox_Impl( Dialog* pParent, TheExtensionManager *pManager );
+                    ExtensionBox_Impl(Window* pParent);
+                    ExtensionBox_Impl(Window* pParent, TheExtensionManager *pManager);
                    ~ExtensionBox_Impl();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
@@ -211,6 +213,7 @@ public:
     void            checkEntries();
 
     TheExtensionManager*    getExtensionManager() const { return m_pManager; }
+    void setExtensionManager(TheExtensionManager* pManager) { m_pManager = pManager; }
 
     //===================================================================================
     //These functions are used for automatic testing

@@ -20,7 +20,7 @@
 #ifndef _PRGSBAR_HXX
 #define _PRGSBAR_HXX
 
-#include "svtools/svtdllapi.h"
+#include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 
 /*************************************************************************
@@ -58,7 +58,7 @@ groesser 100 gesetzt werden, faengt das letzte Rechteck an zu blinken.
 // - ProgressBar -
 // ---------------
 
-class SVT_DLLPUBLIC ProgressBar : public Window
+class VCL_DLLPUBLIC ProgressBar : public Window
 {
 private:
     Point               maPos;
@@ -68,12 +68,10 @@ private:
     sal_uInt16              mnPercentCount;
     sal_Bool                mbCalcNew;
 
-#ifdef _SV_PRGSBAR_CXX
     using Window::ImplInit;
-    SVT_DLLPRIVATE void             ImplInit();
-    SVT_DLLPRIVATE void             ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
-    SVT_DLLPRIVATE void             ImplDrawProgress( sal_uInt16 nOldPerc, sal_uInt16 nNewPerc );
-#endif
+    SAL_DLLPRIVATE void             ImplInit();
+    SAL_DLLPRIVATE void             ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SAL_DLLPRIVATE void             ImplDrawProgress( sal_uInt16 nOldPerc, sal_uInt16 nNewPerc );
 
 public:
                         ProgressBar( Window* pParent, WinBits nWinBits = WB_STDPROGRESSBAR );

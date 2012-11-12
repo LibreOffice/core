@@ -23,8 +23,7 @@
 #include "vcl/dialog.hxx"
 #include "vcl/fixed.hxx"
 #include "vcl/button.hxx"
-
-#include "svtools/prgsbar.hxx"
+#include "vcl/prgsbar.hxx"
 
 namespace padmin {
 

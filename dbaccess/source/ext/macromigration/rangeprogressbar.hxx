@@ -20,7 +20,7 @@
 #ifndef DBACCESS_RANGEPROGRESSBAR_HXX
 #define DBACCESS_RANGEPROGRESSBAR_HXX
 
-#include <svtools/prgsbar.hxx>
+#include <vcl/prgsbar.hxx>
 
 //........................................................................
 namespace dbmm

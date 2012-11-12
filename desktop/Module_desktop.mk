@@ -37,6 +37,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Library_sofficeapp \
     Library_spl \
     Package_intro \
+    UI_deployment \
     Zip_brand \
     Zip_brand_dev \
 ))

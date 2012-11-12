@@ -33,9 +33,9 @@
 #include "vcl/button.hxx"
 #include "vcl/fixed.hxx"
 #include "vcl/fixedhyper.hxx"
+#include "vcl/prgsbar.hxx"
 #include "vcl/timer.hxx"
 
-#include "svtools/prgsbar.hxx"
 #include "svtools/svmedit.hxx"
 
 #include "osl/conditn.hxx"
@@ -108,20 +108,16 @@ class ExtMgrDialog : public ModelessDialog,
                      public DialogHelper
 {
     ExtBoxWithBtns_Impl *m_pExtensionBox;
-    PushButton           m_aAddBtn;
-    PushButton           m_aUpdateBtn;
-    OKButton             m_aCloseBtn;
-    HelpButton           m_aHelpBtn;
-    FixedLine            m_aDivider;
-    FixedLine            m_aDivider2;
-    FixedText            m_aTypeOfExtTxt;
-    CheckBox             m_aBundledCbx;
-    CheckBox             m_aSharedCbx;
-    CheckBox             m_aUserCbx;
-    FixedHyperlink       m_aGetExtensions;
-    FixedText            m_aProgressText;
-    ProgressBar          m_aProgressBar;
-    CancelButton         m_aCancelBtn;
+    PushButton          *m_pAddBtn;
+    PushButton          *m_pUpdateBtn;
+    PushButton          *m_pCloseBtn;
+    CheckBox            *m_pBundledCbx;
+    CheckBox            *m_pSharedCbx;
+    CheckBox            *m_pUserCbx;
+    FixedHyperlink      *m_pGetExtensions;
+    FixedText           *m_pProgressText;
+    ProgressBar         *m_pProgressBar;
+    CancelButton        *m_pCancelBtn;
     const String         m_sAddPackages;
     String               m_sProgressText;
     String               m_sLastFolderURL;
@@ -144,6 +140,7 @@ class ExtMgrDialog : public ModelessDialog,
     DECL_DLLPRIVATE_LINK( HandleAddBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleUpdateBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleCancelBtn, void * );
+    DECL_DLLPRIVATE_LINK( HandleCloseBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleExtTypeCbx, void * );
     DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
     DECL_DLLPRIVATE_LINK(TimeOutHdl, void *);
@@ -153,7 +150,6 @@ public:
                     ExtMgrDialog( Window * pParent, TheExtensionManager *pManager );
     virtual        ~ExtMgrDialog();
 
-    virtual void    Resize();
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual sal_Bool    Close();
 
@@ -172,6 +168,8 @@ public:
     bool removePackage(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
     bool updatePackage(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
     bool acceptLicense(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+
+    TheExtensionManager*    getExtensionManager() const { return m_pManager; }
 
     virtual void    prepareChecking();
     virtual void    checkEntries();

@@ -33,11 +33,11 @@
 #include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/prgsbar.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
-#include <svtools/prgsbar.hxx>
 #include "swdllapi.h"
 #include "mailmergehelper.hxx"
 

@@ -36,8 +36,8 @@
 #include <vcl/field.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/prgsbar.hxx>
 #include <svx/graphctl.hxx>
-#include <svtools/prgsbar.hxx>
 
 namespace sd {
 class DrawDocShell;

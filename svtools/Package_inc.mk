@@ -115,7 +115,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/place.hxx,svtools/plac
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/PlaceEditDialog.hxx,svtools/PlaceEditDialog.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/popupmenucontrollerbase.hxx,svtools/popupmenucontrollerbase.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/popupwindowcontroller.hxx,svtools/popupwindowcontroller.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/prgsbar.hxx,svtools/prgsbar.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/printoptions.hxx,svtools/printoptions.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/prnsetup.hxx,svtools/prnsetup.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/roadmap.hxx,svtools/roadmap.hxx))

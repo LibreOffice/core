@@ -20,6 +20,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
+#include <vcl/prgsbar.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
@@ -764,6 +765,15 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             pWindow = new ScrollBar(pParent, WB_VERT);
         else
             pWindow = new ScrollBar(pParent, WB_HORZ);
+    }
+    else if (name == "GtkProgressBar")
+    {
+        extractScrollAdjustment(id, rMap);
+        bVertical = extractOrientation(rMap);
+        if (bVertical)
+            pWindow = new ProgressBar(pParent, WB_VERT);
+        else
+            pWindow = new ProgressBar(pParent, WB_HORZ);
     }
     else if (name == "GtkScrolledWindow")
     {

@@ -22,7 +22,7 @@
 
 #include <tools/debug.hxx>
 #include <vcl/status.hxx>
-#include <svtools/prgsbar.hxx>
+#include <vcl/prgsbar.hxx>
 
 // =======================================================================
 

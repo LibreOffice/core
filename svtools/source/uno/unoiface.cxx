@@ -29,6 +29,7 @@
 
 #include <tools/debug.hxx>
 #include <vcl/fixedhyper.hxx>
+#include <vcl/prgsbar.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/svmedit.hxx>
 #include <unoiface.hxx>
@@ -43,7 +44,6 @@
 #include <svtools/fmtfield.hxx>
 #include <svl/numuno.hxx>
 #include <svtools/calendar.hxx>
-#include <svtools/prgsbar.hxx>
 #include <svtools/treelistbox.hxx>
 #include "treecontrolpeer.hxx"
 #include "svtxgridcontrol.hxx"
