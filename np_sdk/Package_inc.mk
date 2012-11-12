@@ -31,5 +31,6 @@ $(eval $(call gb_Package_add_file,np_sdk_inc,inc/npsdk/jri.h,mozsrc/jri.h))
 $(eval $(call gb_Package_add_file,np_sdk_inc,inc/npsdk/jri_md.h,mozsrc/jri_md.h))
 $(eval $(call gb_Package_add_file,np_sdk_inc,inc/npsdk/jritypes.h,mozsrc/jritypes.h))
 $(eval $(call gb_Package_add_file,np_sdk_inc,inc/npsdk/npupp.h,mozsrc/npupp.h))
+$(eval $(call gb_Package_add_file,np_sdk_inc,inc/npsdk/plugin.h,mozsrc/plugin.h))
 
 # vim: set noet sw=4 ts=4:

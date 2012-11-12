@@ -82,6 +82,8 @@
 
 #include "nsp_func.hxx"
 
+#include "npsdk/plugin.h"
+
 #include <comphelper/documentconstants.hxx>
 
 #ifdef _MSC_VER
@@ -97,7 +99,7 @@
  ***********************************************************************/
 
 static NSP_Mute_Obj send_lock = NSP_New_Mute_Obj();
-static NSP_PIPE_FD write_fd = 0;
+static NSP_PIPE_FD write_fd = -1;
 
 
 long int NSP_WriteToPipe(NSP_PIPE_FD fp, void* buf, unsigned long int len)
@@ -416,7 +418,7 @@ dupMimeType(NPMIMEType type)
 }
 #endif // end of UNIX
 
-NP_DLLPUBLIC NPError
+NPError
 NPP_Initialize(void)
 {
     debug_fprintf(NSP_LOG_NEW, "NS Plugin begin initialize.\n");
@@ -431,7 +433,7 @@ NPP_GetJavaClass()
 }
 #endif
 
-NP_DLLPUBLIC void
+void
 NPP_Shutdown(void)
 {
     PLUGIN_MSG msg;
