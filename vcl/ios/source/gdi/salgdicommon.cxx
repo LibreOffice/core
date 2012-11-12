@@ -685,6 +685,7 @@ bool IosSalGraphics::drawPolyLine(
     {
         return false;
     }
+
     // setup line attributes
     CGLineJoin aCGLineJoin = kCGLineJoinMiter;
     switch( eLineJoin )
