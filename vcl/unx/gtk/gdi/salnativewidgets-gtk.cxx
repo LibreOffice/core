@@ -3990,10 +3990,14 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     gboolean showmenuicons = true, primarybuttonwarps = false;
     g_object_get( pSettings,
         "gtk-menu-images", &showmenuicons,
-#if GTK_CHECK_VERSION(2,24,13)
-        "gtk-primary-button-warps-slider", &primarybuttonwarps,
-#endif
         (char *)NULL );
+    if( g_object_class_find_property(
+            G_OBJECT_GET_CLASS(pSettings), "gtk-primary-button-warps-slider") )
+    {
+        g_object_get( pSettings,
+            "gtk-primary-button-warps-slider", &primarybuttonwarps,
+            (char *)NULL );
+    }
     aStyleSet.SetPreferredUseImagesInMenus(showmenuicons);
     aStyleSet.SetPrimaryButtonWarpsSlider(primarybuttonwarps);
 
