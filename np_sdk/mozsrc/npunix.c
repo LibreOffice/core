@@ -58,6 +58,7 @@
 #include <stdio.h>
 #include "npapi.h"
 #include "npupp.h"
+#include "plugin.h"
 
 /*
  * Define PLUGIN_TRACE to have the wrapper functions print
@@ -485,7 +486,7 @@ NP_Initialize(NPNetscapeFuncs* nsTable, NPPluginFuncs* pluginFuncs)
         pluginFuncs->javaClass  = Private_GetJavaClass();
 #endif
 
-        err = NPERR_NO_ERROR;
+        err = NPP_Initialize();
     }
 
     return err;
@@ -502,4 +503,5 @@ SAL_DLLPUBLIC_EXPORT void
 NP_Shutdown(void)
 {
     PLUGINDEBUGSTR("NP_Shutdown");
+    NPP_Shutdown();
 }
