@@ -49,7 +49,7 @@ void FixedHyperlink::Initialize()
     aFont.SetUnderline( UNDERLINE_SINGLE );
     SetControlFont( aFont );
     // changes the color to light blue
-    SetTextColor( Color( COL_LIGHTBLUE ) );
+    SetControlForeground( Color( COL_LIGHTBLUE ) );
     // calculates text len
     m_nTextLen = GetCtrlTextWidth( GetText() );
 }
@@ -85,7 +85,7 @@ void FixedHyperlink::GetFocus()
 
 void FixedHyperlink::LoseFocus()
 {
-    SetTextColor( Color( COL_LIGHTBLUE ) );
+    SetTextColor( GetControlForeground() );
     Paint( Rectangle( Point(), GetSizePixel() ) );
     HideFocus();
 }
