@@ -51,6 +51,8 @@ public:
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
 };
 
 class ScXMLConditionalFormatContext : public SvXMLImportContext

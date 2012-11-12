@@ -409,6 +409,12 @@ public:
 
     void    InsertNew( ScConditionalFormat* pNew )
                 { maConditionalFormats.insert(pNew); }
+    /**
+     * Checks that all cond formats have a non empty range.
+     * Deletes empty cond formats.
+     * @return true if all cond formats were valid
+     */
+    bool    CheckAllEntries();
 
     ScConditionalFormat* GetFormat( sal_uInt32 nKey );
 

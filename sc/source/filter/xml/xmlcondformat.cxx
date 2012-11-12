@@ -65,6 +65,17 @@ SvXMLImportContext* ScXMLConditionalFormatsContext::CreateChildContext( sal_uInt
     return pContext;
 }
 
+void ScXMLConditionalFormatsContext::EndElement()
+{
+    ScDocument* pDoc = GetScImport().GetDocument();
+
+    SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
+    ScConditionalFormatList* pCondFormatList = pDoc->GetCondFormList(nTab);
+    bool bDeleted = !pCondFormatList->CheckAllEntries();
+
+    SAL_WARN_IF(bDeleted, "sc", "conditional formats have been deleted because they contained empty range info");
+}
+
 ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList):
     SvXMLImportContext( rImport, nPrfx, rLName )

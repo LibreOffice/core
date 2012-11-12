@@ -1975,20 +1975,32 @@ void ScConditionalFormatList::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
         itr->UpdateMoveTab( nOldPos, nNewPos );
 }
 
-void ScConditionalFormatList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+bool ScConditionalFormatList::CheckAllEntries()
 {
-    for( iterator itr = begin(); itr != end(); ++itr)
-        itr->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
-
+    bool bValid = true;
+    //
     // need to check which must be deleted
     iterator itr = begin();
     while(itr != end())
     {
         if(itr->GetRange().empty())
+        {
+            bValid = false;
             maConditionalFormats.erase(itr++);
+        }
         else
             ++itr;
     }
+
+    return bValid;
+}
+
+void ScConditionalFormatList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    for( iterator itr = begin(); itr != end(); ++itr)
+        itr->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
+
+    CheckAllEntries();
 }
 
 void ScConditionalFormatList::SourceChanged( const ScAddress& rAddr )
