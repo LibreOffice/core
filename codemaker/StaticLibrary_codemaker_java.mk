@@ -27,10 +27,10 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,codemaker_java))
 
-$(eval $(call gb_StaticLibrary_use_unpacked,codemaker_java,boost))
+$(eval $(call gb_StaticLibrary_use_external,codemaker_java,boost_headers))
 
 $(eval $(call gb_StaticLibrary_use_packages,codemaker_java,\
-    codemaker_inc \
+	codemaker_inc \
 	registry_inc \
 	sal_generated \
 	sal_inc \

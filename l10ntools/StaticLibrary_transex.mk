@@ -37,7 +37,7 @@ $(eval $(call gb_StaticLibrary_set_include,transex,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_StaticLibrary_use_unpacked,transex,boost))
+$(eval $(call gb_StaticLibrary_use_external,transex,boost_headers))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,transex,\
     l10ntools/source/export2 \

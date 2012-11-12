@@ -27,7 +27,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,codemaker))
 
-$(eval $(call gb_StaticLibrary_use_unpacked,codemaker,boost))
+$(eval $(call gb_StaticLibrary_use_external,codemaker,boost_headers))
 
 $(eval $(call gb_StaticLibrary_use_packages,codemaker,\
 	codemaker_inc \

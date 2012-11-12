@@ -35,7 +35,7 @@ $(eval $(call gb_Executable_use_libraries,xrmex,\
     sal \
 ))
 
-$(eval $(call gb_Executable_use_unpacked,xrmex,boost))
+$(eval $(call gb_Executable_use_external,xrmex,boost_headers))
 
 $(eval $(call gb_Executable_add_scanners,xrmex,\
     l10ntools/source/xrmlex \

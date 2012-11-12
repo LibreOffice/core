@@ -35,7 +35,7 @@ $(eval $(call gb_Executable_use_libraries,ulfex,\
     sal \
 ))
 
-$(eval $(call gb_Executable_use_unpacked,ulfex,boost))
+$(eval $(call gb_Executable_use_external,ulfex,boost_headers))
 
 $(eval $(call gb_Executable_use_static_libraries,ulfex,\
     transex \

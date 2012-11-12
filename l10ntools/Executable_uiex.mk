@@ -18,8 +18,6 @@ $(eval $(call gb_Executable_use_libraries,uiex,\
     sal \
 ))
 
-$(eval $(call gb_Executable_use_unpacked,uiex,boost))
-
 $(eval $(call gb_Executable_use_static_libraries,uiex,\
     transex \
 ))
@@ -32,6 +30,7 @@ $(eval $(call gb_Executable_use_externals,uiex,\
     libexslt \
     libxml2 \
     libxslt \
+    boost_headers \
 ))
 
 # vim: set noet sw=4 ts=4:

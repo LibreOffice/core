@@ -35,7 +35,7 @@ $(eval $(call gb_Executable_use_libraries,gsicheck,\
     sal \
 ))
 
-$(eval $(call gb_Executable_use_unpacked,gsicheck,boost))
+$(eval $(call gb_Executable_use_external,gsicheck,boost_headers))
 
 $(eval $(call gb_Executable_add_exception_objects,gsicheck,\
     l10ntools/source/gsicheck \
