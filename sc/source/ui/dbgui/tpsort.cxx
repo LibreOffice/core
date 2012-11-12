@@ -236,6 +236,9 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
         if ( nSortPos[i] == LISTBOX_ENTRY_NOTFOUND ) nSortPos[i] = 0;
     }
 
+    if( nSortKeyCount >= aNewSortData.maKeyState.size() )
+        aNewSortData.maKeyState.resize(nSortKeyCount);
+
     if ( nSortPos[0] > 0 )
     {
         for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
