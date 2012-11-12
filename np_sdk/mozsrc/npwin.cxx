@@ -37,6 +37,7 @@
 
 #include "npapi.h"
 #include "npupp.h"
+#include "plugin.h"
 
 //\\// DEFINE
 #define NP_EXPORT
@@ -149,7 +150,7 @@ NP_Initialize(NPNetscapeFuncs* pFuncs)
     }
 #endif
 
-    return NPERR_NO_ERROR;
+    return NPP_Initialize;
 }
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
@@ -163,6 +164,7 @@ NP_Initialize(NPNetscapeFuncs* pFuncs)
 void WINAPI NP_EXPORT
 NP_Shutdown()
 {
+    NPP_Shutdown();
     g_pNavigatorFuncs = NULL;
 }
 

@@ -32,6 +32,7 @@ $(eval $(call gb_Library_Library,npsoplugin))
 
 $(eval $(call gb_Library_use_packages,npsoplugin,\
 	comphelper_inc \
+	np_sdk_inc \
 ))
 
 $(eval $(call gb_Library_use_external,npsoplugin,mozilla_headers))
@@ -94,8 +95,6 @@ $(eval $(call gb_Library_add_defs,npsoplugin,\
 ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_ldflags,npsoplugin,\
 	/EXPORT:NPP_GetMIMEDescription \
-	/EXPORT:NPP_Initialize \
-	/EXPORT:NPP_Shutdown \
 	/EXPORT:NPP_New \
 	/EXPORT:NPP_Destroy \
 	/EXPORT:NPP_SetWindow \
