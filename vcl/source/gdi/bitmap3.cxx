@@ -1179,6 +1179,7 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
         if( bRet )
         {
             bRet = sal_False;
+            const Bitmap aOriginal(*this);
             *this = aNewBmp;
             aNewBmp = Bitmap( Size( nNewWidth, nNewHeight ), 24 );
             pReadAcc = AcquireReadAccess();
@@ -1249,7 +1250,7 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
 
             if( bRet )
             {
-                ImplAdaptBitCount(aNewBmp);
+                aOriginal.ImplAdaptBitCount(aNewBmp);
                 *this = aNewBmp;
             }
         }
