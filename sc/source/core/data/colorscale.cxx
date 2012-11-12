@@ -1050,7 +1050,7 @@ ScIconSetMap* ScIconSetFormat::getIconSetMap()
         { "4TrafficLights", IconSet_4TrafficLights, 4 },
         { "5Arrows", IconSet_5Arrows, 5 },
         { "5ArrowsGray", IconSet_5ArrowsGray, 5 },
-        { "5Ratings", IconSet_5Ratings, 5 },
+        { "5Rating", IconSet_5Ratings, 5 },
         { "5Quarters", IconSet_5Quarters, 5 },
         { NULL, IconSet_3Arrows, 0 }
     };
