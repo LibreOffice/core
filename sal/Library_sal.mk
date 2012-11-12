@@ -59,7 +59,9 @@ $(eval $(call gb_Library_use_libraries,sal,\
 	$(gb_UWINAPI) \
 ))
 
+ifneq ($(SYSTEM_BOOST),YES)
 $(eval $(call gb_Library_use_unpacked,sal,boost))
+endif
 
 $(eval $(call gb_Library_use_externals,sal,\
     valgrind \
