@@ -83,7 +83,6 @@ extern "C" {
 
 // These functions presumably should not be extern "C", but changing
 // that would break binary compatibility.
-#if SUPD < 400
 #ifdef __clang__
 #pragma clang diagnostic push
 // Guard against slightly older clang versions that don't have
@@ -91,16 +90,14 @@ extern "C" {
 #pragma clang diagnostic ignored "-Wunknown-pragmas"
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 #endif
-#endif
+
 osl::Mutex & SAL_CALL osl_detail_ObjectRegistry_getMutex()
     SAL_THROW_EXTERN_C()
 {
     return DebugBaseMutex::get();
 }
-#if SUPD < 400
 #ifdef __clang__
 #pragma clang diagnostic pop
-#endif
 #endif
 
 bool SAL_CALL osl_detail_ObjectRegistry_storeAddresses( char const* pName )
