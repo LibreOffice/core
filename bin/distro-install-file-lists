@@ -215,7 +215,8 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/tdefilepicker
     mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/fps_tde.uno.so
     mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/libvclplug_tdel..so
-    mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/libtdeabdrv1.so
+    mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/libtdeab1l..so
+    mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/libtdeabdrv1l..so
     add_used_directories tde_list.txt common_list.txt
 
     # kde subpackage
@@ -223,7 +224,8 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/kdefilepicker
     mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/fps_kde.uno.so
     mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/libvclplug_kdel..so
-    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/libkabdrv1.so
+    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/libkab1l..so
+    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/libkabdrv1l..so
     add_used_directories kde_list.txt common_list.txt
 
     # create kde4 subpackage
