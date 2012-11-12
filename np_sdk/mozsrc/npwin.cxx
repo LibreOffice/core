@@ -150,7 +150,7 @@ NP_Initialize(NPNetscapeFuncs* pFuncs)
     }
 #endif
 
-    return NPP_Initialize;
+    return NPP_Initialize();
 }
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
