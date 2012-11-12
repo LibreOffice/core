@@ -5924,15 +5924,6 @@ bool PDFWriterImpl::emitCatalog()
     else
         aInitPageRef.append( "0" );
 
-#if !defined(ANDROID) && !defined(IOS)
-    if (m_nSignatureObject != -1) // Document will be signed
-    {
-        aLine.append("/Perms<</DocMDP ");
-        aLine.append(m_nSignatureObject);
-        aLine.append(" 0 R>>");
-    }
-#endif
-
     switch( m_aContext.PDFDocumentAction )
     {
     case PDFWriter::ActionDefault :     //do nothing, this is the Acrobat default
@@ -6109,11 +6100,7 @@ bool PDFWriterImpl::emitSignature()
     OStringBuffer aLine( 0x5000 );
     aLine.append( m_nSignatureObject );
     aLine.append( " 0 obj\n" );
-    aLine.append("<</Reference[<</Data ");
-    aLine.append( m_nCatalogObject );
-    aLine.append(" 0 R/Type/SigRef/TransformParams<</Type/TransformParams"
-                 "/V/1.2/P 1>>/DigestMethod/MD5/DigestLocation[0 0]"
-                 "/DigestValue(aa)/TransformMethod/DocMDP>>]/Contents <" );
+    aLine.append("<</Contents <" );
 
     sal_uInt64 nOffset = ~0U;
     CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nOffset ) ) );
@@ -6313,7 +6300,11 @@ bool PDFWriterImpl::finalizeSignature()
         return false;
     }
 
-    //NSS_CMSSignerInfo_AddSigningTime(cms_signer, PR_Now()); //TODO: Needs PDF 1.6?
+    if (NSS_CMSSignerInfo_AddSigningTime(cms_signer, PR_Now()) != SECSuccess)
+    {
+        SAL_WARN("vcl.gdi", "PDF signing: can't add signing time.");
+        return false;
+    }
 
     if (NSS_CMSSignedData_AddCertificate(cms_sd, cert) != SECSuccess)
     {
