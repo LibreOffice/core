@@ -100,7 +100,7 @@
  ***********************************************************************/
 
 static NSP_Mute_Obj send_lock = NSP_New_Mute_Obj();
-static NSP_PIPE_FD write_fd = -1;
+static NSP_PIPE_FD write_fd = (NSP_PIPE_FD)-1;
 
 
 long int NSP_WriteToPipe(NSP_PIPE_FD fp, void* buf, unsigned long int len)
