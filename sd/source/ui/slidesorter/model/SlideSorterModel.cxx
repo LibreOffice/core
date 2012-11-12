@@ -670,13 +670,36 @@ void SlideSorterModel::InsertSlide (SdPage* pPage)
 
 void SlideSorterModel::DeleteSlide (const SdPage* pPage)
 {
-    const sal_Int32 nIndex (GetIndex(pPage));
-    if (maPageDescriptors[nIndex])
-        if (maPageDescriptors[nIndex]->GetPage() != pPage)
-            return;
+    sal_Int32 nIndex(0);
 
-    maPageDescriptors.erase(maPageDescriptors.begin()+nIndex);
-    UpdateIndices(nIndex);
+    // Caution, GetIndex() may be negative since it uses GetPageNumber()-1
+    // for calculation, so do this only when page is inserted, else the
+    // GetPageNumber() will be zero and thus GetIndex() == -1
+    if(pPage->IsInserted())
+    {
+        nIndex = GetIndex(pPage);
+    }
+    else
+    {
+        // if not inserted, search for page
+        for(; nIndex < static_cast<sal_Int32>(maPageDescriptors.size()); nIndex++)
+        {
+            if(maPageDescriptors[nIndex]->GetPage() == pPage)
+            {
+                break;
+            }
+        }
+    }
+
+    if(nIndex >= 0 && nIndex < static_cast<sal_Int32>(maPageDescriptors.size()))
+    {
+        if (maPageDescriptors[nIndex])
+            if (maPageDescriptors[nIndex]->GetPage() != pPage)
+                return;
+
+        maPageDescriptors.erase(maPageDescriptors.begin()+nIndex);
+        UpdateIndices(nIndex);
+    }
     OSL_TRACE("page removed");
 }
 
