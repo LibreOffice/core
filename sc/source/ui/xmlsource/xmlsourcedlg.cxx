@@ -15,10 +15,12 @@
 #include "orcusfilters.hxx"
 #include "filter.hxx"
 #include "reffact.hxx"
+#include "tabvwsh.hxx"
 
 #include "unotools/pathoptions.hxx"
 #include "tools/urlobj.hxx"
 #include "svtools/svlbitm.hxx"
+#include "sfx2/objsh.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -485,11 +487,21 @@ void ScXMLSourceDlg::OkPressed()
         }
     }
 
+    // Now do the import.
     ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
     if (!pOrcus)
         return;
 
     pOrcus->importXML(*mpDoc, maSrcPath, aParam);
+
+    // Don't forget to broadcast the change.
+    SfxObjectShell* pShell = mpDoc->GetDocumentShell();
+    pShell->Broadcast(SfxSimpleHint(FID_DATACHANGED));
+
+    // Repaint the grid to force repaint the cell values.
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (pViewShell)
+        pViewShell->PaintGrid();
 
     Close();
 }
