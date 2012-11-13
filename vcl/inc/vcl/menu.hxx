@@ -289,10 +289,10 @@ public:
                             Menu();
                             Menu( sal_Bool bMenuBar );
     SAL_DLLPRIVATE Window*  ImplGetWindow() const { return pWindow; }
-//#if defined(QUARTZ)
-//    // ImplSelectWithStart() is used in vcl/aqua/source/window/salnsmenu.mm
-//    SAL_DLLPRIVATE void ImplSelectWithStart( Menu* pStartMenu = NULL );
-//#endif
+#if defined(QUARTZ)
+    // ImplSelectWithStart() is used in vcl/aqua/source/window/salnsmenu.mm
+    SAL_DLLPRIVATE void ImplSelectWithStart( Menu* pStartMenu = NULL );
+#endif
     void ImplSelectWithStart( Menu* pStartMenu = NULL );
 
     public:
