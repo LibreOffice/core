@@ -729,24 +729,27 @@ void VclGrid::setAllocation(const Size& rAllocation)
         for (sal_Int32 x = 0; x < nMaxX; ++x)
             aWidths[x].m_nValue = nAvailableWidth/nMaxX;
     }
-    else
+    else if (rAllocation.Width() != aRequisition.Width())
     {
-        long nExtraWidth = 0;
+        sal_Int32 nExpandables = 0;
+        for (sal_Int32 x = 0; x < nMaxX; ++x)
+            if (aWidths[x].m_bExpand)
+                ++nExpandables;
+        long nExtraWidthForExpanders = nExpandables ? (rAllocation.Width() - aRequisition.Width()) / nExpandables : 0;
+
         if (rAllocation.Width() < aRequisition.Width())
-            nExtraWidth = (rAllocation.Width() - aRequisition.Width()) / nMaxX;
-        else
         {
-            sal_Int32 nExpandables = 0;
+            long nExtraWidth = (rAllocation.Width() - aRequisition.Width() - nExtraWidthForExpanders * nExpandables) / nMaxX;
+
             for (sal_Int32 x = 0; x < nMaxX; ++x)
-                if (aWidths[x].m_bExpand)
-                    ++nExpandables;
-            nExtraWidth = nExpandables ? (rAllocation.Width() - aRequisition.Width()) / nExpandables : 0;
+                aWidths[x].m_nValue += nExtraWidth;
         }
-        if (nExtraWidth)
+
+        if (nExtraWidthForExpanders)
         {
             for (sal_Int32 x = 0; x < nMaxX; ++x)
                 if (aWidths[x].m_bExpand)
-                    aWidths[x].m_nValue += nExtraWidth;
+                    aWidths[x].m_nValue += nExtraWidthForExpanders;
         }
     }
 
@@ -756,24 +759,27 @@ void VclGrid::setAllocation(const Size& rAllocation)
         for (sal_Int32 y = 0; y < nMaxY; ++y)
             aHeights[y].m_nValue = nAvailableHeight/nMaxY;
     }
-    else
+    else if (rAllocation.Height() != aRequisition.Height())
     {
-        long nExtraHeight = 0;
+        sal_Int32 nExpandables = 0;
+        for (sal_Int32 y = 0; y < nMaxY; ++y)
+            if (aHeights[y].m_bExpand)
+                ++nExpandables;
+        long nExtraHeightForExpanders = nExpandables ? (rAllocation.Height() - aRequisition.Height()) / nExpandables : 0;
+
         if (rAllocation.Height() < aRequisition.Height())
-            nExtraHeight = (rAllocation.Height() - aRequisition.Height()) / nMaxY;
-        else
         {
-            sal_Int32 nExpandables = 0;
+            long nExtraHeight = (rAllocation.Height() - aRequisition.Height() - nExtraHeightForExpanders * nExpandables) / nMaxY;
+
             for (sal_Int32 y = 0; y < nMaxY; ++y)
-                if (aHeights[y].m_bExpand)
-                    ++nExpandables;
-            nExtraHeight = nExpandables ? (rAllocation.Height() - aRequisition.Height()) / nExpandables : 0;
+                aHeights[y].m_nValue += nExtraHeight;
         }
-        if (nExtraHeight)
+
+        if (nExtraHeightForExpanders)
         {
             for (sal_Int32 y = 0; y < nMaxY; ++y)
                 if (aHeights[y].m_bExpand)
-                    aHeights[y].m_nValue += nExtraHeight;
+                    aHeights[y].m_nValue += nExtraHeightForExpanders;
         }
     }
 
