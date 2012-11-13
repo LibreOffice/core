@@ -1605,7 +1605,9 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
                                 nCounter = nCntPost;
                             else if (nCntPre)
                                 nCounter = nCntPre;
-                            if (!nCntPre)
+                            // don't artificially increment nCntPre
+                            // for forced denominator
+                            if ( ( eScannedType != NUMBERFORMAT_FRACTION ) && (!nCntPre) )
                                 nCntPre++;
                         }
                     }
