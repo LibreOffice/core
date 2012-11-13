@@ -26,7 +26,6 @@
  * instead of those above.
  */
 
-#include "PlaceEditDialog.hrc"
 #include "PlaceEditDialog.hxx"
 #include "ServerDetailsControls.hxx"
 

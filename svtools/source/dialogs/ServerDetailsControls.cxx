@@ -38,8 +38,6 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
-#include "PlaceEditDialog.hrc"
-
 #include "PlaceEditDialog.hxx"
 #include "ServerDetailsControls.hxx"
 
