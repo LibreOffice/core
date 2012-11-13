@@ -33,25 +33,22 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 #include <tools/urlobj.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 
 class DetailsContainer
 {
     private:
-        std::map< sal_uInt16, Control* > m_aControls;
-        bool m_bShown;
         Link m_aChangeHdl;
+        VclFrame*       m_pFrame;
 
     public:
-        DetailsContainer( );
+        DetailsContainer( VclBuilderContainer* pBuilder, const rtl::OString& rFrame );
         virtual ~DetailsContainer( );
-
-        virtual void addControl( sal_uInt16 nId, Control* pControl );
-        Control* getControl( sal_uInt16 nId );
-        Rectangle getBounds( );
 
         void setChangeHdl( const Link& rLink ) { m_aChangeHdl = rLink; }
 
@@ -69,8 +66,6 @@ class DetailsContainer
 
     protected:
         void notifyChange( );
-
-    private:
         DECL_LINK ( ValueChangeHdl, void * );
 };
 
@@ -80,8 +75,13 @@ class HostDetailsContainer : public DetailsContainer
         sal_uInt16 m_nDefaultPort;
         rtl::OUString m_sScheme;
 
+    protected:
+        Edit*           m_pEDHost;
+        NumericField*   m_pEDPort;
+        Edit*           m_pEDPath;
+
     public:
-        HostDetailsContainer( sal_uInt16 nPort, rtl::OUString sScheme );
+        HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, rtl::OUString sScheme );
         virtual ~HostDetailsContainer( ) { };
 
         virtual void show( bool bShow = true );
@@ -99,11 +99,13 @@ class HostDetailsContainer : public DetailsContainer
 
 class DavDetailsContainer : public HostDetailsContainer
 {
+    private:
+        CheckBox*   m_pCBDavs;
+
     public:
-        DavDetailsContainer( );
+        DavDetailsContainer( VclBuilderContainer* pBuilder );
         ~DavDetailsContainer( ) { };
 
-        virtual void addControl( sal_uInt16 nId, Control* pControl );
         virtual void show( bool bShow = true );
 
     protected:
@@ -115,8 +117,13 @@ class DavDetailsContainer : public HostDetailsContainer
 
 class SmbDetailsContainer : public DetailsContainer
 {
+    private:
+        Edit*           m_pEDHost;
+        Edit*           m_pEDShare;
+        Edit*           m_pEDPath;
+
     public:
-        SmbDetailsContainer( ) : DetailsContainer( ) { };
+        SmbDetailsContainer( VclBuilderContainer* pBuilder );
         ~SmbDetailsContainer( ) { };
 
         virtual INetURLObject getUrl( );
@@ -131,14 +138,17 @@ class CmisDetailsContainer : public DetailsContainer
         std::vector< rtl::OUString > m_aRepoIds;
         rtl::OUString m_sRepoId;
 
+        Edit*       m_pEDBinding;
+        ListBox*    m_pLBRepository;
+        Button*     m_pBTRepoRefresh;
+
     public:
-        CmisDetailsContainer( );
+        CmisDetailsContainer( VclBuilderContainer* pBuilder );
         ~CmisDetailsContainer( ) { };
 
         virtual INetURLObject getUrl( );
         virtual bool setUrl( const INetURLObject& rUrl );
         virtual void setUsername( const rtl::OUString& rUsername );
-        virtual void addControl( sal_uInt16 nId, Control* pControl );
 
     private:
         void selectRepository( );

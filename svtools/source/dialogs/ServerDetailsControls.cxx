@@ -50,58 +50,18 @@ using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
-DetailsContainer::DetailsContainer( ) :
-    m_aControls( ),
-    m_bShown( false )
+DetailsContainer::DetailsContainer( VclBuilderContainer* pBuilder, const rtl::OString& rFrame )
 {
+    pBuilder->get( m_pFrame, rFrame );
 }
 
 DetailsContainer::~DetailsContainer( )
 {
-    m_aControls.clear( );
-}
-
-void DetailsContainer::addControl( sal_uInt16 nId, Control* pControl )
-{
-    m_aControls.insert( pair< sal_uInt16, Control* >( nId, pControl ) );
-    pControl->Show( m_bShown );
-
-    if ( pControl->GetType( ) == WINDOW_EDIT )
-        static_cast< Edit* >( pControl )->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
-    else if ( pControl->GetType( ) == WINDOW_NUMERICFIELD )
-        static_cast< NumericField* >( pControl )->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
-    else if ( pControl->GetType( ) == WINDOW_CHECKBOX )
-        static_cast< CheckBox* >( pControl )->SetToggleHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
-}
-
-Control* DetailsContainer::getControl( sal_uInt16 nId )
-{
-    Control* pControl = NULL;
-    map< sal_uInt16, Control* >::iterator it = m_aControls.find( nId );
-    if ( it != m_aControls.end( ) )
-        pControl = it->second;
-    return pControl;
-}
-
-Rectangle DetailsContainer::getBounds( )
-{
-    Rectangle aBounds;
-    for ( map< sal_uInt16, Control* >::iterator it = m_aControls.begin( ); it != m_aControls.end( ); ++it )
-    {
-        Rectangle aControlBounds( it->second->GetPosPixel(), it->second->GetSizePixel() );
-        aBounds = aBounds.GetUnion( aControlBounds );
-    }
-
-    return aBounds;
 }
 
 void DetailsContainer::show( bool bShow )
 {
-    m_bShown = bShow;
-    for ( map< sal_uInt16, Control* >::iterator it = m_aControls.begin( ); it != m_aControls.end( ); ++it )
-    {
-        it->second->Show( m_bShown );
-    }
+    m_pFrame->Show( bShow );
 }
 
 INetURLObject DetailsContainer::getUrl( )
@@ -128,25 +88,35 @@ IMPL_LINK( DetailsContainer, ValueChangeHdl, void *, EMPTYARG )
     return 0;
 }
 
-HostDetailsContainer::HostDetailsContainer( sal_uInt16 nPort, rtl::OUString sScheme ) :
-    DetailsContainer( ),
+HostDetailsContainer::HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, rtl::OUString sScheme ) :
+    DetailsContainer( pBuilder, "HostDetails" ),
     m_nDefaultPort( nPort ),
     m_sScheme( sScheme )
 {
+    pBuilder->get( m_pEDHost, "host" );
+    m_pEDHost->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+
+    pBuilder->get( m_pEDPort, "port" );
+    m_pEDPort->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+
+    pBuilder->get( m_pEDPath, "path" );
+    m_pEDPath->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+
+    show( false );
 }
 
 void HostDetailsContainer::show( bool bShow )
 {
     DetailsContainer::show( bShow );
     if ( bShow )
-        static_cast< NumericField* >( getControl( ED_ADDPLACE_PORT ) )->SetValue( m_nDefaultPort );
+        m_pEDPort->SetValue( m_nDefaultPort );
 }
 
 INetURLObject HostDetailsContainer::getUrl( )
 {
-    rtl::OUString sHost = rtl::OUString( static_cast< Edit* >( getControl( ED_ADDPLACE_HOST ) )->GetText() ).trim( );
-    sal_Int64 nPort = static_cast< NumericField* >( getControl( ED_ADDPLACE_PORT ) )->GetValue();
-    rtl::OUString sPath = rtl::OUString( static_cast< Edit* >( getControl( ED_ADDPLACE_PATH ) )->GetText() ).trim( );
+    rtl::OUString sHost = rtl::OUString( m_pEDHost->GetText() ).trim( );
+    sal_Int64 nPort = m_pEDPort->GetValue();
+    rtl::OUString sPath = rtl::OUString( m_pEDPath->GetText() ).trim( );
 
     rtl::OUString sUrl;
     if ( !sHost.isEmpty( ) )
@@ -171,9 +141,9 @@ bool HostDetailsContainer::setUrl( const INetURLObject& rUrl )
 
     if ( bSuccess )
     {
-        static_cast< Edit* >( getControl( ED_ADDPLACE_HOST ) )->SetText( rUrl.GetHost( ) );
-        static_cast< NumericField* >( getControl( ED_ADDPLACE_PORT ) )->SetValue( rUrl.GetPort( ) );
-        static_cast< Edit* >( getControl( ED_ADDPLACE_PATH ) )->SetText( rUrl.GetURLPath() );
+        m_pEDHost->SetText( rUrl.GetHost( ) );
+        m_pEDPort->SetValue( rUrl.GetPort( ) );
+        m_pEDPath->SetText( rUrl.GetURLPath() );
     }
 
     return bSuccess;
@@ -184,25 +154,23 @@ bool HostDetailsContainer::verifyScheme( const rtl::OUString& sScheme )
     return sScheme.equals( m_sScheme + "://" );
 }
 
-DavDetailsContainer::DavDetailsContainer( ) :
-    HostDetailsContainer( 80, "http" )
+DavDetailsContainer::DavDetailsContainer( VclBuilderContainer* pBuilder ) :
+    HostDetailsContainer( pBuilder, 80, "http" )
 {
-}
+    pBuilder->get( m_pCBDavs, "webdavs" );
+    m_pCBDavs->SetToggleHdl( LINK( this, DavDetailsContainer, ToggledDavsHdl ) );
 
-void DavDetailsContainer::addControl( sal_uInt16 nId, Control* pControl )
-{
-    DetailsContainer::addControl( nId, pControl );
-
-    // Add listener on CB_ADDPLACE_DAVS
-    if ( nId == CB_ADDPLACE_DAVS )
-        static_cast< CheckBox* >( pControl )->SetToggleHdl( LINK( this, DavDetailsContainer, ToggledDavsHdl ) );
+    show( false );
 }
 
 void DavDetailsContainer::show( bool bShow )
 {
     HostDetailsContainer::show( bShow );
+
+    m_pCBDavs->Show( bShow );
+
     if ( bShow )
-        static_cast< CheckBox* >( getControl( CB_ADDPLACE_DAVS ) )->Check( false );
+        m_pCBDavs->Check( false );
 }
 
 bool DavDetailsContainer::verifyScheme( const rtl::OUString& rScheme )
@@ -211,12 +179,12 @@ bool DavDetailsContainer::verifyScheme( const rtl::OUString& rScheme )
     if ( rScheme.equals( "http://" ) )
     {
         bValid = true;
-        static_cast< CheckBox* >( getControl( CB_ADDPLACE_DAVS ) )->Check( false );
+        m_pCBDavs->Check( false );
     }
     else if ( rScheme.equals( "https://" ) )
     {
         bValid = true;
-        static_cast< CheckBox* >( getControl( CB_ADDPLACE_DAVS ) )->Check( true );
+        m_pCBDavs->Check( true );
     }
     return bValid;
 }
@@ -225,11 +193,10 @@ IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, CheckBox*, pCheckBox )
 {
     // Change default port if needed
     sal_Bool bCheckedDavs = pCheckBox->IsChecked();
-    NumericField* pPortField = static_cast< NumericField* >( getControl( ED_ADDPLACE_PORT ) );
-    if ( pPortField->GetValue() == 80 && bCheckedDavs == sal_True)
-        pPortField->SetValue( 443 );
-    else if ( pPortField->GetValue() == 443 && bCheckedDavs == sal_False )
-        pPortField->SetValue( 80 );
+    if ( m_pEDPort->GetValue() == 80 && bCheckedDavs == sal_True)
+        m_pEDPort->SetValue( 443 );
+    else if ( m_pEDPort->GetValue() == 443 && bCheckedDavs == sal_False )
+        m_pEDPort->SetValue( 80 );
 
     rtl::OUString sScheme( "http" );
     if ( bCheckedDavs )
@@ -241,11 +208,26 @@ IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, CheckBox*, pCheckBox )
     return 0;
 }
 
+SmbDetailsContainer::SmbDetailsContainer( VclBuilderContainer* pBuilder ) :
+    DetailsContainer( pBuilder, "SmbDetails" )
+{
+    pBuilder->get( m_pEDHost, "smbHost" );
+    m_pEDHost->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+
+    pBuilder->get( m_pEDShare, "smbShare" );
+    m_pEDShare->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+
+    pBuilder->get( m_pEDPath, "smbPath" );
+    m_pEDPath->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+
+    show( false );
+}
+
 INetURLObject SmbDetailsContainer::getUrl( )
 {
-    rtl::OUString sHost = rtl::OUString( static_cast< Edit* >( getControl( ED_ADDPLACE_SMBHOST ) )->GetText() ).trim( );
-    rtl::OUString sShare = rtl::OUString( static_cast< Edit* >( getControl( ED_ADDPLACE_SHARE ) )->GetText() ).trim( );
-    rtl::OUString sPath = rtl::OUString( static_cast< Edit* >( getControl( ED_ADDPLACE_SMBPATH ) )->GetText() ).trim( );
+    rtl::OUString sHost = rtl::OUString( m_pEDHost->GetText() ).trim( );
+    rtl::OUString sShare = rtl::OUString( m_pEDShare->GetText() ).trim( );
+    rtl::OUString sPath = rtl::OUString(  m_pEDPath->GetText() ).trim( );
 
     rtl::OUString sUrl;
     if ( !sHost.isEmpty( ) )
@@ -279,16 +261,16 @@ bool SmbDetailsContainer::setUrl( const INetURLObject& rUrl )
             sPath = sFullPath.copy( nPos );
         }
 
-        static_cast< Edit* >( getControl( ED_ADDPLACE_SMBHOST ) )->SetText( rUrl.GetHost( ) );
-        static_cast< Edit* >( getControl( ED_ADDPLACE_SHARE ) )->SetText( sShare );
-        static_cast< Edit* >( getControl( ED_ADDPLACE_SMBPATH ) )->SetText( sPath );
+        m_pEDHost->SetText( rUrl.GetHost( ) );
+        m_pEDShare->SetText( sShare );
+        m_pEDPath->SetText( sPath );
     }
 
     return bSuccess;
 }
 
-CmisDetailsContainer::CmisDetailsContainer( ) :
-    DetailsContainer( ),
+CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
+    DetailsContainer( pBuilder, "CmisDetails" ),
     m_sUsername( ),
     m_xCmdEnv( )
 {
@@ -296,11 +278,22 @@ CmisDetailsContainer::CmisDetailsContainer( ) :
     Reference< XInteractionHandler > xGlobalInteractionHandler(
         InteractionHandler::createWithParent(xContext, 0), UNO_QUERY );
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
+
+    pBuilder->get( m_pEDBinding, "binding" );
+    m_pEDBinding->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+
+    pBuilder->get( m_pLBRepository, "repositories" );
+    m_pLBRepository->SetSelectHdl( LINK( this, CmisDetailsContainer, SelectRepoHdl ) );
+
+    pBuilder->get( m_pBTRepoRefresh, "repositoriesRefresh" );
+    m_pBTRepoRefresh->SetClickHdl( LINK( this, CmisDetailsContainer, RefreshReposHdl ) );
+
+    show( false );
 }
 
 INetURLObject CmisDetailsContainer::getUrl( )
 {
-    rtl::OUString sBindingUrl = rtl::OUString( static_cast< Edit* >( getControl( ED_ADDPLACE_CMIS_BINDING ) )->GetText() ).trim( );
+    rtl::OUString sBindingUrl = rtl::OUString( m_pEDBinding->GetText() ).trim( );
 
     rtl::OUString sUrl;
     if ( !sBindingUrl.isEmpty( ) && !m_sRepoId.isEmpty() )
@@ -330,7 +323,7 @@ bool CmisDetailsContainer::setUrl( const INetURLObject& rUrl )
         sBindingUrl = aHostUrl.GetURLNoMark( );
         sRepositoryId = aHostUrl.GetMark( );
 
-        static_cast< Edit* >( getControl( ED_ADDPLACE_CMIS_BINDING ) )->SetText( sBindingUrl );
+        m_pEDBinding->SetText( sBindingUrl );
     }
 
     return bSuccess;
@@ -341,22 +334,10 @@ void CmisDetailsContainer::setUsername( const rtl::OUString& rUsername )
     m_sUsername = rtl::OUString( rUsername );
 }
 
-void CmisDetailsContainer::addControl( sal_uInt16 nId, Control* pControl )
-{
-    DetailsContainer::addControl( nId, pControl );
-
-    // Add listener on BT_ADDPLACE_CMIS_REPOREFRESH
-    if ( nId == BT_ADDPLACE_CMIS_REPOREFRESH )
-        static_cast< ImageButton* >( pControl )->SetClickHdl( LINK( this, CmisDetailsContainer, RefreshReposHdl ) );
-    if ( nId == LB_ADDPLACE_CMIS_REPOSITORY )
-        static_cast< ListBox* >( pControl )->SetSelectHdl( LINK( this, CmisDetailsContainer, SelectRepoHdl ) );
-}
-
 void CmisDetailsContainer::selectRepository( )
 {
     // Get the repo ID and call the Change listener
-    ListBox* pReposList = static_cast< ListBox* >( getControl( LB_ADDPLACE_CMIS_REPOSITORY ) );
-    sal_uInt16 nPos = pReposList->GetSelectEntryPos( );
+    sal_uInt16 nPos = m_pLBRepository->GetSelectEntryPos( );
     m_sRepoId = m_aRepoIds[nPos];
 
     notifyChange( );
@@ -364,11 +345,10 @@ void CmisDetailsContainer::selectRepository( )
 
 IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
 {
-    rtl::OUString sBindingUrl = rtl::OUString( static_cast< Edit* >( getControl( ED_ADDPLACE_CMIS_BINDING ) )->GetText() ).trim( );
+    rtl::OUString sBindingUrl = rtl::OUString( m_pEDBinding->GetText() ).trim( );
 
     // Clean the listbox
-    ListBox* pReposList = static_cast< ListBox* >( getControl( LB_ADDPLACE_CMIS_REPOSITORY ) );
-    pReposList->Clear( );
+    m_pLBRepository->Clear( );
     m_aRepoIds.clear( );
 
     // Compute the URL
@@ -402,7 +382,7 @@ IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
 
             Reference< XRow > xRow( xResultSet, UNO_QUERY );
             rtl::OUString sName = xRow->getString( 1 );
-            pReposList->InsertEntry( sName );
+            m_pLBRepository->InsertEntry( sName );
         }
     }
     catch ( const Exception& )
@@ -410,9 +390,9 @@ IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
     }
 
     // Auto-select the first one
-    if ( pReposList->GetEntryCount( ) > 0 )
+    if ( m_pLBRepository->GetEntryCount( ) > 0 )
     {
-        pReposList->SelectEntryPos( 0 );
+        m_pLBRepository->SelectEntryPos( 0 );
         selectRepository( );
     }
 

@@ -46,39 +46,15 @@ class SVT_DLLPUBLIC PlaceEditDialog : public ModalDialog
 {
 private :
 
-    FixedText m_aFTServerName;
-    FixedText m_aFTServerType;
-
-    Edit m_aEDServerName;
-    ListBox m_aLBServerType;
+    Edit*      m_pEDServerName;
+    ListBox*   m_pLBServerType;
     boost::shared_ptr< DetailsContainer > m_pCurrentDetails;
 
-    FixedText    m_aFTHost;
-    Edit         m_aEDHost;
-    FixedText    m_aFTPort;
-    NumericField m_aEDPort;
-    FixedText    m_aFTPath;
-    Edit         m_aEDPath;
-    CheckBox     m_aCBDavs;
+    Edit*         m_pEDUsername;
+    OKButton*     m_pBTOk;
+    CancelButton* m_pBTCancel;
 
-    Edit         m_aEDSmbHost;
-    FixedText    m_aFTShare;
-    Edit         m_aEDShare;
-    FixedText    m_aFTSmbPath;
-    Edit         m_aEDSmbPath;
-
-    FixedText    m_aFTCmisBinding;
-    Edit         m_aEDCmisBinding;
-    FixedText    m_aFTCmisRepository;
-    ListBox      m_aLBCmisRepository;
-    ImageButton  m_aBTCmisRepoRefresh;
-
-    FixedText    m_aFTUsername;
-    Edit         m_aEDUsername;
-    OKButton m_aBTOk;
-    CancelButton m_aBTCancel;
-
-    PushButton m_aBTDelete;
+    PushButton*   m_pBTDelete;
 
     /** Vector holding the details UI control for each server type.
 
@@ -97,7 +73,7 @@ public :
      // Returns a place instance with given informations
      boost::shared_ptr<Place> GetPlace();
 
-     rtl::OUString GetServerName() 	{ return m_aEDServerName.GetText(); }
+    rtl::OUString GetServerName() { return m_pEDServerName->GetText(); }
      rtl::OUString GetServerUrl();
 
 private:
