@@ -18,6 +18,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclmain.hxx>
 
 class UIPreviewApp : public Application
 {
@@ -88,6 +89,9 @@ int UIPreviewApp::Main()
     return EXIT_SUCCESS;
 }
 
-UIPreviewApp aApp;
+void vclmain::createApplication()
+{
+    static UIPreviewApp aApp;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -47,6 +47,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/fsys.hxx>
 
+#include <vcl/vclmain.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/font.hxx>
@@ -261,6 +262,9 @@ int GalApp::Main()
     return EXIT_SUCCESS;
 }
 
-GalApp aGalApp;
+void vclmain::createApplication()
+{
+    static GalApp aGalApp;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

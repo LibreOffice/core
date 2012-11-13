@@ -32,16 +32,13 @@ using namespace com::sun::star::container;
 
 using ::rtl::OUString;
 
-const Type CPPUTYPE_SEQINT8  = getCppuType((Sequence<sal_Int8>*)0);
-const Type CPPUTYPE_OUSTRING = getCppuType((OUString*)0);
-
 namespace // private
 {
     bool isValidFlavor( const DataFlavor& aFlavor )
     {
       size_t len = aFlavor.MimeType.getLength();
       Type dtype = aFlavor.DataType;
-      return ((len > 0) && ((dtype == CPPUTYPE_SEQINT8) || (dtype == CPPUTYPE_OUSTRING)));
+      return ((len > 0) && ((dtype == getCppuType((Sequence<sal_Int8>*)0)) || (dtype == getCppuType((OUString*)0))));
     }
 
 } // namespace private
@@ -82,7 +79,7 @@ Any SAL_CALL iOSTransferable::getTransferData( const DataFlavor& aFlavor )
 
 bool iOSTransferable::isUnicodeText(const DataFlavor& flavor)
 {
-  return (flavor.DataType == CPPUTYPE_OUSTRING);
+  return (flavor.DataType == getCppuType((OUString*)0));
 }
 
 

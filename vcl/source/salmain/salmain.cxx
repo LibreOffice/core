@@ -23,11 +23,13 @@
 
 #include "sal/main.h"
 #include "tools/extendapplicationenvironment.hxx"
+#include "vcl/vclmain.hxx"
 
 #include "salinst.hxx"
 
 SAL_IMPLEMENT_MAIN() {
     tools::extendApplicationEnvironment();
+    vclmain::createApplication();
     return SVMain();
 }
 

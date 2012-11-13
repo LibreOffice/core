@@ -21,6 +21,7 @@
 #include <unistd.h>
 
 #include "vcl/svapp.hxx"
+#include "vcl/vclmain.hxx"
 #include "vcl/wrkwin.hxx"
 #include "vcl/unowrap.hxx"
 
@@ -53,7 +54,10 @@ public:
     static rtl::OUString ReadStringHook( const rtl::OUString& );
 };
 
-MyApp aMyApp;
+void vclmain::createApplication()
+{
+    static MyApp aMyApp;
+}
 
 rtl::OUString MyApp::ReadStringHook( const rtl::OUString& rStr )
 {

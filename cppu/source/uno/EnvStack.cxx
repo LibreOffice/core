@@ -67,8 +67,6 @@ namespace
     struct s_threadMap : public rtl::Static< ThreadMap, s_threadMap > {};
 }
 
-static rtl::OUString s_uno_envDcp(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO));
-
 static void s_setCurrent(uno_Environment * pEnv)
 {
     oslThreadIdentifier threadId = osl_getThreadIdentifier(NULL);
@@ -128,8 +126,10 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_getCurrentEnvironment(uno_Environmen
             (*ppEnv)->acquire(*ppEnv);
         }
         else
-            uno_getEnvironment(ppEnv, s_uno_envDcp.pData, NULL);
-
+        {
+            rtl::OUString uno_envDcp(UNO_LB_UNO);
+            uno_getEnvironment(ppEnv, uno_envDcp.pData, NULL);
+        }
     }
 }
 
@@ -196,7 +196,7 @@ static int s_getNextEnv(uno_Environment ** ppEnv, uno_Environment * pCurrEnv, un
 
     if (!nextPurpose.isEmpty())
     {
-        rtl::OUString next_envDcp(s_uno_envDcp);
+        rtl::OUString next_envDcp(UNO_LB_UNO);
         next_envDcp += nextPurpose;
 
         uno_getEnvironment(ppEnv, next_envDcp.pData, NULL);
@@ -355,7 +355,7 @@ CPPU_DLLPUBLIC int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_
     int result = 1;
 
     rtl::OUString typeName(cppu::EnvDcp::getTypeName(pEnv->pTypeName));
-    if (typeName.equals(s_uno_envDcp))
+    if (typeName == UNO_LB_UNO)
     {
         cppu::Enterable * pEnterable = reinterpret_cast<cppu::Enterable *>(pEnv->pReserved);
         if (pEnterable)
@@ -363,7 +363,7 @@ CPPU_DLLPUBLIC int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_
     }
     else
     {
-        rtl::OUString envDcp(s_uno_envDcp);
+        rtl::OUString envDcp(UNO_LB_UNO);
         envDcp += cppu::EnvDcp::getPurpose(pEnv->pTypeName);
 
         uno::Environment env(envDcp);

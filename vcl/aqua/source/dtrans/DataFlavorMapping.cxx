@@ -48,16 +48,13 @@ using ::rtl::OString;
 
 namespace // private
 {
-  const Type CPPUTYPE_SEQINT8  = getCppuType((Sequence<sal_Int8>*)0);
-  const Type CPPUTYPE_OUSTRING = getCppuType( (OUString*)0 );
-
   /* Determine whether or not a DataFlavor is valid.
    */
   bool isValidFlavor(const DataFlavor& aFlavor)
   {
     size_t len = aFlavor.MimeType.getLength();
     Type dtype = aFlavor.DataType;
-    return ((len > 0) && ((dtype == CPPUTYPE_SEQINT8) || (dtype == CPPUTYPE_OUSTRING)));
+    return ((len > 0) && ((dtype == getCppuType((Sequence<sal_Int8>*)0)) || (dtype == getCppuType( (OUString*)0 ))));
   }
 
   NSString* PBTYPE_SODX = @"application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
@@ -92,7 +89,7 @@ namespace // private
     NSString* SystemFlavor;
     const char* OOoFlavor;
     const char* HumanPresentableName;
-    Type DataType;
+    bool DataTypeOUString; // sequence<byte> otherwise
   };
 
 // NSPICTPboardType is deprecated in 10.6 and later
@@ -113,23 +110,23 @@ namespace // private
    */
   FlavorMap flavorMap[] =
     {
-      { NSStringPboardType, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", CPPUTYPE_OUSTRING },
-      { NSRTFPboardType, "text/richtext", "Rich Text Format", CPPUTYPE_SEQINT8 },
-      { NSTIFFPboardType, "image/bmp", "Windows Bitmap", CPPUTYPE_SEQINT8 },
-      { NSPICTPboardType, "image/bmp", "Windows Bitmap", CPPUTYPE_SEQINT8 },
-      { NSHTMLPboardType, "text/html", "Plain Html", CPPUTYPE_SEQINT8 },
-      { NSFilenamesPboardType, "application/x-openoffice-filelist;windows_formatname=\"FileList\"", "FileList", CPPUTYPE_SEQINT8 },
-      { PBTYPE_SESX, FLAVOR_SESX, "Star Embed Source (XML)", CPPUTYPE_SEQINT8 },
-      { PBTYPE_SLSDX, FLAVOR_SLSDX, "Star Link Source Descriptor (XML)", CPPUTYPE_SEQINT8 },
-      { PBTYPE_ESX, FLAVOR_ESX, "Star Embed Source (XML)", CPPUTYPE_SEQINT8 },
-      { PBTYPE_LSX, FLAVOR_LSX, "Star Link Source (XML)", CPPUTYPE_SEQINT8 },
-      { PBTYPE_EOX, FLAVOR_EOX, "Star Embedded Object (XML)", CPPUTYPE_SEQINT8 },
-      { PBTYPE_SVXB, FLAVOR_SVXB, "SVXB (StarView Bitmap/Animation", CPPUTYPE_SEQINT8 },
-      { PBTYPE_GDIMF, FLAVOR_GDIMF, "GDIMetaFile", CPPUTYPE_SEQINT8 },
-      { PBTYPE_WMF, FLAVOR_WMF, "Windows MetaFile", CPPUTYPE_SEQINT8 },
-      { PBTYPE_EMF, FLAVOR_EMF, "Windows Enhanced MetaFile", CPPUTYPE_SEQINT8 },
-      { PBTYPE_SODX, FLAVOR_SODX, "Star Object Descriptor (XML)", CPPUTYPE_SEQINT8 },
-      { PBTYPE_DUMMY_INTERNAL, FLAVOR_DUMMY_INTERNAL, "internal data",CPPUTYPE_SEQINT8 }
+      { NSStringPboardType, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", true },
+      { NSRTFPboardType, "text/richtext", "Rich Text Format", false },
+      { NSTIFFPboardType, "image/bmp", "Windows Bitmap", false },
+      { NSPICTPboardType, "image/bmp", "Windows Bitmap", false },
+      { NSHTMLPboardType, "text/html", "Plain Html", false },
+      { NSFilenamesPboardType, "application/x-openoffice-filelist;windows_formatname=\"FileList\"", "FileList", false },
+      { PBTYPE_SESX, FLAVOR_SESX, "Star Embed Source (XML)", false },
+      { PBTYPE_SLSDX, FLAVOR_SLSDX, "Star Link Source Descriptor (XML)", false },
+      { PBTYPE_ESX, FLAVOR_ESX, "Star Embed Source (XML)", false },
+      { PBTYPE_LSX, FLAVOR_LSX, "Star Link Source (XML)", false },
+      { PBTYPE_EOX, FLAVOR_EOX, "Star Embedded Object (XML)", false },
+      { PBTYPE_SVXB, FLAVOR_SVXB, "SVXB (StarView Bitmap/Animation", false },
+      { PBTYPE_GDIMF, FLAVOR_GDIMF, "GDIMetaFile", false },
+      { PBTYPE_WMF, FLAVOR_WMF, "Windows MetaFile", false },
+      { PBTYPE_EMF, FLAVOR_EMF, "Windows Enhanced MetaFile", false },
+      { PBTYPE_SODX, FLAVOR_SODX, "Star Object Descriptor (XML)", false },
+      { PBTYPE_DUMMY_INTERNAL, FLAVOR_DUMMY_INTERNAL, "internal data",false }
     };
 
 
@@ -138,12 +135,12 @@ namespace // private
 
   inline bool isByteSequenceType(const Type& theType)
   {
-    return (theType == CPPUTYPE_SEQINT8);
+    return (theType == getCppuType((Sequence<sal_Int8>*)0));
   }
 
   inline bool isOUStringType(const Type& theType)
   {
-    return (theType == CPPUTYPE_OUSTRING);
+    return (theType == getCppuType( (OUString*)0 ));
   }
 
 } // namespace private
@@ -519,7 +516,7 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor(NSString* systemDataFlavor
         {
           oOOFlavor.MimeType = OUString::createFromAscii(flavorMap[i].OOoFlavor);
           oOOFlavor.HumanPresentableName = OUString(RTL_CONSTASCII_USTRINGPARAM(flavorMap[i].HumanPresentableName));
-          oOOFlavor.DataType = flavorMap[i].DataType;
+          oOOFlavor.DataType = flavorMap[i].DataTypeOUString ? getCppuType( (OUString*)0 ) : getCppuType((Sequence<sal_Int8>*)0);
           return oOOFlavor;
         }
     } // for
