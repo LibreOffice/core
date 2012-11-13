@@ -1953,10 +1953,6 @@ void Menu::SetItemCommand( sal_uInt16 nItemId, const String& rCommand )
 
     if ( pData )
         pData->aCommandStr = rCommand;
-
-    // update native menu
-    if( ImplGetSalMenu() && pData->pSalMenuItem )
-        ImplGetSalMenu()->SetItemCommand( nPos, pData->pSalMenuItem, rCommand );
 }
 
 const XubString& Menu::GetItemCommand( sal_uInt16 nItemId ) const
@@ -3230,15 +3226,6 @@ void Menu::HighlightItem( sal_uInt16 nItemPos )
         {
             static_cast< MenuFloatingWindow* >( pWindow )->ChangeHighlightItem( nItemPos, sal_False );
         }
-    }
-}
-
-void Menu::Freeze(void)
-{
-    SalMenu *pSalMenu = ImplGetSalMenu();
-
-    if ( pSalMenu ) {
-        pSalMenu->Freeze();
     }
 }
 

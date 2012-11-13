@@ -111,7 +111,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& _xURLTransformer,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
             const rtl::OUString& aModuleIdentifier,
-            AbstractMenu* pMenu,
+            Menu* pMenu,
             sal_Bool bDelete,
             sal_Bool bDeleteChildren );
 
@@ -146,22 +146,22 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         // XSystemDependentMenuPeer
         virtual ::com::sun::star::uno::Any SAL_CALL getMenuHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw (::com::sun::star::uno::RuntimeException);
 
-        DECL_LINK( Select, AbstractMenu * );
+        DECL_LINK( Select, Menu * );
 
-        AbstractMenu*   GetMenuBar() const { return m_pVCLMenu; }
+        Menu*   GetMenuBar() const { return m_pVCLMenu; }
 
         // Configuration methods
-        static void FillMenuWithConfiguration( sal_uInt16& nId, AbstractMenu* pMenu,
+        static void FillMenuWithConfiguration( sal_uInt16& nId, Menu* pMenu,
                                                const ::rtl::OUString& rModuleIdentifier,
                                                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer,
                                                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& rTransformer );
         static void FillMenu( sal_uInt16& nId,
-                              AbstractMenu* pMenu,
+                              Menu* pMenu,
                               const ::rtl::OUString& rModuleIdentifier,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider );
 
-        void FillMenuManager( AbstractMenu* pMenu,
+        void FillMenuManager( Menu* pMenu,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
                               const rtl::OUString& rModuleIdentifier,
@@ -172,8 +172,8 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
 
     protected:
         DECL_LINK(Highlight, void *);
-        DECL_LINK( Activate, AbstractMenu * );
-        DECL_LINK( Deactivate, AbstractMenu * );
+        DECL_LINK( Activate, Menu * );
+        DECL_LINK( Deactivate, Menu * );
         DECL_LINK( AsyncSettingsHdl, Timer * );
 
         void RemoveListener();
@@ -216,16 +216,16 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         void             CreatePicklistArguments(
                             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsList,
                             const MenuItemHandler* );
-        void             CheckAndAddMenuExtension( AbstractMenu* pMenu );
+        void             CheckAndAddMenuExtension( Menu* pMenu );
         static void      impl_RetrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                                   const ::com::sun::star::uno::Sequence< rtl::OUString >& rCommands,
                                                                   std::vector< MenuItemHandler* >& aMenuShortCuts );
-        static void      MergeAddonMenus( AbstractMenu* pMenuBar, const MergeMenuInstructionContainer&, const ::rtl::OUString& aModuleIdentifier );
+        static void      MergeAddonMenus( Menu* pMenuBar, const MergeMenuInstructionContainer&, const ::rtl::OUString& aModuleIdentifier );
 
         MenuItemHandler* GetMenuItemHandler( sal_uInt16 nItemId );
         sal_Bool         CreatePopupMenuController( MenuItemHandler* pMenuItemHandler );
         void             AddMenu(MenuBarManager* pSubMenuManager,const ::rtl::OUString& _sItemCommand,sal_uInt16 _nItemId);
-        sal_uInt16           FillItemCommand(::rtl::OUString& _rItemCommand, AbstractMenu* _pMenu,sal_uInt16 _nIndex) const;
+        sal_uInt16           FillItemCommand(::rtl::OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const;
         void             Init(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,AddonMenu* pAddonMenu,sal_Bool bDelete,sal_Bool bDeleteChildren,bool _bHandlePopUp = false);
         void             SetHdl();
 
@@ -241,7 +241,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         sal_Bool                                                                               m_bModuleIdentified;
         ::rtl::OUString                                                                        m_aMenuItemCommand;
         ::rtl::OUString                                                                        m_aModuleIdentifier;
-        AbstractMenu*                                                                          m_pVCLMenu;
+        Menu*                                                                                  m_pVCLMenu;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                    m_xFrame;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >           m_xUICommandLabels;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerRegistration > m_xPopupMenuControllerRegistration;

@@ -51,7 +51,7 @@ enum RPResultInfo
 
 struct ReferencePathInfo
 {
-    AbstractMenu*      pPopupMenu;
+    Menu*              pPopupMenu;
     sal_uInt16         nPos;
     sal_Int32          nLevel;
     RPResultInfo       eResult;
@@ -64,14 +64,14 @@ class MenuBarMerger
 
         static void       RetrieveReferencePath( const ::rtl::OUString&,
                                                  std::vector< ::rtl::OUString >& aReferencePath );
-        static ReferencePathInfo FindReferencePath( const std::vector< ::rtl::OUString >& aReferencePath, AbstractMenu* pMenu );
+        static ReferencePathInfo FindReferencePath( const std::vector< ::rtl::OUString >& aReferencePath, Menu* pMenu );
         static sal_uInt16 FindMenuItem( const ::rtl::OUString& rCmd,
-                                        AbstractMenu* pMenu );
+                                        Menu* pMenu );
         static void       GetMenuEntry( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rAddonMenuEntry,
                                         AddonMenuItem& aAddonMenu );
         static void       GetSubMenu( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& rSubMenuEntries,
                                       AddonMenuContainer& rSubMenu );
-        static bool       ProcessMergeOperation( AbstractMenu*             pMenu,
+        static bool       ProcessMergeOperation( Menu*                     pMenu,
                                                  sal_uInt16                nPos,
                                                  sal_uInt16&               rItemId,
                                                  const ::rtl::OUString&    rMergeCommand,
@@ -86,21 +86,21 @@ class MenuBarMerger
                                                     const ::rtl::OUString&                  rModuleIdentifier,
                                                     const AddonMenuContainer&               rAddonMenuItems );
         static bool       ProcessFallbackOperation();
-        static bool       MergeMenuItems( AbstractMenu*             pMenu,
+        static bool       MergeMenuItems( Menu*                     pMenu,
                                           sal_uInt16                nPos,
                                           sal_uInt16                nModIndex,
                                           sal_uInt16&               rItemId,
                                           const ::rtl::OUString&    rModuleIdentifier,
                                           const AddonMenuContainer& rAddonMenuItems );
-        static bool       ReplaceMenuItem( AbstractMenu*             pMenu,
+        static bool       ReplaceMenuItem( Menu*                     pMenu,
                                            sal_uInt16                nPos,
                                            sal_uInt16&               rItemId,
                                            const ::rtl::OUString&    rModuleIdentifier,
                                            const AddonMenuContainer& rAddonMenuItems );
-        static bool       RemoveMenuItems( AbstractMenu*             pMenu,
+        static bool       RemoveMenuItems( Menu*                     pMenu,
                                            sal_uInt16                nPos,
                                            const ::rtl::OUString&    rMergeCommandParameter );
-        static bool       CreateSubMenu( AbstractMenu*             pSubMenu,
+        static bool       CreateSubMenu( Menu*                     pSubMenu,
                                          sal_uInt16&               nItemId,
                                          const ::rtl::OUString&    rModuleIdentifier,
                                          const AddonMenuContainer& rAddonSubMenu );

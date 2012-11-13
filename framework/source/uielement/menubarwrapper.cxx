@@ -202,8 +202,6 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                                                                       sal_True );
 
                 m_xMenuBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pMenuBarManager ), UNO_QUERY );
-
-                pVCLMenuBar->Freeze();
             }
 
             // Initialize toolkit menu bar implementation to have awt::XMenuBar for data exchange.

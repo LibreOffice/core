@@ -83,9 +83,7 @@ public:
     virtual void RemoveMenuBarButton( sal_uInt16 nId );
 
     // FIXME: Make the other VCL native backends to work with these new methods.
-    virtual void SetItemCommand( unsigned, SalMenuItem*, const rtl::OUString& ) {}
     virtual void ShowItem( unsigned nPos, sal_Bool bShow ) { EnableItem( nPos, bShow ); }
-    virtual void Freeze() {}
 
     // return an empty rectangle if not implemented
     // return Rectangle( Point( -1, -1 ), Size( 1, 1 ) ) if menu bar buttons implemented

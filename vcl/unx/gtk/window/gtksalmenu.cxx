@@ -786,15 +786,7 @@ void GtkSalMenu::SetAccelerator( unsigned, SalMenuItem*, const KeyCode&, const r
 {
 }
 
-void GtkSalMenu::SetItemCommand( unsigned, SalMenuItem*, const rtl::OUString& )
-{
-}
-
 void GtkSalMenu::GetSystemMenuData( SystemMenuData* )
-{
-}
-
-void GtkSalMenu::Freeze()
 {
 }
 

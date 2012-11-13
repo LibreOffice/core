@@ -102,96 +102,6 @@ struct ImplMenuDelData
     bool isDeleted() const { return mpMenu == 0; }
 };
 
-// ----------------
-// - AbstractMenu -
-// ----------------
-
-class VCL_DLLPUBLIC AbstractMenu : public Resource
-{
-public:
-    virtual ~AbstractMenu() {}
-
-    virtual SAL_DLLPRIVATE Window*  ImplGetWindow() const = 0;
-
-    virtual void                    InsertItem( sal_uInt16 nItemId, const XubString& rStr,
-                                                MenuItemBits nItemBits = 0,
-                                                sal_uInt16 nPos = MENU_APPEND ) = 0;
-    virtual void                    InsertItem( sal_uInt16 nItemId,
-                                                const XubString& rString, const Image& rImage,
-                                                MenuItemBits nItemBits = 0,
-                                                sal_uInt16 nPos = MENU_APPEND ) = 0;
-    virtual void                    InsertSeparator( sal_uInt16 nPos = MENU_APPEND ) = 0;
-    virtual void                    RemoveItem( sal_uInt16 nPos ) = 0;
-    virtual void                    CopyItem( const Menu& rMenu, sal_uInt16 nPos,
-                                              sal_uInt16 nNewPos = MENU_APPEND ) = 0;
-    virtual void                    Clear() = 0;
-
-    virtual void                    SetMenuFlags( sal_uInt16 nFlags ) = 0;
-    virtual sal_uInt16              GetMenuFlags() const = 0;
-
-    virtual sal_uInt16              GetItemCount() const = 0;
-    virtual sal_uInt16              GetItemId( sal_uInt16 nPos ) const = 0;
-    virtual sal_uInt16              GetItemPos( sal_uInt16 nItemId ) const = 0;
-    virtual MenuItemType            GetItemType( sal_uInt16 nPos ) const = 0;
-    virtual sal_uInt16              GetCurItemId() const = 0;
-
-    virtual void                    SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits ) = 0;
-    virtual MenuItemBits            GetItemBits( sal_uInt16 nItemId ) const = 0;
-
-    virtual void                    SetUserValue( sal_uInt16 nItemId, sal_uLong nValue ) = 0;
-    virtual sal_uLong               GetUserValue( sal_uInt16 nItemId ) const = 0;
-
-    virtual void                    SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu ) = 0;
-    virtual PopupMenu*              GetPopupMenu( sal_uInt16 nItemId ) const = 0;
-
-    virtual void                    SetAccelKey( sal_uInt16 nItemId, const KeyCode& rKeyCode ) = 0;
-
-    virtual void                    CheckItem( sal_uInt16 nItemId, sal_Bool bCheck = sal_True ) = 0;
-    virtual sal_Bool                IsItemChecked( sal_uInt16 nItemId ) const = 0;
-
-    virtual void                    EnableItem( sal_uInt16 nItemId, sal_Bool bEnable = sal_True ) = 0;
-    virtual sal_Bool                IsItemEnabled( sal_uInt16 nItemId ) const = 0;
-
-    virtual void                    ShowItem( sal_uInt16 nItemId, sal_Bool bVisible = sal_True ) = 0;
-    virtual void                    HideItem( sal_uInt16 nItemId ) = 0;
-
-    virtual sal_Bool                IsMenuBar() const = 0;
-
-    virtual void                    RemoveDisabledEntries( sal_Bool bCheckPopups = sal_True,
-                                                           sal_Bool bRemoveEmptyPopups = sal_False ) = 0;
-
-    virtual void                    SetItemText( sal_uInt16 nItemId, const XubString& rStr ) = 0;
-    virtual XubString               GetItemText( sal_uInt16 nItemId ) const = 0;
-
-    virtual void                    SetItemImage( sal_uInt16 nItemId, const Image& rImage ) = 0;
-    virtual Image                   GetItemImage( sal_uInt16 nItemId ) const = 0;
-
-    virtual void                    SetItemCommand( sal_uInt16 nItemId, const XubString& rCommand ) = 0;
-    virtual const XubString&        GetItemCommand( sal_uInt16 nItemId ) const = 0;
-
-    virtual void                    SetTipHelpText( sal_uInt16 nItemId, const XubString& rString ) = 0;
-
-    virtual void                    SetHelpCommand( sal_uInt16 nItemId, const XubString& rString ) = 0;
-    virtual const XubString&        GetHelpCommand( sal_uInt16 nItemId ) const = 0;
-
-    virtual void                    SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId ) = 0;
-    virtual rtl::OString            GetHelpId( sal_uInt16 nItemId ) const = 0;
-
-    virtual void                    SetActivateHdl( const Link& rLink ) = 0;
-
-    virtual void                    SetDeactivateHdl( const Link& rLink ) = 0;
-
-    virtual void                    SetHighlightHdl( const Link& rLink ) = 0;
-
-    virtual void                    SetSelectHdl( const Link& rLink ) = 0;
-
-    // Returns the system's menu handle if native menus are supported
-    // pData must point to a SystemMenuData structure
-    virtual sal_Bool                GetSystemMenuData( SystemMenuData* pData ) const = 0;
-
-    virtual void                    Freeze(void) = 0;
-};
-
 // --------
 // - Menu -
 // --------
@@ -203,7 +113,7 @@ struct MenuLogo
     Color       aEndColor;
 };
 
-class VCL_DLLPUBLIC Menu : public AbstractMenu
+class VCL_DLLPUBLIC Menu : public Resource
 {
     friend class MenuBar;
     friend class MenuBarWindow;
@@ -446,8 +356,6 @@ public:
 
     void                HighlightItem( sal_uInt16 nItemPos );
     void                DeHighlight() { HighlightItem( 0xFFFF ); } // MENUITEMPOS_INVALID
-
-    void                Freeze();
 };
 
 // -----------
