@@ -1271,7 +1271,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 pRet = new SfxItemSet( SFX_APP()->GetPool(),
                                 SID_BASIC_ENABLED, SID_BASIC_ENABLED,
                 //SID_OPTIONS_START - ..END
-                                SID_INET_PROXY_PORT,
+                                SID_INET_PROXY_TYPE, SID_INET_PROXY_PORT,
                                 SID_SAVEREL_INET, SID_SAVEREL_FSYS,
                                 SID_INET_SMTPSERVER, SID_INET_SMTPSERVER,
                                 SID_INET_NOPROXY, SID_INET_SOCKS_PROXY_PORT,
