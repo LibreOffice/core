@@ -995,7 +995,24 @@ Size SpinField::CalcMinimumSizeForText(const rtl::OUString &rString) const
     if ( GetStyle() & WB_DROPDOWN )
         aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
     if ( GetStyle() & WB_SPIN )
-        aSz.Width() += maUpperRect.GetWidth();
+    {
+        ImplControlValue aControlValue;
+        Rectangle aArea( Point(), Size(100, aSz.Height()));
+        Rectangle aEntireBound, aEntireContent, aEditBound, aEditContent;
+        if (
+               GetNativeControlRegion(CTRL_SPINBOX, PART_ENTIRE_CONTROL,
+                   aArea, 0, aControlValue, rtl::OUString(), aEntireBound, aEntireContent) &&
+               GetNativeControlRegion(CTRL_SPINBOX, PART_SUB_EDIT,
+                   aArea, 0, aControlValue, rtl::OUString(), aEditBound, aEditContent)
+           )
+        {
+            aSz.Width() += (aEntireContent.GetWidth() - aEditContent.GetWidth());
+        }
+        else
+        {
+            aSz.Width() += maUpperRect.GetWidth();
+        }
+    }
 
     return aSz;
 }
