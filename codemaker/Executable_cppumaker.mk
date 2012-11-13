@@ -26,6 +26,8 @@
 
 $(eval $(call gb_Executable_Executable,cppumaker))
 
+$(eval $(call gb_Executable_use_unpacked,cppumaker,boost))
+
 $(eval $(call gb_Executable_use_libraries,cppumaker,\
     reg \
     sal \
