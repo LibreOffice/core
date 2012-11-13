@@ -4028,9 +4028,14 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     static cairo_font_options_t* (*gdk_screen_get_font_options)(GdkScreen*) =
         (cairo_font_options_t*(*)(GdkScreen*))osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_font_options" );
     if( gdk_screen_get_font_options != NULL )
-#endif
+    {
         const cairo_font_options_t* pNewOptions = gdk_screen_get_font_options( pScreen );
+        aStyleSet.SetCairoFontOptions( pNewOptions );
+    }
+#else
+    const cairo_font_options_t* pNewOptions = gdk_screen_get_font_options( pScreen );
     aStyleSet.SetCairoFontOptions( pNewOptions );
+#endif
 
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );
