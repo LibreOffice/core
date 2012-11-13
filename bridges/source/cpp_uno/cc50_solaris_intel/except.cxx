@@ -34,7 +34,6 @@
 #include <list>
 #include <map>
 #include <rtl/alloc.h>
-#include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 
 #include <rtl/strbuf.hxx>
@@ -308,8 +307,6 @@ void* RTTIHolder::generateRTTI( typelib_CompoundTypeDescription * pCompTypeDescr
     return pRTTI;
 }
 
-struct RTTISingleton: public rtl::Static< RTTIHolder, RTTISingleton > {};
-
 //__________________________________________________________________________________________________
 
 static void deleteException(
@@ -342,7 +339,24 @@ void cc50_solaris_intel_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
     // will be released by deleteException
     typelib_typedescriptionreference_getDescription( &pTypeDescr, pUnoExc->pType );
 
-    void * pRTTI = RTTISingleton::get().generateRTTI( (typelib_CompoundTypeDescription *)pTypeDescr );
+    void* pRTTI;
+    {
+    static ::osl::Mutex aMutex;
+    ::osl::Guard< ::osl::Mutex > guard( aMutex );
+
+    static RTTIHolder * s_pRTTI = 0;
+    if (! s_pRTTI)
+    {
+#ifdef LEAK_STATIC_DATA
+        s_pRTTI = new RTTIHolder();
+#else
+        static RTTIHolder s_aRTTI;
+        s_pRTTI = &s_aRTTI;
+#endif
+    }
+
+    pRTTI = s_pRTTI->generateRTTI( (typelib_CompoundTypeDescription *)pTypeDescr );
+    }
 
     // a must be
     OSL_ENSURE( sizeof(sal_Int32) == sizeof(void *), "### pointer size differs from sal_Int32!" );

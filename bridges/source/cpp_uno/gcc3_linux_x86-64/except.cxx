@@ -38,12 +38,12 @@
 
 #include <boost/unordered_map.hpp>
 
-#include <sal/log.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -216,8 +216,6 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     return rtti;
 }
 
-struct RTTISingleton: public rtl::Static< RTTI, RTTISingleton > {};
-
 //--------------------------------------------------------------------------------------------------
 extern "C" {
 static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
@@ -233,6 +231,11 @@ static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
         ::typelib_typedescription_release( pTD );
     }
 }
+}
+
+namespace
+{
+    struct theRTTI : public rtl::Static<RTTI, theRTTI> {};
 }
 
 //==================================================================================================
@@ -267,7 +270,8 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     // destruct uno exception
     ::uno_any_destruct( pUnoExc, 0 );
     // avoiding locked counts
-	rtti = (type_info *)RTTISingleton::get().getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
+    static RTTI &rRTTI = theRTTI::get();
+    rtti = rRTTI.getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
     TYPELIB_DANGER_RELEASE( pTypeDescr );
     OSL_ENSURE( rtti, "### no rtti for throwing exception!" );
     if (! rtti)

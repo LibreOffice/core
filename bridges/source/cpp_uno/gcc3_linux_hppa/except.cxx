@@ -32,7 +32,6 @@
 #include <cxxabi.h>
 #include <boost/unordered_map.hpp>
 
-#include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
@@ -206,8 +205,6 @@ namespace CPPU_CURRENT_NAMESPACE
         return rtti;
     }
 
-    struct RTTISingleton: public rtl::Static< RTTI, RTTISingleton > {};
-
     //------------------------------------------------------------------
     static void deleteException( void * pExc )
     {
@@ -254,7 +251,22 @@ namespace CPPU_CURRENT_NAMESPACE
 
         // destruct uno exception
         ::uno_any_destruct( pUnoExc, 0 );
-        rtti = (type_info *)RTTISingleton::get().getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
+        // avoiding locked counts
+        static RTTI * s_rtti = 0;
+        if (! s_rtti)
+        {
+            MutexGuard guard( Mutex::getGlobalMutex() );
+            if (! s_rtti)
+            {
+#ifdef LEAK_STATIC_DATA
+                s_rtti = new RTTI();
+#else
+                static RTTI rtti_data;
+                s_rtti = &rtti_data;
+#endif
+            }
+        }
+        rtti = (type_info *)s_rtti->getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
         TYPELIB_DANGER_RELEASE( pTypeDescr );
         OSL_ENSURE( rtti, "### no rtti for throwing exception!" );
         if (! rtti)
