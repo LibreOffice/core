@@ -76,7 +76,6 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
     private:
         virtual void impl_fillNewData();
         void fillPopupControllerCache();
-//        void GenerateFullMenuBar( MenuBar *pMenuBar );
 
         sal_Bool                                                                                m_bRefreshPopupControllerCache : 1;
         com::sun::star::uno::Reference< com::sun::star::lang::XComponent >                      m_xMenuBarManager;
