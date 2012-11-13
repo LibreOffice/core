@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQX///zo\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 11425,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2012-11-13T07:26:23Z",
+      "side": 1,
+      "message": "Why this?",
+      "revId": "8be95d5843bbe128164bd3ccd17ff322d8b8a286",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
