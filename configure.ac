@@ -7799,7 +7799,7 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
             POSTGRESQL_LIB=""
             POSTGRESQL_INC="%OVERRIDE_ME%"
             BUILD_TYPE="$BUILD_TYPE POSTGRESQL"
-        POSTGRESQL_TARBALL="061a9f17323117c9358ed60f33ecff78-postgresql-9.1.1.tar.bz2"
+        POSTGRESQL_TARBALL="c0b4799ea9850eae3ead14f0a60e9418-postgresql-9.2.1.tar.bz2"
         fi
     fi
     if test "${SYSTEM_POSTGRESQL}" = "YES"; then

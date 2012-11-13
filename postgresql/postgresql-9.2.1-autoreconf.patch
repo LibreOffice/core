@@ -1,15 +1,6 @@
-diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-9.1.1.patched/configure
 --- misc/build/postgresql-9.1.1/configure	2011-09-22 23:57:57.000000000 +0200
 +++ misc/build/postgresql-9.1.1.patched/configure	2012-02-03 11:50:07.000000000 +0100
-@@ -718,6 +718,7 @@
- with_selinux
- with_openssl
- with_bonjour
-+with_mozldap
- with_ldap
- with_pam
- krb_srvtab
-@@ -836,6 +837,7 @@
+@@ -830,6 +830,7 @@
  with_krb_srvnam
  with_pam
  with_ldap
@@ -17,7 +8,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
  with_bonjour
  with_openssl
  with_selinux
-@@ -1533,6 +1535,7 @@
+@@ -1527,6 +1528,7 @@
                            [postgres]
    --with-pam              build with PAM support
    --with-ldap             build with LDAP support
@@ -25,8 +16,8 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
    --with-bonjour          build with Bonjour support
    --with-openssl          build with OpenSSL support
    --with-selinux          build with SELinux support
-@@ -5432,6 +5435,42 @@
- $as_echo "$with_ldap" >&6; }
+@@ -5412,6 +5414,42 @@
+ 
  
  
 +{ $as_echo "$as_me:$LINENO: checking whether to use Mozilla C SDK for LDAP support" >&5
@@ -67,8 +58,8 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
 +
  
  #
- # Bonjour
-@@ -8533,11 +8572,11 @@
+ # Kerberos configuration parameters
+@@ -8627,11 +8665,11 @@
  *** Not using spinlocks will cause poor performance." >&2;}
  fi
  
@@ -84,7 +75,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
    $as_echo_n "(cached) " >&6
  else
    ac_func_search_save_LIBS=$LIBS
-@@ -8554,16 +8593,16 @@
+@@ -8648,16 +8686,16 @@
  #ifdef __cplusplus
  extern "C"
  #endif
@@ -104,7 +95,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
    if test -z "$ac_lib"; then
      ac_res="none required"
    else
-@@ -8591,7 +8630,7 @@
+@@ -8685,7 +8723,7 @@
  	 test "$cross_compiling" = yes ||
  	 $as_test_x conftest$ac_exeext
         }; then
@@ -113,7 +104,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
  else
    $as_echo "$as_me: failed program was:" >&5
  sed 's/^/| /' conftest.$ac_ext >&5
-@@ -8602,40 +8641,33 @@
+@@ -8696,40 +8734,33 @@
  rm -rf conftest.dSYM
  rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
        conftest$ac_exeext
@@ -165,7 +156,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
    $as_echo_n "(cached) " >&6
  else
    ac_func_search_save_LIBS=$LIBS
-@@ -8652,16 +8684,16 @@
+@@ -8746,16 +8777,16 @@
  #ifdef __cplusplus
  extern "C"
  #endif
@@ -185,7 +176,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
    if test -z "$ac_lib"; then
      ac_res="none required"
    else
-@@ -8689,7 +8721,7 @@
+@@ -8783,7 +8814,7 @@
  	 test "$cross_compiling" = yes ||
  	 $as_test_x conftest$ac_exeext
         }; then
@@ -194,7 +185,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
  else
    $as_echo "$as_me: failed program was:" >&5
  sed 's/^/| /' conftest.$ac_ext >&5
-@@ -8700,33 +8732,34 @@
+@@ -8794,33 +8825,34 @@
  rm -rf conftest.dSYM
  rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
        conftest$ac_exeext
@@ -240,7 +231,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
    $as_echo_n "(cached) " >&6
  else
    ac_func_search_save_LIBS=$LIBS
-@@ -8743,16 +8776,16 @@
+@@ -8837,16 +8869,16 @@
  #ifdef __cplusplus
  extern "C"
  #endif
@@ -260,7 +251,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
    if test -z "$ac_lib"; then
      ac_res="none required"
    else
-@@ -8780,7 +8813,7 @@
+@@ -8874,7 +8906,7 @@
  	 test "$cross_compiling" = yes ||
  	 $as_test_x conftest$ac_exeext
         }; then
@@ -269,7 +260,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
  else
    $as_echo "$as_me: failed program was:" >&5
  sed 's/^/| /' conftest.$ac_ext >&5
-@@ -8791,34 +8824,38 @@
+@@ -8885,34 +8917,38 @@
  rm -rf conftest.dSYM
  rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
        conftest$ac_exeext
@@ -320,7 +311,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
    $as_echo_n "(cached) " >&6
  else
    ac_func_search_save_LIBS=$LIBS
-@@ -8835,16 +8872,16 @@
+@@ -8929,16 +8965,16 @@
  #ifdef __cplusplus
  extern "C"
  #endif
@@ -340,7 +331,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
    if test -z "$ac_lib"; then
      ac_res="none required"
    else
-@@ -8872,7 +8909,7 @@
+@@ -8966,7 +9002,7 @@
  	 test "$cross_compiling" = yes ||
  	 $as_test_x conftest$ac_exeext
         }; then
@@ -349,7 +340,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
  else
    $as_echo "$as_me: failed program was:" >&5
  sed 's/^/| /' conftest.$ac_ext >&5
-@@ -8883,30 +8920,32 @@
+@@ -8977,30 +9013,32 @@
  rm -rf conftest.dSYM
  rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
        conftest$ac_exeext
@@ -390,7 +381,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
    fi
  fi
  
-@@ -13584,7 +13623,7 @@
+@@ -13598,7 +13636,7 @@
  fi
  
  if test "$with_ldap" = yes ; then
@@ -399,7 +390,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
  
  for ac_header in ldap.h
  do
-@@ -13809,6 +13848,11 @@
+@@ -13823,6 +13861,11 @@
  
  done
  
@@ -411,13 +402,12 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
    fi
  fi
  
-@@ -23348,7 +23392,99 @@
+@@ -23483,7 +23526,99 @@
  # We can test for libldap_r only after we know PTHREAD_LIBS
  if test "$with_ldap" = yes ; then
    _LIBS="$LIBS"
--  if test "$PORTNAME" != "win32"; then
 +  if test "$with_mozldap" = "yes"; then
-+    if test "$PORTNAME" != "win32"; then
+   if test "$PORTNAME" != "win32"; then
 +      mozlibname=ldap50
 +    else
 +      mozlibname=nsldap32v50
@@ -512,10 +502,9 @@ diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-
  
  { $as_echo "$as_me:$LINENO: checking for ldap_bind in -lldap" >&5
  $as_echo_n "checking for ldap_bind in -lldap... " >&6; }
-diff --recursive -u misc/build/postgresql-9.1.1/src/include/pg_config.h.in misc/build/postgresql-9.1.1.patched/src/include/pg_config.h.in
 --- misc/build/postgresql-9.1.1/src/include/pg_config.h.in	2011-09-22 23:57:57.000000000 +0200
 +++ misc/build/postgresql-9.1.1.patched/src/include/pg_config.h.in	2012-02-03 11:50:07.000000000 +0100
-@@ -785,6 +785,13 @@
+@@ -758,6 +758,13 @@
     (--with-libxslt) */
  #undef USE_LIBXSLT
  
@@ -529,3 +518,4 @@ diff --recursive -u misc/build/postgresql-9.1.1/src/include/pg_config.h.in misc/
  /* Define to select named POSIX semaphores. */
  #undef USE_NAMED_POSIX_SEMAPHORES
  
+

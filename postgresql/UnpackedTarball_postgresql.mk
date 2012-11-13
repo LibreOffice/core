@@ -14,11 +14,9 @@ $(eval $(call gb_UnpackedTarball_set_tarball,postgresql,$(POSTGRESQL_TARBALL)))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,postgresql,3))
 
 $(eval $(call gb_UnpackedTarball_add_patches,postgresql, \
-	postgresql/postgresql-moz-ldap.patch \
 	postgresql/postgresql-libs-leak.patch \
-	postgresql/libpq-parallel-build.patch \
-	postgresql/postgresql-9.1.1-autoreconf.patch \
-	postgresql/postgresql-9.1.1-libreoffice.patch \
+	postgresql/postgresql-9.2.1-autoreconf.patch \
+	postgresql/postgresql-9.2.1-libreoffice.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -1,17 +1,15 @@
-diff --recursive -u misc/build/postgresql-9.1.1/src/interfaces/libpq/Makefile misc/build/postgresql-9.1.1.patched/src/interfaces/libpq/Makefile
 --- misc/build/postgresql-9.1.1/src/interfaces/libpq/Makefile	2011-09-22 23:57:57.000000000 +0200
 +++ misc/build/postgresql-9.1.1.patched/src/interfaces/libpq/Makefile	2011-12-15 09:02:18.000000000 +0100
-@@ -142,3 +142,6 @@
- 
+@@ -148,3 +148,6 @@
  maintainer-clean: distclean maintainer-clean-lib
+ 	$(MAKE) -C test $@
  	rm -f libpq-dist.rc
 +
 +libpq-flags.mk:
 +	@printf '%s\n' 'LIBPQ_DEP_LIBS+=$(SHLIB_LINK)' > '$@'
-diff --recursive -u misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak misc/build/postgresql-9.1.1.patched/src/interfaces/libpq/win32.mak
 --- misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak	2011-12-14 14:28:59.000000000 +0100
 +++ misc/build/postgresql-9.1.1.patched/src/interfaces/libpq/win32.mak	2011-12-15 09:11:37.000000000 +0100
-@@ -13,30 +13,29 @@
+@@ -11,30 +11,29 @@
  
  # CPU="i386" or CPU environment of nmake.exe (AMD64 or IA64)
  
@@ -49,7 +47,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak m
  OUTFILENAME=libpq
  !ENDIF
  
-@@ -56,7 +57,7 @@
+@@ -54,7 +53,7 @@
  !ENDIF
  
  !IF "$(KFW_LIB_PATH)" == ""
@@ -58,7 +56,7 @@ diff --recursive -u misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak m
  !MESSAGE Using default Kerberos Library directory: $(KFW_LIB_PATH)
  !ENDIF
  
-@@ -79,18 +80,11 @@
+@@ -67,18 +66,11 @@
  CPP=cl.exe
  RSC=rc.exe
  
@@ -81,12 +79,12 @@ diff --recursive -u misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak m
  
  CLEAN :
  	-@erase "$(INTDIR)\getaddrinfo.obj"
-@@ -192,10 +186,11 @@
+@@ -178,10 +170,11 @@
+ "$(OUTDIR)" :
+     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
  
- CPP_PROJ=/nologo /W3 /EHsc $(OPT) \
-  /I "..\..\include" /I "..\..\include\port\win32" /I "..\..\include\port\win32_msvc" \
-- /I "..\..\port" /I. /I "$(SSL_INC)" /I "$(KFW_INC)" /I "$(MOZLDAP_INC)" \
-+ /I "..\..\port" /I. $(SOLARINC) \
+-CPP_PROJ=/nologo /W3 /EHsc $(OPT) /I "..\..\include" /I "..\..\include\port\win32" /I "..\..\include\port\win32_msvc" /I "..\..\port" /I. /I "$(SSL_INC)" \
++CPP_PROJ=/nologo /W3 /EHsc $(OPT) /I "..\..\include" /I "..\..\include\port\win32" /I "..\..\include\port\win32_msvc" /I "..\..\port" /I. $(SOLARINC) \
   /D "FRONTEND" $(DEBUGDEF) \
   /D "WIN32" /D "_WINDOWS" /Fp"$(INTDIR)\libpq.pch" \
   /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c  \
@@ -94,16 +92,16 @@ diff --recursive -u misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak m
   /D "_CRT_SECURE_NO_DEPRECATE" $(ADD_DEFINES)
  
  !IFDEF USE_SSL
-@@ -230,7 +224,7 @@
+@@ -205,7 +198,7 @@
  LINK32=link.exe
- LINK32_FLAGS=kernel32.lib user32.lib advapi32.lib shfolder.lib wsock32.lib ws2_32.lib secur32.lib $(SSL_LIBS) $(LDAP_LIBS) $(KFW_LIBS) $(ADD_SECLIB) \
+ LINK32_FLAGS=kernel32.lib user32.lib advapi32.lib shfolder.lib wsock32.lib ws2_32.lib secur32.lib $(SSL_LIBS)  $(KFW_LIB) $(ADD_SECLIB) \
   /nologo /subsystem:windows /dll $(LOPT) /incremental:no \
 - /pdb:"$(OUTDIR)\libpqdll.pdb" /machine:$(CPU) \
 + /pdb:"$(OUTDIR)\libpqdll.pdb" /machine:$(MACHINE) \
   /out:"$(OUTDIR)\$(OUTFILENAME).dll"\
   /implib:"$(OUTDIR)\$(OUTFILENAME)dll.lib"  \
-  /libpath:"$(SSL_LIB_PATH)" /libpath:"$(KFW_LIB_PATH)" /libpath:"$(MOZLDAP_LIB_PATH)" \
-@@ -247,7 +241,7 @@
+  /libpath:"$(SSL_LIB_PATH)" /libpath:"$(KFW_LIB_PATH)" \
+@@ -222,7 +215,7 @@
  <<
  
  "$(INTDIR)\libpq.res" : "$(INTDIR)" libpq-dist.rc
