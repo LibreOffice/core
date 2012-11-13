@@ -121,19 +121,6 @@ void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeExc
     m_bDisposed = sal_True;
 }
 
-//void generateFullMenuBar( MenuBarManager *pMenuBarManager, MenuBar *pMenuBar )
-//{
-//    for (int i=0; i < pMenuBar->GetItemCount(); i++)
-//    {
-//        sal_Int16 nId = pMenuBar->GetItemId( i );
-
-//        String aCommandLabel = pMenuBar->GetItemCommand( nId );
-
-//        String label = pMenuBarManager->RetrieveLabelFromCommand( aCommandLabel );
-//        pMenuBar->SetItemText( nId, label );
-//    }
-//}
-
 // XInitialization
 void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
@@ -216,7 +203,6 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 
                 m_xMenuBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pMenuBarManager ), UNO_QUERY );
 
-//                pMenuBarManager->GenerateFullMenuHierarchy( pVCLMenuBar );
                 pVCLMenuBar->Freeze();
             }
 
