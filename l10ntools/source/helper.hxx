@@ -39,6 +39,7 @@
 
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
+#include "rtl/strbuf.hxx"
 #include "sal/types.h"
 
 namespace helper {
@@ -102,6 +103,50 @@ inline sal_Int32 indexOfAnyAsciiL(
     return -1;
 }
 
+rtl::OString QuotHTML(const rtl::OString &rString)
+{
+    rtl::OStringBuffer sReturn;
+    for (sal_Int32 i = 0; i < rString.getLength(); ++i) {
+        switch (rString[i]) {
+        case '\\':
+            if (i < rString.getLength()) {
+                switch (rString[i + 1]) {
+                case '"':
+                case '<':
+                case '>':
+                case '\\':
+                    ++i;
+                    break;
+                }
+            }
+            // fall through
+        default:
+            sReturn.append(rString[i]);
+            break;
+
+        case '<':
+            sReturn.append("&lt;");
+            break;
+
+        case '>':
+            sReturn.append("&gt;");
+            break;
+
+        case '"':
+            sReturn.append("&quot;");
+            break;
+
+        case '&':
+            if (rString.matchL(RTL_CONSTASCII_STRINGPARAM("&amp;"), i))
+                sReturn.append('&');
+            else
+                sReturn.append(RTL_CONSTASCII_STRINGPARAM("&amp;"));
+            break;
+        }
+    }
+    return sReturn.makeStringAndClear();
+}
+
 inline bool isWellFormedXML( OString const & text )
 {
     xmlDocPtr doc;
@@ -119,6 +164,7 @@ inline bool isWellFormedXML( OString const & text )
     xmlCleanupParser();
     return result;
 }
+
 
 template< typename T > inline T abbreviate(
     T const & text, sal_Int32 start, sal_Int32 length)

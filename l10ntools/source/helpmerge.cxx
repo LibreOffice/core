@@ -380,7 +380,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , 
                     nPreSpaces++;
                 pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur , true );
                 OUString sNewdata;
-                if (helper::isWellFormedXML(sNewText))
+                if (helper::isWellFormedXML(helper::QuotHTML(sNewText)))
                 {
                     sNewdata = sSourceText.copy(0,nPreSpaces) +
                         rtl::OStringToOUString(sNewText, RTL_TEXTENCODING_UTF8);

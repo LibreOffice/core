@@ -609,7 +609,6 @@ void XRMResMerge::WorkOnText(
                         sContent, STRING_TYP_TEXT, sLang )) &&
                     ( sContent != "-" ) && !sContent.isEmpty() &&
                     helper::isWellFormedXML( sContent ))
-
                 {
                     rText = sContent;
                     ConvertStringToXMLFormat( rText );
@@ -645,7 +644,8 @@ void XRMResMerge::EndOfText(
                 if (!sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")) &&
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sCur, sal_True )) &&
-                    ( sContent != "-" ) && !sContent.isEmpty())
+                    ( sContent != "-" ) && !sContent.isEmpty() &&
+                    helper::isWellFormedXML( sContent ))
                 {
                     rtl::OString sText( sContent );
                     rtl::OString sAdditionalLine( "\n        " );
