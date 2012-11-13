@@ -104,8 +104,10 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     aLink = LINK(this, ScXMLSourceDlg, RefModifiedHdl);
     maRefEdit.SetModifyHdl(aLink);
 
+    maBtnOk.Disable();
+
     SetNonLinkable();
-    maBtnSelectSource.GrabFocus();
+    maBtnSelectSource.GrabFocus(); // Initial focus is on the select source button.
 }
 
 ScXMLSourceDlg::~ScXMLSourceDlg()
@@ -559,6 +561,10 @@ void ScXMLSourceDlg::RefEditModified()
         else
             maCellLinks.erase(pEntry);
     }
+
+    // Enable the import button only when at least one link exists.
+    bool bHasLink = !maCellLinks.empty() || !maRangeLinks.empty();
+    maBtnOk.Enable(bHasLink);
 }
 
 IMPL_LINK(ScXMLSourceDlg, GetFocusHdl, Control*, pCtrl)
