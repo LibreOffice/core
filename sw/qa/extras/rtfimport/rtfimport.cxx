@@ -42,6 +42,7 @@
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -124,6 +125,7 @@ public:
     void testFdo56512();
     void testFdo52989();
     void testFdo48442();
+    void testFdo55525();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -199,6 +201,7 @@ void Test::run()
         {"fdo56512.rtf", &Test::testFdo56512},
         {"fdo52989.rtf", &Test::testFdo52989},
         {"fdo48442.rtf", &Test::testFdo48442},
+        {"fdo55525.rtf", &Test::testFdo55525},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -915,6 +918,18 @@ void Test::testFdo48442()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_PRINT_AREA, getProperty<sal_Int16>(xShape, "VertOrientRelation")); // was FRAME
+}
+
+void Test::testFdo55525()
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    // Negative left margin was ~missing, -191
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1877), getProperty<sal_Int32>(xTable, "LeftMargin"));
+    // Cell width of A1 was 3332 (e.g. not set, 30% percent of total width)
+    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1016), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

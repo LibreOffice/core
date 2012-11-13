@@ -1699,6 +1699,22 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 RTFValue::Pointer_t pRowValue(new RTFValue(1));
                 if (m_aStates.top().nCells > 0)
                     m_aStates.top().aTableRowSprms.set(NS_sprm::LN_PRow, pRowValue);
+
+                RTFValue::Pointer_t pCellMar = m_aStates.top().aTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblCellMar);
+                if (!pCellMar.get())
+                {
+                    // If no cell margins are defined, the default left/right margin is 0 in Word, but not in Writer.
+                    RTFSprms aAttributes;
+                    aAttributes.set(NS_ooxml::LN_CT_TblWidth_type, RTFValue::Pointer_t(new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa)));
+                    aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, RTFValue::Pointer_t(new RTFValue(0)));
+                    lcl_putNestedSprm(m_aStates.top().aTableRowSprms,
+                            NS_ooxml::LN_CT_TblPrBase_tblCellMar, NS_ooxml::LN_CT_TblCellMar_left,
+                            RTFValue::Pointer_t(new RTFValue(aAttributes)));
+                    lcl_putNestedSprm(m_aStates.top().aTableRowSprms,
+                            NS_ooxml::LN_CT_TblPrBase_tblCellMar, NS_ooxml::LN_CT_TblCellMar_right,
+                            RTFValue::Pointer_t(new RTFValue(aAttributes)));
+                }
+
                 writerfilter::Reference<Properties>::Pointer_t const pTableRowProperties(
                         new RTFReferenceProperties(m_aStates.top().aTableRowAttributes, m_aStates.top().aTableRowSprms)
                         );
@@ -2845,6 +2861,16 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CELLX:
             {
                 int nCellX = nParam - m_aStates.top().nCellX;
+
+                // If there is a negative left margin, then the first cellx is relateve to that.
+                RTFValue::Pointer_t pTblInd = m_aStates.top().aTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblInd);
+                if (m_aStates.top().nCellX == 0 && pTblInd.get())
+                {
+                    RTFValue::Pointer_t pWidth = pTblInd->getAttributes().find(NS_ooxml::LN_CT_TblWidth_w);
+                    if (pWidth.get() && pWidth->getInt() < 0)
+                        nCellX = -1 * (pWidth->getInt() - nParam);
+                }
+
                 m_aStates.top().nCellX = nParam;
                 RTFValue::Pointer_t pXValue(new RTFValue(nCellX));
                 m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue, false);
@@ -2878,6 +2904,17 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 RTFValue::Pointer_t pHRule(new RTFValue(hRule));
                 lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
                     NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_hRule, pHRule);
+            }
+            break;
+        case RTF_TRLEFT:
+            {
+                // the value is in twips
+                lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
+                        NS_ooxml::LN_CT_TblPrBase_tblInd, NS_ooxml::LN_CT_TblWidth_type,
+                        RTFValue::Pointer_t(new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa)));
+                lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
+                        NS_ooxml::LN_CT_TblPrBase_tblInd, NS_ooxml::LN_CT_TblWidth_w,
+                        RTFValue::Pointer_t(new RTFValue(nParam)));
             }
             break;
         case RTF_COLS:
