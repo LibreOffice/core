@@ -22,7 +22,9 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 		CC="$(CC) -MD -nologo \
 			$(if $(filter TRUE,$(ENABLE_DEBUG)),-Zi) \
 			$(SOLARINC)") \
-	&& ./configure --disable-modules --disable-test --disable-introspection \
+	&& echo \
+	    $(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") >> config.log \
+	&& ./configure -C --disable-modules --disable-test --disable-introspection \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	$(if $(filter NO,$(SYSTEM_LIBXML)),LIBXML2_CFLAGS="-I$(OUTDIR)/inc/external" \
 	$(if $(filter MSC,$(COM)),LIBXML2_LIBS="$(OUTDIR)/lib/libxml2.lib",LIBXML2_LIBS="-L$(OUTDIR)/lib -lxml2"),\
