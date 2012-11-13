@@ -1576,15 +1576,6 @@ File gid_File_Lib_Migrationoo3
   #endif
 End
 
-#if defined(WNT) && !defined(SYSTEM_LIBEXTTEXTCAT)
-File gid_File_Lib_Libtextcat
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "libexttextcat.dll";
-End
-#endif
-
 STD_LIB_FILE( gid_File_Lib_Guesslang, guesslang )
 
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Updatefeed , updatefeed.uno )

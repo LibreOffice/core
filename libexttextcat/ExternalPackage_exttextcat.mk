@@ -14,9 +14,6 @@ ifneq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_use_external_project,exttextcat,exttextcat))
 
 $(eval $(call gb_ExternalPackage_add_file,exttextcat,lib/libexttextcat.a,src/.libs/libexttextcat-2.0.a))
-ifeq ($(OS),WNT)
-$(eval $(call gb_ExternalPackage_add_file,exttextcat,bin/libexttextcat.dll,src/.libs/libexttextcat.dll))
-endif
 
 endif
 # vim: set noet sw=4 ts=4:
