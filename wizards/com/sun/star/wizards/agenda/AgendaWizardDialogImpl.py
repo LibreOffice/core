@@ -471,7 +471,11 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
     def closeDocument(self):
         try:
-            xCloseable = self.agendaTemplate.xFrame
-            xCloseable.close(False)
+            xCloseable = self.agendaTemplate.xFrame.close(False)
         except CloseVetoException, e:
             traceback.print_exc()
+
+    def validatePath(self):
+        if self.myPathSelection.usedPathPicker:
+                self.filenameChanged = True
+        self.myPathSelection.usedPathPicker = False
