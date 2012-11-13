@@ -1206,7 +1206,7 @@
             </node>
             <node oor:name=".uno:ManageXMLSource" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Manage ~XML Source...</value>
+                    <value xml:lang="en-US">~XML Source...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DataSort" oor:op="replace">
