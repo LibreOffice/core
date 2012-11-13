@@ -36,7 +36,7 @@ class FaxDocument(TextDocument):
     def switchElement(self, sElement, bState):
         try:
             mySectionHandler = TextSectionHandler(self.xMSF,
-                TextDocument.xTextDocument)
+                self.xTextDocument)
             oSection = \
                 mySectionHandler.xTextDocument.TextSections.getByName(sElement)
             Helper.setUnoPropertyValue(oSection,"IsVisible",bState)
@@ -45,15 +45,15 @@ class FaxDocument(TextDocument):
 
     def updateDateFields(self):
         FH = TextFieldHandler(
-            TextDocument.xTextDocument, TextDocument.xTextDocument)
+            self.xTextDocument, self.xTextDocument)
         FH.updateDateFields()
 
     def switchFooter(self, sPageStyle, bState, bPageNumber, sText):
-        if TextDocument.xTextDocument is not None:
+        if self.xTextDocument is not None:
             try:
-                TextDocument.xTextDocument.lockControllers()
+                self.xTextDocument.lockControllers()
                 xPageStyleCollection = \
-                    TextDocument.xTextDocument.StyleFamilies.getByName("PageStyles")
+                    self.xTextDocument.StyleFamilies.getByName("PageStyles")
                 xPageStyle = xPageStyleCollection.getByName(sPageStyle)
 
                 if bState:
@@ -71,7 +71,7 @@ class FaxDocument(TextDocument):
                         myCursor.setPropertyValue("ParaAdjust", CENTER )
 
                         xPageNumberField = \
-                            TextDocument.xTextDocument.createInstance(
+                            self.xTextDocument.createInstance(
                                 "com.sun.star.text.TextField.PageNumber")
                         xPageNumberField.setPropertyValue("SubType", CURRENT)
                         xPageNumberField.NumberingType = ARABIC
@@ -81,22 +81,22 @@ class FaxDocument(TextDocument):
                     Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn",
                         False)
 
-                TextDocument.xTextDocument.unlockControllers()
+                self.xTextDocument.unlockControllers()
             except Exception:
-                TextDocument.xTextDocument.lockControllers()
+                self.xTextDocument.lockControllers()
                 traceback.print_exc()
 
     def hasElement(self, sElement):
-        if TextDocument.xTextDocument is not None:
+        if self.xTextDocument is not None:
             mySectionHandler = TextSectionHandler(self.xMSF,
-                TextDocument.xTextDocument)
+                self.xTextDocument)
             return mySectionHandler.hasTextSectionByName(sElement)
         else:
             return False
 
     def switchUserField(self, sFieldName, sNewContent, bState):
         myFieldHandler = TextFieldHandler(
-            self.xMSF, TextDocument.xTextDocument)
+            self.xMSF, self.xTextDocument)
         if bState:
             myFieldHandler.changeUserFieldContent(sFieldName, sNewContent)
         else:
@@ -104,8 +104,8 @@ class FaxDocument(TextDocument):
 
     def fillSenderWithUserData(self):
         try:
-            myFieldHandler = TextFieldHandler(TextDocument.xTextDocument,
-                TextDocument.xTextDocument)
+            myFieldHandler = TextFieldHandler(self.xTextDocument,
+                self.xTextDocument)
             oUserDataAccess = Configuration.getConfigurationRoot(
                 self.xMSF, "org.openoffice.UserProfile/Data", False)
             myFieldHandler.changeUserFieldContent("Company",
@@ -127,20 +127,20 @@ class FaxDocument(TextDocument):
 
     def killEmptyUserFields(self):
         myFieldHandler = TextFieldHandler(
-            self.xMSF, TextDocument.xTextDocument)
+            self.xMSF, self.xTextDocument)
         myFieldHandler.removeUserFieldByContent("")
 
     def killEmptyFrames(self):
         try:
             if not self.keepLogoFrame:
                 xTF = self.getFrameByName("Company Logo",
-                TextDocument.xTextDocument)
+                self.xTextDocument)
                 if xTF is not None:
                     xTF.dispose()
 
             if not self.keepTypeFrame:
                 xTF = self.getFrameByName("Communication Type",
-                TextDocument.xTextDocument)
+                self.xTextDocument)
                 if xTF is not None:
                     xTF.dispose()
 

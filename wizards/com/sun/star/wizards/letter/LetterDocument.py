@@ -49,7 +49,7 @@ class LetterDocument(TextDocument):
     def switchElement(self, sElement, bState):
         try:
             mySectionHandler = TextSectionHandler(
-                self.xMSF, TextDocument.xTextDocument)
+                self.xMSF, self.xTextDocument)
             oSection = \
                 mySectionHandler.xTextDocument.TextSections.getByName(sElement)
             Helper.setUnoPropertyValue(oSection, "IsVisible", bState)
@@ -58,14 +58,14 @@ class LetterDocument(TextDocument):
 
     def updateDateFields(self):
         FH = TextFieldHandler(
-            TextDocument.xTextDocument, TextDocument.xTextDocument)
+            self.xTextDocument, self.xTextDocument)
         FH.updateDateFields()
 
     def switchFooter(self, sPageStyle, bState, bPageNumber, sText):
-        if TextDocument.xTextDocument != None:
+        if self.xTextDocument != None:
             try:
-                TextDocument.xTextDocument.lockControllers()
-                xNameAccess = TextDocument.xTextDocument.StyleFamilies
+                self.xTextDocument.lockControllers()
+                xNameAccess = self.xTextDocument.StyleFamilies
                 xPageStyleCollection = xNameAccess.getByName("PageStyles")
                 xPageStyle = xPageStyleCollection.getByName(sPageStyle)
                 if bState:
@@ -82,7 +82,7 @@ class LetterDocument(TextDocument):
                         myCursor.setPropertyValue("ParaAdjust", CENTER )
 
                         xPageNumberField = \
-                            TextDocument.xTextDocument.createInstance(
+                            self.xTextDocument.createInstance(
                                 "com.sun.star.text.TextField.PageNumber")
                         xPageNumberField.setPropertyValue("SubType", CURRENT)
                         xPageNumberField.NumberingType = ARABIC
@@ -93,20 +93,20 @@ class LetterDocument(TextDocument):
                     Helper.setUnoPropertyValue(
                         xPageStyle, "FooterIsOn", False)
 
-                TextDocument.xTextDocument.unlockControllers()
+                self.xTextDocument.unlockControllers()
             except Exception:
                 traceback.print_exc()
 
     def hasElement(self, sElement):
-        if TextDocument.xTextDocument != None:
-            SH = TextSectionHandler(self.xMSF, TextDocument.xTextDocument)
+        if self.xTextDocument != None:
+            SH = TextSectionHandler(self.xMSF, self.xTextDocument)
             return SH.hasTextSectionByName(sElement)
         else:
             return False
 
     def switchUserField(self, sFieldName, sNewContent, bState):
         myFieldHandler = TextFieldHandler(
-            self.xMSF, TextDocument.xTextDocument)
+            self.xMSF, self.xTextDocument)
         if bState:
             myFieldHandler.changeUserFieldContent(sFieldName, sNewContent)
         else:
@@ -115,7 +115,7 @@ class LetterDocument(TextDocument):
     def fillSenderWithUserData(self):
         try:
             myFieldHandler = TextFieldHandler(
-                TextDocument.xTextDocument, TextDocument.xTextDocument)
+                self.xTextDocument, self.xTextDocument)
             oUserDataAccess = Configuration.getConfigurationRoot(
                 self.xMSF, "org.openoffice.UserProfile/Data", False)
             myFieldHandler.changeUserFieldContent(
@@ -135,38 +135,38 @@ class LetterDocument(TextDocument):
 
     def killEmptyUserFields(self):
         myFieldHandler = TextFieldHandler(
-            self.xMSF, TextDocument.xTextDocument)
+            self.xMSF, self.xTextDocument)
         myFieldHandler.removeUserFieldByContent("")
 
     def killEmptyFrames(self):
         try:
             if not self.keepLogoFrame:
                 xTF = self.getFrameByName(
-                    "Company Logo", TextDocument.xTextDocument)
+                    "Company Logo", self.xTextDocument)
                 if xTF != None:
                     xTF.dispose()
 
             if not self.keepBendMarksFrame:
                 xTF = self.getFrameByName(
-                    "Bend Marks", TextDocument.xTextDocument)
+                    "Bend Marks", self.xTextDocument)
                 if xTF != None:
                     xTF.dispose()
 
             if not self.keepLetterSignsFrame:
                 xTF = self.getFrameByName(
-                    "Letter Signs", TextDocument.xTextDocument)
+                    "Letter Signs", self.xTextDocument)
                 if xTF != None:
                     xTF.dispose()
 
             if not self.keepSenderAddressRepeatedFrame:
                 xTF = self.getFrameByName(
-                    "Sender Address Repeated", TextDocument.xTextDocument)
+                    "Sender Address Repeated", self.xTextDocument)
                 if xTF != None:
                     xTF.dispose()
 
             if not self.keepAddressFrame:
                 xTF = self.getFrameByName(
-                    "Sender Address", TextDocument.xTextDocument)
+                    "Sender Address", self.xTextDocument)
                 if xTF != None:
                     xTF.dispose()
 
@@ -183,7 +183,7 @@ class BusinessPaperObject(object):
         self.xFrame = None
         try:
             self.xFrame = \
-                TextDocument.xTextDocument.createInstance(
+                self.xTextDocument.createInstance(
                     "com.sun.star.text.TextFrame")
             self.setFramePosition()
             Helper.setUnoPropertyValue(
@@ -221,9 +221,9 @@ class BusinessPaperObject(object):
                 self.xFrame,
                 "Print", False)
             xTextCursor = \
-                TextDocument.xTextDocument.Text.createTextCursor()
+                self.xTextDocument.Text.createTextCursor()
             xTextCursor.gotoEnd(True)
-            xText = TextDocument.xTextDocument.Text
+            xText = self.xTextDocument.Text
             xText.insertTextContent(
                 xTextCursor, self.xFrame,
                 False)
@@ -271,7 +271,7 @@ class BusinessPaperObject(object):
     def removeFrame(self):
         if self.xFrame is not None:
             try:
-                TextDocument.xTextDocument.Text.removeTextContent(
+                self.xTextDocument.Text.removeTextContent(
                     self.xFrame)
             except Exception:
                 traceback.print_exc()

@@ -259,53 +259,53 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
     #textFields listeners
     def txtTitleTextChanged(self):
-        AgendaTemplate.redrawTitle("txtTitle")
+        self.agendaTemplate.redrawTitle("txtTitle")
 
     def txtDateTextChanged(self):
-        AgendaTemplate.redrawTitle("txtDate")
+        self.agendaTemplate.redrawTitle("txtDate")
 
     def txtTimeTextChanged(self):
-        AgendaTemplate.redrawTitle("txtTime")
+        self.agendaTemplate.redrawTitle("txtTime")
 
     def txtLocationTextChanged(self):
-        AgendaTemplate.redrawTitle("cbLocation")
+        self.agendaTemplate.redrawTitle("cbLocation")
 
     #checkbox listeners
     def chkUseMeetingTypeItemChanged(self):
-        AgendaTemplate.agenda.cp_IncludeMinutes = bool(self.chkMinutes.State)
+        self.agendaTemplate.agenda.cp_IncludeMinutes = bool(self.chkMinutes.State)
 
     def chkUseMeetingTypeItemChanged(self):
-        AgendaTemplate.redraw(self.templateConsts.FILLIN_MEETING_TYPE)
+        self.agendaTemplate.redraw(self.templateConsts.FILLIN_MEETING_TYPE)
 
     def chkUseReadItemChanged(self):
-        AgendaTemplate.redraw(self.templateConsts.FILLIN_READ)
+        self.agendaTemplate.redraw(self.templateConsts.FILLIN_READ)
 
     def chkUseBringItemChanged(self):
-        AgendaTemplate.redraw(self.templateConsts.FILLIN_BRING)
+        self.agendaTemplate.redraw(self.templateConsts.FILLIN_BRING)
 
     def chkUseNotesItemChanged(self):
-        AgendaTemplate.redraw(self.templateConsts.FILLIN_NOTES)
+        self.agendaTemplate.redraw(self.templateConsts.FILLIN_NOTES)
 
     def chkUseCalledByItemChanged(self):
-        AgendaTemplate.redraw(self.templateConsts.FILLIN_CALLED_BY)
+        self.agendaTemplate.redraw(self.templateConsts.FILLIN_CALLED_BY)
 
     def chkUseFacilitatorItemChanged(self):
-        AgendaTemplate.redraw(self.templateConsts.FILLIN_FACILITATOR)
+        self.agendaTemplate.redraw(self.templateConsts.FILLIN_FACILITATOR)
 
     def chkUseNoteTakerItemChanged(self):
-        AgendaTemplate.redraw(self.templateConsts.FILLIN_NOTETAKER)
+        self.agendaTemplate.redraw(self.templateConsts.FILLIN_NOTETAKER)
 
     def chkUseTimeKeeperItemChanged(self):
-        AgendaTemplate.redraw(self.templateConsts.FILLIN_TIMEKEEPER)
+        self.agendaTemplate.redraw(self.templateConsts.FILLIN_TIMEKEEPER)
 
     def chkUseAttendeesItemChanged(self):
-        AgendaTemplate.redraw(self.templateConsts.FILLIN_PARTICIPANTS)
+        self.agendaTemplate.redraw(self.templateConsts.FILLIN_PARTICIPANTS)
 
     def chkUseObserversItemChanged(self):
-        AgendaTemplate.redraw(self.templateConsts.FILLIN_OBSERVERS)
+        self.agendaTemplate.redraw(self.templateConsts.FILLIN_OBSERVERS)
 
     def chkUseResourcePersonsItemChanged(self):
-        AgendaTemplate.redraw(self.templateConsts.FILLIN_RESOURCE_PERSONS)
+        self.agendaTemplate.redraw(self.templateConsts.FILLIN_RESOURCE_PERSONS)
 
     def insertRow(self):
         self.topicsControl.insertRow()

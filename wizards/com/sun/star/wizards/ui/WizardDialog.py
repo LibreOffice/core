@@ -490,13 +490,3 @@ class WizardDialog(UnoDialog2):
 
     def optMakeChangesItemChanged(self):
         self.bEditTemplate = True
-
-    def optReceiverPlaceholderItemChanged(self):
-        OfficeDocument.attachEventCall(
-            TextDocument.xTextDocument, "OnNew", "StarBasic",
-            "macro:///Template.Correspondence.Placeholder()")
-
-    def optReceiverDatabaseItemChanged(self):
-        OfficeDocument.attachEventCall(
-            TextDocument.xTextDocument, "OnNew", "StarBasic",
-            "macro:///Template.Correspondence.Database()")

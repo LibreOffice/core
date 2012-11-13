@@ -78,7 +78,7 @@ One compolsary Heading row.<br/>
 <br/><br/>
 To let the template be flexible, we use a kind of "detection": we look where
 the items are read the design of each table, reaplying it after writing the
-table.AgendaTemplate.xTextDocument
+table.self.xTextDocument
 <br/><br/>
 A note about threads:<br/>
 Many methods here are synchronized, in order to avoid colission made by
@@ -87,40 +87,26 @@ events fired too often.
 '''
 class AgendaTemplate(TextDocument):
 
-    writtenTopics = []
-    itemsCache = None
-    _allItems = []
-    items = []
-    itemsMap = {}
-    templateConsts = None
-    textSectionHandler = None
-    template = None
-    agenda = None
     lock = RLock()
 
-    '''constructor. The document is *not* loaded here.
+    '''
+    constructor. The document is *not* loaded here.
     only some formal members are set.
-    @param  AgendaTemplate.xTextDocument_ service factory.
-    @param agenda_ the data model (CGAgenda)
-    @param resources_ resources.
     '''
 
     def __init__(self,  xmsf, agenda, resources, templateConsts, listener):
         super(AgendaTemplate,self).__init__(xmsf,listener, None,
             "WIZARD_LIVE_PREVIEW")
-        AgendaTemplate.agenda = agenda
-        AgendaTemplate.templateConsts = templateConsts
+        self.agenda = agenda
+        self.templateConsts = templateConsts
         self.resources = resources
-
-        if AgendaTemplate.itemsCache is None:
-            self.initItemsCache()
-
-        AgendaTemplate._allItems = None
+        self.itemsMap = {}
+        self.allItems = []
 
     @synchronized(lock)
     def load(self, templateURL, topics):
-        AgendaTemplate.template = self.calcTemplateName(templateURL)
-        AgendaTemplate.xTextDocument = self.loadAsPreview(templateURL, False)
+        self.template = self.calcTemplateName(templateURL)
+        self.loadAsPreview(templateURL, False)
         self.xFrame.ComponentWindow.Enable = False
         self.xTextDocument.lockControllers()
         self.initialize()
@@ -131,8 +117,6 @@ class AgendaTemplate(TextDocument):
     The agenda templates are in format of aw-XXX.ott
     the templates name is then XXX.ott.
     This method calculates it.
-    @param url
-    @return the template name without the "aw-" at the beginning.
     '''
 
     def calcTemplateName(self, url):
@@ -142,7 +126,6 @@ class AgendaTemplate(TextDocument):
     '''synchronize the document to the model.<br/>
     this method rewrites all titles, item tables , and the topics table-
     thus synchronizing the document to the data model (CGAgenda).
-    @param topicsData since the model does not contain Topics
     information (it is only actualized on save) the given list
     supplies this information.
     '''
@@ -159,55 +142,52 @@ class AgendaTemplate(TextDocument):
         self.redrawTitle("txtTime")
         self.redrawTitle("cbLocation")
 
-    '''redraws/rewrites the table which contains the given item
+    '''
+    redraws/rewrites the table which contains the given item
     This method is called when the user checks/unchecks an item.
     The table is being found, in which the item is, and redrawn.
-    @param itemName
     '''
 
-    @classmethod
     @synchronized(lock)
     def redraw(self, itemName):
-        AgendaTemplate.xTextDocument.lockControllers()
+        self.xTextDocument.lockControllers()
         try:
             # get the table in which the item is...
-            itemsTable = AgendaTemplate.itemsMap[itemName]
+            itemsTable = self.itemsMap[itemName]
             # rewrite the table.
             itemsTable.write(None)
         except Exception, e:
             traceback.print_exc()
-        AgendaTemplate.xTextDocument.unlockControllers()
+        self.xTextDocument.unlockControllers()
 
-    '''checks the data model if the
+    '''
+    checks the data model if the
     item corresponding to the given string should be shown
-    @param itemName a string representing an Item (name or heading).
-    @return true if the model specifies that the item should be displayed.
     '''
 
-    @classmethod
     def isShowItem(self, itemName):
-        if itemName == AgendaTemplate.templateConsts.FILLIN_MEETING_TYPE:
-            return AgendaTemplate.agenda.cp_ShowMeetingType
-        elif itemName == AgendaTemplate.templateConsts.FILLIN_READ:
-            return AgendaTemplate.agenda.cp_ShowRead
-        elif itemName == AgendaTemplate.templateConsts.FILLIN_BRING:
-            return AgendaTemplate.agenda.cp_ShowBring
-        elif itemName == AgendaTemplate.templateConsts.FILLIN_NOTES:
-            return AgendaTemplate.agenda.cp_ShowNotes
-        elif itemName == AgendaTemplate.templateConsts.FILLIN_FACILITATOR:
-            return AgendaTemplate.agenda.cp_ShowFacilitator
-        elif itemName == AgendaTemplate.templateConsts.FILLIN_TIMEKEEPER:
-            return AgendaTemplate.agenda.cp_ShowTimekeeper
-        elif itemName == AgendaTemplate.templateConsts.FILLIN_NOTETAKER:
-            return AgendaTemplate.agenda.cp_ShowNotetaker
-        elif itemName == AgendaTemplate.templateConsts.FILLIN_PARTICIPANTS:
-            return AgendaTemplate.agenda.cp_ShowAttendees
-        elif itemName == AgendaTemplate.templateConsts.FILLIN_CALLED_BY:
-            return AgendaTemplate.agenda.cp_ShowCalledBy
-        elif itemName == AgendaTemplate.templateConsts.FILLIN_OBSERVERS:
-            return AgendaTemplate.agenda.cp_ShowObservers
-        elif itemName == AgendaTemplate.templateConsts.FILLIN_RESOURCE_PERSONS:
-            return AgendaTemplate.agenda.cp_ShowResourcePersons
+        if itemName == self.templateConsts.FILLIN_MEETING_TYPE:
+            return self.agenda.cp_ShowMeetingType
+        elif itemName == self.templateConsts.FILLIN_READ:
+            return self.agenda.cp_ShowRead
+        elif itemName == self.templateConsts.FILLIN_BRING:
+            return self.agenda.cp_ShowBring
+        elif itemName == self.templateConsts.FILLIN_NOTES:
+            return self.agenda.cp_ShowNotes
+        elif itemName == self.templateConsts.FILLIN_FACILITATOR:
+            return self.agenda.cp_ShowFacilitator
+        elif itemName == self.templateConsts.FILLIN_TIMEKEEPER:
+            return self.agenda.cp_ShowTimekeeper
+        elif itemName == self.templateConsts.FILLIN_NOTETAKER:
+            return self.agenda.cp_ShowNotetaker
+        elif itemName == self.templateConsts.FILLIN_PARTICIPANTS:
+            return self.agenda.cp_ShowAttendees
+        elif itemName == self.templateConsts.FILLIN_CALLED_BY:
+            return self.agenda.cp_ShowCalledBy
+        elif itemName == self.templateConsts.FILLIN_OBSERVERS:
+            return self.agenda.cp_ShowObservers
+        elif itemName == self.templateConsts.FILLIN_RESOURCE_PERSONS:
+            return self.agenda.cp_ShowResourcePersons
         else:
             raise ValueError("No such item")
 
@@ -218,87 +198,87 @@ class AgendaTemplate(TextDocument):
     '''
 
     def initItemsCache(self):
-        AgendaTemplate.itemsCache = {}
+        self.itemsCache = {}
         # Headings
-        AgendaTemplate.itemsCache[
-                AgendaTemplate.templateConsts.FILLIN_MEETING_TYPE] = \
-            AgendaItem(AgendaTemplate.templateConsts.FILLIN_MEETING_TYPE,
+        self.itemsCache[
+                self.templateConsts.FILLIN_MEETING_TYPE] = \
+            AgendaItem(self.templateConsts.FILLIN_MEETING_TYPE,
                 self.resources.itemMeetingType,
                 PlaceholderElement(
                     self.resources.reschkMeetingTitle_value,
-                    self.resources.resPlaceHolderHint, self.xMSF))
-        AgendaTemplate.itemsCache[
-                AgendaTemplate.templateConsts.FILLIN_BRING] = \
-            AgendaItem(AgendaTemplate.templateConsts.FILLIN_BRING,
+                    self.resources.resPlaceHolderHint, self.xTextDocument))
+        self.itemsCache[
+                self.templateConsts.FILLIN_BRING] = \
+            AgendaItem(self.templateConsts.FILLIN_BRING,
                 self.resources.itemBring,
                 PlaceholderElement (
                     self.resources.reschkBring_value,
-                    self.resources.resPlaceHolderHint,  self.xMSF))
-        AgendaTemplate.itemsCache[
-                AgendaTemplate.templateConsts.FILLIN_READ] = \
-            AgendaItem (AgendaTemplate.templateConsts.FILLIN_READ, 
+                    self.resources.resPlaceHolderHint, self.xTextDocument))
+        self.itemsCache[
+                self.templateConsts.FILLIN_READ] = \
+            AgendaItem (self.templateConsts.FILLIN_READ, 
                 self.resources.itemRead,
                 PlaceholderElement (
                     self.resources.reschkRead_value,
-                    self.resources.resPlaceHolderHint,  self.xMSF))
-        AgendaTemplate.itemsCache[
-                AgendaTemplate.templateConsts.FILLIN_NOTES] = \
-            AgendaItem (AgendaTemplate.templateConsts.FILLIN_NOTES,
+                    self.resources.resPlaceHolderHint, self.xTextDocument))
+        self.itemsCache[
+                self.templateConsts.FILLIN_NOTES] = \
+            AgendaItem (self.templateConsts.FILLIN_NOTES,
                 self.resources.itemNote,
                 PlaceholderElement (
                     self.resources.reschkNotes_value,
-                    self.resources.resPlaceHolderHint,  self.xMSF))
+                    self.resources.resPlaceHolderHint, self.xTextDocument))
 
         # Names
-        AgendaTemplate.itemsCache[
-                AgendaTemplate.templateConsts.FILLIN_CALLED_BY] = \
-            AgendaItem(AgendaTemplate.templateConsts.FILLIN_CALLED_BY,
+        self.itemsCache[
+                self.templateConsts.FILLIN_CALLED_BY] = \
+            AgendaItem(self.templateConsts.FILLIN_CALLED_BY,
                 self.resources.itemCalledBy,
                 PlaceholderElement (
                     self.resources.reschkConvenedBy_value,
-                    self.resources.resPlaceHolderHint,  self.xMSF))
-        AgendaTemplate.itemsCache[
-                AgendaTemplate.templateConsts.FILLIN_FACILITATOR] = \
-            AgendaItem(AgendaTemplate.templateConsts.FILLIN_FACILITATOR,
+                    self.resources.resPlaceHolderHint, self.xTextDocument))
+        self.itemsCache[
+                self.templateConsts.FILLIN_FACILITATOR] = \
+            AgendaItem(self.templateConsts.FILLIN_FACILITATOR,
                 self.resources.itemFacilitator,
                 PlaceholderElement (
                     self.resources.reschkPresiding_value,
-                    self.resources.resPlaceHolderHint,  self.xMSF))
-        AgendaTemplate.itemsCache[
-                AgendaTemplate.templateConsts.FILLIN_PARTICIPANTS] = \
-            AgendaItem(AgendaTemplate.templateConsts.FILLIN_PARTICIPANTS,
+                    self.resources.resPlaceHolderHint, self.xTextDocument))
+        self.itemsCache[
+                self.templateConsts.FILLIN_PARTICIPANTS] = \
+            AgendaItem(self.templateConsts.FILLIN_PARTICIPANTS,
                 self.resources.itemAttendees,
                 PlaceholderElement(
                     self.resources.reschkAttendees_value,
-                    self.resources.resPlaceHolderHint,  self.xMSF))
-        AgendaTemplate.itemsCache[
-                AgendaTemplate.templateConsts.FILLIN_NOTETAKER] = \
-            AgendaItem(AgendaTemplate.templateConsts.FILLIN_NOTETAKER,
+                    self.resources.resPlaceHolderHint, self.xTextDocument))
+        self.itemsCache[
+                self.templateConsts.FILLIN_NOTETAKER] = \
+            AgendaItem(self.templateConsts.FILLIN_NOTETAKER,
                 self.resources.itemNotetaker,
                 PlaceholderElement(
                     self.resources.reschkNoteTaker_value,
-                    self.resources.resPlaceHolderHint,  self.xMSF))
-        AgendaTemplate.itemsCache[
-                AgendaTemplate.templateConsts.FILLIN_TIMEKEEPER] = \
-            AgendaItem(AgendaTemplate.templateConsts.FILLIN_TIMEKEEPER,
+                    self.resources.resPlaceHolderHint, self.xTextDocument))
+        self.itemsCache[
+                self.templateConsts.FILLIN_TIMEKEEPER] = \
+            AgendaItem(self.templateConsts.FILLIN_TIMEKEEPER,
                 self.resources.itemTimekeeper,
                 PlaceholderElement(
                     self.resources.reschkTimekeeper_value,
-                    self.resources.resPlaceHolderHint,  self.xMSF))
-        AgendaTemplate.itemsCache[
-                AgendaTemplate.templateConsts.FILLIN_OBSERVERS] = \
-            AgendaItem(AgendaTemplate.templateConsts.FILLIN_OBSERVERS,
+                    self.resources.resPlaceHolderHint, self.xTextDocument))
+        self.itemsCache[
+                self.templateConsts.FILLIN_OBSERVERS] = \
+            AgendaItem(self.templateConsts.FILLIN_OBSERVERS,
                 self.resources.itemObservers,
                 PlaceholderElement(
                     self.resources.reschkObservers_value,
-                    self.resources.resPlaceHolderHint,  self.xMSF))
-        AgendaTemplate.itemsCache[
-                AgendaTemplate.templateConsts.FILLIN_RESOURCE_PERSONS] = \
-            AgendaItem(AgendaTemplate.templateConsts.FILLIN_RESOURCE_PERSONS,
+                    self.resources.resPlaceHolderHint, self.xTextDocument))
+        self.itemsCache[
+                self.templateConsts.FILLIN_RESOURCE_PERSONS] = \
+            AgendaItem(self.templateConsts.FILLIN_RESOURCE_PERSONS,
                 self.resources.itemResource,
                 PlaceholderElement(
                     self.resources.reschkResourcePersons_value,
-                    self.resources.resPlaceHolderHint,  self.xMSF))
+                    self.resources.resPlaceHolderHint, self.xTextDocument))
 
     '''Initializes a template.<br/>
     This method does the following tasks:<br/>
@@ -318,7 +298,7 @@ class AgendaTemplate(TextDocument):
         and create the date and time formatters.
         '''
         AgendaTemplate.dateUtils = Helper.DateUtils(
-            self.xMSF, AgendaTemplate.xTextDocument)
+            self.xMSF, self.xTextDocument)
         AgendaTemplate.formatter = AgendaTemplate.dateUtils.formatter
         AgendaTemplate.dateFormat = \
             AgendaTemplate.dateUtils.getFormat(DATE_SYSTEM_LONG)
@@ -326,14 +306,12 @@ class AgendaTemplate(TextDocument):
             AgendaTemplate.dateUtils.getFormat(TIME_HHMM)
 
         self.initItemsCache()
-        AgendaTemplate._allItems = self.searchFillInItems(0)
+        self.allItems = self.searchFillInItems(0)
         self.initializeTitles()
         self.initializeItemsSections()
-        AgendaTemplate.textSectionHandler = TextSectionHandler(
-            AgendaTemplate.xTextDocument, AgendaTemplate.xTextDocument)
-        self.topics = Topics()
-        del AgendaTemplate._allItems[:]
-        AgendaTemplate._allItems = None
+        self.textSectionHandler = TextSectionHandler(
+            self.xTextDocument, self.xTextDocument)
+        self.topics = Topics(self)
 
     '''
     locates the titles (name, location, date, time)
@@ -342,35 +320,35 @@ class AgendaTemplate(TextDocument):
 
     def initializeTitles(self):
         auxList = []
-        for i in AgendaTemplate._allItems:
+        for i in self.allItems:
             text = i.String.lstrip().lower()
-            if text == AgendaTemplate.templateConsts.FILLIN_TITLE:
+            if text == self.templateConsts.FILLIN_TITLE:
                 AgendaTemplate.teTitle = PlaceholderTextElement(
                     i, self.resources.resPlaceHolderTitle,
                     self.resources.resPlaceHolderHint,
-                    AgendaTemplate.xTextDocument)
+                    self.xTextDocument)
                 AgendaTemplate.trTitle = i
-            elif text == AgendaTemplate.templateConsts.FILLIN_DATE:
+            elif text == self.templateConsts.FILLIN_DATE:
                 AgendaTemplate.teDate = PlaceholderTextElement(
                     i, self.resources.resPlaceHolderDate,
                     self.resources.resPlaceHolderHint,
-                    AgendaTemplate.xTextDocument)
+                    self.xTextDocument)
                 AgendaTemplate.trDate = i
-            elif text == AgendaTemplate.templateConsts.FILLIN_TIME:
+            elif text == self.templateConsts.FILLIN_TIME:
                 AgendaTemplate.teTime = PlaceholderTextElement(
                     i, self.resources.resPlaceHolderTime,
                     self.resources.resPlaceHolderHint,
-                    AgendaTemplate.xTextDocument)
+                    self.xTextDocument)
                 AgendaTemplate.trTime = i
-            elif text == AgendaTemplate.templateConsts.FILLIN_LOCATION:
+            elif text == self.templateConsts.FILLIN_LOCATION:
                 AgendaTemplate.teLocation = PlaceholderTextElement(
                     i, self.resources.resPlaceHolderLocation,
                     self.resources.resPlaceHolderHint,
-                    AgendaTemplate.xTextDocument)
+                    self.xTextDocument)
                 AgendaTemplate.trLocation = i
             else:
                 auxList.append(i)
-        AgendaTemplate._allItems = auxList
+        self.allItems = auxList
 
     '''
     analyze the item sections in the template.
@@ -379,13 +357,13 @@ class AgendaTemplate(TextDocument):
 
     def initializeItemsSections(self):
         sections = self.getSections(
-        AgendaTemplate.xTextDocument, AgendaTemplate.templateConsts.SECTION_ITEMS)
+        self.xTextDocument, self.templateConsts.SECTION_ITEMS)
         # for each section - there is a table...
         self.itemsTables = []
         for i in sections:
             try:
                 self.itemsTables.append(
-                    ItemsTable(self.getSection(i), self.getTable(i)))
+                    ItemsTable(self.getSection(i), self.getTable(i), self))
             except Exception, ex:
                 traceback.print_exc()
                 raise AttributeError (
@@ -397,34 +375,31 @@ class AgendaTemplate(TextDocument):
         allSections = document.TextSections.ElementNames
         return self.getNamesWhichStartWith(allSections, s)
 
-    @classmethod
     def getSection(self, name):
-        return getattr(AgendaTemplate.xTextDocument.TextSections, name)
+        return getattr(self.xTextDocument.TextSections, name)
 
-    @classmethod
     def getTable(self, name):
-        return getattr(AgendaTemplate.xTextDocument.TextTables, name)
+        return getattr(self.xTextDocument.TextTables, name)
 
-    @classmethod
     @synchronized(lock)
     def redrawTitle(self, controlName):
         try:
             if controlName == "txtTitle":
                 self.writeTitle(
                     AgendaTemplate.teTitle, AgendaTemplate.trTitle,
-                    AgendaTemplate.agenda.cp_Title)
+                    self.agenda.cp_Title)
             elif controlName == "txtDate":
                 self.writeTitle(
                     AgendaTemplate.teDate, AgendaTemplate.trDate,
-                    self.getDateString(AgendaTemplate.agenda.cp_Date))
+                    self.getDateString(self.agenda.cp_Date))
             elif controlName == "txtTime":
                 self.writeTitle(
                     AgendaTemplate.teTime, AgendaTemplate.trTime,
-                    self.getTimeString(AgendaTemplate.agenda.cp_Time))
+                    self.getTimeString(self.agenda.cp_Time))
             elif controlName == "cbLocation":
                 self.writeTitle(
                     AgendaTemplate.teLocation, AgendaTemplate.trLocation,
-                    AgendaTemplate.agenda.cp_Location)
+                    self.agenda.cp_Location)
             else:
                 raise IllegalArgumentException ("No such title control...")
         except Exception:
@@ -464,7 +439,7 @@ class AgendaTemplate(TextDocument):
     def finish(self, topics):
         self.createMinutes(topics)
         self.deleteHiddenSections()
-        AgendaTemplate.textSectionHandler.removeAllTextSections()
+        self.textSectionHandler.removeAllTextSections()
 
     '''
     hidden sections exist when an item's section is hidden because the
@@ -474,7 +449,7 @@ class AgendaTemplate(TextDocument):
     '''
 
     def deleteHiddenSections(self):
-        allSections = AgendaTemplate.xTextDocument.TextSections.ElementNames
+        allSections = self.xTextDocument.TextSections.ElementNames
         try:
             for i in allSections:
                 self.section = self.getSection(i)
@@ -499,11 +474,11 @@ class AgendaTemplate(TextDocument):
     def createMinutes(self, topicsData):
         # if the minutes section should be removed (the
         # user did not check "create minutes")
-        if not AgendaTemplate.agenda.cp_IncludeMinutes \
+        if not self.agenda.cp_IncludeMinutes \
                 or len(topicsData) <= 1:
             try:
                 minutesAllSection = self.getSection(
-                    AgendaTemplate.templateConsts.SECTION_MINUTES_ALL)
+                    self.templateConsts.SECTION_MINUTES_ALL)
                 minutesAllSection.Anchor.String = ""
             except Exception, ex:
                 traceback.print_exc()
@@ -511,31 +486,31 @@ class AgendaTemplate(TextDocument):
         # the user checked "create minutes"
         else:
             try:
-                topicStartTime = int(AgendaTemplate.agenda.cp_Time)
+                topicStartTime = int(self.agenda.cp_Time)
                 #first I replace the minutes titles...
-                AgendaTemplate.items = TextDocument.searchFillInItems()
+                self.items = self.searchFillInItems()
                 itemIndex = 0
                 for item in self.items:
                     itemText = item.String.lstrip().lower()
                     if itemText == \
-                            AgendaTemplate.templateConsts.FILLIN_MINUTES_TITLE:
+                            self.templateConsts.FILLIN_MINUTES_TITLE:
                         self.fillMinutesItem(
-                            item, AgendaTemplate.agenda.cp_Title,
+                            item, self.agenda.cp_Title,
                             self.resources.resPlaceHolderTitle)
                     elif itemText == \
-                            AgendaTemplate.templateConsts.FILLIN_MINUTES_LOCATION:
+                            self.templateConsts.FILLIN_MINUTES_LOCATION:
                         self.fillMinutesItem(
-                            item, AgendaTemplate.agenda.cp_Location,
+                            item, self.agenda.cp_Location,
                             self.resources.resPlaceHolderLocation)
                     elif itemText == \
-                            AgendaTemplate.templateConsts.FILLIN_MINUTES_DATE:
+                            self.templateConsts.FILLIN_MINUTES_DATE:
                         self.fillMinutesItem(
-                            item, getDateString(AgendaTemplate.agenda.cp_Date),
+                            item, getDateString(self.agenda.cp_Date),
                             self.resources.resPlaceHolderDate)
                     elif itemText == \
-                            AgendaTemplate.templateConsts.FILLIN_MINUTES_TIME:
+                            self.templateConsts.FILLIN_MINUTES_TIME:
                         self.fillMinutesItem(
-                            item, getTimeString(AgendaTemplate.agenda.cp_Time),
+                            item, getTimeString(self.agenda.cp_Time),
                             self.resources.resPlaceHolderTime)
 
                 self.items.clear()
@@ -548,21 +523,21 @@ class AgendaTemplate(TextDocument):
 
                 for i in xrange(len(topicsData) - 1):
                     topic = topicsData[i]
-                    AgendaTemplate.items = TextDocument.searchFillInItems()
+                    items = self.searchFillInItems()
                     itemIndex = 0
-                    for item in self.items:
+                    for item in items:
                         itemText = item.String.lstrip().lower()
                         if itemText == \
-                                AgendaTemplate.templateConsts.FILLIN_MINUTE_NUM:
+                                self.templateConsts.FILLIN_MINUTE_NUM:
                             fillMinutesItem(item, topic[0].Value, "")
                         elif itemText == \
-                                AgendaTemplate.templateConsts.FILLIN_MINUTE_TOPIC:
+                                self.templateConsts.FILLIN_MINUTE_TOPIC:
                             fillMinutesItem(item, topic[1].Value, "")
                         elif itemText == \
-                                AgendaTemplate.templateConsts.FILLIN_MINUTE_RESPONSIBLE:
+                                self.templateConsts.FILLIN_MINUTE_RESPONSIBLE:
                             fillMinutesItem(item, topic[2].Value, "")
                         elif itemText == \
-                                AgendaTemplate.templateConsts.FILLIN_MINUTE_TIME:
+                                self.templateConsts.FILLIN_MINUTE_TIME:
                             topicTime = 0
                             try:
                                 topicTime = topic[3].Value
@@ -582,13 +557,13 @@ class AgendaTemplate(TextDocument):
 
                             fillMinutesItem(item, time, "")
 
-                    AgendaTemplate.textSectionHandler.removeTextSectionbyName(
-                        AgendaTemplate.templateConsts.SECTION_MINUTES)
+                    self.textSectionHandler.removeTextSectionbyName(
+                        self.templateConsts.SECTION_MINUTES)
                     # after the last section we do not insert a one.
                     if i < len(topicsData) - 2:
-                        AgendaTemplate.textSectionHandler.insertTextSection(
-                            AgendaTemplate.templateConsts.SECTION_MINUTES,
-                            AgendaTemplate.template, False)
+                        self.textSectionHandler.insertTextSection(
+                            self.templateConsts.SECTION_MINUTES,
+                            self.template, False)
 
             except Exception, ex:
                 traceback.print_exc()
@@ -610,7 +585,7 @@ class AgendaTemplate(TextDocument):
         if text == None or text == "":
             if placeholder != None and not placeholder == "":
                 placeHolder = createPlaceHolder(
-                    AgendaTemplate.xTextDocument, placeholder,
+                    self.xTextDocument, placeholder,
                     self.resources.resPlaceHolderHint)
                 try:
                     Range.Start.Text.insertTextContent(
@@ -618,11 +593,8 @@ class AgendaTemplate(TextDocument):
                 except Exception, ex:
                     traceback.print_exc()
 
-    '''creates a placeholder field with the given text and given hint.
-    @param  AgendaTemplate.xTextDocument service factory
-    @param ph place holder text
-    @param hint hint text
-    @return the place holder field.
+    '''
+    creates a placeholder field with the given text and given hint.
     '''
 
     @classmethod
@@ -647,10 +619,8 @@ class AgendaTemplate(TextDocument):
                 v.append(i)
         return v
 
-    '''Convenience method for inserting some cells into a table.
-    @param table
-    @param start
-    @param count
+    '''
+    Convenience method for inserting some cells into a table.
     '''
 
     @classmethod
@@ -667,10 +637,9 @@ class AgendaTemplate(TextDocument):
     def getRowIndex(self, cellName):
         return int(cellName.RangeName[1:])
 
-    '''returns the rows count of this table, assuming
+    '''
+    returns the rows count of this table, assuming
     there is no vertical merged cells.
-    @param table
-    @return the rows count of the given table.
     '''
 
     @classmethod
@@ -685,9 +654,10 @@ class ItemsTable(object):
     items = []
     table = None
 
-    def __init__(self, section_, table_):
-        ItemsTable.table = table_
-        self.section = section_
+    def __init__(self, section, table, agenda):
+        self.agenda = agenda
+        ItemsTable.table = table
+        self.section = section
         self.items = []
         '''
         go through all <*> items in the document
@@ -697,16 +667,16 @@ class ItemsTable(object):
         search will be faster.
         '''
         i = 0
-        while i < len(AgendaTemplate._allItems):
-            workwith = AgendaTemplate._allItems[i]
+        while i < len(self.agenda.allItems):
+            workwith = self.agenda.allItems[i]
             t = Helper.getUnoPropertyValue(workwith, "TextTable")
             if t == ItemsTable.table:
                 iText = workwith.String.lower().lstrip()
-                ai = AgendaTemplate.itemsCache[iText]
+                ai = self.agenda.itemsCache[iText]
                 if ai is not None:
                     self.items.append(ai)
-                    del AgendaTemplate._allItems[i]
-                    AgendaTemplate.itemsMap[iText] = self
+                    del self.agenda.allItems[i]
+                    self.agenda.itemsMap[iText] = self
                     i -= 1
             i += 1
 
@@ -726,13 +696,13 @@ class ItemsTable(object):
         with AgendaTemplate.lock:
             name = self.section.Name
             # link and unlink the section to the template.
-            AgendaTemplate.textSectionHandler.linkSectiontoTemplate(
-                AgendaTemplate.template, name, self.section)
-            AgendaTemplate.textSectionHandler.breakLinkOfTextSection(
+            self.agenda.textSectionHandler.linkSectiontoTemplate(
+                self.agenda.template, name, self.section)
+            self.agenda.textSectionHandler.breakLinkOfTextSection(
                 self.section)
             # we need to get a instance after linking.
-            ItemsTable.table = AgendaTemplate.getTable(name)
-            self.section = AgendaTemplate.getSection(name)
+            ItemsTable.table = self.agenda.getTable(name)
+            self.section = self.agenda.getSection(name)
             cursor = ItemsTable.table.createCursorByCellName("A1")
             # should this section be visible?
             visible = False
@@ -748,7 +718,7 @@ class ItemsTable(object):
             see AgendaItem class below.
             '''
             for i in self.items:
-                if AgendaTemplate.isShowItem(i.name):
+                if self.agenda.isShowItem(i.name):
                     visible = True
                     i.table = ItemsTable.table
                     i.write(cursor)
@@ -842,18 +812,18 @@ class Topics(object):
     rowsPerTopic = None
     topicCells = []
 
-    def __init__(self):
+    def __init__(self, agenda):
         self.topicItems = {}
         self.firstRowFormat = []
-        # This is the topics table. say hallo :-)
+        self.agenda = agenda
         try:
-            Topics.table = AgendaTemplate.getTable(
-                AgendaTemplate.templateConsts.SECTION_TOPICS)
+            Topics.table = self.agenda.getTable(
+                self.agenda.templateConsts.SECTION_TOPICS)
         except Exception, ex:
             traceback.print_exc()
             raise AttributeError (
                 "Fatal error while loading template: table " + \
-                AgendaTemplate.templateConsts.SECTION_TOPICS + " could not load.")
+                self.agenda.templateConsts.SECTION_TOPICS + " could not load.")
 
         '''
         first I store all <*> ranges
@@ -864,7 +834,7 @@ class Topics(object):
         if a cell contains a <*> or not.
         '''
         items = {}
-        for i in AgendaTemplate._allItems:
+        for i in self.agenda.allItems:
             t = Helper.getUnoPropertyValue(i, "TextTable")
             if t == Topics.table:
                 cell = Helper.getUnoPropertyValue(i, "Cell")
@@ -877,7 +847,7 @@ class Topics(object):
         So no mutter how many rows a topic takes - we
         can restore its structure and format.
         '''
-        rows = AgendaTemplate.getRowCount(Topics.table)
+        rows = self.agenda.getRowCount(Topics.table)
         Topics.rowsPerTopic = (rows - 1) / 3
         firstCell = "A" + str(1 + Topics.rowsPerTopic + 1)
         afterLastCell = "A" + str(1 + (Topics.rowsPerTopic * 2) + 1)
@@ -904,16 +874,16 @@ class Topics(object):
 
         Topics.numCell = Topics.topicCells.index(
             self.topicItems[
-                AgendaTemplate.templateConsts.FILLIN_TOPIC_NUMBER])
+                self.agenda.templateConsts.FILLIN_TOPIC_NUMBER])
         Topics.topicCell = Topics.topicCells.index(
             self.topicItems[
-                AgendaTemplate.templateConsts.FILLIN_TOPIC_TOPIC])
+                self.agenda.templateConsts.FILLIN_TOPIC_TOPIC])
         Topics.responsibleCell = Topics.topicCells.index(
             self.topicItems[
-                AgendaTemplate.templateConsts.FILLIN_TOPIC_RESPONSIBLE])
+                self.agenda.templateConsts.FILLIN_TOPIC_RESPONSIBLE])
         Topics.timeCell = Topics.topicCells.index(
             self.topicItems[
-                AgendaTemplate.templateConsts.FILLIN_TOPIC_TIME])
+                self.agenda.templateConsts.FILLIN_TOPIC_TIME])
 
     '''@param topic the topic number to write
     @param data the data of the topic.
@@ -923,17 +893,17 @@ class Topics(object):
 
     @classmethod
     def write2(self, topic, data):
-        if topic >= len(AgendaTemplate.writtenTopics):
-            size = topic - len(AgendaTemplate.writtenTopics)
-            AgendaTemplate.writtenTopics += [None] * size
-        AgendaTemplate.writtenTopics.insert(topic, "")
+        if topic >= len(self.agenda.writtenTopics):
+            size = topic - len(self.agenda.writtenTopics)
+            self.agenda.writtenTopics += [None] * size
+        self.agenda.writtenTopics.insert(topic, "")
         # make sure threr are enough rows for me...
-        rows = AgendaTemplate.getRowCount(Topics.table)
+        rows = self.agenda.getRowCount(Topics.table)
         reqRows = 1 + (topic + 1) * Topics.rowsPerTopic
         firstRow = reqRows - Topics.rowsPerTopic + 1
         diff = reqRows - rows
         if diff > 0:
-            AgendaTemplate.insertTableRows(Topics.table, rows, diff)
+            self.agenda.insertTableRows(Topics.table, rows, diff)
             # set the item's text...
 
         self.setItemText(Topics.numCell, data[0].Value)
@@ -957,8 +927,8 @@ class Topics(object):
     '''
 
     def isWritten(self, topic):
-        return (len(AgendaTemplate.writtenTopics) > topic \
-            and AgendaTemplate.writtenTopics[topic] is not None)
+        return (len(self.agenda.writtenTopics) > topic \
+            and self.agenda.writtenTopics[topic] is not None)
 
     '''rewrites a single cell containing.
     This is used in order to refresh the topic/responsible/duration data
@@ -1059,8 +1029,8 @@ class Topics(object):
                 targetNumOfRows, tableRows.Count - targetNumOfRows)'''
 
         self.formatLastRow()
-        while len(AgendaTemplate.writtenTopics) > topics:
-            del AgendaTemplate.writtenTopics[topics]
+        while len(self.agenda.writtenTopics) > topics:
+            del self.agenda.writtenTopics[topics]
 
     '''reapply the format of the first (header) row.
     '''
@@ -1149,15 +1119,15 @@ it using a ParaStyleName.
 
 class PlaceholderElement(object):
 
-    def __init__(self, placeHolderText_, hint_,  xmsf_):
+    def __init__(self, placeHolderText_, hint_,  textDocument):
         self.placeHolderText = placeHolderText_
         self.hint = hint_
-        self.xmsf =  xmsf_
+        self.textDocument =  textDocument
 
     def write(self, textRange):
         try:
             xTextContent = AgendaTemplate.createPlaceHolder(
-                AgendaTemplate.xTextDocument, self.placeHolderText, self.hint)
+                self.textDocument, self.placeHolderText, self.hint)
             textRange.Text.insertTextContent(
                 textRange.Start, xTextContent, True)
         except Exception, ex:

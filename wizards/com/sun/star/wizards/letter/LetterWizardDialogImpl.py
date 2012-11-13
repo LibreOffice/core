@@ -29,7 +29,6 @@ from ..ui.PathSelection import PathSelection
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
 from ..text.TextElement import TextElement
-from ..text.TextDocument import TextDocument
 from ..text.ViewHandler import ViewHandler
 from ..text.TextFieldHandler import TextFieldHandler
 from ..document.OfficeDocument import OfficeDocument
@@ -213,7 +212,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.myLetterDoc.killEmptyFrames()
             self.bSaveSuccess = \
                 OfficeDocument.store(
-                    self.xMSF, TextDocument.xTextDocument,
+                    self.xMSF, self.myLetterDoc.xTextDocument,
                     self.sPath, "writer8_template")
             if self.bSaveSuccess:
                 self.saveConfiguration()
@@ -381,9 +380,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         selectedItemPos = self.lstBusinessStyle.SelectedItemPos
         if self.lstBusinessStylePos != selectedItemPos:
             self.lstBusinessStylePos = selectedItemPos
-            TextDocument.xTextDocument = \
-                self.myLetterDoc.loadAsPreview(
-                    self.BusinessFiles.values()[selectedItemPos], False)
+            self.myLetterDoc.loadAsPreview(
+                self.BusinessFiles.values()[selectedItemPos], False)
             self.initializeElements()
             self.chkBusinessPaperItemChanged()
             self.setElements(False)
@@ -393,9 +391,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         selectedItemPos = self.lstPrivOfficialStyle.SelectedItemPos
         if self.lstPrivOfficialStylePos != selectedItemPos:
             self.lstPrivOfficialStylePos = selectedItemPos
-            TextDocument.xTextDocument = \
-                self.myLetterDoc.loadAsPreview(
-                    self.OfficialFiles.values()[selectedItemPos], False)
+            self.myLetterDoc.loadAsPreview(
+                self.OfficialFiles.values()[selectedItemPos], False)
             self.initializeElements()
             self.setPossibleSenderData(True)
             self.setElements(False)
@@ -405,9 +402,9 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         selectedItemPos = self.lstPrivateStyle.SelectedItemPos
         if self.lstPrivateStylePos != selectedItemPos:
             self.lstPrivateStylePos = selectedItemPos
-            TextDocument.xTextDocument = \
-                self.myLetterDoc.loadAsPreview(
-                    self.PrivateFiles.values()[selectedItemPos], False)
+            self.myLetterDoc.xTextDocument = \
+            self.myLetterDoc.loadAsPreview(
+                self.PrivateFiles.values()[selectedItemPos], False)
             self.initializeElements()
             self.setElements(True)
 
@@ -569,8 +566,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         xReceiverFrame = None
         if self.chkCompanyReceiver.State != 0:
             try:
-                xReceiverFrame = TextDocument.getFrameByName(
-                    "Receiver Address", TextDocument.xTextDocument)
+                xReceiverFrame = self.myLetterDoc.getFrameByName(
+                    "Receiver Address", self.myLetterDoc.xTextDocument)
                 iFrameWidth = int(Helper.getUnoPropertyValue(
                     xReceiverFrame, PropertyNames.PROPERTY_WIDTH))
                 iFrameX = int(Helper.getUnoPropertyValue(
@@ -722,36 +719,36 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def txtSenderNameTextChanged(self):
         myFieldHandler = TextFieldHandler(
-            self.myLetterDoc.xMSF, TextDocument.xTextDocument)
+            self.myLetterDoc.xMSF, self.myLetterDoc.xTextDocument)
         myFieldHandler.changeUserFieldContent(
             "Company", self.txtSenderName.Text)
 
     def txtSenderStreetTextChanged(self):
         myFieldHandler = TextFieldHandler(
-            self.myLetterDoc.xMSF, TextDocument.xTextDocument)
+            self.myLetterDoc.xMSF, self.myLetterDoc.xTextDocument)
         myFieldHandler.changeUserFieldContent(
             "Street", self.txtSenderStreet.Text)
 
     def txtSenderCityTextChanged(self):
         myFieldHandler = TextFieldHandler(
-            self.myLetterDoc.xMSF, TextDocument.xTextDocument)
+            self.myLetterDoc.xMSF, self.myLetterDoc.xTextDocument)
         myFieldHandler.changeUserFieldContent(
             "City", self.txtSenderCity.Text)
 
     def txtSenderPostCodeTextChanged(self):
         myFieldHandler = TextFieldHandler(
-            self.myLetterDoc.xMSF, TextDocument.xTextDocument)
+            self.myLetterDoc.xMSF, self.myLetterDoc.xTextDocument)
         myFieldHandler.changeUserFieldContent(
             "PostCode", self.txtSenderPostCode.Text)
 
     def txtSenderStateTextChanged(self):
         myFieldHandler = TextFieldHandler(
-            self.myLetterDoc.xMSF, TextDocument.xTextDocument)
+            self.myLetterDoc.xMSF, self.myLetterDoc.xTextDocument)
         myFieldHandler.changeUserFieldContent(
             PropertyNames.PROPERTY_STATE, self.txtSenderState.Text)
 
     def txtTemplateNameTextChanged(self):
-        xDocProps = TextDocument.xTextDocument.DocumentProperties
+        xDocProps = self.myLetterDoc.xTextDocument.DocumentProperties
         TitleName = self.txtTemplateName.Text
         xDocProps.Title = TitleName
 
@@ -959,6 +956,16 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         elif self.optPrivateLetter.State:
             self.optPrivateLetterItemChanged()
 
+    def optReceiverPlaceholderItemChanged(self):
+        OfficeDocument.attachEventCall(
+            self.myLetterDoc.xTextDocument, "OnNew", "StarBasic",
+            "macro:///Template.Correspondence.Placeholder()")
+
+    def optReceiverDatabaseItemChanged(self):
+        OfficeDocument.attachEventCall(
+            self.myLetterDoc.xTextDocument, "OnNew", "StarBasic",
+            "macro:///Template.Correspondence.Database()")
+            
     def setElements(self, privLetter):
         if self.optSenderDefine.State:
             self.optSenderDefineItemChanged()
@@ -987,7 +994,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             
     def drawConstants(self):
         '''Localise the template'''
-        constRangeList = TextDocument.searchFillInItems(1)
+        constRangeList = self.myLetterDoc.searchFillInItems(1)
         
         for i in constRangeList:
             text = i.String.lower()

@@ -23,7 +23,6 @@ from ..ui.PathSelection import PathSelection
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
 from ..text.TextFieldHandler import TextFieldHandler
-from ..text.TextDocument import TextDocument
 from ..text.ViewHandler import ViewHandler
 from ..text.TextElement import TextElement
 from ..common.Configuration import Configuration
@@ -179,7 +178,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 bool(self.chkUseCommunicationType.State)
             self.myFaxDoc.killEmptyFrames()
             self.bSaveSuccess = OfficeDocument.store(self.xMSF,
-                TextDocument.xTextDocument, self.sPath, "writer8_template")
+                self.myFaxDoc.xTextDocument, self.sPath, "writer8_template")
             if self.bSaveSuccess:
                 self.saveConfiguration()
                 xIH = self.xMSF.createInstance( \
@@ -231,7 +230,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def drawConstants(self):
         '''Localise the template'''
-        constRangeList = TextDocument.searchFillInItems(1)
+        constRangeList = self.myFaxDoc.searchFillInItems(1)
         
         for i in constRangeList:
             text = i.String.lower()
@@ -434,7 +433,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         #avoid to load the same item again
         if self.lstBusinessStylePos != selectedItemPos:
             self.lstBusinessStylePos = selectedItemPos
-            TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview(
+            self.myFaxDoc.loadAsPreview(
                 self.BusinessFiles.values()[selectedItemPos], False)
             self.initializeElements()
             self.setElements()
@@ -459,14 +458,14 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         #avoid to load the same item again
         if self.lstPrivateStylePos != selectedItemPos:
             self.lstPrivateStylePos = selectedItemPos
-            TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview(
+            self.myFaxDoc.loadAsPreview(
                 self.PrivateFiles.values()[selectedItemPos], False)
             self.initializeElements()
             self.setElements()
 
     def txtTemplateNameTextChanged(self):
         # Change Template Title in Properties
-        xDocProps = TextDocument.xTextDocument.DocumentProperties
+        xDocProps = self.myFaxDoc.xTextDocument.DocumentProperties
         xDocProps.Title = self.txtTemplateName.Text
 
     def optSenderPlaceholderItemChanged(self):
@@ -515,7 +514,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             PropertyNames.PROPERTY_ENABLED, True)
 
         self.myFieldHandler = TextFieldHandler(self.myFaxDoc.xMSF,
-            TextDocument.xTextDocument)
+            self.myFaxDoc.xTextDocument)
         self.txtSenderNameTextChanged()
         self.txtSenderStreetTextChanged()
         self.txtSenderPostCodeTextChanged()
@@ -674,6 +673,16 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.chkUseFooter.State = 0
 
         self.chkUseFooterItemChanged()
+        
+    def optReceiverPlaceholderItemChanged(self):
+        OfficeDocument.attachEventCall(
+            self.myFaxDoc.xTextDocument, "OnNew", "StarBasic",
+            "macro:///Template.Correspondence.Placeholder()")
+
+    def optReceiverDatabaseItemChanged(self):
+        OfficeDocument.attachEventCall(
+            self.myFaxDoc.xTextDocument, "OnNew", "StarBasic",
+            "macro:///Template.Correspondence.Database()")
 
     def __enableSenderReceiver(self):
         BPaperItem = self.getRoadmapItemByID( \

@@ -238,7 +238,6 @@ class TextDocument(object):
 
         return None
 
-    @classmethod
     def searchFillInItems(self, typeSearch):
         sd = self.xTextDocument.createSearchDescriptor()
         
