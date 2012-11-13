@@ -82,6 +82,15 @@
  LT_INLINE_FUNC int
  lt_atomic_int_get(volatile int *v)
  {
+@@ -123,7 +153,7 @@
+ {
+ 	lt_bool_t retval;
+ 
+-	lt_return_if_fail (v != NULL, FALSE);
++       lt_return_val_if_fail (v != NULL, FALSE);
+ 
+ 	pthread_mutex_lock(&__lt_atomic_lock);
+ 	retval = --(*v) == 0;
 --- misc/liblangtag-0.4.0/liblangtag/lt-messages.h
 +++ misc/build/liblangtag-0.4.0/liblangtag/lt-messages.h
 @@ -298,10 +298,17 @@
