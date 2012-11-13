@@ -1,5 +1,5 @@
---- misc/xpdf-3.02/poppler/SecurityHandler.cc	2007-02-27 23:05:52.000000000 +0100
-+++ misc/build/xpdf-3.02/poppler/SecurityHandler.cc	2011-02-03 16:41:49.000000000 +0100
+--- misc/poppler/poppler/SecurityHandler.cc
++++ misc/build/poppler/poppler/SecurityHandler.cc
 @@ -40,7 +40,7 @@
  
    encryptDictA->dictLookup("Filter", &filterObj);
@@ -70,8 +70,8 @@
  #ifdef ENABLE_PLUGINS
  
  //------------------------------------------------------------------------
---- misc/xpdf-3.02/poppler/SecurityHandler.h	2007-02-27 23:05:52.000000000 +0100
-+++ misc/build/xpdf-3.02/poppler/SecurityHandler.h	2011-02-03 16:26:17.000000000 +0100
+--- misc/poppler/poppler/SecurityHandler.h
++++ misc/build/poppler/poppler/SecurityHandler.h
 @@ -103,7 +103,7 @@
    virtual int getEncVersion() { return encVersion; }
    virtual CryptAlgorithm getEncAlgorithm() { return encAlgorithm; }
