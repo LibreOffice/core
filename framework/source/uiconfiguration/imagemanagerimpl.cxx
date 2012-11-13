@@ -681,9 +681,10 @@ CmdImageList* ImageManagerImpl::implts_getDefaultImageList()
     return m_pDefaultImageList;
 }
 
-ImageManagerImpl::ImageManagerImpl( const uno::Reference< XMultiServiceFactory >& xServiceManager,bool _bUseGlobal ) :
+ImageManagerImpl::ImageManagerImpl( const uno::Reference< XMultiServiceFactory >& xServiceManager,::cppu::OWeakObject* pOwner,bool _bUseGlobal ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
     , m_xServiceManager( xServiceManager )
+    , m_pOwner(pOwner)
     , m_pDefaultImageList( 0 )
     , m_aXMLPostfix( ".xml" )
     , m_aResourceString( ModuleImageList )
@@ -707,8 +708,9 @@ ImageManagerImpl::~ImageManagerImpl()
     clear();
 }
 
-void ImageManagerImpl::dispose( const uno::Reference< XInterface >& xOwner )
+void ImageManagerImpl::dispose()
 {
+    uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
     css::lang::EventObject aEvent( xOwner );
     m_aListenerContainer.disposeAndClear( aEvent );
 
@@ -796,7 +798,7 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
 }
 
 // XImageManagerImpl
-void ImageManagerImpl::reset( const uno::Reference< XInterface >& xOwner )
+void ImageManagerImpl::reset()
 throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
@@ -819,7 +821,7 @@ throw (::com::sun::star::uno::RuntimeException)
             aRemoveList[j] = aUserImageNames[j];
 
         // Remove images
-        removeImages( xOwner, sal_Int16( i ), aRemoveList );
+        removeImages( sal_Int16( i ), aRemoveList );
         m_bUserImageListModified[i] = true;
     }
 
@@ -951,7 +953,6 @@ throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno:
 }
 
 void ImageManagerImpl::replaceImages(
-    const uno::Reference< XInterface >& xOwner,
     ::sal_Int16 nImageType,
     const Sequence< ::rtl::OUString >& aCommandURLSequence,
     const Sequence< uno::Reference< XGraphic > >& aGraphicsSequence )
@@ -1010,6 +1011,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
         }
     }
 
+    uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
     // Notify listeners
     if ( pInsertedImages != 0 )
     {
@@ -1036,7 +1038,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     }
 }
 
-void ImageManagerImpl::removeImages( const uno::Reference< XInterface >& xOwner, ::sal_Int16 nImageType, const Sequence< ::rtl::OUString >& aCommandURLSequence ) 
+void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< ::rtl::OUString >& aCommandURLSequence )
 throw ( ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::lang::IllegalAccessException,
         ::com::sun::star::uno::RuntimeException)
@@ -1114,6 +1116,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     }
 
     // Notify listeners
+    uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
     if ( pRemovedImages != 0 )
     {
         ConfigurationEvent aRemoveEvent;
@@ -1139,18 +1142,18 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     }
 }
 
-void ImageManagerImpl::insertImages( const uno::Reference< XInterface >& xOwner, ::sal_Int16 nImageType, const Sequence< ::rtl::OUString >& aCommandURLSequence, const Sequence< uno::Reference< XGraphic > >& aGraphicSequence ) 
+void ImageManagerImpl::insertImages( ::sal_Int16 nImageType, const Sequence< ::rtl::OUString >& aCommandURLSequence, const Sequence< uno::Reference< XGraphic > >& aGraphicSequence )
 throw ( ::com::sun::star::container::ElementExistException,
         ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::lang::IllegalAccessException,
         ::com::sun::star::uno::RuntimeException)
 {
-    replaceImages(xOwner,nImageType,aCommandURLSequence,aGraphicSequence);
+    replaceImages(nImageType,aCommandURLSequence,aGraphicSequence);
 }
 
 
 // XUIConfigurationPersistence
-void ImageManagerImpl::reload( const uno::Reference< XInterface >& xOwner ) 
+void ImageManagerImpl::reload()
 throw ( ::com::sun::star::uno::Exception,
         ::com::sun::star::uno::RuntimeException )
 {
@@ -1259,6 +1262,7 @@ throw ( ::com::sun::star::uno::Exception,
                 aGuard.unlock();
 
                 // Now notify our listeners. Unlock mutex to prevent deadlocks
+                uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
                 if ( pInsertedImages != 0 )
                 {
                     ConfigurationEvent aInsertEvent;
