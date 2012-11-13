@@ -37,7 +37,6 @@ from com.sun.star.awt.VclWindowPeerAttribute import OK
 
 class AgendaWizardDialogImpl(AgendaWizardDialog):
 
-    fileAccess1 = None
     pageDesign = None
 
     def __init__(self, xmsf):
@@ -313,23 +312,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
     def chkUseResourcePersonsItemChanged(self):
         AgendaTemplate.redraw(self.templateConsts.FILLIN_RESOURCE_PERSONS)
-
-    '''
-    convenience method.
-    instead of creating a FileAccess object every time
-    it is needed, I have a FileAccess object memeber.
-    the first time it is needed it will be created, and
-    then be reused...
-    @return the FileAccess memeber object.
-    '''
-
-    def getFileAccess(self):
-        if AgendaWizardDialogImpl.fileAccess1 is None:
-            try:
-                AgendaWizardDialogImpl.fileAccess1 = FileAccess(self.xMSF)
-            except Exception, e:
-                traceback.print_exc()
-        return AgendaWizardDialogImpl.fileAccess1
 
     def insertRow(self):
         self.topicsControl.insertRow()
