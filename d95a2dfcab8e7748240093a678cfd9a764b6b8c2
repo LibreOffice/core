@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQX///zE\u003d",
+        "filename": "sal/osl/unx/salinit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2012-11-13T10:51:06Z",
+      "side": 1,
+      "message": "On Mac OS X, the process is typically started as \"soffice\" rather than \"soffice.bin\" (the corresponding executable is duplicated as both \"soffice\" and \"soffice.bin\" IIRC).",
+      "revId": "d95a2dfcab8e7748240093a678cfd9a764b6b8c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
