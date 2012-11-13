@@ -31,7 +31,6 @@ $(eval $(call gb_Module_add_targets,l10ntools,\
     Executable_idxdict \
     Executable_ulfconv \
     Executable_ulfex \
-    Executable_gsicheck \
     Executable_cfgex \
     Executable_uiex \
     Executable_xrmex \
