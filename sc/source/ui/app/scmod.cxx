@@ -1068,6 +1068,11 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     if (rOptSet.HasItem(SID_SCFORMULAOPTIONS, &pItem))
     {
         const ScFormulaOptions& rOpt = ((const ScTpFormulaItem*)pItem)->GetFormulaOptions();
+
+        if (!pFormulaCfg || (*pFormulaCfg != rOpt))
+            // Formula options have changed. Repaint the column headers.
+            bRepaint = true;
+
         SetFormulaOptions( rOpt );
 
         if ( pDocSh )
