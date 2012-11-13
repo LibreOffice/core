@@ -67,7 +67,7 @@ private:
     SAL_DLLPRIVATE void WriteScientificElement_Impl( sal_Int32 nDecimals, sal_Int32 nInteger,
                                         sal_Bool bGrouping, sal_Int32 nExp );
     SAL_DLLPRIVATE void WriteFractionElement_Impl( sal_Int32 nInteger, sal_Bool bGrouping,
-                                        sal_Int32 nNumerator, sal_Int32 nDenominator );
+                                        sal_Int32 nNumeratorDigits, sal_Int32 nDenominatorDigits, sal_Int32 nDenominator );
     SAL_DLLPRIVATE void WriteCurrencyElement_Impl( const ::rtl::OUString& rString,
                                         const ::rtl::OUString& rExt );
     SAL_DLLPRIVATE void WriteBooleanElement_Impl();

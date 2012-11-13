@@ -594,6 +594,7 @@ namespace xmloff { namespace token {
         TOKEN( "delay",                           XML_DELAY ),
         TOKEN( "deletion",                        XML_DELETION ),
         TOKEN( "deletions",                       XML_DELETIONS ),
+        TOKEN( "denominator-value",               XML_DENOMINATOR_VALUE ),
         TOKEN( "dependence",                      XML_DEPENDENCE ),
         TOKEN( "dependences",                     XML_DEPENDENCES ),
         TOKEN( "dependencies",                    XML_DEPENDENCIES ),

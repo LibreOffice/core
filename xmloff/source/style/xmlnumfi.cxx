@@ -130,6 +130,7 @@ struct SvXMLNumberInfo
     sal_Int32   nExpDigits;
     sal_Int32   nNumerDigits;
     sal_Int32   nDenomDigits;
+    sal_Int32   nFracDenominator;
     sal_Bool    bGrouping;
     sal_Bool    bDecReplace;
     sal_Bool    bVarDecimals;
@@ -138,7 +139,7 @@ struct SvXMLNumberInfo
 
     SvXMLNumberInfo()
     {
-        nDecimals = nInteger = nExpDigits = nNumerDigits = nDenomDigits = -1;
+        nDecimals = nInteger = nExpDigits = nNumerDigits = nDenomDigits = nFracDenominator = -1;
         bGrouping = bDecReplace = bVarDecimals = sal_False;
         fDisplayFactor = 1.0;
     }
@@ -293,6 +294,7 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_GROUPING,
     XML_TOK_ELEM_ATTR_DISPLAY_FACTOR,
     XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT,
+    XML_TOK_ELEM_ATTR_DENOMINATOR_VALUE,
     XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS,
     XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS,
     XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS,
@@ -586,6 +588,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
             { XML_NAMESPACE_NUMBER, XML_GROUPING,                XML_TOK_ELEM_ATTR_GROUPING             },
             { XML_NAMESPACE_NUMBER, XML_DISPLAY_FACTOR,          XML_TOK_ELEM_ATTR_DISPLAY_FACTOR       },
             { XML_NAMESPACE_NUMBER, XML_DECIMAL_REPLACEMENT,     XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT  },
+            { XML_NAMESPACE_NUMBER, XML_DENOMINATOR_VALUE,       XML_TOK_ELEM_ATTR_DENOMINATOR_VALUE  },
             { XML_NAMESPACE_NUMBER, XML_MIN_EXPONENT_DIGITS,     XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS  },
             { XML_NAMESPACE_NUMBER, XML_MIN_NUMERATOR_DIGITS,    XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS },
             { XML_NAMESPACE_NUMBER, XML_MIN_DENOMINATOR_DIGITS,  XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS },
@@ -989,6 +992,10 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nDenomDigits = nAttrVal;
                 break;
+            case XML_TOK_ELEM_ATTR_DENOMINATOR_VALUE:
+                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                    aNumInfo.nFracDenominator = nAttrVal;
+                break;
             case XML_TOK_ELEM_ATTR_LANGUAGE:
                 sLanguage = sValue;
                 break;
@@ -1216,8 +1223,15 @@ void SvXMLNumFmtElementContext::EndElement()
                 for (i=0; i<aNumInfo.nNumerDigits; i++)
                     rParent.AddToCode( OUString::valueOf((sal_Unicode)'?') );
                 rParent.AddToCode( OUString::valueOf((sal_Unicode)'/') );
-                for (i=0; i<aNumInfo.nDenomDigits; i++)
-                    rParent.AddToCode( OUString::valueOf((sal_Unicode)'?') );
+                if ( aNumInfo.nFracDenominator > 0 )
+                {
+                    rParent.AddToCode(  OUString::valueOf( aNumInfo.nFracDenominator ) );
+                }
+                else
+                {
+                    for (i=0; i<aNumInfo.nDenomDigits; i++)
+                        rParent.AddToCode( OUString::valueOf((sal_Unicode)'?') );
+                }
             }
             break;
 

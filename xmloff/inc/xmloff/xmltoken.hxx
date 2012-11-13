@@ -590,6 +590,7 @@ namespace xmloff { namespace token {
         XML_DELAY,
         XML_DELETION,
         XML_DELETIONS,
+        XML_DENOMINATOR_VALUE,
         XML_DEPENDENCE,
         XML_DEPENDENCES,
         XML_DEPENDENCIES,

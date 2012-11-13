@@ -2125,7 +2125,7 @@ void lcl_GetOutputStringScientific(
         fNumber, rtl_math_StringFormat_E, nPrec, rFormatter.GetNumDecimalSep().GetChar(0));
 }
 
-sal_Int32 lcl_GetForcedDenominator(ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
+sal_Int32 lcl_GetForcedDenominator(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
 {
     sal_uInt16 i;
     rtl::OUString aDiv;
@@ -2152,6 +2152,13 @@ void lcl_ForcedDenominator(sal_uLong &nFrac, sal_uLong &nDiv, sal_uLong nForcedD
     nDiv = nForcedDiv;
 }
 
+}
+
+sal_Int32 SvNumberformat::GetForcedDenominatorForType( sal_uInt16 nNumFor ) const
+{
+    const ImpSvNumberformatInfo& rInfo = NumFor[nNumFor].Info();
+    sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
+    return lcl_GetForcedDenominator( rInfo, nAnz );
 }
 
 bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, String& rOutString) const
