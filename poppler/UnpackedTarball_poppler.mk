@@ -18,6 +18,7 @@ endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	poppler/poppler-ooopwd.patch \
+	$(if $(filter MACOSXxTRUE,$(OS)x$(COM_GCC_IS_CLANG)),poppler/poppler-apple-clang.patch) \
 ))
 
 # vim: set noet sw=4 ts=4:
