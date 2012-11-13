@@ -139,24 +139,8 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                 self.xMSF, "Template", "share", "/wizard")
             self.sUserTemplatePath = FileAccess.getOfficePath2(
                 self.xMSF, "Template", "user", "")
-            self.sBitmapPath = FileAccess.combinePaths(
-                self.xMSF, self.sTemplatePath, "/../wizard/bitmap")
         except NoValidPathException:
             traceback.print_exc()
-
-    def checkSavePath(self):
-        if self.agenda.cp_TemplatePath is None \
-            or self.agenda.cp_TemplatePath == "" \
-            or not self.getFileAccess().exists(
-                FileAccess.getParentDir(self.agenda.cp_TemplatePath), False) \
-            or not self.getFileAccess().isDirectory(
-                FileAccess.getParentDir(self.agenda.cp_TemplatePath)):
-            try:
-                self.agenda.cp_TemplatePath = FileAccess.connectURLs(
-                    FileAccess.getOfficePath2(self.xMSF, "Work", "", ""),
-                    self.resources.resDefaultFilename)
-            except Exception, ex:
-                traceback.print_exc()
 
     '''
     bind controls to the agenda member (DataAware model)
@@ -171,7 +155,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         self.setControlProperty(
             "listPageDesign", "StringItemList",
             tuple(self.agendaTemplates.keys()))
-        self.checkSavePath()
         UnoDataAware.attachListBox(
             self.agenda, "cp_AgendaType", self.listPageDesign, True).updateUI()
         UnoDataAware.attachCheckBox(
@@ -348,42 +331,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                 traceback.print_exc()
         return AgendaWizardDialogImpl.fileAccess1
 
-    '''
-    last page, "browse" ("...") button was clicked...
-    '''
-
-    def saveAs(self):
-        try:
-            checkSavePath()
-            saveAs = SystemDialog.createStoreDialog(xMSF)
-            saveAs.addFilterToDialog("ott", "writer8_template", True)
-            # call the saveAs dialog.
-            url = saveAs.callStoreDialog(
-                FileAccess.getParentDir(self.agenda.cp_TemplatePath),
-                FileAccess.getFilename(self.agenda.cp_TemplatePath))
-            if url != None:
-                self.agenda.cp_TemplatePath = url
-                setFilename(url)
-                self.filenameChanged = True
-
-        except Exception, ex:
-            traceback.print_exc()
-
-    '''
-    is called when the user
-    changes the path through the "save as" dialog.
-    The path displayed is a translated, user-friendly, platform dependant path.
-    @param url the new save url.
-    '''
-
-    def setFilename(self, url):
-        try:
-            path = getFileAccess().getPath(url, "")
-            Helper.setUnoPropertyValue(
-                getModel(self.myPathSelection.xSaveTextBox), "Text", path)
-        except Exception, ex:
-            traceback.print_exc()
-
     def insertRow(self):
         self.topicsControl.insertRow()
 
@@ -407,7 +354,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         try:
             fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
-            if self.sPath == "":
+            if not self.sPath:
                 self.myPathSelection.triggerPathPicker()
                 self.sPath = self.myPathSelection.getSelectedPath()
 
