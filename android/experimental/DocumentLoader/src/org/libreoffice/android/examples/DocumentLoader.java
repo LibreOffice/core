@@ -917,6 +917,13 @@ public class DocumentLoader
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstance)
+    {
+        super.onSaveInstanceState(savedInstance);
+        savedInstance.putInt("currentPageNumber", ((PageViewer)flipper.getCurrentView()).currentPageNumber);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -978,11 +985,14 @@ public class DocumentLoader
 
             matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-            flipper.addView(new PageViewer(0), 0, matchParent);
+            int currentPageNumber = 0;
+            if (savedInstanceState != null)
+                currentPageNumber = savedInstanceState.getInt("currentPageNumber");
+            flipper.addView(new PageViewer(currentPageNumber), 0, matchParent);
             for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
-                flipper.addView(new PageViewer(i+1), i+1, matchParent);
+                flipper.addView(new PageViewer(currentPageNumber+i+1), i+1, matchParent);
             for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
-                flipper.addView(new PageViewer(-1), PAGECACHE_PLUSMINUS + i+1, matchParent);
+                flipper.addView(new PageViewer(currentPageNumber+(i*-1)-1), PAGECACHE_PLUSMINUS + i+1, matchParent);
 
             setContentView(flipper);
         }
