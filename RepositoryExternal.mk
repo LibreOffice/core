@@ -615,7 +615,7 @@ endef
 
 else # !SYSTEM_LIBLANGTAG
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	langtag \
 ))
 
@@ -625,7 +625,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,langtag) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_use_libraries,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	langtag \
 )
 

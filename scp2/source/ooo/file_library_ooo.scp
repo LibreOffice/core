@@ -740,29 +740,6 @@ End
 #endif
 
 
-#if defined( ENABLE_LIBLANGTAG ) && !defined( SYSTEM_LIBLANGTAG )
-
-File gid_File_Lib_Langtag
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef MACOSX
-    Name = STRING(CONCAT4(liblangtag,.,1,UNXSUFFIX));
-  #elif defined WNT
-    #if defined _gcc3
-        Name = STRING(CONCAT4(liblangtag,-,1,.dll));
-    #else
-        // Nothing, statically linked to libi18nisolang1
-    #endif
-  #else
-    // FIXME: use version vars
-    Name = STRING(CONCAT4(liblangtag,UNXSUFFIX,.,1));
-  #endif
-End
-
-#endif  // ENABLE_LIBLANGTAG
-
-
 #ifdef SOLAR_JAVA
 
 STD_LIB_FILE( gid_File_Lib_Jdbc, jdbc)

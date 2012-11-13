@@ -9,23 +9,10 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,langtag,langtag))
 $(eval $(call gb_ExternalPackage_use_external_project,langtag,langtag))
-ifeq ($(GUI),WNT)
-ifeq ($(COM),GCC)
-$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag-1.dll,liblangtag/.libs/liblangtag-1.dll))
-$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.dll.a,liblangtag/.libs/liblangtag.dll.a))
-else
+ifeq ($(GUI)$(COM),WNTMSC)
 $(eval $(call gb_ExternalPackage_add_file,langtag,lib/langtag.lib,liblangtag/.libs/langtag.lib))
-endif
 else
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.1.0.0.dylib,liblangtag/.libs/liblangtag.dylib))
-$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.1.dylib,liblangtag/.libs/liblangtag.1.dylib))
-$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.dylib,liblangtag/.libs/liblangtag.dylib))
-else
-$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.so.1.0.0,liblangtag/.libs/liblangtag.so.1.0.0))
-$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.so.1,liblangtag/.libs/liblangtag.so.1))
-$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.so,liblangtag/.libs/liblangtag.so))
-endif
+$(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.a,liblangtag/.libs/liblangtag.a))
 endif
 
 # vim: set noet sw=4 ts=4:
