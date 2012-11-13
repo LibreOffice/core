@@ -16,7 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from .AgendaWizardDialog import AgendaWizardDialog
+from .AgendaWizardDialog import AgendaWizardDialog, uno
 from .AgendaWizardDialogConst import HID
 from .AgendaTemplate import AgendaTemplate, FileAccess
 from .TemplateConsts import TemplateConsts
@@ -30,6 +30,8 @@ from ..common.SystemDialog import SystemDialog
 from ..common.Desktop import Desktop
 from ..common.HelpIds import HelpIds
 from ..common.Configuration import Configuration
+from ..document.OfficeDocument import OfficeDocument
+from ..text.ViewHandler import ViewHandler
 
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
@@ -255,14 +257,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         except Exception:
             traceback.print_exc()
 
-    '''
-    last page, template title changed...
-    '''
-
-    def templateTitleChanged(self):
-        title = Helper.getUnoPropertyValue(getModel(txtTemplateName), "Text")
-        self.agendaTemplate.setTemplateTitle(title)
-
     #textFields listeners
     def txtTitleTextChanged(self):
         AgendaTemplate.redrawTitle("txtTitle")
@@ -354,10 +348,14 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                         # user said: no, do not overwrite
                         endWizard = False
                         return False
-
-            xTextDocument = self.agendaTemplate.document
+            
+            xDocProps = self.agendaTemplate.xTextDocument.DocumentProperties
+            xDocProps.Title = self.txtTemplateName.Text
+            self.agendaTemplate.setWizardTemplateDocInfo( \
+                self.resources.resAgendaWizardDialog_title,
+                self.resources.resTemplateDescription)
             bSaveSuccess = OfficeDocument.store(
-                self.xMSF, AgendaTemplate.xTextDocument, self.sPath,
+                self.xMSF, self.agendaTemplate.xTextDocument, self.sPath,
                 "writer8_template")
 
             if bSaveSuccess:

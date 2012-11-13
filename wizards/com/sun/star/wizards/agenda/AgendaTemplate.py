@@ -158,9 +158,6 @@ class AgendaTemplate(TextDocument):
         self.redrawTitle("txtDate")
         self.redrawTitle("txtTime")
         self.redrawTitle("cbLocation")
-        if AgendaTemplate.agenda.cp_TemplateName is None:
-            AgendaTemplate.agenda.cp_TemplateName = ""
-        self.setTemplateTitle(AgendaTemplate.agenda.cp_TemplateName)
 
     '''redraws/rewrites the table which contains the given item
     This method is called when the user checks/unchecks an item.
@@ -180,14 +177,6 @@ class AgendaTemplate(TextDocument):
         except Exception, e:
             traceback.print_exc()
         AgendaTemplate.xTextDocument.unlockControllers()
-
-    '''update the documents title property to the given title
-    @param newTitle title.
-    '''
-
-    @synchronized(lock)
-    def setTemplateTitle(self, newTitle):
-        self.m_xDocProps.Title = newTitle
 
     '''checks the data model if the
     item corresponding to the given string should be shown
@@ -336,11 +325,6 @@ class AgendaTemplate(TextDocument):
         AgendaTemplate.timeFormat = \
             AgendaTemplate.dateUtils.getFormat(TIME_HHMM)
 
-        '''
-        get the document properties object.
-        '''
-
-        self.m_xDocProps = AgendaTemplate.xTextDocument.DocumentProperties
         self.initItemsCache()
         AgendaTemplate._allItems = self.searchFillInItems(0)
         self.initializeTitles()

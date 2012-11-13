@@ -174,3 +174,5 @@ class AgendaWizardDialogResources(Resource):
         #Common Resources
         self.resOverwriteWarning = self.getResText(
             AgendaWizardDialogResources.RID_COMMON_START + 19)
+        self.resTemplateDescription = self.getResText(
+            AgendaWizardDialogResources.RID_COMMON_START + 20)

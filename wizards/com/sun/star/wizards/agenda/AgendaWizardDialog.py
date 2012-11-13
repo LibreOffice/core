@@ -322,8 +322,7 @@ class AgendaWizardDialog(WizardDialog):
             (8, self.resources.reslblTemplateName_value,
                 97, 62, 6, 602, 101))
         self.txtTemplateName = self.insertTextField("txtTemplateName",
-            AgendaWizardDialogConst.TXTTEMPLATENAME_TEXT_CHANGED,
-            self.PROPS_X,
+            None, self.PROPS_X,
             (12, AgendaWizardDialogConst.TXTTEMPLATENAME_HID,
                 202, 60, 6, 603, 100), self)
         self.insertLabel("lblProceed", self.PROPS_TEXT,

@@ -38,7 +38,6 @@ class AgendaWizardDialogConst:
     CHKUSEOBSERVERS_ITEM_CHANGED = "chkUseObserversItemChanged"
     CHKUSERESOURCEPERSONS_ITEM_CHANGED = "chkUseResourcePersonsItemChanged"
     LISTPAGEDESIGN_ACTION_PERFORMED = "pageDesignChanged"
-    TXTTEMPLATENAME_TEXT_CHANGED = "templateTitleChanged"
     BTNTEMPLATEPATH_ACTION_PERFORMED = "saveAs"
     BTNINSERT_ACTION_PERFORMED = "insertRow"
     BTNREMOVE_ACTION_PERFORMED = "removeRow"
