@@ -2025,14 +2025,24 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
     {
         if (   eScannedType != NUMBERFORMAT_UNDEFINED   // already another type
             && eScannedType != NUMBERFORMAT_DATE)       // except date
-            return MatchedReturn();                               // => jan/31/1994
-        else if (    eScannedType != NUMBERFORMAT_DATE      // analyzed date until now
-                 && (    eSetType == NUMBERFORMAT_FRACTION  // and preset was fraction
-                     || (nAnzNums == 3                      // or 3 numbers
-                         && nStringPos > 2) ) )             // and what ???
+            return MatchedReturn();                     // => jan/31/1994
+        else if (eScannedType != NUMBERFORMAT_DATE      // analyzed no date until now
+                && ( eSetType == NUMBERFORMAT_FRACTION  // and preset was fraction
+                    || (nAnzNums == 3                   // or 3 numbers
+                        && (nStringPos == 3             // and 3rd string particle
+                            || (nStringPos == 4         // or 4th
+                                && nSign)))))           //   if signed
         {
             SkipBlanks(rString, nPos);
-            eScannedType = NUMBERFORMAT_FRACTION;   // !!! it IS a fraction
+            if (nPos == rString.Len())
+            {
+                eScannedType = NUMBERFORMAT_FRACTION;   // !!! it IS a fraction (so far)
+                if (eSetType == NUMBERFORMAT_FRACTION
+                        && nAnzNums == 2
+                        && (nStringPos == 1                     // for 4/5
+                            || (nStringPos == 2 && nSign)))     // or signed -4/5
+                    return true;                                // don't fall into date trap
+            }
         }
         else
             nPos--;                                 // put '/' back
