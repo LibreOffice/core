@@ -1316,13 +1316,6 @@ bool DffPropSet::GetPropertyBool( sal_uInt32 nId, bool bDefault ) const
     return aBuffer.makeStringAndClear();
 }
 
-void DffPropSet::SetPropertyValue( sal_uInt32 nId, sal_uInt32 nValue ) const
-{
-    nId &= 0x3ff;
-    mpPropSetEntries[ nId ].aFlags.bSet = true;
-    mpPropSetEntries[ nId ].nContent = nValue;
-};
-
 sal_Bool DffPropSet::SeekToContent( sal_uInt32 nRecType, SvStream& rStrm ) const
 {
     nRecType &= 0x3ff;

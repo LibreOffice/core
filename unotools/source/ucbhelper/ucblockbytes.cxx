@@ -1572,13 +1572,6 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
 }
 
 //----------------------------------------------------------------------------
-void UcbLockBytes::Cancel()
-{
-    // is alive only for compatibility reasons
-    OSL_ENSURE( m_bTerminated, "UcbLockBytes is not thread safe so it can be used only syncronously!\n" );
-}
-
-//----------------------------------------------------------------------------
 IMPL_LINK_NOARG(UcbLockBytes, DataAvailHdl)
 {
     if ( hasInputStream_Impl() && m_xHandler.Is() )
@@ -1608,45 +1601,6 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference< XStream >& xStre
     xLockBytes->setDontClose_Impl();
     xLockBytes->setStream_Impl( xStream );
     xLockBytes->terminate_Impl();
-    return xLockBytes;
-}
-
-UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xContent, const ::rtl::OUString& rReferer, const ::rtl::OUString& rMediaType,
-        const Reference < XInputStream >& xPostData, const Reference < XInteractionHandler >& xInteractionHandler, UcbLockBytesHandler* pHandler )
-{
-    if( !xContent.is() )
-        return NULL;
-
-    UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
-    xLockBytes->SetSynchronMode( !pHandler );
-    Reference< XActiveDataControl > xSink = (XActiveDataControl*) new UcbDataSink_Impl( xLockBytes );
-
-    PostCommandArgument2 aArgument;
-    aArgument.Source = xPostData;
-    aArgument.Sink = xSink;
-    aArgument.MediaType = rMediaType;
-    aArgument.Referer = rReferer;
-
-    Command aCommand;
-    aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("post"));
-    aCommand.Argument <<= aArgument;
-
-    Reference< XProgressHandler > xProgressHdl = new ProgressHandler_Impl( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );
-
-    sal_Bool bError = UCBOpenContentSync( xLockBytes,
-                                          xContent,
-                                          aCommand,
-                                          xSink,
-                                          xInteractionHandler,
-                                          xProgressHdl,
-                                          pHandler );
-
-       if ( xLockBytes->GetError() == ERRCODE_NONE && ( bError || !xLockBytes->getInputStream().is() ) )
-    {
-        OSL_FAIL("No InputStream, but no error set!" );
-           xLockBytes->SetError( ERRCODE_IO_GENERAL );
-    }
-
     return xLockBytes;
 }
 

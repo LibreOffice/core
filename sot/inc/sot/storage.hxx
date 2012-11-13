@@ -75,9 +75,6 @@ public:
     virtual sal_Bool        Commit();
     virtual sal_Bool        Revert();
     sal_Bool                SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
-    sal_Bool                GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        GetXInputStream() const;
     virtual sal_Size remainingSize();
 };
 
@@ -127,7 +124,6 @@ public:
                         SO2_DECL_BASIC_CLASS_DLL(SotStorage,SOTDATA())
 
     SvMemoryStream *    CreateMemoryStream();
-    const SvStream *    GetSvStream();
 
     static sal_Bool         IsStorageFile( const String & rFileName );
     static sal_Bool         IsStorageFile( SvStream* pStream );
@@ -136,8 +132,7 @@ public:
 
     virtual sal_Bool        Validate();
 
-    void                SetKey( const rtl::OString& rKey );
-    const rtl::OString& GetKey() const { return m_aKey; }
+    const rtl::OString& GetKey() const;
 
     void                SetVersion( long nVers )
                         {
@@ -172,7 +167,6 @@ public:
     virtual sal_uLong       GetFormat();
     virtual String      GetUserName();
     virtual sal_Bool        ShouldConvert();
-    void                SetName( const String& rName );
 
                         // Liste aller Elemente
     virtual void        FillInfoList( SvStorageInfoList * ) const;
@@ -187,9 +181,6 @@ public:
                                     StreamMode = STREAM_STD_READWRITE,
                                     StorageMode = 0 );
     SotStorage *        OpenSotStorage( const String & rEleName,
-                                    StreamMode = STREAM_STD_READWRITE,
-                                    StorageMode = STORAGE_TRANSACTED );
-    SotStorage *        OpenUCBStorage( const String & rEleName,
                                     StreamMode = STREAM_STD_READWRITE,
                                     StorageMode = STORAGE_TRANSACTED );
                         // Abfrage auf Storage oder Stream
@@ -207,7 +198,6 @@ public:
                                 const String & rNewName );
 
     sal_Bool                SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
-    sal_Bool                GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
     sal_Bool                IsOLEStorage() const;
     static sal_Bool         IsOLEStorage( const String & rFileName );
     static sal_Bool         IsOLEStorage( SvStream* pStream );

@@ -160,8 +160,6 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
 
-    const Size      GetMinOutputSizePixel() const;
-
     virtual void    RecalcAll();
     virtual void    selectEntry( const long nPos );
     //-----------------
@@ -225,20 +223,6 @@ ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
     delete m_pOptionsBtn;
     delete m_pEnableBtn;
     delete m_pRemoveBtn;
-}
-
-//------------------------------------------------------------------------------
-const Size ExtBoxWithBtns_Impl::GetMinOutputSizePixel() const
-{
-    Size aMinSize( ExtensionBox_Impl::GetMinOutputSizePixel() );
-    long nHeight = aMinSize.Height();
-    nHeight += m_pOptionsBtn->GetSizePixel().Height();
-    nHeight +=  2 * TOP_OFFSET;
-    long nWidth = m_pOptionsBtn->GetSizePixel().Width();
-    nWidth *= 3;
-    nWidth += 5*TOP_OFFSET + 20;
-
-    return Size( nWidth, nHeight );
 }
 
 // -----------------------------------------------------------------------

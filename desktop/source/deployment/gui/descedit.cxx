@@ -80,12 +80,4 @@ void DescriptionEdit::Clear()
         pVScrBar->Hide();
 }
 
-// -----------------------------------------------------------------------
-
-void DescriptionEdit::SetDescription( const String& rDescription )
-{
-    SetText( rDescription );
-    UpdateScrollBar();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -100,10 +100,7 @@ friend class SvxConfigGroupListBox;
     DECL_LINK(TimerHdl, void *);
     virtual void                    MouseMove( const MouseEvent& rMEvt );
 
-    void Init();
-
 public:
-                                    SvxConfigFunctionListBox(Window*, const ResId&);
                                     SvxConfigFunctionListBox(Window* pParent);
                                     ~SvxConfigFunctionListBox();
     void                            ClearAll();
@@ -165,12 +162,6 @@ protected:
     using SvListView::Expand;
 
 public:
-            SvxConfigGroupListBox (
-                Window* pParent, const ResId&,
-                bool _bShowSlots,
-                const ::com::sun::star::uno::Reference
-                    < ::com::sun::star::frame::XFrame >& xFrame
-            );
             SvxConfigGroupListBox(Window* pParent);
             ~SvxConfigGroupListBox();
 

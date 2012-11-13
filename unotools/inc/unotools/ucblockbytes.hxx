@@ -121,13 +121,6 @@ protected:
 public:
                             // properties: Referer, PostMimeType
     static UcbLockBytesRef  CreateLockBytes( const ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XContent >& xContent,
-                                            const ::rtl::OUString& rReferer,
-                                            const ::rtl::OUString& rMediaType,
-                                            const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xPostData,
-                                            const ::com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionHandler >& xInter,
-                                            UcbLockBytesHandler* pHandler=0 );
-
-    static UcbLockBytesRef  CreateLockBytes( const ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XContent >& xContent,
                                             const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rProps,
                                             StreamMode eMode,
                                             const ::com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionHandler >& xInter,
@@ -149,8 +142,6 @@ public:
 
     ErrCode                 GetError() const
                             { return m_nError; }
-
-    void                    Cancel(); // is alive only for compatibility reasons
 
     // the following properties are available when and after the first DataAvailable callback has been executed
     String                  GetContentType() const;

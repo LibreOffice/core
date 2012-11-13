@@ -70,24 +70,10 @@ using namespace ::com::sun::star::container;
  * The implementations of SvxConfigFunctionListBox and
  * SvxConfigGroupListBox are copied from sfx2/source/dialog/cfg.cxx
  */
-SvxConfigFunctionListBox::SvxConfigFunctionListBox( Window* pParent, const ResId& rResId)
-    : SvTreeListBox( pParent, rResId )
-    , pCurEntry( 0 )
-    , m_pDraggingEntry( 0 )
-{
-    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
-    Init();
-}
-
 SvxConfigFunctionListBox::SvxConfigFunctionListBox(Window* pParent)
     : SvTreeListBox(pParent, WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT)
     , pCurEntry(0)
     , m_pDraggingEntry(0)
-{
-    Init();
-}
-
-void SvxConfigFunctionListBox::Init()
 {
     GetModel()->SetSortMode( SortAscending );
 
@@ -196,35 +182,6 @@ sal_Int8
 SvxConfigFunctionListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return DND_ACTION_NONE;
-}
-
-SvxConfigGroupListBox::SvxConfigGroupListBox(
-    Window* pParent, const ResId& rResId,
-    bool _bShowSlots, const Reference< frame::XFrame >& xFrame )
-        : SvTreeListBox( pParent, rResId )
-        , m_bShowSlots( _bShowSlots )
-    , m_hdImage(CUI_RES(RID_CUIIMG_HARDDISK))
-    , m_libImage(CUI_RES(RID_CUIIMG_LIB))
-    , m_macImage(CUI_RES(RID_CUIIMG_MACRO))
-    , m_docImage(CUI_RES(RID_CUIIMG_DOC))
-    , m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS))
-    , m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS))
-{
-    FreeResource();
-
-    if ( xFrame != NULL )
-    {
-        m_xFrame.set( xFrame );
-    }
-
-    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
-
-    ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-
-    SetNodeBitmaps(
-        aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-        aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
-    );
 }
 
 SvxConfigGroupListBox::SvxConfigGroupListBox(Window* pParent)

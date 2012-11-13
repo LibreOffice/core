@@ -269,7 +269,6 @@ class SOT_DLLPUBLIC SotObject : virtual public SvRefBase
 {
 friend class SotFactory;
 friend class SvObject;
-    sal_uInt16  nStrongLockCount;
     sal_uInt16  nOwnerLockCount;
     sal_Bool    bOwner:1,
                 bSVObject:1,        // Ist Proxy, dann TRUE wenn andere Seite SV ist
@@ -290,9 +289,7 @@ public:
 
     void*               CastAndAddRef( const SotFactory * pFact );
 
-    sal_uInt16              Lock( sal_Bool bLock ); // affects nStrongLockCount
     sal_uInt16              GetOwnerLockCount() const { return nOwnerLockCount; }
-    sal_uInt16              GetStrongLockCount() const { return nStrongLockCount; }
 
     void                OwnerLock( sal_Bool bLock );
     sal_Bool                DoClose();

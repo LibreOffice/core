@@ -360,36 +360,6 @@ sal_Bool SotStorageStream::SetProperty( const String& rName, const ::com::sun::s
     }
 }
 
-sal_Bool SotStorageStream::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
-{
-    UCBStorageStream* pStg = PTR_CAST( UCBStorageStream, pOwnStm );
-    if ( pStg )
-    {
-        return pStg->GetProperty( rName, rValue );
-    }
-    else
-    {
-        OSL_FAIL("Not implemented!");
-        return sal_False;
-    }
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SotStorageStream::GetXInputStream() const
-{
-    UCBStorageStream* pStg = PTR_CAST( UCBStorageStream, pOwnStm );
-    if ( pStg )
-    {
-        return pStg->GetXInputStream();
-    }
-    else
-    {
-        OSL_FAIL("Not implemented!");
-        return ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >();
-    }
-}
-
-
-
 /************** class SotStorage ******************************************
 *************************************************************************/
 class SotStorageFactory : public SotFactory
@@ -732,13 +702,9 @@ const String & SotStorage::GetName() const
     return m_aName;
 }
 
-void SotStorage::SetName( const String& rName )
+const rtl::OString& SotStorage::GetKey() const
 {
-    // This method is necessary because most storages will not be opened with a FileName, but an external stream instead
-    // This stream is a stream opened by a UCP and so aName is only used as a transport for all client code of the SotStorage
-    // class that depends on the fact that a root storage has a name
-    DBG_ASSERT( !GetName().Len(), "SetName() must not be called when the storage already has a name!" );
-    m_aName = rName;
+    return m_aKey;
 }
 
 /*************************************************************************
@@ -960,27 +926,6 @@ SotStorage * SotStorage::OpenSotStorage( const String & rEleName,
     return NULL;
 }
 
-SotStorage * SotStorage::OpenUCBStorage( const String & rEleName,
-                                        StreamMode nMode,
-                                        StorageMode nStorageMode )
-{
-    SotStorage * pStor = NULL;
-    DBG_ASSERT( Owner(), "must be owner" );
-    if( m_pOwnStg )
-    {
-        nMode |= STREAM_SHARE_DENYALL;
-        ErrCode nE = m_pOwnStg->GetError();
-        BaseStorage * p = m_pOwnStg->OpenUCBStorage( rEleName, nMode,
-                        (nStorageMode & STORAGE_TRANSACTED) ? sal_False : sal_True );
-        pStor = new SotStorage( p );
-        if( !nE )
-            m_pOwnStg->ResetError(); // kein Fehler setzen
-    }
-    else
-        SetError( SVSTREAM_GENERALERROR );
-    return pStor;
-}
-
 /*************************************************************************
 |*    SotStorage::IsStream()
 |*    SotStorage::IsStorage()
@@ -1093,15 +1038,6 @@ sal_Bool SotStorage::MoveTo( const String & rEleName,
     return SVSTREAM_OK == GetError();
 }
 
-const SvStream* SotStorage::GetSvStream()
-{
-    const SvStream* pResult = 0;
-    DBG_ASSERT( Owner(), "must be owner" );
-    if( m_pOwnStg )
-        pResult = m_pOwnStg->GetSvStream();
-    return pResult;
-}
-
 sal_Bool SotStorage::Validate()
 {
     DBG_ASSERT( m_bIsRoot, "Validate nur an Rootstorage" );
@@ -1125,29 +1061,6 @@ sal_Bool SotStorage::SetProperty( const String& rName, const ::com::sun::star::u
     }
 }
 
-sal_Bool SotStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
-{
-    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
-    if ( pStg )
-    {
-        return pStg->GetProperty( rName, rValue );
-    }
-    else if ( rName.CompareToAscii("MediaType") == COMPARE_EQUAL )
-    {
-        String aStr = SotExchange::GetFormatMimeType( GetFormat() );
-        sal_uInt16 nPos = aStr.Search(';');
-        if ( nPos != STRING_NOTFOUND )
-            aStr = aStr.Copy( 0, nPos );
-        rValue <<= (::rtl::OUString) aStr;
-        return sal_True;
-    }
-    else
-    {
-        DBG_WARNING("W1:Not implemented!");
-        return sal_False;
-    }
-}
-
 sal_Bool SotStorage::IsOLEStorage() const
 {
     UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
@@ -1162,24 +1075,6 @@ sal_Bool SotStorage::IsOLEStorage( const String & rFileName )
 sal_Bool SotStorage::IsOLEStorage( SvStream* pStream )
 {
     return Storage::IsStorageFile( pStream );
-}
-
-void SotStorage::SetKey( const rtl::OString& rKey )
-{
-    m_aKey = rKey;
-    if ( !IsOLEStorage() )
-    {
-        sal_uInt8 aBuffer[RTL_DIGEST_LENGTH_SHA1];
-        rtlDigestError nError = rtl_digest_SHA1( m_aKey.getStr(), m_aKey.getLength(), aBuffer, RTL_DIGEST_LENGTH_SHA1 );
-        if ( nError == rtl_Digest_E_None )
-        {
-            sal_uInt8* pBuffer = aBuffer;
-            ::com::sun::star::uno::Sequence < sal_Int8 > aSequ( (sal_Int8*) pBuffer, RTL_DIGEST_LENGTH_SHA1 );
-            ::com::sun::star::uno::Any aAny;
-            aAny <<= aSequ;
-            SetProperty( ::rtl::OUString("EncryptionKey"), aAny );
-        }
-    }
 }
 
 SotStorage* SotStorage::OpenOLEStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,

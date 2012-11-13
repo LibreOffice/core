@@ -71,31 +71,6 @@ void ShowErrorDialog( const Any& aException )
     delete pDlg;
 }
 
-void SFTreeListBox::Init()
-{
-    SetSelectionMode( SINGLE_SELECTION );
-
-    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
-                   WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HIDESELECTION |
-                   WB_HASLINES | WB_HASLINESATROOT );
-    SetNodeDefaultImages();
-
-    nMode = 0xFF;    // everything
-}
-
-SFTreeListBox::SFTreeListBox(Window* pParent, const ResId& rResId)
-    : SvTreeListBox(pParent, ResId(rResId.GetId(),*rResId.GetResMgr()))
-    , m_hdImage(CUI_RES(RID_CUIIMG_HARDDISK))
-    , m_libImage(CUI_RES(RID_CUIIMG_LIB))
-    , m_macImage(CUI_RES(RID_CUIIMG_MACRO))
-    , m_docImage(CUI_RES(RID_CUIIMG_DOC))
-    , m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS))
-    , m_sProdMacros(CUI_RES(RID_SVXSTR_PRODMACROS))
-{
-    FreeResource();
-    Init();
-}
-
 SFTreeListBox::SFTreeListBox(Window* pParent)
     : SvTreeListBox(pParent)
     , m_hdImage(CUI_RES(RID_CUIIMG_HARDDISK))
@@ -105,7 +80,14 @@ SFTreeListBox::SFTreeListBox(Window* pParent)
     , m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS))
     , m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS))
 {
-    Init();
+    SetSelectionMode( SINGLE_SELECTION );
+
+    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
+                   WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HIDESELECTION |
+                   WB_HASLINES | WB_HASLINESATROOT );
+    SetNodeDefaultImages();
+
+    nMode = 0xFF;    // everything
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSFTreeListBox(Window *pParent, VclBuilder::stringmap &)

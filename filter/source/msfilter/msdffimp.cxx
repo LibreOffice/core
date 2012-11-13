@@ -6240,15 +6240,6 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
     return ( GRFILTER_OK == nRes ); // Ergebniss melden
 }
 
-/* static */
-bool SvxMSDffManager::ReadCommonRecordHeader(DffRecordHeader& rRec,
-    SvStream& rIn)
-{
-    rRec.nFilePos = rIn.Tell();
-    return SvxMSDffManager::ReadCommonRecordHeader(rIn,rRec.nRecVer,
-        rRec.nRecInstance, rRec.nRecType, rRec.nRecLen);
-}
-
 /* also static */
 bool SvxMSDffManager::ReadCommonRecordHeader(SvStream& rSt,
     sal_uInt8& rVer, sal_uInt16& rInst, sal_uInt16& rFbt, sal_uInt32& rLength)

@@ -1,4 +1,9 @@
+FileStream::open(rtl::OString const&, FileAccessMode)
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
+GraphicObject::SwapIn(SvStream*)
+LiblantagDataRef::presetDataPath(rtl::OUString const&)
+Line::GetLength() const
+Line::Intersection(Rectangle const&, Line&) const
 RelatedMultipart::getIds()
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
 ScFiltersTest::testColorScaleODS()
@@ -8,9 +13,16 @@ ScVbaFormat<ooo::vba::excel::XRange>::setNumberFormat(com::sun::star::lang::Loca
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
-SvTreeEntryList::front()
+SotFactory::CastAndAddRef(SotObject*) const
+String::String(unsigned short)
+SvListView::GetModel() const
+SvTreeList::GetChildIterators(SvTreeListEntry const*) const
+SvTreeListEntry::GetChildEntries()
+SvTreeListEntry::GetChildEntries() const
+SvtGraphicStroke::toString() const
 TextEngine::GetLeftMargin() const
 ThumbnailViewItemAcc::FireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
+UnoControl::UnoControl()
 VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(Size const&, Fraction const&, Point const&, boost::shared_array<unsigned char> const&)
 Window::PostUserEvent(unsigned long&, unsigned long, void*)
 XclExpPivotCache::GetFieldAcc(rtl::OUString const&)
@@ -32,18 +44,15 @@ apitest::XPropertySet::testAddVetoableChangeListener()
 apitest::XPropertySet::testRemovePropertyChangeListener()
 apitest::XPropertySet::testRemoveVetoableChangeListener()
 apitest::XSpreadsheetDocument::testGetSheets()
-cairocanvas::CanvasHelper::flush() const
-cairocanvas::CanvasHelper::getPalette()
-cairocanvas::SpriteDeviceHelper::getSurface()
-cairocanvas::TextLayout::draw(_cairo*)
+cairocanvas::TextLayout::useFont(_cairo*)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 connectivity::file::OStatement_Base::reset()
+connectivity::mork::MQueryHelper::next()
 connectivity::mork::MQueryHelperResultEntry::insert(rtl::OString const&, rtl::OUString&)
 connectivity::mork::OColumnAlias::OColumnAlias()
-connectivity::mozab::MQueryHelper::next()
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
 dbtools::getConnection(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
@@ -51,6 +60,7 @@ framework::OReadMenuDocumentHandler::getServiceFactory()
 jfw_plugin::VendorBase::createInstance()
 oox::drawingml::TextListStyle::dump() const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
+oox::xls::FormulaProcessorBase::generateRangeList2dString(oox::xls::ApiCellRangeList const&, bool, unsigned short, bool)
 sc_apitest::main()
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
@@ -58,3 +68,11 @@ sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
 sd::ViewShellBase::CreateInstance(SfxViewFrame*, SfxViewShell*)
 std::__cxx1998::vector<SfxFilter*, std::allocator<SfxFilter*> >::~vector()
 std::__cxx1998::vector<std::pair<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::~vector()
+svgio::svgreader::SvgDocument::removeSvgStyleAttributesFromMapper(rtl::OUString const&)
+svgio::svgreader::SvgStyleAttributes::setFillRule(bool const*)
+svgio::svgreader::pathTextBreakupHelper::getLength(rtl::OUString const&) const
+test::BootstrapFixtureBase::getPathFromWorkdir(char const*)
+test::BootstrapFixtureBase::getURLFromWorkdir(char const*)
+writerfilter::analyzerIds()
+writerfilter::createAnalyzer()
+writerfilter::createStreamHandler()

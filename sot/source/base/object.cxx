@@ -44,8 +44,7 @@ SO2_IMPL_BASIC_CLASS_DLL(SotObject,SotObjectFactory,
 |*    Beschreibung
 *************************************************************************/
 SotObject::SotObject()
-    : nStrongLockCount( 0 )
-    , nOwnerLockCount( 0 )
+    : nOwnerLockCount( 0 )
     , bOwner      ( sal_True )
     , bSVObject   ( sal_False )
     , bInClose    ( sal_False )
@@ -84,28 +83,6 @@ void* SotObject::CastAndAddRef( const SotFactory * pFact )
     if( pCast )
         AddRef();
     return pCast;
-}
-
-//=========================================================================
-sal_uInt16 SotObject::Lock( sal_Bool bLock )
-{
-    SotObjectRef xHoldAlive( this );
-    sal_uInt16 nRet;
-    if( bLock )
-    {
-        AddRef();
-        nRet = ++nStrongLockCount;
-    }
-    else
-    {
-        nRet = --nStrongLockCount;
-        ReleaseRef();
-    }
-
-    if( !nRet && !nOwnerLockCount )
-        DoClose();
-
-    return nRet;
 }
 
 //=========================================================================

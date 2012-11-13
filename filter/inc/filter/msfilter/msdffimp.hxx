@@ -548,8 +548,6 @@ public:
                                            sal_uInt32 nMaxLen,
                                            bool bUniCode = sal_False);
 
-    static bool ReadCommonRecordHeader( DffRecordHeader& rRec,
-                                        SvStream& rIn) SAL_WARN_UNUSED_RESULT;
     static bool ReadCommonRecordHeader( SvStream& rSt,
                                         sal_uInt8& rVer,
                                         sal_uInt16& rInst,

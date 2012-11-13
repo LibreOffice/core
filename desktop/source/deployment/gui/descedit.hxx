@@ -40,7 +40,6 @@ namespace dp_gui
         inline ~DescriptionEdit() {}
 
         void                Clear();
-        void                SetDescription( const String& rDescription );
     };
 
 } // namespace dp_gui

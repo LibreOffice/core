@@ -319,16 +319,6 @@ void PolyPolygon::GetUnion( const PolyPolygon& rPolyPoly, PolyPolygon& rResult )
     ImplDoOperation( rPolyPoly, rResult, POLY_CLIP_UNION );
 }
 
-void PolyPolygon::GetDifference( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const
-{
-    ImplDoOperation( rPolyPoly, rResult, POLY_CLIP_DIFF );
-}
-
-void PolyPolygon::GetXOR( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const
-{
-    ImplDoOperation( rPolyPoly, rResult, POLY_CLIP_XOR );
-}
-
 void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, sal_uIntPtr nOperation ) const
 {
     // Convert to B2DPolyPolygon, temporarily. It might be

@@ -247,8 +247,6 @@ public:
 
     void                GetIntersection( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
     void                GetUnion( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
-    void                GetDifference( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
-    void                GetXOR( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
 
     void                Move( long nHorzMove, long nVertMove );
     void                Translate( const Point& rTrans );

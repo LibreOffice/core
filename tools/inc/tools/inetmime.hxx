@@ -452,11 +452,6 @@ public:
                                                sal_Size & rLength,
                                                bool & rModify);
 
-    static sal_Char const * scanParameters(sal_Char const * pBegin,
-                                           sal_Char const * pEnd,
-                                           INetContentTypeParameterList *
-                                               pParameters);
-
     static sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
                                               sal_Unicode const * pEnd,
                                               INetContentTypeParameterList *

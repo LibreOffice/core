@@ -625,14 +625,6 @@ sal_uLong Graphic::GetDocFilePos() const
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::ReadEmbedded( SvStream& rIStream, sal_Bool bSwap )
-{
-    ImplTestRefCount();
-    return mpImpGraphic->ImplReadEmbedded( rIStream, bSwap );
-}
-
-// ------------------------------------------------------------------------
-
 sal_Bool Graphic::SwapOut()
 {
     ImplTestRefCount();

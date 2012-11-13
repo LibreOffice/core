@@ -172,8 +172,6 @@ public:
     const String&       GetDocFileName() const;
     sal_uLong               GetDocFilePos() const;
 
-    sal_Bool                ReadEmbedded( SvStream& rIStream, sal_Bool bSwap = sal_False );
-
     sal_Bool                SwapOut();
     sal_Bool                SwapOut( SvStream* pOStm );
     sal_Bool                SwapIn();
