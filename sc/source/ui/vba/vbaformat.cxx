@@ -401,26 +401,6 @@ ScVbaFormat<Ifc1>::getNumberFormatLocal(  ) throw (script::BasicErrorException, 
 }
 
 template< typename Ifc1 >
-void
-ScVbaFormat<Ifc1>::setNumberFormat( lang::Locale _aLocale, const rtl::OUString& _sFormatString) throw( script::BasicErrorException )
-{
-    try
-    {
-        initializeNumberFormats();
-        sal_Int32 nFormat = xNumberFormats->queryKey(_sFormatString, _aLocale , sal_True);
-        if (nFormat == -1)
-        {
-            xNumberFormats->addNew(_sFormatString, _aLocale);
-        }
-        mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_NUMBERFO ) ), uno::makeAny( nFormat ) );
-    }
-    catch (const uno::Exception& )
-    {
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
-    }
-}
-
-template< typename Ifc1 >
 void SAL_CALL
 ScVbaFormat<Ifc1>::setNumberFormatLocal( const uno::Any& _oLocalFormatString ) throw (script::BasicErrorException, uno::RuntimeException)
 {

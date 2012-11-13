@@ -62,7 +62,6 @@ protected:
     bool isAmbiguous(const rtl::OUString& _sPropertyName) throw ( css::script::BasicErrorException );
     css::uno::Reference< css::beans::XPropertyState > getXPropertyState() throw ( css::uno::RuntimeException );
     void initializeNumberFormats() throw ( css::script::BasicErrorException );
-    void setNumberFormat( css::lang::Locale _aLocale, const rtl::OUString& _sFormatString) throw( css::script::BasicErrorException );
     SfxItemSet*  getCurrentDataSet( ) throw ( css::uno::RuntimeException );
 protected:
     virtual ScCellRangesBase* getCellRangesBase() throw ( css::uno::RuntimeException );

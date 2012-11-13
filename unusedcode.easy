@@ -9,10 +9,8 @@ SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsi
 ScFiltersTest::testColorScaleODS()
 ScFiltersTest::testColorScaleXLSX()
 ScMenuFloatingWindow::getDoc()
-ScVbaFormat<ooo::vba::excel::XRange>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
-ScVbaFormat<ooo::vba::excel::XStyle>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
 String::String(unsigned short)
 SvListView::GetModel() const
 SvTreeList::GetChildIterators(SvTreeListEntry const*) const
