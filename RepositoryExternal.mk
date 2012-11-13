@@ -1579,20 +1579,21 @@ endef
 else # !SYSTEM_POPPLER
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	poppler \
+	fofi \
+	Goo \
+	xpdf \
 ))
 
 define gb_LinkTarget__use_poppler
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,poppler) \
-	-I$(call gb_UnpackedTarball_get_dir,poppler/poppler) \
+	-I$(OUTDIR)/inc/xpdf \
 	$$(INCLUDE) \
 )
 
-$(call gb_LinkTarget_use_package,$(1),poppler)
-
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	poppler \
+	fofi \
+	Goo \
+	xpdf \
 )
 
 ifeq ($(OS),MACOSX)

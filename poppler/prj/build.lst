@@ -1,2 +1,0 @@
-pop     poppler  :       NULL
-pop     poppler              nmake   -       all pop_poppler NULL
