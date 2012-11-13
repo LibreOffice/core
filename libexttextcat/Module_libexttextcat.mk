@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,libexttextcat))
 ifeq ($(SYSTEM_LIBEXTTEXTCAT),NO)
 $(eval $(call gb_Module_add_targets,libexttextcat,\
 	UnpackedTarball_exttextcat \
-	ExternalPackage_exttextcat \
 	Zip_fingerprint \
 ))
 ifeq ($(COM),MSC)
@@ -21,6 +20,7 @@ $(eval $(call gb_Module_add_targets,libexttextcat,\
 ))
 else
 $(eval $(call gb_Module_add_targets,libexttextcat,\
+	ExternalPackage_exttextcat \
 	ExternalProject_exttextcat \
 ))
 endif

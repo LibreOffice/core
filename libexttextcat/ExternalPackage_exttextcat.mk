@@ -9,11 +9,8 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,exttextcat,exttextcat))
 
-ifneq ($(COM),MSC)
-
 $(eval $(call gb_ExternalPackage_use_external_project,exttextcat,exttextcat))
 
 $(eval $(call gb_ExternalPackage_add_file,exttextcat,lib/libexttextcat.a,src/.libs/libexttextcat-2.0.a))
 
-endif
 # vim: set noet sw=4 ts=4:
