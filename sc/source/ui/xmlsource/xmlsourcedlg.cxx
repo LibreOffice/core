@@ -105,6 +105,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maRefEdit.SetModifyHdl(aLink);
 
     SetNonLinkable();
+    maBtnSelectSource.GrabFocus();
 }
 
 ScXMLSourceDlg::~ScXMLSourceDlg()
