@@ -31,6 +31,7 @@
 #if defined MACOSX
 #include <cassert>
 #include <limits>
+#include <string.h>
 #include <unistd.h>
 #endif
 
@@ -42,28 +43,29 @@ extern "C" {
 
 void sal_detail_initialize(int argc, char ** argv) {
 #if defined MACOSX
-    // On Mac OS X, soffice can restart itself via exec (see restartOnMac in
-    // desktop/source/app/app.cxx), which leaves all file descriptors open,
-    // which in turn can have unwanted effects (see
-    // <https://bugs.freedesktop.org/show_bug.cgi?id=50603> "Unable to update
-    // LibreOffice without resetting user profile").  But closing fds in
-    // restartOnMac before calling exec does not work, as additional threads
-    // might still be running then, wich can still use those fds and cause
-    // crashes.  Therefore, the simples solution is to close fds at process
-    // start (as early as possible, so that no other threads have been created
-    // yet that might already have opened some fds); this is done for all kinds
-    // of processes here, not just soffice, but hopefully none of our processes
-    // rely on being spawned with certain fds already open.  Unfortunately, Mac
-    // OS X appears to have no better interface to close all fds (like
-    // closefrom):
-    long openMax = sysconf(_SC_OPEN_MAX);
-    if (openMax == -1) {
-        // Some random value, but hopefully sysconf never returns -1 anyway:
-        openMax = 1024;
-    }
-    assert(openMax >= 0 && openMax <= std::numeric_limits< int >::max());
-    for (int fd = 3; fd < openMax; ++fd) {
-        close(fd);
+    if (strstr(argv[0], "soffice.bin")) {
+        // On Mac OS X, soffice can restart itself via exec (see restartOnMac
+        // in desktop/source/app/app.cxx), which leaves all file descriptors
+        // open, which in turn can have unwanted effects (see
+        // <https://bugs.freedesktop.org/show_bug.cgi?id=50603> "Unable to
+        // update LibreOffice without resetting user profile").  But closing
+        // fds in restartOnMac before calling exec does not work, as additional
+        // threads might still be running then, wich can still use those fds
+        // and cause crashes.  Therefore, the simples solution is to close fds
+        // at process start (as early as possible, so that no other threads
+        // have been created yet that might already have opened some fds); this
+        // is done for just soffice otherwise e.g. gengal and ui-previewer
+        // crash.  Unfortunately, Mac OS X appears to have no better interface
+        // to close all fds (like closefrom):
+        long openMax = sysconf(_SC_OPEN_MAX);
+        if (openMax == -1) {
+            // Some random value, but hopefully sysconf never returns -1 anyway:
+            openMax = 1024;
+        }
+        assert(openMax >= 0 && openMax <= std::numeric_limits< int >::max());
+        for (int fd = 3; fd < openMax; ++fd) {
+            close(fd);
+        }
     }
 #endif
 
