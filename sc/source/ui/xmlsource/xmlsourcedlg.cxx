@@ -127,6 +127,8 @@ void ScXMLSourceDlg::SetReference(const ScRange& rRange, ScDocument* pDoc)
     OUString aStr;
     rRange.aStart.Format(aStr, SCA_ABS_3D, pDoc, pDoc->GetAddressConvention());
     mpActiveEdit->SetRefString(aStr);
+
+    RefEditModified();
 }
 
 void ScXMLSourceDlg::Deactivate()
