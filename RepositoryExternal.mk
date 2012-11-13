@@ -1212,7 +1212,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_lcms2
-$(call gb_LinkTarget_use_external_project,$(1),lcms2)
+$(call gb_LinkTarget_use_package,$(1),lcms2)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	$$(INCLUDE) \
@@ -1230,7 +1230,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_lcms2
-$(call gb_LinkTarget_use_external_project,$(1),lcms2)
+$(call gb_LinkTarget_use_package,$(1),lcms2)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	$$(INCLUDE) \
@@ -1521,7 +1521,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_curl
-$(call gb_LinkTarget_use_external_project,$(1),curl)
+$(call gb_LinkTarget_use_package,$(1),curl)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,curl/include) \
 	$$(INCLUDE) \
