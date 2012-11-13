@@ -240,7 +240,7 @@ TabPage RID_OFAPAGE_HTMLOPT
         StringList =
         {
             < "Microsoft Internet Explorer" ; > ;
-            < "Netscape Navigator"; > ;
+            < "Mozilla Firefox"; > ;
             < "%PRODUCTNAME Writer" ; > ;
         };
     };
