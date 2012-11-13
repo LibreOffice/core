@@ -32,7 +32,6 @@
 /** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
                with solaris headers ...
 */
-#include <memory>
 #include <vector>
 
 #include <threadhelp/threadhelpbase.hxx>
@@ -318,8 +317,8 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         DockingOperation                                                     m_eDockOperation;
         PreviewFrameDetection                                                m_ePreviewDetection;
 
-        std::auto_ptr< AddonsOptions >                                       m_pAddonOptions;
-        std::auto_ptr< GlobalSettings >                                      m_pGlobalSettings;
+        AddonsOptions*                                                       m_pAddonOptions;
+        GlobalSettings*                                                      m_pGlobalSettings;
 
         bool                                                                 m_bComponentAttached;
         bool                                                                 m_bLayoutDirty;
