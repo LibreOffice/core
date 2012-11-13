@@ -798,6 +798,7 @@ namespace
     //In the meantime try something that will fit to workaround fdo#35118
     OString mapToFontConfigLangTag(const LanguageTag &rLangTag)
     {
+#if defined(FC_VERSION) && (FC_VERSION >= 20492)
         FcStrSet *pLangSet = FcGetLangs();
         OString sLangAttrib;
 
@@ -823,6 +824,12 @@ namespace
             return sLang;
 
         return OString();
+#else
+        OString sLangAttrib = OUStringToOString(rLangTag.getLanguageAndScript(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
+        if (sLangAttrib.equalsIgnoreAsciiCase("pa-in"))
+            sLangAttrib = "pa";
+        return sLangAttrib;
+#endif
     }
 
 #if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
