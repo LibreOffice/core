@@ -27,6 +27,7 @@
 #include "export.hxx"
 #include "xrmmerge.hxx"
 #include "tokens.h"
+#include "helper.hxx"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -606,7 +607,8 @@ void XRMResMerge::WorkOnText(
                 if ( Export::isAllowed( sLang ) &&
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sLang )) &&
-                    ( sContent != "-" ) && !sContent.isEmpty())
+                    ( sContent != "-" ) && !sContent.isEmpty() &&
+                    helper::isWellFormedXML( sContent ))
 
                 {
                     rText = sContent;

@@ -49,4 +49,8 @@ $(eval $(call gb_Executable_add_exception_objects,helpex,\
     l10ntools/source/helpmerge \
 ))
 
+$(eval $(call gb_Executable_use_externals,helpex,\
+    libxml2 \
+))
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

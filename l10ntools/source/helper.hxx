@@ -35,6 +35,8 @@
 #include <algorithm>
 #include <cassert>
 
+#include <libxml/parser.h>
+
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -98,6 +100,24 @@ inline sal_Int32 indexOfAnyAsciiL(
         }
     }
     return -1;
+}
+
+inline bool isWellFormedXML( OString const & text )
+{
+    xmlDocPtr doc;
+    OString content;
+    bool result = true;
+
+    content = "<root>";
+    content += text;
+    content += "</root>";
+    doc = xmlParseMemory(content.getStr(),(int)content.getLength());
+    if (doc == NULL) {
+        result = false;
+    }
+    xmlFreeDoc(doc);
+    xmlCleanupParser();
+    return result;
 }
 
 template< typename T > inline T abbreviate(

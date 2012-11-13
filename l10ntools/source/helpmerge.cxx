@@ -341,7 +341,7 @@ void HelpParser::MakeDir(const rtl::OString& rPath)
 void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile ){
 
     XMLElement*   pXMLElement = NULL;
-       PFormEntrys   *pEntrys    = NULL;
+    PFormEntrys   *pEntrys    = NULL;
     XMLData       *data       = NULL;
 
     rtl::OString sLId;
@@ -379,9 +379,16 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , 
                 while ( (nPreSpaces < nLen) && (*(sSourceText.getStr()+nPreSpaces) == ' ') )
                     nPreSpaces++;
                 pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur , true );
-                rtl::OUString sNewdata(
-                    sSourceText.copy(0,nPreSpaces) +
-                    rtl::OStringToOUString(sNewText, RTL_TEXTENCODING_UTF8));
+                OUString sNewdata;
+                if (helper::isWellFormedXML(sNewText))
+                {
+                    sNewdata = sSourceText.copy(0,nPreSpaces) +
+                        rtl::OStringToOUString(sNewText, RTL_TEXTENCODING_UTF8);
+                }
+                else
+                {
+                    sNewdata = sSourceText;
+                }
                 if (!sNewdata.isEmpty())
                 {
                     if( pXMLElement != NULL )
