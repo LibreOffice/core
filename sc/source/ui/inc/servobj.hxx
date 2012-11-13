@@ -71,9 +71,6 @@ public:
             void    EndListeningAll();
 };
 
-//SO2_DECL_REF( ScServerObject )
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

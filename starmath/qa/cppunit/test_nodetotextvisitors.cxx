@@ -65,8 +65,8 @@ struct assertion_traits<String>
 };
 }
 
-SO2_DECL_REF(SmDocShell)
-SO2_IMPL_REF(SmDocShell)
+SV_DECL_REF(SmDocShell)
+SV_IMPL_REF(SmDocShell)
 
 class TestOutputDevice : public OutputDevice
 {

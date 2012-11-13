@@ -13,7 +13,6 @@ ScVbaFormat<ooo::vba::excel::XRange>::setNumberFormat(com::sun::star::lang::Loca
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
-SotFactory::CastAndAddRef(SotObject*) const
 String::String(unsigned short)
 SvListView::GetModel() const
 SvTreeList::GetChildIterators(SvTreeListEntry const*) const

@@ -55,11 +55,6 @@
 namespace sd
 {
 
-#ifndef SO2_DECL_SVSTORAGE_DEFINED
-#define SO2_DECL_SVSTORAGE_DEFINED
-SO2_DECL_REF(SvStorage)
-#endif
-
 TYPEINIT1( FuPresentationLayout, FuPoor );
 
 #define DOCUMENT_TOKEN (sal_Unicode('#'))

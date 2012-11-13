@@ -48,8 +48,6 @@
 #include <boost/unordered_map.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-#include <sot/sotref.hxx>
-
 class ScEditEngineDefaulter;
 class SfxStyleSheetBasePool;
 class SfxStyleSheetHint;
@@ -448,8 +446,8 @@ public:
 void UpdateAcceptChangesDialog();
 
 
-SO2_DECL_REF(ScDocShell)
-SO2_IMPL_REF(ScDocShell)
+SV_DECL_REF(ScDocShell)
+SV_IMPL_REF(ScDocShell)
 
 
 /** Create before modifications of the document and then destroy.

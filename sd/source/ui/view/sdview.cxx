@@ -91,11 +91,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 namespace sd {
 
-#ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
-#define SO2_DECL_SVINPLACEOBJECT_DEFINED
-SO2_DECL_REF(SvInPlaceObject)
-#endif
-
 TYPEINIT1(View, FmFormView);
 
 /*************************************************************************

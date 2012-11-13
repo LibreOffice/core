@@ -26,7 +26,6 @@
 #include <rtl/strbuf.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
-#include <sot/sotref.hxx>
 #include <sot/storage.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/jobset.hxx>

@@ -99,13 +99,6 @@ using ::com::sun::star::frame::XController;
 
 namespace sd {
 
-#ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
-#define SO2_DECL_SVINPLACEOBJECT_DEFINED
-SO2_DECL_REF(SvInPlaceObject)
-#endif
-
-
-
 /*************************************************************************
 |*
 |* SfxRequests fuer Controller bearbeiten

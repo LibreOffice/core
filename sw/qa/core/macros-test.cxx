@@ -50,8 +50,8 @@
 
 #include "docsh.hxx"
 
-SO2_DECL_REF(SwDocShell)
-SO2_IMPL_REF(SwDocShell)
+SV_DECL_REF(SwDocShell)
+SV_IMPL_REF(SwDocShell)
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

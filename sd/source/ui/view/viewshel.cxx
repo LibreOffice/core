@@ -84,11 +84,6 @@
 #include "Window.hxx"
 #include "fupoor.hxx"
 
-#ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
-#define SO2_DECL_SVINPLACEOBJECT_DEFINED
-SO2_DECL_REF(SvInPlaceObject)
-#endif
-
 namespace sd { namespace ui { namespace table {
     extern SfxShell* CreateTableObjectBar( ViewShell& rShell, ::sd::View* pView );
 } } }

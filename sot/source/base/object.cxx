@@ -72,19 +72,6 @@ IUnknown * SotObject::GetInterface( const SvGlobalName & )
     return NULL;
 }
 
-/*************************************************************************
-|*    SotObject::CastAndAddRef()
-|*
-|*    Beschreibung
-*************************************************************************/
-void* SotObject::CastAndAddRef( const SotFactory * pFact )
-{
-    void * pCast = Cast( pFact );
-    if( pCast )
-        AddRef();
-    return pCast;
-}
-
 //=========================================================================
 void SotObject::OwnerLock
 (

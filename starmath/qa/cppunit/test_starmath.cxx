@@ -55,8 +55,8 @@
 
 #include <sfx2/zoomitem.hxx>
 
-SO2_DECL_REF(SmDocShell)
-SO2_IMPL_REF(SmDocShell)
+SV_DECL_REF(SmDocShell)
+SV_IMPL_REF(SmDocShell)
 
 using namespace ::com::sun::star;
 

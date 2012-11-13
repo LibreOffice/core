@@ -20,9 +20,9 @@
 #ifndef _SOT_OBJECT_HXX
 #define _SOT_OBJECT_HXX
 
-#include <sot/sotref.hxx>
 #include <sot/sotdata.hxx>
 #include <tools/globname.hxx>
+#include <tools/ref.hxx>
 #include "sot/sotdllapi.h"
 
 /*************************************************************************
@@ -287,8 +287,6 @@ public:
 
     sal_Bool                Owner() const { return bOwner; }
 
-    void*               CastAndAddRef( const SotFactory * pFact );
-
     sal_uInt16              GetOwnerLockCount() const { return nOwnerLockCount; }
 
     void                OwnerLock( sal_Bool bLock );
@@ -302,7 +300,7 @@ private:
 };
 
 //==================class SotObjectRef======================================
-SV_IMPL_REF(SotObject)
+SV_DECL_IMPL_REF(SotObject)
 
 #endif // _IFACE_HXX
 
