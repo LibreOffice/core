@@ -1917,14 +1917,14 @@ void WW8AttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTa
     }
 }
 
-static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, long nRowSpan)
+static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, const sal_uInt32 nRowSpan)
 {
     sal_uInt16 nFlags = 0;
 
     if (nRowSpan > 1)
         nFlags |= (3 << 5);
-    else if (nRowSpan < 0)
-        nFlags |= (1 << 5);
+    //else if (nRowSpan < 0)
+    //    nFlags |= (1 << 5);
 
     if (pBox != NULL)
     {
