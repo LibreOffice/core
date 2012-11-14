@@ -97,8 +97,13 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	icule \
 	icuuc \
 	lcms2 \
+))
+
+ifneq ($(ENABLE_GIO),)
+$(eval $(call gb_Library_use_externals,vcl,\
 	gio \
 ))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/brand \

@@ -89,15 +89,26 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
     vcl/unx/gtk/gdi/salnativewidgets-gtk \
     vcl/unx/gtk/window/gtkframe \
     vcl/unx/gtk/window/gtkobject \
-    vcl/unx/gtk/window/gloactiongroup \
-    vcl/unx/gtk/window/gtksalmenu \
-    vcl/unx/gtk/window/glomenu \
-    vcl/unx/gtk/window/hudawareness \
     vcl/unx/gtk/fpicker/resourceprovider \
     vcl/unx/gtk/fpicker/SalGtkPicker \
     vcl/unx/gtk/fpicker/SalGtkFilePicker \
     vcl/unx/gtk/fpicker/SalGtkFolderPicker \
 ))
+
+ifneq ($(ENABLE_DBUS),)
+ifneq ($(ENABLE_GIO),)
+$(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
+    vcl/unx/gtk/window/gloactiongroup \
+    vcl/unx/gtk/window/gtksalmenu \
+    vcl/unx/gtk/window/glomenu \
+    vcl/unx/gtk/window/hudawareness \
+))
+$(eval $(call gb_Library_add_defs,vclplug_gtk,\
+    -DENABLE_GIO=$(ENABLE_GIO) \
+    -DENABLE_DBUS=#(ENABLE_DBUS) \
+))
+endif
+endif
 
 ifeq ($(ENABLE_GTK_PRINT),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\

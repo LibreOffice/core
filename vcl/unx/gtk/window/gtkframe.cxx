@@ -22,10 +22,6 @@
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkgdi.hxx>
-#include <unx/gtk/glomenu.h>
-#include <unx/gtk/gloactiongroup.h>
-#include <unx/gtk/gtksalmenu.hxx>
-#include <unx/gtk/hudawareness.h>
 #include <vcl/keycodes.hxx>
 #include <unx/wmadaptor.hxx>
 #include <unx/sm.hxx>
@@ -38,6 +34,12 @@
 #include <vcl/window.hxx>
 #if !GTK_CHECK_VERSION(3,0,0)
 #include <unx/x11/xlimits.hxx>
+#endif
+#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#include <unx/gtk/glomenu.h>
+#include <unx/gtk/gloactiongroup.h>
+#include <unx/gtk/gtksalmenu.hxx>
+#include <unx/gtk/hudawareness.h>
 #endif
 
 #include <gtk/gtk.h>
@@ -99,7 +101,10 @@ using namespace com::sun::star;
 
 int GtkSalFrame::m_nFloats = 0;
 
+#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
 static GDBusConnection* pSessionBus = NULL;
+#endif
+
 static sal_uInt16 GetKeyModCode( guint state )
 {
     sal_uInt16 nCode = 0;
@@ -479,7 +484,7 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     Init( pSysData );
 }
 
-#if !GTK_CHECK_VERSION(3,0,0)
+#if !GTK_CHECK_VERSION(3,0,0) && defined(ENABLE_DBUS) && defined(ENABLE_GIO)
 static void
 gdk_x11_window_set_utf8_property  (GdkWindow *window,
                                    const gchar *name,
@@ -506,6 +511,7 @@ gdk_x11_window_set_utf8_property  (GdkWindow *window,
 
 // AppMenu watch functions.
 
+#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
 static void ObjectDestroyedNotify( gpointer data )
 {
     if ( data ) {
@@ -609,9 +615,11 @@ void on_registrar_unavailable( GDBusConnection * /*connection*/,
         pGtkSalMenu->Display( sal_False );
     }
 }
+#endif
 
 void GtkSalFrame::EnsureAppMenuWatch()
 {
+#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
     if ( !m_nWatcherId )
     {
         // Get a DBus session connection.
@@ -634,6 +642,7 @@ void GtkSalFrame::EnsureAppMenuWatch()
     }
 
     //ensure_dbus_setup( this );
+#endif
 }
 
 GtkSalFrame::~GtkSalFrame()
@@ -679,12 +688,15 @@ GtkSalFrame::~GtkSalFrame()
         gtk_widget_destroy( GTK_WIDGET( m_pFixedContainer ) );
     {
         SolarMutexGuard aGuard;
+#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
         if(m_nWatcherId)
             g_bus_unwatch_name(m_nWatcherId);
+#endif
         if( m_pWindow )
         {
             g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", NULL );
 
+#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
             if ( pSessionBus )
             {
                 if ( m_nHudAwarenessId )
@@ -694,6 +706,7 @@ GtkSalFrame::~GtkSalFrame()
                 if ( m_nActionGroupExportId )
                     g_dbus_connection_unexport_action_group( pSessionBus, m_nActionGroupExportId );
             }
+#endif
             gtk_widget_destroy( m_pWindow );
         }
     }
@@ -1124,8 +1137,10 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
 #if !GTK_CHECK_VERSION(3,0,0)
     if( eWinType == GTK_WINDOW_TOPLEVEL )
     {
+#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
         // Enable DBus native menu if available.
         ensure_dbus_setup( this );
+#endif
 
         guint32 nUserTime = 0;
         if( (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
