@@ -34,6 +34,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <rtl/uri.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
@@ -270,12 +271,18 @@ bool SmbDetailsContainer::setUrl( const INetURLObject& rUrl )
 CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
     DetailsContainer( pBuilder, "CmisDetails" ),
     m_sUsername( ),
-    m_xCmdEnv( )
+    m_xCmdEnv( ),
+    m_aServerTypesURLs( ),
+    m_aRepoIds( ),
+    m_sRepoId( )
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xGlobalInteractionHandler(
         InteractionHandler::createWithParent(xContext, 0), UNO_QUERY );
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
+
+    pBuilder->get( m_pLBServerType, "serverType" );
+    m_pLBServerType->SetSelectHdl( LINK( this, CmisDetailsContainer, SelectServerTypeHdl ) );
 
     pBuilder->get( m_pEDBinding, "binding" );
     m_pEDBinding->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
@@ -287,6 +294,15 @@ CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
     m_pBTRepoRefresh->SetClickHdl( LINK( this, CmisDetailsContainer, RefreshReposHdl ) );
 
     show( false );
+
+    // Load the ServerType entries
+    Sequence< ::rtl::OUString > aTypesUrlsList( officecfg::Office::Common::Misc::CmisServersUrls::get( xContext ) );
+    Sequence< ::rtl::OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get( xContext ) );
+    for ( sal_Int32 i = 0; i < aTypesUrlsList.getLength( ) && aTypesNamesList.getLength( ); ++i )
+    {
+        m_pLBServerType->InsertEntry( aTypesNamesList[i] );
+        m_aServerTypesURLs.push_back( aTypesUrlsList[i] );
+    }
 }
 
 INetURLObject CmisDetailsContainer::getUrl( )
@@ -339,6 +355,14 @@ void CmisDetailsContainer::selectRepository( )
     m_sRepoId = m_aRepoIds[nPos];
 
     notifyChange( );
+}
+
+IMPL_LINK( CmisDetailsContainer, SelectServerTypeHdl, void *, EMPTYARG  )
+{
+    // Set a sample URL for the server
+    sal_uInt16 nId = m_pLBServerType->GetSelectEntryPos( );
+    m_pEDBinding->SetText( m_aServerTypesURLs[nId] );
+    return 0;
 }
 
 IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )

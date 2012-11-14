@@ -135,12 +135,14 @@ class CmisDetailsContainer : public DetailsContainer
     private:
         rtl::OUString m_sUsername;
         com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
+        std::vector< rtl::OUString > m_aServerTypesURLs;
         std::vector< rtl::OUString > m_aRepoIds;
         rtl::OUString m_sRepoId;
 
         Edit*       m_pEDBinding;
         ListBox*    m_pLBRepository;
         Button*     m_pBTRepoRefresh;
+        ListBox*    m_pLBServerType;
 
     public:
         CmisDetailsContainer( VclBuilderContainer* pBuilder );
@@ -152,6 +154,7 @@ class CmisDetailsContainer : public DetailsContainer
 
     private:
         void selectRepository( );
+        DECL_LINK ( SelectServerTypeHdl, void * );
         DECL_LINK ( RefreshReposHdl, void * );
         DECL_LINK ( SelectRepoHdl, void * );
 };

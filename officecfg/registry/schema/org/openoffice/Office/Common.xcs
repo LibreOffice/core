@@ -6792,6 +6792,16 @@
           <desc>List of names of the places the user bookmarked in the file picker dialog.</desc>
         </info>
       </prop>
+      <prop oor:name="CmisServersUrls" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>List of sample URLs of the CMIS servers in the place edition dialog.</desc>
+        </info>
+      </prop>
+      <prop oor:name="CmisServersNames" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>List of names of the CMIS servers in the place edition dialog.</desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="Forms">
       <info>
