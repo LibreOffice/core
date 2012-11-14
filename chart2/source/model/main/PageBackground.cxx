@@ -32,7 +32,6 @@
 #include "PropertyHelper.hxx"
 
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <rtl/uuid.h>
 #include <cppuhelper/queryinterface.hxx>
 
@@ -65,9 +64,7 @@ private:
         ::chart::FillProperties::AddDefaultsToMap( rOutMap );
 
         // override other defaults
-        // #121334# As default, do not fill the chart page background; we want to be able to have the background
-        // of the object containing the chart to define this background fill (evtl. with different methodologies)
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
+        ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( rOutMap, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff );
         ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LineProperties::PROP_LINE_STYLE, drawing::LineStyle_NONE );
     }
 };

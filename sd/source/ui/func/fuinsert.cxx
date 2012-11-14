@@ -71,8 +71,8 @@
 #include <vcl/msgbox.hxx>
 #endif
 #include <sfx2/opengrf.hxx>
-
 #include <sfx2/viewfrm.hxx>
+#include <svx/charthelper.hxx>
 
 #include "app.hrc"
 #include "misc.hxx"
@@ -394,6 +394,14 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 aVisualSize.Height = aTmp.Height();
                 xObj->setVisualAreaSize( nAspect, aVisualSize );
                 mpViewShell->ActivateObject(pOleObj, SVVERB_SHOW);
+
+                if (nSlotId == SID_INSERT_DIAGRAM)
+                {
+                    // note, that this call modified the chart model which
+                    // results in a change notification.  So call this after
+                    // everything else is finished.
+                    ChartHelper::AdaptDefaultsForChart( xObj );
+                }
             }
         }
         else

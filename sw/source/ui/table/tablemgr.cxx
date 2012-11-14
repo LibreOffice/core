@@ -31,6 +31,7 @@
 
 #include <sot/storage.hxx>
 #include <sot/clsids.hxx>
+#include <svx/charthelper.hxx>
 
 #include "edtwin.hxx"
 #include "errhdl.hxx"
@@ -278,6 +279,9 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         //DoVerb in der SfxViewShell
         ErrCode nErr = pClient->DoVerb( SVVERB_SHOW );
         (void) nErr;
+
+        // #121334#
+        ChartHelper::AdaptDefaultsForChart( xObj );
     }
 
     uno::Reference< chart2::data::XDataReceiver > xDataReceiver( xChartModel, uno::UNO_QUERY );

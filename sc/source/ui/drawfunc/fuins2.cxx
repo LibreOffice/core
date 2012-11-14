@@ -51,6 +51,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/msgpool.hxx>
+#include <svx/charthelper.hxx>
 #include <scmod.hxx>
 
 // BM/IHA --
@@ -664,6 +665,9 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         Rectangle aRect (aStart, aSize);
         SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
         SdrPageView* pPV = pView->GetSdrPageView();
+
+        // #121334#
+        ChartHelper::AdaptDefaultsForChart( xObj );
 
 //        pView->InsertObjectAtView(pObj, *pPV);//this call leads to an immidiate redraw and asks the chart for a visual representation
 

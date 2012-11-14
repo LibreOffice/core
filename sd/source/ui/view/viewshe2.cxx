@@ -83,6 +83,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/soerr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <svx/charthelper.hxx>
 
 #ifdef _MSC_VER
 #pragma optimize ( "", off )
@@ -832,6 +833,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     GetDocSh()->SetWaitCursor( sal_True );
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
+    bool bChangeDefaultsForChart = false;
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     if ( !xObj.is() )
@@ -848,6 +850,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             if( SvtModuleOptions().IsChart() )
             {
                 aClass = SvGlobalName( SO3_SCH_CLASSID );
+                bChangeDefaultsForChart = true;
             }
         }
         else if( aName.EqualsAscii( "StarCalc" ))
@@ -971,6 +974,11 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         aRect.SetSize(aObjAreaSize);
         // the object area size must be set after scaling, since it triggers the resizing
         pSdClient->SetObjArea(aRect);
+
+        if( bChangeDefaultsForChart && xObj.is())
+        {
+            ChartHelper::AdaptDefaultsForChart( xObj );
+        }
 
         pSdClient->DoVerb(nVerb);   // ErrCode wird ggf. vom Sfx ausgegeben
         pViewShell->GetViewFrame()->GetBindings().Invalidate(

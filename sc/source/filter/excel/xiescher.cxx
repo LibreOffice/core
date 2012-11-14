@@ -75,6 +75,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svditer.hxx>
 #include <editeng/writingmodeitem.hxx>
+#include <svx/charthelper.hxx>
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
@@ -1730,6 +1731,9 @@ SdrObject* XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const R
         Size aSize( Window::LogicToLogic( rAnchorRect.GetSize(), MapMode( MAP_100TH_MM ), MapMode( aUnit ) ) );
         ::com::sun::star::awt::Size aAwtSize( aSize.Width(), aSize.Height() );
         xEmbObj->setVisualAreaSize( nAspect, aAwtSize );
+
+        // #121334#
+        ChartHelper::AdaptDefaultsForChart( xEmbObj );
 
         // create the container OLE object
         xSdrObj.reset( new SdrOle2Obj( svt::EmbeddedObjectRef( xEmbObj, nAspect ), aEmbObjName, rAnchorRect ) );

@@ -41,6 +41,7 @@ using namespace com::sun::star;
 #include <sot/storage.hxx>
 #include <sfx2/app.hxx>
 #include <sot/clsids.hxx>
+#include <svx/charthelper.hxx>
 #include "address.hxx"
 
 #include "scfobj.hxx"
@@ -85,6 +86,9 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
         aSz.Width = rRect.GetSize().Width();
         aSz.Height = rRect.GetSize().Height();
         xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, aSz );
+
+        // #121334#
+        ChartHelper::AdaptDefaultsForChart( xObj );
 
             // hier kann das Chart noch nicht mit Daten gefuettert werden,
             // weil die Formeln noch nicht berechnet sind.
