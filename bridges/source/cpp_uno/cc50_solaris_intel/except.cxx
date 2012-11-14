@@ -48,11 +48,7 @@
 #include <hash.cxx>
 
 // need a += operator for OString and sal_Char
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OUStringToOString;
-using ::rtl::OStringToOUString;
+
 {
     inline OString& operator+=( OString& rString, sal_Char cAdd )
     {
@@ -423,7 +419,7 @@ void cc50_solaris_intel_fillUnoException(
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "> c++ exception occurred: %s\n",
-             ::rtl::OUStringToOString(
+             OUStringToOString(
                  pExcTypeDescr->pTypeName,
                  RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
