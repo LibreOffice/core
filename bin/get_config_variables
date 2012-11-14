@@ -1,0 +1,23 @@
+#!/bin/sh
+#set -x
+
+glv_var="$1"
+glv_config="config_host.mk"
+
+if [ "$glv_var" = "--build" ] ; then
+    glv_config="config_build.mk"
+    shift
+elif [ "$glv_var" = "--host" ] ; then
+    shift
+fi
+
+while [ -n "$1" ] ; do
+    glv_var="$1"
+    shift
+    glv_value=$(grep "^ *export ${glv_var}=" ${glv_config} | sed -e "s/[^=]*=//")
+    export ${glv_var}="${glv_value}"
+done
+
+unset glv_var
+unset glv_value
+unset glv_vonfig
