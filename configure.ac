@@ -1683,11 +1683,6 @@ AC_ARG_WITH(system-mozilla-headers,
     [with_system_mozilla_headers="$with_system_headers"]
 )
 
-AC_ARG_WITH(system-gettext,
-    AS_HELP_STRING([--with-system-gettext],
-        [Use gettext runtime library already on system.]),,
-    [with_system_gettext="$with_system_libs"])
-
 AC_ARG_WITH(system-libpng,
     AS_HELP_STRING([--with-system-libpng],
         [Use libpng already on system.]),,

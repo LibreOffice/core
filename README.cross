@@ -158,7 +158,6 @@ CXX_FOR_BUILD=ccache g++
 --with-system-curl
 --with-system-db
 --with-system-expat
---with-system-gettext
 --with-system-hunspell
 --with-system-icu
 --with-system-libpng
