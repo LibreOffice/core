@@ -59,7 +59,7 @@ Function toFunction(void * pointer) {
 #pragma enable_warn
 }
 
-bool toUnoName(char const * rttiName, rtl::OUString * unoName) {
+bool toUnoName(char const * rttiName, OUString * unoName) {
     rtl::OStringBuffer buf;
     for (;;) {
         char const * p = std::strchr(rttiName, ':');
@@ -281,11 +281,11 @@ private:
         rtl::OString cppName;
         std::vector< __Crun::class_base_descr > bases;
     };
-    typedef std::map< rtl::OUString, Data > Map;
+    typedef std::map< OUString, Data > Map;
 
     static void toCppNames(
-        rtl::OUString const & unoName, rtl::OString * cppName,
-        rtl::OString * rttiName);
+        OUString const & unoName, OString * cppName,
+        OString * rttiName);
 
     static Data const & get_(typelib_CompoundTypeDescription const * type);
 
@@ -307,16 +307,16 @@ __Crun::static_type_info const * RttiMap::get(
 }
 
 void RttiMap::toCppNames(
-    rtl::OUString const & unoName, rtl::OString * cppName,
-    rtl::OString * rttiName)
+    OUString const & unoName, OString * cppName,
+    OString * rttiName)
 {
     OSL_ASSERT(cppName != NULL && rttiName != NULL);
     rtl::OStringBuffer bc;
     rtl::OStringBuffer br;
     br.append("__1n");
     for (sal_Int32 i = 0; i != -1;) {
-        rtl::OUString tok(unoName.getToken(0, '.', i));
-        bc.append(rtl::OUStringToOString(tok, RTL_TEXTENCODING_UTF8));
+        OUString tok(unoName.getToken(0, '.', i));
+        bc.append(OUStringToOString(tok, RTL_TEXTENCODING_UTF8));
             // conversion should never fail, as tok should be well-formed ASCII
         if (i != -1) {
             bc.append("::");
@@ -347,7 +347,7 @@ void RttiMap::toCppNames(
 RttiMap::Data const & RttiMap::get_(
     typelib_CompoundTypeDescription const * type)
 {
-    rtl::OUString name(type->aBase.pTypeName);
+    OUString name(type->aBase.pTypeName);
     Map::iterator it(m_map->find(name));
     if (it == m_map->end()) {
         it = m_map->insert(std::make_pair(name, Data())).first;
@@ -426,16 +426,14 @@ void fillUnoException(
     void * cppException, char const * cppName, uno_Any * unoException,
     uno_Mapping * cppToUno)
 {
-    rtl::OUString name;
+    OUString name;
     typelib_TypeDescription * type = NULL;
     if (toUnoName(cppName, &name)) {
         typelib_typedescription_getByName(&type, name.pData);
     }
     if (type == NULL || type->eTypeClass != typelib_TypeClass_EXCEPTION) {
         css::uno::RuntimeException exc(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Not a UNO exception type: ")) +
-             name),
+            "Not a UNO exception type: " + name),
             css::uno::Reference< css::uno::XInterface >());
         uno_type_any_constructAndConvert(
             unoException, &exc, getCppuType(&exc).getTypeLibType(), cppToUno);
