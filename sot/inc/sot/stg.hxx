@@ -351,7 +351,6 @@ public:
     virtual sal_Bool                ValidateMode( StreamMode ) const;
     virtual const SvStream*     GetSvStream() const;
     virtual sal_Bool                Equals( const BaseStorage& rStream ) const;
-    sal_Bool                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     sal_Bool                        GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue );
 
     UCBStorageElement_Impl*     FindElement_Impl( const String& rName ) const;

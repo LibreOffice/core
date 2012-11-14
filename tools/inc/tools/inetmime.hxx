@@ -414,9 +414,6 @@ public:
                                                         pBegin,
                                                     const sal_Unicode * pEnd);
 
-    static const sal_Char * skipComment(const sal_Char * pBegin,
-                                        const sal_Char * pEnd);
-
     static const sal_Unicode * skipComment(const sal_Unicode * pBegin,
                                            const sal_Unicode * pEnd);
 

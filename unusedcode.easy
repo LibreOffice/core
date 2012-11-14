@@ -12,8 +12,6 @@ ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any cons
 String::String(unsigned short)
 SvListView::GetModel() const
 SvTreeList::GetChildIterators(SvTreeListEntry const*) const
-SvTreeListEntry::GetChildEntries()
-SvTreeListEntry::GetChildEntries() const
 SvtGraphicStroke::toString() const
 TextEngine::GetLeftMargin() const
 ThumbnailViewItemAcc::FireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
@@ -45,12 +43,9 @@ comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<co
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 connectivity::file::OStatement_Base::reset()
-connectivity::mork::MQueryHelper::next()
-connectivity::mork::MQueryHelperResultEntry::insert(rtl::OString const&, rtl::OUString&)
 connectivity::mork::OColumnAlias::OColumnAlias()
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
-dbtools::getConnection(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 framework::OReadMenuDocumentHandler::getServiceFactory()
 jfw_plugin::VendorBase::createInstance()
 oox::drawingml::TextListStyle::dump() const

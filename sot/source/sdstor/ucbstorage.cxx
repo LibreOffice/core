@@ -3253,31 +3253,4 @@ String UCBStorage::CreateLinkFile( const String& rName )
     return String();
 }
 
-sal_Bool UCBStorage::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
-{
-    if ( rName.CompareToAscii("Title") == COMPARE_EQUAL )
-        return sal_False;
-
-    if ( rName.CompareToAscii("MediaType") == COMPARE_EQUAL )
-    {
-        ::rtl::OUString aTmp;
-        rValue >>= aTmp;
-        pImp->m_aContentType = aTmp;
-    }
-
-    try
-    {
-        if ( pImp->GetContent() )
-        {
-            pImp->m_pContent->setPropertyValue( rName, rValue );
-            return sal_True;
-        }
-    }
-    catch (const Exception&)
-    {
-    }
-
-    return sal_False;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

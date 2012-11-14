@@ -513,37 +513,6 @@ const sal_Unicode * INetMIME::skipLinearWhiteSpace(const sal_Unicode * pBegin,
 }
 
 // static
-const sal_Char * INetMIME::skipComment(const sal_Char * pBegin,
-                                       const sal_Char * pEnd)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIME::skipComment(): Bad sequence");
-
-    if (pBegin != pEnd && *pBegin == '(')
-    {
-        sal_uInt32 nLevel = 0;
-        for (const sal_Char * p = pBegin; p != pEnd;)
-            switch (*p++)
-            {
-                case '(':
-                    ++nLevel;
-                    break;
-
-                case ')':
-                    if (--nLevel == 0)
-                        return p;
-                    break;
-
-                case '\\':
-                    if (p != pEnd)
-                        ++p;
-                    break;
-            }
-    }
-    return pBegin;
-}
-
-// static
 const sal_Unicode * INetMIME::skipComment(const sal_Unicode * pBegin,
                                           const sal_Unicode * pEnd)
 {
