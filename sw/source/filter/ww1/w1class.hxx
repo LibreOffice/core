@@ -262,7 +262,7 @@ class Ww1Style
 public:
     Ww1Style();
     ~Ww1Style();
-    sal_Bool IsUsed() const                 { return bUsed; }
+    bool IsUsed() const                 { return bUsed; }
     void SetDefaults(sal_uInt8);
     void SetParent(Ww1StyleSheet* newParent)    { pParent = newParent; }
     void SetName(const String& rName)   { bUsed = sal_True; aName = rName; }
@@ -754,7 +754,7 @@ public:
     void Start(Ww1Shell&, Ww1Manager&);
     void Start(Ww1Shell&, Ww1Manager&, sal_uInt16);
     void Stop(Ww1Shell&, Ww1Manager&);
-    sal_Bool IsUsed() {
+    bool IsUsed() {
         return nCountBytes != 255; }
     sal_uInt16 Count() {
         return count; }

@@ -1149,7 +1149,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
     SwAttrSet aSet( GetAttrPool(), pWhichRange );
 
     {
-        sal_Bool bIsModified = IsModified();
+        bool bIsModified = IsModified();
 
         {
             ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
@@ -1455,7 +1455,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), *pSwResMgr );
     String aNm( aResId );
     {
-        sal_Bool bIsModified = IsModified();
+        bool bIsModified = IsModified();
 
         {
             ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
@@ -1640,7 +1640,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     const SvxNumberFormat::SvxNumPositionAndSpaceMode eNumberFormatPositionAndSpaceMode
                                   = numfunc::GetDefaultPositionAndSpaceMode(); //#i89178#
     {
-        sal_Bool bIsModified = IsModified();
+        bool bIsModified = IsModified();
 
         n = MakeNumRule( aNm, 0, false, eNumberFormatPositionAndSpaceMode );
 
@@ -2295,7 +2295,7 @@ bool SwDoc::IsPoolPageDescUsed( sal_uInt16 nId ) const
 }
 
 // See if the Paragraph/Character/Frame/Page style is in use
-sal_Bool SwDoc::IsUsed( const SwModify& rModify ) const
+bool SwDoc::IsUsed( const SwModify& rModify ) const
 {
     // Check if we have dependent ContentNodes in the Nodes array
     // (also indirect ones for derived Formats)
@@ -2304,9 +2304,9 @@ sal_Bool SwDoc::IsUsed( const SwModify& rModify ) const
 }
 
 // See if the NumRule is used
-sal_Bool SwDoc::IsUsed( const SwNumRule& rRule ) const
+bool SwDoc::IsUsed( const SwNumRule& rRule ) const
 {
-    sal_Bool bUsed = rRule.GetTxtNodeListSize() > 0 ||
+    bool bUsed = rRule.GetTxtNodeListSize() > 0 ||
                      rRule.GetParagraphStyleListSize() > 0;
 
     return bUsed;

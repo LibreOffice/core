@@ -171,7 +171,7 @@ SwPageDesc* SwEditShell::GetPageDescFromPool( sal_uInt16 nId )
 }
 
 
-sal_Bool SwEditShell::IsUsed( const SwModify& rModify ) const
+bool SwEditShell::IsUsed( const SwModify& rModify ) const
 {
     return pDoc->IsUsed( rModify );
 }

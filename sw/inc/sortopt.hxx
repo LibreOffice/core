@@ -45,7 +45,7 @@ struct SW_DLLPUBLIC SwSortKey
     String          sSortType;
     SwSortOrder     eSortOrder;
     sal_uInt16          nColumnId;
-    sal_Bool            bIsNumeric;
+    bool            bIsNumeric;
 };
 
 typedef std::vector<SwSortKey*> SwSortKeys;
@@ -60,8 +60,8 @@ struct SW_DLLPUBLIC SwSortOptions
     SwSortDirection eDirection;
     sal_Unicode     cDeli;
     sal_uInt16          nLanguage;
-    sal_Bool            bTable;
-    sal_Bool            bIgnoreCase;
+    bool            bTable;
+    bool            bIgnoreCase;
 };
 
 #endif  // _SORTOPT_HXX

@@ -2578,23 +2578,23 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
     sal_Bool bRet = sal_True;
     const beans::PropertyValue* pProperties = rDescriptor.getConstArray();
 
-    rSortOpt.bTable = sal_False;
+    rSortOpt.bTable = false;
     rSortOpt.cDeli = ' ';
     rSortOpt.eDirection = SRT_COLUMNS;  //!! UI text may be contrary though !!
 
     SwSortKey* pKey1 = new SwSortKey;
     pKey1->nColumnId = USHRT_MAX;
-    pKey1->bIsNumeric = sal_True;
+    pKey1->bIsNumeric = true;
     pKey1->eSortOrder = SRT_ASCENDING;
 
     SwSortKey* pKey2 = new SwSortKey;
     pKey2->nColumnId = USHRT_MAX;
-    pKey2->bIsNumeric = sal_True;
+    pKey2->bIsNumeric = true;
     pKey2->eSortOrder = SRT_ASCENDING;
 
     SwSortKey* pKey3 = new SwSortKey;
     pKey3->nColumnId = USHRT_MAX;
-    pKey3->bIsNumeric = sal_True;
+    pKey3->bIsNumeric = true;
     pKey3->eSortOrder = SRT_ASCENDING;
     SwSortKey* aKeys[3] = {pKey1, pKey2, pKey3};
 

@@ -666,7 +666,7 @@ void SwHTMLWriter::FillNextNumInfo()
 
     sal_uLong nPos = pCurPam->GetPoint()->nNode.GetIndex() + 1;
 
-    sal_Bool bTable = sal_False;
+    bool bTable = false;
     do
     {
         const SwNode* pNd = pDoc->GetNodes()[nPos];
@@ -692,7 +692,7 @@ void SwHTMLWriter::FillNextNumInfo()
             // Eine Tabelle wird uebersprungen, also den Node
             // hinter der Tabelle betrachten.
             nPos = pNd->EndOfSectionIndex() + 1;
-            bTable = sal_True;
+            bTable = true;
         }
         else
         {

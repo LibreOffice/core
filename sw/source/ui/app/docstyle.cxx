@@ -2428,7 +2428,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             if( pFmt->IsDefault() && pFmt != rDoc.GetDfltCharFmt() )
                 continue;
 
-            const sal_Bool  bUsed = bIsSearchUsed && (bOrganizer || rDoc.IsUsed(*pFmt));
+            const bool bUsed = bIsSearchUsed && (bOrganizer || rDoc.IsUsed(*pFmt));
             if( !bUsed )
             {
                 // Standard is no User template
@@ -2505,7 +2505,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             if(pColl->IsDefault())
                 continue;
 
-            const sal_Bool bUsed = bOrganizer || rDoc.IsUsed(*pColl);
+            const bool bUsed = bOrganizer || rDoc.IsUsed(*pColl);
             if( !(bIsSearchUsed && bUsed ))
             {
                 const sal_uInt16 nId = pColl->GetPoolFmtId();
@@ -2651,7 +2651,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             }
 
             const sal_uInt16 nId = pFmt->GetPoolFmtId();
-            sal_Bool bUsed = bIsSearchUsed && ( bOrganizer || rDoc.IsUsed(*pFmt));
+            bool bUsed = bIsSearchUsed && ( bOrganizer || rDoc.IsUsed(*pFmt));
             if( !bUsed )
             {
                 if( (nSrchMask & ~SFXSTYLEBIT_USED) == SFXSTYLEBIT_USERDEF
@@ -2681,7 +2681,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         {
             const SwPageDesc& rDesc = rDoc.GetPageDesc(i);
             const sal_uInt16 nId = rDesc.GetPoolFmtId();
-            sal_Bool bUsed = bIsSearchUsed && ( bOrganizer || rDoc.IsUsed(rDesc));
+            bool bUsed = bIsSearchUsed && ( bOrganizer || rDoc.IsUsed(rDesc));
             if( !bUsed )
             {
                 if( (nSrchMask & ~SFXSTYLEBIT_USED) == SFXSTYLEBIT_USERDEF
@@ -2707,7 +2707,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             const SwNumRule& rRule = *rNumTbl[ i ];
             if( !rRule.IsAutoRule() )
             {
-                sal_Bool bUsed = bIsSearchUsed && ( bOrganizer || rDoc.IsUsed(rRule) );
+                bool bUsed = bIsSearchUsed && ( bOrganizer || rDoc.IsUsed(rRule) );
                 if( !bUsed )
                 {
                     if( (nSrchMask & ~SFXSTYLEBIT_USED) == SFXSTYLEBIT_USERDEF

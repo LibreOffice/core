@@ -146,7 +146,7 @@ SwElemItem::SwElemItem( sal_uInt16 _nWhich ) :
     bGraphic            =
     bDrawing            =
     bFieldName          =
-    bNotes              = sal_False;
+    bNotes              = false;
 }
 
 SwElemItem::SwElemItem( const SwElemItem& rElemItem ):

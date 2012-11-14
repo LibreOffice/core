@@ -37,7 +37,7 @@
 SwSortKey::SwSortKey() :
     eSortOrder( SRT_ASCENDING ),
     nColumnId( 0 ),
-    bIsNumeric( sal_True )
+    bIsNumeric( true )
 {
 }
 
@@ -64,8 +64,8 @@ SwSortOptions::SwSortOptions()
     : eDirection( SRT_ROWS ),
     cDeli( 9 ),
     nLanguage( LANGUAGE_SYSTEM ),
-    bTable( sal_False ),
-    bIgnoreCase( sal_False )
+    bTable( false ),
+    bIgnoreCase( false )
 {
 }
 

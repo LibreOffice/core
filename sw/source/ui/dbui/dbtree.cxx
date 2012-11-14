@@ -289,7 +289,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                 if(!pImpl->GetContext()->hasByName(sSourceName))
                     return;
                 Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
-                sal_Bool bTable = pParent->GetUserData() == 0;
+                bool bTable = pParent->GetUserData() == 0;
                 Reference<XColumnsSupplier> xColsSupplier;
                 if(bTable)
                 {

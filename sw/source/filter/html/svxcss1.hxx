@@ -155,7 +155,7 @@ public:
     void CopyBorderInfo( sal_uInt16 nCount, sal_uInt16 nWhat );
 
     void SetBoxItem( SfxItemSet& rItemSet, sal_uInt16 nMinBorderDist,
-                     const SvxBoxItem* pDflt=0, sal_Bool bTable = sal_False );
+                     const SvxBoxItem* pDflt=0, bool bTable = false );
 
 };
 
@@ -340,9 +340,9 @@ public:
     virtual void SetDfltEncoding( rtl_TextEncoding eEnc );
     rtl_TextEncoding GetDfltEncoding() const { return eDfltEnc; }
 
-    sal_Bool IsSetWesternProps() const { return (nScriptFlags & CSS1_SCRIPT_WESTERN) != 0; }
-    sal_Bool IsSetCJKProps() const { return (nScriptFlags & CSS1_SCRIPT_CJK) != 0; }
-    sal_Bool IsSetCTLProps() const { return (nScriptFlags & CSS1_SCRIPT_CTL) != 0; }
+    bool IsSetWesternProps() const { return (nScriptFlags & CSS1_SCRIPT_WESTERN) != 0; }
+    bool IsSetCJKProps() const { return (nScriptFlags & CSS1_SCRIPT_CJK) != 0; }
+    bool IsSetCTLProps() const { return (nScriptFlags & CSS1_SCRIPT_CTL) != 0; }
 
     const String& GetBaseURL() const { return sBaseURL;}
 

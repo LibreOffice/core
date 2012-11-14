@@ -271,7 +271,7 @@ public:
     sal_Int16 GetVertOri() const { return eVertOri; }
 
     // Is the cell filled or protected ?
-    sal_Bool IsUsed() const { return pContents!=0 || bProtected; }
+    bool IsUsed() const { return pContents!=0 || bProtected; }
 
     SwHTMLTableLayoutCell *CreateLayoutInfo();
 

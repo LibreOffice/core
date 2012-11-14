@@ -363,7 +363,7 @@ public:
     SwPageDesc* GetPageDescFromPool( sal_uInt16 nId );
 
     /// Query if the paragraph-/character-/frame-/page-style is used.
-    sal_Bool IsUsed( const SwModify& ) const;
+    bool IsUsed( const SwModify& ) const;
 
     /// @return required automatic format.
     SwFrmFmt* GetFrmFmtFromPool( sal_uInt16 nId )

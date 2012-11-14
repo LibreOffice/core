@@ -581,9 +581,9 @@ void SvxCSS1PropertyInfo::CopyBorderInfo( sal_uInt16 nCount, sal_uInt16 nWhat )
 void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
                                       sal_uInt16 nMinBorderDist,
                                       const SvxBoxItem *pDfltItem,
-                                      sal_Bool bTable )
+                                      bool bTable )
 {
-    sal_Bool bChg = nTopBorderDistance != USHRT_MAX ||
+    bool bChg = nTopBorderDistance != USHRT_MAX ||
                 nBottomBorderDistance != USHRT_MAX ||
                 nLeftBorderDistance != USHRT_MAX ||
                 nRightBorderDistance != USHRT_MAX;

@@ -207,7 +207,7 @@ public:
                      sal_Bool mbTextValue = sal_False,
                      OUString const& i_rXmlId = OUString());
 
-    sal_Bool IsUsed() const { return pStartNode!=0 ||
+    bool IsUsed() const { return pStartNode!=0 ||
                                      xSubTable.Is() || bProtected;}
 
     sal_uInt32 GetRowSpan() const { return nRowSpan; }

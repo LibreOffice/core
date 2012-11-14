@@ -287,7 +287,7 @@ protected:
                             sal_uInt16 nDepth,
                             sal_uInt16 nNumOfHeaderRows );
 
-    void MergeBorders( const editeng::SvxBorderLine* pBorderLine, sal_Bool bTable );
+    void MergeBorders( const editeng::SvxBorderLine* pBorderLine, bool bTable );
 
     sal_uInt16 MergeBoxBorders(const SwTableBox *pBox, size_t nRow, size_t nCol,
                             sal_uInt16 nRowSpan, sal_uInt16 nColSpan,

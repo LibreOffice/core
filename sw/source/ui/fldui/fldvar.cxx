@@ -824,7 +824,7 @@ IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
     String sValue(aValueED.GetText());
     sal_Bool bHasValue = sValue.Len() != 0;
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
-    sal_Bool bInsert = sal_False, bApply = sal_False, bDelete = sal_False;
+    bool bInsert = false, bApply = false, bDelete = false;
 
     String sName( aNameED.GetText() );
     xub_StrLen nLen = sName.Len();
@@ -854,7 +854,7 @@ IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
         if( nLen )
         {
             // is there already a corrensponding type
-            bInsert = bApply = sal_True;
+            bInsert = bApply = true;
 
             SwFieldType* pType = GetFldMgr().GetFldType(RES_DDEFLD, sName);
 
@@ -883,13 +883,13 @@ IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
             {
                 // user fields can also be inserted without content!
                 // Bug #56845
-                bInsert = bApply = sal_True;
+                bInsert = bApply = true;
             }
         }
         break;
 
     default:
-        bInsert = sal_True;
+        bInsert = true;
 
         if (nTypeId == TYP_SETFLD || nTypeId == TYP_SEQFLD)
         {
@@ -915,26 +915,26 @@ IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
                     }
 
                     if (i >= INIT_FLDTYPES && !pSh->IsUsed(*pFldType))
-                        bDelete = sal_True;
+                        bDelete = true;
 
                     if (nTypeId == TYP_SEQFLD && !(pFldType->GetType() & nsSwGetSetExpType::GSE_SEQ))
-                        bInsert = sal_False;
+                        bInsert = false;
 
                     if (nTypeId == TYP_SETFLD && (pFldType->GetType() & nsSwGetSetExpType::GSE_SEQ))
-                        bInsert = sal_False;
+                        bInsert = false;
                 }
             }
             if (GetFldMgr().GetFldType(RES_USERFLD, sName))
-                bInsert = sal_False;
+                bInsert = false;
         }
 
         if( !nLen && ( nTypeId == TYP_SETFLD ||
                         (!IsFldEdit() && nTypeId == TYP_GETFLD ) ) )
-            bInsert = sal_False;
+            bInsert = false;
 
         if( (nTypeId == TYP_SETFLD || nTypeId == TYP_FORMELFLD) &&
             !bHasValue )
-            bInsert = sal_False;
+            bInsert = false;
         break;
     }
 

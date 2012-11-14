@@ -91,22 +91,22 @@ Item for settings dialog, element page
 class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
 {
     //view
-    sal_Bool bHorzScrollbar :1;
-    sal_Bool bVertScrollbar :1;
-    sal_Bool bAnyRuler : 1;
-    sal_Bool bHorzRuler     :1;
-    sal_Bool bVertRuler     :1;
-    sal_Bool bVertRulerRight:1;
-    sal_Bool bSmoothScroll  :1;
+    bool bHorzScrollbar :1;
+    bool bVertScrollbar :1;
+    bool bAnyRuler : 1;
+    bool bHorzRuler     :1;
+    bool bVertRuler     :1;
+    bool bVertRulerRight:1;
+    bool bSmoothScroll  :1;
     //visual aids
-    sal_Bool bCrosshair     :1;
-    sal_Bool bHandles       :1;
+    bool bCrosshair     :1;
+    bool bHandles       :1;
     //display
-    sal_Bool bTable             :1;
-    sal_Bool bGraphic           :1;
-    sal_Bool bDrawing           :1;
-    sal_Bool bFieldName         :1;
-    sal_Bool bNotes             :1;
+    bool bTable             :1;
+    bool bGraphic           :1;
+    bool bDrawing           :1;
+    bool bFieldName         :1;
+    bool bNotes             :1;
 
     friend class SwContentOptPage;
 
@@ -209,16 +209,16 @@ class SW_DLLPUBLIC SwTestItem : public SfxPoolItem
     friend class SwModule;
     friend class SwTestTabPage;
 
-    sal_Bool    bTest1:1;
-    sal_Bool    bTest2:1;
-    sal_Bool    bTest3:1;
-    sal_Bool    bTest4:1;
-    sal_Bool    bTest5:1;
-    sal_Bool    bTest6:1;
-    sal_Bool    bTest7:1;
-    sal_Bool    bTest8:1;
-    sal_Bool    bTest9:1;
-    sal_Bool    bTest10:1;
+    bool    bTest1:1;
+    bool    bTest2:1;
+    bool    bTest3:1;
+    bool    bTest4:1;
+    bool    bTest5:1;
+    bool    bTest6:1;
+    bool    bTest7:1;
+    bool    bTest8:1;
+    bool    bTest9:1;
+    bool    bTest10:1;
 
 public:
                             SwTestItem( sal_uInt16 _nWhich):

@@ -209,7 +209,7 @@ const SvxBrushItem *SwWriteTable::GetLineBrush( const SwTableBox *pBox,
 
 
 void SwWriteTable::MergeBorders( const SvxBorderLine* pBorderLine,
-                                   sal_Bool bTable )
+                                   bool bTable )
 {
     if( (sal_uInt32)-1 == nBorderColor )
     {

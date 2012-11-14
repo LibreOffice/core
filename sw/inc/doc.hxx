@@ -1303,8 +1303,8 @@ public:
     void ReplaceCompatabilityOptions(const SwDoc& rSource);
 
     /// Query if style (paragraph- / character- / frame- / page-) is used.
-    sal_Bool IsUsed( const SwModify& ) const;
-    sal_Bool IsUsed( const SwNumRule& ) const;
+    bool IsUsed( const SwModify& ) const;
+    bool IsUsed( const SwNumRule& ) const;
 
     /// Set name of newly loaded document template.
     sal_uInt16 SetDocPattern( const String& rPatternName );
