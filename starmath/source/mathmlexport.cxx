@@ -216,8 +216,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
             bRet = WriteThroughComponent(
                     xStg, xModelComp, "meta.xml", xServiceFactory, xInfoSet,
                     (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaExporter"
-                            : "com.sun.star.comp.Math.XMLMetaExporter"),
-                    sal_False);
+                            : "com.sun.star.comp.Math.XMLMetaExporter"));
         }
         if ( bRet )
         {
@@ -326,8 +325,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     const sal_Char* pStreamName,
     Reference<lang::XMultiServiceFactory> & rFactory,
     Reference<beans::XPropertySet> & rPropSet,
-    const sal_Char* pComponentName,
-    sal_Bool bCompress
+    const sal_Char* pComponentName
     )
 {
     OSL_ENSURE(xStorage.is(), "Need storage!");
@@ -355,15 +353,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
     xSet->setPropertyValue( aPropName, aAny );
 
-    if ( !bCompress )
-    {
-        aPropName = "Compressed";
-        sal_Bool bFalse = sal_False;
-        aAny.setValue( &bFalse, ::getBooleanCppuType() );
-        xSet->setPropertyValue( aPropName, aAny );
-    }
-
-    // even plain stream must be encrypted in encrypted document
+    // all streams must be encrypted in encrypted document
     OUString aTmpPropName( "UseCommonStoragePasswordEncryption" );
     sal_Bool bTrue = sal_True;
     aAny.setValue( &bTrue, ::getBooleanCppuType() );

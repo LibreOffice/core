@@ -82,8 +82,7 @@ private:
             ::com::sun::star::uno::Any> & rArguments,
         /// output descriptor
         const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & rMediaDesc,
-        sal_Bool bPlainStream );            /// neither compress nor encrypt
+            ::com::sun::star::beans::PropertyValue> & rMediaDesc );
 
     /// write a single output stream
     /// (to be called either directly or by WriteThroughComponent(...))
