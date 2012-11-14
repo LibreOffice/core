@@ -191,12 +191,6 @@ namespace dbtools
     /** returns the connection the RowSet is currently working with (which is the ActiveConnection property)
     */
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet) throw (::com::sun::star::uno::RuntimeException);
-    OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection(
-            const ::rtl::OUString& _rsTitleOrPath,
-            const ::rtl::OUString& _rsUser,
-            const ::rtl::OUString& _rsPwd,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
-
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection_withFeedback(
             const ::rtl::OUString& _rDataSourceName,
             const ::rtl::OUString& _rUser,
