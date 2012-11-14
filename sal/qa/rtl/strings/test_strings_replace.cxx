@@ -26,7 +26,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#include <ostream>
+
+#include "sal/config.h"
 
 #include <sal/types.h>
 #include "cppunit/TestAssert.h"

@@ -32,6 +32,7 @@
 #include "sal/config.h"
 
 #include <cassert>
+#include <ostream>
 
 #include <osl/diagnose.h>
 #include <rtl/memory.h>
