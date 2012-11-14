@@ -282,10 +282,6 @@ my_components += \
 my_components += component/slideshow/source/engine/OGLTrans/ogltrans
 .END
 
-.IF "$(ENABLE_LOMENUBAR)" == "TRUE"
-my_components += component/framework/util/lomenubar
-.END
-
 .IF "$(SOLAR_JAVA)" == "TRUE"
 my_components += \
     component/xmerge/source/bridge/XMergeBridge \

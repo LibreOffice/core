@@ -11291,20 +11291,6 @@ AC_SUBST(ENABLE_OXYGENOFFICE)
 AC_SUBST(OXYGENOFFICE_PACK)
 
 dnl ===================================================================
-dnl Test whether to build global menu support
-dnl ===================================================================
-AC_MSG_CHECKING([whether to build global menu support])
-if test "$enable_lomenubar" = "" -o "$enable_lomenubar" = "no"; then
-    AC_MSG_RESULT([no])
-    ENABLE_LOMENUBAR="FALSE"
-else
-    AC_MSG_RESULT([yes])
-    PKG_CHECK_MODULES(DBUSMENUGTK, dbusmenu-gtk-0.4,, AC_MSG_ERROR([requirements to build lo-menubar not met. Use --disable-lomenubar or install the missing packages]))
-    ENABLE_LOMENUBAR="TRUE"
-fi
-AC_SUBST(ENABLE_LOMENUBAR)
-
-dnl ===================================================================
 dnl Test whether to enable online update service
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable online update])
