@@ -577,15 +577,6 @@ protected:
             void        CallEventListeners( sal_uLong nEvent, void* pData = NULL );
             void        FireVclEvent( VclSimpleEvent* pEvent );
 
-    /*
-     * Widgets call this to inform their owner container that the widget wants
-     * to renegotiate its size. Should be called when a widget has a new size
-     * request. e.g. a FixedText Control gets a new label.
-     *
-     * akin to gtk_widget_queue_resize
-     */
-    SAL_DLLPRIVATE void queue_resize();
-
     sal_Int32 get_height_request() const;
     sal_Int32 get_width_request() const;
 
@@ -1075,6 +1066,15 @@ public:
      * the preferred widget size.
      */
     virtual Size GetOptimalSize(WindowSizeType eType) const;
+
+    /*
+     * Widgets call this to inform their owner container that the widget wants
+     * to renegotiate its size. Should be called when a widget has a new size
+     * request. e.g. a FixedText Control gets a new label.
+     *
+     * akin to gtk_widget_queue_resize
+     */
+    void queue_resize();
 
     /*
      * Sets the "width-request" property

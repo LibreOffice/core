@@ -1746,6 +1746,8 @@ void Window::SetBackgroundBitmap( const BitmapEx& rBitmapEx )
 //as dirty for the size remains unchanged, but layout changed circumstances
 void Window::queue_resize()
 {
+    bool bSomeoneCares = false;
+
     Dialog *pDialog = NULL;
 
     Window *pWindow = this;
@@ -1756,6 +1758,7 @@ void Window::queue_resize()
         {
             VclContainer *pContainer = static_cast<VclContainer*>(pWindow);
             pContainer->markLayoutDirty();
+            bSomeoneCares = true;
         }
         else if (pWindow->GetType() == WINDOW_TABCONTROL)
         {
@@ -1768,6 +1771,15 @@ void Window::queue_resize()
             break;
         }
         pWindow = pWindow->GetParent();
+    }
+
+    if (bSomeoneCares)
+    {
+        //fdo#57090 force a resync of the borders of the borderwindow onto this
+        //window in case they have changed
+        Window* pBorderWindow = ImplGetBorderWindow();
+        if (pBorderWindow)
+            pBorderWindow->Resize();
     }
 
     if (!pDialog || pDialog == this)

@@ -1077,6 +1077,18 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
     mnHeight    = nHeight;
     mbNWFBorder = false;
 
+    Window *pWin = NULL, *pCtrl = NULL;
+    if (mpOutDev->GetOutDevType() == OUTDEV_WINDOW)
+        pWin = (Window*) mpOutDev;
+
+    if (pWin)
+        pCtrl = mpBorderWindow->GetWindow(WINDOW_CLIENT);
+
+    long nOrigLeftBorder = mnLeftBorder;
+    long nOrigTopBorder = mnTopBorder;
+    long nOrigRightBorder = mnRightBorder;
+    long nOrigBottomBorder = mnBottomBorder;
+
     sal_uInt16 nBorderStyle = mpBorderWindow->GetBorderStyle();
     if ( nBorderStyle & WINDOW_BORDER_NOBORDER )
     {
@@ -1093,12 +1105,8 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
         {
             // for native widget drawing we must find out what
             // control this border belongs to
-            Window *pWin = NULL, *pCtrl = NULL;
-            if( mpOutDev->GetOutDevType() == OUTDEV_WINDOW )
-                pWin = (Window*) mpOutDev;
-
             ControlType aCtrlType = 0;
-            if( pWin && (pCtrl = mpBorderWindow->GetWindow( WINDOW_CLIENT )) != NULL )
+            if (pCtrl)
             {
                 switch( pCtrl->GetType() )
                 {
@@ -1205,6 +1213,19 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
             mnTopBorder     = aCalcRect.Top();
             mnRightBorder   = aRect.Right()-aCalcRect.Right();
             mnBottomBorder  = aRect.Bottom()-aCalcRect.Bottom();
+        }
+    }
+
+    if (pCtrl)
+    {
+        //fdo#57090 If the borders have changed, then trigger a queue_resize on
+        //the bordered window, which will resync its borders at that point
+        if (nOrigLeftBorder != mnLeftBorder ||
+            nOrigTopBorder != mnTopBorder ||
+            nOrigRightBorder != mnRightBorder ||
+            nOrigBottomBorder != mnBottomBorder)
+        {
+            pCtrl->queue_resize();
         }
     }
 }
