@@ -62,7 +62,7 @@ class ScXMLImportWrapper
         com::sun::star::uno::Reference<com::sun::star::xml::sax::XWriter>& xWriter,
         com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aDescriptor,
         const rtl::OUString& sName, const rtl::OUString& sMediaType, const rtl::OUString& sComponentName,
-        const sal_Bool bPlainText, com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,
+        com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,
         ScMySharedData*& pSharedData);
 
 public:
