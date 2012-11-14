@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <cassert>
 #include <vector>
 // compiled via include from itemset.cxx only!
 
@@ -86,7 +86,7 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
         aNumArr.push_back( nIns );
     }
 
-    DBG_ASSERT( bEndOfRange, "ungerade Anzahl von Which-Paaren!" );
+    assert( bEndOfRange ); // odd number of Which-IDs
 
     // so, jetzt sind alle Bereiche vorhanden und
     rpRanges = new NUMTYPE[ aNumArr.size() + 1 ];
