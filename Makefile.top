@@ -138,6 +138,7 @@ package\
 packimages\
 padmin\
 postgresql\
+postprocess\
 psprint_config\
 pyuno\
 qadevOOo\
@@ -233,7 +234,6 @@ mysqlcppconn\
 nss\
 odk\
 openssl\
-postprocess\
 python\
 redland\
 setup_native\
