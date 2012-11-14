@@ -857,6 +857,8 @@
                 <it>/org.openoffice.Office.Common/Misc/UseSystemFileDialog</it>
                 <it>/org.openoffice.Office.Common/Misc/UseSystemPrintDialog</it>
                 <it>/org.openoffice.Office.Common/Misc/SymbolStyle</it>
+                <it>/org.openoffice.Office.Common/Misc/FilePickerPlacesNames</it>
+                <it>/org.openoffice.Office.Common/Misc/FilePickerPlacesUrls</it>
                 <it>/org.openoffice.Office.Common/Passwords</it>
                 <it>/org.openoffice.Office.Common/Print/PrintingModifiesDocument</it>
                 <it>/org.openoffice.Office.Common/Print/Warning</it>
