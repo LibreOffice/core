@@ -210,6 +210,13 @@ ModalDialog DLG_DOCTEMPLATE
         Pos = MAP_APPFONT( 0, 219 );
         Size = MAP_APPFONT( 320, 8 );
     };
+    PushButton BTN_DOCTEMPLATE_PACKAGE
+    {
+        HelpID = "svtools:PushButton:DLG_DOCTEMPLATE:BTN_DOCTEMPLATE_PACKAGE";
+        Pos = MAP_APPFONT( 208, 206 );
+        Size = MAP_APPFONT( 106, 14 );
+        Text [ en-US ] = "Install Template Pack";
+    };
     PushButton BTN_DOCTEMPLATE_MANAGE
     {
         HelpID = "svtools:PushButton:DLG_DOCTEMPLATE:BTN_DOCTEMPLATE_MANAGE";

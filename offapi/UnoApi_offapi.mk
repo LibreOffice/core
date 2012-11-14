@@ -4293,6 +4293,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xsd,\
 ))
 
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/org/freedesktop/PackageKit,\
+    SyncDbusSessionHelper \
     XSyncDbusSessionHelper \
     XModify \
     XQuery \
