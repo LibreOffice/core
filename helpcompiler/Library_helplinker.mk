@@ -46,7 +46,7 @@ $(eval $(call gb_Library_use_libraries,helplinker,\
 ))
 
 $(eval $(call gb_Library_use_externals,helplinker,\
-    expat_utf16 \
+    expat_utf8 \
     libxslt \
     libxml2 \
     clucene \
