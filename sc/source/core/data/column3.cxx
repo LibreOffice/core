@@ -399,11 +399,13 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
                 // try to create a replacement note cell, if note or broadcaster exists
                 ScNoteCell* pNoteCell = NULL;
                 SvtBroadcaster* pBC = pOldCell->GetBroadcaster();
-                bool bKeepBC = pBC && pBC->HasListeners();
-                // #i99844# do not release broadcaster from old cell, it still has to notify deleted content
-                if (bKeepBC)
+                if (pBC && pBC->HasListeners())
                 {
                     pNoteCell = new ScNoteCell( pBC );
+                    // NOTE: the broadcaster here is transferred and released
+                    // only if it has listeners! If it does not, it will simply
+                    // be deleted when the cell is deleted and no replacement
+                    // cell is created.
                     pOldCell->ReleaseBroadcaster();
                 }
 
@@ -427,15 +429,10 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
                 else
                 {
                     aHint.GetAddress().SetRow( nOldRow );
-                    if(bKeepBC)
-                        aHint.SetCell( pNoteCell );
-                    else
-                        aHint.SetCell( pOldCell );
+                    aHint.SetCell( pNoteCell ? pNoteCell : pOldCell );
                     pDocument->Broadcast( aHint );
                     if (pNoteCell != pOldCell)
                     {
-                        // #i99844# after broadcasting, old cell has to forget the broadcaster (owned by pNoteCell)
-                        pOldCell->ReleaseBroadcaster();
                         pOldCell->Delete();
                     }
                 }
@@ -456,7 +453,9 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
     if (nFirst <= nEndIndex)
         aRemovedSegments.insert_back(nFirst, nEndIndex + 1, true);
 
-    {
+    // Remove segments from the column array, containing pDummyCell and formula
+    // cell pointers to be deleted.
+    { // own scope for variables
         RemovedSegments_t::const_iterator aIt(aRemovedSegments.begin());
         RemovedSegments_t::const_iterator aEnd(aRemovedSegments.end());
         // The indexes in aRemovedSegments denote cell positions in the
@@ -499,29 +498,33 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
     }
 
     // *** delete all formula cells ***
-
-    // first, all cells stop listening, may save unneeded recalcualtions
-    for ( FormulaCellVector::iterator aIt = aDelCells.begin(), aEnd = aDelCells.end(); aIt != aEnd; ++aIt )
-        (*aIt)->EndListeningTo( pDocument );
-
-    // #i101869# if the note cell with the broadcaster was deleted in EndListening,
-    // forget the pointer to the broadcaster
-    for ( FormulaCellVector::iterator aIt = aDelCells.begin(), aEnd = aDelCells.end(); aIt != aEnd; ++aIt )
+    if (!aDelCells.empty())
     {
-        SCSIZE nIndex;
-        if ( !Search( (*aIt)->aPos.Row(), nIndex ) )
-            (*aIt)->ReleaseBroadcaster();
-    }
+        // First, all cells stop listening, may save unneeded broadcasts and
+        // recalcualtions.
+        // NOTE: this actually may remove ScNoteCell entries from maItems if
+        // the last listener is removed from a broadcaster.
+        for ( FormulaCellVector::iterator aIt = aDelCells.begin(), aEnd = aDelCells.end(); aIt != aEnd; ++aIt )
+            (*aIt)->EndListeningTo( pDocument );
 
-    // broadcast SC_HINT_DYING for all cells and delete them
-    for ( FormulaCellVector::iterator aIt = aDelCells.begin(), aEnd = aDelCells.end(); aIt != aEnd; ++aIt )
-    {
-        aHint.SetAddress( (*aIt)->aPos );
-        aHint.SetCell( *aIt );
-        pDocument->Broadcast( aHint );
-        // #i99844# after broadcasting, old cell has to forget the broadcaster (owned by replacement note cell)
-        (*aIt)->ReleaseBroadcaster();
-        (*aIt)->Delete();
+        // NOTE: the vector does not contain cells with broadcasters that have
+        // listeners. If it would, broadcasters that were deleted during
+        // EndListeningTo() would have to be released from these cells.
+
+        // broadcast SC_HINT_DYING for all cells and delete them
+        for ( FormulaCellVector::iterator aIt = aDelCells.begin(), aEnd = aDelCells.end(); aIt != aEnd; ++aIt )
+        {
+            // A formula cell's broadcaster now is at the replacement cell, use
+            // that. If there is no cell anymore it means all listeners are
+            // gone for this formula cell and the replacement cell was removed
+            // from maItems.
+            SCSIZE nIndex;
+            ScBaseCell* pCell = (Search( (*aIt)->aPos.Row(), nIndex) ? maItems[nIndex].pCell : NULL);
+            aHint.SetCell( pCell );
+            aHint.SetAddress( (*aIt)->aPos );
+            pDocument->Broadcast( aHint );
+            (*aIt)->Delete();
+        }
     }
 }
 
