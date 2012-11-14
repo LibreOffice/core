@@ -26,7 +26,7 @@ const cParagraphBreak = 0
 
 global const cExtensionFileName = &quot;TestExtension.oxt&quot;
 
-global const cDocNew = 0, cDocSaveOpen8 = 1, cDocSaveOpenXML = 2, cDocOpen50 = 3, cDocClose = 4, cDocMacros = 5
+global const cDocNew = 0, cDocSaveOpen8 = 1, cDocSaveOpenXML = 2, cDocClose = 3, cDocMacros = 4
 global const cDBService = 0, cDBOpen = 1, cDBInsert = 2, cDBDelete = 3, cDBSeek = 4, cDBClose = 5
 global const cEXTService = 0, cEXTInstall = 1, cEXTUninstall = 2
 global const cTestClosureSetupDoc = 0, cTestClosureWriteStatus = 1
@@ -39,7 +39,7 @@ global const cStExtension = 11
 global const cStTestGlue = 12
 global const cStNone = -1
 
-global const cFlt8 = 0, cFlt50 = 32, cFltNewDoc = 64, cFltXML = 128
+global const cFlt8 = 0, cFltNewDoc = 64, cFltXML = 128
 
 global const frmWriter = 1, frmCalc = 2, frmImpress = 4
 global const frmMath = 5, frmChart = 7, frmHyperText = 8, frmDraw = 9
@@ -81,7 +81,6 @@ Global const cUserFieldTestDraw = &quot;Draw&quot;, cUserFieldTestMath = &quot;M
 Global const cUserFieldTestHTML = &quot;HTML&quot;, cUserFieldTestJava = &quot;Java&quot;, cUserFieldTestDatabase = &quot;Database&quot;
 Global const cUserFieldTestExtension = &quot;Extension&quot;
 Global const cUserFieldTestOpenSaveXML = &quot;SaveOpenXML&quot;
-Global const cUserFieldTestOpen50 = &quot;Open50&quot;
 Global const cUserFieldTestTerminateAfterTest = &quot;Terminate&quot;, cUserFieldTestOpenSave8 = &quot;SaveOpen8&quot;, cUserFieldTestMacros = &quot;Macros&quot;
 
 Global const cOptionsDialogName = &quot;OptionsDlg&quot;, cTest10Modul = &quot;Standard&quot;
@@ -99,7 +98,7 @@ Global bMakeWriterTest as boolean, bMakeCalcTest as  boolean, bMakeImpressTest a
 Global bMakeDrawTest as Boolean, bMakeMathTest as boolean, bMakeChartTest as boolean
 Global bMakeHTMLTest as boolean, bMakeJavaTest as boolean, bMakeDBTest as boolean
 Global bMakeExtensionTest as boolean
-Global bMakeSaveOpenXMLTest as boolean, bMakeOpen50Test as boolean
+Global bMakeSaveOpenXMLTest as boolean
 Global bMakeTerminateAfterTest as boolean, bShowTable as boolean
 Global bMakeSaveOpen8Test as boolean, bMakeMacrosTest as boolean
 
@@ -223,11 +222,10 @@ Sub CreateStatusTable
     tableHeaders(cStHTML) = &quot;HTML&quot;
     tableHeaders(cStJava) = &quot;Java&quot;
 
-    dim tableRows(5) as string
+    dim tableRows(4) as string
     tableRows(cDocNew) = &quot;new&quot;
     tableRows(cDocSaveOpen8) = &quot;V8.0&quot;
     tableRows(cDocSaveOpenXML) = &quot;XML&quot;
-    tableRows(cDocOpen50) = &quot;V5.0&quot;
     tableRows(cDocClose) = &quot;close&quot;
     tableRows(cDocMacros) = &quot;macros&quot;
 
@@ -528,9 +526,6 @@ Sub SetGlobalOptionsDialog ()
     REM create dialog control
     gOptionsDialog = CreateUnoDialog( oInputStreamProvider )
 
-    oControl = gOptionsDialog.getControl(&quot;cbOpen50Test&quot;)
-    oControl.Model.setPropertyValue(&quot;Enabled&quot;, FALSE)
-
 end Sub
 
 Sub ShowOptionsDlg
@@ -569,7 +564,6 @@ Sub SetOptions
     SetUserFieldState (cUserFieldTestDatabase, -(gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).getState), gOutputDoc)
     SetUserFieldState (cUserFieldTestExtension, -(gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).getState), gOutputDoc)
     SetUserFieldState (cUserFieldTestOpenSaveXML, -(gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).getState), gOutputDoc)
-    SetUserFieldState (cUserFieldTestOpen50, -(gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).getState), gOutPutDoc)
     SetUserFieldState (cUserFieldTestOpenSave8, -(gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).getState), gOutputDoc)
     SetUserFieldState (cUserFieldTestMacros, -(gOptionsDialog.getControl(&quot;cbMacrosTest&quot;).getState), gOutputDoc)
     SetUserFieldState (cUserFieldTestTerminateAfterTest, -(gOptionsDialog.getControl(&quot;cbTerminateAfterTest&quot;).getState), gOutputDoc)
@@ -588,7 +582,6 @@ Sub GetOptions
     gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).setState( -( GetUserFieldState (cUserFieldTestDatabase, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).setState( -( GetUserFieldState (cUserFieldTestExtension, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSaveXML, gOutputDoc)))
-    gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).setState(0)
     gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSave8, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbMacrosTest&quot;).setState( -( GetUserFieldState (cUserFieldTestMacros, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbTerminateAfterTest&quot;).setState( -( GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutputDoc)))
@@ -607,7 +600,6 @@ Sub ReadOptions
     bMakeDBTest = GetUserFieldState (cUserFieldTestDatabase, gOutputDoc)
     bMakeExtensionTest = GetUserFieldState (cUserFieldTestExtension, gOutputDoc)
     bMakeSaveOpenXMLTest = GetUserFieldState (cUserFieldTestOpenSaveXML, gOutputDoc)
-    bMakeOpen50Test = false
     bMakeSaveOpen8Test = GetUserFieldState (cUserFieldTestOpenSave8, gOutputDoc)
     bMakeMacrosTest = GetUserFieldState (cUserFieldTestMacros, gOutputDoc)
     bMakeTerminateAfterTest = GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutputDoc)
@@ -631,7 +623,6 @@ Sub SetDefaultOptions
         bMakeExtensionTest = true
     End If
     bMakeSaveOpenXMLTest = true
-    bMakeOpen50Test = false
     bMakeSaveOpen8Test = true
     bMakeMacrosTest = true
     bMakeTerminateAfterTest = false
@@ -667,11 +658,10 @@ Function StartTestWithDefaultOptions
     component(cStJava) = &quot;Java&quot;
     component(cStDataBase) = &quot;Base&quot;
     component(cStExtension) = &quot;Extensions&quot;
-    dim action(5) as string
+    dim action(4) as string
     action(cDocNew) = &quot;new&quot;
     action(cDocSaveOpen8) = &quot;V8.0&quot;
     action(cDocSaveOpenXML) = &quot;XML&quot;
-    action(cDocOpen50) = &quot;V5.0&quot;
     action(cDocClose) = &quot;close&quot;
     action(cDocMacros) = &quot;macros&quot;
     dim baseAction(5) as string
