@@ -504,10 +504,6 @@ bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg
     {
         m_version = true;
     }
-    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("splash-pipe=")) )
-    {
-        m_splashpipe = true;
-    }
 #ifdef MACOSX
     /* #i84053# ignore -psn on Mac
        Platform dependent #ifdef here is ugly, however this is currently
@@ -623,7 +619,6 @@ void CommandLineArgs::InitParamValues()
     m_helpbase = false;
     m_psn = false;
     m_version = false;
-    m_splashpipe = false;
     m_bEmpty = true;
     m_bDocumentArgs  = false;
 }
@@ -769,11 +764,6 @@ bool CommandLineArgs::HasModuleParam() const
 {
     return m_writer || m_calc || m_draw || m_impress || m_global || m_math
         || m_web || m_base;
-}
-
-bool CommandLineArgs::HasSplashPipe() const
-{
-    return m_splashpipe;
 }
 
 std::vector< rtl::OUString > const & CommandLineArgs::GetAccept() const

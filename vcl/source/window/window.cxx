@@ -6413,17 +6413,8 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
         {
             // #106431#, hide SplashScreen
             ImplSVData* pSVData = ImplGetSVData();
-            if ( !pSVData->mpIntroWindow )
-            {
-                // The right way would be just to call this (not even in the 'if')
-                GetpApp()->InitFinished();
-            }
-            else if ( !ImplIsWindowOrChild( pSVData->mpIntroWindow ) )
-            {
-                // ... but the VCL splash is broken, and it needs this
-                // (for ./soffice slot:5500)
-                pSVData->mpIntroWindow->Hide();
-            }
+
+            GetpApp()->InitFinished();
 
             //DBG_ASSERT( !mpWindowImpl->mbSuppressAccessibilityEvents, "Window::Show() - Frame reactivated");
             mpWindowImpl->mbSuppressAccessibilityEvents = sal_False;

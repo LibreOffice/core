@@ -129,10 +129,6 @@ For example -infilter="Calc Office Open XML" only
 Starts with a new Math document.
 
 .TP
-\fB\-\-minimized\fR
-Keeps the splash screen minimized.
-
-.TP
 \fB\-n \fItemplate\fR...
 Creates the a new document from the given templates.
 
@@ -149,18 +145,10 @@ has no longer been supported since OpenOffice.org 2.0.0.
 Disables the check for remote instances using the installation.
 
 .TP
-\fB\-\-nologo\fR
-Disables the splash screen at program start.
-
-.TP
 \fB\-\-norestore\fR
 Disables restart and file recovery after a system crash. It is possible that LO
 will try to restore a file it keeps crashing on, if that happens \fB\-\-norestore\fR
 is the only way to start LO.
-
-.TP
-\fB\-\-nosplash\fR
-Disables the splash screen at program start.
 
 .TP
 \fB\-o \fIfile\fR...
@@ -170,8 +158,7 @@ Without \fb\-o\fR a template file would create a new document derived from that 
 
 .TP
 \fB\-p \fIfile\fR...
-Prints the given files to the default printer and ends. The splash screen
-does not appear.
+Prints the given files to the default printer and ends. 
 
 If the file name contains spaces, then it must be enclosed in quotation marks.
 
@@ -194,8 +181,7 @@ Prints all .doc files to /home/user directory using the nasty_lowres_printer.
 
 .TP
 \fB\-\-pt \fIprintername\fR \fIfile\fR...
-Prints the given files to the printer \fIprintername\fR and ends. The splash
-screen does not appear.
+Prints the given files to the printer \fIprintername\fR and ends.
 
 If a file name contains spaces, then it must be enclosed in quotation marks.
 
@@ -219,7 +205,6 @@ Use \fB\-\-unaccept\fR=\fIall\fR to close all open acceptors.
 .TP
 \fB\-\-terminate_after_init\fR
 Starts LO and terminates after it registers some UNO services.
-Doesn't show the splash during startup.
 
 .TP
 \fB\-\-view \fIfile\fR...

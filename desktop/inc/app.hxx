@@ -133,8 +133,6 @@ class Desktop : public Application
         static void             SetRestartState();
 
         void                    SynchronizeExtensionRepositories();
-        void                    SetSplashScreenText( const ::rtl::OUString& rText );
-        void                    SetSplashScreenProgress( sal_Int32 );
 
         // Bootstrap methods
         static void             InitApplicationServiceManager();
@@ -162,10 +160,6 @@ class Desktop : public Application
 
         static void             PreloadModuleData( const CommandLineArgs& );
         static void             PreloadConfigurationData();
-
-        Reference<XStatusIndicator> m_rSplashScreen;
-        void                    OpenSplashScreen();
-        void                    CloseSplashScreen();
 
         void                    EnableOleAutomation();
                                 DECL_LINK( ImplInitFilterHdl, ConvertData* );

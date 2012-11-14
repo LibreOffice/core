@@ -98,7 +98,6 @@ class CommandLineArgs: private boost::noncopyable
         OUString            GetUnknown() const;
 
         // Access to string parameters
-        bool                    HasSplashPipe() const;
         std::vector< rtl::OUString > const & GetAccept() const;
         std::vector< rtl::OUString > const & GetUnaccept() const;
         std::vector< rtl::OUString > GetOpenList() const;
@@ -154,7 +153,6 @@ class CommandLineArgs: private boost::noncopyable
         bool m_helpbase;
         bool m_psn;
         bool m_version;
-        bool m_splashpipe;
 
         OUString m_unknown;
 

@@ -936,13 +936,6 @@ AC_ARG_ENABLE(headless,
         server usage. Work in progress, use only if you are hacking on
         it. Not related to the --headless option.]), ,)
 
-AC_ARG_ENABLE(unix-qstart-libpng,
-    AS_HELP_STRING([--disable-unix-qstart-libpng],
-        [On UNIX systems, we have a faster splash app, that can use libpng to
-         render its splash, if we can safely link to the system libpng then
-         enabling this is a good idea (ie. for Linux Distro packaging).]),
-,enable_unix_qstart_libpng=yes)
-
 AC_ARG_ENABLE(rpath,
     AS_HELP_STRING([--disable-rpath],
         [Disable the use of relative paths in shared libraries.]),
@@ -9647,15 +9640,6 @@ dnl ===================================================================
 PKG_CHECK_MODULES( LIBPNG, libpng, ENABLE_QUICKSTART_LIBPNG="TRUE", ENABLE_QUICKSTART_LIBPNG="" )
 AC_SUBST(LIBPNG_LIBS)
 AC_SUBST(LIBPNG_CFLAGS)
-
-AC_MSG_CHECKING([whether to enable libpng linking in quickstarter])
-if test "x$enable_unix_qstart_libpng" != "xno"; then
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-    ENABLE_QUICKSTART_LIBPNG=""
-fi
-AC_SUBST(ENABLE_QUICKSTART_LIBPNG)
 
 SPLIT_APP_MODULES=""
 if test "$enable_split_app_modules" = "yes"; then

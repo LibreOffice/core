@@ -105,14 +105,6 @@ static sal_Bool ImplIsMnemonicCtrl( Window* pWindow )
 
 // -----------------------------------------------------------------------
 
-// Called by native error dialog popup implementations
-void ImplHideSplash()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData->mpIntroWindow )
-            pSVData->mpIntroWindow->Hide();
-}
-
 //Get next window after pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
 Window * nextLogicalChildOfParent(Window *pTopLevel, Window *pChild)
