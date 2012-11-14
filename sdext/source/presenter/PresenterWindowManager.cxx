@@ -20,6 +20,7 @@
 #undef ENABLE_PANE_RESIZING
 //#define ENABLE_PANE_RESIZING
 
+#include "vcl/svapp.hxx"
 #include "PresenterWindowManager.hxx"
 #include "PresenterController.hxx"
 #include "PresenterGeometryHelper.hxx"
@@ -655,7 +656,8 @@ void PresenterWindowManager::LayoutStandardMode (void)
     const double nGap (20);
     const double nHorizontalSlideDivide (aBox.Width / nGoldenRatio);
     double nSlidePreviewTop (0);
-
+     /// check whether RTL interface or not
+  if(!Application::GetSettings().GetLayoutRTL()){
     // For the current slide view calculate the outer height from the outer
     // width.  This takes into acount the slide aspect ratio and thus has to
     // go over the inner pane size.
@@ -691,8 +693,45 @@ void PresenterWindowManager::LayoutStandardMode (void)
             aNextSlideOuterBox.Width,
             aNextSlideOuterBox.Height);
     }
+  }else{
 
-    LayoutToolBar();
+    // For the current slide view calculate the outer height from the outer
+    // width.  This takes into acount the slide aspect ratio and thus has to
+    // go over the inner pane size.
+     PresenterPaneContainer::SharedPaneDescriptor pPane (
+        mpPaneContainer->FindPaneURL(PresenterPaneFactory::msCurrentSlidePreviewPaneURL));
+    if (pPane.get() != NULL)
+    {
+        const awt::Size aNextSlideOuterBox (CalculatePaneSize(
+            nHorizontalSlideDivide - 1.5*nGap,
+            PresenterPaneFactory::msCurrentSlidePreviewPaneURL));
+        nSlidePreviewTop = (aBox.Height - aNextSlideOuterBox.Height) / 2;
+        SetPanePosSizeAbsolute (
+            PresenterPaneFactory::msCurrentSlidePreviewPaneURL,
+            aBox.Width - aNextSlideOuterBox.Width - nGap,
+            nSlidePreviewTop,
+            aNextSlideOuterBox.Width,
+            aNextSlideOuterBox.Height);
+    }
+
+    // For the next slide view calculate the outer height from the outer
+    // width.  This takes into acount the slide aspect ratio and thus has to
+    // go over the inner pane size.
+    pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNextSlidePreviewPaneURL);
+    if (pPane.get() != NULL)
+    {
+        const awt::Size aCurrentSlideOuterBox(CalculatePaneSize(
+            aBox.Width - nHorizontalSlideDivide - 1.5*nGap,
+            PresenterPaneFactory::msNextSlidePreviewPaneURL));
+        SetPanePosSizeAbsolute (
+            PresenterPaneFactory::msNextSlidePreviewPaneURL,
+            nGap,
+            nSlidePreviewTop,
+            aCurrentSlideOuterBox.Width,
+            aCurrentSlideOuterBox.Height);
+    }
+ }
+   LayoutToolBar();
 }
 
 void PresenterWindowManager::LayoutNotesMode (void)
@@ -708,6 +747,8 @@ void PresenterWindowManager::LayoutNotesMode (void)
     const double nTertiaryWidth (nSecondaryWidth / nGoldenRatio);
     double nSlidePreviewTop (0);
     double nNotesViewBottom (aToolBarBox.Y1 - nGap);
+     /// check whether RTL interface or not
+  if(!Application::GetSettings().GetLayoutRTL()){
 
     // The notes view has no fixed aspect ratio.
     PresenterPaneContainer::SharedPaneDescriptor pPane (
@@ -761,6 +802,61 @@ void PresenterWindowManager::LayoutNotesMode (void)
             aNextSlideOuterBox.Width,
             aNextSlideOuterBox.Height);
     }
+
+
+  }else {
+    // The notes view has no fixed aspect ratio.
+    PresenterPaneContainer::SharedPaneDescriptor pPane (
+        mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNotesPaneURL));
+    if (pPane.get() != NULL)
+    {
+        const geometry::RealSize2D aNotesViewOuterSize(
+            nPrimaryWidth - 1.5*nGap + 0.5,
+            nNotesViewBottom);
+        nSlidePreviewTop = (aBox.Height
+            - aToolBarBox.Y2 + aToolBarBox.Y1 - aNotesViewOuterSize.Height) / 2;
+        SetPanePosSizeAbsolute (
+            PresenterPaneFactory::msNotesPaneURL,
+            nGap,
+            nSlidePreviewTop,
+            aNotesViewOuterSize.Width,
+            aNotesViewOuterSize.Height);
+        nNotesViewBottom = nSlidePreviewTop + aNotesViewOuterSize.Height;
+    }
+
+    // For the current slide view calculate the outer height from the outer
+    // width.  This takes into acount the slide aspect ratio and thus has to
+    // go over the inner pane size.
+    pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msCurrentSlidePreviewPaneURL);
+    if (pPane.get() != NULL)
+    {
+        const awt::Size aCurrentSlideOuterBox(CalculatePaneSize(
+            nSecondaryWidth - 1.5*nGap,
+            PresenterPaneFactory::msCurrentSlidePreviewPaneURL));
+        SetPanePosSizeAbsolute (
+            PresenterPaneFactory::msCurrentSlidePreviewPaneURL,
+            aBox.Width - aCurrentSlideOuterBox.Width - nGap,
+            nSlidePreviewTop,
+            aCurrentSlideOuterBox.Width,
+            aCurrentSlideOuterBox.Height);
+    }
+
+    // For the next slide view calculate the outer height from the outer
+    // width.  This takes into acount the slide aspect ratio and thus has to
+    // go over the inner pane size.
+    pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNextSlidePreviewPaneURL);
+    if (pPane.get() != NULL)
+    {
+        const awt::Size aNextSlideOuterBox (CalculatePaneSize(
+            nTertiaryWidth,
+            PresenterPaneFactory::msNextSlidePreviewPaneURL));
+        SetPanePosSizeAbsolute (
+            PresenterPaneFactory::msNextSlidePreviewPaneURL,
+            aBox.Width - aNextSlideOuterBox.Width - nGap,
+            nNotesViewBottom - aNextSlideOuterBox.Height,
+            aNextSlideOuterBox.Width,
+            aNextSlideOuterBox.Height);
+    }}
 }
 
 void PresenterWindowManager::LayoutSlideSorterMode (void)
