@@ -160,7 +160,6 @@ struct XML_SERVICEMAP
 {
     const sal_Char* mpService;
     const sal_Char* mpStream;
-    sal_Bool mbPlain;
 };
 
 struct XML_SERVICES
@@ -1012,22 +1011,18 @@ sal_Bool SdXMLFilter::Export()
 
             XML_SERVICEMAP aServices[5]; sal_uInt16 i = 0;
             aServices[i  ].mpService = pServiceNames->mpStyles;
-            aServices[i  ].mpStream  = sXML_styleStreamName;
-            aServices[i++].mbPlain = sal_False;
+            aServices[i++].mpStream  = sXML_styleStreamName;
 
             aServices[i  ].mpService = pServiceNames->mpContent;
-            aServices[i  ].mpStream  = sXML_contentStreamName;
-            aServices[i++].mbPlain = sal_False;
+            aServices[i++].mpStream  = sXML_contentStreamName;
 
             aServices[i  ].mpService = pServiceNames->mpSettings;
-            aServices[i  ].mpStream  = sXML_settingsStreamName;
-            aServices[i++].mbPlain = sal_False;
+            aServices[i++].mpStream  = sXML_settingsStreamName;
 
             if( mrDocShell.GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
             {
                 aServices[i  ].mpService = pServiceNames->mpMeta;
-                aServices[i  ].mpStream  = sXML_metaStreamName;
-                aServices[i++].mbPlain = sal_True;
+                aServices[i++].mpStream  = sXML_metaStreamName;
             };
 
             aServices[i].mpService = NULL;
@@ -1060,11 +1055,9 @@ sal_Bool SdXMLFilter::Export()
                     uno::Any aAny; aAny <<= OUString( "text/xml");
                     xProps->setPropertyValue( "MediaType" , aAny);
 
-                    OUString aUseCommonPassPropName( "UseCommonStoragePasswordEncryption");
-                    if( pServices->mbPlain )
-                        xProps->setPropertyValue( "Compressed" , uno::makeAny( (sal_Bool) sal_False ) );
-                    // if the document is encrypted even the plain streams should be encrypted
-                    xProps->setPropertyValue( aUseCommonPassPropName, uno::makeAny( (sal_Bool)sal_True ) );
+                    // encrypt all streams
+                    xProps->setPropertyValue( "UseCommonStoragePasswordEncryption",
+                                              uno::makeAny( (sal_Bool)sal_True ) );
 
                     const OUString sStreamName( "StreamName");
                     xInfoSet->setPropertyValue( sStreamName, Any( sDocName ) );
