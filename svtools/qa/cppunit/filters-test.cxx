@@ -95,6 +95,10 @@ void SvtoolsFiltersTest::testCVEs()
     testDir(rtl::OUString(),
         getURLFromSrc("/svtools/qa/cppunit/data/gif/"),
         rtl::OUString());
+
+    testDir(rtl::OUString(),
+        getURLFromSrc("/svtools/qa/cppunit/data/bmp/"),
+        rtl::OUString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SvtoolsFiltersTest);
