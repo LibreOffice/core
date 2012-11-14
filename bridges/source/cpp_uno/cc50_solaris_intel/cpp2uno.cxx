@@ -249,7 +249,7 @@ extern "C" void cpp_vtable_call(
                  "### illegal vtable index!" );
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
-        throw RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )), (XInterface *)pThis );
+        throw RuntimeException( "illegal vtable index!", (XInterface *)pThis );
     }
 
     // determine called method
@@ -338,7 +338,7 @@ extern "C" void cpp_vtable_call(
     }
     default:
     {
-        throw RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )), (XInterface *)pThis );
+        throw RuntimeException( "no member description found!", (XInterface *)pThis );
     }
     }
 }
