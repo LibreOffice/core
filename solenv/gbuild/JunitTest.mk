@@ -49,7 +49,7 @@ $(call gb_JunitTest_get_target,%) :
 		mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
         (DBGSV_ERROR_OUT=shell DISABLE_SAL_DBGBOX=t \
 		    $(gb_JunitTest_JAVACOMMAND) \
-            -cp "$(T_CP)" \
+            --classpath "$(T_CP)" \
             $(DEFS) \
             org.junit.runner.JUnitCore \
             $(CLASSES) > $@.log 2>&1 || \
