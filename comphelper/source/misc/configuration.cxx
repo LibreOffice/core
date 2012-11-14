@@ -178,22 +178,6 @@ void comphelper::detail::ConfigurationWrapper::setPropertyValue(
     batch->setPropertyValue(path, value);
 }
 
-css::uno::Any
-comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(
-    rtl::OUString const & path) const
-{
-    return access_->getByHierarchicalName(
-        extendLocalizedPath(path, getDefaultLocale(context_)));
-}
-
-void comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(
-    boost::shared_ptr< ConfigurationChanges > const & batch,
-    rtl::OUString const & path, com::sun::star::uno::Any const & value) const
-{
-    assert(batch.get() != 0);
-    batch->setPropertyValue(path, value);
-}
-
 css::uno::Reference< css::container::XHierarchicalNameAccess >
 comphelper::detail::ConfigurationWrapper::getGroupReadOnly(
     rtl::OUString const & path) const
@@ -203,15 +187,6 @@ comphelper::detail::ConfigurationWrapper::getGroupReadOnly(
             context_, getDefaultLocale(context_))->
          getByHierarchicalName(path)),
         css::uno::UNO_QUERY_THROW);
-}
-
-css::uno::Reference< css::container::XHierarchicalNameReplace >
-comphelper::detail::ConfigurationWrapper::getGroupReadWrite(
-    boost::shared_ptr< ConfigurationChanges > const & batch,
-    rtl::OUString const & path) const
-{
-    assert(batch.get() != 0);
-    return batch->getGroup(path);
 }
 
 css::uno::Reference< css::container::XNameAccess >

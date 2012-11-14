@@ -119,23 +119,9 @@ public:
         rtl::OUString const & path, com::sun::star::uno::Any const & value)
         const;
 
-    com::sun::star::uno::Any getLocalizedPropertyValue(
-        rtl::OUString const & path) const;
-
-    void setLocalizedPropertyValue(
-        boost::shared_ptr< ConfigurationChanges > const & batch,
-        rtl::OUString const & path, com::sun::star::uno::Any const & value)
-        const;
-
     com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess >
     getGroupReadOnly(rtl::OUString const & path) const;
-
-    com::sun::star::uno::Reference<
-        com::sun::star::container::XHierarchicalNameReplace >
-    getGroupReadWrite(
-        boost::shared_ptr< ConfigurationChanges > const & batch,
-        rtl::OUString const & path) const;
 
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
     getSetReadOnly(rtl::OUString const & path) const;
