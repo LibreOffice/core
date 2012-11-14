@@ -29,8 +29,19 @@
 
 #include <unx/salmenu.h>
 #include <unx/gtk/gtkframe.hxx>
-#include <unx/gtk/glomenu.h>
-#include <unx/gtk/gloactiongroup.h>
+
+#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#  define ENABLE_GMENU_INTEGRATION
+#  include <unx/gtk/glomenu.h>
+#  include <unx/gtk/gloactiongroup.h>
+#else
+#  ifndef GLIB_AVAILABLE_IN_2_32
+     typedef void GMenuModel;
+#  endif
+#  ifndef GLIB_AVAILABLE_IN_2_28
+     typedef void GActionGroup;
+#  endif
+#endif
 
 class MenuItemList;
 class GtkSalMenuItem;

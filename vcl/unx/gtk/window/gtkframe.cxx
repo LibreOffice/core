@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
@@ -33,13 +32,11 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #if !GTK_CHECK_VERSION(3,0,0)
-#include <unx/x11/xlimits.hxx>
+#  include <unx/x11/xlimits.hxx>
 #endif
 #if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
-#include <unx/gtk/glomenu.h>
-#include <unx/gtk/gloactiongroup.h>
-#include <unx/gtk/gtksalmenu.hxx>
-#include <unx/gtk/hudawareness.h>
+#  include <unx/gtk/gtksalmenu.hxx>
+#  include <unx/gtk/hudawareness.h>
 #endif
 
 #include <gtk/gtk.h>
@@ -61,7 +58,7 @@
 #include <algorithm>
 
 #if OSL_DEBUG_LEVEL > 1
-#include <cstdio>
+#  include <cstdio>
 #endif
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -511,7 +508,7 @@ gdk_x11_window_set_utf8_property  (GdkWindow *window,
 
 // AppMenu watch functions.
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#ifdef ENABLE_GMENU_INTEGRATION
 static void ObjectDestroyedNotify( gpointer data )
 {
     if ( data ) {
@@ -523,6 +520,7 @@ static void hud_activated( gboolean hud_active, gpointer user_data )
 {
     if ( hud_activated )
     {
+        SolarMutexGuard aGuard;
         GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( user_data );
         GtkSalMenu* pSalMenu = reinterpret_cast< GtkSalMenu* >( pSalFrame->GetMenu() );
 
@@ -555,13 +553,13 @@ gboolean ensure_dbus_setup( gpointer data )
         gchar* aDBusMenubarPath = g_strdup_printf( "/window/%lu/menus/menubar", windowId );
 
         // Set window properties.
-        g_object_set_data_full( G_OBJECT(gdkWindow), "g-lo-menubar", pMenuModel, ObjectDestroyedNotify);
-        g_object_set_data_full( G_OBJECT(gdkWindow), "g-lo-action-group", pActionGroup, ObjectDestroyedNotify);
+        g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", pMenuModel, ObjectDestroyedNotify );
+        g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", pActionGroup, ObjectDestroyedNotify );
 
-        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
-        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "" );
-        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
-        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
+        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
+        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "" );
+        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
+        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
 
         // Publish the menu model and the action group.
         SAL_INFO("vcl.unity", "exporting menu model at " << pMenuModel << " for window " << windowId);
@@ -576,7 +574,7 @@ gboolean ensure_dbus_setup( gpointer data )
 
     return FALSE;
 }
-    
+
 void on_registrar_available( GDBusConnection * /*connection*/,
                              const gchar     * /*name*/,
                              const gchar     * /*name_owner*/,
@@ -619,7 +617,7 @@ void on_registrar_unavailable( GDBusConnection * /*connection*/,
 
 void GtkSalFrame::EnsureAppMenuWatch()
 {
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#ifdef ENABLE_GMENU_INTEGRATION
     if ( !m_nWatcherId )
     {
         // Get a DBus session connection.

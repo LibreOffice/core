@@ -52,6 +52,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_gtk,\
 
 $(eval $(call gb_Library_use_externals,vclplug_gtk,\
 	dbus \
+	gio \
 	gtk \
 	gthread \
 	icule \
@@ -102,10 +103,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
     vcl/unx/gtk/window/gtksalmenu \
     vcl/unx/gtk/window/glomenu \
     vcl/unx/gtk/window/hudawareness \
-))
-$(eval $(call gb_Library_add_defs,vclplug_gtk,\
-    -DENABLE_GIO=$(ENABLE_GIO) \
-    -DENABLE_DBUS=$(ENABLE_DBUS) \
 ))
 endif
 endif

@@ -29,7 +29,6 @@ G_BEGIN_DECLS
 typedef void         (* HudAwarenessCallback)                           (gboolean               hud_active,
                                                                          gpointer               user_data);
 
-
 guint                   hud_awareness_register                          (GDBusConnection       *connection,
                                                                          const gchar           *object_path,
                                                                          HudAwarenessCallback   callback,

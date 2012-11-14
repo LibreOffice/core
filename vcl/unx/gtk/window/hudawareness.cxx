@@ -19,6 +19,7 @@
  * Author: Ryan Lortie <desrt@desrt.ca>
  */
 
+#include <string.h>
 #include <unx/gtk/hudawareness.h>
 
 typedef struct
@@ -30,10 +31,10 @@ typedef struct
 } HudAwarenessHandle;
 
 static void
-hud_awareness_method_call (GDBusConnection       *connection,
-                           const gchar           *sender,
-                           const gchar           *object_path,
-                           const gchar           *interface_name,
+hud_awareness_method_call (GDBusConnection       * /* connection */,
+                           const gchar           * /* sender */,
+                           const gchar           * /* object_path */,
+                           const gchar           * /* interface_name */,
                            const gchar           *method_name,
                            GVariant              *parameters,
                            GDBusMethodInvocation *invocation,
@@ -53,19 +54,6 @@ hud_awareness_method_call (GDBusConnection       *connection,
   g_dbus_method_invocation_return_value (invocation, NULL);
 }
 
-static void
-hud_awareness_handle_free (gpointer data)
-{
-  HudAwarenessHandle *handle = (HudAwarenessHandle*) data;
-
-  g_object_unref (handle->connection);
-
-  if (handle->notify)
-    (* handle->notify) (handle->user_data);
-
-  g_slice_free (HudAwarenessHandle, handle);
-}
-
 guint
 hud_awareness_register (GDBusConnection       *connection,
                         const gchar           *object_path,
@@ -75,15 +63,16 @@ hud_awareness_register (GDBusConnection       *connection,
                         GError               **error)
 {
   static GDBusInterfaceInfo *iface;
-  GDBusInterfaceVTable vtable = {
-    hud_awareness_method_call
-  };
+  GDBusInterfaceVTable vtable;
   HudAwarenessHandle *handle;
   guint object_id;
 
+  memset ((void *)&vtable, 0, sizeof (vtable));
+  vtable.method_call = hud_awareness_method_call;
+
   if G_UNLIKELY (iface == NULL)
     {
-      GError *error = NULL;
+      GError *local_error = NULL;
       GDBusNodeInfo *info;
 
       info = g_dbus_node_info_new_for_xml ("<node>"
@@ -94,8 +83,8 @@ hud_awareness_register (GDBusConnection       *connection,
                                                "</method>"
                                              "</interface>"
                                            "</node>",
-                                           &error);
-      g_assert_no_error (error);
+                                           &local_error);
+      g_assert_no_error (local_error);
       iface = g_dbus_node_info_lookup_interface (info, "com.canonical.hud.Awareness");
       g_assert (iface != NULL);
     }
