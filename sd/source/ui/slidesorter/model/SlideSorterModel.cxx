@@ -687,7 +687,7 @@ void SlideSorterModel::DeleteSlide (const SdPage* pPage)
     else
     {
         // if not inserted, search for page
-        for(; nIndex < maPageDescriptors.size(); nIndex++)
+        for(; nIndex < static_cast<sal_Int32>(maPageDescriptors.size()); nIndex++)
         {
             if(maPageDescriptors[nIndex]->GetPage() == pPage)
             {
@@ -696,7 +696,7 @@ void SlideSorterModel::DeleteSlide (const SdPage* pPage)
         }
     }
 
-    if(nIndex >= 0 && nIndex < maPageDescriptors.size())
+    if(nIndex >= 0 && nIndex < static_cast<sal_Int32>(maPageDescriptors.size()))
     {
         if (maPageDescriptors[nIndex])
             if (maPageDescriptors[nIndex]->GetPage() != pPage)
