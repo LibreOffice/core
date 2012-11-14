@@ -53,11 +53,6 @@ MQueryHelperResultEntry::~MQueryHelperResultEntry()
 {
 }
 
-void MQueryHelperResultEntry::insert( const rtl::OString &key, rtl::OUString &value )
-{
-    m_Fields[ key ] = value;
-}
-
 rtl::OUString MQueryHelperResultEntry::getValue( const rtl::OString &key ) const
 {
     FieldMap::const_iterator iter = m_Fields.find( key );
@@ -147,26 +142,6 @@ void MQueryHelper::reset()
     m_bAtEnd = sal_False;
     clear_results();
     m_aError.reset();
-}
-
-MQueryHelperResultEntry* MQueryHelper::next()
-{
-    MQueryHelperResultEntry* result;
-    sal_uInt32 index;
-
-    m_aMutex.acquire();
-    index = m_nIndex;
-    m_aMutex.release();
-
-    result = getByIndex( index + 1) ; // Add 1 as Row is numbered from 1 to N
-
-    if ( result ) {
-        m_aMutex.acquire();
-        m_nIndex++;
-        m_aMutex.release();
-    }
-
-    return( result );
 }
 
 MQueryHelperResultEntry*

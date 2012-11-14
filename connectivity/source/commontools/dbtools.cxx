@@ -344,28 +344,6 @@ Reference< XConnection> getConnection_withFeedback(const ::rtl::OUString& _rData
 }
 
 //------------------------------------------------------------------------------
-Reference< XConnection> getConnection(
-            const ::rtl::OUString& _rsTitleOrPath,
-            const ::rtl::OUString& _rsUser,
-            const ::rtl::OUString& _rsPwd,
-            const Reference< XComponentContext>& _rxContext)
-{
-    Reference< XConnection > xReturn;
-    try
-    {
-        xReturn = getConnection_allowException(_rsTitleOrPath, _rsUser, _rsPwd, _rxContext);
-    }
-    catch(Exception&)
-    {
-    }
-
-    // TODO: if there were not dozens of places which rely on getConnection not throwing an exception ....
-    // I would change this ...
-
-    return xReturn;
-}
-
-//------------------------------------------------------------------------------
 Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet) throw (RuntimeException)
 {
     Reference< XConnection> xReturn;
