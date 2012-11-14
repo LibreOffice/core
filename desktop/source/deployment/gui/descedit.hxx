@@ -33,7 +33,6 @@ namespace dp_gui
         bool                m_bIsVerticalScrollBarHidden;
 
         void                Init();
-        void                UpdateScrollBar();
 
     public:
         DescriptionEdit( Window* pParent, const ResId& rResId );

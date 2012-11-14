@@ -267,11 +267,8 @@ public:
     const SvStream*             GetSvStream() const;
     virtual sal_Bool                Equals( const BaseStorageStream& rStream ) const;
     sal_Bool                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
-    sal_Bool                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
 
     SvStream*                   GetModifySvStream();
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetXInputStream() const;
 };
 
 namespace ucbhelper
@@ -355,19 +352,15 @@ public:
     virtual const SvStream*     GetSvStream() const;
     virtual sal_Bool                Equals( const BaseStorage& rStream ) const;
     sal_Bool                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
-    sal_Bool                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
     sal_Bool                        GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue );
 
-//#if _SOLAR__PRIVATE
     UCBStorageElement_Impl*     FindElement_Impl( const String& rName ) const;
     sal_Bool                        CopyStorageElement_Impl( UCBStorageElement_Impl& rElement,
                                     BaseStorage* pDest, const String& rNew ) const;
     BaseStorage*                OpenStorage_Impl( const String & rEleName,
                                        StreamMode, sal_Bool bDirect, sal_Bool bForceUCBStorage );
-//#endif
 
 };
-
 
 #endif
 

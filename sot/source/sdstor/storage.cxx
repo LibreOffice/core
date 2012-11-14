@@ -1047,20 +1047,6 @@ sal_Bool SotStorage::Validate()
         return sal_True;
 }
 
-sal_Bool SotStorage::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
-{
-    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
-    if ( pStg )
-    {
-        return pStg->SetProperty( rName, rValue );
-    }
-    else
-    {
-        DBG_WARNING("W1:Not implemented!");
-        return sal_False;
-    }
-}
-
 sal_Bool SotStorage::IsOLEStorage() const
 {
     UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );

@@ -575,44 +575,6 @@ const sal_Unicode * INetMIME::skipComment(const sal_Unicode * pBegin,
 }
 
 // static
-const sal_Char * INetMIME::skipLinearWhiteSpaceComment(const sal_Char *
-                                                           pBegin,
-                                                       const sal_Char * pEnd)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIME::skipLinearWhiteSpaceComment(): Bad sequence");
-
-    while (pBegin != pEnd)
-        switch (*pBegin)
-        {
-            case '\t':
-            case ' ':
-                ++pBegin;
-                break;
-
-            case 0x0D: // CR
-                if (startsWithLineFolding(pBegin, pEnd))
-                    pBegin += 3;
-                else
-                    return pBegin;
-                break;
-
-            case '(':
-            {
-                const sal_Char * p = skipComment(pBegin, pEnd);
-                if (p == pBegin)
-                    return pBegin;
-                pBegin = p;
-                break;
-            }
-
-            default:
-                return pBegin;
-        }
-    return pBegin;
-}
-
-// static
 const sal_Unicode * INetMIME::skipLinearWhiteSpaceComment(const sal_Unicode *
                                                               pBegin,
                                                           const sal_Unicode *
@@ -705,28 +667,6 @@ const sal_Unicode * INetMIME::skipQuotedString(const sal_Unicode * pBegin,
                     break;
             }
     return pBegin;
-}
-
-// static
-bool INetMIME::scanUnsigned(const sal_Char *& rBegin, const sal_Char * pEnd,
-                            bool bLeadingZeroes, sal_uInt32 & rValue)
-{
-    sal_uInt64 nTheValue = 0;
-    const sal_Char * p = rBegin;
-    for ( ; p != pEnd; ++p)
-    {
-        int nWeight = getWeight(*p);
-        if (nWeight < 0)
-            break;
-        nTheValue = 10 * nTheValue + nWeight;
-        if (nTheValue > std::numeric_limits< sal_uInt32 >::max())
-            return false;
-    }
-    if (nTheValue == 0 && (p == rBegin || (!bLeadingZeroes && p - rBegin != 1)))
-        return false;
-    rBegin = p;
-    rValue = sal_uInt32(nTheValue);
-    return true;
 }
 
 // static

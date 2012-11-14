@@ -197,7 +197,6 @@ public:
     virtual sal_Bool        MoveTo( const String & rEleName, SotStorage * pDest,
                                 const String & rNewName );
 
-    sal_Bool                SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     sal_Bool                IsOLEStorage() const;
     static sal_Bool         IsOLEStorage( const String & rFileName );
     static sal_Bool         IsOLEStorage( SvStream* pStream );

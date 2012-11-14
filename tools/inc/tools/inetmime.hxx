@@ -420,11 +420,6 @@ public:
     static const sal_Unicode * skipComment(const sal_Unicode * pBegin,
                                            const sal_Unicode * pEnd);
 
-    static const sal_Char * skipLinearWhiteSpaceComment(const sal_Char *
-                                                            pBegin,
-                                                        const sal_Char *
-                                                            pEnd);
-
     static const sal_Unicode * skipLinearWhiteSpaceComment(const sal_Unicode *
                                                                pBegin,
                                                            const sal_Unicode *
@@ -437,9 +432,6 @@ public:
 
     static const sal_Unicode * skipQuotedString(const sal_Unicode * pBegin,
                                                 const sal_Unicode * pEnd);
-
-    static bool scanUnsigned(const sal_Char *& rBegin, const sal_Char * pEnd,
-                             bool bLeadingZeroes, sal_uInt32 & rValue);
 
     static bool scanUnsigned(const sal_Unicode *& rBegin,
                              const sal_Unicode * pEnd, bool bLeadingZeroes,

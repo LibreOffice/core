@@ -453,9 +453,6 @@ public:
     sal_uLong                       CopySourceToTemporary();                // same as ReadSourceWriteToTemporary()
                                                                         // but the writing is done at the end of temporary
                                                                         // pointer position is not changed
-    Reference<XInputStream>     GetXInputStream();                      // return XInputStream, after that
-                                                                        // this class is close to be unusable
-                                                                        // since it can not read and write
     using SvStream::SetError;
     void                        SetError( sal_uInt32 nError );
     void                        PrepareCachedForReopen( StreamMode nMode );
@@ -709,62 +706,6 @@ UCBStorageStream_Impl::~UCBStorageStream_Impl()
         delete m_pContent;
 }
 
-
-Reference<XInputStream> UCBStorageStream_Impl::GetXInputStream()
-{
-    Reference< XInputStream > aResult;
-
-    if( m_pAntiImpl && m_nRepresentMode != nonset )
-    {
-        OSL_FAIL( "Misuse of the XInputstream!" );
-        SetError( ERRCODE_IO_ACCESSDENIED );
-    }
-    else
-    {
-        if( m_bModified )
-        {
-            // use wrapper around temporary stream
-            if( Init() )
-            {
-                CopySourceToTemporary();
-
-                // owner transfer of stream to wrapper
-                aResult = new ::utl::OInputStreamWrapper( m_pStream, sal_True );
-                m_pStream->Seek(0);
-
-                if( aResult.is() )
-                {
-                    // temporary stream can not be used here any more
-                    // and can not be opened untill wrapper is closed
-                    // stream is deleted by wrapper after use
-                    m_pStream = NULL;
-                    m_nRepresentMode = xinputstream;
-                }
-            }
-        }
-        else
-        {
-            Free();
-
-            // open a new instance of XInputStream
-            try
-            {
-                aResult = m_pContent->openStream();
-            }
-            catch (const Exception&)
-            {
-                // usually means that stream could not be opened
-            }
-
-            if( aResult.is() )
-                m_nRepresentMode = xinputstream;
-            else
-                SetError( ERRCODE_IO_ACCESSDENIED );
-        }
-    }
-
-    return aResult;
-}
 
 sal_Bool UCBStorageStream_Impl::Init()
 {
@@ -1420,11 +1361,6 @@ SvStream* UCBStorageStream::GetModifySvStream()
     return (SvStream*)pImp;
 }
 
-Reference< XInputStream > UCBStorageStream::GetXInputStream() const
-{
-    return pImp->GetXInputStream();
-}
-
 sal_Bool  UCBStorageStream::Equals( const BaseStorageStream& rStream ) const
 {
     // ???
@@ -1498,23 +1434,6 @@ sal_Bool UCBStorageStream::SetProperty( const String& rName, const ::com::sun::s
         if ( pImp->m_pContent )
         {
             pImp->m_pContent->setPropertyValue( rName, rValue );
-            return sal_True;
-        }
-    }
-    catch (const Exception&)
-    {
-    }
-
-    return sal_False;
-}
-
-sal_Bool UCBStorageStream::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
-{
-    try
-    {
-        if ( pImp->m_pContent )
-        {
-            rValue = pImp->m_pContent->getPropertyValue( rName );
             return sal_True;
         }
     }
@@ -3351,23 +3270,6 @@ sal_Bool UCBStorage::SetProperty( const String& rName, const ::com::sun::star::u
         if ( pImp->GetContent() )
         {
             pImp->m_pContent->setPropertyValue( rName, rValue );
-            return sal_True;
-        }
-    }
-    catch (const Exception&)
-    {
-    }
-
-    return sal_False;
-}
-
-sal_Bool UCBStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
-{
-    try
-    {
-        if ( pImp->GetContent() )
-        {
-            rValue = pImp->m_pContent->getPropertyValue( rName );
             return sal_True;
         }
     }

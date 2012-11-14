@@ -55,21 +55,6 @@ void DescriptionEdit::Init()
 
 // -----------------------------------------------------------------------
 
-void DescriptionEdit::UpdateScrollBar()
-{
-    if ( m_bIsVerticalScrollBarHidden )
-    {
-        ScrollBar*  pVScrBar = GetVScrollBar();
-        if ( pVScrBar && pVScrBar->GetVisibleSize() < pVScrBar->GetRangeMax() )
-        {
-            pVScrBar->Show();
-            m_bIsVerticalScrollBarHidden = false;
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void DescriptionEdit::Clear()
 {
     SetText( String() );

@@ -531,6 +531,7 @@ findunusedcode:
               | grep -v ^libwps_tools_win:: \
               | grep -v ^lucene:: \
               | grep -v ^Matrix3d:: \
+              | grep -v ^RelatedMultipart:: \
               | grep -v ^salhelper:: \
               | grep -v ^VSDInternalStream:: \
               | grep -v ^WP1 \
