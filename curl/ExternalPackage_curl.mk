@@ -23,6 +23,7 @@ else ifeq ($(OS),ANDROID)
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.so))
 else
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.so.4.2.0))
+$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so.4,lib/.libs/libcurl.so.4.2.0))
 endif
 
 else ifeq ($(OS)$(COM),WNTGCC)
