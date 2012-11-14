@@ -47,6 +47,7 @@ private:
     FixedHyperlink      aMoreTemplatesLink;
     FixedLine           aLine;
     PushButton          aManageBtn;
+    PushButton          aPackageBtn;
     PushButton          aEditBtn;
     OKButton            aOKBtn;
     CancelButton        aCancelBtn;
@@ -60,6 +61,7 @@ private:
     DECL_DLLPRIVATE_LINK(           SendFocusHdl_Impl, void* );
     DECL_DLLPRIVATE_LINK(           OKHdl_Impl, PushButton* );
     DECL_DLLPRIVATE_LINK(           OrganizerHdl_Impl, void* );
+    DECL_DLLPRIVATE_LINK(           PackageHdl_Impl, void* );
     DECL_DLLPRIVATE_LINK(           UpdateHdl_Impl, Timer* );
     DECL_DLLPRIVATE_LINK(           OpenLinkHdl_Impl, void* );
 
