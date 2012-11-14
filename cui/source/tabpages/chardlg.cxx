@@ -3250,13 +3250,13 @@ void SvxCharPositionPage::FillUserData()
 {
     const sal_Unicode cTok = ';';
 
-    OUString sUser( OUString::valueOf( m_nSuperEsc ) );
+    OUString sUser( OUString::valueOf( static_cast<sal_Int32>(m_nSuperEsc)) );
     sUser += OUString( cTok );
-    sUser += OUString::valueOf( m_nSubEsc );
+    sUser += OUString::valueOf( static_cast<sal_Int32>(m_nSubEsc) );
     sUser += OUString (cTok );
-    sUser += OUString::valueOf( m_nSuperProp );
+    sUser += OUString::valueOf( static_cast<sal_Int32>(m_nSuperProp) );
     sUser += OUString ( cTok );
-    sUser += OUString::valueOf( m_nSubProp );
+    sUser += OUString::valueOf( static_cast<sal_Int32>(m_nSubProp) );
     SetUserData( sUser );
 }
 

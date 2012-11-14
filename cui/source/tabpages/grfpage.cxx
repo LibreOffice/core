@@ -671,9 +671,9 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
         sTemp += aFld.GetText();
 
         if ( aOrigPixelSize.Width() && aOrigPixelSize.Height() ) {
-             int ax = int(floor((float)aOrigPixelSize.Width() /
+             sal_Int32 ax = sal_Int32(floor((float)aOrigPixelSize.Width() /
                         ((float)aOrigSize.Width()/TWIP_TO_INCH)+0.5));
-             int ay = int(floor((float)aOrigPixelSize.Height() /
+             sal_Int32 ay = sal_Int32(floor((float)aOrigPixelSize.Height() /
                         ((float)aOrigSize.Height()/TWIP_TO_INCH)+0.5));
              sTemp += OUString(" ");
              sTemp += CUI_RESSTR( STR_PPI );
@@ -682,7 +682,7 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
                 sPPI += OUString( sal_Unicode (0x00D7) );
                 sPPI += OUString::valueOf(ay);
              }
-             sTemp.replaceAll("%1", sPPI);
+             sTemp = sTemp.replaceAll("%1", sPPI);
         }
         aOrigSizeFT.SetText( sTemp );
     }
