@@ -79,10 +79,6 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    std::string captionDir(dir + SAL_PATHDELIMITER + "caption");
-    std::string contentDir(dir + SAL_PATHDELIMITER + "content");
-    std::string indexDir(dir + SAL_PATHDELIMITER + module + ".idxl");
-
     rtl::OUString sDir;
 
     osl::File::getFileURLFromSystemPath(
