@@ -35,7 +35,6 @@
 typedef struct {
   rtl_uString *pAppPath;
   const char  *pPageinType;     // @pagein-writer for - writer etc. else NULL
-  sal_Bool     bInhibitSplash;  // should we show a splash screen
   sal_Bool     bInhibitPagein;  // should we run pagein ?
   sal_Bool     bInhibitJavaLdx; // should we run javaldx ?
   sal_Bool     bInhibitPipe;    // for --help and --version

@@ -35,7 +35,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Library_deploymentmisc \
     Library_offacc \
     Library_sofficeapp \
-    Library_spl \
     Package_intro \
     UI_deployment \
     Zip_brand \
@@ -109,24 +108,6 @@ else ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_officeloader \
-))
-
-else ifeq ($(OS),ANDROID)
-
-else ifeq ($(OS),IOS)
-
-else ifeq ($(GUIBASE),headless)
-
-$(eval $(call gb_Module_add_targets,desktop,\
-    Executable_oosplash \
-    Library_spl_unx \
-))
-
-else
-
-$(eval $(call gb_Module_add_targets,desktop,\
-    Executable_oosplash \
-    Library_spl_unx \
 ))
 
 endif

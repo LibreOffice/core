@@ -49,7 +49,6 @@
 #include <sal/main.h>
 
 #include "args.h"
-#include "splashx.h"
 
 #define PIPEDEFAULTPATH      "/tmp"
 #define PIPEALTERNATEPATH    "/var/tmp"
@@ -146,15 +145,6 @@ child_spawn ( Args *args, sal_Bool bAllArgs, sal_Bool bWithStatus )
     ppArgs = (rtl_uString **)calloc( nArgs + 1, sizeof( rtl_uString* ) );
     for ( i = 0; i < nArgs; ++i )
         ppArgs[i] = args->ppArgs[i];
-
-    if( bWithStatus )
-    {
-        /* add the pipe arg */
-        snprintf (buffer, 63, "--splash-pipe=%d", status_pipe[1]);
-        rtl_uString_newFromAscii( &pTmp, buffer );
-        ppArgs[nArgs] = pTmp;
-        ++nArgs;
-    }
 
     /* start the main process */
     nError = osl_executeProcess( pApp, ppArgs, nArgs,
@@ -799,7 +789,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     rtl_uString *pPipePath = NULL;
     Args *args;
     int status = 0;
-    struct splash* splash = NULL;
     struct sigaction sigpipe_action;
     struct sigaction sigterm_action;
 
@@ -822,14 +811,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     }
     ustr_debug( "App path", args->pAppPath );
 
-#ifndef ENABLE_QUICKSTART_LIBPNG
-    /* we can't load and render it anyway */
-    args->bInhibitSplash = sal_True;
-#endif
-
     pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
-    if ( pUsePlugin && !strcmp(pUsePlugin, "svp") )
-        args->bInhibitSplash = sal_True;
 
     if ( !args->bInhibitPipe )
     {
@@ -861,12 +843,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
         /* sanity check pieces */
         system_checks();
 
-        /* load splash image and create window */
-        if ( !args->bInhibitSplash )
-        {
-            splash = splash_create(args->pAppPath, argc, argv);
-        }
-
         /* pagein */
         if (!args->bInhibitPagein)
             exec_pagein (args);
@@ -882,7 +858,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
             bRestart = sal_False;
 
             /* fast updates if we have somewhere to update it to */
-            bShortWait = splash ? sal_True : sal_False;
+            bShortWait = sal_False;
 
             /* Periodically update the splash & the percent according
                to what status_fd says, poll quickly only while starting */
@@ -892,12 +868,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
             {
                 ProgressStatus eResult;
 
-                splash_draw_progress( splash, nPercent );
                 eResult = read_percent( info, &nPercent );
                 if (eResult != ProgressContinue)
                 {
-                    splash_destroy(splash);
-                    splash = NULL;
                     bShortWait = sal_False;
                 }
 

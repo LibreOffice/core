@@ -157,7 +157,6 @@ my_components += \
     component/desktop/source/migration/services/migrationoo2 \
     component/desktop/source/migration/services/migrationoo3 \
     component/desktop/source/offacc/offacc \
-    component/desktop/source/splash/spl \
     component/extensions/source/abpilot/abp \
     component/extensions/source/bibliography/bib \
     component/extensions/source/config/ldap/ldapbe2 \
@@ -212,13 +211,6 @@ my_components += \
     component/writerfilter/util/writerfilter \
     component/writerperfect/util/wpftwriter \
     component/writerperfect/util/wpftdraw \
-
-.ENDIF
-
-.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID" && "$(GUIBASE)" != "headless"
-
-my_components += \
-    component/desktop/unx/splash/splash \
 
 .ENDIF
 

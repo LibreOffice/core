@@ -327,7 +327,6 @@ struct ImplSVData
     ImplSVHelpData          maHelpData;         // indepen data for Help classes
     ImplSVNWFData           maNWFData;
     UnoWrapperBase*         mpUnoWrapper;
-    Window*                 mpIntroWindow;      // the splash screen
     DockingManager*         mpDockingManager;
     sal_Bool                mbIsTestTool;
 
@@ -363,7 +362,6 @@ long        ImplCallEvent( NotifyEvent& rEvt );
 
 extern VCL_PLUGIN_PUBLIC ImplSVData* pImplSVData;
 inline VCL_PLUGIN_PUBLIC ImplSVData* ImplGetSVData() { return pImplSVData; }
-VCL_PLUGIN_PUBLIC void ImplHideSplash();
 
 bool ImplInitAccessBridge( bool bAllowCancel, bool &rCancelled );
 

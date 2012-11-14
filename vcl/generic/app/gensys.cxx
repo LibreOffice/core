@@ -94,8 +94,6 @@ int SalGenericSystem::ShowNativeMessageBox( const rtl::OUString& rTitle, const r
     std::list< rtl::OUString > aButtons;
     int nButtonIds[5], nBut = 0;
 
-    ImplHideSplash();
-
     if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK ||
         nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL )
     {

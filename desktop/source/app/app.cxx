@@ -649,8 +649,6 @@ void Desktop::Init()
 void Desktop::InitFinished()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::InitFinished" );
-
-    CloseSplashScreen();
 }
 
 void Desktop::DeInit()
@@ -664,8 +662,6 @@ void Desktop::DeInit()
         FlushConfiguration();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
 
-        // close splashscreen if it's still open
-        CloseSplashScreen();
         Reference< XComponent >(
             comphelper::getProcessComponentContext(), UNO_QUERY_THROW )->
             dispose();
@@ -1309,8 +1305,6 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
                     osl_removeSignalHandler( pSignalHandler );
 
                 restartOnMac(false);
-                if ( m_rSplashScreen.is() )
-                    m_rSplashScreen->reset();
 
                 _exit( ExitHelper::E_CRASH_WITH_RESTART );
             }
@@ -1416,13 +1410,6 @@ int Desktop::Main()
 
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
 
-    // Startup screen
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main { OpenSplashScreen" );
-    OpenSplashScreen();
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main } OpenSplashScreen" );
-
-    SetSplashScreenProgress(10);
-
     UserInstall::UserInstallStatus inst_fin = UserInstall::finalize();
     if (inst_fin != UserInstall::Ok && inst_fin != UserInstall::Created)
     {
@@ -1438,7 +1425,6 @@ int Desktop::Main()
     }
     // refresh path information
     utl::Bootstrap::reloadData();
-    SetSplashScreenProgress(20);
 
     Reference< XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
@@ -1448,8 +1434,6 @@ int Desktop::Main()
     try
     {
         RegisterServices();
-
-        SetSplashScreenProgress(25);
 
         // check user installation directory for lockfile so we can be sure
         // there is no other instance using our data files from a remote host
@@ -1485,8 +1469,6 @@ int Desktop::Main()
         if ( !InitializeConfiguration() )
             return EXIT_FAILURE;
 
-        SetSplashScreenProgress(30);
-
         // set static variable to enabled/disable crash reporter
         retrieveCrashReporterState();
         if ( !isCrashReporterEnabled() )
@@ -1511,10 +1493,8 @@ int Desktop::Main()
 #endif
 
         SetDisplayName( aTitle );
-        SetSplashScreenProgress(35);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
         pExecGlobals->pPathOptions.reset( new SvtPathOptions);
-        SetSplashScreenProgress(40);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
 
         // Check special env variable
@@ -1573,8 +1553,6 @@ int Desktop::Main()
         aEvent.EventName = ::rtl::OUString("OnStartApp");
         pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
 
-        SetSplashScreenProgress(50);
-
         // Backing Component
         sal_Bool bCrashed            = sal_False;
         sal_Bool bExistsRecoveryData = sal_False;
@@ -1628,7 +1606,6 @@ int Desktop::Main()
         FatalError( MakeStartupErrorMessage(e.Message) );
         return EXIT_FAILURE;
     }
-    SetSplashScreenProgress(55);
 
     SvtFontSubstConfig().Apply();
 
@@ -1637,7 +1614,6 @@ int Desktop::Main()
     aAppearanceCfg.SetApplicationDefaults( this );
     SvtAccessibilityOptions aOptions;
     aOptions.SetVCLSettings();
-    SetSplashScreenProgress(60);
 
 #ifdef ENABLE_TELEPATHY
     bool bListen = rCmdLineArgs.IsInvisible();
@@ -1649,13 +1625,8 @@ int Desktop::Main()
         Application::SetFilterHdl( LINK( this, Desktop, ImplInitFilterHdl ) );
         sal_Bool bTerminateRequested = sal_False;
 
-        // Preload function depends on an initialized sfx application!
-        SetSplashScreenProgress(75);
-
         // use system window dialogs
         Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
-
-        SetSplashScreenProgress(80);
 
         if ( !bTerminateRequested && !rCmdLineArgs.IsInvisible() &&
              !rCmdLineArgs.IsNoQuickstart() )
@@ -1666,7 +1637,6 @@ int Desktop::Main()
         {
             if ( xDesktop.is() )
                 xDesktop->addTerminateListener( new OfficeIPCThreadController );
-            SetSplashScreenProgress(100);
         }
         catch ( const com::sun::star::uno::Exception& e )
         {
@@ -1777,9 +1747,6 @@ int Desktop::doShutdown()
     if ( bRR )
     {
         restartOnMac(true);
-        if ( m_rSplashScreen.is() )
-            m_rSplashScreen->reset();
-
         return ExitHelper::E_NORMAL_RESTART;
     }
     return EXIT_SUCCESS;
@@ -1991,7 +1958,6 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl)
 
         OfficeIPCThread::SetReady();
 
-        CloseSplashScreen();
         CheckFirstRun( );
         EnableOleAutomation();
 
@@ -2810,84 +2776,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     }
 }
 
-void Desktop::OpenSplashScreen()
-{
-    const CommandLineArgs &rCmdLine = GetCommandLineArgs();
-    sal_Bool bVisible = sal_False;
-    // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
-    if ( !rCmdLine.IsInvisible() &&
-         !rCmdLine.IsHeadless() &&
-         !rCmdLine.IsQuickstart() &&
-         !rCmdLine.IsMinimized() &&
-         !rCmdLine.IsNoLogo() &&
-         !rCmdLine.IsTerminateAfterInit() &&
-         rCmdLine.GetPrintList().empty() &&
-         rCmdLine.GetPrintToList().empty() &&
-         rCmdLine.GetConversionList().empty() )
-    {
-        // Determine application name from command line parameters
-        OUString aAppName;
-        if ( rCmdLine.IsWriter() )
-            aAppName = rtl::OUString( "writer" );
-        else if ( rCmdLine.IsCalc() )
-            aAppName = rtl::OUString( "calc" );
-        else if ( rCmdLine.IsDraw() )
-            aAppName = rtl::OUString( "draw" );
-        else if ( rCmdLine.IsImpress() )
-            aAppName = rtl::OUString( "impress" );
-        else if ( rCmdLine.IsBase() )
-            aAppName = rtl::OUString( "base" );
-        else if ( rCmdLine.IsGlobal() )
-            aAppName = rtl::OUString( "global" );
-        else if ( rCmdLine.IsMath() )
-            aAppName = rtl::OUString( "math" );
-        else if ( rCmdLine.IsWeb() )
-            aAppName = rtl::OUString( "web" );
-
-        // Which splash to use
-        OUString aSplashService( "com.sun.star.office.SplashScreen" );
-        if ( rCmdLine.HasSplashPipe() )
-            aSplashService = OUString("com.sun.star.office.PipeSplashScreen");
-
-        bVisible = sal_True;
-        Sequence< Any > aSeq( 2 );
-        aSeq[0] <<= bVisible;
-        aSeq[1] <<= aAppName;
-        m_rSplashScreen = Reference<XStatusIndicator>(
-            comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-            aSplashService, aSeq), UNO_QUERY);
-
-        if(m_rSplashScreen.is())
-                m_rSplashScreen->start(OUString("SplashScreen"), 100);
-    }
-
-}
-
-void Desktop::SetSplashScreenProgress(sal_Int32 iProgress)
-{
-    if(m_rSplashScreen.is())
-    {
-        m_rSplashScreen->setValue(iProgress);
-    }
-}
-
-void Desktop::SetSplashScreenText( const ::rtl::OUString& rText )
-{
-    if( m_rSplashScreen.is() )
-    {
-        m_rSplashScreen->setText( rText );
-    }
-}
-
-void Desktop::CloseSplashScreen()
-{
-    if(m_rSplashScreen.is())
-    {
-        m_rSplashScreen->end();
-        m_rSplashScreen = NULL;
-    }
-}
-
 // ========================================================================
 void Desktop::DoFirstRunInitializations()
 {
@@ -2914,10 +2802,6 @@ void Desktop::ShowBackingComponent(Desktop * progress)
         xSMgr->createInstance("com.sun.star.frame.Desktop"), UNO_QUERY);
     if (xDesktopFrame.is())
     {
-        if (progress != 0)
-        {
-            progress->SetSplashScreenProgress(60);
-        }
         Reference< XFrame > xBackingFrame;
         Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
 
@@ -2927,10 +2811,6 @@ void Desktop::ShowBackingComponent(Desktop * progress)
         if (xContainerWindow.is())
         {
             SetDocumentExtendedStyle(xContainerWindow);
-            if (progress != 0)
-            {
-                progress->SetSplashScreenProgress(75);
-            }
             Sequence< Any > lArgs(1);
             lArgs[0] <<= xContainerWindow;
 
@@ -2943,15 +2823,7 @@ void Desktop::ShowBackingComponent(Desktop * progress)
                 // Because the backing component set the property "IsBackingMode" of the frame
                 // to true inside attachFrame(). But setComponent() reset this state everytimes ...
                 xBackingFrame->setComponent(xBackingWin, xBackingComp);
-                if (progress != 0)
-                {
-                    progress->SetSplashScreenProgress(100);
-                }
                 xBackingComp->attachFrame(xBackingFrame);
-                if (progress != 0)
-                {
-                    progress->CloseSplashScreen();
-                }
                 xContainerWindow->setVisible(sal_True);
             }
         }

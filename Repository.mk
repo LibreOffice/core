@@ -158,12 +158,6 @@ $(eval $(call gb_Helper_register_executables,OOO,\
     officeloader \
 ))
 
-else
-
-$(eval $(call gb_Helper_register_executables,OOO,\
-    oosplash \
-))
-
 endif
 
 endif
@@ -345,7 +339,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sot \
     spa \
     spell \
-    spl \
     sts \
     svgfilter \
 	svgio \
@@ -394,14 +387,6 @@ ifneq (,$(filter ANDROID IOS,$(OS)))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	libotouch \
-))
-
-endif
-
-ifeq ($(filter MACOSX WNT,$(OS)),)
-
-$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-    spl_unx \
 ))
 
 endif

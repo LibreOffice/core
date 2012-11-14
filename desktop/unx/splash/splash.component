@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component loader="com.sun.star.loader.SharedLibrary" prefix="splash"
-    xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.office.comp.PipeSplashScreen">
-    <service name="com.sun.star.office.PipeSplashScreen"/>
-  </implementation>
-</component>

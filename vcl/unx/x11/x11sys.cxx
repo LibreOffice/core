@@ -135,10 +135,6 @@ int X11SalSystem::ShowNativeDialog( const rtl::OUString& rTitle, const rtl::OUSt
 {
     int nRet = -1;
 
-    ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData->mpIntroWindow )
-        pSVData->mpIntroWindow->Hide();
-
     WarningBox aWarn( NULL, WB_STDWORK, rMessage );
     aWarn.SetText( rTitle );
     aWarn.Clear();

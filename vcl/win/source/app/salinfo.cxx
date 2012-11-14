@@ -226,7 +226,6 @@ int WinSalSystem::ShowNativeMessageBox(const rtl::OUString& rTitle, const rtl::O
         nDefaultButton <= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO)
         nFlags |= DEFAULT_BTN_MAPPING_TABLE[nButtonCombination][nDefaultButton];
 
-    ImplHideSplash();
     return MessageBoxW(
         0,
         reinterpret_cast<LPCWSTR>(rMessage.getStr()),

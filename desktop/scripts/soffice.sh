@@ -158,5 +158,5 @@ if [ -n "$VALGRINDCHECK" -a -z "$VALGRIND" ] ; then
     exec > valgrind.log 2>&1
 fi
 
-# oosplash does the rest: forcing pages in, javaldx etc. are
-exec $VALGRINDCHECK $STRACECHECK "$sd_prog/oosplash" "$@"
+# soffice.bin does the rest: forcing pages in, javaldx etc. are
+exec $VALGRINDCHECK $STRACECHECK "$sd_prog/soffice.bin" "$@"
