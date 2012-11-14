@@ -54,12 +54,10 @@ $(eval $(call gb_Module_add_targets,avmedia,\
 endif
 endif
 
-ifeq ($(OS),WNT)
 ifneq ($(ENABLE_DIRECTX),)
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediawin \
 ))
-endif
 endif
 
 # vim: set noet sw=4 ts=4:
