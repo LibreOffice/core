@@ -43,9 +43,15 @@ class SwWordCountFloatDlg : public SfxModelessDialog
     FixedText* m_pCurrentWordFT;
     FixedText* m_pCurrentCharacterFT;
     FixedText* m_pCurrentCharacterExcludingSpacesFT;
+    FixedText* m_pCurrentCjkcharsFT;
+
     FixedText* m_pDocWordFT;
     FixedText* m_pDocCharacterFT;
     FixedText* m_pDocCharacterExcludingSpacesFT;
+    FixedText* m_pDocCjkcharsFT;
+
+    FixedText* m_pCjkcharsLabelFT;
+
     PushButton* m_pClosePB;
 
     SW_DLLPRIVATE DECL_LINK( CloseHdl,     void* );

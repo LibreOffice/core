@@ -37,6 +37,7 @@
 #include <wrtsh.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svl/cjkoptions.hxx>
 #include <vcl/msgbox.hxx>
 
 IMPL_LINK_NOARG(SwWordCountFloatDlg, CloseHdl)
@@ -68,12 +69,18 @@ void SwWordCountFloatDlg::SetValues(const SwDocStat& rCurrent, const SwDocStat& 
     setValue(m_pCurrentWordFT, rCurrent.nWord);
     setValue(m_pCurrentCharacterFT, rCurrent.nChar);
     setValue(m_pCurrentCharacterExcludingSpacesFT, rCurrent.nCharExcludingSpaces);
+    setValue(m_pCurrentCjkcharsFT, rCurrent.nAsianWord);
     setValue(m_pDocWordFT, rDoc.nWord);
     setValue(m_pDocCharacterFT, rDoc.nChar);
     setValue(m_pDocCharacterExcludingSpacesFT, rDoc.nCharExcludingSpaces);
+    setValue(m_pDocCjkcharsFT, rDoc.nAsianWord);
+
+    bool bShowCJK = (SvtCJKOptions().IsAnyEnabled() || rDoc.nAsianWord);
+    m_pCurrentCjkcharsFT->Show(bShowCJK);
+    m_pDocCjkcharsFT->Show(bShowCJK);
+    m_pCjkcharsLabelFT->Show(bShowCJK);
 }
 
-//TODO, add asian/non-asian word count to UI when CJK mode is enabled.
 SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
                                          SfxChildWindow* pChild,
                                          Window *pParent,
@@ -83,9 +90,15 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
     get(m_pCurrentWordFT, "selectwords");
     get(m_pCurrentCharacterFT, "selectchars");
     get(m_pCurrentCharacterExcludingSpacesFT, "selectcharsnospaces");
+    get(m_pCurrentCjkcharsFT, "selectcjkchars");
+
     get(m_pDocWordFT, "docwords");
     get(m_pDocCharacterFT, "docchars");
     get(m_pDocCharacterExcludingSpacesFT, "doccharsnospaces");
+    get(m_pDocCjkcharsFT, "doccjkchars");
+
+    get(m_pCjkcharsLabelFT, "cjkcharsft");
+
     get(m_pClosePB, "close");
 
     long nPrefWidth = m_pCurrentWordFT->get_preferred_size().Width();
@@ -93,9 +106,11 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
     m_pCurrentWordFT->set_width_request(nPrefWidth);
     m_pCurrentCharacterFT->set_width_request(nPrefWidth);
     m_pCurrentCharacterExcludingSpacesFT->set_width_request(nPrefWidth);
+    m_pCurrentCjkcharsFT->set_width_request(nPrefWidth);
     m_pDocWordFT->set_width_request(nPrefWidth);
     m_pDocCharacterFT->set_width_request(nPrefWidth);
     m_pDocCharacterExcludingSpacesFT->set_width_request(nPrefWidth);
+    m_pDocCjkcharsFT->set_width_request(nPrefWidth);
 
     Initialize(pInfo);
 
