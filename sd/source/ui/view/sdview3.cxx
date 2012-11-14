@@ -616,8 +616,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             pWorkPage->SetRectsDirty();
 
-            // Use SnapRect, not BoundRect
-            Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
+            // #i120393# Clipboard data uses full object geometry range
+            const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
             maDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
             maDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
@@ -780,8 +780,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if( pOwnData )
                     {
-                        // Use SnapRect, not BoundRect
-                        Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
+                        // #i120393# Clipboard data uses full object geometry range
+                        const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
                         maDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                         maDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
@@ -846,8 +846,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if( pOwnData )
                     {
-                        // Use SnapRect, not BoundRect
-                        Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
+                        // #i120393# Clipboard data uses full object geometry range
+                        const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
                         maDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                         maDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
@@ -1167,8 +1167,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 pWorkPage->SetRectsDirty();
 
-                // Use SnapRect, not BoundRect
-                Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
+                // #i120393# Clipboard data uses full object geometry range
+                const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
                 aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
@@ -1198,8 +1198,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             pWorkPage->SetRectsDirty();
 
-            // Use SnapRect, not BoundRect
-            Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
+            // #i120393# Clipboard data uses full object geometry range
+            const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
             aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
             aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
@@ -1224,8 +1224,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 pWorkPage->SetRectsDirty();
 
-                // Use SnapRect, not BoundRect
-                Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
+                // #i120393# Clipboard data uses full object geometry range
+                const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
                 aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
