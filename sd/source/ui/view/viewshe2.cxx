@@ -832,7 +832,6 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     GetDocSh()->SetWaitCursor( sal_True );
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
-    bool bChangeDefaultsForChart = false;
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     if ( !xObj.is() )
@@ -849,7 +848,6 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             if( SvtModuleOptions().IsChart() )
             {
                 aClass = SvGlobalName( SO3_SCH_CLASSID );
-                bChangeDefaultsForChart = true;
             }
         }
         else if( aName.EqualsAscii( "StarCalc" ))
@@ -973,11 +971,6 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         aRect.SetSize(aObjAreaSize);
         // the object area size must be set after scaling, since it triggers the resizing
         pSdClient->SetObjArea(aRect);
-
-        if( bChangeDefaultsForChart && xObj.is())
-        {
-            AdaptDefaultsForChart( xObj );
-        }
 
         pSdClient->DoVerb(nVerb);   // ErrCode wird ggf. vom Sfx ausgegeben
         pViewShell->GetViewFrame()->GetBindings().Invalidate(
@@ -1184,35 +1177,6 @@ Point ViewShell::GetWinViewPos() const
 Point ViewShell::GetViewOrigin() const
 {
     return mpContentWindow->GetViewOrigin();
-}
-
-void ViewShell::AdaptDefaultsForChart(
-    const uno::Reference < embed::XEmbeddedObject > & xEmbObj )
-{
-    if( xEmbObj.is())
-    {
-        uno::Reference< chart2::XChartDocument > xChartDoc( xEmbObj->getComponent(), uno::UNO_QUERY );
-        OSL_ENSURE( xChartDoc.is(), "Trying to set chart property to non-chart OLE" );
-        if( !xChartDoc.is())
-            return;
-
-        try
-        {
-            // set background to transparent (none)
-            uno::Reference< beans::XPropertySet > xPageProp( xChartDoc->getPageBackground());
-            if( xPageProp.is())
-                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FillStyle")),
-                                             uno::makeAny( drawing::FillStyle_NONE ));
-            // set no border
-            if( xPageProp.is())
-                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LineStyle")),
-                                             uno::makeAny( drawing::LineStyle_NONE ));
-        }
-        catch( const uno::Exception & )
-        {
-            OSL_ENSURE( false, "Exception caught in AdaptDefaultsForChart" );
-        }
-    }
 }
 
 } // end of namespace sd

@@ -89,8 +89,6 @@ using namespace ::com::sun::star;
 #include "globstr.hrc"
 #include "drawview.hxx"
 
-extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht zeichnen
-
 //------------------------------------------------------------------------
 
 #define IS_AVAILABLE(WhichId,ppItem) \
@@ -385,12 +383,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 aPnt.X() -= aSize.Width();      // move position to left edge
             Rectangle aRect (aPnt, aSize);
             SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
-
-                // Dieses Objekt nicht vor dem Aktivieren zeichnen
-                // (in MarkListHasChanged kommt ein Update)
-            if (!bIsFromFile)
-                pSkipPaintObj = pObj;
-
             SdrPageView* pPV = pView->GetSdrPageView();
             pView->InsertObjectAtView(pObj, *pPV);
 
@@ -428,7 +420,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 else
                 {
                     pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
-                    pSkipPaintObj = NULL;
                 }
             }
 
@@ -672,11 +663,6 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
         Rectangle aRect (aStart, aSize);
         SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
-
-        // Dieses Objekt nicht vor dem Aktivieren zeichnen
-        // (in MarkListHasChanged kommt ein Update)
-        pSkipPaintObj = pObj;
-
         SdrPageView* pPV = pView->GetSdrPageView();
 
 //        pView->InsertObjectAtView(pObj, *pPV);//this call leads to an immidiate redraw and asks the chart for a visual representation
