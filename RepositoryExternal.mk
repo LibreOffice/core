@@ -454,12 +454,12 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 endef
 
 define gb_LinkTarget__use_boost_headers
-$(call gb_LinkTarget_use_unpacked,$(1),boost)
+$(call gb_LinkTarget_get_preparation_target,$(1)) : $(call gb_UnpackedTarball_get_target,boost)
 
 endef
 
 define gb_ExternalProject__use_boost_headers
-$(call gb_ExternalProject_use_unpacked,$(1),boost)
+$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_UnpackedTarball_get_target,boost)
 
 endef
 endif # SYSTEM_BOOST
