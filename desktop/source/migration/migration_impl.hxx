@@ -209,6 +209,10 @@ private:
     bool          alreadyMigrated();
     migrations_vr readMigrationSteps(const ::rtl::OUString& rMigrationName);
     sal_Int32     findPreferedMigrationProcess(const migrations_available&);
+#if defined UNX && ! defined MACOSX
+    OUString preXDGConfigDir(const OUString& rConfigDir);
+#endif
+    void          setInstallInfoIfExist(install_info& aInfo,  const OUString& rConfigDir, const OUString& rVersion);
     install_info  findInstallation(const strings_v& rVersions);
     strings_vr    compileFileList();
 

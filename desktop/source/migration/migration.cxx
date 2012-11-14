@@ -84,8 +84,6 @@ static const char ITEM_DESCRIPTOR_COMMANDURL[] = "CommandURL";
 static const char ITEM_DESCRIPTOR_CONTAINER[] = "ItemDescriptorContainer";
 static const char ITEM_DESCRIPTOR_LABEL[] = "Label";
 
-static const char XDG_CONFIG_PART[] = "/.config";
-
 ::rtl::OUString retrieveLabelFromCommand(const ::rtl::OUString& sCommand, const ::rtl::OUString& sModuleIdentifier)
 {
     ::rtl::OUString sLabel;
@@ -527,8 +525,69 @@ static FileBase::RC _checkAndCreateDirectory(INetURLObject& dirURL)
         return result;
 }
 
+static const char XDG_CONFIG_PART[] = "/.config/";
+
+#if defined UNX && ! defined MACOSX
+OUString MigrationImpl::preXDGConfigDir(const OUString& rConfigDir)
+{
+    OUString aPreXDGConfigPath;
+    const char* pXDGCfgHome = getenv("XDG_CONFIG_HOME");
+
+    // cater for XDG_CONFIG_HOME change
+    // If XDG_CONFIG_HOME is set then we;
+    // assume the user knows what they are doing ( room for improvement here, we could
+    // of course search the default config dir etc. also  - but this is more complex,
+    // we would need to weigh results from the current config dir against matches in
+    // the 'old' config dir etc. ) - currently we just use the returned config dir.
+    // If XDG_CONFIG_HOME is NOT set;
+    // assume then we should now using the default $HOME/,config config location for
+    // our user profiles, however *all* previous libreoffice and openoffice.org
+    // configurations will be in the 'old' config directory and that's where we need
+    // to search - we convert the returned config dir to the 'old' dir
+    if ( !pXDGCfgHome && rConfigDir.endsWithAsciiL( XDG_CONFIG_PART, sizeof( XDG_CONFIG_PART ) - 1 )  )
+        // remove trailing '.config/' but leave the terminating '/'
+        aPreXDGConfigPath = rConfigDir.copy( 0, rConfigDir.getLength() - sizeof(  XDG_CONFIG_PART ) + 2 );
+    else
+        aPreXDGConfigPath = rConfigDir;
+
+    // the application-specific config dir is not longer prefixed by '.' because it is hidden under ".config"
+    // we have to add the '.' for the pre-XDG directory names
+    aPreXDGConfigPath += ".";
+
+   return aPreXDGConfigPath;
+}
+#endif
+
+void MigrationImpl::setInstallInfoIfExist(
+    install_info& aInfo,
+    const ::rtl::OUString& rConfigDir,
+    const ::rtl::OUString& rVersion)
+{
+    rtl::OUString url(INetURLObject(rConfigDir).GetMainURL(INetURLObject::NO_DECODE));
+    osl::DirectoryItem item;
+    osl::FileStatus stat(osl_FileStatus_Mask_Type);
+
+    if (osl::DirectoryItem::get(url, item) == osl::FileBase::E_None
+            && item.getFileStatus(stat) == osl::FileBase::E_None
+            && stat.getFileType() == osl::FileStatus::Directory)
+    {
+        aInfo.userdata = url;
+        aInfo.productname = rVersion;
+    }
+}
+
 install_info MigrationImpl::findInstallation(const strings_v& rVersions)
 {
+
+    OUString aTopConfigDir;
+    osl::Security().getConfigDir( aTopConfigDir );
+    if ( !aTopConfigDir.isEmpty() && aTopConfigDir[ aTopConfigDir.getLength()-1 ] != '/' )
+        aTopConfigDir += "/";
+
+#if defined UNX && ! defined MACOSX
+    OUString aPreXDGTopConfigDir = preXDGConfigDir(aTopConfigDir);
+#endif
+
     install_info aInfo;
     strings_v::const_iterator i_ver = rVersions.begin();
     while (i_ver != rVersions.end())
@@ -546,42 +605,12 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
                aProfileName.equalsIgnoreAsciiCase(
                    utl::ConfigManager::getProductName() ) ) )
         {
-            ::rtl::OUString aUserInst;
-            osl::Security().getConfigDir( aUserInst );
+            setInstallInfoIfExist(aInfo, aTopConfigDir + aProfileName, aVersion);
 #if defined UNX && ! defined MACOSX
-            const char* pXDGCfgHome = getenv("XDG_CONFIG_HOME");
-            // cater for XDG_CONFIG_HOME change
-            // If XDG_CONFIG_HOME is set then we;
-            // assume the user knows what they are doing ( room for improvement here, we could
-            // of course search the default config dir etc. also  - but this is more complex,
-            // we would need to weigh results from the current config dir against matches in
-            // the 'old' config dir etc. ) - currently we just use the returned config dir.
-            // If XDG_CONFIG_HOME is NOT set;
-            // assume then we should now using the default $HOME/,config config location for
-            // our user profiles, however *all* previous libreoffice and openoffice.org
-            // configurations will be in the 'old' config directory and that's where we need
-            // to search - we convert the returned config dir to the 'old' dir
-            if ( !pXDGCfgHome && aUserInst.endsWithAsciiL( XDG_CONFIG_PART, sizeof( XDG_CONFIG_PART ) - 1 )  )
-                aUserInst = aUserInst.copy( 0, aUserInst.getLength() - sizeof(  XDG_CONFIG_PART ) + 2 ); // remove trailing '.config' ( but leave the terminating '/' )
+            //try preXDG path if the new one does not exist
+            if ( aInfo.userdata.isEmpty())
+                setInstallInfoIfExist(aInfo, aPreXDGTopConfigDir + aProfileName, aVersion);
 #endif
-            if ( !aUserInst.isEmpty() && aUserInst[ aUserInst.getLength()-1 ] != '/' )
-                aUserInst += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-#if defined UNX && ! defined MACOSX
-            // tribute to whoever had the "great" idea to use different names on Windows and Unix
-            aUserInst += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
-#endif
-            aUserInst += aProfileName;
-            rtl::OUString url(
-                INetURLObject(aUserInst).GetMainURL(INetURLObject::NO_DECODE));
-            osl::DirectoryItem item;
-            osl::FileStatus stat(osl_FileStatus_Mask_Type);
-            if (osl::DirectoryItem::get(url, item) == osl::FileBase::E_None
-                && item.getFileStatus(stat) == osl::FileBase::E_None
-                && stat.getFileType() == osl::FileStatus::Directory)
-            {
-                aInfo.userdata = url;
-                aInfo.productname = aVersion;
-            }
         }
         ++i_ver;
     }
