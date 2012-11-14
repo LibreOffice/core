@@ -391,6 +391,7 @@ namespace XPath
         xmlChar *xStr = (xmlChar*)o1.getStr();
         ::boost::shared_ptr<xmlXPathObject> const xpathObj(
                 xmlXPathEval(xStr, xpathCtx.get()), xmlXPathFreeObject);
+        xmlSetGenericErrorFunc(NULL, NULL);
         if (0 == xpathObj) {
             // OSL_ENSURE(xpathCtx->lastError == NULL, xpathCtx->lastError->message);
             throw XPathException();
