@@ -39,6 +39,7 @@ $(eval $(call gb_Library_use_libraries,PresenterScreen,\
     cppu \
     cppuhelper \
     sal \
+    vcl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,PresenterScreen,\
