@@ -2013,17 +2013,17 @@ static IntervalInfo pIntervalTable[] =
 
 IntervalInfo* getIntervalInfo( const OUString& rStringCode )
 {
-    IntervalInfo* pInfo = NULL;
+    IntervalInfo* pInfo;
     sal_Int16 i = 0;
     while( !(pInfo = pIntervalTable + i)->mStringCode.isEmpty() )
     {
         if( rStringCode.equalsIgnoreAsciiCase( pInfo->mStringCode ) )
         {
-            break;
+            return pInfo;
         }
         i++;
     }
-    return pInfo;
+    return NULL;
 }
 
 inline void implGetDayMonthYear( sal_Int16& rnYear, sal_Int16& rnMonth, sal_Int16& rnDay, double dDate )
