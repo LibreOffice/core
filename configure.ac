@@ -4077,7 +4077,6 @@ if test "$cross_compiling" = "yes"; then
     tar cf - \
         config.guess \
         config_host.mk.in \
-        config_host.mk.source \
         configure \
         ooo.lst.in \
         oowintool \
@@ -4134,7 +4133,8 @@ if test "$cross_compiling" = "yes"; then
     test -f ./config_host.mk 2>/dev/null || exit
     cp config_host.mk ../config_build.mk
     cp config.log ../config.Build.log
-    . ./config_host.mk.source
+    . ./bin/get_config_variables COM GUI GUIBASE OS CPU CPUNAME CC CXX DISABLE_PYTHON GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH PYTHON SYSTEM_LIBXSLT OUTDIR SOLARINC SOLARLIB WORKDIR
+
     for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX DISABLE_PYTHON GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
              PYTHON SYSTEM_LIBXSLT; do
         VV='$'$V
