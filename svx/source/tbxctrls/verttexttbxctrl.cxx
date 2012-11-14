@@ -83,16 +83,10 @@ void SvxVertCTLTextTbxCtrl::StateChanged(
         return;
     }
 
-    if(bEnabled)
+    if(!bEnabled)
     {
-        if(!bVisible)
-        {
-            GetToolBox().ShowItem( GetId(), sal_True );
-            bCalc = sal_True;
-        }
-    }
-    else if(bVisible)
-    {
+        // always hide if either IsVerticalTextEnabled or IsCTLFontEnabled
+        // is false
         GetToolBox().HideItem( GetId() );
         bCalc = sal_True;
     }
