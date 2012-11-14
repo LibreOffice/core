@@ -155,7 +155,6 @@ namespace connectivity
             MQueryHelperResultEntry();
             ~MQueryHelperResultEntry();
 
-            void            insert( const rtl::OString &key, rtl::OUString &value );
             rtl::OUString   getValue( const rtl::OString &key ) const;
             void            setValue( const rtl::OString &key, const rtl::OUString & rValue);
         };
@@ -193,7 +192,6 @@ namespace connectivity
             virtual                    ~MQueryHelper();
 
             void                       reset();
-            MQueryHelperResultEntry*   next();
             MQueryHelperResultEntry*   getByIndex( sal_uInt32 nRow );
             sal_Bool                   isError() const;
             sal_Bool                   queryComplete() const;
