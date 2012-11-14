@@ -461,8 +461,9 @@ void DocxAttributeOutput::EndParagraphProperties()
 
 void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool /*bSingleEmptyRun*/ )
 {
-    // if there is some redlining in the document, output it
-    StartRedline( pRedlineData );
+    // Don't start redline data here, possibly there is a hyperlink later, and
+    // that has to be started first.
+    m_pRedlineData = pRedlineData;
 
     // postpone the output of the start of a run (there are elements that need
     // to be written before the start of the run, but we learn which they are
@@ -538,6 +539,9 @@ void DocxAttributeOutput::EndRun()
         m_pHyperlinkAttrList = NULL;
         m_startedHyperlink = true;
     }
+
+    // if there is some redlining in the document, output it
+    StartRedline();
 
     DoWriteBookmarks( );
     WriteCommentRanges();
@@ -1237,12 +1241,11 @@ void DocxAttributeOutput::Redline( const SwRedlineData* /*pRedline*/ )
     OSL_TRACE( "TODO DocxAttributeOutput::Redline( const SwRedlineData* pRedline )" );
 }
 
-void DocxAttributeOutput::StartRedline( const SwRedlineData* pRedlineData )
+void DocxAttributeOutput::StartRedline()
 {
-    m_pRedlineData = pRedlineData;
-
     if ( !m_pRedlineData )
         return;
+    const SwRedlineData* pRedlineData = m_pRedlineData;
 
     // FIXME check if it's necessary to travel over the Next()'s in pRedlineData
 

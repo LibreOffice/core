@@ -66,6 +66,7 @@ public:
     void testFdo47669();
     void testTableBorders();
     void testFdo51550();
+    void testN789482();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -103,6 +104,7 @@ void Test::run()
         {"fdo47669.docx", &Test::testFdo47669},
         {"table-borders.docx", &Test::testTableBorders},
         {"fdo51550.odt", &Test::testFdo51550},
+        {"n789482.docx", &Test::testN789482},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -480,6 +482,24 @@ void Test::testFdo51550()
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+}
+
+void Test::testN789482()
+{
+    // The problem was that w:del was exported before w:hyperlink, resulting in an invalid XML.
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+    getRun(xParagraph, 1, "Before. ");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Delete"), getProperty<OUString>(getRun(xParagraph, 2), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(getRun(xParagraph, 2), "IsStart"));
+
+    getRun(xParagraph, 3, "www.test.com");
+    CPPUNIT_ASSERT_EQUAL(OUString("http://www.test.com/"), getProperty<OUString>(getRun(xParagraph, 3), "HyperLinkURL"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Delete"), getProperty<OUString>(getRun(xParagraph, 4), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(getRun(xParagraph, 4), "IsStart"));
+
+    getRun(xParagraph, 5, " After.");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

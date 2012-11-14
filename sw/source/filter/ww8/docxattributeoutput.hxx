@@ -132,7 +132,7 @@ public:
     ///
     /// Start of the tag that encloses the run, fills the info according to
     /// the value of m_pRedlineData.
-    void StartRedline( const SwRedlineData* pRedlineData );
+    void StartRedline();
 
     /// Output redlining.
     ///
