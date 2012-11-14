@@ -72,6 +72,7 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <org/freedesktop/PackageKit/XSyncDbusSessionHelper.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <vcl/waitobj.hxx>
@@ -1425,6 +1426,7 @@ SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
     aMoreTemplatesLink  ( this, SvtResId( FT_DOCTEMPLATE_LINK ) ),
     aLine               ( this, SvtResId( FL_DOCTEMPLATE ) ),
     aManageBtn          ( this, SvtResId( BTN_DOCTEMPLATE_MANAGE ) ),
+    aPackageBtn         ( this, SvtResId( BTN_DOCTEMPLATE_PACKAGE ) ),
     aEditBtn            ( this, SvtResId( BTN_DOCTEMPLATE_EDIT ) ),
     aOKBtn              ( this, SvtResId( BTN_DOCTEMPLATE_OPEN ) ),
     aCancelBtn          ( this, SvtResId( BTN_DOCTEMPLATE_CANCEL ) ),
@@ -1454,6 +1456,7 @@ void SvtDocumentTemplateDialog::InitImpl( )
        aMoreTemplatesLink.Hide();
 
     aManageBtn.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, OrganizerHdl_Impl ) );
+    aPackageBtn.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, PackageHdl_Impl ) );
     Link aLink = LINK( this, SvtDocumentTemplateDialog, OKHdl_Impl );
     aEditBtn.SetClickHdl( aLink );
     aOKBtn.SetClickHdl( aLink );
@@ -1502,6 +1505,9 @@ void SvtDocumentTemplateDialog::InitImpl( )
     aPos = aHelpBtn.GetPosPixel();
     aPos.Y() -= nDelta;
     aHelpBtn.SetPosPixel( aPos );
+    aPos = aPackageBtn.GetPosPixel();
+    aPos.Y() -= nDelta;
+    aPackageBtn.SetPosPixel( aPos );
 
     pImpl->pWin->Show();
 
@@ -1633,6 +1639,21 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog , OrganizerHdl_Impl)
     }
 
     Application::SetDefDialogParent( pOldDefWin );
+    return 0;
+}
+
+IMPL_LINK_NOARG(SvtDocumentTemplateDialog, PackageHdl_Impl)
+{
+    try
+    {
+        Reference< org::freedesktop::PackageKit::XModify > xModify(::comphelper::getProcessServiceFactory()->createInstance("org.freedesktop.PackageKit.SyncDbusSessionHelper"), UNO_QUERY);
+        Sequence< ::rtl::OUString > vPackages(1);
+        vPackages[0] = "libreoffice-templates";
+        ::rtl::OUString sInteraction("");
+        xModify->InstallPackageNames(0, vPackages, sInteraction);
+    }
+    catch(...)
+    { }
     return 0;
 }
 
