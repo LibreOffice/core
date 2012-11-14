@@ -4080,6 +4080,7 @@ if test "$cross_compiling" = "yes"; then
         configure \
         ooo.lst.in \
         oowintool \
+        bin/get_config_variables \
         solenv/bin/getcompver.awk \
         solenv/inc/langlist.mk \
         solenv/inc/postset.mk \
