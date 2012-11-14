@@ -228,6 +228,10 @@ sal_Int32 AttributeList::getToken( sal_Int32 nAttrToken, sal_Int32 nDefault ) co
 
 OUString AttributeList::getString( sal_Int32 nAttrToken, const OUString& rDefault ) const
 {
+    // try to avoid slow exception throw/catch if we can
+    if (rDefault.isEmpty())
+        return mxAttribs->getOptionalValue( nAttrToken );
+
     try
     {
         return mxAttribs->getValue( nAttrToken );
