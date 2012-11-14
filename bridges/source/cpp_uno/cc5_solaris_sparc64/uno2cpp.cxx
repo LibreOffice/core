@@ -433,8 +433,7 @@ void unoInterfaceProxyDispatch(
                     true, false };
                 typelib_TypeDescriptionReference * rtd = NULL;
                 typelib_typedescriptionreference_new(
-                    &rtd, typelib_TypeClass_VOID,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("void")).pData);
+                    &rtd, typelib_TypeClass_VOID, "void".pData);
                 slot.index += 1;
                 call(proxy, slot, rtd, 1, &param, pReturn, pArgs, ppException);
                 typelib_typedescriptionreference_release(rtd);
