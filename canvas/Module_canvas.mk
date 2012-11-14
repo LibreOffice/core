@@ -43,16 +43,12 @@ $(eval $(call gb_Module_add_targets,canvas,\
 ))
 endif
 
-ifeq ($(strip $(OS)),WNT)
-ifneq ($(strip $(ENABLE_DIRECTX)),)
-
+ifneq ($(ENABLE_DIRECTX),)
 $(eval $(call gb_Module_add_targets,canvas,\
 	Library_directx9canvas \
 	Library_gdipluscanvas \
 	StaticLibrary_directxcanvas \
 ))
-
-endif
 endif
 
 # vim: set noet sw=4 ts=4:
