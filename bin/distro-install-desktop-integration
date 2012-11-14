@@ -1,9 +1,6 @@
 #!/bin/sh
 
 if test -z "${SRC_ROOT}"; then
-    source ./config_host.mk.source
-fi
-if test -z "${SOLARENV}"; then
     echo "distro-install-clean-up: No environment set!"
     exit 1
 fi
