@@ -22,9 +22,8 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 		CC="$(CC) -MD -nologo \
 			$(if $(filter TRUE,$(ENABLE_DEBUG)),-Zi) \
 			$(SOLARINC)") \
-	&& echo \
-	    $(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") >> config.cache \
-	&& ./configure -C --disable-modules --disable-test --disable-introspection --disable-shared --enable-static --with-pic \
+	&& ./configure --disable-modules --disable-test --disable-introspection --disable-shared --enable-static --with-pic \
+	$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	$(if $(filter NO,$(SYSTEM_LIBXML)),LIBXML2_CFLAGS="-I$(OUTDIR)/inc/external" \
 	$(if $(filter MSC,$(COM)),LIBXML2_LIBS="$(OUTDIR)/lib/libxml2.lib",LIBXML2_LIBS="-L$(OUTDIR)/lib -lxml2"),\

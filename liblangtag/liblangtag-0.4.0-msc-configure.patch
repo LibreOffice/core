@@ -32,6 +32,15 @@
  	$(NULL)
 --- misc/liblangtag-0.4.0/data/Makefile.in	2012-10-22 05:47:23.000000000 +0200
 +++ misc/build/liblangtag-0.4.0/data/Makefile.in	2012-11-06 14:47:23.173704887 +0100
+@@ -52,7 +52,7 @@
+ POST_UNINSTALL = :
+ build_triplet = @build@
+ host_triplet = @host@
+-noinst_PROGRAMS = reg2xml$(EXEEXT) $(am__EXEEXT_1)
++noinst_PROGRAMS = $(am__EXEEXT_1)
+ subdir = data
+ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 @@ -80,8 +80,8 @@
  am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
  am__v_lt_0 = --silent
