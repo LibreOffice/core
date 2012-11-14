@@ -668,22 +668,11 @@ AbstractScImportAsciiDlg * ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg 
 }
 // ScImportAsciiDlg end
 
-AbstractScTextImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScTextImportOptionsDlg( Window* pParent, int nId )
+AbstractScTextImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScTextImportOptionsDlg(Window* pParent)
 {
-    ScTextImportOptionsDlg* pDlg = NULL;
-    switch (nId)
-    {
-        case RID_SCDLG_TEXT_IMPORT_OPTIONS:
-            pDlg = new ScTextImportOptionsDlg(pParent);
-        break;
-        default:
-            ;
-    }
-
-    return pDlg ? new AbstractScTextImportOptionsDlg_Impl(pDlg) : NULL;
+    ScTextImportOptionsDlg* pDlg = new ScTextImportOptionsDlg(pParent);
+    return new AbstractScTextImportOptionsDlg_Impl(pDlg);
 }
-
-
 
 AbstractScAutoFormatDlg * ScAbstractDialogFactory_Impl::CreateScAutoFormatDlg( Window*                  pParent,
                                                                 ScAutoFormat*               pAutoFormat,

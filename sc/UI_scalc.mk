@@ -11,6 +11,7 @@ $(eval $(call gb_UI_UI,modules/scalc))
 
 $(eval $(call gb_UI_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/printeroptions \
+	sc/uiconfig/scalc/ui/textimportoptions \
 ))
 
 # vim: set noet sw=4 ts=4:

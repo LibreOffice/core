@@ -401,7 +401,7 @@ public:
                                                                     SvStream* pInStream, int nId,
                                                                     ScImportAsciiCall eCall);
 
-    virtual AbstractScTextImportOptionsDlg * CreateScTextImportOptionsDlg( Window* pParent, int nId );
+    virtual AbstractScTextImportOptionsDlg * CreateScTextImportOptionsDlg(Window* pParent);
 
     virtual     AbstractScAutoFormatDlg * CreateScAutoFormatDlg( Window*                    pParent, //add for ScAutoFormatDlg
                                                                 ScAutoFormat*               pAutoFormat,

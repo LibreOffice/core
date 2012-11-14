@@ -50,20 +50,14 @@ private:
     void init();
 
 private:
-    OKButton        maBtnOk;
-    CancelButton    maBtnCancel;
-    HelpButton      maBtnHelp;
+    OKButton*       m_pBtnOk;
 
-    FixedLine       maFlChooseLang;
+    RadioButton*    m_pRbAutomatic;
+    RadioButton*    m_pRbCustom;
 
-    RadioButton     maRbAutomatic;
-    RadioButton     maRbCustom;
+    SvxLanguageBox* m_pLbCustomLang;
 
-    SvxLanguageBox  maLbCustomLang;
-
-    FixedLine       maFlOption;
-
-    CheckBox        maBtnConvertDate;
+    CheckBox*       m_pBtnConvertDate;
 
     DECL_LINK(OKHdl, void *);
 

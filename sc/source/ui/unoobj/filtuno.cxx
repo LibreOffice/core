@@ -236,8 +236,8 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         else
         {
             // HTML import.
-            ::std::auto_ptr<AbstractScTextImportOptionsDlg> pDlg(
-                pFact->CreateScTextImportOptionsDlg(NULL, RID_SCDLG_TEXT_IMPORT_OPTIONS));
+            boost::scoped_ptr<AbstractScTextImportOptionsDlg> pDlg(
+                pFact->CreateScTextImportOptionsDlg(NULL));
 
             if (pDlg->Execute() == RET_OK)
             {

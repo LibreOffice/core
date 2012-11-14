@@ -32,27 +32,18 @@
 //------------------------------------------------------------------------
 
 #include "textimportoptions.hxx"
-#include "textimportoptions.hrc"
-
-#include "scresid.hxx"
-#include "vcl/window.hxx"
-#include "vcl/msgbox.hxx"
 #include "vcl/svapp.hxx"
+#include "vcl/msgbox.hxx"
+#include "vcl/window.hxx"
 
-ScTextImportOptionsDlg::ScTextImportOptionsDlg(Window* pParent) :
-    ModalDialog(pParent, ScResId(RID_SCDLG_TEXT_IMPORT_OPTIONS)),
-
-    maBtnOk(this, ScResId(BTN_OK)),
-    maBtnCancel(this, ScResId(BTN_CANCEL)),
-    maBtnHelp(this, ScResId(BTN_HELP)),
-    maFlChooseLang(this, ScResId(FL_CHOOSE_LANG)),
-    maRbAutomatic(this, ScResId(RB_AUTOMATIC)),
-    maRbCustom(this, ScResId(RB_CUSTOM)),
-    maLbCustomLang(this, ScResId(LB_CUSTOM_LANG)),
-    maFlOption(this, ScResId(FL_OPTION)),
-    maBtnConvertDate(this, ScResId(BTN_CONVERT_DATE))
+ScTextImportOptionsDlg::ScTextImportOptionsDlg(Window* pParent)
+    : ModalDialog(pParent, "TextImportOptionsDialog", "modules/scalc/ui/textimportoptions.ui")
 {
-    FreeResource();
+    get(m_pBtnOk, "ok");
+    get(m_pRbAutomatic, "automatic");
+    get(m_pRbCustom, "custom");
+    get(m_pBtnConvertDate, "convertdata");
+    get(m_pLbCustomLang, "lang");
     init();
 }
 
@@ -67,33 +58,33 @@ short ScTextImportOptionsDlg::Execute()
 
 LanguageType ScTextImportOptionsDlg::getLanguageType() const
 {
-    if (maRbAutomatic.IsChecked())
+    if (m_pRbAutomatic->IsChecked())
         return LANGUAGE_SYSTEM;
 
-    return maLbCustomLang.GetSelectLanguage();
+    return m_pLbCustomLang->GetSelectLanguage();
 }
 
 bool ScTextImportOptionsDlg::isDateConversionSet() const
 {
-    return maBtnConvertDate.IsChecked();
+    return m_pBtnConvertDate->IsChecked();
 }
 
 void ScTextImportOptionsDlg::init()
 {
     Link aLink = LINK( this, ScTextImportOptionsDlg, OKHdl );
-    maBtnOk.SetClickHdl(aLink);
+    m_pBtnOk->SetClickHdl(aLink);
     aLink = LINK( this, ScTextImportOptionsDlg, RadioHdl );
-    maRbAutomatic.SetClickHdl(aLink);
-    maRbCustom.SetClickHdl(aLink);
+    m_pRbAutomatic->SetClickHdl(aLink);
+    m_pRbCustom->SetClickHdl(aLink);
 
-    maRbAutomatic.Check(true);
+    m_pRbAutomatic->Check(true);
 
-    maLbCustomLang.SetLanguageList(
+    m_pLbCustomLang->SetLanguageList(
         LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, false, false);
 
     LanguageType eLang = Application::GetSettings().GetLanguage();
-    maLbCustomLang.SelectLanguage(eLang);
-    maLbCustomLang.Disable();
+    m_pLbCustomLang->SelectLanguage(eLang);
+    m_pLbCustomLang->Disable();
 }
 
 IMPL_LINK_NOARG(ScTextImportOptionsDlg, OKHdl)
@@ -104,13 +95,13 @@ IMPL_LINK_NOARG(ScTextImportOptionsDlg, OKHdl)
 
 IMPL_LINK( ScTextImportOptionsDlg, RadioHdl, RadioButton*, pBtn )
 {
-    if (pBtn == &maRbAutomatic)
+    if (pBtn == m_pRbAutomatic)
     {
-        maLbCustomLang.Disable();
+        m_pLbCustomLang->Disable();
     }
-    else if (pBtn == &maRbCustom)
+    else if (pBtn == m_pRbCustom)
     {
-        maLbCustomLang.Enable();
+        m_pLbCustomLang->Enable();
     }
     return 0;
 }

@@ -309,8 +309,8 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     // this for html pasting only, but in the future it may
                     // make sense to do it for other data types too.
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    ::std::auto_ptr<AbstractScTextImportOptionsDlg> pDlg(
-                        pFact->CreateScTextImportOptionsDlg(NULL, RID_SCDLG_TEXT_IMPORT_OPTIONS));
+                    boost::scoped_ptr<AbstractScTextImportOptionsDlg> pDlg(
+                        pFact->CreateScTextImportOptionsDlg(NULL));
 
                     if (pDlg->Execute() == RET_OK)
                     {
