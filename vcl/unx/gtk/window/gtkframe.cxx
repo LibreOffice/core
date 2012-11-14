@@ -518,7 +518,7 @@ static void ObjectDestroyedNotify( gpointer data )
 
 static void hud_activated( gboolean hud_active, gpointer user_data )
 {
-    if ( hud_activated )
+    if ( hud_active )
     {
         SolarMutexGuard aGuard;
         GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( user_data );
