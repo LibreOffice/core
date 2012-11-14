@@ -1520,7 +1520,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         if( !WriteThroughComponent(
             xCom, "settings.xml",
             "com.sun.star.comp.report.XMLSettingsExporter",
-            aDelegatorArguments, aProps, sal_True,_xStorageToSaveTo ) )
+            aDelegatorArguments, aProps, _xStorageToSaveTo ) )
         {
             if( !bWarn )
             {
@@ -1536,7 +1536,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         if( !WriteThroughComponent(
             xCom, "meta.xml",
             "com.sun.star.comp.report.XMLMetaExporter",
-            aDelegatorArguments, aProps, sal_True,_xStorageToSaveTo ) )
+            aDelegatorArguments, aProps, _xStorageToSaveTo ) )
         {
             if( !bWarn )
             {
@@ -1552,7 +1552,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         if( !WriteThroughComponent(
             xCom, "styles.xml",
             "com.sun.star.comp.report.XMLStylesExporter",
-            aDelegatorArguments, aProps, sal_True,_xStorageToSaveTo ) )
+            aDelegatorArguments, aProps, _xStorageToSaveTo ) )
         {
             if( !bWarn )
             {
@@ -1568,7 +1568,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         if( !WriteThroughComponent(
                 xCom, "content.xml",
                 "com.sun.star.comp.report.ExportFilter",
-                aDelegatorArguments, aProps, sal_True,_xStorageToSaveTo ) )
+                aDelegatorArguments, aProps, _xStorageToSaveTo ) )
         {
             bErr = sal_True;
             sErrFile = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml"));
@@ -1666,8 +1666,7 @@ sal_Bool OReportDefinition::WriteThroughComponent(
     const sal_Char* pServiceName,
     const uno::Sequence<uno::Any> & rArguments,
     const uno::Sequence<beans::PropertyValue> & rMediaDesc,
-    sal_Bool bPlainStream
-    ,const uno::Reference<embed::XStorage>& _xStorageToSaveTo)
+    const uno::Reference<embed::XStorage>& _xStorageToSaveTo)
 {
     OSL_ENSURE( NULL != pStreamName, "Need stream name!" );
     OSL_ENSURE( NULL != pServiceName, "Need service name!" );
@@ -1700,16 +1699,9 @@ sal_Bool OReportDefinition::WriteThroughComponent(
         aAny <<= aMime;
         xStreamProp->setPropertyValue( aPropName, aAny );
 
-        if( bPlainStream )
-        {
-            aAny <<= sal_False;
-            xStreamProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Compressed") ), aAny );
-        }
-        else
-        {
-            xStreamProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), uno::makeAny(sal_True) );
-        }
-
+        // encrypt all streams
+        xStreamProp->setPropertyValue( "UseCommonStoragePasswordEncryption",
+                                       uno::makeAny( (sal_Bool)sal_True ) );
 
         // set buffer and create outputstream
 
