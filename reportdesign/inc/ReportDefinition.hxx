@@ -140,8 +140,7 @@ namespace reportdesign
             /// output descriptor
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::PropertyValue> & rMediaDesc,
-            sal_Bool bPlainStream
-            , const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _xStorageToSaveTo);          /// neither compress nor encrypt
+            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _xStorageToSaveTo);
 
         /// write a single output stream
         /// (to be called either directly or by WriteThroughComponent(...))
