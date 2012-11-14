@@ -24,6 +24,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -45,6 +46,17 @@ public:
     static drawinglayer::primitive2d::Primitive2DSequence tryToGetChartContentAsPrimitive2DSequence(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rXModel,
         basegfx::B2DRange& rRange);
+
+    // #i121334# Allow to switch off line and fill style by setting these as attributes
+    // at the OLE chart object. This is needed to allow fill styles of the covering objects
+    // to make their own fill/line settings work. This should not be done by changing
+    // the defaults at the chart (see StaticPageBackgroundDefaults_Initializer::lcl_AddDefaultsToMap)
+    // since this would not be saved/loaded, thus the compatibility will be better when setting it at
+    // newly created charts using this method
+    static void AdaptDefaultsForChart(
+        const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > & xEmbObj,
+        bool bNoFillStyle = true,
+        bool bNoLineStyle = true);
 };
 
 //////////////////////////////////////////////////////////////////////////////

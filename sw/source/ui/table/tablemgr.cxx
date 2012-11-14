@@ -25,6 +25,7 @@
 
 #include <sot/storage.hxx>
 #include <comphelper/classids.hxx>
+#include <svx/charthelper.hxx>
 
 #include "edtwin.hxx"
 #include "wrtsh.hxx"
@@ -265,6 +266,9 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         //this does the DoVerb in the SfxViewShell.
         ErrCode nErr = pClient->DoVerb( SVVERB_SHOW );
         (void) nErr;
+
+        // #i121334#
+        ChartHelper::AdaptDefaultsForChart( xObj );
     }
 
     uno::Reference< chart2::data::XDataReceiver > xDataReceiver( xChartModel, uno::UNO_QUERY );

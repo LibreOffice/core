@@ -69,6 +69,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/soerr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <svx/charthelper.hxx>
 
 using namespace com::sun::star;
 
@@ -877,7 +878,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         if( bChangeDefaultsForChart && xObj.is())
         {
-            AdaptDefaultsForChart( xObj );
+            ChartHelper::AdaptDefaultsForChart( xObj );
         }
 
         pSdClient->DoVerb(nVerb);   // if necessary, ErrCode is outputted by Sfx
@@ -1053,33 +1054,6 @@ Point ViewShell::GetWinViewPos() const
 Point ViewShell::GetViewOrigin() const
 {
     return mpContentWindow->GetViewOrigin();
-}
-
-void ViewShell::AdaptDefaultsForChart(
-    const uno::Reference < embed::XEmbeddedObject > & xEmbObj )
-{
-    if( xEmbObj.is())
-    {
-        uno::Reference< chart2::XChartDocument > xChartDoc( xEmbObj->getComponent(), uno::UNO_QUERY );
-        OSL_ENSURE( xChartDoc.is(), "Trying to set chart property to non-chart OLE" );
-        if( !xChartDoc.is())
-            return;
-
-        try
-        {
-            // set background to transparent (none)
-            uno::Reference< beans::XPropertySet > xPageProp( xChartDoc->getPageBackground());
-            if( xPageProp.is())
-                xPageProp->setPropertyValue( "FillStyle" , uno::makeAny( drawing::FillStyle_NONE ));
-            // set no border
-            if( xPageProp.is())
-                xPageProp->setPropertyValue( "LineStyle" , uno::makeAny( drawing::LineStyle_NONE ));
-        }
-        catch( const uno::Exception & )
-        {
-            OSL_FAIL( "Exception caught in AdaptDefaultsForChart" );
-        }
-    }
 }
 
 } // end of namespace sd

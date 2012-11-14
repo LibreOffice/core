@@ -419,9 +419,6 @@ public:
     */
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
 
-    void AdaptDefaultsForChart(
-        const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > & xEmbObj );
-
     /** Depending on the given request create a new page or duplicate an
         existing one.  A new page is created behind the given slide.
         @param rRequest

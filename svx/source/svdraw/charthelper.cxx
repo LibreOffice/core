@@ -29,6 +29,9 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 
 using namespace ::com::sun::star;
 
@@ -116,6 +119,37 @@ drawinglayer::primitive2d::Primitive2DSequence ChartHelper::tryToGetChartContent
     }
 
     return aRetval;
+}
+
+void ChartHelper::AdaptDefaultsForChart(
+    const uno::Reference < embed::XEmbeddedObject > & xEmbObj,
+    bool /* bNoFillStyle */,
+    bool /* bNoLineStyle */)
+{
+    if( xEmbObj.is())
+    {
+        uno::Reference< chart2::XChartDocument > xChartDoc( xEmbObj->getComponent(), uno::UNO_QUERY );
+        OSL_ENSURE( xChartDoc.is(), "Trying to set chart property to non-chart OLE" );
+        if( !xChartDoc.is())
+            return;
+
+        try
+        {
+            // set background to transparent (none)
+            uno::Reference< beans::XPropertySet > xPageProp( xChartDoc->getPageBackground());
+            if( xPageProp.is())
+                xPageProp->setPropertyValue( "FillStyle",
+                                             uno::makeAny( drawing::FillStyle_NONE ));
+            // set no border
+            if( xPageProp.is())
+                xPageProp->setPropertyValue( "LineStyle",
+                                             uno::makeAny( drawing::LineStyle_NONE ));
+        }
+        catch( const uno::Exception & )
+        {
+            OSL_FAIL( "Exception caught in AdaptDefaultsForChart" );
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

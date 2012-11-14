@@ -43,6 +43,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/msgpool.hxx>
+#include <svx/charthelper.hxx>
 #include <scmod.hxx>
 
 // BM/IHA --
@@ -80,8 +81,6 @@ using namespace ::com::sun::star;
 #include "globstr.hrc"
 #include "drawview.hxx"
 #include "markdata.hxx"
-
-extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht zeichnen
 
 namespace {
 
@@ -368,12 +367,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 aPnt.X() -= aSize.Width();      // move position to left edge
             Rectangle aRect (aPnt, aSize);
             SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
-
-                // Dieses Objekt nicht vor dem Aktivieren zeichnen
-                // (in MarkListHasChanged kommt ein Update)
-            if (!bIsFromFile)
-                pSkipPaintObj = pObj;
-
             SdrPageView* pPV = pView->GetSdrPageView();
             pView->InsertObjectAtView(pObj, *pPV);
 
@@ -411,7 +404,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 else
                 {
                     pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
-                    pSkipPaintObj = NULL;
                 }
             }
 
@@ -628,12 +620,11 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
         Rectangle aRect (aStart, aSize);
         SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
-
-        // Dieses Objekt nicht vor dem Aktivieren zeichnen
-        // (in MarkListHasChanged kommt ein Update)
-        pSkipPaintObj = pObj;
-
         SdrPageView* pPV = pView->GetSdrPageView();
+
+        // #i121334# This call will change the chart's default background fill from white to transparent.
+        // Add here again if this is wanted (see task description for details)
+        // ChartHelper::AdaptDefaultsForChart( xObj );
 
 //        pView->InsertObjectAtView(pObj, *pPV);//this call leads to an immidiate redraw and asks the chart for a visual representation
 
@@ -797,8 +788,6 @@ FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, Window* p
     Point aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
     Rectangle aRect (aStart, aSize);
     SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
-
-    pSkipPaintObj = pObj;
 
     SdrPageView* pPV = pView->GetSdrPageView();
 
