@@ -510,49 +510,37 @@ SalBitmap* GtkInstance::CreateSalBitmap()
 #endif
 }
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#ifdef ENABLE_GMENU_INTEGRATION
+
 SalMenu* GtkInstance::CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu )
 {
     GtkSalMenu* pSalMenu = new GtkSalMenu( bMenuBar );
     pSalMenu->SetMenu( pVCLMenu );
-
-    return static_cast<SalMenu*>( pSalMenu );
+    return pSalMenu;
 }
-#else
-SalMenu* GtkInstance::CreateMenu( sal_Bool, Menu* ) { return NULL; }
-#endif
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
 void GtkInstance::DestroyMenu( SalMenu* pMenu )
 {
-    (void)pMenu;
     delete pMenu;
-//    OSL_ENSURE( pMenu == 0, "DestroyMenu called with non-native menus" );
 }
-#else
-void GtkInstance::DestroyMenu( SalMenu* ) {}
-#endif
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
 SalMenuItem* GtkInstance::CreateMenuItem( const SalItemParams* pItemData )
 {
-    GtkSalMenuItem* pMenuItem = new GtkSalMenuItem( pItemData );
-
-    return static_cast<SalMenuItem*>( pMenuItem );
+    return new GtkSalMenuItem( pItemData );
 }
-#else
-SalMenuItem* GtkInstance::CreateMenuItem( const SalItemParams* ) { return NULL; }
-#endif
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
 void GtkInstance::DestroyMenuItem( SalMenuItem* pItem )
 {
-    (void)pItem;
     delete pItem;
-//    OSL_ENSURE( pItem == 0, "DestroyMenu called with non-native menus" );
 }
-#else
-void GtkInstance::DestroyMenuItem( SalMenuItem* ) {}
+
+#else // not ENABLE_GMENU_INTEGRATION
+
+SalMenu*     GtkInstance::CreateMenu( sal_Bool, Menu* )          { return NULL; }
+void         GtkInstance::DestroyMenu( SalMenu* )                {}
+SalMenuItem* GtkInstance::CreateMenuItem( const SalItemParams* ) { return NULL; }
+void         GtkInstance::DestroyMenuItem( SalMenuItem* )        {}
+
 #endif
 
 SalTimer* GtkInstance::CreateSalTimer()

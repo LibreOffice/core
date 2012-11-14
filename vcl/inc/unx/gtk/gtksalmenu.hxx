@@ -31,7 +31,9 @@
 #include <unx/gtk/gtkframe.hxx>
 
 #if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
-#  define ENABLE_GMENU_INTEGRATION
+#  ifdef GLIB_AVAILABLE_IN_2_32
+#    define ENABLE_GMENU_INTEGRATION
+#  endif
 #  include <unx/gtk/glomenu.h>
 #  include <unx/gtk/gloactiongroup.h>
 #else
