@@ -533,11 +533,11 @@ void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItem
         GVariant *pCurrentState = g_action_group_get_action_state( mpActionGroup, aCommand );
 
         if ( bits & MIB_RADIOCHECK )
-            pCheckValue = ( bCheck == TRUE ) ? g_variant_new_string( aCommand ) : g_variant_new_string( "" );
+            pCheckValue = bCheck ? g_variant_new_string( aCommand ) : g_variant_new_string( "" );
         else
         {
             // By default, all checked items are checkmark buttons.
-            if ( bCheck == TRUE || ( ( bCheck == FALSE ) && pCurrentState != NULL ) )
+            if ( bCheck || ( !bCheck && pCurrentState != NULL ) )
                 pCheckValue = g_variant_new_boolean( bCheck );
         }
 
@@ -614,7 +614,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
     GVariant *pTarget = NULL;
 
     if ( g_action_group_has_action( mpActionGroup, aCommand ) == FALSE ) {
-        if ( ( nBits & MIB_CHECKABLE ) || ( bIsSubmenu == TRUE ) )
+        if ( ( nBits & MIB_CHECKABLE ) || bIsSubmenu )
         {
             // Item is a checkmark button.
             GVariantType* pStateType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_BOOLEAN );
@@ -650,7 +650,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
 
         gchar* aItemCommand = g_strconcat("win.", aCommand, NULL );
 
-        if ( bIsSubmenu == TRUE )
+        if ( bIsSubmenu )
             g_lo_menu_set_submenu_action_to_item_in_section( pMenu, nSection, nItemPos, aItemCommand );
         else
             g_lo_menu_set_action_and_target_value_to_item_in_section( pMenu, nSection, nItemPos, aItemCommand, pTarget );
@@ -676,7 +676,7 @@ GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand, gboolean bGetSub
 
         if ( g_strcmp0( aItemCommandStr, aCommand ) == 0 )
         {
-            pMenu = ( bGetSubmenu == TRUE ) ? pSalItem->mpSubMenu : this;
+            pMenu = bGetSubmenu ? pSalItem->mpSubMenu : this;
             break;
         }
         else

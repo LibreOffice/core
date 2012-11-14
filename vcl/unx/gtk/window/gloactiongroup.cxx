@@ -192,7 +192,7 @@ g_lo_action_group_perform_submenu_action (GLOActionGroup *group,
     if (pSalMenu != NULL) {
         gboolean bState = g_variant_get_boolean (state);
 
-        if (bState == TRUE)
+        if (bState)
             pSalMenu->Activate (action_name);
         else
             pSalMenu->Deactivate (action_name);
@@ -215,7 +215,7 @@ g_lo_action_group_change_state (GActionGroup *group,
 
         if (action != NULL)
         {
-            if (action->submenu == TRUE)
+            if (action->submenu)
                 g_lo_action_group_perform_submenu_action (lo_group, action_name, value);
             else
             {
@@ -229,7 +229,7 @@ g_lo_action_group_change_state (GActionGroup *group,
                     is_new = TRUE;
                 }
 
-                if (g_variant_is_of_type (value, action->state_type) == TRUE)
+                if (g_variant_is_of_type (value, action->state_type))
                 {
                     if (action->state)
                         g_variant_unref(action->state);
