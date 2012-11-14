@@ -1797,10 +1797,7 @@ void Menu::ShowItem( sal_uInt16 nItemId, sal_Bool bVisible )
         pData->bVisible = bVisible;
 
         // update native menu
-        // as long as there is no support to hide native menu entries, we just disable them
-        // TODO: add support to show/hide native menu entries
         if( ImplGetSalMenu() )
-//            ImplGetSalMenu()->EnableItem( nPos, bVisible );
             ImplGetSalMenu()->ShowItem( nPos, bVisible );
     }
 }

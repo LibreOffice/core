@@ -82,7 +82,7 @@ public:
     virtual bool AddMenuBarButton( const SalMenuButtonItem& ); // return false if not implemented or failure
     virtual void RemoveMenuBarButton( sal_uInt16 nId );
 
-    // FIXME: Make the other VCL native backends to work with these new methods.
+    // TODO: implement show/hide for the Win/Mac VCL native backends
     virtual void ShowItem( unsigned nPos, sal_Bool bShow ) { EnableItem( nPos, bShow ); }
 
     // return an empty rectangle if not implemented
