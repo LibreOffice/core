@@ -1,7 +1,0 @@
-mkdir: %_DEST%\xml\ooo
-..\%__SRC%\bin\uiconfig*.zip %_DEST%\bin\
-..\%__SRC%\misc\*.xcd %_DEST%\xml\
-..\%__SRC%\misc\lang\*.xcd %_DEST%\xml\
-..\%__SRC%\misc\scriptproviderforbeanshell.rdb %_DEST%\xml\scriptproviderforbeanshell.rdb
-..\%__SRC%\misc\scriptproviderforjavascript.rdb %_DEST%\xml\scriptproviderforjavascript.rdb
-..\%__SRC%\misc\services.rdb %_DEST%\xml\services.rdb
