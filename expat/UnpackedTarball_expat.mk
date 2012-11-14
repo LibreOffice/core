@@ -23,6 +23,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,expat,\
 # on windows 64 bit platform we need to link it twice:
 # with $(LINK_X64_BINARY) and with $(gb_LINK).
 $(eval $(call gb_UnpackedTarball_set_post_action,expat,\
+	cp lib/xmltok.c lib/unicode_xmltok.c && \
+	cp lib/xmlrole.c lib/unicode_xmlrole.c && \
 	cp lib/xmlparse.c lib/unicode_xmlparse.c \
 	$(if $(filter $(BUILD_X64),TRUE),      && \
 	  cp lib/xmlparse.c lib/xmlparse_x64.c && \

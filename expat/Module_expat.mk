@@ -14,9 +14,8 @@ ifeq ($(SYSTEM_EXPAT),NO)
 $(eval $(call gb_Module_add_targets,expat,\
 	ExternalPackage_expat \
 	UnpackedTarball_expat \
-	StaticLibrary_ascii_expat_xmlparse \
-	StaticLibrary_expat_xmlparse \
-	StaticLibrary_expat_xmltok \
+	StaticLibrary_expat \
+	StaticLibrary_expat_utf16 \
 ))
 
 # Actually it wasn't that clear if we should

@@ -286,9 +286,8 @@ endef
 else # !SYSTEM_EXPAT
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	ascii_expat_xmlparse \
-	expat_xmlparse \
-	expat_xmltok \
+	expat \
+	expat_utf16 \
 	expat_x64 \
 ))
 
@@ -300,7 +299,7 @@ $(call gb_LinkTarget_set_include,$(1),\
     $$(INCLUDE) \
 )
 
-$(if $(filter-out ascii_expat_xmlparse expat_xmltok,$(2)),\
+$(if $(filter expat_utf16,$(2)),\
 	$(call gb_LinkTarget_add_defs,$(1),\
 		-DXML_UNICODE \
 ))
@@ -315,12 +314,12 @@ endif # SYSTEM_EXPAT
 
 # now define 2 wrappers that select which internal static library to use...
 define gb_LinkTarget__use_expat_utf8
-$(call gb_LinkTarget__use_expat,$(1),ascii_expat_xmlparse expat_xmltok)
+$(call gb_LinkTarget__use_expat,$(1),expat)
 
 endef
 
 define gb_LinkTarget__use_expat_utf16
-$(call gb_LinkTarget__use_expat,$(1),expat_xmlparse expat_xmltok)
+$(call gb_LinkTarget__use_expat,$(1),expat_utf16)
 
 endef
 
