@@ -379,7 +379,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                 xModelComp, "meta.xml", xServiceFactory,
                 (bOASIS ? "com.sun.star.comp.Writer.XMLOasisMetaExporter"
                         : "com.sun.star.comp.Writer.XMLMetaExporter"),
-                aEmptyArgs, aProps, sal_True ) )
+                aEmptyArgs, aProps ) )
         {
             bWarn = sal_True;
             sWarnFile = String( RTL_CONSTASCII_STRINGPARAM("meta.xml"),
@@ -395,7 +395,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                 xModelComp, "settings.xml", xServiceFactory,
                 (bOASIS ? "com.sun.star.comp.Writer.XMLOasisSettingsExporter"
                         : "com.sun.star.comp.Writer.XMLSettingsExporter"),
-                aEmptyArgs, aProps, sal_False ) )
+                aEmptyArgs, aProps ) )
             {
                 if( !bWarn )
                 {
@@ -411,7 +411,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
             xModelComp, "styles.xml", xServiceFactory,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisStylesExporter"
                     : "com.sun.star.comp.Writer.XMLStylesExporter"),
-            aFilterArgs, aProps, sal_False ) )
+            aFilterArgs, aProps ) )
     {
         bErr = sal_True;
         sErrFile = String( RTL_CONSTASCII_STRINGPARAM("styles.xml"),
@@ -425,7 +425,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                 xModelComp, "content.xml", xServiceFactory,
                 (bOASIS ? "com.sun.star.comp.Writer.XMLOasisContentExporter"
                         : "com.sun.star.comp.Writer.XMLContentExporter"),
-                aFilterArgs, aProps, sal_False ) )
+                aFilterArgs, aProps ) )
         {
             bErr = sal_True;
             sErrFile = String( RTL_CONSTASCII_STRINGPARAM("content.xml"),
@@ -524,8 +524,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     const uno::Reference<lang::XMultiServiceFactory> & rFactory,
     const sal_Char* pServiceName,
     const Sequence<Any> & rArguments,
-    const Sequence<beans::PropertyValue> & rMediaDesc,
-    sal_Bool bPlainStream )
+    const Sequence<beans::PropertyValue> & rMediaDesc )
 {
     OSL_ENSURE( xStg.is(), "Need storage!" );
     OSL_ENSURE( NULL != pStreamName, "Need stream name!" );
@@ -554,13 +553,6 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
         xSet->setPropertyValue( rtl::OUString("MediaType"), aAny );
 
         OUString aUseCommonPassPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
-        if( bPlainStream )
-        {
-            OUString aCompressPropName( RTL_CONSTASCII_USTRINGPARAM("Compressed") );
-            sal_Bool bFalse = sal_False;
-            aAny.setValue( &bFalse, ::getBooleanCppuType() );
-            xSet->setPropertyValue( aCompressPropName, aAny );
-        }
 
         // even plain stream should be encrypted in encrypted documents
         sal_Bool bTrue = sal_True;
