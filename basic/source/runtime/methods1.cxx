@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <cstddef>
 
 #include <stdlib.h> // getenv
 #include <vcl/svapp.hxx>
@@ -1968,7 +1971,6 @@ RTLFUNC(Weekday)
 
 enum Interval
 {
-    INTERVAL_NONE,
     INTERVAL_YYYY,
     INTERVAL_Q,
     INTERVAL_M,
@@ -1984,44 +1986,33 @@ enum Interval
 struct IntervalInfo
 {
     Interval    meInterval;
-    const OUString mStringCode;
+    char const * mStringCode;
     double      mdValue;
     bool        mbSimple;
-
-    IntervalInfo( Interval eInterval, const OUString sStringCode, double dValue, bool bSimple )
-        : meInterval( eInterval )
-        , mStringCode( sStringCode )
-        , mdValue( dValue )
-        , mbSimple( bSimple )
-    {}
 };
 
-static IntervalInfo pIntervalTable[] =
+IntervalInfo const * getIntervalInfo( const OUString& rStringCode )
 {
-    IntervalInfo( INTERVAL_YYYY,    "yyyy",      0.0,               false ),    // Year
-    IntervalInfo( INTERVAL_Q,       "q",         0.0,               false ),    // Quarter
-    IntervalInfo( INTERVAL_M,       "m",         0.0,               false ),    // Month
-    IntervalInfo( INTERVAL_Y,       "y",         1.0,               true ),     // Day of year
-    IntervalInfo( INTERVAL_D,       "d",         1.0,               true ),     // Day
-    IntervalInfo( INTERVAL_W,       "w",         1.0,               true ),     // Weekday
-    IntervalInfo( INTERVAL_WW,      "ww",        7.0,               true ),     // Week
-    IntervalInfo( INTERVAL_H,       "h",        (1.0 /    24.0),    true ),     // Hour
-    IntervalInfo( INTERVAL_N,       "n",        (1.0 /  1440.0),    true),      // Minute
-    IntervalInfo( INTERVAL_S,       "s",        (1.0 / 86400.0),    true ),     // Second
-    IntervalInfo( INTERVAL_NONE, "", 0.0, false )
-};
-
-IntervalInfo* getIntervalInfo( const OUString& rStringCode )
-{
-    IntervalInfo* pInfo;
-    sal_Int16 i = 0;
-    while( !(pInfo = pIntervalTable + i)->mStringCode.isEmpty() )
+    static IntervalInfo const aIntervalTable[] =
     {
-        if( rStringCode.equalsIgnoreAsciiCase( pInfo->mStringCode ) )
+        { INTERVAL_YYYY, "yyyy", 0.0,           false }, // Year
+        { INTERVAL_Q,    "q",    0.0,           false }, // Quarter
+        { INTERVAL_M,    "m",    0.0,           false }, // Month
+        { INTERVAL_Y,    "y",    1.0,           true  }, // Day of year
+        { INTERVAL_D,    "d",    1.0,           true  }, // Day
+        { INTERVAL_W,    "w",    1.0,           true  }, // Weekday
+        { INTERVAL_WW,   "ww",   7.0,           true  }, // Week
+        { INTERVAL_H,    "h",    1.0 /    24.0, true  }, // Hour
+        { INTERVAL_N,    "n",    1.0 /  1440.0, true  }, // Minute
+        { INTERVAL_S,    "s",    1.0 / 86400.0, true  }  // Second
+    };
+    for( std::size_t i = 0; i != SAL_N_ELEMENTS(aIntervalTable); ++i )
+    {
+        if( rStringCode.equalsIgnoreAsciiCaseAscii(
+                aIntervalTable[i].mStringCode ) )
         {
-            return pInfo;
+            return &aIntervalTable[i];
         }
-        i++;
     }
     return NULL;
 }
@@ -2059,7 +2050,7 @@ RTLFUNC(DateAdd)
     }
 
     OUString aStringCode = rPar.Get(1)->GetOUString();
-    IntervalInfo* pInfo = getIntervalInfo( aStringCode );
+    IntervalInfo const * pInfo = getIntervalInfo( aStringCode );
     if( !pInfo )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -2184,7 +2175,7 @@ RTLFUNC(DateDiff)
     }
 
     OUString aStringCode = rPar.Get(1)->GetOUString();
-    IntervalInfo* pInfo = getIntervalInfo( aStringCode );
+    IntervalInfo const * pInfo = getIntervalInfo( aStringCode );
     if( !pInfo )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -2296,8 +2287,6 @@ RTLFUNC(DateDiff)
             dRet = RoundImpl( dFactor * (dDate2 - dDate1) );
             break;
         }
-        case INTERVAL_NONE:
-            break;
     }
     rPar.Get(0)->PutDouble( dRet );
 }
@@ -2384,7 +2373,7 @@ RTLFUNC(DatePart)
     }
 
     OUString aStringCode = rPar.Get(1)->GetOUString();
-    IntervalInfo* pInfo = getIntervalInfo( aStringCode );
+    IntervalInfo const * pInfo = getIntervalInfo( aStringCode );
     if( !pInfo )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -2485,8 +2474,6 @@ RTLFUNC(DatePart)
             nRet = implGetSecond( dDate );
             break;
         }
-        case INTERVAL_NONE:
-            break;
     }
     rPar.Get(0)->PutLong( nRet );
 }
