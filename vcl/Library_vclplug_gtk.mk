@@ -31,6 +31,12 @@ $(eval $(call gb_Library_add_defs,vclplug_gtk,\
     -DLIBO_VERSION=\"$(UPD)$(LAST_MINOR)\" \
 ))
 
+ifeq ($(ENABLE_DBUS),TRUE)
+$(eval $(call gb_Library_add_defs,vclplug_gtk,\
+	-DENABLE_DBUS \
+))
+endif
+
 $(eval $(call gb_Library_use_sdk_api,vclplug_gtk))
 
 $(eval $(call gb_Library_use_libraries,vclplug_gtk,\
