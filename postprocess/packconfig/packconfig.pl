@@ -149,7 +149,7 @@ sub get_lang_files
     find_lang_files($files_hash_ref, $lang);
 
     if ( !keys %$files_hash_ref ) {
-        print_message("can't find any lang config files in '$files_path'", 3);
+        print_error("can't find any lang config files in '$files_path'", 3);
     }
 
     return wantarray ? @main::file_list : \@main::file_list;
