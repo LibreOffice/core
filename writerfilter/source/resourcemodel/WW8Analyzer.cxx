@@ -200,11 +200,6 @@ void WW8Analyzer::dumpStats(ostream & o) const
 
 }
 
-Stream::Pointer_t createAnalyzer()
-{
-    return Stream::Pointer_t(new WW8Analyzer());
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
