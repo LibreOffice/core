@@ -787,10 +787,6 @@ namespace drawinglayer
             }
             else
             {
-                // remember that we enter a PolygonStrokePrimitive2D decomposition,
-                // used for AA thick line drawing
-                mnPolygonStrokePrimitive2D++;
-
                 mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
 
                 if(mnPolygonStrokePrimitive2D
@@ -808,9 +804,6 @@ namespace drawinglayer
                         mpOutputDevice->DrawPolyLine(aLocalPolyPolygon.getB2DPolygon(a), 0.0);
                     }
                 }
-
-                // leave PolygonStrokePrimitive2D
-                mnPolygonStrokePrimitive2D--;
             }
         }
 
