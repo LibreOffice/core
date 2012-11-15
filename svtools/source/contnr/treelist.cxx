@@ -1465,11 +1465,6 @@ void SvListView::Clear()
     }
 }
 
-SvTreeList* SvListView::GetModel() const
-{
-    return pModel;
-}
-
 void SvListView::SetModel( SvTreeList* pNewModel )
 {
     DBG_CHKTHIS(SvListView,0);
