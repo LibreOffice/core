@@ -2172,14 +2172,6 @@ FontSelectPatternAttributes::FontSelectPatternAttributes( const PhysicalFontFace
     // NOTE: no normalization for width/height/orientation
 }
 
-FontSelectPattern::FontSelectPattern( const PhysicalFontFace& rFontData,
-    const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
-    : FontSelectPatternAttributes(rFontData, rSize, fExactHeight, nOrientation, bVertical)
-    , mpFontData( &rFontData )
-    , mpFontEntry( NULL )
-{
-}
-
 void FontSelectPattern::copyAttributes(const FontSelectPatternAttributes &rAttributes)
 {
     static_cast<FontSelectPatternAttributes&>(*this) = rAttributes;
