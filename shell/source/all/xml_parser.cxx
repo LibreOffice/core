@@ -123,8 +123,6 @@ static void xml_end_element_handler(void* UserData, const XML_Char* name)
 
 static void xml_character_data_handler(void* UserData, const XML_Char* s, int len)
 {
-    static int count = 0;
-
     assert(UserData);
 
     xml_parser* pImpl  = get_parser_instance(UserData);
@@ -136,26 +134,6 @@ static void xml_character_data_handler(void* UserData, const XML_Char* s, int le
         else
             pDocHdl->characters(UTF8ToWString(std::string(reinterpret_cast<const char*>(s), len)));
     }
-#if 0
-    if (count < 5) {
-        char buf[1000];
-        sprintf(buf,
-                "%s: len=%d\n"
-                "s=%.10s\n"
-                "pDocHdl=%p has_only_whitespaces()=%d\n"
-                "string=%S",
-                "xml_character_data_handler",
-                len,
-                s,
-                pDocHdl,
-                has_only_whitespaces(s,len),
-                UTF8ToWString(std::string(reinterpret_cast<const char*>(s), len)).c_str()
-            );
-
-        MessageBoxA(NULL, buf, "xml_character_data_handler", MB_OK);
-        count++;
-    }
-#endif
 }
 
 static void xml_comment_handler(void* UserData, const XML_Char* Data)
