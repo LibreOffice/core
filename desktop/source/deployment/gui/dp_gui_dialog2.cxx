@@ -701,7 +701,7 @@ void DialogHelper::PostUserEvent( const Link& rLink, void* pCaller )
 //                             ExtMgrDialog
 //------------------------------------------------------------------------------
 ExtMgrDialog::ExtMgrDialog(Window *pParent, TheExtensionManager *pManager)
-    : ModelessDialog(pParent, "ExtensionManagerDialog", "desktop/ui/ExtensionManager.ui")
+    : ModelessDialog(pParent, "ExtensionManagerDialog", "desktop/ui/extensionmanager.ui")
     , DialogHelper(pManager->getContext(), (Dialog*) this)
     , m_sAddPackages(getResourceString(RID_STR_ADD_PACKAGES))
     , m_bHasProgress(false)

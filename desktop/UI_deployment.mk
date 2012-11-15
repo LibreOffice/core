@@ -10,7 +10,7 @@
 $(eval $(call gb_UI_UI,desktop))
 
 $(eval $(call gb_UI_add_uifiles,desktop,\
-    desktop/uiconfig/ui/ExtensionManager \
+    desktop/uiconfig/ui/extensionmanager \
 ))
 
 # vim: set noet sw=4 ts=4:
