@@ -7924,8 +7924,6 @@ if test "$with_system_boost" = "yes"; then
        [AC_MSG_ERROR(boost/spirit/include/classic_core.hpp not found. install boost >= 1.36)], [])
     AC_CHECK_HEADER(boost/function.hpp, [],
        [AC_MSG_ERROR(boost/function.hpp not found. install boost)], [])
-    AC_CHECK_HEADER([boost/unordered_map.hpp], [HAVE_BOOST_UNORDERED_MAP=TRUE],
-                   [AC_MSG_WARN([boost/unordered_map.hpp not found])], [])
 
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS -fno-exceptions"
@@ -7955,9 +7953,7 @@ else
     BUILD_TYPE="$BUILD_TYPE BOOST"
     SYSTEM_BOOST=NO
     BOOST_TARBALL=f02578f5218f217a9f20e9c30e119c6a-boost_1_44_0.tar.bz2
-    HAVE_BOOST_UNORDERED_MAP=TRUE
 fi
-AC_SUBST([HAVE_BOOST_UNORDERED_MAP])
 AC_SUBST([MINGW_BOOST_DATE_TIME_DLL])
 AC_SUBST(SYSTEM_BOOST)
 AC_SUBST(BOOST_TARBALL)
