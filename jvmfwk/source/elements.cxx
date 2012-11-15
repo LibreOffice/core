@@ -223,7 +223,9 @@ void NodeJava::load()
         //we do not support yet to write into the shared installation
 
         //check if shared settings exist at all.
-        jfw::FileStatus s = checkFileURL(BootParams::getSharedData());
+        OUString sURL(BootParams::getSharedData());
+        jfw::FileStatus s = sURL.isEmpty()
+            ? FILE_DOES_NOT_EXIST : checkFileURL(sURL);
         if (s == FILE_INVALID)
             throw FrameworkException(
                 JFW_E_ERROR,
@@ -234,7 +236,11 @@ void NodeJava::load()
     }
     else if (USER == m_layer)
     {
-        prepareSettingsDocument();
+        if (!prepareSettingsDocument())
+        {
+            SAL_INFO("jvmfwk", "no path to load user settings document from");
+            return;
+        }
     }
     else
     {
@@ -383,12 +389,15 @@ void NodeJava::load()
     return ret;
 }
 
-void NodeJava::prepareSettingsDocument() const
+bool NodeJava::prepareSettingsDocument() const
 {
     rtl::OString sExcMsg(
         "[Java framework] Error in function prepareSettingsDocument"
         " (elements.cxx).");
-    createSettingsDocument();
+    if (!createSettingsDocument())
+    {
+        return false;
+    }
     rtl::OString sSettings = getSettingsPath();
     CXmlDocPtr doc(xmlParseFile(sSettings.getStr()));
     if (!doc)
@@ -402,6 +411,7 @@ void NodeJava::prepareSettingsDocument() const
                 sSettings.getStr(), doc,"UTF-8", 1) == -1)
             throw FrameworkException(JFW_E_ERROR, sExcMsg);
     }
+    return true;
 }
 
 void NodeJava::write() const
@@ -412,7 +422,11 @@ void NodeJava::write() const
     CXPathContextPtr contextUser;
     CXPathObjectPtr pathObj;
 
-    prepareSettingsDocument();
+    if (!prepareSettingsDocument())
+    {
+        SAL_INFO("jvmfwk", "no path to write settings document to");
+        return;
+    }
 
     //Read the user elements
     rtl::OString sSettingsPath = getSettingsPath();
@@ -689,11 +703,10 @@ const boost::optional<CNodeJavaInfo> & NodeJava::getJavaInfo() const
     return m_javaInfo;
 }
 
-jfw::FileStatus NodeJava::checkSettingsFileStatus() const
+jfw::FileStatus NodeJava::checkSettingsFileStatus(OUString const & sURL) const
 {
     jfw::FileStatus ret = FILE_DOES_NOT_EXIST;
 
-    const rtl::OUString sURL = getSettingsURL();
     //check the file time
     ::osl::DirectoryItem item;
     File::RC rc = ::osl::DirectoryItem::get(sURL, item);
@@ -725,15 +738,19 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
     return ret;
 }
 
-void NodeJava::createSettingsDocument() const
+bool NodeJava::createSettingsDocument() const
 {
     const rtl::OUString sURL = getSettingsURL();
+    if (sURL.isEmpty())
+    {
+        return false;
+    }
     //make sure there is a user directory
     rtl::OString sExcMsg("[Java framework] Error in function createSettingsDocument "
                          "(elements.cxx).");
     // check if javasettings.xml already exist
-    if (FILE_OK == checkSettingsFileStatus())
-        return;
+    if (FILE_OK == checkSettingsFileStatus(sURL))
+        return true;
 
     //make sure that the directories are created in case they do not exist
     FileBase::RC rcFile = Directory::createPath(getDirFromFile(sURL));
@@ -773,6 +790,7 @@ void NodeJava::createSettingsDocument() const
     const rtl::OString path = getSettingsPath();
     if (xmlSaveFormatFileEnc(path.getStr(), doc,"UTF-8", 1) == -1)
          throw FrameworkException(JFW_E_ERROR, sExcMsg);
+    return true;
 }
 
 //=====================================================================

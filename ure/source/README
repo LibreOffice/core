@@ -245,16 +245,12 @@ locations for types.rdb and services.rdb files:
 Linux x86, Solaris x86, and Solaris SPARC:
 
 - <URE installation>/share/misc/ types.rdb and services.rdb, respectively
-- /etc/opt/ure/ types.rdb and services.rdb, respectively
-- ~/.ure/ types.rdb and services.rdb, respectively
 - any URLs listed in the public deployment variables URE_MORE_TYPES and
   URE_MORE_SERVICES, respectively
 
 Windows:
 
 - <URE installation>\misc\ types.rdb and services.rdb, respectively
-- Documents and Settings\<User Name>\Application Data\URE\ types.rdb and
-  services.rdb, respectively
 - any URLs listed in the public deployment variables URE_MORE_TYPES and
   URE_MORE_SERVICES, respectively
 
@@ -297,36 +293,14 @@ relevant Java settings file for information on a suitable JDK/JRE version.
 NOTE: On any platform, you can delete the javasettings_${_OS}_${_ARCH}.xml file
 if the file contains problematic stale data.
 
-By default, the URE searches for a Java settings file in the following
-locations:
-
-Linux x86, Solaris x86, and Solaris SPARC:
-
-- /etc/opt/ure/javasettings_${_OS}_${_ARCH}.xml
-- ~/.ure/javasettings_${_OS}_${_ARCH}.xml
-
-NOTE: If these files do not contain information about a JDK/JRE, the URE
-searches for a suitable JDK/JRE installation and stores the relevant information
-in the ~/.ure/javasettings_${_OS}_${_ARCH}.xml file.  If you want all users to
-access the same JDK/JRE, log on as root and copy an existing
-~/.ure/javasettings_${_OS}_${_ARCH}.xml to
-/etc/opt/ure/javasettings_${_OS}_${_ARCH}.xml.
-
-Windows:
-
-- Documents and Settings\<User Name>\Application
-  Data\URE\javasettings_${_OS}_${_ARCH}.xml
-
-NOTE: If this file does not contain information about a JDK/JRE, the URE
-searches for a suitable JDK/JRE installation and stores the relevant information
-in the Documents and Settings\<User Name>\Application
-Data\URE\javasettings_${_OS}_${_ARCH}.xml file.  The URE on Windows does not
-by default support a system-wide deployment of the Java settings file.  That is,
-you cannot store the file in a Documents and Settings\All Users\Application
-Data\URE directory.
-
-You can override these paths by setting the URE_OVERRIDE_JAVA_JFW_SHARED_DATA
-and URE_OVERRIDE_JAVA_JFW_USER_DATA deployment variables.  You can also use the
+By default, the URE does not search for a Java settings file, but instead
+searches for a suitable JDK/JRE installation whenever necessary.  You can
+override this by setting the URE_OVERRIDE_JAVA_JFW_SHARED_DATA and
+URE_OVERRIDE_JAVA_JFW_USER_DATA deployment variables.  If
+URE_OVERRIDE_JAVA_JFW_USER_DATA is set, the URE will update the relevant
+information in
+${URE_OVERRIDE_JAVA_JFW_USER_DATA}/javasettings_${_OS}_${_ARCH}.xml when it
+searches for a suitable JDK/JRE installation.  You can also use the
 UNO_JAVA_JFW_JREHOME deployment variable to specify the location of a JDK/JRE
 installation.  For more information on this variable, see
 http://udk.openoffice.org/common/man/spec/javavendorextension.sxw.

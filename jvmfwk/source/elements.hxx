@@ -127,11 +127,11 @@ private:
         @return
         JFW_E_CONFIG_READWRITE
     */
-    void prepareSettingsDocument() const;
+    bool prepareSettingsDocument() const;
 
     /** helper function for prepareSettingsDocument.
     */
-    void createSettingsDocument() const;
+    bool createSettingsDocument() const;
 
     /** returns the system path to the data file which is to be used. The value
         depends on the the member m_layer and the bootstrap parameters
@@ -145,7 +145,7 @@ private:
 
     /** Verifies if the respective settings file exist.
      */
-    jfw::FileStatus checkSettingsFileStatus() const;
+    jfw::FileStatus checkSettingsFileStatus(OUString const & sURL) const;
 
     /** Determines the layer for which the instance the loads and writes the
         data.
