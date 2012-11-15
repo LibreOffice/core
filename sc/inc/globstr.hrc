@@ -612,9 +612,10 @@
 #define STR_COND_ENDS_WITH          487
 #define STR_COND_CONTAINS           488
 #define STR_COND_NOT_CONTAINS       489
+#define STR_COND_DATE               490
 
-#define STR_ERR_CONDFORMAT_PROTECTED 490
+#define STR_ERR_CONDFORMAT_PROTECTED 491
 
-#define STR_COUNT                   491
+#define STR_COUNT                   492
 
 #endif

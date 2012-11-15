@@ -67,4 +67,6 @@
 #define LB_TYPE_COL_SCALE_MIN 42
 #define LB_TYPE_COL_SCALE_MIDDLE 43
 #define LB_TYPE_COL_SCALE_MAX 44
+
+#define LB_DATE_TYPE 45
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

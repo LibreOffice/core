@@ -254,7 +254,6 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
 
 void ScConditionFrmtEntry::Init()
 {
-    maLbStyle.SetSeparatorPos(0);
     maEdVal1.SetGetFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeGetFocusHdl ) );
     maEdVal2.SetGetFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeGetFocusHdl ) );
     maEdVal1.SetLoseFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeLoseFocusHdl ) );
@@ -266,6 +265,7 @@ void ScConditionFrmtEntry::Init()
     maEdVal1.SetModifyHdl( LINK( this, ScCondFrmtEntry, EdModifyHdl ) );
     maEdVal2.SetModifyHdl( LINK( this, ScCondFrmtEntry, EdModifyHdl ) );
 
+    maLbStyle.SetSeparatorPos(0);
     SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
     for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
     {
@@ -402,9 +402,11 @@ void ScConditionFrmtEntry::SetInactive()
     Deselect();
 }
 
-IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl)
+namespace {
+
+void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPreview )
 {
-    if(maLbStyle.GetSelectEntryPos() == 0)
+    if(rLbStyle.GetSelectEntryPos() == 0)
     {
         // call new style dialog
         SfxUInt16Item aFamilyItem( SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA );
@@ -430,26 +432,32 @@ IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl)
 
         // Find the new style and add it into the style list boxes
         rtl::OUString aNewStyle;
-        SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
+        SfxStyleSheetIterator aStyleIter( pDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
         for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
         {
             rtl::OUString aName = pStyle->GetName();
-            if ( maLbStyle.GetEntryPos(aName) == LISTBOX_ENTRY_NOTFOUND )    // all lists contain the same entries
+            if ( rLbStyle.GetEntryPos(aName) == LISTBOX_ENTRY_NOTFOUND )    // all lists contain the same entries
             {
-                maLbStyle.InsertEntry(aName);
-                maLbStyle.SelectEntry(aName);
+                rLbStyle.InsertEntry(aName);
+                rLbStyle.SelectEntry(aName);
             }
         }
     }
 
-    rtl::OUString aStyleName = maLbStyle.GetSelectEntry();
-    SfxStyleSheetBase* pStyleSheet = mpDoc->GetStyleSheetPool()->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
+    rtl::OUString aStyleName = rLbStyle.GetSelectEntry();
+    SfxStyleSheetBase* pStyleSheet = pDoc->GetStyleSheetPool()->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
     if(pStyleSheet)
     {
         const SfxItemSet& rSet = pStyleSheet->GetItemSet();
-        maWdPreview.Init( rSet );
+        rWdPreview.Init( rSet );
     }
+}
 
+}
+
+IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl)
+{
+    StyleSelect( maLbStyle, mpDoc, maWdPreview );
     return 0;
 }
 
@@ -495,51 +503,7 @@ void ScFormulaFrmtEntry::Init()
 
 IMPL_LINK_NOARG(ScFormulaFrmtEntry, StyleSelectHdl)
 {
-    if(maLbStyle.GetSelectEntryPos() == 0)
-    {
-        // call new style dialog
-        SfxUInt16Item aFamilyItem( SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA );
-        SfxStringItem aRefItem( SID_STYLE_REFERENCE, ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
-
-        // unlock the dispatcher so SID_STYLE_NEW can be executed
-        // (SetDispatcherLock would affect all Calc documents)
-        ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-        SfxDispatcher* pDisp = pViewShell->GetDispatcher();
-        sal_Bool bLocked = pDisp->IsLocked();
-        if (bLocked)
-            pDisp->Lock(false);
-
-        // Execute the "new style" slot, complete with undo and all necessary updates.
-        // The return value (SfxUInt16Item) is ignored, look for new styles instead.
-        pDisp->Execute( SID_STYLE_NEW, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD | SFX_CALLMODE_MODAL,
-                &aFamilyItem,
-                &aRefItem,
-                0L );
-
-        if (bLocked)
-            pDisp->Lock(sal_True);
-
-        // Find the new style and add it into the style list boxes
-        rtl::OUString aNewStyle;
-        SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
-        for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
-        {
-            rtl::OUString aName = pStyle->GetName();
-            if ( maLbStyle.GetEntryPos(aName) == LISTBOX_ENTRY_NOTFOUND )    // all lists contain the same entries
-            {
-                maLbStyle.InsertEntry(aName);
-                maLbStyle.SelectEntry(aName);
-            }
-        }
-    }
-
-    rtl::OUString aStyleName = maLbStyle.GetSelectEntry();
-    SfxStyleSheetBase* pStyleSheet = mpDoc->GetStyleSheetPool()->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
-    if(pStyleSheet)
-    {
-        const SfxItemSet& rSet = pStyleSheet->GetItemSet();
-        maWdPreview.Init( rSet );
-    }
+    StyleSelect( maLbStyle, mpDoc, maWdPreview );
 
     return 0;
 }
@@ -1166,6 +1130,77 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl )
         SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax);
         DataBarTypeSelectHdl(NULL);
     }
+    return 0;
+}
+
+ScDateFrmtEntry::ScDateFrmtEntry( Window* pParent, ScDocument* pDoc, const ScCondDateFormatEntry* pFormat ):
+    ScCondFrmtEntry( pParent, pDoc, ScAddress() ),
+    maLbDateEntry( this, ScResId( LB_DATE_TYPE ) ),
+    maFtStyle( this, ScResId( FT_STYLE ) ),
+    maLbStyle( this, ScResId( LB_STYLE ) ),
+    maWdPreview( this, ScResId( WD_PREVIEW ) )
+{
+    Init();
+    FreeResource();
+
+    if(pFormat)
+    {
+        sal_Int32 nPos = static_cast<sal_Int32>(pFormat->GetDateType());
+        maLbDateEntry.SelectEntryPos(nPos);
+    }
+}
+
+void ScDateFrmtEntry::Init()
+{
+    maLbDateEntry.SelectEntryPos(0);
+    maLbType.SelectEntryPos(3);
+
+    maLbStyle.SetSeparatorPos(0);
+    SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
+    for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
+    {
+        rtl::OUString aName = pStyle->GetName();
+        maLbStyle.InsertEntry( aName );
+    }
+    maLbStyle.SetSelectHdl( LINK( this, ScDateFrmtEntry, StyleSelectHdl ) );
+}
+
+void ScDateFrmtEntry::SetActive()
+{
+    maLbDateEntry.Show();
+    maFtStyle.Show();
+    maWdPreview.Show();
+
+    Select();
+}
+
+void ScDateFrmtEntry::SetInactive()
+{
+    maLbDateEntry.Show();
+    maFtStyle.Show();
+    maWdPreview.Show();
+
+    Deselect();
+}
+
+ScFormatEntry* ScDateFrmtEntry::GetEntry() const
+{
+    ScCondDateFormatEntry* pNewEntry = new ScCondDateFormatEntry(mpDoc);
+    condformat::ScCondFormatDateType eType = static_cast<condformat::ScCondFormatDateType>(maLbDateEntry.GetSelectEntryPos());
+    pNewEntry->SetDateType(eType);
+    pNewEntry->SetStyleName(maLbStyle.GetSelectEntry());
+    return pNewEntry;
+}
+
+rtl::OUString ScDateFrmtEntry::GetExpressionString()
+{
+    return ScCondFormatHelper::GetExpression(DATE, 0);
+}
+
+IMPL_LINK_NOARG( ScDateFrmtEntry, StyleSelectHdl )
+{
+    StyleSelect( maLbStyle, mpDoc, maWdPreview );
+
     return 0;
 }
 

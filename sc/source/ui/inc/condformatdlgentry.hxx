@@ -21,7 +21,8 @@ enum ScCondFrmtEntryType
     FORMULA,
     COLORSCALE2,
     COLORSCALE3,
-    DATABAR
+    DATABAR,
+    DATE
 };
 
 }
@@ -74,7 +75,6 @@ public:
 
 class ScConditionFrmtEntry : public ScCondFrmtEntry
 {
-
     //cond format ui elements
     ListBox maLbCondType;
     formula::RefEdit maEdVal1;
@@ -214,6 +214,29 @@ public:
     virtual void SetInactive();
 
     virtual condformat::entry::ScCondFrmtEntryType GetType() { return condformat::entry::DATABAR; }
+};
+
+class ScDateFrmtEntry : public ScCondFrmtEntry
+{
+public:
+    ScDateFrmtEntry( Window* pParent, ScDocument* pDoc, const ScCondDateFormatEntry* pFormat = NULL );
+    virtual ScFormatEntry* GetEntry() const;
+    virtual void SetActive();
+    virtual void SetInactive();
+    virtual condformat::entry::ScCondFrmtEntryType GetType() { return condformat::entry::DATE; }
+
+protected:
+    virtual rtl::OUString GetExpressionString();
+
+private:
+    void Init();
+
+    DECL_LINK( StyleSelectHdl, void* );
+
+    ListBox maLbDateEntry;
+    FixedText maFtStyle;
+    ListBox maLbStyle;
+    SvxFontPrevWindow maWdPreview;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

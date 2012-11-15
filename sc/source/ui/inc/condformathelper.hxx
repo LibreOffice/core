@@ -19,7 +19,8 @@ enum ScCondFormatEntryType
     DATABAR,
     FORMULA,
     ICONSET,
-    COLLAPSED
+    DATE,
+    COLLAPSE
 };
 
 class ScCondFormatHelper

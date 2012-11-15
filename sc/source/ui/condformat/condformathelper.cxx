@@ -27,6 +27,8 @@ rtl::OUString getTextForType(ScCondFormatEntryType eType)
             return ScGlobal::GetRscString(STR_COND_FORMULA);
         case ICONSET:
             return ScGlobal::GetRscString(STR_COND_ICONSET);
+        case DATE:
+            return ScGlobal::GetRscString(STR_COND_DATE);
         default:
             break;
     }
@@ -135,6 +137,9 @@ rtl::OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rForm
                 break;
             case condformat::ICONSET:
                 aBuffer.append(getTextForType(ICONSET));
+                break;
+            case condformat::DATE:
+                aBuffer.append(getTextForType(DATE));
                 break;
         }
     }

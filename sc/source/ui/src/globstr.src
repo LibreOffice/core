@@ -1911,6 +1911,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Top Percent";
     };
+    String STR_COND_DATE
+    {
+        Text [ en-US ] = "Date is";
+    };
     String STR_COND_BOTTOM_PERCENT
     {
         Text [ en-US ] = "Bottom Percent";

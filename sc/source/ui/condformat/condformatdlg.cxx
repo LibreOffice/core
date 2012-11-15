@@ -91,6 +91,9 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
                     break;
                 case condformat::ICONSET:
                     break;
+                case condformat::DATE:
+                    maEntries.push_back(new ScDateFrmtEntry( this, mpDoc, static_cast<const ScCondDateFormatEntry*>( pEntry ) ) );
+                    break;
             }
         }
     }
@@ -249,6 +252,7 @@ IMPL_LINK(ScCondFormatList, TypeListHdl, ListBox*, pBox)
             {
                 case condformat::entry::FORMULA:
                 case condformat::entry::CONDITION:
+                case condformat::entry::DATE:
                     break;
                 case condformat::entry::COLORSCALE2:
                 case condformat::entry::COLORSCALE3:
@@ -272,6 +276,14 @@ IMPL_LINK(ScCondFormatList, TypeListHdl, ListBox*, pBox)
                 return 0;
 
             maEntries.replace( itr, new ScFormulaFrmtEntry(this, mpDoc, maPos));
+            static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
+            itr->SetActive();
+            break;
+        case 3:
+            if(itr->GetType() == condformat::entry::DATE)
+                return 0;
+
+            maEntries.replace( itr, new ScDateFrmtEntry( this, mpDoc ));
             static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
             itr->SetActive();
             break;

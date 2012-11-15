@@ -121,6 +121,7 @@ Control RID_COND_ENTRY
             "All Cells";
             "Cell value is";
             "Formula is";
+            "Date is";
         };
     };
     ListBox LB_CELLIS_TYPE
@@ -308,6 +309,30 @@ Control RID_COND_ENTRY
         Pos = MAP_APPFONT( 120, 62 );
         Size = MAP_APPFONT( 60, 14 );
         Text [ en-US ] = "More options ...";
+    };
+    ListBox LB_DATE_TYPE
+    {
+        Pos = MAP_APPFONT( 100, 15 );
+        Size = MAP_APPFONT( 100, 60 );
+        Border = TRUE;
+        DropDown = TRUE;
+        DDExtraWidth = TRUE;
+        StringList [ en-US ] =
+        {
+            "Today";
+            "Yesterday";
+            "Tomorrow";
+            "Last 7 days";
+            "This week";
+            "Last week";
+            "Next week";
+            "This month";
+            "Last month";
+            "Next month";
+            "This year";
+            "Last year";
+            "Next year";
+        };
     };
 };
 
