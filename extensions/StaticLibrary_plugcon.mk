@@ -33,7 +33,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,plugcon))
 
 $(eval $(call gb_StaticLibrary_use_package,plugcon,np_sdk_inc))
 
-$(eval $(call gb_StaticLibrary_use_external,plugcon,mozilla_headers))
+$(eval $(call gb_StaticLibrary_use_external,plugcon,npapi_headers))
 
 $(eval $(call gb_StaticLibrary_set_include,plugcon,\
 	$$(INCLUDE) \

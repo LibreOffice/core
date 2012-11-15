@@ -51,20 +51,20 @@ endef
 
 endif
 
-ifeq ($(SYSTEM_MOZILLA_HEADERS),YES)
+ifeq ($(SYSTEM_NPAPI_HEADERS),YES)
 
-define gb_LinkTarget__use_mozilla_headers
+define gb_LinkTarget__use_npapi_headers
 $(call gb_LinkTarget_set_include,$(1),\
-	$(MOZILLA_HEADERS_CFLAGS) \
+	$(NPAPI_HEADERS_CFLAGS) \
 	$$(INCLUDE) \
 )
 
 endef
 
-else #!SYSTEM_MOZILLA_HEADERS
+else #!SYSTEM_NPAPI_HEADERS
 
-define gb_LinkTarget__use_mozilla_headers
-$(call gb_LinkTarget_use_package,$(1),mozilla_inc)
+define gb_LinkTarget__use_npapi_headers
+$(call gb_LinkTarget_use_package,$(1),npapi)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(OUTDIR)/inc/external/npsdk \
 	$$(INCLUDE) \
@@ -72,7 +72,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 endef
 
-endif #SYSTEM_MOZILLA_HEADERS
+endif #SYSTEM_NPAPI_HEADERS
 
 ifeq ($(SYSTEM_ODBC_HEADERS),YES)
 

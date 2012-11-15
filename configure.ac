@@ -1676,11 +1676,11 @@ AC_ARG_WITH(system-mozilla,
     WITH_SYSTEM_MOZILLA=$withval ,
 WITH_SYSTEM_MOZILLA=no)
 
-AC_ARG_WITH(system-mozilla-headers,
-    AS_HELP_STRING([--with-system-mozilla-headers],
-        [Use mozilla headers provided by system instead of bundled ones. Used in
-         nsplugin]),,
-    [with_system_mozilla_headers="$with_system_headers"]
+AC_ARG_WITH(system-npapi-headers,
+    AS_HELP_STRING([--with-system-npapi-headers],
+        [Use NPAPI headers provided by system instead of bundled ones. Used in
+         extensions/source/nsplugin and extensions/source/plugin]),,
+    [with_system_npapi_headers="$with_system_headers"]
 )
 
 AC_ARG_WITH(system-libpng,
@@ -8336,19 +8336,19 @@ dnl ===================================================================
 dnl Check for system mozilla headers
 dnl ===================================================================
 HAVE_NON_CONST_NPP_GETMIMEDESCRIPTION=
-AC_MSG_CHECKING([which Mozilla headers to use])
+AC_MSG_CHECKING([which NPAPI headers to use])
 
-if test "$with_system_mozilla_headers" = "yes"; then
+if test "$with_system_npapi_headers" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_MOZILLA_HEADERS=YES
+    SYSTEM_NPAPI_HEADERS=YES
     # First try npapi-sdk:
-    PKG_CHECK_MODULES(MOZILLA_HEADERS, npapi-sdk, [LOCATED=yes], [LOCATED=no])
+    PKG_CHECK_MODULES(NPAPI_HEADERS, npapi-sdk, [LOCATED=yes], [LOCATED=no])
     # Then go with libxul:
     if test "x$LOCATED" != "xyes"; then
-        PKG_CHECK_MODULES(MOZILLA_HEADERS, libxul, [LOCATED=yes], [LOCATED=no])
+        PKG_CHECK_MODULES(NPAPI_HEADERS, libxul, [LOCATED=yes], [LOCATED=no])
     fi
     if test "x$LOCATED" != "xyes"; then
-        PKG_CHECK_MODULES(MOZILLA_HEADERS, mozilla-plugin, [LOCATED=yes], [LOCATED=no])
+        PKG_CHECK_MODULES(NPAPI_HEADERS, mozilla-plugin, [LOCATED=yes], [LOCATED=no])
     fi
     # if still not found bail out
     if test "x$LOCATED" != "xyes"; then
@@ -8357,7 +8357,7 @@ if test "$with_system_mozilla_headers" = "yes"; then
 
     AC_LANG_PUSH([C])
     save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS $MOZILLA_HEADERS_CFLAGS"
+    CFLAGS="$CFLAGS $NPAPI_HEADERS_CFLAGS"
     AC_MSG_CHECKING([for NPP_GetMIMEDescription return type])
     AC_COMPILE_IFELSE(
         [AC_LANG_SOURCE([[
@@ -8373,15 +8373,13 @@ if test "$with_system_mozilla_headers" = "yes"; then
     CFLAGS=$save_CFLAGS
     AC_LANG_POP([C])
 else
-    if test "$enable_mozilla" = "no"; then
-        AC_MSG_RESULT([none])
-    else
-        AC_MSG_RESULT([internal])
-    fi
-    SYSTEM_MOZILLA_HEADERS=NO
+    AC_MSG_RESULT([internal])
+        dnl ...but will not be built/used unless ENABLE_NSPLUGIN or WITH_MOZILLA
+        dnl is YES
+    SYSTEM_NPAPI_HEADERS=NO
 fi
-AC_SUBST(MOZILLA_HEADERS_CFLAGS)
-AC_SUBST(SYSTEM_MOZILLA_HEADERS)
+AC_SUBST(NPAPI_HEADERS_CFLAGS)
+AC_SUBST(SYSTEM_NPAPI_HEADERS)
 AC_SUBST(HAVE_NON_CONST_NPP_GETMIMEDESCRIPTION)
 
 dnl ===================================================================

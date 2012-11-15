@@ -33,9 +33,9 @@ $(eval $(call gb_Module_add_targets,np_sdk,\
 	Package_inc \
 ))
 
-ifeq ($(SYSTEM_MOZILLA_HEADERS),NO)
+ifeq ($(SYSTEM_NPAPI_HEADERS),NO)
 $(eval $(call gb_Module_add_targets,np_sdk,\
-	Package_mozilla_inc \
+	Package_npapi \
 ))
 endif
 

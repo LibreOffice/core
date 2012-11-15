@@ -25,11 +25,11 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,mozilla_inc,$(SRCDIR)/np_sdk))
+$(eval $(call gb_Package_Package,npapi,$(SRCDIR)/np_sdk))
 
-$(eval $(call gb_Package_add_file,mozilla_inc,inc/external/npsdk/npapi.h,inc/npapi.h))
-$(eval $(call gb_Package_add_file,mozilla_inc,inc/external/npsdk/npfunctions.h,inc/npfunctions.h))
-$(eval $(call gb_Package_add_file,mozilla_inc,inc/external/npsdk/npruntime.h,inc/npruntime.h))
-$(eval $(call gb_Package_add_file,mozilla_inc,inc/external/npsdk/nptypes.h,inc/nptypes.h))
+$(eval $(call gb_Package_add_file,npapi,inc/external/npsdk/npapi.h,inc/npapi.h))
+$(eval $(call gb_Package_add_file,npapi,inc/external/npsdk/npfunctions.h,inc/npfunctions.h))
+$(eval $(call gb_Package_add_file,npapi,inc/external/npsdk/npruntime.h,inc/npruntime.h))
+$(eval $(call gb_Package_add_file,npapi,inc/external/npsdk/nptypes.h,inc/nptypes.h))
 
 # vim: set noet sw=4 ts=4:

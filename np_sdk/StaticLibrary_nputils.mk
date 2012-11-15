@@ -33,7 +33,7 @@ $(eval $(call gb_StaticLibrary_use_packages,nputils,\
 ))
 
 $(eval $(call gb_StaticLibrary_use_externals,nputils,\
-	mozilla_headers \
+	npapi_headers \
 ))
 
 ifeq ($(GUIBASE),aqua)
