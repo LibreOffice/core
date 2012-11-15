@@ -1813,7 +1813,7 @@ void    SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
             {
                 SvLBoxTab* pTab;
                 SvLBoxItem* pItem = GetItem( pEntry, aPos.X(), &pTab );
-                if( pItem && SV_ITEM_ID_LBOXSTRING == pItem->IsA())
+                if (pItem && SV_ITEM_ID_LBOXSTRING == pItem->GetType())
                 {
                     aPos = GetEntryPosition( pEntry );
 

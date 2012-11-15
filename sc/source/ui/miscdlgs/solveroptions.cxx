@@ -398,8 +398,8 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl)
     if (pEntry)
     {
         SvLBoxItem* pItem = pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON);
-        if ( pItem && pItem->IsA() == SV_ITEM_ID_LBOXBUTTON )
-            bCheckbox = sal_True;
+        if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
+            bCheckbox = true;
     }
 
     maBtnEdit.Enable( !bCheckbox );

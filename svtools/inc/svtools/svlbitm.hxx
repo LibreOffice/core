@@ -122,7 +122,7 @@ public:
                     SvLBoxString(SvTreeListEntry*, sal_uInt16 nFlags, const rtl::OUString& rStr);
                     SvLBoxString();
     virtual         ~SvLBoxString();
-    virtual sal_uInt16  IsA();
+    virtual sal_uInt16 GetType() const;
     virtual void    InitViewData(SvTreeListBox*, SvTreeListEntry*, SvViewDataItem*);
     rtl::OUString   GetText() const { return maText; }
     void            SetText( const rtl::OUString& rText ) { maText = rText; }
@@ -137,7 +137,7 @@ class SvLBoxBmp : public SvLBoxItem
 public:
                     SvLBoxBmp();
     virtual         ~SvLBoxBmp();
-    virtual sal_uInt16  IsA();
+    virtual sal_uInt16 GetType() const;
     virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
     virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvTreeListEntry* );
     virtual SvLBoxItem* Create() const;
@@ -171,7 +171,7 @@ public:
                     SvLBoxButton();
     virtual         ~SvLBoxButton();
     virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
-    virtual sal_uInt16  IsA();
+    virtual sal_uInt16 GetType() const;
     virtual sal_Bool    ClickHdl(SvTreeListBox* pView, SvTreeListEntry* );
     virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvTreeListEntry* );
     virtual SvLBoxItem* Create() const;
@@ -229,7 +229,7 @@ public:
                                     sal_uInt16 nEntryFlagsBmp1);
                     SvLBoxContextBmp();
     virtual         ~SvLBoxContextBmp();
-    virtual sal_uInt16  IsA();
+    virtual sal_uInt16 GetType() const;
     virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
     virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvTreeListEntry* );
     virtual SvLBoxItem* Create() const;

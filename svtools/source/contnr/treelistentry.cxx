@@ -189,7 +189,7 @@ SvLBoxItem* SvTreeListEntry::GetFirstItem( sal_uInt16 nId ) const
     while( nCur < nCount )
     {
         pItem = GetItem( nCur );
-        if( pItem->IsA() == nId )
+        if (pItem->GetType() == nId)
             return pItem;
         nCur++;
     }

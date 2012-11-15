@@ -451,8 +451,8 @@ StringCompare SvxSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry*
 
     if(pLeftItem != NULL && pRightItem != NULL)
     {
-        sal_uInt16 nLeftKind=pLeftItem->IsA();
-        sal_uInt16 nRightKind=pRightItem->IsA();
+        sal_uInt16 nLeftKind = pLeftItem->GetType();
+        sal_uInt16 nRightKind = pRightItem->GetType();
 
         if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
             nLeftKind == SV_ITEM_ID_LBOXSTRING )

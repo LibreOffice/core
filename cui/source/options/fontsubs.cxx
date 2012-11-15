@@ -505,7 +505,7 @@ void SvxFontSubstCheckListBox::SetCheckButtonState( SvTreeListEntry* pEntry, sal
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
 
     DBG_ASSERT(pItem,"SetCheckButton:Item not found");
-    if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
+    if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
         switch( eState )
         {
@@ -531,7 +531,7 @@ SvButtonState SvxFontSubstCheckListBox::GetCheckButtonState( SvTreeListEntry* pE
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
     DBG_ASSERT(pItem,"GetChButnState:Item not found");
 
-    if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
+    if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
         sal_uInt16 nButtonFlags = pItem->GetButtonFlags();
         eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );

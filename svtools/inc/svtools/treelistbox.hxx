@@ -173,7 +173,7 @@ public:
                         SvLBoxItem( SvTreeListEntry*, sal_uInt16 nFlags );
                         SvLBoxItem();
     virtual             ~SvLBoxItem();
-    virtual sal_uInt16      IsA() = 0;
+    virtual sal_uInt16 GetType() const = 0;
     const Size&         GetSize( SvTreeListBox* pView, SvTreeListEntry* pEntry );
     const Size&         GetSize( SvViewDataEntry* pData, sal_uInt16 nItemPos )
                         {
@@ -211,7 +211,7 @@ public:
 // The DropTarget is 0 in that case
 #define SV_DRAGDROP_ENABLE_TOP      (DragDropMode)0x0020
 
-#define SVLISTBOX_ID_LBOX 0   // for SvTreeListBox::IsA()
+#define SVLISTBOX_ID_LBOX 0   // for SvTreeListBox::GetType()
 
 #define SVLBOX_IN_EDT           0x0001
 #define SVLBOX_EDT_ENABLED      0x0002

@@ -424,7 +424,7 @@ void _SfxMacroTabPage::FillEvents()
         if( pE )
         {
             SvLBoxString*   pLItem = ( SvLBoxString* ) pE->GetItem( LB_MACROS_ITEMPOS );
-            DBG_ASSERT( pLItem && SV_ITEM_ID_LBOXSTRING == pLItem->IsA(), "_SfxMacroTabPage::FillEvents(): no LBoxString" );
+            DBG_ASSERT( pLItem && SV_ITEM_ID_LBOXSTRING == pLItem->GetType(), "_SfxMacroTabPage::FillEvents(): no LBoxString" );
 
             String          sOld( pLItem->GetText() );
             String          sNew;

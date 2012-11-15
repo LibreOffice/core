@@ -236,7 +236,7 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
             for (sal_uInt16 i=0;i<nCount;++i)
             {
                 SvLBoxItem* pItem = pEntryLoop->GetItem(i);
-                if ( !pItem || ( pItem->IsA() != SV_ITEM_ID_LBOXCONTEXTBMP ) )
+                if (!pItem || pItem->GetType() != SV_ITEM_ID_LBOXCONTEXTBMP)
                     continue;
 
                 SvLBoxContextBmp* pContextBitmapItem = static_cast< SvLBoxContextBmp* >( pItem );

@@ -1885,7 +1885,7 @@ bool SvImpLBox::ButtonDownCheckCtrl(
     const MouseEvent& rMEvt, SvTreeListEntry* pEntry, long nY)
 {
     SvLBoxItem* pItem = pView->GetItem(pEntry,rMEvt.GetPosPixel().X(),&pActiveTab);
-    if( pItem && (pItem->IsA()==SV_ITEM_ID_LBOXBUTTON))
+    if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
         pActiveButton = (SvLBoxButton*)pItem;
         pActiveEntry = pEntry;
@@ -3160,7 +3160,7 @@ bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
             // recalculate text rectangle
             SvLBoxTab* pTab;
             SvLBoxString* pItem = (SvLBoxString*)(pView->GetItem( pEntry, aPos.X(), &pTab ));
-            if( !pItem || pItem->IsA() != SV_ITEM_ID_LBOXSTRING )
+            if (!pItem || pItem->GetType() != SV_ITEM_ID_LBOXSTRING)
                 return false;
 
             aPos = GetEntryPosition( pEntry );

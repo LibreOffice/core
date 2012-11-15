@@ -268,7 +268,7 @@ static void lcl_SetCheckButton( SvTreeListEntry* pEntry, sal_Bool bCheck )
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
 
     DBG_ASSERT(pItem,"SetCheckButton:Item not found");
-    if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
+    if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
         if (bCheck)
             pItem->SetStateChecked();

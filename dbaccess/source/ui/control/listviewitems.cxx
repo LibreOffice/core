@@ -43,13 +43,11 @@ namespace dbaui
         pView->Pop();
     }
 
-    //------------------------------------------------------------------------
-    sal_uInt16 OBoldListboxString::IsA()
+    sal_uInt16 OBoldListboxString::GetType() const
     {
         return SV_ITEM_ID_BOLDLBSTRING;
     }
 
-    //------------------------------------------------------------------------
     void OBoldListboxString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry )
     {
         if (m_bEmphasized)

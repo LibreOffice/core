@@ -43,7 +43,7 @@ namespace dbaui
         {
         }
 
-        virtual sal_uInt16 IsA();
+        virtual sal_uInt16 GetType() const;
 
         virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry);
         virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* _pViewData);

@@ -1790,9 +1790,9 @@ String SvTreeListBox::SearchEntryText( SvTreeListEntry* pEntry ) const
     while( nCur < nCount )
     {
         pItem = pEntry->GetItem( nCur );
-        if ( pItem->IsA() == SV_ITEM_ID_LBOXSTRING && !static_cast<SvLBoxString*>( pItem )->GetText().isEmpty() )
+        if (pItem->GetType() == SV_ITEM_ID_LBOXSTRING && !static_cast<const SvLBoxString*>(pItem)->GetText().isEmpty())
         {
-            sRet = static_cast<SvLBoxString*>( pItem )->GetText();
+            sRet = static_cast<const SvLBoxString*>(pItem)->GetText();
             break;
         }
         nCur++;
@@ -2757,7 +2757,7 @@ void SvTreeListBox::ImplEditEntry( SvTreeListEntry* pEntry )
         for( sal_uInt16 i = 0 ; i < nCount ; i++ )
         {
             SvLBoxItem* pTmpItem = pEntry->GetItem( i );
-            if( pTmpItem->IsA() != SV_ITEM_ID_LBOXSTRING )
+            if (pTmpItem->GetType() != SV_ITEM_ID_LBOXSTRING)
                 continue;
 
             SvLBoxTab* pTab = GetTab( pEntry, pTmpItem );
@@ -3017,7 +3017,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
             Wallpaper aWallpaper = GetBackground();
 
             int bSelTab = nFlags & SV_LBOXTAB_SHOW_SELECTION;
-            sal_uInt16 nItemType = pItem->IsA();
+            sal_uInt16 nItemType = pItem->GetType();
 
             if ( pViewDataEntry->IsSelected() && bSelTab && !pViewDataEntry->IsCursored() )
             {
@@ -3097,9 +3097,9 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
             pItem->Paint( aEntryPos, *this, pViewDataEntry->GetFlags(), pEntry );
 
             // division line between tabs
-            if( pNextTab && pItem->IsA() == SV_ITEM_ID_LBOXSTRING &&
+            if (pNextTab && pItem->GetType() == SV_ITEM_ID_LBOXSTRING &&
                 // not at the right edge of the window!
-                aRect.Right() < nMaxRight )
+                aRect.Right() < nMaxRight)
             {
                 aRect.Left() = aRect.Right() - SV_TAB_BORDER;
                 DrawRect( aRect );

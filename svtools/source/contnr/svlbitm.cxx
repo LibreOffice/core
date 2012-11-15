@@ -213,7 +213,7 @@ SvLBoxString::~SvLBoxString()
     DBG_DTOR(SvLBoxString,0);
 }
 
-sal_uInt16 SvLBoxString::IsA()
+sal_uInt16 SvLBoxString::GetType() const
 {
     DBG_CHKTHIS(SvLBoxString,0);
     return SV_ITEM_ID_LBOXSTRING;
@@ -272,7 +272,7 @@ SvLBoxBmp::~SvLBoxBmp()
     DBG_DTOR(SvLBoxBmp,0);
 }
 
-sal_uInt16 SvLBoxBmp::IsA()
+sal_uInt16 SvLBoxBmp::GetType() const
 {
     DBG_CHKTHIS(SvLBoxBmp,0);
     return SV_ITEM_ID_LBOXBMP;
@@ -338,7 +338,7 @@ SvLBoxButton::~SvLBoxButton()
     DBG_DTOR(SvLBoxButton,0);
 }
 
-sal_uInt16 SvLBoxButton::IsA()
+sal_uInt16 SvLBoxButton::GetType() const
 {
     DBG_CHKTHIS(SvLBoxButton,0);
     return SV_ITEM_ID_LBOXBUTTON;
@@ -503,7 +503,7 @@ SvLBoxContextBmp::~SvLBoxContextBmp()
     DBG_DTOR(SvLBoxContextBmp,0);
 }
 
-sal_uInt16 SvLBoxContextBmp::IsA()
+sal_uInt16 SvLBoxContextBmp::GetType() const
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
     return SV_ITEM_ID_LBOXCONTEXTBMP;

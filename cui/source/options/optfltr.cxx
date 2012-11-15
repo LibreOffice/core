@@ -209,7 +209,7 @@ sal_Bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
         if( pEntry )
         {
             SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem( nCol ));
-            if( pItem && ((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON )
+            if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
             {
                 sal_uInt16 nButtonFlags = pItem->GetButtonFlags();
                 bCheck = SV_BUTTON_CHECKED ==
@@ -267,7 +267,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
         if( pEntry )
         {
             SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem( nCol ));
-            if( pItem && ((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON )
+            if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
             {
                 if( (rOpt.*pArr->FnIs)() )
                     pItem->SetStateChecked();
@@ -340,7 +340,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::SetCheckButtonState(
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
 
     DBG_ASSERT(pItem,"SetCheckButton:Item not found");
-    if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
+    if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
         switch( eState )
         {
@@ -367,7 +367,7 @@ SvButtonState OfaMSFilterTabPage2::MSFltrSimpleTable::GetCheckButtonState(
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
     DBG_ASSERT(pItem,"GetChButnState:Item not found");
 
-    if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
+    if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
         sal_uInt16 nButtonFlags = pItem->GetButtonFlags();
         eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );
