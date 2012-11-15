@@ -86,6 +86,8 @@ protected:
     virtual void setSecondaryDimension(Size &rSize, long) const = 0;
     virtual long getSecondaryCoordinate(const Point &rPos) const = 0;
     virtual void setSecondaryCoordinate(Point &rPos, long) const = 0;
+
+    virtual bool getPrimaryDimensionChildExpand(const Window &rWindow) const = 0;
 };
 
 class VCL_DLLPUBLIC VclVBox : public VclBox
@@ -128,6 +130,10 @@ protected:
     {
         rPos.setX(nPos);
     }
+    virtual bool getPrimaryDimensionChildExpand(const Window &rWindow) const
+    {
+        return rWindow.get_expand() || rWindow.get_vexpand();
+    }
 };
 
 class VCL_DLLPUBLIC VclHBox : public VclBox
@@ -169,6 +175,10 @@ protected:
     virtual void setSecondaryCoordinate(Point &rPos, long nPos) const
     {
         rPos.setY(nPos);
+    }
+    virtual bool getPrimaryDimensionChildExpand(const Window &rWindow) const
+    {
+        return rWindow.get_expand() || rWindow.get_hexpand();
     }
 };
 
@@ -262,6 +272,10 @@ protected:
     {
         rPos.setX(nPos);
     }
+    virtual bool getPrimaryDimensionChildExpand(const Window &rWindow) const
+    {
+        return rWindow.get_expand() || rWindow.get_vexpand();
+    }
 };
 
 class VCL_DLLPUBLIC VclHButtonBox : public VclButtonBox
@@ -303,6 +317,10 @@ protected:
     virtual void setSecondaryCoordinate(Point &rPos, long nPos) const
     {
         rPos.setY(nPos);
+    }
+    virtual bool getPrimaryDimensionChildExpand(const Window &rWindow) const
+    {
+        return rWindow.get_expand() || rWindow.get_hexpand();
     }
 };
 

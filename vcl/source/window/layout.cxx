@@ -130,7 +130,7 @@ void VclBox::setAllocation(const Size &rAllocation)
         if (!pChild->IsVisible())
             continue;
         ++nVisibleChildren;
-        bool bExpand = pChild->get_expand();
+        bool bExpand = getPrimaryDimensionChildExpand(*pChild);
         if (bExpand)
             ++nExpandChildren;
     }
@@ -181,7 +181,7 @@ void VclBox::setAllocation(const Size &rAllocation)
                 aBoxSize = getLayoutRequisition(*pChild);
                 long nPrimaryDimension = getPrimaryDimension(aBoxSize);
                 nPrimaryDimension += nPadding * 2;
-                if (pChild->get_expand())
+                if (getPrimaryDimensionChildExpand(*pChild))
                     nPrimaryDimension += nExtraSpace;
                 setPrimaryDimension(aBoxSize, nPrimaryDimension);
             }
