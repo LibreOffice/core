@@ -132,7 +132,7 @@ $(call gb_SrsTemplatePartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_
 	$$(call gb_Helper_abbreviate_dirs,\
 	    mkdir -p $$(dir $$@) && \
 	    cp $$< $$@)
-ifneq ($(strip $(WITH_LANG)),)
+ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_SrsPartMergeTarget_SrsPartMergeTarget,$(1),$(true))
 endif
 
@@ -165,13 +165,13 @@ endef
 # How it works:
 # We let _get_target depend on _get_update_target, so after they are
 # done, _get_target is newer than _get_update_target. If
-# WITH_LANG changes (from nonempty to empty or the other way around),
+# gb_WITH_LANG changes (from nonempty to empty or the other way around),
 # _get_target and _get_update_target are switched, therefore _get_target
 # is now _older_ than _get_update_target and must be regenerated :-)
 gb_SrsTemplateTarget__get_merged_target = $(call gb_SrsTemplateTarget_get_target,$(1))_merged_last
 gb_SrsTemplateTarget__get_unmerged_target = $(call gb_SrsTemplateTarget_get_target,$(1))_unmerged_last
 
-ifeq ($(strip $(WITH_LANG)),)
+ifeq ($(strip $(gb_WITH_LANG)),)
 gb_SrsTemplateTarget__get_target = $(call gb_SrsTemplateTarget__get_unmerged_target,$(1))
 gb_SrsTemplateTarget__get_update_target = $(call gb_SrsTemplateTarget__get_merged_target,$(1))
 else
