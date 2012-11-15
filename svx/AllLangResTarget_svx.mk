@@ -91,7 +91,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/form/formshell.src \
     svx/source/items/svxerr.src \
     svx/source/items/svxitems.src \
-    svx/source/mnuctrls/mnuctrls.src \
     svx/source/stbctrls/stbctrls.src \
     svx/source/svdraw/svdstr.src \
     svx/source/table/table.src \
@@ -105,6 +104,10 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/tbxctrls/tbunosearchcontrollers.src \
     svx/source/toolbars/extrusionbar.src \
     svx/source/toolbars/fontworkbar.src \
+))
+
+$(eval $(call gb_SrsTarget_add_nonlocalized_files,svx/res,\
+    svx/source/mnuctrls/mnuctrls.src \
     svx/source/unodraw/unodraw.src \
 ))
 

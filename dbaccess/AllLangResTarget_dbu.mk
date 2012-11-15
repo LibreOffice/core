@@ -81,7 +81,6 @@ $(eval $(call gb_SrsTarget_add_files,dbaccess/dbu,\
     dbaccess/source/ui/dlg/textconnectionsettings.src \
     dbaccess/source/ui/dlg/UserAdminDlg.src \
     dbaccess/source/ui/dlg/UserAdmin.src \
-    dbaccess/source/ui/imagelists/dbimagelists.src \
     dbaccess/source/ui/misc/dbumiscres.src \
     dbaccess/source/ui/misc/WizardPages.src \
     dbaccess/source/ui/querydesign/querydlg.src \
@@ -90,6 +89,10 @@ $(eval $(call gb_SrsTarget_add_files,dbaccess/dbu,\
     dbaccess/source/ui/tabledesign/table.src \
     dbaccess/source/ui/uno/copytablewizard.src \
     dbaccess/source/ui/uno/dbinteraction.src \
+))
+
+$(eval $(call gb_SrsTarget_add_nonlocalized_files,dbaccess/dbu,\
+    dbaccess/source/ui/imagelists/dbimagelists.src \
 ))
 
 $(eval $(call gb_SrsTarget_add_templates,dbaccess/dbu,\

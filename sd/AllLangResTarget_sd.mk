@@ -99,9 +99,12 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/dlg/tpoption.src \
     sd/source/ui/dlg/vectdlg.src \
     sd/source/ui/slideshow/slideshow.src \
-    sd/source/ui/slidesorter/view/SlsResource.src \
     sd/source/ui/table/TableDesignPane.src \
     sd/source/ui/view/DocumentRenderer.src \
+))
+
+$(eval $(call gb_SrsTarget_add_nonlocalized_files,sd/res,\
+    sd/source/ui/slidesorter/view/SlsResource.src \
 ))
 
 $(eval $(call gb_SrsTarget_add_templates,sd/res,\

@@ -48,7 +48,6 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/appl/sfx.src \
     sfx2/source/bastyp/bastyp.src \
     sfx2/source/bastyp/fltfnc.src \
-    sfx2/source/control/templateview.src \
     sfx2/source/dialog/alienwarn.src \
     sfx2/source/dialog/dialog.src \
     sfx2/source/dialog/dinfdlg.src \
@@ -77,6 +76,10 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/doc/templatedlg.src \
     sfx2/source/menu/menu.src \
     sfx2/source/view/view.src \
+))
+
+$(eval $(call gb_SrsTarget_add_nonlocalized_files,sfx/res,\
+    sfx2/source/control/templateview.src \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -93,6 +93,9 @@ $(eval $(call gb_SrsTarget_add_files,chart2/res,\
     chart2/source/controller/dialogs/tp_TitleRotation.src \
     chart2/source/controller/dialogs/tp_Trendline.src \
     chart2/source/controller/dialogs/tp_Wizard_TitlesAndObjects.src \
+))
+
+$(eval $(call gb_SrsTarget_add_nonlocalized_files,chart2/res,\
     chart2/source/controller/menus/ShapeContextMenu.src \
     chart2/source/controller/menus/ShapeEditContextMenu.src \
 ))

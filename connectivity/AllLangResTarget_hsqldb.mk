@@ -40,7 +40,7 @@ $(eval $(call gb_SrsTarget_set_include,hsqldb/res,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_SrsTarget_add_files,hsqldb/res,\
+$(eval $(call gb_SrsTarget_add_nonlocalized_files,hsqldb/res,\
 	connectivity/source/drivers/hsqldb/hsqlui.src \
 ))
 

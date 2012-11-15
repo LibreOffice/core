@@ -32,7 +32,7 @@ $(eval $(call gb_SrsTarget_set_include,toolkit/awt,\
     -I$(SRCDIR)/toolkit/source/awt \
 ))
 
-$(eval $(call gb_SrsTarget_add_files,toolkit/awt,\
+$(eval $(call gb_SrsTarget_add_nonlocalized_files,toolkit/awt,\
     toolkit/source/awt/xthrobber.src \
 ))
 

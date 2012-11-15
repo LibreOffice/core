@@ -51,7 +51,6 @@ $(eval $(call gb_SrsTarget_set_include,svt/res,\
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svt/res,\
-    svtools/source/brwbox/editbrowsebox.src \
     svtools/source/contnr/fileview.src \
     svtools/source/contnr/svcontnr.src \
     svtools/source/contnr/templwin.src \
@@ -73,6 +72,10 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/misc/svtools.src \
     svtools/source/misc/undo.src \
     svtools/source/toolpanel/toolpanel.src \
+))
+
+$(eval $(call gb_SrsTarget_add_nonlocalized_files,svt/res,\
+    svtools/source/brwbox/editbrowsebox.src \
 ))
 
 # vim: set noet sw=4 ts=4:

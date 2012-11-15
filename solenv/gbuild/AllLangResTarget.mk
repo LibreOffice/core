@@ -67,6 +67,16 @@ endef
 $(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY)  $(gb_SrsPartMergeTarget_TRANSEXTARGET)
 	$(if $(SDF),$(call gb_SrsPartMergeTarget__command,$@,$*,$<),mkdir -p $(dir $@) && cp $< $@)
 
+define gb_SrsPartMergeTarget_SrsPartMergeTarget
+$(call gb_SrsPartMergeTarget__SrsPartMergeTarget_impl,$(1),$(if $(2),$(gb_SDFLOCATION)/$(dir $(1))localize.sdf))
+
+endef
+
+define gb_SrsPartMergeTarget__SrsPartMergeTarget_impl
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(2)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : $(2)
+
+endef
 
 # SrsPartTarget class
 
@@ -110,7 +120,7 @@ $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE :=
 else
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(call gb_SrsPartMergeTarget_get_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_get_target,$(1))
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(dir $(1))localize.sdf
+$(call gb_SrsPartMergeTarget_SrsPartMergeTarget,$(1),$(2))
 endif
 
 endef
@@ -123,8 +133,7 @@ $(call gb_SrsTemplatePartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_
 	    mkdir -p $$(dir $$@) && \
 	    cp $$< $$@)
 ifneq ($(strip $(WITH_LANG)),)
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(dir $(1))localize.sdf
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : $(gb_SDFLOCATION)/$(dir $(1))localize.sdf
+$(call gb_SrsPartMergeTarget_SrsPartMergeTarget,$(1),$(true))
 endif
 
 endef
@@ -275,11 +284,11 @@ endif
 
 endef
 
-define gb_SrsTarget_add_file
+define gb_SrsTarget__add_file
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SrsTarget_get_dep_target,$(1)) : $(call gb_SrsPartTarget_get_dep_target,$(2))
 endif
-$(call gb_SrsPartTarget_SrsPartTarget,$(2))
+$(call gb_SrsPartTarget_SrsPartTarget,$(2),$(3))
 $(call gb_SrsTarget_get_target,$(1)) : $(call gb_SrsPartTarget_get_target,$(2))
 $(call gb_SrsPartTarget_get_target,$(2)) :| $(call gb_SrsTarget_get_external_headers_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(2)) :| $(call gb_SrsTemplateTarget_get_target,$(1))
@@ -288,8 +297,34 @@ $(call gb_SrsTarget_get_target,$(1)) : PARTS += $(2)
 
 endef
 
+define gb_SrsTarget_add_file
+$(call gb_SrsTarget__add_file,$(1),$(2),$(true))
+
+endef
+
 define gb_SrsTarget_add_files
 $(foreach file,$(2),$(call gb_SrsTarget_add_file,$(1),$(file)))
+
+endef
+
+# Add a srs file that does not have any localizable content.
+#
+# This only exists to allow dependencies on SDF files. It must be used
+# if neither of the srs files in a directory have any localizable
+# content, because in that case there is going to be no SDF generated
+# for the directory. Therefore we must avoid depending on the SDF.
+#
+# gb_SrsTarget_add_nonlocalized_file srs file
+define gb_SrsTarget_add_nonlocalized_file
+$(call gb_SrsTarget__add_file,$(1),$(2),$(false))
+
+endef
+
+# Add srs files that do not have any localizable content.
+#
+# gb_SrsTarget_add_nonlocalized_files srs file(s)
+define gb_SrsTarget_add_nonlocalized_files
+$(foreach file,$(2),$(call gb_SrsTarget_add_nonlocalized_file,$(1),$(file)))
 
 endef
 
