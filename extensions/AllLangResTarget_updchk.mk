@@ -36,7 +36,7 @@ $(eval $(call gb_AllLangResTarget_add_srs,updchk,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,updchk/res))
 
-$(eval $(call gb_SrsTarget_add_files,updchk/res,\
+$(eval $(call gb_SrsTarget_add_nonlocalized_files,updchk/res,\
 	extensions/source/update/ui/updatecheckui.src \
 ))
 
