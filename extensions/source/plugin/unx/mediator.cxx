@@ -62,7 +62,7 @@ Mediator::~Mediator()
             aHeader[2] = MEDIATOR_MAGIC;
             ssize_t nToWrite = sizeof(aHeader);
             bool bSuccess = (nToWrite == write(m_nSocket, aHeader, nToWrite));
-            SAL_WARN_IF( !bSuccess, "extensions", "short write");
+            SAL_WARN_IF(!bSuccess, "extensions.plugin", "short write");
         }
         // kick the thread out of its run method; it deletes itself
         close( m_nSocket );
@@ -100,7 +100,7 @@ sal_uLong Mediator::SendMessage( sal_uLong nBytes, const char* pBytes, sal_uLong
     memcpy( &pBuffer[3], pBytes, (size_t)nBytes );
     ssize_t nToWrite = nBytes + 3*sizeof( sal_uLong );
     bool bSuccess = (nToWrite == write( m_nSocket, pBuffer, nToWrite ));
-    SAL_WARN_IF( !bSuccess, "extensions", "short write");
+    SAL_WARN_IF(!bSuccess, "extensions.plugin", "short write");
     delete [] pBuffer;
 
     return nMessageID;
@@ -222,16 +222,21 @@ void MediatorListener::run()
             }
             else
             {
-                medDebug( 1, "got incomplete MediatorMessage: { %d, %d, %*s }\n",
-                          nHeader[0], nHeader[1], nHeader[1], pBuffer );
+                SAL_WARN(
+                    "extensions.plugin",
+                    "got incomplete MediatorMessage: { " << nHeader[0] << ", "
+                        << nHeader[1] << ", ... }");
                 bRun = false;
             }
             delete [] pBuffer;
         }
         else
         {
-            medDebug( 1, "got incomplete message header of %d bytes ( nHeader = [ %u, %u ] ), errno is %d\n",
-                      nBytes, nHeader[ 0 ], nHeader[ 1 ], (int)errno );
+            SAL_WARN(
+                "extensions.plugin",
+                "got incomplete message header of " << nBytes
+                    << " bytes (nHeader = [" << nHeader[0] << ", " << nHeader[1]
+                    << "]), errno is " << errno);
             bRun = false;
         }
     }
@@ -252,7 +257,9 @@ sal_uLong MediatorMessage::ExtractULONG()
     if( ! m_pRun )
         m_pRun = m_pBytes;
 
-    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::ExtractULONG\n" );
+    SAL_WARN_IF(
+        (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "extensions.plugin",
+        "overflow in MediatorMessage::ExtractULONG");
     sal_uLong nCount;
     memcpy( &nCount, m_pRun, sizeof( sal_uLong ) );
     m_pRun += sizeof( sal_uLong );
@@ -264,13 +271,17 @@ void* MediatorMessage::GetBytes( sal_uLong& rBytes )
     if( ! m_pRun )
         m_pRun = m_pBytes;
 
-    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetBytes\n" );
+    SAL_WARN_IF(
+        (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "extensions.plugin",
+        "overflow in MediatorMessage::GetBytes");
     sal_uLong nBytes = ExtractULONG();
 
     if( nBytes == 0 )
         return NULL;
 
-    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetBytes\n" );
+    SAL_WARN_IF(
+        (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "extensions.plugin",
+        "overflow in MediatorMessage::GetBytes");
     char* pBuffer = new char[ nBytes ];
     memcpy( pBuffer, m_pRun, nBytes );
     m_pRun += nBytes;
@@ -283,13 +294,17 @@ char* MediatorMessage::GetString()
     if( ! m_pRun )
         m_pRun = m_pBytes;
 
-    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetString\n" );
+    SAL_WARN_IF(
+        (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "extensions.plugin",
+        "overflow in MediatorMessage::GetString");
     sal_uLong nBytes = ExtractULONG();
 
     if( nBytes == 0 )
         return NULL;
 
-    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetString\n" );
+    SAL_WARN_IF(
+        (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "extensions.plugin",
+        "overflow in MediatorMessage::GetString");
     char* pBuffer = new char[ nBytes+1 ];
     memcpy( pBuffer, m_pRun, nBytes );
     pBuffer[ nBytes ] = 0;
@@ -302,10 +317,16 @@ sal_uInt32 MediatorMessage::GetUINT32()
     if( ! m_pRun )
         m_pRun = m_pBytes;
 
-    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetUINT32\n" );
+    SAL_WARN_IF(
+        (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "extensions.plugin",
+        "overflow in MediatorMessage::GetUINT32");
     sal_uLong nBytes = ExtractULONG();
-    medDebug( nBytes != sizeof( sal_uInt32 ), "No sal_uInt32 in MediatorMessage::GetUINT32\n" );
-    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetUINT32\n" );
+    SAL_WARN_IF(
+        nBytes != sizeof( sal_uInt32 ), "extensions.plugin",
+        "no sal_uInt32 in MediatorMessage::GetUINT32");
+    SAL_WARN_IF(
+        (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "extensions.plugin",
+        "overflow in MediatorMessage::GetUINT32");
     sal_uInt32 nRet;
     memcpy( &nRet, m_pRun, sizeof( nRet ) );
     m_pRun += sizeof( sal_uInt32 );

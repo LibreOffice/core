@@ -44,7 +44,7 @@ sal_uInt32 PluginConnector::GetStreamID( NPStream* pStream )
     for( size_t i = 0; i < nLen; i++ )
         if( m_aNPWrapStreams[ i ] == pStream )
             return static_cast<sal_uInt32>(i);
-    medDebug( 1, "Error: NPStream has no ID\n" );
+    SAL_WARN("extensions.plugin", "NPStream has no ID");
     return UnknownStreamID;
 }
 
@@ -54,7 +54,7 @@ sal_uInt32 PluginConnector::GetNPPID( NPP instance )
     for( size_t i=0; i <nLen; i++ )
         if( m_aInstances[ i ]->instance == instance )
             return static_cast<sal_uInt32>(i);
-    medDebug( 1, "Error: NPP has no ID\n" );
+    SAL_WARN("extensions.plugin", "NPP has no ID");
 
     return UnknownNPPID;
 }

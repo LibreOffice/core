@@ -96,7 +96,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
     while( (pMessage = GetNextMessage( sal_False )) )
     {
         nCommand = (CommandAtoms)pMessage->GetUINT32();
-        medDebug( 1, "%s\n", GetCommandName( nCommand ) );
+        SAL_INFO("extensions.plugin", GetCommandName(nCommand));
         switch( nCommand )
         {
             case eNPN_GetURL:
@@ -146,11 +146,16 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                         m_aNPWrapStreams.erase( m_aNPWrapStreams.begin() + nFileID );
                     }
                     else
-                        medDebug( 1, "StreamID %d has incoherent urls %s and %s\n",
-                                  nFileID, pUrl, m_aNPWrapStreams[ nFileID ]->url );
+                        SAL_WARN(
+                            "extensions.plugin",
+                            "StreamID " << nFileID << " has incoherent urls "
+                                << pUrl << " and "
+                                << m_aNPWrapStreams[nFileID]->url);
                 }
                 else
-                    medDebug( 1, "Nonexistent StreamID %d\n", nFileID );
+                    SAL_WARN(
+                        "extensions.plugin",
+                        "nonexistent StreamID " << nFileID);
 
                 Respond( pMessage->m_nID,
                          (char*)(&aRet), sizeof( NPError ), NULL );
@@ -310,7 +315,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             }
             break;
             default:
-                medDebug( 1, "caught unknown NPN request %d\n", nCommand );
+                SAL_WARN(
+                    "extensions.plugin",
+                    "caught unknown NPN request " << +nCommand);
         }
 
         delete pMessage;

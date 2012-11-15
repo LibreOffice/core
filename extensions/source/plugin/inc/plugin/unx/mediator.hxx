@@ -29,15 +29,11 @@
 #define _MEDIATOR_HXX
 
 #include <string.h>
-#include <stdarg.h>
 #include <tools/link.hxx>
 #include <osl/pipe.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <osl/thread.hxx>
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
 
 #include <vector>
 
@@ -163,22 +159,6 @@ class MediatorListener : public osl::Thread
     virtual void run();
     virtual void onTerminated();
 };
-
-inline void medDebug( int condition, const char* pFormat, ... )
-{
-#if OSL_DEBUG_LEVEL > 1
-    if( condition )
-    {
-        va_list ap;
-        va_start( ap, pFormat );
-        vfprintf( stderr, pFormat, ap );
-        va_end( ap );
-    }
-#else
-    (void)condition;
-    (void)pFormat;
-#endif
-}
 
 #endif // _MEDIATOR_HXX
 

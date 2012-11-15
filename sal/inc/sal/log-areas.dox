@@ -74,6 +74,7 @@ certain functionality.
 
 @section extensions
 
+@li @c extensions.plugin
 @li @c extensions.scanner
 
 @section Filter

@@ -110,13 +110,13 @@ static NPError l_NPN_DestroyStream( NPP instance, NPStream* stream, NPError reas
 static JRIEnv* l_NPN_GetJavaEnv()
 {
     // no java in this program
-    medDebug( 1, "SNI: NPN_GetJavaEnv\n" );
+    SAL_INFO("extensions.plugin", "SNI: NPN_GetJavaEnv");
     return NULL;
 }
 
 static jref l_NPN_GetJavaPeer( NPP /*instance*/ )
 {
-    medDebug( 1, "SNI: NPN_GetJavaPeer\n" );
+    SAL_INFO("extensions.plugin", "SNI: NPN_GetJavaPeer");
     return NULL;
 }
 #endif
@@ -134,13 +134,13 @@ static NPError l_NPN_GetURL( NPP instance, const char* url, const char* window )
                   POST_STRING(url),
                   POST_STRING(window),
                   NULL );
-    medDebug( !pMes, "geturl: message unaswered\n" );
+    SAL_WARN_IF(!pMes, "extensions.plugin", "geturl: message unanswered");
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
     // returns NPError
     NPError aRet = pConnector->GetNPError( pMes );
-    medDebug( aRet, "geturl returns %d\n", (int)aRet );
+    SAL_WARN_IF(aRet, "extensions.plugin", "geturl returns " << aRet);
     delete pMes;
     return aRet;
 }
@@ -257,7 +257,7 @@ static NPError l_NPN_PostURL( NPP instance, const char* url, const char* window,
 
 static NPError l_NPN_RequestRead( NPStream* stream, NPByteRange* rangeList )
 {
-    medDebug( 1, "pluginapp: NPN_RequestRead\n" );
+    SAL_INFO("extensions.plugin", "pluginapp: NPN_RequestRead");
 
     NPByteRange* pRange = rangeList;
     sal_uInt32 nRanges = 0;
@@ -333,7 +333,7 @@ static const char* l_NPN_UserAgent( NPP instance )
 
     delete pMes;
 
-    medDebug( 1, "NPN_UserAgent returns %s\n", pAgent );
+    SAL_INFO("extensions.plugin", "NPN_UserAgent returns " << pAgent);
 
     return pAgent;
 }
@@ -364,7 +364,7 @@ static int32_t l_NPN_Write( NPP instance, NPStream* stream, int32_t len, void* b
 
 static void l_NPN_ReloadPlugins( NPBool /*reloadPages*/ )
 {
-    medDebug( 1, "NPN_ReloadPlugins: SNI\n" );
+    SAL_INFO("extensions.plugin", "NPN_ReloadPlugins: SNI");
 }
 
 static NPError l_NPN_GetValue( NPP, NPNVariable variable, void* value )
@@ -378,31 +378,31 @@ static NPError l_NPN_GetValue( NPP, NPNVariable variable, void* value )
     {
         case NPNVxDisplay:
             *((Display**)value) = pXtAppDisplay;
-            medDebug( 1, "Display requested\n" );
+            SAL_INFO("extensions.plugin", "Display requested");
             break;
         case NPNVxtAppContext:
             *((XtAppContext*)value) = app_context;
-            medDebug( 1, "AppContext requested\n" );
+            SAL_INFO("extensions.plugin", "AppContext requested");
             break;
         case NPNVjavascriptEnabledBool:
             // no javascript
             *(NPBool*)value = false;
-            medDebug( 1, "javascript enabled requested\n" );
+            SAL_INFO("extensions.plugin", "javascript enabled requested");
             break;
         case NPNVasdEnabledBool:
             // no SmartUpdate
             *(NPBool*)value = false;
-            medDebug( 1, "smart update enabled requested\n" );
+            SAL_INFO("extensions.plugin", "smart update enabled requested");
             break;
         case NPNVisOfflineBool:
             // no offline browsing
             *(NPBool*)value = false;
-            medDebug( 1, "offline browsing requested\n" );
+            SAL_INFO("extensions.plugin", "offline browsing requested");
             break;
         case NPNVSupportsXEmbedBool:
             // asking xembed
             *(int*)value = true;
-            medDebug( 1, "xembed requested\n" );
+            SAL_INFO("extensions.plugin", "xembed requested");
             break;
         case NPNVToolkit:
 #           ifdef ENABLE_GTK
@@ -410,10 +410,12 @@ static NPError l_NPN_GetValue( NPP, NPNVariable variable, void* value )
 #           else
             *(int*)value = 0;
 #           endif
-            medDebug( 1, "toolkit requested\n" );
+            SAL_INFO("extensions.plugin", "toolkit requested");
             break;
         default:
-            medDebug( 1, "unknown NPNVariable %x requested\n", variable );
+            SAL_WARN(
+                "extensions.plugin",
+                "unknown NPNVariable " << +variable << " requested");
             return NPERR_INVALID_PARAM;
     }
     return NPERR_NO_ERROR;
@@ -421,23 +423,23 @@ static NPError l_NPN_GetValue( NPP, NPNVariable variable, void* value )
 
 static NPError l_NPN_SetValue(NPP /*instance*/, NPPVariable variable, void *value)
 {
-    medDebug( 1, "NPN_SetValue %d=%p\n", variable, value );
+    SAL_INFO("extensions.plugin", "NPN_SetValue " << +variable << "=" << value);
     return 0;
 }
 
 static void l_NPN_InvalidateRect(NPP /*instance*/, NPRect* /*invalidRect*/)
 {
-    medDebug( 1, "NPN_InvalidateRect\n" );
+    SAL_INFO("extensions.plugin", "NPN_InvalidateRect");
 }
 
 static void l_NPN_InvalidateRegion(NPP /*instance*/, NPRegion /*invalidRegion*/)
 {
-    medDebug( 1, "NPN_InvalidateRegion\n" );
+    SAL_INFO("extensions.plugin", "NPN_InvalidateRegion");
 }
 
 static void l_NPN_ForceRedraw(NPP /*instance*/)
 {
-    medDebug( 1, "NPN_ForceRedraw\n" );
+    SAL_INFO("extensions.plugin", "NPN_ForceRedraw");
 }
 
 }
@@ -519,7 +521,8 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
     while( (pMessage = GetNextMessage( sal_False )) )
     {
         nCommand = (CommandAtoms)pMessage->GetUINT32();
-        medDebug( 1, "pluginapp: %s\n", GetCommandName( nCommand ) );
+        SAL_INFO(
+            "extensions.plugin", "pluginapp: " << GetCommandName(nCommand));
         switch( nCommand )
         {
             case eNPP_DestroyStream:
@@ -591,7 +594,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 m_aInstances.erase( m_aInstances.begin() + nInstance );
                 delete pInst;
                 delete instance;
-                medDebug( 1, "destroyed instance (returning %d)\n", aRet );
+                SAL_INFO(
+                    "extensions.plugin",
+                    "destroyed instance (returning " << aRet << ")");
             }
             break;
             case eNPP_NewStream:
@@ -609,10 +614,17 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 uint16_t nStype = NP_ASFILE;
                 NPError aRet = aPluginFuncs.newstream( instance, pType, pStream,
                                                        *pSeekable, &nStype );
-                medDebug( 1, "pluginapp: NPP_NewStream( %p, %s, %p, %s, %p ) returns %d\n"
-                          "stream = { pdata = %p, ndata = %p, url = %s, end = %d, lastmodified = %d, notifyData = %p }\n",
-                          instance, pType, pStream, *pSeekable ? "seekable" : "not seekable", &nStype, (int)aRet,
-                          pStream->pdata, pStream->ndata, pStream->url, pStream->end, pStream->lastmodified, pStream->notifyData );
+                SAL_INFO(
+                    "extensions.plugin",
+                    "pluginapp: NPP_NewStream(" << instance << ", " << pType
+                        << ", " << pStream << ", "
+                        << (*pSeekable ? "seekable" : "not seekable") << ", "
+                        << &nStype << ") returns " << aRet
+                        << "; stream = { pdata = " << pStream->pdata
+                        << ", ndata = " << pStream->ndata << ", url = "
+                        << pStream->url << ", end = " << pStream->end
+                        << ", lastmodified = " << pStream->lastmodified
+                        << ", notifyData = " << pStream->notifyData << " }");
                 Respond( pMessage->m_nID,
                          (char*)&aRet, sizeof( aRet ),
                          &nStype, sizeof( nStype ),
@@ -646,14 +658,17 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                                           pInst->nArg ? pInst->argv : NULL,
                                           ( nSaveBytes == 4 && *(sal_uInt32*)pSavedData == 0 ) ?
                                           &(pInst->aData) : NULL );
-                medDebug( 1, "pluginapp: NPP_New( %s, %p, %d, %d, %p, %p, %p ) returns %d\n",
-                          pInst->pMimeType,
-                          instance, *pMode, pInst->nArg, pInst->argn, pInst->argv, &pInst->aData,
-                          (int) aRet );
-#if OSL_DEBUG_LEVEL > 1
+                SAL_INFO(
+                    "extensions.plugin",
+                    "pluginapp: NPP_New( " << pInst->pMimeType << ", "
+                        << instance << ", " << *pMode << ", " << pInst->nArg
+                        << ", " << pInst->argn << ", " << pInst->argv << ", "
+                        << &pInst->aData << ") returns" << aRet);
                 for( int i = 0; i < pInst->nArg; i++ )
-                    medDebug( 1, "   \"%s\"=\"%s\"\n", pInst->argn[i], pInst->argv[i] );
-#endif
+                    SAL_INFO(
+                        "extensions.plugin",
+                        "   \"" << pInst->argn[i] << "\"=\"" << pInst->argv[i]
+                            << "\"");
 
                 #ifdef ENABLE_GTK
                 // check if XEMBED is to be used
@@ -666,7 +681,10 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                     NPError error = aPluginFuncs.getvalue( instance, NPPVpluginNeedsXEmbed, (void *)&bNeedsXEmbed );
                     if( error == NPERR_NO_ERROR )
                         pInst->bShouldUseXEmbed = (bNeedsXEmbed != 0);
-                    medDebug( 1, "should use xembed = %s\n", pInst->bShouldUseXEmbed ? "true" : "false" );
+                    SAL_INFO(
+                        "extensions.plugin",
+                        "should use xembed = "
+                            << (pInst->bShouldUseXEmbed ? "true" : "false"));
                 }
                 #endif
 
@@ -694,7 +712,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 {
                     if( ! pInst->pGtkWidget )
                     {
-                        medDebug( 1, "creating gtk plug and socket\n" );
+                        SAL_INFO(
+                            "extensions.plugin",
+                            "creating gtk plug and socket");
 
                         pInst->pGtkWindow = gtk_plug_new((GdkNativeWindow)reinterpret_cast<sal_uIntPtr>(pWindow->window));
                         gtk_widget_show( pInst->pGtkWindow );
@@ -771,7 +791,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 }
 
                 NPError aRet = aPluginFuncs.setwindow( pInst->instance, &pInst->window );
-                medDebug( 1, "pluginapp: NPP_SetWindow returns %d\n", (int) aRet );
+                SAL_INFO(
+                    "extensions.plugin",
+                    "pluginapp: NPP_SetWindow returns " << aRet);
                 Respond( pMessage->m_nID,
                          (char*)&aRet, sizeof( aRet ),
                          NULL );
@@ -785,7 +807,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 sal_uInt32 nFileID          = pMessage->GetUINT32();
                 NPStream* pStream       = m_aNPWrapStreams[ nFileID ];
                 char* fname             = pMessage->GetString();
-                medDebug( 1, "pluginapp: NPP_StreamAsFile %s\n", fname );
+                SAL_INFO(
+                    "extensions.plugin",
+                    "pluginapp: NPP_StreamAsFile " << fname);
                 aPluginFuncs.asfile( instance, pStream, fname );
                 delete [] fname;
             }
@@ -811,8 +835,11 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 NPStream* pStream       = m_aNPWrapStreams[ nFileID ];
                 int32_t nRet = aPluginFuncs.writeready( instance, pStream );
 
-                medDebug( 1, "pluginapp: NPP_WriteReady( %p, %p ) (stream id = %d) returns %d\n",
-                          instance, pStream, nFileID, nRet );
+                SAL_INFO(
+                    "extensions.plugin",
+                    "pluginapp: NPP_WriteReady(" << instance << ", " << pStream
+                        << ") (stream id = " << nFileID << ") returns "
+                        << nRet);
 
                 Respond( pMessage->m_nID,
                          (char*)&nRet, sizeof( nRet ),
@@ -830,10 +857,16 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 char* buffer            = (char*)pMessage->GetBytes( len );
                 int32_t nRet = aPluginFuncs.write( instance, pStream, offset, len, buffer );
 
-                medDebug( 1,"pluginapp: NPP_Write( %p, %p, %d, %d, %p ) returns %d\n"
-                          "stream = { pdata = %p, ndata = %p, url = %s, end = %d, lastmodified = %d, notifyData = %p }\n",
-                          instance, pStream, offset, len, buffer, nRet,
-                          pStream->pdata, pStream->ndata, pStream->url, pStream->end, pStream->lastmodified, pStream->notifyData );
+                SAL_INFO(
+                    "extensions.plugin",
+                    "pluginapp: NPP_Write(" << instance << ", " << pStream
+                        << ", " << offset << ", " << len << ", " << buffer
+                        << ") returns " << nRet << "; stream = { pdata = "
+                        << pStream->pdata << ", ndata = " << pStream->ndata
+                        << ", url = " << pStream->url << ", end = "
+                        << pStream->end << ", lastmodified = "
+                        << pStream->lastmodified << ", notifyData = "
+                        << pStream->notifyData << " }");
 
                 Respond( pMessage->m_nID,
                          (char*)&nRet, sizeof( nRet ),
@@ -858,25 +891,33 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 pNP_Initialize =
                     (NPError(*)(NPNetscapeFuncs*, NPPluginFuncs*))
                     osl_getAsciiFunctionSymbol( pPluginLib, "NP_Initialize" );
-                medDebug( !pNP_Initialize, "no NP_Initialize, %s\n", dlerror() );
+                SAL_WARN_IF(
+                    !pNP_Initialize, "extensions.plugin",
+                    "no NP_Initialize, " << dlerror());
                 pNP_Shutdown = (NPError(*)())
                     osl_getAsciiFunctionSymbol( pPluginLib, "NP_Shutdown" );
-                medDebug( !pNP_Initialize, "no NP_Shutdown, %s\n", dlerror() );
+                SAL_WARN_IF(
+                    !pNP_Initialize, "extensions.plugin",
+                    "no NP_Shutdown, " << dlerror());
 
-                medDebug( 1, "entering NP_Initialize\n" );
+                SAL_INFO("extensions.plugin", "entering NP_Initialize");
                 NPError aRet = pNP_Initialize( &aNetscapeFuncs, &aPluginFuncs );
-                medDebug( 1, "pluginapp: NP_Initialize returns %d\n", (int) aRet );
+                SAL_INFO(
+                    "extensions.plugin",
+                    "pluginapp: NP_Initialize returns " << aRet);
                 Respond( pMessage->m_nID, (char*)&aRet, sizeof( aRet ), NULL );
             }
             break;
             case eNPP_Shutdown:
             {
                 bool bSuccess = (4 == write(wakeup_fd[1], "xxxx", 4));
-                SAL_WARN_IF( !bSuccess, "extensions", "short write");
+                SAL_WARN_IF(!bSuccess, "extensions.plugin", "short write");
             }
             break;
             default:
-                medDebug( 1, "caught unknown NPP request %d\n", nCommand );
+                SAL_WARN(
+                    "extensions.plugin",
+                    "caught unknown NPP request " << +nCommand);
                 break;
         }
         delete pMessage;
@@ -886,7 +927,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
 
 void LoadAdditionalLibs( const char* _pPluginLib )
 {
-    medDebug( 1, "LoadAdditionalLibs %s\n", _pPluginLib );
+    SAL_INFO("extensions.plugin", "LoadAdditionalLibs " << _pPluginLib);
 
     if( ! strncmp( _pPluginLib, "libflashplayer.so", 17 ) )
     {

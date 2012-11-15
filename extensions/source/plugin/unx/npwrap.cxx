@@ -63,10 +63,10 @@ static bool bPluginAppQuit = false;
 
 static long GlobalConnectionLostHdl( void* /*pInst*/, void* /*pArg*/ )
 {
-    medDebug( 1, "pluginapp exiting due to connection lost\n" );
+    SAL_WARN("extensions.plugin", "pluginapp exiting due to connection lost");
 
     bool bSuccess = (4 == write(wakeup_fd[1], "xxxx", 4 ));
-    SAL_WARN_IF( !bSuccess, "extensions", "short write");
+    SAL_WARN_IF(!bSuccess, "extensions.plugin", "short write");
     return 0;
 }
 
@@ -95,7 +95,7 @@ extern "C"
                 // it seems you can use XtRemoveInput only
                 // safely from within the callback
                 // why is that ?
-                medDebug( 1, "removing wakeup pipe\n" );
+                SAL_INFO("extensions.plugin", "removing wakeup pipe");
                 XtRemoveInput( *id );
                 XtAppSetExitFlag( app_context );
                 bPluginAppQuit = true;
@@ -111,9 +111,9 @@ extern "C"
 
 IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
 {
-    medDebug( 1, "new message handler\n" );
+    SAL_INFO("extensions.plugin", "new message handler");
     bool bSuccess = (4 == write(wakeup_fd[1], "cccc", 4));
-    SAL_WARN_IF( !bSuccess, "extensions", "short write");
+    SAL_WARN_IF(!bSuccess, "extensions.plugin", "short write");
     return 0;
 
 }
@@ -135,7 +135,10 @@ Widget createSubWidget( char* /*pPluginText*/, Widget shell, XLIB_Window aParent
     XtRealizeWidget( shell );
     XtRealizeWidget( newWidget );
 
-    medDebug( 1, "Reparenting new widget %x to %x\n", XtWindow( newWidget ), aParentWindow );
+    SAL_INFO(
+        "extensions.plugin",
+        "reparenting new widget " << XtWindow( newWidget ) << " to "
+            << aParentWindow);
     XReparentWindow( pXtAppDisplay,
                      XtWindow( shell ),
                      aParentWindow,
@@ -178,10 +181,7 @@ static oslModule LoadModule( const char* pPath )
     osl_getFileURLFromSystemPath( sSystemPath.pData, &sFileURL.pData );
 
     oslModule pLib = osl_loadModule( sFileURL.pData, SAL_LOADMODULE_LAZY );
-    if( ! pLib )
-    {
-        medDebug( 1, "could not open %s: %s\n", pPath, dlerror() );
-    }
+    SAL_INFO_IF(!pLib, "extensions.plugin", "could not open " << pPath);
     return pLib;
 }
 
@@ -189,15 +189,18 @@ static oslModule LoadModule( const char* pPath )
 static void CheckPlugin( const char* pPath )
 {
     oslModule pLib = LoadModule( pPath );
-
-    char*(*pNP_GetMIMEDescription)() = (char*(*)())
-        osl_getAsciiFunctionSymbol( pLib, "NP_GetMIMEDescription" );
-    if( pNP_GetMIMEDescription )
-        printf( "%s\n", pNP_GetMIMEDescription() );
-    else
-        medDebug( 1, "could not get symbol NP_GetMIMEDescription %s\n", dlerror() );
-
-    osl_unloadModule( pLib );
+    if (pLib != 0)
+    {
+        char*(*pNP_GetMIMEDescription)() = (char*(*)())
+            osl_getAsciiFunctionSymbol( pLib, "NP_GetMIMEDescription" );
+        if( pNP_GetMIMEDescription )
+            printf( "%s\n", pNP_GetMIMEDescription() );
+        else
+            SAL_WARN(
+                "extensions.plugin",
+                "could not get symbol NP_GetMIMEDescription " << dlerror());
+        osl_unloadModule( pLib );
+    }
 }
 
 #if OSL_DEBUG_LEVEL > 1 && defined LINUX
@@ -351,7 +354,7 @@ int main( int argc, char **argv)
 
     if( pipe( wakeup_fd ) )
     {
-        medDebug( 1, "could not pipe()\n" );
+        SAL_WARN("extensions.plugin", "could not pipe()");
         return 1;
     }
     // initialize 'wakeup' pipe.
@@ -410,7 +413,7 @@ int main( int argc, char **argv)
     GSource* pXTSource = g_source_new( &aXtEventFuncs, sizeof(GSource) );
     if( !pXTSource )
     {
-        medDebug( 1, "could not get Xt GSource" );
+        SAL_WARN("extensions.plugin", "could not get Xt GSource");
         return 1;
     }
 
@@ -427,7 +430,7 @@ int main( int argc, char **argv)
     GSource *pWakeupSource = g_source_new( &aWakeupEventFuncs, sizeof(GSource) );
     if ( pWakeupSource == NULL )
     {
-        medDebug( 1, "could not get wakeup source" );
+        SAL_WARN("extensions.plugin", "could not get wakeup source");
         return 1;
     }
     g_source_set_priority( pWakeupSource, GDK_PRIORITY_EVENTS);
@@ -483,16 +486,16 @@ int main( int argc, char **argv)
         #endif
     } while( ! XtAppGetExitFlag( app_context ) && ! bPluginAppQuit );
 
-    medDebug( 1, "left plugin app main loop\n" );
+    SAL_INFO("extensions.plugin", "left plugin app main loop");
 
     #ifdef ENABLE_GTK
     g_source_remove(xt_polling_timer_id);
     #endif
 
     pNP_Shutdown();
-    medDebug( 1, "NP_Shutdown done\n" );
+    SAL_INFO("extensions.plugin", "NP_Shutdown done");
     osl_unloadModule( pPluginLib );
-    medDebug( 1, "plugin close\n" );
+    SAL_INFO("extensions.plugin", "plugin close");
 
     close( wakeup_fd[0] );
     close( wakeup_fd[1] );
