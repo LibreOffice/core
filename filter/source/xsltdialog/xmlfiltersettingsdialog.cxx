@@ -74,8 +74,6 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResM
     sTemplatePath( RTL_CONSTASCII_USTRINGPARAM( "$(user)/template/") ),
     sDocTypePrefix( RTL_CONSTASCII_USTRINGPARAM( "doctype:") )
 {
-    FreeResource();
-
     mpResMgr = &rResMgr;
 
     mpFilterListBox = new XMLFilterListBox( &maCtrlFilterList );
@@ -85,6 +83,8 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResM
     mpFilterListBox->SetAccessibleName(RESIDSTR(STR_XML_FILTER_LISTBOX));
     maCtrlFilterList.SetAccessibleName(RESIDSTR(STR_XML_FILTER_LISTBOX));
     mpFilterListBox->SetHelpId( HID_XML_FILTER_LIST );
+
+    FreeResource();
 
     maPBNew.SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
     maPBEdit.SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
