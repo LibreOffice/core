@@ -29,8 +29,6 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 
-#include <vector>
-
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
