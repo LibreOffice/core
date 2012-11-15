@@ -79,9 +79,8 @@ class DataAware(object):
         if data is not ui:
             try:
                 self.setToUI(data)
-            except Exception, ex:
+            except Exception:
                 traceback.print_exc()
-                #TODO tell user...
         self.enableControls(data)
 
     '''

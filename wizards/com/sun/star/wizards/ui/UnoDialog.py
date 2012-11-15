@@ -40,20 +40,8 @@ class UnoDialog(object):
             self.xUnoDialog.setModel(self.xDialogModel)
             self.m_oPeerConfig = None
             self.xWindowPeer = None
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
-
-    def getControlKey(self, EventObject, ControlList):
-        xControlModel = EventObject.getModel()
-        try:
-            sName = xControlModel.getPropertyValue(
-                PropertyNames.PROPERTY_NAME)
-            iKey = ControlList.get(sName).intValue()
-        except com.sun.star.uno.Exception, exception:
-            traceback.print_exc()
-            iKey = 2000
-
-        return iKey
 
     def getPeerConfiguration(self):
         if self.m_oPeerConfig is None:
@@ -68,7 +56,7 @@ class UnoDialog(object):
                 xPSet = self.xDialogModel.getByName(ControlName)
                 setattr(xPSet,PropertyName, PropertyValue)
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def setControlProperties(
@@ -79,7 +67,7 @@ class UnoDialog(object):
         try:
             xPSet = self.xDialogModel.getByName(ControlName)
             return xPSet.getPropertyValue(PropertyName)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             return None
 
@@ -92,7 +80,7 @@ class UnoDialog(object):
             while i < allProps.length:
                 sName = allProps[i].Name
                 i += 1
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def getMAPConversionFactor(self, ControlName):
@@ -168,7 +156,7 @@ class UnoDialog(object):
                     controlname, PropertyNames.PROPERTY_STEP,
                     UIConsts.INVISIBLESTEP)
 
-        except com.sun.star.uno.Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     # repaints the currentDialogStep
@@ -181,7 +169,7 @@ class UnoDialog(object):
                 self.xDialogModel, PropertyNames.PROPERTY_STEP, 99)
             Helper.setUnoPropertyValue(
                 self.xDialogModel, PropertyNames.PROPERTY_STEP, ncurstep)
-        except com.sun.star.uno.Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def insertControlModel(
@@ -193,7 +181,7 @@ class UnoDialog(object):
             self.xDialogModel.insertByName(componentName, xControlModel)
             Helper.setUnoPropertyValue(xControlModel,
                 PropertyNames.PROPERTY_NAME, componentName)
-        except Exception, ex:
+        except Exception:
             traceback.print_exc()
 
         aObj = self.xUnoDialog.getControl(componentName)
@@ -202,17 +190,6 @@ class UnoDialog(object):
     def setFocus(self, ControlName):
         oFocusControl = self.xUnoDialog.getControl(ControlName)
         oFocusControl.setFocus()
-
-    def combineListboxList(self, sFirstEntry, MainList):
-        try:
-            FirstList = [sFirstEntry]
-            ResultList = [MainList.length + 1]
-            System.arraycopy(FirstList, 0, ResultList, 0, 1)
-            System.arraycopy(MainList, 0, ResultList, 1, len(MainList))
-            return ResultList
-        except java.lang.Exception, jexception:
-            traceback.print_exc()
-            return None
 
     def selectListBoxItem(self, xListBox, iFieldsSelIndex):
         if iFieldsSelIndex > -1:

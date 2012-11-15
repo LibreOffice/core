@@ -41,10 +41,10 @@ class ViewHandler(object):
                 xViewTextCursor.gotoRange(xHeaderRange, False)
                 xViewTextCursor.collapseToStart()
             else:
-                print "No Headertext available"
+                print ("No Headertext available")
 
-        except com.sun.star.uno.Exception, exception:
-            exception.printStackTrace(System.out)
+        except Exception:
+            traceback.print_exc()
 
     def setViewSetting(self, Setting, Value):
         self.xTextViewCursorSupplier.ViewSettings.setPropertyValue(Setting, Value)

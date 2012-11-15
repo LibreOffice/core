@@ -31,10 +31,10 @@ class Desktop(object):
         if xMSF is not None:
             try:
                 xDesktop = xMSF.createInstance( "com.sun.star.frame.Desktop")
-            except Exception, exception:
+            except Exception:
                 traceback.print_exc()
         else:
-            print "Can't create a desktop. null pointer !"
+            print ("Can't create a desktop. null pointer !")
 
         return xDesktop
 
@@ -55,7 +55,7 @@ class Desktop(object):
             oURLArray[0] = oURL
             xDispatch = xFrame.queryDispatch(oURLArray[0], _stargetframe, ALL)
             return xDispatch
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
         return None
@@ -99,7 +99,7 @@ class Desktop(object):
             aResult = ocharservice.parsePredefinedToken(KParseType.IDENTNAME,
                 _sString, 0, _aLocale, nStartFlags, "", nStartFlags, " ")
             return aResult.EndPos
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
             return -1
 

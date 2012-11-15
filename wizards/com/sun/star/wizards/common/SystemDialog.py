@@ -40,7 +40,7 @@ class SystemDialog(object):
             if self.systemDialog is not None:
                 self.systemDialog.initialize((Type,))
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     @classmethod
@@ -68,7 +68,7 @@ class SystemDialog(object):
         try:
             s = self.xStringSubstitution.substituteVariables(path, False)
             return s
-        except Exception, ex:
+        except Exception:
             traceback.print_exc()
             return path
 
@@ -85,7 +85,7 @@ class SystemDialog(object):
                 sPathList = self.systemDialog.getFiles()
                 self.sStorePath = sPathList[0]
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
         return self.sStorePath
@@ -94,7 +94,7 @@ class SystemDialog(object):
         try:
             self.systemDialog.setDisplayDirectoryxPropertyValue(
                 subst(displayDir))
-        except IllegalArgumentException, iae:
+        except IllegalArgumentException as iae:
             traceback.print_exc()
             raise AttributeError(iae.getMessage());
 
@@ -115,7 +115,7 @@ class SystemDialog(object):
             if self.execute(self.systemDialog):
                 return self.systemDialog.getFiles()
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
         return None
@@ -127,7 +127,7 @@ class SystemDialog(object):
             pattern = "*." + sExtension
             #add the filter
             self.addFilter(uiName, pattern, setToDefault)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def addFilter(self, uiName, pattern, setToDefault):
@@ -136,7 +136,7 @@ class SystemDialog(object):
             if setToDefault:
                 self.systemDialog.setCurrentFilter(uiName)
 
-        except Exception, ex:
+        except Exception:
             traceback.print_exc()
 
     '''
@@ -157,7 +157,7 @@ class SystemDialog(object):
 
             raise NullPointerException(
                 "UIName property not found for Filter " + filterName);
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             return None
 
@@ -221,6 +221,6 @@ class SystemDialog(object):
             xPathSubst = xMSF.createInstance(
                 "com.sun.star.util.PathSubstitution")
             return xPathSubst
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
             return None

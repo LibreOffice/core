@@ -134,7 +134,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.removeTerminateListener()
             self.closeDocument()
             self.running = False
-        except Exception, exception:
+        except Exception:
             self.removeTerminateListener()
             traceback.print_exc()
             self.running = False
@@ -213,7 +213,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 pass
                 #TODO: Error Handling
 
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
         finally:
             if endWizard:
@@ -225,7 +225,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def closeDocument(self):
         try:
             self.myFaxDoc.xFrame.close(False)
-        except CloseVetoException, e:
+        except CloseVetoException:
             traceback.print_exc()
 
     def drawConstants(self):
@@ -265,9 +265,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 "Template", "share", "/wizard")
             self.UserTemplatePath = FileAccess.getOfficePath2(self.xMSF,
                 "Template", "user", "")
-            self.sBitmapPath = FileAccess.combinePaths(self.xMSF,
-                self.sTemplatePath, "/../wizard/bitmap")
-        except NoValidPathException, e:
+        except NoValidPathException:
             traceback.print_exc()
 
     def initializeTemplates(self, xMSF):
@@ -287,7 +285,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.setControlProperty("lstBusinessStyle", "SelectedItems", (0,))
             self.setControlProperty("lstPrivateStyle", "SelectedItems" , (0,))
             return True
-        except NoValidPathException, e:
+        except NoValidPathException:
             traceback.print_exc()
             return False
 
@@ -395,7 +393,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 "cp_TemplateName", self.txtTemplateName, True).updateUI()
             UnoDataAware.attachEditControl(cgl, "cp_TemplatePath",
                 self.myPathSelection.xSaveTextBox, True).updateUI()
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def saveConfiguration(self):
@@ -404,7 +402,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 "/org.openoffice.Office.Writer/Wizards/Fax", True)
             self.myConfig.writeConfiguration(root, "cp_")
             root.commitChanges()
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
     def setConfiguration(self):
@@ -617,7 +615,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 FaxWizardDialogImpl.RM_FOOTER)
             Helper.setUnoPropertyValue(BPaperItem,
                 PropertyNames.PROPERTY_ENABLED, bFooterPossible)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def chkFooterNextPagesItemChanged(self):

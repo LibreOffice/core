@@ -95,7 +95,7 @@ class TextDocument(object):
                     "private:object", "_blank", 0, loadArgs)
                 # remember some things for later usage
                 self.xFrame = self.xTextDocument.CurrentController.Frame
-            except Exception, e:
+            except Exception:
                 traceback.print_exc()
 
         elif _textDocument is not None:
@@ -148,7 +148,7 @@ class TextDocument(object):
         try:
             myViewHandler.setViewSetting(
                 "ZoomType", ENTIRE_PAGE)
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
         myFieldHandler = TextFieldHandler(self.xMSF, self.xTextDocument)
         myFieldHandler.updateDocInfoFields()
@@ -160,7 +160,7 @@ class TextDocument(object):
             xPageStyleCollection = xNameAccess.getByName("PageStyles")
             xPageStyle = xPageStyleCollection.getByName("First Page")
             return Helper.getUnoPropertyValue(xPageStyle, "Size")
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             return None
 
@@ -207,14 +207,7 @@ class TextDocument(object):
             description = description.replace("<wizard_name>", WizardName)
             description = description.replace("<current_date>", myDate)
             xDocProps2.Description = description
-        except NoSuchElementException, e:
-            # TODO Auto-generated catch block
-            traceback.print_exc()
-        except WrappedTargetException, e:
-            # TODO Auto-generated catch block
-            traceback.print_exc()
-        except Exception, e:
-            # TODO Auto-generated catch block
+        except Exception:
             traceback.print_exc()
 
     '''

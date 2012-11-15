@@ -59,7 +59,7 @@ class OfficeDocument(object):
             uno.invoke(xComponent.Events, "replaceByName",
                 (EventName, uno.Any("[]com.sun.star.beans.PropertyValue",
                     tuple(oEventProperties))))
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def dispose(self, xMSF, xComponent):
@@ -71,7 +71,7 @@ class OfficeDocument(object):
 
                 Desktop.dispatchURL(xMSF, ".uno:CloseDoc", xFrame)
 
-        except PropertyVetoException, exception:
+        except PropertyVetoException:
             traceback.print_exc()
 
     '''
@@ -132,7 +132,7 @@ class OfficeDocument(object):
         xToolkit = None
         try:
             xToolkit = xMSF.createInstance("com.sun.star.awt.Toolkit")
-        except Exception, e:
+        except Exception:
             # TODO Auto-generated catch block
             traceback.print_exc()
 
@@ -156,8 +156,7 @@ class OfficeDocument(object):
         xPeer = None
         try:
             xPeer = xToolkit.createWindow(aDescriptor)
-        except IllegalArgumentException, e:
-            # TODO Auto-generated catch block
+        except IllegalArgumentException:
             traceback.print_exc()
 
         #define some further properties of the frame window
@@ -167,8 +166,7 @@ class OfficeDocument(object):
         xFrame = None
         try:
             xFrame = xMSF.createInstance("com.sun.star.frame.Frame")
-        except Exception, e:
-            # TODO Auto-generated catch block
+        except Exception:
             traceback.print_exc()
 
         xFrame.initialize(xPeer)
@@ -187,7 +185,7 @@ class OfficeDocument(object):
         try:
             xComponent = xInterface.loadComponentFromURL(
                 sURL, sFrame, 0, tuple(xValues))
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
         return xComponent
@@ -223,9 +221,8 @@ class OfficeDocument(object):
             return True
         except ErrorCodeIOException:
             return True
-            #There's a bug here, fix later
             pass
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             return False
 
@@ -235,8 +232,8 @@ class OfficeDocument(object):
             try:
                 xComponent.close(True)
                 bState = True
-            except com.sun.star.util.CloseVetoException, exCloseVeto:
-                print "could not close doc"
+            except com.sun.star.util.CloseVetoException:
+                print ("could not close doc")
                 bState = False
 
         else:
@@ -256,7 +253,7 @@ class OfficeDocument(object):
                             (rowcount + ypos) - 1)
                     xNewRange.setDataArray(datalist)
 
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
     @classmethod

@@ -30,12 +30,12 @@ class TextFieldHandler(object):
     '''
 
     xTextFieldsSupplierAux = None
-    arrayTextFields = None
-    dictTextFields = None
 
     def __init__(self, xMSF, xTextDocument):
         self.xMSFDoc = xMSF
         self.xTextFieldsSupplier = xTextDocument
+        self.arrayTextFields = {}
+        self.dictTextFields = []
         if TextFieldHandler.xTextFieldsSupplierAux is not \
                 self.xTextFieldsSupplier:
             self.__getTextFields()
@@ -56,7 +56,7 @@ class TextFieldHandler(object):
                 UserFieldContent = xMaster.getPropertyValue("Content")
                 return UserFieldContent
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
         return ""
@@ -76,7 +76,7 @@ class TextFieldHandler(object):
             xField.attachTextFieldMaster(xPSet)
             xTextCursor.getText().insertTextContent(
                 xTextCursor, xField, False)
-        except com.sun.star.uno.Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def createUserField(self, FieldName, FieldTitle):
@@ -89,25 +89,22 @@ class TextFieldHandler(object):
     def __getTextFields(self):
         try:
             if self.xTextFieldsSupplier.TextFields.hasElements():
-                TextFieldHandler.dictTextFields = {}
-                TextFieldHandler.arrayTextFields = []
                 xEnum = \
                     self.xTextFieldsSupplier.TextFields.createEnumeration()
                 while xEnum.hasMoreElements():
                     oTextField = xEnum.nextElement()
-                    TextFieldHandler.arrayTextFields.append(oTextField)
+                    self.arrayTextFields.append(oTextField)
                     xPropertySet = oTextField.TextFieldMaster
                     if xPropertySet.Name:
-                        TextFieldHandler.dictTextFields[xPropertySet.Name] = \
+                        self.dictTextFields[xPropertySet.Name] = \
                             oTextField
-        except Exception, e:
-            #TODO Auto-generated catch block
+        except Exception:
             traceback.print_exc()
 
     def __getTextFieldsByProperty(
             self, _PropertyName, _aPropertyValue):
         try:
-            xProperty = TextFieldHandler.dictTextFields[_aPropertyValue]
+            xProperty = self.dictTextFields[_aPropertyValue]
             xPropertySet = xProperty.TextFieldMaster
             if xPropertySet.PropertySetInfo.hasPropertyByName(
                     _PropertyName):
@@ -117,7 +114,7 @@ class TextFieldHandler(object):
                 if sValue == _aPropertyValue:
                     return xProperty
             return None
-        except KeyError, e:
+        except KeyError:
             return None
 
     def changeUserFieldContent(self, _FieldName, _FieldContent):
@@ -129,7 +126,7 @@ class TextFieldHandler(object):
 
     def updateDocInfoFields(self):
         try:
-            for i in TextFieldHandler.arrayTextFields:
+            for i in self.arrayTextFields:
                 if i.supportsService(
                     "com.sun.star.text.TextField.ExtendedUser"):
                     i.update()
@@ -138,7 +135,7 @@ class TextFieldHandler(object):
                     "com.sun.star.text.TextField.User"):
                     i.update()
 
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
     def updateDateFields(self):
@@ -149,23 +146,23 @@ class TextFieldHandler(object):
             dt.Year = time.strftime("%Y", now)
             dt.Month = time.strftime("%m", now)
             dt.Month += 1
-            for i in TextFieldHandler.arrayTextFields:
+            for i in self.arrayTextFields:
                 if i.supportsService(
                     "com.sun.star.text.TextField.DateTime"):
                     i.setPropertyValue("IsFixed", False)
                     i.setPropertyValue("DateTimeValue", dt)
 
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
     def fixDateFields(self, _bSetFixed):
         try:
-            for i in TextFieldHandler.arrayTextFields:
+            for i in self.arrayTextFields:
                 if i.supportsService(
                     "com.sun.star.text.TextField.DateTime"):
                     i.setPropertyValue("IsFixed", _bSetFixed)
 
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
     def removeUserFieldByContent(self, _FieldContent):
@@ -178,5 +175,5 @@ class TextFieldHandler(object):
                     xDependentTextFields[i].dispose()
                     i += 1
 
-        except Exception, e:
+        except Exception:
             traceback.print_exc()

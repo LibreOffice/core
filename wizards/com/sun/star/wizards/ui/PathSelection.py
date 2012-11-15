@@ -99,7 +99,7 @@ class PathSelection(object):
                 myFA.getPath(self.sDefaultDirectory + \
                     "/" + \
                     self.sDefaultName, None))
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
     def triggerPathPicker(self):
@@ -130,7 +130,7 @@ class PathSelection(object):
                 elif iDialogType == DialogTypes.FILE:
                     #TODO: write code for picking a file for loading
                     return
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
     def callXPathSelectionListener(self):

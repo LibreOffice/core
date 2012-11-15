@@ -37,14 +37,14 @@ class Resource(object):
             if self.xStringIndexAccess is None:
                 raise Exception ("could not initialize xStringIndexAccess")
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             self.showCommonResourceError(self.xMSF)
 
     def getResText(self, nID):
         try:
             return self.xStringIndexAccess.getByIndex(nID)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             raise ValueError("Resource with ID not " + str(nID) + " not found")
 
@@ -56,7 +56,7 @@ class Resource(object):
                 ResArray[i] = getResText(nID + i)
                 i += 1
             return ResArray
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             raise ValueError("Resource with ID not" + str(nID) + " not found")
 

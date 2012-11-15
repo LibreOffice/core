@@ -102,7 +102,7 @@ class NumberFormatter(object):
                     _FormatString, self.aLocale)
 
             return NewFormatKey
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
             return -1
 
@@ -122,7 +122,7 @@ class NumberFormatter(object):
                     _FormatString, _aLocale)
 
             return NewFormatKey
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
             return -1
 
@@ -147,7 +147,7 @@ class NumberFormatter(object):
                 # TODO: throws a exception in a try catch environment, very helpful?
                 raise Exception
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def getNullDateCorrection(self):
@@ -174,7 +174,7 @@ class NumberFormatter(object):
                 self.iLogicalFormatKey = self.xNumberFormats.addNew(
                     FormatString, self.aLocale)
 
-        except Exception, e:
+        except Exception:
             #MalformedNumberFormat
             traceback.print_exc()
             self.iLogicalFormatKey = self.xNumberFormats.getStandardFormat(

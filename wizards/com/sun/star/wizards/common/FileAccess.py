@@ -87,7 +87,7 @@ class FileAccess(object):
             ResultPath = str(Helper.getUnoPropertyValue(xInterface, sPath))
             ResultPath = self.deleteLastSlashfromUrl(ResultPath)
             return ResultPath
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             return ""
 
@@ -139,7 +139,7 @@ class FileAccess(object):
                         break
 
             ResultPath = self.deleteLastSlashfromUrl(ResultPath)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             ResultPath = ""
 
@@ -149,115 +149,13 @@ class FileAccess(object):
         return ResultPath
 
     @classmethod
-    def getOfficePaths(self, xMSF, _sPath, sType, sSearchDir):
-        #This method currently only works with sPath="Template"
-        aPathList = []
-        Template_writable = ""
-        try:
-            xPathInterface = xMSF.createInstance(
-                "com.sun.star.util.PathSettings")
-            Template_writable = xPathInterface.getPropertyValue(
-                _sPath + "_writable")
-            Template_internal = xPathInterface.getPropertyValue(
-                _sPath + "_internal")
-            Template_user = xPathInterface.getPropertyValue(_sPath + "_user")
-            i = 0
-            for i in Template_internal:
-                if i.startsWith("vnd."):
-                    # if there exists a language in the directory,
-                    # we try to add the right language
-                    sPathToExpand = sPath.substring(len("vnd.sun.star.Expand:"))
-                    xExpander = Helper.getMacroExpander(xMSF)
-                    sPath = xExpander.expandMacros(sPathToExpand)
-
-                sPath = checkIfLanguagePathExists(xMSF, sPath)
-                aPathList.add(sPath)
-                i += 1
-            i = 0
-            while i < Template_user.length:
-                aPathList.add(Template_user[i])
-                i += 1
-            aPathList.add(Template_writable)
-
-        except Exception, exception:
-            traceback.print_exc()
-        return aPathList
-
-    @classmethod
-    def checkIfLanguagePathExists(self, _xMSF, _sPath):
-        try:
-            defaults = _xMSF.createInstance("com.sun.star.text.Defaults")
-            aLocale = Helper.getUnoStructValue(defaults, "CharLocale")
-            if aLocale == None:
-                java.util.Locale.getDefault()
-                aLocale = com.sun.star.lang.Locale.Locale()
-                aLocale.Country = java.util.Locale.getDefault().getCountry()
-                aLocale.Language = java.util.Locale.getDefault().getLanguage()
-                aLocale.Variant = java.util.Locale.getDefault().getVariant()
-
-            sLanguage = aLocale.Language
-            sCountry = aLocale.Country
-            sVariant = aLocale.Variant
-            # de-DE-Bayrisch
-            aLocaleAll = StringBuffer.StringBuffer()
-            aLocaleAll.append(sLanguage).append('-').append(sCountry).append('-').append(sVariant)
-            sPath = _sPath + "/" + aLocaleAll.toString()
-            xInterface = _xMSF.createInstance(
-                "com.sun.star.ucb.SimpleFileAccess")
-            if xInterface.exists(sPath):
-                # de-DE
-                return sPath
-
-            aLocaleLang_Country = StringBuffer.StringBuffer()
-            aLocaleLang_Country.append(sLanguage).append('-').append(sCountry)
-            sPath = _sPath + "/" + aLocaleLang_Country.toString()
-            if xInterface.exists(sPath):
-                # de
-                return sPath
-
-            aLocaleLang = StringBuffer.StringBuffer()
-            aLocaleLang.append(sLanguage)
-            sPath = _sPath + "/" + aLocaleLang.toString()
-            if xInterface.exists(sPath):
-                # the absolute default is en-US or en
-                return sPath
-
-            sPath = _sPath + "/en-US"
-            if xInterface.exists(sPath):
-                return sPath
-
-            sPath = _sPath + "/en"
-            if xInterface.exists(sPath):
-                return sPath
-
-        except com.sun.star.uno.Exception, e:
-            pass
-
-        return _sPath
-
-    @classmethod
-    def combinePaths2(self, xMSF, _aFirstPath, _sSecondPath):
-        i = 0
-        while i < _aFirstPath.size():
-            sOnePath = _aFirstPath.get(i)
-            sOnePath = addPath(sOnePath, _sSecondPath)
-            if isPathValid(xMSF, sOnePath):
-                _aFirstPath.add(i, sOnePath)
-                _aFirstPath.remove(i + 1)
-            else:
-                _aFirstPath.remove(i)
-                i -= 1
-
-            i += 1
-
-    @classmethod
     def isPathValid(self, xMSF, _sPath):
         bExists = False
         try:
             xUcbInterface = xMSF.createInstance(
                 "com.sun.star.ucb.SimpleFileAccess")
             bExists = xUcbInterface.exists(_sPath)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
         return bExists
@@ -271,7 +169,7 @@ class FileAccess(object):
                 "com.sun.star.ucb.SimpleFileAccess")
             ReturnPath = _sFirstPath + _sSecondPath
             bexists = xUcbInterface.exists(ReturnPath)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             return ""
 
@@ -279,32 +177,6 @@ class FileAccess(object):
             raise NoValidPathException (xMSF, "");
 
         return ReturnPath
-
-    @classmethod
-    def createSubDirectory(self, xMSF, xSimpleFileAccess, Path):
-        sNoDirCreation = ""
-        try:
-            oResource = Resource.Resource_unknown(xMSF, "ImportWizard", "imp")
-            if oResource != None:
-                sNoDirCreation = oResource.getResText(1050)
-                sMsgDirNotThere = oResource.getResText(1051)
-                sQueryForNewCreation = oResource.getResText(1052)
-                OSPath = JavaTools.convertfromURLNotation(Path)
-                sQueryMessage = JavaTools.replaceSubString(sMsgDirNotThere,
-                    OSPath, "%1")
-                sQueryMessage = sQueryMessage + (char)
-                13 + sQueryForNewCreation
-                icreate = SystemDialog.showMessageBox(xMSF, "QueryBox",
-                    YES_NO, sQueryMessage)
-                if icreate == 2:
-                    xSimpleFileAccess.createFolder(Path)
-                    return True
-
-            return False
-        except Exception:
-            sMsgNoDir = JavaTools.replaceSubString(sNoDirCreation, Path, "%1")
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", OK, sMsgNoDir)
-            return False
 
     @classmethod
     def getFolderTitles(self, xMSF, FilterName, FolderName, resDict=None):
@@ -336,7 +208,7 @@ class FileAccess(object):
                             title = xDocInterface.Title
                     LocLayoutFiles[title] = i
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
         return OrderedDict(sorted(LocLayoutFiles.items(), key=lambda t: t[0]))
@@ -353,25 +225,6 @@ class FileAccess(object):
         return sNewPath
 
     @classmethod
-    def getPathFromList(self, xMSF, _aList, _sFile):
-        sFoundFile = ""
-        try:
-            xInterface = xMSF.createInstance(
-                "com.sun.star.ucb.SimpleFileAccess")
-            i = 0
-            while i < _aList.size():
-                sPath = _aList.get(i)
-                sPath = addPath(sPath, _sFile)
-                if xInterface.exists(sPath):
-                    sFoundFile = sPath
-
-                i += 1
-        except Exception, e:
-            pass
-
-        return sFoundFile
-
-    @classmethod
     def getTitle(self, xMSF, _sFile):
         sTitle = ""
         try:
@@ -380,7 +233,7 @@ class FileAccess(object):
             noArgs = []
             xDocInterface.loadFromMedium(_sFile, noArgs)
             sTitle = xDocInterface.getTitle()
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
         return sTitle
@@ -599,12 +452,6 @@ class FileAccess(object):
 
         return name + stringI + stringExt
 
-    def getSize(self, url):
-        try:
-            return self.fileAccess.getSize(url)
-        except Exception, ex:
-            return -1
-
     @classmethod
     def connectURLs(self, urlFolder, urlFilename):
         stringFolder = ""
@@ -614,52 +461,3 @@ class FileAccess(object):
         if urlFilename.startswith("/"):
             stringFileName = urlFilename[1:]
         return urlFolder + stringFolder + stringFileName
-
-    @classmethod
-    def getDataFromTextFile(self, _xMSF, _filepath):
-        sFileData = None
-        try:
-            oDataVector = []
-            oSimpleFileAccess = _xMSF.createInstance(
-                "com.sun.star.ucb.SimpleFileAccess")
-            if oSimpleFileAccess.exists(_filepath):
-                xInputStream = oSimpleFileAccess.openFileRead(_filepath)
-                oTextInputStream = _xMSF.createInstance(
-                    "com.sun.star.io.TextInputStream")
-                oTextInputStream.setInputStream(xInputStream)
-                while not oTextInputStream.isEOF():
-                    oDataVector.addElement(oTextInputStream.readLine())
-                oTextInputStream.closeInput()
-                sFileData = [oDataVector.size()]
-                oDataVector.toArray(sFileData)
-
-        except Exception, e:
-            traceback.print_exc()
-
-        return sFileData
-
-    '''
-    shortens a filename to a user displayable representation.
-    @param path
-    @param maxLength
-    @return
-    '''
-
-    @classmethod
-    def getShortFilename(self, path, maxLength):
-        firstPart = 0
-        if path.length() > maxLength:
-            if path.startsWith("/"):
-                # unix
-                nextSlash = path.indexOf("/", 1) + 1
-                firstPart = Math.min(nextSlash, (maxLength - 3) / 2)
-            else:
-                #windows
-                firstPart = Math.min(10, (maxLength - 3) / 2)
-
-            s1 = path.substring(0, firstPart)
-            s2 = path.substring(path.length() - (maxLength - (3 + firstPart)))
-            return s1 + "..." + s2
-        else:
-            return path
-

@@ -31,7 +31,7 @@ class Helper(object):
                 setattr(xPSet, PropertyName, PropertyValue)
 
         except AttributeError:
-            raise AttributeError, "No Such Property: '%s'" % PropertyName
+            raise AttributeError( "No Such Property: '%s'" % PropertyName)
         except Exception:
             traceback.print_exc()
 
@@ -43,7 +43,7 @@ class Helper(object):
             else:
                 raise RuntimeException()
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             return None
 
@@ -64,7 +64,7 @@ class Helper(object):
                 return oObject
             return None
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             return None
 
@@ -76,7 +76,7 @@ class Helper(object):
                 if isinstance(oObject,list):
                     return getArrayValue(oObject)
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
         return None
@@ -90,7 +90,7 @@ class Helper(object):
                     return oObject
 
             return None
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             return None
 
@@ -128,7 +128,7 @@ class Helper(object):
             else:
                 return oPropList
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             return None
 
@@ -137,13 +137,13 @@ class Helper(object):
         #try to add the path to the class loader
         aHelper = PropertySetHelper(_xMSF);
         aDefaultContext = aHelper.getPropertyValueAsObject("DefaultContext")
-        return aDefaultContext;
+        return aDefaultContext
 
     def getMacroExpander(_xMSF):
         xComponentContext = self.getComponentContext(_xMSF);
         aSingleton = xComponentContext.getValueByName(
             "/singletons/com.sun.star.util.theMacroExpander")
-        return aSingleton;
+        return aSingleton
 
     class DateUtils(object):
 

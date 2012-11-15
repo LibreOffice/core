@@ -35,7 +35,7 @@ class TextSectionHandler(object):
                 self.removeTextSection(oTextSection)
 
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def hasTextSectionByName(self, SectionName):
@@ -48,13 +48,13 @@ class TextSectionHandler(object):
             oTextSection = xAllTextSections.getByIndex(
                 xAllTextSections.getCount() - 1)
             self.removeTextSection(oTextSection)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def removeTextSection(self, _oTextSection):
         try:
             self.xText.removeTextContent(_oTextSection)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def removeInvisibleTextSections(self):
@@ -68,7 +68,7 @@ class TextSectionHandler(object):
                     self.xText.removeTextContent(xTextContentTextSection)
 
                 i -= 1
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def removeAllTextSections(self):
@@ -78,7 +78,7 @@ class TextSectionHandler(object):
             for i in xrange(TextSectionCount - 1, -1, -1):
                 xTextContentTextSection = xAllTextSections.getByIndex(i)
                 self.xText.removeTextContent(xTextContentTextSection)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def breakLinkOfTextSection(self, oTextSection):
@@ -120,7 +120,7 @@ class TextSectionHandler(object):
             xSecondTextCursor = self.xText.createTextCursor()
             xSecondTextCursor.gotoEnd(False)
             insertTextSection(GroupName, TemplateName, xSecondTextCursor)
-        except IllegalArgumentException, e:
+        except IllegalArgumentException:
             traceback.print_exc()
 
     def insertTextSection(self, sectionName, templateName, position):
@@ -135,6 +135,6 @@ class TextSectionHandler(object):
                     position, xTextSection, False)
 
             linkSectiontoTemplate(xTextSection, templateName, sectionName)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 

@@ -77,7 +77,7 @@ class WizardDialog(UnoDialog2):
             if self.nNewStep != self.nOldStep:
                 self.switchToStep()
 
-        except IllegalArgumentException, exception:
+        except IllegalArgumentException:
             traceback.print_exc()
 
     def setRoadmapInteractive(self, _bInteractive):
@@ -89,7 +89,7 @@ class WizardDialog(UnoDialog2):
     def isRoadmapComplete(self):
         try:
             return bool(Helper.getUnoPropertyValue(self.oRoadmap, "Complete"))
-        except IllegalArgumentException, exception:
+        except IllegalArgumentException:
             traceback.print_exc()
             return False
 
@@ -103,7 +103,7 @@ class WizardDialog(UnoDialog2):
         try:
             return int(Helper.getUnoPropertyValue(
                 self.oRoadmap, "CurrentItemID"))
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             return -1
 
@@ -135,9 +135,9 @@ class WizardDialog(UnoDialog2):
             Helper.setUnoPropertyValue(
                 self.oRoadmap, "Text",
                 self.__oWizardResource.getResText(UIConsts.RID_COMMON + 16))
-        except NoSuchMethodException, ex:
+        except NoSuchMethodException:
             Resource.showCommonResourceError(xMSF)
-        except Exception, jexception:
+        except Exception:
             traceback.print_exc()
 
     def setRMItemLabels(self, _oResource, StartResID):
@@ -155,7 +155,7 @@ class WizardDialog(UnoDialog2):
                 PropertyNames.PROPERTY_ENABLED, _bEnabled)
             Helper.setUnoPropertyValue(oRoadmapItem, "ID", _CurItemID)
             self.oRoadmap.insertByIndex(Index, oRoadmapItem)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def getRoadmapItemByID(self, _ID):
@@ -168,7 +168,7 @@ class WizardDialog(UnoDialog2):
                     return CurRoadmapItem
 
             return None
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             return None
 
@@ -303,7 +303,7 @@ class WizardDialog(UnoDialog2):
                     uno.Any("short",(curtabindex + 1)),
                     iButtonWidth), self)
             self.setControlProperty("btnWizardNext", "DefaultButton", True)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def insertRoadMapItems(self, enabled, items):
@@ -356,7 +356,7 @@ class WizardDialog(UnoDialog2):
             bIsEnabled = bool(Helper.getUnoPropertyValue(xRoadmapItem,
                 PropertyNames.PROPERTY_ENABLED))
             return bIsEnabled
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             return False
 
@@ -374,7 +374,7 @@ class WizardDialog(UnoDialog2):
                 if (self.nNewStep == 0):
                     self.nNewStep = self.nOldStep
                 self.switchToStep()
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
     #TODO discuss with rp
@@ -394,7 +394,7 @@ class WizardDialog(UnoDialog2):
             self.nNewStep = self.getNextAvailableStep()
             if self.nNewStep > -1:
                 self.switchToStep()
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
     @abstractmethod
@@ -415,7 +415,7 @@ class WizardDialog(UnoDialog2):
 
             if success:
                 self.removeTerminateListener()
-        except Exception, e:
+        except Exception:
              traceback.print_exc()
 
     def getMaximalStep(self):
@@ -425,7 +425,7 @@ class WizardDialog(UnoDialog2):
         try:
             return int(Helper.getUnoPropertyValue(self.xDialogModel,
                 PropertyNames.PROPERTY_STEP))
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
             return -1
 
@@ -478,7 +478,7 @@ class WizardDialog(UnoDialog2):
         try:
             self.cancelWizard()
             self.removeTerminateListener()
-        except Exception,e:
+        except Exception:
             traceback.print_exc()
 
     def queryTermination(self):
