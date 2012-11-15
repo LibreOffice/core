@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQX///ts\u003d",
+        "filename": "bridges/source/cpp_uno/cc5_solaris_sparc64/uno2cpp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-15T04:01:22Z",
+      "side": 1,
+      "message": "that\u0027s wrong. \"void\".pData does not make sens",
+      "revId": "be29c729efe2b400955ab1882c3bf891b1ff5e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
