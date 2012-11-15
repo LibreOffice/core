@@ -324,7 +324,6 @@ public:
                         SvListView();   // Sets the Model to 0
     virtual             ~SvListView();
     void                Clear();
-    SvTreeList*         GetModel() const;
     virtual void        SetModel( SvTreeList* );
     virtual void        ModelNotification(
                             sal_uInt16 nActionId,

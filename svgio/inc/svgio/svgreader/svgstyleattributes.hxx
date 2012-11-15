@@ -304,7 +304,6 @@ namespace svgio
 
             /// fill rule content
             bool getFillRule() const;
-            void setFillRule(const bool* pFillRule = 0);
 
             /// fill StrokeDasharray content
             const SvgNumberVector& getStrokeDasharray() const;

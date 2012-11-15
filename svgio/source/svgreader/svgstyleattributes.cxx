@@ -2049,19 +2049,6 @@ namespace svgio
             return true;
         }
 
-        void SvgStyleAttributes::setFillRule(const bool* pFillRule)
-        {
-            if(pFillRule)
-            {
-                maFillRuleSet = true;
-                maFillRule = *pFillRule;
-            }
-            else
-            {
-                maFillRuleSet = false;
-            }
-        }
-
         const SvgNumberVector& SvgStyleAttributes::getStrokeDasharray() const
         {
             if(!maStrokeDasharray.empty())

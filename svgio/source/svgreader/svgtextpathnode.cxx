@@ -72,22 +72,7 @@ namespace svgio
 
             // read access to evtl. advanced position
             double getPosition() const { return mfPosition; }
-
-            // get length of given text
-            double getLength(const rtl::OUString& rText) const;
         };
-
-        double pathTextBreakupHelper::getLength(const rtl::OUString& rText) const
-        {
-            const sal_uInt32 nLength(rText.getLength());
-
-            if(nLength)
-            {
-                return getTextLayouter().getTextWidth(rText, 0, nLength);
-            }
-
-            return 0.0;
-        }
 
         void pathTextBreakupHelper::freeB2DCubicBezierHelper()
         {
