@@ -29,7 +29,6 @@
 #include <osl/nlsupport.h>
 #include <osl/diagnose.h>
 #include <osl/process.h>
-#include <rtl/memory.h>
 
 #if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
     defined(FREEBSD) || defined(MACOSX)  || defined(IOS) || defined(OPENBSD) || \

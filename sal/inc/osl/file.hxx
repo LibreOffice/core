@@ -36,7 +36,6 @@
 #include <cassert>
 
 #include <osl/time.h>
-#include <rtl/memory.h>
 #include <rtl/ustring.hxx>
 
 #include <osl/file.h>

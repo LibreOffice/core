@@ -38,7 +38,6 @@
 #include <rtl/ustring.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
-#include <rtl/memory.h>
 #include <rtl/textenc.h>
 #include "sal/log.hxx"
 

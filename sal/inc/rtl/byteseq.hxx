@@ -31,7 +31,6 @@
 #include <osl/interlck.h>
 #include <rtl/byteseq.h>
 #include <rtl/alloc.h>
-#include <rtl/memory.h>
 
 #if ! defined EXCEPTIONS_OFF
 #include <new>

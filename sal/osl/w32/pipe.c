@@ -40,7 +40,6 @@
 #include <osl/process.h>
 
 #include <rtl/alloc.h>
-#include <rtl/memory.h>
 
 #define PIPESYSTEM      "\\\\.\\pipe\\"
 #define PIPEPREFIX    "OSL_PIPE_"

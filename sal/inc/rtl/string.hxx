@@ -35,7 +35,6 @@
 #include <ostream>
 
 #include <osl/diagnose.h>
-#include <rtl/memory.h>
 #include <rtl/textenc.h>
 #include <rtl/string.h>
 #include <rtl/stringutils.hxx>
