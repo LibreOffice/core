@@ -293,7 +293,7 @@ private:
 
 class SC_DLLPUBLIC ScCondFormatEntry : public ScConditionEntry
 {
-    String                  aStyleName;
+    rtl::OUString                  aStyleName;
 
     using ScConditionEntry::operator==;
 
@@ -316,8 +316,8 @@ public:
 
     int             operator== ( const ScCondFormatEntry& r ) const;
 
-    const String&   GetStyle() const        { return aStyleName; }
-    void            UpdateStyleName(const String& rNew)  { aStyleName=rNew; }
+    const rtl::OUString&   GetStyle() const        { return aStyleName; }
+    void            UpdateStyleName(const rtl::OUString& rNew)  { aStyleName=rNew; }
     virtual ScFormatEntry* Clone(ScDocument* pDoc) const;
 
 protected:
@@ -360,13 +360,13 @@ public:
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void            DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void            UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
-    void            RenameCellStyle( const String& rOld, const String& rNew );
+    void            RenameCellStyle( const rtl::OUString& rOld, const rtl::OUString& rNew );
 
     void            SourceChanged( const ScAddress& rAddr );
 
     const ScFormatEntry* GetEntry( sal_uInt16 nPos ) const;
 
-    const String&   GetCellStyle( ScBaseCell* pCell, const ScAddress& rPos ) const;
+    const rtl::OUString&   GetCellStyle( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
     ScCondFormatData GetData( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
@@ -422,7 +422,7 @@ public:
     void    CompileXML();
     void    UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    void    RenameCellStyle( const String& rOld, const String& rNew );
+    void    RenameCellStyle( const rtl::OUString& rOld, const rtl::OUString& rNew );
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
     void    DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 

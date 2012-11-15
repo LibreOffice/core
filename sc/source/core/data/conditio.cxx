@@ -1707,7 +1707,7 @@ const ScFormatEntry* ScConditionalFormat::GetEntry( sal_uInt16 nPos ) const
         return NULL;
 }
 
-const String& ScConditionalFormat::GetCellStyle( ScBaseCell* pCell, const ScAddress& rPos ) const
+const rtl::OUString& ScConditionalFormat::GetCellStyle( ScBaseCell* pCell, const ScAddress& rPos ) const
 {
     for (CondFormatContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
@@ -1719,7 +1719,7 @@ const String& ScConditionalFormat::GetCellStyle( ScBaseCell* pCell, const ScAddr
         }
     }
 
-    return EMPTY_STRING;
+    return EMPTY_OUSTRING;
 }
 
 ScCondFormatData ScConditionalFormat::GetData( ScBaseCell* pCell, const ScAddress& rPos ) const
@@ -1804,7 +1804,7 @@ void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
     maRanges.DeleteArea( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
 }
 
-void ScConditionalFormat::RenameCellStyle(const String& rOld, const String& rNew)
+void ScConditionalFormat::RenameCellStyle(const rtl::OUString& rOld, const rtl::OUString& rNew)
 {
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
         if(itr->GetType() == condformat::CONDITION)
@@ -1963,7 +1963,7 @@ void ScConditionalFormatList::UpdateReference( UpdateRefMode eUpdateRefMode,
     }
 }
 
-void ScConditionalFormatList::RenameCellStyle( const String& rOld, const String& rNew )
+void ScConditionalFormatList::RenameCellStyle( const rtl::OUString& rOld, const rtl::OUString& rNew )
 {
     for( iterator itr = begin(); itr != end(); ++itr)
         itr->RenameCellStyle(rOld,rNew);
