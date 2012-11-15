@@ -47,7 +47,7 @@ my $current_lang;            # big fat global because File::Find is a pig
 parse_options();
 
 #pack the .ui translations
-my @langs = split(/\s+/, $ENV{WITH_LANG});
+my @langs = split(/\s+/, $ENV{WITH_LANG_LIST});
 foreach (@langs) {
     next if ($_ eq "en-US");
     my %files_hash;
