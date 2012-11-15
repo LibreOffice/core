@@ -61,6 +61,7 @@ my $TARGET;
 my $LIBVER;
 my $OOO_BUILD;
 my $OOO_INSTALL;
+my $SOLARVER;
 
 if ($ENV{'OS'} eq 'MACOSX') {
     print "FIXME: linkoo currently does not work on Mac OS X\n";
@@ -108,8 +109,15 @@ File::Spec->file_name_is_absolute($OOO_BUILD) || die "linkoo requires absolute p
 
 ($TARGET, $LIBVER, $LANG) = sniff_target ($OOO_BUILD);
 
+$SOLARVER = "$OOO_BUILD/solver";
+
 if ($TARGET =~ /^wntgcci/ || $TARGET =~ /^wntmsci[0-9]+/) {
     $windows = 1;
+}
+
+if ($TARGET =~ /^wntmsci[0-9]+/) {
+    # wntgcci means are cross-compiling & can symlink, so copy only on real
+    # Windows
     $copy = 1;
 }
 
@@ -329,7 +337,7 @@ sub scan_and_link_files($$$)
     }
 
     # Now scan the solver
-    scan_one_dir ($installed_files, \%build_files, "$ENV{'SOLARVER'}/$target", 1);
+    scan_one_dir ($installed_files, \%build_files, "$SOLARVER/$target", 1);
 
     for my $file (keys %build_files) {
 	my $src = $build_files{$file};
@@ -393,7 +401,7 @@ sub link_gdb_py()
     my $dirh;
     my @basis;
     my @ure;
-    my $src = "$ENV{'SOLARVER'}/$TARGET/lib";
+    my $src = "$SOLARVER/$TARGET/lib";
     opendir ($dirh, $src) || die "can't open solver: $src: $!";
     while (my $dent = readdir ($dirh)) {
 	$dent =~ /^\./ && next;
@@ -423,7 +431,7 @@ sub link_pagein_files()
     return if ($windows);
 
     print "pagein case:";
-    my $src  = "$ENV{'SOLARVER'}/$TARGET/bin";
+    my $src  = "$SOLARVER/$TARGET/bin";
     my $dest = "$OOO_INSTALL/" . $brand_program_dir;
     for my $c ('calc', 'draw', 'impress', 'writer', 'common') {
 	do_link ($src, $dest, "pagein-$c", "pagein-$c");
