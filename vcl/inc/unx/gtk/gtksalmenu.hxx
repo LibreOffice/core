@@ -26,7 +26,7 @@
 #  ifndef GLIB_AVAILABLE_IN_2_32
      typedef void GMenuModel;
 #  endif
-#  ifndef GLIB_AVAILABLE_IN_2_28
+#  if !GLIB_CHECK_VERSION(2,28,0)
      typedef void GActionGroup;
 #  endif
 #endif
