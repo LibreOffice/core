@@ -323,10 +323,11 @@ wrapper_get_name( AtkObject *atk_obj )
 
     if( obj->mpContext )
     {
+        uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
             rtl::OString aName =
                 rtl::OUStringToOString(
-                    obj->mpContext->getAccessibleName(),
+                    xContext->getAccessibleName(),
                     RTL_TEXTENCODING_UTF8);
 
             int nCmp = atk_obj->name ? rtl_str_compare( atk_obj->name, aName.getStr() ) : -1;
@@ -354,10 +355,11 @@ wrapper_get_description( AtkObject *atk_obj )
 
     if( obj->mpContext )
     {
+        uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
             rtl::OString aDescription =
                 rtl::OUStringToOString(
-                    obj->mpContext->getAccessibleDescription(),
+                    xContext->getAccessibleDescription(),
                     RTL_TEXTENCODING_UTF8);
 
             g_free(atk_obj->description);
@@ -382,8 +384,9 @@ wrapper_get_n_children( AtkObject *atk_obj )
 
     if( obj->mpContext )
     {
+        uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
-            n = obj->mpContext->getAccessibleChildCount();
+            n = xContext->getAccessibleChildCount();
         }
         catch(const uno::Exception& e) {
             OSL_FAIL("Exception in getAccessibleChildCount()" );
@@ -411,9 +414,10 @@ wrapper_ref_child( AtkObject *atk_obj,
 
     if( obj->mpContext )
     {
+        uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
             uno::Reference< accessibility::XAccessible > xAccessible =
-                obj->mpContext->getAccessibleChild( i );
+                xContext->getAccessibleChild( i );
 
             child = atk_object_wrapper_ref( xAccessible );
         }
@@ -435,8 +439,9 @@ wrapper_get_index_in_parent( AtkObject *atk_obj )
 
     if( obj->mpContext )
     {
+        uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
-            i = obj->mpContext->getAccessibleIndexInParent();
+            i = xContext->getAccessibleIndexInParent();
 
 #ifdef ENABLE_TRACING
             fprintf(stderr, "%p->getAccessibleIndexInParent() returned: %u\n",
@@ -460,9 +465,10 @@ wrapper_ref_relation_set( AtkObject *atk_obj )
 
     if( obj->mpContext )
     {
+        uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
             uno::Reference< accessibility::XAccessibleRelationSet > xRelationSet(
-                    obj->mpContext->getAccessibleRelationSet()
+                    xContext->getAccessibleRelationSet()
             );
 
             sal_Int32 nRelations = xRelationSet.is() ? xRelationSet->getRelationCount() : 0;
@@ -505,9 +511,10 @@ wrapper_ref_state_set( AtkObject *atk_obj )
 
     if( obj->mpContext )
     {
+        uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
             uno::Reference< accessibility::XAccessibleStateSet > xStateSet(
-                obj->mpContext->getAccessibleStateSet());
+                xContext->getAccessibleStateSet());
 
             if( xStateSet.is() )
             {
