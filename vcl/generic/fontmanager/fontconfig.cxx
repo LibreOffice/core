@@ -73,7 +73,7 @@ using namespace psp;
     #define FC_FONTFORMAT "fontformat"
 #endif
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+#if defined(ENABLE_DBUS) && defined(ENABLE_FONT_AUTOINSTALL)
 #include <dbus/dbus-glib.h>
 #endif
 
@@ -832,7 +832,7 @@ namespace
 #endif
     }
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+#if defined(ENABLE_FONT_AUTOINSTALL)
     LanguageTag getExemplerLangTagForCodePoint(sal_uInt32 currentChar)
     {
         int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
@@ -850,12 +850,12 @@ namespace
         const SystemEnvData* pEnvData = pTopWindow ? pTopWindow->GetSystemData() : NULL;
         return pEnvData ? pEnvData->aWindow : 0;
     }
-#endif
+#endif /* defined(ENABLE_FONT_AUTOINSTALL) */
 }
 
 IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
 {
-#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+#if defined(ENABLE_FONT_AUTOINSTALL)
     guint xid = get_xid_for_dbus();
 
     if (!xid)
@@ -907,7 +907,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
     g_free(fonts);
     g_object_unref(G_OBJECT (proxy));
     m_aCurrentRequests.clear();
-#endif
+#endif /* defined(ENABLE_FONT_AUTOINSTALL) */
     return 0;
 }
 
@@ -1054,7 +1054,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
                     }
                 }
                 OUString sStillMissing(pRemainingCodes, nRemainingLen);
-#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+#if defined(ENABLE_FONT_AUTOINSTALL)
                 if (get_xid_for_dbus())
                 {
                     if (sStillMissing == rMissingCodes) //replaced nothing
@@ -1085,7 +1085,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
                         m_aFontInstallerTimer.Start();
                     }
                 }
-#endif
+#endif /* defined(ENABLE_FONT_AUTOINSTALL) */
                 rMissingCodes = sStillMissing;
             }
         }
