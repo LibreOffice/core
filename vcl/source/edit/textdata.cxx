@@ -320,14 +320,14 @@ TEIMEInfos::~TEIMEInfos()
 void TEIMEInfos::CopyAttribs( const sal_uInt16* pA, sal_uInt16 nL )
 {
     nLen = nL;
-    delete pAttribs;
+    delete[] pAttribs;
     pAttribs = new sal_uInt16[ nL ];
     memcpy( pAttribs, pA, nL*sizeof(sal_uInt16) );
 }
 
 void TEIMEInfos::DestroyAttribs()
 {
-    delete pAttribs;
+    delete[] pAttribs;
     pAttribs = NULL;
     nLen = 0;
 }
