@@ -49,7 +49,6 @@ public:
     void testGetRowFields();
     void testGetPageFields();
     void testGetDataFields();
-    void testGetHiddenFields();
 
     virtual uno::Reference< uno::XInterface > init() = 0;
 

@@ -56,7 +56,6 @@ public:
     CPPUNIT_TEST(testIsGroupField);
     CPPUNIT_TEST(testCreateNameGroup);
     // see fdo#
-    //CPPUNIT_TEST(testCreateDateGroup);
     CPPUNIT_TEST_SUITE_END();
 private:
     static sal_Int32 nTest;
