@@ -1,39 +1,28 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef INCLUDED_DP_PERSMAP_H
 #define INCLUDED_DP_PERSMAP_H
 
-#include "rtl/ustring.hxx"
-#include "db.hxx"
+#include <rtl/ustring.hxx>
+#include <osl/file.hxx>
 #include <boost/unordered_map.hpp>
-
-using namespace berkeleydbproxy;
 
 namespace dp_misc
 {
@@ -45,13 +34,16 @@ typedef ::boost::unordered_map<
 // should be removed for LibreOffice 4.0
 class PersistentMap
 {
-    ::rtl::OUString m_sysPath;
-    mutable Db m_db;
-    void throw_rtexc( int err, char const * msg = 0 ) const;
+    ::osl::File m_MapFile;
+    t_string2string_map m_entries;
+    bool m_bReadOnly;
+    bool m_bIsOpen;
+    bool m_bToBeCreated;
+    bool m_bIsDirty;
 
 public:
     ~PersistentMap();
-    PersistentMap( ::rtl::OUString const & url );
+    PersistentMap( ::rtl::OUString const & url, bool readOnly );
     /** in mem db */
     PersistentMap();
 
@@ -60,6 +52,17 @@ public:
     t_string2string_map getEntries() const;
     void put( ::rtl::OString const & key, ::rtl::OString const & value );
     bool erase( ::rtl::OString const & key, bool flush_immediately = true );
+
+protected:
+    bool open();
+    bool readAll();
+    void add( ::rtl::OString const & key, ::rtl::OString const & value );
+    void flush();
+
+#ifndef DISABLE_BDB2PMAP
+    bool importFromBDB( void);
+    ::rtl::OUString m_MapFileName;
+#endif
 };
 
 }

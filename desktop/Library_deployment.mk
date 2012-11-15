@@ -50,12 +50,6 @@ $(eval $(call gb_Library_use_libraries,deployment,\
 	$(gb_UWINAPI) \
 ))
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-$(eval $(call gb_Library_use_externals,deployment,\
-    berkeleydb \
-))
-endif
-
 $(eval $(call gb_Library_set_componentfile,deployment,desktop/source/deployment/deployment))
 
 $(eval $(call gb_Library_add_exception_objects,deployment,\

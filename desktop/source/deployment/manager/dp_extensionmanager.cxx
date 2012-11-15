@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include <cppuhelper/implbase1.hxx>
@@ -142,20 +133,24 @@ class ExtensionRemoveGuard
     css::uno::Reference<css::deployment::XPackageManager> m_xPackageManager;
 
 public:
+    ExtensionRemoveGuard(){};
     ExtensionRemoveGuard(
         css::uno::Reference<css::deployment::XPackage> const & extension,
         css::uno::Reference<css::deployment::XPackageManager> const & xPackageManager):
         m_extension(extension), m_xPackageManager(xPackageManager) {}
     ~ExtensionRemoveGuard();
 
-    void reset(css::uno::Reference<css::deployment::XPackage> const & extension) {
+    void set(css::uno::Reference<css::deployment::XPackage> const & extension,
+             css::uno::Reference<css::deployment::XPackageManager> const & xPackageManager) {
         m_extension = extension;
+        m_xPackageManager = xPackageManager;
     }
 };
 
 ExtensionRemoveGuard::~ExtensionRemoveGuard()
 {
     try {
+        OSL_ASSERT(!(m_extension.is() && !m_xPackageManager.is()));
         if (m_xPackageManager.is() && m_extension.is())
             m_xPackageManager->removePackage(
                 dp_misc::getIdentifier(m_extension), ::rtl::OUString(),
@@ -207,6 +202,10 @@ Reference<deploy::XPackageManager>  ExtensionManager::getTmpRepository()
 {
     return m_xPackageManagerFactory->getPackageManager(OUSTR("tmp"));
 }
+Reference<deploy::XPackageManager>  ExtensionManager::getBakRepository()
+{
+    return m_xPackageManagerFactory->getPackageManager(OUSTR("bak"));
+}
 
 Reference<task::XAbortChannel> ExtensionManager::createAbortChannel()
     throw (uno::RuntimeException)
@@ -225,6 +224,10 @@ ExtensionManager::getPackageManager(::rtl::OUString const & repository)
         xPackageManager = getSharedRepository();
     else if (repository.equals(OUSTR("bundled")))
         xPackageManager = getBundledRepository();
+    else if (repository.equals(OUSTR("tmp")))
+        xPackageManager = getTmpRepository();
+    else if (repository.equals(OUSTR("bak")))
+        xPackageManager = getBakRepository();
     else
         throw lang::IllegalArgumentException(
             OUSTR("No valid repository name provided."),
@@ -675,6 +678,7 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
     //Make sure the extension is removed from the tmp repository in case
     //of an exception
     ExtensionRemoveGuard tmpExtensionRemoveGuard(xTmpExtension, getTmpRepository());
+    ExtensionRemoveGuard bakExtensionRemoveGuard;
     const OUString sIdentifier = dp_misc::getIdentifier(xTmpExtension);
     const OUString sFileName = xTmpExtension->getName();
     Reference<deploy::XPackage> xOldExtension;
@@ -711,22 +715,10 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                         xOldExtension->revokePackage(
                             false, xAbortChannel, Reference<ucb::XCommandEnvironment>());
                         //save the old user extension in case the user aborts
-                        //store the extension in the tmp repository, this will overwrite
-                        //xTmpPackage (same identifier). Do not let the user abort or
-                        //interact
-                        //importing the old extension in the tmp repository will remove
-                        //the xTmpExtension
-                        //no command environment supplied, only this class shall interact
-                        //with the user!
-                        xExtensionBackup = getTmpRepository()->importExtension(
+                        xExtensionBackup = getBakRepository()->importExtension(
                             xOldExtension, Reference<task::XAbortChannel>(),
                             Reference<ucb::XCommandEnvironment>());
-                        tmpExtensionRemoveGuard.reset(xExtensionBackup);
-                        //xTmpExtension will later be used to check the dependencies
-                        //again. However, only xExtensionBackup will be later removed
-                        //from the tmp repository
-                        xTmpExtension = xExtensionBackup;
-                        OSL_ASSERT(xTmpExtension.is());
+                        bakExtensionRemoveGuard.set(xExtensionBackup, getBakRepository());
                     }
                     catch (const lang::DisposedException &)
                     {

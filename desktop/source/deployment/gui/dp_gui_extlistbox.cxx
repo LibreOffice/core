@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "svtools/controldims.hrc"
 
@@ -38,7 +29,7 @@
 #include "com/sun/star/i18n/CollatorOptions.hpp"
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/DeploymentException.hpp"
-
+#include "cppuhelper/weakref.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
@@ -50,6 +41,25 @@ using namespace ::com::sun::star;
 
 namespace dp_gui {
 
+namespace {
+
+struct FindWeakRef
+{
+    const uno::Reference<deployment::XPackage> m_extension;
+
+    FindWeakRef( uno::Reference<deployment::XPackage> const & ext): m_extension(ext) {}
+    bool operator () (uno::WeakReference< deployment::XPackage >  const & ref);
+};
+
+bool FindWeakRef::operator () (uno::WeakReference< deployment::XPackage >  const & ref)
+{
+    const uno::Reference<deployment::XPackage> ext(ref);
+    if (ext == m_extension)
+        return true;
+    return false;
+}
+
+} // end namespace
 //------------------------------------------------------------------------------
 //                          struct Entry_Impl
 //------------------------------------------------------------------------------
@@ -981,6 +991,35 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl pEntry, const long nStar
     }
 }
 
+void ExtensionBox_Impl::cleanVecListenerAdded()
+{
+    typedef ::std::vector<uno::WeakReference<deployment::XPackage> >::iterator IT;
+    IT i = m_vListenerAdded.begin();
+    while( i != m_vListenerAdded.end())
+    {
+        const uno::Reference<deployment::XPackage> hardRef(*i);
+        if (!hardRef.is())
+            i = m_vListenerAdded.erase(i);
+        else
+            ++i;
+    }
+}
+
+void ExtensionBox_Impl::addEventListenerOnce(
+    uno::Reference<deployment::XPackage > const & extension)
+{
+    //make sure to only add the listener once
+    cleanVecListenerAdded();
+    if ( ::std::find_if(m_vListenerAdded.begin(), m_vListenerAdded.end(),
+                        FindWeakRef(extension))
+         == m_vListenerAdded.end())
+    {
+        extension->addEventListener( uno::Reference< lang::XEventListener > (
+                                         m_xRemoveListener, uno::UNO_QUERY ) );
+        m_vListenerAdded.push_back(extension);
+    }
+}
+
 //------------------------------------------------------------------------------
 long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &xPackage,
                                   bool bLicenseMissing )
@@ -995,34 +1034,24 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     if ( ! pEntry->m_sTitle.Len() )
         return 0;
 
-    bool bNewEntryInserted = false;
-
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
     if ( m_vEntries.empty() )
     {
+        addEventListenerOnce(xPackage);
         m_vEntries.push_back( pEntry );
-        bNewEntryInserted = true;
     }
     else
     {
         if ( !FindEntryPos( pEntry, 0, m_vEntries.size()-1, nPos ) )
         {
+            addEventListenerOnce(xPackage);
             m_vEntries.insert( m_vEntries.begin()+nPos, pEntry );
-            bNewEntryInserted = true;
         }
         else if ( !m_bInCheckMode )
         {
             OSL_FAIL( "ExtensionBox_Impl::addEntry(): Will not add duplicate entries"  );
         }
     }
-
-    //Related: rhbz#702833 Only add a Listener if we're adding a new entry, to
-    //keep in sync with removeEventListener logic
-    if (bNewEntryInserted)
-    {
-        pEntry->m_xPackage->addEventListener(uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
-    }
-
 
     pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
     pEntry->m_bUser       = xPackage->getRepositoryName().equals( USER_PACKAGE_MANAGER );
@@ -1078,9 +1107,14 @@ void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage 
 }
 
 //------------------------------------------------------------------------------
+//This function is also called as a result of removing an extension.
+//see PackageManagerImpl::removePackage
+//The gui is a registered as listener on the package. Removing it will cause the
+//listeners to be notified an then this function is called. At this moment xPackage
+//is in the disposing state and all calls on it may result in a DisposedException.
 void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage > &xPackage )
 {
-    if ( ! m_bInDelete )
+   if ( ! m_bInDelete )
     {
         ::osl::ClearableMutexGuard aGuard( m_entriesMutex );
 
@@ -1097,6 +1131,8 @@ void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage 
                 // the entry will be moved into the m_vRemovedEntries list which will be
                 // cleared on the next paint event
                 m_vRemovedEntries.push_back( *iIndex );
+                (*iIndex)->m_xPackage->removeEventListener(
+                    uno::Reference<lang::XEventListener>(m_xRemoveListener, uno::UNO_QUERY));
                 m_vEntries.erase( iIndex );
 
                 m_bNeedsRecalc = true;

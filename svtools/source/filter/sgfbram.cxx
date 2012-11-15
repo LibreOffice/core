@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include <string.h>
@@ -36,11 +27,6 @@
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
 
-/*************************************************************************
-|*
-|*    operator>>( SvStream&, SgfHeader& )
-|*
-*************************************************************************/
 SvStream& operator>>(SvStream& rIStream, SgfHeader& rHead)
 {
     rIStream.Read((char*)&rHead.Magic,SgfHeaderSize);
@@ -60,24 +46,12 @@ SvStream& operator>>(SvStream& rIStream, SgfHeader& rHead)
     return rIStream;
 }
 
-
-/*************************************************************************
-|*
-|*    SgfHeader::ChkMagic()
-|*
-*************************************************************************/
 sal_Bool SgfHeader::ChkMagic()
 { return Magic=='J'*256+'J'; }
 
 sal_uInt32 SgfHeader::GetOffset()
 { return sal_uInt32(OfsLo)+0x00010000*sal_uInt32(OfsHi); }
 
-
-/*************************************************************************
-|*
-|*    operator>>( SvStream&, SgfEntry& )
-|*
-*************************************************************************/
 SvStream& operator>>(SvStream& rIStream, SgfEntry& rEntr)
 {
     rIStream.Read((char*)&rEntr.Typ,SgfEntrySize);
@@ -95,12 +69,6 @@ SvStream& operator>>(SvStream& rIStream, SgfEntry& rEntr)
 sal_uInt32 SgfEntry::GetOffset()
 { return sal_uInt32(OfsLo)+0x00010000*sal_uInt32(OfsHi); }
 
-
-/*************************************************************************
-|*
-|*    operator>>( SvStream&, SgfVector& )
-|*
-*************************************************************************/
 SvStream& operator>>(SvStream& rIStream, SgfVector& rVect)
 {
     rIStream.Read((char*)&rVect,sizeof(rVect));
@@ -114,12 +82,6 @@ SvStream& operator>>(SvStream& rIStream, SgfVector& rVect)
     return rIStream;
 }
 
-
-/*************************************************************************
-|*
-|*    operator<<( SvStream&, BmpFileHeader& )
-|*
-*************************************************************************/
 SvStream& operator<<(SvStream& rOStream, BmpFileHeader& rHead)
 {
 #if defined OSL_BIGENDIAN
@@ -161,11 +123,6 @@ sal_uInt32 BmpFileHeader::GetOfs()
     return sal_uInt32(OfsLo)+0x00010000*sal_uInt32(OfsHi);
 }
 
-/*************************************************************************
-|*
-|*    operator<<( SvStream&, BmpInfoHeader& )
-|*
-*************************************************************************/
 SvStream& operator<<(SvStream& rOStream, BmpInfoHeader& rInfo)
 {
 #if defined OSL_BIGENDIAN
@@ -198,12 +155,6 @@ SvStream& operator<<(SvStream& rOStream, BmpInfoHeader& rInfo)
     return rOStream;
 }
 
-
-/*************************************************************************
-|*
-|*    operator<<( SvStream&, RGBQuad& )
-|*
-*************************************************************************/
 SvStream& operator<<(SvStream& rOStream, const RGBQuad& rQuad)
 {
     rOStream.Write((char*)&rQuad,sizeof(rQuad));
@@ -243,12 +194,6 @@ sal_uInt8 PcxExpand::GetByte(SvStream& rInp)
 // SgfBMapFilter ///////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-/*************************************************************************
-|*
-|*    SgfFilterBmp()
-|*
-*************************************************************************/
 sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
 {
     BmpFileHeader  aBmpHead;
@@ -378,12 +323,6 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
     return sal_True;
 }
 
-
-/*************************************************************************
-|*
-|*    SgfBMapFilter()
-|*
-*************************************************************************/
 sal_Bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
 {
     sal_uLong     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
@@ -453,11 +392,6 @@ Color Hpgl2SvFarbe( sal_uInt8 nFarb )
     return aColor;
 }
 
-/*************************************************************************
-|*
-|*    SgfFilterVect()
-|*
-*************************************************************************/
 sal_Bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMtf)
 {
     VirtualDevice aOutDev;
@@ -526,11 +460,6 @@ sal_Bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile&
 }
 
 
-/*************************************************************************
-|*
-|*    SgfVectFilter()
-|*
-*************************************************************************/
 sal_Bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
 {
     sal_uLong     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.

@@ -1,30 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--***********************************************************************
+<!--
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************ -->
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema
     oor:package="org.openoffice.Office" oor:name="Common" xml:lang="en-US"
@@ -4154,72 +4145,6 @@
           </info>
           <value>0</value>
         </prop>
-      </group>
-      <group oor:name="Registration">
-        <info>
-          <author>FS</author>
-          <desc>Contains various settings regarding the product registration
-          feature.</desc>
-        </info>
-        <prop oor:name="TemplateURL" oor:type="xs:string" oor:nillable="false">
-          <info>
-            <desc>Contains a string specifying the URL with placeholders to be
-            used for online registration.</desc>
-          </info>
-          <value/>
-          <!-- JB: Empty default inserted into empty property node. Remove if
-               NIL was intended -->
-        </prop>
-        <prop oor:name="URL" oor:type="xs:string" oor:nillable="false">
-          <info>
-            <desc>Contains a string specifying the real URL to be used for
-            online registration.</desc>
-          </info>
-          <value/>
-          <!-- JB: Empty default inserted into empty property node. Remove if
-               NIL was intended -->
-        </prop>
-        <prop oor:name="ReminderDate" oor:type="xs:string" oor:nillable="false">
-          <info>
-            <desc>Contains a string representation of the date on which the user
-            receives a reminder (e.g. "13.02.2002").</desc>
-          </info>
-          <value/>
-          <!-- JB: Empty default inserted into empty property node. Remove if
-               NIL was intended -->
-        </prop>
-        <prop oor:name="RequestDialog" oor:type="xs:int" oor:nillable="false">
-          <info>
-            <desc>Contains the number used internally to determine when the
-            dialog should be started.</desc>
-          </info>
-          <value>1</value>
-        </prop>
-        <prop
-            oor:name="ShowMenuItem" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>Contains a Boolean that specifies if the "Registration..."
-            menu item is available.</desc>
-          </info>
-          <value>true</value>
-        </prop>
-        <prop oor:name="ProductVersionID" oor:type="xs:string">
-          <info>
-            <author>CD/OBR</author>
-            <desc>Current product ID.</desc>
-            <deprecated>This data is saved in a dedicated file since OOo 3.0
-            FCS</deprecated>
-          </info>
-        </prop>
-        <set oor:name="ProductVersions" oor:node-type="ProductVersionID">
-          <info>
-            <author>CD/OBR</author>
-            <desc>Specifies product specific IDs and associated instance
-            UUIDs</desc>
-            <deprecated>This data is saved in a dedicated file since OOo 3.0
-            FCS</deprecated>
-          </info>
-        </set>
       </group>
     </group>
     <group oor:name="Java">

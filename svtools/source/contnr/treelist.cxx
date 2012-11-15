@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "svtools/treelist.hxx"
 #include "svtools/treelistentry.hxx"
@@ -58,12 +49,6 @@ SvViewData::~SvViewData()
 #endif
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-
 SvTreeList::SvTreeList()
 {
     nEntryCount = 0;
@@ -73,13 +58,6 @@ SvTreeList::SvTreeList()
     eSortMode = SortNone;
 }
 
-
-/*************************************************************************
-|*
-|*    SvTreeList::~SvTreeList
-|*
-*************************************************************************/
-
 SvTreeList::~SvTreeList()
 {
     Clear();
@@ -88,12 +66,6 @@ SvTreeList::~SvTreeList()
     pRootItem = 0;
 #endif
 }
-
-/*************************************************************************
-|*
-|*    SvTreeList::Broadcast
-|*
-*************************************************************************/
 
 void SvTreeList::Broadcast(
     sal_uInt16 nActionId,
@@ -169,12 +141,6 @@ bool SvTreeList::IsAtRootDepth( const SvTreeListEntry* pEntry ) const
     return pEntry->pParent == pRootItem;
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-
 void SvTreeList::Clear()
 {
     Broadcast( LISTACTION_CLEARING );
@@ -182,13 +148,6 @@ void SvTreeList::Clear()
     nEntryCount = 0;
     Broadcast( LISTACTION_CLEARED );
 }
-
-
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
 
 bool SvTreeList::IsChild(const SvTreeListEntry* pParent, const SvTreeListEntry* pChild) const
 {
@@ -362,14 +321,6 @@ sal_uLong SvTreeList::Copy(SvTreeListEntry* pSrcEntry,SvTreeListEntry* pTargetPa
     return nRetVal;
 }
 
-
-
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-
 void SvTreeList::Move( SvTreeListEntry* pSrcEntry, SvTreeListEntry* pDstEntry )
 {
     SvTreeListEntry* pParent;
@@ -437,12 +388,6 @@ SvTreeListEntry* SvTreeList::CreateEntry() const
     return new SvTreeListEntry;
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-
 SvTreeListEntry* SvTreeList::Clone( SvTreeListEntry* pEntry, sal_uLong& nCloneCount ) const
 {
     SvTreeListEntry* pClonedEntry = CloneEntry( pEntry );
@@ -475,12 +420,6 @@ void SvTreeList::CloneChildren(
     rDst.swap(aClone);
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::GetChildCount
-|*
-*************************************************************************/
-
 sal_uLong SvTreeList::GetChildCount( const SvTreeListEntry* pParent ) const
 {
     if ( !pParent )
@@ -500,12 +439,6 @@ sal_uLong SvTreeList::GetChildCount( const SvTreeListEntry* pParent ) const
     nCount--;
     return nCount;
 }
-
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
 
 sal_uLong SvTreeList::GetVisibleChildCount(const SvListView* pView, SvTreeListEntry* pParent) const
 {
@@ -550,13 +483,6 @@ sal_uLong SvTreeList::GetChildSelectionCount(const SvListView* pView,SvTreeListE
     return nCount;
 }
 
-
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-
 SvTreeListEntry* SvTreeList::First() const
 {
     if ( nEntryCount )
@@ -565,11 +491,6 @@ SvTreeListEntry* SvTreeList::First() const
         return 0;
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::Next
-|*
-*************************************************************************/
 SvTreeListEntry* SvTreeList::Next( SvTreeListEntry* pActEntry, sal_uInt16* pDepth ) const
 {
     DBG_ASSERT( pActEntry && pActEntry->pParent, "SvTreeList::Next: invalid entry/parent!" );
@@ -628,11 +549,6 @@ SvTreeListEntry* SvTreeList::Next( SvTreeListEntry* pActEntry, sal_uInt16* pDept
     return 0;
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::Prev
-|*
-*************************************************************************/
 SvTreeListEntry* SvTreeList::Prev( SvTreeListEntry* pActEntry, sal_uInt16* pDepth ) const
 {
     DBG_ASSERT(pActEntry!=0,"Entry?");
@@ -676,12 +592,6 @@ SvTreeListEntry* SvTreeList::Prev( SvTreeListEntry* pActEntry, sal_uInt16* pDept
     return 0;
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-
 SvTreeListEntry* SvTreeList::Last() const
 {
     SvTreeListEntries* pActList = &pRootItem->maChildren;
@@ -693,12 +603,6 @@ SvTreeListEntry* SvTreeList::Last() const
     }
     return pEntry;
 }
-
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
 
 sal_uLong SvTreeList::GetVisiblePos( const SvListView* pView, SvTreeListEntry* pEntry ) const
 {
@@ -713,12 +617,6 @@ sal_uLong SvTreeList::GetVisiblePos( const SvListView* pView, SvTreeListEntry* p
     const SvViewData* pViewData = pView->GetViewData( pEntry );
     return pViewData->nVisPos;
 }
-
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
 
 sal_uLong SvTreeList::GetVisibleCount( SvListView* pView ) const
 {
@@ -749,15 +647,8 @@ sal_uLong SvTreeList::GetVisibleCount( SvListView* pView ) const
 }
 
 
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-
 // For performance reasons, this function assumes that the passed entry is
 // already visible.
-
 SvTreeListEntry* SvTreeList::NextVisible(const SvListView* pView,SvTreeListEntry* pActEntry,sal_uInt16* pActDepth) const
 {
     DBG_ASSERT(pView,"NextVisible:No View");
@@ -816,12 +707,6 @@ SvTreeListEntry* SvTreeList::NextVisible(const SvListView* pView,SvTreeListEntry
 }
 
 
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-
 // For performance reasons, this function assumes that the passed entry is
 // already visible.
 
@@ -868,12 +753,6 @@ SvTreeListEntry* SvTreeList::PrevVisible(const SvListView* pView, SvTreeListEntr
     return 0;
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-
 SvTreeListEntry* SvTreeList::LastVisible( const SvListView* pView, sal_uInt16* pDepth) const
 {
     DBG_ASSERT(pView,"LastVis:No View");
@@ -884,12 +763,6 @@ SvTreeListEntry* SvTreeList::LastVisible( const SvListView* pView, sal_uInt16* p
         *pDepth = GetDepth( pEntry );
     return pEntry;
 }
-
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
 
 SvTreeListEntry* SvTreeList::NextVisible(const SvListView* pView,SvTreeListEntry* pEntry,sal_uInt16& nDelta) const
 {
@@ -914,12 +787,6 @@ SvTreeListEntry* SvTreeList::NextVisible(const SvListView* pView,SvTreeListEntry
     return pEntry;
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-
 SvTreeListEntry* SvTreeList::PrevVisible( const SvListView* pView, SvTreeListEntry* pEntry, sal_uInt16& nDelta ) const
 {
     DBG_ASSERT(pView&&pEntry&&IsEntryVisible(pView,pEntry),"PrevVis:Parms/!Vis");
@@ -939,12 +806,6 @@ SvTreeListEntry* SvTreeList::PrevVisible( const SvListView* pView, SvTreeListEnt
     }
     return pEntry;
 }
-
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
 
 SvTreeListEntry* SvTreeList::FirstSelected( const SvListView* pView) const
 {
@@ -1008,13 +869,6 @@ SvTreeListEntry* SvTreeList::LastSibling( SvTreeListEntry* pEntry ) const
     return rChildren.empty() ? NULL : &rChildren.back();
 }
 
-
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-
 SvTreeListEntry* SvTreeList::NextSelected( const SvListView* pView, SvTreeListEntry* pEntry ) const
 {
     DBG_ASSERT(pView&&pEntry,"NextSel:View/Entry?");
@@ -1023,12 +877,6 @@ SvTreeListEntry* SvTreeList::NextSelected( const SvListView* pView, SvTreeListEn
         pEntry = Next( pEntry );
     return pEntry;
 }
-
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
 
 SvTreeListEntry* SvTreeList::PrevSelected( const SvListView* pView, SvTreeListEntry* pEntry) const
 {
@@ -1040,12 +888,6 @@ SvTreeListEntry* SvTreeList::PrevSelected( const SvListView* pView, SvTreeListEn
     return pEntry;
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-
 SvTreeListEntry* SvTreeList::LastSelected( const SvListView* pView ) const
 {
     DBG_ASSERT(pView,"LastSel:No View");
@@ -1055,11 +897,6 @@ SvTreeListEntry* SvTreeList::LastSelected( const SvListView* pView ) const
     return pEntry;
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::Insert
-|*
-*************************************************************************/
 sal_uLong SvTreeList::Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos )
 {
     DBG_ASSERT( pEntry,"Entry?");
@@ -1095,12 +932,6 @@ sal_uLong SvTreeList::Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,s
     return nPos; // pEntry->nListPos;
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-
 sal_uLong SvTreeList::GetAbsPos( const SvTreeListEntry* pEntry) const
 {
     if ( !bAbsPositionsValid )
@@ -1112,12 +943,6 @@ sal_uLong SvTreeList::GetRelPos( const SvTreeListEntry* pChild ) const
 {
     return pChild->GetChildListPos();
 }
-
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
 
 void SvTreeList::SetAbsolutePositions()
 {
@@ -1131,13 +956,6 @@ void SvTreeList::SetAbsolutePositions()
     }
     bAbsPositionsValid = true;
 }
-
-
-/*************************************************************************
-|*
-|*    SvTreeList::Expand
-|*
-*************************************************************************/
 
 void SvTreeList::Expand( SvListView* pView, SvTreeListEntry* pEntry )
 {
@@ -1158,12 +976,6 @@ void SvTreeList::Expand( SvListView* pView, SvTreeListEntry* pEntry )
     }
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::Collapse
-|*
-*************************************************************************/
-
 void SvTreeList::Collapse( SvListView* pView, SvTreeListEntry* pEntry )
 {
     DBG_ASSERT(pView&&pEntry,"Collapse:View/Entry?");
@@ -1182,13 +994,6 @@ void SvTreeList::Collapse( SvListView* pView, SvTreeListEntry* pEntry )
         pView->bVisPositionsValid = sal_False;
     }
 }
-
-
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
 
 sal_Bool SvTreeList::Select( SvListView* pView, SvTreeListEntry* pEntry, sal_Bool bSelect )
 {
@@ -1267,12 +1072,6 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
 
     return true;
 }
-
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
 
 void SvTreeList::SelectAll( SvListView* pView, sal_Bool bSelect )
 {
