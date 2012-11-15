@@ -10,7 +10,6 @@ ScMenuFloatingWindow::getDoc()
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 String::String(unsigned short)
-SvListView::GetModel() const
 SvTreeList::GetChildIterators(SvTreeListEntry const*) const
 SvTreeListEntry::GetChildEntries()
 SvTreeListEntry::GetChildEntries() const
@@ -63,9 +62,6 @@ sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
 sd::ViewShellBase::CreateInstance(SfxViewFrame*, SfxViewShell*)
 std::__cxx1998::vector<SfxFilter*, std::allocator<SfxFilter*> >::~vector()
 std::__cxx1998::vector<std::pair<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::~vector()
-svgio::svgreader::SvgDocument::removeSvgStyleAttributesFromMapper(rtl::OUString const&)
-svgio::svgreader::SvgStyleAttributes::setFillRule(bool const*)
-svgio::svgreader::pathTextBreakupHelper::getLength(rtl::OUString const&) const
 test::BootstrapFixtureBase::getPathFromWorkdir(char const*)
 test::BootstrapFixtureBase::getURLFromWorkdir(char const*)
 unicode::isAlphaDigit(unsigned short)

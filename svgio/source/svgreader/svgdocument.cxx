@@ -87,14 +87,6 @@ namespace svgio
             }
         }
 
-        void SvgDocument::removeSvgStyleAttributesFromMapper(const rtl::OUString& rStr)
-        {
-            if(rStr.getLength())
-            {
-                maIdStyleTokenMapperList.erase(rStr);
-            }
-        }
-
         const SvgStyleAttributes* SvgDocument::findSvgStyleAttributesById(const rtl::OUString& rStr) const
         {
             const IdStyleTokenMapper::const_iterator aResult(maIdStyleTokenMapperList.find(rStr));
