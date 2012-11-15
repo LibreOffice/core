@@ -61,8 +61,14 @@ public:
     ~LanguageTag();
     LanguageTag& operator=( const LanguageTag & rLanguageTag );
 
-    /** Obtain BCP 47 language tag. */
-    rtl::OUString                   getBcp47() const;
+    /** Obtain BCP 47 language tag.
+
+        @param bResolveSystem
+               If TRUE, resolve an empty language tag denoting the system
+               locale to the real locale used.
+               If FALSE, return an empty OUString for such a tag.
+     */
+    rtl::OUString                   getBcp47( bool bResolveSystem = true ) const;
 
     /** Obtain language tag as Locale.
 
@@ -72,40 +78,67 @@ public:
         the entire BCP 47 language tag in the Variant field. The Country field
         contains the corresponding ISO 3166 country code _if_ there is one, or
         otherwise is empty.
+
+        @param bResolveSystem
+               If TRUE, resolve an empty language tag denoting the system
+               locale to the real locale used.
+               If FALSE, return an empty Locale for such a tag.
      */
-    com::sun::star::lang::Locale    getLocale() const;
+    com::sun::star::lang::Locale    getLocale( bool bResolveSystem = true ) const;
 
-    /** Obtain mapping to MS-LangID. */
-    LanguageType                    getLanguageType() const;
+    /** Obtain mapping to MS-LangID.
 
-    /** Get ISO 639 language code, or BCP 47 language. */
+        @param bResolveSystem
+               If TRUE, resolve an empty language tag denoting the system
+               locale to the real locale used.
+               If FALSE, return LANGUAGE_SYSTEM for such a tag.
+     */
+    LanguageType                    getLanguageType( bool bResolveSystem = true ) const;
+
+    /** Get ISO 639 language code, or BCP 47 language.
+
+        Always resolves an empty tag to the system locale.
+     */
     rtl::OUString                   getLanguage() const;
 
     /** Get ISO 15924 script code, if not the default script according to
         BCP 47. For default script an empty string is returned.
+
+        Always resolves an empty tag to the system locale.
      */
     rtl::OUString                   getScript() const;
 
     /** Get combined language and script code, separated by '-' if
         non-default script, if default script only language.
+
+        Always resolves an empty tag to the system locale.
      */
     rtl::OUString                   getLanguageAndScript() const;
 
     /** Get ISO 3166 country alpha code. Empty if the BCP 47 tags denote a
         region not expressable as 2 character country code.
+
+        Always resolves an empty tag to the system locale.
      */
     rtl::OUString                   getCountry() const;
 
     /** Get BCP 47 region tag, which may be an ISO 3166 country alpha code or
         any other BCP 47 region tag.
+
+        Always resolves an empty tag to the system locale.
      */
     rtl::OUString                   getRegion() const;
 
     /** If language tag is a locale that can be expressed using only ISO 639
         language codes and ISO 3166 country codes, thus is convertible to a
-        conforming Locale struct without using extension mechanisms. Note that
-        an empty language tag or empty Locale::Language field or LanguageType
-        LANGUAGE_SYSTEM is treated as a valid ISO locale.
+        conforming Locale struct without using extension mechanisms.
+
+        Note that an empty language tag or empty Locale::Language field or
+        LanguageType LANGUAGE_SYSTEM could be treated as a valid ISO locale in
+        some context, but here is not. If you want that ask for
+        aTag.isSystemLocale() || aTag.isIsoLocale()
+
+        Always resolves an empty tag to the system locale.
      */
     bool                            isIsoLocale() const;
 
@@ -114,11 +147,20 @@ public:
         thus can be stored in an ODF document using only fo:language, fo:script
         and fo:country attributes. If this is FALSE, the locale must be stored
         as a <*:rfc-language-tag> element.
+
+        Always resolves an empty tag to the system locale.
      */
     bool                            isIsoODF() const;
 
-    /** If this is a valid BCP 47 language tag. */
+    /** If this is a valid BCP 47 language tag.
+
+        Always resolves an empty tag to the system locale.
+     */
     bool                            isValidBcp47() const;
+
+    /** If this tag was contructed as an empty tag denoting the system locale.
+      */
+    bool                            isSystemLocale() const;
 
 private:
 
@@ -139,6 +181,7 @@ private:
     mutable Decision                        meIsValid;
     mutable Decision                        meIsIsoLocale;
     mutable Decision                        meIsIsoODF;
+            bool                            mbSystemLocale      : 1;
     mutable bool                            mbInitializedBcp47  : 1;
     mutable bool                            mbInitializedLocale : 1;
     mutable bool                            mbInitializedLangID : 1;
