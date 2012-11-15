@@ -95,7 +95,8 @@ enum ScFormatEntryType
     CONDITION,
     COLORSCALE,
     DATABAR,
-    ICONSET
+    ICONSET,
+    DATE
 };
 
 }
@@ -322,6 +323,59 @@ public:
 
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const;
+};
+
+namespace condformat {
+
+enum ScCondFormatDateType
+{
+    YESTERDAY,
+    TOMORROW,
+    TODAY,
+    LAST7DAYS,
+    LASTWEEK,
+    THISWEEK,
+    NEXTWEEK,
+    LASTMONTH,
+    THISMONTH,
+    NEXTMONTH
+};
+
+}
+
+class SC_DLLPUBLIC ScCondDateFormatEntry : public ScFormatEntry
+{
+public:
+    ScCondDateFormatEntry(ScDocument* pDoc);
+    ScCondDateFormatEntry(ScDocument* pDoc, const ScCondDateFormatEntry& rEntry);
+
+    bool IsValid( const ScAddress& rPos ) const;
+
+    void SetDateType(condformat::ScCondFormatDateType eType);
+    condformat::ScCondFormatDateType GetDateType() const;
+
+    const rtl::OUString& GetStyleName() const;
+    void SetStyleName( const rtl::OUString& rStyleName );
+
+    virtual condformat::ScFormatEntryType GetType() const { return condformat::DATE; }
+    virtual void UpdateReference( UpdateRefMode, const ScRange&,
+            SCsCOL, SCsROW, SCsTAB ) {}
+    virtual void UpdateMoveTab( SCTAB, SCTAB ) {}
+
+    virtual ScFormatEntry* Clone( ScDocument* pDoc = NULL ) const;
+
+    virtual void SetParent( ScConditionalFormat* ) {}
+
+    bool operator==( const ScFormatEntry& ) const;
+
+#if DUMP_FORMAT_INFO
+    virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const;
+#endif
+
+private:
+    condformat::ScCondFormatDateType meType;
+
+    rtl::OUString maStyleName;
 };
 
 //

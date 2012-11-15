@@ -1628,6 +1628,101 @@ ScFormatEntry* ScCondFormatEntry::Clone( ScDocument* pDoc ) const
 
 //------------------------------------------------------------------------
 
+ScCondDateFormatEntry::ScCondDateFormatEntry( ScDocument* pDoc ):
+    ScFormatEntry( pDoc )
+{
+}
+
+ScCondDateFormatEntry::ScCondDateFormatEntry( ScDocument* pDoc, const ScCondDateFormatEntry& rFormat ):
+    ScFormatEntry( pDoc ),
+    meType( rFormat.meType ),
+    maStyleName( rFormat.maStyleName )
+{
+}
+
+bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
+{
+    ScBaseCell* pBaseCell = mpDoc->GetCell( rPos );
+
+    if(!pBaseCell)
+        return false;
+
+    if(pBaseCell->GetCellType() != CELLTYPE_VALUE && pBaseCell->GetCellType() != CELLTYPE_FORMULA)
+        return false;
+
+    double nVal = mpDoc->GetValue(rPos);
+    long nCellDate = static_cast<long>(nVal);
+    Date aActDate( Date::SYSTEM );
+    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+    long nCurrentDate = aActDate - *(pFormatter->GetNullDate());
+
+    switch(meType)
+    {
+        case condformat::TODAY:
+            if( nCurrentDate == nCellDate )
+                return true;
+            break;
+        case condformat::TOMORROW:
+            if( nCurrentDate == nCellDate -1 )
+                return true;
+            break;
+        case condformat::YESTERDAY:
+            if( nCurrentDate == nCellDate + 1)
+                return true;
+            break;
+        default:
+            return true;
+            break;
+    }
+
+    return false;
+}
+
+void ScCondDateFormatEntry::SetDateType( condformat::ScCondFormatDateType eType )
+{
+    meType = eType;
+}
+
+condformat::ScCondFormatDateType ScCondDateFormatEntry::GetDateType() const
+{
+    return meType;
+}
+
+const rtl::OUString& ScCondDateFormatEntry::GetStyleName() const
+{
+    return maStyleName;
+}
+
+void ScCondDateFormatEntry::SetStyleName( const rtl::OUString& rStyleName )
+{
+    maStyleName = rStyleName;
+}
+
+ScFormatEntry* ScCondDateFormatEntry::Clone( ScDocument* pDoc ) const
+{
+    return new ScCondDateFormatEntry( pDoc, *this );
+}
+
+bool ScCondDateFormatEntry::operator==( const ScFormatEntry& r ) const
+{
+    if(r.GetType() != condformat::DATE)
+        return false;
+
+    const ScCondDateFormatEntry& rEntry = static_cast<const ScCondDateFormatEntry&>(r);
+
+    if(rEntry.meType != meType)
+        return false;
+
+    return rEntry.maStyleName == maStyleName;
+}
+
+void ScCondDateFormatEntry::dumpInfo( rtl::OUStringBuffer& rBuffer ) const
+{
+    rBuffer.append("Date Format");
+}
+
+//------------------------------------------------------------------------
+
 ScConditionalFormat::ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument) :
     pDoc( pDocument ),
     nKey( nNewKey )
@@ -1717,6 +1812,12 @@ const rtl::OUString& ScConditionalFormat::GetCellStyle( ScBaseCell* pCell, const
             if ( rEntry.IsCellValid( pCell, rPos ) )
                 return rEntry.GetStyle();
         }
+        else if(itr->GetType() == condformat::DATE)
+        {
+            const ScCondDateFormatEntry& rEntry = static_cast<const ScCondDateFormatEntry&>(*itr);
+            if (rEntry.IsValid( rPos ))
+                return rEntry.GetStyleName();
+        }
     }
 
     return EMPTY_OUSTRING;
@@ -1747,6 +1848,12 @@ ScCondFormatData ScConditionalFormat::GetData( ScBaseCell* pCell, const ScAddres
         {
             const ScIconSetFormat& rEntry = static_cast<const ScIconSetFormat&>(*itr);
             aData.pIconSet = rEntry.GetIconSetInfo(rPos);
+        }
+        else if(itr->GetType() == condformat::DATE && aData.aStyleName.isEmpty())
+        {
+            const ScCondDateFormatEntry& rEntry = static_cast<const ScCondDateFormatEntry&>(*itr);
+            if ( rEntry.IsValid( rPos ) )
+                aData.aStyleName = rEntry.GetStyleName();
         }
     }
     return aData;
