@@ -400,9 +400,6 @@ protected:
 */
 Stream::Pointer_t WRITERFILTER_RESOURCEMODEL_DLLPUBLIC createStreamHandler();
 
-    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC analyzerIds();
-    Stream::Pointer_t WRITERFILTER_RESOURCEMODEL_DLLPUBLIC createAnalyzer();
-
     void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC logger(string prefix, string message);
 
     void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<Properties>::Pointer_t props);

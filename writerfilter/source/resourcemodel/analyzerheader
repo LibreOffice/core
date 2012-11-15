@@ -22,6 +22,3 @@
 
 namespace writerfilter
 {
-void analyzerIds(::std::iostream & out)
-{
-    out << "<ids>" << endl;
