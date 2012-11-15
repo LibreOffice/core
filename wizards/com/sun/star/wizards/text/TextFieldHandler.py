@@ -34,8 +34,8 @@ class TextFieldHandler(object):
     def __init__(self, xMSF, xTextDocument):
         self.xMSFDoc = xMSF
         self.xTextFieldsSupplier = xTextDocument
-        self.arrayTextFields = {}
-        self.dictTextFields = []
+        self.arrayTextFields = []
+        self.dictTextFields = {}
         if TextFieldHandler.xTextFieldsSupplierAux is not \
                 self.xTextFieldsSupplier:
             self.__getTextFields()
