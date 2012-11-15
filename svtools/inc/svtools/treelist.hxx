@@ -256,7 +256,10 @@ public:
     SvTreeListEntry*        GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const;
     SvTreeListEntry*        GetEntry( sal_uLong nRootPos ) const;
     SvTreeListEntry*        GetEntryAtAbsPos( sal_uLong nAbsPos ) const;
-    SvTreeListEntry*        GetParent( SvTreeListEntry* pEntry ) const;
+
+    const SvTreeListEntry* GetParent( const SvTreeListEntry* pEntry ) const;
+    SvTreeListEntry* GetParent( SvTreeListEntry* pEntry );
+
     SvTreeListEntry*        GetRootLevelParent( SvTreeListEntry* pEntry ) const;
     const SvTreeListEntries& GetChildList( SvTreeListEntry* pParent ) const;
     SvTreeListEntries& GetChildList( SvTreeListEntry* pParent );

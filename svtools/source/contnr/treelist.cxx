@@ -1855,11 +1855,19 @@ SvTreeListEntries& SvTreeList::GetChildList( SvTreeListEntry* pParent )
     return pParent->maChildren;
 }
 
-SvTreeListEntry* SvTreeList::GetParent( SvTreeListEntry* pEntry ) const
+const SvTreeListEntry* SvTreeList::GetParent( const SvTreeListEntry* pEntry ) const
+{
+    const SvTreeListEntry* pParent = pEntry->pParent;
+    if (pParent == pRootItem)
+        pParent = NULL;
+    return pParent;
+}
+
+SvTreeListEntry* SvTreeList::GetParent( SvTreeListEntry* pEntry )
 {
     SvTreeListEntry* pParent = pEntry->pParent;
-    if ( pParent==pRootItem )
-        pParent = 0;
+    if (pParent == pRootItem)
+        pParent = NULL;
     return pParent;
 }
 

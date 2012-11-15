@@ -938,6 +938,11 @@ void SvTreeListBox::FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_In
     }
 }
 
+const SvTreeListEntry* SvTreeListBox::GetParent( const SvTreeListEntry* pEntry ) const
+{
+    return pModel->GetParent(pEntry);
+}
+
 SvTreeListEntry* SvTreeListBox::GetParent( SvTreeListEntry* pEntry ) const
 {
     return pModel->GetParent(pEntry);
