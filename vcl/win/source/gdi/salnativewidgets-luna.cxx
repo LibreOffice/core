@@ -456,12 +456,13 @@ void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
         const long GRADIENT_HEIGHT = 32;
 
         long gradient_break = rc.top;
+        long gradient_bottom = rc.bottom - 1;
         GRADIENT_RECT g_rect[1] = { { 0, 1 } };
 
         // very slow gradient at the top (if we have space for that)
-        if ( rc.bottom - rc.top > GRADIENT_HEIGHT )
+        if ( gradient_bottom - rc.top > GRADIENT_HEIGHT )
         {
-            gradient_break = rc.bottom - GRADIENT_HEIGHT;
+            gradient_break = gradient_bottom - GRADIENT_HEIGHT;
 
             TRIVERTEX vert[2] = {
                 { rc.left, rc.top,          0xff00, 0xff00, 0xff00, 0xff00 },
@@ -472,10 +473,19 @@ void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
 
         // gradient at the bottom
         TRIVERTEX vert[2] = {
-            { rc.left, gradient_break, 0xfa00, 0xfa00, 0xfa00, 0xff00 },
-            { rc.right, rc.bottom,     0xf000, 0xf000, 0xf000, 0xff00 }
+            { rc.left, gradient_break,   0xfa00, 0xfa00, 0xfa00, 0xff00 },
+            { rc.right, gradient_bottom, 0xf000, 0xf000, 0xf000, 0xff00 }
         };
         GradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
+
+        // and a darker horizontal line under that
+        HPEN hpen = CreatePen( PS_SOLID, 1, RGB( 0xa0, 0xa0, 0xa0 ) );
+        SelectObject( hDC, hpen );
+
+        MoveToEx( hDC, rc.left, gradient_bottom, NULL );
+        LineTo( hDC, rc.right, gradient_bottom );
+
+        DeleteObject( hpen );
     }
     else
     {
