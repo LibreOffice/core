@@ -330,18 +330,6 @@ void FileStream::createTempFile(const OString& sPath)
         m_file = NULL;
 }
 
-void FileStream::open(const OString& name, FileAccessMode mode)
-{
-    if ( !name.isEmpty() )
-    {
-        oslFileError ret =  osl_File_E_None;
-        if ((ret = osl_openFile(convertToFileUrl(name).pData, &m_file, checkAccessMode(mode))) == osl_File_E_None)
-            m_name = name;
-        else
-            m_file = NULL;
-    }
-}
-
 void FileStream::close()
 {
     if ( isValid() )
