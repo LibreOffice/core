@@ -481,12 +481,14 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     Init( pSysData );
 }
 
-#if !GTK_CHECK_VERSION(3,0,0) && defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#ifdef ENABLE_GMENU_INTEGRATION
+
 static void
 gdk_x11_window_set_utf8_property  (GdkWindow *window,
                                    const gchar *name,
                                    const gchar *value)
 {
+#if !GTK_CHECK_VERSION(3,0,0)
   GdkDisplay* display = gdk_window_get_display (window);
 
   if (value != NULL)
@@ -503,12 +505,11 @@ gdk_x11_window_set_utf8_property  (GdkWindow *window,
                        GDK_WINDOW_XID (window),
                        gdk_x11_get_xatom_by_name_for_display (display, name));
     }
-}
 #endif
+}
 
 // AppMenu watch functions.
 
-#ifdef ENABLE_GMENU_INTEGRATION
 static void ObjectDestroyedNotify( gpointer data )
 {
     if ( data ) {
@@ -1135,7 +1136,7 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
 #if !GTK_CHECK_VERSION(3,0,0)
     if( eWinType == GTK_WINDOW_TOPLEVEL )
     {
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#ifdef ENABLE_GMENU_INTEGRATION
         // Enable DBus native menu if available.
         ensure_dbus_setup( this );
 #endif
