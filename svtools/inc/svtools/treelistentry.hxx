@@ -32,7 +32,6 @@
 #include "svtdllapi.h"
 #include "tools/solar.h"
 
-#include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 // Flags, die am Model haengen
@@ -58,11 +57,13 @@ class SVT_DLLPUBLIC SvTreeListEntry
     friend class SvListView;
     friend class SvTreeListBox;
 
+    typedef boost::ptr_vector<SvLBoxItem> ItemsType;
+
     SvTreeListEntry*    pParent;
     SvTreeListEntries   maChildren;
     sal_uLong           nAbsPos;
     sal_uLong           nListPos;
-    std::vector<SvLBoxItem*> aItems;
+    ItemsType           maItems;
     void*            pUserData;
     sal_uInt16       nEntryFlags;
 
@@ -70,9 +71,10 @@ private:
     void ClearChildren();
     void SetListPositions();
     void InvalidateChildrensListPositions();
-    void DeleteItems_Impl();
 
 public:
+    static size_t ITEM_NOT_FOUND;
+
     SvTreeListEntry();
     SvTreeListEntry(const SvTreeListEntry& r);
     virtual ~SvTreeListEntry();
@@ -86,16 +88,18 @@ public:
 
     void Clone(SvTreeListEntry* pSource);
 
-    sal_uInt16 ItemCount() const;
+    size_t ItemCount() const;
 
     // DARF NUR GERUFEN WERDEN, WENN DER EINTRAG NOCH NICHT IM MODEL
     // EINGEFUEGT IST, DA SONST FUER DAS ITEM KEINE VIEW-ABHAENGIGEN
     // DATEN ALLOZIERT WERDEN!
     void        AddItem( SvLBoxItem* pItem );
-    void        ReplaceItem( SvLBoxItem* pNewItem, sal_uInt16 nPos );
-    SvLBoxItem* GetItem( sal_uInt16 nPos ) const;
-    SvLBoxItem* GetFirstItem( sal_uInt16 nId ) const;
-    sal_uInt16 GetPos( SvLBoxItem* pItem ) const;
+    void ReplaceItem( SvLBoxItem* pNewItem, size_t nPos );
+    const SvLBoxItem* GetItem( size_t nPos ) const;
+    SvLBoxItem* GetItem( size_t nPos );
+    const SvLBoxItem* GetFirstItem( sal_uInt16 nId ) const;
+    SvLBoxItem* GetFirstItem( sal_uInt16 nId );
+    size_t GetPos( const SvLBoxItem* pItem ) const;
     void*       GetUserData() const;
     void        SetUserData( void* pPtr );
     void        EnableChildrenOnDemand( bool bEnable=true );

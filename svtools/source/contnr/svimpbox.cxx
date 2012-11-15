@@ -229,7 +229,7 @@ void SvImpLBox::CalcCellFocusRect( SvTreeListEntry* pEntry, Rectangle& rRect )
             SvLBoxItem* pItem = pCursor->GetItem( nCurTabPos );
             rRect.Left() = pView->GetTab( pCursor, pItem )->GetPos();
         }
-        if ( pCursor->ItemCount() > ( nCurTabPos + 1 ) )
+        if (pCursor->ItemCount() > static_cast<size_t>(nCurTabPos+1))
         {
             SvLBoxItem* pNextItem = pCursor->GetItem( nCurTabPos + 1 );
             long nRight = pView->GetTab( pCursor, pNextItem )->GetPos() - 1;

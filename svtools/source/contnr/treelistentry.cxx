@@ -30,6 +30,10 @@
 #include "svtools/treelist.hxx"
 #include "svtools/treelistbox.hxx"
 
+#include <limits>
+
+size_t SvTreeListEntry::ITEM_NOT_FOUND = std::numeric_limits<size_t>::max();
+
 void SvTreeListEntry::ClearChildren()
 {
     maChildren.clear();
@@ -53,18 +57,6 @@ void SvTreeListEntry::SetListPositions()
 void SvTreeListEntry::InvalidateChildrensListPositions()
 {
     nListPos |= 0x80000000;
-}
-
-void SvTreeListEntry::DeleteItems_Impl()
-{
-    sal_uInt16 nCount = aItems.size();
-    while( nCount )
-    {
-        nCount--;
-        SvLBoxItem* pItem = aItems[ nCount ];
-        delete pItem;
-    }
-    aItems.clear();
 }
 
 SvTreeListEntry::SvTreeListEntry() :
@@ -93,7 +85,7 @@ SvTreeListEntry::~SvTreeListEntry()
 #endif
 
     maChildren.clear();
-    DeleteItems_Impl();
+    maItems.clear();
 }
 
 bool SvTreeListEntry::HasChildren() const
@@ -132,29 +124,28 @@ void SvTreeListEntry::Clone(SvTreeListEntry* pSource)
     nAbsPos     = pSource->nAbsPos;
 
     SvLBoxItem* pNewItem;
-    DeleteItems_Impl();
-    sal_uInt16 nCount = ((SvTreeListEntry*)pSource)->ItemCount();
-    sal_uInt16 nCurPos = 0;
-    while( nCurPos < nCount )
+    maItems.clear();
+    ItemsType::iterator it = pSource->maItems.begin(), itEnd = pSource->maItems.end();
+    for (; it != itEnd; ++it)
     {
-        SvLBoxItem* pItem = ((SvTreeListEntry*)pSource)->GetItem( nCurPos );
+        SvLBoxItem* pItem = &(*it);
         pNewItem = pItem->Create();
-        pNewItem->Clone( pItem );
-        AddItem( pNewItem );
-        nCurPos++;
+        pNewItem->Clone(pItem);
+        maItems.push_back(pNewItem);
     }
-    pUserData = ((SvTreeListEntry*)pSource)->GetUserData();
-    nEntryFlags = ((SvTreeListEntry*)pSource)->nEntryFlags;
+
+    pUserData = pSource->GetUserData();
+    nEntryFlags = pSource->nEntryFlags;
 }
 
-sal_uInt16 SvTreeListEntry::ItemCount() const
+size_t SvTreeListEntry::ItemCount() const
 {
-    return (sal_uInt16)aItems.size();
+    return maItems.size();
 }
 
 void SvTreeListEntry::AddItem( SvLBoxItem* pItem )
 {
-    aItems.push_back( pItem );
+    maItems.push_back( pItem );
 }
 
 void SvTreeListEntry::EnableChildrenOnDemand( bool bEnable )
@@ -165,41 +156,72 @@ void SvTreeListEntry::EnableChildrenOnDemand( bool bEnable )
         nEntryFlags &= (~SV_ENTRYFLAG_CHILDREN_ON_DEMAND);
 }
 
-void SvTreeListEntry::ReplaceItem( SvLBoxItem* pNewItem, sal_uInt16 nPos )
+void SvTreeListEntry::ReplaceItem( SvLBoxItem* pNewItem, size_t nPos )
 {
     DBG_ASSERT(pNewItem,"ReplaceItem:No Item");
-    SvLBoxItem* pOld = GetItem( nPos );
-    if ( pOld )
+    if (nPos >= maItems.size())
     {
-        aItems[ nPos ] = pNewItem;
-        delete pOld;
+        // Out of bound. Bail out.
+        delete pNewItem;
+        return;
     }
+
+    maItems.erase(maItems.begin()+nPos);
+    maItems.insert(maItems.begin()+nPos, pNewItem);
 }
 
-SvLBoxItem* SvTreeListEntry::GetItem( sal_uInt16 nPos ) const
+const SvLBoxItem* SvTreeListEntry::GetItem( size_t nPos ) const
 {
-    return aItems[nPos];
+    return &maItems[nPos];
 }
 
-SvLBoxItem* SvTreeListEntry::GetFirstItem( sal_uInt16 nId ) const
+SvLBoxItem* SvTreeListEntry::GetItem( size_t nPos )
 {
-    sal_uInt16 nCount = aItems.size();
-    sal_uInt16 nCur = 0;
-    SvLBoxItem* pItem;
-    while( nCur < nCount )
+    return &maItems[nPos];
+}
+
+namespace {
+
+class FindByType : std::unary_function<SvLBoxItem, void>
+{
+    sal_uInt16 mnId;
+public:
+    FindByType(sal_uInt16 nId) : mnId(nId) {}
+    bool operator() (const SvLBoxItem& rItem) const
     {
-        pItem = GetItem( nCur );
-        if (pItem->GetType() == nId)
-            return pItem;
-        nCur++;
+        return rItem.GetType() == mnId;
     }
-    return 0;
+};
+
+class FindByPointer : std::unary_function<SvLBoxItem, void>
+{
+    const SvLBoxItem* mpItem;
+public:
+    FindByPointer(const SvLBoxItem* p) : mpItem(p) {}
+    bool operator() (const SvLBoxItem& rItem) const
+    {
+        return &rItem == mpItem;
+    }
+};
+
 }
 
-sal_uInt16 SvTreeListEntry::GetPos( SvLBoxItem* pItem ) const
+const SvLBoxItem* SvTreeListEntry::GetFirstItem( sal_uInt16 nId ) const
 {
-    std::vector<SvLBoxItem*>::const_iterator it = std::find( aItems.begin(), aItems.end(), pItem );
-    return it == aItems.end() ? USHRT_MAX : it - aItems.begin();
+    ItemsType::const_iterator it = std::find_if(maItems.begin(), maItems.end(), FindByType(nId));
+    return it == maItems.end() ? NULL : &(*it);
+}
+
+SvLBoxItem* SvTreeListEntry::GetFirstItem( sal_uInt16 nId )
+{
+    ItemsType::iterator it = std::find_if(maItems.begin(), maItems.end(), FindByType(nId));
+    return it == maItems.end() ? NULL : &(*it);
+}
+
+size_t SvTreeListEntry::GetPos( const SvLBoxItem* pItem ) const
+{
+    ItemsType::const_iterator it = std::find_if(maItems.begin(), maItems.end(), FindByPointer(pItem));
+    return it == maItems.end() ? ITEM_NOT_FOUND : std::distance(maItems.begin(), it);
 }
 
 void* SvTreeListEntry::GetUserData() const

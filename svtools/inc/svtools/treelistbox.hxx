@@ -835,7 +835,7 @@ inline SvViewDataItem* SvTreeListBox::GetViewDataItem( SvTreeListEntry* pEntry,
         (SvViewDataEntry*)SvListView::GetViewData(pEntry);
     DBG_ASSERT(pEntryData,"Entry not in View");
     DBG_ASSERT(pEntryData->pItemData,"No ItemData");
-    sal_uInt16 nItemPos = ((SvTreeListEntry*)pEntry)->GetPos( pItem );
+    sal_uInt16 nItemPos = pEntry->GetPos(pItem);
     return (pEntryData->pItemData+nItemPos);
 }
 

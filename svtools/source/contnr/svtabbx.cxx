@@ -375,7 +375,7 @@ String SvTabListBox::GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const
     SvTreeListEntry* pEntry = GetEntryOnPos( nPos );
     DBG_ASSERT( pEntry, "SvTabListBox::GetCellText(): Invalid Entry" );
     XubString aResult;
-    if ( pEntry && pEntry->ItemCount() > ( nCol + 1 ) )
+    if (pEntry && pEntry->ItemCount() > static_cast<size_t>(nCol+1))
     {
         const SvLBoxItem* pStr = pEntry->GetItem( nCol + 1 );
         if (pStr && pStr->GetType() == SV_ITEM_ID_LBOXSTRING)
