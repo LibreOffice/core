@@ -49,12 +49,8 @@ public:
     virtual uno::Reference<uno::XInterface> init() = 0;
 
     void testGetPropertySetInfo();
-    void testAddPropertyChangeListener();
-    void testAddVetoableChangeListener();
     void testSetPropertyValue();
     void testGetPropertyValue();
-    void testRemovePropertyChangeListener();
-    void testRemoveVetoableChangeListener();
 
 protected:
     virtual bool isPropertyValueChangeable(const rtl::OUString& rName);

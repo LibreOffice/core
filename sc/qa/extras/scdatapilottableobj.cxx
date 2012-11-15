@@ -56,7 +56,6 @@ public:
 
     CPPUNIT_TEST_SUITE(ScDataPilotTableObj);
     CPPUNIT_TEST(testRefresh);
-    //CPPUNIT_TEST(testGetHiddenFields);
     CPPUNIT_TEST(testGetOutputRange);
     CPPUNIT_TEST(testSourceRange);
     CPPUNIT_TEST(testTag);

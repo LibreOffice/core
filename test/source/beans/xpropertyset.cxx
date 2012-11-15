@@ -57,16 +57,6 @@ void XPropertySet::testGetPropertySetInfo()
     }
 }
 
-void XPropertySet::testAddPropertyChangeListener()
-{
-    // TODO: implement this.
-}
-
-void XPropertySet::testAddVetoableChangeListener()
-{
-    // TODO: implement this.
-}
-
 void XPropertySet::testSetPropertyValue()
 {
     testGetPropertySetInfo();
@@ -96,16 +86,6 @@ void XPropertySet::testGetPropertyValue()
         bool bSuccess = getSinglePropertyValue(xPropSet, maPropsToTest.normal[i]);
         CPPUNIT_ASSERT(bSuccess);
     }
-}
-
-void XPropertySet::testRemovePropertyChangeListener()
-{
-    // TODO: implement this.
-}
-
-void XPropertySet::testRemoveVetoableChangeListener()
-{
-    // TODO: implement this.
 }
 
 bool XPropertySet::isPropertyValueChangeable(const rtl::OUString& rName)

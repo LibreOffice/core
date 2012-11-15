@@ -45,7 +45,6 @@ public:
     void testQueryColumnDifference();
     void testQueryContentDifference();
     void testQueryEmptyCells();
-    void testQueryFormulaCells();
     void testQueryIntersection();
     void testQueryRowDifference();
     void testQueryVisibleCells();

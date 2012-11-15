@@ -59,10 +59,8 @@ $(eval $(call gb_Library_use_external,subsequenttest,cppunit))
 $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/unoapi_test \
     test/source/beans/xpropertyset \
-    test/source/container/xelementaccess \
     test/source/container/xindexaccess \
     test/source/container/xnamecontainer \
-    test/source/container/xnamereplace \
     test/source/container/xnamed \
     test/source/sheet/cellproperties \
     test/source/sheet/datapilotfield \
@@ -78,7 +76,6 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/sheet/xnamedrange \
     test/source/sheet/xnamedranges \
     test/source/sheet/xprintareas \
-    test/source/sheet/xspreadsheetdocument \
     test/source/sheet/xspreadsheets2 \
     test/source/text/xtext \
     test/source/text/xtextfield \
