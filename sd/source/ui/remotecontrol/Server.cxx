@@ -175,7 +175,7 @@ void RemoteServer::setup()
     spServer = new RemoteServer();
     spServer->launch();
 
-#ifdef ENABLE_BLUETOOTH
+#ifdef ENABLE_SDREMOTE_BLUETOOTH
     sd::BluetoothServer::setup( &(spServer->mCommunicators) );
 #endif
 }
@@ -309,7 +309,7 @@ void SdDLL::RegisterRemotes()
 
 bool RemoteServer::isBluetoothDiscoverable()
 {
-#ifdef ENABLE_BLUETOOTH
+#ifdef ENABLE_SDREMOTE_BLUETOOTH
     return BluetoothServer::isDiscoverable();
 #else
     return false;
@@ -318,7 +318,7 @@ bool RemoteServer::isBluetoothDiscoverable()
 
 void RemoteServer::setBluetoothDiscoverable( bool aDiscoverable )
 {
-#ifdef ENABLE_BLUETOOTH
+#ifdef ENABLE_SDREMOTE_BLUETOOTH
     BluetoothServer::setDiscoverable( aDiscoverable );
 #else
     (void) aDiscoverable;

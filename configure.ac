@@ -860,11 +860,11 @@ AC_ARG_ENABLE(sdremote,
         [Determines whether to enable Impress remote control.]),
 ,enable_sdremote=yes)
 
-AC_ARG_ENABLE(bluetooth,
-    AS_HELP_STRING([--disable-bluetooth],
+AC_ARG_ENABLE(sdremote-bluetooth,
+    AS_HELP_STRING([--disable-sdremote-bluetooth],
         [Determines whether to build sdremote with bluetooth support
-        (via dbus)]),
-,enable_bluetooth=yes)
+         Requires: dbus]),
+,enable_sdremote_bluetooth=yes)
 
 AC_ARG_ENABLE(gconf,
     AS_HELP_STRING([--disable-gconf],
@@ -9524,12 +9524,12 @@ AC_MSG_CHECKING([whether to enable sd remotecontrol])
 if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_SDREMOTE=YES
-    AC_MSG_CHECKING([whether to enable bluetooth support])
-    if test -n "$enable_bluetooth" -a "$enable_bluetooth" != "no"; then
+    AC_MSG_CHECKING([whether to enable sdremote via bluetooth support])
+    if test -n "$enable_sdremote_bluetooth" -a "$enable_sdremote_bluetooth" != "no"; then
         if test "$OS" = "LINUX"; then
             if test "$ENABLE_DBUS" = "TRUE"; then
                 AC_MSG_RESULT([yes])
-                ENABLE_BLUETOOTH=YES
+                ENABLE_SDREMOTE_BLUETOOTH=YES
                 dnl ===================================================================
                 dnl Check for system bluez
                 dnl ===================================================================
@@ -9544,11 +9544,11 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
                 fi
             else
                 AC_MSG_RESULT([no, dbus disabled])
-                ENABLE_BLUETOOTH=NO
+                ENABLE_SDREMOTE_BLUETOOTH=NO
             fi
         else
             AC_MSG_RESULT([no])
-            ENABLE_BLUETOOTH=NO
+            ENABLE_SDREMOTE_BLUETOOTH=NO
         fi
     fi
 else
@@ -9556,7 +9556,7 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_SDREMOTE)
-AC_SUBST(ENABLE_BLUETOOTH)
+AC_SUBST(ENABLE_SDREMOTE_BLUETOOTH)
 
 dnl ===================================================================
 dnl Check whether the gtk 2.0 libraries are available.
