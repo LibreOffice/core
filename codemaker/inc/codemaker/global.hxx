@@ -82,7 +82,6 @@ public:
 
     sal_Bool isValid();
 
-    void open(const ::rtl::OString& name, FileAccessMode nMode = FAM_READWRITE);
     void createTempFile(const ::rtl::OString& sPath);
     void close();
 
