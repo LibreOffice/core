@@ -196,16 +196,6 @@ void XDataPilotDescriptor::testGetDataFields()
     checkName( xIndex, 2 );
 }
 
-void XDataPilotDescriptor::testGetHiddenFields()
-{
-    std::cout << "testGetHiddenFields" <<std::endl;
-    uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(),UNO_QUERY_THROW);;
-    testGetDataPilotFields_Impl( xDescr );
-    uno::Reference< container::XIndexAccess > xIndex(xDescr->getHiddenFields(), UNO_QUERY_THROW);
-
-    checkName( xIndex, 3 );
-}
-
 void XDataPilotDescriptor::checkName( uno::Reference< container::XIndexAccess > xIndex, sal_Int32 nIndex )
 {
     CPPUNIT_ASSERT(xIndex.is());

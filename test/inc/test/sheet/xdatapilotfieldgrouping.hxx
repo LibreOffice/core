@@ -38,7 +38,6 @@ class OOO_DLLPUBLIC_TEST XDataPilotFieldGrouping
 {
 public:
     void testCreateNameGroup();
-    void testCreateDateGroup();
 
     virtual uno::Reference< uno::XInterface > init() = 0;
 

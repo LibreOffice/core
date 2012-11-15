@@ -48,15 +48,5 @@ void XDataPilotFieldGrouping::testCreateNameGroup()
     xDataPilotFieldGrouping->createNameGroup( aElements );
 }
 
-void XDataPilotFieldGrouping::testCreateDateGroup()
-{
-    uno::Reference< sheet::XDataPilotFieldGrouping > xDataPilotFieldGrouping(init(),UNO_QUERY_THROW);
-    sheet::DataPilotFieldGroupInfo aGroupInfo;
-    aGroupInfo.GroupBy = sheet::DataPilotFieldGroupBy::MONTHS;
-    aGroupInfo.HasDateValues = true;
-    xDataPilotFieldGrouping->createDateGroup(aGroupInfo);
 }
-
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

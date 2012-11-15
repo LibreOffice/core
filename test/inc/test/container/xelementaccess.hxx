@@ -38,9 +38,6 @@ class XElementAccess
 public:
     XElementAccess(uno::Type& rType): maType(rType) {}
 
-    void testGetElementType();
-    void testHasElements();
-
     virtual uno::Reference< uno::XInterface > init() = 0;
 
     virtual ~XElementAccess() {}

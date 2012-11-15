@@ -59,7 +59,6 @@ $(eval $(call gb_Library_use_external,subsequenttest,cppunit))
 $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/unoapi_test \
     test/source/beans/xpropertyset \
-    test/source/container/xelementaccess \
     test/source/container/xindexaccess \
     test/source/container/xnamecontainer \
     test/source/container/xnamereplace \
