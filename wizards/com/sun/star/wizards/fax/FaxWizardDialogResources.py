@@ -164,25 +164,25 @@ class FaxWizardDialogResources(Resource):
         self.loadCommunicationResources()
 
     def loadRoadmapResources(self):
-        for i in xrange(5):
+        for i in range(5):
             self.RoadmapLabels.append(self.getResText(
                 FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + \
                 + i + 1))
 
     def loadSalutationResources(self):
-        for i in xrange(4):
+        for i in range(4):
             self.SalutationLabels.append(self.getResText(
                 FaxWizardDialogResources.RID_FAXWIZARDSALUTATION_START + \
                 i + 1))
 
     def loadGreetingResources(self):
-        for i in xrange(4):
+        for i in range(4):
             self.GreetingLabels.append(self.getResText(
                 FaxWizardDialogResources.RID_FAXWIZARDGREETING_START + \
                 i + 1))
 
     def loadCommunicationResources(self):
-        for i in xrange(3):
+        for i in range(3):
             self.CommunicationLabels.append(self.getResText(
                 FaxWizardDialogResources.RID_FAXWIZARDCOMMUNICATION_START + \
                 i + 1))
