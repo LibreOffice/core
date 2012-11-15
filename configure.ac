@@ -12484,6 +12484,12 @@ fi
 
 AC_SUBST(LO_PATH)
 
+# We need at least berkeleydb for build platform in ooo.lst
+if test "$CROSS_COMPILING" = "YES" ; then
+    BUILD_TARBALLS="d70951c80dabecc2892c919ff5d07172-db-4.7.25.NC-custom.tar.gz"
+fi
+AC_SUBST(BUILD_TARBALLS)
+
 # make sure config.guess is +x; we execute config.guess, so it has to be so
 chmod +x ./config.guess
 
