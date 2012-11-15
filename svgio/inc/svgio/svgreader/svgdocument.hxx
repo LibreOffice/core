@@ -68,7 +68,6 @@ namespace svgio
 
             /// add/remove styles to mapper
             void addSvgStyleAttributesToMapper(const rtl::OUString& rStr, const SvgStyleAttributes& rSvgStyleAttributes);
-            void removeSvgStyleAttributesFromMapper(const rtl::OUString& rStr);
 
             /// find a style by it's Id
             bool hasSvgStyleAttributesById() const { return !maIdStyleTokenMapperList.empty(); }
