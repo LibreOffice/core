@@ -90,6 +90,14 @@ constants BorderLineStyle
     /** Inset border line.
      */
     const short INSET = 13;
+
+    /** Finely dashed border line.
+     */
+    const short FINE_DASHED = 14;
+
+    /** Maximum valid border line style value.
+     */
+    const short BORDER_LINE_STYLE_MAX = 14;
 };
 
 

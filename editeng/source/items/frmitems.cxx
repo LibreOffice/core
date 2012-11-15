@@ -1794,7 +1794,7 @@ sal_Bool
 SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
     SvxBorderStyle const nStyle =
-        (rLine.LineStyle < 0 || INSET < rLine.LineStyle)
+        (rLine.LineStyle < 0 || BORDER_LINE_STYLE_MAX < rLine.LineStyle)
         ? SOLID     // default
         : rLine.LineStyle;
 
