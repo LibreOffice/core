@@ -33,6 +33,10 @@ public:
     //while GetOptimalSize/get_preferred_size and SetPosSizePixel are
     //oblivious to them
     static Size getLayoutRequisition(const Window &rWindow);
+    static void setLayoutPosSize(Window &rWindow, const Point &rPos, const Size &rSize);
+
+    //applies the allocation pos and size onto rWindow via setLayoutPosSize taking into account
+    //the rWindows alignment desires within that allocation
     static void setLayoutAllocation(Window &rWindow, const Point &rPos, const Size &rSize);
 
 protected:
