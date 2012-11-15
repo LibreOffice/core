@@ -7924,8 +7924,6 @@ if test "$with_system_boost" = "yes"; then
        [AC_MSG_ERROR(boost/spirit/include/classic_core.hpp not found. install boost >= 1.36)], [])
     AC_CHECK_HEADER(boost/function.hpp, [],
        [AC_MSG_ERROR(boost/function.hpp not found. install boost)], [])
-    AC_CHECK_HEADER([boost/unordered_map.hpp], [HAVE_BOOST_UNORDERED_MAP=TRUE],
-                   [AC_MSG_WARN([boost/unordered_map.hpp not found])], [])
 
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS -fno-exceptions"
