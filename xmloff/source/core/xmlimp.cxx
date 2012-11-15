@@ -203,7 +203,7 @@ namespace
             ~DocumentInfo()
             {}
 
-            const sal_uInt16 getGeneratorVersion() const
+            sal_uInt16 getGeneratorVersion() const
             {
                 return mnGeneratorVersion;
             }
@@ -265,7 +265,7 @@ public:
             DestroyFontToSubsFontConverter( hMathFontConv );
     }
 
-    const sal_uInt16 getGeneratorVersion( const SvXMLImport& rImport )
+    sal_uInt16 getGeneratorVersion( const SvXMLImport& rImport )
     {
         if ( !mpDocumentInfo.get() )
         {
