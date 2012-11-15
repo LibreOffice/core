@@ -329,16 +329,19 @@ namespace condformat {
 
 enum ScCondFormatDateType
 {
+    TODAY,
     YESTERDAY,
     TOMORROW,
-    TODAY,
     LAST7DAYS,
-    LASTWEEK,
     THISWEEK,
+    LASTWEEK,
     NEXTWEEK,
-    LASTMONTH,
     THISMONTH,
-    NEXTMONTH
+    LASTMONTH,
+    NEXTMONTH,
+    THISYEAR,
+    LASTYEAR,
+    NEXTYEAR
 };
 
 }
