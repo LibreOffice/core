@@ -32,17 +32,9 @@ $(eval $(call gb_StaticLibrary_set_include,shell_xmlparser,\
 	$$(INCLUDE) \
 ))
 
-ifeq ($(GUI),WNT)
-$(eval $(call gb_StaticLibrary_use_externals,shell_xmlparser,\
-	expat_utf16 \
-))
-
-else
 $(eval $(call gb_StaticLibrary_use_externals,shell_xmlparser,\
 	expat_utf8 \
 ))
-
-endif
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,shell_xmlparser,\
     shell/source/all/xml_parser \

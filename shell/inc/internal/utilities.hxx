@@ -73,6 +73,12 @@ std::wstring StringToWString(const std::string& String);
 std::string WStringToString(const std::wstring& String);
 
 //---------------------------------
+/** Convert a string to a wstring
+    using CP_UTF8
+*/
+std::wstring UTF8ToWString(const std::string& String);
+
+//---------------------------------
 /** Retrieve a string from the
     resources of this module
 */

@@ -15,7 +15,6 @@ $(eval $(call gb_Module_add_targets,expat,\
 	ExternalPackage_expat \
 	UnpackedTarball_expat \
 	StaticLibrary_expat \
-	StaticLibrary_expat_utf16 \
 ))
 
 # Actually it wasn't that clear if we should
@@ -32,9 +31,6 @@ $(eval $(call gb_Module_add_targets,expat,\
 endif
 
 # ---------------- X64 stuff special ---------------------
-#  use UNICODE only because shell/shlxthandler
-#  doesn't link against ascii_expat_xmlparse
-#---------------------------------------------------------
 ifeq ($(BUILD_X64),TRUE)
 $(eval $(call gb_Module_add_targets,expat,\
 	StaticLibrary_expat_x64 \

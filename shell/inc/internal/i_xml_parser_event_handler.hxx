@@ -23,7 +23,7 @@
 #include <string>
 #include <map>
 
-#if defined(XML_UNICODE) || defined(XML_UNICODE_WCHAR_T)
+#ifdef _WIN32
     typedef std::wstring string_t;
     typedef wchar_t char_t;
 #else

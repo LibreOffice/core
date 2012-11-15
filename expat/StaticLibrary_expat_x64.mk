@@ -21,7 +21,6 @@ $(eval $(call gb_StaticLibrary_set_include,expat_x64,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_defs,expat_x64,\
-    -DXML_UNICODE \
     -DCOMPILED_FROM_DSP \
 ))
 

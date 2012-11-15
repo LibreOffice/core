@@ -15,18 +15,15 @@ $(eval $(call gb_UnpackedTarball_add_patches,expat,\
 	expat/expat-2.1.0.patch \
 ))
 
-# This is a bit hackish
-# we need to compile it twice:
-# with -DXML_UNICODE and without.
+# This is a bit hackish.
 
-# This is a bit hackish too ;-)
-# on windows 64 bit platform we need to link it twice:
-# with $(LINK_X64_BINARY) and with $(gb_LINK).
+# When building for Windows (as 32-bit) we need to build it twice: as
+# 32- and 64-bit code, to be able to produce a 64-bit Explorer
+# ("shell") extension that is used when the 32-bit LibreOffice is
+# installed on a 64-bit OS.
+
 $(eval $(call gb_UnpackedTarball_set_post_action,expat,\
-	cp lib/xmltok.c lib/unicode_xmltok.c && \
-	cp lib/xmlrole.c lib/unicode_xmlrole.c && \
-	cp lib/xmlparse.c lib/unicode_xmlparse.c \
-	$(if $(filter $(BUILD_X64),TRUE),      && \
+	$(if $(filter $(BUILD_X64),TRUE),         \
 	  cp lib/xmlparse.c lib/xmlparse_x64.c && \
 	  cp lib/xmltok.c lib/xmltok_x64.c     && \
 	  cp lib/xmlrole.c lib/xmlrole_x64.c) \

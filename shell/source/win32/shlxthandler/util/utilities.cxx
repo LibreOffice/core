@@ -32,21 +32,40 @@
 const size_t MAX_RES_STRING = 1024;
 const wchar_t SPACE_CHAR = _T(' ');
 
-//---------------------------------
-/**
-*/
-std::wstring StringToWString(const std::string& String)
+static std::wstring StringToWString(const std::string& String, int codepage)
 {
     int len = MultiByteToWideChar(
-        CP_ACP, 0, String.c_str(), -1, 0, 0);
+        codepage, 0, String.c_str(), -1, 0, 0);
 
     wchar_t* buff = reinterpret_cast<wchar_t*>(
         _alloca(len * sizeof(wchar_t)));
 
     MultiByteToWideChar(
-        CP_ACP, 0, String.c_str(), -1, buff, len);
+        codepage, 0, String.c_str(), -1, buff, len);
 
     return std::wstring(buff);
+}
+
+static std::string WStringToString(const std::wstring& String, int codepage)
+{
+    int len = WideCharToMultiByte(
+        codepage, 0, String.c_str(), -1, 0, 0, 0, 0);
+
+    char* buff = reinterpret_cast<char*>(
+        _alloca(len * sizeof(char)));
+
+    WideCharToMultiByte(
+        codepage, 0, String.c_str(), -1, buff, len, 0, 0);
+
+    return std::string(buff);
+}
+
+//---------------------------------
+/**
+*/
+std::wstring StringToWString(const std::string& String)
+{
+    return StringToWString(String, CP_ACP);
 }
 
 //---------------------------------
@@ -54,16 +73,15 @@ std::wstring StringToWString(const std::string& String)
 */
 std::string WStringToString(const std::wstring& String)
 {
-    int len = WideCharToMultiByte(
-        CP_ACP, 0, String.c_str(), -1, 0, 0, 0, 0);
+    return WStringToString(String, CP_ACP);
+}
 
-    char* buff = reinterpret_cast<char*>(
-        _alloca(len * sizeof(char)));
-
-    WideCharToMultiByte(
-        CP_ACP, 0, String.c_str(), -1, buff, len, 0, 0);
-
-    return std::string(buff);
+//---------------------------------
+/**
+*/
+std::wstring UTF8ToWString(const std::string& String)
+{
+    return StringToWString(String, CP_UTF8);
 }
 
 //---------------------------------

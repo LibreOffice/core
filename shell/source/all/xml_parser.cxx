@@ -21,6 +21,12 @@
 #include "internal/xml_parser.hxx"
 #include "internal/i_xml_parser_event_handler.hxx"
 
+#ifdef _WIN32
+#include "internal/utilities.hxx"
+#else
+#define UTF8ToWString(s) s
+#endif
+
 #include <assert.h>
 
 namespace /* private */
@@ -96,12 +102,12 @@ static void xml_start_element_handler(void* UserData, const XML_Char* name, cons
 
         while(atts[i])
         {
-            attributes[reinterpret_cast<const char_t*>(get_local_name(atts[i]))] = reinterpret_cast<const char_t*>(atts[i+1]);
+            attributes[UTF8ToWString(reinterpret_cast<const char*>(get_local_name(atts[i])))] = UTF8ToWString(reinterpret_cast<const char*>(atts[i+1]));
             i += 2; // skip to next pair
         }
 
         pDocHdl->start_element(
-            reinterpret_cast<const char_t*>(name), reinterpret_cast<const char_t*>(get_local_name(name)), attributes);
+            UTF8ToWString(reinterpret_cast<const char*>(name)), UTF8ToWString(reinterpret_cast<const char*>(get_local_name(name))), attributes);
     }
 }
 
@@ -112,11 +118,13 @@ static void xml_end_element_handler(void* UserData, const XML_Char* name)
     xml_parser* pImpl  = get_parser_instance(UserData);
     i_xml_parser_event_handler* pDocHdl = pImpl->get_document_handler();
     if (pDocHdl)
-        pDocHdl->end_element(reinterpret_cast<const char_t*>(name), reinterpret_cast<const char_t*>(get_local_name(name)));
+        pDocHdl->end_element(UTF8ToWString(reinterpret_cast<const char*>(name)), UTF8ToWString(reinterpret_cast<const char*>(get_local_name(name))));
 }
 
 static void xml_character_data_handler(void* UserData, const XML_Char* s, int len)
 {
+    static int count = 0;
+
     assert(UserData);
 
     xml_parser* pImpl  = get_parser_instance(UserData);
@@ -124,10 +132,30 @@ static void xml_character_data_handler(void* UserData, const XML_Char* s, int le
     if (pDocHdl)
     {
         if (has_only_whitespaces(s,len))
-            pDocHdl->ignore_whitespace(string_t(reinterpret_cast<const char_t*>(s), len));
+            pDocHdl->ignore_whitespace(UTF8ToWString(std::string(reinterpret_cast<const char*>(s), len)));
         else
-            pDocHdl->characters(string_t(reinterpret_cast<const char_t*>(s), len));
+            pDocHdl->characters(UTF8ToWString(std::string(reinterpret_cast<const char*>(s), len)));
     }
+#if 0
+    if (count < 5) {
+        char buf[1000];
+        sprintf(buf,
+                "%s: len=%d\n"
+                "s=%.10s\n"
+                "pDocHdl=%p has_only_whitespaces()=%d\n"
+                "string=%S",
+                "xml_character_data_handler",
+                len,
+                s,
+                pDocHdl,
+                has_only_whitespaces(s,len),
+                UTF8ToWString(std::string(reinterpret_cast<const char*>(s), len)).c_str()
+            );
+
+        MessageBoxA(NULL, buf, "xml_character_data_handler", MB_OK);
+        count++;
+    }
+#endif
 }
 
 static void xml_comment_handler(void* UserData, const XML_Char* Data)
@@ -137,7 +165,7 @@ static void xml_comment_handler(void* UserData, const XML_Char* Data)
     xml_parser* pImpl  = get_parser_instance(UserData);
     i_xml_parser_event_handler* pDocHdl = pImpl->get_document_handler();
     if (pDocHdl)
-        pDocHdl->comment(reinterpret_cast<const char_t*>(Data));
+        pDocHdl->comment(UTF8ToWString(reinterpret_cast<const char*>(Data)));
 }
 
 } // extern "C"
