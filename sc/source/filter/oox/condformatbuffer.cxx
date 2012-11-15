@@ -692,41 +692,6 @@ void CondFormatRule::finalizeImport()
             eOperator = SC_COND_ENDS_WITH;
         break;
         case XML_timePeriod:
-            switch( maModel.mnTimePeriod )
-            {
-                case XML_yesterday:
-                    aReplaceFormula = "FLOOR(#B,1)=TODAY()-1";
-                break;
-                case XML_today:
-                    aReplaceFormula = "FLOOR(#B,1)=TODAY()";
-                break;
-                case XML_tomorrow:
-                    aReplaceFormula = "FLOOR(#B,1)=TODAY()+1";
-                break;
-                case XML_last7Days:
-                    aReplaceFormula = "AND(TODAY()-7<FLOOR(#B,1),FLOOR(#B,1)<=TODAY())";
-                break;
-                case XML_lastWeek:
-                    aReplaceFormula = "AND(TODAY()-WEEKDAY(TODAY())-7<FLOOR(#B,1),FLOOR(#B,1)<=TODAY()-WEEKDAY(TODAY()))";
-                break;
-                case XML_thisWeek:
-                    aReplaceFormula = "AND(TODAY()-WEEKDAY(TODAY())<FLOOR(#B,1),FLOOR(#B,1)<=TODAY()-WEEKDAY(TODAY())+7)";
-                break;
-                case XML_nextWeek:
-                    aReplaceFormula = "AND(TODAY()-WEEKDAY(TODAY())+7<FLOOR(#B,1),FLOOR(#B,1)<=TODAY()-WEEKDAY(TODAY())+14)";
-                break;
-                case XML_lastMonth:
-                    aReplaceFormula = "OR(AND(MONTH(#B)=MONTH(TODAY())-1,YEAR(#B)=YEAR(TODAY())),AND(MONTH(#B)=12,MONTH(TODAY())=1,YEAR(#B)=YEAR(TODAY())-1))";
-                break;
-                case XML_thisMonth:
-                    aReplaceFormula = "AND(MONTH(#B)=MONTH(TODAY()),YEAR(#B)=YEAR(TODAY()))";
-                break;
-                case XML_nextMonth:
-                    aReplaceFormula = "OR(AND(MONTH(#B)=MONTH(TODAY())+1,YEAR(#B)=YEAR(TODAY())),AND(MONTH(#B)=1,MONTH(TODAY())=12,YEAR(#B)=YEAR(TODAY())+1))";
-                break;
-                default:
-                    OSL_FAIL( "CondFormatRule::finalizeImport - unknown time period type" );
-            }
         break;
         case XML_containsBlanks:
             aReplaceFormula = "LEN(TRIM(#B))=0";
@@ -855,6 +820,53 @@ void CondFormatRule::finalizeImport()
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, NULL, NULL, &rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
+    }
+    else if( maModel.mnType == XML_timePeriod )
+    {
+        condformat::ScCondFormatDateType eDateType = condformat::TODAY;
+        switch( maModel.mnTimePeriod )
+        {
+            case XML_yesterday:
+                eDateType = condformat::YESTERDAY;
+                break;
+            case XML_today:
+                eDateType = condformat::TODAY;
+                break;
+            case XML_tomorrow:
+                eDateType = condformat::TOMORROW;
+                break;
+            case XML_last7Days:
+                eDateType = condformat::LAST7DAYS;
+                break;
+            case XML_lastWeek:
+                eDateType = condformat::LASTWEEK;
+                break;
+            case XML_thisWeek:
+                eDateType = condformat::THISWEEK;
+                break;
+            case XML_nextWeek:
+                eDateType = condformat::NEXTWEEK;
+                break;
+            case XML_lastMonth:
+                eDateType = condformat::LASTMONTH;
+                break;
+            case XML_thisMonth:
+                eDateType = condformat::THISMONTH;
+                break;
+            case XML_nextMonth:
+                eDateType = condformat::NEXTMONTH;
+                break;
+            default:
+                SAL_WARN("sc", "CondFormatRule::finalizeImport - unknown time period type" );
+        }
+
+        ScDocument& rDoc = getScDocument();
+        ScCondDateFormatEntry* pFormatEntry = new ScCondDateFormatEntry(&rDoc);
+        pFormatEntry->SetDateType(eDateType);
+        OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
+        pFormatEntry->SetStyleName( aStyleName );
+
+        mpFormat->AddEntry(pFormatEntry);
     }
     else if( mpColor )
     {
