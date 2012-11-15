@@ -1398,6 +1398,9 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
             case table::BorderLineStyle::INSET:
                 pVal = ( sal_Char* )"inset";
                 break;
+            case table::BorderLineStyle::FINE_DASHED:
+                pVal = ( sal_Char* )"dashSmallGap";
+                break;
             case table::BorderLineStyle::NONE:
             default:
                 break;
