@@ -57,12 +57,12 @@ class ScTokenArray;
 
 enum ScConditionMode
 {
-    SC_COND_EQUAL, //done
-    SC_COND_LESS, //done
+    SC_COND_EQUAL,
+    SC_COND_LESS,
     SC_COND_GREATER,
     SC_COND_EQLESS,
     SC_COND_EQGREATER,
-    SC_COND_NOTEQUAL, //done
+    SC_COND_NOTEQUAL,
     SC_COND_BETWEEN,
     SC_COND_NOTBETWEEN,
     SC_COND_DUPLICATE,
