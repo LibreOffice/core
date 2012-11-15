@@ -90,6 +90,10 @@ constants BorderLineStyle
     /** Inset border line.
      */
     const short INSET = 13;
+
+    /** Finely dashed border line.
+     */
+    const short FINE_DASHED = 14;
 };
 
 

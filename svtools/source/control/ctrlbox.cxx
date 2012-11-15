@@ -615,6 +615,13 @@ namespace svtools
                     aPattern.push_back( 20 );
                 }
                 break;
+            case STYLE_FINE_DASHED:
+                if ( eUnit == MAP_PIXEL )
+                {
+                    aPattern.push_back( 4 );
+                    aPattern.push_back( 1 );
+                }
+                break;
             default:
                 break;
         }

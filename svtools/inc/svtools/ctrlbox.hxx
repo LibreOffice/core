@@ -44,6 +44,7 @@ typedef ::std::vector< FontInfo              > ImplFontList;
 #define STYLE_SOLID                ( ( sal_uInt16 ) 0 )
 #define STYLE_DOTTED               ( ( sal_uInt16 ) 1 )
 #define STYLE_DASHED               ( ( sal_uInt16 ) 2 )
+#define STYLE_FINE_DASHED          ( ( sal_uInt16 ) 14 )
 #define STYLE_NONE                 ( ( sal_uInt16 ) -1)
 
 #define CHANGE_LINE1               ( ( sal_uInt16 ) 1 )

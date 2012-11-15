@@ -128,8 +128,10 @@ ConvertBorderStyleFromWord(int const nWordLineStyle)
             return DOTTED;
             break;
         case  7:
-        case 22:
             return DASHED;
+            break;
+        case 22:
+            return FINE_DASHED;
             break;
         // then the shading beams which we represent by a double line
         case 23:
@@ -215,6 +217,7 @@ ConvertBorderWidthFromWord(SvxBorderStyle const eStyle, double const fWidth,
 
         case DOTTED:
         case DASHED:
+        case FINE_DASHED:
             return fWidth;
             break;
 
@@ -270,6 +273,7 @@ ConvertBorderWidthToWord(SvxBorderStyle const eStyle, double const fWidth)
         case SOLID:
         case DOTTED:
         case DASHED:
+        case FINE_DASHED:
             return fWidth;
             break;
 
@@ -335,6 +339,7 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
         case SOLID:
         case DOTTED:
         case DASHED:
+        case FINE_DASHED:
             aImpl = BorderWidthImpl( CHANGE_LINE1, 1.0 );
             break;
 
@@ -514,6 +519,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
                 case SOLID:
                 case DOTTED:
                 case DASHED:
+                case FINE_DASHED:
                     ::std::swap( nOut, nIn);
                     break;
                 default:
