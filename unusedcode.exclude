@@ -1,0 +1,26 @@
+#
+# list of symbols that should not be dropped, even they're not
+# referenced in current (linux) builds
+#
+
+# test functions that aren't used yet, but will be in near future
+# https://gerrit.libreoffice.org/#/c/1077/
+
+ScFiltersTest::testColorScaleODS()
+ScFiltersTest::testColorScaleXLSX()
+apitest::XCellRangesQuery::testQueryFormulaCells()
+apitest::XDataPilotDescriptor::testGetHiddenFields()
+apitest::XDataPilotFieldGrouping::testCreateDateGroup()
+apitest::XCellRangesQuery::testQueryFormulaCells()
+apitest::XElementAccess::testGetElementType()
+apitest::XElementAccess::testHasElements()
+apitest::XIndexAccess::XIndexAccess(int)
+apitest::XIndexAccess::testGetByIndex()
+apitest::XIndexAccess::testGetByIndexException()
+apitest::XIndexAccess::testGetCount()
+apitest::XNameReplace::testReplaceByName()
+apitest::XPropertySet::testAddPropertyChangeListener()
+apitest::XPropertySet::testAddVetoableChangeListener()
+apitest::XPropertySet::testRemovePropertyChangeListener()
+apitest::XPropertySet::testRemoveVetoableChangeListener()
+apitest::XSpreadsheetDocument::testGetSheets()
