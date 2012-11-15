@@ -81,6 +81,9 @@ $(eval $(call gb_Library_use_libraries,sal,\
 	$(if $(filter $(OS),ANDROID), \
 		lo-bootstrap \
 	) \
+	$(if $(filter-out $(GUI),UNX), \
+		uwinapi \
+	) \
 	$(gb_STDLIBS) \
 ))
 
