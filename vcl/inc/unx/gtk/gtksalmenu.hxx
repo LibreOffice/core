@@ -17,16 +17,16 @@
 #include <unx/gtk/gtkframe.hxx>
 
 #if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
-#  if GLIB_MAJOR_VERSION > 2 && GLIB_MINOR_VERSION >= 32
+#  if GLIB_MAJOR_VERSION > 2 || GLIB_MINOR_VERSION >= 32
 #    define ENABLE_GMENU_INTEGRATION
 #  endif
 #  include <unx/gtk/glomenu.h>
 #  include <unx/gtk/gloactiongroup.h>
 #else
-#  if GLIB_MAJOR_VERSION > 2 && GLIB_MINOR_VERSION >= 32
+#  if !(GLIB_MAJOR_VERSION > 2 || GLIB_MINOR_VERSION >= 32)
      typedef void GMenuModel;
 #  endif
-#  if GLIB_MAJOR_VERSION > 2 && GLIB_MINOR_VERSION >= 28
+#  if !(GLIB_MAJOR_VERSION > 2 || GLIB_MINOR_VERSION >= 28)
      typedef void GActionGroup;
 #  endif
 #endif
