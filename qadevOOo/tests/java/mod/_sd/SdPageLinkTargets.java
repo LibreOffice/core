@@ -119,16 +119,16 @@ public class SdPageLinkTargets extends TestCase {
                 setPropertyValue("CLSID","12DCAE26-281F-416F-a234-c3086127382e");
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
-            throw new StatusException("Couldn't change property", e);
+            throw new StatusException("WrappedTarget: couldn't change property CLSID", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
-            throw new StatusException("Couldn't change property", e);
+            throw new StatusException("IllegalArgument: couldn't change property CLSID", e);
         } catch (com.sun.star.beans.PropertyVetoException e) {
             e.printStackTrace(log);
-            throw new StatusException("Couldn't change property", e);
+            throw new StatusException("PropertyVeto: couldn't change property CLSID", e);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             e.printStackTrace(log);
-            throw new StatusException("Couldn't change property", e);
+            throw new StatusException("UnknownProperty: couldn't change property CLSID", e);
         }
 
         log.println( "creating a new environment for LinkTargets object" );
