@@ -1352,11 +1352,11 @@ $(call gb_LinkTarget_add_defs,$(1),\
     -DENABLE_DBUS \
 )
 
-ifeq ($(ENABLE_PACKAGEKIT),YES)
+ifeq ($(ENABLE_FONT_AUTOINSTALL),YES)
 $(call gb_LinkTarget_add_defs,$(1),\
-    -DENABLE_PACKAGEKIT \
+    -DENABLE_FONT_AUTOINSTALL \
 )
-endif # ENABLE_PACKAGEKIT
+endif # ENABLE_FONT_AUTOINSTALL
 
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(DBUS_LIBS) \

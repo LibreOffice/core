@@ -849,11 +849,11 @@ AC_ARG_ENABLE(dbus,
          e.g. Presentation mode screensaver control, bluetooth presentation control]),
 ,enable_dbus=yes)
 
-AC_ARG_ENABLE(packagekit,
-    AS_HELP_STRING([--enable-packagekit],
-        [Determines whether to enable features using packagekit.
-         Right now that is auto font install]),
-,)
+AC_ARG_ENABLE(font-autoinstall,
+    AS_HELP_STRING([--enable-font-autoinstall],
+        [Determines whether to enable font auto install via packagekit.
+         Requires: packagekit, dbus]),
+,enable_font_autoinstall=auto)
 
 AC_ARG_ENABLE(sdremote,
     AS_HELP_STRING([--disable-sdremote],
@@ -9506,19 +9506,35 @@ AC_SUBST(ENABLE_DBUS)
 AC_SUBST(DBUS_CFLAGS)
 AC_SUBST(DBUS_LIBS)
 
+dnl
+dnl Automatic font installation via packagekit - requires DBUS
+dnl
 AC_MSG_CHECKING([whether to enable font install via packagekit])
-if test "$ENABLE_DBUS" = "TRUE"; then
-    if test -n "$enable_packagekit" -a "$enable_packagekit" != "no"; then
-        ENABLE_PACKAGEKIT=YES
-        AC_MSG_RESULT([yes])
-    else
-        ENABLE_PACKAGEKIT=NO
+case "$enable_font_autoinstall" in
+    auto)
+        if test "$ENABLE_DBUS" = "TRUE" ; then
+            ENABLE_FONT_AUTOINSTALL=YES
+            AC_MSG_RESULT([yes])
+        else
+            ENABLE_FONT_AUTOINSTALL=NO
+            AC_MSG_RESULT([no])
+        fi
+    ;;
+    yes)
+        if test "$ENABLE_DBUS" = "TRUE" ; then
+            ENABLE_FONT_AUTOINSTALL=YES
+            AC_MSG_RESULT([yes])
+        else
+            AC_MSG_ERROR([Auto font install requires dbus, which is explicitly disabled])
+        fi
+    ;;
+    *)
+        ENABLE_FONT_AUTOINSTALL=NO
         AC_MSG_RESULT([no])
-    fi
-else
-    AC_MSG_RESULT([no, dbus disabled.])
-fi
-AC_SUBST(ENABLE_PACKAGEKIT)
+    ;;
+esac
+AC_SUBST(ENABLE_FONT_AUTOINSTALL)
+
 
 AC_MSG_CHECKING([whether to enable sd remotecontrol])
 if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
