@@ -29,6 +29,7 @@
 
 #include <typelib/typedescription.hxx>
 
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/script/Converter.hpp>
@@ -50,10 +51,12 @@ using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
+using com::sun::star::lang::WrappedTargetRuntimeException;
 using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::lang::XUnoTunnel;
 using com::sun::star::reflection::theCoreReflection;
 using com::sun::star::reflection::XIdlReflection;
+using com::sun::star::reflection::InvocationTargetException;
 using com::sun::star::script::Converter;
 using com::sun::star::script::XTypeConverter;
 using com::sun::star::script::XInvocationAdapterFactory2;
@@ -604,6 +607,22 @@ static Sequence< Type > invokeGetTypes( const Runtime & r , PyObject * o )
     return ret;
 }
 
+static OUString
+lcl_ExceptionMessage(PyObject *const o, OUString const*const pWrapped)
+{
+    OUStringBuffer buf;
+    buf.appendAscii("Couldn't convert ");
+    PyRef reprString( PyObject_Str(o), SAL_NO_ACQUIRE );
+    buf.appendAscii( PyString_AsString(reprString.get()) );
+    buf.appendAscii(" to a UNO type");
+    if (pWrapped)
+    {
+        buf.appendAscii("; caught exception: ");
+        buf.append(*pWrapped);
+    }
+    return buf.makeStringAndClear();
+}
+
 Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) const
     throw ( com::sun::star::uno::RuntimeException )
 {
@@ -796,7 +815,8 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
                 }
                 catch( const com::sun::star::uno::Exception & e )
                 {
-                    throw RuntimeException( e.Message, e.Context );
+                    throw WrappedTargetRuntimeException(
+                            e.Message, e.Context, makeAny(e));
                 }
             }
             else
@@ -834,17 +854,23 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             }
             else
             {
-                Sequence< Type > interfaces = invokeGetTypes( *this, o );
-                if( interfaces.getLength() )
-                {
-                    Adapter *pAdapter = new Adapter( o, interfaces );
-                    mappedObject =
-                        getImpl()->cargo->xAdapterFactory->createAdapter(
-                            pAdapter, interfaces );
+                try {
+                    Sequence<Type> interfaces = invokeGetTypes(*this, o);
+                    if (interfaces.getLength())
+                    {
+                        Adapter *pAdapter = new Adapter( o, interfaces );
+                        mappedObject =
+                            getImpl()->cargo->xAdapterFactory->createAdapter(
+                                pAdapter, interfaces );
 
-                    // keep a list of exported objects to ensure object identity !
-                    impl->cargo->mappedObjects[ PyRef(o) ] =
-                        com::sun::star::uno::WeakReference< XInvocation > ( pAdapter );
+                        // keep a list of exported objects to ensure object identity !
+                        impl->cargo->mappedObjects[ PyRef(o) ] =
+                            com::sun::star::uno::WeakReference< XInvocation > ( pAdapter );
+                    }
+                } catch (InvocationTargetException const& e) {
+                    OUString const msg(lcl_ExceptionMessage(o, &e.Message));
+                    throw WrappedTargetRuntimeException( // re-wrap that
+                            msg, e.Context, e.TargetException);
                 }
             }
             if( mappedObject.is() )
@@ -853,12 +879,8 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             }
             else
             {
-                OUStringBuffer buf;
-                buf.appendAscii( "Couldn't convert " );
-                PyRef reprString( PyObject_Str( o ) , SAL_NO_ACQUIRE );
-                buf.appendAscii( PyString_AsString( reprString.get() ) );
-                buf.appendAscii( " to a UNO type" );
-                throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > () );
+                OUString const msg(lcl_ExceptionMessage(o, 0));
+                throw RuntimeException(msg, Reference<XInterface>());
             }
         }
     }
