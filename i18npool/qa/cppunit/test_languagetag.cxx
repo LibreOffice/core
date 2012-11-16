@@ -165,6 +165,36 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( de_DE.getLanguageType() == LANGUAGE_GERMAN );
     }
 
+    // test reset() methods
+    {
+        LanguageTag aTag( LANGUAGE_DONTKNOW );
+        lang::Locale aLocale;
+
+        aTag.reset( LANGUAGE_GERMAN );
+        aLocale = aTag.getLocale();
+        CPPUNIT_ASSERT( aTag.getBcp47() == "de-DE" );
+        CPPUNIT_ASSERT( aLocale.Language == "de" );
+        CPPUNIT_ASSERT( aLocale.Country == "DE" );
+        CPPUNIT_ASSERT( aLocale.Variant == "" );
+        CPPUNIT_ASSERT( aTag.getLanguageType() == LANGUAGE_GERMAN );
+
+        aTag.reset( "en-US" );
+        aLocale = aTag.getLocale();
+        CPPUNIT_ASSERT( aTag.getBcp47() == "en-US" );
+        CPPUNIT_ASSERT( aLocale.Language == "en" );
+        CPPUNIT_ASSERT( aLocale.Country == "US" );
+        CPPUNIT_ASSERT( aLocale.Variant == "" );
+        CPPUNIT_ASSERT( aTag.getLanguageType() == LANGUAGE_ENGLISH_US );
+
+        aTag.reset( lang::Locale( "de", "DE", "" ) );
+        aLocale = aTag.getLocale();
+        CPPUNIT_ASSERT( aTag.getBcp47() == "de-DE" );
+        CPPUNIT_ASSERT( aLocale.Language == "de" );
+        CPPUNIT_ASSERT( aLocale.Country == "DE" );
+        CPPUNIT_ASSERT( aLocale.Variant == "" );
+        CPPUNIT_ASSERT( aTag.getLanguageType() == LANGUAGE_GERMAN );
+    }
+
     {
         OUString s_uab( "unreg-and-bad" );
         LanguageTag uab( s_uab, true );

@@ -288,6 +288,64 @@ LanguageTag::~LanguageTag()
 }
 
 
+void LanguageTag::resetVars()
+{
+    lt_tag_unref( MPLANGTAG);
+    mpImplLangtag = NULL;
+
+    maLocale            = lang::Locale();
+    if (!maBcp47.isEmpty())
+        maBcp47         = OUString();
+    if (!maCachedLanguage.isEmpty())
+        maCachedLanguage= OUString();
+    if (!maCachedScript.isEmpty())
+        maCachedScript  = OUString();
+    if (!maCachedCountry.isEmpty())
+        maCachedCountry = OUString();
+    mnLangID            = LANGUAGE_DONTKNOW;
+    meIsValid           = DECISION_DONTKNOW;
+    meIsIsoLocale       = DECISION_DONTKNOW;
+    meIsIsoODF          = DECISION_DONTKNOW;
+    mbSystemLocale      = true;
+    mbInitializedBcp47  = false;
+    mbInitializedLocale = false;
+    mbInitializedLangID = false;
+    mbCachedLanguage    = false;
+    mbCachedScript      = false;
+    mbCachedCountry     = false;
+}
+
+
+void LanguageTag::reset( const rtl::OUString & rBcp47LanguageTag, bool bCanonicalize )
+{
+    resetVars();
+    maBcp47             = rBcp47LanguageTag;
+    mbSystemLocale      = rBcp47LanguageTag.isEmpty();
+    mbInitializedBcp47  = !mbSystemLocale;
+
+    if (bCanonicalize)
+        canonicalize();
+}
+
+
+void LanguageTag::reset( const com::sun::star::lang::Locale & rLocale )
+{
+    resetVars();
+    maLocale            = rLocale;
+    mbSystemLocale      = rLocale.Language.isEmpty();
+    mbInitializedLocale = !mbSystemLocale;
+}
+
+
+void LanguageTag::reset( LanguageType nLanguage )
+{
+    resetVars();
+    mnLangID            = nLanguage;
+    mbSystemLocale      = nLanguage == LANGUAGE_SYSTEM;
+    mbInitializedLangID = !mbSystemLocale;
+}
+
+
 bool LanguageTag::canonicalize() const
 {
 #ifdef erDEBUG

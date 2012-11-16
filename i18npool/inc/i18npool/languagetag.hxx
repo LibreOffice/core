@@ -162,6 +162,16 @@ public:
       */
     bool                            isSystemLocale() const;
 
+
+    /** Reset with existing BCP 47 language tag string. See ctor. */
+    void                            reset( const rtl::OUString & rBcp47LanguageTag, bool bCanonicalize = false );
+
+    /** Reset with Locale. */
+    void                            reset( const com::sun::star::lang::Locale & rLocale );
+
+    /** Reset with LanguageType MS-LangID. */
+    void                            reset( LanguageType nLanguage );
+
 private:
 
     enum Decision
@@ -201,6 +211,8 @@ private:
     rtl::OUString   getLanguageFromLangtag() const;
     rtl::OUString   getScriptFromLangtag() const;
     rtl::OUString   getRegionFromLangtag() const;
+
+    void            resetVars();
 
     static bool     isIsoLanguage( const rtl::OUString& rLanguage );
     static bool     isIsoScript( const rtl::OUString& rScript );
