@@ -494,6 +494,8 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
     pThread->maPipeIdent = pThread->maPipeIdent + aUserInstallPathHashCode;
 
+    int triesLeft = 2;
+pipe_mode_selection:
     PipeMode nPipeMode = PIPEMODE_DONTKNOW;
     do
     {
@@ -533,6 +535,9 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     else
     {
         // Seems another office is running. Pipe arguments to it and self terminate
+
+        // If we fail to connect, go back to 'nPipeMode' detection, because the other
+        // instance may have already terminated.
         osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
 
         rtl::OStringBuffer aArguments(RTL_CONSTASCII_STRINGPARAM(
@@ -544,32 +549,47 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
             aArguments.append('0');
         }
         sal_uInt32 nCount = rtl_getAppCommandArgCount();
+        bool bArgumentPassingDone = true, bIsConfirmationSequence = false;
         for( sal_uInt32 i=0; i < nCount; i++ )
         {
             rtl_getAppCommandArg( i, &aDummy.pData );
             if (!addArgument(aArguments, ',', aDummy)) {
-                return IPC_STATUS_BOOTSTRAP_ERROR;
+                bArgumentPassingDone = false;
+                break;
             }
         }
-        // finally, write the string onto the pipe
-        aStreamPipe.write(aArguments.getStr(), aArguments.getLength());
-        aStreamPipe.write("\0", 1);
 
-        rtl::OString aToken(sc_aConfirmationSequence);
-        char *pReceiveBuffer = new char[aToken.getLength()+1];
-        sal_Int32 n = aStreamPipe.read(pReceiveBuffer, aToken.getLength());
-        pReceiveBuffer[n]='\0';
-
-        bool bIsConfirmationSequence = aToken.equals(pReceiveBuffer);
-        delete[] pReceiveBuffer;
-
-        if (!bIsConfirmationSequence)
+        if (bArgumentPassingDone)
         {
-            // something went wrong
-            return IPC_STATUS_BOOTSTRAP_ERROR;
+            // finally, write the string onto the pipe
+            aStreamPipe.write(aArguments.getStr(), aArguments.getLength());
+            aStreamPipe.write("\0", 1);
+
+            rtl::OString aToken(sc_aConfirmationSequence);
+            char *pReceiveBuffer = new char[aToken.getLength()+1];
+            sal_Int32 n = aStreamPipe.read(pReceiveBuffer, aToken.getLength());
+            pReceiveBuffer[n]='\0';
+
+            bIsConfirmationSequence = aToken.equals(pReceiveBuffer);
+            delete[] pReceiveBuffer;
         }
 
-        return IPC_STATUS_2ND_OFFICE;
+        if (bArgumentPassingDone && bIsConfirmationSequence)
+        {
+            return IPC_STATUS_2ND_OFFICE;
+        }
+        else if (triesLeft-- > 0)
+        {
+            TimeValue aTimeValue;
+            aTimeValue.Seconds = 0;
+            aTimeValue.Nanosec = 250000000; /* 250ms */
+            salhelper::Thread::wait( aTimeValue );
+            goto pipe_mode_selection;
+        }
+        else
+        {
+            return IPC_STATUS_BOOTSTRAP_ERROR;
+        }
     }
 
     return IPC_STATUS_OK;
