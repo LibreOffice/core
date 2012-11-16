@@ -23,7 +23,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
@@ -197,8 +197,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
             k = 0;
             for (aItB = aLocaleNamesSet.begin();  aItB != aLocaleNamesSet.end();  ++aItB)
             {
-                Locale aTmp( MsLangId::convertLanguageToLocale(
-                        MsLangId::convertIsoStringToLanguage( *aItB )));
+                Locale aTmp( LanguageTag( *aItB ).getLocale());
                 aSuppLocales[k++] = aTmp;
             }
 
@@ -234,8 +233,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                     {
                         aThes[k]  = NULL;
                         aTEncs[k]  = RTL_TEXTENCODING_DONTKNOW;
-                        aTLocs[k]  = MsLangId::convertLanguageToLocale(
-                                        MsLangId::convertIsoStringToLanguage( aDictIt->aLocaleNames[i] ));
+                        aTLocs[k]  = LanguageTag( aDictIt->aLocaleNames[i] ).getLocale();
                         aCharSetInfo[k] = new CharClass( aTLocs[k] );
                         // also both files have to be in the same directory and the
                         // file names must only differ in the extension (.aff/.dic).

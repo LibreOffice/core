@@ -34,7 +34,7 @@
 
 #include <linguistic/lngprops.hxx>
 #include <linguistic/spelldta.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/useroptions.hxx>
@@ -168,8 +168,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             k = 0;
             for (aItB = aLocaleNamesSet.begin();  aItB != aLocaleNamesSet.end();  ++aItB)
             {
-                Locale aTmp( MsLangId::convertLanguageToLocale(
-                        MsLangId::convertIsoStringToLanguage( *aItB )));
+                Locale aTmp( LanguageTag( *aItB ).getLocale());
                 aSuppLocales[k++] = aTmp;
             }
 
@@ -203,8 +202,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                     {
                         aDicts[k]  = NULL;
                         aDEncs[k]  = RTL_TEXTENCODING_DONTKNOW;
-                        aDLocs[k]  = MsLangId::convertLanguageToLocale(
-                                        MsLangId::convertIsoStringToLanguage( aLocaleNames[i] ));
+                        aDLocs[k]  = LanguageTag( aLocaleNames[i] ).getLocale();
                         // also both files have to be in the same directory and the
                         // file names must only differ in the extension (.aff/.dic).
                         // Thus we use the first location only and strip the extension part.

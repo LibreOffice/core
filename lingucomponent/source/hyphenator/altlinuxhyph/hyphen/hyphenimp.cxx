@@ -22,7 +22,7 @@
 
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 
@@ -172,8 +172,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
             k = 0;
             for (aItB = aLocaleNamesSet.begin();  aItB != aLocaleNamesSet.end();  ++aItB)
             {
-                Locale aTmp( MsLangId::convertLanguageToLocale(
-                        MsLangId::convertIsoStringToLanguage( *aItB )));
+                Locale aTmp( LanguageTag( *aItB ).getLocale());
                 aSuppLocales[k++] = aTmp;
             }
 
@@ -205,8 +204,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                     {
                         aDicts[k].aPtr = NULL;
                         aDicts[k].eEnc = RTL_TEXTENCODING_DONTKNOW;
-                        aDicts[k].aLoc = MsLangId::convertLanguageToLocale(
-                                        MsLangId::convertIsoStringToLanguage( aDictIt->aLocaleNames[i] ));
+                        aDicts[k].aLoc = LanguageTag( aDictIt->aLocaleNames[i] ).getLocale();
                         aDicts[k].apCC = new CharClass( aDicts[k].aLoc );
                         // also both files have to be in the same directory and the
                         // file names must only differ in the extension (.aff/.dic).
