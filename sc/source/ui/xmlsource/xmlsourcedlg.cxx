@@ -42,7 +42,7 @@ bool isAttribute(const SvTreeListEntry& rEntry)
 OUString getXPath(const SvTreeListBox& rTree, const SvTreeListEntry& rEntry)
 {
     OUStringBuffer aBuf;
-    for (SvTreeListEntry* p = const_cast<SvTreeListEntry*>(&rEntry); p; p = rTree.GetParent(p))
+    for (const SvTreeListEntry* p = &rEntry; p; p = rTree.GetParent(p))
     {
         const SvLBoxItem* pItem = p->GetFirstItem(SV_ITEM_ID_LBOXSTRING);
         if (!pItem)
