@@ -109,7 +109,7 @@ void TransliterationWrapper::setLanguageLocaleImpl( sal_uInt16 nLang )
 {
     if( LANGUAGE_NONE == nLang )
         nLang = LANGUAGE_SYSTEM;
-    aLanguageTag = LanguageTag( nLang);
+    aLanguageTag.reset( nLang);
 }
 
 
@@ -175,7 +175,7 @@ void TransliterationWrapper::loadModuleByImplName(
         com::sun::star::lang::Locale aLocale( aLanguageTag.getLocale());
         // Reset LanguageTag, so the next call to loadModuleIfNeeded() forces
         // new settings.
-        aLanguageTag = LanguageTag( LANGUAGE_DONTKNOW);
+        aLanguageTag.reset( LANGUAGE_DONTKNOW);
         if ( xTrans.is() )
             xTrans->loadModuleByImplName( rModuleName, aLocale );
     }
