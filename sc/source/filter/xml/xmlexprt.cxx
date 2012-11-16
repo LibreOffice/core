@@ -3820,6 +3820,41 @@ rtl::OUString getIconSetName(ScIconSetType eType)
     return rtl::OUString::createFromAscii(pName);
 }
 
+rtl::OUString getDateStringForType(condformat::ScCondFormatDateType eType)
+{
+    switch(eType)
+    {
+        case condformat::TODAY:
+            return rtl::OUString("today");
+        case condformat::YESTERDAY:
+            return rtl::OUString("yesterday");
+        case condformat::TOMORROW:
+            return rtl::OUString("tomorrow");
+        case condformat::LAST7DAYS:
+            return rtl::OUString("last-7-days");
+        case condformat::THISWEEK:
+            return rtl::OUString("this-week");
+        case condformat::LASTWEEK:
+            return rtl::OUString("last-week");
+        case condformat::NEXTWEEK:
+            return rtl::OUString("next-week");
+        case condformat::THISMONTH:
+            return rtl::OUString("this-month");
+        case condformat::LASTMONTH:
+            return rtl::OUString("last-month");
+        case condformat::NEXTMONTH:
+            return rtl::OUString("next-month");
+        case condformat::THISYEAR:
+            return rtl::OUString("this-year");
+        case condformat::LASTYEAR:
+            return rtl::OUString("last-year");
+        case condformat::NEXTYEAR:
+            return rtl::OUString("next-year");
+    }
+
+    return rtl::OUString();
+}
+
 }
 
 void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
@@ -4075,6 +4110,14 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it));
                             SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
                         }
+                    }
+                    else if(pFormatEntry->GetType() == condformat::DATE)
+                    {
+                        const ScCondDateFormatEntry& mrDateFormat = static_cast<const ScCondDateFormatEntry&>(*pFormatEntry);
+                        rtl::OUString aDateType = getDateStringForType(mrDateFormat.GetDateType());
+                        AddAttribute( XML_NAMESPACE_CALC_EXT, XML_STYLE, mrDateFormat.GetStyleName());
+                        AddAttribute( XML_NAMESPACE_CALC_EXT, XML_DATE, aDateType);
+                        SvXMLElementExport aElementDateFormat(*this, XML_NAMESPACE_CALC_EXT, XML_DATE_IS, true, true);
                     }
                 }
             }

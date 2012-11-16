@@ -560,6 +560,7 @@ namespace xmloff { namespace token {
         XML_DATABASE_SOURCE_SQL,
         XML_DATABASE_SOURCE_TABLE,
         XML_DATE,
+        XML_DATE_IS,
         XML_DATE_ADJUST,
         XML_DATE_STYLE,
         XML_DATE_TIME,

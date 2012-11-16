@@ -154,12 +154,19 @@ enum ScXMLCondFormatTokens
     XML_TOK_CONDFORMAT_COLORSCALE,
     XML_TOK_CONDFORMAT_DATABAR,
     XML_TOK_CONDFORMAT_CONDITION,
-    XML_TOK_CONDFORMAT_ICONSET
+    XML_TOK_CONDFORMAT_ICONSET,
+    XML_TOK_CONDFORMAT_DATE
 };
 
 enum ScXMLCondFormatAttrTokens
 {
     XML_TOK_CONDFORMAT_TARGET_RANGE
+};
+
+enum ScXMLCondDateAttrTokens
+{
+    XML_TOK_COND_DATE_VALUE,
+    XML_TOK_COND_DATE_STYLE
 };
 
 enum ScXMLConditionAttrTokens
@@ -775,6 +782,7 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     SvXMLTokenMap           *pCondFormatsTokenMap;
     SvXMLTokenMap           *pCondFormatTokenMap;
     SvXMLTokenMap           *pCondFormatAttrMap;
+    SvXMLTokenMap           *pCondDateAttrMap;
     SvXMLTokenMap           *pConditionAttrMap;
     SvXMLTokenMap           *pColorScaleTokenMap;
     SvXMLTokenMap           *pColorScaleEntryAttrTokenMap;
@@ -939,6 +947,7 @@ public:
     const SvXMLTokenMap& GetCondFormatsTokenMap();
     const SvXMLTokenMap& GetCondFormatTokenMap();
     const SvXMLTokenMap& GetCondFormatAttrMap();
+    const SvXMLTokenMap& GetCondDateAttrMap();
     const SvXMLTokenMap& GetConditionAttrMap();
     const SvXMLTokenMap& GetColorScaleTokenMap();
     const SvXMLTokenMap& GetColorScaleEntryAttrMap();

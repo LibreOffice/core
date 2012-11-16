@@ -131,6 +131,9 @@ SvXMLImportContext* ScXMLConditionalFormatContext::CreateChildContext( sal_uInt1
         case XML_TOK_CONDFORMAT_ICONSET:
             pContext = new ScXMLIconSetFormatContext( GetScImport(), nPrefix, rLocalName, xAttrList, mpFormat );
             break;
+        case XML_TOK_CONDFORMAT_DATE:
+            pContext = new ScXMLDateContext( GetScImport(), nPrefix, rLocalName, xAttrList, mpFormat );
+            break;
         default:
             break;
     }
@@ -701,6 +704,78 @@ ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport, 
 
     pColorScaleEntry = new ScColorScaleEntry(nVal, Color());
     setColorEntryType(sType, pColorScaleEntry, sVal, GetScImport());
+}
+
+namespace {
+
+condformat::ScCondFormatDateType getDateFromString(const rtl::OUString& rString)
+{
+    if(rString == "today")
+        return condformat::TODAY;
+    else if(rString == "yesterday")
+        return condformat::YESTERDAY;
+    else if(rString == "tomorrow")
+        return condformat::TOMORROW;
+    else if(rString == "last-7-days")
+        return condformat::LAST7DAYS;
+    else if(rString == "this-week")
+        return condformat::THISWEEK;
+    else if(rString == "last-week")
+        return condformat::LASTWEEK;
+    else if(rString == "next-week")
+        return condformat::NEXTWEEK;
+    else if(rString == "this-month")
+        return condformat::THISMONTH;
+    else if(rString == "last-month")
+        return condformat::LASTMONTH;
+    else if(rString == "next-month")
+        return condformat::NEXTMONTH;
+    else if(rString == "this-year")
+        return condformat::THISYEAR;
+    else if(rString == "last-year")
+        return condformat::LASTYEAR;
+    else if(rString == "next-year")
+        return condformat::NEXTYEAR;
+
+    SAL_WARN("sc", "unknown date type: " << rString);
+    return condformat::TODAY;
+}
+
+}
+
+ScXMLDateContext::ScXMLDateContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+                        const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScConditionalFormat* pFormat ):
+    SvXMLImportContext( rImport, nPrfx, rLName )
+{
+    rtl::OUString sDateType, sStyle;
+    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetCondDateAttrMap();
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    {
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        rtl::OUString aLocalName;
+        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                    sAttrName, &aLocalName ));
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+
+        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+        {
+            case XML_TOK_COND_DATE_VALUE:
+                sDateType = sValue;
+                break;
+            case XML_TOK_COND_DATE_STYLE:
+                sStyle = sValue;
+            default:
+                break;
+        }
+    }
+
+    ScCondDateFormatEntry* pFormatEntry = new ScCondDateFormatEntry(GetScImport().GetDocument());
+    pFormatEntry->SetStyleName(sStyle);
+    pFormatEntry->SetDateType(getDateFromString(sDateType));
+    pFormat->AddEntry(pFormatEntry);
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
