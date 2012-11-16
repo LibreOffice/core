@@ -22,7 +22,7 @@
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/transliterationwrapper.hxx"
 
-#include "i18npool/mslangid.hxx"
+#include "i18npool/languagetag.hxx"
 
 #include "rtl/ustrbuf.hxx"
 
@@ -65,7 +65,7 @@ utl::TransliterationWrapper& vcl::I18nHelper::ImplGetTransliterationWrapper() co
             nModules |= i18n::TransliterationModules_IGNORE_CASE;
 
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = new utl::TransliterationWrapper( m_xContext, (i18n::TransliterationModules)nModules );
-        ((vcl::I18nHelper*)this)->mpTransliterationWrapper->loadModuleIfNeeded( MsLangId::convertLocaleToLanguage( maLocale ) );
+        ((vcl::I18nHelper*)this)->mpTransliterationWrapper->loadModuleIfNeeded( LanguageTag( maLocale ).getLanguageType() );
     }
     return *mpTransliterationWrapper;
 }

@@ -18,6 +18,7 @@
  */
 
 #include "i18npool/mslangid.hxx"
+#include "i18npool/languagetag.hxx"
 
 #include "rtl/tencinfo.h"
 #include "rtl/logfile.hxx"
@@ -476,7 +477,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
     }
     else
     {
-        MsLangId::convertLanguageToLocale( eLang, aLocale );
+        aLocale = LanguageTag( eLang ).getLocale();
     }
 
     utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();

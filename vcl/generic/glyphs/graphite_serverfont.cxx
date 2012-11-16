@@ -25,7 +25,7 @@
 //
 
 // Platform
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <sallayout.hxx>
 // Module
 #include "gcach_ftyp.hxx"
@@ -70,8 +70,8 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) thro
     rtl::OString aLang("");
     if (rServerFont.GetFontSelData().meLanguage != LANGUAGE_DONTKNOW)
     {
-        aLang = MsLangId::convertLanguageToIsoByteString(
-            rServerFont.GetFontSelData().meLanguage );
+        aLang = rtl::OUStringToOString( LanguageTag( rServerFont.GetFontSelData().meLanguage ).getBcp47(),
+                RTL_TEXTENCODING_UTF8 );
     }
     rtl::OString name = rtl::OUStringToOString(
         rServerFont.GetFontSelData().maTargetName, RTL_TEXTENCODING_UTF8 );

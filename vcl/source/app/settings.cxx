@@ -22,6 +22,7 @@
 #include "tools/debug.hxx"
 
 #include "i18npool/mslangid.hxx"
+#include "i18npool/languagetag.hxx"
 
 #include "vcl/svapp.hxx"
 #include "vcl/event.hxx"
@@ -1439,7 +1440,7 @@ void AllSettings::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
     if ( rLocale.Language.isEmpty() )
         mpData->meLanguage = LANGUAGE_SYSTEM;
     else
-        mpData->meLanguage = MsLangId::convertLocaleToLanguage( rLocale );
+        mpData->meLanguage = LanguageTag( rLocale ).getLanguageType( false);
     if ( mpData->mpLocaleDataWrapper )
     {
         delete mpData->mpLocaleDataWrapper;
@@ -1468,7 +1469,7 @@ void AllSettings::SetLanguage( LanguageType eLang )
         CopyData();
 
         mpData->meLanguage = eLang;
-        MsLangId::convertLanguageToLocale( GetLanguage(), ((AllSettings*)this)->mpData->maLocale );
+        mpData->maLocale = LanguageTag( GetLanguage() ).getLocale();
         if ( mpData->mpLocaleDataWrapper )
         {
             delete mpData->mpLocaleDataWrapper;

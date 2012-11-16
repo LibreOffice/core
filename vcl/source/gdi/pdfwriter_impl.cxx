@@ -43,7 +43,7 @@
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
 
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
@@ -11666,7 +11666,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
     {
         if( eAttr == PDFWriter::Language )
         {
-            m_aStructure[ m_nCurrentStructElement ].m_aLocale = MsLangId::convertLanguageToLocale( (LanguageType)nValue );
+            m_aStructure[ m_nCurrentStructElement ].m_aLocale = LanguageTag( (LanguageType)nValue ).getLocale();
             return true;
         }
 
