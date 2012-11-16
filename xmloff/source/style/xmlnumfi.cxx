@@ -26,7 +26,7 @@
 #include <svl/zformat.hxx>
 #include <svl/numuno.hxx>
 #include <rtl/math.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -602,9 +602,9 @@ const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
         pLocaleData = new LocaleDataWrapper(
             comphelper::getComponentContext(
                pFormatter ? pFormatter->GetServiceManager() : mxServiceFactory),
-            MsLangId::convertLanguageToLocale( nLang ) );
+            LanguageTag( nLang ).getLocale() );
     else
-        pLocaleData->setLocale( MsLangId::convertLanguageToLocale( nLang ) );
+        pLocaleData->setLocale( LanguageTag( nLang ).getLocale() );
     return *pLocaleData;
 }
 
@@ -1009,7 +1009,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
 
     if ( !sLanguage.isEmpty() || !sCountry.isEmpty() )
     {
-        nElementLang = MsLangId::convertIsoNamesToLanguage( sLanguage, sCountry );
+        nElementLang = LanguageTag( sLanguage, sCountry ).getLanguageType( false);
         if ( nElementLang == LANGUAGE_DONTKNOW )
             nElementLang = LANGUAGE_SYSTEM;         //! error handling for invalid locales?
     }
@@ -1369,7 +1369,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 
     if ( !sLanguage.isEmpty() || !sCountry.isEmpty() )
     {
-        nFormatLang = MsLangId::convertIsoNamesToLanguage( sLanguage, sCountry );
+        nFormatLang = LanguageTag( sLanguage, sCountry ).getLanguageType( false);
         if ( nFormatLang == LANGUAGE_DONTKNOW )
             nFormatLang = LANGUAGE_SYSTEM;          //! error handling for invalid locales?
     }
@@ -1383,7 +1383,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
             aFormatCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "[NatNum" ) );
             aFormatCode.append( nNatNum, 10 );
 
-            LanguageType eLang = MsLangId::convertLocaleToLanguage( aNatNumAttr.Locale );
+            LanguageType eLang = LanguageTag( aNatNumAttr.Locale ).getLanguageType( false);
             if ( eLang == LANGUAGE_DONTKNOW )
                 eLang = LANGUAGE_SYSTEM;            //! error handling for invalid locales?
             if ( eLang != nFormatLang && eLang != LANGUAGE_SYSTEM )

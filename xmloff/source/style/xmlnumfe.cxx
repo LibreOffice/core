@@ -22,6 +22,7 @@
 #include <svl/zformat.hxx>
 #include <svl/numuno.hxx>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <unotools/calendarwrapper.hxx>
@@ -243,7 +244,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     }
     else
     {
-        lang::Locale aLocale( MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage() ) );
+        lang::Locale aLocale( LanguageTag( MsLangId::getSystemLanguage() ).getLocale() );
 
         pCharClass = new CharClass( comphelper::getComponentContext(rExport.getServiceFactory()), aLocale );
         pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(rExport.getServiceFactory()), aLocale );
@@ -278,7 +279,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     }
     else
     {
-        lang::Locale aLocale( MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage() ) );
+        lang::Locale aLocale( LanguageTag( MsLangId::getSystemLanguage() ).getLocale() );
 
         pCharClass = new CharClass( comphelper::getComponentContext(rExport.getServiceFactory()), aLocale );
         pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(rExport.getServiceFactory()), aLocale );
@@ -342,7 +343,7 @@ void SvXMLNumFmtExport::AddLanguageAttr_Impl( sal_Int32 nLang )
     if ( nLang != LANGUAGE_SYSTEM )
     {
         OUString aLangStr, aCountryStr;
-        MsLangId::convertLanguageToIsoNames( (LanguageType)nLang, aLangStr, aCountryStr );
+        LanguageTag( (LanguageType)nLang ).getIsoLanguageCountry( aLangStr, aCountryStr );
 
         if (!aLangStr.isEmpty())
             rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_LANGUAGE, aLangStr );
@@ -798,7 +799,7 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
 
     sal_Bool bRet = sal_False;
 
-    LanguageType nLang = MsLangId::convertLocaleToLanguage( rLocale );
+    LanguageType nLang = LanguageTag( rLocale ).getLanguageType( false);
     pFormatter->ChangeIntl( nLang );
     String sCurString, sDummy;
     pFormatter->GetCompatibilityCurrency( sCurString, sDummy );
@@ -841,7 +842,7 @@ static OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageT
     CalendarWrapper* pCalendar = pFormatter->GetCalendar();
     if (pCalendar)
     {
-        lang::Locale aLocale( MsLangId::convertLanguageToLocale( nLang ) );
+        lang::Locale aLocale( LanguageTag( nLang ).getLocale() );
 
         uno::Sequence<OUString> aCals = pCalendar->getAllCalendars( aLocale );
         sal_Int32 nCnt = aCals.getLength();
@@ -1311,7 +1312,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             //  automatic currency symbol is implemented as part of
                             //  normal text -> search for the symbol
                             bCurrencyWritten = WriteTextWithCurrency_Impl( *pElemStr,
-                                MsLangId::convertLanguageToLocale( nLang ) );
+                                LanguageTag( nLang ).getLocale() );
                             bAnyContent = sal_True;
                         }
                         else
@@ -1486,7 +1487,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         if ( nElemType == NF_KEY_NNNN )
                         {
                             //  write additional text element for separator
-                            pLocaleData->setLocale( MsLangId::convertLanguageToLocale( nLang ) );
+                            pLocaleData->setLocale( LanguageTag( nLang ).getLocale() );
                             AddToTextElement_Impl( pLocaleData->getLongDateDayOfWeekSep() );
                         }
                     }
