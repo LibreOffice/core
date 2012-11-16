@@ -111,6 +111,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_IS_NV { Text = "ISNA" ; };
     String SC_OPCODE_IS_ERR { Text = "ISERR" ; };
     String SC_OPCODE_IS_ERROR { Text = "ISERROR" ; };
+    String SC_OPCODE_IF_NA { Text = "IFERROR" ; };
+    String SC_OPCODE_IF_ERROR { Text = "IFNA" ; };
     String SC_OPCODE_IS_EVEN { Text = "ISEVEN" ; };
     String SC_OPCODE_IS_ODD { Text = "ISODD" ; };
     String SC_OPCODE_N { Text = "N" ; };
@@ -444,6 +446,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_IS_NV { Text = "ISNA" ; };
     String SC_OPCODE_IS_ERR { Text = "ISERR" ; };
     String SC_OPCODE_IS_ERROR { Text = "ISERROR" ; };
+    String SC_OPCODE_IF_ERROR { Text = "IFERROR" ; };
+    String SC_OPCODE_IF_NA { Text = "IFNA" ; };
     String SC_OPCODE_IS_EVEN { Text = "ISEVEN" ; };
     String SC_OPCODE_IS_ODD { Text = "ISODD" ; };
     String SC_OPCODE_N { Text = "N" ; };
@@ -967,6 +971,14 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_IS_ERROR
     {
         Text [ en-US ] = "ISERROR" ;
+    };
+    String SC_OPCODE_IF_ERROR
+    {
+        Text [ en-US ] = "IFERROR" ;
+    };
+    String SC_OPCODE_IF_NA
+    {
+        Text [ en-US ] = "IFNA" ;
     };
     String SC_OPCODE_IS_EVEN
     {
