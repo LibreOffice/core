@@ -7393,7 +7393,7 @@ system)
 
 internal)
     SYSTEM_PYTHON=NO
-    PYTHON_TARBALL="e81c2f0953aa60f8062c05a4673f2be0-Python-2.6.1.tar.bz2"
+    PYTHON_TARBALL="b3b2524f72409d919a4137826a870a8f-Python-3.3.0.tar.bz2"
     BUILD_TYPE="$BUILD_TYPE PYTHON"
     # Embedded Python dies without Home set
     if test "$HOME" = ""; then

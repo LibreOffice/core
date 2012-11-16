@@ -48,7 +48,9 @@ $(eval $(call gb_Library_set_include,pyuno_wrapper,\
 ))
 else
 $(eval $(call gb_Library_set_include,pyuno_wrapper,\
-    -I$(OUTDIR)/inc/python \
+	-I$(call gb_UnpackedTarball_get_dir,python3) \
+	-I$(call gb_UnpackedTarball_get_dir,python3)/PC \
+	-I$(call gb_UnpackedTarball_get_dir,python3)/Include \
     $$(INCLUDE) \
 ))
 endif
