@@ -38,6 +38,7 @@ $(eval $(call gb_Library_set_componentfile,utl,unotools/util/utl))
 
 # add any additional include paths for this library here
 $(eval $(call gb_Library_set_include,utl,\
+    -I$(SRCDIR)/unotools/inc \
     $$(INCLUDE) \
 ))
 

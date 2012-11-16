@@ -25,6 +25,7 @@
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <i18npool/lang.h>
+#include <i18npool/languagetag.hxx>
 
 
 /**
