@@ -26,7 +26,7 @@
 #include <tools/debug.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <svtools/langtab.hxx>
 #include <comphelper/processfactory.hxx>
 #include <helper/mischelper.hxx>
@@ -179,7 +179,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
     if ( xLangGuesser.is() && !rGuessedTextLang.isEmpty())
     {
         ::com::sun::star::lang::Locale aLocale(xLangGuesser->guessPrimaryLanguage( rGuessedTextLang, 0, rGuessedTextLang.getLength()) );
-        LanguageType nLang = MsLangId::convertLocaleToLanguageWithFallback( aLocale );
+        LanguageType nLang = LanguageTag( aLocale ).makeFallback().getLanguageType();
         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_NONE && nLang != LANGUAGE_SYSTEM
             && IsScriptTypeMatchingToLanguage( nScriptType, nLang ))
             rLangItems.insert( rLanguageTable.GetString( nLang ));
