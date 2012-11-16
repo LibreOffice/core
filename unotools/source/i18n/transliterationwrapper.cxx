@@ -20,7 +20,7 @@
 
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/debug.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 #include "instance.hxx"
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
@@ -34,8 +34,8 @@ using namespace ::utl;
 TransliterationWrapper::TransliterationWrapper(
                     const Reference< XComponentContext > & rxContext,
                     sal_uInt32 nTyp )
-    : xTrans( Transliteration::create(rxContext) ), nType( nTyp ),
-      nLanguage( 0 ), bFirstCall( sal_True )
+    : xTrans( Transliteration::create(rxContext) ),
+      aLanguageTag( LANGUAGE_SYSTEM ), nType( nTyp ), bFirstCall( sal_True )
 {
 }
 
@@ -107,10 +107,9 @@ sal_Bool TransliterationWrapper::needLanguageForTheMode() const
 
 void TransliterationWrapper::setLanguageLocaleImpl( sal_uInt16 nLang )
 {
-    nLanguage = nLang;
-    if( LANGUAGE_NONE == nLanguage )
-        nLanguage = LANGUAGE_SYSTEM;
-    MsLangId::convertLanguageToLocale( nLanguage, aLocale);
+    if( LANGUAGE_NONE == nLang )
+        nLang = LANGUAGE_SYSTEM;
+    aLanguageTag = LanguageTag( nLang);
 }
 
 
@@ -136,7 +135,7 @@ void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
     }
     else
     {
-        if( nLanguage != nLang )
+        if( aLanguageTag.getLanguageType() != nLang )
         {
             setLanguageLocaleImpl( nLang );
             if( !bLoad )
@@ -156,7 +155,7 @@ void TransliterationWrapper::loadModuleImpl() const
     try
     {
         if ( xTrans.is() )
-            xTrans->loadModule( (TransliterationModules)nType, aLocale );
+            xTrans->loadModule( (TransliterationModules)nType, aLanguageTag.getLocale() );
     }
     catch ( const Exception& e )
     {
@@ -173,9 +172,10 @@ void TransliterationWrapper::loadModuleByImplName(
     try
     {
         setLanguageLocaleImpl( nLang );
-        // Reset LanguageType, so the next call to loadModuleIfNeeded() forces
+        com::sun::star::lang::Locale aLocale( aLanguageTag.getLocale());
+        // Reset LanguageTag, so the next call to loadModuleIfNeeded() forces
         // new settings.
-        nLanguage = LANGUAGE_DONTKNOW;
+        aLanguageTag = LanguageTag( LANGUAGE_DONTKNOW);
         if ( xTrans.is() )
             xTrans->loadModuleByImplName( rModuleName, aLocale );
     }

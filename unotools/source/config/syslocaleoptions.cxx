@@ -22,6 +22,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/logfile.hxx>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -70,10 +71,8 @@ static com::sun::star::lang::Locale lcl_str_to_locale( const ::rtl::OUString rSt
 
 class SvtSysLocaleOptions_Impl : public utl::ConfigItem
 {
-        Locale                  m_aRealLocale;
-        Locale                  m_aRealUILocale;
-        LanguageType            m_eRealLanguage;
-        LanguageType            m_eRealUILanguage;
+        LanguageTag             m_aRealLocale;
+        LanguageTag             m_aRealUILocale;
         OUString                m_aLocaleString;    // en-US or de-DE or empty for SYSTEM
         OUString                m_aUILocaleString;    // en-US or de-DE or empty for SYSTEM
         OUString                m_aCurrencyString;  // USD-en-US or EUR-de-DE
@@ -122,10 +121,10 @@ public:
             void                SetIgnoreLanguageChange( sal_Bool bSet);
 
             sal_Bool            IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const;
-            const Locale&       GetRealLocale() { return m_aRealLocale; }
-            const Locale&       GetRealUILocale() { return m_aRealUILocale; }
-            LanguageType        GetRealLanguage() { return m_eRealLanguage; }
-            LanguageType        GetRealUILanguage() { return m_eRealUILanguage; }
+            const Locale&       GetRealLocale() { return m_aRealLocale.getLocale(); }
+            const Locale&       GetRealUILocale() { return m_aRealUILocale.getLocale(); }
+            LanguageType        GetRealLanguage() { return m_eRealLanguage.getLanguageType(); }
+            LanguageType        GetRealUILanguage() { return m_eRealUILanguage.getLanguageType(); }
 };
 
 
@@ -167,6 +166,8 @@ const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
 
 SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     : ConfigItem( ROOTNODE_SYSLOCALE )
+    , m_aRealLocale( LANGUAGE_SYSTEM)
+    , m_aRealUILocale( LANGUAGE_SYSTEM)
     , m_bDecimalSeparator( sal_True )
     , m_bROLocale(CFG_READONLY_DEFAULT)
     , m_bROUILocale(CFG_READONLY_DEFAULT)
@@ -287,30 +288,27 @@ SvtSysLocaleOptions_Impl::~SvtSysLocaleOptions_Impl()
 
 void SvtSysLocaleOptions_Impl::MakeRealLocale()
 {
-    m_aRealLocale = lcl_str_to_locale( m_aLocaleString );
-    if ( !m_aRealLocale.Language.isEmpty() )
+    if (m_aLocaleString.isEmpty())
     {
-        m_eRealLanguage = MsLangId::convertLocaleToLanguage( m_aRealLocale );
+        LanguageType nLang = MsLangId::getSystemLanguage();
+        m_aRealLocale = LanguageTag( nLang);
     }
     else
     {
-        m_eRealLanguage = MsLangId::getSystemLanguage();
-        MsLangId::convertLanguageToLocale( m_eRealLanguage, m_aRealLocale );
+        m_aRealLocale = LanguageTag( m_aLocaleString);
     }
 }
 
 void SvtSysLocaleOptions_Impl::MakeRealUILocale()
 {
-    // as we can't switch UILocale at runtime, we only store changes in the configuration
-    m_aRealUILocale = lcl_str_to_locale( m_aUILocaleString );
-    if ( !m_aRealUILocale.Language.isEmpty() )
+    if (m_aUILocaleString.isEmpty())
     {
-        m_eRealUILanguage = MsLangId::convertLocaleToLanguage( m_aRealUILocale );
+        LanguageType nLang = MsLangId::getSystemUILanguage();
+        m_aRealUILocale = LanguageTag( nLang);
     }
     else
     {
-        m_eRealUILanguage = MsLangId::getSystemUILanguage();
-        MsLangId::convertLanguageToLocale( m_eRealUILanguage, m_aRealUILocale );
+        m_aRealUILocale = LanguageTag( m_aUILocaleString);
     }
 }
 
@@ -431,7 +429,7 @@ void SvtSysLocaleOptions_Impl::SetLocaleString( const OUString& rStr )
     {
         m_aLocaleString = rStr;
         MakeRealLocale();
-        MsLangId::setConfiguredSystemLanguage( m_eRealLanguage );
+        MsLangId::setConfiguredSystemLanguage( m_aRealLocale.getLanguageType() );
         SetModified();
         sal_uLong nHint = SYSLOCALEOPTIONS_HINT_LOCALE;
         if ( m_aCurrencyString.isEmpty() )
@@ -448,7 +446,7 @@ void SvtSysLocaleOptions_Impl::SetUILocaleString( const OUString& rStr )
 
         // as we can't switch UILocale at runtime, we only store changes in the configuration
         MakeRealUILocale();
-        MsLangId::setConfiguredSystemLanguage( m_eRealUILanguage );
+        MsLangId::setConfiguredSystemLanguage( m_aRealUILocale.getLanguageType() );
         SetModified();
         NotifyListeners( SYSLOCALEOPTIONS_HINT_UILOCALE );
     }
@@ -700,7 +698,7 @@ void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( String& rAbbrev,
     {
         rAbbrev = rConfigString.copy( 0, nDelim );
         String aIsoStr( rConfigString.copy( nDelim+1 ) );
-        eLang = MsLangId::convertIsoStringToLanguage( aIsoStr );
+        eLang = LanguageTag( aIsoStr ).getLanguageType();
     }
     else
     {
@@ -714,7 +712,7 @@ void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( String& rAbbrev,
 ::rtl::OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
         const String& rAbbrev, LanguageType eLang )
 {
-    String aIsoStr( MsLangId::convertLanguageToIsoString( eLang ) );
+    String aIsoStr( LanguageTag( eLang ).getBcp47() );
     if ( aIsoStr.Len() )
     {
         ::rtl::OUStringBuffer aStr( rAbbrev.Len() + 1 + aIsoStr.Len() );

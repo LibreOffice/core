@@ -22,6 +22,7 @@
 #define _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <tools/string.hxx>
 #include <tools/solar.h>
+#include <i18npool/languagetag.hxx>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
 
 namespace com { namespace sun { namespace star {
@@ -37,9 +38,8 @@ class UNOTOOLS_DLLPUBLIC TransliterationWrapper
 {
     ::com::sun::star::uno::Reference<
         ::com::sun::star::i18n::XExtendedTransliteration > xTrans;
-    ::com::sun::star::lang::Locale aLocale;
+    LanguageTag aLanguageTag;
     sal_uInt32 nType;
-    sal_uInt16 nLanguage;
     mutable sal_Bool bFirstCall;
 
                                 // not implemented, prevent usage
@@ -57,8 +57,8 @@ public:
     ~TransliterationWrapper();
 
     // get current Locale / Language
-    const ::com::sun::star::lang::Locale& getLocale() const { return aLocale;}
-    sal_uInt16 getLanguage() const { return nLanguage; }
+    const ::com::sun::star::lang::Locale& getLocale() const { return aLanguageTag.getLocale();}
+    sal_uInt16 getLanguage() const { return aLanguageTag.getLanguageType(); }
 
     sal_uInt32 getType() const { return nType; }
 

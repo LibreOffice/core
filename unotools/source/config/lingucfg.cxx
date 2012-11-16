@@ -29,6 +29,7 @@
 #include <rtl/instance.hxx>
 #include <osl/mutex.hxx>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
 #include <unotools/lingucfg.hxx>
@@ -61,7 +62,7 @@ static sal_Bool lcl_SetLocale( sal_Int16 &rLanguage, const uno::Any &rVal )
     lang::Locale aNew;
     if (rVal >>= aNew)  // conversion successful?
     {
-        sal_Int16 nNew = MsLangId::convertLocaleToLanguage( aNew );
+        sal_Int16 nNew = LanguageTag( aNew ).getLanguageType( false);
         if (nNew != rLanguage)
         {
             rLanguage = nNew;
@@ -75,7 +76,7 @@ static inline const OUString lcl_LanguageToCfgLocaleStr( sal_Int16 nLanguage )
 {
     OUString aRes;
     if (LANGUAGE_SYSTEM != nLanguage)
-        aRes = MsLangId::convertLanguageToIsoString( nLanguage );
+        aRes = LanguageTag( nLanguage ).getBcp47();
     return aRes;
 }
 
@@ -83,7 +84,7 @@ static sal_Int16 lcl_CfgAnyToLanguage( const uno::Any &rVal )
 {
     OUString aTmp;
     rVal >>= aTmp;
-    return (aTmp.isEmpty()) ? LANGUAGE_SYSTEM : MsLangId::convertIsoStringToLanguage( aTmp );
+    return (aTmp.isEmpty()) ? LANGUAGE_SYSTEM : LanguageTag( aTmp ).getLanguageType();
 }
 
 SvtLinguOptions::SvtLinguOptions()
@@ -365,19 +366,19 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
         }
         case UPH_DEFAULT_LOCALE :
         {
-            lang::Locale aLocale( MsLangId::convertLanguageToLocale( rOpt.nDefaultLanguage, false ) );
+            lang::Locale aLocale( LanguageTag( rOpt.nDefaultLanguage ).getLocale( false ) );
             aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
             break;
         }
         case UPH_DEFAULT_LOCALE_CJK :
         {
-            lang::Locale aLocale( MsLangId::convertLanguageToLocale( rOpt.nDefaultLanguage_CJK, false ) );
+            lang::Locale aLocale( LanguageTag( rOpt.nDefaultLanguage_CJK ).getLocale( false ) );
             aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
             break;
         }
         case UPH_DEFAULT_LOCALE_CTL :
         {
-            lang::Locale aLocale( MsLangId::convertLanguageToLocale( rOpt.nDefaultLanguage_CTL, false ) );
+            lang::Locale aLocale( LanguageTag( rOpt.nDefaultLanguage_CTL ).getLocale( false ) );
             aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
             break;
         }

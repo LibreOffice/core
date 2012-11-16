@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/TextSearch.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
@@ -125,8 +125,7 @@ TextSearch::TextSearch(const SearchParam & rParam, LanguageType eLang )
 {
     if( LANGUAGE_NONE == eLang )
         eLang = LANGUAGE_SYSTEM;
-    ::com::sun::star::lang::Locale aLocale(
-            MsLangId::convertLanguageToLocale( LanguageType(eLang)));
+    ::com::sun::star::lang::Locale aLocale( LanguageTag( eLang ).getLocale() );
 
     Init( rParam, aLocale);
 }

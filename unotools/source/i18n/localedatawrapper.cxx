@@ -27,7 +27,7 @@
 #include <unotools/digitgroupingiterator.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 #include "instance.hxx"
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
@@ -299,7 +299,7 @@ void LocaleDataWrapper::invalidateData()
             }
             continue;
         }
-        LanguageType eLang = MsLangId::convertLocaleToLanguage( xLoc[i] );
+        LanguageType eLang = LanguageTag( xLoc[i] ).getLanguageType();
 
         // In checks, exclude known problems because no MS-LCID defined.
         if (areChecksEnabled() && eLang == LANGUAGE_DONTKNOW)
@@ -317,10 +317,10 @@ void LocaleDataWrapper::invalidateData()
         }
         if ( eLang != LANGUAGE_DONTKNOW )
         {
-            rtl::OUString aLanguage, aCountry;
-            MsLangId::convertLanguageToIsoNames( eLang, aLanguage, aCountry );
-            if ( xLoc[i].Language != aLanguage ||
-                    xLoc[i].Country != aCountry )
+            LanguageTag aLanguageTag( eLang);
+            lang::Locale aLocale = aLanguageTag.getLocale();
+            if ( xLoc[i].Language != aLocale.Language ||
+                    xLoc[i].Country != aLocale.Country )
             {
                 // In checks, exclude known problems because no MS-LCID defined
                 // and default for Language found.
@@ -338,12 +338,7 @@ void LocaleDataWrapper::invalidateData()
                     aMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM( "  ->  0x"));
                     aMsg.append(static_cast<sal_Int32>(eLang), 16);
                     aMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM( "  ->  "));
-                    aMsg.append(aLanguage);
-                    if ( !aCountry.isEmpty() )
-                    {
-                        aMsg.append('_');
-                        aMsg.append(aCountry);
-                    }
+                    aMsg.append(aLanguageTag.getBcp47());
                     outputCheckMessage( aMsg.makeStringAndClear() );
                 }
                 eLang = LANGUAGE_DONTKNOW;

@@ -27,13 +27,12 @@ IntlWrapper::IntlWrapper(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSF,
             const ::com::sun::star::lang::Locale& rLocale )
         :
-        aLocale( rLocale ),
+        aLanguageTag( rLocale ),
         xSMgr( xSF ),
         pLocaleData( NULL ),
         pCollator( NULL ),
         pCaseCollator( NULL )
 {
-    eLanguage = MsLangId::convertLocaleToLanguage( aLocale );
 }
 
 
@@ -41,13 +40,12 @@ IntlWrapper::IntlWrapper(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSF,
             LanguageType eLang )
         :
+        aLanguageTag( eLang ),
         xSMgr( xSF ),
         pLocaleData( NULL ),
         pCollator( NULL ),
-        pCaseCollator( NULL ),
-        eLanguage( eLang )
+        pCaseCollator( NULL )
 {
-    MsLangId::convertLanguageToLocale( eLanguage, aLocale );
 }
 
 
@@ -61,7 +59,8 @@ IntlWrapper::~IntlWrapper()
 
 void IntlWrapper::ImplNewLocaleData() const
 {
-    ((IntlWrapper*)this)->pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(xSMgr), aLocale );
+    ((IntlWrapper*)this)->pLocaleData = new LocaleDataWrapper(
+        comphelper::getComponentContext(xSMgr), aLanguageTag.getLocale() );
 }
 
 
@@ -70,12 +69,13 @@ void IntlWrapper::ImplNewCollator( sal_Bool bCaseSensitive ) const
     CollatorWrapper* p = new CollatorWrapper( xSMgr );
     if ( bCaseSensitive )
     {
-        p->loadDefaultCollator( aLocale, 0 );
+        p->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
         ((IntlWrapper*)this)->pCaseCollator = p;
     }
     else
     {
-        p->loadDefaultCollator( aLocale, ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
+        p->loadDefaultCollator( aLanguageTag.getLocale(),
+                ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
         ((IntlWrapper*)this)->pCollator = p;
     }
 }

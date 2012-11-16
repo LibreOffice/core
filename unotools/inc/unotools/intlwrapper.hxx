@@ -47,14 +47,12 @@ class UNOTOOLS_DLLPUBLIC IntlWrapper
 {
 private:
 
-    ::com::sun::star::lang::Locale  aLocale;
+            LanguageTag         aLanguageTag;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
 
             LocaleDataWrapper*  pLocaleData;
             CollatorWrapper*    pCollator;
             CollatorWrapper*    pCaseCollator;
-
-            LanguageType        eLanguage;
 
             void                ImplNewLocaleData() const;
             void                ImplNewCollator( sal_Bool bCaseSensitive ) const;
@@ -71,8 +69,8 @@ public:
                                     );
                                 ~IntlWrapper();
 
-    LanguageType                getLanguage() const { return eLanguage; }
-    const ::com::sun::star::lang::Locale&   getLocale() const { return aLocale; }
+    LanguageType                getLanguage() const { return aLanguageTag.getLanguageType(); }
+    const ::com::sun::star::lang::Locale&   getLocale() const { return aLanguageTag.getLocale(); }
 
     const LocaleDataWrapper*    getLocaleData() const
                                     {
