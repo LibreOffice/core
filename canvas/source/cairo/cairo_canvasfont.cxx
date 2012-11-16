@@ -25,7 +25,7 @@
 #include <basegfx/numeric/ftools.hxx>
 
 #include <vcl/metric.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 #include "cairo_canvasfont.hxx"
 #include "cairo_textlayout.hxx"
@@ -57,7 +57,7 @@ namespace cairocanvas
                 rFontRequest.FontDescription.FontDescription.Proportion == rendering::PanoseProportion::MONO_SPACED
                     ? PITCH_FIXED : PITCH_VARIABLE);
 
-        maFont->SetLanguage(MsLangId::convertLocaleToLanguage(rFontRequest.Locale));
+        maFont->SetLanguage( LanguageTag( rFontRequest.Locale).getLanguageType( false));
 
         // adjust to stretched/shrinked font
         if( !::rtl::math::approxEqual( rFontMatrix.m00, rFontMatrix.m11) )
