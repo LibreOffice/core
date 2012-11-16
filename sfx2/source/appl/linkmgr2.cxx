@@ -34,7 +34,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <sfx2/request.hxx>
 
 #include "fileobj.hxx"
@@ -608,8 +608,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
     {
         // first only loop over the DocumentShells the shells and find those
         // with the name:
-        com::sun::star::lang::Locale aLocale;
-        MsLangId::convertLanguageToLocale( LANGUAGE_SYSTEM, aLocale );
+        com::sun::star::lang::Locale aLocale( LanguageTag( LANGUAGE_SYSTEM).getLocale());
         CharClass aCC( aLocale );
 
         TypeId aType( TYPE(SfxObjectShell) );
