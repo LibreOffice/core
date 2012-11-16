@@ -123,8 +123,8 @@ public:
             sal_Bool            IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const;
             const Locale&       GetRealLocale() { return m_aRealLocale.getLocale(); }
             const Locale&       GetRealUILocale() { return m_aRealUILocale.getLocale(); }
-            LanguageType        GetRealLanguage() { return m_eRealLocale.getLanguageType(); }
-            LanguageType        GetRealUILanguage() { return m_eRealUILocale.getLanguageType(); }
+            LanguageType        GetRealLanguage() { return m_aRealLocale.getLanguageType(); }
+            LanguageType        GetRealUILanguage() { return m_aRealUILocale.getLanguageType(); }
 };
 
 
