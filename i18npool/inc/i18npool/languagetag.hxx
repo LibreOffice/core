@@ -95,6 +95,21 @@ public:
      */
     LanguageType                    getLanguageType( bool bResolveSystem = true ) const;
 
+    /** Obtain ISO strings for language and country.
+
+        This is a convenience method for places that so far use only language and
+        country to replace the MsLangId::convert...IsoNames...() calls. Avoid
+        use in new code.
+
+        ATTENTION! May return empty strings if the language tag is not
+        expressable in valid ISO codes!
+
+        @see isIsoLocale()
+
+        Always resolves an empty tag to the system locale.
+     */
+    void                            getIsoLanguageCountry( rtl::OUString& rLanguage, rtl::OUString& rCountry ) const;
+
     /** Get ISO 639 language code, or BCP 47 language.
 
         Always resolves an empty tag to the system locale.

@@ -618,6 +618,20 @@ LanguageType LanguageTag::getLanguageType( bool bResolveSystem ) const
 }
 
 
+void LanguageTag::getIsoLanguageCountry( rtl::OUString& rLanguage, rtl::OUString& rCountry ) const
+{
+    if (!isIsoLocale())
+    {
+        rLanguage = OUString();
+        rCountry = OUString();
+        return;
+    }
+    // After isIsoLocale() it's safe to call getLanguage() for ISO code.
+    rLanguage = getLanguage();
+    rCountry = getCountry();
+}
+
+
 namespace
 {
 
