@@ -9547,9 +9547,13 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
                 ENABLE_SDREMOTE_BLUETOOTH=NO
             fi
         else
+            # FIXME: should this really be disabled in everything non-Linux?
             AC_MSG_RESULT([no])
             ENABLE_SDREMOTE_BLUETOOTH=NO
         fi
+    else
+        AC_MSG_RESULT([no])
+        ENABLE_SDREMOTE_BLUETOOTH=NO
     fi
 else
     ENABLE_SDREMOTE=NO
