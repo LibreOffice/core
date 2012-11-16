@@ -54,14 +54,14 @@ Module gid_Module_Optional_Pyuno
              gid_File_Py_Python_Core,
              gid_File_Py_Python_Bin,
              gid_File_Lib_Python_So,
-             gid_Shortcut_Lib_Python_So,
+             gid_File_Lib_Python3_So,
              gid_File_Scripts_Python,
              gid_File_Share_Registry_Pyuno_Xcd);
     Unixlinks = (gid_Unixlink_Python_Headers,
                  gid_Unixlink_Python_Resources,
                  gid_Unixlink_Python_Versions_Current,
                  gid_Unixlink_Python_Versions_ver_Headers,
-                 gid_Unixlink_Python_OOoPython,
+                 gid_Unixlink_Python_LibreOfficePython,
                  gid_Unixlink_Python_bin_idle,
                  gid_Unixlink_Python_bin_pydoc,
                  gid_Unixlink_Python_bin_python_real,
@@ -69,7 +69,7 @@ Module gid_Module_Optional_Pyuno
                  gid_Unixlink_Python_bin_pythonconfig,
                  gid_Unixlink_Python_bin_pythonw_real,
                  gid_Unixlink_Python_bin_pythonw,
-                 gid_Unixlink_Python_bin_smtpdpy,
+                 gid_Unixlink_Python_bin_pyvenv,
                  gid_Unixlink_Python_libpython);
     Minimal = NO;
     Default = YES;

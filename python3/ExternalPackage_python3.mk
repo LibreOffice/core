@@ -39,16 +39,10 @@ else ifeq ($(OS),WNT) # MinGW
 $(eval $(call gb_ExternalPackage_add_file,python3,bin/python.exe,python.exe))
 $(eval $(call gb_ExternalPackage_add_file,python3,bin/python3.dll,python3.dll))
 else
-ifeq ($(OS),MACOSX)
-# TODO what is this?
-$(eval $(call gb_ExternalPackage_add_file,python3,lib/OOoPython.framework/OOoPython,python))
-$(eval $(call gb_ExternalPackage_add_file,python3,lib/OOoPython.framework/Versions/2.6,OOoPython.framework/Versions/2.6))
-else # ELF UNIX
 $(eval $(call gb_ExternalPackage_add_file,python3,bin/python,python))
 $(eval $(call gb_ExternalPackage_add_file,python3,lib/libpython3.so,libpython3.so))
 $(eval $(call gb_ExternalPackage_add_file,python3,lib/libpython3.3m.so,libpython3.3m.so))
 # versioned lib/libpython3.3m.so.1.0 appears to be unnecessary?
-endif
 
 # Unfortunately the python build system does not allow to explicitly enable or
 # disable these, it just tries to build them and then prints which did not
@@ -823,5 +817,4 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,lib/python/xmlrpc,\
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,lib/python/site-packages,\
 	Lib/site-packages/README \
 ))
-
 # vim: set noet sw=4 ts=4:
