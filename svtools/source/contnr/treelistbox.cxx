@@ -359,10 +359,10 @@ SvLBoxItem::~SvLBoxItem()
     DBG_DTOR(SvLBoxItem,0);
 }
 
-const Size& SvLBoxItem::GetSize( SvTreeListBox* pView,SvTreeListEntry* pEntry )
+const Size& SvLBoxItem::GetSize(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const
 {
     DBG_CHKTHIS(SvLBoxItem,0);
-    SvViewDataItem* pViewData = pView->GetViewDataItem( pEntry, this );
+    const SvViewDataItem* pViewData = pView->GetViewDataItem( pEntry, this );
     return pViewData->aSize;
 }
 
@@ -964,14 +964,18 @@ sal_uLong SvTreeListBox::GetLevelChildCount( SvTreeListEntry* _pParent ) const
     return nCount;
 }
 
-SvViewDataItem* SvTreeListBox::GetViewDataItem( SvTreeListEntry* pEntry, SvLBoxItem* pItem ) const
+SvViewDataItem* SvTreeListBox::GetViewDataItem(SvTreeListEntry* pEntry, SvLBoxItem* pItem)
 {
-    SvViewDataEntry* pEntryData =
-        (SvViewDataEntry*)SvListView::GetViewData(pEntry);
+    return const_cast<SvViewDataItem*>(static_cast<const SvTreeListBox*>(this)->GetViewDataItem(pEntry, pItem));
+}
+
+const SvViewDataItem* SvTreeListBox::GetViewDataItem(const SvTreeListEntry* pEntry, const SvLBoxItem* pItem) const
+{
+    const SvViewDataEntry* pEntryData = (const SvViewDataEntry*)SvListView::GetViewData(pEntry);
     DBG_ASSERT(pEntryData,"Entry not in View");
     DBG_ASSERT(pEntryData->pItemData,"No ItemData");
     sal_uInt16 nItemPos = pEntry->GetPos(pItem);
-    return (pEntryData->pItemData+nItemPos);
+    return (pEntryData->pItemData + nItemPos);
 }
 
 SvViewData* SvTreeListBox::CreateViewData( SvTreeListEntry* )
@@ -2914,13 +2918,10 @@ void SvTreeListBox::InvalidateEntry( SvTreeListEntry* pEntry )
     }
 }
 
-
 long SvTreeListBox::PaintEntry(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nTabFlags)
 {
     return PaintEntry1(pEntry,nLine,nTabFlags);
 }
-
-#define SV_TAB_BORDER 8
 
 long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nTabFlags,
     sal_Bool bHasClipRegion )
@@ -3397,6 +3398,56 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
     return pItemClicked;
 }
 
+long SvTreeListBox::getPreferredDimensions(std::vector<long> &rWidths) const
+{
+    long nHeight = 0;
+    rWidths.clear();
+    SvTreeListEntry* pEntry = First();
+    while (pEntry)
+    {
+        sal_uInt16 nCount = pEntry->ItemCount();
+        sal_uInt16 nCurPos = 0;
+        if (nCount > rWidths.size())
+            rWidths.resize(nCount);
+        while (nCurPos < nCount)
+        {
+            SvLBoxItem* pItem = pEntry->GetItem( nCurPos );
+            long nWidth = pItem->GetSize(this, pEntry).Width();
+            if (nWidth)
+            {
+                nWidth += SV_TAB_BORDER * 2;
+                if (nWidth > rWidths[nCurPos])
+                   rWidths[nCurPos] = nWidth;
+            }
+            ++nCurPos;
+        }
+        pEntry = Next( pEntry );
+        nHeight += GetEntryHeight();
+    }
+    return nHeight;
+}
+
+Size SvTreeListBox::GetOptimalSize(WindowSizeType eType) const
+{
+    Size aRet;
+    switch (eType)
+    {
+        case WINDOWSIZE_MINIMUM:
+        case WINDOWSIZE_PREFERRED:
+        {
+            std::vector<long> aWidths;
+            aRet.Height() = getPreferredDimensions(aWidths);
+            for (size_t i = 0; i < aWidths.size(); ++i)
+                aRet.Width() += aWidths[i];
+            break;
+        }
+        default:
+            aRet = Control::GetOptimalSize(eType);
+            break;
+    }
+    return aRet;
+}
+
 SvLBoxItem* SvTreeListBox::GetItem(SvTreeListEntry* pEntry,long nX,SvLBoxTab** ppTab)
 {
     return GetItem_Impl( pEntry, nX, ppTab, 0 );
@@ -3685,6 +3736,7 @@ void SvTreeListBox::ModelNotification( sal_uInt16 nActionId, SvTreeListEntry* pE
                 nContextBmpWidthMax = nMaxWidth;
                 SetTabs();
             }
+            queue_resize();
         }
         break;
 

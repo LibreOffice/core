@@ -23,6 +23,7 @@
 #include "svtools/svtdllapi.h"
 
 #include <deque>
+#include <vector>
 
 #include <vcl/ctrl.hxx>
 #include <vcl/seleng.hxx>
@@ -165,10 +166,10 @@ public:
                         SvLBoxItem();
     virtual             ~SvLBoxItem();
     virtual sal_uInt16 GetType() const = 0;
-    const Size&         GetSize( SvTreeListBox* pView, SvTreeListEntry* pEntry );
-    const Size&         GetSize( SvViewDataEntry* pData, sal_uInt16 nItemPos )
+    const Size&         GetSize(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
+    const Size&         GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos) const
                         {
-                            SvViewDataItem* pIData=pData->pItemData+nItemPos;
+                            const SvViewDataItem* pIData = pData->pItemData + nItemPos;
                             return pIData->aSize;
                         }
 
@@ -411,7 +412,8 @@ public:
     sal_uLong           GetLevelChildCount( SvTreeListEntry* pParent ) const;
 
     SvViewDataEntry* GetViewDataEntry( SvTreeListEntry* pEntry ) const { return (SvViewDataEntry*)SvListView::GetViewData(pEntry); }
-    SvViewDataItem*  GetViewDataItem( SvTreeListEntry*, SvLBoxItem* ) const;
+    SvViewDataItem*  GetViewDataItem(SvTreeListEntry*, SvLBoxItem*);
+    const SvViewDataItem*  GetViewDataItem(const SvTreeListEntry*, const SvLBoxItem*) const;
 
     bool IsInplaceEditingEnabled() const { return ((nImpFlags & SVLBOX_EDT_ENABLED) != 0); }
     bool IsEditingActive() const { return ((nImpFlags & SVLBOX_IN_EDT) != 0); }
@@ -787,9 +789,13 @@ public:
 
     void            EnableContextMenuHandling( void );
     void            EnableContextMenuHandling( sal_Bool bEnable );
-    sal_Bool            IsContextMenuHandlingEnabled( void ) const;
+    sal_Bool        IsContextMenuHandlingEnabled( void ) const;
 
     void            EnableList( bool _bEnable );
+
+    long getPreferredDimensions(std::vector<long> &rWidths) const;
+
+    virtual Size GetOptimalSize(WindowSizeType i_eType) const;
 };
 
 #define SV_LBOX_DD_FORMAT "SV_LBOX_DD_FORMAT"

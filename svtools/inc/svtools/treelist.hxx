@@ -406,7 +406,7 @@ public:
     sal_Bool            IsSelected( SvTreeListEntry* pEntry ) const;
     sal_Bool            HasEntryFocus( SvTreeListEntry* pEntry ) const;
     void                SetEntryFocus( SvTreeListEntry* pEntry, sal_Bool bFocus );
-    const SvViewData*         GetViewData( SvTreeListEntry* pEntry ) const;
+    const SvViewData*         GetViewData( const SvTreeListEntry* pEntry ) const;
     SvViewData*         GetViewData( SvTreeListEntry* pEntry );
     sal_Bool            HasViewData() const
     { return maDataTable.size() > 1; }  // There's always a ROOT
@@ -460,26 +460,18 @@ inline void SvListView::SetEntryFocus( SvTreeListEntry* pEntry, sal_Bool bFocus 
     itr->second->SetFocus(bFocus);
 }
 
-inline const SvViewData* SvListView::GetViewData( SvTreeListEntry* pEntry ) const
+inline const SvViewData* SvListView::GetViewData( const SvTreeListEntry* pEntry ) const
 {
-#ifndef DBG_UTIL
-    return maDataTable.find( pEntry )->second;
-#else
-    SvDataTable::const_iterator itr = maDataTable.find( pEntry );
+    SvDataTable::const_iterator itr = maDataTable.find( const_cast<SvTreeListEntry*>(pEntry) );
     DBG_ASSERT(itr != maDataTable.end(),"Entry not in model or wrong view");
     return itr->second;
-#endif
 }
 
 inline SvViewData* SvListView::GetViewData( SvTreeListEntry* pEntry )
 {
-#ifndef DBG_UTIL
-    return maDataTable.find( pEntry )->second;
-#else
     SvDataTable::iterator itr = maDataTable.find( pEntry );
     DBG_ASSERT(itr != maDataTable.end(),"Entry not in model or wrong view");
     return itr->second;
-#endif
 }
 
 #endif

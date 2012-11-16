@@ -20,15 +20,7 @@
 
 #define HID_XML_SOURCE_FILE_DIALOG                          "FILTER_HID_XML_SOURCE_FILE_DIALOG"
 #define HID_XML_SOURCE_FILE_VALIDATE                        "FILTER_HID_XML_SOURCE_FILE_VALIDATE"
-#define HID_XML_FILTER_SETTINGS_DIALOG                      "FILTER_HID_XML_FILTER_SETTINGS_DIALOG"
 #define HID_XML_FILTER_LIST                                 "FILTER_HID_XML_FILTER_LIST"
-#define HID_XML_FILTER_NEW                                  "FILTER_HID_XML_FILTER_NEW"
-#define HID_XML_FILTER_EDIT                                 "FILTER_HID_XML_FILTER_EDIT"
-#define HID_XML_FILTER_TEST                                 "FILTER_HID_XML_FILTER_TEST"
-#define HID_XML_FILTER_DELETE                               "FILTER_HID_XML_FILTER_DELETE"
-#define HID_XML_FILTER_SAVE                                 "FILTER_HID_XML_FILTER_SAVE"
-#define HID_XML_FILTER_OPEN                                 "FILTER_HID_XML_FILTER_OPEN"
-#define HID_XML_FILTER_CLOSE                                "FILTER_HID_XML_FILTER_CLOSE"
 
 #define HID_XML_FILTER_TABDIALOG                            "FILTER_HID_XML_FILTER_TABDIALOG"
 #define HID_XML_FILTER_TABPAGE_BASIC                        "FILTER_HID_XML_FILTER_TABPAGE_BASIC"

@@ -31,7 +31,6 @@
 #include "xmlfiltertabpagebasic.hxx"
 #include "xmlfiltertabpagexslt.hxx"
 #include "xmlfiltersettingsdialog.hxx"
-#include "xmlfiltersettingsdialog.hrc"
 #include "xmlfilterhelpids.hrc"
 
 using namespace com::sun::star::uno;

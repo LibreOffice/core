@@ -105,13 +105,20 @@ private:
     com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxParent;  /// parent window
     com::sun::star::uno::Reference< XMultiServiceFactory > mxMSF;
 
-    static ResMgr* mpResMgr;
     XMLFilterSettingsDialog* mpDialog;
 };
 
 //-------------------------------------------------------------------------
 
-ResMgr* XMLFilterDialogComponent::mpResMgr = NULL;
+namespace
+{
+    static ResMgr* pXSLTResMgr = NULL;
+}
+
+ResMgr* getXSLTDialogResMgr()
+{
+    return pXSLTResMgr;
+}
 
 XMLFilterDialogComponent::XMLFilterDialogComponent( const com::sun::star::uno::Reference< XMultiServiceFactory >& rxMSF ) :
     OComponentHelper( maMutex ),
@@ -291,10 +298,10 @@ void SAL_CALL XMLFilterDialogComponent::disposing()
         mpDialog = NULL;
     }
 
-    if( mpResMgr )
+    if (pXSLTResMgr)
     {
-        delete mpResMgr;
-        mpResMgr = NULL;
+        delete pXSLTResMgr;
+        pXSLTResMgr = NULL;
     }
 }
 
@@ -335,9 +342,9 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException)
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpResMgr )
+    if( NULL == pXSLTResMgr )
     {
-        mpResMgr = ResMgr::CreateResMgr( "xsltdlg", Application::GetSettings().GetUILocale() );
+        pXSLTResMgr = ResMgr::CreateResMgr( "xsltdlg", Application::GetSettings().GetUILocale() );
     }
 
     if( NULL == mpDialog )
@@ -351,12 +358,12 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException)
         }
 
         Reference< XComponent > xComp( this );
-        mpDialog = new XMLFilterSettingsDialog( pParent, *mpResMgr, mxMSF );
-        mpDialog->ShowWindow();
+        mpDialog = new XMLFilterSettingsDialog(pParent, mxMSF);
+        mpDialog->Execute();
     }
     else if( !mpDialog->IsVisible() )
     {
-        mpDialog->ShowWindow();
+        mpDialog->Execute();
     }
     mpDialog->ToTop();
 

@@ -20,15 +20,7 @@
 
 hidspecial HID_XML_SOURCE_FILE_DIALOG                   { HelpId = HID_XML_SOURCE_FILE_DIALOG; };
 hidspecial HID_XML_SOURCE_FILE_VALIDATE                 { HelpId = HID_XML_SOURCE_FILE_VALIDATE; };
-hidspecial HID_XML_FILTER_SETTINGS_DIALOG               { HelpId = HID_XML_FILTER_SETTINGS_DIALOG; };
 hidspecial HID_XML_FILTER_LIST                          { HelpId = HID_XML_FILTER_LIST; };
-hidspecial HID_XML_FILTER_NEW                           { HelpId = HID_XML_FILTER_NEW; };
-hidspecial HID_XML_FILTER_EDIT                          { HelpId = HID_XML_FILTER_EDIT; };
-hidspecial HID_XML_FILTER_TEST                          { HelpId = HID_XML_FILTER_TEST; };
-hidspecial HID_XML_FILTER_DELETE                        { HelpId = HID_XML_FILTER_DELETE; };
-hidspecial HID_XML_FILTER_SAVE                          { HelpId = HID_XML_FILTER_SAVE; };
-hidspecial HID_XML_FILTER_OPEN                          { HelpId = HID_XML_FILTER_OPEN; };
-hidspecial HID_XML_FILTER_CLOSE                         { HelpId = HID_XML_FILTER_CLOSE; };
 
 hidspecial HID_XML_FILTER_TABDIALOG                     { HelpId = HID_XML_FILTER_TABDIALOG; };
 hidspecial HID_XML_FILTER_TABPAGE_BASIC                 { HelpId = HID_XML_FILTER_TABPAGE_BASIC; };

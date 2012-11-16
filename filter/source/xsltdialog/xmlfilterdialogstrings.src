@@ -183,3 +183,8 @@ String STR_NO_FILTERS_FOUND
 {
     Text [ en-US ]  = "No XML filter could be installed because the package '%s' does not contain any XML filters.";
 };
+
+String STR_XML_FILTER_LISTBOX
+{
+    Text [ en-US ]  = "XML Filter List";
+};

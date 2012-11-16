@@ -64,6 +64,7 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Package_inc \
 	Package_docbook \
 	Package_xslt \
+	UI_xsltdlg \
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))

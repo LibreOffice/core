@@ -60,4 +60,6 @@
 #define STR_APPL_NAME_OASIS_IMPRESS             (RID_XSLT_DIALOG_START + 36)
 #define STR_APPL_NAME_OASIS_DRAW                (RID_XSLT_DIALOG_START + 37)
 
+#define STR_XML_FILTER_LISTBOX                  (RID_XSLT_DIALOG_START + 38)
+
 #endif

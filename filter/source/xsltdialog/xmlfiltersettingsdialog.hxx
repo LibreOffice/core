@@ -23,9 +23,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <vcl/wrkwin.hxx>
-
 #include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/layout.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svl/poolitem.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -34,16 +34,22 @@
 
 // --------------------------------------------------------------------
 
-class SvxPathControl_Impl : public Control
+class HeaderBar;
+class XMLFilterListBox;
+
+class SvxPathControl : public VclVBox
 {
 private:
-    Control*        m_pFocusCtrl;
-
+    bool bHasBeenShown;
+    HeaderBar* m_pHeaderBar;
+    XMLFilterListBox* m_pFocusCtrl;
+protected:
+    virtual void setAllocation(const Size &rAllocation);
 public:
-    SvxPathControl_Impl( Window* pParent, const ResId& rId ) :
-        Control( pParent, rId ), m_pFocusCtrl( NULL ) {}
-
-    void            SetFocusControl( Control* pCtrl ) { m_pFocusCtrl = pCtrl; }
+    SvxPathControl(Window* pParent);
+    HeaderBar* getHeaderBar() { return m_pHeaderBar; }
+    XMLFilterListBox* getListBox() { return m_pFocusCtrl; }
+    ~SvxPathControl();
 
     virtual long    Notify( NotifyEvent& rNEvt );
 };
@@ -56,7 +62,7 @@ class XMLFilterListBox : public SvTabListBox
 {
 private:
     bool        mbFirstPaint;
-    HeaderBar*  mpHeaderBar;
+    HeaderBar*  m_pHeaderBar;
 
     DECL_LINK( TabBoxScrollHdl_Impl, SvTabListBox* );
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar* );
@@ -64,10 +70,7 @@ private:
     String getEntryString( const filter_info_impl* pInfo ) const;
 
 public:
-    XMLFilterListBox( SvxPathControl_Impl* pParent );
-    ~XMLFilterListBox();
-
-    void Reset();
+    XMLFilterListBox(SvxPathControl* pParent);
 
     /** adds a new filter info entry to the ui filter list */
     void addFilterEntry( const filter_info_impl* pInfo );
@@ -79,17 +82,17 @@ public:
 
 // --------------------------------------------------------------------
 
-class XMLFilterSettingsDialog : public WorkWindow
+class XMLFilterSettingsDialog : public Dialog
 {
 public:
-    XMLFilterSettingsDialog( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF  );
-    virtual ~XMLFilterSettingsDialog();
+    XMLFilterSettingsDialog(Window* pParent,
+        const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF);
 
     DECL_LINK(ClickHdl_Impl, PushButton * );
     DECL_LINK(SelectionChangedHdl_Impl, void * );
     DECL_LINK(DoubleClickHdl_Impl, void * );
 
-    void ShowWindow();
+    virtual short Execute();
 
     void    onNew();
     void    onEdit();
@@ -104,8 +107,6 @@ public:
     virtual long    Notify( NotifyEvent& rNEvt );
 
     bool    isClosable();
-
-    static ResMgr* mpResMgr;
 
 private:
     void    initFilterList();
@@ -126,21 +127,20 @@ private:
 
     std::vector< filter_info_impl* > maFilterVector;
 
-    XMLFilterListBox*   mpFilterListBox;
-    SvxPathControl_Impl maCtrlFilterList;
-    PushButton  maPBNew;
-    PushButton  maPBEdit;
-    PushButton  maPBTest;
-    PushButton  maPBDelete;
-    PushButton  maPBSave;
-    PushButton  maPBOpen;
-    HelpButton  maPBHelp;
-    PushButton  maPBClose;
+    XMLFilterListBox*   m_pFilterListBox;
+    SvxPathControl* m_pCtrlFilterList;
+    PushButton* m_pPBNew;
+    PushButton* m_pPBEdit;
+    PushButton* m_pPBTest;
+    PushButton* m_pPBDelete;
+    PushButton* m_pPBSave;
+    PushButton* m_pPBOpen;
+    PushButton* m_pPBClose;
 
-    bool    mbIsClosable;
+    bool m_bIsClosable;
 
-    ::rtl::OUString sTemplatePath;
-    ::rtl::OUString sDocTypePrefix;
+    OUString m_sTemplatePath;
+    OUString m_sDocTypePrefix;
 
     SvtModuleOptions maModuleOpt;
 };
