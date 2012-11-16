@@ -1,0 +1,80 @@
+FreeBSD porting fixes, patch by maho@openoffice.org
+
+--- misc/Python-2.6.1/Lib/test/test_threading.py	2008-09-30 22:41:13.000000000 +0200
++++ misc/build/Python-2.6.1/Lib/test/test_threading.py	2011-06-06 17:31:17.000000000 +0200
+@@ -382,7 +382,7 @@
+     # #12316 and #11870), and fork() from a worker thread is known to trigger
+     # problems with some operating systems (issue #3863): skip problematic tests
+     # on platforms known to behave badly.
+-    platforms_to_skip = ('freebsd4', 'freebsd5', 'freebsd6', 'netbsd5',
++    platforms_to_skip = ('freebsd4', 'freebsd5', 'freebsd6', 'freebsd7', 'netbsd5',
+                          'os2emx')
+ 
+     def _run_and_join(self, script):
+--- misc/Python-2.6.1/Python/thread_pthread.h	2006-06-13 17:04:24.000000000 +0200
++++ misc/build/Python-2.6.1/Python/thread_pthread.h	2011-06-06 17:33:34.000000000 +0200
+@@ -26,6 +26,10 @@
+ #endif
+ #endif
+ 
++#ifdef __FreeBSD__
++#include <osreldate.h>
++#endif
++
+ /* The POSIX spec says that implementations supporting the sem_*
+    family of functions must indicate this by defining
+    _POSIX_SEMAPHORES. */   
+@@ -44,7 +48,6 @@
+    in default setting.  So the process scope is preferred to get
+    enough number of threads to work. */
+ #ifdef __FreeBSD__
+-#include <osreldate.h>
+ #if __FreeBSD_version >= 500000 && __FreeBSD_version < 504101
+ #undef PTHREAD_SYSTEM_SCHED_SUPPORTED
+ #endif
+@@ -149,6 +152,9 @@
+ {
+     pthread_t th;
+     int status;
++#ifdef __FreeBSD__
++	sigset_t set, oset;
++#endif
+ #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+     pthread_attr_t attrs;
+ #endif
+@@ -177,7 +183,10 @@
+ #if defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+     pthread_attr_setscope(&attrs, PTHREAD_SCOPE_SYSTEM);
+ #endif
+-
++#ifdef __FreeBSD__
++	sigfillset(&set);
++	SET_THREAD_SIGMASK(SIG_BLOCK, &set, &oset);
++#endif
+     status = pthread_create(&th,
+ #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+                              &attrs,
+@@ -188,6 +197,9 @@
+ 				 (void *)arg
+ 				 );
+ 
++#ifdef __FreeBSD__
++	SET_THREAD_SIGMASK(SIG_SETMASK, &oset, NULL);
++#endif
+ #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+ 	pthread_attr_destroy(&attrs);
+ #endif
+--- misc/Python-2.6.1/configure	2008-11-16 18:57:10.000000000 +0100
++++ misc/build/Python-2.6.1/configure	2011-06-06 17:31:17.000000000 +0200
+@@ -4110,11 +4110,6 @@
+ 	  LDLIBRARY='libpython$(VERSION).so'
+ 	  BLDLIBRARY='-L. -lpython$(VERSION)'
+ 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
+-	  case $ac_sys_system in
+-	      FreeBSD*)
+-		SOVERSION=`echo $SOVERSION|cut -d "." -f 1`
+-		;;
+-	  esac
+ 	  INSTSONAME="$LDLIBRARY".$SOVERSION
+ 	  ;;
+     hp*|HP*)

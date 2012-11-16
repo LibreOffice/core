@@ -1,0 +1,159 @@
+build with GCC on AIX
+
+diff -ru python3.old_/configure python3/configure
+--- python3.old_/configure	2012-09-29 10:00:50.000000000 +0200
++++ python3/configure	2012-11-13 19:28:25.869753237 +0100
+@@ -3426,8 +3426,6 @@
+ else
+ 
+ 	case $ac_sys_system in
+-	AIX*)   CC=${CC:-xlc_r}
+-		without_gcc=;;
+ 	*)	without_gcc=no;;
+ 	esac
+ fi
+@@ -5541,10 +5539,18 @@
+ 	      PY3LIBRARY=libpython3.so
+ 	  fi
+           ;;
+-    Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*|OpenBSD*)
++    Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*|OpenBSD*|AIX*)
+ 	  LDLIBRARY='libpython$(LDVERSION).so'
+-	  BLDLIBRARY='-L. -lpython$(LDVERSION)'
+-	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
++	  case $ac_sys_system in
++	    AIX*)
++	      BLDLIBRARY='-Wl,-brtl -L. -lpython$(LDVERSION)'
++	      RUNSHARED=LIBPATH=`pwd`:${LIBPATH}
++	      ;;
++	    *)
++	      BLDLIBRARY='-L. -lpython$(LDVERSION)'
++	      RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
++	      ;;
++	  esac
+ 	  INSTSONAME="$LDLIBRARY".$SOVERSION
+ 	  if test "$with_pydebug" != yes
+           then
+@@ -6174,7 +6180,7 @@
+ 		# debug builds.
+ 		OPT="-g -O0 -Wall $STRICT_PROTO"
+ 	    else
+-		OPT="-g $WRAP -O3 -Wall $STRICT_PROTO"
++		OPT="$WRAP -O0 -Wall $STRICT_PROTO"
+ 	    fi
+ 	    ;;
+ 	*)
+@@ -8306,8 +8312,13 @@
+ then
+ 	case $ac_sys_system/$ac_sys_release in
+ 	AIX*)
+-		BLDSHARED="\$(srcdir)/Modules/ld_so_aix \$(CC) -bI:\$(srcdir)/Modules/python.exp"
+-		LDSHARED="\$(BINLIBDEST)/config/ld_so_aix \$(CC) -bI:\$(BINLIBDEST)/config/python.exp"
++		if test "$GCC" = "yes"; then
++		  LDSHARED='$(CC) -shared'
++		  BLDSHARED='$(CC) -Wl,-brtl -shared'
++		else
++		  BLDSHARED="\$(srcdir)/Modules/ld_so_aix \$(CC) -bI:\$(srcdir)/Modules/python.exp"
++		  LDSHARED="\$(BINLIBDEST)/config/ld_so_aix \$(CC) -bI:\$(BINLIBDEST)/config/python.exp"
++		fi
+ 		;;
+ 	IRIX/5*) LDSHARED="ld -shared";;
+ 	IRIX*/6*) LDSHARED="ld ${SGI_ABI} -shared -all";;
+diff -ru python3.old_/configure.ac python3/configure.ac
+--- python3.old_/configure.ac	2012-09-29 10:00:50.000000000 +0200
++++ python3/configure.ac	2012-11-13 19:28:36.273753536 +0100
+@@ -545,8 +545,6 @@
+ 		without_gcc=$withval;;
+ 	esac], [
+ 	case $ac_sys_system in
+-	AIX*)   CC=${CC:-xlc_r}
+-		without_gcc=;;
+ 	*)	without_gcc=no;;
+ 	esac])
+ AC_MSG_RESULT($without_gcc)
+@@ -910,10 +908,18 @@
+ 	      PY3LIBRARY=libpython3.so
+ 	  fi
+           ;;
+-    Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*|OpenBSD*)
++    Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*|OpenBSD*|AIX*)
+ 	  LDLIBRARY='libpython$(LDVERSION).so'
+-	  BLDLIBRARY='-L. -lpython$(LDVERSION)'
+-	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
++	  case $ac_sys_system in
++	    AIX*)
++	      BLDLIBRARY='-Wl,-brtl -L. -lpython$(LDVERSION)'
++	      RUNSHARED=LIBPATH=`pwd`:${LIBPATH}
++	      ;;
++	    *)
++	      BLDLIBRARY='-L. -lpython$(LDVERSION)'
++	      RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
++	      ;;
++	  esac
+ 	  case $ac_sys_system in
+ 	      FreeBSD*)
+ 		SOVERSION=`echo $SOVERSION|cut -d "." -f 1`
+@@ -1866,8 +1872,13 @@
+ then
+ 	case $ac_sys_system/$ac_sys_release in
+ 	AIX*)
+-		BLDSHARED="\$(srcdir)/Modules/ld_so_aix \$(CC) -bI:\$(srcdir)/Modules/python.exp"
+-		LDSHARED="\$(BINLIBDEST)/config/ld_so_aix \$(CC) -bI:\$(BINLIBDEST)/config/python.exp"
++		if test "$GCC" = "yes"; then
++			LDSHARED='$(CC) -shared'
++			BLDSHARED='$(CC) -Wl,-brtl -shared'
++		else
++			BLDSHARED="\$(srcdir)/Modules/ld_so_aix \$(CC) -bI:\$(srcdir)/Modules/python.exp"
++			LDSHARED="\$(BINLIBDEST)/config/ld_so_aix \$(CC) -bI:\$(BINLIBDEST)/config/python.exp"
++		fi
+ 		;;
+ 	IRIX/5*) LDSHARED="ld -shared";;
+ 	IRIX*/6*) LDSHARED="ld ${SGI_ABI} -shared -all";;
+diff -ru python3.old_/Makefile.pre.in python3/Makefile.pre.in
+--- python3.old_/Makefile.pre.in	2012-09-29 10:00:41.000000000 +0200
++++ python3/Makefile.pre.in	2012-11-13 19:10:10.733742599 +0100
+@@ -493,7 +493,10 @@
+ 
+ libpython$(LDVERSION).so: $(LIBRARY_OBJS)
+ 	if test $(INSTSONAME) != $(LDLIBRARY); then \
+-		$(BLDSHARED) -Wl,-h$(INSTSONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
++		if [ "`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" != "aix" ]; then \
++			SONAME="-Wl,-h$(INSTSONAME)"; \
++		fi; \
++		$(BLDSHARED) $(SONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
+ 		$(LN) -f $(INSTSONAME) $@; \
+ 	else \
+ 		$(BLDSHARED) -o $@ $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
+@@ -1106,6 +1109,8 @@
+ 	export PATH; PATH="`pwd`:$$PATH"; \
+ 	export PYTHONPATH; PYTHONPATH="`pwd`/Lib"; \
+ 	export DYLD_FRAMEWORK_PATH; DYLD_FRAMEWORK_PATH="`pwd`"; \
++	export LD_LIBRARY_PATH; LD_LIBRARY_PATH="`pwd`${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"; \
++	export LIBPATH; LIBPATH="`pwd`${LIBPATH:+:$LIBPATH}"; \
+ 	export EXE; EXE="$(BUILDEXE)"; \
+ 	cd $(srcdir)/Lib/$(PLATDIR); $(RUNSHARED) ./regen
+ 
+diff -ru python3.old_/Modules/_ctypes/libffi/fficonfig.py.in python3/Modules/_ctypes/libffi/fficonfig.py.in
+--- python3.old_/Modules/_ctypes/libffi/fficonfig.py.in	2012-09-29 10:00:42.000000000 +0200
++++ python3/Modules/_ctypes/libffi/fficonfig.py.in	2012-11-13 19:09:25.252740861 +0100
+@@ -16,7 +16,7 @@
+     'M32R': ['src/m32r/sysv.S', 'src/m32r/ffi.c'],
+     'M68K': ['src/m68k/ffi.c', 'src/m68k/sysv.S'],
+     'POWERPC': ['src/powerpc/ffi.c', 'src/powerpc/sysv.S', 'src/powerpc/ppc_closure.S', 'src/powerpc/linux64.S', 'src/powerpc/linux64_closure.S'],
+-    'POWERPC_AIX': ['src/powerpc/ffi.c', 'src/powerpc/aix.S', 'src/powerpc/aix_closure.S'],
++    'POWERPC_AIX': ['src/powerpc/ffi_darwin.c', 'src/powerpc/aix.S', 'src/powerpc/aix_closure.S'],
+     'POWERPC_FREEBSD': ['src/powerpc/ffi.c', 'src/powerpc/sysv.S', 'src/powerpc/ppc_closure.S'],
+     'ARM': ['src/arm/sysv.S', 'src/arm/ffi.c'],
+     'LIBFFI_CRIS': ['src/cris/sysv.S', 'src/cris/ffi.c'],
+diff -ru python3.old_/Modules/Setup.dist python3/Modules/Setup.dist
+--- python3.old_/Modules/Setup.dist	2012-09-29 10:00:42.000000000 +0200
++++ python3/Modules/Setup.dist	2012-11-13 19:09:25.251740860 +0100
+@@ -177,7 +177,7 @@
+ #_bisect _bisectmodule.c	# Bisection algorithms
+ #_heapq _heapqmodule.c	# Heap queue algorithm
+ 
+-#unicodedata unicodedata.c    # static Unicode character database
++unicodedata unicodedata.c    # static Unicode character database
+ 
+ 
+ # Modules with some UNIX dependencies -- on by default:
