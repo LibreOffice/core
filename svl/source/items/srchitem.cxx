@@ -28,7 +28,7 @@
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <svl/memberid.hrc>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 using namespace utl;
 using namespace com::sun::star::beans;
@@ -428,7 +428,7 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
         {
             sal_Int16 nLocale;
             if (!aSearchOpt.Locale.Language.isEmpty() || !aSearchOpt.Locale.Country.isEmpty() )
-                nLocale = MsLangId::convertLocaleToLanguage( aSearchOpt.Locale );
+                nLocale = LanguageTag( aSearchOpt.Locale ).getLanguageType();
             else
                 nLocale = LANGUAGE_NONE;
             rVal <<= nLocale;
@@ -577,7 +577,7 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
                 }
                 else
                 {
-                    MsLangId::convertLanguageToLocale( (sal_Int16) nInt, aSearchOpt.Locale );
+                    aSearchOpt.Locale = LanguageTag( nInt).getLocale();
                 }
             }
             break;

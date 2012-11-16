@@ -22,6 +22,7 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -200,7 +201,7 @@ LanguageType SvtSystemLanguageOptions::GetWin16SystemLanguage()
 {
     if( m_sWin16SystemLocale.isEmpty() )
         return LANGUAGE_NONE;
-    return MsLangId::convertIsoStringToLanguage( m_sWin16SystemLocale );
+    return LanguageTag( m_sWin16SystemLocale ).getLanguageType();
 }
 
 

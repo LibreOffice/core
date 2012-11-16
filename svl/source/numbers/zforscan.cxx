@@ -222,7 +222,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     // #80023# be sure to generate keywords for the loaded Locale, not for the
     // requested Locale, otherwise number format codes might not match
     lang::Locale aLoadedLocale = pLocaleData->getLoadedLocale();
-    LanguageType eLang = MsLangId::convertLocaleToLanguage( aLoadedLocale );
+    LanguageType eLang = LanguageTag( aLoadedLocale ).getLanguageType( false);
     NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(pFormatter->GetServiceManager()), aLoadedLocale );
 
     i18n::NumberFormatCode aFormat = aNumberFormatCode.getFormatCode( NF_NUMBER_STANDARD );

@@ -109,7 +109,7 @@ static LanguageType lcl_GetLanguage( const lang::Locale& rLocale )
     if ( rLocale.Language.isEmpty() )
         return LANGUAGE_SYSTEM;
 
-    LanguageType eRet = MsLangId::convertLocaleToLanguage( rLocale );
+    LanguageType eRet = LanguageTag( rLocale ).getLanguageType( false );
     if ( eRet == LANGUAGE_NONE )
         eRet = LANGUAGE_SYSTEM;         //! or throw an exception?
 
@@ -757,8 +757,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const rtl::OUString& aPro
         }
         else if (aString.EqualsAscii( PROPERTYNAME_LOCALE ))
         {
-            lang::Locale aLocale( MsLangId::convertLanguageToLocale(
-                            pFormat->GetLanguage()));
+            lang::Locale aLocale( LanguageTag( pFormat->GetLanguage()).getLocale());
             aRet <<= aLocale;
         }
         else if (aString.EqualsAscii( PROPERTYNAME_TYPE ))
@@ -893,8 +892,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         bool bThousand, bRed;
         sal_uInt16 nDecimals, nLeading;
         pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-        lang::Locale aLocale( MsLangId::convertLanguageToLocale(
-                    pFormat->GetLanguage()));
+        lang::Locale aLocale( LanguageTag( pFormat->GetLanguage()).getLocale());
 
         uno::Sequence<beans::PropertyValue> aSeq(13);
         beans::PropertyValue* pArray = aSeq.getArray();

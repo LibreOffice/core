@@ -4774,7 +4774,7 @@ OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
         const SvNumberNatNum& rNum ) const
 {
     com::sun::star::lang::Locale aLocale(
-            MsLangId::convertLanguageToLocale( rNum.GetLang() ) );
+            LanguageTag( rNum.GetLang() ).getLocale() );
     return GetFormatter().GetNatNum()->getNativeNumberString( rStr,
             aLocale, rNum.GetNatNum() );
 }
@@ -4789,7 +4789,7 @@ void SvNumberformat::GetNatNumXml(
         if ( rNum.IsSet() )
         {
             com::sun::star::lang::Locale aLocale(
-                    MsLangId::convertLanguageToLocale( rNum.GetLang() ) );
+                    LanguageTag( rNum.GetLang() ).getLocale() );
             rAttr = GetFormatter().GetNatNum()->convertToXmlAttributes(
                     aLocale, rNum.GetNatNum() );
         }

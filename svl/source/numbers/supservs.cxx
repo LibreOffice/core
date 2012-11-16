@@ -101,7 +101,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
         {
             Locale aLocale;
             *pArgs >>= aLocale;
-            eNewFormatterLanguage = MsLangId::convertLocaleToLanguage( aLocale);
+            eNewFormatterLanguage = LanguageTag( aLocale).getLanguageType( false);
         }
 #ifdef DBG_UTIL
         else

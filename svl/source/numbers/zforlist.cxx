@@ -233,7 +233,7 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     eEvalDateFormat = NF_EVALDATEFORMAT_INTL;
     nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
-    aLocale = MsLangId::convertLanguageToLocale( eLang );
+    aLocale = LanguageTag( eLang ).getLocale();
     pCharClass = new CharClass( comphelper::getComponentContext(xServiceManager), aLocale );
     xLocaleData.init( comphelper::getComponentContext(xServiceManager), aLocale, eLang );
     xCalendar.init( comphelper::getComponentContext(xServiceManager), aLocale );
@@ -266,7 +266,7 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
     {
         ActLnge = eLnge;
 
-        aLocale = MsLangId::convertLanguageToLocale( eLnge );
+        aLocale = LanguageTag( eLnge ).getLocale();
         pCharClass->setLocale( aLocale );
         xLocaleData.changeLocale( aLocale, eLnge );
         xCalendar.changeLocale( aLocale );
@@ -1919,7 +1919,7 @@ String SvNumberFormatter::GetFormatDecimalSep( sal_uInt32 nFormat ) const
     else
     {
         ::com::sun::star::lang::Locale aSaveLocale( xLocaleData->getLocale() );
-        ::com::sun::star::lang::Locale aTmpLocale(MsLangId::convertLanguageToLocale(pFormat->GetLanguage()));
+        ::com::sun::star::lang::Locale aTmpLocale( LanguageTag( pFormat->GetLanguage()).getLocale());
         ((SvNumberFormatter*)this)->xLocaleData.changeLocale(aTmpLocale, pFormat->GetLanguage() );
         aRet = xLocaleData->getNumDecimalSep();
         ((SvNumberFormatter*)this)->xLocaleData.changeLocale( aSaveLocale, eSaveLang );
@@ -3547,7 +3547,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     LanguageType eSysLang = SvtSysLocale().GetLanguage();
     LocaleDataWrapper* pLocaleData = new LocaleDataWrapper(
         ::comphelper::getProcessComponentContext(),
-        MsLangId::convertLanguageToLocale( eSysLang ) );
+        LanguageTag( eSysLang ).getLocale() );
     // get user configured currency
     String aConfiguredCurrencyAbbrev;
     LanguageType eConfiguredCurrencyLanguage = LANGUAGE_SYSTEM;
@@ -3573,8 +3573,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     sal_uInt16 nLegacyOnlyCurrencyPos = 0;
     for ( sal_Int32 nLocale = 0; nLocale < nLocaleCount; nLocale++ )
     {
-        LanguageType eLang = MsLangId::convertLocaleToLanguage(
-                pLocales[nLocale]);
+        LanguageType eLang = LanguageTag( pLocales[nLocale]).getLanguageType( false);
         rInstalledLocales.insert( eLang);
         pLocaleData->setLocale( pLocales[nLocale] );
         Sequence< Currency2 > aCurrSeq = pLocaleData->getAllCurrencies();
