@@ -22,7 +22,7 @@
 #include <dicimp.hxx>
 #include <hyphdsp.hxx>
 #include <i18npool/lang.h>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
@@ -123,8 +123,8 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNe
                 if (aTagValue.equalsL(RTL_CONSTASCII_STRINGPARAM("<none>")))
                     nLng = LANGUAGE_NONE;
                 else
-                    nLng = MsLangId::convertIsoStringToLanguage(rtl::OStringToOUString(
-                        aTagValue, RTL_TEXTENCODING_ASCII_US));
+                    nLng = LanguageTag(rtl::OStringToOUString(
+                        aTagValue, RTL_TEXTENCODING_ASCII_US)).getLanguageType();
             }
 
             // type: negative / positive
@@ -424,7 +424,7 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
     else
     {
         rtl::OStringBuffer aLine(RTL_CONSTASCII_STRINGPARAM("lang: "));
-        aLine.append(rtl::OUStringToOString(MsLangId::convertLanguageToIsoString(nLanguage), eEnc));
+        aLine.append(rtl::OUStringToOString(LanguageTag(nLanguage).getBcp47(), eEnc));
         pStream->WriteLine(aLine.makeStringAndClear());
     }
     if (0 != (nErr = pStream->GetError()))

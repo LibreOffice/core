@@ -20,7 +20,7 @@
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
 #include <tools/string.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <tools/stream.hxx>
 #include <osl/mutex.hxx>
 #include <ucbhelper/content.hxx>
@@ -225,7 +225,7 @@ void ConvDicXMLDictionaryContext_Impl::StartElement(
         OUString aValue = rxAttrList->getValueByIndex(i);
 
         if ( nPrefix == XML_NAMESPACE_TCD && aLocalName == "lang" )
-            nLanguage = MsLangId::convertIsoStringToLanguage( aValue );
+            nLanguage = LanguageTag( aValue ).getLanguageType();
         else if ( nPrefix == XML_NAMESPACE_TCD && aLocalName == "conversion-type" )
             nConversionType = GetConversionTypeFromText( aValue );
     }
@@ -327,7 +327,7 @@ sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eCl
                   _GetNamespaceMap().GetNameByKey( XML_NAMESPACE_TCD ) );
     AddAttributeASCII( XML_NAMESPACE_TCD, "package", "org.openoffice.Office" );
 
-    OUString aIsoLang( MsLangId::convertLanguageToIsoString( rDic.nLanguage ) );
+    OUString aIsoLang( LanguageTag( rDic.nLanguage ).getBcp47() );
     AddAttribute( XML_NAMESPACE_TCD, "lang", aIsoLang );
     OUString aConvType( ConversionTypeToText( rDic.nConversionType ) );
     AddAttribute( XML_NAMESPACE_TCD, "conversion-type", aConvType );

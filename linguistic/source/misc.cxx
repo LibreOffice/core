@@ -24,7 +24,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/lngmisc.hxx>
 #include <ucbhelper/content.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -48,7 +48,6 @@
 #include "defs.hxx"
 #include "linguistic/lngprops.hxx"
 #include "linguistic/hyphdta.hxx"
-#include <i18npool/mslangid.hxx>
 
 using namespace osl;
 using namespace com::sun::star;
@@ -374,14 +373,14 @@ LanguageType LocaleToLanguage( const Locale& rLocale )
     if ( rLocale.Language.isEmpty() )
         return LANGUAGE_NONE;
 
-    return MsLangId::convertLocaleToLanguage( rLocale );
+    return LanguageTag( rLocale ).getLanguageType();
 }
 
 
 Locale& LanguageToLocale( Locale& rLocale, LanguageType eLang )
 {
     if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
-        MsLangId::convertLanguageToLocale( eLang, rLocale );
+        rLocale = LanguageTag( eLang ).getLocale();
 
     return rLocale;
 }
@@ -390,7 +389,7 @@ Locale CreateLocale( LanguageType eLang )
 {
     Locale aLocale;
     if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
-        return MsLangId::convertLanguageToLocale( eLang );
+        return LanguageTag( eLang ).getLocale();
 
     return aLocale;
 }

@@ -52,7 +52,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/factory.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 
@@ -446,7 +446,7 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
         m_bGCServicesChecked = sal_True;
     }
 
-    const LanguageType nLang = MsLangId::convertLocaleToLanguage( rLocale );
+    const LanguageType nLang = LanguageTag( rLocale ).getLanguageType( false);
     GCImplNames_t::const_iterator aLangIt( m_aGCImplNamesByLang.find( nLang ) );
     if (aLangIt != m_aGCImplNamesByLang.end())  // matching configured language found?
     {
@@ -1015,7 +1015,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
                 {
                     // only the first entry is used, there should be only one grammar checker per language
                     const OUString aImplName( aImplNames[0] );
-                    const LanguageType nLang = MsLangId::convertIsoStringToLanguage( pElementNames[i] );
+                    const LanguageType nLang = LanguageTag( pElementNames[i] ).getLanguageType();
                     aTmpGCImplNamesByLang[ nLang ] = aImplName;
                 }
             }
