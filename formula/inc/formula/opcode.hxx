@@ -252,6 +252,8 @@ enum OpCodeEnum
         ocEffektiv          = SC_OPCODE_EFFEKTIV,
         ocNominal           = SC_OPCODE_NOMINAL,
         ocSubTotal          = SC_OPCODE_SUB_TOTAL,
+        ocIfError           = SC_OPCODE_IF_ERROR,
+        ocIfNA              = SC_OPCODE_IF_NA,
     // Database functions
         ocDBSum             = SC_OPCODE_DB_SUM,
         ocDBCount           = SC_OPCODE_DB_COUNT,
