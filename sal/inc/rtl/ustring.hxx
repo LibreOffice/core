@@ -903,7 +903,8 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, bool >::Type startsWith( T& literal ) const
     {
-        return rtl_ustr_asciil_reverseEquals_WithLength( pData->buffer, literal,
+        return internal::ConstCharArrayDetector< T, void >::size - 1 <= pData->length
+            && rtl_ustr_asciil_reverseEquals_WithLength( pData->buffer, literal,
                 internal::ConstCharArrayDetector< T, void >::size - 1);
     }
 
