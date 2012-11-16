@@ -7,14 +7,20 @@ use strict;
 use File::Copy;
 use File::Temp qw/ tempfile tempdir /;
 
+my %piece_dir = (
+    "dictionaries"      => "dictionaries",
+    "help"              => "helpcontent2",
+    "translations"      => "translations"
+);
+
 # get libreoffice-build version from the given libreoffice-build sources
 sub get_config_version($)
 {
     my ($lo_core_dir) = @_;
     my $version;
 
-    open (CONFIGURE, "$lo_core_dir/configure.in") ||
-        die "can't open \"$lo_core_dir/configure.in\" for reading: $!\n";
+    open (CONFIGURE, "$lo_core_dir/configure.ac") ||
+        die "can't open \"$lo_core_dir/configure.ac\" for reading: $!\n";
 
     while (my $line = <CONFIGURE>) {
         chomp $line;
@@ -283,7 +289,7 @@ sub generate_tarballs($$$$$$$$$$)
         my $piece_dir = $source_dir;
         foreach my $piece ( keys %{$p_piece_tarball_name} ) {
             print "\n--- Generating $piece ---\n";
-            $piece_dir = "$source_dir/clone/$piece" if ($is_lo_core_dir);
+            $piece_dir = "$source_dir/$piece_dir{$piece}" if ($is_lo_core_dir);
             generate_piece_tarball($piece_dir, $release_version, $piece, $md5, $bzip2, $xz, $p_piece_tarball_name->{$piece});
         }
     }
@@ -340,7 +346,6 @@ my $lo_core_tempdir;
 my $force;
 my $verbose=1;
 my $is_lo_core_dir=0;
-my @pieces=("dictionaries", "help", "translations");
 my %piece_tarball_name;
 
 ###################
@@ -372,8 +377,10 @@ for my $arg (@ARGV) {
         $pack_lo_pieces=0;
     } elsif ($arg =~ m/--piece=(.*)/) {
           # process just one piece and do not pack libreoffice-build
-          @pieces=();
-          push @pieces, "$1";
+          die("Error: unknown piece: $1") unless (defined $piece_dir{$1});
+          my $dir = $piece_dir{$1};
+          %piece_dir=();
+          $piece_dir{"$1"} = $dir;
           $pack_lo_core=0;
     } elsif ($arg =~ /^-/ ) {
         die "Error: unknown option: $arg\n";
@@ -402,12 +409,12 @@ unless ( -d "$source_dir" ) {
 $is_lo_core_dir=1 if (-f "$source_dir/autogen.sh" && -f "$source_dir/config_host.mk.in");
 
 # all tarballs are generated from the libreoffice-core directory
-if (@pieces > 1 && $is_lo_core_dir == 0 ) {
+if (%piece_dir > 1 && $is_lo_core_dir == 0 ) {
     die "Error: \"$source_dir\" is not a valid libreoffice-core directory\n";
 }
 
 # just a single piece tarball can be generated from piece directory; version must be explicitly set in this case
-if (@pieces == 1  &&  $is_lo_core_dir == 0  &&  ! defined $set_version ) {
+if (%piece_dir == 1  &&  $is_lo_core_dir == 0  &&  ! defined $set_version ) {
     die "Error: version must be set using the --set-version=<version> option\n" unless (defined $set_version);
 }
 
@@ -444,11 +451,13 @@ if ($is_lo_core_dir) {
 }
 
 # define tarball names
-$lo_core_tarball_name = "libreoffice-core-$release_version";
-foreach my $piece (@pieces) {
-    if (-d "$source_dir/clone/$piece") {
+$lo_core_tarball_name = "libreoffice-$release_version";
+foreach my $piece (keys %piece_dir) {
+    if (-f "$source_dir/$piece_dir{$piece}/.git") {
+        print "Add piece $piece\n";
         $piece_tarball_name{$piece} = "libreoffice-$piece-$release_version";
     } else {
+        print "did not found: $source_dir/$piece_dir{$piece}/.git\n";
         print "Warning: $piece sources are not available -> skipping\n";
     }
 }
