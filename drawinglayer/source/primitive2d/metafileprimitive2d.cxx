@@ -48,7 +48,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <drawinglayer/primitive2d/textlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textstrikeoutprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
@@ -1312,7 +1312,7 @@ namespace
 
             // prepare FontColor and Locale
             const basegfx::BColor aFontColor(rProperty.getTextColor());
-            const com::sun::star::lang::Locale aLocale(MsLangId::convertLanguageToLocale(rProperty.getLanguageType()));
+            const com::sun::star::lang::Locale aLocale(LanguageTag(rProperty.getLanguageType()).getLocale());
             const bool bWordLineMode(rFont.IsWordLineMode());
 
             const bool bDecoratedIsNeeded(
@@ -1552,8 +1552,8 @@ namespace
                         // strikeout with character
                         const sal_Unicode aStrikeoutChar(
                             drawinglayer::primitive2d::TEXT_STRIKEOUT_SLASH == aTextStrikeout ? '/' : 'X');
-                        const com::sun::star::lang::Locale aLocale(MsLangId::convertLanguageToLocale(
-                            rProperty.getLanguageType()));
+                        const com::sun::star::lang::Locale aLocale(LanguageTag(
+                            rProperty.getLanguageType()).getLocale());
 
                         aTargetVector.push_back(
                             new drawinglayer::primitive2d::TextCharacterStrikeoutPrimitive2D(

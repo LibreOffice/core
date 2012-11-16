@@ -24,7 +24,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/font.hxx>
 #include <vcl/metric.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <vcl/svapp.hxx>
 
@@ -403,7 +403,7 @@ namespace drawinglayer
             aRetval.SetItalic(rFontAttribute.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
             aRetval.SetOutline(rFontAttribute.getOutline());
             aRetval.SetPitch(rFontAttribute.getMonospaced() ? PITCH_FIXED : PITCH_VARIABLE);
-            aRetval.SetLanguage(MsLangId::convertLocaleToLanguage(rLocale));
+            aRetval.SetLanguage(LanguageTag(rLocale).getLanguageType(false));
 
 #ifdef WIN32
             // for WIN32 systems, correct the FontWidth if FontScaling is used
