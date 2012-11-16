@@ -162,7 +162,8 @@ LanguageTag::LanguageTag( const rtl::OUString & rBcp47LanguageTag, bool bCanonic
         mbInitializedLangID( false),
         mbCachedLanguage( false),
         mbCachedScript( false),
-        mbCachedCountry( false)
+        mbCachedCountry( false),
+        mbIsFallback( false)
 {
     theDataRef::get().incRef();
 
@@ -185,7 +186,8 @@ LanguageTag::LanguageTag( const com::sun::star::lang::Locale & rLocale )
         mbInitializedLangID( false),
         mbCachedLanguage( false),
         mbCachedScript( false),
-        mbCachedCountry( false)
+        mbCachedCountry( false),
+        mbIsFallback( false)
 {
     theDataRef::get().incRef();
 }
@@ -204,7 +206,8 @@ LanguageTag::LanguageTag( LanguageType nLanguage )
         mbInitializedLangID( !mbSystemLocale),
         mbCachedLanguage( false),
         mbCachedScript( false),
-        mbCachedCountry( false)
+        mbCachedCountry( false),
+        mbIsFallback( false)
 {
     theDataRef::get().incRef();
 }
@@ -224,7 +227,8 @@ LanguageTag::LanguageTag( const rtl::OUString& rLanguage, const rtl::OUString& r
         mbInitializedLangID( false),
         mbCachedLanguage( false),
         mbCachedScript( false),
-        mbCachedCountry( false)
+        mbCachedCountry( false),
+        mbIsFallback( false)
 {
     theDataRef::get().incRef();
 }
@@ -249,7 +253,8 @@ LanguageTag::LanguageTag( const LanguageTag & rLanguageTag )
         mbInitializedLangID( rLanguageTag.mbInitializedLangID),
         mbCachedLanguage( rLanguageTag.mbCachedLanguage),
         mbCachedScript( rLanguageTag.mbCachedScript),
-        mbCachedCountry( rLanguageTag.mbCachedCountry)
+        mbCachedCountry( rLanguageTag.mbCachedCountry),
+        mbIsFallback( rLanguageTag.mbIsFallback)
 {
     theDataRef::get().incRef();
 }
@@ -276,6 +281,7 @@ LanguageTag& LanguageTag::operator=( const LanguageTag & rLanguageTag )
     mbCachedLanguage    = rLanguageTag.mbCachedLanguage;
     mbCachedScript      = rLanguageTag.mbCachedScript;
     mbCachedCountry     = rLanguageTag.mbCachedCountry;
+    mbIsFallback        = rLanguageTag.mbIsFallback;
     return *this;
 }
 
@@ -313,6 +319,7 @@ void LanguageTag::resetVars()
     mbCachedLanguage    = false;
     mbCachedScript      = false;
     mbCachedCountry     = false;
+    mbIsFallback        = false;
 }
 
 
@@ -803,6 +810,32 @@ bool LanguageTag::isValidBcp47() const
 bool LanguageTag::isSystemLocale() const
 {
     return mbSystemLocale;
+}
+
+
+LanguageTag & LanguageTag::makeFallback()
+{
+    if (!mbIsFallback)
+    {
+        if (mbInitializedLangID)
+        {
+            LanguageType nLang1 = getLanguageType();
+            LanguageType nLang2 = MsLangId::lookupFallbackLanguage( nLang1);
+            if (nLang1 != nLang2)
+                reset( nLang2);
+        }
+        else
+        {
+            const lang::Locale& rLocale1 = getLocale();
+            lang::Locale aLocale2( MsLangId::lookupFallbackLocale( rLocale1));
+            if (    rLocale1.Language != aLocale2.Language ||
+                    rLocale1.Country  != aLocale2.Country ||
+                    rLocale1.Variant  != aLocale2.Variant)
+                reset( aLocale2);
+        }
+        mbIsFallback = true;
+    }
+    return *this;
 }
 
 

@@ -149,6 +149,14 @@ private:
             const ::com::sun::star::lang::Locale & rLocale );
 
 
+    /** To be used only by LanguageTag. */
+    I18NISOLANG_DLLPRIVATE static LanguageType lookupFallbackLanguage( LanguageType nLang );
+
+    /** To be used only by LanguageTag. */
+    I18NISOLANG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(
+            const ::com::sun::star::lang::Locale & rLocale );
+
+
 #if I18NPOOL_FORCE_LANGUAGETAG
 public:
 #endif
@@ -317,12 +325,9 @@ private:
     I18NISOLANG_DLLPRIVATE static inline LanguageType simplifySystemLanguages( LanguageType nLang );
 
     // Several locale lookups with fall-back
-    I18NISOLANG_DLLPRIVATE static LanguageType lookupFallbackLanguage( LanguageType nLang );
     I18NISOLANG_DLLPRIVATE static LanguageType lookupFallbackLanguage(
             const ::com::sun::star::lang::Locale & rLocale );
     I18NISOLANG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale( LanguageType nLang );
-    I18NISOLANG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(
-            const ::com::sun::star::lang::Locale & rLocale );
 };
 
 

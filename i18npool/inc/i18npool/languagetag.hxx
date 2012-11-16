@@ -187,6 +187,15 @@ public:
     /** Reset with LanguageType MS-LangID. */
     void                            reset( LanguageType nLanguage );
 
+
+    /** Fall back to a known locale.
+
+        If the current tag does not represent a known (by us) locale, fall back
+        to the most likely locale possible known.
+        If the current tag is known, no change occurs.
+     */
+    LanguageTag &                   makeFallback();
+
 private:
 
     enum Decision
@@ -213,6 +222,7 @@ private:
     mutable bool                            mbCachedLanguage    : 1;
     mutable bool                            mbCachedScript      : 1;
     mutable bool                            mbCachedCountry     : 1;
+            bool                            mbIsFallback        : 1;
 
     void    convertLocaleToBcp47();
     void    convertLocaleToLang();
