@@ -1732,8 +1732,9 @@ SdrObject* XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const R
         ::com::sun::star::awt::Size aAwtSize( aSize.Width(), aSize.Height() );
         xEmbObj->setVisualAreaSize( nAspect, aAwtSize );
 
-        // #121334#
-        ChartHelper::AdaptDefaultsForChart( xEmbObj );
+        // #121334# This call will change the chart's default background fill from white to transparent.
+        // Add here again if this is wanted (see task description for details)
+        // ChartHelper::AdaptDefaultsForChart( xEmbObj );
 
         // create the container OLE object
         xSdrObj.reset( new SdrOle2Obj( svt::EmbeddedObjectRef( xEmbObj, nAspect ), aEmbObjName, rAnchorRect ) );

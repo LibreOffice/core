@@ -292,8 +292,9 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
             if( xObj.is())
                 xObj->setVisualAreaSize( nAspect, aSz );
 
-            // #121334#
-            ChartHelper::AdaptDefaultsForChart( xObj );
+            // #121334# This call will change the chart's default background fill from white to transparent.
+            // Add here again if this is wanted (see task description for details)
+            // ChartHelper::AdaptDefaultsForChart( xObj );
 
             pPage->InsertObject( pObj );
             pModel->AddUndo( new SdrUndoNewObj( *pObj ) );
