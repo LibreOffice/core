@@ -30,6 +30,19 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
 
+// apparently PATH_MAX is not standard and not defined by MSVC
+#ifndef PATH_MAX
+#ifdef _MAX_PATH
+#define PATH_MAX _MAX_PATH
+#else
+#ifdef MAX_PATH
+#define PATH_MAX MAX_PATH
+#else
+#error no PATH_MAX
+#endif
+#endif
+#endif
+
 using rtl::OUString;
 using rtl::OUStringBuffer;
 using rtl::OString;
@@ -111,7 +124,6 @@ static void setPythonHome ( const OUString & pythonHome )
     OString o = rtl::OUStringToOString( systemPythonHome, osl_getThreadTextEncoding() );
 #if PY_MAJOR_VERSION >= 3
     // static because Py_SetPythonHome just copies the "wide" pointer
-    // PATH_MAX is defined in Python.h
     static wchar_t wide[PATH_MAX + 1];
     size_t len = mbstowcs(wide, o.pData->buffer, PATH_MAX + 1);
     if(len == (size_t)-1)
