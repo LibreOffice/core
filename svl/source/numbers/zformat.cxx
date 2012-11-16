@@ -5206,7 +5206,7 @@ String SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
 OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
                                               const SvNumberNatNum& rNum ) const
 {
-    com::sun::star::lang::Locale aLocale( MsLangId::convertLanguageToLocale( rNum.GetLang() ) );
+    com::sun::star::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
     return GetFormatter().GetNatNum()->getNativeNumberString( rStr,
                                                               aLocale, rNum.GetNatNum() );
 }
