@@ -35,7 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/fmtfield.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchAlgorithms.hpp>
@@ -293,8 +293,8 @@ SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
     if (!s_cFormatter)
     {
         // get the Office's locale and translate
-        LanguageType eSysLanguage = MsLangId::convertLocaleToLanguage(
-                SvtSysLocale().GetLocaleData().getLocale() );
+        LanguageType eSysLanguage = LanguageTag(
+                SvtSysLocale().GetLocaleData().getLocale()).getLanguageType( false);
         s_cFormatter = new SvNumberFormatter(
             ::comphelper::getProcessServiceFactory(),
             eSysLanguage);
@@ -619,8 +619,8 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bReset
         if ( m_pFormatter )
         {
             // get the Office's locale and translate
-            LanguageType eSysLanguage = MsLangId::convertLocaleToLanguage(
-                    SvtSysLocale().GetLocaleData().getLocale() );
+            LanguageType eSysLanguage = LanguageTag(
+                    SvtSysLocale().GetLocaleData().getLocale()).getLanguageType( false);
             // get the standard numeric format for this language
             m_nFormatKey = m_pFormatter->GetStandardFormat( NUMBERFORMAT_NUMBER, eSysLanguage );
         }
@@ -1144,8 +1144,7 @@ void DoubleNumericField::ResetConformanceTester()
     sal_Unicode cSeparatorDecimal = '.';
     if (pFormatEntry)
     {
-        Locale aLocale;
-        MsLangId::convertLanguageToLocale( pFormatEntry->GetLanguage(), aLocale );
+        Locale aLocale( LanguageTag( pFormatEntry->GetLanguage()).getLocale());
         LocaleDataWrapper aLocaleInfo( aLocale );
 
         String sSeparator = aLocaleInfo.getNumThousandSep();
@@ -1236,8 +1235,7 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     sal_uInt16 nDigits = GetDecimalDigits();
 
     // build a new format string with the base class' and my own settings
-    Locale aLocale;
-    MsLangId::convertLanguageToLocale( eLanguage, aLocale );
+    Locale aLocale( LanguageTag( eLanguage).getLocale());
     LocaleDataWrapper aLocaleInfo( aLocale );
 
     XubString sNewFormat;

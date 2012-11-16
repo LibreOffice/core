@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <sal/main.h>
 #include <svtools/langtab.hxx>
 #include <tools/extendapplicationenvironment.hxx>
@@ -76,14 +76,7 @@ SAL_IMPLEMENT_MAIN()
                 continue;
             }
 
-            lang::Locale aLocale;
-
-            MsLangId::convertLanguageToLocale(eLang, aLocale);
-
-            rtl::OUStringBuffer aBuf(aLocale.Language);
-            if (!aLocale.Country.isEmpty())
-                aBuf.append('-').append(aLocale.Country);
-            rtl::OUString sTag = aBuf.makeStringAndClear();
+            rtl::OUString sTag( LanguageTag( eLang).getBcp47());
 
             std::cout << rtl::OUStringToOString(sTag, osl_getThreadTextEncoding()).getStr()
                 << std::endl;
