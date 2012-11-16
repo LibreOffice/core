@@ -153,14 +153,16 @@ File gid_File_Lib_Python_So
     Name = STRING(PY_FULL_DLL_NAME);
     Styles = (PACKED);
 End
-#ifdef UNX
-Shortcut gid_Shortcut_Lib_Python_So
-    FileID = gid_File_Lib_Python_So;
+File gid_File_Lib_Python3_So
+    LIB_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-    Name = STRING(CONCAT3(libpython,PYMAJMIN,UNXSUFFIX));
-    Styles = (NETWORK,RELATIVE);
-End
+#ifdef UNX
+    Name = STRING(CONCAT3(libpython,PYMAJOR,UNXSUFFIX));
+#else // WNT
+    Name = STRING(CONCAT3(python,PYMAJOR,.dll));
 #endif //UNX
+    Styles = (PACKED);
+End
 #else //MACOSX
 //directory entries solely to be able to create the symlinks
 Directory gid_Dir_PythonFramework

@@ -2024,7 +2024,7 @@ define gb_LinkTarget__use_python
 
 ifeq ($(OS),WNT)
 $(call gb_LinkTarget_add_libs,$(1),\
-    python26.lib \
+    python33.lib \
 )
 else ifeq ($(OS),MACOSX)
 $(call gb_LinkTarget_add_libs,$(1),\
@@ -2032,19 +2032,22 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_use_libraries,$(1),\
-    python2.6 \
+    python3.3m \
 )
 endif
 
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR)/inc/python \
+	-I$(call gb_UnpackedTarball_get_dir,python3) \
+	-I$(call gb_UnpackedTarball_get_dir,python3)/PC \
+	-I$(call gb_UnpackedTarball_get_dir,python3)/Include \
 	$$(INCLUDE) \
 )
 
 endef
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	python2.6 \
+	python3 \
+	python3.3m \
 ))
 
 endif # SYSTEM_PYTHON
