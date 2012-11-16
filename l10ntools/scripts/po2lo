@@ -41,7 +41,7 @@ class Entry:
     """Represents a single line in an SDF file."""
 
     def __init__(self, items):
-        self.has_translation = None;
+        self.has_po = None
         self.items = items # list of 15 fields
         path = self.items[1].split('\\')
         self.po = "%s/%s/%s.po" % (options.input.replace('\\', '/'), self.items[0], "/".join(path[:-1]))
@@ -67,15 +67,17 @@ class Entry:
 
         self.items[9] = options.language
         self.items[2] = ""
-        self.has_translation = False
+        self.has_po = False
         for idx, key in self.keys:
             try:
-                if translations.data[(self.po, key)][1]:
+                self.items[8] = str(translations.snumber[(self.po, key)])
+                self.has_po = True
+                (text, fuzzy) = translations.data[(self.po, key)]
+                if fuzzy:
                     self.items[2] += "1"
                 else:
                     self.items[2] += "0"
-                self.items[idx] = translations.data[(self.po, key)][0]
-                self.has_translation = True
+                self.items[idx] = text
 
                 self.items[14] = "2002-02-02 02:02:02"
             except KeyError:
@@ -103,9 +105,10 @@ class Template:
 
         sock = xopen(options.output, "w", encoding='utf-8')
         for line in self.lines:
-            sock.write("\t".join(line.items))
+            temp = "\t".join(line.items)
             line.translate(translations)
-            if line.has_translation:
+            if line.has_po:
+                sock.write(temp)
                 sock.write("\t".join(line.items)+"\r\n")
         sock.close()
 
@@ -114,6 +117,8 @@ class Translations:
 
     def __init__(self):
         self.data = {}
+        self.snumber = {}
+        counter = 0
         for root, dirs, files in os.walk(options.input):
             for file in files:
                 path = "%s/%s" % (root, file)
@@ -125,16 +130,17 @@ class Translations:
                 for line in sock:
                     if line.startswith("#: "):
                         key = line.strip()[3:]
+                        fuzzy = False
                     elif line.startswith("#, fuzzy"):
                         fuzzy = True
+                    elif line.startswith("msgid "):
+                        counter = counter + 1
+                        self.setserialnumber(path, key, counter)
                     elif line.startswith("msgstr "):
                         trans = line.strip()[8:-1]
                         if len(trans):
                             self.setdata(path, key, trans, fuzzy)
-                            if fuzzy:
-                                fuzzy = False
-                            else:
-                                multiline = False
+                            multiline = False
                         else:
                             buf = []
                             buf.append(trans)
@@ -143,8 +149,6 @@ class Translations:
                         buf.append(line.strip()[1:-1])
                     elif multiline and not len(line.strip()) and len("".join(buf)):
                         self.setdata(path, key, "".join(buf),fuzzy)
-                        if fuzzy:
-                            fuzzy = False
                         buf = []
                         multiline = False
                 if multiline and len("".join(buf)):
@@ -161,6 +165,9 @@ class Translations:
             else:
                 s = s.replace('\\\\', '\\')
             self.data[(path.replace('\\', '/'), key)] = ( s , fuzzy )
+
+    def setserialnumber(self, path, key, number):
+        self.snumber[(path.replace('\\', '/'), key)] = ( number )
 
     def escape_help_text(self, text):
         """Escapes the help text as it would be in an SDF file."""

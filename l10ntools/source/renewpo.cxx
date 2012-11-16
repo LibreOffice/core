@@ -12,6 +12,7 @@
 #include <dirent.h>
 #include <string>
 #include <vector>
+#include <map>
 
 #include <osl/file.hxx>
 #include <rtl/string.hxx>
@@ -20,17 +21,17 @@
 
 using namespace std;
 
-//Check wheather the two entry are the same but in different languages
-bool IsSameEntry(const OString& rFirstEntry,const OString& rSecEntry)
+bool isInSameFile( const OString& rFirstLine, const OString& rSecondLine)
 {
-    for(int i = PoEntry::PROJECT; i<=PoEntry::LOCALID;++i)
-    {
-        if ( rFirstEntry.getToken(i,'\t') != rSecEntry.getToken(i,'\t') &&
-             i != PoEntry::DUMMY)
-            return false;
-    }
-    return true;
+    const OString rFirstSource =
+        rFirstLine.getToken(PoEntry::SOURCEFILE,'\t');
+    const OString rSecondSource =
+        rSecondLine.getToken(PoEntry::SOURCEFILE,'\t');
+    return
+        rFirstSource.copy(0,rFirstSource.lastIndexOf("\\")) ==
+        rSecondSource.copy(0,rSecondSource.lastIndexOf("\\"));
 }
+
 
 //Get path of po file
 OString GetPath(const OString& rPath, const OString& rLine)
@@ -57,8 +58,9 @@ OString DelLocalId(const OString& rLine)
 }
 
 //Renew po files of the actual language
-void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
-                    const OString& rpo2loPath, const OString& rSDFPath)
+void HandleLanguage(struct dirent* pLangEntry, const OString& rOldPath,
+    const OString& rNewPath, const OString& rpo2loPath,
+    const OString& rSDFPath)
 {
     const OString LangEntryName = pLangEntry->d_name;
 
@@ -83,35 +85,69 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
     const OString SDFFileName =
         OUStringToOString(aTempPath, RTL_TEXTENCODING_UTF8);
     system( (rpo2loPath +
-            " -i " + rPath + "/" + LangEntryName +
+            " -i " + rOldPath + "/" + LangEntryName +
             " -o " + SDFFileName +
             " -l " + LangEntryName +
             " -t " + rSDFPath).getStr());
     cout << "Language sdf is ready!" << endl;
 
-    PoOfstream aNewPo;
+    //Store info for po entries
     ifstream aSDFInput(SDFFileName.getStr());
+    map<sal_Int32,pair<OString,OString> > aPoInfos;
     string s;
     getline(aSDFInput,s);
-    OString sLine = OString(s.data(),s.length());
     while(!aSDFInput.eof())
     {
-        OString sActUnTrans = sLine;
-        const OString sPath = rPath + "/"+ LangEntryName;
-        const OString sActSourcePath = GetPath(sPath,sActUnTrans);
-        //Make new po file and add header
-        if (!aNewPo.isOpen())
+        //Get strings belong to one po entry and store
+        const OString sActUnTrans = OString(s.data(),s.length());
+        if( sActUnTrans.getToken(PoEntry::LANGUAGEID,'\t')=="ast" ) throw;
+        getline(aSDFInput,s);
+        const OString sActTrans = OString(s.data(),s.length());
+
+        if(!(aPoInfos.insert( pair<sal_Int32,pair<OString,OString> >(
+            sActTrans.getToken(PoEntry::WIDTH,'\t').toInt32(),
+            pair<OString,OString>(sActUnTrans,sActTrans))).second))
         {
-            const OString sNewPoFileName = sActSourcePath + ".po_tmp";
+            cerr << "Error: faild to insert into map!" << '\n';
+            throw;
+        }
+        getline(aSDFInput,s);
+    }
+
+    //Close and remove sdf file
+    aSDFInput.close();
+    if (osl::File::remove(aTempUrl) != osl::FileBase::E_None)
+    {
+        cerr << "Warning: failure removing temporary " << aTempUrl << '\n';
+    }
+
+    //Construct and write out po entries
+    PoOfstream aNewPo;
+    for( map<sal_Int32,pair<OString,OString> >::iterator
+        pActInfo=aPoInfos.begin(); pActInfo!=aPoInfos.end(); ++pActInfo )
+    {
+        //Make new po file and add header
+        if ( pActInfo==aPoInfos.begin() ||
+            !isInSameFile(((--pActInfo)++)->second.first,pActInfo->second.first) )
+        {
+            if( pActInfo!=aPoInfos.begin() )
+                aNewPo.close();
+
+            const OString sNewPoFileName =
+                GetPath(rNewPath + "/" +LangEntryName,pActInfo->second.first) +
+                ".po";
+            system(("mkdir -p " + sNewPoFileName.copy(0,sNewPoFileName.lastIndexOf("/"))).getStr());
             aNewPo.open(sNewPoFileName);
             if (!aNewPo.isOpen())
             {
                 cerr
-                    << "Cannot open temp file for new po: "
+                    << "Cannot open new po file: "
                     << sNewPoFileName.getStr() << endl;
                 return;
             }
-            const OString sOldPoFileName = sActSourcePath + ".po";
+            const OString sOldPoFileName =
+                GetPath(rOldPath + "/" +LangEntryName,pActInfo->second.first) +
+                ".po";
             ifstream aOldPo(sOldPoFileName.getStr());
             if (!aOldPo.is_open())
             {
@@ -124,19 +160,7 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
             aOldPo.close();
         }
 
-        //Set PoEntry and write out
-        getline(aSDFInput,s);
-        OString sActTrans;
-        if (!aSDFInput.eof() &&
-            IsSameEntry(sActUnTrans,sLine = OString(s.data(),s.length())))
-        {
-            sActTrans = sLine;
-            getline(aSDFInput,s);
-        }
-        else
-        {
-            sActTrans ="";
-        }
+        //Write out po entries
         const PoEntry::TYPE vInitializer[] =
             { PoEntry::TTEXT, PoEntry::TQUICKHELPTEXT, PoEntry::TTITLE };
         const vector<PoEntry::TYPE> vTypes( vInitializer,
@@ -144,28 +168,28 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
         unsigned short nDummyBit = 0;
         for( unsigned short nIndex=0; nIndex<vTypes.size(); ++nIndex )
         {
-            if (!sActUnTrans.getToken(vTypes[nIndex],'\t').isEmpty())
+            if (!pActInfo->second.first.getToken(vTypes[nIndex],'\t').isEmpty())
             {
                 /**Because of xrmex there are duplicated id's,
-                   only use this if xrmex have already fixed*/
+                only use this if xrmex have already fixed*/
                 const OString sSource =
-                    sActUnTrans.getToken(PoEntry::SOURCEFILE,'\t');
+                    pActInfo->second.first.getToken(PoEntry::SOURCEFILE,'\t');
                 const OString sEnding =
                     sSource.copy(sSource.getLength()-4, 4);
-                if (sActUnTrans.getToken(PoEntry::GROUPID,'\t')==
-                    sActUnTrans.getToken(PoEntry::LOCALID,'\t') &&
+                if (pActInfo->second.first.getToken(PoEntry::GROUPID,'\t')==
+                    pActInfo->second.first.getToken(PoEntry::LOCALID,'\t') &&
                     ( sEnding == ".xrm" || sEnding == ".xml" ))
                 {
-                    sActUnTrans = DelLocalId(sActUnTrans);
+                    pActInfo->second.first = DelLocalId(pActInfo->second.first);
                 }
                 try
                 {
-                    PoEntry aPE(sActUnTrans, vTypes[nIndex]);
+                    PoEntry aPE(pActInfo->second.first, vTypes[nIndex]);
                     const OString sActStr =
-                        sActTrans.getToken(vTypes[nIndex],'\t');
+                        pActInfo->second.second.getToken(vTypes[nIndex],'\t');
                     aPE.setMsgStr(sActStr);
                     aPE.setFuzzy( sActStr.isEmpty() ? false :
-                        static_cast<bool>(sActTrans.getToken(PoEntry::DUMMY,'\t').
+                        static_cast<bool>(pActInfo->second.second.getToken(PoEntry::DUMMY,'\t').
                             copy(nDummyBit++,1).toBoolean()));
                     aNewPo.writeEntry(aPE);
                 }
@@ -173,28 +197,13 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
                 {
                     cerr
                         << "Invalid sdf line "
-                        << sActUnTrans.replaceAll("\t","\\t").getStr() << '\n';
+                        << pActInfo->second.first.replaceAll("\t","\\t").getStr() << '\n';
                 }
             }
         }
-        //Check wheather next entry is in the same po file
-        OString sNextSourcePath = aSDFInput.eof() ? "" :
-            GetPath(sPath,sLine = OString(s.data(),s.length()));
-        if (sNextSourcePath!=sActSourcePath)
-        {
-            aNewPo.close();
-            system(("rm " + sActSourcePath +".po").getStr());
-            system(("mv "+ sActSourcePath +".po_tmp " +
-                    sActSourcePath +".po").getStr());
-        }
     }
-
-    //Close and remove sdf file
-    aSDFInput.close();
-    if (osl::File::remove(aTempUrl) != osl::FileBase::E_None)
-    {
-        cerr << "Warning: failure removing temporary " << aTempUrl << '\n';
-    }
+    aNewPo.close();
+    aPoInfos.clear();
 }
 
 
@@ -203,10 +212,7 @@ int main(int argc, char* argv[])
     //Usage
     if (argc < 4)
     {
-        cout << "Use: renewpot translationsdir po2lo en-US.sdf" << endl;
-        cout << "translationsdir: this directory contains the po" << endl;
-        cout << "files of all languages. Every language has a" << endl;
-        cout << "directory named with language id." << endl;
+        cout << "Use: renewpot oldpots newpots po2lo en-US.sdf" << endl;
         return 1;
     }
 
@@ -216,7 +222,8 @@ int main(int argc, char* argv[])
     {
         if ( OString(pActEntry->d_name).indexOf('.')==-1 )
             HandleLanguage(pActEntry,OString(argv[1]),
-                           OString(argv[2]),OString(argv[3]));
+                           OString(argv[2]),OString(argv[3]),
+                           OString(argv[4]));
     }
     closedir(pTranslations);
 }
