@@ -1064,8 +1064,12 @@ void ImplNoBorderWindowView::DrawWindow( sal_uInt16, OutputDevice*, const Point*
 // =======================================================================
 
 ImplSmallBorderWindowView::ImplSmallBorderWindowView( ImplBorderWindow* pBorderWindow )
+    : mpBorderWindow(pBorderWindow)
+    , mnLeftBorder(0)
+    , mnTopBorder(0)
+    , mnRightBorder(0)
+    , mnBottomBorder(0)
 {
-    mpBorderWindow = pBorderWindow;
 }
 
 // -----------------------------------------------------------------------
