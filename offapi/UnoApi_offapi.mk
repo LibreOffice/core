@@ -4293,10 +4293,12 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xsd,\
 ))
 
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/org/freedesktop/PackageKit,\
-    SyncDbusSessionHelper \
     XSyncDbusSessionHelper \
     XModify \
     XQuery \
+))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/org/freedesktop/PackageKit,\
+    SyncDbusSessionHelper \
 ))
 
 # vim: set noet sw=4 ts=4:
