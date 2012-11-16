@@ -31,6 +31,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <unotools/sharedunocomponent.hxx>
@@ -164,8 +165,7 @@ namespace dbtools
                 if ( !bHaveFieldFormat )
                 {
                     // fall back to a format key as indicated by the field type
-                    Locale aSystemLocale;
-                    MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage(), aSystemLocale );
+                    Locale aSystemLocale( LanguageTag( MsLangId::getSystemLanguage() ).getLocale() );
                     Reference< XNumberFormatTypes > xNumTypes( xNumberFormatsSupp->getNumberFormats(), UNO_QUERY_THROW );
                     _rData.m_nFormatKey = getDefaultNumberFormat( _rxColumn, xNumTypes, aSystemLocale );
                 }
