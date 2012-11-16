@@ -50,6 +50,7 @@ include $(OUTDIR)/inc/pyversion.Makefile
 $(eval $(call gb_InstallModule_add_defs,scp2/python,\
 	-DPYVERSION=$(PYVERSION) \
 	-DPYMAJMIN=$(PYMAJOR).$(PYMINOR) \
+	-DPYMAJOR=$(PYMAJOR) \
 	-DPY_FULL_DLL_NAME=$(PY_FULL_DLL_NAME) \
 ))
 endif

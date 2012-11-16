@@ -67,7 +67,8 @@ foreach $file (@todo)
         {
             my $full = $1;
             my $loc = locate($2);
-            $loc = locate($1) if $full =~ m'^\s*@loader_path/(OOoPython.framework/Versions/[^/]+/OOoPython)';
+            # mapping for PythonFramework in RepositoryExternal.mk
+            next if $full =~ m'^\s*@loader_path/(LibreOfficePython.framework/Versions/[^/]+/LibreOfficePython)';
             if (defined $loc)
             {
                 handle($full, $loc) unless defined $done{$full};

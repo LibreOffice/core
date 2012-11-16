@@ -1,3 +1,3 @@
-bgpu  pyuno : salhelper stoc cpputools cppuhelper bridges tools PYTHON:python LIBXSLT:libxslt NULL
+bgpu  pyuno : salhelper stoc cpputools cppuhelper bridges tools PYTHON:python3 LIBXSLT:libxslt NULL
 pu    pyuno   		     	       		  	  		usr1 - all br_mkout NULL
 pu    pyuno\prj 							nmake - all pu_prj NULL
