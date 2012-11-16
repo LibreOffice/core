@@ -33,8 +33,6 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
-#include <cstdarg>
-
 #include <sys/types.h>
 #include <signal.h>
 #include <sys/wait.h>
@@ -50,8 +48,6 @@
     return ::boost::shared_ptr<SysPlugData>();
 }
 
-int UnxPluginComm::nConnCounter = 0;
-
 UnxPluginComm::UnxPluginComm(
                              const String& /*mimetype*/,
                              const String& library,
@@ -60,13 +56,13 @@ UnxPluginComm::UnxPluginComm(
                              int nDescriptor2
                              ) :
         PluginComm( ::rtl::OUStringToOString( library, osl_getThreadTextEncoding() ), false ),
-        PluginConnector( nDescriptor2 )
+        PluginConnector( nDescriptor2 ),
+        m_nCommPID( 0 )
 {
     rtl::OString path;
     if (!getPluginappPath(&path))
     {
-        fprintf( stderr, "cannot construct path to pluginapp.bin\n" );
-        m_nCommPID = -1;
+        SAL_WARN("extensions.plugin", "cannot construct path to pluginapp.bin");
         return;
     }
 
@@ -83,50 +79,58 @@ UnxPluginComm::UnxPluginComm(
     pArgs[3] = pWindow;
     pArgs[4] = NULL;
 
-#if OSL_DEBUG_LEVEL > 1
-    m_nCommPID = 10;
-    fprintf( stderr, "Try to launch: %s %s %s %s, descriptors are %d, %d\n", pArgs[0], pArgs[1], pArgs[2], pArgs[3], nDescriptor1, nDescriptor2 );
-#endif
+    SAL_INFO(
+        "extensions.plugin",
+        "try to launch: " << pArgs[0] << " " << pArgs[1] << " " << pArgs[2]
+            << " " << pArgs[3] << ", descriptors are " << nDescriptor1 << ", "
+            << nDescriptor2);
 
-    if( ! ( m_nCommPID = fork() ) )
+    pid_t pid = fork();
+    if( pid == 0 )
     {
         execvp( pArgs[0], const_cast< char ** >(pArgs) );
-        fprintf( stderr, "Error: could not exec %s\n", pArgs[0] );
+        SAL_WARN("extensions.plugin", "could not exec " << pArgs[0]);
         _exit(255);
     }
 
-    if( m_nCommPID != -1 )
+    if( pid == -1 )
     {
-        // wait for pluginapp.bin to start up
-        if( ! WaitForMessage( 5000 ) )
-        {
-            fprintf( stderr, "Timeout on command: %s %s %s %s\n", pArgs[0], pArgs[1], pArgs[2], pArgs[3] );
-            invalidate();
-        }
-        else
-        {
-            MediatorMessage* pMessage = GetNextMessage( sal_True );
-            Respond( pMessage->m_nID,
-                     const_cast<char*>("init ack"),8,
-                     NULL );
-            delete pMessage;
-            NPP_Initialize();
-        }
+        SAL_WARN("extensions.plugin", "fork failed");
+        return;
+    }
+
+    m_nCommPID = pid;
+    // wait for pluginapp.bin to start up
+    if( ! WaitForMessage( 5000 ) )
+    {
+        SAL_WARN(
+            "extensions.plugin",
+            "timeout on command: " << pArgs[0] << " " << pArgs[1] << " "
+                << pArgs[2] << " " << pArgs[3]);
+        invalidate();
+    }
+    else
+    {
+        MediatorMessage* pMessage = GetNextMessage( sal_True );
+        Respond( pMessage->m_nID,
+                 const_cast<char*>("init ack"),8,
+                 NULL );
+        delete pMessage;
+        NPP_Initialize();
     }
 }
 
 UnxPluginComm::~UnxPluginComm()
 {
     NPP_Shutdown();
-    if( m_nCommPID != -1 && m_nCommPID != 0 )
+    if( m_nCommPID != 0 )
     {
         int status = 16777216;
         pid_t nExit = waitpid( m_nCommPID, &status, WUNTRACED );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "child %d (plugin app child %d) exited with status %d\n", (int)nExit, (int)m_nCommPID, (int)WEXITSTATUS(status) );
-#else
-        (void)nExit;
-#endif
+        SAL_INFO(
+            "extensions.plugin",
+            "child " << nExit << " (plugin app child " << m_nCommPID
+                << ") exited with status " << WEXITSTATUS(status));
     }
 }
 

@@ -37,8 +37,6 @@
 class UnxPluginComm : public PluginComm, public PluginConnector
 {
 private:
-    static int  nConnCounter;
-
     pid_t       m_nCommPID;
 public:
     UnxPluginComm( const String& mimetype,
