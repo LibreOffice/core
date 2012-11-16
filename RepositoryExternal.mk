@@ -283,6 +283,8 @@ $(call gb_LinkTarget_add_libs,$(1),-lexpat)
 
 endef
 
+gb_ExternalProject__use_expat :=
+
 else # !SYSTEM_EXPAT
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
@@ -301,6 +303,12 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	$(2) \
 )
+
+endef
+
+define gb_ExternalProject__use_expat
+$(call gb_ExternalProject_use_package,$(1),expat_inc)
+$(call gb_ExternalProject_use_static_libraries,$(1),expat)
 
 endef
 
