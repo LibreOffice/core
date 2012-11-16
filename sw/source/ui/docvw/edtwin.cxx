@@ -2974,6 +2974,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 bExecDrawTextLink = sal_True;
                         }
 
+                        SwContentAtPos aFieldAtPos ( SwContentAtPos::SW_FIELD );
+
                         // only try to select frame, if pointer already was
                         // switched accordingly
                         if ( aActHitType != SDRHIT_NONE && !rSh.IsSelFrmMode() &&
@@ -3090,6 +3092,19 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             }
                         }
 
+                        // Are we selecting a field?
+                        else if ( rSh.GetContentAtPos( aDocPos, aFieldAtPos ) )
+                        {
+                            // select work, AdditionalMode if applicable
+                            if ( KEY_MOD1 == rMEvt.GetModifier() && !rSh.IsAddMode() )
+                            {
+                                rSh.EnterAddMode();
+                                rSh.SelWrd( &aDocPos );
+                                rSh.LeaveAddMode();
+                            }
+                            else
+                                rSh.SelWrd( &aDocPos );
+                        }
                         break;
                     }
                     case 2:
@@ -4213,7 +4228,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             }
             else
             {
-                if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPt ) )
+                SwContentAtPos aFieldAtPos ( SwContentAtPos::SW_FIELD );
+                if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPt ) && !rSh.GetContentAtPos( aDocPt, aFieldAtPos ) )
                 {
                     const sal_Bool bTmpNoInterrupt = bNoInterrupt;
                     bNoInterrupt = sal_False;
@@ -4257,8 +4273,12 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                                     SwContentAtPos::SW_INETATTR |
                                                     SwContentAtPos::SW_SMARTTAG  | SwContentAtPos::SW_FORMCTRL);
 
-                        if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, sal_True ) )
+                        if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, sal_False ) )
                         {
+                            // Do it again if we're not on a field to update the cursor accordingly
+                            if ( SwContentAtPos::SW_FIELD != aCntntAtPos.eCntntAtPos )
+                                rSh.GetContentAtPos( aDocPt, aCntntAtPos, sal_True );
+
                             sal_Bool bViewLocked = rSh.IsViewLocked();
                             if( !bViewLocked && !rSh.IsReadOnlyAvailable() &&
                                 aCntntAtPos.IsInProtectSect() )
