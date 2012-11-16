@@ -62,7 +62,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/graphictools.hxx>
 #include <tools/poly.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <implrenderer.hxx>
 #include <tools.hxx>
 #include <outdevstate.hxx>
@@ -872,7 +872,7 @@ namespace cppcanvas
                     : rendering::PanoseProportion::ANYTHING;
 
             LanguageType aLang = rFont.GetLanguage();
-            aFontRequest.Locale = MsLangId::convertLanguageToLocale(aLang, false);
+            aFontRequest.Locale = LanguageTag( aLang).getLocale( false);
 
             // setup state-local text transformation,
             // if the font be rotated
