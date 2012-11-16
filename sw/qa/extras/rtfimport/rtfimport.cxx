@@ -775,16 +775,17 @@ void Test::testInk()
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xDraws->getByIndex(0), "CustomShapeGeometry");
+    uno::Sequence<beans::PropertyValue> aPathProps;
     for (int i = 0; i < aProps.getLength(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "Path")
-            rProp.Value >>= aProps;
+            rProp.Value >>= aPathProps;
     }
     uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aPathProps.getLength(); ++i)
     {
-        const beans::PropertyValue& rProp = aProps[i];
+        const beans::PropertyValue& rProp = aPathProps[i];
         if (rProp.Name == "Segments")
             rProp.Value >>= aSegments;
     }
