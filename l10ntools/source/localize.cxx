@@ -267,15 +267,10 @@ void handleCommand(
             {
                 const sal_Int32 nProjectInd = inPath.indexOf(project);
                 const OString relativPath =
-                    project == OUString("dictionaries") ?
-                        OUStringToOString(
-                            inPath.copy( nProjectInd + 13,
-                                inPath.lastIndexOf('/')- nProjectInd - 13),
-                            RTL_TEXTENCODING_UTF8 ) :
-                        OUStringToOString(
-                            inPath.copy( nProjectInd,
-                                inPath.lastIndexOf('/')- nProjectInd),
-                            RTL_TEXTENCODING_UTF8 );
+                    OUStringToOString(
+                        inPath.copy( nProjectInd,
+                            inPath.lastIndexOf('/')- nProjectInd),
+                        RTL_TEXTENCODING_UTF8 );
 
                 rPoOutPut.writeHeader(PoHeader(relativPath));
             }
