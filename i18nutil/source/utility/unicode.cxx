@@ -400,13 +400,8 @@ sal_Bool SAL_CALL func( const sal_Unicode ch) {\
     return (bit(getUnicodeType(ch)) & (mask)) != 0;\
 }
 
-IsType(unicode::isUpper, UPPERMASK)
-IsType(unicode::isLower, LOWERMASK)
 IsType(unicode::isControl, CONTROLMASK)
-IsType(unicode::isPrint, PRINTMASK)
 IsType(unicode::isAlpha, ALPHAMASK)
-IsType(unicode::isDigit, DIGITMASK)
-IsType(unicode::isAlphaDigit, ALPHAMASK|DIGITMASK)
 IsType(unicode::isSpace, SPACEMASK)
 
 #define CONTROLSPACE    bit(0x09)|bit(0x0a)|bit(0x0b)|bit(0x0c)|bit(0x0d)|\
