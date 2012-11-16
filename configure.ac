@@ -9524,7 +9524,7 @@ AC_MSG_CHECKING([whether to enable sd remotecontrol])
 if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_SDREMOTE=YES
-    AC_MSG_CHECKING([whether to enable sdremote via bluetooth support])
+    AC_MSG_CHECKING([whether to enable bluetooth support in sdremote])
     if test -n "$enable_sdremote_bluetooth" -a "$enable_sdremote_bluetooth" != "no"; then
         if test "$OS" = "LINUX"; then
             if test "$ENABLE_DBUS" = "TRUE"; then
