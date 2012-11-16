@@ -37,7 +37,7 @@
 #include <tools/tenccvt.hxx>
 
 #include <rtl/ustring.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <svl/itemset.hxx>
 
 #include <svtools/langtab.hxx>
@@ -2607,7 +2607,7 @@ bool SvxLanguageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= (sal_Int16)(GetValue());
         break;
         case MID_LANG_LOCALE:
-            lang::Locale aRet( MsLangId::convertLanguageToLocale( GetValue(), false));
+            lang::Locale aRet( LanguageTag( GetValue()).getLocale( false));
             rVal <<= aRet;
         break;
     }
@@ -2635,7 +2635,7 @@ bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 return sal_False;
 
             if (!aLocale.Language.isEmpty() || !aLocale.Country.isEmpty())
-                SetValue(MsLangId::convertLocaleToLanguage( aLocale ));
+                SetValue( LanguageTag( aLocale ).getLanguageType( false));
             else
                 SetValue(LANGUAGE_NONE);
         }

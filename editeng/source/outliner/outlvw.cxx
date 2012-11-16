@@ -28,7 +28,7 @@
 #include <editeng/fhgtitem.hxx>
 
 #include <svl/style.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 #define _OUTLINER_CXX
 #include <editeng/outliner.hxx>
@@ -1325,7 +1325,7 @@ bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
     aText = pEditEngine->GetText( aTextSel );
     aTextSel.Adjust();
     LanguageType nLang = pEditEngine->GetLanguage( aTextSel.nStartPara, aTextSel.nStartPos );
-    String aLangText( MsLangId::convertLanguageToIsoString( nLang ) );
+    String aLangText( LanguageTag( nLang ).getBcp47() );
 
     // set word and locale to look up as status value
     String aStatusVal( aText );

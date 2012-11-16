@@ -27,7 +27,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <vcl/metric.hxx>
 
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
@@ -102,7 +102,7 @@ static LanguageType lcl_CheckLanguage(
                 nLang = nTmpLang;
         }
         if (nLang == LANGUAGE_NONE) // language not found by looking up the sytem language...
-            nLang = MsLangId::convertLocaleToLanguageWithFallback( aLocale );
+            nLang = LanguageTag( aLocale ).makeFallback().getLanguageType();
         if (nLang == LANGUAGE_SYSTEM)
             nLang = nTmpLang;
         if (nLang == LANGUAGE_DONTKNOW)

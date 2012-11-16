@@ -1905,7 +1905,7 @@ sal_Bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
 String SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
                                             sal_Bool bNewFile, sal_Bool bTst ) const
 {
-    String sRet, sExt( MsLangId::convertLanguageToIsoString( eLang ) );
+    String sRet, sExt( LanguageTag( eLang ).getBcp47() );
     sExt.Insert('_', 0);
     sExt.AppendAscii( ".dat" );
     if( bNewFile )

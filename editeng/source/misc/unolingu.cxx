@@ -40,7 +40,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx> // helper for implementations
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -131,7 +131,7 @@ void ThesDummy_Impl::GetCfgLocales()
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
             pLocale[i] = SvxCreateLocale(
-                            MsLangId::convertIsoStringToLanguage( pNodeNames[i] ) );
+                            LanguageTag( pNodeNames[i] ).getLanguageType() );
         }
     }
 }
@@ -877,13 +877,13 @@ LanguageType SvxLocaleToLanguage( const Locale& rLocale )
     if ( rLocale.Language.isEmpty() )
         return LANGUAGE_NONE;
 
-    return MsLangId::convertLocaleToLanguage( rLocale );
+    return LanguageTag( rLocale ).getLanguageType();
 }
 
 Locale& SvxLanguageToLocale( Locale& rLocale, LanguageType eLang )
 {
     if ( eLang != LANGUAGE_NONE )
-        MsLangId::convertLanguageToLocale( eLang, rLocale );
+        rLocale = LanguageTag( eLang ).getLocale();
     else
         rLocale = Locale();
 
@@ -894,7 +894,7 @@ Locale SvxCreateLocale( LanguageType eLang )
 {
     Locale aLocale;
     if ( eLang != LANGUAGE_NONE )
-        MsLangId::convertLanguageToLocale( eLang, aLocale );
+        aLocale = LanguageTag( eLang ).getLocale();
 
     return aLocale;
 }
