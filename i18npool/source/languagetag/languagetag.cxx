@@ -12,6 +12,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
+#include <rtl/instance.hxx>
 
 //#define erDEBUG
 
@@ -40,6 +41,13 @@ using namespace com::sun::star;
     field. The Locale's Language field then will contain this ISO 639-2
     reserved for local use code. */
 #define ISO639_LANGUAGE_TAG "qlt"
+
+
+// "statics" to be returned as const reference to an empty locale and string.
+namespace {
+struct theEmptyLocale : public rtl::Static< lang::Locale, theEmptyLocale > {};
+struct theEmptyBcp47 : public rtl::Static< OUString, theEmptyBcp47 > {};
+}
 
 
 /** A reference holder for liblangtag data de/initialization, one static
@@ -71,7 +79,9 @@ private:
     void teardown();
 };
 
-static LiblantagDataRef theDataRef;
+namespace {
+struct theDataRef : public rtl::Static< LiblantagDataRef, theDataRef > {};
+}
 
 LiblantagDataRef::LiblantagDataRef()
     :
@@ -154,7 +164,7 @@ LanguageTag::LanguageTag( const rtl::OUString & rBcp47LanguageTag, bool bCanonic
         mbCachedScript( false),
         mbCachedCountry( false)
 {
-    theDataRef.incRef();
+    theDataRef::get().incRef();
 
     if (bCanonicalize)
         canonicalize();
@@ -177,7 +187,7 @@ LanguageTag::LanguageTag( const com::sun::star::lang::Locale & rLocale )
         mbCachedScript( false),
         mbCachedCountry( false)
 {
-    theDataRef.incRef();
+    theDataRef::get().incRef();
 }
 
 
@@ -196,7 +206,7 @@ LanguageTag::LanguageTag( LanguageType nLanguage )
         mbCachedScript( false),
         mbCachedCountry( false)
 {
-    theDataRef.incRef();
+    theDataRef::get().incRef();
 }
 
 
@@ -216,7 +226,7 @@ LanguageTag::LanguageTag( const rtl::OUString& rLanguage, const rtl::OUString& r
         mbCachedScript( false),
         mbCachedCountry( false)
 {
-    theDataRef.incRef();
+    theDataRef::get().incRef();
 }
 
 
@@ -241,7 +251,7 @@ LanguageTag::LanguageTag( const LanguageTag & rLanguageTag )
         mbCachedScript( rLanguageTag.mbCachedScript),
         mbCachedCountry( rLanguageTag.mbCachedCountry)
 {
-    theDataRef.incRef();
+    theDataRef::get().incRef();
 }
 
 
@@ -274,7 +284,7 @@ LanguageTag::~LanguageTag()
 {
     lt_tag_unref( MPLANGTAG);
 
-    theDataRef.decRef();
+    theDataRef::get().decRef();
 }
 
 
@@ -448,10 +458,10 @@ void LanguageTag::convertLangToBcp47()
 }
 
 
-rtl::OUString LanguageTag::getBcp47( bool bResolveSystem ) const
+const rtl::OUString & LanguageTag::getBcp47( bool bResolveSystem ) const
 {
     if (!bResolveSystem && mbSystemLocale)
-        return OUString();
+        return theEmptyBcp47::get();
     if (!mbInitializedBcp47)
     {
         if (mbInitializedLocale)
@@ -520,10 +530,10 @@ rtl::OUString LanguageTag::getRegionFromLangtag() const
 }
 
 
-com::sun::star::lang::Locale LanguageTag::getLocale( bool bResolveSystem ) const
+const com::sun::star::lang::Locale & LanguageTag::getLocale( bool bResolveSystem ) const
 {
     if (!bResolveSystem && mbSystemLocale)
-        return lang::Locale();
+        return theEmptyLocale::get();
     if (!mbInitializedLocale)
     {
         if (mbInitializedBcp47)

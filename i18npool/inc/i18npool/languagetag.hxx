@@ -68,7 +68,7 @@ public:
                locale to the real locale used.
                If FALSE, return an empty OUString for such a tag.
      */
-    rtl::OUString                   getBcp47( bool bResolveSystem = true ) const;
+    const rtl::OUString &           getBcp47( bool bResolveSystem = true ) const;
 
     /** Obtain language tag as Locale.
 
@@ -84,7 +84,7 @@ public:
                locale to the real locale used.
                If FALSE, return an empty Locale for such a tag.
      */
-    com::sun::star::lang::Locale    getLocale( bool bResolveSystem = true ) const;
+    const com::sun::star::lang::Locale &    getLocale( bool bResolveSystem = true ) const;
 
     /** Obtain mapping to MS-LangID.
 
