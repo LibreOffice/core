@@ -90,6 +90,16 @@ rtl::OUString getExpression(sal_Int32 nIndex)
     return rtl::OUString();
 }
 
+rtl::OUString getDateString(sal_Int32 nIndex)
+{
+    sal_Int32 nStringIndex = STR_COND_TODAY + nIndex;
+    if(nStringIndex <= STR_COND_NEXTYEAR)
+        return ScGlobal::GetRscString(nStringIndex);
+
+    assert(false);
+    return rtl::OUString();
+}
+
 }
 
 rtl::OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, const ScAddress& rPos)
@@ -139,7 +149,12 @@ rtl::OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rForm
                 aBuffer.append(getTextForType(ICONSET));
                 break;
             case condformat::DATE:
-                aBuffer.append(getTextForType(DATE));
+                {
+                    aBuffer.append(getTextForType(DATE));
+                    aBuffer.append(" ");
+                    sal_Int32 nDateEntry = static_cast<sal_Int32>(static_cast<const ScCondDateFormatEntry*>(rFormat.GetEntry(0))->GetDateType());
+                    aBuffer.append(getDateString(nDateEntry));
+                }
                 break;
         }
     }
@@ -170,6 +185,10 @@ rtl::OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sa
     else if(eType == FORMULA)
     {
         aBuffer.append(" ").append(aStr1);
+    }
+    else if(eType == DATE)
+    {
+        aBuffer.append(getDateString(nIndex));
     }
 
     return aBuffer.makeStringAndClear();

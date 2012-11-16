@@ -1942,6 +1942,58 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Not Contains";
     };
+    String STR_COND_TODAY
+    {
+        Text [ en-US ] = "today";
+    };
+    String STR_COND_YESTERDAY
+    {
+        Text [ en-US ] = "yesterday";
+    };
+    String STR_COND_TOMORROW
+    {
+        Text [ en-US ] = "tomorrow";
+    };
+    String STR_COND_LAST7DAYS
+    {
+        Text [ en-US ] = "in the last 7 days";
+    };
+    String STR_COND_THISWEEK
+    {
+        Text [ en-US ] = "this week";
+    };
+    String STR_COND_LASTWEEK
+    {
+        Text [ en-US ] = "last week";
+    };
+    String STR_COND_NEXTWEEK
+    {
+        Text [ en-US ] = "next week";
+    };
+    String STR_COND_THISMONTH
+    {
+        Text [ en-US ] = "this month";
+    };
+    String STR_COND_LASTMONTH
+    {
+        Text [ en-US ] = "last month";
+    };
+    String STR_COND_NEXTMONTH
+    {
+        Text [ en-US ] = "next month";
+    };
+    String STR_COND_THISYEAR
+    {
+        Text [ en-US ] = "this year";
+    };
+    String STR_COND_LASTYEAR
+    {
+        Text [ en-US ] = "last year";
+    };
+    String STR_COND_NEXTYEAR
+    {
+        Text [ en-US ] = "next year";
+    };
     String STR_ERR_CONDFORMAT_PROTECTED
     {
         Text [ en-US ] = "Conditional Formats can not be created, deleted or changed in protected sheets!";
