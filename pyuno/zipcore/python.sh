@@ -57,7 +57,7 @@ export PYTHONHOME
 # execute binary
 exec "$sd_prog/python.bin" "$@"
 MACSECTION
-PYTHONHOME=$sd_prog/OOoPython.framework
+PYTHONHOME=$sd_prog/LibreOfficePython.framework
 export PYTHONHOME
 
 pybasislibdir=$PYTHONHOME/Versions/%%PYVERSION%%/lib/python%%PYVERSION%%
@@ -65,4 +65,4 @@ PYTHONPATH=$sd_prog:$pybasislibdir:$pybasislibdir/lib-dynload:$pybasislibdir/lib
 export PYTHONPATH
 
 # execute binary
-exec "$PYTHONHOME/Versions/%%PYVERSION%%/Resources/Python.app/Contents/MacOS/OOoPython" "$@"
+exec "$PYTHONHOME/Versions/%%PYVERSION%%/Resources/Python.app/Contents/MacOS/LibreOfficePython" "$@"
