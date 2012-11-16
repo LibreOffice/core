@@ -58,8 +58,6 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
-
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -72,10 +70,6 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
-
-using ::rtl::OUString;
-
-// ============================================================================
 
 namespace {
 

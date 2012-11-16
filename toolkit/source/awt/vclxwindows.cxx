@@ -6611,10 +6611,6 @@ throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-#if OSL_DEBUG_LEVEL > 0
-    sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
-    (void)bVoid;
-#endif
     VCLXContainer::setProperty( PropertyName, Value );
 }
 

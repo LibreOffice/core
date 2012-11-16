@@ -107,9 +107,8 @@ inline bool getLongAttr(
 class ImportContext;
 
 //==============================================================================
-typedef ::cppu::WeakImplHelper1< css::xml::input::XRoot >   DialogImport_Base;
 struct DialogImport
-    : DialogImport_Base
+    : public ::cppu::WeakImplHelper1< css::xml::input::XRoot >
 {
     friend class ImportContext;
 
@@ -162,7 +161,8 @@ public:
         , _xDialogModelFactory( xDialogModel, css::uno::UNO_QUERY_THROW ), _xDoc( xDoc )
         { OSL_ASSERT( _xDialogModel.is() && _xDialogModelFactory.is() &&
                       _xContext.is() ); }
-    inline DialogImport( const DialogImport& rOther ) : DialogImport_Base()
+    inline DialogImport( const DialogImport& rOther ) :
+        ::cppu::WeakImplHelper1< css::xml::input::XRoot >()
         , _xContext( rOther._xContext )
         , _xSupplier( rOther._xSupplier )
         , _pStyleNames( rOther._pStyleNames )

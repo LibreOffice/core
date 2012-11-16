@@ -311,12 +311,12 @@ namespace dlgprov
                 sal_Int32 nControlCount = aControls.getLength();
 
                 Sequence< Reference< XInterface > > aObjects( nControlCount );
-                Reference< XInterface >* pObjectsModify = aObjects.getArray();
+                Reference< XInterface >* pObjects2 = aObjects.getArray();
                 const Reference< XControl >* pControls = aControls.getConstArray();
 
-                for ( sal_Int32 j = 0; j < nControlCount; ++j )
+                for ( sal_Int32 i2 = 0; i2 < nControlCount; ++i2 )
                 {
-                    pObjectsModify[j] = Reference< XInterface >( pControls[j], UNO_QUERY );
+                    pObjects2[i2] = Reference< XInterface >( pControls[i2], UNO_QUERY );
                 }
                 nestedAttachEvents( aObjects, Helper, sDialogCodeName );
             }

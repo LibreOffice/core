@@ -49,10 +49,6 @@
 namespace oox {
 namespace xls {
 
-using ::rtl::OUString;
-
-// ============================================================================
-
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;

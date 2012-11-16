@@ -40,19 +40,12 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
-
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
-// ============================================================================
 
 namespace {
 
@@ -454,9 +447,6 @@ bool VbaFormControl::convertProperties( const Reference< XControlModel >& rxCtrl
             mxCtrlModel->convertSize( aPropMap, rConv );
             PropertySet aPropSet( rxCtrlModel );
             aPropSet.setProperties( aPropMap );
-
-            // bind to control source and row source range
-            mxSiteModel->bindToSources( rxCtrlModel, rConv );
 
             // create and convert all embedded controls
             if( !maControls.empty() ) try

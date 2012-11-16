@@ -637,13 +637,14 @@ UnoMultiPageControl::~UnoMultiPageControl()
 }
 // XTabListener
 
-void SAL_CALL UnoMultiPageControl::inserted( ::sal_Int32 /*ID*/ ) throw (RuntimeException)
+void SAL_CALL UnoMultiPageControl::inserted( SAL_UNUSED_PARAMETER ::sal_Int32 ) throw (RuntimeException)
 {
 }
-void SAL_CALL UnoMultiPageControl::removed( ::sal_Int32 /*ID*/ ) throw (RuntimeException)
+void SAL_CALL UnoMultiPageControl::removed( SAL_UNUSED_PARAMETER ::sal_Int32 ) throw (RuntimeException)
 {
 }
-void SAL_CALL UnoMultiPageControl::changed( ::sal_Int32 /*ID*/, const Sequence< NamedValue >& /*Properties*/ ) throw (RuntimeException)
+void SAL_CALL UnoMultiPageControl::changed( SAL_UNUSED_PARAMETER ::sal_Int32 ID,
+                                            SAL_UNUSED_PARAMETER const Sequence< NamedValue >& ) throw (RuntimeException)
 {
 }
 void SAL_CALL UnoMultiPageControl::activated( ::sal_Int32 ID ) throw (RuntimeException)
@@ -651,7 +652,7 @@ void SAL_CALL UnoMultiPageControl::activated( ::sal_Int32 ID ) throw (RuntimeExc
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( ID ), sal_False );
 
 }
-void SAL_CALL UnoMultiPageControl::deactivated( ::sal_Int32 /*ID*/ ) throw (RuntimeException)
+void SAL_CALL UnoMultiPageControl::deactivated( SAL_UNUSED_PARAMETER ::sal_Int32 ) throw (RuntimeException)
 {
 }
 void SAL_CALL UnoMultiPageControl::disposing(const EventObject&) throw (RuntimeException)
