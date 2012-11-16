@@ -193,7 +193,6 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	wizards \
 	writerfilter \
 	writerperfect \
-	$(call gb_Helper_optional,X11_EXTENSIONS,x11_extensions) \
 	xmerge \
 	$(call gb_Helper_optional,DESKTOP,xmlhelp) \
 	xmloff \

@@ -2070,25 +2070,9 @@ endif # SYSTEM_LIBORCUS
 
 ifeq ($(GUIBASE),unx)
 
-# TODO: do we really need these X11 headers in the repo?
-ifneq ($(filter X11_EXTENSIONS,$(BUILD_TYPE)),)
-
-define gb_LinkTarget__use_x11extensions
-$(call gb_LinkTarget_use_packages,$(1),\
-	x11_extensions_inc \
-)
-endef
-
-else # !X11_EXTENSIONS
-
-gb_LinkTarget__use_x11extensions :=
-
-endif # X11_EXTENSIONS
-
 ifeq ($(XRANDR_DLOPEN),FALSE)
 
 define gb_LinkTarget__use_Xrandr
-$(call gb_LinkTarget__use_x11extensions,$(1))
 
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
@@ -2103,7 +2087,6 @@ endef
 else # XRANDR_DLOPEN
 
 define gb_LinkTarget__use_Xrandr
-$(call gb_LinkTarget__use_x11extensions,$(1))
 
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DXRANDR_DLOPEN \
@@ -2113,7 +2096,6 @@ endef
 endif # XRANDR_DLOPEN
 
 define gb_LinkTarget__use_Xrender
-$(call gb_LinkTarget__use_x11extensions,$(1))
 
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
