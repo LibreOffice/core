@@ -96,7 +96,7 @@ File gid_File_Py_Python_Core
     TXT_FILE_BODY;
   #ifdef MACOSX
     Dir = gid_Brand_Dir_Program;
-    Name = "OOoPython.framework.zip";
+    Name = "LibreOfficePython.framework.zip";
     Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
   #else
     Dir = gid_Dir_Py_PythonCore_Lib;
@@ -153,19 +153,21 @@ File gid_File_Lib_Python_So
     Name = STRING(PY_FULL_DLL_NAME);
     Styles = (PACKED);
 End
-#ifdef UNX
-Shortcut gid_Shortcut_Lib_Python_So
-    FileID = gid_File_Lib_Python_So;
+File gid_File_Lib_Python3_So
+    LIB_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-    Name = STRING(CONCAT3(libpython,PYMAJMIN,UNXSUFFIX));
-    Styles = (NETWORK,RELATIVE);
-End
+#ifdef UNX
+    Name = STRING(CONCAT3(libpython,PYMAJOR,UNXSUFFIX));
+#else // WNT
+    Name = STRING(CONCAT3(python,PYMAJOR,.dll));
 #endif //UNX
+    Styles = (PACKED);
+End
 #else //MACOSX
 //directory entries solely to be able to create the symlinks
 Directory gid_Dir_PythonFramework
     ParentID = gid_Brand_Dir_Program;
-    HostName = "OOoPython.framework";
+    HostName = "LibreOfficePython.framework";
 End
 
 Unixlink gid_Unixlink_Python_Headers
@@ -230,18 +232,18 @@ Directory gid_Dir_PythonFramework_Versions_ver_lib_pythonver_config
     HostName = "config";
 End
 
-Unixlink gid_Unixlink_Python_OOoPython
+Unixlink gid_Unixlink_Python_LibreOfficePython
     BIN_FILE_BODY;
     Dir = gid_Dir_PythonFramework;
-    Name = "OOoPython";
-    Target = "Versions/Current/OOoPython";
+    Name = "LibreOfficePython";
+    Target = STRING(CONCAT3(Versions/,PYMAJMIN,/LibreOfficePython));
     Styles = ();
 End
 
 Unixlink gid_Unixlink_Python_bin_idle
     BIN_FILE_BODY;
     Dir = gid_Dir_PythonFramework_Versions_ver_bin;
-    Name = "idle";
+    Name = "idle3";
     Target = STRING(CONCAT2(idle,PYMAJMIN));
     Styles = ();
 End
@@ -249,7 +251,7 @@ End
 Unixlink gid_Unixlink_Python_bin_pydoc
     BIN_FILE_BODY;
     Dir = gid_Dir_PythonFramework_Versions_ver_bin;
-    Name = "pydoc";
+    Name = "pydoc3";
     Target = STRING(CONCAT2(pydoc,PYMAJMIN));
     Styles = ();
 End
@@ -257,15 +259,15 @@ End
 Unixlink gid_Unixlink_Python_bin_python_real
     BIN_FILE_BODY;
     Dir = gid_Dir_PythonFramework_Versions_ver_bin;
-    Name = "python";
-    Target = "../Resources/Python.app/Contents/MacOS/OOoPython";
+    Name = STRING(CONCAT2(python,PYMAJMIN));
+    Target = "../Resources/Python.app/Contents/MacOS/LibreOfficePython";
     Styles = ();
 End
 
 Unixlink gid_Unixlink_Python_bin_python
     BIN_FILE_BODY;
     Dir = gid_Dir_PythonFramework_Versions_ver_bin;
-    Name = "python";
+    Name = "python3";
     Target = STRING(CONCAT2(python,PYMAJMIN));
     Styles = ();
 End
@@ -273,7 +275,7 @@ End
 Unixlink gid_Unixlink_Python_bin_pythonconfig
     BIN_FILE_BODY;
     Dir = gid_Dir_PythonFramework_Versions_ver_bin;
-    Name = "python-config";
+    Name = "python3-config";
     Target = STRING(CONCAT3(python,PYMAJMIN,-config));
     Styles = ();
 End
@@ -281,24 +283,24 @@ End
 Unixlink gid_Unixlink_Python_bin_pythonw_real
     BIN_FILE_BODY;
     Dir = gid_Dir_PythonFramework_Versions_ver_bin;
-    Name = "pythonw";
-    Target = "../Resources/Python.app/Contents/MacOS/OOoPython";
+    Name = STRING(CONCAT2(pythonw,PYMAJMIN));
+    Target = "../Resources/Python.app/Contents/MacOS/LibreOfficePython";
     Styles = ();
 End
 
 Unixlink gid_Unixlink_Python_bin_pythonw
     BIN_FILE_BODY;
     Dir = gid_Dir_PythonFramework_Versions_ver_bin;
-    Name = "pythonw";
+    Name = "pythonw3";
     Target = STRING(CONCAT2(pythonw,PYMAJMIN));
     Styles = ();
 End
 
-Unixlink gid_Unixlink_Python_bin_smtpdpy
+Unixlink gid_Unixlink_Python_bin_pyvenv
     BIN_FILE_BODY;
     Dir = gid_Dir_PythonFramework_Versions_ver_bin;
-    Name = "smtpd.py";
-    Target = STRING(CONCAT3(smtpd,PYMAJMIN,.py));
+    Name = "pyvenv";
+    Target = STRING(CONCAT2(pyvenv-,PYMAJMIN));
     Styles = ();
 End
 
@@ -306,7 +308,7 @@ Unixlink gid_Unixlink_Python_libpython
     BIN_FILE_BODY;
     Dir = gid_Dir_PythonFramework_Versions_ver_lib_pythonver_config;
     Name = STRING(PY_FULL_DLL_NAME);
-    Target = "../../../OOoPython";
+    Target = "../../../LibreOfficePython";
     Styles = ();
 End
 #endif //MACOSX
