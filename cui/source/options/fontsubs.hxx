@@ -24,6 +24,7 @@
 #include <svx/simptabl.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/ctrlbox.hxx>
+#include "svtools/treelistentry.hxx"
 
 // class SvxFontSubstCheckListBox ------------------------------------------
 

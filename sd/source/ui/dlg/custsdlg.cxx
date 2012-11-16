@@ -43,6 +43,7 @@
 #include "app.hxx"
 #include "customshowlist.hxx"
 #include <vcl/msgbox.hxx>
+#include "svtools/treelistentry.hxx"
 
 
 /////////////////////

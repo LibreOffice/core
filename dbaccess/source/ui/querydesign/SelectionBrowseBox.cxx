@@ -39,6 +39,7 @@
 #include "sqlmessage.hxx"
 #include "UITools.hxx"
 #include <osl/diagnose.h>
+#include "svtools/treelistentry.hxx"
 
 using namespace ::svt;
 using namespace ::dbaui;

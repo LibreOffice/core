@@ -23,6 +23,7 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/svlbitm.hxx>
+#include "svtools/treelistentry.hxx"
 #include <svl/eitem.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/app.hxx>

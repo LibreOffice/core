@@ -35,6 +35,8 @@
 
 #include <svx/dialogs.hrc>
 
+#include "svtools/treelistentry.hxx"
+
 // class SvxCheckListBox -------------------------------------------------
 
 SvxCheckListBox::SvxCheckListBox( Window* pParent, WinBits nWinStyle ) :

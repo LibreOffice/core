@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "webconninfo.hxx"
+#include "webconninfo.hrc"
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include <sal/macros.h>
@@ -26,8 +28,7 @@
 #include <com/sun/star/task/XPasswordContainer2.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/docpasswordrequest.hxx>
-#include "webconninfo.hxx"
-#include "webconninfo.hrc"
+#include "svtools/treelistentry.hxx"
 
 using namespace ::com::sun::star;
 

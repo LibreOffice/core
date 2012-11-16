@@ -232,10 +232,10 @@ private:
     void                NotifyTabsChanged();
 
     // if element at cursor can be expanded in general
-    bool IsExpandable() const { return pCursor->HasChildren() || pCursor->HasChildrenOnDemand(); }
+    bool IsExpandable() const;
 
     // if element at cursor can be expanded at this moment
-    bool IsNowExpandable() const { return IsExpandable() && !pView->IsExpanded( pCursor ); }
+    bool IsNowExpandable() const;
 
     static  void        implInitDefaultNodeImages();
 

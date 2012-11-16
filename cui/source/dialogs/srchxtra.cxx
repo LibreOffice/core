@@ -35,6 +35,7 @@
 #include <svx/dialogs.hrc> // RID_SVXPAGE_...
 #include <tools/resary.hxx>
 #include <rtl/strbuf.hxx>
+#include "svtools/treelistentry.hxx"
 
 // class SvxSearchFormatDialog -------------------------------------------
 

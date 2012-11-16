@@ -46,6 +46,7 @@
 
 #include <svtools/svmedit.hxx>
 #include <svtools/svlbitm.hxx>
+#include "svtools/treelistentry.hxx"
 #include "svimpbox.hxx"
 
 #include <set>
@@ -971,6 +972,16 @@ sal_uLong SvTreeListBox::GetLevelChildCount( SvTreeListEntry* _pParent ) const
     }
 
     return nCount;
+}
+
+SvViewDataItem* SvTreeListBox::GetViewDataItem( SvTreeListEntry* pEntry, SvLBoxItem* pItem ) const
+{
+    SvViewDataEntry* pEntryData =
+        (SvViewDataEntry*)SvListView::GetViewData(pEntry);
+    DBG_ASSERT(pEntryData,"Entry not in View");
+    DBG_ASSERT(pEntryData->pItemData,"No ItemData");
+    sal_uInt16 nItemPos = pEntry->GetPos(pItem);
+    return (pEntryData->pItemData+nItemPos);
 }
 
 SvViewData* SvTreeListBox::CreateViewData( SvTreeListEntry* )

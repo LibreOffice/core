@@ -42,6 +42,7 @@
 #include <vcl/txtattr.hxx>
 #include <svtools/textwindowpeer.hxx>
 #include <svtools/syntaxhighlight.hxx>
+#include "svtools/treelistentry.hxx"
 #include <vcl/taskpanelist.hxx>
 #include <vcl/help.hxx>
 

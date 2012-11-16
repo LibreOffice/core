@@ -42,6 +42,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
+#include "svtools/treelistentry.hxx"
 #include <IDocumentSettingAccess.hxx>
 
 using namespace ::com::sun::star::beans;

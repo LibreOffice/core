@@ -63,6 +63,7 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::container;
 
 #include <svtools/imagemgr.hxx>
+#include "svtools/treelistentry.hxx"
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 

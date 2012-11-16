@@ -26,6 +26,7 @@
 #include <vcl/fixed.hxx>
 #include <osl/diagnose.h>
 #include <svtools/treelistbox.hxx>
+#include "svtools/treelistentry.hxx"
 #include <svtools/svmedit.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlerror.hxx>

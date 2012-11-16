@@ -42,6 +42,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <connectivity/dbmetadata.hxx>
+#include "svtools/treelistentry.hxx"
 
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>

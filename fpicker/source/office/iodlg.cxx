@@ -37,6 +37,7 @@
 #include "svtools/fileview.hxx"
 #include "svtools/sfxecode.hxx"
 #include "svtools/svtabbx.hxx"
+#include "svtools/treelistentry.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/localfilehelper.hxx>
 

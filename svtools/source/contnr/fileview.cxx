@@ -26,8 +26,9 @@
  *
  ************************************************************************/
 
+#include "fileview.hxx"
 #include "sal/config.h"
-
+#include "svtools/treelistentry.hxx"
 #include <svtools/fileview.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/imagemgr.hxx>
@@ -35,7 +36,6 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/svtools.hrc>
 #include "fileview.hrc"
-#include "fileview.hxx"
 #include "contentenumeration.hxx"
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <com/sun/star/util/DateTime.hpp>

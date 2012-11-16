@@ -30,6 +30,7 @@
 #include <sfx2/minfitem.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <svl/stritem.hxx>
+#include "svtools/treelistentry.hxx"
 
 #include <sal/macros.h>
 

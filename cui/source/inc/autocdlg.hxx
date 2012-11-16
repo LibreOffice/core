@@ -26,6 +26,7 @@
 #include <vcl/field.hxx>
 #include <vcl/metric.hxx>
 #include <svx/langbox.hxx>
+#include "svtools/treelistentry.hxx"
 
 class CharClass;
 class CollatorWrapper;

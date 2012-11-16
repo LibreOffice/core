@@ -38,6 +38,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include "svtools/treelistentry.hxx"
 
 #define HHC editeng::HangulHanjaConversion
 #define LINE_CNT        static_cast< sal_uInt16 >(2)

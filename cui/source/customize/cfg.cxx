@@ -44,6 +44,7 @@
 #include <svl/stritem.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/svlbitm.hxx>
+#include "svtools/treelistentry.hxx"
 #include <tools/diagnose_ex.h>
 #include <toolkit/unohlp.hxx>
 

@@ -49,6 +49,7 @@
 #include <comphelper/extract.hxx>
 #include "dbu_qry.hrc"
 #include <vcl/msgbox.hxx>
+#include "svtools/treelistentry.hxx"
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;

@@ -45,6 +45,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <svtools/indexentryres.hxx>
+#include "svtools/treelistentry.hxx"
 #include <editeng/unolingu.hxx>
 #include <column.hxx>
 #include <fmtfsize.hxx>

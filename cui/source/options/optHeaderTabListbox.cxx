@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svlbitm.hxx>
+#include "svtools/treelistentry.hxx"
 
 namespace svx
 {

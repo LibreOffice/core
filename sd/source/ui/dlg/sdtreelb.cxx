@@ -54,6 +54,7 @@
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <svtools/embedtransfer.hxx>
+#include "svtools/treelistentry.hxx"
 #include <tools/diagnose_ex.h>
 #include <comphelper/servicehelper.hxx>
 #include <ViewShell.hxx>

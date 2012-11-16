@@ -64,6 +64,7 @@
 #include <rtl/bootstrap.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/localfilehelper.hxx>
+#include "svtools/treelistentry.hxx"
 
 namespace svx{
     namespace DocRecovery{

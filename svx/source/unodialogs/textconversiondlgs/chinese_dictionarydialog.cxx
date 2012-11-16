@@ -41,6 +41,7 @@
 // header for class HeaderBar
 #include <svtools/headbar.hxx>
 #include <svtools/svlbitm.hxx>
+#include "svtools/treelistentry.hxx"
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
 // header for class SvtLinguConfigItem

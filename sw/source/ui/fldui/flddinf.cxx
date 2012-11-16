@@ -31,6 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include "svtools/treelistentry.hxx"
 
 #include <helpid.h>
 #include <swtypes.hxx>

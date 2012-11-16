@@ -27,6 +27,7 @@
 #include <svtools/svtabbx.hxx>
 // header for class SvTreeListBox
 #include <svtools/treelistbox.hxx>
+#include "svtools/treelistentry.hxx"
 
 namespace chart
 {

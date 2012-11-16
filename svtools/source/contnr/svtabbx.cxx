@@ -31,6 +31,7 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtools.hrc>
+#include "svtools/treelistentry.hxx"
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include "svtaccessiblefactory.hxx"

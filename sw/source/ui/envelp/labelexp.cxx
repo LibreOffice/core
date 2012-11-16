@@ -30,6 +30,7 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include "svtools/treelistentry.hxx"
 #include <swtypes.hxx>
 #include <labfmt.hxx>
 #include <unotools.hxx>

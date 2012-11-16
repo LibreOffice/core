@@ -194,6 +194,18 @@ public:
     virtual void        Clone( SvLBoxItem* pSource ) = 0;
 };
 
+inline SvLBoxItem* new_clone(const SvLBoxItem& rSrc)
+{
+    SvLBoxItem* p = rSrc.Create();
+    p->Clone(const_cast<SvLBoxItem*>(&rSrc));
+    return p;
+}
+
+inline void delete_clone(const SvLBoxItem* p)
+{
+    delete p;
+}
+
 // *********************************************************************
 // ****************************** SvTreeListBox ************************
 // *********************************************************************
@@ -828,17 +840,6 @@ public:
     void        StopEditing( sal_Bool bCancel = sal_False );
     void        Hide();
 };
-
-inline SvViewDataItem* SvTreeListBox::GetViewDataItem( SvTreeListEntry* pEntry,
-    SvLBoxItem* pItem) const
-{
-    SvViewDataEntry* pEntryData =
-        (SvViewDataEntry*)SvListView::GetViewData(pEntry);
-    DBG_ASSERT(pEntryData,"Entry not in View");
-    DBG_ASSERT(pEntryData->pItemData,"No ItemData");
-    sal_uInt16 nItemPos = pEntry->GetPos(pItem);
-    return (pEntryData->pItemData+nItemPos);
-}
 
 #endif
 

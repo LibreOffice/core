@@ -26,6 +26,7 @@
 #include <dialmgr.hxx>
 
 #include "svtools/svlbitm.hxx"
+#include "svtools/treelistentry.hxx"
 
 enum MSFltrPg2_CheckBoxEntries {
     Math,

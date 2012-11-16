@@ -31,6 +31,7 @@
 #include "scresid.hxx"
 
 #include "svtools/svlbitm.hxx"
+#include "svtools/treelistentry.hxx"
 
 namespace {
 

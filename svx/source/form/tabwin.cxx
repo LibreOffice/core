@@ -62,6 +62,7 @@
 #include <comphelper/property.hxx>
 #include <sfx2/frame.hxx>
 #include <svx/dataaccessdescriptor.hxx>
+#include "svtools/treelistentry.hxx"
 
 const long STD_WIN_SIZE_X = 120;
 const long STD_WIN_SIZE_Y = 150;

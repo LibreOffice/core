@@ -32,6 +32,7 @@
 #include <dialogs.hrc>
 #include <resourcemanager.hxx>
 #include <vcl/msgbox.hxx>
+#include "svtools/treelistentry.hxx"
 
 /* HACK: disable some warnings for MS-C */
 #ifdef _MSC_VER

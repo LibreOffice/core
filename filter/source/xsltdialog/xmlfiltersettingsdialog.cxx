@@ -30,6 +30,7 @@
 #include <osl/file.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include "svtools/treelistentry.hxx"
 
 #include <rtl/uri.hxx>
 

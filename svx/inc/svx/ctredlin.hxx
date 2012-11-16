@@ -45,6 +45,7 @@
 #include <vcl/tabctrl.hxx>
 #include <tools/datetime.hxx>
 #include <svtools/txtcmp.hxx>
+#include "svtools/treelistentry.hxx"
 #include "svx/svxdllapi.h"
 
 #define FLT_DATE_BEFORE     0

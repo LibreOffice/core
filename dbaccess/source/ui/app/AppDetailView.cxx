@@ -39,6 +39,7 @@
 #include "IController.hxx"
 #include "moduledbu.hxx"
 #include <svtools/localresaccess.hxx>
+#include "svtools/treelistentry.hxx"
 #include <algorithm>
 #include "dbtreelistbox.hxx"
 #include "IApplicationController.hxx"

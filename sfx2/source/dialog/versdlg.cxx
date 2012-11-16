@@ -27,6 +27,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/datetime.hxx>
+#include "svtools/treelistentry.hxx"
 
 #include "versdlg.hrc"
 #include "versdlg.hxx"

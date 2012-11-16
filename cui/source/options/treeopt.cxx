@@ -90,6 +90,7 @@
 #include <vcl/help.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
+#include "svtools/treelistentry.hxx"
 
 #ifndef _SVX_LANGITEM_HXX
 #define ITEMID_LANGUAGE SID_ATTR_CHAR_LANGUAGE

@@ -38,6 +38,7 @@
 #include <svl/eitem.hxx>
 #include <svl/urlbmk.hxx>
 #include <svtools/filter.hxx>
+#include "svtools/treelistentry.hxx"
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>
 

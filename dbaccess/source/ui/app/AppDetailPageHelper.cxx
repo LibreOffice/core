@@ -62,6 +62,7 @@
 #include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "IApplicationController.hxx"
+#include "svtools/treelistentry.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 

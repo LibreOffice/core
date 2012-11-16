@@ -86,6 +86,7 @@
 #include <redline.hxx>
 #include <docary.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include "svtools/treelistentry.hxx"
 
 #include "swabstdlg.hxx"
 #include "globals.hrc"

@@ -41,6 +41,7 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
+#include "svtools/treelistentry.hxx"
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

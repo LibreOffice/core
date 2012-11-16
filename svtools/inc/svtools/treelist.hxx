@@ -30,7 +30,8 @@
 #define _SVTREELIST_HXX
 
 #include "svtools/svtdllapi.h"
-#include "svtools/treelistentry.hxx"
+#include "svtools/treelistentries.hxx"
+
 #include <tools/solar.h>
 #include <tools/link.hxx>
 #include <tools/string.hxx>
@@ -248,9 +249,8 @@ public:
     bool Remove( const SvTreeListEntry* pEntry );
     void                Clear();
 
-    sal_Bool            HasChildren( SvTreeListEntry* pEntry ) const;
-    sal_Bool            HasParent( SvTreeListEntry* pEntry ) const
-    { return (sal_Bool)(pEntry->pParent!=pRootItem); }
+    bool HasChildren( const SvTreeListEntry* pEntry ) const;
+    bool HasParent( const SvTreeListEntry* pEntry ) const;
 
     bool                IsChild(const SvTreeListEntry* pParent, const SvTreeListEntry* pChild) const;
     SvTreeListEntry*        GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const;
@@ -270,9 +270,8 @@ public:
     std::pair<SvTreeListEntries::iterator, SvTreeListEntries::iterator>
         GetChildIterators(SvTreeListEntry* pParent);
 
-    sal_uLong           GetAbsPos( SvTreeListEntry* pEntry ) const;
-    sal_uLong           GetRelPos( SvTreeListEntry* pChild ) const
-    { return pChild->GetChildListPos(); }
+    sal_uLong GetAbsPos( const SvTreeListEntry* pEntry ) const;
+    sal_uLong GetRelPos( const SvTreeListEntry* pChild ) const;
 
     sal_uLong GetChildCount( const SvTreeListEntry* pParent ) const;
     sal_uInt16 GetDepth( const SvTreeListEntry* pEntry ) const;

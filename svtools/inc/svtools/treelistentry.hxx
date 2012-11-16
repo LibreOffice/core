@@ -31,6 +31,8 @@
 
 #include "svtdllapi.h"
 #include "tools/solar.h"
+#include "treelistbox.hxx"
+#include "treelistentries.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -46,10 +48,6 @@
 #define SV_ENTRYFLAG_USER_FLAGS         0xF000
 #define SV_ENTRYFLAG_SEMITRANSPARENT    0x8000      // draw semi-transparent entry bitmaps
 
-class SvLBoxItem;
-class SvTreeListEntry;
-
-typedef boost::ptr_vector<SvTreeListEntry> SvTreeListEntries;
 
 class SVT_DLLPUBLIC SvTreeListEntry
 {

@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
+#include "svtools/treelistentry.hxx"
 
 //............................................................................
 namespace pcr

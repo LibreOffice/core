@@ -28,7 +28,6 @@
 
 #include "svtools/treelistentry.hxx"
 #include "svtools/treelist.hxx"
-#include "svtools/treelistbox.hxx"
 
 #include <limits>
 

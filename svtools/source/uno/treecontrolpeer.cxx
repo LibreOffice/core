@@ -42,6 +42,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/treelistbox.hxx>
+#include "svtools/treelistentry.hxx"
 #include <svtools/svlbitm.hxx>
 
 #include <map>

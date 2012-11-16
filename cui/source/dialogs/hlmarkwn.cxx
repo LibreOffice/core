@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <toolkit/unohlp.hxx>
+#include "svtools/treelistentry.hxx"
 
 #include <cuires.hrc>
 #include "hlmarkwn.hrc"

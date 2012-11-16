@@ -54,6 +54,7 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 
 #include <svtools/insdlg.hxx>
+#include "svtools/treelistentry.hxx"
 #include <sot/clsids.hxx>
 #include <unotools/configmgr.hxx>
 #include <docsh.hxx>

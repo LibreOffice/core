@@ -107,6 +107,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistbox.hxx>
+#include "svtools/treelistentry.hxx"
 #include <svx/algitem.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/databaseregistrationui.hxx>

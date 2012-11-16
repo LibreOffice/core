@@ -25,6 +25,7 @@
 #include "dbu_misc.hrc"
 #include "WizardPages.hrc"
 #include <vcl/scrbar.hxx>
+#include "svtools/treelistentry.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 
 using namespace ::dbaui;

@@ -60,6 +60,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include "svtools/treelistentry.hxx"
 #include <rtl/logfile.hxx>
 //............................................................................
 namespace svxform

@@ -31,6 +31,7 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <svtools/stdctrl.hxx>
+#include "svtools/treelistentry.hxx"
 #include <unotools/securityoptions.hxx>
 #include <cuires.hrc>
 #include "certpath.hxx"

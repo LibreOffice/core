@@ -26,7 +26,8 @@
  *
  ************************************************************************/
 
-#include <svtools/treelist.hxx>
+#include "svtools/treelist.hxx"
+#include "svtools/treelistentry.hxx"
 #include "osl/diagnose.h"
 
 #include <stdio.h>
@@ -1100,11 +1101,16 @@ sal_uLong SvTreeList::Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,s
 |*
 *************************************************************************/
 
-sal_uLong SvTreeList::GetAbsPos( SvTreeListEntry* pEntry) const
+sal_uLong SvTreeList::GetAbsPos( const SvTreeListEntry* pEntry) const
 {
     if ( !bAbsPositionsValid )
         ((SvTreeList*)this)->SetAbsolutePositions();
     return pEntry->nAbsPos;
+}
+
+sal_uLong SvTreeList::GetRelPos( const SvTreeListEntry* pChild ) const
+{
+    return pChild->GetChildListPos();
 }
 
 /*************************************************************************
@@ -1816,12 +1822,17 @@ void SvTreeList::GetInsertionPos( SvTreeListEntry* pEntry, SvTreeListEntry* pPar
     }
 }
 
-sal_Bool SvTreeList::HasChildren( SvTreeListEntry* pEntry ) const
+bool SvTreeList::HasChildren( const SvTreeListEntry* pEntry ) const
 {
     if ( !pEntry )
         pEntry = pRootItem;
 
     return !pEntry->maChildren.empty();
+}
+
+bool SvTreeList::HasParent( const SvTreeListEntry* pEntry ) const
+{
+    return pEntry->pParent != pRootItem;
 }
 
 SvTreeListEntry* SvTreeList::GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const

@@ -19,6 +19,7 @@
 
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
+#include "svtools/treelistentry.hxx"
 
 #include "structpg.hxx"
 #include "formdlgs.hrc"

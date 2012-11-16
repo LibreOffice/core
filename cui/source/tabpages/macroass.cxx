@@ -37,6 +37,7 @@
 #include <vcl/fixed.hxx>
 #include "headertablistbox.hxx"
 #include "svtools/svlbitm.hxx"
+#include "svtools/treelistentry.hxx"
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XFrame;

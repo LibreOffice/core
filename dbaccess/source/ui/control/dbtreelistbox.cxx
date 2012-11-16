@@ -38,6 +38,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <framework/imageproducer.hxx>
 #include <vcl/svapp.hxx>
+#include "svtools/treelistentry.hxx"
+
 #include <memory>
 
 // .........................................................................

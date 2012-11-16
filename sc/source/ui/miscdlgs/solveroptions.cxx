@@ -37,6 +37,7 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include "svtools/treelistentry.hxx"
 
 #include <algorithm>
 

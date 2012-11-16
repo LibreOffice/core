@@ -46,6 +46,7 @@
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <svtools/imgdef.hxx>
+#include "svtools/treelistentry.hxx"
 #include "TablesSingleDlg.hxx"
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>

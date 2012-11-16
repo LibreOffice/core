@@ -24,8 +24,9 @@
 #include <vcl/help.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/tempfile.hxx>
-
 #include <unotools/pathoptions.hxx>
+#include "svtools/treelistentry.hxx"
+
 #include <swtypes.hxx>
 #include <glosbib.hxx>
 #include <gloshdl.hxx>

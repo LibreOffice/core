@@ -42,6 +42,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
+#include "svtools/treelistentry.hxx"
+
 #define NODE_BMP_TABDIST_NOTVALID   -2000000
 #define FIRST_ENTRY_TAB             1
 
@@ -3323,6 +3325,16 @@ void SvImpLBox::NotifyTabsChanged()
     {
         nCurUserEvent = Application::PostUserEvent(LINK(this,SvImpLBox,MyUserEvent),(void*)0);
     }
+}
+
+bool SvImpLBox::IsExpandable() const
+{
+    return pCursor->HasChildren() || pCursor->HasChildrenOnDemand();
+}
+
+bool SvImpLBox::IsNowExpandable() const
+{
+    return IsExpandable() && !pView->IsExpanded( pCursor );
 }
 
 IMPL_LINK(SvImpLBox,MyUserEvent,void*, pArg )

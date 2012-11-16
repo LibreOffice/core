@@ -64,6 +64,7 @@
 #include <vcl/wrkwin.hxx>
 #include <tools/diagnose_ex.h>
 #include <svtools/svlbitm.hxx>
+#include "svtools/treelistentry.hxx"
 
 #include <functional>
 

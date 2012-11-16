@@ -30,6 +30,7 @@
 #include "sfx2/imgmgr.hxx"
 #include "srchdlg.hxx"
 #include "sfx2/sfxhelp.hxx"
+#include "svtools/treelistentry.hxx"
 
 #include "app.hrc"
 #include "newhelp.hrc"

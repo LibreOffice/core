@@ -27,6 +27,7 @@
 #include <svtools/filter.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistbox.hxx>
+#include "svtools/treelistentry.hxx"
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
