@@ -37,6 +37,7 @@
 #include <sal/log.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
+#include <i18npool/languagetag.hxx>
 #include <i18npool/mslangid.hxx>
 #include <tools/simplerm.hxx>
 
@@ -249,7 +250,7 @@ void ResMgrContainer::init()
 
     // set default language
     LanguageType nLang = MsLangId::getSystemUILanguage();
-    MsLangId::convertLanguageToLocale(nLang, m_aDefLocale);
+    m_aDefLocale = LanguageTag( nLang).getLocale();
 }
 
 namespace
