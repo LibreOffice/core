@@ -549,7 +549,7 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal
     }
 
     if (nDelFlag & IDF_NOTE)
-        maNotes.erase( nCol1, nRow1, nCol2, nRow2, true );
+        maNotes.erase( nCol1, nRow1, nCol2, nRow2 );
 
     if (IsStreamValid())
         // TODO: In the future we may want to check if the table has been
