@@ -41,7 +41,7 @@
 #include <svtools/colorcfg.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/datetime.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 //==================================================================
@@ -262,7 +262,7 @@ namespace pcr
 
         // determine a default format
         Locale aSysLocale = SvtSysLocale().GetLocaleData().getLocale();
-        LanguageType eSysLanguage = MsLangId::convertLocaleToLanguage( aSysLocale );
+        LanguageType eSysLanguage = LanguageTag( aSysLocale ).getLanguageType( false);
 
         getTypedControlWindow()->SetFormatter( getTypedControlWindow()->StandardFormatter() );
         SvNumberFormatter* pFormatter = getTypedControlWindow()->GetFormatter();
