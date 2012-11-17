@@ -32,7 +32,6 @@
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
-#include <i18npool/mslangid.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -71,15 +70,12 @@ void test::BootstrapFixture::setUp()
     test::BootstrapFixtureBase::setUp();
 
     // force locale (and resource files loaded) to en-US
-    const LanguageType eLang=LANGUAGE_ENGLISH_US;
 
-    OUString aLang, aCountry;
-    MsLangId::convertLanguageToIsoNames(eLang, aLang, aCountry);
-    lang::Locale aLocale(aLang, aCountry, OUString());
+    lang::Locale aLocale( "en", "US", "");
     ResMgr::SetDefaultLocale( aLocale );
 
     SvtSysLocaleOptions aLocalOptions;
-    OUString aLangISO = MsLangId::convertLanguageToIsoString( LANGUAGE_ENGLISH_US );
+    OUString aLangISO( "en-US" );
     aLocalOptions.SetLocaleConfigString( aLangISO );
     aLocalOptions.SetUILocaleConfigString( aLangISO );
 
