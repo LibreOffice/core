@@ -53,7 +53,7 @@ typedef unsigned short WORD;
 #include "sal/main.h"
 
 #include "tools/config.hxx"
-#include "i18npool/mslangid.hxx"
+#include "i18npool/languagetag.hxx"
 
 #include <iostream>
 #include <fstream>
@@ -332,7 +332,9 @@ void add_group_entries(
         rtl::OString iso_lang = aConfig.GetKeyName(sal::static_int_cast<sal_uInt16>(i));
         rtl::OString key_value_utf8 = aConfig.ReadKey(sal::static_int_cast<sal_uInt16>(i));
         iso_lang_identifier myiso_lang( iso_lang );
-        LanguageType ltype = MsLangId::convertIsoNamesToLanguage(myiso_lang.language(), myiso_lang.country());
+        LanguageType ltype = LanguageTag(
+                OStringToOUString( myiso_lang.language(), RTL_TEXTENCODING_UTF8),
+                OStringToOUString( myiso_lang.country(), RTL_TEXTENCODING_UTF8)).getLanguageType();
         if(  ( ltype & 0x0200 ) == 0 && map[ ltype ].empty()  )
         {
             Substitutor.set_language(iso_lang_identifier(iso_lang));
@@ -459,7 +461,9 @@ void start_language_section(
 
     std::string lang_section("LANGUAGE ");
 
-    LanguageType ltype = MsLangId::convertIsoNamesToLanguage(iso_lang.language(), iso_lang.country());
+    LanguageType ltype = LanguageTag(
+            OStringToOUString( iso_lang.language(), RTL_TEXTENCODING_UTF8),
+            OStringToOUString( iso_lang.country(), RTL_TEXTENCODING_UTF8)).getLanguageType();
 
     char buff[10];
     int primLangID = PRIMARYLANGID(ltype);
