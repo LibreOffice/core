@@ -30,6 +30,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <unotools/compatibility.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/fontoptions.hxx>
@@ -1255,7 +1256,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         LanguageType aLang = LANGUAGE_DONTKNOW;
         for (sal_IntPtr i=0; i<seqInstalledLanguages.getLength(); i++)
         {
-            aLang = MsLangId::convertIsoStringToLanguage(seqInstalledLanguages[i]);
+            aLang = LanguageTag(seqInstalledLanguages[i]).getLanguageType();
             if (aLang != LANGUAGE_DONTKNOW)
             {
                 //sal_uInt16 p = aUserInterfaceLB.InsertLanguage(aLang);
@@ -1551,7 +1552,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
-            Locale aLocale = MsLangId::convertLanguageToLocale( eSelectLang, false );
+            Locale aLocale = LanguageTag( eSelectLang).getLocale( false );
             aValue <<= aLocale;
             OUString aPropName( "DefaultLocale" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
@@ -1571,7 +1572,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
-            Locale aLocale = MsLangId::convertLanguageToLocale( eSelectLang, false );
+            Locale aLocale = LanguageTag( eSelectLang).getLocale( false );
             aValue <<= aLocale;
             OUString aPropName( "DefaultLocale_CJK" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
@@ -1591,7 +1592,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
-            Locale aLocale = MsLangId::convertLanguageToLocale( eSelectLang, false );
+            Locale aLocale = LanguageTag( eSelectLang).getLocale( false );
             aValue <<= aLocale;
             OUString aPropName( "DefaultLocale_CTL" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
@@ -1724,17 +1725,17 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
         Locale aLocale;
         aWestLang >>= aLocale;
 
-        eCurLang = MsLangId::convertLocaleToLanguage( aLocale );
+        eCurLang = LanguageTag( aLocale ).getLanguageType( false);
 
         aCJKLang = pLangConfig->aLinguConfig.GetProperty("DefaultLocale_CJK");
         aLocale = Locale();
         aCJKLang >>= aLocale;
-        eCurLangCJK = MsLangId::convertLocaleToLanguage( aLocale );
+        eCurLangCJK = LanguageTag( aLocale ).getLanguageType( false);
 
         aCTLLang = pLangConfig->aLinguConfig.GetProperty("DefaultLocale_CTL");
         aLocale = Locale();
         aCTLLang >>= aLocale;
-        eCurLangCTL = MsLangId::convertLocaleToLanguage( aLocale );
+        eCurLangCTL = LanguageTag( aLocale ).getLanguageType( false);
     }
     catch (const Exception&)
     {
