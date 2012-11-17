@@ -1144,7 +1144,7 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         GtkRequisition aReq;
         gtk_widget_size_request( widget, &aReq );
         Rectangle aEditRect = rControlRegion;
-        long nHeight = (aEditRect.GetHeight() > aReq.height+1) ? aEditRect.GetHeight() : aReq.height+1;
+        long nHeight = (aEditRect.GetHeight() > aReq.height) ? aEditRect.GetHeight() : aReq.height;
         aEditRect = Rectangle( aEditRect.TopLeft(),
                                Size( aEditRect.GetWidth(), nHeight ) );
         rNativeBoundingRegion = aEditRect;
