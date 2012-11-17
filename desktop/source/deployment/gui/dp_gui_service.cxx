@@ -36,7 +36,7 @@
 #include "comphelper/processfactory.hxx"
 #include "comphelper/servicedecl.hxx"
 #include "comphelper/unwrapargs.hxx"
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
 #include "com/sun/star/lang/XServiceInfo.hpp"
@@ -249,8 +249,8 @@ void ServiceImpl::startExecuteModal(
                                         static_cast<OWeakObject *>(this) );
             AllSettings as = app->GetSettings();
             as.SetUILanguage(
-                MsLangId::convertIsoStringToLanguage(
-                    utl::ConfigManager::getLocale() ) );
+                LanguageTag(
+                    utl::ConfigManager::getLocale() ).getLanguageType() );
             app->SetSettings( as );
             app->SetDisplayName(
                 utl::ConfigManager::getProductName() +

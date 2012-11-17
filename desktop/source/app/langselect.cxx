@@ -38,6 +38,7 @@
 #include <tools/resid.hxx>
 #include <tools/config.hxx>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -230,14 +231,14 @@ bool LanguageSelection::prepareLanguage()
                 Reference< XChangesBatch >(xProp2, UNO_QUERY_THROW)->commitChanges();
             }
 
-            MsLangId::setConfiguredSystemUILanguage( MsLangId::convertLocaleToLanguage(loc) );
+            MsLangId::setConfiguredSystemUILanguage( LanguageTag(loc).getLanguageType( false) );
 
             OUString sLocale;
             xProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupSystemLocale"))) >>= sLocale;
             if ( !sLocale.isEmpty() )
             {
                 loc = LanguageSelection::IsoStringToLocale(sLocale);
-                MsLangId::setConfiguredSystemLanguage( MsLangId::convertLocaleToLanguage(loc) );
+                MsLangId::setConfiguredSystemLanguage( LanguageTag(loc).getLanguageType( false) );
             }
             else
                 MsLangId::setConfiguredSystemLanguage( MsLangId::getSystemLanguage() );
@@ -269,7 +270,7 @@ void LanguageSelection::setDefaultLanguage(const OUString& sLocale)
     // See #i42730# for rules for determining source of settings
 
     // determine script type of locale
-    LanguageType nLang = MsLangId::convertIsoStringToLanguage(sLocale);
+    LanguageType nLang = LanguageTag(sLocale).getLanguageType();
     sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(nLang);
 
     switch (nScriptType)
