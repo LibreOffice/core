@@ -103,6 +103,12 @@ if (!@ARGV) {
     @cmdline_args = @ARGV;
 }
 
+my $default_config = "distro-configs/default.conf";
+if (-f $default_config) {
+    print STDERR "Reading default config file: $default_config\n";
+    push @args, read_args ($default_config);
+}
+
 my @args;
 for my $arg (@cmdline_args) {
     if ($arg eq '--clean') {
