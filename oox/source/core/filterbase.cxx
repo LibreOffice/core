@@ -166,6 +166,7 @@ struct FilterBaseImpl
 
 FilterBaseImpl::FilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     meDirection( FILTERDIRECTION_UNKNOWN ),
+    meVersion( ECMA_DIALECT ),
     mxComponentContext( rxContext, UNO_SET_THROW ),
     mxComponentFactory( rxContext->getServiceManager(), UNO_SET_THROW ),
     mxServiceFactory( rxContext->getServiceManager(), UNO_QUERY_THROW )
@@ -562,7 +563,7 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
         sal_Int32 nVersion = aProps.getUnpackedValueOrDefault( CREATE_OUSTRING( "FileFormatVersion" ), sal_Int32( 0 ) );
         mxImpl->meVersion = OoxmlVersion( nVersion );
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         // Not ISO OOXML
     }
