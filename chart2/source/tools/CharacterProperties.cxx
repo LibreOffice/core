@@ -45,6 +45,7 @@
 // header for struct SvtLinguConfig
 #include <unotools/lingucfg.hxx>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <vcl/outdev.hxx>
 
 using namespace ::com::sun::star;
@@ -409,11 +410,11 @@ void CharacterProperties::AddDefaultsToMap(
 
     using namespace ::com::sun::star::i18n::ScriptType;
     LanguageType nLang;
-    nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aDefaultLocale), LATIN);
+    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag(aDefaultLocale).getLanguageType( false), LATIN);
     Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_SPREADSHEET, nLang, DEFAULTFONT_FLAGS_ONLYONE, 0 );
-    nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage( aDefaultLocale_CJK), ASIAN);
+    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag( aDefaultLocale_CJK).getLanguageType( false), ASIAN);
     Font aFontCJK = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_SPREADSHEET, nLang, DEFAULTFONT_FLAGS_ONLYONE, 0 );
-    nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage( aDefaultLocale_CTL), COMPLEX);
+    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag( aDefaultLocale_CTL).getLanguageType( false), COMPLEX);
     Font aFontCTL = OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_SPREADSHEET, nLang, DEFAULTFONT_FLAGS_ONLYONE, 0 );
 
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_NAME, OUString( aFont.GetName() ) );
