@@ -45,7 +45,7 @@ class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
     Image           aQueryBMP;
 
     String          sDefDBName;
-    sal_Bool            bInitialized;
+    bool            bInitialized;
     sal_Bool            bShowColumns;
 
     SwDBTreeList_Impl* pImpl;

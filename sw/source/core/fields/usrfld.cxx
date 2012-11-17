@@ -188,7 +188,7 @@ SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const String& aNam )
     nValue( 0 ),
     nType(nsSwGetSetExpType::GSE_STRING)
 {
-    bValidValue = bDeleted = sal_False;
+    bValidValue = bDeleted = false;
     aName = aNam;
 
     if (nType & nsSwGetSetExpType::GSE_STRING)
@@ -250,7 +250,7 @@ double SwUserFieldType::GetValue( SwCalc& rCalc )
     rCalc.Pop();
 
     if( !rCalc.IsCalcError() )
-        bValidValue = sal_True;
+        bValidValue = true;
     else
         nValue = 0;
 

@@ -75,9 +75,9 @@ class SW_DLLPUBLIC SwDBField : public SwValueField
     rtl::OUString aContent;
     rtl::OUString sFieldCode; ///< contains Word's field code
     sal_uInt16  nSubType;
-    sal_Bool    bIsInBodyTxt    : 1;
-    sal_Bool    bValidValue     : 1;
-    sal_Bool    bInitialized    : 1;
+    bool    bIsInBodyTxt    : 1;
+    bool    bValidValue     : 1;
+    bool    bInitialized    : 1;
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
@@ -97,7 +97,7 @@ public:
     virtual String      GetFieldName() const;
 
     /// For calculations in expressions.
-    void                ChgValue( double d, sal_Bool bVal );
+    void                ChgValue( double d, bool bVal );
 
     /// Get the evaluation via DBMgr string.
     void                Evaluate();
@@ -107,11 +107,11 @@ public:
     void                InitContent();
     void                InitContent(const String& rExpansion);
 
-    inline void         ChgBodyTxtFlag( sal_Bool bIsInBody );
+    inline void         ChgBodyTxtFlag( bool bIsInBody );
 
-    inline sal_Bool         IsInitialized() const   { return bInitialized; }
-    inline void         ClearInitialized()      { bInitialized = sal_False; }
-    inline void         SetInitialized()        { bInitialized = sal_True; }
+    inline bool         IsInitialized() const   { return bInitialized; }
+    inline void         ClearInitialized()      { bInitialized = false; }
+    inline void         SetInitialized()        { bInitialized = true; }
 
     /// Get name.
     virtual const rtl::OUString& GetPar1() const;
@@ -130,7 +130,7 @@ inline  void SwDBField::SetExpansion(const String& rStr)
     { aContent = rStr; }
 
 /// set from UpdateExpFlds (the Node-Position is known there)
-inline void SwDBField::ChgBodyTxtFlag( sal_Bool bIsInBody )
+inline void SwDBField::ChgBodyTxtFlag( bool bIsInBody )
     { bIsInBodyTxt = bIsInBody; }
 
 /*--------------------------------------------------------------------
@@ -182,7 +182,7 @@ public:
 class SW_DLLPUBLIC SwDBNextSetField : public SwDBNameInfField
 {
     rtl::OUString  aCond;
-    sal_Bool    bCondValid;
+    bool    bCondValid;
 
 public:
     SwDBNextSetField( SwDBNextSetFieldType*,
@@ -192,8 +192,8 @@ public:
     virtual SwField*        Copy() const;
 
     void                    Evaluate(SwDoc*);
-    inline void             SetCondValid(sal_Bool bCond);
-    inline sal_Bool             IsCondValid() const;
+    inline void             SetCondValid(bool bCond);
+    inline bool             IsCondValid() const;
 
     // Condition
     virtual const rtl::OUString&   GetPar1() const;
@@ -202,10 +202,10 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
-inline sal_Bool SwDBNextSetField::IsCondValid() const
+inline bool SwDBNextSetField::IsCondValid() const
     { return bCondValid; }
 
-inline void SwDBNextSetField::SetCondValid(sal_Bool bCond)
+inline void SwDBNextSetField::SetCondValid(bool bCond)
     { bCondValid = bCond; }
 
 /*--------------------------------------------------------------------
@@ -229,7 +229,7 @@ class SwDBNumSetField : public SwDBNameInfField
 {
     rtl::OUString  aCond;
     String  aPar2;
-    sal_Bool    bCondValid;
+    bool    bCondValid;
 
 public:
     SwDBNumSetField(SwDBNumSetFieldType*, const String& rCond, const String& rDBNum, const SwDBData& rDBData);
@@ -237,8 +237,8 @@ public:
     virtual String          Expand() const;
     virtual SwField*        Copy() const;
 
-    inline sal_Bool             IsCondValid() const;
-    inline void             SetCondValid(sal_Bool bCond);
+    inline bool             IsCondValid() const;
+    inline void             SetCondValid(bool bCond);
     void                    Evaluate(SwDoc*);
 
     // Condition
@@ -254,10 +254,10 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
-inline sal_Bool SwDBNumSetField::IsCondValid() const
+inline bool SwDBNumSetField::IsCondValid() const
     { return bCondValid; }
 
-inline void SwDBNumSetField::SetCondValid(sal_Bool bCond)
+inline void SwDBNumSetField::SetCondValid(bool bCond)
     { bCondValid = bCond; }
 
 /*--------------------------------------------------------------------

@@ -99,7 +99,7 @@ protected:
 
     String      sFormel;            ///< current formula
     NameType    eNmType;            ///< current display method
-    sal_Bool        bValidValue;        ///< sal_True: recalculate formula
+    bool        bValidValue;        ///< true: recalculate formula
 
     // find the node in which the formula is located
     //  TextFeld    -> TextNode,

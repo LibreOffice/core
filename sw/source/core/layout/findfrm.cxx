@@ -748,7 +748,7 @@ SwFrm *SwFrm::_FindNext()
     }
     else
     {
-        const sal_Bool bBody = pThis->IsInDocBody();
+        const bool bBody = pThis->IsInDocBody();
         SwFrm *pNxtCnt = lcl_NextFrm( pThis );
         if ( pNxtCnt )
         {
@@ -847,7 +847,7 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
 
     if ( pThis->IsCntntFrm() )
     {
-        const sal_Bool bBody = pThis->IsInDocBody();
+        const bool bBody = pThis->IsInDocBody();
         const sal_Bool bFtn  = pThis->IsInFtn();
         SwCntntFrm *pNxtCnt = ((SwCntntFrm*)pThis)->GetNextCntntFrm();
         if ( pNxtCnt )
@@ -1101,7 +1101,7 @@ SwFrm *SwFrm::_FindPrev()
         else
         {
             SwFrm* pRet;
-            const sal_Bool bBody = pThis->IsInDocBody();
+            const bool bBody = pThis->IsInDocBody();
             const sal_Bool bFtn  = bBody ? sal_False : pThis->IsInFtn();
             if ( bBody || bFtn )
             {

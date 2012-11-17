@@ -110,7 +110,7 @@ static sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
 
 //-----------------------------------------------------------------------------
 
-void ReplacePoint( String& rTmpName, sal_Bool bWithCommandType )
+void ReplacePoint( String& rTmpName, bool bWithCommandType )
 {
     // replace first and last (if bWithCommandType: last two) dot Ersten und letzten Punkt ersetzen, da in Tabellennamen Punkte erlaubt sind
     // since table names may contain dots

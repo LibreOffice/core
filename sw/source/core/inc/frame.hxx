@@ -524,7 +524,7 @@ public:
 
     void SetInfFlags();
     inline void InvalidateInfFlags() { bInfInvalid = sal_True; }
-    inline sal_Bool IsInDocBody() const;    // use InfoFlags, determine flags
+    inline bool IsInDocBody() const;    // use InfoFlags, determine flags
     inline sal_Bool IsInFtn() const;        // if necessary
     inline sal_Bool IsInTab() const;
     inline sal_Bool IsInFly() const;
@@ -889,7 +889,7 @@ public:
     bool IsCollapse() const;
 };
 
-inline sal_Bool SwFrm::IsInDocBody() const
+inline bool SwFrm::IsInDocBody() const
 {
     if ( bInfInvalid )
         ((SwFrm*)this)->SetInfFlags();

@@ -38,8 +38,8 @@ class SwDoc;
 
 class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
 {
-    sal_Bool    bValidValue : 1;
-    sal_Bool    bDeleted : 1;
+    bool    bValidValue : 1;
+    bool    bDeleted : 1;
     double  nValue;
     rtl::OUString  aName;
     String  aContent;
@@ -56,8 +56,8 @@ public:
     String                  GetContent( sal_uInt32 nFmt = 0 );
            void             SetContent( const String& rStr, sal_uInt32 nFmt = 0 );
 
-    inline sal_Bool             IsValid() const;
-    inline void             ChgValid( sal_Bool bNew );
+    inline bool             IsValid() const;
+    inline void             ChgValid( bool bNew );
 
            double           GetValue(SwCalc& rCalc);    // Recalculate member nValue.
     inline double           GetValue() const;
@@ -66,8 +66,8 @@ public:
     inline sal_uInt16           GetType() const;
     inline void             SetType(sal_uInt16);
 
-    sal_Bool                    IsDeleted() const       { return bDeleted; }
-    void                    SetDeleted( sal_Bool b )    { bDeleted = b; }
+    bool                    IsDeleted() const       { return bDeleted; }
+    void                    SetDeleted( bool b )    { bDeleted = b; }
 
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId );
@@ -76,10 +76,10 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 };
 
-inline sal_Bool SwUserFieldType::IsValid() const
+inline bool SwUserFieldType::IsValid() const
     { return bValidValue; }
 
-inline void SwUserFieldType::ChgValid( sal_Bool bNew )
+inline void SwUserFieldType::ChgValid( bool bNew )
     { bValidValue = bNew; }
 
 inline double SwUserFieldType::GetValue() const

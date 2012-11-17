@@ -188,7 +188,7 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
     SvTreeListBox   (pParent, rResId),
     aImageList      (SW_RES(ILIST_DB_DLG    )),
     sDefDBName      (rDefDBName),
-    bInitialized    (sal_False),
+    bInitialized    (false),
     bShowColumns    (bShowCol),
     pImpl(new SwDBTreeList_Impl(pSh))
 {
@@ -233,7 +233,7 @@ void SwDBTreeList::InitTreeList()
     String sColumnName(sDefDBName.GetToken(2, DB_DELIM));
     Select(sDBName, sTableName, sColumnName);
 
-    bInitialized = sal_True;
+    bInitialized = true;
 }
 
 void    SwDBTreeList::AddDataSource(const String& rSource)

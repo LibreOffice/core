@@ -956,7 +956,7 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
     OSL_ENSURE( !IsInFtn(), "GetNextLeaf(), don't call me for Ftn." );
     OSL_ENSURE( !IsInSct(), "GetNextLeaf(), don't call me for Sections." );
 
-    const sal_Bool bBody = IsInDocBody();  // If I'm coming from the DocBody,
+    const bool bBody = IsInDocBody();  // If I'm coming from the DocBody,
                                            // I want to end up in the body.
 
     // It doesn't make sense to insert pages, as we only want to search the
@@ -1096,7 +1096,7 @@ SwLayoutFrm *SwFrm::GetPrevLeaf( MakePageType )
 {
     OSL_ENSURE( !IsInFtn(), "GetPrevLeaf(), don't call me for Ftn." );
 
-    const sal_Bool bBody = IsInDocBody();  // If I'm coming from the DocBody,
+    const bool bBody = IsInDocBody();  // If I'm coming from the DocBody,
                                            // I want to end up in the body.
     const sal_Bool bFly  = IsInFly();
 

@@ -84,7 +84,7 @@ void SwFldPortion::TakeNextOffset( const SwFldPortion* pFld )
     bFollow = sal_True;
 }
 
-SwFldPortion::SwFldPortion( const XubString &rExpand, SwFont *pFont, sal_Bool bPlaceHold )
+SwFldPortion::SwFldPortion( const XubString &rExpand, SwFont *pFont, bool bPlaceHold )
     : aExpand(rExpand), pFnt(pFont), nNextOffset(0), nNextScriptChg(STRING_LEN), nViewWidth(0),
       bFollow( sal_False ), bHasFollow( sal_False ), bPlaceHolder( bPlaceHold )
     , m_bNoLength( sal_False )

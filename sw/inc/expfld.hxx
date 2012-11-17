@@ -48,7 +48,7 @@ class SwEditShell;
 const SwTxtNode* GetBodyTxtNode( const SwDoc& pDoc, SwPosition& rPos,
                                  const SwFrm& rFrm );
 
-void ReplacePoint(String& sTmpName, sal_Bool bWithCommandType = sal_False);
+void ReplacePoint(String& sTmpName, bool bWithCommandType = false);
 
 struct _SeqFldLstElem
 {
@@ -94,7 +94,7 @@ protected:
 class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
 {
     String          sExpand;
-    sal_Bool            bIsInBodyTxt;
+    bool            bIsInBodyTxt;
     sal_uInt16          nSubType;
 
     bool            bLateInitialization; // #i82544#
@@ -113,10 +113,10 @@ public:
     inline void                 ChgExpStr(const String& rExpand);
 
     /// Called by formating.
-    inline sal_Bool                 IsInBodyTxt() const;
+    inline bool                 IsInBodyTxt() const;
 
     /// Set by UpdateExpFlds where node position is known.
-    inline void                 ChgBodyTxtFlag( sal_Bool bIsInBody );
+    inline void                 ChgBodyTxtFlag( bool bIsInBody );
 
     /** For fields in header/footer/footnotes/flys:
      Only called by formating!! */
@@ -145,11 +145,11 @@ inline const String& SwGetExpField::GetExpStr() const
     { return sExpand;   }
 
  /// Called by formating.
-inline sal_Bool SwGetExpField::IsInBodyTxt() const
+inline bool SwGetExpField::IsInBodyTxt() const
     { return bIsInBodyTxt; }
 
  /// Set by UpdateExpFlds where node position is known.
-inline void SwGetExpField::ChgBodyTxtFlag( sal_Bool bIsInBody )
+inline void SwGetExpField::ChgBodyTxtFlag( bool bIsInBody )
     { bIsInBodyTxt = bIsInBody; }
 
 class SwSetExpField;

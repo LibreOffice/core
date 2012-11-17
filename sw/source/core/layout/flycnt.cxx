@@ -116,7 +116,7 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         SwCntntFrm *pCntnt = (SwCntntFrm*)GetAnchorFrm();
         AnchorFrm()->RemoveFly( this );
 
-        const sal_Bool bBodyFtn = (pCntnt->IsInDocBody() || pCntnt->IsInFtn());
+        const bool bBodyFtn = (pCntnt->IsInDocBody() || pCntnt->IsInFtn());
 
         // Search the new anchor using the NodeIdx; the relation between old
         // and new NodeIdx determines the search direction
@@ -898,7 +898,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
 
 static sal_uLong lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
                           const SwCntntFrm *& rpCnt,
-                          const sal_Bool bBody, const sal_Bool bFtn )
+                          const bool bBody, const sal_Bool bFtn )
 {
     // Searches below pLay the nearest Cnt to the point. The reference point of
     //the Cntnts is always the left upper corner.
@@ -962,7 +962,7 @@ static sal_uLong lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
 }
 
 static const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
-                                  const sal_Bool bBody, const sal_Bool bFtn )
+                                  const bool bBody, const sal_Bool bFtn )
 {
     //Starting from pCnt searches the CntntFrm whose left upper corner is the
     //nearest to the point.
@@ -1083,7 +1083,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
 
     //Take care to use meaningful ranges during search. This means to not enter
     //or leave header/footer in this case.
-    const sal_Bool bBody = pCnt->IsInDocBody() || bBodyOnly;
+    const bool bBody = pCnt->IsInDocBody() || bBodyOnly;
     const sal_Bool bFtn  = !bBodyOnly && pCnt->IsInFtn();
 
     Point aNew( rNew );

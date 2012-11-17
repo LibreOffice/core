@@ -64,10 +64,10 @@
  *************************************************************************/
 
 
-static sal_Bool lcl_IsInBody( SwFrm *pFrm )
+static bool lcl_IsInBody( SwFrm *pFrm )
 {
     if ( pFrm->IsInDocBody() )
-        return sal_True;
+        return true;
     else
     {
         const SwFrm *pTmp = pFrm;
@@ -88,8 +88,8 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     const sal_Bool bName = rInf.GetOpt().IsFldName();
 
     SwCharFmt* pChFmt = 0;
-    sal_Bool bNewFlyPor = sal_False,
-         bINet = sal_False;
+    bool bNewFlyPor = false,
+         bINet = false;
 
     // set language
     ((SwTxtFormatter*)this)->SeekAndChg( rInf );
@@ -104,7 +104,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     ViewShell *pSh = rInf.GetVsh();
     SwDoc *const pDoc( (pSh) ? pSh->GetDoc() : 0 );
     bool const bInClipboard( (pDoc) ? pDoc->IsClipBoard() : true );
-    sal_Bool bPlaceHolder = sal_False;
+    sal_Bool bPlaceHolder = false;
 
     switch( pFld->GetTyp()->Which() )
     {
@@ -197,14 +197,14 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 SwGetExpField* pExpFld = (SwGetExpField*)pFld;
                 if( !::lcl_IsInBody( pFrame ) )
                 {
-                    pExpFld->ChgBodyTxtFlag( sal_False );
+                    pExpFld->ChgBodyTxtFlag( false );
                     pExpFld->ChangeExpansion( *pFrame, *((SwTxtFld*)pHint) );
                 }
                 else if( !pExpFld->IsInBodyTxt() )
                 {
                     // war vorher anders, also erst expandieren, dann umsetzen!!
                     pExpFld->ChangeExpansion( *pFrame, *((SwTxtFld*)pHint) );
-                    pExpFld->ChgBodyTxtFlag( sal_True );
+                    pExpFld->ChgBodyTxtFlag( true );
                 }
             }
             {
@@ -246,8 +246,8 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
         case RES_JUMPEDITFLD:
             if( !bName )
                 pChFmt =  ((SwJumpEditField*)pFld)->GetCharFmt();
-            bNewFlyPor = sal_True;
-            bPlaceHolder = sal_True;
+            bNewFlyPor = true;
+            bPlaceHolder = true;
             break;
 
         default:

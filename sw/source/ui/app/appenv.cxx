@@ -94,7 +94,7 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
         while ( aLine.Len() )
         {
             String sTmpText;
-            sal_Bool bField = sal_False;
+            bool bField = false;
 
             sal_uInt16 nPos = aLine.Search( '<' );
             if ( nPos )
@@ -120,11 +120,11 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
                     sal_uInt16 nCnt = comphelper::string::getTokenCount(sDBName, '.');
                     if (nCnt >= 3)
                     {
-                        ::ReplacePoint(sDBName, sal_True);
+                        ::ReplacePoint(sDBName, true);
                         SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyStr, 0, &rSh );
                         rFldMgr.InsertFld( aData );
                         sRet = sDBName;
-                        bField = sal_True;
+                        bField = true;
                     }
                 }
             }
@@ -185,7 +185,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     SwEnvCfgItem aEnvCfg;
 
     // Check if there's already an envelope.
-    sal_Bool bEnvChange = sal_False;
+    bool bEnvChange = false;
 
     SfxItemSet aSet(GetPool(), FN_ENVELOP, FN_ENVELOP, 0);
     aSet.Put(aEnvCfg.GetItem());
@@ -381,9 +381,9 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         rFmt.SetFmtAttr(aULMargin);
 
         // Header and footer
-        rFmt.SetFmtAttr(SwFmtHeader(sal_Bool(sal_False)));
+        rFmt.SetFmtAttr(SwFmtHeader(sal_False));
         pDesc->ChgHeaderShare(sal_False);
-        rFmt.SetFmtAttr(SwFmtFooter(sal_Bool(sal_False)));
+        rFmt.SetFmtAttr(SwFmtFooter(sal_False));
         pDesc->ChgFooterShare(sal_False);
 
         // Page numbering

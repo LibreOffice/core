@@ -191,9 +191,9 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 SwDBField::SwDBField(SwDBFieldType* pTyp, sal_uLong nFmt)
     :   SwValueField(pTyp, nFmt),
         nSubType(0),
-        bIsInBodyTxt(sal_True),
-        bValidValue(sal_False),
-        bInitialized(sal_False)
+        bIsInBodyTxt(true),
+        bValidValue(false),
+        bInitialized(false)
 {
     if (GetTyp())
         ((SwDBFieldType*)GetTyp())->AddRef();
@@ -286,7 +286,7 @@ String SwDBField::GetFieldName() const
 
 //------------------------------------------------------------------------------
 
-void SwDBField::ChgValue( double d, sal_Bool bVal )
+void SwDBField::ChgValue( double d, bool bVal )
 {
     bValidValue = bVal;
     SetValue(d);
@@ -314,7 +314,7 @@ void SwDBField::Evaluate()
     SwNewDBMgr* pMgr = GetDoc()->GetNewDBMgr();
 
     // erstmal loeschen
-    bValidValue = sal_False;
+    bValidValue = false;
     double nValue = DBL_MAX;
     const SwDBData& aTmpData = GetDBData();
 
@@ -343,7 +343,7 @@ void SwDBField::Evaluate()
             if (*pDocFormatter->GetNullDate() != aStandard)
                 nValue += (aStandard - *pDocFormatter->GetNullDate());
         }
-        bValidValue = sal_True;
+        bValidValue = true;
         SetValue(nValue);
         aContent = ((SwValueFieldType*)GetTyp())->ExpandValue(nValue, GetFormat(), GetLanguage());
     }
@@ -358,7 +358,7 @@ void SwDBField::Evaluate()
 
             SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
             if (nFmt && nFmt != SAL_MAX_UINT32 && !pFormatter->IsTextFormat(nFmt))
-                bValidValue = sal_True; // Wegen Bug #60339 nicht mehr bei allen Strings
+                bValidValue = true; // Wegen Bug #60339 nicht mehr bei allen Strings
         }
         else
         {
@@ -366,7 +366,7 @@ void SwDBField::Evaluate()
             SetValue(aContent.isEmpty() ? 0 : 1);
         }
     }
-    bInitialized = sal_True;
+    bInitialized = true;
 }
 
 /*--------------------------------------------------------------------
@@ -613,7 +613,7 @@ SwDBNextSetField::SwDBNextSetField(SwDBNextSetFieldType* pTyp,
                                    const String& rCond,
                                    const String& ,
                                    const SwDBData& rDBData) :
-    SwDBNameInfField(pTyp, rDBData), aCond(rCond), bCondValid(sal_True)
+    SwDBNameInfField(pTyp, rDBData), aCond(rCond), bCondValid(true)
 {}
 
 //------------------------------------------------------------------------------
@@ -715,7 +715,7 @@ SwDBNumSetField::SwDBNumSetField(SwDBNumSetFieldType* pTyp,
     SwDBNameInfField(pTyp, rDBData),
     aCond(rCond),
     aPar2(rDBNum),
-    bCondValid(sal_True)
+    bCondValid(true)
 {}
 
 //------------------------------------------------------------------------------
