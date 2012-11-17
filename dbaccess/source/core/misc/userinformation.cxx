@@ -21,7 +21,7 @@
 #include "userinformation.hxx"
 
 #include <osl/diagnose.h>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <unotools/configmgr.hxx>
 
 using namespace ::utl;
@@ -30,10 +30,7 @@ using namespace ::com::sun::star::lang;
 
 //--------------------------------------------------------------------------
 UserInformation::UserInformation():
-    m_aUserLocale(
-        MsLangId::convertLanguageToLocale(
-            MsLangId::convertIsoStringToLanguage(
-                ConfigManager::getLocale(), '-')))
+    m_aUserLocale( LanguageTag( ConfigManager::getLocale()).getLocale())
 {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
