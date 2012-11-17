@@ -43,7 +43,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <tools/wintypes.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <rtl/textenc.h>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
@@ -150,7 +150,7 @@ Reference< XNumberFormatsSupplier > StandardFormatsSupplier::get( const Referenc
         // get the Office's locale
         const Locale& rSysLocale = SvtSysLocale().GetLocaleData().getLocale();
         // translate
-        eSysLanguage = MsLangId::convertLocaleToLanguage( rSysLocale );
+        eSysLanguage = LanguageTag( rSysLocale ).getLanguageType( false);
     }
 
     StandardFormatsSupplier* pSupplier = new StandardFormatsSupplier( _rxORB, eSysLanguage );
@@ -856,7 +856,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
             if (isA(aLocale, static_cast<Locale*>(NULL)))
             {
                 Locale* pLocale = (Locale*)aLocale.getValue();
-                eFormatLanguage = MsLangId::convertLocaleToLanguage( *pLocale );
+                eFormatLanguage = LanguageTag( *pLocale ).getLanguageType( false);
             }
         }
 
@@ -940,7 +940,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
 
                 if (xFormats.is())
                 {
-                    Locale aDescriptionLanguage( MsLangId::convertLanguageToLocale(eDescriptionLanguage));
+                    Locale aDescriptionLanguage( LanguageTag(eDescriptionLanguage).getLocale());
 
                     nKey = xFormats->queryKey(sFormatDescription, aDescriptionLanguage, sal_False);
                     if (nKey == (sal_Int32)-1)
