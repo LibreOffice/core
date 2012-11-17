@@ -33,6 +33,7 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/lingucfg.hxx>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 // =============================================================================
 namespace reportdesign
@@ -83,11 +84,11 @@ OFormatProperties::OFormatProperties()
         using namespace ::com::sun::star::i18n::ScriptType;
 
         aLinguConfig.GetProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale"))) >>= aCharLocale;
-        LanguageType eCurLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aCharLocale), LATIN);
+        LanguageType eCurLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag(aCharLocale).getLanguageType(false), LATIN);
         aLinguConfig.GetProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale_CJK")))  >>= aCharLocaleAsian;
-        LanguageType eCurLangCJK = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aCharLocaleAsian), ASIAN);
+        LanguageType eCurLangCJK = MsLangId::resolveSystemLanguageByScriptType(LanguageTag(aCharLocaleAsian).getLanguageType(false), ASIAN);
         aLinguConfig.GetProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale_CTL")))  >>= aCharLocaleComplex;
-        LanguageType eCurLangCTL = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aCharLocaleComplex), COMPLEX);
+        LanguageType eCurLangCTL = MsLangId::resolveSystemLanguageByScriptType(LanguageTag(aCharLocaleComplex).getLanguageType(false), COMPLEX);
 
         Font aLatin,aCJK,aCTL;
         lcl_getDefaultFonts(aLatin,aCJK,aCTL,eCurLang,eCurLangCJK,eCurLangCTL);

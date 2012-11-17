@@ -94,7 +94,7 @@
 #include <com/sun/star/report/Function.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include "dlgpage.hxx"
 #include <vcl/msgbox.hxx>
 #include "rptui_slotid.hrc"
@@ -252,7 +252,7 @@ namespace
                 break;
         }
 
-        _rItemSet.Put(SvxLanguageItem(MsLangId::convertLocaleToLanguageWithFallback(aLocale),_nLanguage));
+        _rItemSet.Put(SvxLanguageItem(LanguageTag(aLocale).makeFallback().getLanguageType(),_nLanguage));
 
         _rItemSet.Put(SvxPostureItem(aFont.GetItalic(),_nPosture));
         _rItemSet.Put(SvxWeightItem(aFont.GetWeight(),_nWeight));
@@ -546,8 +546,7 @@ namespace
             if ( SFX_ITEM_SET == _rItemSet.GetItemState( pItems[k].nWhich,sal_True,&pItem) && pItem->ISA(SvxLanguageItem))
             {
                 const SvxLanguageItem* pFontItem = static_cast<const SvxLanguageItem*>(pItem);
-                lang::Locale aCharLocale;
-                MsLangId::convertLanguageToLocale( pFontItem->GetLanguage(), aCharLocale );
+                lang::Locale aCharLocale( LanguageTag( pFontItem->GetLanguage()).getLocale());
                 lcl_pushBack( _out_rProperties, pItems[k].sPropertyName, uno::makeAny( aCharLocale ) );
             }
         }
