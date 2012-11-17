@@ -23,7 +23,7 @@
 #include <ConversionHelper.hxx>
 #include <ModelEventListener.hxx>
 #include <MeasureHandler.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <i18nutil/paper.hxx>
 #include <ooxml/OOXMLFastTokens.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -1143,8 +1143,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Language_eastAsia: //90315
         case NS_ooxml::LN_CT_Language_bidi: //90316
         {
-            LanguageType eLang = MsLangId::convertIsoStringToLanguage( sStringValue );
-            lang::Locale aLocale = MsLangId::convertLanguageToLocale( eLang );
+            lang::Locale aLocale( LanguageTag( sStringValue).getLocale());
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(NS_ooxml::LN_CT_Language_val== nName ? PROP_CHAR_LOCALE :
                              NS_ooxml::LN_CT_Language_eastAsia == nName ? PROP_CHAR_LOCALE_ASIAN : PROP_CHAR_LOCALE_COMPLEX,
@@ -2301,8 +2300,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_CRgLid1:    // sprmCRgLid1    language Asian
     case NS_sprm::LN_CRgLid1_80: // sprmCRgLid1_80 older language Asian
         {
-            lang::Locale aLocale;
-            MsLangId::convertLanguageToLocale( (LanguageType)nIntValue, aLocale );
+            lang::Locale aLocale( LanguageTag( (LanguageType)nIntValue).getLocale());
 
             PropertyIds aPropId;
             switch (nSprmId)
