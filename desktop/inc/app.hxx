@@ -31,7 +31,6 @@
 
 // stl includes first
 #include <map>
-#include <memory>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
@@ -197,7 +196,7 @@ class Desktop : public Application
         OUString                        m_aBootstrapErrorMessage;
         BootstrapStatus                 m_aBootstrapStatus;
 
-        std::auto_ptr< Lockfile > m_pLockfile;
+        Lockfile *m_pLockfile;
         Timer    m_firstRunTimer;
 
         static ResMgr*                  pResMgr;
