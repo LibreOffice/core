@@ -41,6 +41,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -142,7 +143,7 @@ namespace svxform
                 // determine the script type associated with the system locale
                 const SvtSysLocale aSysLocale;
                 const LocaleDataWrapper& rSysLocaleData = aSysLocale.GetLocaleData();
-                const sal_Int16 eSysLocaleScriptType = MsLangId::getScriptType( MsLangId::convertLocaleToLanguage( rSysLocaleData.getLocale() ) );
+                const sal_Int16 eSysLocaleScriptType = MsLangId::getScriptType( LanguageTag( rSysLocaleData.getLocale() ).getLanguageType() );
 
                 // depending on this script type, use the right property from the document's style which controls the
                 // default locale for document content
@@ -185,7 +186,7 @@ namespace svxform
                 }
 
                 // retrieve a default font for this locale, and set it at the control
-                Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS, MsLangId::convertLocaleToLanguage( aDocumentCharLocale ), DEFAULTFONT_FLAGS_ONLYONE );
+                Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS, LanguageTag( aDocumentCharLocale ).getLanguageType(), DEFAULTFONT_FLAGS_ONLYONE );
                 FontDescriptor aFontDesc = VCLUnoHelper::CreateFontDescriptor( aFont );
                 _rxModel->setPropertyValue(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontDescriptor" ) ),
