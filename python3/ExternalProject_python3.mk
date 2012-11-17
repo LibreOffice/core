@@ -57,13 +57,15 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 	cd $(EXTERNAL_WORKDIR) \
 	&& ./configure \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		--enable-shared \
-		--with-system-expat \
+		$(if $(filter YES,$(SYSTEM_EXPAT)),--with-system-expat) \
 		$(if $(strip $(VALGRIND_CFLAGS)),--with-valgrind) \
 		--prefix=/$(if $(filter MACOSX,$(OS)),@__________________________________________________OOO,python-inst) \
 		$(if $(filter AIX,$(OS)),--disable-ipv6 --with-threads CFLAGS="-g0") \
 		$(if $(filter WNT-GCC,$(OS)-$(COM)),--with-threads ac_cv_printf_zd_format=no) \
-		$(if $(filter MACOSX,$(OS)),--enable-universalsdk=$(MACOSX_SDK_PATH) --with-universal-archs=32-bit --enable-frameworks=/SomeDirThatIsNotLibraryOrSystemOrFrameworks --with-framework-name=OOoPython) \
+		$(if $(filter MACOSX,$(OS)), \
+			--enable-universalsdk=$(MACOSX_SDK_PATH) --with-universal-archs=32-bit --enable-framework=/SomeDirThatIsNotLibraryOrSystemOrFrameworks --with-framework-name=LibreOfficePython, \
+			--enable-shared \
+		) \
 		CC="$(strip $(CC) \
 			$(if $(filter YES,$(SYSTEM_OPENSSL)),, -I$(OUTDIR)/inc/external) \
 			$(if $(filter YES,$(SYSTEM_EXPAT)),, -I$(OUTDIR)/inc/external/expat) \
