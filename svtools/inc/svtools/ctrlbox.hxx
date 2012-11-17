@@ -64,55 +64,52 @@ typedef ::std::vector< FontInfo              > ImplFontList;
 
 /*************************************************************************
 
-Beschreibung
+Description
 ============
 
 class ColorListBox
 
-Beschreibung
+Description
 
-Erlaubt die Auswahl von Farben.
+Allows color selection
 
 --------------------------------------------------------------------------
 
 class LineListBox
 
-Beschreibung
+Description
 
-Erlaubt die Auswahl von Linien-Styles und Groessen. Es ist darauf zu achten,
-das vor dem ersten Insert die Units und die Fesntergroesse gesetzt sein
-muessen. An Unit wird Point und mm unterstuetzt und als SourceUnit Point,
-mm und Twips. Alle Angaben muessen in 100teln der jeweiligen Einheit
-vorliegen.
+Allows selection of line styles and sizes. Not that before first insert,
+units and window size need to be set. Supported units are typographic point
+(pt) and millimeters (mm). For SourceUnit, pt, mm and twips are supported.
+All scalar numbers in 1/100 of the corresponding unit.
 
-Line1 ist aeussere, Line2 die innere und Distance die Distanz zwischen
-den beiden Linien. Wenn Line2 = 0 ist, wird nur Line1 angezeigt. Als
-Default sind sowohl Source als auch Ziel-Unit FUNIT_POINT.
+Line1 is the outer, Line2 the inner line, Distance is the distance between
+these two lines. If Line2 == 2, only Line1 will be shown. Defaults for
+source and target unit are FUNIT_POINT.
 
-Mit SetColor() kann die Linienfarbe eingestellt werden.
+SetColor() sets the line color.
 
-Anmerkungen und Ausnahmen
+Remarks
 
-Gegenueber einer normalen ListBox, koennen keine User-Daten gesetzt
-werden. Ausserdem sollte wenn der UpdateMode ausgeschaltet ist, keine
-Daten abgefragt oder die Selektion gesetzt werden, da in diesem Zustand
-die Daten nicht definiert sind. Wenn der UpdateMode ausgeschaltet ist,
-sollte der Rueckgabewert bei Insert nicht ausgewertet werden, da er keine
-Bedeutung hat. Ausserdem darf nicht das WinBit WB_SORT gesetzt sein.
+Contrary to a simple ListBox, user-specific data are not supported.
+If UpdateMode is disabled, no data should be read, no selections
+should be set, and the return code shall be ignore, as in these are
+not defined in this mode. Also the bit WinBit WB_SORT may not be set.
 
 --------------------------------------------------------------------------
 
 class FontNameBox
 
-Beschreibung
+Description
 
-Erlaubt die Auswahl von Fonts. Die ListBox wird mit Fill gefuellt, wo
-ein Pointer auf eine FontList uebergeben werden muss.
+Allows selection of fonts. The ListBox will be filled using Fill parameter,
+which is pointer to an FontList object.
 
-Mit EnableWYSIWYG() kann man einstellen, das die Fontnamen in Ihrer Schrift
-angezeigt werden.
+Calling EnableWYSIWYG() enables rendering the font name in the currently
+selected font.
 
-Querverweise
+See also
 
 FontList; FontStyleBox; FontSizeBox; FontNameMenu
 
@@ -120,20 +117,21 @@ FontList; FontStyleBox; FontSizeBox; FontNameMenu
 
 class FontStyleBox
 
-Beschreibung
+Description
 
-Erlaubt die Auswahl eines FontStyles. Mit Fill wird die ListBox mit
-den Styles zum uebergebenen Font gefuellt. Nachgebildete Styles werden
-immer mit eingefuegt (kann sich aber noch aendern, da vielleicht
-nicht alle Applikationen [StarDraw,Formel,FontWork] mit Syntetic-Fonts
-umgehen koennen). Bei Fill bleibt vorherige Name soweit wie moeglich
-erhalten.
+Allows select of FontStyle's. The parameter Fill points to a list
+of available font styles for the font.
 
-Fuer DontKnow sollte die FontStyleBox mit String() gefuellt werden.
-Dann enthaellt die Liste die Standardattribute. Der Style, der gerade
-angezeigt wird, muss gegebenenfalls noch vom Programm zurueckgesetzt werden.
+Reproduced styles are always added - this could change in future, as
+potentially not all applications [Draw,Equation,FontWork] can properly
+handle synthetic fonts. On filling, the previous name will be retained
+if possible.
 
-Querverweise
+For DontKnow, the FontStyleBox should be filled with String(),
+so it will contain a list with the default attributes. The currently
+shown style probably needs to be reset by the application.
+
+See also
 
 FontList; FontNameBox; FontSizeBox;
 
@@ -141,24 +139,25 @@ FontList; FontNameBox; FontSizeBox;
 
 class FontSizeBox
 
-Beschreibung
+Description
 
-Erlaubt die Auswahl von Fontgroessen. Werte werden ueber GetValue()
-abgefragt und ueber SetValue() gesetzt. Fill fuellt die ListBox mit den
-Groessen zum uebergebenen Font. Alle Groessen werden in 10tel Point
-angegeben. Die FontListe, die bei Fill uebergeben wird, muss bis zum
-naechsten Fill-Aufruf erhalten bleiben.
+Allows selection of font sizes. The values are retrieved via GetValue()
+and set via SetValue(). The Fill parameter fills the ListBox with the
+available sizes for the passed font.
 
-Zusaetzlich erlaubt die FontSizeBox noch einen Relative-Mode. Dieser
-dient dazu, Prozent-Werte eingeben zu koennen. Dies kann zum Beispiel
-nuetzlich sein, wenn man die Box in einem Vorlagen-Dialog anbietet.
-Dieser Modus ist nur anschaltbar, jedoch nicht wieder abschaltbar.
+All sizes are in 1/10 typographic point (pt).
 
-Fuer DontKnow sollte die FontSizeBox mit FontInfo() gefuellt werden.
-Dann enthaellt die Liste die Standardgroessen. Die Groesse, die gerade
-angezeigt wird, muss gegebenenfalls noch vom Programm zurueckgesetzt werden.
+The passed FontList must be retained until the next fill call.
 
-Querverweise
+Additionally it supports an relative mod, which allows entering
+percentage values. This, eg., can be useful for template dialogs.
+This mode can only be enabled, but not disabled again.
+
+For DontKnow the FontSizeBox should be filled FontInfo(), so it will
+contain an list with the standard sizes. Th currently shown size
+probably needs to be reset by the application.
+
+See also
 
 FontList; FontNameBox; FontStyleBox; FontSizeMenu
 
@@ -170,7 +169,7 @@ FontList; FontNameBox; FontStyleBox; FontSizeMenu
 
 class SVT_DLLPUBLIC ColorListBox : public ListBox
 {
-    ImpColorList*   pColorList; // Separate Liste, falls UserDaten von aussen verwendet werden.
+    ImpColorList*   pColorList; // separate liste, in case of user data are required from outside
     Size            aImageSize;
 
 #ifdef _CTRLBOX_CXX
