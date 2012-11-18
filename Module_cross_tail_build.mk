@@ -31,6 +31,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	autodoc \
 	basegfx \
 	binaryurp \
+	$(call gb_Helper_optional,BOOST,boost) \
 	bridges \
 	cli_ure \
 	$(call gb_Helper_optional,CLUCENE,clucene) \
@@ -50,6 +51,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	jvmaccess \
 	jvmfwk \
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
+	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
 	o3tl \
 	offapi \
 	officecfg \
@@ -77,6 +79,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	ure \
 	xmlhelp \
 	xmlreader \
+	$(call gb_Helper_optional,ZLIB,zlib) \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
