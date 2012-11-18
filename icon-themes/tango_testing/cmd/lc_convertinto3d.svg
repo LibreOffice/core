@@ -16,7 +16,7 @@
    width="24"
    height="24"
    sodipodi:docname="lc_convertinto3d.svg"
-   inkscape:export-filename="/home/alexander/tango_testing/cmd/lc_convertinto3d.png"
+   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/cmd/lc_convertinto3d.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <metadata
@@ -255,17 +255,17 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1366"
-     inkscape:window-height="716"
+     inkscape:window-height="717"
      id="namedview4"
      showgrid="false"
      inkscape:snap-global="true"
      showborder="false"
      inkscape:showpageshadow="false"
      inkscape:zoom="1"
-     inkscape:cx="40.090391"
-     inkscape:cy="-6.3424885"
+     inkscape:cx="12.221184"
+     inkscape:cy="16.116673"
      inkscape:window-x="0"
-     inkscape:window-y="30"
+     inkscape:window-y="28"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2">
     <inkscape:grid
@@ -646,9 +646,9 @@ AAABAAAAAQAEAAIAAAABAAgAAQAqAAQAAAADABAAFgAgAAEAAv+0AAIAAf+0ABn/tAACAAH/2wAC\
        id="path4190"
        transform="matrix(1.1579561,0,0,1.1579561,-1.8954736,-1.8954717)"
        style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-       d="m 3.9999999,6.9999998 0,13.6406252 M 2.5005055,6.1970192 3.9999999,6.9999998 5.6292512,7.5574629 5.647557,21.583435 2.5317555,19.746282 z M 5.6292512,7.5574629 5.647557,21.083435 21.595935,14.106088 21.587892,3.4441509 z M 2.4536305,6.0720192 3.9999999,6.9999998 5.6292512,7.5574629 21.572267,3.4441509 19.003485,2.4460392 z"
+       d="m 3.9999999,6.9999998 0,13.6406252 M 2.5005055,6.1970192 3.9999999,6.9999998 4.9105012,7.4637129 4.928807,21.489685 2.5317555,19.746282 z M 5.7230012,7.6199629 5.647557,21.083435 21.595935,14.106088 21.587892,3.4441509 z M 2.2661305,5.7907692 5.0980012,6.6824629 21.447267,2.6316509 19.034735,1.9460392 z"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccccccccccccccc" />
+       sodipodi:nodetypes="cccccccccccccccccc" />
   </g>
   <g
      id="g4095"
@@ -661,4 +661,10 @@ AAABAAAAAQAEAAIAAAABAAgAAQAqAAQAAAADABAAFgAgAAEAAv+0AAIAAf+0ABn/tAACAAH/2wAC\
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccc" />
   </g>
+  <path
+     style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 3.125,7.0625 3.28125,19.78125"
+     id="path3036"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cc" />
 </svg>
