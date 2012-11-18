@@ -416,29 +416,39 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
         SvNumberformat* pOldEntry = aOldTable.begin()->second;
         aOldTable.erase( nKey );
         String aString( pOldEntry->GetFormatstring() );
-        xub_StrLen nCheckPos = STRING_NOTFOUND;
 
         // Same as PutEntry() but assures key position even if format code is
         // a duplicate. Also won't mix up any LastInsertKey.
         ChangeIntl( eOldLanguage );
         LanguageType eLge = eOldLanguage;   // ConvertMode changes this
         bool bCheck = false;
+        xub_StrLen nCheckPos;
         SvNumberformat* pNewEntry = new SvNumberformat( aString, pFormatScanner,
-            pStringScanner, nCheckPos, eLge );
+                                                        pStringScanner, nCheckPos, eLge );
         if ( nCheckPos != 0 )
+        {
             delete pNewEntry;
+        }
         else
         {
             short eCheckType = pNewEntry->GetType();
             if ( eCheckType != NUMBERFORMAT_UNDEFINED )
+            {
                 pNewEntry->SetType( eCheckType | NUMBERFORMAT_DEFINED );
+            }
             else
+            {
                 pNewEntry->SetType( NUMBERFORMAT_DEFINED );
+            }
 
             if ( !aFTable.insert( make_pair( nKey, pNewEntry) ).second )
+            {
                 delete pNewEntry;
+            }
             else
+            {
                 bCheck = true;
+            }
         }
         DBG_ASSERT( bCheck, "SvNumberFormatter::ReplaceSystemCL: couldn't convert" );
         (void)bCheck;
@@ -486,6 +496,7 @@ bool SvNumberFormatter::PutEntry(String& rString,
                                                  pStringScanner,
                                                  nCheckPos,
                                                  eLge);
+
     if (nCheckPos == 0)                         // Format ok
     {                                           // Type comparison:
         short eCheckType = p_Entry->GetType();
@@ -532,14 +543,16 @@ bool SvNumberFormatter::PutEntry(String& rString,
     return bCheck;
 }
 
-bool SvNumberFormatter::PutEntry(
-    OUString& rString, xub_StrLen& nCheckPos, short& nType, sal_uInt32& nKey,
-    LanguageType eLnge)
+bool SvNumberFormatter::PutEntry(OUString& rString, sal_Int32& nCheckPos32,
+                                 short& nType, sal_uInt32& nKey,
+                                 LanguageType eLnge)
 {
     // Wrapper to allow OUString to be used.
     String aStr(rString);
+    xub_StrLen nCheckPos = nCheckPos32 < 0 ? 0xFFFF : (xub_StrLen)nCheckPos32;
     bool bRet = PutEntry(aStr, nCheckPos, nType, nKey, eLnge);
     rString = aStr;
+    nCheckPos32 = nCheckPos == 0xFFFF ? -1 : nCheckPos;
     return bRet;
 }
 
@@ -561,24 +574,45 @@ bool SvNumberFormatter::PutandConvertEntry(String& rString,
 }
 
 bool SvNumberFormatter::PutandConvertEntry(OUString& rString,
-                                           xub_StrLen& nCheckPos,
+                                           sal_Int32& nCheckPos,
                                            short& nType,
                                            sal_uInt32& nKey,
                                            LanguageType eLnge,
                                            LanguageType eNewLnge)
 {
-    String aStr;
-    bool bRet = PutandConvertEntry(aStr, nCheckPos, nType, nKey, eLnge, eNewLnge);
-    rString = aStr;
-    return bRet;
+    bool bRes;
+    if (eNewLnge == LANGUAGE_DONTKNOW)
+        eNewLnge = IniLnge;
+
+    pFormatScanner->SetConvertMode(eLnge, eNewLnge);
+    bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge);
+    pFormatScanner->SetConvertMode(false);
+    return bRes;
+}
+
+bool SvNumberFormatter::PutandConvertEntrySystem(OUString& rString,
+                                                 sal_Int32& nCheckPos,
+                                                 short& nType,
+                                                 sal_uInt32& nKey,
+                                                 LanguageType eLnge,
+                                                 LanguageType eNewLnge)
+{
+    bool bRes;
+    if (eNewLnge == LANGUAGE_DONTKNOW)
+        eNewLnge = IniLnge;
+
+    pFormatScanner->SetConvertMode(eLnge, eNewLnge, true);
+    bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge);
+    pFormatScanner->SetConvertMode(false);
+    return bRes;
 }
 
 bool SvNumberFormatter::PutandConvertEntrySystem(String& rString,
-                                           xub_StrLen& nCheckPos,
-                                           short& nType,
-                                           sal_uInt32& nKey,
-                                           LanguageType eLnge,
-                                           LanguageType eNewLnge)
+                                                 xub_StrLen& nCheckPos,
+                                                 short& nType,
+                                                 sal_uInt32& nKey,
+                                                 LanguageType eLnge,
+                                                 LanguageType eNewLnge)
 {
     bool bRes;
     if (eNewLnge == LANGUAGE_DONTKNOW)
@@ -617,7 +651,7 @@ sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( String & rString,
             // language and wouldn't match eSysLnge anymore, do that on a copy.
             String aTmp( rString);
             rNewInserted = PutandConvertEntrySystem( aTmp, rCheckPos, rType,
-                    nKey, eLnge, SvtSysLocale().GetLanguage());
+                                                     nKey, eLnge, SvtSysLocale().GetLanguage());
             if (rCheckPos > 0)
             {
                 SAL_WARN( "svl.numbers", "SvNumberFormatter::GetIndexPuttingAndConverting: bad format code string for current locale");
@@ -3194,7 +3228,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultSystemCurrencyFormat()
 {
     if ( nDefaultSystemCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
-        xub_StrLen nCheck;
+        sal_Int32 nCheck;
         short nType;
         NfWSStringsDtor aCurrList;
         sal_uInt16 nDefault = GetCurrencyFormatStrings( aCurrList,
@@ -3237,7 +3271,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
 
         if ( nDefaultCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
         {   // none found, create one
-            xub_StrLen nCheck;
+            sal_Int32 nCheck;
             NfWSStringsDtor aCurrList;
             sal_uInt16 nDefault = GetCurrencyFormatStrings( aCurrList,
                 GetCurrencyEntry( ActLnge ), false );

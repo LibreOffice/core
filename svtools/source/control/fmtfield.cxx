@@ -640,7 +640,7 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bReset
             LanguageType aNewLang = pDefaultEntry ? pDefaultEntry->GetLanguage() : LANGUAGE_DONTKNOW;
 
             // den alten Format-String in die neue Sprache konvertieren
-            sal_uInt16 nCheckPos;
+            sal_Int32 nCheckPos;
             short nType;
             pFormatter->PutandConvertEntry(sOldFormat, nCheckPos, nType, nDestKey, aOldLang, aNewLang);
             m_nFormatKey = nDestKey;
@@ -716,7 +716,7 @@ void FormattedField::SetThousandsSep(sal_Bool _bUseSeparator)
     // generate a new format ...
     OUString sFmtDescription = ImplGetFormatter()->GenerateFormat(m_nFormatKey, eLang, _bUseSeparator, IsRed, nPrecision, nAnzLeading);
     // ... and introduce it to the formatter
-    sal_uInt16 nCheckPos;
+    sal_Int32 nCheckPos;
     sal_uInt32  nNewKey;
     short nType;
     ImplGetFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
@@ -759,7 +759,7 @@ void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
     // generate a new format ...
     OUString sFmtDescription = ImplGetFormatter()->GenerateFormat(m_nFormatKey, eLang, bThousand, IsRed, _nPrecision, nAnzLeading);
     // ... and introduce it to the formatter
-    sal_uInt16 nCheckPos;
+    sal_Int32 nCheckPos;
     sal_uInt32 nNewKey;
     short nType;
     ImplGetFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);

@@ -838,39 +838,42 @@ rtl::OUString SvxExtTimeField::GetFormatted( Time& aTime, SvxTimeFormat eFormat,
     {
         case SVXTIMEFORMAT_12_HM:
             nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMMAMPM, eLang );
-        break;
+            break;
         case SVXTIMEFORMAT_12_HMSH:
-        {   // no builtin format available, try to insert or reuse
-            rtl::OUString aFormatCode( RTL_CONSTASCII_USTRINGPARAM( "HH:MM:SS.00 AM/PM" ) );
-            xub_StrLen nCheckPos;
+        {
+            // no builtin format available, try to insert or reuse
+            OUString aFormatCode( RTL_CONSTASCII_USTRINGPARAM( "HH:MM:SS.00 AM/PM" ) );
+            sal_Int32 nCheckPos;
             short nType;
-            rFormatter.PutandConvertEntry( aFormatCode,
-                nCheckPos, nType, nFormatKey, LANGUAGE_ENGLISH_US, eLang );
+            rFormatter.PutandConvertEntry( aFormatCode, nCheckPos, nType,
+                                           nFormatKey, LANGUAGE_ENGLISH_US, eLang );
             DBG_ASSERT( nCheckPos == 0, "SVXTIMEFORMAT_12_HMSH: could not insert format code" );
             if ( nCheckPos )
+            {
                 nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HH_MMSS00, eLang );
+            }
+            break;
         }
-        break;
         case SVXTIMEFORMAT_24_HM:
             nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMM, eLang );
-        break;
+            break;
         case SVXTIMEFORMAT_24_HMSH:
             nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HH_MMSS00, eLang );
-        break;
+            break;
         case SVXTIMEFORMAT_12_HMS:
             nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMMSSAMPM, eLang );
-        break;
+            break;
         case SVXTIMEFORMAT_24_HMS:
             nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMMSS, eLang );
-        break;
+            break;
         case SVXTIMEFORMAT_STANDARD:
         default:
             nFormatKey = rFormatter.GetStandardFormat( NUMBERFORMAT_TIME, eLang );
     }
 
     double fFracTime = aTime.GetTimeInDays();
-    rtl::OUString aStr;
-       Color* pColor = NULL;
+    OUString aStr;
+    Color* pColor = NULL;
     rFormatter.GetOutputString( fFracTime, nFormatKey, aStr, &pColor );
     return aStr;
 }

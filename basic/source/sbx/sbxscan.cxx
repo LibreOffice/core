@@ -739,7 +739,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
         // number format, use SvNumberFormatter to handle it.
         if( bSuccess )
         {
-            sal_uInt16 nCheckPos = 0;
+            sal_Int32 nCheckPos = 0;
             short nType;
             OUString aFmtStr = *pFmt;
             VbaFormatInfo* pInfo = getFormatInfo( aFmtStr );

@@ -104,7 +104,7 @@ double ImpGetDate( const SbxValues* p )
             pFormatter = new SvNumberFormatter( xFactory, eLangType );
 
             sal_uInt32 nIndex;
-            sal_uInt16 nCheckPos = 0;
+            sal_Int32 nCheckPos = 0;
             short nType = 127;
 
             // Default templates of the formatter have only two-digit
@@ -277,7 +277,7 @@ start:
             pFormatter = new SvNumberFormatter( xFactory, eLangType );
 
             sal_uInt32 nIndex;
-            sal_uInt16 nCheckPos = 0;
+            sal_Int32 nCheckPos = 0;
             short nType;
 
             SvtSysLocale aSysLocale;

@@ -1898,12 +1898,11 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     aCode = aCode.replaceAll(";;", ";");
                     // get rid of Xcl escape characters
                     aCode = aCode.replaceAll(rtl::OUString(static_cast<sal_Unicode>(0x1b)), rtl::OUString());
-                    xub_StrLen nCheckPos;
+                    sal_Int32 nCheckPos;
                     short nType;
                     sal_uInt32 nKey;
-                    pDoc->GetFormatTable()->PutandConvertEntry(
-                        aCode, nCheckPos, nType, nKey, LANGUAGE_ENGLISH_US,
-                        ScGlobal::eLnge );
+                    pDoc->GetFormatTable()->PutandConvertEntry( aCode, nCheckPos, nType, nKey,
+                                                                LANGUAGE_ENGLISH_US, ScGlobal::eLnge );
                     if ( nCheckPos )
                         nKey = 0;
                     aFormats.push_back( nKey );

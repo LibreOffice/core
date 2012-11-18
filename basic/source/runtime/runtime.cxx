@@ -373,7 +373,7 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
 
     rpNumberFormatter = new SvNumberFormatter( xFactory, eLangType );
 
-    sal_uInt16 nCheckPos = 0; short nType;
+    sal_Int32 nCheckPos = 0; short nType;
     rnStdTimeIdx = rpNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eLangType );
 
     // the formatter's standard templates have only got a two-digit date
@@ -393,7 +393,7 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
     default:  aDateStr = "MM.TT.JJJJ"; break;
     }
     rpNumberFormatter->PutandConvertEntry( aDateStr, nCheckPos, nType,
-        rnStdDateIdx, LANGUAGE_GERMAN, eLangType );
+                                           rnStdDateIdx, LANGUAGE_GERMAN, eLangType );
     nCheckPos = 0;
     OUString aStrHHMMSS(" HH:MM:SS");
     aDateStr += aStrHHMMSS;
