@@ -568,8 +568,9 @@ AC_ARG_ENABLE(scripting,
         [Disable BASIC, Java and Python. Work in progress, use only if you are hacking on it.])
 )
 
-# This is mainly for iOS, but could potentially be used in some
+# This is mainly for Android and iOS, but could potentially be used in some
 # special case otherwise, too, so factored out as a separate setting
+
 AC_ARG_ENABLE(dynamic-loading,
     AS_HELP_STRING([--disable-dynamic-loading],
         [Disable any use of dynamic loading of code. Work in progress, use only if you are hacking on it.])
