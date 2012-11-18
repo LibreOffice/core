@@ -24,6 +24,7 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/basegfxdllapi.h>
+#include <vector>
 
 // predeclarations
 class ImplB2DPolyPolygon;

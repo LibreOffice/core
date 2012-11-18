@@ -21,7 +21,6 @@
 #define _SV_SALLAYOUT_HXX
 
 #include <tools/gen.hxx>
-#include <vector>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #ifndef _TOOLS_LANG_HXX

@@ -21,7 +21,6 @@
 #define _BGFX_POLYGON_B2DPOLYGONTRIANGULATOR_HXX
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <vector>
 #include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
