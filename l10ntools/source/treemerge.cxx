@@ -279,8 +279,8 @@ void TreeParser::Merge(
     {
         MergeDataFile aMergeDataFile(
             rMergeSrc, static_cast<OString>( m_pSource->name ), false );
-
-        if( aMergeDataFile.GetLanguages()[0] != m_sLang )
+        const std::vector<OString> vLanguages = aMergeDataFile.GetLanguages();
+        if( !vLanguages.empty() && vLanguages[0] != m_sLang )
         {
             std::cerr
                 << "Treex error: given language conflicts with "
@@ -288,7 +288,6 @@ void TreeParser::Merge(
                 << m_sLang.getStr() << " - " << rMergeSrc.getStr() << std::endl;
             return;
         }
-
         lcl_MergeLevel(
             m_pSource, pRootNode, (const xmlChar *)("help_section"),
             &aMergeDataFile, m_sLang, rXhpRoot );
