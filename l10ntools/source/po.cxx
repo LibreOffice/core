@@ -198,7 +198,8 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
         rOFStream << "#, fuzzy" << std::endl;
     if ( !m_sMsgCtxt.isEmpty() )
         rOFStream << "msgctxt "
-                  << lcl_GenMsgString(m_sMsgCtxt).getStr() << std::endl;
+                  << lcl_GenMsgString(m_sReference+"\n"+m_sMsgCtxt).getStr()
+                  << std::endl;
     rOFStream << "msgid "
               << lcl_GenMsgString(m_sMsgId).getStr() << std::endl;
     rOFStream << "msgstr "
@@ -251,7 +252,8 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
             m_sMsgStr = lcl_GenNormString(sLine.copy(7));
             pLastMsg = &m_sMsgStr;
         }
-        else if (sLine.startsWith("\"") && pLastMsg)
+        else if (sLine.startsWith("\"") && pLastMsg &&
+           (pLastMsg != &m_sMsgCtxt || sLine != "\"" + m_sReference + "\"") )
         {
             *pLastMsg += lcl_GenNormString(sLine);
         }
