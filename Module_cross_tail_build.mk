@@ -33,19 +33,13 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	binaryurp \
 	bridges \
 	cli_ure \
-	$(if $(filter CLUCENE,$(BUILD_TYPE)),\
-		clucene \
-	) \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
-		codemaker \
-	) \
+	$(call gb_Helper_optional,CLUCENE,clucene) \
+	$(call gb_Helper_optional,DESKTOP,codemaker) \
 	comphelper \
 	cosv \
 	cppu \
 	cppuhelper \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
-		helpcompiler \
-	) \
+	$(call gb_Helper_optional,DESKTOP,helpcompiler) \
 	i18npool \
 	i18nutil \
 	idl \
@@ -55,16 +49,12 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	jurt \
 	jvmaccess \
 	jvmfwk \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
-		l10ntools \
-	) \
+	$(call gb_Helper_optional,DESKTOP,l10ntools) \
 	o3tl \
 	offapi \
 	officecfg \
 	oovbaapi \
-	$(if $(filter QADEVOOO,$(BUILD_TYPE)),\
-		qadevOOo \
-	) \
+	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 	registry \
 	remotebridges \
 	ridljar \
@@ -76,13 +66,9 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	stoc \
 	store \
 	tools \
-	$(if $(filter TRANSLATIONS,$(BUILD_TYPE)),\
-		translations \
-	) \
+	$(call gb_Helper_optional,TRANSLATIONS,translations) \
 	ucbhelper \
-	$(if $(filter UCPP,$(BUILD_TYPE)),\
-		ucpp \
-	) \
+	$(call gb_Helper_optional,UCPP,ucpp) \
 	udkapi \
 	udm \
 	unoil \
