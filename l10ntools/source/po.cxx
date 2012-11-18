@@ -452,7 +452,8 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
         copy(vParts[SOURCEFILE].lastIndexOf("\\")+1));
 
     OString sMsgCtxt =
-        vParts[GROUPID] + "\n" +
+        vParts[SOURCEFILE].copy(vParts[SOURCEFILE].lastIndexOf("\\")+1) +
+        "\n" + vParts[GROUPID] + "\n" +
         (vParts[LOCALID].isEmpty() ? "" : vParts[LOCALID] + "\n") +
         vParts[RESOURCETYPE];
     switch(eType){
@@ -527,7 +528,7 @@ OString PoEntry::getSourceFile() const
 OString PoEntry::getGroupId() const
 {
     assert( m_bIsInitialized );
-    return m_pGenPo->getMsgCtxt().getToken(0,'\n');
+    return m_pGenPo->getMsgCtxt().getToken(1,'\n');
 }
 
 //Get localid
@@ -538,7 +539,7 @@ OString PoEntry::getLocalId() const
     if (sMsgCtxt.indexOf('\n')==sMsgCtxt.lastIndexOf('\n'))
         return OString();
     else
-        return sMsgCtxt.getToken(1,'\n');
+        return sMsgCtxt.getToken(2,'\n');
 }
 
 //Get the type of component from which entry is extracted
@@ -547,9 +548,9 @@ OString PoEntry::getResourceType() const
     assert( m_bIsInitialized );
     const OString sMsgCtxt = m_pGenPo->getMsgCtxt();
     if (sMsgCtxt.indexOf('\n')==sMsgCtxt.lastIndexOf('\n'))
-        return sMsgCtxt.getToken(1,'\n').getToken(0,'.');
-    else
         return sMsgCtxt.getToken(2,'\n').getToken(0,'.');
+    else
+        return sMsgCtxt.getToken(3,'\n').getToken(0,'.');
 }
 
 //Get the type of entry
