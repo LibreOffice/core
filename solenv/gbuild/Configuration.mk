@@ -257,7 +257,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XcuMergeTarget_CFGEXCOMMAND) \
 		-p $(firstword $(subst /, ,$(2))) \
-		-i $(call gb_Helper_symlinked_native,$(3)) \
+		-i $(3) \
 		-o $(1) \
 		-m $${MERGEINPUT} \
 		-l all) && \
