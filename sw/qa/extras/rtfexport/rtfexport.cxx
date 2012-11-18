@@ -25,8 +25,6 @@
  * instead of those above.
  */
 
-#include "../swmodeltestbase.hxx"
-
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -36,8 +34,7 @@
 
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
-
-using rtl::OUStringBuffer;
+#include <swmodeltestbase.hxx>
 
 class Test : public SwModelTestBase
 {

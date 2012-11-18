@@ -25,9 +25,8 @@
  * instead of those above.
  */
 
-#include "../swmodeltestbase.hxx"
-
 #include <unotools/tempfile.hxx>
+#include <swmodeltestbase.hxx>
 
 class Test : public SwModelTestBase
 {

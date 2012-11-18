@@ -25,8 +25,6 @@
  * instead of those above.
  */
 
-#include "../swmodeltestbase.hxx"
-
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -34,6 +32,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <unotools/tempfile.hxx>
+
+#include <swmodeltestbase.hxx>
 
 class Test : public SwModelTestBase
 {

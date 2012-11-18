@@ -25,9 +25,6 @@
  * instead of those above.
  */
 
-#include "../swmodeltestbase.hxx"
-#include "bordertest.hxx"
-
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
@@ -54,8 +51,10 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 
-
 #include <vcl/svapp.hxx>
+
+#include <swmodeltestbase.hxx>
+#include <bordertest.hxx>
 
 #define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 

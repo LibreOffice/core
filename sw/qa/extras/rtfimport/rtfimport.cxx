@@ -25,9 +25,6 @@
  * instead of those above.
  */
 
-#include "../swmodeltestbase.hxx"
-#include "bordertest.hxx"
-
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
@@ -60,6 +57,9 @@
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
+
+#include <swmodeltestbase.hxx>
+#include <bordertest.hxx>
 
 #define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 

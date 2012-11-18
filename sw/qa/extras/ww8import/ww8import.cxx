@@ -25,9 +25,6 @@
  * instead of those above.
  */
 
-#include "../swmodeltestbase.hxx"
-#include "bordertest.hxx"
-
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
@@ -36,6 +33,9 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 
 #include <vcl/svapp.hxx>
+
+#include <swmodeltestbase.hxx>
+#include <bordertest.hxx>
 
 class Test : public SwModelTestBase
 {

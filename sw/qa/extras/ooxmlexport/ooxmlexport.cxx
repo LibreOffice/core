@@ -25,8 +25,6 @@
  * instead of those above.
  */
 
-#include "../swmodeltestbase.hxx"
-
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
@@ -39,6 +37,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 
 #include <unotools/tempfile.hxx>
+#include <swmodeltestbase.hxx>
 
 class Test : public SwModelTestBase
 {
