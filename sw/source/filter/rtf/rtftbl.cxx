@@ -53,7 +53,7 @@ typedef std::vector<SwTableBoxFmt*> SwBoxFrmFmts;
 
 class SwShareBoxFmts;
 extern void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* = 0,
-                    sal_Bool = sal_True, const sal_Bool = sal_True, SwShareBoxFmts* = 0 );
+                    bool = true, const bool = true, SwShareBoxFmts* = 0 );
 
 struct Row
 {
@@ -556,7 +556,7 @@ void SwRTFParser::ReadTable( int nToken )
             pPam->SetMark(); pPam->DeleteMark();
             while( n < pNewLine->GetTabBoxes().size() )
                 _DeleteBox( pTableNode->GetTable(),
-                            pNewLine->GetTabBoxes()[ n ], 0, sal_False, sal_False );
+                            pNewLine->GetTabBoxes()[ n ], 0, false, false );
         }
 
         pOldTblNd = pTableNode;

@@ -60,7 +60,7 @@ void _InsTblBox( SwDoc* pDoc, SwTableNode* pTblNd,
                 SwTableBox* pBox, sal_uInt16 nInsPos, sal_uInt16 nCnt = 1 );
 
 SW_DLLPUBLIC void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo = 0,
-                sal_Bool bCalcNewSize = sal_True, const sal_Bool bCorrBorder = sal_True,
+                bool bCalcNewSize = true, const bool bCorrBorder = true,
                 SwShareBoxFmts* pShareFmts = 0 );
 
 // Klasse fuers SplitTable

@@ -748,7 +748,7 @@ void SwUndoTxtToTbl::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             SwTableBox* pBox = rTbl.GetTblBox( (*pDelBoxes)[ --n ] );
             if( pBox )
-                ::_DeleteBox( rTbl, pBox, 0, sal_False, sal_False );
+                ::_DeleteBox( rTbl, pBox, 0, false, false );
             else {
                 OSL_ENSURE( !this, "Where is my box?" );
             }
