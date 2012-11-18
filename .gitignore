@@ -61,7 +61,6 @@
 /configure
 /desktop/scripts/soffice.sh
 /makefile.mk
-/bin/repo-list
 /src.downloaded
 /ooo.lst
 /intltool-extract.in
