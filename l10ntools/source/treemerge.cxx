@@ -146,7 +146,9 @@ namespace
                                 replaceAll("$[officeversion]","%PRODUCTVERSION");
                     xmlNodeSetContent(
                         pReturn,
-                        reinterpret_cast<const xmlChar*>( sNewTitle.getStr() ));
+                        xmlEncodeSpecialChars( NULL,
+                            reinterpret_cast<const xmlChar*>(
+                                sNewTitle.getStr() )));
                     xmlFree( sTitle );
                     break;
                 }
