@@ -150,8 +150,7 @@ sal_Bool MergeData::operator==( ResData *pData )
 //
 
 MergeDataFile::MergeDataFile(
-    const rtl::OString &rFileName,
-    const rtl::OString &rFile,
+    const rtl::OString &rFileName, const rtl::OString &rFile,
     bool bCaseSensitive)
 {
     std::ifstream aInputStream( rFileName.getStr() );
@@ -167,6 +166,7 @@ MergeDataFile::MergeDataFile(
     {
         const OString sHack("HACK");
         const OString sFileName( lcl_NormalizeFilename(rFile) );
+        const bool bReadAll = sFileName.isEmpty();
         PoIfstream aPoInput;
         aPoInput.open( OString(sPoFileName.data(), sPoFileName.length()) );
         if ( !aPoInput.isOpen() )
@@ -212,8 +212,8 @@ MergeDataFile::MergeDataFile(
             {
                 return;
             }
-        } while( !aPoInput.eof() && aNextPo.getSourceFile() != sFileName );
-        while( !aPoInput.eof() && aNextPo.getSourceFile() == sFileName )
+        } while( !aPoInput.eof() && aNextPo.getSourceFile() != sFileName && !bReadAll );
+        while( !aPoInput.eof() && (aNextPo.getSourceFile() == sFileName || bReadAll ))
         {
             PoEntry aActPo( aNextPo );
 
@@ -262,7 +262,7 @@ MergeDataFile::MergeDataFile(
             InsertEntry(
                 aActPo.getResourceType(), aActPo.getGroupId(),
                 aActPo.getLocalId(), sHack, sLang, sText,
-                sQHText, sTitle, sFileName, bCaseSensitive );
+                sQHText, sTitle, aActPo.getSourceFile(), bCaseSensitive );
 
             if( bFirstLang )
             {
@@ -271,7 +271,8 @@ MergeDataFile::MergeDataFile(
                     aActPo.getResourceType(), aActPo.getGroupId(),
                     aActPo.getLocalId(), sHack, "qtz",
                     sQTZText + "||" + sExText, sQTZQHText + "||" + sExQHText,
-                    sQTZTitle + "||" + sExTitle, sFileName, bCaseSensitive );
+                    sQTZTitle + "||" + sExTitle, aActPo.getSourceFile(),
+                    bCaseSensitive );
             }
         }
         aPoInput.close();

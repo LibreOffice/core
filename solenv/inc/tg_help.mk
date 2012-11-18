@@ -54,7 +54,10 @@ $(XHPDEST)$/{$(aux_alllangiso)}$/$(SHELL_PACKAGE)$/%.xhp :| %.xhp
 $(HELP_OUT)$/$(TARGET).done : $(HLANGXHPFILES)
 .IF "$(WITH_LANG)"!=""
     @echo Localizing help files...
-    $(COMMAND_ECHO)$(AUGMENT_LIBRARY_PATH) $(HELPEX) -p $(PRJNAME) -r $(PRJ) -i @$(mktmp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES))))) -x $(XHPDEST) -y $(SHELL_PACKAGE) -l all -lf $(aux_alllangiso:t",") -m $(LOCALIZESDF) && $(TOUCH) $@
+	@$(foreach,xhpfile,$(XHPFILES) cp $(SRC_ROOT)/$(PRJNAME)/source/$(SHELL_PACKAGE)/$(xhpfile) $(subst,$(PRJ),$(SRC_ROOT)/$(PRJNAME) $(XHPDEST))/en-US/$(SHELL_PACKAGE)/$(xhpfile) && ) \
+	$(foreach,lang,$(subst,en-US, $(aux_alllangiso)) \
+		$(AUGMENT_LIBRARY_PATH) $(HELPEX) -mi $(mktmp $(foreach,xhpfile,$(XHPFILES) $(SRC_ROOT)/$(PRJNAME)/source/$(SHELL_PACKAGE)/$(xhpfile))) -o $(subst,$(PRJ),$(SRC_ROOT)/$(PRJNAME) $(XHPDEST))/$(lang)/$(SHELL_PACKAGE) -m $(mktmp $(SRC_ROOT)/translations/source/$(lang)/$(PRJNAME)/source/$(SHELL_PACKAGE).po) -l $(lang) && )\
+	$(TOUCH) $@
 .ELSE			# "$(WITH_LANG)"!=""
     @echo Copying help files...
     $(COMMAND_ECHO)cp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES)))) $(XHPDEST)$/en-US$/$(SHELL_PACKAGE) && $(TOUCH) $@
