@@ -57,7 +57,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 	cd $(EXTERNAL_WORKDIR) \
 	&& ./configure \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		$(if $(filter YES,$(SYSTEM_EXPAT)),--with-system-expat) \
+		--with-system-expat \
 		$(if $(strip $(VALGRIND_CFLAGS)),--with-valgrind) \
 		--prefix=/$(if $(filter MACOSX,$(OS)),@__________________________________________________OOO,python-inst) \
 		$(if $(filter AIX,$(OS)),--disable-ipv6 --with-threads CFLAGS="-g0") \
