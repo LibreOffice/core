@@ -37,10 +37,6 @@ import org.jfree.report.flow.ReportTarget;
 import org.jfree.report.flow.layoutprocessor.LayoutController;
 import org.jfree.report.structure.Element;
 
-/**
- *
- * @author Ocke Janssen
- */
 public class ObjectOleLayoutController extends AbstractReportElementLayoutController
 {
 

@@ -21,7 +21,6 @@ package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 /*
  * Exception thrown when a function specified in a calc formula has no equivalent in Pocket Excel
  *
- * @author : Mike Hayes
  */
 
 public class UnsupportedFunctionException extends Exception {

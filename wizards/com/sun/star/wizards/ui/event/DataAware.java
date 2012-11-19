@@ -247,7 +247,6 @@ public abstract class DataAware {
      * reflection.
      * This Object gets and sets a value a specific
      * (JavaBean-style) property on a given object.
-     * @author rp143992
      */
     public static class PropertyValue implements Value {
         /**

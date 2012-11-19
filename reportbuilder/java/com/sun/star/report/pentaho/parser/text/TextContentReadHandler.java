@@ -26,7 +26,6 @@ import org.xml.sax.SAXException;
  * This is a generic implementation that accepts all input and adds special
  * handlers for the report-elements.
  *
- * @author Thomas Morgner
  */
 public class TextContentReadHandler extends NoCDATATextContentReadHandler
 {

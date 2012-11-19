@@ -33,7 +33,6 @@ import java.io.IOException;
  *  &quot;Office&quot; <code>Document</code> object is passed in to
  *  be used as input.</p>
  *
- *  @author  Henrik Just
  *  @see     org.openoffice.xmerge.PluginFactory
  *  @see     org.openoffice.xmerge.DocumentSerializerFactory
  */

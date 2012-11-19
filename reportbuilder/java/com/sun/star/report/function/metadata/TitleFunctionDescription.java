@@ -22,10 +22,6 @@ import org.pentaho.reporting.libraries.formula.function.FunctionCategory;
 import org.pentaho.reporting.libraries.formula.typing.Type;
 import org.pentaho.reporting.libraries.formula.typing.coretypes.TextType;
 
-/**
- *
- * @author Ocke Janssen
- */
 public class TitleFunctionDescription extends AbstractFunctionDescription
 {
 

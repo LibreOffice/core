@@ -24,7 +24,6 @@ import com.sun.star.wizards.common.Desktop;
 /**
  * The last class in the WebWizard Dialog class hirarchy.
  * Has no functionality, is just nice to have it instanciated.
- * @author  rpiterman
  */
 public class WebWizard extends WWD_Events
 {

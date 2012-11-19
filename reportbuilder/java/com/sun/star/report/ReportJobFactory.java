@@ -21,10 +21,6 @@ import com.sun.star.beans.NamedValue;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.uno.Exception;
 
-/**
- *
- * @author Ocke Janssen
- */
 public interface ReportJobFactory
 {
 

@@ -20,10 +20,6 @@ package com.sun.star.report.pentaho.model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Ocke Janssen
- */
 public class ObjectOleElement extends ReportElement
 {
 

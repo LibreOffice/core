@@ -34,7 +34,6 @@ import org.xml.sax.SAXException;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 13.03.2007
  */
 public class MasterPageReadHandler extends ElementReadHandler

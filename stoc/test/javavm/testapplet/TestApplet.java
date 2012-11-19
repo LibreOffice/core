@@ -29,11 +29,6 @@ import java.net.MalformedURLException;
  * Created on 21. November 2001, 09:37
  */
 
-/**
- *
- * @author  jl97489
- * @version
- */
 public class TestApplet extends java.applet.Applet {
 
     /** Initialization method that will be called after the applet is loaded
@@ -60,10 +55,6 @@ public class TestApplet extends java.applet.Applet {
             String s= e.getMessage();
             System.out.println(s);
         }
-        //        catch( Exception ex) {
-//            String s= ex.getMessage();
-//            ex.printStackTrace();
-//        }
 
     }
 

@@ -27,7 +27,6 @@ import org.xml.sax.SAXException;
 /**
  * Creation-Date: 03.07.2006, 14:22:34
  *
- * @author Thomas Morgner
  */
 public abstract class ElementReadHandler extends AbstractXmlReadHandler
 {

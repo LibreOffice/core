@@ -25,7 +25,6 @@ import org.jfree.report.expressions.FormulaExpression;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 02.03.2007
  */
 public class ImageElement extends ReportElement

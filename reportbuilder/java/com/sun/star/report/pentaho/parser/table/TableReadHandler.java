@@ -38,7 +38,6 @@ import org.xml.sax.SAXException;
 /**
  * Creation-Date: 03.07.2006, 13:47:47
  *
- * @author Thomas Morgner
  */
 public class TableReadHandler extends ElementReadHandler
 {

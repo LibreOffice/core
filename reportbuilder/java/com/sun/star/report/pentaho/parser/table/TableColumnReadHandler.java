@@ -25,7 +25,6 @@ import org.jfree.report.structure.Section;
 /**
  * Creation-Date: 03.07.2006, 14:26:55
  *
- * @author Thomas Morgner
  */
 public class TableColumnReadHandler extends ElementReadHandler
 {

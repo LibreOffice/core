@@ -28,7 +28,6 @@ import org.jfree.report.structure.Element;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 13.03.2007
  */
 public class FontFaceDeclsSection extends Element

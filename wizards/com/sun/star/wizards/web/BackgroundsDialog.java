@@ -131,7 +131,6 @@ public class BackgroundsDialog extends ImageListDialog
      * The image URL is the object given from the list model.
      * the image name, got from the "render" method is 
      * the filename portion of the url.
-     * @author rpiterman
      *
      */
     private class BGRenderer implements ImageList.IImageRenderer
@@ -170,7 +169,6 @@ public class BackgroundsDialog extends ImageListDialog
      * It goes through each image in the set, and checks it:
      * if it is a directory it lists all image files in this directory.
      * if it is a file, it adds the file to the list. 
-     * @author rpiterman
      */
     private class Model extends DefaultListModel
     {

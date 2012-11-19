@@ -30,7 +30,6 @@ import java.io.InputStream;
  * possible other files are 'settings.xml' and 'styles.xml' (see the Oasis standard
  * for details on these files and their contents).
  *
- * @author Thomas Morgner
  */
 public interface InputRepository
 {

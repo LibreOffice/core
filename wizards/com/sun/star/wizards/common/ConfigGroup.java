@@ -19,10 +19,6 @@ package com.sun.star.wizards.common;
 
 import java.lang.reflect.Field;
 
-/**
- *
- * @author  rpiterman
- */
 public class ConfigGroup implements ConfigNode
 {
 
@@ -98,7 +94,6 @@ public class ConfigGroup implements ConfigNode
         {
             return new Double(field.getDouble(this));
         }
-        //System.out.println("ohoh...");
         return null; //and good luck with it :-) ...
     }
 

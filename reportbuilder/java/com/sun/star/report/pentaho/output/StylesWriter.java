@@ -55,7 +55,6 @@ import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
 /**
  * This class writes the style collection into a 'styles.xml' document.
  *
- * @author Thomas Morgner
  * @since 09.03.2007
  */
 public class StylesWriter

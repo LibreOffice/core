@@ -89,7 +89,6 @@ import org.openoffice.test.tools.SpreadsheetDocument;
 /**
  * Unit test for the UndoManager API
  *
- * @author frank.schoenheit@oracle.com
  */
 public class UndoManager
 {

@@ -29,10 +29,6 @@ import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author od138299
- */
 public class CheckCrossReferences {
 
     private com.sun.star.container.XEnumeration xParaEnum;

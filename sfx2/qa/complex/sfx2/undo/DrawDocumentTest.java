@@ -21,9 +21,6 @@ package complex.sfx2.undo;
 import com.sun.star.lang.XMultiServiceFactory;
 import org.openoffice.test.tools.DocumentType;
 
-/**
- * @author frank.schoenheit@oracle.com
- */
 public class DrawDocumentTest extends DrawingOrPresentationDocumentTest
 {
     public DrawDocumentTest( XMultiServiceFactory i_orb ) throws com.sun.star.uno.Exception

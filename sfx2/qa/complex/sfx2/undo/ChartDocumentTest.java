@@ -45,9 +45,6 @@ import org.openoffice.test.tools.DocumentType;
 import org.openoffice.test.tools.OfficeDocument;
 import static org.junit.Assert.*;
 
-/**
- * @author frank.schoenheit@oracle.com
- */
 public class ChartDocumentTest implements DocumentTest
 {
     public ChartDocumentTest( final XMultiServiceFactory i_orb ) throws com.sun.star.uno.Exception, InterruptedException

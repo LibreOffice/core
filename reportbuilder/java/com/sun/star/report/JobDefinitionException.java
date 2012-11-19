@@ -20,7 +20,6 @@ package com.sun.star.report;
 /**
  * Creation-Date: 05.02.2006, 17:36:33
  *
- * @author Thomas Morgner
  */
 public class JobDefinitionException extends RuntimeException
 {

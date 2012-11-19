@@ -24,7 +24,6 @@ import org.jfree.layouting.input.style.values.CSSNumericValue;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 24.03.2007
  */
 public class PageContext

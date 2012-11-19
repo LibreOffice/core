@@ -28,7 +28,6 @@ import static org.junit.Assert.*;
 
 /**
  * implements the {@link DocumentTest} interface on top of a spreadsheet document
- * @author frank.schoenheit@oracle.com
  */
 public class CalcDocumentTest extends DocumentTestBase
 {

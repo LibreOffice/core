@@ -39,7 +39,6 @@ import org.jfree.report.structure.Element;
  * is being processed, an marker attribute is added to the element's call
  * to OutputProcessor.startElement() and OutputProcessor.endElement().
  *
- * @author Thomas Morgner
  * @since 19.03.2007
  */
 public class OfficeGroupSectionLayoutController extends SectionLayoutController

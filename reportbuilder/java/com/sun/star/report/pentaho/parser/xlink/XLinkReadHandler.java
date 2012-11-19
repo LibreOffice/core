@@ -27,7 +27,6 @@ import org.xml.sax.SAXException;
 /**
  * An image reference.
  *
- * @author Thomas Morgner
  */
 public class XLinkReadHandler extends AbstractXmlReadHandler
 {

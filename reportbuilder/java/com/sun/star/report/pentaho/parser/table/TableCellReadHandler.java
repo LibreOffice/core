@@ -24,7 +24,6 @@ import com.sun.star.report.pentaho.parser.text.NoCDATATextContentReadHandler;
  * A read handler for table-cell contents. This is basicly a text-content
  * read handler; we may extend this implementation later.
  *
- * @author Thomas Morgner
  * @since 05.03.2007
  */
 public class TableCellReadHandler extends NoCDATATextContentReadHandler
