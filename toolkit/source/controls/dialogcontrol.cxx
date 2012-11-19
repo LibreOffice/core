@@ -643,7 +643,7 @@ void SAL_CALL UnoMultiPageControl::inserted( SAL_UNUSED_PARAMETER ::sal_Int32 ) 
 void SAL_CALL UnoMultiPageControl::removed( SAL_UNUSED_PARAMETER ::sal_Int32 ) throw (RuntimeException)
 {
 }
-void SAL_CALL UnoMultiPageControl::changed( SAL_UNUSED_PARAMETER ::sal_Int32 ID,
+void SAL_CALL UnoMultiPageControl::changed( SAL_UNUSED_PARAMETER ::sal_Int32,
                                             SAL_UNUSED_PARAMETER const Sequence< NamedValue >& ) throw (RuntimeException)
 {
 }
