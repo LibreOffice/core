@@ -2153,7 +2153,7 @@ ifeq ($(SYSTEM_NSS),YES)
 
 define gb_LinkTarget__use_nss3
 $(call gb_LinkTarget_add_defs,$(1),\
-	-DSYSTEM_MOZILLA \
+	-DSYSTEM_NSS \
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
