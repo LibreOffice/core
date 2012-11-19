@@ -65,6 +65,7 @@
 #include <list>
 #include <boost/unordered_map.hpp>
 #include <algorithm>
+#include <set>
 
 namespace deploy = com::sun::star::deployment;
 namespace lang  = com::sun::star::lang;
@@ -1220,6 +1221,31 @@ void ExtensionManager::reinstallDeployedExtensions(
         Reference<deploy::XPackageManager>
             xPackageManager = getPackageManager(repository);
 
+        std::set< OUString > disabledExts;
+        {
+            const uno::Sequence< Reference<deploy::XPackage> > extensions(
+                xPackageManager->getDeployedPackages(xAbortChannel, xCmdEnv));
+            for ( sal_Int32 pos = 0; pos < extensions.getLength(); ++pos )
+            {
+                try
+                {
+                    beans::Optional< beans::Ambiguous< sal_Bool > > registered(
+                        extensions[pos]->isRegistered(xAbortChannel, xCmdEnv));
+                    if (!registered.IsPresent
+                        || registered.Value.IsAmbiguous
+                        || !registered.Value.Value)
+                    {
+                        const OUString id = dp_misc::getIdentifier(extensions[ pos ]);
+                        OSL_ASSERT(!id.isEmpty());
+                        disabledExts.insert(id);
+                    }
+                }
+                catch (const lang::DisposedException &)
+                {
+                }
+            }
+        }
+
         ::osl::MutexGuard guard(getMutex());
         xPackageManager->reinstallDeployedPackages(
             force, xAbortChannel, xCmdEnv);
@@ -1236,7 +1262,9 @@ void ExtensionManager::reinstallDeployedExtensions(
                 const OUString id =  dp_misc::getIdentifier(extensions[ pos ]);
                 const OUString fileName = extensions[ pos ]->getName();
                 OSL_ASSERT(!id.isEmpty());
-                activateExtension(id, fileName, false, true, xAbortChannel, xCmdEnv );
+                activateExtension(
+                    id, fileName, disabledExts.find(id) != disabledExts.end(),
+                    true, xAbortChannel, xCmdEnv );
             }
             catch (const lang::DisposedException &)
             {
