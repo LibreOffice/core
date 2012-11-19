@@ -190,21 +190,15 @@ endif
 ifeq ($(ENABLE_NSPLUGIN),YES)
 $(eval $(call gb_Helper_register_executables,OOO,\
     nsplugin \
-))
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-    npsoplugin \
-))
-endif
-
-ifeq ($(WITH_MOZILLA),YES)
-$(eval $(call gb_Helper_register_executables,OOO,\
     pluginapp.bin \
 ))
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     pl \
 ))
-endif # WITH_MOZILLA
-
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+    npsoplugin \
+))
+endif
 
 ifeq ($(OS),MACOSX)
 

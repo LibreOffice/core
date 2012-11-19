@@ -1015,7 +1015,9 @@ AC_ARG_ENABLE(zenity,
 
 AC_ARG_ENABLE(nsplugin,
     AS_HELP_STRING([--disable-nsplugin],
-        [Do not build nsplugin extension for browser embedding.])
+        [Do not build NPAPI-based plugin features (allowing to plug LibreOffice
+         into browser windows, and to plug browser plugins into LibreOffice
+         documents.])
 )
 
 AC_ARG_ENABLE(cups,
@@ -8387,8 +8389,7 @@ if test "$with_system_npapi_headers" = "yes"; then
     AC_LANG_POP([C])
 else
     AC_MSG_RESULT([internal])
-        dnl ...but will not be built/used unless ENABLE_NSPLUGIN or WITH_MOZILLA
-        dnl is YES
+        dnl ...but will not be built/used unless ENABLE_NSPLUGIN is YES
     SYSTEM_NPAPI_HEADERS=NO
 fi
 AC_SUBST(NPAPI_HEADERS_CFLAGS)

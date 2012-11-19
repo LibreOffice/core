@@ -934,7 +934,7 @@ SPECIAL_LIB_FILE(gid_File_Lib_DeploymentGui,deploymentgui)
 
 STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deploymentmisc)
 
-#ifndef WITHOUT_MOZILLA
+#if defined ENABLE_NSPLUGIN
 STD_LIB_FILE( gid_File_Lib_Pl , pl)
 #endif
 

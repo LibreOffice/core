@@ -104,18 +104,13 @@ endif # DISABLE_ATL
 endif # WNT
 
 ifeq ($(ENABLE_NSPLUGIN),YES)
+
 $(eval $(call gb_Module_add_targets,extensions,\
 	Executable_nsplugin \
 	Library_npsoplugin \
+	Library_pl \
 	StaticLibrary_npsoenv \
 	WinResTarget_npsoplugin \
-))
-endif
-
-ifeq ($(WITH_MOZILLA),YES)
-
-$(eval $(call gb_Module_add_targets,extensions,\
-	Library_pl \
 ))
 
 ifeq ($(GUI),UNX)
@@ -127,7 +122,7 @@ $(eval $(call gb_Module_add_targets,extensions,\
 endif
 endif
 
-endif # WITH_MOZILLA=YES
+endif # ENABLE_PLUGIN=YES
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,extensions,\

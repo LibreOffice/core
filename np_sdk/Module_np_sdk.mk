@@ -27,21 +27,16 @@
 
 $(eval $(call gb_Module_Module,np_sdk))
 
-ifneq (,$(filter YES,$(ENABLE_NSPLUGIN) $(WITH_MOZILLA)))
+ifeq ($(ENABLE_NSPLUGIN),YES)
 
 $(eval $(call gb_Module_add_targets,np_sdk,\
 	Package_inc \
+	StaticLibrary_nputils \
 ))
 
 ifeq ($(SYSTEM_NPAPI_HEADERS),NO)
 $(eval $(call gb_Module_add_targets,np_sdk,\
 	Package_npapi \
-))
-endif
-
-ifeq ($(ENABLE_NSPLUGIN),YES)
-$(eval $(call gb_Module_add_targets,np_sdk,\
-	StaticLibrary_nputils \
 ))
 endif
 
