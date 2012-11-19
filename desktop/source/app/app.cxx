@@ -99,7 +99,6 @@
 #include "com/sun/star/deployment/XExtensionManager.hpp"
 #include "com/sun/star/task/XInteractionApprove.hpp"
 #include "cppuhelper/compbase3.hxx"
-#include <hash_set>
 
 #ifdef ENABLE_TELEPATHY
 #include <tubes/manager.hxx>
