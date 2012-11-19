@@ -8225,19 +8225,37 @@ else
             fi
         fi
     else
-        AC_MSG_CHECKING([which pre-built Mozilla module in moz/zipped])
-        if test -e "$SRC_ROOT/moz/zipped/${OS}${COM}${CPU}inc.zip" -a \
-                -e "$SRC_ROOT/moz/zipped/${OS}${COM}${CPU}lib.zip" -a \
-                -e "$SRC_ROOT/moz/zipped/${OS}${COM}${CPU}runtime.zip"; then
+        AC_MSG_CHECKING([which pre-built Mozilla module in $TARFILE_LOCATION])
+        MOZ_ZIP_INC="${OS}${COM}${CPU}inc.zip"
+        MOZ_ZIP_LIB="${OS}${COM}${CPU}lib.zip"
+        MOZ_ZIP_RUNTIME="${OS}${COM}${CPU}runtime.zip"
+        PREBUILD_MOZAB="YES"
+        if test -e "$TARFILE_LOCATION/${OS}${COM}${CPU}inc.zip" -a \
+                -e "$TARFILE_LOCATION/${OS}${COM}${CPU}lib.zip" -a \
+                -e "$TARFILE_LOCATION/${OS}${COM}${CPU}runtime.zip"; then
             AC_MSG_RESULT([Found])
-            PREBUILD_MOZAB="YES"
-            if test "$_os" = "WINNT"; then
-                AC_MSG_CHECKING([for MSVC 2005 runtime needed for prebuilt Mozilla])
-                if test -e "$SRC_ROOT/external/msvcp80/Microsoft.VC80.CRT.manifest" -a \
-                        -e "$SRC_ROOT/external/msvcp80/msvcp80.dll" -a \
-                        -e "$SRC_ROOT/external/msvcp80/msvcr80.dll"; then
+            MOZ_ZIP_INC=
+            MOZ_ZIP_LIB=
+            MOZ_ZIP_RUNTIME=
+        fi
+        if test "$_os" = "WINNT"; then
+            AC_MSG_CHECKING([for MSVC 2005 runtime needed for prebuilt Mozilla])
+            if test -e "$SRC_ROOT/external/msvcp80/Microsoft.VC80.CRT.manifest" -a \
+                    -e "$SRC_ROOT/external/msvcp80/msvcp80.dll" -a \
+                    -e "$SRC_ROOT/external/msvcp80/msvcr80.dll"; then
+                AC_MSG_RESULT([Found])
+            else
+                #uwin-prefixed paths are with no quotes to allow for mask, and uwin to not have spaces, btw
+                uwin=`cygpath -d "$WINDIR"`
+                uwin=`cygpath -u "$uwin"`
+                #if we have one we have all
+                if test -e $uwin/winsxs/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053* ; then
+                    MSVC80_DLL_DIR=`cd $uwin/winsxs/; ls -d x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053*`
+                    MSVC80_MNFST=`ls $uwin/winsxs/Manifests/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053_*.manifest`
                     AC_MSG_RESULT([Found])
                 else
+                    MSVC80_DLL_DIR=
+                    MSVC80_MNFST=
                     AC_MSG_RESULT([Not Found])
                     AC_MSG_ERROR([For the pre-built Mozilla libraries, you need MSVC 2005 runtime files
 Microsoft.VC80.CRT.manifest, msvcp80.dll, and msvcr80.dll
@@ -8245,19 +8263,9 @@ in external/msvcp80.
 
 You can get them by installing:
 <http://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE>
-and copying the abovementioned files from:
-c:/windows/winsxs/x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.4053_x-ww_e6967989/
-and
-c:/windows/winsxs/manifests/x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.4053_x-ww_e6967989.manifest
-])
+and relaunch ./autogen.sh])
                 fi
             fi
-        else
-            AC_MSG_RESULT([Not Found])
-            AC_MSG_ERROR([If you don't use system mozilla and also disable the build of internal mozilla, you must provided the appropriate libraries yourself.
-You need to copy $OS$COM$CPU{inc,lib,runtime}.zip into moz/zipped.
-These files can be found at <http://dev-www.libreoffice.org/mozilla/>
-])
         fi
     fi
 fi
@@ -8275,6 +8283,11 @@ AC_SUBST(MOZ_INC)
 AC_SUBST(MOZ_LIB)
 AC_SUBST(MOZ_LIB_XPCOM)
 AC_SUBST(MOZ_TARBALL)
+AC_SUBST(MSVC80_DLL_DIR)
+AC_SUBST(MSVC80_MNFST)
+AC_SUBST(MOZ_ZIP_INC)
+AC_SUBST(MOZ_ZIP_LIB)
+AC_SUBST(MOZ_ZIP_RUNTIME)
 
 # libxmlsec is mandatory
 if test $_os != Android -a $_os != iOS ; then
