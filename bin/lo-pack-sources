@@ -7,7 +7,8 @@ use strict;
 use File::Copy;
 use File::Temp qw/ tempfile tempdir /;
 
-my %piece_dir = (
+my %piece_dirname = (
+    "core"              => "",
     "dictionaries"      => "dictionaries",
     "help"              => "helpcontent2",
     "translations"      => "translations"
@@ -88,27 +89,45 @@ sub copy_dir_filter_and_show_progress($$)
     print "\n";
 }
 
+# copy files to temp dir; showing a progress; using a black list
+sub remove_empty_submodules($)
+{
+    my ($target_topdir) = @_;
+
+    foreach my $submodule (sort values %piece_dirname) {
+        next unless ($submodule);
+        print "Removing empty submodule: $submodule...\n";
+        rmdir "$target_topdir/$submodule" || die "Error: Can't remove submodule directory: $target_topdir/$submodule";
+    }
+}
+
 # copy the piece lo source directory into a tmp directory
 # omit the .git subdirectories
 sub copy_lo_piece_to_tempdir($$$)
 {
-    my ($piece_dir, $piece, $piece_tarball_name) = @_;
+    my ($source_dir, $piece, $lo_topdir_name) = @_;
     my $tempdir = tempdir( 'libreoffice-XXXXXX', DIR => File::Spec->tmpdir );
 
-    mkdir "$tempdir/$piece_tarball_name" || die "Can't create directory \"$tempdir/$piece_tarball_name\": $!\n";
-    copy_dir_filter_and_show_progress("$piece_dir", "$tempdir/$piece_tarball_name");
+    mkdir "$tempdir/$lo_topdir_name" || die "Can't create directory \"$tempdir/$lo_topdir_name\": $!\n";
+    mkdir "$tempdir/$lo_topdir_name/$piece_dirname{$piece}" || die "Can't create directory \"$tempdir/$lo_topdir_name/$piece_dirname{$piece}\": $!\n" if ($piece_dirname{$piece});
+    
+    copy_dir_filter_and_show_progress("$source_dir/$piece_dirname{$piece}", "$tempdir/$lo_topdir_name/$piece_dirname{$piece}");
+    remove_empty_submodules("$tempdir/$lo_topdir_name/") if ($piece eq "core");
 
     return $tempdir;
 }
 
 sub generate_lo_piece_changelog($$$)
 {
-    my ($lo_piece_clone, $lo_piece_release_dir, $piece) = @_;
+    my ($source_dir, $lo_piece_release_topdir, $piece) = @_;
+    
+    my $log_name = "ChangeLog";
+    $log_name .= "-$piece_dirname{$piece}" if ($piece_dirname{$piece});
     print "Generating changelog for $piece...\n";
 #    print "1:$lo_piece_clone, 2:$lo_piece_release_dir, 3:$piece\n";
-    system ("cd $lo_piece_clone && " .
+    system ("cd $source_dir/$piece_dirname{$piece} && " .
             "git log --date=short --pretty='format:@%cd  %an  <%ae>  [%H]%n%n%s%n%n%e%b' | " .
-            "  sed -e 's|^\([^@]\)|\t\1|' -e 's|^@||' >$lo_piece_release_dir/ChangeLog" ) &&
+            "  sed -e 's|^\([^@]\)|\t\1|' -e 's|^@||' >$lo_piece_release_topdir/$log_name" ) &&
         die "Error: generating failed: $!\n";
 }
 
@@ -230,30 +249,25 @@ sub check_if_file_exists($$)
     }
 }
 
-sub check_if_already_released($$$$$$$)
+sub check_if_already_released($$$$$$)
 {
-    my ($lo_core_tarball_name, $p_piece_tarball_name, $force, $bzip2, $xz, $pack_lo_core, $pack_lo_pieces) = @_;
+    my ($p_piece_tarball_name, $force, $bzip2, $xz, $pack_lo_core, $pack_lo_pieces) = @_;
 
-    check_if_file_exists("$lo_core_tarball_name.tar.bz2", $force)  if ($pack_lo_core && defined $bzip2);
-    check_if_file_exists("$lo_core_tarball_name.tar.xz", $force) if ($pack_lo_core && defined $xz);
-
-    if ($pack_lo_pieces) {
-        foreach my $tarball_name ( values %{$p_piece_tarball_name} ) {
-            check_if_file_exists("$tarball_name.tar.bz2", $force) if (defined $bzip2);
-            check_if_file_exists("$tarball_name.tar.xz", $force) if (defined $xz);
-        }
+    foreach my $tarball_name ( sort values %{$p_piece_tarball_name} ) {
+        check_if_file_exists("$tarball_name.tar.bz2", $force) if (defined $bzip2);
+        check_if_file_exists("$tarball_name.tar.xz", $force) if (defined $xz);
     }
 }
 
 sub prepare_piece_sources($$$$)
 {
-    my ($piece_dir, $release_version, $piece, $piece_tarball_name) = @_;
+    my ($source_dir, $release_version, $piece, $lo_topdir_name) = @_;
 
     # prepare sources
-    my $temp_dir = copy_lo_piece_to_tempdir($piece_dir, $piece, $piece_tarball_name);
-    generate_lo_piece_changelog($piece_dir, "$temp_dir/$piece_tarball_name", $piece);
-    run_autoreconf("$temp_dir/$piece_tarball_name", $piece) if ($piece eq 'core');
-    generate_sources_version_file("$temp_dir/$piece_tarball_name", $release_version) if ($piece eq 'core');
+    my $temp_dir = copy_lo_piece_to_tempdir($source_dir, $piece, $lo_topdir_name);
+    generate_lo_piece_changelog($source_dir, "$temp_dir/$lo_topdir_name", $piece);
+    run_autoreconf("$temp_dir/$lo_topdir_name", $piece) if ($piece eq 'core');
+    generate_sources_version_file("$temp_dir/$lo_topdir_name", $release_version) if ($piece eq 'core');
 
     return $temp_dir;
 }
@@ -266,32 +280,24 @@ sub pack_piece_sources($$$$)
     generate_md5($tarball) if (defined $md5);
 }
 
-sub generate_piece_tarball($$$$$$$)
+sub generate_piece_tarball($$$$$$$$)
 {
-    my ($piece_dir, $release_version, $piece, $md5, $bzip2, $xz, $piece_tarball_name) = @_;
+    my ($source_dir, $release_version, $piece, $md5, $bzip2, $xz, $lo_topdir_name, $piece_tarball_name) = @_;
 
-    my $temp_dir = prepare_piece_sources($piece_dir, $release_version, $piece, $piece_tarball_name);
+    my $temp_dir = prepare_piece_sources($source_dir, $release_version, $piece, $lo_topdir_name);
     pack_piece_sources($temp_dir, $md5, "$piece_tarball_name.tar.bz2", "--bzip2") if (defined $bzip2);
     pack_piece_sources($temp_dir, $md5, "$piece_tarball_name.tar.xz", "--xz") if (defined $xz);
     remove_tempdir($temp_dir);
 }
 
 
-sub generate_tarballs($$$$$$$$$$)
+sub generate_tarballs($$$$$$$$$)
 {
-    my ($source_dir, $release_version, $md5, $bzip2, $xz, $lo_core_tarball_name, $p_piece_tarball_name, $pack_lo_core, $pack_lo_pieces, $is_lo_core_dir) = @_;
+    my ($source_dir, $release_version, $md5, $bzip2, $xz, $lo_topdir_name, $p_piece_tarball_name, $pack_lo_core, $pack_lo_pieces) = @_;
 
-    if ($pack_lo_core) {
-        generate_piece_tarball($source_dir, $release_version, "core", $md5, $bzip2, $xz, $lo_core_tarball_name);
-    }
-
-    if ($pack_lo_pieces) {
-        my $piece_dir = $source_dir;
-        foreach my $piece ( keys %{$p_piece_tarball_name} ) {
-            print "\n--- Generating $piece ---\n";
-            $piece_dir = "$source_dir/$piece_dir{$piece}" if ($is_lo_core_dir);
-            generate_piece_tarball($piece_dir, $release_version, $piece, $md5, $bzip2, $xz, $p_piece_tarball_name->{$piece});
-        }
+    foreach my $piece (sort keys %{$p_piece_tarball_name} ) {
+        print "\n--- Generating $piece ---\n";
+        generate_piece_tarball($source_dir, $release_version, $piece, $md5, $bzip2, $xz, $lo_topdir_name, $p_piece_tarball_name->{$piece});
     }
 }
 
@@ -341,11 +347,10 @@ my $source_dir;
 my $releases_state_file;
 my $state_config_version;
 my $state_release_version;
-my $lo_core_tarball_name;
 my $lo_core_tempdir;
 my $force;
 my $verbose=1;
-my $is_lo_core_dir=0;
+my $lo_topdir_name;
 my %piece_tarball_name;
 
 ###################
@@ -377,10 +382,10 @@ for my $arg (@ARGV) {
         $pack_lo_pieces=0;
     } elsif ($arg =~ m/--piece=(.*)/) {
           # process just one piece and do not pack libreoffice-build
-          die("Error: unknown piece: $1") unless (defined $piece_dir{$1});
-          my $dir = $piece_dir{$1};
-          %piece_dir=();
-          $piece_dir{"$1"} = $dir;
+          die("Error: unknown piece: $1") unless (defined $piece_dirname{$1});
+          my $dir = $piece_dirname{$1};
+          %piece_dirname=();
+          $piece_dirname{"$1"} = $dir;
           $pack_lo_core=0;
     } elsif ($arg =~ /^-/ ) {
         die "Error: unknown option: $arg\n";
@@ -406,16 +411,8 @@ unless ( -d "$source_dir" ) {
 }
 
 # check if it is a valid libreoffice-core directory
-$is_lo_core_dir=1 if (-f "$source_dir/autogen.sh" && -f "$source_dir/config_host.mk.in");
-
-# all tarballs are generated from the libreoffice-core directory
-if (%piece_dir > 1 && $is_lo_core_dir == 0 ) {
+unless (-f "$source_dir/autogen.sh" && -f "$source_dir/config_host.mk.in") {
     die "Error: \"$source_dir\" is not a valid libreoffice-core directory\n";
-}
-
-# just a single piece tarball can be generated from piece directory; version must be explicitly set in this case
-if (%piece_dir == 1  &&  $is_lo_core_dir == 0  &&  ! defined $set_version ) {
-    die "Error: version must be set using the --set-version=<version> option\n" unless (defined $set_version);
 }
 
 if (defined $set_version && defined $inc_version) {
@@ -433,34 +430,36 @@ $xz = 1 unless (defined $xz || defined $bzip2);
 
 print "Source: $source_dir\n" if ($verbose);
 
-if ($is_lo_core_dir) {
-    # detect some paths
-    $releases_state_file = default_releases_state_file($source_dir) unless (defined $releases_state_file);
+# detect some paths
+$releases_state_file = default_releases_state_file($source_dir) unless (defined $releases_state_file);
 
-    # detect versions
-    $config_version = get_config_version($source_dir);
-    ($state_config_version, $state_release_version) = load_releases_state($releases_state_file);
-    if (defined $set_version) {
-        $release_version = "$set_version";
-    } else {
-        $release_version = get_release_version($config_version, $state_config_version, $state_release_version, $inc_version);
-    }
-} else {
-    # must be single piece release with predefined version
+# detect versions
+$config_version = get_config_version($source_dir);
+($state_config_version, $state_release_version) = load_releases_state($releases_state_file);
+if (defined $set_version) {
     $release_version = "$set_version";
+} else {
+    $release_version = get_release_version($config_version, $state_config_version, $state_release_version, $inc_version);
 }
 
 # define tarball names
-$lo_core_tarball_name = "libreoffice-$release_version";
-foreach my $piece (keys %piece_dir) {
-    if (-f "$source_dir/$piece_dir{$piece}/.git") {
-        print "Add piece $piece\n";
-        $piece_tarball_name{$piece} = "libreoffice-$piece-$release_version";
+print "Detected piece:\n";
+foreach my $piece (sort keys %piece_dirname) {
+    if (-e "$source_dir/$piece_dirname{$piece}/.git") {
+        print "    $piece\n";
+        if ($piece eq "core") {
+            $piece_tarball_name{$piece} = "libreoffice-$release_version";
+        } else {
+            $piece_tarball_name{$piece} = "libreoffice-$piece-$release_version";
+        }
     } else {
-        print "did not found: $source_dir/$piece_dir{$piece}/.git\n";
+        print "did not found: $source_dir/$piece_dirname{$piece}/.git\n";
         print "Warning: $piece sources are not available -> skipping\n";
     }
 }
+
+# top directory inside the source tarballs
+$lo_topdir_name = "libreoffice-$release_version";
 
 print "Default version   : $config_version\n" if ($verbose && defined $config_version);
 print "Last used version : $state_release_version\n" if ($verbose && defined $state_release_version);
@@ -470,13 +469,13 @@ print "New version       : $release_version\n" if ($verbose);
 if ( defined $get_config_version ) {
     print "$release_version\n";
 } else {
-    check_if_already_released($lo_core_tarball_name, \%piece_tarball_name, $force, $bzip2, $xz, $pack_lo_core, $pack_lo_pieces);
+    check_if_already_released(\%piece_tarball_name, $force, $bzip2, $xz, $pack_lo_core, $pack_lo_pieces);
 
     # give a chance to stop the process
     print ("\nWaiting 3 seconds...\n");
     sleep 3;
 
-    generate_tarballs($source_dir, $release_version, $md5, $bzip2, $xz, $lo_core_tarball_name, \%piece_tarball_name, $pack_lo_core, $pack_lo_pieces, $is_lo_core_dir);
+    generate_tarballs($source_dir, $release_version, $md5, $bzip2, $xz, $lo_topdir_name, \%piece_tarball_name, $pack_lo_core, $pack_lo_pieces);
 
     if ( defined $releases_state_file ) {
         save_releases_state($releases_state_file, $config_version, $release_version);
