@@ -41,7 +41,7 @@ $(readlicense_oo_DIR)/readme.xrm : \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XRM,1)
 	$(call gb_Helper_abbreviate_dirs, \
         MERGEINPUT=`$(gb_MKTEMP)` && \
-        echo $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/readlicense_oo/docs/readme.po) > $${MERGEINPUT} && \
+        echo $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/readlicense_oo/docs.po) > $${MERGEINPUT} && \
 		$(readlicense_XRMEXCOMMAND) \
 			-p readlicense_oo \
 			-i $< \
