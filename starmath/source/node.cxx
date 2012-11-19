@@ -1951,6 +1951,11 @@ long SmOperNode::CalcSymbolHeight(const SmNode &rSymbol,
     return nHeight;
 }
 
+void SmOperNode::GetHeightVerOffset(const SmRect &rRect, long &rHeight, long &rVerOffset) const
+{
+     rVerOffset = (rRect.GetBottom() - rRect.GetAlignB()) / 2;
+     rHeight    = rRect.GetHeight() - rVerOffset;
+ }
 
 void SmOperNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
@@ -1960,11 +1965,19 @@ void SmOperNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     OSL_ENSURE(pOper, "Sm: missing subnode");
     OSL_ENSURE(pBody, "Sm: missing subnode");
 
-    SmNode *pSymbol = GetSymbol();
-    pSymbol->SetSize(Fraction(CalcSymbolHeight(*pSymbol, rFormat),
-                              pSymbol->GetFont().GetSize().Height()));
-
     pBody->Arrange(rDev, rFormat);
+    long  nHeight,
+          nVerOffset;
+   GetHeightVerOffset(*pBody, nHeight, nVerOffset);
+   nHeight += rFormat.GetDistance(DIS_ROOT)
+            * GetFont().GetSize().Height() / 100L;
+
+    pOper->AdaptToY(rDev, nHeight + nHeight / 10L );
+    pOper->AdaptToX(rDev, pBody->GetItalicWidth());
+
+    SmNode *pSymbol = GetSymbol();
+    //pSymbol->SetSize(Fraction(CalcSymbolHeight(*pSymbol, rFormat),
+    //                          pSymbol->GetFont().GetSize().Height()));
     pOper->Arrange(rDev, rFormat);
 
     long  nOrigHeight = GetFont().GetSize().Height(),
@@ -1973,6 +1986,8 @@ void SmOperNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
     Point aPos = pOper->AlignTo(*pBody, RP_LEFT, RHA_CENTER, /*RVA_CENTERY*/RVA_MID);
     aPos.X() -= nDist;
+    aPos.Y()  = pOper->GetTop() + pBody->GetBottom() - pOper->GetBottom();
+    aPos.Y() -= nVerOffset;
     pOper->MoveTo(aPos);
 
     SmRect::operator = (*pBody);
