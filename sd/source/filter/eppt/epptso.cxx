@@ -85,7 +85,7 @@
 #include <com/sun/star/table/BorderLine.hpp>
 #include <set>
 #include <oox/ole/olehelper.hxx>
-#include "i18npool/mslangid.hxx"
+#include "i18npool/languagetag.hxx"
 
 using namespace ::com::sun::star;
 
@@ -3862,7 +3862,7 @@ void TextObjBinary::WriteTextSpecInfo( SvStream* pStrm )
                 *pStrm  << static_cast< sal_uInt32 >( nPortionSize )
                         << nFlags
                         << static_cast< sal_Int16 >( 1 )    // spellinfo -> needs rechecking
-                        << static_cast< sal_Int16 >( MsLangId::convertLocaleToLanguageWithFallback( pPortion->meCharLocale ) )
+                        << static_cast< sal_Int16 >( LanguageTag( pPortion->meCharLocale ).makeFallback().getLanguageType() )
                         << static_cast< sal_Int16 >( 0 );   // alt language
             }
         }

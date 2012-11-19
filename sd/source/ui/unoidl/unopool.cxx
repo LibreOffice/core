@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/unopool.hxx>
@@ -35,7 +35,7 @@ LanguageType SdUnoGetLanguage( const lang::Locale& rLocale )
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_SYSTEM;
 
-    LanguageType eRet = MsLangId::convertLocaleToLanguage( rLocale );
+    LanguageType eRet = LanguageTag( rLocale ).getLanguageType( false);
     if ( eRet == LANGUAGE_NONE )
         eRet = LANGUAGE_SYSTEM;         //! or throw an exception?
 

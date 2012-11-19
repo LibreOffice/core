@@ -65,6 +65,7 @@
 #include <unotools/saveopt.hxx>
 #include <comphelper/extract.hxx>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
@@ -231,7 +232,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
 
     LanguageType eRealLanguage = MsLangId::getRealLanguage( meLanguage );
-    mpLocale = new ::com::sun::star::lang::Locale( MsLangId::convertLanguageToLocale( eRealLanguage ));
+    mpLocale = new ::com::sun::star::lang::Locale( LanguageTag( eRealLanguage ).getLocale());
     mpCharClass = new CharClass( *mpLocale );
 
     // If the current application language is a language that uses right-to-left text...
