@@ -626,15 +626,16 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
 
     long nMaxDigit = GetMaxDigitWidth();
     sal_uInt16 nNumDigits = static_cast<sal_uInt16>(nWidth / nMaxDigit);
-    OUString sTempOut(aString);
-    if (!pNumFormat->GetOutputString(fVal, nNumDigits, sTempOut))
     {
+        OUString sTempOut(aString);
+        if (!pNumFormat->GetOutputString(fVal, nNumDigits, sTempOut))
+        {
+            aString = sTempOut;
+            // Failed to get output string.  Bail out.
+            return;
+        }
         aString = sTempOut;
-        // Failed to get output string.  Bail out.
-        return;
     }
-    aString = sTempOut;
-
     sal_uInt8 nSignCount = 0, nDecimalCount = 0, nExpCount = 0;
     xub_StrLen nLen = aString.Len();
     sal_Unicode cDecSep = ScGlobal::GetpLocaleData()->getLocaleItem().decimalSeparator.getStr()[0];
