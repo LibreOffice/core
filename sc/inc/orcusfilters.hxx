@@ -17,6 +17,7 @@ class SvTreeListBox;
 class Image;
 struct ScOrcusXMLTreeParam;
 struct ScOrcusImportXMLParam;
+class ScOrcusXMLContext;
 
 /**
  * Collection of orcus filter wrappers.
@@ -28,11 +29,17 @@ public:
 
     virtual bool importCSV(ScDocument& rDoc, const rtl::OUString& rPath) const = 0;
 
-    virtual bool loadXMLStructure(
-       const rtl::OUString& rPath, SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) const = 0;
+    virtual ScOrcusXMLContext* createXMLContext(ScDocument& rDoc, const rtl::OUString& rPath) const = 0;
+};
 
-    virtual bool importXML(
-        ScDocument& rDoc, const rtl::OUString& rPath, const ScOrcusImportXMLParam& rParam) const = 0;
+class ScOrcusXMLContext
+{
+public:
+    virtual ~ScOrcusXMLContext() {}
+
+    virtual bool loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) const = 0;
+
+    virtual bool importXML(const ScOrcusImportXMLParam& rParam) const = 0;
 };
 
 #endif

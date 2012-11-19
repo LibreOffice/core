@@ -15,13 +15,24 @@
 class ScOrcusFiltersImpl : public ScOrcusFilters
 {
 public:
+    static rtl::OString toSystemPath(const rtl::OUString& rPath);
+
     virtual bool importCSV(ScDocument& rDoc, const rtl::OUString& rPath) const;
 
-    virtual bool loadXMLStructure(
-        const rtl::OUString& rPath, SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) const;
+    virtual ScOrcusXMLContext* createXMLContext(ScDocument& rDoc, const rtl::OUString& rPath) const;
+};
 
-    virtual bool importXML(
-        ScDocument& rDoc, const rtl::OUString& rPath, const ScOrcusImportXMLParam& rParam) const;
+class ScOrcusXMLContextImpl : public ScOrcusXMLContext
+{
+    ScDocument& mrDoc;
+    rtl::OUString maPath;
+public:
+    ScOrcusXMLContextImpl(ScDocument& rDoc, const rtl::OUString& rPath);
+    virtual ~ScOrcusXMLContextImpl();
+
+    virtual bool loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) const;
+
+    virtual bool importXML(const ScOrcusImportXMLParam& rParam) const;
 };
 
 #endif

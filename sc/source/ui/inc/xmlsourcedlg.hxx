@@ -23,6 +23,7 @@
 
 class ScDocument;
 class ScRange;
+class ScOrcusXMLContext;
 
 class ScXMLSourceTree : public SvTreeListBox
 {
@@ -54,6 +55,8 @@ class ScXMLSourceDlg : public ScAnyRefDlg
     ScOrcusXMLTreeParam maXMLParam;
     std::set<const SvTreeListEntry*> maCellLinks;
     std::set<const SvTreeListEntry*> maRangeLinks;
+
+    boost::scoped_ptr<ScOrcusXMLContext> mpXMLContext;
 
     ScDocument* mpDoc;
 

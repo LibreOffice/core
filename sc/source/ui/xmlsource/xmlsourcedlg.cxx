@@ -208,7 +208,11 @@ void ScXMLSourceDlg::LoadSourceFileStructure(const OUString& rPath)
     if (!pOrcus)
         return;
 
-    pOrcus->loadXMLStructure(rPath, maLbTree, maXMLParam);
+    mpXMLContext.reset(pOrcus->createXMLContext(*mpDoc, rPath));
+    if (!mpXMLContext)
+        return;
+
+    mpXMLContext->loadXMLStructure(maLbTree, maXMLParam);
 }
 
 void ScXMLSourceDlg::HandleGetFocus(Control* pCtrl)
@@ -454,6 +458,9 @@ void getFieldLinks(ScOrcusImportXMLParam::RangeLink& rRangeLink, const SvTreeLis
 
 void ScXMLSourceDlg::OkPressed()
 {
+    if (!mpXMLContext)
+        return;
+
     // Begin import.
 
     ScOrcusImportXMLParam aParam;
@@ -493,11 +500,8 @@ void ScXMLSourceDlg::OkPressed()
     }
 
     // Now do the import.
-    ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
-    if (!pOrcus)
-        return;
 
-    pOrcus->importXML(*mpDoc, maSrcPath, aParam);
+    mpXMLContext->importXML(aParam);
 
     // Don't forget to broadcast the change.
     SfxObjectShell* pShell = mpDoc->GetDocumentShell();
