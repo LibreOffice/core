@@ -572,7 +572,7 @@ sal_Bool GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* 
             bChanged =
                 ( ( *ppFontList != pNewFontList ) ||
                   pBox->GetListCount() != pNewFontList->GetFontNameCount() );
-            HACK(vergleich ist unvollstaendig)
+            // HACK(vergleich ist unvollstaendig) ???
 
             if ( bChanged )
                 *ppFontList = pNewFontList;

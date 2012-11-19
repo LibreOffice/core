@@ -143,12 +143,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #define EXTERN_C
 #endif
 
-#ifdef NOHACKS
-#define HACK( comment ) #error hack: comment
-#else
-#define HACK( comment )
-#endif
-
 #define _LF     ((char)0x0A)
 #define _CR     ((char)0x0D)
 

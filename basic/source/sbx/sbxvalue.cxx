@@ -187,7 +187,7 @@ void SbxValue::Clear()
             {
                 if( aData.pObj != this )
                 {
-                    HACK(nicht bei Parent-Prop - sonst CyclicRef)
+                    SAL_WARN("basic.sbx", "nicht bei Parent-Prop - sonst CyclicRef");
                     SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
                     sal_Bool bParentProp = pThisVar && 5345 ==
                     ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
@@ -538,7 +538,7 @@ sal_Bool SbxValue::Put( const SbxValues& rVal )
                             {
                                 OSL_FAIL( "TheRealValue" );
                             }
-                            HACK(nicht bei Parent-Prop - sonst CyclicRef)
+                            SAL_WARN("basic.sbx", "nicht bei Parent-Prop - sonst CyclicRef");
                             SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
                             sal_Bool bParentProp = pThisVar && 5345 ==
                                     ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
@@ -802,7 +802,7 @@ sal_Bool SbxValue::SetType( SbxDataType t )
                 case SbxOBJECT:
                     if( aData.pObj && aData.pObj != this )
                     {
-                        HACK(nicht bei Parent-Prop - sonst CyclicRef)
+                        SAL_WARN("basic.sbx", "nicht bei Parent-Prop - sonst CyclicRef");
                         SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
                         sal_uInt16 nSlotId = pThisVar
                                     ? ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) )

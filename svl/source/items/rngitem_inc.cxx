@@ -177,7 +177,7 @@ SfxItemPresentation SfxXRangesItem::GetPresentation( SfxItemPresentation /*ePres
                                     XubString &/*rText*/,
                                     const IntlWrapper * ) const
 {
-    HACK(n. i.)
+    // not implemented
     return SFX_ITEM_PRESENTATION_NONE;
 }
 

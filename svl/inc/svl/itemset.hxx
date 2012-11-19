@@ -118,7 +118,7 @@ public:
     virtual void                InvalidateItem( sal_uInt16 nWhich );
     virtual sal_uInt16              ClearItem( sal_uInt16 nWhich = 0);
     virtual void                ClearInvalidItems( sal_Bool bHardDefault = sal_False );
-            void                InvalidateAllItems(); HACK(via nWhich = 0)
+            void                InvalidateAllItems(); // HACK(via nWhich = 0) ???
 
     inline void                 SetParent( const SfxItemSet* pNew );
 

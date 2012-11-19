@@ -1534,7 +1534,7 @@ void SfxBindings::UpdateControllers_Impl
             {
                 pEnumCache->Invalidate(sal_False);
 
-                HACK(CONTROL/SELECT Kram)
+                // HACK(CONTROL/SELECT Kram) ???
                 if ( eState == SFX_ITEM_DONTCARE && pFound->nWhichId == 10144 )
                 {
                     SfxVoidItem aVoid(0);

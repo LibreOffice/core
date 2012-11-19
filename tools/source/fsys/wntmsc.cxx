@@ -602,7 +602,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
         DirEntry aDirEntry( aPath );
 
         // Is a medium in this device?
-        HACK("How?")
+        // How?
         sal_Bool bAccess = sal_True;
         const DirEntry *pTop = aDirEntry.ImpGetTopPtr();
         rtl::OString aName = rtl::OString(pTop->aName).toAsciiLowerCase();

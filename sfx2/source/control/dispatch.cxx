@@ -1220,7 +1220,7 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
         {
             Flush();
             SfxSlotServer aSvr;
-            if ( _FindServer(pReq->GetSlot(), aSvr, HACK(x) sal_True ) )
+            if ( _FindServer(pReq->GetSlot(), aSvr, sal_True ) ) // HACK(x), whatever that was supposed to mean
             {
                 const SfxSlot *pSlot = aSvr.GetSlot();
                 SfxShell *pSh = GetShell(aSvr.GetShellLevel());
@@ -1676,7 +1676,7 @@ void SfxDispatcher::FlushImpl()
 //--------------------------------------------------------------------
 void SfxDispatcher::SetSlotFilter
 (
-    HACK(hier muss mal ein enum rein)
+    // HACK(hier muss mal ein enum rein) ???
     sal_Bool           bEnable,  /* sal_True:
                                     only enable specified slots,
                                     disable all other

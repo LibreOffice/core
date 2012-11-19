@@ -1482,7 +1482,7 @@ FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
 #ifdef UNX
     {
         // create hardlink
-        HACK(redirection missing)
+        // redirection missing
         rtl::OString aThis(rtl::OUStringToOString(GetFull(), osl_getThreadTextEncoding()));
         rtl::OString aDest(rtl::OUStringToOString(rDest.GetFull(), osl_getThreadTextEncoding()));
         if (link(aThis.getStr(), aDest.getStr()) == -1)
