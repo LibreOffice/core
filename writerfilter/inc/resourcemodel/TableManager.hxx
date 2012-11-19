@@ -476,6 +476,11 @@ protected:
     sal_uInt32 getTableDepthNew() { return mnTableDepthNew; }
 
     /**
+       Return the current table difference, i.e. 1 if we are in the first cell of a new table, etc.
+     */
+    sal_uInt32 getTableDepthDifference() { return mnTableDepthNew - mnTableDepth; }
+
+    /**
        Action to be carried out at the end of the last paragraph of a
        cell.
      */
