@@ -245,7 +245,7 @@ public:
      * Get output string from a numeric value that fits the number of
      * characters specified.
      */
-    bool GetOutputString( double fNumber, sal_uInt16 nCharCount, String& rOutString ) const;
+    bool GetOutputString( double fNumber, sal_uInt16 nCharCount, OUString& rOutString ) const;
 
     bool GetOutputString( double fNumber, String& OutString, Color** ppColor );
     bool GetOutputString( OUString& sString, OUString& OutString, Color** ppColor );
@@ -569,7 +569,8 @@ private:
 
     // standard number output
     SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, String& OutString );
-    SVL_DLLPRIVATE void ImpGetOutputStdToPrecision( double& rNumber, String& rOutString, sal_uInt16 nPrecision ) const;
+    SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, OUString& OutString );
+    SVL_DLLPRIVATE void ImpGetOutputStdToPrecision( double& rNumber, OUString& rOutString, sal_uInt16 nPrecision ) const;
     // numbers in input line
     SVL_DLLPRIVATE void ImpGetOutputInputLine( double fNumber, String& OutString );
 

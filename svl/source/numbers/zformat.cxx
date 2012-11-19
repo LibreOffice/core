@@ -2089,6 +2089,13 @@ void SvNumberformat::Build50Formatstring( String& rStr ) const
 
 void SvNumberformat::ImpGetOutputStandard(double& fNumber, String& OutString)
 {
+    OUString sTemp(OutString);
+    ImpGetOutputStandard(fNumber, sTemp);
+    OutString = sTemp;
+}
+
+void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& OutString)
+{
     sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
 
     if ( fabs(fNumber) > 1.0E15 )       // #58531# war E16
@@ -2104,7 +2111,7 @@ void SvNumberformat::ImpGetOutputStandard(double& fNumber, String& OutString)
     }
 }
 
-void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, String& rOutString, sal_uInt16 nPrecision) const
+void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutString, sal_uInt16 nPrecision) const
 {
     // Make sure the precision doesn't go over the maximum allowable precision.
     nPrecision = ::std::min(UPPER_PRECISION, nPrecision);
@@ -2142,8 +2149,8 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, String& rOutStr
     rOutString = ::rtl::math::doubleToUString( rNumber,
                                                rtl_math_StringFormat_F, nPrecision /*2*/,
                                                GetFormatter().GetNumDecimalSep().GetChar(0), true );
-    if (rOutString.GetChar(0) == '-' &&
-        comphelper::string::getTokenCount(rOutString, '0') == rOutString.Len())
+    if (rOutString[0] == (sal_Unicode)'-' &&
+        comphelper::string::getTokenCount(rOutString, '0') == rOutString.getLength())
     {
         rOutString = comphelper::string::stripStart(rOutString, '-');            // nicht -0
     }
@@ -2302,7 +2309,7 @@ sal_uLong SvNumberformat::ImpGGTRound(sal_uLong x, sal_uLong y)
 namespace {
 
 void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
-                                   const SvNumberFormatter& rFormatter, String& rOutString)
+                                   const SvNumberFormatter& rFormatter, OUString& rOutString)
 {
     bool bSign = ::rtl::math::isSignBitSet(fNumber);
 
@@ -2359,7 +2366,7 @@ sal_Int32 SvNumberformat::GetForcedDenominatorForType( sal_uInt16 nNumFor ) cons
     return lcl_GetForcedDenominator( rInfo, nAnz );
 }
 
-bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, String& rOutString) const
+bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, OUString& rOutString) const
 {
     using namespace std;
 
@@ -2401,7 +2408,7 @@ bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, Stri
         --nPrec;
     }
     ImpGetOutputStdToPrecision(fNumber, rOutString, nPrec);
-    if (rOutString.Len() > nCharCount)
+    if (rOutString.getLength() > nCharCount)
     {
         // String still wider than desired.  Switch to scientific notation.
         lcl_GetOutputStringScientific(fNumber, nCharCount, GetFormatter(), rOutString);
@@ -2455,7 +2462,11 @@ bool SvNumberformat::GetOutputString(double fNumber,
                     }
                     fNumber = -fNumber;
                 }
-                ImpGetOutputStdToPrecision(fNumber, OutString, 10); // Use 10 decimals for general 'unlimited' format.
+                {
+                    OUString sTemp(OutString);
+                    ImpGetOutputStdToPrecision(fNumber, sTemp, 10); // Use 10 decimals for general 'unlimited' format.
+                    OutString = sTemp;
+                }
                 if (fNumber < EXP_LOWER_BOUND)
                 {
                     xub_StrLen nLen = OutString.Len();
