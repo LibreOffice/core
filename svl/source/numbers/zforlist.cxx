@@ -1481,15 +1481,17 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
         pFormat->SetStarFormatSupport( false );
 }
 
-void SvNumberFormatter::GetOutputString(String& sString,
+void SvNumberFormatter::GetOutputString(OUString& sString,
                                         sal_uInt32 nFIndex,
-                                        String& sOutString,
+                                        OUString& sOutString,
                                         Color** ppColor,
                                         bool bUseStarFormat )
 {
     SvNumberformat* pFormat = GetFormatEntry( nFIndex );
     if (!pFormat)
+    {
         pFormat = GetFormatEntry(ZF_STANDARD_TEXT);
+    }
     if (!pFormat->IsTextFormat() && !pFormat->HasTextFormat())
     {
         *ppColor = NULL;
@@ -1499,10 +1501,14 @@ void SvNumberFormatter::GetOutputString(String& sString,
     {
         ChangeIntl(pFormat->GetLanguage());
         if ( bUseStarFormat )
+        {
            pFormat->SetStarFormatSupport( true );
+        }
         pFormat->GetOutputString(sString, sOutString, ppColor);
         if ( bUseStarFormat )
+        {
            pFormat->SetStarFormatSupport( false );
+        }
     }
 }
 
@@ -1528,35 +1534,6 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
     if ( bUseStarFormat )
         pFormat->SetStarFormatSupport( false );
     sOutString = aOutString;
-}
-
-void SvNumberFormatter::GetOutputString(OUString& sString,
-                                        sal_uInt32 nFIndex,
-                                        OUString& sOutString,
-                                        Color** ppColor,
-                                        bool bUseStarFormat )
-{
-    SvNumberformat* pFormat = GetFormatEntry( nFIndex );
-    if (!pFormat)
-        pFormat = GetFormatEntry(ZF_STANDARD_TEXT);
-    if (!pFormat->IsTextFormat() && !pFormat->HasTextFormat())
-    {
-        *ppColor = NULL;
-        sOutString = sString;
-    }
-    else
-    {
-        ChangeIntl(pFormat->GetLanguage());
-        String aString = sString;
-        String aOutString = sOutString;
-        if ( bUseStarFormat )
-           pFormat->SetStarFormatSupport( true );
-        pFormat->GetOutputString(aString, aOutString, ppColor);
-        if ( bUseStarFormat )
-           pFormat->SetStarFormatSupport( false );
-        sString = aString;
-        sOutString = aOutString;
-    }
 }
 
 bool SvNumberFormatter::GetPreviewString(const String& sFormatString,
@@ -1723,19 +1700,26 @@ bool SvNumberFormatter::GetPreviewString( const String& sFormatString,
                                                   eLnge);
     if (nCheckPos == 0)                          // String ok
     {
-        String aNonConstPreview( sPreviewString);
+        OUString aNonConstPreview( sPreviewString);
+        OUString sTemp;
         // May have to create standard formats for this locale.
         sal_uInt32 CLOffset = ImpGenerateCL(eLnge);
         nKey = ImpIsEntry( p_Entry->GetFormatstring(), CLOffset, eLnge);
         if (nKey != NUMBERFORMAT_ENTRY_NOT_FOUND)       // already present
-            GetOutputString( aNonConstPreview, nKey, sOutString, ppColor);
+        {
+            GetOutputString( aNonConstPreview, nKey, sTemp, ppColor);
+            sOutString = sTemp;
+        }
         else
         {
             // If the format is valid but not a text format and does not
             // include a text subformat, an empty string would result. Same as
             // in SvNumberFormatter::GetOutputString()
             if (p_Entry->IsTextFormat() || p_Entry->HasTextFormat())
-                p_Entry->GetOutputString( aNonConstPreview, sOutString, ppColor);
+            {
+                p_Entry->GetOutputString( aNonConstPreview, sTemp, ppColor);
+                sOutString = sTemp;
+            }
             else
             {
                 *ppColor = NULL;

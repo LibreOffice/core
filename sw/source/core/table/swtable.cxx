@@ -2148,7 +2148,11 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
         {
             // special text format:
             String sTmp, sTxt( pTNd->GetTxt() );
-            pDoc->GetNumberFormatter()->GetOutputString( sTxt, nFmt, sTmp, &pCol );
+            OUString sTempIn(sTxt);
+            OUString sTempOut;
+            pDoc->GetNumberFormatter()->GetOutputString( sTempIn, nFmt, sTempOut, &pCol );
+            sTxt = sTempIn;
+            sTmp = sTempOut;
             if( sTxt != sTmp )
             {
                 // exchange text

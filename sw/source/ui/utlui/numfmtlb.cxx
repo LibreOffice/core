@@ -242,8 +242,10 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
                     sValue = pFmt->GetFormatstring();
             else if( nFormatType == NUMBERFORMAT_TEXT )
             {
-                String sTxt(rtl::OUString("\"ABC\""));
-                pFormatter->GetOutputString( sTxt, nFormat, sValue, &pCol);
+                OUString sTxt("\"ABC\"");
+                OUString sTempOut(sValue);
+                pFormatter->GetOutputString( sTxt, nFormat, sTempOut, &pCol);
+                sValue = sTempOut;
             }
 
             if (nFormat != nSysNumFmt       &&
@@ -317,8 +319,10 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
 
     if (nType == NUMBERFORMAT_TEXT)
     {
-        String sTxt(rtl::OUString("\"ABC\""));
-        pFormatter->GetOutputString(sTxt, nDefFmt, sValue, &pCol);
+        OUString sTxt("\"ABC\"");
+        OUString sTempOut(sValue);
+        pFormatter->GetOutputString(sTxt, nDefFmt, sTempOut, &pCol);
+        sValue = sTempOut;
     }
     else
         pFormatter->GetOutputString(fValue, nDefFmt, sValue, &pCol);

@@ -511,11 +511,15 @@ String SwValueFieldType::ExpandValue( const double& rVal,
     {
         String sValue;
         DoubleToString(sValue, rVal, nFmtLng);
-        pFormatter->GetOutputString(sValue, nFmt, sExpand, &pCol);
+        OUString sTempIn(sValue);
+        OUString sTempOut(sExpand);
+        pFormatter->GetOutputString(sTempIn, nFmt, sTempOut, &pCol);
+        sExpand = sTempOut;
     }
     else
+    {
         pFormatter->GetOutputString(rVal, nFmt, sExpand, &pCol);
-
+    }
     return sExpand;
 }
 
@@ -748,11 +752,15 @@ String SwFormulaField::GetExpandedFormula() const
         {
             String sValue;
             ((SwValueFieldType *)GetTyp())->DoubleToString(sValue, GetValue(), nFmt);
-            pFormatter->GetOutputString(sValue, nFmt, sFormattedValue, &pCol);
+            OUString sTempOut(sFormattedValue);
+            OUString sTempIn(sValue);
+            pFormatter->GetOutputString(sTempIn, nFmt, sTempOut, &pCol);
+            sFormattedValue = sTempOut;
         }
         else
+        {
             pFormatter->GetOutputString(GetValue(), nFmt, sFormattedValue, &pCol);
-
+        }
         return sFormattedValue;
     }
     else

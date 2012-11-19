@@ -367,11 +367,13 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
         }
         else
         {
-            String aStr = pFCell->GetString();
+            OUString aStr = pFCell->GetString();
+            OUString sTempOut(rStrResult);
             sal_uLong nFormat = aFormatter.GetStandardFormat(
                             pFCell->GetFormatType(), ScGlobal::eLnge);
             aFormatter.GetOutputString( aStr, nFormat,
-                                        rStrResult, &pColor );
+                                        sTempOut, &pColor );
+            rStrResult = sTempOut;
         }
 
         ScRange aTestRange;

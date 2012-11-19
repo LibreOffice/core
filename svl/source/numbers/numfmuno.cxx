@@ -253,28 +253,31 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32
     return nRet;
 }
 
-rtl::OUString SAL_CALL SvNumberFormatterServiceObj::formatString( sal_Int32 nKey,
-                                    const rtl::OUString& aString ) throw(uno::RuntimeException)
+OUString SAL_CALL SvNumberFormatterServiceObj::formatString( sal_Int32 nKey,
+                                                             const OUString& aString )
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    String aRet;
+    OUString aRet;
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
-        String aTemp = aString;
+        OUString aTemp = aString;
         Color* pColor = NULL;
         pFormatter->GetOutputString(aTemp, nKey, aRet, &pColor);
     }
     else
+    {
         throw uno::RuntimeException();
-
+    }
     return aRet;
 }
 
 util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32 nKey,
-                                    const rtl::OUString& aString,util::Color aDefaultColor )
-                            throw(uno::RuntimeException)
+                                                                       const OUString& aString,
+                                                                       util::Color aDefaultColor )
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -282,16 +285,20 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
-        String aTemp = aString;
-        String aStr;
+        OUString aTemp = aString;
+        OUString aStr;
         Color* pColor = NULL;
         pFormatter->GetOutputString(aTemp, nKey, aStr, &pColor);
         if (pColor)
+        {
             nRet = pColor->GetColor();
+        }
         // sonst Default behalten
     }
     else
+    {
         throw uno::RuntimeException();
+    }
 
     return nRet;
 }

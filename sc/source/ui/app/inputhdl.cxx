@@ -1360,8 +1360,14 @@ static String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScA
                 String aStr = pCell->GetString();
                 sal_uLong nFormat = aFormatter.GetStandardFormat(
                                 pCell->GetFormatType(), ScGlobal::eLnge);
-                aFormatter.GetOutputString( aStr, nFormat,
-                                            aValue, &pColor );
+                {
+                OUString sTempIn(aStr);
+                OUString sTempOut(aValue);
+                aFormatter.GetOutputString( sTempIn, nFormat,
+                                            sTempOut, &pColor );
+                aStr = sTempIn;
+                aValue = sTempOut;
+                }
 
                 aValue.Insert('"',0);   // in Anfuehrungszeichen
                 aValue+='"';

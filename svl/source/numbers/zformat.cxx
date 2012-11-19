@@ -101,6 +101,23 @@ xub_StrLen SvNumberformat::InsertBlanks( String& r, xub_StrLen nPos, sal_Unicode
     return nPos;
 }
 
+sal_Int32 SvNumberformat::InsertBlanks( OUStringBuffer& r, sal_Int32 nPos, sal_Unicode c )
+{
+    if( c >= 32 )
+    {
+        int n = 2;   // Default fuer Zeichen > 128 (HACK!)
+        if( c <= 127 )
+        {
+            n = (int)cCharWidths[ c - 32 ];
+        }
+        while( n-- )
+        {
+            r.insert( nPos++, (sal_Unicode)' ');
+        }
+    }
+    return nPos;
+}
+
 static long GetPrecExp( double fAbsVal )
 {
     DBG_ASSERT( fAbsVal > 0.0, "GetPrecExp: fAbsVal <= 0.0" );
@@ -2190,11 +2207,11 @@ short SvNumberformat::ImpCheckCondition(double& fNumber,
     }
 }
 
-bool SvNumberformat::GetOutputString(String& sString,
-                                     String& OutString,
+bool SvNumberformat::GetOutputString(OUString& sString,
+                                     OUString& OutString,
                                      Color** ppColor)
 {
-    OutString.Erase();
+    OUStringBuffer sOutBuff;
     sal_uInt16 nIx;
     if (eType & NUMBERFORMAT_TEXT)
     {
@@ -2211,9 +2228,9 @@ bool SvNumberformat::GetOutputString(String& sString,
     }
     *ppColor = NumFor[nIx].GetColor();
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
+    bool bRes = false;
     if (rInfo.eScannedType == NUMBERFORMAT_TEXT)
     {
-        bool bRes = false;
         const sal_uInt16 nAnz = NumFor[nIx].GetCount();
         for (sal_uInt16 i = 0; i < nAnz; i++)
         {
@@ -2222,26 +2239,26 @@ bool SvNumberformat::GetOutputString(String& sString,
             case NF_SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
-                    OutString += (sal_Unicode) 0x1B;
-                    OutString += rInfo.sStrArray[i][1];
+                    sOutBuff.append((sal_Unicode) 0x1B);
+                    sOutBuff.append(rInfo.sStrArray[i][1]);
                     bRes = true;
                 }
                 break;
             case NF_SYMBOLTYPE_BLANK:
-                InsertBlanks( OutString, OutString.Len(),
+                InsertBlanks( sOutBuff, sOutBuff.getLength(),
                               rInfo.sStrArray[i][1] );
                 break;
             case NF_KEY_GENERAL :   // #77026# "General" is the same as "@"
             case NF_SYMBOLTYPE_DEL :
-                OutString += sString;
+                sOutBuff.append(sString);
                 break;
             default:
-                OutString += rInfo.sStrArray[i];
+                sOutBuff.append(rInfo.sStrArray[i]);
             }
         }
-        return bRes;
     }
-    return false;
+    OutString = sOutBuff.makeStringAndClear();
+    return bRes;
 }
 
 sal_uLong SvNumberformat::ImpGGT(sal_uLong x, sal_uLong y)

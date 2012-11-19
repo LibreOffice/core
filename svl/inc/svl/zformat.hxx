@@ -248,7 +248,7 @@ public:
     bool GetOutputString( double fNumber, sal_uInt16 nCharCount, String& rOutString ) const;
 
     bool GetOutputString( double fNumber, String& OutString, Color** ppColor );
-    bool GetOutputString( String& sString, String& OutString, Color** ppColor );
+    bool GetOutputString( OUString& sString, OUString& OutString, Color** ppColor );
 
     // True if type text
     bool IsTextFormat() const { return (eType & NUMBERFORMAT_TEXT) != 0; }
@@ -387,6 +387,10 @@ public:
     /** Insert the number of blanks into the string that is needed to simulate
         the width of character c for underscore formats */
     static xub_StrLen InsertBlanks( String& r, xub_StrLen nPos, sal_Unicode c );
+
+    /** Insert the number of blanks into the string that is needed to simulate
+        the width of character c for underscore formats */
+    static sal_Int32 InsertBlanks( OUStringBuffer& r, sal_Int32 nPos, sal_Unicode c );
 
     /// One of YMD,DMY,MDY if date format
     DateFormat GetDateOrder() const;

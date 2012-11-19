@@ -413,9 +413,17 @@ void FormattedField::SetTextFormatted(const OUString& rStr)
     sal_uInt32 nTempFormatKey = static_cast< sal_uInt32 >( m_nFormatKey );
     if( IsUsingInputStringForFormatting() &&
         ImplGetFormatter()->IsNumberFormat(m_sCurrentTextValue, nTempFormatKey, dNumber) )
+    {
         ImplGetFormatter()->GetInputLineString(dNumber, m_nFormatKey, sFormatted);
+    }
     else
-        ImplGetFormatter()->GetOutputString(m_sCurrentTextValue, m_nFormatKey, sFormatted, &m_pLastOutputColor);
+    {
+        OUString sTempIn(m_sCurrentTextValue);
+        OUString sTempOut(sFormatted);
+        ImplGetFormatter()->GetOutputString(sTempIn, m_nFormatKey, sTempOut, &m_pLastOutputColor);
+        m_sCurrentTextValue = sTempIn;
+        sFormatted = sTempOut;
+    }
 
     // calculate the new selection
     Selection aSel(GetSelection());
@@ -956,14 +964,23 @@ void FormattedField::ImplSetValue(double dVal, sal_Bool bForce)
         String sTemp;
         ImplGetFormatter()->GetOutputString(dVal, 0, sTemp, &m_pLastOutputColor);
         // dann den String entsprechend dem Text-Format
-        ImplGetFormatter()->GetOutputString(sTemp, m_nFormatKey, sNewText, &m_pLastOutputColor);
+        {
+        OUString sTempIn(m_sCurrentTextValue);
+        OUString sTempOut;
+        ImplGetFormatter()->GetOutputString(sTempIn, m_nFormatKey, sTempOut, &m_pLastOutputColor);
+        sNewText = sTempOut;
+        }
     }
     else
     {
         if( IsUsingInputStringForFormatting())
+        {
             ImplGetFormatter()->GetInputLineString(dVal, m_nFormatKey, sNewText);
+        }
         else
+        {
             ImplGetFormatter()->GetOutputString(dVal, m_nFormatKey, sNewText, &m_pLastOutputColor);
+        }
     }
 
     ImplSetTextImpl(sNewText, NULL);

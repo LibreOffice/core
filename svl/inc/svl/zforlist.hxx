@@ -490,13 +490,6 @@ public:
     /** Format a string according to a format index, return string and color.
         Formats only if the format code is of type text or the 4th subcode
         of a format code is specified, otherwise sOutString will be == "" */
-    void GetOutputString( String& sString, sal_uInt32 nFIndex,
-                          String& sOutString, Color** ppColor, bool bUseStarFormat = false );
-
-
-    /** Format a string according to a format index, return string and color.
-        Formats only if the format code is of type text or the 4th subcode
-        of a format code is specified, otherwise sOutString will be == "" */
     void GetOutputString( OUString& sString, sal_uInt32 nFIndex,
                           OUString& sOutString, Color** ppColor, bool bUseStarFormat = false );
 
