@@ -37,7 +37,8 @@ else
 
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
 	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure \
+	&& $(if $(filter TRUE,$(DISABLE_DYNLOADING)),CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)" CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)") \
+		./configure \
 		--with-pic \
 		--enable-static \
 		--disable-shared \
