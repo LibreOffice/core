@@ -422,7 +422,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
         ChangeIntl( eOldLanguage );
         LanguageType eLge = eOldLanguage;   // ConvertMode changes this
         bool bCheck = false;
-        xub_StrLen nCheckPos;
+        xub_StrLen nCheckPos = 0;
         SvNumberformat* pNewEntry = new SvNumberformat( aString, pFormatScanner,
                                                         pStringScanner, nCheckPos, eLge );
         if ( nCheckPos != 0 )
