@@ -1245,9 +1245,9 @@ void ExtensionManager::reinstallDeployedExtensions(
                 {
                     beans::Optional< beans::Ambiguous< sal_Bool > > registered(
                         extensions[pos]->isRegistered(xAbortChannel, xCmdEnv));
-                    if (!registered.IsPresent
-                        || registered.Value.IsAmbiguous
-                        || !registered.Value.Value)
+                    if (registered.IsPresent &&
+                        !(registered.Value.IsAmbiguous ||
+                          registered.Value.Value))
                     {
                         const OUString id = dp_misc::getIdentifier(extensions[ pos ]);
                         OSL_ASSERT(!id.isEmpty());
