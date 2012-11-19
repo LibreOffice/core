@@ -2687,7 +2687,7 @@ SalColormap::SalColormap( sal_uInt16 nDepth )
 SalColormap::~SalColormap()
 {
 #ifdef DBG_UTIL
-    m_hColormap      = NULL;
+    m_hColormap      = None;
     m_pDisplay       = NULL;
 #endif
 }
