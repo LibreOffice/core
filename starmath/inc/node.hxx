@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <iostream>
 
 #ifndef NODE_HXX
 #define NODE_HXX
@@ -1092,10 +1091,8 @@ inline SmVerticalBraceNode::SmVerticalBraceNode(const SmToken &rNodeToken) :
  */
 class SmOperNode : public SmStructureNode
 {
-//--
 protected:
     void   GetHeightVerOffset(const SmRect &rRect, long &rHeight, long &rVerOffset) const;
-//--
 public:
     SmOperNode(const SmToken &rNodeToken)
     :   SmStructureNode(NOPER, rNodeToken)
@@ -1114,6 +1111,7 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void Accept(SmVisitor* pVisitor);
 };
+
 
 ////////////////////////////////////////////////////////////////////////////////
 

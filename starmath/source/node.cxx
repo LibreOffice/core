@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <iostream>
 
 #include "node.hxx"
 #include "rect.hxx"
@@ -1915,7 +1914,6 @@ void SmVerticalBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFor
 SmNode * SmOperNode::GetSymbol()
 {
     SmNode *pNode = GetSubNode(0);
-
     OSL_ENSURE(pNode, "Sm: NULL pointer!");
 
     if (pNode->GetType() == NSUBSUP)
@@ -1967,7 +1965,6 @@ void SmOperNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     OSL_ENSURE(pOper, "Sm: missing subnode");
     OSL_ENSURE(pBody, "Sm: missing subnode");
 
-    //--
     pBody->Arrange(rDev, rFormat);
     long  nHeight,
           nVerOffset;
@@ -1977,7 +1974,6 @@ void SmOperNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
     pOper->AdaptToY(rDev, nHeight + nHeight / 10L );
     pOper->AdaptToX(rDev, pBody->GetItalicWidth());
-    //--
 
     SmNode *pSymbol = GetSymbol();
     //pSymbol->SetSize(Fraction(CalcSymbolHeight(*pSymbol, rFormat),
@@ -1990,10 +1986,8 @@ void SmOperNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
     Point aPos = pOper->AlignTo(*pBody, RP_LEFT, RHA_CENTER, /*RVA_CENTERY*/RVA_MID);
     aPos.X() -= nDist;
-    //--
     aPos.Y()  = pOper->GetTop() + pBody->GetBottom() - pOper->GetBottom();
     aPos.Y() -= nVerOffset;
-    //--
     pOper->MoveTo(aPos);
 
     SmRect::operator = (*pBody);
@@ -2698,7 +2692,6 @@ void SmMathSymbolNode::AdaptToX(const OutputDevice &rDev, sal_uLong nWidth)
     aFntSize.Width() /= nDenom ? nDenom : 1;
 
     GetFont().SetSize(aFntSize);
-
 }
 
 void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)

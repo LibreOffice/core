@@ -1127,7 +1127,6 @@ void OQueryController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:DBViewTableNames",  SID_QUERY_VIEW_TABLES,      CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:DBViewAliases",     SID_QUERY_VIEW_ALIASES,     CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:DBDistinctValues",  SID_QUERY_DISTINCT_VALUES,  CommandGroup::FORMAT );
-///**********
     implDescribeSupportedFeature( ".uno:DBChangeDesignMode",ID_BROWSER_SQL,             CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:DBClearQuery",      SID_BROWSER_CLEAR_QUERY,    CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:SbaExecuteSql",     ID_BROWSER_QUERY_EXECUTE,   CommandGroup::VIEW );
