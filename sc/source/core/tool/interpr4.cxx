@@ -2721,7 +2721,7 @@ void ScInterpreter::ScExternal()
     }
     else if ( ( aUnoName = ScGlobal::GetAddInCollection()->FindFunction(aFuncName, false) ).Len()  )
     {
-        //  bLocalFirst=false in FindFunction, cFunc should be the stored 
+        //  bLocalFirst=false in FindFunction, cFunc should be the stored
         //  internal name
 
         ScUnoAddInCall aCall( *ScGlobal::GetAddInCollection(), aUnoName, nParamCount );
@@ -3961,6 +3961,8 @@ StackVar ScInterpreter::Interpret()
                 case ocIsNA             : ScIsNV();                     break;
                 case ocIsErr            : ScIsErr();                    break;
                 case ocIsError          : ScIsError();                  break;
+                case ocIfError          : ScIfError();                  break;
+                case ocIfNA             : ScIfNA();                     break;
                 case ocIsEven           : ScIsEven();                   break;
                 case ocIsOdd            : ScIsOdd();                    break;
                 case ocN                : ScN();                        break;
@@ -4256,6 +4258,8 @@ StackVar ScInterpreter::Interpret()
     case ocIsEmpty : \
     case ocIsErr : \
     case ocIsError : \
+    case ocIfError : \
+    case ocIfNA : \
     case ocIsFormula : \
     case ocIsLogical : \
     case ocIsNA : \

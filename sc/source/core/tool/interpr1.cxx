@@ -2852,6 +2852,171 @@ void ScInterpreter::ScIsError()
 }
 
 
+void ScInterpreter::ScIfError()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIsError" );
+
+    //must have 2 parameters
+    //toDo: if one argument, make 2nd argument empty cell
+    if ( !MustHaveParamCount( GetByte(), 2 ) )
+        return;
+
+    FormulaToken* p;
+
+    //first read the second argument and store
+    if ( sp )
+    {
+        sp--;
+        p = pStack[ sp ];
+    }
+    else
+        p = 0;
+
+    //process 1st argument
+    ScEvaluate();
+
+    //if no error, return
+    if ( sp )
+    {
+        if ( GetStackType() == svError )
+        {
+            sp--;
+            nGlobalError = pStack[sp]->GetError();
+        }
+    }
+    if ( !nGlobalError )
+        return;
+
+    nGlobalError = 0;
+    //return 2nd argument
+    if ( p )
+    {
+        Push( *p );
+        ScEvaluate();
+    }
+    else
+        PushIllegalParameter();
+}
+
+
+void ScInterpreter::ScEvaluate()
+{
+    String aInputString;
+    double fVal = 0.0;
+
+    switch ( GetRawStackType() )
+    {
+        case svMissing:
+        case svEmptyCell:
+            Pop();
+            PushString( String( "" ) );
+            return;
+        case svSingleRef:
+        case svDoubleRef:
+            {
+                ScAddress aAdr;
+                if ( !PopDoubleRefOrSingleRef( aAdr ) )
+                {
+                    PushString( String ( "" ) );
+                    return;
+                }
+                ScBaseCell* pCell = GetCell( aAdr );
+                if ( pCell && pCell->HasStringData() )
+                {
+                    GetCellString( aInputString, pCell );
+                    PushString( aInputString );
+                    return;
+                }
+                else if ( pCell && pCell->HasValueData() )
+                {
+                    PushDouble( GetCellValue(aAdr, pCell) );
+                    return;
+                }
+                else
+                {
+                    PushString( String( "" ) );
+                    return;
+                }
+            }
+            break;
+        case svMatrix:
+            {
+                ScMatValType nType = GetDoubleOrStringFromMatrix( fVal, aInputString );
+                switch ( nType )
+                {
+                    case SC_MATVAL_EMPTY:
+                        fVal = 0.0;
+                        // fallthru
+                    case SC_MATVAL_VALUE:
+                    case SC_MATVAL_BOOLEAN:
+                        PushDouble( fVal );
+                        break;
+                    case SC_MATVAL_STRING:
+                        {
+                            sal_uInt32 nFIndex = 0;     // 0 for default locale
+                            if ( pFormatter->IsNumberFormat( aInputString, nFIndex, fVal ) )
+                                PushDouble( fVal );
+                            else
+                                PushError( errNoValue );
+                        }
+                        break;
+                    default:
+                        PushError( errNoValue );
+                }
+            }
+            break;
+        default:
+            return;     // leave on stack
+    }
+}
+
+
+void ScInterpreter::ScIfNA()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIfNA" );
+
+    //must have 2 parameters
+    //toDo: if one argument, make 2nd argument empty cell
+    if ( !MustHaveParamCount( GetByte(), 2 ) )
+        return;
+
+    FormulaToken* p;
+
+    //first read the second argument and store
+    if ( sp )
+    {
+        sp--;
+        p = pStack[ sp ];
+    }
+    else
+        p = 0;
+
+    //process 1st argument
+    ScEvaluate();
+
+    //if no error, return
+    if ( sp )
+    {
+        if ( GetStackType() == svError )
+        {
+            sp--;
+            nGlobalError = pStack[sp]->GetError();
+        }
+    }
+    if ( !nGlobalError || nGlobalError != NOTAVAILABLE )
+        return;
+
+    nGlobalError = 0;
+    //return 2nd argument
+    if ( p )
+    {
+        Push( *p );
+        ScEvaluate();
+    }
+    else
+        PushIllegalParameter();
+}
+
 short ScInterpreter::IsEven()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::IsEven" );

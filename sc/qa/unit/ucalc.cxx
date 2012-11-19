@@ -3902,6 +3902,8 @@ void Test::testFunctionLists()
         "CELL",
         "CURRENT",
         "FORMULA",
+        "IFERROR",
+        "IFNA",
         "INFO",
         "ISBLANK",
         "ISERR",
