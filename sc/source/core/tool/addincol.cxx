@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include <comphelper/processfactory.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/charclass.hxx>
@@ -185,7 +185,7 @@ sal_Bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, ::rtl::OUStri
         long i;
 
         rtl::OUString aLangStr, aCountryStr;
-        MsLangId::convertLanguageToIsoNames( eDestLang, aLangStr, aCountryStr );
+        LanguageTag( eDestLang ).getIsoLanguageCountry( aLangStr, aCountryStr );
         rtl::OUString aUserLang = aLangStr.toAsciiLowerCase();
         rtl::OUString aUserCountry = aCountryStr.toAsciiUpperCase();
 
@@ -792,7 +792,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
         //  AddIns must use the language for which the office is installed
         LanguageType eOfficeLang = Application::GetSettings().GetUILanguage();
 
-        lang::Locale aLocale( MsLangId::convertLanguageToLocale( eOfficeLang ));
+        lang::Locale aLocale( LanguageTag( eOfficeLang ).getLocale());
         xAddIn->setLocale( aLocale );
 
         ::rtl::OUString aServiceName( xName->getServiceName() );
@@ -1047,7 +1047,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
     if ( xLoc.is() )        // optional in new add-ins
     {
         LanguageType eOfficeLang = Application::GetSettings().GetUILanguage();
-        lang::Locale aLocale( MsLangId::convertLanguageToLocale( eOfficeLang ));
+        lang::Locale aLocale( LanguageTag( eOfficeLang ).getLocale());
         xLoc->setLocale( aLocale );
     }
 

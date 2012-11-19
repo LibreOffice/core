@@ -29,7 +29,7 @@
 #include "sc.hrc"
 
 #include <comphelper/processfactory.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
@@ -1297,7 +1297,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     aTransliteration.loadModuleIfNeeded( eDocLang );
     CalendarWrapper aCalendar( comphelper::getComponentContext(pDoc->GetServiceManager()) );
     aCalendar.loadDefaultCalendar(
-        MsLangId::convertLanguageToLocale( eDocLang ) );
+        LanguageTag( eDocLang ).getLocale() );
     ::utl::TransliterationWrapper* pEnglishTransliteration = NULL;
     CalendarWrapper* pEnglishCalendar = NULL;
     if ( eDocLang != LANGUAGE_ENGLISH_US )
@@ -1307,7 +1307,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
         aTransliteration.loadModuleIfNeeded( LANGUAGE_ENGLISH_US );
         pEnglishCalendar = new CalendarWrapper ( comphelper::getComponentContext(pDoc->GetServiceManager()) );
         pEnglishCalendar->loadDefaultCalendar(
-            MsLangId::convertLanguageToLocale( LANGUAGE_ENGLISH_US ) );
+            LanguageTag( LANGUAGE_ENGLISH_US ).getLocale() );
     }
 
     rtl::OUString aLine;

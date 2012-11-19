@@ -30,7 +30,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <vcl/msgbox.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <svtools/collatorres.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -682,7 +682,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
         aBtnHeader.SetText( aStrRowLabel );
     }
 
-    LanguageType eLang = MsLangId::convertLocaleToLanguage( aSortData.aCollatorLocale );
+    LanguageType eLang = LanguageTag( aSortData.aCollatorLocale ).getLanguageType( false);
     if ( eLang == LANGUAGE_DONTKNOW )
         eLang = LANGUAGE_SYSTEM;
     aLbLanguage.SelectLanguage( eLang );
@@ -749,7 +749,7 @@ sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 
     // get locale
     LanguageType eLang = aLbLanguage.GetSelectLanguage();
-    aNewSortData.aCollatorLocale = MsLangId::convertLanguageToLocale( eLang, false );
+    aNewSortData.aCollatorLocale = LanguageTag( eLang ).getLocale( false );
 
     // get algorithm
     rtl::OUString sAlg;
@@ -976,7 +976,7 @@ IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
     }
     else
     {
-        lang::Locale aLocale( MsLangId::convertLanguageToLocale( eLang ));
+        lang::Locale aLocale( LanguageTag( eLang ).getLocale());
         uno::Sequence<rtl::OUString> aAlgos = pColWrap->listCollatorAlgorithms( aLocale );
 
         long nCount = aAlgos.getLength();

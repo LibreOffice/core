@@ -31,7 +31,7 @@
 #include <svl/itemprop.hxx>
 #include <svx/unomid.hxx>
 #include <vcl/svapp.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
@@ -192,7 +192,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
         {
             LanguageType eNew;
             if (!aLocale.Language.isEmpty() || !aLocale.Country.isEmpty())
-                eNew = MsLangId::convertLocaleToLanguage( aLocale );
+                eNew = LanguageTag( aLocale ).getLanguageType( false);
             else
                 eNew = LANGUAGE_NONE;
 

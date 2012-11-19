@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 #include "convuno.hxx"
 #include "global.hxx"
@@ -43,7 +43,7 @@ LanguageType ScUnoConversion::GetLanguage( const lang::Locale& rLocale )
     if ( rLocale.Language.isEmpty() )
         return LANGUAGE_SYSTEM;
 
-    LanguageType eRet = MsLangId::convertLocaleToLanguage( rLocale );
+    LanguageType eRet = LanguageTag( rLocale ).getLanguageType( false);
     if ( eRet == LANGUAGE_NONE )
         eRet = LANGUAGE_SYSTEM;         //! or throw an exception?
 
@@ -52,7 +52,7 @@ LanguageType ScUnoConversion::GetLanguage( const lang::Locale& rLocale )
 
 void ScUnoConversion::FillLocale( lang::Locale& rLocale, LanguageType eLang )
 {
-    MsLangId::convertLanguageToLocale( eLang, rLocale );
+    rLocale = LanguageTag( eLang ).getLocale();
 }
 
 

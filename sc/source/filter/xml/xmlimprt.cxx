@@ -2301,7 +2301,7 @@ void ScXMLImport::ExamineDefaultStyle()
                 else
                 {
                     LocaleDataWrapper aLocaleData( comphelper::getComponentContext(pDoc->GetServiceManager()),
-                        MsLangId::convertLanguageToLocale( nFormatLang ) );
+                        LanguageTag( nFormatLang ).getLocale() );
                     aDecSep = aLocaleData.getNumDecimalSep();
                 }
 
