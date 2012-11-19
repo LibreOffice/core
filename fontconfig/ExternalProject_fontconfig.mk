@@ -21,7 +21,8 @@ $(eval $(call gb_ExternalProject_register_targets,fontconfig,\
 
 $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 	cd $(EXTERNAL_WORKDIR) \
-	&& $(if $(debug),CFLAGS=-g) $(if $(filter ANDROID,$(OS)),LIBS="-lm") ./configure \
+	&& CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS)" $(if $(filter ANDROID,$(OS)),LIBS="-lm") \
+		./configure \
 		--disable-shared \
 		--with-arch=arm \
 		--with-expat-includes=$(OUTDIR)/inc/external/expat \

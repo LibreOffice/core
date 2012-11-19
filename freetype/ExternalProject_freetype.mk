@@ -17,7 +17,8 @@ $(eval $(call gb_ExternalProject_register_targets,freetype,\
 
 $(call gb_ExternalProject_get_state_target,freetype,build) :
 	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure \
+	&& CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS)" \
+		./configure \
 		--disable-shared \
 		--without-zlib \
 		--without-bzip2 \
