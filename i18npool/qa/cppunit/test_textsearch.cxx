@@ -92,6 +92,7 @@ void TestTextSearch::testICU()
     CPPUNIT_ASSERT( nErr == U_ZERO_ERROR );
     CPPUNIT_ASSERT( pRegexMatcher->end( nErr ) == 1 );
     CPPUNIT_ASSERT( nErr == U_ZERO_ERROR );
+    delete pRegexMatcher;
 }
 
 void TestTextSearch::testSearches()
