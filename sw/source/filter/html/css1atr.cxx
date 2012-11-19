@@ -63,7 +63,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/bigint.hxx>
 #include <unotools/charclass.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <charfmt.hxx>
 #include <fmtcol.hxx>
 #include <fmtfsize.hxx>
@@ -2797,7 +2797,7 @@ static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     if( LANGUAGE_DONTKNOW == eLang )
         return rWrt;
 
-    String sOut = MsLangId::convertLanguageToIsoString( eLang );
+    String sOut = LanguageTag( eLang ).getBcp47();
 
     rHTMLWrt.OutCSS1_Property( sCSS1_P_so_language, sOut );
 

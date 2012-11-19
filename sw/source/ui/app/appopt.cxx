@@ -46,6 +46,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <fontcfg.hxx>
 #include <optload.hxx>
 #include <optcomp.hxx>
@@ -164,17 +165,17 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
 
         Any aLang = aLinguCfg.GetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale")));
         aLang >>= aLocale;
-        nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aLocale), LATIN);
+        nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag(aLocale).getLanguageType(false), LATIN);
         pRet->Put(SvxLanguageItem(nLang, SID_ATTR_LANGUAGE));
 
         aLang = aLinguCfg.GetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale_CJK")));
         aLang >>= aLocale;
-        nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aLocale), ASIAN);
+        nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag(aLocale).getLanguageType(false), ASIAN);
         pRet->Put(SvxLanguageItem(nLang, SID_ATTR_CHAR_CJK_LANGUAGE));
 
         aLang = aLinguCfg.GetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale_CTL")));
         aLang >>= aLocale;
-        nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aLocale), COMPLEX);
+        nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag(aLocale).getLanguageType(false), COMPLEX);
         pRet->Put(SvxLanguageItem(nLang, SID_ATTR_CHAR_CTL_LANGUAGE));
     }
     if(bTextDialog)

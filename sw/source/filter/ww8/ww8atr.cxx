@@ -132,7 +132,7 @@
 #include "ww8attributeoutput.hxx"
 #include "fields.hxx"
 #include <vcl/outdev.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -2343,7 +2343,7 @@ bool MSWordExportBase::GetNumberFmt(const SwField& rFld, String& rStr)
     {
         sal_uInt16 nLng = rFld.GetLanguage();
         LocaleDataWrapper aLocDat(comphelper::getComponentContext(pNFmtr->GetServiceManager()),
-                                  MsLangId::convertLanguageToLocale(nLng));
+                                  LanguageTag(nLng).getLocale());
 
         String sFmt(pNumFmt->GetMappedFormatstring(GetNfKeywordTable(),
             aLocDat));

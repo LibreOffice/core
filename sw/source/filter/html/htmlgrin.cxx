@@ -33,7 +33,7 @@
 #include <vcl/wrkwin.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/sfx.hrc>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -996,7 +996,7 @@ void SwHTMLParser::InsertBodyOptions()
     }
     if( aLang.Len() )
     {
-        LanguageType eLang = MsLangId::convertIsoStringToLanguage( aLang );
+        LanguageType eLang = LanguageTag( aLang ).getLanguageType();
         if( LANGUAGE_DONTKNOW != eLang )
         {
             sal_uInt16 nWhich = 0;

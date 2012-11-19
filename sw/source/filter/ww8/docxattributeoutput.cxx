@@ -33,7 +33,7 @@
 #include <oox/export/utils.hxx>
 #include <oox/mathml/export.hxx>
 
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
@@ -3283,7 +3283,7 @@ void DocxAttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
     if (!m_pCharLangAttrList)
         m_pCharLangAttrList = m_pSerializer->createAttrList();
 
-    ::com::sun::star::lang::Locale xLocale= MsLangId::convertLanguageToLocale( rLanguage.GetLanguage( ) );
+    ::com::sun::star::lang::Locale xLocale= LanguageTag( rLanguage.GetLanguage( ) ).getLocale();
     OString sLanguage = OUStringToOString(xLocale.Language, RTL_TEXTENCODING_UTF8);
     OString sCountry = OUStringToOString(xLocale.Country, RTL_TEXTENCODING_UTF8);
 

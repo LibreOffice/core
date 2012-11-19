@@ -35,7 +35,7 @@
 #include <cmdid.h>
 #include <helpid.h>
 
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/langitem.hxx>
 #include <svtools/langtab.hxx>
@@ -1365,7 +1365,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
             LanguageType nLang = rSh.GetCurLang();
             lang::Locale aLocale = SvxCreateLocale( nLang );
-            String aLangText( MsLangId::convertLanguageToIsoString( nLang ) );
+            String aLangText( LanguageTag( nLang ).getBcp47() );
 
             // set word and locale to look up as status value
             String aStatusVal( aText );

@@ -29,7 +29,7 @@
 #include <stdlib.h>
 
 #include <svx/svxids.hrc>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/udlnitem.hxx>
@@ -3078,7 +3078,7 @@ static void ParseCSS1_so_language( const CSS1Expression *pExpr,
     if( CSS1_IDENT == pExpr->GetType() ||
         CSS1_STRING == pExpr->GetType() )
     {
-        LanguageType eLang = MsLangId::convertIsoStringToLanguage( pExpr->GetString() );
+        LanguageType eLang = LanguageTag( pExpr->GetString() ).getLanguageType();
         if( LANGUAGE_DONTKNOW != eLang )
         {
             SvxLanguageItem aLang( eLang, aItemIds.nLanguage );

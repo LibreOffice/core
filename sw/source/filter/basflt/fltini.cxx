@@ -30,7 +30,7 @@
 #include <stdio.h>                      // sscanf
 #include <hintids.hxx>
 #include <i18npool/lang.h>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/parhtml.hxx>
 #include <sot/storage.hxx>
@@ -784,7 +784,7 @@ void SwAsciiOptions::ReadUserData( const String& rStr )
                                 sFont = sToken;
                                 break;
                         case 3:         // Language
-                nLanguage = MsLangId::convertIsoStringToLanguage( sToken );
+                nLanguage = LanguageTag( sToken ).getLanguageType();
                                 break;
                         }
                 }
@@ -820,7 +820,7 @@ void SwAsciiOptions::WriteUserData( String& rStr )
         // 4. Language
         if (nLanguage)
         {
-        rtl::OUString sTmp = MsLangId::convertLanguageToIsoString( nLanguage );
+        rtl::OUString sTmp = LanguageTag( nLanguage ).getBcp47();
         rStr += (String)sTmp;
         }
         rStr += ',';

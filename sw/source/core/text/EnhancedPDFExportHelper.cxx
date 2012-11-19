@@ -77,7 +77,7 @@
 #include <porfld.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <itrpaint.hxx>
-#include "i18npool/mslangid.hxx"
+#include "i18npool/languagetag.hxx"
 #include <IMark.hxx>
 #include <SwNodeNum.hxx>
 #include <switerator.hxx>
@@ -1580,7 +1580,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
     //
     // set the document locale
     //
-    com::sun::star::lang::Locale aDocLocale = MsLangId::convertLanguageToLocale( SwEnhancedPDFExportHelper::GetDefaultLanguage() );
+    com::sun::star::lang::Locale aDocLocale( LanguageTag( SwEnhancedPDFExportHelper::GetDefaultLanguage() ).getLocale() );
     pPDFExtOutDevData->SetDocumentLocale( aDocLocale );
 
     //

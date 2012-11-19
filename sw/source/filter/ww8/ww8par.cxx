@@ -29,7 +29,7 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/random.h>
@@ -2347,7 +2347,7 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
             */
             const SvxLanguageItem *pLang = (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
             LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
-            ::com::sun::star::lang::Locale aLocale(MsLangId::convertLanguageToLocale(eLang));
+            ::com::sun::star::lang::Locale aLocale(LanguageTag(eLang).getLocale());
             eSrcCharSet = msfilter::util::getBestTextEncodingFromLocale(aLocale);
         }
     }

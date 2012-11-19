@@ -116,7 +116,7 @@
 
 #include <editeng/langitem.hxx>
 #include <docary.hxx>      //SwCharFmts
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 #include <format.hxx>
 #include <charfmt.hxx>    //SwCharFmt
@@ -3259,7 +3259,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
                 break;
             if (LANGUAGE_NONE != *it)
             {
-                MsLangId::convertLanguageToLocale( *it, pLanguage[nCount] );
+                pLanguage[nCount] = LanguageTag( *it ).getLocale();
                 pLanguage[nCount].Language = aLangTab.GetString( *it );
                 nCount += 1;
             }

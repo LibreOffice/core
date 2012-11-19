@@ -110,7 +110,7 @@
 #include <mailmergehelper.hxx>
 #include <maildispatcher.hxx>
 #include <svtools/htmlcfg.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <editeng/langitem.hxx>
 #include <svl/numuno.hxx>
@@ -311,7 +311,7 @@ static sal_Bool lcl_GetColumnCnt(SwDSParam* pParam,
     aFormatData.aNullDate = pParam->aNullDate;
     aFormatData.xFormatter = pParam->xFormatter;
 
-    MsLangId::convertLanguageToLocale( (LanguageType)nLanguage, aFormatData.aLocale );
+    aFormatData.aLocale = LanguageTag( (LanguageType)nLanguage ).getLocale();
 
     rResult = SwNewDBMgr::GetDBField( xColumnProps, aFormatData, pNumber);
     return sal_True;
@@ -1464,7 +1464,7 @@ sal_uLong SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
         uno::Reference< XNumberFormats > xDocNumberFormats = xDocNumFmtsSupplier->getNumberFormats();
         uno::Reference< XNumberFormatTypes > xDocNumberFormatTypes(xDocNumberFormats, UNO_QUERY);
 
-        com::sun::star::lang::Locale aLocale( MsLangId::convertLanguageToLocale( (LanguageType)nLanguage ));
+        com::sun::star::lang::Locale aLocale( LanguageTag( (LanguageType)nLanguage ).getLocale());
 
         //get the number formatter of the data source
         uno::Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);

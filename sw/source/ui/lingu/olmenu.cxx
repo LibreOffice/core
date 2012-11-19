@@ -52,6 +52,7 @@
 #include <editeng/brshitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
 #include <osl/file.hxx>
@@ -128,7 +129,7 @@ static LanguageType lcl_CheckLanguage(
                 nLang = nTmpLang;
         }
         if (nLang == LANGUAGE_NONE) // language not found by looking up the system language...
-            nLang = MsLangId::convertLocaleToLanguageWithFallback( aLocale );
+            nLang = LanguageTag( aLocale ).makeFallback().getLanguageType();
         if (nLang == LANGUAGE_SYSTEM)
             nLang = nTmpLang;
         if (nLang == LANGUAGE_DONTKNOW)

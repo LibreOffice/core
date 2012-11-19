@@ -30,7 +30,7 @@
 #include <ooo/vba/word/WdStyleType.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include "vbafont.hxx"
 #include "vbapalette.hxx"
 #include "vbaparagraphformat.hxx"
@@ -61,12 +61,12 @@ sal_Int32 SwVbaStyle::getLanguageID( const uno::Reference< beans::XPropertySet >
 {
     lang::Locale aLocale;
     xTCProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CharLocale") ) ) >>= aLocale;
-    return MsLangId::convertLocaleToLanguage( aLocale );
+    return LanguageTag( aLocale ).getLanguageType( false);
 }
 
 void SwVbaStyle::setLanguageID( const uno::Reference< beans::XPropertySet >& xTCProps, sal_Int32 _languageid ) throw (uno::RuntimeException)
 {
-    lang::Locale aLocale = MsLangId::convertLanguageToLocale( static_cast<LanguageType>(_languageid) );
+    lang::Locale aLocale = LanguageTag( static_cast<LanguageType>(_languageid) ).getLocale();
     xTCProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CharLocale") ), uno::makeAny( aLocale ) ) ;
 }
 

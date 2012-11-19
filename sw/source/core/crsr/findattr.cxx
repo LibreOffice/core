@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemiter.hxx>
@@ -1107,7 +1107,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                 aTmp.searchFlag |= (SearchFlags::REG_NOT_BEGINOFLINE |
                                     SearchFlags::REG_NOT_ENDOFLINE);
 
-                MsLangId::convertLanguageToLocale( LANGUAGE_SYSTEM, aTmp.Locale );
+                aTmp.Locale = LanguageTag( LANGUAGE_SYSTEM ).getLocale();
 
                 pSTxt = new utl::TextSearch( aTmp );
             }

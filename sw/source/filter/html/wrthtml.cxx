@@ -36,7 +36,7 @@
 
 #include <svtools/htmlcfg.hxx>
 #include <vcl/svapp.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svx/htmlmode.hxx>
@@ -1234,7 +1234,7 @@ void SwHTMLWriter::OutLanguage( LanguageType nLang )
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_lang)
             .append("=\"");
         Strm() << sOut.makeStringAndClear().getStr();
-        HTMLOutFuncs::Out_String( Strm(), MsLangId::convertLanguageToIsoString(nLang),
+        HTMLOutFuncs::Out_String( Strm(), LanguageTag(nLang).getBcp47(),
                                   eDestEnc, &aNonConvertableCharacters ) << '"';
     }
 }
