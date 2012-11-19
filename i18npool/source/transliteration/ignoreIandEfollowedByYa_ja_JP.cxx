@@ -139,7 +139,7 @@ ignoreIandEfollowedByYa_ja_JP::folding( const OUString& inStr, sal_Int32 startPo
     newStr->length = sal_Int32(dst - newStr->buffer);
     if (useOffset)
         offset.realloc(newStr->length);
-    return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
+    return OUString( newStr, SAL_NO_ACQUIRE ); // take over ownership of <newStr>
 }
 
 } } } }

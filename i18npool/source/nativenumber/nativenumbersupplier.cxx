@@ -73,7 +73,7 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
         Sequence< sal_Int32 >& offset, sal_Bool useOffset, sal_Int16 number ) throw(RuntimeException)
 {
         const sal_Unicode *src = inStr.getStr() + startPos;
-        rtl_uString *newStr = x_rtl_uString_new_WithLength(nCount);
+        rtl_uString *newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
         if (useOffset)
             offset.realloc(nCount);
 
@@ -93,7 +93,7 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
             if (useOffset)
                 offset[i] = startPos + i;
         }
-        return OUString( newStr, SAL_NO_ACQUIRE);
+        return OUString( newStr, SAL_NO_ACQUIRE); // take over ownership of <newStr>
 }
 
 sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
@@ -246,7 +246,10 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
 
             if (useOffset)
                 offset.realloc(count);
-            return OUString(newStr->buffer, count);
+            OUString resultStr( newStr->buffer, count );
+            x_rtl_uString_release( newStr );
+            x_rtl_uString_release( srcStr );
+            return resultStr;
         }
         return OUString();
 }
@@ -309,7 +312,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
 
         if (nCount > 0) {
             const sal_Unicode *str = inStr.getStr() + startPos;
-            rtl_uString *newStr = x_rtl_uString_new_WithLength(nCount * MultiplierExponent_7_CJK[0] + 1);
+            rtl_uString *newStr = x_rtl_uString_new_WithLength( nCount * MultiplierExponent_7_CJK[0] + 1 );
             if (useOffset)
                 offset.realloc( nCount * MultiplierExponent_7_CJK[0] + 1 );
             sal_Int32 count = 0, index;
@@ -367,7 +370,9 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
                 for (i = 0; i < count; i++)
                     offset[i] += startPos;
             }
-            return OUString(newStr->buffer, count);
+            OUString resultStr( newStr->buffer, count );
+            x_rtl_uString_release( newStr );
+            return resultStr;
         }
         return OUString();
 }
