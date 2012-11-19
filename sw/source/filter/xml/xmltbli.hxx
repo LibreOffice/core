@@ -189,7 +189,7 @@ public:
                      sal_Bool bTextValue = sal_False );
     void InsertRow( const ::rtl::OUString& rStyleName,
                     const ::rtl::OUString& rDfltCellStyleName,
-                    sal_Bool bInHead,
+                    bool bInHead,
                     const ::rtl::OUString & i_rXmlId = ::rtl::OUString() );
     void FinishRow();
     void InsertRepRows( sal_uInt32 nCount );

@@ -694,7 +694,7 @@ sal_Bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBox
         if( pUndo )
             pUndo->InsertRow( *this, aBoxes, aTarget.mnAddLine );
         else
-            InsertRow( pDoc, aBoxes, aTarget.mnAddLine, sal_True );
+            InsertRow( pDoc, aBoxes, aTarget.mnAddLine, true );
 
         aTarget.moreLines( *this );
         bClear = true;
@@ -780,11 +780,11 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
             // Do not create empty Sections, otherwise they will be deleted!
             lcl_CpyBox( rCpyTbl, pCpyBox, *this, pMyBox, bDelCntnt, pUndo );
 
-            if( 0 == (pTmp = pCpyBox->FindNextBox( rCpyTbl, pCpyBox, sal_False )))
+            if( 0 == (pTmp = pCpyBox->FindNextBox( rCpyTbl, pCpyBox, false )))
                 break;      // no more Boxes
             pCpyBox = pTmp;
 
-            if( 0 == ( pTmp = pMyBox->FindNextBox( *this, pMyBox, sal_False )))
+            if( 0 == ( pTmp = pMyBox->FindNextBox( *this, pMyBox, false )))
                 bDelCntnt = sal_False;  // No space left?
             else
                 pMyBox = (SwTableBox*)pTmp;
@@ -907,7 +907,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                     ? !pUndo->InsertRow( *this, SelLineFromBox( pInsBox,
                                 aBoxes, sal_True ), nNewLns )
                     : !InsertRow( pDoc, SelLineFromBox( pInsBox,
-                                aBoxes, sal_True ), nNewLns, sal_True ) )
+                                aBoxes, sal_True ), nNewLns, true ) )
                     return sal_False;
             }
 

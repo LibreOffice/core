@@ -519,14 +519,14 @@ SwRowFrm* GetRowFrm( SwTableLine& rLine )
     return 0;
 }
 
-sal_Bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool bBehind )
+bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
 {
     OSL_ENSURE( !rBoxes.empty() && nCnt, "No valid Box List" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
-        return sal_False;
+        return false;
 
-    sal_Bool bRes = sal_True;
+    bool bRes = true;
     if( IsNewModel() )
         bRes = NewInsertCol( pDoc, rBoxes, nCnt, bBehind );
     else
@@ -538,7 +538,7 @@ sal_Bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 n
             ForEach_FndLineCopyCol( GetTabLines(), &aPara );
         }
         if( aFndBox.GetLines().empty() )
-            return sal_False;
+            return false;
 
         SetHTMLTableLayout( 0 );    // Delete HTML Layout
 
@@ -563,7 +563,7 @@ sal_Bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 n
 
         CHECKBOXWIDTH;
         CHECKTABLELAYOUT;
-        bRes = sal_True;
+        bRes = true;
     }
 
     SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
@@ -574,13 +574,13 @@ sal_Bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 n
     return bRes;
 }
 
-sal_Bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
-                        sal_uInt16 nCnt, sal_Bool bBehind )
+bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
+                        sal_uInt16 nCnt, bool bBehind )
 {
     OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "No valid Box List" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
-        return sal_False;
+        return false;
 
      // Find all Boxes/Lines
     _FndBox aFndBox( 0, 0 );
@@ -589,7 +589,7 @@ sal_Bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         ForEach_FndLineCopyCol( GetTabLines(), &aPara );
     }
     if( aFndBox.GetLines().empty() )
-        return sal_False;
+        return false;
 
     SetHTMLTableLayout( 0 );   // Delete HTML Layout
 
@@ -671,7 +671,7 @@ sal_Bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
     pDoc->UpdateCharts( GetFrmFmt()->GetName() );
 
-    return sal_True;
+    return true;
 }
 
 void _FndBoxAppendRowLine( SwTableLine* pLine, _FndPara* pFndPara );
@@ -706,12 +706,12 @@ void _FndBoxAppendRowLine( SwTableLine* pLine, _FndPara* pFndPara )
         delete pFndLine;
 }
 
-sal_Bool SwTable::AppendRow( SwDoc* pDoc, sal_uInt16 nCnt )
+bool SwTable::AppendRow( SwDoc* pDoc, sal_uInt16 nCnt )
 {
     SwTableNode *const pTblNd = const_cast<SwTableNode*>(
         m_TabSortContentBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTblNd )
-        return sal_False;
+        return false;
 
     // Find all Boxes/Lines
     _FndBox aFndBox( 0, 0 );
@@ -724,7 +724,7 @@ sal_Bool SwTable::AppendRow( SwDoc* pDoc, sal_uInt16 nCnt )
         _FndBoxAppendRowLine(pLLine, &aPara);
     }
     if( aFndBox.GetLines().empty() )
-        return sal_False;
+        return false;
 
     SetHTMLTableLayout( 0 );    // Delete HTML Layout
 
@@ -764,7 +764,7 @@ sal_Bool SwTable::AppendRow( SwDoc* pDoc, sal_uInt16 nCnt )
     CHECKBOXWIDTH;
     CHECKTABLELAYOUT;
 
-    return sal_True;
+    return true;
 }
 
 static void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const long nOffset,
@@ -1071,12 +1071,12 @@ lcl_SaveUpperLowerBorder( SwTable& rTbl, const SwTableBox& rBox,
     }
 }
 
-sal_Bool SwTable::DeleteSel(
+bool SwTable::DeleteSel(
     SwDoc*     pDoc
     ,
     const SwSelBoxes& rBoxes,
     const SwSelBoxes* pMerged, SwUndo* pUndo,
-    const sal_Bool bDelMakeFrms, const sal_Bool bCorrBorder )
+    const bool bDelMakeFrms, const bool bCorrBorder )
 {
     OSL_ENSURE( pDoc, "No doc?" );
     SwTableNode* pTblNd = 0;
@@ -1084,7 +1084,7 @@ sal_Bool SwTable::DeleteSel(
     {
         pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
         if( !pTblNd )
-            return sal_False;
+            return false;
     }
 
     SetHTMLTableLayout( 0 );    // Delete HTML Layout
@@ -1143,16 +1143,16 @@ sal_Bool SwTable::DeleteSel(
     CHECKTABLELAYOUT;
     CHECK_TABLE( *this );
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
-                        sal_Bool bSameHeight )
+bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
+                        bool bSameHeight )
 {
     OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "No valid values" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
-        return sal_False;
+        return false;
 
     // TL_CHART2: splitting/merging of a number of cells or rows will usually make
     // the table too complex to be handled with chart.
@@ -1286,15 +1286,15 @@ sal_Bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
 
     CHECKBOXWIDTH
     CHECKTABLELAYOUT
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
+bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
 {
     OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "No valid values" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
-        return sal_False;
+        return false;
 
     // TL_CHART2: splitting/merging of a number of cells or rows will usually make
     // the table too complex to be handled with chart.
@@ -1396,7 +1396,7 @@ sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nC
 
     CHECKBOXWIDTH
     CHECKTABLELAYOUT
-    return sal_True;
+    return true;
 }
 
 /*
@@ -1733,13 +1733,13 @@ static void lcl_Merge_MoveLine(_FndLine& rFndLine, _InsULPara *const pULPara)
 
 static void lcl_BoxSetHeadCondColl( const SwTableBox* pBox );
 
-sal_Bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
+bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                         SwTableBox* pMergeBox, SwUndoTblMerge* pUndo )
 {
     OSL_ENSURE( !rBoxes.empty() && pMergeBox, "no valid values" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
-        return sal_False;
+        return false;
 
     // Find all Boxes/Lines
     _FndBox aFndBox( 0, 0 );
@@ -1748,7 +1748,7 @@ sal_Bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         ForEach_FndLineCopyCol( GetTabLines(), &aPara );
     }
     if( aFndBox.GetLines().empty() )
-        return sal_False;
+        return false;
 
     // TL_CHART2: splitting/merging of a number of cells or rows will usually make
     // the table too complex to be handled with chart.
@@ -1837,7 +1837,7 @@ sal_Bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             pUndo->AddNewBox( pRightBox->GetSttIdx() );
     }
 
-    DeleteSel( pDoc, rBoxes, 0, 0, sal_False, sal_False );
+    DeleteSel( pDoc, rBoxes, 0, 0, false, false );
 
     // Clean up this Line's structure once again, generally all of them
     GCLines();
@@ -1851,7 +1851,7 @@ sal_Bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     CHECKBOXWIDTH
     CHECKTABLELAYOUT
 
-    return sal_True;
+    return true;
 }
 
 static void lcl_CheckRowSpan( SwTable &rTbl )
@@ -2181,7 +2181,7 @@ lcl_CopyLineToDoc(const _FndLine& rFndLine, _CpyPara *const pCpyPara)
         ++pCpyPara->nLnIdx;
 }
 
-sal_Bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
+bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
 {
     // Find all Boxes/Lines
     SwSelBoxes aSelBoxes;
@@ -2195,7 +2195,7 @@ sal_Bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
         ForEach_FndLineCopyCol( GetTabLines(), &aPara );
     }
     if( aFndBox.GetLines().empty() )
-        return sal_False;
+        return false;
 
     {
         // Convert Table formulas to their relative representation
@@ -2225,12 +2225,12 @@ sal_Bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
         }
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
-                        const SwSelBoxes& rSelBoxes, sal_Bool bCpyNds,
-                        sal_Bool bCpyName ) const
+bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
+                        const SwSelBoxes& rSelBoxes, bool bCpyNds,
+                        bool bCpyName ) const
 {
     // Find all Boxes/Lines
     _FndBox aFndBox( 0, 0 );
@@ -2239,7 +2239,7 @@ sal_Bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         ForEach_FndLineCopyCol( (SwTableLines&)GetTabLines(), &aPara );
     }
     if( aFndBox.GetLines().empty() )
-        return sal_False;
+        return false;
 
     // First copy the PoolTemplates for the Table, so that the Tables are
     // actually copied and have valid values.
@@ -2255,7 +2255,7 @@ sal_Bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
             rPos, 1, 1, GetFrmFmt()->GetHoriOrient().GetHoriOrient(),
             0, 0, sal_False, IsNewModel() );
     if( !pNewTbl )
-        return sal_False;
+        return false;
 
     SwNodeIndex aIdx( rPos.nNode, -1 );
     SwTableNode* pTblNd = aIdx.GetNode().FindTableNode();
@@ -2373,12 +2373,12 @@ sal_Bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
 
     CHECKTABLELAYOUT
 
-    return sal_True;
+    return true;
 }
 
 // Find the next Box with content from this Line
 SwTableBox* SwTableLine::FindNextBox( const SwTable& rTbl,
-                     const SwTableBox* pSrchBox, sal_Bool bOvrTblLns ) const
+                     const SwTableBox* pSrchBox, bool bOvrTblLns ) const
 {
     const SwTableLine* pLine = this;            // for M800
     SwTableBox* pBox;
@@ -2426,7 +2426,7 @@ SwTableBox* SwTableLine::FindNextBox( const SwTable& rTbl,
 
 // Find the previous Box from this Line
 SwTableBox* SwTableLine::FindPreviousBox( const SwTable& rTbl,
-                         const SwTableBox* pSrchBox, sal_Bool bOvrTblLns ) const
+                         const SwTableBox* pSrchBox, bool bOvrTblLns ) const
 {
     const SwTableLine* pLine = this;            // for M800
     SwTableBox* pBox;
@@ -2480,7 +2480,7 @@ SwTableBox* SwTableLine::FindPreviousBox( const SwTable& rTbl,
 
 // Find the next Box with content from this Line
 SwTableBox* SwTableBox::FindNextBox( const SwTable& rTbl,
-                         const SwTableBox* pSrchBox, sal_Bool bOvrTblLns ) const
+                         const SwTableBox* pSrchBox, bool bOvrTblLns ) const
 {
     if( !pSrchBox  && GetTabLines().empty() )
         return (SwTableBox*)this;
@@ -2491,7 +2491,7 @@ SwTableBox* SwTableBox::FindNextBox( const SwTable& rTbl,
 
 // Find the next Box with content from this Line
 SwTableBox* SwTableBox::FindPreviousBox( const SwTable& rTbl,
-                         const SwTableBox* pSrchBox, sal_Bool bOvrTblLns ) const
+                         const SwTableBox* pSrchBox, bool bOvrTblLns ) const
 {
     if( !pSrchBox && GetTabLines().empty() )
         return (SwTableBox*)this;
@@ -2583,7 +2583,7 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             for( sal_uInt16 i = 0; i < pBox->GetTabLines().size(); ++i )
             {
                 rParam.nLowerDiff = 0;
-                lcl_SetSelBoxWidth( pBox->GetTabLines()[ i ], rParam, nDist, sal_False );
+                lcl_SetSelBoxWidth( pBox->GetTabLines()[ i ], rParam, nDist, false );
 
                 if( nLowerDiff < rParam.nLowerDiff )
                     nLowerDiff = rParam.nLowerDiff;
@@ -2684,7 +2684,7 @@ static bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             {
                 rParam.nLowerDiff = 0;
                 lcl_SetOtherBoxWidth( pBox->GetTabLines()[ i ], rParam,
-                                            nDist, sal_False );
+                                            nDist, false );
 
                 if( nLowerDiff < rParam.nLowerDiff )
                     nLowerDiff = rParam.nLowerDiff;
@@ -2785,7 +2785,7 @@ static bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             for( sal_uInt16 i = 0; i < pBox->GetTabLines().size(); ++i )
             {
                 rParam.nLowerDiff = 0;
-                lcl_InsSelBox( pBox->GetTabLines()[ i ], rParam, nDist, sal_False );
+                lcl_InsSelBox( pBox->GetTabLines()[ i ], rParam, nDist, false );
 
                 if( nLowerDiff < rParam.nLowerDiff )
                     nLowerDiff = rParam.nLowerDiff;
@@ -2968,7 +2968,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             {
                 rParam.nLowerDiff = 0;
                 lcl_InsOtherBox( pBox->GetTabLines()[ i ], rParam,
-                                        nDist, sal_False );
+                                        nDist, false );
 
                 if( nLowerDiff < rParam.nLowerDiff )
                     nLowerDiff = rParam.nLowerDiff;
@@ -3558,7 +3558,7 @@ static _FndBox* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,
     return pFndBox;
 }
 
-sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
+bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo )
 {
     SetHTMLTableLayout( 0 );    // Delete HTML Layout
@@ -3568,8 +3568,8 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
 
     _FndBox* pFndBox = 0;                // for insertion/deletion
     SwTableSortBoxes aTmpLst;       // for Undo
-    sal_Bool bBigger,
-        bRet = sal_False,
+    bool bBigger,
+        bRet = false,
         bLeft = nsTblChgWidthHeightType::WH_COL_LEFT == ( eType & 0xff ) ||
                 nsTblChgWidthHeightType::WH_CELL_LEFT == ( eType & 0xff ),
         bInsDel = 0 != (eType & nsTblChgWidthHeightType::WH_FLAG_INSDEL );
@@ -3638,7 +3638,7 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     ( bLeft ? rLR.GetRight() >= nAbsDiff
                             : rLR.GetLeft() >= nAbsDiff ))
                 {
-                    bRet = sal_True; bLeft = !bLeft;
+                    bRet = true; bLeft = !bLeft;
                 }
 
                 if( !bRet )
@@ -3655,13 +3655,13 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             }
             else
             {
-                bRet = sal_True;
+                bRet = true;
                 for( n = 0; n < aLines.size(); ++n )
                 {
                     aParam.LoopClear();
                     if( !(*fnSelBox)( aLines[ n ], aParam, nDistStt, true ))
                     {
-                        bRet = sal_False;
+                        bRet = false;
                         break;
                     }
                 }
@@ -3678,7 +3678,7 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     {
                         // This whole Table is to be deleted!
                         GetFrmFmt()->GetDoc()->DeleteRowCol(aParam.m_Boxes);
-                        return sal_False;
+                        return false;
                     }
 
                     if( ppUndo )
@@ -3784,7 +3784,7 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
         else if( bInsDel ||
                 ( bLeft ? nDist : Abs( rSz.GetWidth() - nDist ) > COLFUZZY ) )
         {
-            bRet = sal_True;
+            bRet = true;
             if( bLeft && TBLFIX_CHGABS == eTblChgMode && !bInsDel )
                 aParam.bBigger = !bBigger;
 
@@ -3798,14 +3798,14 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                         aParam.LoopClear();
                         if( !(*fnSelBox)( aLines[ n ], aParam, nDistStt, true ))
                         {
-                            bRet = sal_False;
+                            bRet = false;
                             break;
                         }
                     }
                 }
                 else
                 {
-                    if( 0 != ( bRet = bLeft ? nDist != 0
+                    if( ( bRet = bLeft ? nDist != 0
                                             : ( rSz.GetWidth() - nDist ) > COLFUZZY ) )
                     {
                         for( n = 0; n < aLines.size(); ++n )
@@ -3813,12 +3813,12 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                             aParam.LoopClear();
                             if( !(*fnOtherBox)( aLines[ n ], aParam, 0, true ))
                             {
-                                bRet = sal_False;
+                                bRet = false;
                                 break;
                             }
                         }
                         if( bRet && !aParam.bAnyBoxFnd )
-                            bRet = sal_False;
+                            bRet = false;
                     }
 
                     if( !bRet && rAktBox.GetFrmFmt()->GetFrmSize().GetWidth()
@@ -3828,14 +3828,14 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                         // Consume the space from the current Cell
                         aParam.bSplittBox = true;
                         // We also need to test this!
-                        bRet = sal_True;
+                        bRet = true;
 
                         for( n = 0; n < aLines.size(); ++n )
                         {
                             aParam.LoopClear();
                             if( !(*fnSelBox)( aLines[ n ], aParam, nDistStt, true ))
                             {
-                                bRet = sal_False;
+                                bRet = false;
                                 break;
                             }
                         }
@@ -3849,7 +3849,7 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     aParam.LoopClear();
                     if( !(*fnOtherBox)( aLines[ n ], aParam, 0, true ))
                     {
-                        bRet = sal_False;
+                        bRet = false;
                         break;
                     }
                 }
@@ -3861,7 +3861,7 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     aParam.LoopClear();
                     if( !(*fnSelBox)( aLines[ n ], aParam, nDistStt, true ))
                     {
-                        bRet = sal_False;
+                        bRet = false;
                         break;
                     }
                 }
@@ -3963,7 +3963,7 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 {
                     bRet = (*fnOtherBox)( pLine, aParam, 0, true );
                     if( bRet && !aParam.bAnyBoxFnd )
-                        bRet = sal_False;
+                        bRet = false;
                 }
 
                 if( !bRet && !aParam.bBigger && rAktBox.GetFrmFmt()->
@@ -3972,7 +3972,7 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 {
                     // Consume the room from the current Cell
                     aParam.bSplittBox = true;
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
             else
@@ -4294,7 +4294,7 @@ static bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
     return bRet;
 }
 
-sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
+bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff,SwUndo** ppUndo )
 {
     SwTableLine* pLine = rAktBox.GetUpper();
@@ -4305,8 +4305,8 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
 
     _FndBox* pFndBox = 0;                // for insertion/deletion
     SwTableSortBoxes aTmpLst;       // for Undo
-    sal_Bool bBigger,
-        bRet = sal_False,
+    bool bBigger,
+        bRet = false,
         bTop = nsTblChgWidthHeightType::WH_ROW_TOP == ( eType & 0xff ) ||
                 nsTblChgWidthHeightType::WH_CELL_TOP == ( eType & 0xff ),
         bInsDel = 0 != (eType & nsTblChgWidthHeightType::WH_FLAG_INSDEL );
@@ -4352,7 +4352,7 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                 // First test if we have room at all
                 if( bBigger )
                 {
-                    bRet = sal_True;
+                    bRet = true;
 // What's up with Top, Table in a Frame or Header/Footer with fixed width??
                     if( !bRet )
                     {
@@ -4388,7 +4388,7 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                             aParam.m_Boxes.size() == m_TabSortContentBoxes.size())
                         {
                             GetFrmFmt()->GetDoc()->DeleteRowCol(aParam.m_Boxes);
-                            return sal_False;
+                            return false;
                         }
 
 
@@ -4401,12 +4401,12 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                         *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, sal_True );
 
                     (*fnSelLine)( (*pLines)[ nBaseLinePos ], aParam,
-                                    nAbsDiff, sal_False );
+                                    nAbsDiff, false );
                 }
             }
             else
             {
-                bRet = sal_True;
+                bRet = true;
                 sal_uInt16 nStt, nEnd;
                 if( bTop )
                     nStt = 0, nEnd = nBaseLinePos;
@@ -4424,7 +4424,7 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                         aParam.nMaxHeight += pLineFrm->Frm().Height();
                     }
                     if( bBigger && aParam.nMaxSpace < nAbsDiff )
-                        bRet = sal_False;
+                        bRet = false;
                 }
                 else
                 {
@@ -4436,7 +4436,7 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                             nEnd = nStt + 1;
                     }
                     else
-                        bRet = sal_False;
+                        bRet = false;
                 }
 
                 if( bRet )
@@ -4448,7 +4448,7 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                             if( !(*fnOtherLine)( (*pLines)[ n ], aParam,
                                                     nAbsDiff, true ))
                             {
-                                bRet = sal_False;
+                                bRet = false;
                                 break;
                             }
                         }
@@ -4489,18 +4489,18 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                     if( bTop )
                     {
                         (*fnSelLine)( (*pLines)[ nBaseLinePos ], aParam,
-                                        nAbsDiff, sal_False );
+                                        nAbsDiff, false );
                         for( n = nStt; n < nEnd; ++n )
                             (*fnOtherLine)( (*pLines)[ n ], aParam1,
-                                            nAbsDiff, sal_False );
+                                            nAbsDiff, false );
                     }
                     else
                     {
                         for( n = nStt; n < nEnd; ++n )
                             (*fnOtherLine)( (*pLines)[ n ], aParam1,
-                                            nAbsDiff, sal_False );
+                                            nAbsDiff, false );
                         (*fnSelLine)( (*pLines)[ nBaseLinePos ], aParam,
-                                        nAbsDiff, sal_False );
+                                        nAbsDiff, false );
                     }
                 }
                 else
@@ -4704,7 +4704,7 @@ void SwShareBoxFmts::RemoveFormat( const SwFrmFmt& rFmt )
             aShareArr.erase( aShareArr.begin() + i );
 }
 
-sal_Bool SwShareBoxFmts::Seek_Entry( const SwFrmFmt& rFmt, sal_uInt16* pPos ) const
+bool SwShareBoxFmts::Seek_Entry( const SwFrmFmt& rFmt, sal_uInt16* pPos ) const
 {
     sal_uLong nIdx = (sal_uLong)&rFmt;
     sal_uInt16 nO = aShareArr.size(), nM, nU = 0;
@@ -4719,7 +4719,7 @@ sal_Bool SwShareBoxFmts::Seek_Entry( const SwFrmFmt& rFmt, sal_uInt16* pPos ) co
             {
                 if( pPos )
                     *pPos = nM;
-                return sal_True;
+                return true;
             }
             else if( nFmt < nIdx )
                 nU = nM + 1;
@@ -4727,7 +4727,7 @@ sal_Bool SwShareBoxFmts::Seek_Entry( const SwFrmFmt& rFmt, sal_uInt16* pPos ) co
             {
                 if( pPos )
                     *pPos = nU;
-                return sal_False;
+                return false;
             }
             else
                 nO = nM - 1;
@@ -4735,7 +4735,7 @@ sal_Bool SwShareBoxFmts::Seek_Entry( const SwFrmFmt& rFmt, sal_uInt16* pPos ) co
     }
     if( pPos )
         *pPos = nU;
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

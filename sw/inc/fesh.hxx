@@ -597,8 +597,8 @@ public:
     /// Is content of a table cell or at least a table cell completely selected?
     sal_Bool HasBoxSelection() const;
 
-    sal_Bool InsertRow( sal_uInt16 nCnt, sal_Bool bBehind );
-    sal_Bool InsertCol( sal_uInt16 nCnt, sal_Bool bBehind );  // 0 == at the end.
+    bool InsertRow( sal_uInt16 nCnt, bool bBehind );
+    bool InsertCol( sal_uInt16 nCnt, bool bBehind );  // 0 == at the end.
     sal_Bool DeleteCol();
     sal_Bool DeleteRow();
 

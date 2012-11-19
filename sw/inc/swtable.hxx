@@ -156,15 +156,15 @@ private:
     SwTable & operator= (const SwTable &);
     // no default ctor.
     SwTable();
-    sal_Bool OldMerge( SwDoc*, const SwSelBoxes&, SwTableBox*, SwUndoTblMerge* );
-    sal_Bool OldSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, sal_Bool );
+    bool OldMerge( SwDoc*, const SwSelBoxes&, SwTableBox*, SwUndoTblMerge* );
+    bool OldSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, bool );
     sal_Bool NewMerge( SwDoc*, const SwSelBoxes&, const SwSelBoxes& rMerged,
                    SwTableBox*, SwUndoTblMerge* );
     sal_Bool NewSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, sal_Bool );
     SwBoxSelection* CollectBoxSelection( const SwPaM& rPam ) const;
     void InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nIdx, sal_uInt16 nCnt );
-    sal_Bool _InsertRow( SwDoc*, const SwSelBoxes&, sal_uInt16 nCnt, sal_Bool bBehind );
-    sal_Bool NewInsertCol( SwDoc*, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool );
+    bool _InsertRow( SwDoc*, const SwSelBoxes&, sal_uInt16 nCnt, bool bBehind );
+    bool NewInsertCol( SwDoc*, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool );
     void _FindSuperfluousRows( SwSelBoxes& rBoxes, SwTableLine*, SwTableLine* );
     void AdjustWidths( const long nOld, const long nNew );
     void NewSetTabCols( Parm &rP, const SwTabCols &rNew, const SwTabCols &rOld,
@@ -233,8 +233,8 @@ public:
         return bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pMergeBox, pUndo ) :
                            OldMerge( pDoc, rBoxes, pMergeBox, pUndo );
     }
-    sal_Bool SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1,
-                   sal_Bool bSameHeight = sal_False )
+    bool SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1,
+                   bool bSameHeight = false )
     {
 #ifdef DBG_UTIL
         m_bDontChangeModel = true;
@@ -247,15 +247,15 @@ public:
     void ExpandColumnSelection( SwSelBoxes& rBoxes, long &rMin, long &rMax ) const;
     void PrepareDeleteCol( long nMin, long nMax );
 
-    sal_Bool InsertCol( SwDoc*, const SwSelBoxes& rBoxes,
-                    sal_uInt16 nCnt = 1, sal_Bool bBehind = sal_True );
-    sal_Bool InsertRow( SwDoc*, const SwSelBoxes& rBoxes,
-                    sal_uInt16 nCnt = 1, sal_Bool bBehind = sal_True );
-    sal_Bool AppendRow( SwDoc* pDoc, sal_uInt16 nCnt = 1 );
+    bool InsertCol( SwDoc*, const SwSelBoxes& rBoxes,
+                    sal_uInt16 nCnt = 1, bool bBehind = true );
+    bool InsertRow( SwDoc*, const SwSelBoxes& rBoxes,
+                    sal_uInt16 nCnt = 1, bool bBehind = true );
+    bool AppendRow( SwDoc* pDoc, sal_uInt16 nCnt = 1 );
     void PrepareDelBoxes( const SwSelBoxes& rBoxes );
-    sal_Bool DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
-        SwUndo* pUndo, const sal_Bool bDelMakeFrms, const sal_Bool bCorrBorder );
-    sal_Bool SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1 );
+    bool DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
+        SwUndo* pUndo, const bool bDelMakeFrms, const bool bCorrBorder );
+    bool SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1 );
     sal_Bool Merge( const SwSelBoxes& rBoxes,
                 SwTableBox* pMergeBox, SwUndoTblMerge* = 0 );
 
@@ -282,8 +282,8 @@ public:
     const SwTableBox* GetTblBox( const String& rName,
                                  const bool bPerformValidCheck = false ) const;
     // Copy selected boxes to another document.
-    sal_Bool MakeCopy( SwDoc*, const SwPosition&, const SwSelBoxes&,
-                    sal_Bool bCpyNds = sal_True, sal_Bool bCpyName = sal_False ) const;
+    bool MakeCopy( SwDoc*, const SwPosition&, const SwSelBoxes&,
+                    bool bCpyNds = true, bool bCpyName = false ) const;
     // Copy table in this (implemented in TBLRWCL.CXX).
     sal_Bool InsTable( const SwTable& rCpyTbl, const SwNodeIndex&,
                     SwUndoTblCpyTbl* pUndo = 0 );
@@ -292,7 +292,7 @@ public:
     sal_Bool InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes&,
                       SwUndoTblCpyTbl* pUndo );
     // Copy headline of table (with content!) into an other one.
-    sal_Bool CopyHeadlineIntoTable( SwTableNode& rTblNd );
+    bool CopyHeadlineIntoTable( SwTableNode& rTblNd );
 
     // Get box, whose start index is set on nBoxStt.
           SwTableBox* GetTblBox( sal_uLong nSttIdx );
@@ -336,9 +336,9 @@ public:
     TblChgMode GetTblChgMode() const        { return eTblChgMode; }
     void SetTblChgMode( TblChgMode eMode )  { eTblChgMode = eMode; }
 
-    sal_Bool SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
+    bool SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
-    sal_Bool SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
+    bool SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
     void RegisterToFormat( SwFmt& rFmt );
 #ifdef DBG_UTIL
@@ -378,9 +378,9 @@ public:
 
     // Search next/previous box with content.
     SwTableBox* FindNextBox( const SwTable&, const SwTableBox* =0,
-                            sal_Bool bOvrTblLns=sal_True ) const;
+                            bool bOvrTblLns=true ) const;
     SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =0,
-                            sal_Bool bOvrTblLns=sal_True ) const;
+                            bool bOvrTblLns=true ) const;
 
     SwTwips GetTableLineHeight( bool& bLayoutAvailable ) const;
 
@@ -437,9 +437,9 @@ public:
 
     // Search next/previous box with content.
     SwTableBox* FindNextBox( const SwTable&, const SwTableBox* =0,
-                            sal_Bool bOvrTblLns=sal_True ) const;
+                            bool bOvrTblLns=true ) const;
     SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =0,
-                            sal_Bool bOvrTblLns=sal_True ) const;
+                            bool bOvrTblLns=true ) const;
     // Return name of this box. It is determined dynamically and
     // is calculated from the position in the lines/boxes/table.
     String GetName() const;

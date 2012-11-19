@@ -97,7 +97,7 @@ sal_Bool SwTable::NewMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 {
     if( pUndo )
         pUndo->SetSelBoxes( rBoxes );
-    DeleteSel( pDoc, rBoxes, &rMerged, 0, sal_True, sal_True );
+    DeleteSel( pDoc, rBoxes, &rMerged, 0, true, true );
 
     CHECK_TABLE( *this )
     return sal_True;
@@ -607,7 +607,7 @@ static void lcl_InvalidateCellFrm( const SwTableBox& rBox )
 */
 
 static long lcl_InsertPosition( SwTable &rTable, std::vector<sal_uInt16>& rInsPos,
-    const SwSelBoxes& rBoxes, sal_Bool bBehind )
+    const SwSelBoxes& rBoxes, bool bBehind )
 {
     sal_Int32 nAddWidth = 0;
     long nCount = 0;
@@ -652,11 +652,11 @@ insertion behind (true) or before (false) the selected boxes
 
 */
 
-sal_Bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
-    sal_uInt16 nCnt, sal_Bool bBehind )
+bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
+    sal_uInt16 nCnt, bool bBehind )
 {
     if( aLines.empty() || !nCnt )
-        return sal_False;
+        return false;
 
     CHECK_TABLE( *this )
     long nNewBoxWidth = 0;
@@ -678,12 +678,12 @@ sal_Bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         nAddWidth *= nCnt; // we have to insert nCnt boxes per line
         sal_uInt64 nResultingWidth = nAddWidth + nTableWidth;
         if( !nResultingWidth )
-            return sal_False;
+            return false;
         nAddWidth = (nAddWidth * nTableWidth) / nResultingWidth;
         nNewBoxWidth = long( nAddWidth / nCnt ); // Rounding
         nAddWidth = nNewBoxWidth * nCnt; // Rounding
         if( !nAddWidth || nAddWidth >= nTableWidth )
-            return sal_False;
+            return false;
         AdjustWidths( static_cast< long >(nTableWidth), static_cast< long >(nTableWidth - nAddWidth) );
     }
 
@@ -781,7 +781,7 @@ sal_Bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 #endif
     CHECK_TABLE( *this )
 
-    return sal_True;
+    return true;
 }
 
 /** SwTable::PrepareMerge(..) some preparation for the coming Merge(..)
@@ -1169,7 +1169,7 @@ void SwTable::InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nRowIdx, sal_uInt16 nCnt
         aFSz.SetHeight( nNewHeight );
         pFrmFmt->SetFmtAttr( aFSz );
     }
-    _InsertRow( pDoc, aBoxes, nCnt, sal_True );
+    _InsertRow( pDoc, aBoxes, nCnt, true );
     sal_uInt16 nBoxCount = rLine.GetTabBoxes().size();
     for( sal_uInt16 n = 0; n < nCnt; ++n )
     {
@@ -1482,8 +1482,8 @@ sal_Bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
     boxes.
 */
 
-sal_Bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
-                        sal_uInt16 nCnt, sal_Bool bBehind )
+bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
+                        sal_uInt16 nCnt, bool bBehind )
 {
     bool bRet = false;
     if( IsNewModel() )

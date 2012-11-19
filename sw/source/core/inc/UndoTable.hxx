@@ -305,7 +305,7 @@ public:
                 sal_Bool bDelCntnt );
 
     sal_Bool IsEmpty() const;
-    sal_Bool InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes, sal_uInt16 nCnt );
+    bool InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes, sal_uInt16 nCnt );
 };
 
 class SwUndoCpyTbl : public SwUndo

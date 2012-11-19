@@ -1622,14 +1622,14 @@ public:
     sal_Bool TableToText( const SwTableNode* pTblNd, sal_Unicode cCh );
 
     /// Create columns / rows in table.
-    sal_Bool InsertCol( const SwCursor& rCursor,
-                    sal_uInt16 nCnt = 1, sal_Bool bBehind = sal_True );
-    sal_Bool InsertCol( const SwSelBoxes& rBoxes,
-                    sal_uInt16 nCnt = 1, sal_Bool bBehind = sal_True );
-    sal_Bool InsertRow( const SwCursor& rCursor,
-                    sal_uInt16 nCnt = 1, sal_Bool bBehind = sal_True );
-    sal_Bool InsertRow( const SwSelBoxes& rBoxes,
-                    sal_uInt16 nCnt = 1, sal_Bool bBehind = sal_True );
+    bool InsertCol( const SwCursor& rCursor,
+                    sal_uInt16 nCnt = 1, bool bBehind = true );
+    bool InsertCol( const SwSelBoxes& rBoxes,
+                    sal_uInt16 nCnt = 1, bool bBehind = true );
+    bool InsertRow( const SwCursor& rCursor,
+                    sal_uInt16 nCnt = 1, bool bBehind = true );
+    bool InsertRow( const SwSelBoxes& rBoxes,
+                    sal_uInt16 nCnt = 1, bool bBehind = true );
 
     /// Delete Colums/Rows in table.
     sal_Bool DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn = false );

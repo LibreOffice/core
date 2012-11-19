@@ -1865,7 +1865,7 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
             SwTable &rTable = pTblNd->GetTable();
             if( nMax > nMin && rTable.IsNewModel() )
                 rTable.PrepareDeleteCol( nMin, nMax );
-            rTable.DeleteSel( &rDoc, aSelBoxes, 0, this, sal_True, sal_True );
+            rTable.DeleteSel( &rDoc, aSelBoxes, 0, this, true, true );
         }
         else
         {
@@ -2777,7 +2777,7 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
     return pUndo;
 }
 
-sal_Bool SwUndoTblCpyTbl::InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes,
+bool SwUndoTblCpyTbl::InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes,
                                 sal_uInt16 nCnt )
 {
     SwTableNode* pTblNd = (SwTableNode*)rTbl.GetTabSortBoxes()[0]->
@@ -2787,7 +2787,7 @@ sal_Bool SwUndoTblCpyTbl::InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes,
                                        0, 0, nCnt, sal_True, sal_False );
     SwTableSortBoxes aTmpLst( rTbl.GetTabSortBoxes() );
 
-    sal_Bool bRet = rTbl.InsertRow( rTbl.GetFrmFmt()->GetDoc(), rBoxes, nCnt, sal_True );
+    bool bRet = rTbl.InsertRow( rTbl.GetFrmFmt()->GetDoc(), rBoxes, nCnt, true );
     if( bRet )
         pInsRowUndo->SaveNewBoxes( *pTblNd, aTmpLst );
     else
@@ -2909,7 +2909,7 @@ void SwUndoSplitTbl::UndoImpl(::sw::UndoRedoContext & rContext)
             _FndBox aTmpBox( 0, 0 );
             aTmpBox.SetTableLines( aSelBoxes, rTbl );
             aTmpBox.DelFrms( rTbl );
-            rTbl.DeleteSel( pDoc, aSelBoxes, 0, 0, sal_False, sal_False );
+            rTbl.DeleteSel( pDoc, aSelBoxes, 0, 0, false, false );
         }
         break;
     }

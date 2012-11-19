@@ -829,7 +829,7 @@ void SwRTFParser::NewTblLine()
     nInsTblRow = USHRT_MAX;
 
     // erweiter die aktuelle um eine neue Line
-    sal_Bool bMakeCopy = sal_False;
+    bool bMakeCopy = false;
     SwNode* pNd = pDoc->GetNodes()[ pPam->GetPoint()->nNode.GetIndex()-1 ];
     if( !pNd->IsEndNode() ||
         !(pNd = pNd->StartOfSectionNode())->IsTableNode() )
@@ -837,7 +837,7 @@ void SwRTFParser::NewTblLine()
         if( !pOldTblNd )
             return ;
 
-        bMakeCopy = sal_True;
+        bMakeCopy = true;
         pNd = pOldTblNd;
     }
     pTableNode = (SwTableNode*)pNd;
@@ -853,7 +853,7 @@ void SwRTFParser::NewTblLine()
     if( !bMakeCopy &&
         64000 < pTableNode->GetTable().GetTabSortBoxes().size() )
     {
-        bMakeCopy = sal_True;       // spaetestens jetzt eine neue anfangen!
+        bMakeCopy = true;       // spaetestens jetzt eine neue anfangen!
     }
 
     if( bMakeCopy )
@@ -862,7 +862,7 @@ void SwRTFParser::NewTblLine()
         SwSelBoxes aBoxes;
         pTableNode->GetTable().SelLineFromBox( pBox, aBoxes );
         pTableNode->GetTable().MakeCopy( pDoc, *pPam->GetPoint(),
-                                        aBoxes, sal_False );
+                                        aBoxes, false );
         sal_uLong nNd = pPam->GetPoint()->nNode.GetIndex()-1;
         pTableNode = pDoc->GetNodes()[ nNd ]->FindTableNode();
         pOldTblNd = pTableNode;

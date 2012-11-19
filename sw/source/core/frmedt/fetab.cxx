@@ -197,18 +197,18 @@ void SwFEShell::ParkCursorInTab()
 #*  Class      :  SwFEShell
 #*  Methods    :  InsertRow(), InsertCol
 #***********************************************************************/
-sal_Bool SwFEShell::InsertRow( sal_uInt16 nCnt, sal_Bool bBehind )
+bool SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
 {
     // check if Point/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
-        return sal_False;
+        return false;
 
     if( pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
-        return sal_False;
+        return false;
     }
 
     SET_CURR_SHELL( this );
@@ -220,7 +220,7 @@ sal_Bool SwFEShell::InsertRow( sal_uInt16 nCnt, sal_Bool bBehind )
 
     TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( aBoxes.size() )
         bRet = GetDoc()->InsertRow( aBoxes, nCnt, bBehind );
 
@@ -228,18 +228,18 @@ sal_Bool SwFEShell::InsertRow( sal_uInt16 nCnt, sal_Bool bBehind )
     return bRet;
 }
 
-sal_Bool SwFEShell::InsertCol( sal_uInt16 nCnt, sal_Bool bBehind )
+bool SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
 {
     // check if Point/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
-        return sal_False;
+        return false;
 
     if( pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
-        return sal_False;
+        return false;
     }
 
     SET_CURR_SHELL( this );
@@ -248,7 +248,7 @@ sal_Bool SwFEShell::InsertCol( sal_uInt16 nCnt, sal_Bool bBehind )
     {
         ErrorHandler::HandleError( ERR_TBLINSCOL_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
-        return sal_False;
+        return false;
     }
 
     StartAllAction();
@@ -258,7 +258,7 @@ sal_Bool SwFEShell::InsertCol( sal_uInt16 nCnt, sal_Bool bBehind )
 
     TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( !aBoxes.empty() )
         bRet = GetDoc()->InsertCol( aBoxes, nCnt, bBehind );
 
@@ -403,7 +403,7 @@ sal_Bool SwFEShell::DeleteRow()
                 pDelBox = pLn->GetTabBoxes().back();
             }
             SwTableBox* pNextBox = pDelLine->FindNextBox( pTblNd->GetTable(),
-                                                            pDelBox, sal_True );
+                                                            pDelBox, true );
             while( pNextBox &&
                     pNextBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
                 pNextBox = pNextBox->FindNextBox( pTblNd->GetTable(), pNextBox );
@@ -415,7 +415,7 @@ sal_Bool SwFEShell::DeleteRow()
                 while( !pDelBox->GetSttNd() )
                     pDelBox = pDelBox->GetTabLines()[0]->GetTabBoxes()[0];
                 pNextBox = pDelLine->FindPreviousBox( pTblNd->GetTable(),
-                                                            pDelBox, sal_True );
+                                                            pDelBox, true );
                 while( pNextBox &&
                         pNextBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
                     pNextBox = pNextBox->FindPreviousBox( pTblNd->GetTable(), pNextBox );

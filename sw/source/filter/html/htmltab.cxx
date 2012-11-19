@@ -602,11 +602,11 @@ public:
     inline void CloseSection( sal_Bool bHead );
 
     // Ende einer Spalten-Gruppe bekanntgeben
-    inline void CloseColGroup( sal_uInt16 nSpan, sal_uInt16 nWidth, sal_Bool bRelWidth,
+    inline void CloseColGroup( sal_uInt16 nSpan, sal_uInt16 nWidth, bool bRelWidth,
                                SvxAdjust eAdjust, sal_Int16 eVertOri );
 
     // Einfuegen einer Spalte
-    void InsertCol( sal_uInt16 nSpan, sal_uInt16 nWidth, sal_Bool bRelWidth,
+    void InsertCol( sal_uInt16 nSpan, sal_uInt16 nWidth, bool bRelWidth,
                     SvxAdjust eAdjust, sal_Int16 eVertOri );
 
     // Beenden einer Tab-Definition (MUSS fuer ALLE Tabs aufgerufen werden)
@@ -2311,7 +2311,7 @@ void HTMLTable::CloseRow( sal_Bool bEmpty )
 }
 
 inline void HTMLTable::CloseColGroup( sal_uInt16 nSpan, sal_uInt16 _nWidth,
-                                      sal_Bool bRelWidth, SvxAdjust eAdjust,
+                                      bool bRelWidth, SvxAdjust eAdjust,
                                       sal_Int16 eVertOrient )
 {
     if( nSpan )
@@ -2322,7 +2322,7 @@ inline void HTMLTable::CloseColGroup( sal_uInt16 nSpan, sal_uInt16 _nWidth,
         ((*pColumns)[nCurCol-1]).SetEndOfGroup();
 }
 
-void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nColWidth, sal_Bool bRelWidth,
+void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nColWidth, bool bRelWidth,
                            SvxAdjust eAdjust, sal_Int16 eVertOrient )
 {
     // #i35143# - no columns, if rows already exist.

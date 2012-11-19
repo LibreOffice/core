@@ -74,14 +74,14 @@ class SwCollectTblLineBoxes
     std::vector<SwTableBox*> m_Boxes;
     SwHistory* pHst;
     sal_uInt16 nMode, nWidth;
-    sal_Bool bGetFromTop : 1;
-    sal_Bool bGetValues : 1;
+    bool bGetFromTop : 1;
+    bool bGetValues : 1;
 
 public:
-    SwCollectTblLineBoxes( sal_Bool bTop, sal_uInt16 nMd = 0, SwHistory* pHist=0 )
+    SwCollectTblLineBoxes( bool bTop, sal_uInt16 nMd = 0, SwHistory* pHist=0 )
         :
         pHst( pHist ), nMode( nMd ), nWidth( 0 ),
-        bGetFromTop( bTop ), bGetValues( sal_True )
+        bGetFromTop( bTop ), bGetValues( true )
 
     {}
 
@@ -99,17 +99,17 @@ public:
             return *m_Boxes[ nPos ];
         }
 
-    sal_Bool IsGetFromTop() const           { return bGetFromTop; }
-    sal_Bool IsGetValues() const            { return bGetValues; }
+    bool IsGetFromTop() const           { return bGetFromTop; }
+    bool IsGetValues() const            { return bGetValues; }
 
     sal_uInt16 GetMode() const              { return nMode; }
-    void SetValues( sal_Bool bFlag )        { bGetValues = sal_False; nWidth = 0;
+    void SetValues( bool bFlag )        { bGetValues = false; nWidth = 0;
                                           bGetFromTop = bFlag; }
-    sal_Bool Resize( sal_uInt16 nOffset, sal_uInt16 nWidth );
+    bool Resize( sal_uInt16 nOffset, sal_uInt16 nWidth );
 };
 
 void sw_Box_CollectBox( const SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara );
-sal_Bool sw_Line_CollectBox( const SwTableLine*& rpLine, void* pPara );
+bool sw_Line_CollectBox( const SwTableLine*& rpLine, void* pPara );
 
 void sw_BoxSetSplitBoxFmts( SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara );
 
@@ -133,7 +133,7 @@ struct _SwGCLineBorder
 
     _SwGCLineBorder( const SwTableBox& rBox )
         : pLines( &rBox.GetTabLines() ), pShareFmts(0), nLinePos( 0 )  {}
-    sal_Bool IsLastLine() const { return nLinePos + 1 >= (sal_uInt16)pLines->size(); }
+    bool IsLastLine() const { return nLinePos + 1 >= (sal_uInt16)pLines->size(); }
 };
 
 class _SwGCBorder_BoxBrd
@@ -181,7 +181,7 @@ typedef boost::ptr_vector<SwShareBoxFmt> _SwShareBoxFmts;
 class SwShareBoxFmts
 {
     _SwShareBoxFmts aShareArr;
-    sal_Bool Seek_Entry( const SwFrmFmt& rFmt, sal_uInt16* pPos ) const;
+    bool Seek_Entry( const SwFrmFmt& rFmt, sal_uInt16* pPos ) const;
 
     void ChangeFrmFmt( SwTableBox* pBox, SwTableLine* pLn, SwFrmFmt& rFmt );
 

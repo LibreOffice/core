@@ -1694,7 +1694,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
 
 void SwXMLTableContext::InsertRow( const OUString& rStyleName,
                                    const OUString& rDfltCellStyleName,
-                                   sal_Bool bInHead,
+                                   bool bInHead,
                                    const OUString & i_rXmlId )
 {
     OSL_ENSURE( nCurRow < USHRT_MAX,
@@ -1737,7 +1737,7 @@ void SwXMLTableContext::InsertRepRows( sal_uInt32 nCount )
     while( nCount > 1 && IsInsertRowPossible() )
     {
         InsertRow( pSrcRow->GetStyleName(), pSrcRow->GetDefaultCellStyleName(),
-                   sal_False );
+                   false );
         while( nCurCol < GetColumnCount() )
         {
             if( !GetCell(nCurRow,nCurCol)->IsUsed() )

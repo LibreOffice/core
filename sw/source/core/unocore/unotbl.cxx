@@ -4759,10 +4759,10 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
 
             String sTLName = sw_GetCellName(0, nIndex);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
-            sal_Bool bAppend = sal_False;
+            bool bAppend = false;
             if(!pTLBox)
             {
-                bAppend = sal_True;
+                bAppend = true;
                 // am Ende anfuegen, dazu muss der Cursor in die letzte Zeile!
                 SwTableLines& rLines = pTable->GetTabLines();
                 SwTableLine* pLine = rLines.back();
@@ -4971,10 +4971,10 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
 
             String sTLName = sw_GetCellName(nIndex, 0);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
-            sal_Bool bAppend = sal_False;
+            bool bAppend = false;
             if(!pTLBox)
             {
-                bAppend = sal_True;
+                bAppend = true;
                 // am Ende anfuegen, dazu muss der Cursor in die letzte Spalte!
                 SwTableBoxes& rBoxes = pLine->GetTabBoxes();
                 pTLBox = rBoxes.back();

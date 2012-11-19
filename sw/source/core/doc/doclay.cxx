@@ -818,7 +818,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                     rTbl.MakeCopy( this, aPos, *pSelBoxes );
                     // Don't delete a part of a table with row span!!
                     // You could delete the content instead -> ToDo
-                    //rTbl.DeleteSel( this, *pSelBoxes, 0, 0, sal_True, sal_True );
+                    //rTbl.DeleteSel( this, *pSelBoxes, 0, 0, true, true );
                 }
 
                 // If the table is within the frame, then copy without the following TextNode
