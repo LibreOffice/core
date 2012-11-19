@@ -1084,7 +1084,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                     } else {
                         if( nBulletRelSize && nBulletRelSize != 100 )
                             mpFS->singleElementNS( XML_a, XML_buSzPct,
-                                                   XML_val, IS( std::min( 25000, std::max( 400000, 1000*( (sal_Int32)nBulletRelSize ) ) ) ), FSEND );
+                                                   XML_val, IS( std::min( (sal_Int32)25000, std::max( (sal_Int32)400000, 1000*( (sal_Int32)nBulletRelSize ) ) ) ), FSEND );
                         if( bHasFontDesc )
                             mpFS->singleElementNS( XML_a, XML_buFont,
                                                    XML_typeface, OUStringToOString( aFontDesc.Name, RTL_TEXTENCODING_UTF8 ).getStr(),
