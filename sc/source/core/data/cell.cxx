@@ -203,7 +203,7 @@ void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldD
     ScDBData* pDBData = aOldNamedDBs.findByIndex(pToken->GetIndex());
     if (!pDBData)
         return; //invalid index
-    rtl::OUString aDBName = pDBData->GetName();
+    rtl::OUString aDBName = pDBData->GetUpperName();
 
     //search in new document
     ScDBCollection* pNewDBCollection = rNewDoc.GetDBCollection();
@@ -212,7 +212,7 @@ void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldD
         pNewDBCollection = new ScDBCollection(&rNewDoc);
     }
     ScDBCollection::NamedDBs& aNewNamedDBs = pNewDBCollection->getNamedDBs();
-    ScDBData* pNewDBData = aNewNamedDBs.findByName(aDBName);
+    ScDBData* pNewDBData = aNewNamedDBs.findByUpperName(aDBName);
     if (!pNewDBData)
     {
         pNewDBData = new ScDBData(*pDBData);

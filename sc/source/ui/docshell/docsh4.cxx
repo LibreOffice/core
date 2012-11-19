@@ -207,7 +207,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (bIsNewArea)
                 {
                     ScDBCollection* pDBColl = aDocument.GetDBCollection();
-                    if ( !pDBColl || !pDBColl->getNamedDBs().findByName(sTarget) )
+                    if ( !pDBColl || !pDBColl->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(sTarget)) )
                     {
                         ScAddress aPos;
                         if ( aPos.Parse( sTarget, &aDocument, aDocument.GetAddressConvention() ) & SCA_VALID )

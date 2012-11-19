@@ -958,11 +958,11 @@ void ScFiltersTest::testBugFixesODS()
 
     {
         // fdo#40426
-        ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByName("DBRange1");
+        ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName("DBRANGE1");
         CPPUNIT_ASSERT(pDBData);
         CPPUNIT_ASSERT(pDBData->HasHeader());
         // no header
-        pDBData = pDoc->GetDBCollection()->getNamedDBs().findByName("DBRange2");
+        pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName("DBRANGE2");
         CPPUNIT_ASSERT(pDBData);
         CPPUNIT_ASSERT(!pDBData->HasHeader());
     }

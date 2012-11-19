@@ -1734,7 +1734,7 @@ ScDBData* ScDatabaseRangeObj::GetDBData_Impl() const
             ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
             if (pNames)
             {
-                ScDBData* p = pNames->getNamedDBs().findByName(aName);
+                ScDBData* p = pNames->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aName));
                 if (p)
                     pRet = p;
             }
@@ -2441,7 +2441,7 @@ sal_Bool SAL_CALL ScDatabaseRangesObj::hasByName( const rtl::OUString& aName )
     {
         ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
         if (pNames)
-            return pNames->getNamedDBs().findByName(aName) != NULL;
+            return pNames->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aName)) != NULL;
     }
     return false;
 }

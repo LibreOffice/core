@@ -65,7 +65,7 @@ void ScDBFunc::GotoDBArea( const ::rtl::OUString& rDBName )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDBCollection* pDBCol = pDoc->GetDBCollection();
-    ScDBData* pData = pDBCol->getNamedDBs().findByName(rDBName);
+    ScDBData* pData = pDBCol->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rDBName));
     if (pData)
     {
         SCTAB nTab = 0;

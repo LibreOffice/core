@@ -185,7 +185,6 @@ public:
         const_iterator begin() const;
         const_iterator end() const;
         ScDBData* findByIndex(sal_uInt16 nIndex);
-        ScDBData* findByName(const ::rtl::OUString& rName);
         ScDBData* findByUpperName(const ::rtl::OUString& rName);
         bool insert(ScDBData* p);
         void erase(iterator itr);

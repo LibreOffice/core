@@ -276,7 +276,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                     ++nCount;
                     aNewName = aImport;
                     aNewName += String::CreateFromInt32( nCount );
-                    pDummy = rDBs.findByName(aNewName);
+                    pDummy = rDBs.findByUpperName(ScGlobal::pCharClass->uppercase(aNewName));
                 }
                 while (pDummy);
                 pNoNameData = new ScDBData( aNewName, nTab,

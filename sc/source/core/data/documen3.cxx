@@ -250,7 +250,7 @@ void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, bool bRemove
             bool bFound = false;
             if (pNewDBCollection)
             {
-                ScDBData* pNewData = pNewDBCollection->getNamedDBs().findByName(rOldData.GetName());
+                ScDBData* pNewData = pNewDBCollection->getNamedDBs().findByUpperName(rOldData.GetUpperName());
                 if (pNewData)
                 {
                     if (pNewData->HasAutoFilter())

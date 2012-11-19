@@ -205,7 +205,7 @@ bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const Strin
     ScRangeName* pNames = pSrcDoc->GetRangeName();
     if (pNames)         // benannte Bereiche
     {
-        const ScRangeData* p = pNames->findByUpperName(ScGlobal::pCharClass->uppercase(rAreaName));
+        const ScRangeData* p = pNames->findByUpperName(rAreaName);
         if (p && p->IsValidReference(rRange))
             bFound = true;
     }
@@ -214,7 +214,7 @@ bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const Strin
         ScDBCollection* pDBColl = pSrcDoc->GetDBCollection();
         if (pDBColl)
         {
-            const ScDBData* pDB = pDBColl->getNamedDBs().findByName(rAreaName);
+            const ScDBData* pDB = pDBColl->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rAreaName));
             if (pDB)
             {
                 SCTAB nTab;

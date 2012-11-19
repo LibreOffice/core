@@ -127,7 +127,7 @@ bool ScDBDocFunc::DeleteDBRange(const ::rtl::OUString& rName)
     bool bUndo = pDoc->IsUndoEnabled();
 
     ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
-    const ScDBData* p = rDBs.findByName(rName);
+    const ScDBData* p = rDBs.findByUpperName(ScGlobal::pCharClass->uppercase(rName));
     if (p)
     {
         ScDocShellModificator aModificator( rDocShell );
@@ -162,8 +162,8 @@ bool ScDBDocFunc::RenameDBRange( const String& rOld, const String& rNew )
     ScDBCollection* pDocColl = pDoc->GetDBCollection();
     bool bUndo = pDoc->IsUndoEnabled();
     ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
-    const ScDBData* pOld = rDBs.findByName(rOld);
-    const ScDBData* pNew = rDBs.findByName(rNew);
+    const ScDBData* pOld = rDBs.findByUpperName(ScGlobal::pCharClass->uppercase(rOld));
+    const ScDBData* pNew = rDBs.findByUpperName(ScGlobal::pCharClass->uppercase(rNew));
     if (pOld && !pNew)
     {
         ScDocShellModificator aModificator( rDocShell );
@@ -216,7 +216,7 @@ bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
         pData = pDoc->GetAnonymousDBData(nTab);
     }
     else
-        pData = pDocColl->getNamedDBs().findByName(rNewData.GetName());
+        pData = pDocColl->getNamedDBs().findByUpperName(rNewData.GetUpperName());
 
     if (pData)
     {
@@ -267,7 +267,7 @@ bool ScDBDocFunc::RepeatDB( const ::rtl::OUString& rDBName, bool bRecord, bool b
     {
         ScDBCollection* pColl = pDoc->GetDBCollection();
         if (pColl)
-            pDBData = pColl->getNamedDBs().findByName(rDBName);
+            pDBData = pColl->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rDBName));
     }
 
     if ( pDBData )
@@ -1525,7 +1525,7 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const svx::ODataAccessDes
 
     ScDocument* pDoc = rDocShell.GetDocument();
     ScDBCollection& rDBColl = *pDoc->GetDBCollection();
-    const ScDBData* pData = rDBColl.getNamedDBs().findByName(rTarget);
+    const ScDBData* pData = rDBColl.getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rTarget));
     if (!pData)
     {
         InfoBox aInfoBox(rDocShell.GetActiveDialogParent(),

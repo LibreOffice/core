@@ -53,7 +53,7 @@ using ::std::pair;
 
 bool ScDBData::less::operator() (const ScDBData& left, const ScDBData& right) const
 {
-    return ScGlobal::GetpTransliteration()->compareString(left.GetName(), right.GetName()) < 0;
+    return ScGlobal::GetpTransliteration()->compareString(left.GetUpperName(), right.GetUpperName()) < 0;
 }
 
 ScDBData::ScDBData( const ::rtl::OUString& rName,
@@ -643,17 +643,6 @@ public:
     }
 };
 
-class FindByName : public unary_function<ScDBData, bool>
-{
-    const ::rtl::OUString& mrName;
-public:
-    FindByName(const ::rtl::OUString& rName) : mrName(rName) {}
-    bool operator() (const ScDBData& r) const
-    {
-        return r.GetName() == mrName;
-    }
-};
-
 class FindByUpperName : public unary_function<ScDBData, bool>
 {
     const ::rtl::OUString& mrName;
@@ -697,13 +686,6 @@ ScDBData* ScDBCollection::NamedDBs::findByIndex(sal_uInt16 nIndex)
 {
     DBsType::iterator itr = find_if(
         maDBs.begin(), maDBs.end(), FindByIndex(nIndex));
-    return itr == maDBs.end() ? NULL : &(*itr);
-}
-
-ScDBData* ScDBCollection::NamedDBs::findByName(const ::rtl::OUString& rName)
-{
-    DBsType::iterator itr = find_if(
-        maDBs.begin(), maDBs.end(), FindByName(rName));
     return itr == maDBs.end() ? NULL : &(*itr);
 }
 

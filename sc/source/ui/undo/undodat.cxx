@@ -1068,7 +1068,7 @@ void ScUndoAutoFilter::DoChange( bool bUndo )
     else
     {
         ScDBCollection* pColl = pDoc->GetDBCollection();
-        pDBData = pColl->getNamedDBs().findByName(aDBName);
+        pDBData = pColl->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aDBName));
     }
 
     if ( pDBData )
@@ -1812,7 +1812,7 @@ void ScUndoConsolidate::Undo()
         ScDBCollection* pColl = pDoc->GetDBCollection();
         if (pColl)
         {
-            ScDBData* pDocData = pColl->getNamedDBs().findByName(pUndoData->GetName());
+            ScDBData* pDocData = pColl->getNamedDBs().findByUpperName(pUndoData->GetUpperName());
             if (pDocData)
                 *pDocData = *pUndoData;
         }

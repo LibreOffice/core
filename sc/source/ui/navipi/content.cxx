@@ -264,7 +264,7 @@ static String lcl_GetDBAreaRange( ScDocument* pDoc, const String& rDBName )
     if (pDoc)
     {
         ScDBCollection* pDbNames = pDoc->GetDBCollection();
-        const ScDBData* pData = pDbNames->getNamedDBs().findByName(rDBName);
+        const ScDBData* pData = pDbNames->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rDBName));
         if (pData)
         {
             ScRange aRange;

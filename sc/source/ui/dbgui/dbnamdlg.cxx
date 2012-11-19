@@ -380,7 +380,7 @@ void ScDbNameDlg::UpdateNames()
 void ScDbNameDlg::UpdateDBData( const String& rStrName )
 {
 
-    const ScDBData* pData = aLocalDbCol.getNamedDBs().findByName(rStrName);
+    const ScDBData* pData = aLocalDbCol.getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rStrName));
 
     if ( pData )
     {
@@ -471,7 +471,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                 ScAddress aStart = theCurArea.aStart;
                 ScAddress aEnd   = theCurArea.aEnd;
 
-                ScDBData* pOldEntry = aLocalDbCol.getNamedDBs().findByName(aNewName);
+                ScDBData* pOldEntry = aLocalDbCol.getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aNewName));
                 if (pOldEntry)
                 {
                     //  Bereich veraendern

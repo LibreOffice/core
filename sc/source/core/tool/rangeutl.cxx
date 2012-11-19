@@ -335,7 +335,7 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
     else if( eScope==RUTL_DBASE )
     {
         ScDBCollection::NamedDBs& rDbNames = pDoc->GetDBCollection()->getNamedDBs();
-        ScDBData* pData = rDbNames.findByName(rName);
+        ScDBData* pData = rDbNames.findByUpperName(ScGlobal::pCharClass->uppercase(rName));
         if (pData)
         {
             pData->GetArea(nTab, nColStart, nRowStart, nColEnd, nRowEnd);
