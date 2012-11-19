@@ -156,7 +156,7 @@ $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 ))
 
 $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
-	-DSYSTEM_MOZILLA \
+	-DSYSTEM_NSS \
 ))
 
 $(eval $(call gb_Library_add_libs,xsec_xmlsec,\

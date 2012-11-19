@@ -248,9 +248,9 @@ void deleteRootsModule()
 //the location of the roots module to the profile, which makes FF2 and TB2 use
 //it instead of there own module.
 //
-//When using SYSTEM_MOZILLA then the libnss3.so lib is typically found in
-///usr/lib. This folder may, however, NOT contain the roots certificate
-//module. That is, just providing the library name in SECMOD_LoadUserModule or
+//When using SYSTEM_NSS then the libnss3.so lib is typically found in /usr/lib.
+//This folder may, however, NOT contain the roots certificate module. That is,
+//just providing the library name in SECMOD_LoadUserModule or
 //SECMOD_AddNewModule will FAIL to load the mozilla unless the LD_LIBRARY_PATH
 //contains an FF or TB installation.
 //ATTENTION: DO NOT call this function directly instead use initNSS
@@ -305,13 +305,13 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
     out_nss_init = true;
 
 #ifdef XMLSEC_CRYPTO_NSS
-#if defined SYSTEM_MOZILLA
+#if defined SYSTEM_NSS
     if (!SECMOD_HasRootCerts())
-    {
 #endif
+    {
         deleteRootsModule();
 
-#if defined SYSTEM_MOZILLA
+#if defined SYSTEM_NSS
         OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("libnssckbi" SAL_DLLEXTENSION));
 #else
         OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("${LO_LIB_DIR}/libnssckbi" SAL_DLLEXTENSION));
@@ -365,9 +365,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
             xmlsec_trace("Adding new root certificate module failed.");
             return_value = false;
         }
-#if SYSTEM_MOZILLA
     }
-#endif
 #endif
 
     return return_value;
