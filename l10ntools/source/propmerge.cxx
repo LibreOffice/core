@@ -182,7 +182,8 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
 
     MergeDataFile aMergeDataFile( rMergeSrc, m_sSource, false );
 
-    if( aMergeDataFile.GetLanguages()[0] != m_sLang )
+    const std::vector<OString> aLanguages = aMergeDataFile.GetLanguages();
+    if( m_sLang != "qtz" && !aLanguages.empty() && aLanguages[0] != m_sLang )
     {
         std::cerr
             << "Propex error: given language conflicts with "

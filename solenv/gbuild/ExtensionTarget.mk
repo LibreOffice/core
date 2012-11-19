@@ -234,6 +234,9 @@ endef
 # localize .properties file
 # source file is copied to $(WORKDIR)
 define gb_ExtensionTarget_localize_properties
+ifneq ($(filter-out en-US,$(gb_ExtensionTarget_ALL_LANGS)),)
+$(call gb_ExtensionTarget_localize_properties_onelang,$(1),$(subst en_US,qtz,$(2)),$(3),qtz,$(firstword $(filter-out en-US,$(gb_ExtensionTarget_ALL_LANGS))))
+endif
 $(foreach lang,$(gb_ExtensionTarget_ALL_LANGS),\
 	$(call gb_ExtensionTarget_localize_properties_onelang,$(1),$(subst en_US,$(subst -,_,$(lang)),$(2)),$(3),$(lang)))
 endef
@@ -242,9 +245,9 @@ define gb_ExtensionTarget_localize_properties_onelang
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(2)
 ifneq ($(filter-out en-US,$(4)),)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
-	POFILE := $(gb_POLOCATION)/$(4)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
+	POFILE := $(gb_POLOCATION)/$(or $(5),$(4))/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
-	$(gb_POLOCATION)/$(4)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
+	$(gb_POLOCATION)/$(or $(5),$(4))/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
 endif
 $(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) \
@@ -253,13 +256,13 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(3) \
 		$(gb_ExtensionTarget_PROPMERGETARGET)
 	$$(call gb_Output_announce,$(2),$(true),PRP,3)
 	$$(call gb_Helper_abbreviate_dirs, \
-		$(if $(filter-out en-US,$(4)), \
-			MERGEINPUT=`$(gb_MKTEMP)` && \
-			echo $$(POFILE) > $$$${MERGEINPUT} && \
-			mkdir -p $$(dir $$@) && \
-			$(gb_ExtensionTarget_PROPMERGECOMMAND) -i $$< -o $$@ -m $$$${MERGEINPUT} -l $(4) && \
-			rm -rf $$$${MERGEINPUT}, \
-			cp $$< $$@))
+		mkdir -p $$(dir $$@) && \
+		cp -f $$< $$@ )
+	$(if $(filter-out en-US,$(4)), \
+		MERGEINPUT=`$(gb_MKTEMP)` && \
+		echo $$(POFILE) > $$$${MERGEINPUT} && \
+		$(gb_ExtensionTarget_PROPMERGECOMMAND) -i $$< -o $$@ -m $$$${MERGEINPUT} -l $(4) && \
+		rm -rf $$$${MERGEINPUT})
 
 endef
 
