@@ -145,6 +145,7 @@ CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
 CONFIGURE_FLAGS=--disable-gtk-doc --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
 .IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+CFLAGS=-fvisibility=hidden
 CONFIGURE_FLAGS+= --disable-shared
 .ELSE
 CONFIGURE_FLAGS+= --disable-static

@@ -104,8 +104,12 @@ LDFLAGS:=-Wl,-z,origin -Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-n
 LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
 
+.IF "$(DISABLE_DYNLOADING)"=="TRUE"
+CFLAGS=-fvisibility=hidden
+.ENDIF
+
 .IF "$(COM)"=="C52" && "$(CPU)"=="U"
-CFLAGS=-m64
+CFLAGS+=-m64
 .EXPORT: CFLAGS
 .ENDIF
 

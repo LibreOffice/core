@@ -129,6 +129,11 @@ CFLAGS:=-g
 .ELSE
 CFLAGS:=-O
 .ENDIF
+
+.IF "$(DISABLE_DYNLOADING)"=="TRUE"
+CFLAGS+=-fvisibility=hidden
+.ENDIF
+
 .IF "$(COM)"=="C52" && "$(CPU)"=="U"
 CFLAGS+=-m64
 .ENDIF
