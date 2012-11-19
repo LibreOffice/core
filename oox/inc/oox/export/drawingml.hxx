@@ -63,6 +63,9 @@ protected:
 
     rtl::OUString WriteImage( const rtl::OUString& rURL );
 
+    const char* GetComponentDir();
+    const char* GetRelationCompPrefix();
+
 public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX ) : meDocumentType( eDocumentType ), mpFS( pFS ), mpFB( pFB ) {}
     void SetFS( ::sax_fastparser::FSHelperPtr pFS ) { mpFS = pFS; }
@@ -86,7 +89,7 @@ public:
     void WriteStretch();
     void WriteLinespacing( ::com::sun::star::style::LineSpacing& rLineSpacing );
 
-    ::rtl::OUString WriteBlip( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, ::rtl::OUString& rURL );
+    ::rtl::OUString WriteBlip( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, ::rtl::OUString& rURL, Graphic *pGraphic=NULL );
     void WriteBlipMode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
 
     void WriteShapeTransformation( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rXShape,

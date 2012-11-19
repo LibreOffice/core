@@ -430,6 +430,30 @@ OUString DrawingML::WriteImage( const OUString& rURL )
     return OUString();
 }
 
+const char* DrawingML::GetComponentDir()
+{
+    switch ( meDocumentType )
+    {
+        case DOCUMENT_DOCX: return "word";
+        case DOCUMENT_PPTX: return "ppt";
+        case DOCUMENT_XLSX: return "xl";
+    }
+
+    return "unknown";
+}
+
+const char* DrawingML::GetRelationCompPrefix()
+{
+    switch ( meDocumentType )
+    {
+        case DOCUMENT_DOCX: return "";
+        case DOCUMENT_PPTX:
+        case DOCUMENT_XLSX: return "../";
+    }
+
+    return "unknown";
+}
+
 OUString DrawingML::WriteImage( const Graphic& rGraphic )
 {
     GfxLink aLink = rGraphic.GetLink ();
@@ -491,16 +515,8 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
             }
     }
 
-    const char *pComponent = "";
-    switch ( meDocumentType )
-    {
-        case DOCUMENT_DOCX: pComponent = "word"; break;
-        case DOCUMENT_PPTX: pComponent = "ppt"; break;
-        case DOCUMENT_XLSX: pComponent = "xl"; break;
-    }
-
     Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
-                                                                      .appendAscii( pComponent )
+                                                                      .appendAscii( GetComponentDir() )
                                                                       .appendAscii( "/media/image" )
                                                                       .append( (sal_Int32) mnImageCounter )
                                                                       .appendAscii( pExtension )
@@ -509,22 +525,11 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
     xOutStream->writeBytes( Sequence< sal_Int8 >( (const sal_Int8*) aData, nDataSize ) );
     xOutStream->closeOutput();
 
-    const char *pImagePrefix = "";
-    switch ( meDocumentType )
-    {
-        case DOCUMENT_DOCX:
-            pImagePrefix = "media/image";
-            break;
-        case DOCUMENT_PPTX:
-        case DOCUMENT_XLSX:
-            pImagePrefix = "../media/image";
-            break;
-    }
-
     sRelId = mpFB->addRelation( mpFS->getOutputStream(),
                                 US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" ),
                                 OUStringBuffer()
-                                .appendAscii( pImagePrefix )
+                                .appendAscii( GetRelationCompPrefix() )
+                                .appendAscii( "media/image" )
                                 .append( (sal_Int32) mnImageCounter ++ )
                                 .appendAscii( pExtension )
                                 .makeStringAndClear() );
@@ -532,9 +537,9 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
     return sRelId;
 }
 
-OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, OUString& rURL )
+OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, OUString& rURL, Graphic *pGraphic )
 {
-        OUString sRelId = WriteImage( rURL );
+    OUString sRelId = pGraphic ? WriteImage( *pGraphic ) : WriteImage( rURL );
     sal_Int16 nBright = 0;
     sal_Int32 nContrast = 0;
 

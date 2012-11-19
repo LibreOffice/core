@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/mediadescriptor.hxx>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/export/shapes.hxx"
 #include "oox/export/utils.hxx"
@@ -42,6 +43,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
@@ -50,8 +52,10 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -76,6 +80,7 @@
 #include <svl/languageoptions.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdoole2.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/unoapi.hxx>
 #include <oox/export/chartexport.hxx>
@@ -93,8 +98,12 @@ using ::com::sun::star::beans::XPropertyState;
 using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XIndexAccess;
+using ::com::sun::star::document::XExporter;
+using ::com::sun::star::document::XFilter;
 using ::com::sun::star::drawing::FillStyle;
+using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::io::XOutputStream;
+using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::text::XSimpleText;
 using ::com::sun::star::text::XText;
 using ::com::sun::star::text::XTextContent;
@@ -103,6 +112,8 @@ using ::com::sun::star::text::XTextRange;
 using ::oox::core::XmlFilterBase;
 using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::frame::XModel;
+using ::com::sun::star::sheet::XSpreadsheetDocument;
+using ::comphelper::MediaDescriptor;
 using ::oox::core::XmlFilterBase;
 using ::rtl::OString;
 using ::rtl::OStringBuffer;
@@ -111,7 +122,6 @@ using ::rtl::OUStringBuffer;
 using ::sax_fastparser::FSHelperPtr;
 
 #define IDS(x) (OString(#x " ") + OString::valueOf( mnShapeIdMax++ )).getStr()
-
 
 struct CustomShapeTypeTranslationTable
 {
@@ -565,6 +575,9 @@ namespace oox { namespace drawingml {
     if ( GETA(propName) ) \
         mAny >>= variable;
 
+// not thread safe
+int ShapeExport::mnSpreadsheetCounter = 1;
+
 ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType )
     : DrawingML( pFS, pFB, eDocumentType )
     , mnShapeIdMax( 1 )
@@ -811,6 +824,13 @@ ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
 
 ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
 {
+    WriteGraphicObjectShapePart( xShape );
+
+    return *this;
+}
+
+void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, Graphic* pGraphic )
+{
     DBG(printf("write graphic object shape\n"));
 
     if( NonEmptyText( xShape ) )
@@ -819,17 +839,17 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
 
         //DBG(dump_pset(mXPropSet));
 
-        return *this;
+        return;
     }
 
     DBG(printf("graphicObject without text\n"));
 
     OUString sGraphicURL;
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
-    if( !xShapeProps.is() || !( xShapeProps->getPropertyValue( S( "GraphicURL" ) ) >>= sGraphicURL ) )
+    if( !pGraphic && ( !xShapeProps.is() || !( xShapeProps->getPropertyValue( S( "GraphicURL" ) ) >>= sGraphicURL ) ) )
     {
         DBG(printf("no graphic URL found\n"));
-        return *this;
+        return;
     }
 
     FSHelperPtr pFS = GetFS();
@@ -839,8 +859,12 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
     pFS->startElementNS( mnXmlNamespace, XML_nvPicPr, FSEND );
 
     OUString sName, sDescr;
-    bool bHaveName = xShapeProps->getPropertyValue( S( "Name" ) ) >>= sName;
-    bool bHaveDesc = xShapeProps->getPropertyValue( S( "Description" ) ) >>= sDescr;
+    bool bHaveName, bHaveDesc;
+
+    if ( ( bHaveName= GetProperty( xShapeProps, S( "Name" ) ) ) )
+        mAny >>= sName;
+    if ( ( bHaveDesc = GetProperty( xShapeProps, S( "Description" ) ) ) )
+        mAny >>= sDescr;
 
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     I32S( GetNewShapeID( xShape ) ),
@@ -859,13 +883,16 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
 
     pFS->startElementNS( mnXmlNamespace, XML_blipFill, FSEND );
 
-    WriteBlip( xShapeProps, sGraphicURL );
+    WriteBlip( xShapeProps, sGraphicURL, pGraphic );
 
+    // now we stretch always when we get pGraphic (when changing that
+    // behavior, test n#780830 for regression, where the OLE sheet might get tiled
     bool bStretch = false;
-    if( ( xShapeProps->getPropertyValue( S( "FillBitmapStretch" ) ) >>= bStretch ) && bStretch )
-    {
+    if( !pGraphic && GetProperty( xShapeProps, S( "FillBitmapStretch" ) ) )
+        mAny >>= bStretch;
+
+    if ( pGraphic || bStretch )
         WriteStretch();
-    }
 
     pFS->endElementNS( mnXmlNamespace, XML_blipFill );
 
@@ -878,8 +905,6 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     pFS->endElementNS( mnXmlNamespace, XML_pic );
-
-    return *this;
 }
 
 ShapeExport& ShapeExport::WriteConnectorShape( Reference< XShape > xShape )
@@ -1283,17 +1308,110 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
 ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
 {
     Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
-    if( xPropSet.is() && GetProperty( xPropSet, S("Model") ) )
-    {
-        Reference< XChartDocument > xChartDoc;
-        mAny >>= xChartDoc;
-        if( xChartDoc.is() )
+    if( xPropSet.is() ) {
+        if( GetProperty( xPropSet, S("Model") ) )
         {
-            //export the chart
-            Reference< XModel > xModel( xChartDoc, UNO_QUERY );
-            ChartExport aChartExport( mnXmlNamespace, GetFS(), xModel, GetFB(), GetDocumentType() );
-            static sal_Int32 nChartCount = 0;
-            aChartExport.WriteChartObj( xShape, ++nChartCount );
+            Reference< XChartDocument > xChartDoc;
+            mAny >>= xChartDoc;
+            if( xChartDoc.is() )
+            {
+                //export the chart
+                Reference< XModel > xModel( xChartDoc, UNO_QUERY );
+                ChartExport aChartExport( mnXmlNamespace, GetFS(), xModel, GetFB(), GetDocumentType() );
+                static sal_Int32 nChartCount = 0;
+                aChartExport.WriteChartObj( xShape, ++nChartCount );
+            }
+            else
+            {
+                // this part now supports only embedded spreadsheets, it can be extended to support remaining ooxml documents
+                // only exporter, counter and object filename are specific to spreadsheet
+                Reference< XSpreadsheetDocument > xSheetDoc( mAny, UNO_QUERY );
+                if( xSheetDoc.is() )
+                {
+                    Reference< XComponent > xDocument( mAny, UNO_QUERY );
+                    Reference< XExporter > xExporter( mpFB->getServiceFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelFilterExport" ) ), UNO_QUERY );
+                    if( xDocument.is() && xExporter.is() && mpFB )
+                    {
+                        Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
+                                                                                          .appendAscii( GetComponentDir() )
+                                                                                          .appendAscii( "/embeddings/spreadsheet" )
+                                                                                          .append( (sal_Int32) mnSpreadsheetCounter )
+                                                                                          .appendAscii( ".xlsx" )
+                                                                                          .makeStringAndClear(),
+                                                                                          S("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") );
+                        // export the embedded document
+                        Sequence< PropertyValue > rMedia(1);
+
+                        rMedia[0].Name = MediaDescriptor::PROP_STREAMFOROUTPUT();
+                        rMedia[0].Value <<= xOutStream;
+
+                        Reference< XFilter > xFilter( xExporter, UNO_QUERY );
+
+                        if( xFilter.is() )
+                        {
+                            xExporter->setSourceDocument( xDocument );
+                            xFilter->filter( rMedia );
+                        }
+
+                        xOutStream->closeOutput();
+
+                        OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
+                                                             US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package" ),
+                                                             OUStringBuffer()
+                                                             .appendAscii( GetRelationCompPrefix() )
+                                                             .appendAscii( "embeddings/spreadsheet" )
+                                                             .append( (sal_Int32) mnSpreadsheetCounter ++ )
+                                                             .appendAscii( ".xlsx" )
+                                                             .makeStringAndClear() );
+
+                        mpFS->startElementNS( mnXmlNamespace, XML_graphicFrame, FSEND );
+
+                        mpFS->startElementNS( mnXmlNamespace, XML_nvGraphicFramePr, FSEND );
+
+                        mpFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
+                                               XML_id,     I32S( GetNewShapeID( xShape ) ),
+                                               XML_name,   IDS(Object),
+                                               FSEND );
+
+                        mpFS->singleElementNS( mnXmlNamespace, XML_cNvGraphicFramePr,
+                                               FSEND );
+
+                        if( GetDocumentType() == DOCUMENT_PPTX )
+                            mpFS->singleElementNS( mnXmlNamespace, XML_nvPr,
+                                                   FSEND );
+                        mpFS->endElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
+
+                        WriteShapeTransformation( xShape, mnXmlNamespace );
+
+                        mpFS->startElementNS( XML_a, XML_graphic, FSEND );
+                        mpFS->startElementNS( XML_a, XML_graphicData,
+                                              XML_uri, "http://schemas.openxmlformats.org/presentationml/2006/ole",
+                                              FSEND );
+                        mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
+                                              XML_name, "Spreadsheet",
+                                              FSNS(XML_r, XML_id), USS( sRelId ),
+                                              FSEND );
+
+                        mpFS->singleElementNS( mnXmlNamespace, XML_embed, FSEND );
+
+                        // pic element
+                        SdrObject* pSdrOLE2( GetSdrObjectFromXShape( xShape ) );
+                        if ( pSdrOLE2 && pSdrOLE2->ISA( SdrOle2Obj ) )
+                        {
+                            Graphic* pGraphic = ((SdrOle2Obj*)pSdrOLE2)->GetGraphic();
+                            if ( pGraphic )
+                                WriteGraphicObjectShapePart( xShape, pGraphic );
+                        }
+
+                        mpFS->endElementNS( mnXmlNamespace, XML_oleObj );
+
+                        mpFS->endElementNS( XML_a, XML_graphicData );
+                        mpFS->endElementNS( XML_a, XML_graphic );
+
+                        mpFS->endElementNS( mnXmlNamespace, XML_graphicFrame );
+                    }
+                }
+            }
         }
     }
     return *this;
