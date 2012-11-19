@@ -42,7 +42,6 @@ import org.pentaho.reporting.libraries.formula.lvalues.LValue;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 05.03.2007
  * @noinspection CloneableClassWithoutClone
  */

@@ -37,7 +37,6 @@ import org.jfree.report.util.AttributeNameGenerator;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 14.03.2007
  */
 public class MasterPageFactory

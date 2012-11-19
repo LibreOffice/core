@@ -37,7 +37,6 @@ import org.jfree.report.structure.Element;
  * table-row, table-cell, table-page, chart, default, drawing-page, graphic,
  * presentation, control and ruby.
  *
- * @author Thomas Morgner
  * @since 07.03.2007
  */
 public class OfficeStyles extends Element

@@ -27,9 +27,6 @@ import com.sun.star.uno.UnoRuntime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author frank.schoenheit@oracle.com
- */
 public class SpreadsheetView extends OfficeDocumentView
 {
 

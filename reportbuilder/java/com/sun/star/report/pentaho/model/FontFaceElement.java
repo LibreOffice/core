@@ -24,7 +24,6 @@ import org.jfree.report.structure.Section;
 /**
  * Represents an automatic or manual data style definition.
  *
- * @author Thomas Morgner
  * @since 02.03.2007
  */
 public class FontFaceElement extends Section

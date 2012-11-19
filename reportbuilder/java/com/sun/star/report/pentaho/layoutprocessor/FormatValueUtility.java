@@ -42,7 +42,6 @@ import org.pentaho.reporting.libraries.formula.util.HSSFDateUtil;
 /**
  * Creation-Date: 06.06.2007, 17:03:30
  *
- * @author Thomas Morgner
  */
 public class FormatValueUtility
 {

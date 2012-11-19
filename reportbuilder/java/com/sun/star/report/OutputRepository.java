@@ -24,7 +24,6 @@ import java.io.OutputStream;
  * A repository for writing. Providing a repository always assumes,
  * that more than one stream can be written.
  *
- * @author Thomas Morgner
  */
 public interface OutputRepository
 {

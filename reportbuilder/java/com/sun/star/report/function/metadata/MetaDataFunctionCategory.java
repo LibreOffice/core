@@ -20,10 +20,6 @@ package com.sun.star.report.function.metadata;
 import org.pentaho.reporting.libraries.formula.function.AbstractFunctionCategory;
 import org.pentaho.reporting.libraries.formula.function.FunctionCategory;
 
-/**
- *
- * @author Ocke Janssen
- */
 public class MetaDataFunctionCategory extends AbstractFunctionCategory
 {
 

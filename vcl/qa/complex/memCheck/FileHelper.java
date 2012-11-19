@@ -18,10 +18,6 @@
 
 package complex.memCheck;
 
-/**
- *
- * @author ll93751
- */
 public class FileHelper
 {
     public static String appendPath(String _sPath, String _sRelativePathToAdd)
@@ -42,7 +38,6 @@ public class FileHelper
     public static String getJavaCompatibleFilename(String _sFilename)
     {
         // It is a little bit stupid that office urls not compatible to java file urls
-        // System.out.println("java.io.File can't access Office file urls.");
         if(_sFilename.startsWith("path:"))
         {
             final String sPath = _sFilename.substring(5);
@@ -63,7 +58,6 @@ public static String getBasename(String _sFilename)
             {
                 return "";
             }
-            // String fs = System.getProperty("file.separator");
 
             int nIdx = _sFilename.lastIndexOf("\\");
             if (nIdx == -1)

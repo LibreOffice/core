@@ -28,10 +28,6 @@ import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-/**
- *
- * @author Ocke Janssen
- */
 public class MasterDetailReadHandler extends ElementReadHandler
 {
 

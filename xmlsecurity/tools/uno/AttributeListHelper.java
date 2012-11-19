@@ -25,7 +25,6 @@ import com.sun.star.xml.sax.XAttributeList;
  * Class to construct an attribute list, and provide a XAttributeList
  * interface.
  *
- * @author      Michael Mi
  * @version     %I%, %G%
  */
 public class AttributeListHelper implements com.sun.star.xml.sax.XAttributeList

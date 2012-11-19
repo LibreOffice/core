@@ -25,7 +25,6 @@ import org.jfree.layouting.input.style.keys.box.BoxStyleKeys;
 /**
  * Creation-Date: 03.07.2006, 13:08:27
  *
- * @author Thomas Morgner
  */
 public class RowHeightMapper implements StyleMapper
 {

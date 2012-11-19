@@ -28,10 +28,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 
-/**
- *
- * @author jochen
- */
 public class Main {
 
     /**
@@ -155,7 +151,6 @@ class MyHandler implements HttpHandler {
 
             if (fileExtension.equalsIgnoreCase("crl"))
             {
-                //h.set("Content-Type","application/x-pkcs7-crl");
                 h.set("Content-Type","application/pkix-crl");
             }
             else if (fileExtension.equalsIgnoreCase("crt")

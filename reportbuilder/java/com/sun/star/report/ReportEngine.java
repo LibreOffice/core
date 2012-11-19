@@ -26,7 +26,6 @@ package com.sun.star.report;
  * For each type of Job, there should be separate job-factory (remote jobs
  * vs. local jobs etc).
  *
- * @author Thomas Morgner
  */
 public interface ReportEngine
 {

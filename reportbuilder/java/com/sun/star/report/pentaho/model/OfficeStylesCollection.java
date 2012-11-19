@@ -36,7 +36,6 @@ import org.jfree.report.structure.Element;
  * exists), the font-declarations and auto-styles of the document-content.xml
  * and the styles declared in the main document.
  *
- * @author Thomas Morgner
  * @since 06.03.2007
  */
 public class OfficeStylesCollection extends Element

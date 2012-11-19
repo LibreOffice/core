@@ -53,7 +53,6 @@ import static org.junit.Assert.*;
  * Currently, this service is implemented in
  * unoxml/source/rdf/librdf_repository.cxx
  *
- * @author mst
  */
 public class RDFRepositoryTest
 {

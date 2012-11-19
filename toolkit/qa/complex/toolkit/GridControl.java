@@ -59,7 +59,6 @@ import static org.junit.Assert.*;
 import org.openoffice.test.OfficeConnection;
 
 /** is a unit test for the grid control related implementations
- * @author frank.schoenheit@sun.com
  */
 public class GridControl
 {

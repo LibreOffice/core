@@ -90,7 +90,6 @@ import com.sun.star.wizards.ui.event.DataAware;
  * A note about threads:<br/>
  * Many methods here are synchronized, in order to avoid colission made by
  * events fired too often.
- * @author rpiterman
  *
  */
 public class AgendaTemplate extends TextDocument implements TemplateConsts, DataAware.Listener

@@ -26,7 +26,6 @@ import org.jfree.report.structure.Section;
  * A group header or footer. If such a section is marked as sticky, it will be
  * repeated on each new page.
  *
- * @author Thomas Morgner
  * @since 02.03.2007
  */
 public class OfficeGroupSection extends Section

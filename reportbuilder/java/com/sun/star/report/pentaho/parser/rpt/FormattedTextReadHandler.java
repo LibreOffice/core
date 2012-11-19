@@ -33,7 +33,6 @@ import org.xml.sax.SAXException;
 /**
  * Creation-Date: 01.10.2006, 19:06:45
  *
- * @author Thomas Morgner
  */
 public class FormattedTextReadHandler extends ElementReadHandler
 {

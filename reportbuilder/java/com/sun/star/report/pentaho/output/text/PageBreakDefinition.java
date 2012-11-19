@@ -20,7 +20,6 @@ package com.sun.star.report.pentaho.output.text;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 24.03.2007
  */
 public class PageBreakDefinition

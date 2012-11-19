@@ -30,7 +30,6 @@ import org.xml.sax.SAXException;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 12.03.2007
  */
 public class StyleMappingDocumentReadHandler extends AbstractXmlReadHandler

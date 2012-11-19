@@ -27,7 +27,6 @@ import com.sun.star.util.XCloneable;
 
 /**
  * a dummy implementation of css.awt.grid.XGridColumn
- * @author frank.schoenheit@oracle.com
  */
 public class DummyColumn implements XGridColumn
 {

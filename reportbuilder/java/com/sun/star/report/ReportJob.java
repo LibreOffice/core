@@ -39,7 +39,6 @@ import java.io.IOException;
  * </tr>
  * </table>
  *
- * @author Thomas Morgner
  */
 public interface ReportJob
 {

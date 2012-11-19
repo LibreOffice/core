@@ -34,7 +34,6 @@ import org.jfree.report.structure.Node;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 06.03.2007
  */
 public class OfficeReportLayoutController extends ElementLayoutController

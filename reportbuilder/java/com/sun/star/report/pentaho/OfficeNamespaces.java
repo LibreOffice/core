@@ -20,7 +20,6 @@ package com.sun.star.report.pentaho;
 /**
  * Creation-Date: Feb 22, 2007, 1:53:29 PM
  *
- * @author Thomas Morgner
  */
 public class OfficeNamespaces
 {

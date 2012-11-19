@@ -34,7 +34,6 @@ import org.jfree.report.util.IntegerCache;
 /**
  * Creation-Date: 24.04.2007, 14:40:20
  *
- * @author Thomas Morgner
  */
 public class OfficeTableLayoutController extends SectionLayoutController
 {

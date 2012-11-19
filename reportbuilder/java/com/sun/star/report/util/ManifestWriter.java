@@ -38,7 +38,6 @@ import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
 /**
  * Creation-Date: 24.07.2007, 18:16:52
  *
- * @author Thomas Morgner
  */
 public class ManifestWriter
 {

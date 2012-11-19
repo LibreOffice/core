@@ -41,10 +41,6 @@ import org.pentaho.reporting.libraries.xmlns.common.AttributeList;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriter;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
 
-/**
- *
- * @author Ocke Janssen
- */
 public class ChartRawReportTarget extends OfficeDocumentReportTarget
 {
 
@@ -95,7 +91,6 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
     protected void endContent(final AttributeMap attrs) throws IOException, DataSourceException, ReportProcessingException
     {
         final XmlWriter xmlWriter = getXmlWriter();
-        //xmlWriter.writeCloseTag();
         while (closeTags > 0)
         {
             xmlWriter.writeCloseTag();
@@ -231,7 +226,6 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
         final XmlWriter xmlWriter = getXmlWriter();
         xmlWriter.writeTag(namespace, elementType, attrList, XmlWriter.OPEN);
         ++closeTags;
-        // System.out.println("elementType = " + elementType);
     }
     // /////////////////////////////////////////////////////////////////////////
 

@@ -24,7 +24,6 @@ import org.openoffice.test.tools.OfficeDocument;
  * wrapper around an OfficeDocument, for running a standardized test procedure (related do Undo functionality)
  * on the document.
  *
- * @author frank.schoenheit@oracle.com
  */
 public interface DocumentTest
 {

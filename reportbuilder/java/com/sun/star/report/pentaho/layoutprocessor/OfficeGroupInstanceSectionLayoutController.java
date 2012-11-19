@@ -41,7 +41,6 @@ import org.jfree.report.structure.Node;
 /**
  * Creation-Date: 25.07.2007, 14:50:45
  *
- * @author Thomas Morgner
  */
 public class OfficeGroupInstanceSectionLayoutController extends SectionLayoutController
 {

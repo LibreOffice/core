@@ -25,7 +25,6 @@ import com.sun.star.wizards.common.PropertyNames;
 
 /** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>).
- * @author Bertram Nolte
  */
 public class CallTableWizard
 {

@@ -25,7 +25,6 @@ import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlResourceFactory;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 12.03.2007
  */
 public class StyleMapperXmlResourceFactory extends AbstractXmlResourceFactory

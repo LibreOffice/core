@@ -23,9 +23,6 @@ import com.sun.star.uno.Exception;
 import org.openoffice.test.tools.DocumentType;
 import org.openoffice.test.tools.OfficeDocument;
 
-/**
- * @author frank.schoenheit@oracle.com
- */
 abstract class DocumentTestBase implements DocumentTest
 {
     DocumentTestBase( final XMultiServiceFactory i_orb, final DocumentType i_docType ) throws Exception
