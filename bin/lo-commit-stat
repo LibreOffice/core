@@ -7,8 +7,13 @@ use strict;
 use LWP::UserAgent;
 use utf8;
 
-my $main_repo="core";
-my @pieces=("dictionaries", "help", "translations");
+my %module_dirname = (
+    "core"              => "",
+    "dictionaries"      => "dictionaries",
+    "help"              => "helpcontent2",
+    "translations"      => "translations"
+);
+
 
 my %bugzillas = (
     fdo  => "https://bugs.freedesktop.org/show_bug.cgi?id=",
@@ -20,7 +25,7 @@ my %bugzillas = (
 
 sub search_bugs($$$$)
 {
-    my ($pdata, $piece, $commit_id, $line) = @_;
+    my ($pdata, $module, $commit_id, $line) = @_;
 
     my $bug = "";
     my $bug_orig;
@@ -61,8 +66,8 @@ sub search_bugs($$$$)
         # someone mistyped fdo as fd0
         $bug =~ s/^fd0\#/fdo#/;
         # save the bug number
-        %{$pdata->{$piece}{$commit_id}{'bugs'}} = () if (! defined %{$pdata->{$piece}{$commit_id}{'bugs'}});
-        $pdata->{$piece}{$commit_id}{'bugs'}{$bug} = 1;
+        %{$pdata->{$module}{$commit_id}{'bugs'}} = () if (! defined %{$pdata->{$module}{$commit_id}{'bugs'}});
+        $pdata->{$module}{$commit_id}{'bugs'}{$bug} = 1;
     }
 
     return $line;
@@ -89,23 +94,24 @@ sub standardize_summary($)
 
 sub load_git_log($$$$$) 
 {
-    my ($pdata, $repo_dir, $piece, $branch_name, $git_command) = @_;
+    my ($pdata, $repo_dir, $module, $branch_name, $git_command) = @_;
 
     my $cmd = "cd $repo_dir; $git_command";
     my $commit_id;
     my $summary;
 
-    print STDERR "Analyzing log from the git repo: $piece...\n";
+    print STDERR "Analyzing log from the git repo: $module...\n";
 
-    my $repo_branch_name = get_branch_name($repo_dir);
-    if ( $branch_name ne $repo_branch_name ) {
-        die "Error: mismatch of branches:\n" .
-            "       main repo is on the branch: $branch_name\n" .
-            "       $piece repo is on the branch: $repo_branch_name\n";
-    }
+#   FIXME: ./g pull move submodules in unnamed branches
+#    my $repo_branch_name = get_branch_name($repo_dir);
+#    if ( $branch_name ne $repo_branch_name ) {
+#        die "Error: mismatch of branches:\n" .
+#            "       main repo is on the branch: $branch_name\n" .
+#            "       $module repo is on the branch: $repo_branch_name\n";
+#    }
 
     open (GIT, "$cmd 2>&1|") || die "Can't run $cmd: $!";
-    %{$pdata->{$piece}} = ();
+    %{$pdata->{$module}} = ();
 
     while (my $line = <GIT>) {
         chomp $line;
@@ -113,7 +119,7 @@ sub load_git_log($$$$$)
         if ( $line =~ m/^commit ([0-9a-z]{20})/ ) {
             $commit_id = "$1";
             $summary=undef;
-            %{$pdata->{$piece}{"$commit_id"}} = ();
+            %{$pdata->{$module}{"$commit_id"}} = ();
             next;
         }
 
@@ -121,10 +127,10 @@ sub load_git_log($$$$$)
             # get rid of extra empty spaces;
             my $name = "$1";
             $name =~ s/\s+$//;
-            die "Error: Author already defined for the commit {$commit_id}\n" if defined ($pdata->{$piece}{$commit_id}{'author'});
-            %{$pdata->{$piece}{$commit_id}{'author'}} = ();
-            $pdata->{$piece}{$commit_id}{'author'}{'name'} = "$name";
-            $pdata->{$piece}{$commit_id}{'author'}{'email'} = "$2";
+            die "Error: Author already defined for the commit {$commit_id}\n" if defined ($pdata->{$module}{$commit_id}{'author'});
+            %{$pdata->{$module}{$commit_id}{'author'}} = ();
+            $pdata->{$module}{$commit_id}{'author'}{'name'} = "$name";
+            $pdata->{$module}{$commit_id}{'author'}{'email'} = "$2";
             next;
         }
 
@@ -138,13 +144,13 @@ sub load_git_log($$$$$)
             next;
         }
 
-        $line = search_bugs($pdata, $piece, $commit_id, $line);
+        $line = search_bugs($pdata, $module, $commit_id, $line);
         # FIXME: need to be implemented
 #        search_keywords($pdata, $line);
 
-        unless (defined $pdata->{$piece}{$commit_id}{'summary'}) {
+        unless (defined $pdata->{$module}{$commit_id}{'summary'}) {
             $summary = standardize_summary($line);
-            $pdata->{$piece}{$commit_id}{'summary'} = $summary;
+            $pdata->{$module}{$commit_id}{'summary'} = $summary;
         }
     }
 
@@ -172,21 +178,10 @@ sub get_repo_name($)
 
 sub load_data($$$$$)
 {
-    my ($pdata, $top_dir, $piece, $branch_name, $git_command) = @_;
+    my ($pdata, $top_dir, $p_module_dirname, $branch_name, $git_command) = @_;
 
-    if (defined $piece) {
-        my $piece_dir;
-        if ("$piece" eq "$main_repo") {
-            $piece_dir = "$top_dir";
-        } else {
-            $piece_dir = "$top_dir/clone/$piece";
-        }
-        load_git_log($pdata, $piece_dir, $piece, $branch_name, $git_command);
-    } else {
-        load_git_log($pdata, $top_dir, $main_repo, $branch_name, $git_command);
-        foreach my $piece (@pieces) {
-            load_git_log($pdata, "$top_dir/clone/$piece", $piece, $branch_name, $git_command);
-        }
+    foreach my $module (keys %{$p_module_dirname}) {
+        load_git_log($pdata, "$top_dir/$p_module_dirname->{$module}", $module, $branch_name, $git_command);
     }
 }
 
@@ -238,14 +233,14 @@ sub open_log_file($$$$$)
 
 sub print_summary_in_stat($$$$$$)
 {
-    my ($summary, $ppiece_title, $pbugs, $pauthors, $prefix, $log) = @_;
+    my ($summary, $pmodule_title, $pbugs, $pauthors, $prefix, $log) = @_;
 
     return if ( $summary eq "" );
 
-    # print piece title if not done yet
-    if ( defined ${$ppiece_title} ) {
-        print $log "${$ppiece_title}\n";
-        ${$ppiece_title} = undef;
+    # print module title if not done yet
+    if ( defined ${$pmodule_title} ) {
+        print $log "${$pmodule_title}\n";
+        ${$pmodule_title} = undef;
     }
 
     # finally print the summary line
@@ -266,32 +261,32 @@ sub print_stat($$)
 {
     my ($pdata, $log) = @_;
 
-    foreach my $piece ( sort { $a cmp $b } keys %{$pdata}) {
-        # check if this piece has any entries at all
-        my $piece_title = "+ $piece";
-        if ( %{$pdata->{$piece}} ) {
+    foreach my $module ( sort { $a cmp $b } keys %{$pdata}) {
+        # check if this module has any entries at all
+        my $module_title = "+ $module";
+        if ( %{$pdata->{$module}} ) {
             my $old_summary="";
             my %authors = ();
             my %bugs = ();
-            foreach my $id ( sort { lc $pdata->{$piece}{$a}{'summary'} cmp lc $pdata->{$piece}{$b}{'summary'} } keys %{$pdata->{$piece}}) {
-                my $summary = $pdata->{$piece}{$id}{'summary'};
+            foreach my $id ( sort { lc $pdata->{$module}{$a}{'summary'} cmp lc $pdata->{$module}{$b}{'summary'} } keys %{$pdata->{$module}}) {
+                my $summary = $pdata->{$module}{$id}{'summary'};
                 if ($summary ne $old_summary) {
-                    print_summary_in_stat($old_summary, \$piece_title, \%bugs, \%authors, "    + ", $log);
+                    print_summary_in_stat($old_summary, \$module_title, \%bugs, \%authors, "    + ", $log);
                     $old_summary = $summary;
                     %authors = ();
                     %bugs = ();
                 }
                 # collect bug numbers
-                if (defined $pdata->{$piece}{$id}{'bugs'}) {
-                    foreach my $bug (keys %{$pdata->{$piece}{$id}{'bugs'}}) {
+                if (defined $pdata->{$module}{$id}{'bugs'}) {
+                    foreach my $bug (keys %{$pdata->{$module}{$id}{'bugs'}}) {
                         $bugs{$bug} = 1;
                     }
                 }
                 # collect author names
-                my $author = $pdata->{$piece}{$id}{'author'}{'name'};
+                my $author = $pdata->{$module}{$id}{'author'}{'name'};
                 $authors{$author} = 1;
             }
-            print_summary_in_stat($old_summary, \$piece_title, \%bugs, \%authors, "    + ", $log);
+            print_summary_in_stat($old_summary, \$module_title, \%bugs, \%authors, "    + ", $log);
         }
     }
 }
@@ -335,11 +330,11 @@ sub print_bugs($$$)
 
     # associate bugs with their summaries and fixers
     my %bugs = ();
-    foreach my $piece ( keys %{$pdata}) {
-        foreach my $id ( keys %{$pdata->{$piece}}) {
-            foreach my $bug (keys %{$pdata->{$piece}{$id}{'bugs'}}) {
-                my $author = $pdata->{$piece}{$id}{'author'}{'name'};
-                my $summary = $pdata->{$piece}{$id}{'summary'};
+    foreach my $module ( keys %{$pdata}) {
+        foreach my $id ( keys %{$pdata->{$module}}) {
+            foreach my $bug (keys %{$pdata->{$module}{$id}{'bugs'}}) {
+                my $author = $pdata->{$module}{$id}{'author'}{'name'};
+                my $summary = $pdata->{$module}{$id}{'summary'};
                 $bugs{$bug}{'summary'} = $summary;
                 $bugs{$bug}{'author'}{$author} = 1;
             }
@@ -371,9 +366,9 @@ sub print_bugnumbers($$)
 
     # just collect bugs
     my %bugs = ();
-    foreach my $piece ( keys %{$pdata}) {
-        foreach my $id ( keys %{$pdata->{$piece}}) {
-            foreach my $bug (keys %{$pdata->{$piece}{$id}{'bugs'}}) {
+    foreach my $module ( keys %{$pdata}) {
+        foreach my $id ( keys %{$pdata->{$module}}) {
+            foreach my $bug (keys %{$pdata->{$module}{$id}{'bugs'}}) {
                 $bugs{$bug} = 1;
             }
         }
@@ -389,12 +384,13 @@ sub usage()
 {
     print "This script generates LO git commit summary\n\n" .
           
-          "Usage: lo-commit-stat [--help] [--no-pieces] [--piece=<piece>] --log-dir=<dir> --log-suffix=<string> topdir [git_arg...]\n\n" .
+          "Usage: lo-commit-stat [--help] [--no-submodules] [--module=<module>] --log-dir=<dir> --log-suffix=<string> topdir [git_arg...]\n\n" .
 
           "Options:\n" .
           "     --help          print this help\n" .
-          "     --no-pieces     read changes just from the main repository, ignore other cloned repos\n" .
-          "     --piece=<piece> summarize just changes from the given piece\n" .
+          "     --no-submodule  read changes just from the main repository, ignore submodules\n" .
+          "     --module=<module> summarize just changes from the given module, use \"core\"\n" .
+          "                     for the main module\n" .
           "     --log-dir=<dir> directory where to put the generated log\n" .
           "     --log-suffix=<string> suffix of the log file name; the result will be\n" .
           "                     commit-log-<branch>-<log-name-suffix>.log; the branch name\n" .
@@ -404,8 +400,7 @@ sub usage()
           "     --bug-numbers   print just fixed bug numbers\n" .
           "     --rev-list      use \"git rev-list\" instead of \"git log\"; useful to check\n" .
           "                     differences between branches\n" .
-          "      topdir         directory with the libreoffice/core clone; the piece repos\n" .
-          "                     must be cloned in the main-repo-root/clone/<piece> subdirectories\n" .
+          "      topdir         directory with the libreoffice/core clone\n" .
           "      git_arg        extra parameters passed to the git command to define\n" .
           "                     the area of interest; The default command is \"git log\" and\n" .
           "                     parameters might be, for example, --after=\"2010-09-27\" or\n" .
@@ -421,7 +416,7 @@ sub usage()
 #######################################################################
 
 
-my $piece;
+my $module;
 my $top_dir;
 my $log_prefix = "commit-log";
 my $log_dir;
@@ -438,10 +433,10 @@ foreach my $arg (@ARGV) {
     if ($arg eq '--help') {
         usage();
         exit;
-    } elsif ($arg eq '--no-pieces') {
-        $piece = "core";
-    } elsif ($arg =~ m/--piece=(.*)/) {
-	$piece = $1;
+    } elsif ($arg eq '--no-submodule') {
+        $module = "core";
+    } elsif ($arg =~ m/--module=(.*)/) {
+	$module = $1;
     } elsif ($arg =~ m/--log-suffix=(.*)/) {
 	$log_suffix = "$1";
     } elsif ($arg =~ m/--log-dir=(.*)/) {
@@ -466,6 +461,13 @@ foreach my $arg (@ARGV) {
     }
 }
 
+# ugly hack; we want only one module
+if ($module) {
+    my $name = $module_dirname{$module};
+    %module_dirname = ();
+    $module_dirname{$module} = $name;
+}
+
 $git_command .= " " . join ' ', @git_args if (@git_args);
 
 (defined $top_dir) || die "Error: top directory is not defined\n";
@@ -478,7 +480,7 @@ $git_command .= " " . join ' ', @git_args if (@git_args);
 
 $branch_name = get_branch_name($top_dir);
 
-load_data(\%data, $top_dir, $piece, $branch_name, $git_command);
+load_data(\%data, $top_dir, \%module_dirname, $branch_name, $git_command);
 
 $log = open_log_file($log_dir, $log_prefix, $log_suffix, $top_dir, $branch_name);
 if ( $print_mode eq "bugs" ) {
