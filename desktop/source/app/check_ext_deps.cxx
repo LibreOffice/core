@@ -433,7 +433,7 @@ void Desktop::SynchronizeExtensionRepositories()
     } else {
         // reinstallDeployedExtensions above already calls syncRepositories
         // internally:
-        dp_misc::syncRepositories(m_bCleanedExtensionCache, silent);
+        dp_misc::syncRepositories(false, silent);
     }
 }
 

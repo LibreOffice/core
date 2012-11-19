@@ -221,7 +221,7 @@ void removeTree(OUString const & url) {
 // com.sun.star.comp.deployment.component.PackageRegistryBackend/*.rdb files
 // contained data nevertheless.
 //
-// When a LO upgrade is detected (i.e., no/ user/extensions/bundled/buildid or
+// When a LO upgrade is detected (i.e., no user/extensions/bundled/buildid or
 // one containing an old build ID), then user/extensions/bundled,
 // user/extensions/shared, and user/uno_packages/cache/registry/
 // com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc are
