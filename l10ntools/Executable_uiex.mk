@@ -16,7 +16,6 @@ $(eval $(call gb_Executable_set_include,uiex,\
 
 $(eval $(call gb_Executable_use_libraries,uiex,\
     sal \
-    i18nregexp \
 ))
 
 $(eval $(call gb_Executable_use_unpacked,uiex,boost))
@@ -33,6 +32,8 @@ $(eval $(call gb_Executable_use_externals,uiex,\
     libexslt \
     libxml2 \
     libxslt \
+	icuuc \
+    $(if $(filter MSC,$(COM)),icuin,icui18n) \
 ))
 
 # vim: set noet sw=4 ts=4:

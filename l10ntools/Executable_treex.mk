@@ -17,7 +17,6 @@ $(eval $(call gb_Executable_set_include,treex,\
 
 $(eval $(call gb_Executable_use_libraries,treex,\
     sal \
-    i18nregexp \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,treex,\
@@ -31,6 +30,8 @@ $(eval $(call gb_Executable_add_exception_objects,treex,\
 
 $(eval $(call gb_Executable_use_externals,treex,\
     libxml2 \
+	icuuc \
+    $(if $(filter MSC,$(COM)),icuin,icui18n) \
 ))
 
 # vim: set noet sw=4 ts=4:

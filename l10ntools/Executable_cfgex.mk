@@ -33,7 +33,6 @@ $(eval $(call gb_Executable_set_include,cfgex,\
 
 $(eval $(call gb_Executable_use_libraries,cfgex,\
     sal \
-    i18nregexp \
 ))
 
 $(eval $(call gb_Executable_use_unpacked,cfgex,boost))
@@ -48,6 +47,11 @@ $(eval $(call gb_Executable_use_static_libraries,cfgex,\
 
 $(eval $(call gb_Executable_add_exception_objects,cfgex,\
     l10ntools/source/cfgmerge \
+))
+
+$(eval $(call gb_Executable_use_externals,cfgex,\
+    icuuc \
+    $(if $(filter MSC,$(COM)),icuin,icui18n) \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

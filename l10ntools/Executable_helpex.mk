@@ -33,7 +33,6 @@ $(eval $(call gb_Executable_set_include,helpex,\
 
 $(eval $(call gb_Executable_use_libraries,helpex,\
     sal \
-    i18nregexp \
 ))
 
 $(eval $(call gb_Executable_use_external,helpex,expat_utf8))
@@ -51,6 +50,8 @@ $(eval $(call gb_Executable_add_exception_objects,helpex,\
 
 $(eval $(call gb_Executable_use_externals,helpex,\
     libxml2 \
+    icuuc \
+    $(if $(filter MSC,$(COM)),icuin,icui18n) \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

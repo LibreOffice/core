@@ -18,7 +18,6 @@ $(eval $(call gb_Executable_set_include,renewpo,\
 
 $(eval $(call gb_Executable_use_libraries,renewpo,\
     sal \
-    i18nregexp \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,renewpo,\
@@ -27,6 +26,11 @@ $(eval $(call gb_Executable_use_static_libraries,renewpo,\
 
 $(eval $(call gb_Executable_add_exception_objects,renewpo,\
     l10ntools/source/renewpo \
+))
+
+$(eval $(call gb_Executable_use_externals,renewpo,\
+    icuuc \
+    $(if $(filter MSC,$(COM)),icuin,icui18n) \
 ))
 
 # vim: set noet sw=4 ts=4:

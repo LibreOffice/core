@@ -7,10 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/util/SearchOptions.hpp>
-#include <com/sun/star/util/SearchFlags.hpp>
-#include <com/sun/star/i18n/XExtendedTransliteration.hpp>
-#include <regexp/reclass.hxx>
 #include <rtl/ustring.hxx>
 
 #include <cstring>
@@ -21,11 +17,14 @@
 #include <string>
 
 #include <boost/crc.hpp>
+#include <unicode/regex.h>
 
 #include "po.hxx"
 
 #define POESCAPED OString("\\n\\t\\r\\\\\\\"")
 #define POUNESCAPED OString("\n\t\r\\\"")
+
+using namespace U_ICU_NAMESPACE;
 
 //Class GenPoEntry
 
@@ -317,61 +316,37 @@ namespace
             return lcl_UnEscapeText(rText,"\\n\\t\\r","\n\t\r");
     }
 
-    //Miminize the length of the regular expression result
-    static void lcl_Minimize(
-        const OUString& rText, Regexpr& io_rRegExp, re_registers& io_rRegs )
-    {
-        re_registers aPrevRegs;
-        const sal_Int32 nStart = io_rRegs.start[0];
-        do
-        {
-            const OUString sTemp = rText.copy(0,io_rRegs.end[0]-1);
-            memcpy(
-                static_cast<void*>(&aPrevRegs),
-                static_cast<void*>(&io_rRegs),
-                sizeof(re_registers));
-            memset(static_cast<void*>(&io_rRegs), 0, sizeof(re_registers));
-            io_rRegExp.set_line(sTemp.getStr(),sTemp.getLength());
-            io_rRegExp.re_search(&io_rRegs,nStart);
-        } while(io_rRegs.num_of_match);
-
-        memcpy(static_cast<void*>(&io_rRegs),static_cast<void*>(&aPrevRegs),
-               sizeof(re_registers));
-        io_rRegExp.set_line(rText.getStr(),rText.getLength());
-    }
-
     //Find all special tag in a string using a regular expression
     static void lcl_FindAllTag(
         const OString& rText,std::vector<OString>& o_vFoundTags )
     {
-        ::com::sun::star::util::SearchOptions aOptions;
-        aOptions.algorithmType =
-            ::com::sun::star::util::SearchAlgorithms_REGEXP;
-        aOptions.searchFlag =
-            ::com::sun::star::util::SearchFlags::NORM_WORD_ONLY;
-        aOptions.searchString = "<[/]?[a-z_\\-]+(| +[a-z]+=\".*\") *[/]?>";
-        ::com::sun::star::uno::Reference<
-             ::com::sun::star::i18n::XExtendedTransliteration > xTrans;
 
-        Regexpr aRegExp(aOptions,xTrans);
-        const OUString sTemp(OStringToOUString(rText,RTL_TEXTENCODING_UTF8));
-        aRegExp.set_line(sTemp.getStr(),sTemp.getLength());
+        UErrorCode nIcuErr = U_ZERO_ERROR;
+        sal_uInt32 nSearchFlags = UREGEX_DOTALL | UREGEX_CASE_INSENSITIVE;
+        OUString sLocaleText( OStringToOUString(rText,RTL_TEXTENCODING_UTF8) );
+        OUString sPattern( "<[/]??[a-z_-]+?(?:| +[a-z]+?=\".*?\") *[/]??>" );
+        UnicodeString sSearchPat(
+            reinterpret_cast<const UChar*>(
+                sPattern.getStr()), sPattern.getLength() );
+        UnicodeString sSource(
+            reinterpret_cast<const UChar*>(
+                sLocaleText.getStr()), sLocaleText.getLength() );
 
-        re_registers aRegs;
-        memset(static_cast<void*>(&aRegs), 0, sizeof(re_registers));
-        sal_Int32 nStart = 0;
-        o_vFoundTags.resize(0);
-        aRegExp.re_search(&aRegs,nStart);
-        while(aRegs.num_of_match)
+        RegexMatcher aRegexMatcher( sSearchPat, nSearchFlags, nIcuErr );
+        aRegexMatcher.reset( sSource );
+        int64_t nStartPos = 0;
+        while( aRegexMatcher.find(nStartPos, nIcuErr) &&
+            nIcuErr == U_ZERO_ERROR )
         {
-            lcl_Minimize(sTemp,aRegExp,aRegs);
+            UnicodeString sMatch =
+                aRegexMatcher.group(nIcuErr);
             o_vFoundTags.push_back(
                 OUStringToOString(
-                    sTemp.copy(aRegs.start[0],aRegs.end[0]-aRegs.start[0]),
+                    OUString(
+                        reinterpret_cast<const sal_Unicode*>(
+                            sMatch.getBuffer()),sMatch.length()),
                     RTL_TEXTENCODING_UTF8));
-            nStart = aRegs.end[0];
-            memset(static_cast<void*>(&aRegs), 0, sizeof(re_registers));
-            aRegExp.re_search(&aRegs,nStart);
+            nStartPos = aRegexMatcher.start(nIcuErr)+1;
         }
     }
 

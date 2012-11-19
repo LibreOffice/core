@@ -33,7 +33,6 @@ $(eval $(call gb_Executable_set_include,transex3,\
 
 $(eval $(call gb_Executable_use_libraries,transex3,\
     sal \
-    i18nregexp \
 ))
 
 $(eval $(call gb_Executable_add_scanners,transex3,\
@@ -48,6 +47,11 @@ $(eval $(call gb_Executable_use_static_libraries,transex3,\
 
 $(eval $(call gb_Executable_add_exception_objects,transex3,\
     l10ntools/source/export \
+))
+
+$(eval $(call gb_Executable_use_externals,transex3,\
+    icuuc \
+    $(if $(filter MSC,$(COM)),icuin,icui18n) \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
