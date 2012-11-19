@@ -28,7 +28,6 @@
 $(eval $(call gb_Package_Package,sal_inc,$(SRCDIR)/sal/inc))
 
 $(eval $(call gb_Package_add_file,sal_inc,inc/protectorfactory.hxx,cppunittester/protectorfactory.hxx))
-$(eval $(call gb_Package_add_file,sal_inc,inc/osl/armarch.h,osl/armarch.h))
 $(eval $(call gb_Package_add_file,sal_inc,inc/osl/conditn.h,osl/conditn.h))
 $(eval $(call gb_Package_add_file,sal_inc,inc/osl/conditn.hxx,osl/conditn.hxx))
 $(eval $(call gb_Package_add_file,sal_inc,inc/osl/diagnose.h,osl/diagnose.h))

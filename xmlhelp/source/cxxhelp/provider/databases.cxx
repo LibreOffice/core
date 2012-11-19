@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "db.hxx"
 #include <osl/diagnose.h>
@@ -73,7 +64,6 @@
 #include "urlparameter.hxx"
 
 using namespace chelp;
-using namespace berkeleydbproxy;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
@@ -187,8 +177,6 @@ Databases::~Databases()
         DatabasesTable::iterator it = m_aDatabases.begin();
         while( it != m_aDatabases.end() )
         {
-            if( it->second )
-                it->second->close( 0 );
             delete it->second;
             ++it;
         }
@@ -575,7 +563,7 @@ rtl::OUString Databases::country( const rtl::OUString& Language )
 
 
 
-Db* Databases::getBerkeley( const rtl::OUString& Database,
+helpdatafileproxy::Hdf* Databases::getHelpDataFile( const rtl::OUString& Database,
                             const rtl::OUString& Language, bool helpText,
                             const rtl::OUString* pExtensionPath )
 {
@@ -594,13 +582,13 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
         key = *pExtensionPath + Language + dbFileName;      // make unique, don't change language
 
     std::pair< DatabasesTable::iterator,bool > aPair =
-        m_aDatabases.insert( DatabasesTable::value_type( key,(Db*)0 ) );
+        m_aDatabases.insert( DatabasesTable::value_type( key, 0 ) );
 
     DatabasesTable::iterator it = aPair.first;
 
     if( aPair.second && ! it->second )
     {
-        Db* table = new Db();
+        helpdatafileproxy::Hdf* pHdf = 0;
 
         rtl::OUString fileURL;
         if( pExtensionPath )
@@ -608,25 +596,18 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
         else
             fileURL = getInstallPathAsURL() + key;
 
-        rtl::OUString fileNameDBHelp( fileURL );
+        rtl::OUString fileNameHDFHelp( fileURL );
         //Extensions always use the new format
         if( pExtensionPath != NULL )
-            fileNameDBHelp += rtl::OUString( "_" );
+            fileNameHDFHelp += rtl::OUString( "_" );
         //SimpleFileAccess takes file URLs as arguments!!! Using filenames works accidentally but
         //fails for example when using long path names on Windows (starting with \\?\)
-        if( m_xSFA->exists( fileNameDBHelp ) )
+        if( m_xSFA->exists( fileNameHDFHelp ) )
         {
-            DBHelp* pDBHelp = new DBHelp( fileNameDBHelp, m_xSFA );
-            table->setDBHelp( pDBHelp );
-        }
-        else if( table->open( 0,fileURL, DB_BTREE,DB_RDONLY,0644 ) )
-        {
-            table->close( 0 );
-            delete table;
-            table = 0;
+            pHdf = new helpdatafileproxy::Hdf( fileNameHDFHelp, m_xSFA );
         }
 
-        it->second = table;
+        it->second = pHdf;
     }
 
     return it->second;
@@ -734,18 +715,18 @@ namespace chelp {
 
 
 KeywordInfo::KeywordElement::KeywordElement( Databases *pDatabases,
-                                             Db* pDb,
+                                             helpdatafileproxy::Hdf* pHdf,
                                              rtl::OUString& ky,
                                              rtl::OUString& data )
     : key( ky )
 {
     pDatabases->replaceName( key );
-    init( pDatabases,pDb,data );
+    init( pDatabases,pHdf,data );
 }
 
 
 
-void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl::OUString& ids )
+void KeywordInfo::KeywordElement::init( Databases *pDatabases,helpdatafileproxy::Hdf* pHdf,const rtl::OUString& ids )
 {
     const sal_Unicode* idstr = ids.getStr();
     std::vector< rtl::OUString > id,anchor;
@@ -770,8 +751,6 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
     listAnchor.realloc( id.size() );
     listTitle.realloc( id.size() );
 
-    Dbt data;
-    DBData aDBData;
     const sal_Char* pData = NULL;
     const sal_Char pEmpty[] = "";
 
@@ -781,25 +760,13 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
         listAnchor[i] = anchor[i];
 
         pData = pEmpty;
-        if( pDb )
+        if( pHdf )
         {
             rtl::OString idi( id[i].getStr(),id[i].getLength(),RTL_TEXTENCODING_UTF8 );
-            DBHelp* pDBHelp = pDb->getDBHelp();
-            if( pDBHelp != NULL )
-            {
-                bool bSuccess = pDBHelp->getValueForKey( idi, aDBData );
-                if( bSuccess )
-                {
-                    pData = aDBData.getData();
-                }
-            }
-            else
-            {
-                Dbt key_( static_cast< void* >( const_cast< sal_Char* >( idi.getStr() ) ),
-                         idi.getLength() );
-                pDb->get( 0,&key_,&data,0 );
-                pData = static_cast<sal_Char*>( data.get_data() );
-            }
+            helpdatafileproxy::HDFData aHDFData;
+            bool bSuccess = pHdf->getValueForKey( idi, aHDFData );
+            if( bSuccess )
+                pData = aHDFData.getData();
         }
 
         DbtToStringConverter converter( pData );
@@ -897,30 +864,25 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
         bool bExtension = false;
         while( !(fileURL = aDbFileIt.nextDbFile( bExtension )).isEmpty() )
         {
-            Db table;
-
-            rtl::OUString fileNameDBHelp( fileURL );
+            rtl::OUString fileNameHDFHelp( fileURL );
             if( bExtension )
-                fileNameDBHelp += rtl::OUString( "_" );
-            if( m_xSFA->exists( fileNameDBHelp ) )
+                fileNameHDFHelp += rtl::OUString::createFromAscii( "_" );
+            if( m_xSFA->exists( fileNameHDFHelp ) )
             {
-                DBHelp aDBHelp( fileNameDBHelp, m_xSFA );
-
-                DBData aKey;
-                DBData aValue;
-                if( aDBHelp.startIteration() )
+                helpdatafileproxy::Hdf aHdf( fileNameHDFHelp, m_xSFA );
+                helpdatafileproxy::HDFData aKey;
+                helpdatafileproxy::HDFData aValue;
+                if( aHdf.startIteration() )
                 {
-                    Db* idmap = getBerkeley( Database,Language );
-
-                    DBHelp* pDBHelp = idmap->getDBHelp();
-                    if( pDBHelp != NULL )
+                    helpdatafileproxy::Hdf* pHdf = getHelpDataFile( Database,Language );
+                    if( pHdf != NULL )
                     {
                         bool bOptimizeForPerformance = true;
-                        pDBHelp->releaseHashMap();
-                        pDBHelp->createHashMap( bOptimizeForPerformance );
+                        pHdf->releaseHashMap();
+                        pHdf->createHashMap( bOptimizeForPerformance );
                     }
 
-                    while( aDBHelp.getNextKeyAndValue( aKey, aValue ) )
+                    while( aHdf.getNextKeyAndValue( aKey, aValue ) )
                     {
                         rtl::OUString keyword( aKey.getData(), aKey.getSize(),
                                                RTL_TEXTENCODING_UTF8 );
@@ -935,59 +897,16 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                             continue;
 
                         aVector.push_back( KeywordInfo::KeywordElement( this,
-                                                                        idmap,
+                                                                        pHdf,
                                                                         keyword,
                                                                         doclist ) );
                     }
-                    aDBHelp.stopIteration();
+                    aHdf.stopIteration();
 
-                    if( pDBHelp != NULL )
-                        pDBHelp->releaseHashMap();
+                    if( pHdf != NULL )
+                        pHdf->releaseHashMap();
                 }
             }
-
-            else if( 0 == table.open( 0,fileURL,DB_BTREE,DB_RDONLY,0644 ) )
-            {
-                Db* idmap = getBerkeley( Database,Language );
-
-                bool first = true;
-
-                Dbc* cursor = 0;
-                table.cursor( 0,&cursor,0 );
-                Dbt key_,data;
-                key_.set_flags( DB_DBT_MALLOC ); // Initially the cursor must allocate the necessary memory
-                data.set_flags( DB_DBT_MALLOC );
-                while( cursor && DB_NOTFOUND != cursor->get( &key_,&data,DB_NEXT ) )
-                {
-                    rtl::OUString keyword( static_cast<sal_Char*>(key_.get_data()),
-                                           key_.get_size(),
-                                           RTL_TEXTENCODING_UTF8 );
-                    rtl::OUString doclist( static_cast<sal_Char*>(data.get_data()),
-                                           data.get_size(),
-                                           RTL_TEXTENCODING_UTF8 );
-
-                    bool bBelongsToDatabase = true;
-                    if( bExtension )
-                        bBelongsToDatabase = checkModuleMatchForExtension( Database, doclist );
-
-                    if( !bBelongsToDatabase )
-                        continue;
-
-                    aVector.push_back( KeywordInfo::KeywordElement( this,
-                                                                    idmap,
-                                                                    keyword,
-                                                                    doclist ) );
-                    if( first )
-                    {
-                        key_.set_flags( DB_DBT_REALLOC );
-                        data.set_flags( DB_DBT_REALLOC );
-                        first = false;
-                    }
-                }
-
-                if( cursor ) cursor->close();
-            }
-            table.close( 0 );
         }
 
         // sorting
@@ -1297,8 +1216,7 @@ void Databases::setActiveText( const rtl::OUString& Module,
     rtl::OString id( Id.getStr(),Id.getLength(),RTL_TEXTENCODING_UTF8 );
     EmptyActiveTextSet::iterator it = m_aEmptyActiveTextSet.find( id );
     bool bFoundAsEmpty = ( it != m_aEmptyActiveTextSet.end() );
-    Dbt data;
-    DBData aDBData;
+    helpdatafileproxy::HDFData aHDFData;
 
     int nSize = 0;
     const sal_Char* pData = NULL;
@@ -1306,27 +1224,12 @@ void Databases::setActiveText( const rtl::OUString& Module,
     bool bSuccess = false;
     if( !bFoundAsEmpty )
     {
-        Db* db;
-        Dbt key( static_cast< void* >( const_cast< sal_Char* >( id.getStr() ) ),id.getLength() );
-        while( !bSuccess && (db = aDbIt.nextDb()) != NULL )
+        helpdatafileproxy::Hdf* pHdf = 0;
+        while( !bSuccess && (pHdf = aDbIt.nextHdf()) != NULL )
         {
-            DBHelp* pDBHelp = db->getDBHelp();
-            if( pDBHelp != NULL )
-            {
-                bSuccess = pDBHelp->getValueForKey( id, aDBData );
-                nSize = aDBData.getSize();
-                pData = aDBData.getData();
-            }
-            else
-            {
-                int err = db->get( 0, &key, &data, 0 );
-                if( err == 0 )
-                {
-                    bSuccess = true;
-                    nSize = data.get_size();
-                    pData = static_cast<sal_Char*>( data.get_data() );
-                }
-            }
+            bSuccess = pHdf->getValueForKey( id, aHDFData );
+            nSize = aHDFData.getSize();
+            pData = aHDFData.getData();
         }
     }
 
@@ -1648,16 +1551,16 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< ::r
 //===================================================================
 // class DataBaseIterator
 
-Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_pExtensionRegistryPath )
+helpdatafileproxy::Hdf* DataBaseIterator::nextHdf( rtl::OUString* o_pExtensionPath, rtl::OUString* o_pExtensionRegistryPath )
 {
-    Db* pRetDb = NULL;
+    helpdatafileproxy::Hdf* pRetHdf = NULL;
 
-    while( !pRetDb && m_eState != END_REACHED )
+    while( !pRetHdf && m_eState != END_REACHED )
     {
         switch( m_eState )
         {
             case INITIAL_MODULE:
-                pRetDb = m_rDatabases.getBerkeley( m_aInitialModule, m_aLanguage, m_bHelpText );
+                pRetHdf = m_rDatabases.getHelpDataFile( m_aInitialModule, m_aLanguage, m_bHelpText );
                 m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
                 break;
 
@@ -1671,7 +1574,7 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_
                 Reference< deployment::XPackage > xHelpPackage = implGetNextUserHelpPackage( xParentPackageBundle );
                 if( !xHelpPackage.is() )
                     break;
-                pRetDb = implGetDbFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
+                pRetHdf = implGetHdfFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
                 break;
             }
 
@@ -1682,7 +1585,7 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_
                 if( !xHelpPackage.is() )
                     break;
 
-                pRetDb = implGetDbFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
+                pRetHdf = implGetHdfFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
                 break;
             }
 
@@ -1693,7 +1596,7 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_
                 if( !xHelpPackage.is() )
                     break;
 
-                pRetDb = implGetDbFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
+                pRetHdf = implGetHdfFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
                 break;
             }
 
@@ -1703,10 +1606,10 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_
         }
     }
 
-    return pRetDb;
+    return pRetHdf;
 }
 
-Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xPackage,
+helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( Reference< deployment::XPackage > xPackage,
             rtl::OUString* o_pExtensionPath, rtl::OUString* o_pExtensionRegistryPath )
 {
 
@@ -1720,7 +1623,7 @@ Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xP
         return NULL;
     }
 
-    Db* pRetDb = NULL;
+    helpdatafileproxy::Hdf* pRetHdf = NULL;
     if (optRegData.IsPresent && !optRegData.Value.isEmpty())
     {
         rtl::OUString aRegDataUrl = rtl::OUStringBuffer(optRegData.Value).append('/').makeStringAndClear();
@@ -1728,11 +1631,11 @@ Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xP
         rtl::OUString aHelpFilesBaseName("help");
 
         rtl::OUString aUsedLanguage = m_aLanguage;
-        pRetDb = m_rDatabases.getBerkeley(
+        pRetHdf = m_rDatabases.getHelpDataFile(
             aHelpFilesBaseName, aUsedLanguage, m_bHelpText, &aRegDataUrl);
 
         // Language fallback
-        if( !pRetDb )
+        if( !pRetHdf )
         {
             ::std::vector< ::rtl::OUString > av;
             implGetLanguageVectorFromPackage( av, xPackage );
@@ -1746,7 +1649,7 @@ Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xP
             if( pFound != av.end() )
             {
                 aUsedLanguage = *pFound;
-                pRetDb = m_rDatabases.getBerkeley(
+                pRetHdf = m_rDatabases.getHelpDataFile(
                     aHelpFilesBaseName, aUsedLanguage, m_bHelpText, &aRegDataUrl);
             }
         }
@@ -1758,7 +1661,7 @@ Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xP
             *o_pExtensionRegistryPath = rtl::OUStringBuffer(xPackage->getURL()).append('/').append(aUsedLanguage).makeStringAndClear();
     }
 
-    return pRetDb;
+    return pRetHdf;
 }
 
 
@@ -2100,8 +2003,8 @@ rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemp
                     }
                 }
 
-		HelpIndexer aIndexer(aLang, aMod, aLangURL, aZipDir);
-		aIndexer.indexDocuments();
+        HelpIndexer aIndexer(aLang, aMod, aLangURL, aZipDir);
+        aIndexer.indexDocuments();
 
                 if( bIsWriteAccess )
                     aIndexFolder = implGetFileFromPackage( rtl::OUString( ".idxl" ), xPackage );

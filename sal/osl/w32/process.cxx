@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
-*
-* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
-* Copyright 2000, 2010 Oracle and/or its affiliates.
-*
-* OpenOffice.org - a multi-platform office productivity suite
-*
-* This file is part of OpenOffice.org.
-*
-* OpenOffice.org is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License version 3
-* only, as published by the Free Software Foundation.
-*
-* OpenOffice.org is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License version 3 for more details
-* (a copy is included in the LICENSE file that accompanied this code).
-*
-* You should have received a copy of the GNU Lesser General Public License
-* version 3 along with OpenOffice.org.  If not, see
-* <http://www.openoffice.org/license.html>
-* for a copy of the LGPLv3 License.
-*
-************************************************************************/
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #define UNICODE
 #include "system.h"
@@ -398,13 +389,6 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 /***************************************************************************
  * Environment
  ***************************************************************************/
-/*
-   #109941# because of a bug in the M$ unicows library we have to
-   allocate a buffer large enough to hold the requested environment
-   variable instead of testing for the required size. This wastes
-   some stack space, maybe we should revoke this work around if
-   unicows library is fixed.
-*/
 #define ENV_BUFFER_SIZE (32*1024-1)
 
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
@@ -421,6 +405,7 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
 
 oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *ustrValue)
 {
+    // set Windows environment variable
     LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
     LPCWSTR lpValue = reinterpret_cast<LPCWSTR>(ustrValue->buffer);
     if (SetEnvironmentVariableW(lpName, lpValue))
@@ -438,8 +423,8 @@ oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *u
 
 oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
 {
-    //If the second parameter is NULL, the variable is deleted from the current
-    //process's environment.
+    // delete the variable from the current process environment
+    // by setting SetEnvironmentVariable's second parameter to NULL
     LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
     if (SetEnvironmentVariableW(lpName, NULL))
     {

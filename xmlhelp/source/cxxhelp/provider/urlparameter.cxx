@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include "bufferedinputstream.hxx"
@@ -84,7 +75,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
-using namespace berkeleydbproxy;
 using namespace chelp;
 
 
@@ -210,7 +200,7 @@ void URLParameter::init( bool bDefaultLanguageIsInitialized )
 {
     (void)bDefaultLanguageIsInitialized;
 
-    m_bBerkeleyRead = false;
+    m_bHelpDataFileRead = false;
     m_bStart = false;
     m_bUseDB = true;
     m_nHitCount = 100;                // The default maximum hitcount
@@ -220,10 +210,10 @@ void URLParameter::init( bool bDefaultLanguageIsInitialized )
 rtl::OUString URLParameter::get_the_tag()
 {
     if(m_bUseDB) {
-        if( ! m_bBerkeleyRead )
-            readBerkeley();
+        if( ! m_bHelpDataFileRead )
+            readHelpDataFile();
 
-        m_bBerkeleyRead = true;
+        m_bHelpDataFileRead = true;
 
         return m_aTag;
     }
@@ -236,9 +226,9 @@ rtl::OUString URLParameter::get_the_tag()
 rtl::OUString URLParameter::get_the_path()
 {
     if(m_bUseDB) {
-        if( ! m_bBerkeleyRead )
-            readBerkeley();
-        m_bBerkeleyRead = true;
+        if( ! m_bHelpDataFileRead )
+            readHelpDataFile();
+        m_bHelpDataFileRead = true;
 
         return m_aPath;
     }
@@ -251,9 +241,9 @@ rtl::OUString URLParameter::get_the_path()
 rtl::OUString URLParameter::get_the_title()
 {
     if(m_bUseDB) {
-        if( ! m_bBerkeleyRead )
-            readBerkeley();
-        m_bBerkeleyRead = true;
+        if( ! m_bHelpDataFileRead )
+            readHelpDataFile();
+        m_bHelpDataFileRead = true;
 
         return m_aTitle;
     }
@@ -265,9 +255,9 @@ rtl::OUString URLParameter::get_the_title()
 rtl::OUString URLParameter::get_the_jar()
 {
     if(m_bUseDB) {
-        if( ! m_bBerkeleyRead )
-            readBerkeley();
-        m_bBerkeleyRead = true;
+        if( ! m_bHelpDataFileRead )
+            readHelpDataFile();
+        m_bHelpDataFileRead = true;
 
         return m_aJar;
     }
@@ -276,9 +266,7 @@ rtl::OUString URLParameter::get_the_jar()
 }
 
 
-
-
-void URLParameter::readBerkeley()
+void URLParameter::readHelpDataFile()
 {
     if( get_id().compareToAscii("") == 0 )
         return;
@@ -291,39 +279,21 @@ void URLParameter::readBerkeley()
 
     const sal_Char* pData = NULL;
 
-    Dbt data;
-    DBData aDBData;
+    helpdatafileproxy::HDFData aHDFData;
     rtl::OUString aExtensionPath;
     rtl::OUString aExtensionRegistryPath;
     while( true )
     {
-        Db* db = aDbIt.nextDb( &aExtensionPath, &aExtensionRegistryPath );
-        if( !db )
+        helpdatafileproxy::Hdf* pHdf = aDbIt.nextHdf( &aExtensionPath, &aExtensionRegistryPath );
+        if( !pHdf )
             break;
 
         rtl::OString keyStr( m_aId.getStr(),m_aId.getLength(),RTL_TEXTENCODING_UTF8 );
-
-        DBHelp* pDBHelp = db->getDBHelp();
-        if( pDBHelp != NULL )
+        bSuccess = pHdf->getValueForKey( keyStr, aHDFData );
+        if( bSuccess )
         {
-            bSuccess = pDBHelp->getValueForKey( keyStr, aDBData );
-            if( bSuccess )
-            {
-                pData = aDBData.getData();
-                break;
-            }
-        }
-        else
-        {
-            Dbt key( static_cast< void* >( const_cast< sal_Char* >( keyStr.getStr() ) ),
-                     keyStr.getLength() );
-            int err = db->get( 0,&key,&data,0 );
-            if( err == 0 )
-            {
-                bSuccess = true;
-                pData = static_cast<sal_Char*>( data.get_data() );
-                break;
-            }
+            pData = aHDFData.getData();
+            break;
         }
     }
 

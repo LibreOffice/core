@@ -30,6 +30,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,Module_DLL))
 
+$(eval $(call gb_CppunitTest_set_visibility_default,Module_DLL))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,Module_DLL,\
     sal/qa/osl/module/osl_Module_DLL \
 ))

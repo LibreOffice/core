@@ -363,6 +363,7 @@ $(eval $(foreach method,\
 	set_objcxxflags \
 	use_external \
 	use_externals \
+	set_visibility_default \
 ,\
 	$(call gb_CppunitTest__forward_to_Linktarget,$(method))\
 ))

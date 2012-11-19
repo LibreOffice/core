@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include "db.hxx"
@@ -34,25 +25,12 @@
 
 #include "com/sun/star/io/XSeekable.hpp"
 
-#include "osl/file.hxx"
-#include "osl/thread.hxx"
-using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 
-namespace berkeleydbproxy {
+namespace helpdatafileproxy {
 
-//----------------------------------------------------------------------------
-namespace db_internal
-{
-    static inline int check_error(int dberr, const char * where)
-    {
-        (void)where;
-        return dberr;
-    }
-}
-
-void DBData::copyToBuffer( const char* pSrcData, int nSize )
+void HDFData::copyToBuffer( const char* pSrcData, int nSize )
 {
     m_nSize = nSize;
     delete [] m_pBuffer;
@@ -62,9 +40,9 @@ void DBData::copyToBuffer( const char* pSrcData, int nSize )
 }
 
 
-// DBHelp
+// Hdf
 
-bool DBHelp::implReadLenAndData( const char* pData, int& riPos, DBData& rValue )
+bool Hdf::implReadLenAndData( const char* pData, int& riPos, HDFData& rValue )
 {
     bool bSuccess = false;
 
@@ -84,7 +62,7 @@ bool DBHelp::implReadLenAndData( const char* pData, int& riPos, DBData& rValue )
     return bSuccess;
 }
 
-void DBHelp::createHashMap( bool bOptimizeForPerformance )
+void Hdf::createHashMap( bool bOptimizeForPerformance )
 {
     releaseHashMap();
     if( bOptimizeForPerformance )
@@ -111,7 +89,7 @@ void DBHelp::createHashMap( bool bOptimizeForPerformance )
         int iPos = 0;
         while( iPos < nRead )
         {
-            DBData aDBKey;
+            HDFData aDBKey;
             if( !implReadLenAndData( pData, iPos, aDBKey ) )
                 break;
 
@@ -144,7 +122,7 @@ void DBHelp::createHashMap( bool bOptimizeForPerformance )
     }
 }
 
-void DBHelp::releaseHashMap( void )
+void Hdf::releaseHashMap( void )
 {
     if( m_pStringToDataMap != NULL )
     {
@@ -159,7 +137,7 @@ void DBHelp::releaseHashMap( void )
 }
 
 
-bool DBHelp::getValueForKey( const rtl::OString& rKey, DBData& rValue )
+bool Hdf::getValueForKey( const rtl::OString& rKey, HDFData& rValue )
 {
     bool bSuccess = false;
     if( !m_xSFA.is() )
@@ -227,7 +205,7 @@ bool DBHelp::getValueForKey( const rtl::OString& rKey, DBData& rValue )
     return bSuccess;
 }
 
-bool DBHelp::startIteration( void )
+bool Hdf::startIteration( void )
 {
     bool bSuccess = false;
 
@@ -252,7 +230,7 @@ bool DBHelp::startIteration( void )
     return bSuccess;
 }
 
-bool DBHelp::getNextKeyAndValue( DBData& rKey, DBData& rValue )
+bool Hdf::getNextKeyAndValue( HDFData& rKey, HDFData& rValue )
 {
     bool bSuccess = false;
 
@@ -268,7 +246,7 @@ bool DBHelp::getNextKeyAndValue( DBData& rKey, DBData& rValue )
     return bSuccess;
 }
 
-void DBHelp::stopIteration( void )
+void Hdf::stopIteration( void )
 {
     m_aItData = Sequence<sal_Int8>();
     m_pItData = NULL;
@@ -276,158 +254,6 @@ void DBHelp::stopIteration( void )
     m_iItPos = -1;
 }
 
-
-Db::Db()
-{
-    db_internal::check_error( db_create(&m_pDBP,0,0),"Db::Db" );
-    m_pDBHelp = NULL;
-}
-
-
-Db::~Db()
-{
-    if (m_pDBP)
-    {
-        // should not happen
-        // TODO: add assert
-    }
-
-    delete m_pDBHelp;
-}
-
-
-int Db::close(u_int32_t flags)
-{
-    int error = m_pDBP->close(m_pDBP,flags);
-    m_pDBP = 0;
-    return db_internal::check_error(error,"Db::close");
-}
-
-int Db::open(DB_TXN *txnid,
-             const char *file,
-             const char *database,
-             DBTYPE type,
-             u_int32_t flags,
-             int mode)
-{
-    int err = m_pDBP->open(m_pDBP,txnid,file,database,type,flags,mode);
-    return db_internal::check_error( err,"Db::open" );
-}
-
-int Db::open(DB_TXN *txnid,
-             ::rtl::OUString const & fileURL,
-             DBTYPE type,
-             u_int32_t flags,
-             int mode)
-{
-    ::rtl::OUString ouPath;
-    ::osl::FileBase::getSystemPathFromFileURL(fileURL, ouPath);
-    const ::rtl::OString sPath = ::rtl::OUStringToOString(ouPath, osl_getThreadTextEncoding());
-    return open(txnid, sPath.getStr(), 0, type, flags, mode);
-}
-
-
-
-int Db::get(DB_TXN *txnid, Dbt *key, Dbt *data, u_int32_t flags)
-{
-    int err = m_pDBP->get(m_pDBP,txnid,key,data,flags);
-
-    // these are non-exceptional outcomes
-    if (err != DB_NOTFOUND && err != DB_KEYEMPTY)
-        db_internal::check_error( err,"Db::get" );
-
-    return err;
-}
-
-int Db::cursor(DB_TXN *txnid, Dbc **cursorp, u_int32_t flags)
-{
-    DBC * dbc = 0;
-    int error = m_pDBP->cursor(m_pDBP,txnid,&dbc,flags);
-
-    if (!db_internal::check_error(error,"Db::cursor"))
-        *cursorp = new Dbc(dbc);
-
-    return error;
-}
-
-//----------------------------------------------------------------------------
-
-Dbc::Dbc(DBC * dbc)
-: m_pDBC(dbc)
-{
-}
-
-Dbc::~Dbc()
-{
-}
-
-int Dbc::close()
-{
-    int err = m_pDBC->c_close(m_pDBC);
-    delete this;
-    return db_internal::check_error( err,"Dbcursor::close" );
-}
-
-int Dbc::get(Dbt *key, Dbt *data, u_int32_t flags)
-{
-    int err = m_pDBC->c_get(m_pDBC,key,data,flags);
-
-    // these are non-exceptional outcomes
-    if (err != DB_NOTFOUND && err != DB_KEYEMPTY)
-        db_internal::check_error( err, "Dbcursor::get" );
-
-    return err;
-}
-
-//----------------------------------------------------------------------------
-
-
-Dbt::Dbt()
-{
-    using namespace std;
-    DBT * thispod = this;
-    memset(thispod, 0, sizeof *thispod);
-}
-
-
-Dbt::Dbt(void *data_arg, u_int32_t size_arg)
-{
-    using namespace std;
-    DBT * thispod = this;
-    memset(thispod, 0, sizeof *thispod);
-    this->set_data(data_arg);
-    this->set_size(size_arg);
-}
-
-Dbt::~Dbt()
-{
-}
-
-void * Dbt::get_data() const
-{
-    return this->data;
-}
-
-void Dbt::set_data(void *value)
-{
-    this->data = value;
-}
-
-u_int32_t Dbt::get_size() const
-{
-    return this->size;
-}
-
-void Dbt::set_size(u_int32_t value)
-{
-    this->size = value;
-}
-
-void Dbt::set_flags(u_int32_t value)
-{
-    this->flags = value;
-}
-
-} // namespace ecomp
+} // end of namespace helpdatafileproxy
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
