@@ -311,8 +311,9 @@ bool ScOrcusFiltersImpl::loadXMLStructure(
     if (aStrm.empty())
         return false;
 
-    orcus::xmlns_repository aNsRepo; // xml namespace repository.
-    orcus::xml_structure_tree aXmlTree(aNsRepo);
+    orcus::xmlns_repository repo; // xml namespace repository.
+    orcus::xmlns_context cxt = repo.create_context();
+    orcus::xml_structure_tree aXmlTree(cxt);
     try
     {
         aXmlTree.parse(&aStrm[0], aStrm.size());
