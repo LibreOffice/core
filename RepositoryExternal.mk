@@ -1415,51 +1415,6 @@ define gb_LinkTarget__use_pixbuf
 $(error gb_LinkTarget__use_pixbuf should not be used any more)
 endef
 
-ifeq ($(SYSTEM_DB),YES)
-
-define gb_LinkTarget__use_berkeleydb
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(filter -I%,$(SYSTEM_DB_CFLAGS)) \
-)
-
-$(call gb_LinkTarget_add_defs,$(1),\
-	$(filter -D%,$(SYSTEM_DB_CFLAGS)) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	-l$(DB_LIB) \
-)
-
-endef
-
-else # !SYSTEM_DB
-
-ifneq ($(OS),WNT)
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	db-4.7 \
-))
-else
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	db47 \
-))
-endif
-
-define gb_LinkTarget__use_berkeleydb
-ifneq ($(OS),WNT)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	db-4.7 \
-)
-else
-$(call gb_LinkTarget_use_libraries,$(1),\
-	db47 \
-)
-endif
-
-endef
-
-endif # SYSTEM_DB
-
 ifeq ($(SYSTEM_LIBPNG),YES)
 
 define gb_LinkTarget__use_png

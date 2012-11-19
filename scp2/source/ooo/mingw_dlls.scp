@@ -67,12 +67,6 @@ MINGW_DLL( gid_Brand_File_Lib_Mingw_Libxml2, MINGW_LIBXML_DLL )
 #endif
 #endif
 
-#ifdef SYSTEM_DB
-#ifdef NEEDS_MINGW_DB_DLL
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libdb, MINGW_DB_DLL )
-#endif
-#endif
-
 #if defined SYSTEM_CURL || defined SYSTEM_NSS
 #ifdef NEEDS_MINGW_NSPR4_DLL
 MINGW_DLL( gid_Brand_File_Lib_Mingw_Libnspr,     MINGW_NSPR4_DLL )

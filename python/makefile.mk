@@ -129,12 +129,6 @@ PATCH_FILES= \
 	     Python-2.6.2-cross.patch \
 	     Python-2.6.2-cross.fix-configure.patch \
 
-.IF "$(SYSTEM_DB)" != "YES"
-PATCH_FILES += \
-	       Python-2.6.1-cross.berkeleydb.patch \
-
-.ENDIF
-
 BUILD_DIR=
 MYCWD=$(shell @pwd)/$(INPATH)/misc/build
 .IF "$(PYTHON_FOR_BUILD)" == ""

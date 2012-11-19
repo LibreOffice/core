@@ -216,7 +216,6 @@ xsltml\
 zlib\
 
 dmake_modules:=\
-berkeleydb\
 cppunit\
 crashrep\
 external\

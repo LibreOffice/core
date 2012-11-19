@@ -76,12 +76,6 @@ $(eval $(call gb_Library_use_externals,merged,\
 ))
 endif
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-$(eval $(call gb_Library_use_externals,merged,\
-	berkeleydb \
-))
-endif
-
 ifneq ($(OS),IOS)
 $(eval $(call gb_Library_use_libraries,merged,\
 	jvmaccess \

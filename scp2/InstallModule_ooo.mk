@@ -51,7 +51,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_CAIRO \
 	SYSTEM_CLUCENE \
 	SYSTEM_CURL \
-	SYSTEM_DB \
 	SYSTEM_EXPAT \
 	SYSTEM_GRAPHITE \
 	SYSTEM_HSQLDB \
@@ -89,7 +88,6 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 	MINGW_CAIRO_DLL \
 	MINGW_CRYPTO_DLL \
 	MINGW_CURL_DLL \
-	MINGW_DB_DLL \
 	MINGW_EXPAT_DLL \
 	MINGW_FONTCONFIG_DLL \
 	MINGW_FREETYPE_DLL \

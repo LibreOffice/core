@@ -188,13 +188,6 @@ ZLIB3RDLIB=-lz
 ZLIB3RDLIB=-lzlib
 .ENDIF
 JPEG3RDLIB=-ljpeg
-.IF "$(SYSTEM_DB)" == "YES"
-BERKELEYLIB=-l$(DB_LIB)
-.ELIF "$(GUI)$(COM)"=="WNTGCC"
-BERKELEYLIB=-ldb47
-.ELSE
-BERKELEYLIB=-ldb-4.7
-.ENDIF
 CURLLIB=-lcurl
 SFX2LIB=-lsfx$(DLLPOSTFIX)
 SFXLIB=-lsfx$(DLLPOSTFIX)
@@ -418,7 +411,6 @@ EXPAT3RDLIB=expat_xmltok.lib expat_xmlparse.lib
 EXPATASCII3RDLIB=expat_xmltok.lib ascii_expat_xmlparse.lib
 ZLIB3RDLIB=zlib.lib
 JPEG3RDLIB=jpeg.lib
-BERKELEYLIB=libdb47.lib
 CURLLIB=libcurl.lib
 CHAOSLIB=ichaos.lib
 UUILIB=iuui.lib

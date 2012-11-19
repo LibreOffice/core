@@ -1,5 +1,0 @@
-The Berkeley database.
-
-This code is used primarily for legacy UNO component registration in
-the users' directory, for some small bits in xmlhelp, and for the help
-compiler.

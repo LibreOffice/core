@@ -1379,11 +1379,6 @@ AC_ARG_WITH(system-poppler,
         [Use system poppler. (only needed for pdfimport extension)]),,
     [with_system_poppler="$with_system_libs"])
 
-AC_ARG_WITH(system-db,
-    AS_HELP_STRING([--with-system-db],
-        [Use Berkeley db already on system.]),,
-    [with_system_db="$with_system_libs"])
-
 AC_ARG_WITH(system-apache-commons,
     AS_HELP_STRING([--with-system-apache-commons],
         [Use Apache commons libraries already on system.]),,
@@ -2207,10 +2202,6 @@ AC_ARG_WITH(system-boost-for-build,
 AC_ARG_WITH(system-cppunit-for-build,
     AS_HELP_STRING([--with-system-cppunit-for-build],
         [Use cppunit already on system for build tools (cross-compilation only).]))
-
-AC_ARG_WITH(system-db-for-build,
-    AS_HELP_STRING([--with-system-db-for-build],
-        [Use db already on system for build tools (cross-compilation only).]))
 
 AC_ARG_WITH(system-expat-for-build,
     AS_HELP_STRING([--with-system-expat-for-build],
@@ -4090,7 +4081,6 @@ if test "$cross_compiling" = "yes"; then
     test -n "${with_solver_and_workdir_root}" && sub_conf_opts="$sub_conf_opts --with-solver-and-workdir-root=${with_solver_and_workdir_root}"
     test -n "$with_system_boost_for_build" && sub_conf_opts="$sub_conf_opts --with-system-boost"
     test -n "$with_system_cppunit_for_build" && sub_conf_opts="$sub_conf_opts --with-system-cppunit"
-    test -n "$with_system_db_for_build" && sub_conf_opts="$sub_conf_opts --with-system-db"
     test -n "$with_system_expat_for_build" && sub_conf_opts="$sub_conf_opts --with-system-expat"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
     test -n "$with_system_libxml_for_build" && sub_conf_opts="$sub_conf_opts --with-system-libxml"
@@ -7439,71 +7429,6 @@ AC_SUBST([MINGW_READLINE_DLL])
 AC_SUBST([MINGW_TERMCAP_DLL])
 AC_SUBST(MINGW_PYVERSION)
 AC_SUBST(MINGW_PYTHON_MAJOR_VERSION)
-
-dnl ===================================================================
-dnl Check for system Berkeley db
-dnl ===================================================================
-AC_MSG_CHECKING([which db to use])
-if test "$with_system_db" = "yes"; then
-    SYSTEM_DB=YES
-    AC_MSG_RESULT([external])
-
-    db_header=
-    for dbver in 5.3 5.1 5.0 5 4.8 4.7 4; do
-        for dash in - ''; do
-            AC_CHECK_HEADER([db$dash$dbver/db.h],
-                [ db_header="db$dash$dbver/db.h"; break 2 ])
-        done
-    done
-
-    if test -z "$db_header"; then
-        AC_CHECK_HEADER([db/db.h], [db_header='db/db.h'; dbver=''])
-    fi
-
-    if test -z "$db_header"; then
-       AC_CHECK_HEADER(db.h, [ db_header='db.h'; dbver='' ])
-    fi
-
-    if test -z "$db_header"; then
-        AC_MSG_ERROR([db.h not found. Use the correct -I flag, or install the Berkeley db development package.])
-    fi
-
-    AC_MSG_CHECKING([whether db is at least 4.1])
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <$db_header>]], [[int array[(DB_VERSION_MAJOR > 4 || (DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR >= 1))-1];]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no. you need at least db 4.1])])
-
-    SYSTEM_DB_CFLAGS="-DSYSTEM_DB_HEADER='<$db_header>'"
-
-    DB_LIB=
-    dnl At least on OpenBSD and RHEL-6 dbver is not appended to the library
-    dnl even though the headers are in a versioned dir
-    for suffix in '' '-$dbver' '$dbver' ''; do
-        AC_CHECK_LIB(db$suffix, dbopen,
-            [ DB_LIB="db$suffix"; DB_CPPLIB="db_cxx$suffix"; break ])
-        AC_CHECK_LIB(db$suffix, __db185_open,
-            [ DB_LIB="db$suffix"; DB_CPPLIB="db_cxx$suffix"; break ])
-    done
-
-    if test -z "$DB_LIB"; then
-        AC_MSG_ERROR([db library not found. Use the correct -L flag,
-or install the Berkeley db development package.])
-    fi
-
-    SCPDEFS="$SCPDEFS -DSYSTEM_DB"
-    libo_MINGW_CHECK_DLL([DB], [libdb])
-elif test $_os != iOS -a $_os != Android; then
-    AC_MSG_RESULT([internal])
-    SYSTEM_DB=NO
-    BERKELEYDB_TARBALL="d70951c80dabecc2892c919ff5d07172-db-4.7.25.NC-custom.tar.gz"
-    BUILD_TYPE="$BUILD_TYPE BERKELEYDB"
-else
-   AC_MSG_RESULT([none])
-fi
-AC_SUBST(SYSTEM_DB)
-AC_SUBST(SYSTEM_DB_CFLAGS)
-AC_SUBST(DB_LIB)
-AC_SUBST(DB_CPPLIB)
-AC_SUBST(BERKELEYDB_TARBALL)
-AC_SUBST([MINGW_DB_DLL])
 
 AC_MSG_CHECKING([whether to build the MySQL Connector extension])
 if test "x$enable_ext_mysql_connector" = "xyes" -a "x$enable_extension_integration" != "xno"; then
@@ -12423,8 +12348,6 @@ AC_SUBST(LO_PATH)
 BUILD_TARBALLS=
 # Ugly hack to get what we need for build platform into ooo.lst
 if test "$CROSS_COMPILING" = "YES" ; then
-    # BERKELEYDB_TARBALL
-    BUILD_TARBALLS="$BUILD_TARBALLS d70951c80dabecc2892c919ff5d07172-db-4.7.25.NC-custom.tar.gz" 
     # ICU_DATA_SUBSET_ZIP
     BUILD_TARBALLS="$BUILD_TARBALLS fc188d2ed5c2cbcf7a021b34b9f88478-icudt49l-subset.zip"
 fi
