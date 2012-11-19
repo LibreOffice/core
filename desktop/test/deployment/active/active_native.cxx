@@ -28,12 +28,13 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/awt/MessageBoxButtons.hpp"
 #include "com/sun/star/awt/Rectangle.hpp"
 #include "com/sun/star/awt/Toolkit.hpp"
 #include "com/sun/star/awt/XMessageBox.hpp"
-#include "com/sun/star/awt/XMessageBoxFactory.hpp"
 #include "com/sun/star/awt/XWindowPeer.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/frame/DispatchDescriptor.hpp"
@@ -43,7 +44,6 @@
 #include "com/sun/star/frame/XFrame.hpp"
 #include "com/sun/star/frame/XStatusListener.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/registry/XRegistryKey.hpp"
 #include "com/sun/star/uno/DeploymentException.hpp"
@@ -57,11 +57,11 @@
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/implementationentry.hxx"
+#include "cppuhelper/supportsservice.hxx"
 #include "cppuhelper/weak.hxx"
-#include "osl/diagnose.h"
 #include "rtl/textenc.h"
-#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 #include "sal/types.h"
 #include "uno/lbnames.h"
 
@@ -80,32 +80,32 @@ public:
         SAL_THROW((css::uno::Exception))
     { return static_cast< cppu::OWeakObject * >(new Provider(xContext)); }
 
-    static rtl::OUString SAL_CALL static_getImplementationName();
+    static OUString SAL_CALL static_getImplementationName();
 
-    static css::uno::Sequence< rtl::OUString > SAL_CALL
+    static css::uno::Sequence< OUString > SAL_CALL
     static_getSupportedServiceNames();
 
 private:
     Provider(
         css::uno::Reference< css::uno::XComponentContext > const & context):
-        context_(context) { OSL_ASSERT(context.is()); }
+        context_(context) { assert(context.is()); }
 
     virtual ~Provider() {}
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     { return static_getImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
-    { return ServiceName == getSupportedServiceNames()[0]; } //TODO
+    { return cppu::supportsService(this, ServiceName); }
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
     { return static_getSupportedServiceNames(); }
 
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
-        css::util::URL const &, rtl::OUString const &, sal_Int32)
+        css::util::URL const &, OUString const &, sal_Int32)
         throw (css::uno::RuntimeException);
 
     virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
@@ -116,39 +116,31 @@ private:
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
 
-rtl::OUString Provider::static_getImplementationName() {
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.test.deployment.active_native"));
+OUString Provider::static_getImplementationName() {
+    return rtl::OUString("com.sun.star.comp.test.deployment.active_native");
 }
 
-css::uno::Sequence< rtl::OUString > Provider::static_getSupportedServiceNames()
+css::uno::Sequence< OUString > Provider::static_getSupportedServiceNames()
 {
-    rtl::OUString name(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.test.deployment.active_native"));
-    return css::uno::Sequence< rtl::OUString >(&name, 1);
+    OUString name("com.sun.star.test.deployment.active_native");
+    return css::uno::Sequence< OUString >(&name, 1);
 }
 
 css::uno::Reference< css::frame::XDispatch > Provider::queryDispatch(
-    css::util::URL const &, rtl::OUString const &, sal_Int32)
+    css::util::URL const &, OUString const &, sal_Int32)
     throw (css::uno::RuntimeException)
 {
     css::uno::Reference< css::frame::XDispatch > dispatch;
     if (!(context_->getValueByName(
-              rtl::OUString(
-                  RTL_CONSTASCII_USTRINGPARAM(
-                      "/singletons/com.sun.star.test.deployment."
-                      "active_native_singleton"))) >>=
+              "/singletons/com.sun.star.test.deployment."
+              "active_native_singleton") >>=
           dispatch) ||
         !dispatch.is())
     {
         throw css::uno::DeploymentException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "component context fails to supply singleton"
-                    " com.sun.star.test.deployment.active_native_singleton of"
-                    " type com.sun.star.frame.XDispatch")),
+            "component context fails to supply singleton"
+            " com.sun.star.test.deployment.active_native_singleton of type"
+            " com.sun.star.frame.XDispatch",
             context_);
     }
     return dispatch;
@@ -180,28 +172,28 @@ public:
         SAL_THROW((css::uno::Exception))
     { return static_cast< cppu::OWeakObject * >(new Dispatch(xContext)); }
 
-    static rtl::OUString SAL_CALL static_getImplementationName();
+    static OUString SAL_CALL static_getImplementationName();
 
-    static css::uno::Sequence< rtl::OUString > SAL_CALL
+    static css::uno::Sequence< OUString > SAL_CALL
     static_getSupportedServiceNames()
-    { return css::uno::Sequence< rtl::OUString >(); }
+    { return css::uno::Sequence< OUString >(); }
 
 private:
     Dispatch(
         css::uno::Reference< css::uno::XComponentContext > const & context):
-        context_(context) { OSL_ASSERT(context.is()); }
+        context_(context) { assert(context.is()); }
 
     virtual ~Dispatch() {}
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     { return static_getImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const &)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
-    { return false; } //TODO
+    { return cppu::supportsService(this, ServiceName); }
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
     { return static_getSupportedServiceNames(); }
 
@@ -225,10 +217,9 @@ private:
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
 
-rtl::OUString Dispatch::static_getImplementationName() {
+OUString Dispatch::static_getImplementationName() {
     return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.test.deployment.active_native_singleton"));
+        "com.sun.star.comp.test.deployment.active_native_singleton");
 }
 
 void Dispatch::dispatch(
@@ -236,29 +227,19 @@ void Dispatch::dispatch(
     css::uno::Sequence< css::beans::PropertyValue > const &)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Reference< css::lang::XMultiComponentFactory > smgr( context_->getServiceManager(), css::uno::UNO_SET_THROW);
-    css::uno::Reference< css::awt::XToolkit > toolkit( css::awt::Toolkit::create(context_), css::uno::UNO_SET_THROW);
-
     css::uno::Reference< css::awt::XMessageBox > box(
-        css::uno::Reference< css::awt::XMessageBoxFactory >(
-            toolkit,
-            css::uno::UNO_QUERY_THROW)->createMessageBox(
-                css::uno::Reference< css::awt::XWindowPeer >(
-                    css::uno::Reference< css::frame::XFrame >(
-                        css::uno::Reference< css::frame::XDesktop >(
-                            smgr->createInstanceWithContext(
-                                rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        "com.sun.star.frame.Desktop")),
-                                context_),
-                            css::uno::UNO_QUERY_THROW)->getCurrentFrame(),
-                        css::uno::UNO_SET_THROW)->getComponentWindow(),
-                    css::uno::UNO_QUERY_THROW),
-                css::awt::Rectangle(),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("infobox")),
-                css::awt::MessageBoxButtons::BUTTONS_OK,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("active")),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("native"))),
+        css::awt::Toolkit::create(context_)->createMessageBox(
+            css::uno::Reference< css::awt::XWindowPeer >(
+                css::uno::Reference< css::frame::XFrame >(
+                    css::uno::Reference< css::frame::XDesktop >(
+                        (context_->getServiceManager()->
+                         createInstanceWithContext(
+                             "com.sun.star.frame.Desktop", context_)),
+                        css::uno::UNO_QUERY_THROW)->getCurrentFrame(),
+                    css::uno::UNO_SET_THROW)->getComponentWindow(),
+                css::uno::UNO_QUERY_THROW),
+            css::awt::Rectangle(), "infobox",
+            css::awt::MessageBoxButtons::BUTTONS_OK, "active", "native"),
         css::uno::UNO_SET_THROW);
     box->execute();
     css::uno::Reference< css::lang::XComponent >(
@@ -295,19 +276,15 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
             (css::uno::Reference< css::registry::XRegistryKey >(
                 static_cast< css::registry::XRegistryKey * >(pRegistryKey))->
              createKey(
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
-                 Dispatch::static_getImplementationName() +
-                 rtl::OUString(
-                     RTL_CONSTASCII_USTRINGPARAM(
-                         "/UNO/SINGLETONS/com.sun.star.test.deployment."
-                         "active_native_singleton")))),
+                 "/" + Dispatch::static_getImplementationName() +
+                 ("/UNO/SINGLETONS/com.sun.star.test.deployment."
+                  "active_native_singleton"))),
             css::uno::UNO_SET_THROW)->
             setStringValue(Dispatch::static_getImplementationName());
     } catch (const css::uno::Exception & e) {
-        (void) e;
-        OSL_TRACE(
-            "active_native component_writeInfo exception: %s",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_INFO(
+            "desktop.test",
+            "active_native component_writeInfo exception: " << e.Message);
         return false;
     }
     return true;
