@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <boost/optional.hpp>
 #include <DomainMapperTableManager.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <BorderHandler.hxx>
@@ -51,6 +52,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML, bool bImplicitMe
     m_nTableWidth(0),
     m_bOOXML( bOOXML ),
     m_bImplicitMerges(bImplicitMerges),
+    m_bPushCurrentWidth(false),
     m_pTablePropsHandler( new TablePropertiesHandler( bOOXML ) )
 {
     m_pTablePropsHandler->SetTableManager( this );
@@ -282,7 +284,21 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 break;
             }
             case NS_ooxml::LN_CT_TcPrBase_tcW:
-                break; //fixed column width is not supported
+                {
+                    // Contains unit and value, but unit is not interesting for
+                    // us, later we'll just distribute these values in a
+                    // 0..10000 scale.
+                    writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                    if( pProperties.get())
+                    {
+                        MeasureHandlerPtr pMeasureHandler(new MeasureHandler());
+                        pProperties->resolve(*pMeasureHandler);
+                        getCurrentCellWidths()->push_back(pMeasureHandler->getMeasureValue());
+                        if (getTableDepthDifference() > 0)
+                            m_bPushCurrentWidth = true;
+                    }
+                }
+                break;
             case NS_ooxml::LN_CT_TrPrBase_cnfStyle:
                 {
                     TablePropertyMapPtr pProps( new TablePropertyMap );
@@ -338,6 +354,11 @@ boost::shared_ptr< vector< sal_Int32 > > DomainMapperTableManager::getCurrentSpa
     return m_aGridSpans.back( );
 }
 
+boost::shared_ptr< vector< sal_Int32 > > DomainMapperTableManager::getCurrentCellWidths( )
+{
+    return m_aCellWidths.back( );
+}
+
 const OUString& DomainMapperTableManager::getTableVertAnchor() const
 {
     return m_sTableVertAnchor;
@@ -347,18 +368,33 @@ void DomainMapperTableManager::startLevel( )
 {
     DomainMapperTableManager_Base_t::startLevel( );
 
+    // If requested, pop the value that was pushed too early.
+    boost::optional<sal_Int32> oCurrentWidth;
+    if (m_bPushCurrentWidth && !m_aCellWidths.empty() && !m_aCellWidths.back()->empty())
+    {
+        oCurrentWidth.reset(m_aCellWidths.back()->back());
+        m_aCellWidths.back()->pop_back();
+    }
+
     IntVectorPtr pNewGrid( new vector<sal_Int32> );
     IntVectorPtr pNewSpans( new vector<sal_Int32> );
+    IntVectorPtr pNewCellWidths( new vector<sal_Int32> );
     m_aTableGrid.push_back( pNewGrid );
     m_aGridSpans.push_back( pNewSpans );
+    m_aCellWidths.push_back( pNewCellWidths );
     m_nCell.push_back( 0 );
     m_nTableWidth = 0;
+
+    // And push it back to the right level.
+    if (oCurrentWidth)
+        m_aCellWidths.back()->push_back(*oCurrentWidth);
 }
 
 void DomainMapperTableManager::endLevel( )
 {
     m_aTableGrid.pop_back( );
     m_aGridSpans.pop_back( );
+    m_aCellWidths.pop_back( );
     m_nCell.pop_back( );
     m_nTableWidth = 0;
 
@@ -394,6 +430,7 @@ void DomainMapperTableManager::endOfRowAction()
 #endif
 
     IntVectorPtr pTableGrid = getCurrentGrid( );
+    IntVectorPtr pCellWidths = getCurrentCellWidths( );
     if(!m_nTableWidth && pTableGrid->size())
     {
         ::std::vector<sal_Int32>::const_iterator aCellIter = pTableGrid->begin();
@@ -523,11 +560,40 @@ void DomainMapperTableManager::endOfRowAction()
 #endif
         insertRowProps(pPropMap);
     }
+    else if (pCellWidths->size() > 0)
+    {
+        // If we're here, then the number of cells does not equal to the amount
+        // defined by the grid, even after taking care of
+        // gridSpan/gridBefore/gridAfter. Handle this by ignoring the grid and
+        // providing the separators based on the provided cell widths.
+        uno::Sequence< text::TableColumnSeparator > aSeparators(pCellWidths->size() - 1);
+        text::TableColumnSeparator* pSeparators = aSeparators.getArray();
+        sal_Int16 nSum = 0;
+        sal_uInt32 nPos = 0;
+
+        for (sal_uInt32 i = 0; i < pCellWidths->size() - 1; ++i)
+        {
+            nSum += (*pCellWidths.get())[i];
+            pSeparators[nPos].Position = nSum * nFullWidthRelative / nFullWidth;
+            pSeparators[nPos].IsVisible = sal_True;
+            nPos++;
+        }
+
+        TablePropertyMapPtr pPropMap( new TablePropertyMap );
+        pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, false, uno::makeAny( aSeparators ) );
+#ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->startElement("rowProperties");
+        pPropMap->dumpXml( dmapper_logger );
+        dmapper_logger->endElement();
+#endif
+        insertRowProps(pPropMap);
+    }
 
     ++m_nRow;
     m_nCell.back( ) = 0;
     m_nCellBorderIndex = 0;
     pCurrentSpans->clear();
+    pCellWidths->clear();
 
     m_nGridBefore = m_nGridAfter = 0;
 

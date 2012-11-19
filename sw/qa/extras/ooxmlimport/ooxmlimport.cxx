@@ -107,6 +107,7 @@ public:
     void testFdo52208();
     void testN785767();
     void testN773061();
+    void testN780645();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -167,6 +168,7 @@ void Test::run()
         {"fdo52208.docx", &Test::testFdo52208},
         {"n785767.docx", &Test::testN785767},
         {"n773061.docx", &Test::testN773061},
+        {"n780645.docx", &Test::testN780645},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1028,6 +1030,17 @@ void Test::testN773061()
     CPPUNIT_ASSERT_EQUAL( getProperty< sal_Int32 >( xFrame, "TopBorderDistance" ), sal_Int32( 0 ));
     CPPUNIT_ASSERT_EQUAL( getProperty< sal_Int32 >( xFrame, "RightBorderDistance" ), sal_Int32( 0 ));
     CPPUNIT_ASSERT_EQUAL( getProperty< sal_Int32 >( xFrame, "BottomBorderDistance" ), sal_Int32( 0 ));
+}
+
+void Test::testN780645()
+{
+    // The problem was that when the number of cells didn't match the grid, we
+    // didn't take care of direct cell widths.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2135), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position); // was 1999
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

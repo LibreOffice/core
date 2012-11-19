@@ -50,6 +50,10 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
 
     ::std::vector< IntVectorPtr >  m_aTableGrid;
     ::std::vector< IntVectorPtr >  m_aGridSpans;
+    /// If this is true, then we pushed a width before the next level started, and that should be carried over when starting the next level.
+    bool            m_bPushCurrentWidth;
+    /// Individual table cell width values, used only in case the number of cells doesn't match the table grid.
+    ::std::vector< IntVectorPtr >  m_aCellWidths;
 
     TablePropertiesHandler   *m_pTablePropsHandler;
     PropertyMapPtr            m_pStyleProps;
@@ -75,6 +79,7 @@ public:
 
     IntVectorPtr getCurrentGrid( );
     IntVectorPtr getCurrentSpans( );
+    IntVectorPtr getCurrentCellWidths( );
 
     const OUString& getTableStyleName() const { return m_sTableStyleName; }
     const OUString& getTableVertAnchor() const;
