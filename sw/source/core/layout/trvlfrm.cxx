@@ -2529,7 +2529,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
             }
 
             //Now the frames between, if there are any
-            sal_Bool bBody = pStartFrm->IsInDocBody();
+            bool const bBody = pStartFrm->IsInDocBody();
             const SwTableBox* pCellBox = pStartFrm->GetUpper()->IsCellFrm() ?
                                          ((SwCellFrm*)pStartFrm->GetUpper())->GetTabBox() : 0;
             const SwCntntFrm *pCntnt = pStartFrm->GetNextCntntFrm();
