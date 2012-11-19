@@ -343,8 +343,8 @@ void SalDisplay::doDestruct()
 
     if( IsDisplay() )
     {
-        delete mpInputMethod, mpInputMethod = (SalI18N_InputMethod*)ILLEGAL_POINTER;
-        delete mpKbdExtension, mpKbdExtension = (SalI18N_KeyboardExtension*)ILLEGAL_POINTER;
+        delete mpInputMethod, mpInputMethod = NULL;
+        delete mpKbdExtension, mpKbdExtension = NULL;
 
         for( unsigned int i = 0; i < m_aScreens.size(); i++ )
         {
@@ -2687,8 +2687,8 @@ SalColormap::SalColormap( sal_uInt16 nDepth )
 SalColormap::~SalColormap()
 {
 #ifdef DBG_UTIL
-    m_hColormap      = (Colormap)ILLEGAL_POINTER;
-    m_pDisplay       = (SalDisplay*)ILLEGAL_POINTER;
+    m_hColormap      = NULL;
+    m_pDisplay       = NULL;
 #endif
 }
 

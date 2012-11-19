@@ -50,12 +50,6 @@ typedef sal_uIntPtr    sal_uLong; /* Replaces type ULONG */
 #define __LOADONCALLAPI
 #endif
 
-#if defined UNX
-#define ILLEGAL_POINTER ((void*)1)
-#else
-#define ILLEGAL_POINTER NULL
-#endif
-
 // solar binary types
 
 /* Solar (portable) Binary (exchange) Type; OSI 6 subset

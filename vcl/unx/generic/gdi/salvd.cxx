@@ -177,7 +177,7 @@ sal_Bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
 X11SalVirtualDevice::X11SalVirtualDevice() :
     m_nXScreen( 0 )
 {
-    pDisplay_               = (SalDisplay*)ILLEGAL_POINTER;
+    pDisplay_               = NULL;
     pGraphics_              = NULL;
     hDrawable_              = None;
     nDX_                    = 0;
