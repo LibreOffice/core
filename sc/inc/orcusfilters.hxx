@@ -29,6 +29,15 @@ public:
 
     virtual bool importCSV(ScDocument& rDoc, const rtl::OUString& rPath) const = 0;
 
+    /**
+     * Create a context for XML file.  The context object stores session
+     * information for each unique XML file.  You must create a new context
+     * for each XML file, and never to re-use the same context for multiple
+     * XML files.
+     *
+     * The caller is responsible for deleting the instance returned from this
+     * method when it's done.
+     */
     virtual ScOrcusXMLContext* createXMLContext(ScDocument& rDoc, const rtl::OUString& rPath) const = 0;
 };
 
