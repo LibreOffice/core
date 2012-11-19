@@ -110,3 +110,7 @@ http://ooo.itc.hu/oxygenoffice/download/libreoffice/
 @TYPO_EXTENSION_PACK@
 @VALIDATOR_EXTENSION_PACK@
 @WATCH_WINDOW_EXTENSION_PACK@
+http://dev-www.libreoffice.org/mozilla/
+@MOZ_ZIP_INC@
+@MOZ_ZIP_LIB@
+@MOZ_ZIP_RUNTIME@

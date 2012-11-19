@@ -32,7 +32,7 @@ TARGET=ooo_mozab
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	settings.mk
+.INCLUDE :    settings.mk
 
 # --- Files --------------------------------------------------------
 
@@ -66,7 +66,7 @@ SYSBASE_X11:=--x-includes=$(SYSBASE)/usr/include/X11 --x-libraries=$(SYSBASE)/us
 MOZ_ENABLE_COREXFONTS=1
 MOZILLA_CONFIGURE_FLAGS +=--disable-xft
 .EXPORT : CFLAGS LDFLAGS MOZ_ENABLE_COREXFONTS
-.ENDIF			# "$(SYSBASE)"!="" && "$(OS)" == "LINUX"
+.ENDIF         # "$(SYSBASE)"!="" && "$(OS)" == "LINUX"
 
 # ----- pkg-config end -------
 
@@ -289,8 +289,15 @@ LIBIDL_PREFIX:=$(MOZ_TOOLS)/vc71
 
 .IF "$(BUILD_MOZAB)"==""
 all:
-	@echo "Never Build Mozilla."
-.ENDIF	
+    @echo "Never Build Mozilla but copy runtime files."
+    @@-$(MKDIR) $(OUT)$/zipped
+    $(COPY) $(MOZ_ZIP_INC) $(OUT)$/zipped$/
+    $(COPY) $(MOZ_ZIP_LIB) $(OUT)$/zipped$/
+    $(COPY) $(MOZ_ZIP_RUNTIME) $(OUT)$/zipped$/
+    $(COPY) $(MSVC80_MNFST) $(EXTMSV80)$/Microsoft.VC80.CRT.manifest
+    $(COPY) $(MSVC80_DLL_DIR)$/msvcp80.dll $(EXTMSV80)$/
+    $(COPY) $(MSVC80_DLL_DIR)$/msvcr80.dll $(EXTMSV80)$/
+.ENDIF    
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
@@ -354,7 +361,7 @@ $(MISC)$/build$/moztools.complete : $(MISC)$/build$/moztools.unpack
 .ENDIF
 .ENDIF # "$(GUI)"=="WNT"
 
-zip:	\
+zip:    \
     $(MISC)$/CREATETARBALL
 
 .IF "$(GUIBASE)"=="aqua" && "$(CREATE_UNIVERSAL_MAC_MOZ_ZIP)"!=""
@@ -362,7 +369,7 @@ MOZ_ARCH=$(eq,$(CPU),I i386 ppc)
 MOZILLA_CONFIGURE_FLAGS+=$(eq,$(CPU),I --target=i386-apple-darwin8 --target=powerpc-apple-darwin8)
 
 force_clean :
-	@$(IFEXIST) $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) $(THEN) echo 'ERROR: get rid of your outputdir first (or refactor the makefiles to allow incremental creation of prebuilt zips). Remember to copy already created zips to a safe place '; exit 1 $(FI)
+    @$(IFEXIST) $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) $(THEN) echo 'ERROR: get rid of your outputdir first (or refactor the makefiles to allow incremental creation of prebuilt zips). Remember to copy already created zips to a safe place '; exit 1 $(FI)
 
 zip_intel .SEQUENTIAL: force_clean $(MISC)$/CREATETARBALL
 
