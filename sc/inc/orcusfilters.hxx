@@ -46,9 +46,9 @@ class ScOrcusXMLContext
 public:
     virtual ~ScOrcusXMLContext() {}
 
-    virtual bool loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) const = 0;
+    virtual bool loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) = 0;
 
-    virtual bool importXML(const ScOrcusImportXMLParam& rParam) const = 0;
+    virtual bool importXML(const ScOrcusImportXMLParam& rParam) = 0;
 };
 
 #endif

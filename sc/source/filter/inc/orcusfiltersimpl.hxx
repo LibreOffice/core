@@ -12,6 +12,8 @@
 
 #include "orcusfilters.hxx"
 
+#include <orcus/xml_namespace.hpp>
+
 class ScOrcusFiltersImpl : public ScOrcusFilters
 {
 public:
@@ -26,13 +28,16 @@ class ScOrcusXMLContextImpl : public ScOrcusXMLContext
 {
     ScDocument& mrDoc;
     rtl::OUString maPath;
+
+    orcus::xmlns_repository maNsRepo; /// XML namespace repository for this context.
+
 public:
     ScOrcusXMLContextImpl(ScDocument& rDoc, const rtl::OUString& rPath);
     virtual ~ScOrcusXMLContextImpl();
 
-    virtual bool loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) const;
+    virtual bool loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam);
 
-    virtual bool importXML(const ScOrcusImportXMLParam& rParam) const;
+    virtual bool importXML(const ScOrcusImportXMLParam& rParam);
 };
 
 #endif

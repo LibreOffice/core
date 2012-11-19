@@ -124,7 +124,7 @@ ScOrcusXMLContextImpl::ScOrcusXMLContextImpl(ScDocument& rDoc, const OUString& r
 
 ScOrcusXMLContextImpl::~ScOrcusXMLContextImpl() {}
 
-bool ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) const
+bool ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam)
 {
     rParam.maUserDataStore.clear();
 
@@ -138,8 +138,7 @@ bool ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXM
     if (aStrm.empty())
         return false;
 
-    orcus::xmlns_repository repo; // xml namespace repository.
-    orcus::xmlns_context cxt = repo.create_context();
+    orcus::xmlns_context cxt = maNsRepo.create_context();
     orcus::xml_structure_tree aXmlTree(cxt);
     try
     {
@@ -165,7 +164,7 @@ bool ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXM
     return true;
 }
 
-bool ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam) const
+bool ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
 {
     ScOrcusFactory aFactory(mrDoc);
     OString aSysPath = ScOrcusFiltersImpl::toSystemPath(maPath);
