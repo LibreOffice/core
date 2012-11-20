@@ -27,6 +27,7 @@ class MorkDriverTest: public test::BootstrapFixture
 public:
     MorkDriverTest() : test::BootstrapFixture(false, false) {};
 
+    void checkAcceptsURL(Reference< XDriver> xDriver, const char* url, bool expected);
     void test_metadata();
     void test_select_default_all();
     void test_select_list_table_joe_doe_5();
@@ -46,6 +47,15 @@ private:
     Reference<XConnection> m_xConnection;
 };
 
+void MorkDriverTest::checkAcceptsURL(Reference< XDriver> xDriver, const char* url, bool expected)
+{
+    sal_Bool res = xDriver->acceptsURL(OUString::createFromAscii(url));
+    if (res != expected)
+    {
+        CPPUNIT_ASSERT_MESSAGE("wrong URL outcome!", true);
+    }
+}
+
 void MorkDriverTest::setUp()
 {
     test::BootstrapFixture::setUp();
@@ -63,6 +73,18 @@ void MorkDriverTest::setUp()
     {
         CPPUNIT_ASSERT_MESSAGE("cannot connect to mork driver!", xDriver.is());
     }
+
+    // bad
+    checkAcceptsURL(xDriver, "sdbc:address:macab",        false);
+    checkAcceptsURL(xDriver, "sdbc:mozab:ldap:",          false);
+    checkAcceptsURL(xDriver, "sdbc:mozab:outlook:",       false);
+    checkAcceptsURL(xDriver, "sdbc:mozab:outlookexp:",    false);
+
+    // good
+    checkAcceptsURL(xDriver, "sdbc:mozab:mozilla:",       true);
+    checkAcceptsURL(xDriver, "sdbc:mozab:thunderbird:",   true);
+    checkAcceptsURL(xDriver, "sdbc:address:mozilla:",     true);
+    checkAcceptsURL(xDriver, "sdbc:address:thunderbird:", true);
 
     m_xConnection = xDriver->connect(url, info);
     if (!m_xConnection.is())

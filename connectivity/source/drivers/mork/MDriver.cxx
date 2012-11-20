@@ -95,10 +95,42 @@ sal_Bool MorkDriver::acceptsURL(rtl::OUString const & url)
     throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=> MorkDriver::acceptsURL()" );
+    // Skip 'sdbc:mozab: part of URL
+    //
+    sal_Int32 nLen = url.indexOf(':');
+    nLen = url.indexOf(':',nLen+1);
+    OUString aAddrbookURI(url.copy(nLen+1));
+    // Get Scheme
+    nLen = aAddrbookURI.indexOf(':');
+    OUString aAddrbookScheme;
+    if ( nLen == -1 )
+    {
+        // There isn't any subschema: - but could be just subschema
+        if ( !aAddrbookURI.isEmpty() )
+        {
+            aAddrbookScheme= aAddrbookURI;
+        }
+        else if(url == OUString("sdbc:address:") )
+        {
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        aAddrbookScheme = aAddrbookURI.copy(0, nLen);
+    }
 
-    //... TODO
-    (void) url; // avoid warnings
-    return true;
+    if ((aAddrbookScheme.compareToAscii( "thunderbird" ) == 0) ||
+        (aAddrbookScheme.compareToAscii( "mozilla" ) == 0))
+    {
+        return true;
+    }
+
+    return false;
 }
 
 css::uno::Sequence< css::sdbc::DriverPropertyInfo > MorkDriver::getPropertyInfo(
