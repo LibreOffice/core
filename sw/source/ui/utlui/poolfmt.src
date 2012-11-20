@@ -70,19 +70,19 @@ String STR_POOLPAGE_LANDSCAPE
 };
 String STR_POOLCHR_LINENUM
 {
-    Text [ en-US ] = "Line numbering" ;
+    Text [ en-US ] = "Line Numbering" ;
 };
 String STR_POOLCHR_IDX_MAIN_ENTRY
 {
-    Text [ en-US ] = "Main index entry";
+    Text [ en-US ] = "Main Index Entry";
 };
 String STR_POOLCHR_FOOTNOTE_ANCHOR
 {
-    Text [ en-US ] = "Footnote anchor";
+    Text [ en-US ] = "Footnote Anchor";
 };
 String STR_POOLCHR_ENDNOTE_ANCHOR
 {
-    Text [ en-US ] = "Endnote anchor";
+    Text [ en-US ] = "Endnote Anchor";
 };
 
  // Zeichenvorlagen fuer HTML
@@ -157,27 +157,27 @@ String STR_POOLFRM_LABEL
  // -----------------
 String STR_POOLCOLL_STANDARD
 {
-    Text [ en-US ] = "Default" ;
+    Text [ en-US ] = "Default Style" ;
 };
 String STR_POOLCOLL_TEXT
 {
-    Text [ en-US ] = "Text body" ;
+    Text [ en-US ] = "Text Body" ;
 };
 String STR_POOLCOLL_TEXT_IDENT
 {
-    Text [ en-US ] = "First line indent" ;
+    Text [ en-US ] = "First Line Indent" ;
 };
 String STR_POOLCOLL_TEXT_NEGIDENT
 {
-    Text [ en-US ] = "Hanging indent" ;
+    Text [ en-US ] = "Hanging Indent" ;
 };
 String STR_POOLCOLL_TEXT_MOVE
 {
-    Text [ en-US ] = "Text body indent" ;
+    Text [ en-US ] = "Text Body Indent" ;
 };
 String STR_POOLCOLL_GREETING
 {
-    Text [ en-US ] = "Complimentary close" ;
+    Text [ en-US ] = "Complimentary Close" ;
 };
 String STR_POOLCOLL_SIGNATURE
 {
@@ -409,11 +409,11 @@ String STR_POOLCOLL_HEADER
 };
 String STR_POOLCOLL_HEADERL
 {
-    Text [ en-US ] = "Header left" ;
+    Text [ en-US ] = "Header Left" ;
 };
 String STR_POOLCOLL_HEADERR
 {
-    Text [ en-US ] = "Header right" ;
+    Text [ en-US ] = "Header Right" ;
 };
 String STR_POOLCOLL_FOOTER
 {
@@ -421,11 +421,11 @@ String STR_POOLCOLL_FOOTER
 };
 String STR_POOLCOLL_FOOTERL
 {
-    Text [ en-US ] = "Footer left" ;
+    Text [ en-US ] = "Footer Left" ;
 };
 String STR_POOLCOLL_FOOTERR
 {
-    Text [ en-US ] = "Footer right" ;
+    Text [ en-US ] = "Footer Right" ;
 };
 String STR_POOLCOLL_TABLE
 {
@@ -437,7 +437,7 @@ String STR_POOLCOLL_TABLE_HDLN
 };
 String STR_POOLCOLL_FRAME
 {
-    Text [ en-US ] = "Frame contents" ;
+    Text [ en-US ] = "Frame Contents" ;
 };
 String STR_POOLCOLL_FOOTNOTE
 {
@@ -593,19 +593,19 @@ String STR_POOLCOLL_TOX_ILLUS1
 };
 String STR_POOLCOLL_TOX_OBJECTH
 {
-    Text [ en-US ] = "Object index heading";
+    Text [ en-US ] = "Object Index Heading";
 };
 String STR_POOLCOLL_TOX_OBJECT1
 {
-    Text [ en-US ] = "Object index 1";
+    Text [ en-US ] = "Object Index 1";
 };
 String STR_POOLCOLL_TOX_TABLESH
 {
-    Text [ en-US ] = "Table index heading";
+    Text [ en-US ] = "Table Index Heading";
 };
 String STR_POOLCOLL_TOX_TABLES1
 {
-    Text [ en-US ] = "Table index 1";
+    Text [ en-US ] = "Table Index 1";
 };
 String STR_POOLCOLL_TOX_AUTHORITIESH
 {
