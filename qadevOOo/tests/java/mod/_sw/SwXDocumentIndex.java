@@ -112,7 +112,7 @@ public class SwXDocumentIndex extends TestCase {
         log.println("inserting the Index into text document");
         try {
             oText.insertTextContent(oCursor, xTC, false);
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't insert the Index", e);
         }

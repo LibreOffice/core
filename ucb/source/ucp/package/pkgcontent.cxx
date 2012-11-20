@@ -2596,15 +2596,15 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
             xParentContainer->insertByName( m_aProps.aTitle,
                                             uno::makeAny( xNew ) );
         }
-        catch ( uno::RuntimeException const & )
-        {
-            throw;
-        }
         catch ( lang::IllegalArgumentException const & )
         {
             // insertByName
             OSL_FAIL( "Content::storeData - insertByName failed!" );
             return sal_False;
+        }
+        catch ( uno::RuntimeException const & )
+        {
+            throw;
         }
         catch ( container::ElementExistException const & )
         {

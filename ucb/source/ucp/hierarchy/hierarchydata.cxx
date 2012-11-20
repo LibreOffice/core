@@ -448,16 +448,16 @@ sal_Bool HierarchyEntry::setData(
             }
         }
     }
-    catch ( uno::RuntimeException const & )
-    {
-        throw;
-    }
     catch ( lang::IllegalArgumentException const & )
     {
         // replaceByName, insertByName
 
         OSL_FAIL(
             "HierarchyEntry::setData - caught IllegalArgumentException!" );
+    }
+    catch ( uno::RuntimeException const & )
+    {
+        throw;
     }
     catch ( container::NoSuchElementException const & )
     {

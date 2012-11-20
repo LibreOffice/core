@@ -184,7 +184,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
             oViewHandler.selectFirstPage(oTextTableHandler);
             // xProgressBar.end();
         }
-        catch (Exception e)
+        catch (IllegalArgumentException e)
         {
             Logger.getLogger(ReportTextDocument.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -274,7 +274,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
                 }
             }
         }
-        catch (Exception e)
+        catch (IllegalArgumentException e)
         {
             Logger.getLogger(ReportTextDocument.class.getName()).log(Level.SEVERE, null, e);
         }

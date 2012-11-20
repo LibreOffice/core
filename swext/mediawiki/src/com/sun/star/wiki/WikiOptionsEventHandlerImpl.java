@@ -252,10 +252,6 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
             {
                 throw r;
             }
-            catch ( com.sun.star.uno.Exception e )
-            {
-                throw new WrappedTargetException( sMethod, this, e );
-            }
         }
         else if ( sMethod.equals( sAdd ) )
         {

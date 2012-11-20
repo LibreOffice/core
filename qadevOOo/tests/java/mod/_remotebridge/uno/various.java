@@ -152,8 +152,6 @@ public class various extends TestCase {
                 acceptedCall = acc.accept(connectString) ;
                 xBrdgFctr.createBridge("MyBridge", "urp",
                                             acceptedCall, xInstProv);
-            } catch (com.sun.star.lang.IllegalArgumentException e) {
-                ex = e ;
             } catch (com.sun.star.connection.ConnectionSetupException e) {
                 ex = e ;
             } catch (com.sun.star.connection.AlreadyAcceptingException e) {

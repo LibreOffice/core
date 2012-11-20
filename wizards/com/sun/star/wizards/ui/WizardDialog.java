@@ -208,7 +208,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         {
             return AnyConverter.toInt(Helper.getUnoPropertyValue(oRoadmap, "CurrentItemID"));
         }
-        catch (com.sun.star.uno.Exception exception)
+        catch (com.sun.star.lang.IllegalArgumentException exception)
         {
             exception.printStackTrace(System.err);
             return -1;
@@ -616,7 +616,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             bIsEnabled = AnyConverter.toBoolean(Helper.getUnoPropertyValue(xRoadmapItem, PropertyNames.PROPERTY_ENABLED));
             return bIsEnabled;
         }
-        catch (com.sun.star.uno.Exception exception)
+        catch (com.sun.star.lang.IllegalArgumentException exception)
         {
             exception.printStackTrace(System.err);
             return false;
@@ -706,7 +706,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         {
             return AnyConverter.toInt(Helper.getUnoPropertyValue(this.MSFDialogModel, PropertyNames.PROPERTY_STEP));
         }
-        catch (com.sun.star.uno.Exception exception)
+        catch (com.sun.star.lang.IllegalArgumentException exception)
         {
             exception.printStackTrace(System.err);
             return -1;

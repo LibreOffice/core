@@ -177,9 +177,6 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     catch (const RuntimeException &) {
         throw;
     }
-    catch (const lang::IllegalArgumentException &) {
-        throw;
-    }
     catch (const CommandFailedException &) {
         throw;
     }

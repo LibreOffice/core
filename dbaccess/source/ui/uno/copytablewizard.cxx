@@ -1568,7 +1568,6 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
             m_xInteractionHandler = xDestDocHandler;
     }
     catch( const RuntimeException& ) { throw; }
-    catch( const IllegalArgumentException& ) { throw; }
     catch( const SQLException& ) { throw; }
     catch( const Exception& )
     {

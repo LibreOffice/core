@@ -61,7 +61,7 @@ public class PlaceholderTextElement extends TextElement
                 XTextContent xTextContent = createPlaceHolder(xmsf, placeHolderText, hint);
                 xTextRange.getText().insertTextContent(xTextRange.getStart(), xTextContent, true);
             }
-            catch (Exception ex)
+            catch (com.sun.star.lang.IllegalArgumentException ex)
             {
                 ex.printStackTrace();
             }

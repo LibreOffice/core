@@ -169,7 +169,7 @@ public class AccessibleBrowseBox extends TestCase {
                 public void fireEvent() {
                     try {
                         xSelect.select(fParams);
-                    } catch (com.sun.star.uno.Exception e) {
+                    } catch (com.sun.star.lang.IllegalArgumentException e) {
                         e.printStackTrace();
                     }
                 }
