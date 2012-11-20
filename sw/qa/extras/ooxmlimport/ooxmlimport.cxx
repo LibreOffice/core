@@ -1,4 +1,4 @@
-/*
+v/*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
  * The contents of this file are subject to the Mozilla Public License Version
@@ -50,6 +50,7 @@
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/TableBorder2.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -108,6 +109,7 @@ public:
     void testN785767();
     void testN773061();
     void testN780645();
+    void testFineTableDash();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -169,6 +171,7 @@ void Test::run()
         {"n785767.docx", &Test::testN785767},
         {"n773061.docx", &Test::testN773061},
         {"n780645.docx", &Test::testN780645},
+        {"tableborder-finedash.docx", &Test::testFineTableDash}
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1009,6 +1012,7 @@ void Test::testFdo52208()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
 }
 
+
 void Test::testN785767()
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1041,6 +1045,17 @@ void Test::testN780645()
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2135), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position); // was 1999
+}
+
+void Test::testFineTableDash()
+{
+    // The problem was that finely dashed borders on tables were unsupported
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTableProperties(xTables->getByIndex(0), uno::UNO_QUERY);
+    table::TableBorder2 aBorder;
+    xTableProperties->getPropertyValue("TableBorder2") >>= aBorder;
+    CPPUNIT_ASSERT_EQUAL(aBorder.RightLine.LineStyle, table::BorderLineStyle::FINE_DASHED);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
