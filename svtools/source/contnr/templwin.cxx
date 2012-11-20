@@ -1455,8 +1455,11 @@ void SvtDocumentTemplateDialog::InitImpl( )
         aPackageBtn.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, PackageHdl_Impl ) );
         aPackageBtn.Enable(xSyncDbusSessionHelper.is());
     }
-    catch(...)
+    catch (Exception & e)
     {
+        SAL_INFO(
+            "svtools.contnr",
+            "disable Install Template Pack, caught " << e.Message);
         aPackageBtn.Enable(false);
     }
     Link aLink = LINK( this, SvtDocumentTemplateDialog, OKHdl_Impl );
@@ -1656,8 +1659,12 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog, PackageHdl_Impl)
         ::rtl::OUString sInteraction("");
         xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
     }
-    catch(...)
-    { }
+    catch (Exception & e)
+    {
+        SAL_INFO(
+            "svtools.contnr",
+            "trying Install Template Pack, caught " << e.Message);
+    }
     return 0;
 }
 
