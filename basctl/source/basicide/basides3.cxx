@@ -19,8 +19,6 @@
 
 #include <basidesh.hrc>
 
-#define _SOLAR__PRIVATE 1
-
 #include <basidesh.hxx>
 #include <baside2.hxx>
 #include <baside3.hxx>

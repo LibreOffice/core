@@ -22,7 +22,6 @@
 
 #include "basidesh.hxx"
 
-#define _SOLAR__PRIVATE 1
 #include <tools/diagnose_ex.h>
 #include <basic/basmgr.hxx>
 #include <basidesh.hrc>

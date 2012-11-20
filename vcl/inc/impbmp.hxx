@@ -50,8 +50,6 @@ public:
                         ImpBitmap();
                         ~ImpBitmap();
 
-#if _SOLAR__PRIVATE
-
 public:
 
     void                ImplSetSalBitmap( SalBitmap* pSalBitmap );
@@ -80,8 +78,6 @@ public:
 
     inline void         ImplSetChecksum( sal_uLong nChecksum ) { mnChecksum = nChecksum; }
     inline sal_uLong        ImplGetChecksum() const { return mnChecksum; }
-
-#endif // PRIVATE
 };
 
 inline Size ImpBitmap::ImplGetSourceSize() const

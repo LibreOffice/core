@@ -151,7 +151,6 @@ public:
     // calling this method delegates the responsibility to call closeinput to the caller!
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > getInputStream();
 
-#if _SOLAR__PRIVATE
     sal_Bool                setInputStream_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > &rxInputStream,
                                                  sal_Bool bSetXSeekable = sal_True );
     sal_Bool                setStream_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > &rxStream );
@@ -188,7 +187,6 @@ public:
     void                    SetRealURL_Impl( const String& rURL )  { m_aRealURL = rURL; }
     void                    SetExpireDate_Impl( const DateTime& rDateTime )  { m_aExpireDate = rDateTime; }
     void                    SetStreamValid_Impl();
-#endif
 };
 
 SV_IMPL_REF( UcbLockBytes );

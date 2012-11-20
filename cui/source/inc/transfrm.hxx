@@ -134,22 +134,18 @@ private:
     RECT_POINT          meRP;
 
     //------------------------------------
-#if _SOLAR__PRIVATE
     DECL_LINK( ChangePosProtectHdl, void * );
     DECL_LINK( ChangeSizeProtectHdl, void * );
 
     void SetMinMaxPosition();
     void GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange);
-#endif
 
-#if _SOLAR__PRIVATE
     DECL_LINK( ChangeWidthHdl, void * );
     DECL_LINK( ChangeHeightHdl, void * );
     DECL_LINK( ClickSizeProtectHdl, void * );
     DECL_LINK( ClickAutoHdl, void * );
 
     void        SetMaxSize( Rectangle aRect );
-#endif
 
 public:
     SvxPositionSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  );

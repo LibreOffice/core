@@ -56,14 +56,12 @@ class _SvxMacroTabPage_Impl;
 
 class _SvxMacroTabPage : public SfxTabPage
 {
-#if _SOLAR__PRIVATE
     DECL_STATIC_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox * );
     DECL_STATIC_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton * );
     DECL_STATIC_LINK( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTabListBox * );
 
     static long GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton* pBtn );
 
-#endif
 protected:
     _SvxMacroTabPage_Impl*      mpImpl;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xAppEvents;
@@ -133,9 +131,7 @@ private:
     const SfxItemSet*   pOptions;
     SfxItemSet*         pOutSet;
 
-#if _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( OKHdl_Impl, Button * );
-#endif
 };
 
 

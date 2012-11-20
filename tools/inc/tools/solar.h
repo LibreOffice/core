@@ -24,11 +24,6 @@
 #include <osl/endian.h>
 #include <comphelper/fileformat.h>
 
-#ifdef _SOLAR__PRIVATE
-#undef _SOLAR__PRIVATE
-#endif
-#define _SOLAR__PRIVATE 1
-
 /** Intermediate type to solve type clash with Windows headers.
  Should be removed as soon as all code parts have been reviewed
  and the correct type is known. Most of the times ULONG is meant

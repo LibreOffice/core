@@ -152,11 +152,9 @@ private:
     sal_uInt16          mnIcon;
     ImplData*       mpImplData;
 
-#if _SOLAR__PRIVATE
 public:
     using Window::ImplIsInTaskPaneList;
     SAL_DLLPRIVATE sal_Bool ImplIsInTaskPaneList( Window* pWin );
-#endif
 
 private:
     // Default construction is forbidden and not implemented.

@@ -56,14 +56,14 @@ friend class ImpItemEdit;
     bool bDontSortItems;
     bool bShowWhichIds;
     bool bShowRealValues;
+
 private:
-#if _SOLAR__PRIVATE
     void ImpCtor();
     void ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntPtr nEntryNum);
     ImpItemListRow* ImpGetEntry(sal_uIntPtr nPos) const { return aList[nPos]; }
     void ImpSaveWhich();
     void ImpRestoreWhich();
-#endif // __PRIVATE
+
 protected:
     virtual long GetRowCount() const;
     virtual sal_Bool SeekRow(long nRow);

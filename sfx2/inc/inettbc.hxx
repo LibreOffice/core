@@ -25,9 +25,8 @@
 #include <vcl/combobox.hxx>
 #include <svtools/acceleratorexecute.hxx>
 
-#if _SOLAR__PRIVATE
-
 #include <sfx2/tbxctrl.hxx>
+
 class SvtURLBox;
 
 class SfxURLToolBoxControl_Impl : public SfxToolBoxControl
@@ -60,8 +59,6 @@ public:
     virtual Window*         CreateItemWindow( Window* pParent );
     virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
 };
-
-#endif
 
 #endif
 

@@ -59,10 +59,8 @@ public:
 
     Timer&          operator=( const Timer& rTimer );
 
-//    #ifdef _SOLAR__PRIVATE
     static void ImplDeInitTimer();
     static void ImplTimerCallbackProc();
-//    #endif
 };
 
 // -------------

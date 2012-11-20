@@ -262,7 +262,6 @@ public:
     void                        AddRemoveClipboardListener( const com::sun::star::uno::Reference < com::sun::star::datatransfer::clipboard::XClipboardListener>&, sal_Bool );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardNotifier > GetClipboardNotifier();
 
-#if _SOLAR__PRIVATE
     SAL_DLLPRIVATE SfxInPlaceClient* GetUIActiveIPClient_Impl() const;
     SAL_DLLPRIVATE void AddContextMenuInterceptor_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::ui::XContextMenuInterceptor >& xInterceptor );
     SAL_DLLPRIVATE void RemoveContextMenuInterceptor_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::ui::XContextMenuInterceptor >& xInterceptor );
@@ -296,7 +295,6 @@ public:
     SAL_DLLPRIVATE void TakeOwnerShip_Impl();
     SAL_DLLPRIVATE void TakeFrameOwnerShip_Impl();
     SAL_DLLPRIVATE sal_Bool ExecKey_Impl(const KeyEvent& aKey);
-#endif
 };
 
 //========================================================================

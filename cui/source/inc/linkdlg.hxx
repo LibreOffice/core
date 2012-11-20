@@ -73,7 +73,6 @@ class SvBaseLinksDlg : public ModalDialog
     sal_Bool            bHtmlMode;
     Timer aUpdateTimer;
 
-#if _SOLAR__PRIVATE
     DECL_LINK( LinksSelectHdl, SvTabListBox * );
     DECL_LINK( LinksDoubleClickHdl, SvTabListBox * );
     DECL_LINK( AutomaticClickHdl, RadioButton * );
@@ -88,7 +87,6 @@ class SvBaseLinksDlg : public ModalDialog
     String ImplGetStateStr( const sfx2::SvBaseLink& );
     void SetType( sfx2::SvBaseLink& rLink, sal_uInt16 nPos, sal_uInt16 nType );
     void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uInt16 nPos = LISTBOX_APPEND, sal_Bool bSelect = sal_False);
-#endif
 
     void StartUpdateTimer()         { aUpdateTimer.Start(); }
 

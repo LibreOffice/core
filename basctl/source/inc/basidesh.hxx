@@ -95,7 +95,6 @@ private:
     friend class ContainerListenerImpl;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xLibListener;
 
-#if _SOLAR__PRIVATE
     void                Init();
     void                InitTabBar();
     void                InitScrollBars();
@@ -113,7 +112,6 @@ private:
 
     DECL_LINK( TabBarHdl, TabBar* );
     DECL_LINK( TabBarSplitHdl, TabBar * );
-#endif
 
     static unsigned nShellCount;
 

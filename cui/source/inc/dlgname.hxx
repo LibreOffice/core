@@ -39,9 +39,8 @@ private:
     HelpButton      aBtnHelp;
 
     Link            aCheckNameHdl;
-#if _SOLAR__PRIVATE
+
     DECL_LINK(ModifyHdl, void *);
-#endif
 
 public:
     SvxNameDialog( Window* pWindow, const String& rName, const String& rDesc );
@@ -93,9 +92,8 @@ private:
 
     // callback link for name uniqueness
     Link            aCheckNameHdl;
-#if _SOLAR__PRIVATE
+
     DECL_LINK(ModifyHdl, void *);
-#endif
 
 public:
     // constructor
@@ -156,10 +154,10 @@ private:
     CancelButton    aBtnCancel;
     FixedImage      aFtImage;
     Image*          pImage;
-#if _SOLAR__PRIVATE
+
     DECL_LINK(Button1Hdl, void *);
     DECL_LINK(Button2Hdl, void *);
-#endif
+
 public:
     SvxMessDialog( Window* pWindow, const String& rText, const String& rDesc, Image* pImg = NULL );
     ~SvxMessDialog();

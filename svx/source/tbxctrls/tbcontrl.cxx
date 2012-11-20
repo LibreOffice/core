@@ -247,9 +247,7 @@ private:
     ImageList       aImgList;
     sal_Bool        bParagraphMode;
 
-#if _SOLAR__PRIVATE
     DECL_LINK( SelectHdl, void * );
-#endif
 
 protected:
     virtual void    Resize();
@@ -277,9 +275,7 @@ private:
     LineListBox         m_aLineStyleLb;
     bool                m_bIsWriter;
 
-#if _SOLAR__PRIVATE
     DECL_LINK( SelectHdl, void * );
-#endif
 
 protected:
     virtual void    Resize();

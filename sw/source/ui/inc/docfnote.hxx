@@ -30,9 +30,7 @@ class SwFootNoteOptionDlg :public SfxTabDialog
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
-#ifdef _SOLAR__PRIVATE
     DECL_LINK( OkHdl, Button * );
-#endif
 
 public:
     SwFootNoteOptionDlg(Window *pParent, SwWrtShell &rSh );

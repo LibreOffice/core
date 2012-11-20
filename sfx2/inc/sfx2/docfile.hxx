@@ -69,7 +69,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 {
     SfxMedium_Impl* pImp;
 
-#if _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetIsRemote_Impl();
     SAL_DLLPRIVATE void CloseInStream_Impl();
     SAL_DLLPRIVATE sal_Bool CloseOutStream_Impl();
@@ -77,7 +76,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     DECL_DLLPRIVATE_STATIC_LINK( SfxMedium, UCBHdl_Impl, sal_uInt32 * );
 
     SAL_DLLPRIVATE void SetEncryptionDataToStorage_Impl();
-#endif
 
 public:
 
@@ -197,7 +195,6 @@ public:
     void                SetInCheckIn( bool bInCheckIn );
     bool                IsInCheckIn( );
 
-#if _SOLAR__PRIVATE
     SAL_DLLPRIVATE sal_Bool HasStorage_Impl() const;
 
     SAL_DLLPRIVATE void StorageBackup_Impl();
@@ -266,7 +263,6 @@ public:
     //             in this case the methods will be used generally, and might need to be renamed
     SAL_DLLPRIVATE sal_uInt16 GetCachedSignatureState_Impl();
     SAL_DLLPRIVATE void       SetCachedSignatureState_Impl( sal_uInt16 nState );
-#endif
 
     static com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag > GetVersionList(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );

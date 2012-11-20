@@ -25,9 +25,7 @@ private:
     rtl::OUString  maCommand;
     const Color    mLastColor;
 
-#if _SOLAR__PRIVATE
     DECL_LINK( SelectHdl, void * );
-#endif
 
 protected:
     virtual void    Resize();
