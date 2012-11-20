@@ -1032,7 +1032,7 @@ void SmXMLFencedContext_Impl::EndElement()
     SmToken aToken;
     aToken.cMathChar = '\0';
     aToken.nGroup = 0;
-    aToken.aText = ',';
+    aToken.aText = ",";
     aToken.eType = TLEFT;
     aToken.nLevel = 5;
 
@@ -1049,7 +1049,7 @@ void SmXMLFencedContext_Impl::EndElement()
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
 
     aToken.cMathChar = '\0';
-    aToken.aText = ',';
+    aToken.aText = ",";
     aToken.eType = TIDENT;
 
     sal_uLong i = rNodeStack.size() - nElementCount;
@@ -1252,10 +1252,7 @@ void SmXMLStringContext_Impl::TCharacters(const OUString &rChars)
 
     Obviously this isn't fully done here.
     */
-    aToken.aText.Erase();
-    aToken.aText += '\"';
-    aToken.aText += String(rChars);
-    aToken.aText += '\"';
+    aToken.aText = "\"" + rChars + "\"";
 }
 
 void SmXMLStringContext_Impl::EndElement()
@@ -1295,8 +1292,8 @@ void SmXMLIdentifierContext_Impl::EndElement()
     SmTextNode *pNode = 0;
     //we will handle identifier italic/normal here instead of with a standalone
     //font node
-    if (((aStyleHelper.nIsItalic == -1) && (aToken.aText.Len() > 1))
-        || ((aStyleHelper.nIsItalic == 0) && (aToken.aText.Len() == 1)))
+    if (((aStyleHelper.nIsItalic == -1) && (aToken.aText.getLength() > 1))
+        || ((aStyleHelper.nIsItalic == 0) && (aToken.aText.getLength() == 1)))
     {
         pNode = new SmTextNode(aToken,FNT_FUNCTION);
         pNode->GetFont().SetItalic(ITALIC_NONE);
@@ -1712,7 +1709,7 @@ void SmXMLNoneContext_Impl::EndElement(void)
     SmToken aToken;
     aToken.cMathChar = '\0';
     aToken.nGroup = 0;
-    aToken.aText.Erase();
+    aToken.aText = "";
     aToken.nLevel = 5;
     aToken.eType = TIDENT;
     GetSmImport().GetNodeStack().push(
@@ -2491,11 +2488,11 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
             SmNode *pScriptNode = lcl_popOrZero(aReverseStack);
 
             if (pScriptNode && ((pScriptNode->GetToken().eType != TIDENT) ||
-                (pScriptNode->GetToken().aText.Len())))
+                (!pScriptNode->GetToken().aText.isEmpty())))
                 aSubNodes[eSub+1] = pScriptNode;
             pScriptNode = lcl_popOrZero(aReverseStack);
             if (pScriptNode && ((pScriptNode->GetToken().eType != TIDENT) ||
-                (pScriptNode->GetToken().aText.Len())))
+                (!pScriptNode->GetToken().aText.isEmpty())))
                 aSubNodes[eSup+1] = pScriptNode;
 
             pNode->SetSubNodes(aSubNodes);

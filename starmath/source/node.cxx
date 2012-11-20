@@ -462,7 +462,7 @@ const SmNode * SmNode::FindTokenAt(sal_uInt16 nRow, sal_uInt16 nCol) const
 {
     if (    IsVisible()
         &&  nRow == GetToken().nRow
-        &&  nCol >= GetToken().nCol  &&  nCol < GetToken().nCol + GetToken().aText.Len())
+        &&  nCol >= GetToken().nCol  &&  nCol < GetToken().nCol + GetToken().aText.getLength())
         return this;
     else
     {
@@ -2367,7 +2367,7 @@ void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     // special handling for ':' where it is a token on it's own and is likely
     // to be used for mathematical notations. (E.g. a:b = 2:3)
     // In that case it should not be displayed in italic.
-    if (GetToken().aText.Len() == 1 && GetToken().aText.GetChar(0) == ':')
+    if (GetToken().aText.getLength() == 1 && GetToken().aText[0] == ':')
         Attributes() &= ~ATTR_ITALIC;
 };
 
@@ -2894,7 +2894,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     const SmSym   *pSym;
     SmModule  *pp = SM_MOD();
 
-    String aName( GetToken().aText.Copy(1) );
+    OUString aName(GetToken().aText.copy(1));
     if (NULL != (pSym = pp->GetSymbolManager().GetSymbolByName( aName )))
     {
         sal_UCS4 cChar = pSym->GetCharacter();

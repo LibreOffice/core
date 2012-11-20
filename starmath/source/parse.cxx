@@ -88,7 +88,7 @@ SmToken::SmToken(SmTokenType eTokenType,
                  sal_uInt16 nTokenLevel) {
     eType = eTokenType;
     cMathChar = cMath;
-    aText.AssignAscii(pText);
+    aText = OUString::createFromAscii(pText);
     nGroup = nTokenGroup;
     nLevel = nTokenLevel;
     nCol = nRow = 0;
@@ -491,7 +491,7 @@ void SmParser::NextToken()
         m_aCurToken.cMathChar = '\0';
         m_aCurToken.nGroup       = 0;
         m_aCurToken.nLevel       = 0;
-        m_aCurToken.aText.Erase();
+        m_aCurToken.aText = "";
     }
     else if ((aRes.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER))
              || (bNumStart && (aRes.TokenType & KParseType::IDENTNAME)))
@@ -534,7 +534,7 @@ void SmParser::NextToken()
             m_aCurToken.cMathChar  = pEntry->cMathChar;
             m_aCurToken.nGroup     = pEntry->nGroup;
             m_aCurToken.nLevel     = pEntry->nLevel;
-            m_aCurToken.aText.AssignAscii( pEntry->pIdent );
+            m_aCurToken.aText      = OUString::createFromAscii( pEntry->pIdent );
         }
         else
         {
@@ -558,7 +558,7 @@ void SmParser::NextToken()
         m_aCurToken.cMathChar = '\0';
         m_aCurToken.nGroup       = TGPOWER;
         m_aCurToken.nLevel       = 0;
-        m_aCurToken.aText.AssignAscii( "_" );
+        m_aCurToken.aText = "_";
 
         aRes.EndPos = nRealStart + 1;
     }
@@ -581,7 +581,7 @@ void SmParser::NextToken()
                             m_aCurToken.cMathChar = MS_LL;
                             m_aCurToken.nGroup       = TGRELATION;
                             m_aCurToken.nLevel       = 0;
-                            m_aCurToken.aText.AssignAscii( "<<" );
+                            m_aCurToken.aText = "<<";
 
                             rnEndPos = nRealStart + 2;
                         }
@@ -592,7 +592,7 @@ void SmParser::NextToken()
                             m_aCurToken.cMathChar = MS_LE;
                             m_aCurToken.nGroup       = TGRELATION;
                             m_aCurToken.nLevel       = 0;
-                            m_aCurToken.aText.AssignAscii( "<=" );
+                            m_aCurToken.aText = "<=";
 
                             rnEndPos = nRealStart + 2;
                         }
@@ -603,7 +603,7 @@ void SmParser::NextToken()
                             m_aCurToken.cMathChar = MS_NEQ;
                             m_aCurToken.nGroup       = TGRELATION;
                             m_aCurToken.nLevel       = 0;
-                            m_aCurToken.aText.AssignAscii( "<>" );
+                            m_aCurToken.aText = "<>";
 
                             rnEndPos = nRealStart + 2;
                         }
@@ -614,7 +614,7 @@ void SmParser::NextToken()
                             m_aCurToken.cMathChar = MS_PLACE;
                             m_aCurToken.nGroup       = 0;
                             m_aCurToken.nLevel       = 5;
-                            m_aCurToken.aText.AssignAscii( "<?>" );
+                            m_aCurToken.aText = "<?>";
 
                             rnEndPos = nRealStart + 3;
                         }
@@ -624,7 +624,7 @@ void SmParser::NextToken()
                             m_aCurToken.cMathChar = MS_LT;
                             m_aCurToken.nGroup       = TGRELATION;
                             m_aCurToken.nLevel       = 0;
-                            m_aCurToken.aText.AssignAscii( "<" );
+                            m_aCurToken.aText = "<";
                         }
                     }
                     break;
@@ -637,7 +637,7 @@ void SmParser::NextToken()
                             m_aCurToken.cMathChar = MS_GE;
                             m_aCurToken.nGroup       = TGRELATION;
                             m_aCurToken.nLevel       = 0;
-                            m_aCurToken.aText.AssignAscii( ">=" );
+                            m_aCurToken.aText = ">=";
 
                             rnEndPos = nRealStart + 2;
                         }
@@ -648,7 +648,7 @@ void SmParser::NextToken()
                             m_aCurToken.cMathChar = MS_GG;
                             m_aCurToken.nGroup       = TGRELATION;
                             m_aCurToken.nLevel       = 0;
-                            m_aCurToken.aText.AssignAscii( ">>" );
+                            m_aCurToken.aText = ">>";
 
                             rnEndPos = nRealStart + 2;
                         }
@@ -658,7 +658,7 @@ void SmParser::NextToken()
                             m_aCurToken.cMathChar = MS_GT;
                             m_aCurToken.nGroup       = TGRELATION;
                             m_aCurToken.nLevel       = 0;
-                            m_aCurToken.aText.AssignAscii( ">" );
+                            m_aCurToken.aText = ">";
                         }
                     }
                     break;
@@ -734,7 +734,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = MS_LBRACKET;
                         m_aCurToken.nGroup       = TGLBRACES;
                         m_aCurToken.nLevel       = 5;
-                        m_aCurToken.aText.AssignAscii( "[" );
+                        m_aCurToken.aText = "[";
                     }
                     break;
                 case '\\':
@@ -743,7 +743,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = '\0';
                         m_aCurToken.nGroup       = 0;
                         m_aCurToken.nLevel       = 5;
-                        m_aCurToken.aText.AssignAscii( "\\" );
+                        m_aCurToken.aText = "\\";
                     }
                     break;
                 case ']':
@@ -752,7 +752,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = MS_RBRACKET;
                         m_aCurToken.nGroup       = TGRBRACES;
                         m_aCurToken.nLevel       = 0;
-                        m_aCurToken.aText.AssignAscii( "]" );
+                        m_aCurToken.aText = "]";
                     }
                     break;
                 case '^':
@@ -761,7 +761,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = '\0';
                         m_aCurToken.nGroup       = TGPOWER;
                         m_aCurToken.nLevel       = 0;
-                        m_aCurToken.aText.AssignAscii( "^" );
+                        m_aCurToken.aText = "^";
                     }
                     break;
                 case '`':
@@ -770,7 +770,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = '\0';
                         m_aCurToken.nGroup       = TGBLANK;
                         m_aCurToken.nLevel       = 5;
-                        m_aCurToken.aText.AssignAscii( "`" );
+                        m_aCurToken.aText = "`";
                     }
                     break;
                 case '{':
@@ -779,7 +779,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = MS_LBRACE;
                         m_aCurToken.nGroup       = 0;
                         m_aCurToken.nLevel       = 5;
-                        m_aCurToken.aText.AssignAscii( "{" );
+                        m_aCurToken.aText = "{";
                     }
                     break;
                 case '|':
@@ -788,7 +788,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = MS_OR;
                         m_aCurToken.nGroup       = TGSUM;
                         m_aCurToken.nLevel       = 0;
-                        m_aCurToken.aText.AssignAscii( "|" );
+                        m_aCurToken.aText = "|";
                     }
                     break;
                 case '}':
@@ -797,7 +797,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = MS_RBRACE;
                         m_aCurToken.nGroup       = 0;
                         m_aCurToken.nLevel       = 0;
-                        m_aCurToken.aText.AssignAscii( "}" );
+                        m_aCurToken.aText = "}";
                     }
                     break;
                 case '~':
@@ -806,7 +806,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = '\0';
                         m_aCurToken.nGroup       = TGBLANK;
                         m_aCurToken.nLevel       = 5;
-                        m_aCurToken.aText.AssignAscii( "~" );
+                        m_aCurToken.aText = "~";
                     }
                     break;
                 case '#':
@@ -818,7 +818,7 @@ void SmParser::NextToken()
                             m_aCurToken.cMathChar = '\0';
                             m_aCurToken.nGroup       = 0;
                             m_aCurToken.nLevel       = 0;
-                            m_aCurToken.aText.AssignAscii( "##" );
+                            m_aCurToken.aText = "##";
 
                             rnEndPos = nRealStart + 2;
                         }
@@ -828,7 +828,7 @@ void SmParser::NextToken()
                             m_aCurToken.cMathChar = '\0';
                             m_aCurToken.nGroup       = 0;
                             m_aCurToken.nLevel       = 0;
-                            m_aCurToken.aText.AssignAscii( "#" );
+                            m_aCurToken.aText = "#";
                         }
                     }
                     break;
@@ -838,7 +838,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = MS_AND;
                         m_aCurToken.nGroup       = TGPRODUCT;
                         m_aCurToken.nLevel       = 0;
-                        m_aCurToken.aText.AssignAscii( "&" );
+                        m_aCurToken.aText = "&";
                     }
                     break;
                 case '(':
@@ -847,7 +847,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = MS_LPARENT;
                         m_aCurToken.nGroup       = TGLBRACES;
                         m_aCurToken.nLevel       = 5;     //! 0 to continue expression
-                        m_aCurToken.aText.AssignAscii( "(" );
+                        m_aCurToken.aText = "(";
                     }
                     break;
                 case ')':
@@ -856,7 +856,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = MS_RPARENT;
                         m_aCurToken.nGroup       = TGRBRACES;
                         m_aCurToken.nLevel       = 0;     //! 0 to terminate expression
-                        m_aCurToken.aText.AssignAscii( ")" );
+                        m_aCurToken.aText = ")";
                     }
                     break;
                 case '*':
@@ -865,7 +865,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = MS_MULTIPLY;
                         m_aCurToken.nGroup       = TGPRODUCT;
                         m_aCurToken.nLevel       = 0;
-                        m_aCurToken.aText.AssignAscii( "*" );
+                        m_aCurToken.aText = "*";
                     }
                     break;
                 case '+':
@@ -877,7 +877,7 @@ void SmParser::NextToken()
                             m_aCurToken.cMathChar = MS_PLUSMINUS;
                             m_aCurToken.nGroup       = TGUNOPER | TGSUM;
                             m_aCurToken.nLevel       = 5;
-                            m_aCurToken.aText.AssignAscii( "+-" );
+                            m_aCurToken.aText = "+-";
 
                             rnEndPos = nRealStart + 2;
                         }
@@ -887,7 +887,7 @@ void SmParser::NextToken()
                             m_aCurToken.cMathChar = MS_PLUS;
                             m_aCurToken.nGroup       = TGUNOPER | TGSUM;
                             m_aCurToken.nLevel       = 5;
-                            m_aCurToken.aText.AssignAscii( "+" );
+                            m_aCurToken.aText = "+";
                         }
                     }
                     break;
@@ -900,7 +900,7 @@ void SmParser::NextToken()
                             m_aCurToken.cMathChar = MS_MINUSPLUS;
                             m_aCurToken.nGroup       = TGUNOPER | TGSUM;
                             m_aCurToken.nLevel       = 5;
-                            m_aCurToken.aText.AssignAscii( "-+" );
+                            m_aCurToken.aText = "-+";
 
                             rnEndPos = nRealStart + 2;
                         }
@@ -910,7 +910,7 @@ void SmParser::NextToken()
                             m_aCurToken.cMathChar = MS_MINUS;
                             m_aCurToken.nGroup       = TGUNOPER | TGSUM;
                             m_aCurToken.nLevel       = 5;
-                            m_aCurToken.aText.AssignAscii( "-" );
+                            m_aCurToken.aText = "-";
                         }
                     }
                     break;
@@ -943,7 +943,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = MS_SLASH;
                         m_aCurToken.nGroup       = TGPRODUCT;
                         m_aCurToken.nLevel       = 0;
-                        m_aCurToken.aText.AssignAscii( "/" );
+                        m_aCurToken.aText = "/";
                     }
                     break;
                 case '=':
@@ -952,7 +952,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar = MS_ASSIGN;
                         m_aCurToken.nGroup       = TGRELATION;
                         m_aCurToken.nLevel       = 0;
-                        m_aCurToken.aText.AssignAscii( "=" );
+                        m_aCurToken.aText = "=";
                     }
                     break;
                 default:
@@ -1036,7 +1036,7 @@ void SmParser::Align()
                 if (TokenInGroup(TGDISCARDED) || pSNode)
                 {
                     m_nBufferIndex = GetTokenIndex();
-                    m_aBufferString.Erase(m_nBufferIndex, m_aCurToken.aText.Len());
+                    m_aBufferString.Erase(m_nBufferIndex, m_aCurToken.aText.getLength());
                 }
                 else
                     pSNode = new SmAlignNode(m_aCurToken);
@@ -1673,7 +1673,7 @@ void SmParser::Oper()
                         break;
                 }
                 if( pLim )
-                    m_aCurToken.aText.AssignAscii( pLim );
+                    m_aCurToken.aText = OUString::createFromAscii(pLim);
                 pNode = new SmTextNode(m_aCurToken, FNT_TEXT);
             }
             break;
@@ -2314,31 +2314,31 @@ void SmParser::Matrix()
 void SmParser::Special()
 {
     bool bReplace = false;
-    String &rName = m_aCurToken.aText;
-    String aNewName;
+    OUString &rName = m_aCurToken.aText;
+    OUString aNewName;
 
     if (CONVERT_NONE == GetConversion())
     {
         // conversion of symbol names for 6.0 (XML) file format
         // (name change on import / export.
         // UI uses localized names XML file format does not.)
-        if( rName.Len() && rName.GetChar( 0 ) == sal_Unicode( '%' ) )
+        if (!rName.isEmpty() && rName[0] == '%')
         {
             if (IsImportSymbolNames())
             {
                 const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
-                aNewName = rLSD.GetUiSymbolName( rName.Copy( 1 ) );
+                aNewName = rLSD.GetUiSymbolName(rName.copy(1));
                 bReplace = true;
             }
             else if (IsExportSymbolNames())
             {
                 const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
-                aNewName = rLSD.GetExportSymbolName( rName.Copy( 1 ) );
+                aNewName = rLSD.GetExportSymbolName(rName.copy(1));
                 bReplace = true;
             }
         }
-        if( aNewName.Len() )
-            aNewName.Insert( '%', 0 );
+        if (!aNewName.isEmpty())
+            aNewName = "%" + aNewName;
     }
     else    // 5.0 <-> 6.0 formula text (symbol name) conversion
     {
@@ -2375,15 +2375,15 @@ void SmParser::Special()
         // conversion not necessary
     }
 
-    if (bReplace  &&  aNewName.Len()  &&  rName != aNewName)
+    if (bReplace && !aNewName.isEmpty() && rName != aNewName)
     {
-        Replace( GetTokenIndex(), rName.Len(), aNewName );
+        Replace(GetTokenIndex(), rName.getLength(), aNewName);
         rName = aNewName;
     }
 
     // add symbol name to list of used symbols
-    const String aSymbolName( m_aCurToken.aText.Copy( 1 ) );
-    if (aSymbolName.Len() > 0 )
+    const OUString aSymbolName(m_aCurToken.aText.copy(1));
+    if (!aSymbolName.isEmpty())
         AddToUsedSymbols( aSymbolName );
 
     m_aNodeStack.push(new SmSpecialNode(m_aCurToken));

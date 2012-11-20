@@ -111,7 +111,7 @@ enum SmTokenType
 struct SmToken
 {
 
-    String          aText;      // token text
+    OUString        aText;      // token text
     SmTokenType     eType;      // token info
     sal_Unicode cMathChar;
 

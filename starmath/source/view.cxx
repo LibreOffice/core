@@ -187,7 +187,7 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
             ESelection  aSel (aToken.nRow - 1, aToken.nCol - 1);
 
             if (rMEvt.GetClicks() != 1 || aToken.eType == TPLACE)
-                aSel.nEndPos = aSel.nEndPos + sal::static_int_cast< sal_uInt16 >(aToken.aText.Len());
+                aSel.nEndPos = aSel.nEndPos + sal::static_int_cast< sal_uInt16 >(aToken.aText.getLength());
 
             pEdit->SetSelection(aSel);
             SetCursor(pNode);
