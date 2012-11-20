@@ -84,11 +84,16 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rOldPath,
     }
     const OString SDFFileName =
         OUStringToOString(aTempPath, RTL_TEXTENCODING_UTF8);
-    system( (rpo2loPath +
+    const char* cmd = (rpo2loPath +
             " -i " + rOldPath + "/" + LangEntryName +
             " -o " + SDFFileName +
             " -l " + LangEntryName +
-            " -t " + rSDFPath).getStr());
+                       " -t " + rSDFPath).getStr();
+    if (system(cmd) != 0)
+    {
+        std::cerr << "Error: Failed to execute " << cmd << '\n';
+        throw false;
+    }
     cout << "Language sdf is ready!" << endl;
 
     //Store info for po entries
@@ -136,7 +141,13 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rOldPath,
             const OString sNewPoFileName =
                 GetPath(rNewPath + "/" +LangEntryName,pActInfo->second.first) +
                 ".po";
-            system(("mkdir -p " + sNewPoFileName.copy(0,sNewPoFileName.lastIndexOf("/"))).getStr());
+            const char* cmd2 = ("mkdir -p " + sNewPoFileName.copy(0,sNewPoFileName.lastIndexOf("/"))).getStr();
+            if (system(cmd2) != 0)
+            {
+                std::cerr << "Error: Failed to execute " << cmd2 << '\n';
+                throw false;
+            }
+
             aNewPo.open(sNewPoFileName);
             if (!aNewPo.isOpen())
             {
