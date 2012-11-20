@@ -322,6 +322,7 @@ bool includeProject(rtl::OUString const & project) {
         "sw",
         "swext",
         "sysui",
+        "tubes",
         "uui",
         "vcl",
         "wizards",
