@@ -169,7 +169,7 @@ public class BasicMacroTools {
             e.printStackTrace();
             throw new Exception("ERROR: Library " + LibraryName +
                                 "already exist." + e.toString());
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace();
             throw new Exception("Could not link Basic library:" +
                                 LibraryName + e.toString());

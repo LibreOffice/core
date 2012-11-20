@@ -3494,14 +3494,6 @@ uno::Reference< script::provider::XScriptProvider > SAL_CALL SfxBaseModel::getSc
     {
         throw;
     }
-    catch( const lang::IllegalArgumentException& )
-    {
-        throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(),
-            *this,
-            ::cppu::getCaughtException()
-        );
-    }
 
     return xScriptProvider;
 }

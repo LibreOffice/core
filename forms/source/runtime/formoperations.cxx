@@ -720,7 +720,6 @@ namespace frm
         }
         catch( const RuntimeException& ) { throw; }
         catch( const SQLException& ) { throw; }
-        catch( const IllegalArgumentException& ) { throw; }
         catch( const Exception& )
         {
             throw WrappedTargetException( ::rtl::OUString(), *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );

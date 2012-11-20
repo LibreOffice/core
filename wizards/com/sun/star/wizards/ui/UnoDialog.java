@@ -532,7 +532,7 @@ public class UnoDialog implements EventNames
             int iCurStep = AnyConverter.toInt(getControlProperty(controlname, PropertyNames.PROPERTY_STEP));
             setControlProperty(controlname, PropertyNames.PROPERTY_STEP, new Integer(iStep));
         }
-        catch (com.sun.star.uno.Exception exception)
+        catch (com.sun.star.lang.IllegalArgumentException exception)
         {
             exception.printStackTrace(System.err);
         }
@@ -563,7 +563,7 @@ public class UnoDialog implements EventNames
                 setControlProperty(controlname, PropertyNames.PROPERTY_STEP, UIConsts.INVISIBLESTEP);
             }
         }
-        catch (com.sun.star.uno.Exception exception)
+        catch (com.sun.star.lang.IllegalArgumentException exception)
         {
             exception.printStackTrace(System.err);
         }
@@ -580,7 +580,7 @@ public class UnoDialog implements EventNames
             Helper.setUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP, 99);
             Helper.setUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP, new Integer(ncurstep));
         }
-        catch (com.sun.star.uno.Exception exception)
+        catch (com.sun.star.lang.IllegalArgumentException exception)
         {
             exception.printStackTrace(System.err);
         }

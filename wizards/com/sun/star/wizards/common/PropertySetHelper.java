@@ -93,11 +93,6 @@ public class PropertySetHelper
                 DebugHelper.writeInfo(e.getMessage());
                 DebugHelper.exception(e);
             }
-            catch (com.sun.star.lang.IllegalArgumentException e)
-            {
-                DebugHelper.writeInfo(e.getMessage());
-                DebugHelper.exception(e);
-            }
             catch (com.sun.star.lang.WrappedTargetException e)
             {
                 DebugHelper.writeInfo(e.getMessage());

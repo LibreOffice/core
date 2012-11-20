@@ -341,7 +341,7 @@ public class DBColumn
                 }
             }
         }
-        catch (Exception exception)
+        catch (IllegalArgumentException exception)
         {
             System.err.println(exception);
         }

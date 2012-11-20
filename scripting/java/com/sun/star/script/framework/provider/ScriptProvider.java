@@ -680,7 +680,7 @@ public abstract class ScriptProvider
             XContent content = factory.createDocumentContent( document );
             return content.getIdentifier().getContentIdentifier();
         }
-        catch( Exception ex )
+        catch (com.sun.star.lang.IllegalArgumentException ex)
         {
         }
 

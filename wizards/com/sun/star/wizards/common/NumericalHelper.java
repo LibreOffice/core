@@ -1476,7 +1476,7 @@ public class NumericalHelper
             }
             catch (com.sun.star.lang.IllegalArgumentException e)
             {
-                DebugHelper.exception(e);
+//TODO does not do anything anyway                DebugHelper.exception(e);
             }
             // reverse again to get the number
             return romanNumber.reverse().toString();
