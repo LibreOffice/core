@@ -3273,11 +3273,40 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
 
     // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
     // in X and Y which equal a 180 degree rotation. Recognize it and react accordingly
-    if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
+    const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
+    const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
+
+    if(bMirrorX && bMirrorY)
     {
         aScale.setX(fabs(aScale.getX()));
         aScale.setY(fabs(aScale.getY()));
         fRotate = fmod(fRotate + F_PI, F_2PI);
+    }
+    else if(bMirrorX || bMirrorY)
+    {
+        basegfx::B2DHomMatrix aNew;
+
+        // create pre-multiplied matrix without mirroring
+        aNew.translate(-0.5, -0.5);
+        aNew.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
+        aNew.translate(0.5, 0.5);
+        aNew = rMatrix * aNew;
+
+        // decompose to get corrected, mirror-free values
+        aNew.decompose(aScale, aTranslate, fRotate, fShearX);
+
+        // apply mirroring to CustomShapeGeometry
+        if((bool)IsMirroredX() != bMirrorX)
+        {
+            SetMirroredX(bMirrorX);
+            bPurposeFlipX = !bPurposeFlipX;
+        }
+
+        if((bool)IsMirroredY() != bMirrorY)
+        {
+            SetMirroredY(bMirrorY);
+            bPurposeFlipY = !bPurposeFlipY;
+        }
     }
 
     // reset object shear and rotations

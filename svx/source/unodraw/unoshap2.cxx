@@ -2098,6 +2098,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     {
         bMirroredX = ( ((SdrObjCustomShape*)pObject)->IsMirroredX() );
         bMirroredY = ( ((SdrObjCustomShape*)pObject)->IsMirroredY() );
+        ((SdrObjCustomShape*)pObject)->bPurposeFlipX = ((SdrObjCustomShape*)pObject)->bPurposeFlipY = false;
     }
 
     SvxShape::setPropertyValue( aPropertyName, aValue );
@@ -2126,7 +2127,8 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
             pObject->NbcMirror( aTop, aBottom );
             // NbcMirroring is flipping the current mirror state,
             // so we have to set the correct state again
-            ((SdrObjCustomShape*)pObject)->SetMirroredX( bMirroredX ? sal_False : sal_True );
+            if(((SdrObjCustomShape*)pObject)->bPurposeFlipX)
+                ((SdrObjCustomShape*)pObject)->SetMirroredX( bMirroredX ? sal_False : sal_True );
         }
         if ( bNeedsMirrorY )
         {
@@ -2135,7 +2137,8 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
             pObject->NbcMirror( aLeft, aRight );
             // NbcMirroring is flipping the current mirror state,
             // so we have to set the correct state again
-            ((SdrObjCustomShape*)pObject)->SetMirroredY( bMirroredY ? sal_False : sal_True );
+            if(((SdrObjCustomShape*)pObject)->bPurposeFlipY)
+                ((SdrObjCustomShape*)pObject)->SetMirroredY( bMirroredY ? sal_False : sal_True );
         }
 
         if( pListCopy )
