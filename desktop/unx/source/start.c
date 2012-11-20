@@ -465,18 +465,20 @@ send_args( int fd, rtl_uString *pCwdPath )
 
     if ( rtl_uString_getLength( pEscapedCwdPath ) )
     {
-    rtl_uStringbuffer_insert_ascii( &pBuffer, &nCapacity,
-        rtl_uString_getLength( pBuffer ),
-        RTL_CONSTASCII_STRINGPARAM( "1" ) );
-    rtl_uStringbuffer_insert( &pBuffer, &nCapacity,
-                rtl_uString_getLength( pBuffer ),
-                rtl_uString_getStr( pEscapedCwdPath ),
-                rtl_uString_getLength( pEscapedCwdPath ) );
+        rtl_uStringbuffer_insert_ascii( &pBuffer, &nCapacity,
+            rtl_uString_getLength( pBuffer ),
+            RTL_CONSTASCII_STRINGPARAM( "1" ) );
+        rtl_uStringbuffer_insert( &pBuffer, &nCapacity,
+                    rtl_uString_getLength( pBuffer ),
+                    rtl_uString_getStr( pEscapedCwdPath ),
+                    rtl_uString_getLength( pEscapedCwdPath ) );
     }
     else
-    rtl_uStringbuffer_insert_ascii( &pBuffer, &nCapacity,
-        rtl_uString_getLength( pBuffer ),
-        RTL_CONSTASCII_STRINGPARAM( "0" ) );
+    {
+        rtl_uStringbuffer_insert_ascii( &pBuffer, &nCapacity,
+            rtl_uString_getLength( pBuffer ),
+            RTL_CONSTASCII_STRINGPARAM( "0" ) );
+    }
 
     for ( nArg = 0; nArg < nArgCount; ++nArg )
     {
