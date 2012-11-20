@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQn///40\u003d",
+        "filename": "editeng/source/items/frmitems.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1797,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-20T12:11:39Z",
+      "side": 1,
+      "message": "oh! goodness no! I wanted to avoid a pitfall, not make the things harder, obsure and more fragile...\n\nhow would that be an \u0027incompatible change\u0027, I can\u0027t really see a case where that would create an incompatibility..\nOut of curiosity, can you describe how that would break something, anything ?\n(not changing the value of things in general... but of such a *_MAX semaphore in particular)",
+      "parentUuid": "AAAAQn///5I\u003d",
+      "revId": "0a3b8d03829065534628e7e6bbcc8f3464cbab9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQn///5s\u003d",
         "filename": "svtools/inc/svtools/ctrlbox.hxx",
         "patchSetId": 1
