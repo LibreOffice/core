@@ -26,6 +26,9 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 
 else
 
+# overwrite src/cairo-version.h because that is just a dummy file and included
+# from cairo.h in non-overridable way
+
 $(call gb_ExternalProject_get_state_target,cairo,build) :
 	cd $(EXTERNAL_WORKDIR) \
 	&& ./configure \
@@ -46,6 +49,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		--disable-svg --enable-gtk-doc=no --enable-test-surfaces=no \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+	&& cp cairo-version.h src/cairo-version.h \
 	&& cd src && $(MAKE) \
 	&& touch $@
 
