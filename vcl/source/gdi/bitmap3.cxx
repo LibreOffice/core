@@ -2175,6 +2175,10 @@ bool Bitmap::ImplScaleConvolution( const double& rScaleX, const double& rScaleY,
     int* pPixels;
     int* pCount;
 
+    // Handle negative scales safely cf. other ImplScale methods
+    if( ( nNewWidth < 1L ) || ( nNewHeight < 1L ) )
+        return false;
+
     // Do horizontal filtering
     ImplCalculateContributions( nWidth, nNewWidth, aNumberOfContributions, pWeights, pPixels, pCount, aKernel );
     pReadAcc = AcquireReadAccess();

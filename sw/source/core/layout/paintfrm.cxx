@@ -5791,9 +5791,15 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
             aPageBottomRightShadow );
         pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right() + 1, aPagePxRect.Top() - mnShadowPxWidth ) ),
             aPageTopRightShadow );
-        BitmapEx aPageRightShadow = aPageRightShadowBase;
-        aPageRightShadow.Scale( 1, aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1) );
-        lcl_paintBitmapExToRect(pOut, Point( aPaintRect.Right() + mnShadowPxWidth, aPagePxRect.Top() + mnShadowPxWidth - 1), aPageRightShadow, RIGHT );
+
+        if ( aPagePxRect.Height() > 2 * mnShadowPxWidth)
+        {
+            BitmapEx aPageRightShadow = aPageRightShadowBase;
+            aPageRightShadow.Scale( 1, aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1) );
+            lcl_paintBitmapExToRect( pOut, Point( aPaintRect.Right() + mnShadowPxWidth,
+                                                 aPagePxRect.Top() + mnShadowPxWidth - 1),
+                                     aPageRightShadow, RIGHT );
+        }
     }
 
     // Left shadows and corners
@@ -5803,17 +5809,23 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
         pOut->DrawBitmapEx( pOut->PixelToLogic( Point( lLeft,
             aPagePxRect.Bottom() + 1 + mnShadowPxWidth - aPageBottomLeftShadow.GetSizePixel().Height() ) ), aPageBottomLeftShadow );
         pOut->DrawBitmapEx( pOut->PixelToLogic( Point( lLeft, aPagePxRect.Top() - mnShadowPxWidth ) ), aPageTopLeftShadow );
-        BitmapEx aPageLeftShadow = aPageLeftShadowBase;
-        aPageLeftShadow.Scale( 1, aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1) );
-        lcl_paintBitmapExToRect(pOut, Point( lLeft, aPagePxRect.Top() + mnShadowPxWidth - 1), aPageLeftShadow, LEFT);
+        if ( aPagePxRect.Height() > 2 * mnShadowPxWidth)
+        {
+            BitmapEx aPageLeftShadow = aPageLeftShadowBase;
+            aPageLeftShadow.Scale( 1, aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1) );
+            lcl_paintBitmapExToRect( pOut, Point( lLeft, aPagePxRect.Top() + mnShadowPxWidth - 1),
+                                     aPageLeftShadow, LEFT );
+        }
     }
 
     BitmapEx aPageBottomShadow = aPageBottomShadowBase;
     aPageBottomShadow.Scale( aPaintRect.Width(), 1 );
-    lcl_paintBitmapExToRect(pOut, Point( aPaintRect.Left(), aPagePxRect.Bottom() + 1 ), aPageBottomShadow, BOTTOM);
+    lcl_paintBitmapExToRect( pOut, Point( aPaintRect.Left(), aPagePxRect.Bottom() + 1 ),
+                             aPageBottomShadow, BOTTOM );
     BitmapEx aPageTopShadow = aPageTopShadowBase;
     aPageTopShadow.Scale( aPaintRect.Width(), 1 );
-    lcl_paintBitmapExToRect(pOut, Point( aPaintRect.Left(), aPagePxRect.Top() - mnShadowPxWidth ), aPageTopShadow, TOP);
+    lcl_paintBitmapExToRect( pOut, Point( aPaintRect.Left(), aPagePxRect.Top() - mnShadowPxWidth ),
+                             aPageTopShadow, TOP );
 }
 
 //mod #i6193# paint sidebar for notes
