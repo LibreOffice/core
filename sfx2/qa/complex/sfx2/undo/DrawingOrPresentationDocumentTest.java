@@ -16,11 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package complex.sfx2.undo;
 
 import com.sun.star.awt.Rectangle;
@@ -42,7 +37,6 @@ import static org.junit.Assert.*;
 
 /**
  * implements the {@link DocumentTest} interface on top of a drawing document
- * @author frank.schoenheit@oracle.com
  */
 public abstract class DrawingOrPresentationDocumentTest extends DocumentTestBase
 {
@@ -86,7 +80,6 @@ public abstract class DrawingOrPresentationDocumentTest extends DocumentTestBase
         verifyShapeGeometry( shape, BIG_CIRCLE_SIZE, BIG_CIRCLE_SIZE );
         final XPropertySet shapeProps = UnoRuntime.queryInterface( XPropertySet.class, shape );
         assertEquals( "wrong circle tpye", CIRCLE_TYPE.getValue(), ((CircleKind)shapeProps.getPropertyValue( "CircleKind" )).getValue() );
-        //assertEquals( "wrong circle fill color", FILL_COLOR, ((Integer)shapeProps.getPropertyValue( "FillColor" )).intValue() );
             // disable this particular check: A bug in the drawing layer API restores the FillColor to its
             // default value upon re-insertion. This is issue #i115080#
     }

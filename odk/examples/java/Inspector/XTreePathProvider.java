@@ -16,15 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * xTreePathProvider.java
- *
- * Created on 12. Dezember 2006, 13:30
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
-
 public interface XTreePathProvider {
 
     public XUnoNode getLastPathComponent();

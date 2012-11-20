@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package complex.sfx2;
 
 import com.sun.star.document.DocumentEvent;
@@ -24,10 +19,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.openoffice.test.tools.OfficeDocument;
 
-/**
- *
- * @author frank.shoenheit@oracle.com
- */
 public class DocumentEvents extends JUnitBasedTest
 {
     @Before

@@ -15,24 +15,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-/*
- * BorderRightMapper.java
- *
- * Created on 16. Februar 2007, 13:00
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
 package com.sun.star.report.pentaho.parser.stylemapper.fo;
 
 import com.sun.star.report.pentaho.parser.StyleMapper;
 
 import org.jfree.layouting.input.style.CSSDeclarationRule;
 
-/**
- *
- * @author oj93728
- */
 public class BorderRightMapper implements StyleMapper
 {
 

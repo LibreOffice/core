@@ -22,15 +22,6 @@ import complexlib.ComplexTestCase;
 import java.io.File;
 import com.sun.star.text.XTextDocument;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author hb137859
- */
 public class LoadDocuments extends ComplexTestCase {
     private XMultiServiceFactory m_xMSF;
 
