@@ -837,10 +837,19 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 
         if ( ( fd = connect_pipe( pPipePath ) ) >= 0 )
         {
-            rtl_uString *pCwdPath = NULL;
-            osl_getProcessWorkingDir( &pCwdPath );
+            // Wait for answer
+            char resp[ strlen( "InternalIPC::SendArguments" ) + 1];
+            ssize_t n = read( fd, resp, SAL_N_ELEMENTS( resp ) );
+            if (n == (ssize_t) SAL_N_ELEMENTS( resp )
+                && (memcmp(
+                resp, "InternalIPC::SendArguments",
+                SAL_N_ELEMENTS( resp ) - 1) == 0)) {
+                rtl_uString *pCwdPath = NULL;
+                osl_getProcessWorkingDir( &pCwdPath );
 
-            bSentArgs = send_args( fd, pCwdPath );
+                // Then send args
+                bSentArgs = send_args( fd, pCwdPath );
+           }
 
             close( fd );
         }

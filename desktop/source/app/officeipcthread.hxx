@@ -103,6 +103,8 @@ class OfficeIPCThread : public salhelper::Thread
     static const int sc_nShSeqLength;
     static const char *sc_aConfirmationSequence;
     static const int sc_nCSeqLength;
+    static const char *sc_aSendArgumentsSequence;
+    static const int sc_nCSASeqLength;
 
     OfficeIPCThread();
 
