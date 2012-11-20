@@ -601,11 +601,6 @@ static sal_Bool _osl_decodeURL( rtl_String* strUTF8, rtl_uString** pstrDecodedUR
     {
         switch ( *pSrc )
         {
-        case 0:
-        case '?':
-        case '#':
-            bValidEncoded = false;
-            break;
         case '%':
             {
                 sal_Char    aToken[3];
