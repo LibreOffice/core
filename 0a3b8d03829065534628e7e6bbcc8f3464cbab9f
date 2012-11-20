@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQn///5w\u003d",
+        "filename": "editeng/source/items/frmitems.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1797,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-20T05:11:03Z",
+      "side": 1,
+      "message": "while we are at it, couldn\u0027t we add a \u0027semaphore constant\u0027\nin the idl where FINE_DASHED is defined to indicate the \u0027max value\u0027 (like BORDER_STYLE_MAX or something to that effect)\nso that the next time a new border style is added\n1/ one does not need to change the code above\n2/ more importantly, one does not _forget_ to change the code above. looks like it would be easy to be tripped by this.",
+      "revId": "0a3b8d03829065534628e7e6bbcc8f3464cbab9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn///5s\u003d",
+        "filename": "svtools/inc/svtools/ctrlbox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-20T05:11:03Z",
+      "side": 1,
+      "message": "yep it sure does :-)",
+      "revId": "0a3b8d03829065534628e7e6bbcc8f3464cbab9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
