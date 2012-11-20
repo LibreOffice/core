@@ -324,7 +324,7 @@ namespace
         UErrorCode nIcuErr = U_ZERO_ERROR;
         sal_uInt32 nSearchFlags = UREGEX_DOTALL | UREGEX_CASE_INSENSITIVE;
         OUString sLocaleText( OStringToOUString(rText,RTL_TEXTENCODING_UTF8) );
-        OUString sPattern( "<[/]??[a-z_-]+?(?:| +[a-z]+?=\".*?\") *[/]??>" );
+        OUString sPattern("<[/]\?\?[a-z_-]+?(?:| +[a-z]+?=\".*?\") *[/]\?\?>");
         UnicodeString sSearchPat(
             reinterpret_cast<const UChar*>(
                 sPattern.getStr()), sPattern.getLength() );
