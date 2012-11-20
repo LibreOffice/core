@@ -590,15 +590,18 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     catch(const std::ios::failure& ex)
     {
         std::cout << ex.what() << std::endl;
+        return 1;
     }
     catch(const std::exception& ex)
     {
         std::cout << ex.what() << std::endl;
         ShowUsage();
+        return 1;
     }
     catch(...)
     {
         std::cout << "Unexpected error..." << std::endl;
+        return 1;
     }
     return 0;
 }
