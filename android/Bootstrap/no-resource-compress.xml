@@ -26,6 +26,7 @@
                     resourcefilter="${aapt.resource.filter}"
                     libraryResFolderPathRefid="project.library.res.folder.path"
                     libraryPackagesRefid="project.library.packages"
+                    libraryRFileRefid="project.library.bin.r.file.path"
                     previousBuildType="${build.last.target}"
                     buildType="${build.target}"
                     ignoreAssets="${aapt.ignore.assets}">
