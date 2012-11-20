@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQn///5M\u003d",
+        "filename": "editeng/source/items/frmitems.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1797,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2012-11-20T10:51:35Z",
+      "side": 1,
+      "message": "...but that would mean that the UNOIDL constant BORDER_STYLE_MAX would need to change its value over time, which is not what one wants",
+      "parentUuid": "AAAAQn///5w\u003d",
+      "revId": "0a3b8d03829065534628e7e6bbcc8f3464cbab9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQn///5s\u003d",
         "filename": "svtools/inc/svtools/ctrlbox.hxx",
         "patchSetId": 1
