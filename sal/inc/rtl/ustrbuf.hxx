@@ -924,6 +924,26 @@ public:
         return *this;
     }
 
+    /**
+       Replace all occurrences of
+       oldChar in this string buffer with newChar.
+
+       @since LibreOffice 4.0
+
+       @param    oldChar     the old character.
+       @param    newChar     the new character.
+       @return   this string buffer
+    */
+    OUStringBuffer& replace( sal_Unicode oldChar, sal_Unicode newChar )
+    {
+        sal_Int32 index = 0;
+        while((index = indexOf(oldChar, index)) >= 0)
+        {
+            pData->buffer[ index ] = newChar;
+        }
+        return *this;
+    }
+
     /** Allows access to the internal data of this OUStringBuffer, for effective
         manipulation.
 
