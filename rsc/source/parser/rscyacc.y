@@ -160,7 +160,7 @@ sal_Bool DoClassHeader( RSCHEADER * pHeader, sal_Bool bMember )
                 RSCINST aTmpI( S.Top() );
                 aTmpI.pClass->Destroy( aTmpI );
                 aTmpI.pClass->Create( &aTmpI, aCopyInst );
-            };
+            }
         }
         else
             pTC->pEH->Error( ERR_FALSETYPE, S.Top().pClass, aName1,
@@ -213,8 +213,8 @@ sal_Bool DoClassHeader( RSCHEADER * pHeader, sal_Bool bMember )
                     return( sal_False );
             }
             S.Push( aTmpI );
-        };
-    };
+        }
+    }
     if( TYPE_REF == pHeader->nTyp )
     {
         ERRTYPE aError;
@@ -770,7 +770,7 @@ var_header_class
 			pTC->pEH->Error( ERR_NOVARIABLENAME, S.Top().pClass, RscId(),
 							 pHS->getString( $1 ).getStr() );
 			return( ERR_ERROR );
-		};
+		}
 
 		if( !DoClassHeader( &$3, sal_True ) )
 			return( ERR_ERROR );
@@ -799,7 +799,7 @@ var_header_class
 			pTC->pEH->Error( ERR_NOVARIABLENAME, S.Top().pClass, RscId(),
 							 pHS->getString( $1 ).getStr() );
 			return( ERR_ERROR );
-		};
+		}
 		if( !DoClassHeader( &$6, sal_True ) )
 			return( ERR_ERROR );
 		$$ = $6;
@@ -828,7 +828,7 @@ var_header_class
 			pTC->pEH->Error( ERR_NOVARIABLENAME, S.Top().pClass, RscId(),
 							 pHS->getString( $1 ).getStr() );
 			return( ERR_ERROR );
-		};
+		}
 		if( !DoClassHeader( &$6, sal_True ) )
 			return( ERR_ERROR );
 		$$ = $6;
@@ -848,7 +848,7 @@ var_header
 			pTC->pEH->Error( ERR_NOVARIABLENAME, S.Top().pClass, RscId(),
 							 pHS->getString( $1 ).getStr() );
 			return( ERR_ERROR );
-		};
+		}
 	}
   | VARNAME '[' CONSTNAME ']' '='
 	{
@@ -872,7 +872,7 @@ var_header
 			pTC->pEH->Error( ERR_NOVARIABLENAME, S.Top().pClass, RscId(),
 							 pHS->getString( $1 ).getStr() );
 			return( ERR_ERROR );
-		};
+		}
 	}
   | VARNAME '[' SYMBOL ']' '='
 	{
@@ -897,7 +897,7 @@ var_header
 			pTC->pEH->Error( ERR_NOVARIABLENAME, S.Top().pClass, RscId(),
 							 pHS->getString( $1 ).getStr() );
 			return( ERR_ERROR );
-		};
+		}
 	}
   ;
 tupel_header0
@@ -912,7 +912,7 @@ tupel_header0
 		{
 			pTC->pEH->Error( ERR_NOTUPELNAME, S.Top().pClass, RscId() );
 			return( ERR_ERROR );
-		};
+		}
 	}
   ;
 
@@ -928,7 +928,7 @@ tupel_header1
 		{
 			pTC->pEH->Error( ERR_NOTUPELNAME, S.Top().pClass, RscId() );
 			return( ERR_ERROR );
-		};
+		}
 	}
   ;
 
@@ -944,7 +944,7 @@ tupel_header2
 		{
 			pTC->pEH->Error( ERR_NOTUPELNAME, S.Top().pClass, RscId() );
 			return( ERR_ERROR );
-		};
+		}
 	}
   ;
 
@@ -958,7 +958,7 @@ tupel_header3
 		{
 			pTC->pEH->Error( ERR_NOTUPELNAME, S.Top().pClass, RscId() );
 			return( ERR_ERROR );
-		};
+		}
 		S.Push( aInst );
 	}
   ;

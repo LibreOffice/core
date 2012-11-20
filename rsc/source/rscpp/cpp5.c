@@ -511,37 +511,37 @@ dosizeof()
     typecode = 0;
     while (0 != (c = skipws())) {
         if ((c = macroid(c)) == EOF_CHAR || c == '\n')
-        goto nogood;            /* End of line is a bug */
+            goto nogood;            /* End of line is a bug */
         else if (c == '(') {        /* thing (*)() func ptr */
-        if (skipws() == '*'
-         && skipws() == ')') {      /* We found (*)     */
-            if (skipws() != '(')    /* Let () be optional   */
-            unget();
-            else if (skipws() != ')')
-            goto nogood;
-            typecode |= T_FPTR;     /* Function pointer */
-        }
-        else {              /* Junk is a bug    */
-            goto nogood;
-        }
+            if (skipws() == '*'
+             && skipws() == ')') {      /* We found (*)     */
+                if (skipws() != '(')    /* Let () be optional   */
+                    unget();
+                else if (skipws() != ')')
+                    goto nogood;
+                typecode |= T_FPTR;     /* Function pointer */
+            }
+            else {              /* Junk is a bug    */
+                goto nogood;
+            }
         }
         else if (type[c] != LET)        /* Exit if not a type   */
-        break;
-        else if (!catenate()) {     /* Maybe combine tokens */
-        /*
-         * Look for this unexpandable token in basic_types.
-         * The code accepts "int long" as well as "long int"
-         * which is a minor bug as bugs go (and one shared with
-         * a lot of C compilers).
-         */
-        for (tp = basic_types; tp->name != NULLST; tp++) {
-            if (streq(token, tp->name))
             break;
-        }
-        if (tp->name == NULLST) {
-            cerror("#if sizeof, unknown type \"%s\"", token);
-            return (OP_FAIL);
-        }
+        else if (!catenate()) {     /* Maybe combine tokens */
+            /*
+             * Look for this unexpandable token in basic_types.
+             * The code accepts "int long" as well as "long int"
+             * which is a minor bug as bugs go (and one shared with
+             * a lot of C compilers).
+             */
+            for (tp = basic_types; tp->name != NULLST; tp++) {
+                if (streq(token, tp->name))
+                break;
+            }
+            if (tp->name == NULLST) {
+                cerror("#if sizeof, unknown type \"%s\"", token);
+                return (OP_FAIL);
+            }
         typecode |= tp->type;       /* Or in the type bit   */
         }
     }
@@ -554,10 +554,10 @@ dosizeof()
     }
     if (c == ')') {             /* Last syntax check    */
         for (testp = test_table; *testp != 0; testp++) {
-        if (!bittest(typecode & *testp)) {
-            cerror("#if ... sizeof: illegal type combination", NULLST);
-            return (OP_FAIL);
-        }
+            if (!bittest(typecode & *testp)) {
+                cerror("#if ... sizeof: illegal type combination", NULLST);
+                return (OP_FAIL);
+            }
         }
         /*
          * We assume that all function pointers are the same size:
@@ -566,25 +566,25 @@ dosizeof()
          *      sizeof (signed int) == (sizeof unsigned int)
          */
         if ((typecode & T_FPTR) != 0)   /* Function pointer */
-        typecode = T_FPTR | T_PTR;
+            typecode = T_FPTR | T_PTR;
         else {              /* Var or var * datum   */
-        typecode &= ~(T_SIGNED | T_UNSIGNED);
-        if ((typecode & (T_SHORT | T_LONG)) != 0)
-            typecode &= ~T_INT;
+            typecode &= ~(T_SIGNED | T_UNSIGNED);
+            if ((typecode & (T_SHORT | T_LONG)) != 0)
+                typecode &= ~T_INT;
         }
         if ((typecode & ~T_PTR) == 0) {
-        cerror("#if sizeof() error, no type specified", NULLST);
-        return (OP_FAIL);
+            cerror("#if sizeof() error, no type specified", NULLST);
+            return (OP_FAIL);
         }
         /*
          * Exactly one bit (and possibly T_PTR) may be set.
          */
         for (sizp = size_table; sizp->bits != 0; sizp++) {
-        if ((typecode & ~T_PTR) == sizp->bits) {
-            evalue = ((typecode & T_PTR) != 0)
-            ? sizp->psize : sizp->size;
-            return (DIG);
-        }
+            if ((typecode & ~T_PTR) == sizp->bits) {
+                evalue = ((typecode & T_PTR) != 0)
+                ? sizp->psize : sizp->size;
+                return (DIG);
+            }
         }                   /* We shouldn't fail    */
         cierror("#if ... sizeof: bug, unknown type code 0x%x", typecode);
         return (OP_FAIL);
@@ -642,7 +642,7 @@ evalnum(int c)
         c1 -= ('a' - 10);
         else c1 -= '0';
         if (c1 < 0 || c1 >= base)
-        break;
+            break;
         value *= base;
         value += c1;
         c = cget();
@@ -743,7 +743,7 @@ evalchar(int skip)
      */
     while ((c = get()) != '\'' && c != EOF_CHAR && c != '\n') {
         if (!skip)
-        ciwarn("multi-byte constant '%c' isn't portable", c);
+            ciwarn("multi-byte constant '%c' isn't portable", c);
         value <<= BITS_CHAR;
         value += c;
     }
@@ -794,16 +794,16 @@ evaleval(int* valp, int op, int skip)
     case OP_DIV:
     case OP_MOD:
         if (v2 == 0) {
-        if (!skip) {
-            cwarn("%s by zero in #if, zero result assumed",
-            (op == OP_DIV) ? "divide" : "mod");
-        }
-        v1 = 0;
+            if (!skip) {
+                cwarn("%s by zero in #if, zero result assumed",
+                (op == OP_DIV) ? "divide" : "mod");
+            }
+            v1 = 0;
         }
         else if (op == OP_DIV)
-        v1 /= v2;
+            v1 /= v2;
         else
-        v1 %= v2;
+            v1 %= v2;
         break;
 
     case OP_ASL:

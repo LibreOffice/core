@@ -349,7 +349,7 @@ void         (*outfun)() /* BP */
              && c != EOF_CHAR) {
 
             if (c != DEF_MAGIC)
-            (*outfun)(c);
+                (*outfun)(c);
             if (c == '\\')
                 (*outfun)(get());
         }

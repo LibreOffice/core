@@ -407,24 +407,24 @@ ERRTYPE RscBaseCont::SetString( const RSCINST & rInst, const char * pStr )
 
 //?B 040991
 //?W 040991 sonst Endlosrekursion moeglich
-if( RSC_NOTYPE == pTypeClass->GetTypId() ){
-    aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
-    aError = aTmpI.pClass->GetString( aTmpI, &pTmpStr );
-    if( aError.IsOk() )
-        aError = aTmpI.pClass->SetString( aTmpI, pStr );
-    else {
-        aError.Clear();
-        DeletePos( rInst, pClassData->nEntries -1 );
-        aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+    if( RSC_NOTYPE == pTypeClass->GetTypId() ){
+        aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
         aError = aTmpI.pClass->GetString( aTmpI, &pTmpStr );
         if( aError.IsOk() )
             aError = aTmpI.pClass->SetString( aTmpI, pStr );
+        else {
+            aError.Clear();
+            DeletePos( rInst, pClassData->nEntries -1 );
+            aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+            aError = aTmpI.pClass->GetString( aTmpI, &pTmpStr );
+            if( aError.IsOk() )
+                aError = aTmpI.pClass->SetString( aTmpI, pStr );
+        }
+        if( aError.IsError() )
+            DeletePos( rInst, pClassData->nEntries -1 );
     }
-    if( aError.IsError() )
-        DeletePos( rInst, pClassData->nEntries -1 );
-}
-else
-    aError = ERR_UNKNOWN_METHOD;
+    else
+        aError = ERR_UNKNOWN_METHOD;
 
     return( aError );
 }
@@ -444,24 +444,24 @@ ERRTYPE RscBaseCont::SetNumber( const RSCINST & rInst, sal_Int32 lValue ){
 
 //?B 040991
 //?W 040991 sonst Endlosrekursion moeglich
-if( RSC_NOTYPE == pTypeClass->GetTypId() ){
-    aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
-    aError = aTmpI.pClass->GetNumber( aTmpI, &lNumber );
-    if( aError.IsOk() )
-        aError = aTmpI.pClass->SetNumber( aTmpI, lValue );
-    else {
-        aError.Clear();
-        DeletePos( rInst, pClassData->nEntries -1 );
-        aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+    if( RSC_NOTYPE == pTypeClass->GetTypId() ){
+        aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
         aError = aTmpI.pClass->GetNumber( aTmpI, &lNumber );
         if( aError.IsOk() )
             aError = aTmpI.pClass->SetNumber( aTmpI, lValue );
+        else {
+            aError.Clear();
+            DeletePos( rInst, pClassData->nEntries -1 );
+            aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+            aError = aTmpI.pClass->GetNumber( aTmpI, &lNumber );
+            if( aError.IsOk() )
+                aError = aTmpI.pClass->SetNumber( aTmpI, lValue );
+        }
+        if( aError.IsError() )
+            DeletePos( rInst, pClassData->nEntries -1 );
     }
-    if( aError.IsError() )
-        DeletePos( rInst, pClassData->nEntries -1 );
-}
-else
-    aError = ERR_UNKNOWN_METHOD;
+    else
+        aError = ERR_UNKNOWN_METHOD;
 
     return( aError );
 }
@@ -480,27 +480,27 @@ ERRTYPE RscBaseCont::SetBool
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
-//?B 040991
-//?W 040991 sonst Endlosrekursion moeglich
-if( RSC_NOTYPE == pTypeClass->GetTypId() )
-{
-    aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
-    aError = aTmpI.pClass->GetBool( aTmpI, &bBool );
-    if( aError.IsOk() )
-        aError = aTmpI.pClass->SetBool( aTmpI, bValue );
-    else {
-        aError.Clear();
-        DeletePos( rInst, pClassData->nEntries -1 );
-        aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+    //?B 040991
+    //?W 040991 sonst Endlosrekursion moeglich
+    if( RSC_NOTYPE == pTypeClass->GetTypId() )
+    {
+        aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
         aError = aTmpI.pClass->GetBool( aTmpI, &bBool );
         if( aError.IsOk() )
             aError = aTmpI.pClass->SetBool( aTmpI, bValue );
+        else {
+            aError.Clear();
+            DeletePos( rInst, pClassData->nEntries -1 );
+            aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+            aError = aTmpI.pClass->GetBool( aTmpI, &bBool );
+            if( aError.IsOk() )
+                aError = aTmpI.pClass->SetBool( aTmpI, bValue );
+        }
+        if( aError.IsError() )
+            DeletePos( rInst, pClassData->nEntries -1 );
     }
-    if( aError.IsError() )
-        DeletePos( rInst, pClassData->nEntries -1 );
-}
-else
-    aError = ERR_UNKNOWN_METHOD;
+    else
+        aError = ERR_UNKNOWN_METHOD;
 
     return( aError );
 }
@@ -522,24 +522,24 @@ ERRTYPE RscBaseCont::SetConst
 
 //?B 040991
 //?W 040991 sonst Endlosrekursion moeglich
-if( RSC_NOTYPE == pTypeClass->GetTypId() ){
-    aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
-    aError = aTmpI.pClass->GetConst( aTmpI, &nConst );
-    if( aError.IsOk() )
-        aError = aTmpI.pClass->SetConst( aTmpI, nValueId, lValue );
-    else {
-        aError.Clear();
-        DeletePos( rInst, pClassData->nEntries -1 );
-        aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+    if( RSC_NOTYPE == pTypeClass->GetTypId() ){
+        aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
         aError = aTmpI.pClass->GetConst( aTmpI, &nConst );
         if( aError.IsOk() )
             aError = aTmpI.pClass->SetConst( aTmpI, nValueId, lValue );
+        else {
+            aError.Clear();
+            DeletePos( rInst, pClassData->nEntries -1 );
+            aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+            aError = aTmpI.pClass->GetConst( aTmpI, &nConst );
+            if( aError.IsOk() )
+                aError = aTmpI.pClass->SetConst( aTmpI, nValueId, lValue );
+        }
+        if( aError.IsError() )
+            DeletePos( rInst, pClassData->nEntries -1 );
     }
-    if( aError.IsError() )
-        DeletePos( rInst, pClassData->nEntries -1 );
-}
-else
-    aError = ERR_UNKNOWN_METHOD;
+    else
+        aError = ERR_UNKNOWN_METHOD;
 
     return( aError );
 }
@@ -559,24 +559,24 @@ ERRTYPE RscBaseCont::SetRef( const RSCINST & rInst, const RscId & rRefId ){
 
 //?B 040991
 //?W 040991 sonst Endlosrekursion moeglich
-if( RSC_NOTYPE == pTypeClass->GetTypId() ){
-    aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
-    aError = aTmpI.pClass->GetRef( aTmpI, &aId );
-    if( aError.IsOk() )
-        aError = aTmpI.pClass->SetRef( aTmpI, rRefId );
-    else {
-        aError.Clear();
-        DeletePos( rInst, pClassData->nEntries -1 );
-        aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+    if( RSC_NOTYPE == pTypeClass->GetTypId() ){
+        aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
         aError = aTmpI.pClass->GetRef( aTmpI, &aId );
         if( aError.IsOk() )
-            aError = aTmpI.pClass->SetNumber( aTmpI, rRefId );
+            aError = aTmpI.pClass->SetRef( aTmpI, rRefId );
+        else {
+            aError.Clear();
+            DeletePos( rInst, pClassData->nEntries -1 );
+            aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+            aError = aTmpI.pClass->GetRef( aTmpI, &aId );
+            if( aError.IsOk() )
+                aError = aTmpI.pClass->SetNumber( aTmpI, rRefId );
+        }
+        if( aError.IsError() )
+            DeletePos( rInst, pClassData->nEntries -1 );
     }
-    if( aError.IsError() )
-        DeletePos( rInst, pClassData->nEntries -1 );
-}
-else
-    aError = ERR_UNKNOWN_METHOD;
+    else
+        aError = ERR_UNKNOWN_METHOD;
 
     return( aError );
 }
