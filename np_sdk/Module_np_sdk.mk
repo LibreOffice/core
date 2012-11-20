@@ -27,16 +27,21 @@
 
 $(eval $(call gb_Module_Module,np_sdk))
 
-ifeq ($(ENABLE_NSPLUGIN),YES)
+ifneq (,$(filter YES,$(ENABLE_NPAPI_FROM_BROWSER) $(ENABLE_NPAPI_INTO_BROWSER)))
 
 $(eval $(call gb_Module_add_targets,np_sdk,\
 	Package_inc \
-	StaticLibrary_nputils \
 ))
 
 ifeq ($(SYSTEM_NPAPI_HEADERS),NO)
 $(eval $(call gb_Module_add_targets,np_sdk,\
 	Package_npapi \
+))
+endif
+
+ifeq ($(ENABLE_NPAPI_INTO_BROWSER),YES)
+$(eval $(call gb_Module_add_targets,np_sdk,\
+	StaticLibrary_nputils \
 ))
 endif
 

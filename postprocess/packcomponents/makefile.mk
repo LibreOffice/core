@@ -298,7 +298,7 @@ my_components += \
     component/wizards/com/sun/star/wizards/web/web
 .END
 
-.IF "$(ENABLE_NSPLUGIN)" == "YES"
+.IF "$(ENABLE_NPAPI_FROM_BROWSER)" == "YES"
 my_components += component/extensions/source/plugin/pl
 .END
 

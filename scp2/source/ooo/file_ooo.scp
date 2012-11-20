@@ -102,8 +102,7 @@ File gid_File_Basic_Tutorials
     Name = "basicsrvtutorials.zip";
 End
 
-#ifdef ENABLE_NSPLUGIN
-
+#if defined ENABLE_NPAPI_INTO_BROWSER
 File gid_File_Exe_Nsplugin
         BIN_FILE_BODY;
         Styles          = (PACKED);
@@ -114,17 +113,7 @@ File gid_File_Exe_Nsplugin
     Name = "nsplugin.exe";
   #endif
 End
-
-#if defined(UNX) && !defined(QUARTZ)
-File gid_File_Bin_Pluginapp
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "pluginapp.bin";
-    Styles = (PACKED);
-End
 #endif
-
-#endif // ENABLE_NSPLUGIN
 
 File gid_File_Bin_Gengal
     BIN_FILE_BODY;
@@ -155,6 +144,17 @@ File gid_File_Script_Gengal
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
     Name = "gengal";
+End
+
+#endif
+
+#if defined ENABLE_NPAPI_FROM_BROWSER && defined UNX && !defined QUARTZ
+
+File gid_File_Bin_Pluginapp
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = "pluginapp.bin";
+    Styles = (PACKED);
 End
 
 #endif

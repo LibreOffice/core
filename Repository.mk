@@ -187,13 +187,18 @@ $(eval $(call gb_Helper_register_executables,UREBIN,\
 
 endif
 
-ifeq ($(ENABLE_NSPLUGIN),YES)
+ifeq ($(ENABLE_NPAPI_FROM_BROWSER),YES)
 $(eval $(call gb_Helper_register_executables,OOO,\
-    nsplugin \
     pluginapp.bin \
 ))
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     pl \
+))
+endif
+
+ifeq ($(ENABLE_NPAPI_INTO_BROWSER),YES)
+$(eval $(call gb_Helper_register_executables,OOO,\
+    nsplugin \
 ))
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     npsoplugin \

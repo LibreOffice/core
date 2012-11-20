@@ -934,7 +934,7 @@ SPECIAL_LIB_FILE(gid_File_Lib_DeploymentGui,deploymentgui)
 
 STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deploymentmisc)
 
-#if defined ENABLE_NSPLUGIN
+#if defined ENABLE_NPAPI_FROM_BROWSER
 STD_LIB_FILE( gid_File_Lib_Pl , pl)
 #endif
 

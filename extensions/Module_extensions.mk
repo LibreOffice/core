@@ -103,14 +103,10 @@ endif # DISABLE_ATL
 
 endif # WNT
 
-ifeq ($(ENABLE_NSPLUGIN),YES)
+ifeq ($(ENABLE_NPAPI_FROM_BROWSER),YES)
 
 $(eval $(call gb_Module_add_targets,extensions,\
-	Executable_nsplugin \
-	Library_npsoplugin \
 	Library_pl \
-	StaticLibrary_npsoenv \
-	WinResTarget_npsoplugin \
 ))
 
 ifeq ($(GUI),UNX)
@@ -122,7 +118,18 @@ $(eval $(call gb_Module_add_targets,extensions,\
 endif
 endif
 
-endif # ENABLE_PLUGIN=YES
+endif # ENABLE_NPAPI_FROM_BROWSER=YES
+
+ifeq ($(ENABLE_NPAPI_INTO_BROWSER),YES)
+
+$(eval $(call gb_Module_add_targets,extensions,\
+	Executable_nsplugin \
+	Library_npsoplugin \
+	StaticLibrary_npsoenv \
+	WinResTarget_npsoplugin \
+))
+
+endif # ENABLE_NPAPI_INTO_BROWSER=YES
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,extensions,\

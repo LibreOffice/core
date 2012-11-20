@@ -1014,13 +1014,6 @@ AC_ARG_ENABLE(zenity,
         [Do not display a build icon in the notification area (on unix) during build.]),
 ,enable_zenity=yes)
 
-AC_ARG_ENABLE(nsplugin,
-    AS_HELP_STRING([--disable-nsplugin],
-        [Do not build NPAPI-based plugin features (allowing to plug LibreOffice
-         into browser windows, and to plug browser plugins into LibreOffice
-         documents.])
-)
-
 AC_ARG_ENABLE(cups,
     AS_HELP_STRING([--disable-cups],
         [Do not build cups support.])
@@ -1682,7 +1675,8 @@ WITH_SYSTEM_MOZILLA=no)
 AC_ARG_WITH(system-npapi-headers,
     AS_HELP_STRING([--with-system-npapi-headers],
         [Use NPAPI headers provided by system instead of bundled ones. Used in
-         extensions/source/nsplugin and extensions/source/plugin]),,
+         extensions/source/nsplugin (ENABLE_NPAPI_INTO_BROWSER=YES) and
+         extensions/source/plugin (ENABLE_NPAPI_FROM_BROWSER=YES)]),,
     [with_system_npapi_headers="$with_system_headers"]
 )
 
@@ -8390,7 +8384,8 @@ if test "$with_system_npapi_headers" = "yes"; then
     AC_LANG_POP([C])
 else
     AC_MSG_RESULT([internal])
-        dnl ...but will not be built/used unless ENABLE_NSPLUGIN is YES
+        dnl ...but will not be built/used unless ENABLE_NPAPI_FROM_BROWSER or
+        dnl ENABLE_NPAPI_INTO_BROWSER is YES
     SYSTEM_NPAPI_HEADERS=NO
 fi
 AC_SUBST(NPAPI_HEADERS_CFLAGS)
@@ -8556,24 +8551,33 @@ AC_SUBST(GRAPHITE_TARBALL)
 AC_SUBST([MINGW_GRAPHITE2_DLL])
 
 dnl ===================================================================
-dnl Check for nsplugin
+dnl Check for NPAPI interface to plug browser plugins into LibreOffice documents
 dnl ===================================================================
-AC_MSG_CHECKING([whether to build nsplugin extension])
-ENABLE_NSPLUGIN=NO
-if test $_os = Darwin -o $_os = iOS -o $_os = Android -o "$enable_headless" = "yes"; then
-    enable_gtk=no
-fi
-if test "$enable_nsplugin" != "no"; then
-    if test "$enable_gtk" != "no"; then
-        AC_MSG_RESULT([yes])
-        ENABLE_NSPLUGIN=YES
-    else
-        AC_MSG_RESULT([no, disabled gtk2])
-    fi
+AC_MSG_CHECKING([whether to plug browser plugins into LibreOffice documents])
+if test "$_os" != Android -a "$_os" != iOS
+then
+    AC_MSG_RESULT([yes])
+    ENABLE_NPAPI_FROM_BROWSER=YES
 else
     AC_MSG_RESULT([no])
+    ENABLE_NPAPI_FROM_BROWSER=NO
 fi
-AC_SUBST(ENABLE_NSPLUGIN)
+AC_SUBST(ENABLE_NPAPI_FROM_BROWSER)
+
+dnl ===================================================================
+dnl Check for NPAPI interface to plug LibreOffice into browser windows
+dnl ===================================================================
+AC_MSG_CHECKING([whether to plug LibreOffice into browser windows])
+if test "$_os" != Android -a "$_os" != Darwin -a "$_os" != iOS -a \
+        "$enable_headless" != yes -a "$enable_gtk" != no
+then
+    AC_MSG_RESULT([yes])
+    ENABLE_NPAPI_INTO_BROWSER=YES
+else
+    AC_MSG_RESULT([no])
+    ENABLE_NPAPI_INTO_BROWSER=NO
+fi
+AC_SUBST(ENABLE_NPAPI_INTO_BROWSER)
 
 AC_MSG_CHECKING([whether to use X11])
 dnl ***************************************
@@ -9416,6 +9420,9 @@ AC_SUBST(GTK3_CFLAGS)
 AC_SUBST(ENABLE_GTK3)
 
 AC_MSG_CHECKING([which VCLplugs shall be built])
+if test $_os = Darwin -o $_os = iOS -o $_os = Android -o "$enable_headless" = "yes"; then
+    enable_gtk=no
+fi
 ENABLE_GTK=""
 if test "x$enable_gtk" = "xyes"; then
     ENABLE_GTK="TRUE"
