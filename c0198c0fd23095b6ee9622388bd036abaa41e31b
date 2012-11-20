@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQn///3s\u003d",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-20T16:19:33Z",
+      "side": 1,
+      "message": "This is a wrapper to allow _String_ (not OUString) to be used indeed.\nThis wrapper will be deleted in few more commit, and the offending comment with it.",
+      "parentUuid": "AAAAQn///4I\u003d",
+      "revId": "c0198c0fd23095b6ee9622388bd036abaa41e31b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQn///4M\u003d",
         "filename": "svl/source/numbers/zforlist.cxx",
         "patchSetId": 1
@@ -47,6 +65,24 @@
       "writtenOn": "2012-11-20T14:44:19Z",
       "side": 1,
       "message": "This is mostly a matter of taste, but I do not see the point of this change besides making the code less readable.",
+      "revId": "c0198c0fd23095b6ee9622388bd036abaa41e31b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn///3w\u003d",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1651,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-20T16:19:33Z",
+      "side": 1,
+      "message": "nCheckPos was an unsigned value and now it is a signed value\nso no, this is not a matter of taste, but a matter of correctness:\n\nbefore nCheckPos values : 0,  \u003e0 including the \u0027special\u0027 0xffff\nafter   nCheckPos values: -1, 0, \u003e0",
+      "parentUuid": "AAAAQn///4M\u003d",
       "revId": "c0198c0fd23095b6ee9622388bd036abaa41e31b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQn///3o\u003d",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-20T16:19:33Z",
+      "side": 1,
+      "message": "Not in rtl API. replace(f, t) \u003d\u003e replace every occurrences of the character f by t :   see ustring.hxx\n\ngit blame indicate that replace() has been like that since May 2001\nthe replaceAll variant (different types of arg) come in Feb15 this year... sadly they have already been \u0027published\u0027 (in 3.6) so... too late to fix-up that inconsistency",
+      "parentUuid": "AAAAQn///4E\u003d",
+      "revId": "c0198c0fd23095b6ee9622388bd036abaa41e31b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQn///4A\u003d",
         "filename": "svl/source/numbers/zformat.cxx",
         "patchSetId": 1
@@ -81,6 +135,24 @@
       "writtenOn": "2012-11-20T14:44:19Z",
       "side": 1,
       "message": "What\u0027s the point of changing (something that looks like) C++ cast to C cast?",
+      "revId": "c0198c0fd23095b6ee9622388bd036abaa41e31b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn///3k\u003d",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-20T16:19:33Z",
+      "side": 1,
+      "message": "I guess it was retaliation :-) for having me waste so much time\nto figure out what that stupid construct was doing... only\nto find-out that it was just a convoluted way to do a trivial\nscalar type cast... via a Template no less...!!!",
+      "parentUuid": "AAAAQn///4A\u003d",
       "revId": "c0198c0fd23095b6ee9622388bd036abaa41e31b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
