@@ -56,6 +56,7 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, sal_Bool bOne_, const SfxItem
     get(m_pDeleteBtn, "delete");
     get(m_pFontText, "fontft");
     get(m_pFontLB, "fontlb");
+    m_pFontLB->SetStyle(m_pFontLB->GetStyle() | WB_SORT);
     get(m_pSubsetText, "subsetft");
     get(m_pSubsetLB, "subsetlb");
     get(m_pCharCodeText, "charcodeft");
