@@ -95,11 +95,6 @@
 
 #include "langselect.hxx"
 
-#include "com/sun/star/deployment/ExtensionManager.hpp"
-#include "com/sun/star/deployment/XExtensionManager.hpp"
-#include "com/sun/star/task/XInteractionApprove.hpp"
-#include "cppuhelper/compbase3.hxx"
-
 #ifdef ENABLE_TELEPATHY
 #include <tubes/manager.hxx>
 #endif
