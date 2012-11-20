@@ -813,17 +813,18 @@ sal_Bool SAL_CALL osl_writeProfileIdent(oslProfile Profile,
                               sal_uInt32 FirstId, const sal_Char* Strings[],
                               sal_uInt32 Value)
 {
-    int i, n;
+    int i, n = 0;
     sal_Bool bRet=sal_False;
 
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  osl_writeProfileIdent");
 #endif
 
-    for (n = 0; Strings[n] != NULL; n++);
+    while (Strings[n] != NULL)
+        ++n;
 
     if ((i = Value - FirstId) >= n)
-        bRet=sal_False;
+        bRet = sal_False;
     else
         bRet = osl_writeProfileString(Profile, pszSection, pszEntry, Strings[i]);
 
