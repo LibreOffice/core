@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQn///5I\u003d",
+        "filename": "editeng/source/items/frmitems.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1797,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-11-20T10:55:17Z",
+      "side": 1,
+      "message": "such a constant in the IDL would actually not do any good because we can\u0027t change its value, as doing so would be an incompatible change.\nhmm... i guess the way to do this would be to have a service with a method that returns the max value, but that sounds awfully complicated for such a simple problem...",
+      "parentUuid": "AAAAQn///5w\u003d",
+      "revId": "0a3b8d03829065534628e7e6bbcc8f3464cbab9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQn///5s\u003d",
         "filename": "svtools/inc/svtools/ctrlbox.hxx",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2012-11-20T05:11:03Z",
       "side": 1,
       "message": "yep it sure does :-)",
+      "revId": "0a3b8d03829065534628e7e6bbcc8f3464cbab9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQn///5A\u003d",
+        "filename": "svtools/inc/svtools/ctrlbox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-11-20T10:55:17Z",
+      "side": 1,
+      "message": "well at least SvxBorderStyle is now just a typedef, some progress there :)",
+      "parentUuid": "AAAAQn///5s\u003d",
       "revId": "0a3b8d03829065534628e7e6bbcc8f3464cbab9f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
