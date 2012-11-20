@@ -84,14 +84,14 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rOldPath,
     }
     const OString SDFFileName =
         OUStringToOString(aTempPath, RTL_TEXTENCODING_UTF8);
-    const char* cmd = (rpo2loPath +
+    const OString cmd = OString(rpo2loPath +
             " -i " + rOldPath + "/" + LangEntryName +
             " -o " + SDFFileName +
             " -l " + LangEntryName +
-                       " -t " + rSDFPath).getStr();
-    if (system(cmd) != 0)
+            " -t " + rSDFPath);
+    if (system(cmd.getStr()) != 0)
     {
-        std::cerr << "Error: Failed to execute " << cmd << '\n';
+        std::cerr << "Error: Failed to execute " << cmd.getStr() << '\n';
         throw false;
     }
     cout << "Language sdf is ready!" << endl;
@@ -141,10 +141,10 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rOldPath,
             const OString sNewPoFileName =
                 GetPath(rNewPath + "/" +LangEntryName,pActInfo->second.first) +
                 ".po";
-            const char* cmd2 = ("mkdir -p " + sNewPoFileName.copy(0,sNewPoFileName.lastIndexOf("/"))).getStr();
-            if (system(cmd2) != 0)
+            const OString cmd2 = OString("mkdir -p " + sNewPoFileName.copy(0,sNewPoFileName.lastIndexOf("/")));
+            if (system(cmd2.getStr()) != 0)
             {
-                std::cerr << "Error: Failed to execute " << cmd2 << '\n';
+                std::cerr << "Error: Failed to execute " << cmd2.getStr() << '\n';
                 throw false;
             }
 
