@@ -9425,7 +9425,10 @@ if test $_os = Darwin -o $_os = iOS -o $_os = Android -o "$enable_headless" = "y
 fi
 ENABLE_GTK=""
 if test "x$enable_gtk" = "xyes"; then
-    test_cairo=yes
+    if test "$GUIBASE" = "unx"; then
+        # Used in vcl/Library_vclplug_gtk.mk
+        test_cairo=yes
+    fi
     ENABLE_GTK="TRUE"
     R="gtk $R"
 fi
