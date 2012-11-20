@@ -953,7 +953,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
             // then make it by your self
             if( !bInSwapIn )
             {
-                sal_Bool bIsModifyLocked = IsModifyLocked();
+                bool bIsModifyLocked = IsModifyLocked();
                 LockModify();
                 SwapIn( sal_False );
                 if( !bIsModifyLocked )

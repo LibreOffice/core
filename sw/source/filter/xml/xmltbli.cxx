@@ -1892,7 +1892,7 @@ SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
     sal_Bool bProtected,
     sal_Bool bMayShare,
     sal_Bool& bNew,
-    sal_Bool* pModifyLocked )
+    bool* pModifyLocked )
 {
     if ( pSharedBoxFormats == NULL )
         pSharedBoxFormats = new map_BoxFmt();
@@ -2061,7 +2061,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
 
     // Share formats!
     OUString sStyleName = pCell->GetStyleName();
-    sal_Bool bModifyLocked;
+    bool bModifyLocked;
     sal_Bool bNew;
     SwTableBoxFmt *pBoxFmt2 = GetSharedBoxFormat(
         pBox, sStyleName, nColWidth, pCell->IsProtected(),

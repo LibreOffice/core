@@ -53,7 +53,7 @@
 
 static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                     SwTable& rDstTbl, SwTableBox* pDstBox,
-                    sal_Bool bDelCntnt, SwUndoTblCpyTbl* pUndo );
+                    bool bDelCntnt, SwUndoTblCpyTbl* pUndo );
 
 // The following type will be used by table copy functions to describe
 // the structure of tables (or parts of tables).
@@ -501,7 +501,7 @@ namespace
                     SwTableBox *pBox = rInfo.mpBox;
                     if( pBox && pBox->getRowSpan() > 0 )
                         lcl_CpyBox( rSource, rInfo.mpCopy, rDstTbl, pBox,
-                                    sal_True, pUndo );
+                                    true, pUndo );
                 }
             }
         }
@@ -519,7 +519,7 @@ namespace
 // of a "BaseLine".
 static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                     SwTable& rDstTbl, SwTableBox* pDstBox,
-                    sal_Bool bDelCntnt, SwUndoTblCpyTbl* pUndo )
+                    bool bDelCntnt, SwUndoTblCpyTbl* pUndo )
 {
     OSL_ENSURE( ( !pCpyBox || pCpyBox->GetSttNd() ) && pDstBox->GetSttNd(),
             "No content in this Box" );
@@ -764,7 +764,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
 
     SwTblNumFmtMerge aTNFM( *pCpyDoc, *pDoc );
 
-    sal_Bool bDelCntnt = sal_True;
+    bool bDelCntnt = true;
     const SwTableBox* pTmp;
 
     for( sal_uInt16 nLines = 0; nLines < rCpyTbl.GetTabLines().size(); ++nLines )
@@ -785,11 +785,11 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
             pCpyBox = pTmp;
 
             if( 0 == ( pTmp = pMyBox->FindNextBox( *this, pMyBox, false )))
-                bDelCntnt = sal_False;  // No space left?
+                bDelCntnt = false;  // No space left?
             else
                 pMyBox = (SwTableBox*)pTmp;
 
-        } while( sal_True );
+        } while( true );
 
         // Find the topmost Line
         SwTableLine* pNxtLine = pMyBox->GetUpper();
@@ -798,7 +798,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
         sal_uInt16 nPos = GetTabLines().GetPos( pNxtLine );
         // Is there a next?
         if( nPos + 1 >= (sal_uInt16)GetTabLines().size() )
-            bDelCntnt = sal_False;      // there is none, all goes into the last Box
+            bDelCntnt = false;      // there is none, all goes into the last Box
         else
         {
             // Find the next Box with content
@@ -806,7 +806,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
             pMyBox = pNxtLine->GetTabBoxes().front();
             while( !pMyBox->GetTabLines().empty() )
                 pMyBox = pMyBox->GetTabLines().front()->GetTabBoxes().front();
-            bDelCntnt = sal_True;
+            bDelCntnt = true;
         }
     }
 
@@ -905,9 +905,9 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 
                 if( pUndo
                     ? !pUndo->InsertRow( *this, SelLineFromBox( pInsBox,
-                                aBoxes, sal_True ), nNewLns )
+                                aBoxes, true ), nNewLns )
                     : !InsertRow( pDoc, SelLineFromBox( pInsBox,
-                                aBoxes, sal_True ), nNewLns, true ) )
+                                aBoxes, true ), nNewLns, true ) )
                     return sal_False;
             }
 
@@ -1014,7 +1014,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
         for (size_t n = 0; n < rSelBoxes.size(); ++n)
         {
             lcl_CpyBox( rCpyTbl, pTmpBx, *this,
-                        (SwTableBox*)rSelBoxes[n], sal_True, pUndo );
+                        (SwTableBox*)rSelBoxes[n], true, pUndo );
         }
     }
     else
@@ -1028,7 +1028,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 // Copy the pCpyBox into pMyBox
                 lcl_CpyBox( rCpyTbl, pCpyLn->GetTabBoxes()[
                             nBx % pCpyLn->GetTabBoxes().size() ],
-                    *this, pFLine->GetBoxes()[nBx].GetBox(), sal_True, pUndo );
+                    *this, pFLine->GetBoxes()[nBx].GetBox(), true, pUndo );
             }
         }
 
@@ -1055,7 +1055,7 @@ static void _FndCntntLine( const SwTableLine* pLine, SwSelBoxes* pPara )
 
 // Find all Boxes with content in this Box
 SwSelBoxes& SwTable::SelLineFromBox( const SwTableBox* pBox,
-                                    SwSelBoxes& rBoxes, sal_Bool bToTop ) const
+                                    SwSelBoxes& rBoxes, bool bToTop ) const
 {
     SwTableLine* pLine = (SwTableLine*)pBox->GetUpper();
     if( bToTop )

@@ -300,9 +300,9 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 
-    void AddBoxBefore( const SwTableBox& rBox, sal_Bool bDelCntnt );
+    void AddBoxBefore( const SwTableBox& rBox, bool bDelCntnt );
     void AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx,
-                sal_Bool bDelCntnt );
+                bool bDelCntnt );
 
     sal_Bool IsEmpty() const;
     bool InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes, sal_uInt16 nCnt );

@@ -624,7 +624,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     if (pSection->DataEquals(rNewData))
     {
         // Check Attributes
-        sal_Bool bOnlyAttrChg = sal_False;
+        bool bOnlyAttrChg = false;
         if( pAttr && pAttr->Count() )
         {
             SfxItemIter aIter( *pAttr );
@@ -633,7 +633,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
             {
                 if( pFmt->GetFmtAttr( nWhich ) != *aIter.GetCurItem() )
                 {
-                    bOnlyAttrChg = sal_True;
+                    bOnlyAttrChg = true;
                     break;
                 }
 
@@ -902,7 +902,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
 
     // We could optimize this, by not removing already contained Frames and recreating them,
     // but by simply rewiring them
-    sal_Bool bInsFrm = bCreateFrms && !pSectNd->GetSection().IsHidden() &&
+    bool bInsFrm = bCreateFrms && !pSectNd->GetSection().IsHidden() &&
                    GetDoc()->GetCurrentViewShell();
     SwNode2Layout *pNode2Layout = NULL;
     if( bInsFrm )

@@ -182,7 +182,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
     SwCntntNode* pNode = (SwCntntNode*)rpNd->GetCntntNode();
     if( pNode && pNode->HasSwAttrSet() )
     {
-        const sal_Bool bLocked = pNode->IsModifyLocked();
+        const bool bLocked = pNode->IsModifyLocked();
         pNode->LockModify();
 
         SwDoc* pDoc = pNode->GetDoc();

@@ -2187,7 +2187,7 @@ bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
     SwSelBoxes aSelBoxes;
     SwTableBox* pBox = GetTabSortBoxes()[ 0 ];
     pBox = GetTblBox( pBox->GetSttNd()->StartOfSectionNode()->GetIndex() + 1 );
-    SelLineFromBox( pBox, aSelBoxes, sal_True );
+    SelLineFromBox( pBox, aSelBoxes, true );
 
     _FndBox aFndBox( 0, 0 );
     {

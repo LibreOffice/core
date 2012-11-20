@@ -152,7 +152,7 @@ namespace
     };
 
     /// Checks whether a writer-specific block exists (i.e. size is not zero)
-    sal_Bool WriterSpecificBlockExists(SvStream &stream)
+    bool WriterSpecificBlockExists(SvStream &stream)
     {
         sal_uInt64 endOfSwBlock = 0;
         stream >> endOfSwBlock;

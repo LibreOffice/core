@@ -68,7 +68,7 @@ extern void ClearFEShellTabCols();
 //siehe auch swtable.cxx
 #define COLFUZZY 20L
 
-inline sal_Bool IsSame( long nA, long nB ) { return  Abs(nA-nB) <= COLFUZZY; }
+inline bool IsSame( long nA, long nB ) { return  Abs(nA-nB) <= COLFUZZY; }
 
 class SwTblFmtCmp
 {
@@ -131,8 +131,8 @@ static void lcl_GetStartEndCell( const SwCursor& rCrsr,
     prEnd   = pMarkFrm  ? pMarkFrm->GetUpper() : 0;
 }
 
-static sal_Bool lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
-                    sal_Bool bAllCrsr = sal_False )
+static bool lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
+                    bool bAllCrsr = false )
 {
     const SwTableCursor* pTblCrsr =
         dynamic_cast<const SwTableCursor*>(&rCursor);
@@ -176,17 +176,17 @@ inline void InsertLine( std::vector<SwTableLine*>& rLineArr, SwTableLine* pLine 
 
 //-----------------------------------------------------------------------------
 
-static sal_Bool lcl_IsAnLower( const SwTableLine *pLine, const SwTableLine *pAssumed )
+static bool lcl_IsAnLower( const SwTableLine *pLine, const SwTableLine *pAssumed )
 {
     const SwTableLine *pTmp = pAssumed->GetUpper() ?
                                     pAssumed->GetUpper()->GetUpper() : 0;
     while ( pTmp )
     {
         if ( pTmp == pLine )
-            return sal_True;
+            return true;
         pTmp = pTmp->GetUpper() ? pTmp->GetUpper()->GetUpper() : 0;
     }
-    return sal_False;
+    return false;
 }
 //-----------------------------------------------------------------------------
 
@@ -201,9 +201,9 @@ struct LinesAndTable
 };
 
 
-sal_Bool _FindLine( _FndLine & rLine, LinesAndTable* pPara );
+bool _FindLine( _FndLine & rLine, LinesAndTable* pPara );
 
-sal_Bool _FindBox( _FndBox & rBox, LinesAndTable* pPara )
+bool _FindBox( _FndBox & rBox, LinesAndTable* pPara )
 {
     if (!rBox.GetLines().empty())
     {
@@ -230,17 +230,17 @@ sal_Bool _FindBox( _FndBox & rBox, LinesAndTable* pPara )
         ::InsertLine( pPara->rLines,
                       static_cast<SwTableLine*>(rBox.GetBox()->GetUpper()));
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool _FindLine( _FndLine& rLine, LinesAndTable* pPara )
+bool _FindLine( _FndLine& rLine, LinesAndTable* pPara )
 {
     for (_FndBoxes::iterator it = rLine.GetBoxes().begin();
          it != rLine.GetBoxes().end(); ++it)
     {
         _FindBox(*it, pPara);
     }
-    return sal_True;
+    return true;
 }
 
 static void lcl_CollectLines( std::vector<SwTableLine*> &rArr, const SwCursor& rCursor, bool bRemoveLines )
@@ -653,13 +653,13 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
             pSetBox = 0;
         }
 
-        sal_Bool bFirst = sal_True;
+        bool bFirst = true;
         for ( sal_uInt16 i = 0; i < aUnions.size(); ++i )
         {
             SwSelUnion *pUnion = &aUnions[i];
             SwTabFrm *pTab = pUnion->GetTable();
             const SwRect &rUnion = pUnion->GetUnion();
-            const sal_Bool bLast  = i == aUnions.size() - 1 ? sal_True : sal_False;
+            const bool bLast  = (i == aUnions.size() - 1);
 
             std::vector<SwCellFrm*> aCellArr;
             aCellArr.reserve( 255 );
@@ -795,7 +795,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 }
             }
 
-            bFirst = sal_False;
+            bFirst = false;
         }
 
         SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();
@@ -942,8 +942,8 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
             SwSelUnion *pUnion = &aUnions[i];
             const SwTabFrm *pTab = pUnion->GetTable();
             const SwRect &rUnion = pUnion->GetUnion();
-            const sal_Bool bFirst = i == 0 ? sal_True : sal_False;
-            const sal_Bool bLast  = i == aUnions.size() - 1 ? sal_True : sal_False;
+            const bool bFirst = i == 0;
+            const bool bLast  = (i == aUnions.size() - 1);
 
             std::vector<SwCellFrm*> aCellArr;
             aCellArr.reserve(255);
@@ -1128,7 +1128,7 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
 {
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     SwSelBoxes aBoxes;
-    if( pTblNd && ::lcl_GetBoxSel( rCursor, aBoxes, sal_True ) )
+    if( pTblNd && ::lcl_GetBoxSel( rCursor, aBoxes, true ) )
     {
         SwTable& rTable = pTblNd->GetTable();
         if (GetIDocumentUndoRedo().DoesUndo())
@@ -1181,7 +1181,7 @@ sal_Bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) cons
     if( pTblNd && lcl_GetBoxSel( rCursor, aBoxes ))
     {
         bRet = sal_True;
-        sal_Bool bOneFound = sal_False;
+        bool bOneFound = false;
         const sal_uInt16 nWhich = rToFill.Which();
         for (size_t i = 0; i < aBoxes.size(); ++i)
         {
@@ -1194,7 +1194,7 @@ sal_Bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) cons
                     if( !bOneFound )
                     {
                         (SvxBrushItem&)rToFill = rBack;
-                        bOneFound = sal_True;
+                        bOneFound = true;
                     }
                     else if( rToFill != rBack )
                         bRet = sal_False;
@@ -1208,7 +1208,7 @@ sal_Bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) cons
                     if( !bOneFound )
                     {
                         (SvxFrameDirectionItem&)rToFill = rDir;
-                        bOneFound = sal_True;
+                        bOneFound = true;
                     }
                     else if( rToFill != rDir )
                         bRet = sal_False;
@@ -1220,7 +1220,7 @@ sal_Bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) cons
                     if( !bOneFound )
                     {
                         (SwFmtVertOrient&)rToFill = rOrient;
-                        bOneFound = sal_True;
+                        bOneFound = true;
                     }
                     else if( rToFill != rOrient )
                         bRet = sal_False;
@@ -1400,7 +1400,7 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
                 const long nCLeft  = (pCell->Frm().*fnRect->fnGetLeft)();
                 const long nCRight = (pCell->Frm().*fnRect->fnGetRight)();
 
-                sal_Bool bNotInCols = sal_True;
+                bool bNotInCols = true;
 
                 for ( sal_uInt16 i = 0; i <= rCols.Count(); ++i )
                 {
@@ -1431,7 +1431,7 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
                     //Wir wollen nicht allzu genau hinsehen.
                     if ( ::IsSame(nCLeft, nLeftA) && ::IsSame(nCRight, nRightA))
                     {
-                        bNotInCols = sal_False;
+                        bNotInCols = false;
                         if ( bWishValues )
                         {
                             const sal_uInt16 nWish = ::lcl_CalcCellFit( pCell );

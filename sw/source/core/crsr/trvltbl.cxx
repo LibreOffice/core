@@ -100,7 +100,7 @@ sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
                 // the document might change; w/o Action views would not be notified
                 ((SwEditShell*)this)->StartAllAction();
                 bRet = pDoc->InsertRow( pTblNd->GetTable().
-                                    SelLineFromBox( pTableBox, aBoxes, sal_False ));
+                                    SelLineFromBox( pTableBox, aBoxes, false ));
                 ((SwEditShell*)this)->EndAllAction();
             }
         }

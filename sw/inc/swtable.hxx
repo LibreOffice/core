@@ -124,14 +124,14 @@ protected:
                                         // at HTML-import.
     sal_uInt16      nRowsToRepeat;      // Number of rows to repeat on every page.
 
-    sal_Bool        bModifyLocked   :1;
+    bool        bModifyLocked   :1;
     sal_Bool        bNewModel       :1; // sal_False: old SubTableModel; sal_True: new RowSpanModel
 #ifdef DBG_UTIL
     /// This is set by functions (like Merge()) to forbid a late model change.
     bool m_bDontChangeModel;
 #endif
 
-    sal_Bool IsModifyLocked(){ return bModifyLocked;}
+    bool IsModifyLocked(){ return bModifyLocked;}
 
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 
@@ -179,8 +179,8 @@ public:
     sal_uInt16 IncGrfsThatResize() { return ++nGrfsThatResize; }
     sal_uInt16 DecGrfsThatResize() { return nGrfsThatResize ? --nGrfsThatResize : 0; }
 
-    void LockModify()   { bModifyLocked = sal_True; }   // Must be used always
-    void UnlockModify() { bModifyLocked = sal_False;}   // in pairs!
+    void LockModify()   { bModifyLocked = true; }   // Must be used always
+    void UnlockModify() { bModifyLocked = false;}   // in pairs!
 
     void SetTableModel( sal_Bool bNew ){ bNewModel = bNew; }
     sal_Bool IsNewModel() const { return bNewModel; }
@@ -308,9 +308,9 @@ public:
     // Search all content-bearing boxes of the base line on which this box stands.
     // rBoxes as a return value for immediate use.
     // steht. rBoxes auch als Return-Wert, um es gleich weiter zu benutzen
-    // bToTop = sal_True -> up to base line, sal_False-> else only line of box.
+    // bToTop = true -> up to base line, sal_False-> else only line of box.
     SwSelBoxes& SelLineFromBox( const SwTableBox* pBox,
-                            SwSelBoxes& rBoxes, sal_Bool bToTop = sal_True ) const;
+                            SwSelBoxes& rBoxes, bool bToTop = true ) const;
 
     // Get information from client.
     virtual bool GetInfo( SfxPoolItem& ) const;

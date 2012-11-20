@@ -139,7 +139,7 @@ class SwXMLTableContext : public XMLTextTableContext
         sal_Bool bProtected,        /// is cell protected?
         sal_Bool bMayShare, /// may the format be shared (no value, formula...)
         sal_Bool& bNew,     /// true, if the format it not from the cache
-        sal_Bool* pModifyLocked );  /// if set, call pBox->LockModify() and return old lock status
+        bool* pModifyLocked );  /// if set, call pBox->LockModify() and return old lock status
 
 public:
 

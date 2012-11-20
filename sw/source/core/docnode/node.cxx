@@ -787,13 +787,13 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
     {
         sal_uInt16 nPos;
         SwNode* pNd = (SwNode*)this;
-        sal_Bool bCheckFirst = sal_False;
+        bool bCheckFirst = false;
         if( !rONds.Seek_Entry( pNd, &nPos ))
         {
             if( nPos )
                 nPos = nPos-1;
             else
-                bCheckFirst = sal_True;
+                bCheckFirst = true;
         }
 
         if( bCheckFirst )
@@ -830,7 +830,7 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
     return pRet;
 }
 
-inline sal_Bool IsValidNextPrevNd( const SwNode& rNd )
+inline bool IsValidNextPrevNd( const SwNode& rNd )
 {
     return ND_TABLENODE == rNd.GetNodeType() ||
            ( ND_CONTENTNODE & rNd.GetNodeType() ) ||

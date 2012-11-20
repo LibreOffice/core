@@ -51,7 +51,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
 
     if (pTxtNd && pTxtNd->IsOutlineStateChanged())
     {
-        sal_Bool bFound = pOutlineNds->find(pTxtNd) != pOutlineNds->end();
+        bool bFound = pOutlineNds->find(pTxtNd) != pOutlineNds->end();
 
         if (pTxtNd->IsOutline())
         {

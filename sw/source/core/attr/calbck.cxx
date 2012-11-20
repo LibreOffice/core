@@ -100,7 +100,7 @@ bool SwClient::GetInfo( SfxPoolItem& ) const
 SwModify::SwModify()
     : SwClient(0), pRoot(0)
 {
-    bModifyLocked = sal_False;
+    bModifyLocked = false;
     bLockClientList = sal_False;
     bInDocDTOR = sal_False;
     bInCache = sal_False;
@@ -110,7 +110,7 @@ SwModify::SwModify()
 SwModify::SwModify( SwModify* pToRegisterIn )
     : SwClient( pToRegisterIn ), pRoot( 0 )
 {
-    bModifyLocked = sal_False;
+    bModifyLocked = false;
     bLockClientList = sal_False;
     bInDocDTOR = sal_False;
     bInCache = sal_False;

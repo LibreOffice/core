@@ -120,7 +120,7 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
     if( !bContourMapModeValid )
     {
         const MapMode aGrfMap( GetGraphic().GetPrefMapMode() );
-        sal_Bool bPixelGrf = aGrfMap.GetMapUnit() == MAP_PIXEL;
+        bool bPixelGrf = aGrfMap.GetMapUnit() == MAP_PIXEL;
         const MapMode aContourMap( bPixelGrf ? MAP_PIXEL : MAP_100TH_MM );
         if( bPixelGrf ? !bPixelContour : aGrfMap != aContourMap )
         {

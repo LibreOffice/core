@@ -2647,7 +2647,7 @@ void SwUndoTblCpyTbl::RedoImpl(::sw::UndoRedoContext & rContext)
     _DEBUG_REDLINE( &rDoc )
 }
 
-void SwUndoTblCpyTbl::AddBoxBefore( const SwTableBox& rBox, sal_Bool bDelCntnt )
+void SwUndoTblCpyTbl::AddBoxBefore( const SwTableBox& rBox, bool bDelCntnt )
 {
     if( !pArr->empty() && !bDelCntnt )
         return;
@@ -2676,7 +2676,7 @@ void SwUndoTblCpyTbl::AddBoxBefore( const SwTableBox& rBox, sal_Bool bDelCntnt )
     _DEBUG_REDLINE( pDoc )
 }
 
-void SwUndoTblCpyTbl::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx, sal_Bool bDelCntnt )
+void SwUndoTblCpyTbl::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx, bool bDelCntnt )
 {
     _UndoTblCpyTbl_Entry* pEntry = &(*pArr).back();
 
@@ -2905,7 +2905,7 @@ void SwUndoSplitTbl::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             SwSelBoxes aSelBoxes;
             SwTableBox* pBox = rTbl.GetTblBox( nTblNode + nOffset + 1 );
-            rTbl.SelLineFromBox( pBox, aSelBoxes, sal_True );
+            rTbl.SelLineFromBox( pBox, aSelBoxes, true );
             _FndBox aTmpBox( 0, 0 );
             aTmpBox.SetTableLines( aSelBoxes, rTbl );
             aTmpBox.DelFrms( rTbl );

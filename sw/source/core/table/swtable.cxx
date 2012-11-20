@@ -260,7 +260,7 @@ SwTable::SwTable( SwTableFmt* pFmt )
     pTableNode( 0 ),
     nGrfsThatResize( 0 ),
     nRowsToRepeat( 1 ),
-    bModifyLocked( sal_False ),
+    bModifyLocked( false ),
     bNewModel( sal_True )
 {
     // default value set in the options
@@ -274,7 +274,7 @@ SwTable::SwTable( const SwTable& rTable )
     eTblChgMode( rTable.eTblChgMode ),
     nGrfsThatResize( 0 ),
     nRowsToRepeat( rTable.GetRowsToRepeat() ),
-    bModifyLocked( sal_False ),
+    bModifyLocked( false ),
     bNewModel( rTable.bNewModel )
 {
 }
@@ -2373,7 +2373,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                                     if( bIsNumFmt )
                                     {
                                         // directly assign value - without Modify
-                                        int bIsLockMod = IsModifyLocked();
+                                        bool bIsLockMod = IsModifyLocked();
                                         LockModify();
                                         SetFmtAttr( SwTblBoxValue( fVal ));
                                         if( !bIsLockMod )

@@ -955,7 +955,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             if( !bCopyCollFmt || bColumnSel || pStt->nContent.GetIndex() )
             {
                 SwIndex aDestIdx( rPos.nContent );
-                sal_Bool bCopyOk = sal_False;
+                bool bCopyOk = false;
                 if( !pDestTxtNd )
                 {
                     if( pStt->nContent.GetIndex() || bOneNode )
@@ -964,7 +964,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     else
                     {
                         pDestTxtNd = static_cast<SwTxtNode*>(pSttTxtNd->MakeCopy( pDoc, aInsPos ));
-                        bCopyOk = sal_True;
+                        bCopyOk = true;
                     }
                     aDestIdx.Assign( pDestTxtNd, 0 );
                     bCopyCollFmt = true;
@@ -990,7 +990,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     // Correct the area again
                     if( bEndEqualIns )
                     {
-                        sal_Bool bChg = pEnd != rPam.GetPoint();
+                        bool bChg = pEnd != rPam.GetPoint();
                         if( bChg )
                             rPam.Exchange();
                         rPam.Move( fnMoveBackward, fnGoCntnt );
@@ -1322,7 +1322,7 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndConte
     _SaveRedlEndPosForRestore aRedlRest( rInsPos, 0 );
 
     SwNodeIndex aSavePos( rInsPos, -1 );
-    sal_Bool bEndIsEqualEndPos = rInsPos == rRg.aEnd;
+    bool bEndIsEqualEndPos = rInsPos == rRg.aEnd;
     GetNodes()._CopyNodes( rRg, rInsPos, bMakeNewFrms, sal_True );
     ++aSavePos;
     if( bEndIsEqualEndPos )
@@ -1557,7 +1557,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
         }
 
         // Check recursion: copy content in its own frame, then don't copy it.
-        sal_Bool bMakeCpy = sal_True;
+        bool bMakeCpy = true;
         if( pDest == this )
         {
             const SwFmtCntnt& rCntnt = (*it).GetFmt()->GetCntnt();
@@ -1567,7 +1567,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
                 pSNd->GetIndex() < rStartIdx.GetIndex() &&
                 rStartIdx.GetIndex() < pSNd->EndOfSectionIndex() )
             {
-                bMakeCpy = sal_False;
+                bMakeCpy = false;
                 aSet.erase ( it );
             }
         }
