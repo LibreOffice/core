@@ -28,6 +28,7 @@
 #include "rtl/bootstrap.hxx"
 
 #include "i18npool/mslangid.hxx"
+#include "i18npool/languagetag.hxx"
 
 #include "osl/module.h"
 #include "osl/file.hxx"
@@ -548,7 +549,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
         eLang = MapCharToLanguage( uChar );
         if( eLang == LANGUAGE_DONTKNOW )
             continue;
-        MsLangId::convertLanguageToLocale( eLang, aLocale );
+        aLocale = LanguageTag( eLang ).getLocale();
         break;
     }
 
