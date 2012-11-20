@@ -1193,7 +1193,7 @@ namespace basctl
         // sort document list by doc title?
         if ( _eListType == DocumentsSorted )
         {
-            CollatorWrapper aCollator( ::comphelper::getProcessServiceFactory() );
+            CollatorWrapper aCollator( ::comphelper::getProcessComponentContext() );
             aCollator.loadDefaultCollator( SvtSysLocale().GetLanguageTag().getLocale(), 0 );
             ::std::sort( aScriptDocs.begin(), aScriptDocs.end(), DocumentTitleLess( aCollator ) );
         }

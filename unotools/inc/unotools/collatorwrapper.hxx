@@ -23,8 +23,8 @@
 
 #include <com/sun/star/i18n/XCollator.hpp>
 
-namespace com { namespace sun { namespace star { namespace lang {
-        class XMultiServiceFactory;
+namespace com { namespace sun { namespace star { namespace uno {
+        class XComponentContext;
 }}}}
 
 class UNOTOOLS_DLLPUBLIC CollatorWrapper
@@ -32,7 +32,7 @@ class UNOTOOLS_DLLPUBLIC CollatorWrapper
     private:
 
         ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory
+                ::com::sun::star::uno::XComponentContext
             > mxServiceFactory;
 
         ::com::sun::star::uno::Reference<
@@ -43,7 +43,7 @@ class UNOTOOLS_DLLPUBLIC CollatorWrapper
 
         CollatorWrapper (
                 const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory > &xServiceFactoryIn);
+                    ::com::sun::star::uno::XComponentContext > &rxContext);
 
         ~CollatorWrapper();
 

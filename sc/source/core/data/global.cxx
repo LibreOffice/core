@@ -1146,7 +1146,7 @@ CollatorWrapper*        ScGlobal::GetCollator()
 {
     if ( !pCollator )
     {
-        pCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
+        pCollator = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
         pCollator->loadDefaultCollator( *GetLocale(), SC_COLLATOR_IGNORES );
     }
     return pCollator;
@@ -1155,7 +1155,7 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
 {
     if ( !pCaseCollator )
     {
-        pCaseCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
+        pCaseCollator = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
         pCaseCollator->loadDefaultCollator( *GetLocale(), 0 );
     }
     return pCaseCollator;
@@ -1174,7 +1174,7 @@ IntlWrapper*         ScGlobal::GetScIntlWrapper()
 {
     if ( !pScIntlWrapper )
     {
-        pScIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), LanguageTag( *GetLocale()) );
+        pScIntlWrapper = new IntlWrapper( LanguageTag( *GetLocale()) );
     }
     return pScIntlWrapper;
 }

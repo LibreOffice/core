@@ -671,14 +671,14 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const ::rtl::O
 
 DBG_NAME(FmSearchEngine);
 //------------------------------------------------------------------------
-FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
+FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
             const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
             const Reference< XNumberFormatsSupplier > & xFormatSupplier, FMSEARCH_MODE eMode)
 
     :m_xSearchCursor(xCursor)
     ,m_xFormatSupplier(xFormatSupplier)
-    ,m_aCharacterClassficator( comphelper::getComponentContext(_rxORB), SvtSysLocale().GetLanguageTag() )
-    ,m_aStringCompare( _rxORB )
+    ,m_aCharacterClassficator( _rxContext, SvtSysLocale().GetLanguageTag() )
+    ,m_aStringCompare( _rxContext )
     ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
     ,m_bUsingTextComponents(sal_False)
     ,m_eSearchForType(SEARCHFOR_STRING)
@@ -710,12 +710,12 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
 }
 
 //------------------------------------------------------------------------
-FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
+FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
         const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
         const InterfaceArray& arrFields, FMSEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
-    ,m_aCharacterClassficator( comphelper::getComponentContext(_rxORB), SvtSysLocale().GetLanguageTag() )
-    ,m_aStringCompare( _rxORB )
+    ,m_aCharacterClassficator( _rxContext, SvtSysLocale().GetLanguageTag() )
+    ,m_aStringCompare( _rxContext )
     ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
     ,m_bUsingTextComponents(sal_True)
     ,m_xOriginalIterator(xCursor)

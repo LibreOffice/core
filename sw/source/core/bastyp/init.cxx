@@ -828,9 +828,8 @@ CollatorWrapper& GetAppCollator()
     if( !pCollator )
     {
         const lang::Locale& rLcl = pBreakIt->GetLocale( GetAppLanguage() );
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
 
-        pCollator = new CollatorWrapper( xMSF );
+        pCollator = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
         pCollator->loadDefaultCollator( rLcl, SW_COLLATOR_IGNORES );
     }
     return *pCollator;
@@ -840,9 +839,8 @@ CollatorWrapper& GetAppCaseCollator()
     if( !pCaseCollator )
     {
         const lang::Locale& rLcl = pBreakIt->GetLocale( GetAppLanguage() );
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
 
-        pCaseCollator = new CollatorWrapper( xMSF );
+        pCaseCollator = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
         pCaseCollator->loadDefaultCollator( rLcl, 0 );
     }
     return *pCaseCollator;

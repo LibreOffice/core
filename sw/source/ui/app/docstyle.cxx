@@ -573,9 +573,7 @@ bool  SwDocStyleSheet::HasClearParentSupport() const
  --------------------------------------------------------------------*/
 String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
 {
-    IntlWrapper aIntlWrapper(
-        ::comphelper::getProcessServiceFactory(),
-        SvtSysLocale().GetLanguageTag());
+    IntlWrapper aIntlWrapper( SvtSysLocale().GetLanguageTag() );
 
     rtl::OUString sPlus(" + ");
     if ( SFX_STYLE_FAMILY_PAGE == nFamily )

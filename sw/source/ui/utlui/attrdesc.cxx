@@ -73,7 +73,7 @@ void SwAttrSet::GetPresentation(
     if( Count() )
     {
         SfxItemIter aIter( *this );
-        const IntlWrapper rInt( ::comphelper::getProcessServiceFactory(),
+        const IntlWrapper rInt( ::comphelper::getProcessComponentContext(),
                                     GetAppLanguageTag() );
         while( sal_True )
         {

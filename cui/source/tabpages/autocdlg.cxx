@@ -59,15 +59,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-static ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XMultiServiceFactory >& GetProcessFact()
-{
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
-                                    ::comphelper::getProcessServiceFactory();
-    return xMSF;
-}
-
 OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
     SfxTabDialog( pParent,  CUI_RES( RID_OFA_AUTOCORR_DLG ), _pSet ),
     aLanguageFT ( this,     CUI_RES( FT_LANG ) ),
@@ -887,7 +878,7 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
     bSWriter = pMod == SfxModule::GetActiveModule();
 
     LanguageTag aLanguageTag( eLastDialogLanguage );
-    pCompareClass = new CollatorWrapper( GetProcessFact() );
+    pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
     pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
     pCharClass = new CharClass( aLanguageTag );
 
@@ -1090,7 +1081,7 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
         delete pCharClass;
 
         LanguageTag aLanguageTag( eLastDialogLanguage );
-        pCompareClass = new CollatorWrapper( GetProcessFact() );
+        pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
         pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
         pCharClass = new CharClass( aLanguageTag );
         ModifyHdl(&aShortED);
@@ -1381,7 +1372,7 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
     FreeResource();
 
     ::com::sun::star::lang::Locale aLcl( LanguageTag(eLastDialogLanguage ).getLocale());
-    pCompareClass = new CollatorWrapper( GetProcessFact() );
+    pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
     pCompareClass->loadDefaultCollator( aLcl, 0 );
 
     aNewAbbrevPB.SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
@@ -1555,7 +1546,7 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
         RefillReplaceBoxes(sal_False, eLang, eSet);
         eLastDialogLanguage = eSet;
         delete pCompareClass;
-        pCompareClass = new CollatorWrapper( GetProcessFact() );
+        pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
         pCompareClass->loadDefaultCollator( LanguageTag( eLastDialogLanguage ).getLocale(), 0 );
         ModifyHdl(&aAbbrevED);
         ModifyHdl(&aDoubleCapsED);

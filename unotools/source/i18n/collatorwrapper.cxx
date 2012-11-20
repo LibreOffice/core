@@ -19,19 +19,13 @@
 
 #include <unotools/collatorwrapper.hxx>
 #include <tools/debug.hxx>
-
-#include "instance.hxx"
+#include <com/sun/star/i18n/Collator.hpp>
 
 using namespace ::com::sun::star;
 
-CollatorWrapper::CollatorWrapper (
-        const uno::Reference< lang::XMultiServiceFactory > &xServiceFactory)
-    : mxServiceFactory (xServiceFactory)
+CollatorWrapper::CollatorWrapper ( const uno::Reference< uno::XComponentContext > &rxContext )
 {
-    mxInternationalCollator = uno::Reference< i18n::XCollator > (
-        intl_createInstance( xServiceFactory, "com.sun.star.i18n.Collator",
-                             "CollatorWrapper" ), uno::UNO_QUERY );
-    DBG_ASSERT (mxInternationalCollator.is(), "CollatorWrapper: no i18n collator");
+    mxInternationalCollator = i18n::Collator::create( rxContext );
 }
 
 CollatorWrapper::~CollatorWrapper()

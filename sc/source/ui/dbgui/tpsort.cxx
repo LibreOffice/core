@@ -549,7 +549,7 @@ void ScTabPageSortOptions::Init()
     pColRes = new CollatorResource();
 
     //! use CollatorWrapper from document?
-    pColWrap = new CollatorWrapper( comphelper::getProcessServiceFactory() );
+    pColWrap = new CollatorWrapper( comphelper::getProcessComponentContext() );
 
     const ScSortItem&   rSortItem = (const ScSortItem&)
                                     GetItemSet().Get( nWhichSort );

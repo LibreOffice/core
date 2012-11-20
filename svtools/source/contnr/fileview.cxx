@@ -1711,7 +1711,7 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
     ,mbReplaceNames             ( sal_False )
     ,mnSuspendSelectCallback    ( 0 )
     ,mbIsFirstResort            ( sal_True )
-    ,aIntlWrapper               ( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLanguageTag() )
+    ,aIntlWrapper               ( Application::GetSettings().GetLanguageTag() )
     ,maFolderImage              ( SvtResId( IMG_SVT_FOLDER ) )
     ,mxCmdEnv ( xEnv )
 

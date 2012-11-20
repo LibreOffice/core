@@ -427,9 +427,9 @@ namespace
         const SortDescriptor&   rSortOrder;
         IntlWrapper             aIntlWrapper;
 
-        ComparisonData( const SortDescriptor& _rSortOrder, const Reference< XMultiServiceFactory >& _rxFactory )
+        ComparisonData( const SortDescriptor& _rSortOrder, const Reference< XComponentContext >& _rxContext )
             :rSortOrder( _rSortOrder )
-            ,aIntlWrapper( _rxFactory, SvtSysLocale().GetLanguageTag() )
+            ,aIntlWrapper( _rxContext, SvtSysLocale().GetLanguageTag() )
         {
         }
     };
@@ -546,7 +546,7 @@ void OEvoabResultSet::construct( const QueryData& _rData )
 
         if ( m_pContacts && !_rData.aSortOrder.empty() )
         {
-            ComparisonData aCompData( _rData.aSortOrder, getConnection()->getDriver().getMSFactory() );
+            ComparisonData aCompData( _rData.aSortOrder, comphelper::getComponentContext(getConnection()->getDriver().getMSFactory()) );
             m_pContacts = sortContacts( m_pContacts, aCompData );
         }
     }

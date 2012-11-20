@@ -1583,7 +1583,7 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<rtl::OUString>& rList,
         ++nStart;
     }
 
-    CollatorWrapper aCollator( ::comphelper::getProcessServiceFactory());
+    CollatorWrapper aCollator( ::comphelper::getProcessComponentContext());
     aCollator.loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0);
 
     const String aTwoSpace( RTL_CONSTASCII_USTRINGPARAM( "  "));

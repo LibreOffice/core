@@ -49,7 +49,7 @@ class UNOTOOLS_DLLPUBLIC IntlWrapper
 private:
 
             LanguageTag         maLanguageTag;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
             LocaleDataWrapper*  pLocaleData;
             CollatorWrapper*    pCollator;
@@ -61,7 +61,10 @@ private:
 
 public:
                                 IntlWrapper(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSF,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
+                                    const LanguageTag& rLanguageTag
+                                    );
+                                IntlWrapper(
                                     const LanguageTag& rLanguageTag
                                     );
                                 ~IntlWrapper();

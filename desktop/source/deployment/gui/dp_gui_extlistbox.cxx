@@ -255,7 +255,7 @@ void ExtensionBox_Impl::Init()
     m_xRemoveListener = new ExtensionRemovedListener( this );
 
     m_pLocale = new lang::Locale( Application::GetSettings().GetLanguageTag().getLocale() );
-    m_pCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
+    m_pCollator = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
     m_pCollator->loadDefaultCollator( *m_pLocale, i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
 
     Show();

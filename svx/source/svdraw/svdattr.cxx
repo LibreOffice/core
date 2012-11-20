@@ -868,7 +868,6 @@ SfxItemPresentation SdrAngleItem::GetPresentation(
         const IntlWrapper* pMyIntlWrapper = NULL;
         if(!pIntlWrapper)
             pIntlWrapper = pMyIntlWrapper = new IntlWrapper(
-                ::comphelper::getProcessServiceFactory(),
                 Application::GetSettings().GetLanguageTag() );
 
         if(pIntlWrapper->getLocaleData()->isNumLeadingZero())

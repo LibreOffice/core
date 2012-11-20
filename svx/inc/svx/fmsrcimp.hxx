@@ -294,13 +294,13 @@ public:
         every record as well as at the end of the search.
     */
     FmSearchEngine(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor,
         const ::rtl::OUString& strVisibleFields,
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xFormat,
         FMSEARCH_MODE eMode);
     FmSearchEngine(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor,
         const ::rtl::OUString& strVisibleFields,
         const InterfaceArray& arrFields,

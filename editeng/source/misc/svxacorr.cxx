@@ -187,15 +187,6 @@ LanguageType SvxAutoCorrDoc::GetLanguage( xub_StrLen , sal_Bool ) const
     return LANGUAGE_SYSTEM;
 }
 
-static ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory >& GetProcessFact()
-{
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
-                                    ::comphelper::getProcessServiceFactory();
-    return xMSF;
-}
-
 static const LanguageTag& GetAppLang()
 {
     return Application::GetSettings().GetLanguageTag();
@@ -225,7 +216,7 @@ static TransliterationWrapper& GetIgnoreTranslWrapper()
 static CollatorWrapper& GetCollatorWrapper()
 {
     static int bIsInit = 0;
-    static CollatorWrapper aCollWrp( GetProcessFact() );
+    static CollatorWrapper aCollWrp( ::comphelper::getProcessComponentContext() );
     if( !bIsInit )
     {
         aCollWrp.loadDefaultCollator( GetAppLang().getLocale(), 0 );

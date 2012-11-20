@@ -175,7 +175,7 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const OUString& sInitialText, co
     }
 
     m_pSearchEngine = new FmSearchEngine(
-        ::comphelper::getProcessServiceFactory(), fmscInitial.xCursor, fmscInitial.strUsedFields, fmscInitial.arrFields, SM_ALLOWSCHEDULE );
+        ::comphelper::getProcessComponentContext(), fmscInitial.xCursor, fmscInitial.strUsedFields, fmscInitial.arrFields, SM_ALLOWSCHEDULE );
     initCommon( fmscInitial.xCursor );
 
     if (fmscInitial.sFieldDisplayNames.Len() != 0)

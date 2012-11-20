@@ -24,17 +24,27 @@
 #include <comphelper/processfactory.hxx>
 
 IntlWrapper::IntlWrapper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSF,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
             const LanguageTag& rLanguageTag )
         :
         maLanguageTag( rLanguageTag ),
-        xSMgr( xSF ),
+        m_xContext( rxContext ),
         pLocaleData( NULL ),
         pCollator( NULL ),
         pCaseCollator( NULL )
 {
 }
 
+IntlWrapper::IntlWrapper(
+            const LanguageTag& rLanguageTag )
+        :
+        maLanguageTag( rLanguageTag ),
+        m_xContext( comphelper::getProcessComponentContext() ),
+        pLocaleData( NULL ),
+        pCollator( NULL ),
+        pCaseCollator( NULL )
+{
+}
 
 IntlWrapper::~IntlWrapper()
 {
@@ -46,14 +56,13 @@ IntlWrapper::~IntlWrapper()
 
 void IntlWrapper::ImplNewLocaleData() const
 {
-    ((IntlWrapper*)this)->pLocaleData = new LocaleDataWrapper(
-        comphelper::getComponentContext(xSMgr), maLanguageTag );
+    ((IntlWrapper*)this)->pLocaleData = new LocaleDataWrapper( m_xContext, maLanguageTag );
 }
 
 
 void IntlWrapper::ImplNewCollator( sal_Bool bCaseSensitive ) const
 {
-    CollatorWrapper* p = new CollatorWrapper( xSMgr );
+    CollatorWrapper* p = new CollatorWrapper( m_xContext );
     if ( bCaseSensitive )
     {
         p->loadDefaultCollator( maLanguageTag.getLocale(), 0 );
