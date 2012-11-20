@@ -51,7 +51,7 @@ typedef boost::unordered_map<int,int> IntMap;
 
 // Graphite headers
 #ifdef ENABLE_GRAPHITE
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <graphite_layout.hxx>
 #include <graphite_features.hxx>
 #endif
@@ -2737,7 +2737,8 @@ GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplW
     mpFont = gr_make_font_with_advance_fn(static_cast<float>(-aLogFont.lfHeight),
         hDC, gr_fontAdvance, rWFD.GraphiteFace());
     maImpl.SetFont(mpFont);
-    const rtl::OString aLang = MsLangId::convertLanguageToIsoByteString( rWFE.maFontSelData.meLanguage );
+    const rtl::OString aLang = OUStringToOString( LanguageTag( rWFE.maFontSelData.meLanguage ).getBcp47(),
+            RTL_TEXTENCODING_ASCII_US);
     rtl::OString name = rtl::OUStringToOString(
         rWFE.maFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
     sal_Int32 nFeat = name.indexOf(grutils::GrFeatureParser::FEAT_PREFIX) + 1;
