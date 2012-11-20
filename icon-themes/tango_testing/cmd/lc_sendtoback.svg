@@ -16,7 +16,7 @@
    width="24"
    height="24"
    sodipodi:docname="lc_sendtoback.svg"
-   inkscape:export-filename="/home/alexander/tango_testing/cmd/lc_sendtoback.png"
+   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/cmd/lc_sendtoback.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <metadata
@@ -137,16 +137,6 @@
          id="stop3786-9" />
     </linearGradient>
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3764-2"
-       id="linearGradient3501-6"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-2,4)"
-       x1="17"
-       y1="2"
-       x2="17"
-       y2="16" />
-    <linearGradient
        id="linearGradient3764-2">
       <stop
          id="stop3766-7"
@@ -177,14 +167,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1366"
-     inkscape:window-height="718"
+     inkscape:window-height="717"
      id="namedview4"
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:zoom="1"
-     inkscape:cx="26.63585"
-     inkscape:cy="7.3079843"
+     inkscape:cx="15.894306"
+     inkscape:cy="3.3006936"
      inkscape:window-x="0"
      inkscape:window-y="28"
      inkscape:window-maximized="1"
@@ -315,7 +305,7 @@ AAABAAAAAQAEAAIAAAABAAgAAQAqAAQAAAADABAAFgAgAAEAAv+0AAIAAf+0ABn/tAACAAH/2wAC\
                height="14"
                width="16"
                id="rect2998-1"
-               style="fill:url(#linearGradient3501-6);fill-opacity:1.0;stroke:none" />
+               style="fill:#3a6ba8;fill-opacity:1;stroke:none" />
             <path
                id="rect3851-4"
                transform="translate(0,1028.3622)"
