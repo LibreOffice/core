@@ -1353,7 +1353,7 @@
 						<desc>Specifies whether rulers are displayed. Filters the values of HorizontalRuler and VerticalRuler.</desc>
 						<label>Show rulers</label>
 					</info>
-					<value>false</value>
+					<value>true</value>
 				</prop>
 				<prop oor:name="HorizontalRuler" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/Layout/Window -->
