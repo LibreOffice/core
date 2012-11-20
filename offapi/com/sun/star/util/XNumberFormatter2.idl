@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module util {
 /**
   Provides a unified interface for the NumberFormatter service to implement.
 
-  @since LibreOffice 3.7
+  @since LibreOffice 4.0
 */
 published interface XNumberFormatter2
 {

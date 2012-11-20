@@ -84,7 +84,7 @@ published service TextPageStyle
 
         @see com::sun::star::text::Text
 
-        @since LibreOffice 3.7
+        @since LibreOffice 4.0
       */
     [optional, property] com::sun::star::text::XText HeaderTextFirst;
 
@@ -114,7 +114,7 @@ published service TextPageStyle
 
         @see com::sun::star::text::Text
 
-        @since LibreOffice 3.7
+        @since LibreOffice 4.0
       */
     [optional, property] com::sun::star::text::XText FooterTextFirst;
 

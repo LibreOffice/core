@@ -36,7 +36,7 @@ namespace cppu {
     @return true iff the sequence returned by the given implementation's
     getSupportedServices method contains the given name
 
-    @since LibreOffice 3.7
+    @since LibreOffice 4.0
 */
 bool CPPUHELPER_DLLPUBLIC supportsService(
     com::sun::star::lang::XServiceInfo * implementation,

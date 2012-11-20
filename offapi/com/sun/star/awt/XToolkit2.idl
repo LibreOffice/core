@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module awt {
 /**
   Provides a unified interface for the new-style service Toolkit to implement.
 
-  @since LibreOffice 3.7
+  @since LibreOffice 4.0
  */
 published interface XToolkit2
 {

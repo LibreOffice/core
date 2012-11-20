@@ -512,7 +512,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
  Currently implemented by a Clang compiler plugin.
 
- @since LibreOffice 3.7
+ @since LibreOffice 4.0
 
 */
 

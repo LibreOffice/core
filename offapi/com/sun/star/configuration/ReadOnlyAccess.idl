@@ -38,7 +38,7 @@ module com { module sun { module star { module configuration {
 
     <p>This service is still unpublished and unstable.</p>
 
-    @since LibreOffice 3.7
+    @since LibreOffice 4.0
 */
 service ReadOnlyAccess: com::sun::star::container::XHierarchicalNameAccess {
     /** Service constructor.

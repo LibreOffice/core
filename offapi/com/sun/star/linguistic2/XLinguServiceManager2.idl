@@ -29,7 +29,7 @@ module com { module sun { module star { module linguistic2 {
 /**
   Provides a unified interface for the LinguServiceManager service to implement.
 
-  @since LibreOffice 3.7
+  @since LibreOffice 4.0
 */
 published interface XLinguServiceManager2
 {

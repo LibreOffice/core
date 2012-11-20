@@ -63,7 +63,7 @@ SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInte
     @param p Address of count variable
     @return The adjusted value of the count variable.
 
-    @since LibreOffice 3.7
+    @since LibreOffice 4.0
 */
 #if defined( HAVE_GCC_BUILTIN_ATOMIC )
 #    define osl_atomic_increment(p)  __sync_add_and_fetch((p), 1)
@@ -80,7 +80,7 @@ SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInte
     @param p Address of count variable
     @return The adjusted value of the count variable.
 
-    @since LibreOffice 3.7
+    @since LibreOffice 4.0
 */
 #if defined( HAVE_GCC_BUILTIN_ATOMIC )
 #    define osl_atomic_decrement(p) __sync_sub_and_fetch((p), 1)

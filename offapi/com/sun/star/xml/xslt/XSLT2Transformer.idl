@@ -16,7 +16,7 @@ module com { module sun { module star { module xml { module xslt {
 
 /** Get XSLT filter transformer supporting XSLT 2.0.
 
-    @since LibreOffice 3.7
+    @since LibreOffice 4.0
  */
 service XSLT2Transformer : XXSLTTransformer
 {

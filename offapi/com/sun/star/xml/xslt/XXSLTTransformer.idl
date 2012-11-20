@@ -19,7 +19,7 @@ module com { module sun { module star { module xml { module xslt {
 
 /** An interface for XSLT transformers.
 
-    @since LibreOffice 3.7
+    @since LibreOffice 4.0
  */
 interface XXSLTTransformer
 {

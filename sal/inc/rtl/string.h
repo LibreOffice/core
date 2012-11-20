@@ -900,7 +900,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromStr_WithLength( rtl_String ** newS
     @param     count        the number of characters.
     @return    the specified substring.
 
-    @since LibreOffice 3.7
+    @since LibreOffice 4.0
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromSubString(
         rtl_String ** newStr, const rtl_String * from,

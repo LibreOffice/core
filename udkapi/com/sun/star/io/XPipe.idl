@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module io {
     <p> With the pipe-service, an outputstream can be converted into an
     input stream at the cost of an additional buffer.
 
-    @since LibreOffice 3.7
+    @since LibreOffice 4.0
  */
 published interface XPipe
 {

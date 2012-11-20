@@ -199,7 +199,7 @@ published service PageProperties
 [property, maybevoid] boolean HeaderIsShared;
 /** determines if the header/footer content on the first page and remaining pages is the same.
 
-    @since LibreOffice 3.7
+    @since LibreOffice 4.0
  */
 [optional, property, maybevoid] boolean FirstIsShared;
 /** contains the height of the header.

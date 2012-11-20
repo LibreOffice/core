@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module frame {
   This interface provides a merged single interface for the ModuleManager
   service to implement.
 
-  @since LibreOffice 3.7
+  @since LibreOffice 4.0
 */
 interface XModuleManager2
 {

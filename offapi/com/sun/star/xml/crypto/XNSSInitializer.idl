@@ -26,7 +26,7 @@
 module com { module sun { module star { module xml { module crypto {
 
 /**
-    @since LibreOffice 3.7
+    @since LibreOffice 4.0
  */
 interface XNSSInitializer {
     interface ::com::sun::star::xml::crypto::XDigestContextSupplier;

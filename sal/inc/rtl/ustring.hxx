@@ -889,7 +889,7 @@ public:
       @return true if and only if the given str appears as a substring at the
       start of this string
 
-      @since LibreOffice 3.7
+      @since LibreOffice 4.0
     */
     bool startsWith(OUString const & str) const {
         return match(str, 0);
@@ -898,7 +898,7 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.7
+     @since LibreOffice 4.0
     */
     template< typename T >
     typename internal::ConstCharArrayDetector< T, bool >::Type startsWith( T& literal ) const
@@ -919,7 +919,7 @@ public:
       @param    str         the object (substring) to be compared.
       @return true if this string starts with str, ignoring the case of ASCII
       letters ("A"--"Z" and "a"--"z"); otherwise, false is returned
-      @since LibreOffice 3.7
+      @since LibreOffice 4.0
     */
     sal_Bool startsWithIgnoreAsciiCase( const OUString & str ) const SAL_THROW(())
     {
@@ -929,7 +929,7 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.7
+     @since LibreOffice 4.0
     */
     template< typename T >
     typename internal::ConstCharArrayDetector< T, bool >::Type startsWithIgnoreAsciiCase( T& literal ) const SAL_THROW(())
@@ -1533,7 +1533,7 @@ public:
 
       @param fromIndex  the position in the string where we will begin searching
 
-      @since LibreOffice 3.7
+      @since LibreOffice 4.0
     */
     OUString replaceAll(OUString const & from, OUString const & to, int fromIndex = 0) const {
         rtl_uString * s = 0;

@@ -25,7 +25,7 @@
 module com {  module sun {  module star {  module reflection {
 
 /**
-   @since LibreOffice 3.7
+   @since LibreOffice 4.0
  */
 singleton theCoreReflection : com::sun::star::reflection::XIdlReflection;
 

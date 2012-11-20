@@ -670,7 +670,7 @@ public:
       @return true if and only if the given str appears as a substring at the
       start of this string
 
-      @since LibreOffice 3.7
+      @since LibreOffice 4.0
     */
     bool startsWith(OString const & str) const {
         return match(str, 0);
@@ -679,7 +679,7 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.7
+     @since LibreOffice 4.0
     */
     template< typename T >
     typename internal::ConstCharArrayDetector< T, bool >::Type startsWith( T& literal ) const
@@ -1483,7 +1483,7 @@ struct OStringHash
     Support for rtl::OString in std::ostream (and thus in
     CPPUNIT_ASSERT or SAL_INFO macros, for example).
 
-    @since LibreOffice 3.7
+    @since LibreOffice 4.0
  */
 template< typename charT, typename traits > std::basic_ostream<charT, traits> &
 operator <<(

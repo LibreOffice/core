@@ -1237,7 +1237,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromStr_WithLength(
     @param     count        the number of characters.
     @return    the specified substring.
 
-    @since LibreOffice 3.7
+    @since LibreOffice 4.0
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromSubString(
         rtl_uString ** newStr, const rtl_uString * from,
@@ -1536,7 +1536,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAll(
 
     @param fromIndex  the position in the string where we will begin searching
 
-    @since LibreOffice 3.7
+    @since LibreOffice 4.0
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAllFromIndex(
     rtl_uString ** newStr, rtl_uString * str, rtl_uString const * from,

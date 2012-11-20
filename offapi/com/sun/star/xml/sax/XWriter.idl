@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 /**
   Provides a unified interface for the new-style Writer service to implement.
 
-  @since LibreOffice 3.7
+  @since LibreOffice 4.0
  */
 interface XWriter
 {
