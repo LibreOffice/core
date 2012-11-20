@@ -70,7 +70,7 @@ interface XModify : com::sun::star::uno::XInterface
      * @since LibreOffice 4.0
      */
 
-    void InstalliGStreamerResources( [in] unsigned long xid, [in] sequence< string > resources, [in] string interaction);
+    void InstallGStreamerResources( [in] unsigned long xid, [in] sequence< string > resources, [in] string interaction);
 
     /**
      * Installs resources of a given type from a configured software source.

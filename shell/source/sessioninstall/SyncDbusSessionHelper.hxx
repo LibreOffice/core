@@ -35,7 +35,7 @@ namespace shell { namespace sessioninstall
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
             virtual void SAL_CALL InstallFontconfigResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* resources */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
-            virtual void SAL_CALL InstalliGStreamerResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* resources */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
+            virtual void SAL_CALL InstallGStreamerResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* resources */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
             virtual void SAL_CALL InstallResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* types */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* resources */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
