@@ -142,7 +142,7 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
 }
 
 // static
-void MsLangId::convertLanguageToLocale( LanguageType nLang,
+void MsLangId::Conversion::convertLanguageToLocale( LanguageType nLang,
         ::com::sun::star::lang::Locale & rLocale )
 {
     if (!rLocale.Variant.isEmpty())
@@ -152,7 +152,7 @@ void MsLangId::convertLanguageToLocale( LanguageType nLang,
 
 
 // static
-::com::sun::star::lang::Locale MsLangId::convertLanguageToLocale(
+::com::sun::star::lang::Locale MsLangId::Conversion::convertLanguageToLocale(
         LanguageType nLang, bool bResolveSystem )
 {
     ::com::sun::star::lang::Locale aLocale;
@@ -171,7 +171,7 @@ void MsLangId::convertLanguageToLocale( LanguageType nLang,
 
 
 // static
-LanguageType MsLangId::convertLocaleToLanguage(
+LanguageType MsLangId::Conversion::convertLocaleToLanguage(
         const ::com::sun::star::lang::Locale& rLocale )
 {
     // empty language => LANGUAGE_SYSTEM
@@ -188,19 +188,7 @@ LanguageType MsLangId::convertLocaleToLanguage(
 
 
 // static
-LanguageType MsLangId::convertLocaleToLanguageWithFallback(
-            const ::com::sun::star::lang::Locale & rLocale )
-{
-    // empty language => LANGUAGE_SYSTEM
-    if (rLocale.Language.isEmpty())
-        return lookupFallbackLanguage( LANGUAGE_SYSTEM);
-
-    return lookupFallbackLanguage( rLocale);
-}
-
-
-// static
-::com::sun::star::lang::Locale MsLangId::convertLanguageToLocaleWithFallback(
+::com::sun::star::lang::Locale MsLangId::Conversion::convertLanguageToLocaleWithFallback(
         LanguageType nLang )
 {
     return lookupFallbackLocale( MsLangId::getRealLanguage( nLang));
@@ -213,9 +201,9 @@ LanguageType MsLangId::convertLocaleToLanguageWithFallback(
 {
     // empty language => LANGUAGE_SYSTEM
     if (rLocale.Language.isEmpty())
-        return convertLanguageToLocaleWithFallback( LANGUAGE_SYSTEM);
+        return Conversion::convertLanguageToLocaleWithFallback( LANGUAGE_SYSTEM);
 
-    return lookupFallbackLocale( rLocale);
+    return Conversion::lookupFallbackLocale( rLocale);
 }
 
 // static

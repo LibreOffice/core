@@ -451,7 +451,7 @@ void LanguageTag::convertLocaleToLang()
         /* FIXME: this is temporary until code base is converted to not use
          * MsLangId::convert...() anymore. After that, proper new method has to
          * be implemented to allow ISO639_LANGUAGE_TAG and sript tag and such. */
-        mnLangID = MsLangId::convertLocaleToLanguage( maLocale);
+        mnLangID = MsLangId::Conversion::convertLocaleToLanguage( maLocale);
     }
     mbInitializedLangID = true;
 }
@@ -506,7 +506,7 @@ void LanguageTag::convertLangToLocale()
      * MsLangId::convert...() anymore. After that, proper new method has to be
      * implemented to allow ISO639_LANGUAGE_TAG and script tag and such. */
     // Resolve system here!
-    maLocale = MsLangId::convertLanguageToLocale( mnLangID, true);
+    maLocale = MsLangId::Conversion::convertLanguageToLocale( mnLangID, true);
     mbInitializedLocale = true;
 }
 
@@ -820,14 +820,14 @@ LanguageTag & LanguageTag::makeFallback()
         if (mbInitializedLangID)
         {
             LanguageType nLang1 = getLanguageType();
-            LanguageType nLang2 = MsLangId::lookupFallbackLanguage( nLang1);
+            LanguageType nLang2 = MsLangId::Conversion::lookupFallbackLanguage( nLang1);
             if (nLang1 != nLang2)
                 reset( nLang2);
         }
         else
         {
             const lang::Locale& rLocale1 = getLocale();
-            lang::Locale aLocale2( MsLangId::lookupFallbackLocale( rLocale1));
+            lang::Locale aLocale2( MsLangId::Conversion::lookupFallbackLocale( rLocale1));
             if (    rLocale1.Language != aLocale2.Language ||
                     rLocale1.Country  != aLocale2.Country ||
                     rLocale1.Variant  != aLocale2.Variant)

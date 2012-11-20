@@ -609,7 +609,7 @@ static IsoLangOtherEntry const aImplOtherEntries[] =
 // =======================================================================
 
 // static
-void MsLangId::convertLanguageToIsoNames( LanguageType nLang,
+void MsLangId::Conversion::convertLanguageToIsoNames( LanguageType nLang,
         rtl::OUString& rLangStr, rtl::OUString& rCountry )
 {
     if ( nLang == LANGUAGE_SYSTEM )
@@ -651,48 +651,6 @@ void MsLangId::convertLanguageToIsoNames( LanguageType nLang,
 }
 
 // -----------------------------------------------------------------------
-
-// static
-void MsLangId::convertLanguageToIsoNames( LanguageType nLang,
-        rtl::OString& rLangStr, rtl::OString& rCountry )
-{
-    if ( nLang == LANGUAGE_SYSTEM )
-        nLang = MsLangId::getSystemLanguage();
-
-    // Search for LangID (in this table we find only defined ISO combinations)
-    const IsoLangEntry* pEntry = aImplIsoLangEntries;
-    do
-    {
-        if ( pEntry->mnLang == nLang )
-        {                          // avoid embedded \0 warning
-            rLangStr = rtl::OString( static_cast< const char* >( pEntry->maLangStr ));
-            rCountry = rtl::OString( static_cast< const char* >( pEntry->maCountry ));
-            return;
-        }
-        ++pEntry;
-    }
-    while ( pEntry->mnLang != LANGUAGE_DONTKNOW );
-
-    // Search for LangID if we didn't find a specific ISO combination.
-    // All entries in this table are allowed for mime specifications,
-    // but not defined ISO combinations.
-    const IsoLangNoneStdEntry* pNoneStdEntry = aImplIsoNoneStdLangEntries;
-    do
-    {
-        if ( pNoneStdEntry->mnLang == nLang )
-        {                          // avoid embedded \0 warning
-            rLangStr = rtl::OString( static_cast< const char* >( pNoneStdEntry->maLangStr ));
-            rCountry = rtl::OString( static_cast< const char* >( pNoneStdEntry->maCountry ));
-            return;
-        }
-        ++pNoneStdEntry;
-    }
-    while ( pNoneStdEntry->mnLang != LANGUAGE_DONTKNOW );
-
-    // not found
-    rLangStr = rtl::OString();
-    rCountry = rtl::OString();
-}
 
 // -----------------------------------------------------------------------
 
@@ -749,14 +707,14 @@ static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry( LanguageType nLan
 }
 
 // static
-LanguageType MsLangId::lookupFallbackLanguage( LanguageType nLang )
+LanguageType MsLangId::Conversion::lookupFallbackLanguage( LanguageType nLang )
 {
     return lcl_lookupFallbackEntry( nLang).mnLang;
 }
 
 
 // static
-::com::sun::star::lang::Locale MsLangId::lookupFallbackLocale( LanguageType nLang )
+::com::sun::star::lang::Locale MsLangId::Conversion::lookupFallbackLocale( LanguageType nLang )
 {
     const MsLangId::IsoLangEntry& rEntry = lcl_lookupFallbackEntry( nLang);
     return ::com::sun::star::lang::Locale(
@@ -829,16 +787,9 @@ static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry(
     return aLastResortFallbackEntry;
 }
 
-// static
-LanguageType MsLangId::lookupFallbackLanguage(
-        const ::com::sun::star::lang::Locale & rLocale )
-{
-    return lcl_lookupFallbackEntry( rLocale).mnLang;
-}
-
 
 // static
-::com::sun::star::lang::Locale MsLangId::lookupFallbackLocale(
+::com::sun::star::lang::Locale MsLangId::Conversion::lookupFallbackLocale(
         const ::com::sun::star::lang::Locale & rLocale )
 {
     const MsLangId::IsoLangEntry& rEntry = lcl_lookupFallbackEntry( rLocale);
@@ -848,49 +799,10 @@ LanguageType MsLangId::lookupFallbackLanguage(
             rtl::OUString());
 }
 
-// -----------------------------------------------------------------------
-
-// static
-rtl::OUString MsLangId::convertLanguageToIsoString( LanguageType nLang,
-        sal_Unicode cSep )
-{
-    rtl::OUString   aLangStr;
-    rtl::OUString   aCountry;
-    convertLanguageToIsoNames( nLang, aLangStr, aCountry );
-    if ( !aCountry.isEmpty() )
-    {
-        rtl::OUStringBuffer aBuf( aLangStr);
-        aBuf.append( cSep );
-        aBuf.append( aCountry );
-        return aBuf.makeStringAndClear();
-    }
-    else
-        return aLangStr;
-}
-
-// -----------------------------------------------------------------------
-
-// static
-rtl::OString MsLangId::convertLanguageToIsoByteString( LanguageType nLang,
-        sal_Char cSep )
-{
-    rtl::OString  aLangStr;
-    rtl::OString  aCountry;
-    convertLanguageToIsoNames( nLang, aLangStr, aCountry );
-    if ( !aCountry.isEmpty() )
-    {
-        rtl::OStringBuffer aBuf( aLangStr);
-        aBuf.append( cSep );
-        aBuf.append( aCountry );
-        return aBuf.makeStringAndClear();
-    }
-    return aLangStr;
-}
-
 // =======================================================================
 
 // static
-LanguageType MsLangId::convertIsoNamesToLanguage( const rtl::OUString& rLang,
+LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const rtl::OUString& rLang,
         const rtl::OUString& rCountry )
 {
     // language is lower case in table
@@ -992,32 +904,12 @@ LanguageType MsLangId::convertIsoNamesToLanguage( const rtl::OUString& rLang,
 // -----------------------------------------------------------------------
 
 // static
-LanguageType MsLangId::convertIsoNamesToLanguage( const rtl::OString& rLang,
+LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const rtl::OString& rLang,
         const rtl::OString& rCountry )
 {
     rtl::OUString aLang = OStringToOUString( rLang, RTL_TEXTENCODING_ASCII_US);
     rtl::OUString aCountry = OStringToOUString( rCountry, RTL_TEXTENCODING_ASCII_US);
     return convertIsoNamesToLanguage( aLang, aCountry);
-}
-
-// -----------------------------------------------------------------------
-
-// static
-LanguageType MsLangId::convertIsoStringToLanguage(
-        const rtl::OUString& rString, sal_Unicode cSep )
-{
-    rtl::OUString   aLang;
-    rtl::OUString   aCountry;
-    sal_Int32  nSepPos = rString.indexOf( cSep );
-    if ( nSepPos >= 0 )
-    {
-        aLang = rString.copy( 0, nSepPos );
-        aCountry = rString.copy( nSepPos+1 );
-    }
-    else
-        aLang = rString;
-
-    return convertIsoNamesToLanguage( aLang, aCountry );
 }
 
 // -----------------------------------------------------------------------
@@ -1102,7 +994,7 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
         while ( pGLIBCModifiersEntry->mnLang != LANGUAGE_DONTKNOW );
     }
 
-    return convertIsoNamesToLanguage( aLang, aCountry );
+    return Conversion::convertIsoNamesToLanguage( aLang, aCountry );
 }
 
 // -----------------------------------------------------------------------
