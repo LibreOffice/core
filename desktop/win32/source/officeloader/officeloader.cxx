@@ -273,42 +273,52 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
                 if ( INVALID_HANDLE_VALUE != hPipe )
                 {
-                    DWORD   dwBytesWritten;
-                    int argc2 = 0;
-                    LPWSTR  *argv2 = CommandLineToArgvW( GetCommandLine(), &argc2 );
-
-                    fSuccess = WriteFile( hPipe, RTL_CONSTASCII_STRINGPARAM("InternalIPC::Arguments"), &dwBytesWritten, NULL );
-                    if (fSuccess) {
-                        if (cwdLen > 0) {
-                            fSuccess = writeArgument(hPipe, '2', cwd);
-                        } else {
-                            fSuccess = WriteFile(
-                                hPipe, RTL_CONSTASCII_STRINGPARAM("0"),
-                                &dwBytesWritten, NULL);
-                        }
-                    }
-                    for ( int argn = 1; fSuccess && argn < argc2; argn++ )
-                    {
-                        fSuccess = writeArgument(hPipe, ',', argv2[argn]);
-                    }
-
+                    DWORD   dwBytesRead = 0;
+                    char    *pBuffer = (char *)_alloca( sizeof("InternalIPC::SendArguments") + 1);
+                    fSuccess = ReadFile( hPipe, pBuffer, sizeof("InternalIPC::SendArguments") + 1, &dwBytesRead, NULL );
                     if ( fSuccess )
                     {
-                        fSuccess = WriteFile(  hPipe, "", 1, &dwBytesWritten, NULL );
+                        fSuccess = (dwBytesRead == (sizeof("InternalIPC::SendArguments") + 1) &&
+                            0 == strncmp( "InternalIPC::SendArguments", pBuffer, dwBytesRead - 1 ) );
+                    }
+                    if ( fSuccess )
+                    {
+                        DWORD   dwBytesWritten;
+                        int argc2 = 0;
+                        LPWSTR  *argv2 = CommandLineToArgvW( GetCommandLine(), &argc2 );
+
+                        fSuccess = WriteFile( hPipe, RTL_CONSTASCII_STRINGPARAM("InternalIPC::Arguments"), &dwBytesWritten, NULL );
+                        if (fSuccess) {
+                            if (cwdLen > 0) {
+                                fSuccess = writeArgument(hPipe, '2', cwd);
+                            } else {
+                                fSuccess = WriteFile(
+                                    hPipe, RTL_CONSTASCII_STRINGPARAM("0"),
+                                    &dwBytesWritten, NULL);
+                            }
+                        }
+                        for ( int argn = 1; fSuccess && argn < argc2; argn++ )
+                        {
+                            fSuccess = writeArgument(hPipe, ',', argv2[argn]);
+                        }
+
                         if ( fSuccess )
                         {
-                            DWORD   dwBytesRead = 0;
-                            char    *pBuffer = (char *)_alloca( sizeof(PIPE_TERMINATION_SEQUENCE) );
-                            fSuccess = ReadFile( hPipe, pBuffer, sizeof(PIPE_TERMINATION_SEQUENCE) - 1, &dwBytesRead, NULL );
+                            fSuccess = WriteFile(  hPipe, "", 1, &dwBytesWritten, NULL );
                             if ( fSuccess )
                             {
-                                pBuffer[dwBytesRead] = 0;
-                                if ( 0 != strcmp( PIPE_TERMINATION_SEQUENCE, pBuffer ) )
-                                    fSuccess = FALSE;
+                                DWORD   dwBytesRead = 0;
+                                char    *pBuffer = (char *)_alloca( sizeof(PIPE_TERMINATION_SEQUENCE) );
+                                fSuccess = ReadFile( hPipe, pBuffer, sizeof(PIPE_TERMINATION_SEQUENCE) - 1, &dwBytesRead, NULL );
+                                if ( fSuccess )
+                                {
+                                    pBuffer[dwBytesRead] = 0;
+                                    if ( 0 != strcmp( PIPE_TERMINATION_SEQUENCE, pBuffer ) )
+                                        fSuccess = FALSE;
+                                }
                             }
                         }
                     }
-
                     CloseHandle( hPipe );
 
                     return fSuccess ? 0 : -1;

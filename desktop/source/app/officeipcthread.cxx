@@ -66,6 +66,8 @@ const char  *OfficeIPCThread::sc_aShowSequence = "-tofront";
 const int OfficeIPCThread::sc_nShSeqLength = 5;
 const char  *OfficeIPCThread::sc_aConfirmationSequence = "InternalIPC::ProcessingDone";
 const int OfficeIPCThread::sc_nCSeqLength = 27;
+const char  *OfficeIPCThread::sc_aSendArgumentsSequence = "InternalIPC::SendArguments";
+const int OfficeIPCThread::sc_nCSASeqLength = 26;
 
 namespace { static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments"; }
 
@@ -506,8 +508,31 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         }
         else if( pThread->maPipe.create( pThread->maPipeIdent.getStr(), osl_Pipe_OPEN, rSecurity )) // Creation not successfull, now we try to connect
         {
-            // Pipe connected to first office
-            nPipeMode = PIPEMODE_CONNECTED;
+            osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
+            char pReceiveBuffer[sc_nCSASeqLength + 1];
+            int nResult = 0;
+            int nBytes = 0;
+            int nBufSz = sc_nCSASeqLength + 1;
+            // read byte per byte
+            while ((nResult=aStreamPipe.recv( pReceiveBuffer+nBytes, nBufSz-nBytes))>0) {
+                nBytes += nResult;
+                if (pReceiveBuffer[nBytes-1]=='\0') {
+                    break;
+                }
+            }
+            if (rtl::OString(sc_aSendArgumentsSequence).equals(pReceiveBuffer))
+            {
+                // Pipe connected to first office
+                nPipeMode = PIPEMODE_CONNECTED;
+            }
+            else
+            {
+                // Pipe connection failed (other office exited or crashed)
+                TimeValue tval;
+                tval.Seconds = 0;
+                tval.Nanosec = 500000000;
+                salhelper::Thread::wait( tval );
+            }
         }
         else
         {
@@ -660,6 +685,17 @@ void OfficeIPCThread::execute()
             // only lock the mutex when processing starts, othewise we deadlock when the office goes
             // down during wait
             osl::ClearableMutexGuard aGuard( GetMutex() );
+
+            if (!mbDowning)
+            {
+                // notify client we're ready to process its args
+                int nBytes = 0;
+                int nResult = 0;
+                while (
+                    (nResult = maStreamPipe.send(sc_aSendArgumentsSequence+nBytes, sc_nCSASeqLength-nBytes))>0 &&
+                    ((nBytes += nResult) < sc_nCSASeqLength) ) ;
+            }
+            maStreamPipe.write("\0", 1);
 
             // test byte by byte
             const int nBufSz = 2048;
