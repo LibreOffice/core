@@ -1102,6 +1102,72 @@ public:
             pData->buffer, pData->length, literal, internal::ConstCharArrayDetector< T, void >::size - 1);
     }
 
+    /**
+       Strip the given character from the start of the buffer.
+
+       @since LibreOffice 4.0
+
+       @param    c         the character to strip
+       @return   The number of characters stripped
+
+    */
+    sal_Int32 stripStart(sal_Unicode c = (sal_Unicode)' ')
+    {
+        sal_Int32 index;
+        for(index = 0; index < getLength() ; index++)
+        {
+            if(pData->buffer[ index ] != c)
+            {
+                break;
+            }
+        }
+        if(index)
+        {
+            remove(0, index);
+        }
+        return index;
+    }
+
+    /**
+       Strip the given character from the end of the buffer.
+
+       @since LibreOffice 4.0
+
+       @param    c         the character to strip
+       @return   The number of characters stripped
+
+    */
+    sal_Int32 stripEnd(sal_Unicode c = (sal_Unicode)' ')
+    {
+        sal_Int32 result = getLength();
+        sal_Int32 index;
+        for(index = getLength(); index > 0 ; index--)
+        {
+            if(pData->buffer[ index - 1 ] != c)
+            {
+                break;
+            }
+        }
+        if(index < getLength())
+        {
+            remove(index);
+        }
+        return result - getLength();
+    }
+    /**
+       Strip the given character from the both end of the buffer.
+
+       @since LibreOffice 4.0
+
+       @param    c         the character to strip
+       @return   The number of characters stripped
+
+    */
+    sal_Int32 strip(sal_Unicode c = (sal_Unicode)' ')
+    {
+        return stripStart(c) + stripEnd(c);
+    }
+
 private:
     /**
         A pointer to the data structur which contains the data.
