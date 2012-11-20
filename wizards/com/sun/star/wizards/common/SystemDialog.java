@@ -152,7 +152,7 @@ public class SystemDialog
                 sStorePath = sPathList[0];
             }
         }
-        catch (com.sun.star.uno.Exception exception)
+        catch (com.sun.star.lang.IllegalArgumentException exception)
         {
             exception.printStackTrace();
         }
@@ -199,7 +199,7 @@ public class SystemDialog
                 return xFilePicker.getFiles();
             }
         }
-        catch (com.sun.star.uno.Exception exception)
+        catch (com.sun.star.lang.IllegalArgumentException exception)
         {
             exception.printStackTrace();
         }

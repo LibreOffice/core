@@ -104,7 +104,7 @@ public class SwXTextTable extends TestCase {
         if (SOF.getTableCollection(xTextDoc).getCount() == 0) {
             try {
                 SOF.insertTextContent(xTextDoc, oObj);
-            } catch (com.sun.star.uno.Exception uE) {
+            } catch (com.sun.star.lang.IllegalArgumentException uE) {
                 uE.printStackTrace(log);
                 throw new StatusException("Couldn't create TextTable : " +
                                           uE.getMessage(), uE);

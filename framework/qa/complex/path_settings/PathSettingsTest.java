@@ -179,7 +179,7 @@ public class PathSettingsTest
                 System.out.println("Can't convert Object to String");
             }
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (com.sun.star.lang.IllegalArgumentException e)
         {
             /* ignore */
         }
@@ -273,7 +273,7 @@ public class PathSettingsTest
 //                System.out.print(" ==> ");
 //                System.out.print(sValue);
             }
-            catch (com.sun.star.uno.Exception e)
+            catch (com.sun.star.lang.IllegalArgumentException e)
             {
 //                System.out.print(" FAILED ");
             }

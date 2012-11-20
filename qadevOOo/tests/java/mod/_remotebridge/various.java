@@ -147,8 +147,6 @@ public class various extends TestCase {
         public void run() {
             try {
                 acceptedCall = acc.accept(connectString) ;
-            } catch (com.sun.star.lang.IllegalArgumentException e) {
-                ex = e ;
             } catch (com.sun.star.connection.ConnectionSetupException e) {
                 ex = e ;
             } catch (com.sun.star.connection.AlreadyAcceptingException e) {

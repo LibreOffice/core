@@ -104,7 +104,7 @@ public class SwXCellRange extends TestCase {
         if( SOF.getTableCollection( xTextDoc ).getCount() == 0 ) {
             try {
                 SOF.insertTextContent(xTextDoc, the_table );
-            } catch( com.sun.star.uno.Exception e ) {
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
                 e.printStackTrace( log );
                 throw new StatusException("Couldn't create TextTable : "
                         + e.getMessage(), e);

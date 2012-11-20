@@ -756,7 +756,7 @@ public class FilterComponent
                 }
                 return false;
             }
-            catch (Exception exception)
+            catch (IllegalArgumentException exception)
             {
                 exception.printStackTrace(System.err);
                 return false;
@@ -817,7 +817,7 @@ public class FilterComponent
                     Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue", _filtercondition.Value);
                 }
             }
-            catch (Exception e)
+            catch (IllegalArgumentException e)
             {
                 e.printStackTrace(System.err);
             }
@@ -858,7 +858,7 @@ public class FilterComponent
                 {
                     iselected = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), PropertyNames.SELECTED_ITEMS));
                 }
-                catch (Exception e)
+                catch (IllegalArgumentException e)
                 {
                     e.printStackTrace(System.err);
                 }
@@ -883,7 +883,7 @@ public class FilterComponent
                 short[] SelFields = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTFIELDNAME]), PropertyNames.SELECTED_ITEMS));
                 return FieldNames[SelFields[0]];
             }
-            catch (Exception exception)
+            catch (IllegalArgumentException exception)
             {
                 exception.printStackTrace(System.err);
             }
@@ -923,7 +923,7 @@ public class FilterComponent
                         return -1;
                 }
             }
-            catch (Exception exception)
+            catch (IllegalArgumentException exception)
             {
                 exception.printStackTrace(System.err);
             }

@@ -4845,13 +4845,6 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
             m_pImpl->AddLog( OSL_LOG_PREFIX "Rethrow" );
             throw;
         }
-        catch( const lang::IllegalArgumentException& aIAException )
-        {
-            m_pImpl->AddLog( aIAException.Message );
-            m_pImpl->AddLog( OSL_LOG_PREFIX "Rethrow" );
-
-            throw;
-        }
         catch( const uno::Exception& aException )
         {
             m_pImpl->AddLog( aException.Message );

@@ -146,7 +146,7 @@ public class Finalizer
             m_queryWizard.setControlProperty("txtSummary", "Text", CurDBMetaData.getSummaryString());
             return sCurQueryName;
         }
-        catch (com.sun.star.uno.Exception exception)
+        catch (IllegalArgumentException exception)
         {
             exception.printStackTrace(System.err);
             return PropertyNames.EMPTY_STRING;

@@ -130,7 +130,7 @@ public class ObjectInspectorModel extends TestCase {
             tEnv.addObjRelation("maxHelpTextLines", new Integer(maxHelpTextLines));
 
             return tEnv;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Unexpected exception", e);
         }

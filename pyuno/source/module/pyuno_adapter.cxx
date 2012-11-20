@@ -323,6 +323,16 @@ Any Adapter::invoke( const OUString &aFunctionName,
         }
         throw;
     }
+    catch( const IllegalArgumentException & e )
+    {
+        if( isLog( cargo, LogLevel::CALL ) )
+        {
+            logException(
+                cargo,  "except  uno->py[0x" ,
+                mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
+        }
+        throw;
+    }
     catch( const RuntimeException & e )
     {
         if( cargo && isLog( cargo, LogLevel::CALL ) )
@@ -339,16 +349,6 @@ Any Adapter::invoke( const OUString &aFunctionName,
         {
             logException(
                 cargo, "except  uno->py[0x" ,
-                mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
-        }
-        throw;
-    }
-    catch( const IllegalArgumentException & e )
-    {
-        if( isLog( cargo, LogLevel::CALL ) )
-        {
-            logException(
-                cargo,  "except  uno->py[0x" ,
                 mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
         }
         throw;
