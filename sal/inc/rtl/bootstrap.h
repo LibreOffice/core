@@ -124,8 +124,7 @@ extern "C" {
     If it is never called, the filename is based on the name of the executable,
     with the suffix ".ini" on Windows or "rc" on Unix.
 
-    @param pFileUri URL of the ini file; must not be null, must not be the empty
-    string
+    @param pNameUri URL of the inifile with path but WITHOUT suffix (.ini or rc)
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pFileUri )
     SAL_THROW_EXTERN_C();
