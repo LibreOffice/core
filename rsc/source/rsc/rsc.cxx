@@ -827,7 +827,7 @@ ERRTYPE RscCompiler::Link()
                 aSysListTmp = lcl_getTempFile(sOilDirUrl);
                 OSL_TRACE("temporary ilst file: %s", aSysListTmp.getStr());
 
-                OUString sIlstUrl, sIlstSys;
+                OUString sIlstUrl;
                 sIlstUrl = sRcUrl.copy(sRcUrl.lastIndexOf('/')+1);
                 sIlstUrl = sIlstUrl.copy(0,sIlstUrl.lastIndexOf('.'));
                 sIlstUrl += OUString(RTL_CONSTASCII_USTRINGPARAM(".ilst"));
