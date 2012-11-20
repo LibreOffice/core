@@ -326,7 +326,6 @@ void SmGraphicWindow::SetCursor(const SmNode *pNode)
           aTLPos  (GetFormulaDrawPos() + aOffset);
     aTLPos.X() -= pNode->GetItalicLeftSpace();
     Size  aSize   (pNode->GetItalicSize());
-    Point aBRPos  (aTLPos.X() + aSize.Width(), aTLPos.Y() + aSize.Height());
 
     SetCursor(Rectangle(aTLPos, aSize));
 }

@@ -539,7 +539,7 @@ throw(uno::RuntimeException)
     if ( rId.getLength() == 16 &&
         0 == memcmp( getUnoTunnelId().getConstArray(),
         rId.getConstArray(), 16 ) )
-    return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_uIntPtr >(this));
+        return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_uIntPtr >(this));
 
     return SvXMLImport::getSomething( rId );
 }

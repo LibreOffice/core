@@ -384,7 +384,7 @@ throw(uno::RuntimeException)
     if ( rId.getLength() == 16 &&
         0 == memcmp( getUnoTunnelId().getConstArray(),
         rId.getConstArray(), 16 ) )
-    return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_uIntPtr >(this));
+        return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_uIntPtr >(this));
 
     return SvXMLExport::getSomething( rId );
 }
@@ -759,7 +759,7 @@ void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel)
     if (nSize > 1 || (pNode && pNode->GetType() == NEXPRESSION))
         pRow = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW, sal_True, sal_True);
 
-        for (sal_uInt16 i = 0; i < nSize; i++)
+    for (sal_uInt16 i = 0; i < nSize; i++)
         if (const SmNode *pTemp = pNode->GetSubNode(i))
             ExportNodes(pTemp, nLevel+1);
 

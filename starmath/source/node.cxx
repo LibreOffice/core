@@ -825,8 +825,6 @@ void SmExpressionNode::CreateTextFromNode(String &rText)
 void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     // arranges all subnodes in one column
 {
-    Point rPosition;
-
     SmNode *pNode;
     sal_uInt16  nSize   = GetNumSubNodes();
 
@@ -2533,8 +2531,6 @@ void SmMatrixNode::CreateTextFromNode(String &rText)
 
 void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
-    Point   aPosition,
-            aOffset;
     SmNode *pNode;
     sal_uInt16  i, j;
 
