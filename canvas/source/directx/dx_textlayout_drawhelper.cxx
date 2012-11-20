@@ -39,7 +39,7 @@
 #include <canvas/debug.hxx>
 #include "dx_impltools.hxx"
 #include <vcl/sysdata.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/lanuagetag.hxx>
 #include "dx_textlayout_drawhelper.hxx"
 #include "dx_bitmap.hxx"
 #include "dx_canvasfont.hxx"
@@ -125,7 +125,7 @@ namespace dxcanvas
                     rFontRequest.FontDescription.FontDescription.Proportion == rendering::PanoseProportion::MONO_SPACED
                     ? PITCH_FIXED : PITCH_VARIABLE);
 
-            aFont.SetLanguage(MsLangId::convertLocaleToLanguage(rFontRequest.Locale));
+            aFont.SetLanguage(LanguageTag(rFontRequest.Locale).getLanguageType());
 
             // setup font color
             aFont.SetColor( aColor );
