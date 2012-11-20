@@ -16,6 +16,7 @@ VclContainer::VclContainer(Window *pParent)
     , m_bLayoutDirty(true)
 {
     ImplInit(pParent, WB_HIDE, NULL);
+    SetBackground();
 }
 
 Size VclContainer::GetOptimalSize(WindowSizeType eType) const
