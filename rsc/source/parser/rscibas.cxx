@@ -25,6 +25,7 @@
 #include <string.h>
 
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <comphelper/string.hxx>
 #include <tools/rc.h>
 #include <tools/color.hxx>
@@ -94,7 +95,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
         fprintf( stderr, "ISO Language in : %d\n",
                  (int)nIndex,
                  pLangEntry->mnLang,
-                 MsLangId::convertLanguageToIsoByteString( pLangEntry->mnLang ).getStr() );
+                 OUStringToOString( LanguageTag( pLangEntry->mnLang ).getBcp47(), RTL_TEXTENCODING_ASCII_US).getStr() );
 #endif
         rtl::OString aLang(pLangEntry->maLangStr, strlen(pLangEntry->maLangStr));
         rtl::OString aCountry(pLangEntry->maCountry, strlen(pLangEntry->maCountry));
