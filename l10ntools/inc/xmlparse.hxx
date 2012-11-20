@@ -26,7 +26,10 @@
 #include <vector>
 
 #include <signal.h>
+
+#include <libxml/xmlexports.h> // define XMLCALL so expat.h does not redefine it
 #include <expat.h>
+
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "boost/unordered_map.hpp"
