@@ -30,6 +30,7 @@
 
 #endif  // MACOSX
 #include <rtl/instance.hxx>
+#include "i18npool/languagetag.hxx"
 #include "i18npool/mslangid.hxx"
 
 // =======================================================================
@@ -101,7 +102,7 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
                 rtl::OUString     rLang( procLocale->Language );
                 rtl::OUString     rCountry( procLocale->Country );
 
-                nLang = MsLangId::convertIsoNamesToLanguage( rLang, rCountry );
+                nLang = LanguageTag( rLang, rCountry ).getLanguageType();
                 OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
                 rSystemLanguage = nLang;
 #ifdef DEBUG
