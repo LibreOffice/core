@@ -373,7 +373,7 @@ And here is an autogen.lastrun for Android when cross-compiling to x86 from Linu
 There are a couple of (more or less) interactive apps that you can run
 on the emulator or on a device that use LibreOffice code. Look in
 android/experimental. DocumentLoader is just a testbench, really for
-code to load a document (just Weiter ones so far) and display one page
+code to load a document (just Writer ones so far) and display one page
 at a time. LibreOffice4Android is what resulted from a Google Summer
 of Code project in 2012, a document viewer.
 
