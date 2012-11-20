@@ -754,7 +754,10 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_cairo
+$(call gb_LinkTarget_use_package,$(1),cairo)
+$(call gb_LinkTarget_use_package,$(1),pixman)
 $(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,cairo) \
 	-I$(call gb_UnpackedTarball_get_dir,cairo)/src \
 	$(FREETYPE_CFLAGS) \
 	$$(INCLUDE) \
