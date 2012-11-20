@@ -108,6 +108,7 @@ import com.sun.star.view.XRenderable;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 
 import org.libreoffice.android.Bootstrap;
 
@@ -127,9 +128,7 @@ public class DocumentLoader
     private static final int PAGECACHE_SIZE = PAGECACHE_PLUSMINUS*2 + 1;
 
     BootstrapContext bootstrapContext;
-    Object doc;
-    int pageCount;
-    XRenderable renderable;
+    DocumentContext documentContext;
 
     GestureDetector.OnGestureListener gestureListener;
     GestureDetector gestureDetector;
@@ -151,7 +150,7 @@ public class DocumentLoader
         {
             Log.i(TAG, "onFling: " + event1 + " " + event2);
             if (event1.getX() - event2.getX() > 120) {
-                if (((PageViewer)flipper.getCurrentView()).currentPageNumber == pageCount-1)
+                if (((PageViewer)flipper.getCurrentView()).currentPageNumber == documentContext.pageCount-1)
                     return false;
 
                 Animation inFromRight = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 1, Animation.RELATIVE_TO_SELF, 0,
@@ -612,7 +611,7 @@ public class DocumentLoader
 
             // getRenderer returns a set of properties that include the PageSize
             long t0 = System.currentTimeMillis();
-            PropertyValue rendererProps[] = renderable.getRenderer(number, doc, renderProps);
+            PropertyValue rendererProps[] = documentContext.renderable.getRenderer(number, documentContext.doc, renderProps);
             long t1 = System.currentTimeMillis();
             Log.i(TAG, "getRenderer took " + ((t1-t0)-bootstrapContext.timingOverhead) + " ms");
 
@@ -692,7 +691,7 @@ public class DocumentLoader
             renderProps[1].Value = device;
 
             t0 = System.currentTimeMillis();
-            renderable.render(number, doc, renderProps);
+            documentContext.renderable.render(number, documentContext.doc, renderProps);
             t1 = System.currentTimeMillis();
             Log.i(TAG, "Rendering page " + number + " took " + ((t1-t0)-bootstrapContext.timingOverhead) + " ms");
 
@@ -727,7 +726,7 @@ public class DocumentLoader
 
                 Log.i(TAG, "doInBackground(" + number + ")");
 
-                if (number >= pageCount)
+                if (number >= documentContext.pageCount)
                     return -1;
 
                 state = PageState.LOADING;
@@ -811,11 +810,11 @@ public class DocumentLoader
                 loadProps[2].Value = new Boolean(true);
 
                 long t0 = System.currentTimeMillis();
-                doc = bootstrapContext.componentLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
+                documentContext.doc = bootstrapContext.componentLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
                 long t1 = System.currentTimeMillis();
                 Log.i(TAG, "Loading took " + ((t1-t0)-bootstrapContext.timingOverhead) + " ms");
 
-                renderable = (XRenderable) UnoRuntime.queryInterface(XRenderable.class, doc);
+                documentContext.renderable = (XRenderable) UnoRuntime.queryInterface(XRenderable.class, documentContext.doc);
 
                 PropertyValue renderProps[] = new PropertyValue[3];
                 renderProps[0] = new PropertyValue();
@@ -829,9 +828,9 @@ public class DocumentLoader
                 renderProps[2].Value = new MyXController();
 
                 t0 = System.currentTimeMillis();
-                pageCount = renderable.getRendererCount(doc, renderProps);
+                documentContext.pageCount = documentContext.renderable.getRendererCount(documentContext.doc, renderProps);
                 t1 = System.currentTimeMillis();
-                Log.i(TAG, "getRendererCount: " + pageCount + ", took " + ((t1-t0)-bootstrapContext.timingOverhead) + " ms");
+                Log.i(TAG, "getRendererCount: " + documentContext.pageCount + ", took " + ((t1-t0)-bootstrapContext.timingOverhead) + " ms");
             }
             catch (Exception e) {
                 e.printStackTrace(System.err);
@@ -853,6 +852,18 @@ public class DocumentLoader
         public XComponentLoader componentLoader;
         public XToolkitExperimental toolkit;
         public XDevice dummySmallDevice;
+    }
+
+    /**
+     * This class contains the state that is specific to a document, but
+     * independent from a view.
+     */
+    class DocumentContext
+    {
+        public Object doc;
+        public int pageCount;
+        public XRenderable renderable;
+        public String input;
     }
 
     static void dumpUNOObject(String objectName, Object object)
@@ -924,7 +935,10 @@ public class DocumentLoader
 
     @Override
     public Object onRetainNonConfigurationInstance() {
-        return bootstrapContext;
+        ArrayList ret = new ArrayList(2);
+        ret.add(bootstrapContext);
+        ret.add(documentContext);
+        return ret;
     }
 
     private void initBootstrapContext()
@@ -982,12 +996,25 @@ public class DocumentLoader
         }
     }
 
+    private void initDocumentContext(String input)
+    {
+        documentContext = new DocumentContext();
+        documentContext.input = input;
+        // Load the wanted document
+        new DocumentLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, "file://" + input);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
-        bootstrapContext = (BootstrapContext)getLastNonConfigurationInstance();
+        ArrayList contexts = (ArrayList)getLastNonConfigurationInstance();
+        if (contexts != null)
+        {
+            bootstrapContext = (BootstrapContext)contexts.get(0);
+            documentContext = (DocumentContext)contexts.get(1);
+        }
 
         extras = getIntent().getExtras();
 
@@ -1011,8 +1038,8 @@ public class DocumentLoader
             if (bootstrapContext == null)
                 initBootstrapContext();
 
-            // Load the wanted document
-            new DocumentLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, "file://" + input);
+            if (documentContext == null || !documentContext.input.equals(input))
+                initDocumentContext(input);
 
             flipper = new ViewFlipper(this);
 
