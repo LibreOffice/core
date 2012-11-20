@@ -11863,7 +11863,6 @@ WITH_LANG_LIST=`echo $WITH_LANG | sed "s/ALL/$ALL_LANGS/"`
 # they need a real list of languages
 test -z "$WITH_LANG_LIST" && WITH_LANG_LIST="en-US"
 test "$WITH_LANG" = "en-US" && WITH_LANG=
-test -z "$WITH_LANG" || BUILD_TYPE="$BUILD_TYPE TRANSLATIONS"
 AC_SUBST(ALL_LANGS)
 AC_SUBST(WITH_LANG)
 AC_SUBST(WITH_LANG_LIST)

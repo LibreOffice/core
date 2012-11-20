@@ -68,7 +68,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	stoc \
 	store \
 	tools \
-	$(call gb_Helper_optional,TRANSLATIONS,translations) \
 	ucbhelper \
 	$(call gb_Helper_optional,UCPP,ucpp) \
 	udkapi \

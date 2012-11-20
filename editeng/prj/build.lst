@@ -1,2 +1,2 @@
-ed	editeng	:	TRANSLATIONS:translations svtools xmloff linguistic unotest NULL
+ed	editeng	:	svtools xmloff linguistic unotest NULL
 ed	editeng\prj									nmake	-	all	ed_prj NULL

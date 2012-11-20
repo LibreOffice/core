@@ -182,7 +182,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	toolkit \
 	tools \
 	touch \
-	$(call gb_Helper_optional,TRANSLATIONS,translations) \
 	tubes \
 	twain \
 	ucb \
