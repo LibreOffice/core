@@ -127,8 +127,6 @@ public class DocumentLoader
     private static final int PAGECACHE_SIZE = PAGECACHE_PLUSMINUS*2 + 1;
 
     BootstrapContext bootstrapContext;
-    XToolkitExperimental toolkit;
-    XDevice dummySmallDevice;
     Object doc;
     int pageCount;
     XRenderable renderable;
@@ -607,7 +605,7 @@ public class DocumentLoader
             renderProps[0].Value = new Boolean(true);
             renderProps[1] = new PropertyValue();
             renderProps[1].Name = "RenderDevice";
-            renderProps[1].Value = dummySmallDevice;
+            renderProps[1].Value = bootstrapContext.dummySmallDevice;
             renderProps[2] = new PropertyValue();
             renderProps[2].Name = "View";
             renderProps[2].Value = new MyXController();
@@ -634,7 +632,7 @@ public class DocumentLoader
             XDevice device;
             if (pageWidth == 0) {
                 // Huh?
-                device = toolkit.createScreenCompatibleDeviceUsingBuffer(flipper.getWidth(), flipper.getHeight(), 1, 1, 0, 0, wrapped_bb);
+                device = bootstrapContext.toolkit.createScreenCompatibleDeviceUsingBuffer(flipper.getWidth(), flipper.getHeight(), 1, 1, 0, 0, wrapped_bb);
             } else {
 
                 // Scale so that it fits our device which has a resolution of
@@ -684,7 +682,7 @@ public class DocumentLoader
 
                 Log.i(TAG, "Rendering page " + number + " level=" + level + " scale=" + scaleNumerator + "/" + scaleDenominator + ", offset=(" + xOffset + ", " + yOffset + ")");
 
-                device = toolkit.createScreenCompatibleDeviceUsingBuffer(flipper.getWidth(), flipper.getHeight(),
+                device = bootstrapContext.toolkit.createScreenCompatibleDeviceUsingBuffer(flipper.getWidth(), flipper.getHeight(),
                                                                          scaleNumerator, scaleDenominator,
                                                                          -xOffset, -yOffset,
                                                                          wrapped_bb);
@@ -817,17 +815,7 @@ public class DocumentLoader
                 long t1 = System.currentTimeMillis();
                 Log.i(TAG, "Loading took " + ((t1-t0)-bootstrapContext.timingOverhead) + " ms");
 
-                Object toolkitService = bootstrapContext.mcf.createInstanceWithContext
-                    ("com.sun.star.awt.Toolkit", bootstrapContext.componentContext);
-                toolkit = (XToolkitExperimental) UnoRuntime.queryInterface(XToolkitExperimental.class, toolkitService);
-
                 renderable = (XRenderable) UnoRuntime.queryInterface(XRenderable.class, doc);
-
-                // Set up dummySmallDevice and use it to find out the number
-                // of pages ("renderers").
-                ByteBuffer smallbb = ByteBuffer.allocateDirect(SMALLSIZE*SMALLSIZE*4);
-                long wrapped_smallbb = Bootstrap.new_byte_buffer_wrapper(smallbb);
-                dummySmallDevice = toolkit.createScreenCompatibleDeviceUsingBuffer(SMALLSIZE, SMALLSIZE, 1, 1, 0, 0, wrapped_smallbb);
 
                 PropertyValue renderProps[] = new PropertyValue[3];
                 renderProps[0] = new PropertyValue();
@@ -835,7 +823,7 @@ public class DocumentLoader
                 renderProps[0].Value = new Boolean(true);
                 renderProps[1] = new PropertyValue();
                 renderProps[1].Name = "RenderDevice";
-                renderProps[1].Value = dummySmallDevice;
+                renderProps[1].Value = bootstrapContext.dummySmallDevice;
                 renderProps[2] = new PropertyValue();
                 renderProps[2].Name = "View";
                 renderProps[2].Value = new MyXController();
@@ -863,6 +851,8 @@ public class DocumentLoader
         public XComponentContext componentContext;
         public XMultiComponentFactory mcf;
         public XComponentLoader componentLoader;
+        public XToolkitExperimental toolkit;
+        public XDevice dummySmallDevice;
     }
 
     static void dumpUNOObject(String objectName, Object object)
@@ -973,6 +963,17 @@ public class DocumentLoader
             bootstrapContext.componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
 
             Log.i(TAG, "componentLoader is" + (bootstrapContext.componentLoader!=null ? " not" : "") + " null");
+
+            Object toolkitService = bootstrapContext.mcf.createInstanceWithContext
+                ("com.sun.star.awt.Toolkit", bootstrapContext.componentContext);
+            bootstrapContext.toolkit = (XToolkitExperimental) UnoRuntime.queryInterface(XToolkitExperimental.class, toolkitService);
+
+            // Set up dummySmallDevice and use it to find out the number
+            // of pages ("renderers").
+            ByteBuffer smallbb = ByteBuffer.allocateDirect(SMALLSIZE*SMALLSIZE*4);
+            long wrapped_smallbb = Bootstrap.new_byte_buffer_wrapper(smallbb);
+            bootstrapContext.dummySmallDevice = bootstrapContext.toolkit.createScreenCompatibleDeviceUsingBuffer(SMALLSIZE, SMALLSIZE, 1, 1, 0, 0, wrapped_smallbb);
+
         }
         catch (Exception e)
         {
