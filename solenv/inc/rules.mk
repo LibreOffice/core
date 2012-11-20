@@ -697,17 +697,3 @@ $(COMMONMISC)/$(TARGET)/%.uulf : $$(@:b).ulf
     @$(COPY) $< $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
     @-$(RM) $@.$(INPATH)
-
-# This is still needed?????
-$(COMMONMISC)/$(TARGET)/%.xrm : %.xrm
-    $(COMMAND_ECHO)-$(MKDIR) $(@:d)
-    $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)$(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
-    $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
-    $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
-
-# dirty hack
-# if local *.sdf file is missing
-#%.sdf:
-#    echo > $@
-

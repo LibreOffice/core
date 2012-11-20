@@ -38,7 +38,7 @@
 #	    => XcuMergeTarget: merge
 #          => buildtools (cfgex)
 #	       => Xcu data source
-#          => localize.sdf
+#          => *.po
 #       => XcsTarget (schema)
 
 # Per-repo pattern rules for each repository do not work for all targets
@@ -251,18 +251,24 @@ gb_XcuMergeTarget_CFGEXCOMMAND := $(gb_Helper_set_ld_path) $(gb_XcuMergeTarget_C
 # PRJNAME is computed from the stem (parameter $(2))
 define gb_XcuMergeTarget__command
 $(call gb_Output_announce,$(2),$(true),XCU,5)
+MERGEINPUT=`$(gb_MKTEMP)` && \
+echo $(POFILES) > $${MERGEINPUT} && \
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XcuMergeTarget_CFGEXCOMMAND) \
 		-p $(firstword $(subst /, ,$(2))) \
 		-i $(3) \
 		-o $(1) \
-		-m $(SDF) \
-		-l all)
+		-m $${MERGEINPUT} \
+		-l all) && \
+rm -rf $${MERGEINPUT}
+
 endef
 
 $(call gb_XcuMergeTarget_get_target,%) : $(gb_XcuMergeTarget_CFGEXTARGET)
-	$(if $(SDF),$(call gb_XcuMergeTarget__command,$@,$*,$(filter %.xcu,$^)),mkdir -p $(dir $@) && cp $(filter %.xcu,$^) $@)
+	$(if $(filter $(words $(POFILES)),$(words $(wildcard $(POFILES)))),\
+		$(call gb_XcuMergeTarget__command,$@,$*,$(filter %.xcu,$^)),\
+		mkdir -p $(dir $@) && cp $(filter %.xcu,$^) $@)
 
 $(call gb_XcuMergeTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCU,5)
@@ -273,9 +279,9 @@ $(call gb_XcuMergeTarget_get_clean_target,%) :
 define gb_XcuMergeTarget_XcuMergeTarget
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
 	$(call gb_Configuration__get_source,$(2),$(3)/$(4)) \
-	$(gb_SDFLOCATION)/$(dir $(1))localize.sdf
+	$(wildcard $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po))
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
-	SDF := $(gb_SDFLOCATION)/$(dir $(1))localize.sdf
+	POFILES := $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
 endef
 
 

@@ -1,3 +1,3 @@
-sd      sd      :    filter TRANSLATIONS:translations animations configmgr svx sfx2 stoc canvas embeddedobj LIBXSLT:libxslt oox ure test xmloff fileaccess unoxml dbaccess BLUEZ:bluez_bluetooth NULL
+sd      sd      :    filter animations configmgr svx sfx2 stoc canvas embeddedobj LIBXSLT:libxslt oox ure test xmloff fileaccess unoxml dbaccess BLUEZ:bluez_bluetooth NULL
 sd	sd										usr1	-	all	sd_mkout NULL
 sd	sd\prj									nmake		-	all	sd_prj NULL

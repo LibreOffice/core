@@ -119,7 +119,6 @@ QueryBox DLG_IMPORT_DBNAME
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
     Message [ en-US ] = "Use database name as default database for the document?" ;
-    Message [ x-comment ] = " ";
 };
 String STR_PAGE
 {

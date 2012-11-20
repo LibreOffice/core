@@ -40,15 +40,11 @@
 #include "sal/main.h"
 #include "sal/types.h"
 
+#include "po.hxx"
+
 using namespace std;
 
 namespace {
-
-namespace global {
-
-std::ofstream output;
-
-}
 
 rtl::OUString getEnvironment(rtl::OUString const & variable) {
     rtl::OUString value;
@@ -164,7 +160,8 @@ bool passesPositiveList(rtl::OUString const & url) {
 
 void handleCommand(
     rtl::OUString const & project, rtl::OUString const & projectRoot,
-    rtl::OUString const & url, rtl::OUString const & executable, bool positive)
+    rtl::OUString const & url, rtl::OUString const & actualDir,
+    PoOfstream & rPoOutPut, rtl::OUString const & executable, bool positive)
 {
     if (positive ? passesPositiveList(url) : passesNegativeList(url)) {
         rtl::OUString inPath;
@@ -196,7 +193,7 @@ void handleCommand(
                     RTL_CONSTASCII_USTRINGPARAM("INPATH_FOR_BUILD"))));
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("/bin/"));
         buf.append(executable);
-        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" -e -p "));
+        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" -p "));
         buf.append(project);
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" -r "));
         buf.append(projectRoot);
@@ -229,23 +226,89 @@ void handleCommand(
         }
         std::ifstream in(outPath8.getStr());
         if (!in.is_open()) {
-            std::cerr << "Error: Cannot open " << outPath.getStr() << "\n";
+            std::cerr << "Error: Cannot open " << outPath8.getStr() << "\n";
             throw false; //TODO
+        }
+
+        std::string s;
+        std::getline(in, s);
+        if (!in.eof() && !rPoOutPut.isOpen())
+        {
+            rtl::OUString outDirUrl;
+            if (osl::FileBase::getFileURLFromSystemPath(actualDir.
+                copy(0,actualDir.lastIndexOf('/')), outDirUrl)
+                != osl::FileBase::E_None)
+            {
+                std::cerr << "Error: Cannot convert pathname to URL\n";
+                throw false; //TODO
+            }
+            osl::Directory::createPath(outDirUrl);
+
+            rtl::OString outFilePath;
+            if (!actualDir.concat(".pot").
+                convertToString(
+                &outFilePath, osl_getThreadTextEncoding(),
+                (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+            {
+                std::cerr << "Error: Cannot convert pathname from UTF-16\n";
+                throw false; //TODO
+            }
+            rPoOutPut.open(outFilePath.getStr());
+            if (!rPoOutPut.isOpen())
+            {
+                std::cerr
+                    << "Error: Cannot open po file "
+                    << outFilePath.getStr() << "\n";
+                throw false; //TODO
+            }
+
+            //Add header to actual po file
+            {
+                const sal_Int32 nProjectInd = inPath.indexOf(project);
+                const OString relativPath =
+                    OUStringToOString(
+                        inPath.copy( nProjectInd,
+                            inPath.lastIndexOf('/')- nProjectInd),
+                        RTL_TEXTENCODING_UTF8 );
+
+                rPoOutPut.writeHeader(PoHeader(relativPath));
+            }
         }
         while (!in.eof())
         {
-            std::string s;
+            OString sLine = OString(s.data(),s.length());
+            try
+            {
+                if (!sLine.getToken(PoEntry::TEXT,'\t').isEmpty())
+                    rPoOutPut.writeEntry(PoEntry(sLine));
+                if (!sLine.getToken(PoEntry::QUICKHELPTEXT,'\t').isEmpty())
+                    rPoOutPut.writeEntry(PoEntry(sLine,PoEntry::TQUICKHELPTEXT));
+                if (!sLine.getToken(PoEntry::TITLE,'\t').isEmpty())
+                    rPoOutPut.writeEntry(PoEntry(sLine,PoEntry::TTITLE));
+            }
+            catch(PoEntry::Exception& aException)
+            {
+                if(aException == PoEntry::INVALIDSDFLINE)
+                {
+                    std::cerr
+                        << executable
+                        << "'s output is invalid:\n"
+                        << sLine.replaceAll("\t","\\t").getStr()
+                        << std::endl;
+                    throw false; //TODO
+                }
+            }
             std::getline(in, s);
-            if (!s.empty())
-                global::output << s << '\n';
-        }
+        };
         in.close();
     }
 }
 
 void handleFile(
     rtl::OUString const & project, rtl::OUString const & projectRoot,
-    rtl::OUString const & url)
+    rtl::OUString const & url, rtl::OUString const & actualDir,
+    PoOfstream & rPoOutPut)
 {
     struct Command {
         char const * extension;
@@ -262,13 +325,14 @@ void handleFile(
         { RTL_CONSTASCII_STRINGPARAM(".xml"), "xrmex", true },
         { RTL_CONSTASCII_STRINGPARAM(".xhp"), "helpex", false },
         { RTL_CONSTASCII_STRINGPARAM(".properties"), "propex", false },
-        { RTL_CONSTASCII_STRINGPARAM(".ui"), "uiex", false } };
+        { RTL_CONSTASCII_STRINGPARAM(".ui"), "uiex", false },
+        { RTL_CONSTASCII_STRINGPARAM(".tree"), "treex", false } };
     for (std::size_t i = 0; i != SAL_N_ELEMENTS(commands); ++i) {
         if (url.endsWithAsciiL(
                 commands[i].extension, commands[i].extensionLength))
         {
             handleCommand(
-                project, projectRoot, url,
+                project, projectRoot, url, actualDir, rPoOutPut,
                 rtl::OUString::createFromAscii(commands[i].executable),
                 commands[i].positive);
             break;
@@ -379,8 +443,9 @@ bool excludeDirectory(rtl::OUString const & directory) {
 /// level <= 0)
 void handleDirectory(
     rtl::OUString const & url, int level, rtl::OUString const & project,
-    rtl::OUString const & projectRoot)
+    rtl::OUString const & projectRoot, rtl::OUString const & actualDir)
 {
+    PoOfstream aPoOutPut;
     osl::Directory dir(url);
     if (dir.open() != osl::FileBase::E_None) {
         std::cerr
@@ -410,7 +475,8 @@ void handleDirectory(
         case -1: // the clone or src directory
             if (stat.getFileType() == osl::FileStatus::Directory) {
                 handleDirectory(
-                    stat.getFileURL(), 0, rtl::OUString(), rtl::OUString());
+                    stat.getFileURL(), 0, rtl::OUString(),
+                    rtl::OUString(), actualDir);
             }
             break;
         case 0: // a root directory
@@ -418,12 +484,14 @@ void handleDirectory(
                 if (includeProject(stat.getFileName())) {
                     handleDirectory(
                         stat.getFileURL(), 1, stat.getFileName(),
-                        rtl::OUString());
-                } else if ( stat.getFileName() == "clone" || stat.getFileName() == "src" )
+                        rtl::OUString(), actualDir.concat("/").
+                        concat(stat.getFileName()));
+                } else if ( stat.getFileName() == "clone" ||
+                            stat.getFileName() == "src" )
                 {
                     handleDirectory(
                         stat.getFileURL(), -1, rtl::OUString(),
-                        rtl::OUString());
+                        rtl::OUString(), actualDir);
                 }
             }
             break;
@@ -435,24 +503,29 @@ void handleDirectory(
                         pr += rtl::OUString('/');
                     }
                     pr += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".."));
-                    handleDirectory(stat.getFileURL(), 2, project, pr);
+                    handleDirectory(stat.getFileURL(), 2, project, pr,
+                                    actualDir.concat("/").
+                                    concat(stat.getFileName()));
                 }
             } else {
-                handleFile(project, projectRoot, stat.getFileURL());
+                handleFile(project, projectRoot,
+                           stat.getFileURL(), actualDir, aPoOutPut);
             }
             break;
         }
     }
+    if (aPoOutPut.isOpen())
+        aPoOutPut.close();
     if (dir.close() != osl::FileBase::E_None) {
         std::cerr << "Error: Cannot close directory\n";
         throw false; //TODO
     }
 }
 
-void handleProjects(char const * root) {
+void handleProjects(char const * sourceRoot, char const * destRoot) {
     rtl::OUString root16;
     if (!rtl_convertStringToUString(
-            &root16.pData, root, rtl_str_getLength(root),
+            &root16.pData, sourceRoot, rtl_str_getLength(sourceRoot),
             osl_getThreadTextEncoding(),
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
              | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
@@ -468,9 +541,19 @@ void handleProjects(char const * root) {
         std::cerr << "Error: Cannot convert pathname to URL\n";
         throw false; //TODO
     }
-    handleDirectory(rootUrl, 0, rtl::OUString(), rtl::OUString());
+    rtl::OUString outPutRoot;
+    if (!rtl_convertStringToUString(
+            &outPutRoot.pData, destRoot, rtl_str_getLength(destRoot),
+            osl_getThreadTextEncoding(),
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+             | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+             | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
+    {
+        std::cerr << "Error: Cannot convert pathname to UTF-16\n";
+        throw false; //TODO
+    }
+    handleDirectory(rootUrl, 0, rtl::OUString(), rtl::OUString(), outPutRoot);
 }
-
 }
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
@@ -483,17 +566,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
                 "Syntax: localize <source-root> <outfile>\n");
         std::exit(EXIT_FAILURE);
     }
-    global::output.open(argv[2], std::ios_base::out | std::ios_base::trunc);
-    if (!global::output.is_open()) {
-        std::cerr << "Error: Cannot append to " << argv[2] << '\n';
-        std::exit(EXIT_FAILURE);
-    }
     try {
-        handleProjects(argv[1]);
+        handleProjects(argv[1],argv[2]);
     } catch (bool) { //TODO
         return EXIT_FAILURE;
     }
-    global::output.close();
     return EXIT_SUCCESS;
 }
 

@@ -55,8 +55,6 @@ public:
 /// point to existing files.
     bool Merge( const rtl::OString &rSDFFile_in, const rtl::OString &rDestinationFile_in ,
         const rtl::OString& sLanguage , MergeDataFile& aMergeDataFile );
-    bool Merge( const rtl::OString &rSDFFile, const rtl::OString &rPathX , const rtl::OString &rPathY , bool bISO
-        , const std::vector<rtl::OString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir );
 
 private:
     rtl::OString GetOutpath( const rtl::OString& rPathX , const rtl::OString& sCur , const rtl::OString& rPathY );

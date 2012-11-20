@@ -1,2 +1,2 @@
-st	svtools	: TRANSLATIONS:translations svl offapi toolkit ucbhelper unotools JPEG:jpeg cppu cppuhelper comphelper configmgr sal salhelper sot jvmfwk LIBXSLT:libxslt ure test NULL
+st	svtools	: svl offapi toolkit ucbhelper unotools JPEG:jpeg cppu cppuhelper comphelper configmgr sal salhelper sot jvmfwk LIBXSLT:libxslt ure test NULL
 st	svtools\prj					        nmake	-	all	st_prj NULL

@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "export.hxx"
+#include "po.hxx"
 
 namespace
 {
@@ -35,6 +36,27 @@ namespace
                 rFilename.lastIndexOf( '\\' ),
                 rFilename.lastIndexOf( '/' ))+1);
     };
+
+    static bool lcl_ReadPoChecked(
+        PoEntry& o_rPoEntry, PoIfstream& rPoFile,
+        const std::string& rFileName)
+    {
+        try
+        {
+            rPoFile.readEntry( o_rPoEntry );
+        }
+        catch( PoIfstream::Exception& aException )
+        {
+            if( aException == PoIfstream::INVALIDENTRY )
+            {
+                printf(
+                    "Warning : %s contains invalid entry\n",
+                    rFileName.c_str() );
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
 //
@@ -128,47 +150,134 @@ sal_Bool MergeData::operator==( ResData *pData )
 //
 
 MergeDataFile::MergeDataFile(
-    const rtl::OString &rFileName,
-    const rtl::OString &rFile,
+    const rtl::OString &rFileName, const rtl::OString &rFile,
     bool bCaseSensitive)
 {
-    std::ifstream aInputStream(rFileName.getStr());
-    const ::rtl::OString sHACK(RTL_CONSTASCII_STRINGPARAM("HACK"));
-    const ::rtl::OString sFileNormalized(lcl_NormalizeFilename(rFile));
-    const bool isFileEmpty = sFileNormalized.isEmpty();
-
-    if (!aInputStream.is_open())
+    std::ifstream aInputStream( rFileName.getStr() );
+    if ( !aInputStream.is_open() )
     {
-        printf("Warning : Can't open %s\n", rFileName.getStr());
+        printf("Warning : Can't open po path container file");
         return;
     }
-    while (!aInputStream.eof())
+    std::string sPoFileName;
+    aInputStream >> sPoFileName;
+    bool bFirstLang = true;
+    while( !aInputStream.eof() )
     {
-        std::string buf;
-        std::getline(aInputStream, buf);
-        rtl::OString sLine(buf.data(), buf.length());
-        sal_Int32 n = 0;
-        // Skip all wrong filenames
-        const ::rtl::OString filename = lcl_NormalizeFilename(sLine.getToken(1, '\t', n)); // token 1
-        if (isFileEmpty || (!isFileEmpty && filename.equals(sFileNormalized)) )
+        const OString sHack("HACK");
+        const OString sFileName( lcl_NormalizeFilename(rFile) );
+        const bool bReadAll = sFileName.isEmpty();
+        PoIfstream aPoInput;
+        aPoInput.open( OString(sPoFileName.data(), sPoFileName.length()) );
+        if ( !aPoInput.isOpen() )
         {
-            const rtl::OString sTYP = sLine.getToken( 1, '\t', n ); // token 3
-            const rtl::OString sGID = sLine.getToken( 0, '\t', n ); // token 4
-            const rtl::OString sLID = sLine.getToken( 0, '\t', n ); // token 5
-            rtl::OString sPFO = sLine.getToken( 1, '\t', n ); // token 7
-            sPFO = sHACK;
-            rtl::OString nLANG = sLine.getToken( 1, '\t', n ); // token 9
-            nLANG = nLANG.trim();
-            const rtl::OString sTEXT = sLine.getToken( 0, '\t', n ); // token 10
-            const rtl::OString sQHTEXT = sLine.getToken( 1, '\t', n ); // token 12
-            const rtl::OString sTITLE = sLine.getToken( 0, '\t', n ); // token 13
-
-            if (!nLANG.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")))
+            printf( "Warning : Can't open %s\n", sPoFileName.c_str() );
+            return;
+        }
+        PoHeader aPoHeader;
+        try
+        {
+            aPoInput.readHeader( aPoHeader );
+        }
+        catch( PoIfstream::Exception& aException )
+        {
+            if( aException == PoIfstream::INVALIDHEADER )
             {
-                aLanguageSet.insert(nLANG);
-                InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE, filename, bCaseSensitive );
+                printf(
+                    "Warning : %s has invalid header\n",
+                    sPoFileName.c_str() );
+                return;
             }
         }
+        OString sLang;
+        try
+        {
+            sLang = aPoHeader.getLanguage();
+        }
+        catch( PoHeader::Exception& aException )
+        {
+            if( aException == PoHeader::NOLANG )
+            {
+                printf(
+                    "Warning : %s' header not has language specification\n",
+                    sPoFileName.c_str() );
+                return;
+            }
+        }
+        aLanguageSet.insert( sLang );
+        PoEntry aNextPo;
+        do
+        {
+            if( !lcl_ReadPoChecked(aNextPo, aPoInput, sPoFileName) )
+            {
+                return;
+            }
+        } while( !aPoInput.eof() && aNextPo.getSourceFile() != sFileName && !bReadAll );
+        while( !aPoInput.eof() && (aNextPo.getSourceFile() == sFileName || bReadAll ))
+        {
+            PoEntry aActPo( aNextPo );
+
+            bool bInSameComp = false;
+            OString sText;
+            OString sQHText;
+            OString sTitle;
+            OString sExText;
+            OString sExQHText;
+            OString sExTitle;
+            OString sQTZText;
+            OString sQTZQHText;
+            OString sQTZTitle;
+            do
+            {
+                if( bInSameComp )
+                    aActPo = aNextPo;
+                OString sTemp = aActPo.getMsgStr();
+                if( aActPo.isFuzzy() || sTemp.isEmpty() )
+                    sTemp = aActPo.getMsgId();
+                switch( aActPo.getType() )
+                {
+                    case PoEntry::TTEXT:
+                        sText = sTemp;
+                        sExText = aActPo.getMsgId();
+                        sQTZText = aActPo.getKeyId();
+                        break;
+                    case PoEntry::TQUICKHELPTEXT:
+                        sQHText = sTemp;
+                        sExQHText = aActPo.getMsgId();
+                        sQTZQHText = aActPo.getKeyId();
+                        break;
+                    case PoEntry::TTITLE:
+                        sTitle = sTemp;
+                        sExTitle = aActPo.getMsgId();
+                        sQTZTitle = aActPo.getKeyId();
+                        break;
+                }
+                if( !lcl_ReadPoChecked(aNextPo, aPoInput, sPoFileName) )
+                {
+                    return;
+                }
+            } while( !aPoInput.eof() &&
+                ( bInSameComp = PoEntry::IsInSameComp(aActPo, aNextPo) ) );
+
+            InsertEntry(
+                aActPo.getResourceType(), aActPo.getGroupId(),
+                aActPo.getLocalId(), sHack, sLang, sText,
+                sQHText, sTitle, aActPo.getSourceFile(), bCaseSensitive );
+
+            if( bFirstLang )
+            {
+                aLanguageSet.insert("qtz");
+                InsertEntry(
+                    aActPo.getResourceType(), aActPo.getGroupId(),
+                    aActPo.getLocalId(), sHack, "qtz",
+                    sQTZText + "||" + sExText, sQTZQHText + "||" + sExQHText,
+                    sQTZTitle + "||" + sExTitle, aActPo.getSourceFile(),
+                    bCaseSensitive );
+            }
+        }
+        aPoInput.close();
+        aInputStream >> sPoFileName;
+        bFirstLang = false;
     }
     aInputStream.close();
 }

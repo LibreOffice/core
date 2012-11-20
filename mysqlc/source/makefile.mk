@@ -236,7 +236,7 @@ $(COMPONENT_DESCRIPTIONS_PACKDEP) : $(DESCRIPTION)
 $(DESCRIPTION_SRC): description.xml
     +-$(RM) $@
 .IF "$(WITH_LANG)" != ""
-    $(XRMEX) -p $(PRJNAME) -i $< -o $@ -m $(LOCALIZESDF) -l all
+    $(XRMEX) -p $(PRJNAME) -i $< -o $@ -m $(mktmp $(foreach,lang,$(subst,en-US, $(WITH_LANG)) $(SRCDIR)$/newtrans.1.0/source/$(lang)/$(PRJNAME)$/$(PATH_IN_MODULE).po)) -l all
     $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" < $@ > $@.new
     mv $@.new $@
     @$(COPY) $(@:d)/description-*.txt $(EXTENSIONDIR)

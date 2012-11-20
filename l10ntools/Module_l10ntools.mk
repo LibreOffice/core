@@ -31,12 +31,14 @@ $(eval $(call gb_Module_add_targets,l10ntools,\
     Executable_idxdict \
     Executable_ulfconv \
     Executable_ulfex \
-    Executable_gsicheck \
     Executable_cfgex \
     Executable_uiex \
     Executable_xrmex \
     Executable_localize \
     Executable_transex3 \
+    Executable_renewpo \
+    Executable_propex \
+    Executable_treex \
     StaticLibrary_transex \
     Package_inc \
     Package_scripts \

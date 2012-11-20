@@ -6,31 +6,29 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
+# convert old po to new po
+#
 
-$(eval $(call gb_Executable_Executable,uiex))
+$(eval $(call gb_Executable_Executable,renewpo))
 
-$(eval $(call gb_Executable_set_include,uiex,\
+$(eval $(call gb_Executable_set_include,renewpo,\
     -I$(SRCDIR)/l10ntools/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_use_libraries,uiex,\
+$(eval $(call gb_Executable_use_libraries,renewpo,\
     sal \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,uiex,\
+$(eval $(call gb_Executable_use_static_libraries,renewpo,\
     transex \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,uiex,\
-    l10ntools/source/uimerge \
+$(eval $(call gb_Executable_add_exception_objects,renewpo,\
+    l10ntools/source/renewpo \
 ))
 
-$(eval $(call gb_Executable_use_externals,uiex,\
-    libexslt \
-    libxml2 \
-    libxslt \
-    boost_headers \
+$(eval $(call gb_Executable_use_externals,renewpo,\
     icuuc \
     $(if $(filter MSC,$(COM)),icuin,icui18n) \
 ))

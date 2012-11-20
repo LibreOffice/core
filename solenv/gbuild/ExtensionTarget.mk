@@ -36,16 +36,14 @@ gb_ExtensionTarget_ZIPCOMMAND := zip $(if $(findstring s,$(MAKEFLAGS)),-q)
 gb_ExtensionTarget_XRMEXTARGET := $(call gb_Executable_get_target_for_build,xrmex)
 gb_ExtensionTarget_XRMEXCOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_XRMEXTARGET)
-# propmerge is a perl script
-gb_ExtensionTarget_PROPMERGETARGET := $(OUTDIR_FOR_BUILD)/bin/propmerge
-gb_ExtensionTarget_PROPMERGECOMMAND := \
-	$(PERL) $(gb_ExtensionTarget_PROPMERGETARGET)
 
-gb_ExtensionTarget_UPDATETREETARGET := $(SRCDIR)/l10ntools/scripts/update_tree.pl
-gb_ExtensionTarget_UPDATETREECOMMAND := \
-    $(gb_Helper_set_ld_path) $(PERL) $(gb_ExtensionTarget_UPDATETREETARGET)
-    # update_tree.pl calls xmllint, which needs $(gb_Helper_set_ld_path) if it
-    # is the internal one
+gb_ExtensionTarget_PROPMERGETARGET := $(call gb_Executable_get_target_for_build,propex)
+gb_ExtensionTarget_PROPMERGECOMMAND := \
+	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_PROPMERGETARGET)
+
+gb_ExtensionTarget_TREEXTARGET := $(call gb_Executable_get_target_for_build,treex)
+gb_ExtensionTarget_TREEXCOMMAND := \
+    $(gb_Helper_set_ld_path) $(gb_ExtensionTarget_TREEXTARGET)
 
 gb_ExtensionTarget_HELPEXTARGET := $(call gb_Executable_get_target_for_build,helpex)
 gb_ExtensionTarget_HELPEXCOMMAND := \
@@ -99,14 +97,18 @@ $(call gb_ExtensionTarget_get_workdir,%)/description.xml :
 else
 $(call gb_ExtensionTarget_get_workdir,%)/description.xml : $(gb_ExtensionTarget_XRMEXTARGET)
 	$(call gb_Output_announce,$*/description.xml,$(true),XRM,3)
+	MERGEINPUT=`$(gb_MKTEMP)` && \
+	echo $(POFILES) > $${MERGEINPUT} && \
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_ExtensionTarget_get_workdir,$*) && \
 		$(gb_ExtensionTarget_XRMEXCOMMAND) \
 			-p $(PRJNAME) \
 			-i $(filter %.xml,$^) \
 			-o $@ \
-			-m $(SDF) \
-			-l all)
+			-m $${MERGEINPUT} \
+			-l all) && \
+	rm -rf $${MERGEINPUT}
+
 endif
 
 # rule to create oxt package in workdir
@@ -145,8 +147,10 @@ $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml :| \
 	$(call gb_ExtensionTarget__get_preparation_target,$(1))
 
 ifneq ($(strip $(gb_WITH_LANG)),)
-$(call gb_ExtensionTarget_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(2)/localize.sdf
-$(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $(gb_SDFLOCATION)/$(2)/localize.sdf
+$(call gb_ExtensionTarget_get_target,$(1)) : \
+	POFILES := $(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
+$(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : \
+	$(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
 endif
 
 $(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
@@ -230,11 +234,20 @@ endef
 # localize .properties file
 # source file is copied to $(WORKDIR)
 define gb_ExtensionTarget_localize_properties
+ifneq ($(filter-out en-US,$(gb_ExtensionTarget_ALL_LANGS)),)
+$(call gb_ExtensionTarget_localize_properties_onelang,$(1),$(subst en_US,qtz,$(2)),$(3),qtz,$(firstword $(filter-out en-US,$(gb_ExtensionTarget_ALL_LANGS))))
+endif
+$(foreach lang,$(gb_ExtensionTarget_ALL_LANGS),\
+	$(call gb_ExtensionTarget_localize_properties_onelang,$(1),$(subst en_US,$(subst -,_,$(lang)),$(2)),$(3),$(lang)))
+endef
+
+define gb_ExtensionTarget_localize_properties_onelang
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(2)
-ifneq ($(strip $(gb_WITH_LANG)),)
-$(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(foreach lang,$(subst -,_,$(gb_ExtensionTarget_TRANS_LANGS)),$(subst en_US,$(lang),$(2)))
-$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
-$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
+ifneq ($(filter-out en-US,$(4)),)
+$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
+	POFILE := $(gb_POLOCATION)/$(or $(5),$(4))/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
+$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
+	$(gb_POLOCATION)/$(or $(5),$(4))/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
 endif
 $(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) \
@@ -242,9 +255,14 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) \
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(3) \
 		$(gb_ExtensionTarget_PROPMERGETARGET)
 	$$(call gb_Output_announce,$(2),$(true),PRP,3)
-	mkdir -p $$(dir $$@) && \
-	cp -f $$< $$@ \
-	$(if $(strip $(gb_WITH_LANG)),&& $(gb_ExtensionTarget_PROPMERGECOMMAND) -i $$@ -m $$(SDF))
+	$$(call gb_Helper_abbreviate_dirs, \
+		mkdir -p $$(dir $$@) && \
+		cp -f $$< $$@ )
+	$(if $(filter-out en-US,$(4)), \
+		MERGEINPUT=`$(gb_MKTEMP)` && \
+		echo $$(POFILE) > $$$${MERGEINPUT} && \
+		$(gb_ExtensionTarget_PROPMERGECOMMAND) -i $$< -o $$@ -m $$$${MERGEINPUT} -l $(4) && \
+		rm -rf $$$${MERGEINPUT})
 
 endef
 
@@ -269,9 +287,8 @@ endef
 #     suffix
 # $(3): relative path of (target) help.tree file (e.g.,
 #     com.sun.wiki-publisher/help.tree)
-# $(4): optional relative path of source help.tree file, when it differs from $(3)
-#     (i.e., if $(4) is empty the en-US source file is $(2)/$(3), otherwise it
-#     is $(2)/$(4))
+# $(4): relative path of source help.tree file
+# $(5): relative path of localized xhp files (PlatformID included) 
 define gb_ExtensionTarget_add_helptreefile
 $(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
     $(call gb_ExtensionTarget__localize_helptreefile_onelang,$(1),$(2),$(3),$(4),$(lang),$(5)) \
@@ -304,10 +321,12 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : HELPFILES += $(3)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
         $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3)
 ifneq ($(strip $(gb_WITH_LANG)),)
+ifneq ($(filter-out en-US,$(5)),)
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
-        SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
+	POFILE := $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
-        $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
+        $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
+endif
 endif
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         $(if $(filter-out en-US,$(5)),$(gb_ExtensionTarget_HELPEXTARGET)) | \
@@ -318,43 +337,54 @@ $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
 	$$(call gb_Helper_abbreviate_dirs, \
         mkdir -p $$(dir $$@) && \
         $(if $(filter-out en-US,$(5)), \
+            MERGEINPUT=`$(gb_MKTEMP)` && \
+            echo $$(POFILE) > $$$${MERGEINPUT} && \
             $(gb_ExtensionTarget_HELPEXCOMMAND) -i $$< -o $$@ -l $(5) \
-                -m $$(SDF), \
+                -m $$$${MERGEINPUT} && \
+            rm -rf $$$${MERGEINPUT}, \
             cp $$< $$@))
 
 endef
 
 # localize one help.tree for one language; the result is stored as
-# help/$(4)/$(3) in the extension's workdir; as a special case, if $(4) is
-# "en-US", the source file is just copied, not passed through update_tree.pl
+# help/$(4)/$(3) in the extension's workdir;
 # $(1): extension identifier
 # $(2): absolute path prefix of en-US source file without $(3) (resp. $(4))
 #     suffix
 # $(3): relative path of (target) help.tree file (see
 #     gb_ExtensionTarget_add_helptreefile)
-# $(4): optional relative path of source help.tree file (see
+# $(4): relative path of source help.tree file (see
 #     gb_ExtensionTarget_add_helptreefile)
 # $(5): language
+# $(6): relative path of localized xhp files (PlatformID included) 
 define gb_ExtensionTarget__localize_helptreefile_onelang
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
         $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3)
 ifneq ($(strip $(gb_WITH_LANG)),)
+ifneq ($(filter-out en-US,$(5)),)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
-        SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
+	POFILE := $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(4))))
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
-        $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
+        $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(4))))
+endif
 endif
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
-        $(if $(filter-out en-US,$(5)),$(gb_ExtensionTarget_UPDATETREETARGET)) | \
+        $(gb_ExtensionTarget_TREEXTARGET) | \
         $(2)/$(4)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(2)/$(or $(4),$(3))
 	$$(call gb_Output_announce,$(1) $(3) $(5),$(true),TRE,3)
 	$$(call gb_Helper_abbreviate_dirs, \
-        mkdir -p $$(dir $$@) && \
+		mkdir -p $$(dir $$@) && \
 		$(if $(filter-out en-US,$(5)), \
-			$(gb_ExtensionTarget_UPDATETREECOMMAND) $$< $(5) $$(SDF) $$@ $(6),\
-			cp $$< $$@))
+		    MERGEINPUT=`$(gb_MKTEMP)` && \
+			echo $$(POFILE) > $$$${MERGEINPUT} && \
+			$(gb_ExtensionTarget_TREEXCOMMAND) -i $$< -o $$@ -l $(5) \
+				-m $$$${MERGEINPUT} \
+				-r $$(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(6) && \
+			rm -rf $$$${MERGEINPUT}, \
+			$(gb_ExtensionTarget_TREEXCOMMAND) -i $$< -o $$@ -l $(5) \
+				-r $$(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(6) ))
 
 endef
 

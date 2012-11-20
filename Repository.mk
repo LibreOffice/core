@@ -56,8 +56,10 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     osl_process_child \
     pdf2xml \
     pdfunzip \
+    propex \
     regsingleton \
     regsvrex \
+    renewpo \
     rsc \
     rscdep \
     saxparser \
@@ -66,6 +68,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     svg2odf \
     svidl \
     transex3 \
+    treex \
     typesconfig \
     $(if $(filter UCPP,$(BUILD_TYPE)),\
             ucpp \

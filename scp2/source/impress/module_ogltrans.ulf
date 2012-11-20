@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-MODULE_OPTIONAL_OGLTRANS
 
 [STR_NAME_MODULE_OPTIONAL_OGLTRANS]
 en-US = "OpenGL slide transitions for %PRODUCTNAME Impress"

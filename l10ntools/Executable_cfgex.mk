@@ -49,4 +49,9 @@ $(eval $(call gb_Executable_add_exception_objects,cfgex,\
     l10ntools/source/cfgmerge \
 ))
 
+$(eval $(call gb_Executable_use_externals,cfgex,\
+    icuuc \
+    $(if $(filter MSC,$(COM)),icuin,icui18n) \
+))
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

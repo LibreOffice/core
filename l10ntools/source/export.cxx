@@ -42,102 +42,45 @@ MergeDataFile * pMergeDataFile = 0; //TODO
 
 namespace global {
 
-bool mergeMode = false;
-char const * prj = 0;
-char const * prjRoot = 0;
-char const * inputPathname = 0;
-char const * outputPathname = 0;
-char const * mergeSrc;
+OString prj;
+OString prjRoot;
+OString inputPathname;
 boost::scoped_ptr< Export > exporter;
 
 }
-
-void handleArguments(int argc, char ** argv) {
-    for (int i = 1; i != argc; ++i) {
-        if (std::strcmp(argv[i], "-e") == 0) {
-            // ingored, used to be "Disable writing errorlog"
-        } else if (std::strcmp(argv[i], "-i") == 0) {
-            if (++i == argc) {
-                global::inputPathname = 0; // no valid command line
-                break;
-            }
-            global::inputPathname = argv[i];
-        } else if (std::strcmp(argv[i], "-l") == 0) {
-            if (++i == argc) {
-                global::inputPathname = 0; // no valid command line
-                break;
-            }
-            Export::sLanguages = argv[i];
-        } else if (std::strcmp(argv[i], "-m") == 0) {
-            if (++i == argc) {
-                global::inputPathname = 0; // no valid command line
-                break;
-            }
-            global::mergeSrc = argv[i];
-            global::mergeMode = true;
-        } else if (std::strcmp(argv[i], "-o") == 0) {
-            if (++i == argc) {
-                global::inputPathname = 0; // no valid command line
-                break;
-            }
-            global::outputPathname = argv[i];
-        } else if (std::strcmp(argv[i], "-p") == 0) {
-            if (++i == argc) {
-                global::inputPathname = 0; // no valid command line
-                break;
-            }
-            global::prj = argv[i];
-        } else if (std::strcmp(argv[i], "-r") == 0) {
-            if (++i == argc) {
-                global::inputPathname = 0; // no valid command line
-                break;
-            }
-            global::prjRoot = argv[i];
-        } else {
-            global::inputPathname = 0; // no valid command line
-            break;
-        }
-    }
-    if (global::inputPathname == 0 || global::outputPathname == 0) {
-        std::fprintf(
-            stderr,
-            ("Syntax: transex3 [-p Prj] [-r PrjRoot] -i FileIn -o FileOut"
-             " [-m DataBase] [-e] [-l l1,l2,...]\n"
-             " Prj:      Project\n"
-             " PrjRoot:  Path to project root (../.. etc.)\n"
-             " FileIn:   Source files (*.src)\n"
-             " FileOut:  Destination file (*.*)\n"
-             " DataBase: Mergedata (*.sdf)\n"
-             " -e: ignored\n"
-             " -l: Restrict the handled languages; l1, l2, ... are elements of"
-             " (de, en-US, ...)\n"));
-        std::exit(EXIT_FAILURE);
-    }
-    Export::InitLanguages();
-}
-
 }
 
 extern "C" {
 
 FILE * init(int argc, char ** argv) {
-    handleArguments(argc, argv);
 
-    FILE * pFile = std::fopen(global::inputPathname, "r");
+    HandledArgs aArgs;
+    if ( !Export::handleArguments(argc, argv, aArgs) )
+    {
+        Export::writeUsage("transex3","src/hrc");
+        std::exit(EXIT_FAILURE);
+    }
+    Export::InitLanguages();
+    global::prj =  aArgs.m_sPrj;
+    global::prjRoot =  aArgs.m_sPrjRoot;
+    global::inputPathname =  aArgs.m_sInputFile;
+
+    FILE * pFile = std::fopen(global::inputPathname.getStr(), "r");
     if (pFile == 0) {
         std::fprintf(
             stderr, "Error: Cannot open file \"%s\"\n",
-            global::inputPathname);
+            global::inputPathname.getStr());
         std::exit(EXIT_FAILURE);
     }
 
-    if (global::mergeMode) {
+    if (aArgs.m_bMergeMode) {
         global::exporter.reset(
-            new Export(global::mergeSrc, global::outputPathname));
+            new Export(aArgs.m_sMergeSrc.getStr(), aArgs.m_sOutputFile.getStr()));
     } else {
         sActFileName =
-            common::pathnameToken(global::inputPathname, global::prjRoot);
-        global::exporter.reset(new Export(global::outputPathname));
+            common::pathnameToken(
+                global::inputPathname.getStr(), global::prjRoot.getStr());
+        global::exporter.reset(new Export(aArgs.m_sOutputFile.getStr()));
     }
 
     global::exporter->Init();

@@ -227,51 +227,6 @@ void HelpParser::parse_languages( std::vector<rtl::OString>& aLanguages , MergeD
 
 }
 
-bool HelpParser::Merge(
-    const rtl::OString &rSDFFile, const rtl::OString &rPathX , const rtl::OString &rPathY , bool bISO ,
-    const std::vector<rtl::OString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir )
-{
-
-
-    (void) rSDFFile ;
-    bool hasNoError = true;
-    SimpleXMLParser aParser;
-    rtl::OUString sXmlFile(
-        rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
-    //TODO: explicit BOM handling?
-
-    XMLFile* xmlfile = aParser.Execute( sXmlFile, new XMLFile( rtl::OUString('0') ) );
-
-    if( xmlfile == NULL)
-    {
-        printf("%s\n", rtl::OUStringToOString(aParser.GetError().sMessage, RTL_TEXTENCODING_UTF8).getStr());
-        exit(-1);
-    }
-
-    xmlfile->Extract();
-
-    rtl::OString sCur;
-    for( unsigned int n = 0; n < aLanguages.size(); n++ ){
-        sCur = aLanguages[ n ];
-
-        rtl::OString sFilepath;
-        if( bISO )  sFilepath = GetOutpath( rPathX , sCur , rPathY );
-        else        sFilepath = rPathX;
-        if( bCreateDir )
-            MakeDir(sFilepath);
-
-        XMLFile* file = new XMLFile( *xmlfile );
-        sFilepath += sHelpFile;
-        hasNoError = MergeSingleFile( file , aMergeDataFile , sCur , sFilepath );
-        delete file;
-
-        if( !hasNoError ) return false;         // Stop on error
-     }
-
-    delete xmlfile;
-    return hasNoError;
-}
-
 bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const rtl::OString& sLanguage ,
                                   rtl::OString const & sPath )
 {
@@ -341,7 +296,7 @@ void HelpParser::MakeDir(const rtl::OString& rPath)
 void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile ){
 
     XMLElement*   pXMLElement = NULL;
-       PFormEntrys   *pEntrys    = NULL;
+    PFormEntrys   *pEntrys    = NULL;
     XMLData       *data       = NULL;
 
     rtl::OString sLId;
@@ -379,9 +334,16 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , 
                 while ( (nPreSpaces < nLen) && (*(sSourceText.getStr()+nPreSpaces) == ' ') )
                     nPreSpaces++;
                 pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur , true );
-                rtl::OUString sNewdata(
-                    sSourceText.copy(0,nPreSpaces) +
-                    rtl::OStringToOUString(sNewText, RTL_TEXTENCODING_UTF8));
+                OUString sNewdata;
+                if (helper::isWellFormedXML(helper::QuotHTML(sNewText)))
+                {
+                    sNewdata = sSourceText.copy(0,nPreSpaces) +
+                        rtl::OStringToOUString(sNewText, RTL_TEXTENCODING_UTF8);
+                }
+                else
+                {
+                    sNewdata = sSourceText;
+                }
                 if (!sNewdata.isEmpty())
                 {
                     if( pXMLElement != NULL )

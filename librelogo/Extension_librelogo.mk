@@ -41,6 +41,6 @@ $(eval $(call gb_Extension_localize_properties,librelogo,pythonpath/LibreLogo_en
 
 $(eval $(call gb_Extension_add_helpfile,librelogo,$(SRCDIR)/librelogo/source/help/en-US,org.openoffice.comp.pyuno.LibreLogo/LibreLogo.xhp,LibreLogo.xhp))
 
-$(eval $(call gb_Extension_add_helptreefile,librelogo,$(SRCDIR)/librelogo/source/help/en-US,/help.tree,/help.tree,org.openoffice.comp.pyuno.LibreLogo))
+$(eval $(call gb_Extension_add_helptreefile,librelogo,$(SRCDIR)/librelogo/source/help/en-US,help.tree,help.tree,org.openoffice.comp.pyuno.LibreLogo))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

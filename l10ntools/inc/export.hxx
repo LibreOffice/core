@@ -248,6 +248,27 @@ typedef ::std::vector< ResData* > ResStack;
 class WordTransformer;
 class ParserQueue;
 
+//result type of handleArguments()
+struct HandledArgs
+{
+    OString m_sPrj;
+    OString m_sPrjRoot;
+    OString m_sInputFile;
+    OString m_sOutputFile;
+    OString m_sMergeSrc;
+    OString m_sLanguages;
+    bool m_bMergeMode;
+    HandledArgs()
+        : m_sPrj( OString() )
+        , m_sPrjRoot( OString() )
+        , m_sInputFile( OString() )
+        , m_sOutputFile( OString() )
+        , m_sMergeSrc( OString() )
+        , m_sLanguages( OString() )
+        , m_bMergeMode( false )
+    {}
+};
+
 class Export
 {
 private:
@@ -284,6 +305,9 @@ public:
     ParserQueue* pParseQueue; // public ?
     static rtl::OString sLanguages; // public ?
     static rtl::OString sForcedLanguages; // public ?
+
+    static bool handleArguments(int argc, char * argv[], HandledArgs& o_aHandledArgs);
+    static void writeUsage(const OString& rName, const OString& rFileType);
 
     static void InitLanguages( bool bMergeMode = false );
     static void InitForcedLanguages( bool bMergeMode = false );

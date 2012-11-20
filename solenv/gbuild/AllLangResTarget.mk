@@ -53,27 +53,31 @@ gb_SrsPartMergeTarget_TRANSEXCOMMAND := \
 
 define gb_SrsPartMergeTarget__command
 $(call gb_Output_announce,$(3),$(true),srs,1)
+MERGEINPUT=`$(gb_MKTEMP)` && \
+echo $(POFILES) > $${MERGEINPUT} && \
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
 		-p $(firstword $(subst /, ,$(2))) \
 		-i $(3) \
 		-o $(1) \
-		-m $(SDF) \
-		-l all)
+		-m $${MERGEINPUT} \
+		-l all) && \
+rm -rf $${MERGEINPUT}
 
 endef
 
 $(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY)  $(gb_SrsPartMergeTarget_TRANSEXTARGET)
-	$(if $(SDF),$(call gb_SrsPartMergeTarget__command,$@,$*,$<),mkdir -p $(dir $@) && cp $< $@)
+	$(if $(filter $(words $(POFILES)),$(words $(wildcard $(POFILES)))),\
+		$(call gb_SrsPartMergeTarget__command,$@,$*,$<),\
+		mkdir -p $(dir $@) && cp $< $@)
 
 define gb_SrsPartMergeTarget_SrsPartMergeTarget
-$(call gb_SrsPartMergeTarget__SrsPartMergeTarget_impl,$(1),$(if $(2),$(gb_SDFLOCATION)/$(dir $(1))localize.sdf))
-
+$(call gb_SrsPartMergeTarget__SrsPartMergeTarget_impl,$(1),$(if $(2),$(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)))
 endef
 
 define gb_SrsPartMergeTarget__SrsPartMergeTarget_impl
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(2)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : POFILES := $(2)
 $(call gb_SrsPartMergeTarget_get_target,$(1)) : $(2)
 
 endef
@@ -470,4 +474,4 @@ $(foreach lang,$(gb_AllLangResTarget_LANGS),\
 
 endef
 
-# vim: set noet sw=4:
+# vim: set noet sw=4: 

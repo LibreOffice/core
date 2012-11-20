@@ -1,4 +1,4 @@
-fm	forms	:    TRANSLATIONS:translations oovbaapi salhelper svx sfx2 QADEVOOO:qadevOOo LIBXSLT:libxslt NULL
+fm	forms	:    oovbaapi salhelper svx sfx2 QADEVOOO:qadevOOo LIBXSLT:libxslt NULL
 fm  forms                                   usr1    -   all fm_mkofrm NULL
 fm  forms\prj				    nmake   -	all fm_prj NULL
 

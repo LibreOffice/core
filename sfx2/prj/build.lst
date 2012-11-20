@@ -1,2 +1,2 @@
-sf      sfx2    :    TRANSLATIONS:translations NATIVE:idl basic xmlscript framework readlicense_oo shell sax LIBXML2:libxml2 LIBXSLT:libxslt NULL
+sf      sfx2    :    NATIVE:idl basic xmlscript framework readlicense_oo shell sax LIBXML2:libxml2 LIBXSLT:libxslt NULL
 sf	sfx2\prj								nmake	-	all	sf_prj NULL

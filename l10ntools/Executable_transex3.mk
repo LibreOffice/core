@@ -49,4 +49,9 @@ $(eval $(call gb_Executable_add_exception_objects,transex3,\
     l10ntools/source/export \
 ))
 
+$(eval $(call gb_Executable_use_externals,transex3,\
+    icuuc \
+    $(if $(filter MSC,$(COM)),icuin,icui18n) \
+))
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

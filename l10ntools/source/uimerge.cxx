@@ -26,100 +26,10 @@
 #include <fstream>
 #include <vector>
 
-#define STATE_NON       0x0001
-#define STATE_INPUT     0x0002
-#define STATE_OUTPUT    0x0003
-#define STATE_PRJ       0x0004
-#define STATE_ROOT      0x0005
-#define STATE_MERGESRC  0x0006
-#define STATE_ERRORLOG  0x0007
-#define STATE_LANGUAGES 0x000C
-
-sal_Bool bMergeMode;
-sal_Bool bErrorLog;
-sal_Bool bUTF8;
-sal_Bool bDisplayName;
-sal_Bool bExtensionDescription;
 rtl::OString sPrj;
 rtl::OString sPrjRoot;
 rtl::OString sInputFileName;
 rtl::OString sOutputFile;
-rtl::OString sMergeSrc;
-rtl::OString sLangAttribute;
-rtl::OString sResourceType;
-XRMResParser *pParser = NULL;
-
-void GetOutputFile( int argc, char* argv[])
-{
-    bMergeMode = sal_False;
-    bErrorLog = sal_True;
-    bUTF8 = sal_True;
-    bDisplayName = sal_False;
-    bExtensionDescription = sal_False;
-    sPrj = "";
-    sPrjRoot = "";
-    sInputFileName = "";
-    Export::sLanguages = "";
-    sal_uInt16 nState = STATE_NON;
-
-    // parse command line
-    for( int i = 1; i < argc; i++ ) {
-        if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-I" ) {
-            nState = STATE_INPUT; // next token specifies source file
-        }
-        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-O" ) {
-            nState = STATE_OUTPUT; // next token specifies the dest file
-        }
-        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-P" ) {
-            nState = STATE_PRJ; // next token specifies the cur. project
-        }
-        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-R" ) {
-            nState = STATE_ROOT; // next token specifies path to project root
-        }
-        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-M" ) {
-            nState = STATE_MERGESRC; // next token specifies the merge database
-        }
-        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-E" ) {
-            nState = STATE_ERRORLOG;
-            bErrorLog = sal_False;
-        }
-        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-L" ) {
-            nState = STATE_LANGUAGES;
-        }
-        else {
-            switch ( nState ) {
-                case STATE_NON: {
-                    return;    // no valid command line
-                }
-                case STATE_INPUT: {
-                    sInputFileName = argv[ i ];
-                }
-                break;
-                case STATE_OUTPUT: {
-                    sOutputFile = argv[ i ]; // the dest. file
-                }
-                break;
-                case STATE_PRJ: {
-                    sPrj = rtl::OString( argv[ i ]);
-                }
-                break;
-                case STATE_ROOT: {
-                    sPrjRoot = rtl::OString( argv[ i ]); // path to project root
-                }
-                break;
-                case STATE_MERGESRC: {
-                    sMergeSrc = rtl::OString( argv[ i ]);
-                    bMergeMode = sal_True; // activate merge mode, cause merge database found
-                }
-                break;
-                case STATE_LANGUAGES: {
-                    Export::sLanguages = rtl::OString( argv[ i ]);
-                }
-                break;
-            }
-        }
-    }
-}
 
 int extractTranslations()
 {
@@ -275,22 +185,19 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     int nRetValue = 0;
 
-    GetOutputFile( argc, argv );
-
-    if (sOutputFile.isEmpty())
+    HandledArgs aArgs;
+    if ( !Export::handleArguments(argc, argv, aArgs) )
     {
-        fprintf( stdout, "Syntax: UIEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-L l1,l2,...]\n" );
-        fprintf( stdout, " Prj:      Project\n" );
-        fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
-        fprintf( stdout, " FileIn:   Source files (*.src)\n" );
-        fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
-        fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
-        fprintf( stdout, " -e: Disable writing errorlog\n" );
-        fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (de,en-US,es...)\n" );
+        Export::writeUsage("uiex","ui");
         return 1;
     }
 
-    if (!bMergeMode)
+    sPrj = aArgs.m_sPrj;
+    sPrjRoot = aArgs.m_sPrjRoot;
+    sInputFileName = aArgs.m_sInputFile;
+    sOutputFile = aArgs.m_sOutputFile;
+
+    if (!aArgs.m_bMergeMode)
     {
         if (Export::sLanguages != "en-US")
         {
@@ -302,7 +209,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     else
     {
-        Merge(sMergeSrc, sInputFileName, sOutputFile);
+        Merge(aArgs.m_sMergeSrc, sInputFileName, sOutputFile);
     }
 
     return nRetValue;

@@ -7,30 +7,28 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Executable_Executable,uiex))
 
-$(eval $(call gb_Executable_set_include,uiex,\
+$(eval $(call gb_Executable_Executable,propex))
+
+$(eval $(call gb_Executable_set_include,propex,\
     -I$(SRCDIR)/l10ntools/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_use_libraries,uiex,\
+$(eval $(call gb_Executable_use_libraries,propex,\
     sal \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,uiex,\
+$(eval $(call gb_Executable_use_static_libraries,propex,\
     transex \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,uiex,\
-    l10ntools/source/uimerge \
+$(eval $(call gb_Executable_add_exception_objects,propex,\
+    l10ntools/source/propmerge \
+    l10ntools/source/propex \
 ))
 
-$(eval $(call gb_Executable_use_externals,uiex,\
-    libexslt \
-    libxml2 \
-    libxslt \
-    boost_headers \
+$(eval $(call gb_Executable_use_externals,propex,\
     icuuc \
     $(if $(filter MSC,$(COM)),icuin,icui18n) \
 ))
