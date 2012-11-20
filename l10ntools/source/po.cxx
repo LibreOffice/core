@@ -185,7 +185,7 @@ void GenPoEntry::setFuzzy(const bool bFuzzy)
 //Write to file
 void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
 {
-    if ( rOFStream.tellp() != 0 )
+    if ( rOFStream.tellp() != std::ofstream::pos_type( 0 ))
         rOFStream << std::endl;
     if ( !m_sExtractCom.isEmpty() )
         rOFStream
