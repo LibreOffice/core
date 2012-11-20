@@ -971,7 +971,7 @@ public:
                  greater than or equal to fromIndex, or
                  -1 if the character does not occur.
     */
-    sal_Int32 indexOf( sal_Unicode ch, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    sal_Int32 indexOf( sal_Unicode ch, sal_Int32 fromIndex = 0 )
     {
         sal_Int32 ret = rtl_ustr_indexOfChar_WithLength( pData->buffer+fromIndex, pData->length-fromIndex, ch );
         return (ret < 0 ? ret : ret+fromIndex);
@@ -988,7 +988,7 @@ public:
                  character sequence represented by this string, or
                  -1 if the character does not occur.
     */
-    sal_Int32 lastIndexOf( sal_Unicode ch ) const SAL_THROW(())
+    sal_Int32 lastIndexOf( sal_Unicode ch )
     {
         return rtl_ustr_lastIndexOfChar_WithLength( pData->buffer, pData->length, ch );
     }
@@ -1007,7 +1007,7 @@ public:
                  is less than fromIndex, or -1
                  if the character does not occur before that point.
     */
-    sal_Int32 lastIndexOf( sal_Unicode ch, sal_Int32 fromIndex ) const SAL_THROW(())
+    sal_Int32 lastIndexOf( sal_Unicode ch, sal_Int32 fromIndex )
     {
         return rtl_ustr_lastIndexOfChar_WithLength( pData->buffer, fromIndex, ch );
     }
@@ -1029,7 +1029,7 @@ public:
                  returned. If it does not occur as a substring starting
                  at fromIndex or beyond, -1 is returned.
     */
-    sal_Int32 indexOf( const OUString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    sal_Int32 indexOf( const OUString & str, sal_Int32 fromIndex = 0 )
     {
         sal_Int32 ret = rtl_ustr_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                         str.pData->buffer, str.pData->length );
@@ -1043,7 +1043,7 @@ public:
        @since LibreOffice 4.0
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 )
     {
         sal_Int32 ret = rtl_ustr_indexOfAscii_WithLength(
             pData->buffer + fromIndex, pData->length - fromIndex, literal,
@@ -1068,7 +1068,7 @@ public:
                  the last such substring is returned. If it does not occur as
                  a substring, -1 is returned.
     */
-    sal_Int32 lastIndexOf( const OUString & str ) const SAL_THROW(())
+    sal_Int32 lastIndexOf( const OUString & str )
     {
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, pData->length,
                                                    str.pData->buffer, str.pData->length );
@@ -1093,7 +1093,7 @@ public:
                  of the first character of the last such substring is
                  returned. Otherwise, -1 is returned.
     */
-    sal_Int32 lastIndexOf( const OUString & str, sal_Int32 fromIndex ) const SAL_THROW(())
+    sal_Int32 lastIndexOf( const OUString & str, sal_Int32 fromIndex )
     {
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
                                                    str.pData->buffer, str.pData->length );
@@ -1105,7 +1105,7 @@ public:
        @since LibreOffice 4.0
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type lastIndexOf( T& literal ) const SAL_THROW(())
+    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type lastIndexOf( T& literal )
     {
         return rtl_ustr_lastIndexOfAscii_WithLength(
             pData->buffer, pData->length, literal, internal::ConstCharArrayDetector< T, void >::size - 1);
