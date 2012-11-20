@@ -27,7 +27,8 @@ class BodyNotInBlock
     private:
         typedef vector< const Stmt* > StmtParents;
         void traverseStatement( const Stmt* stmt, StmtParents& parents );
-        void checkBody( const Stmt* body, const StmtParents& parents, int stmtType, bool dontGoUp = false );
+        void checkBody( const Stmt* body, SourceLocation stmtLocation, const StmtParents& parents,
+            int stmtType, bool dontGoUp = false );
     };
 
 } // namespace

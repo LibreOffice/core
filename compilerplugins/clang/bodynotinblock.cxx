@@ -56,15 +56,15 @@ void BodyNotInBlock::traverseStatement( const Stmt* stmt, StmtParents& parents )
             parents.push_back( *it );
             if( const IfStmt* ifstmt = dyn_cast< IfStmt >( *it ))
                 {
-                checkBody( ifstmt->getThen(), parents, 0, ifstmt->getElse() != NULL );
-                checkBody( ifstmt->getElse(), parents, 0 );
+                checkBody( ifstmt->getThen(), ifstmt->getIfLoc(), parents, 0, ifstmt->getElse() != NULL );
+                checkBody( ifstmt->getElse(), ifstmt->getElseLoc(), parents, 0 );
                 }
             else if( const WhileStmt* whilestmt = dyn_cast< WhileStmt >( *it ))
-                checkBody( whilestmt->getBody(), parents, 1 );
+                checkBody( whilestmt->getBody(), whilestmt->getWhileLoc(), parents, 1 );
             else if( const ForStmt* forstmt = dyn_cast< ForStmt >( *it ))
-                checkBody( forstmt->getBody(), parents, 2 );
+                checkBody( forstmt->getBody(), forstmt->getForLoc(), parents, 2 );
             else if( const CXXForRangeStmt* forstmt = dyn_cast< CXXForRangeStmt >( *it ))
-                checkBody( forstmt->getBody(), parents, 2 );
+                checkBody( forstmt->getBody(), forstmt->getForLoc(), parents, 2 );
             parents.pop_back();
             }
         }
@@ -72,16 +72,17 @@ void BodyNotInBlock::traverseStatement( const Stmt* stmt, StmtParents& parents )
     parents.pop_back();
     }
 
-void BodyNotInBlock::checkBody( const Stmt* body, const StmtParents& parents, int stmtType, bool dontGoUp )
+void BodyNotInBlock::checkBody( const Stmt* body, SourceLocation stmtLocation, const StmtParents& parents,
+    int stmtType, bool dontGoUp )
     {
     if( body == NULL || parents.size() < 2 )
         return;
-    // TODO: If the if/while/for comes from a macro expansion, ignore it completely for
+    // TODO: If the if/else/while/for comes from a macro expansion, ignore it completely for
     // now. The code below could assume everything is in the same place (and thus also column)
     // and give a false warning. Moreover some macros are rather lousily written and would
     // result in poor formatting. To be evaluated later, maybe this could be handled
     // including macro expansion.
-    if( parents.back()->getLocStart().isMacroID())
+    if( stmtLocation.isMacroID())
         return;
     if( dyn_cast< CompoundStmt >( body ))
         return; // if body is a compound statement, then it is in {}
