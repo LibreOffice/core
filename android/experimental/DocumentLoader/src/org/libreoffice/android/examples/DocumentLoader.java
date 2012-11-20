@@ -126,10 +126,7 @@ public class DocumentLoader
     private static final int PAGECACHE_PLUSMINUS = 2;
     private static final int PAGECACHE_SIZE = PAGECACHE_PLUSMINUS*2 + 1;
 
-    long timingOverhead;
-    XComponentContext context;
-    XMultiComponentFactory mcf;
-    XComponentLoader componentLoader;
+    BootstrapContext bootstrapContext;
     XToolkitExperimental toolkit;
     XDevice dummySmallDevice;
     Object doc;
@@ -619,7 +616,7 @@ public class DocumentLoader
             long t0 = System.currentTimeMillis();
             PropertyValue rendererProps[] = renderable.getRenderer(number, doc, renderProps);
             long t1 = System.currentTimeMillis();
-            Log.i(TAG, "getRenderer took " + ((t1-t0)-timingOverhead) + " ms");
+            Log.i(TAG, "getRenderer took " + ((t1-t0)-bootstrapContext.timingOverhead) + " ms");
 
             int pageWidth = 0, pageHeight = 0;
             for (int i = 0; i < rendererProps.length; i++) {
@@ -699,7 +696,7 @@ public class DocumentLoader
             t0 = System.currentTimeMillis();
             renderable.render(number, doc, renderProps);
             t1 = System.currentTimeMillis();
-            Log.i(TAG, "Rendering page " + number + " took " + ((t1-t0)-timingOverhead) + " ms");
+            Log.i(TAG, "Rendering page " + number + " took " + ((t1-t0)-bootstrapContext.timingOverhead) + " ms");
 
             Bootstrap.force_full_alpha_bb(bb, 0, flipper.getWidth() * flipper.getHeight() * 4);
 
@@ -816,12 +813,12 @@ public class DocumentLoader
                 loadProps[2].Value = new Boolean(true);
 
                 long t0 = System.currentTimeMillis();
-                doc = componentLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
+                doc = bootstrapContext.componentLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
                 long t1 = System.currentTimeMillis();
-                Log.i(TAG, "Loading took " + ((t1-t0)-timingOverhead) + " ms");
+                Log.i(TAG, "Loading took " + ((t1-t0)-bootstrapContext.timingOverhead) + " ms");
 
-                Object toolkitService = mcf.createInstanceWithContext
-                    ("com.sun.star.awt.Toolkit", context);
+                Object toolkitService = bootstrapContext.mcf.createInstanceWithContext
+                    ("com.sun.star.awt.Toolkit", bootstrapContext.componentContext);
                 toolkit = (XToolkitExperimental) UnoRuntime.queryInterface(XToolkitExperimental.class, toolkitService);
 
                 renderable = (XRenderable) UnoRuntime.queryInterface(XRenderable.class, doc);
@@ -846,7 +843,7 @@ public class DocumentLoader
                 t0 = System.currentTimeMillis();
                 pageCount = renderable.getRendererCount(doc, renderProps);
                 t1 = System.currentTimeMillis();
-                Log.i(TAG, "getRendererCount: " + pageCount + ", took " + ((t1-t0)-timingOverhead) + " ms");
+                Log.i(TAG, "getRendererCount: " + pageCount + ", took " + ((t1-t0)-bootstrapContext.timingOverhead) + " ms");
             }
             catch (Exception e) {
                 e.printStackTrace(System.err);
@@ -854,6 +851,18 @@ public class DocumentLoader
             }
             return null;
         }
+    }
+
+    /**
+     * This class contains the state that is initialized once and never changes
+     * (not specific to a document or a view).
+     */
+    class BootstrapContext
+    {
+        public long timingOverhead;
+        public XComponentContext componentContext;
+        public XMultiComponentFactory mcf;
+        public XComponentLoader componentLoader;
     }
 
     static void dumpUNOObject(String objectName, Object object)
@@ -924,19 +933,19 @@ public class DocumentLoader
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
+    public Object onRetainNonConfigurationInstance() {
+        return bootstrapContext;
+    }
+
+    private void initBootstrapContext()
     {
-        super.onCreate(savedInstanceState);
+        try
+        {
+            bootstrapContext = new BootstrapContext();
 
-        extras = getIntent().getExtras();
-
-        gestureListener = new GestureListener();
-        gestureDetector = new GestureDetector(this, gestureListener);
-
-        try {
             long t0 = System.currentTimeMillis();
             long t1 = System.currentTimeMillis();
-            timingOverhead = t1 - t0;
+            bootstrapContext.timingOverhead = t1 - t0;
 
             Bootstrap.setup(this);
 
@@ -946,14 +955,45 @@ public class DocumentLoader
             // Log.i(TAG, "Sleeping NOW");
             // Thread.sleep(20000);
 
-            context = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
+            bootstrapContext.componentContext = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
 
-            Log.i(TAG, "context is" + (context!=null ? " not" : "") + " null");
+            Log.i(TAG, "context is" + (bootstrapContext.componentContext!=null ? " not" : "") + " null");
 
-            mcf = context.getServiceManager();
+            bootstrapContext.mcf = bootstrapContext.componentContext.getServiceManager();
 
-            Log.i(TAG, "mcf is" + (mcf!=null ? " not" : "") + " null");
+            Log.i(TAG, "mcf is" + (bootstrapContext.mcf!=null ? " not" : "") + " null");
 
+            Bootstrap.initVCL();
+
+            Object desktop = bootstrapContext.mcf.createInstanceWithContext
+                ("com.sun.star.frame.Desktop", bootstrapContext.componentContext);
+
+            Log.i(TAG, "desktop is" + (desktop!=null ? " not" : "") + " null");
+
+            bootstrapContext.componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
+
+            Log.i(TAG, "componentLoader is" + (bootstrapContext.componentLoader!=null ? " not" : "") + " null");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.err);
+            finish();
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        bootstrapContext = (BootstrapContext)getLastNonConfigurationInstance();
+
+        extras = getIntent().getExtras();
+
+        gestureListener = new GestureListener();
+        gestureDetector = new GestureDetector(this, gestureListener);
+
+        try {
             String input = getIntent().getStringExtra("input");
             if (input == null)
                 input = "/assets/test1.odt";
@@ -967,16 +1007,8 @@ public class DocumentLoader
 
             Bootstrap.setCommandArgs(argv);
 
-            Bootstrap.initVCL();
-
-            Object desktop = mcf.createInstanceWithContext
-                ("com.sun.star.frame.Desktop", context);
-
-            Log.i(TAG, "desktop is" + (desktop!=null ? " not" : "") + " null");
-
-            componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
-
-            Log.i(TAG, "componentLoader is" + (componentLoader!=null ? " not" : "") + " null");
+            if (bootstrapContext == null)
+                initBootstrapContext();
 
             // Load the wanted document
             new DocumentLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, "file://" + input);
