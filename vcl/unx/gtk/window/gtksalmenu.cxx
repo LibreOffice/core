@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifdef ENABLE_GMENU_INTEGRATION
+
 #include <unx/gtk/gtksalmenu.hxx>
 
 #include <unx/gtk/glomenu.h>
@@ -796,5 +798,7 @@ GtkSalMenuItem::GtkSalMenuItem( const SalItemParams* pItemData ) :
 GtkSalMenuItem::~GtkSalMenuItem()
 {
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifdef ENABLE_GMENU_INTEGRATION
+
 #include <stdio.h>
 #include <string.h>
 
@@ -648,5 +650,7 @@ g_lo_menu_class_init (GLOMenuClass *klass)
     model_class->get_item_attributes = g_lo_menu_get_item_attributes;
     model_class->get_item_links = g_lo_menu_get_item_links;
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

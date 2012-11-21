@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifdef ENABLE_GMENU_INTEGRATION
+
 #include <unx/gtk/gloactiongroup.h>
 
 #include <unx/gtk/gtkinst.hxx>
@@ -403,5 +405,7 @@ g_lo_action_group_clear (GLOActionGroup  *group)
         g_lo_action_group_remove (group, (gchar*) element->data);
     }
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
