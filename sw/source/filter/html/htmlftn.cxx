@@ -441,7 +441,7 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
 {
     const SwEndNoteInfo *pInfo;
 
-    String sFtnName, sClass, sPrefix, sSuffix;
+    String sFtnName, sClass;
     if( rFmtFtn.IsEndNote() )
     {
         sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_sym );

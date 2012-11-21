@@ -55,7 +55,6 @@ SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent )
     // determine graphic name
     GalleryExplorer::BeginLocking(GALLERY_THEME_RULERS);
     GalleryExplorer::FillObjList(GALLERY_THEME_RULERS, m_aGrfNames);
-    Color aColor(COL_WHITE);
     m_pExampleVS->InsertItem(1, 1);
     m_pExampleVS->SetItemText(1, m_sSimple);
 

@@ -955,7 +955,6 @@ void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
     Bitmap  thePreview;
     Point   aCenterPos;
     Size    theWndSize = GetSizePixel();
-    Size    thePrevSize;
     Color   oldColor;
     Font    aFont;
 

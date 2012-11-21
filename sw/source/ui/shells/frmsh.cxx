@@ -779,7 +779,6 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 break;
                 case SID_HYPERLINK_GETLINK:
                 {
-                    String sURL;
                     SvxHyperlinkItem aHLinkItem;
                     const SfxPoolItem* pItem;
 

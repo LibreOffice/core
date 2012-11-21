@@ -147,8 +147,6 @@ void SwChartLockController_Helper::LockUnlockAllCharts( sal_Bool bLock )
             pTblNd->GetNodes().IsDocNodes() )
         {
             uno::Reference< frame::XModel > xRes;
-
-            String aName( pTmpTbl->GetFrmFmt()->GetName() );
             SwOLENode *pONd;
             SwStartNode *pStNd;
             SwNodeIndex aIdx( *pDoc->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
@@ -1950,8 +1948,6 @@ SwChartDataSequence::SwChartDataSequence(
     release();
 
 #if OSL_DEBUG_LEVEL > 0
-    OUString aRangeStr( getSourceRangeRepresentation() );
-
     // check if it can properly convert into a SwUnoTableCrsr
     // which is required for some functions
     SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
@@ -2000,8 +1996,6 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     release();
 
 #if OSL_DEBUG_LEVEL > 0
-    OUString aRangeStr( getSourceRangeRepresentation() );
-
     // check if it can properly convert into a SwUnoTableCrsr
     // which is required for some functions
     SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);

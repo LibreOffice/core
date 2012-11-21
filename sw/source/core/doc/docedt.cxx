@@ -757,9 +757,6 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     SwIndex& rIdx = rPt.nContent;
     xub_StrLen nStart = 0;
 
-    sal_Unicode c;
-    String aStr;
-
     bool bOldExpFlg = pNode->IsIgnoreDontExpand();
     pNode->SetIgnoreDontExpand( true );
 
@@ -771,7 +768,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
         {
             lcl_SkipAttr( pNode, rIdx, nStart );
         }
-        c = rStr.GetChar( nCnt );
+        sal_Unicode c = rStr.GetChar( nCnt );
         if (GetIDocumentUndoRedo().DoesUndo())
         {
             bool bMerged(false);
@@ -1949,7 +1946,6 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( GetGCIterator() );
                             if (xGCIterator.is())
                             {
-                                String aText( ((SwTxtNode*)pNd)->GetTxt().Copy( nBeginGrammarCheck, nEndGrammarCheck - nBeginGrammarCheck ) );
                                 uno::Reference< lang::XComponent > xDoc( ((SwDocShell*)GetDocShell())->GetBaseModel(), uno::UNO_QUERY );
                                 // Expand the string:
                                 const ModelToViewHelper aConversionMap(*(SwTxtNode*)pNd);

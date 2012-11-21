@@ -450,8 +450,6 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             // normal doc shell, therefore, SfxInplaceObject::SaveAs
             // will set the wrong class id.
             SvGlobalName aClassName;
-            String aAppName, aLongUserName, aUserName;
-
             // The document is closed explicitly, but using SfxObjectShellLock is still more correct here
             SfxObjectShellLock xDocSh =
                 new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );

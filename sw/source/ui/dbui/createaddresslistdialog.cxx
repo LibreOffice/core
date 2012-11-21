@@ -402,11 +402,9 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             pStream->SetLineDelimiter( LINEEND_LF );
             pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
 
-            OUString sSemi(';');
             OUString sQuote('"');
             String sTempMiddle(sQuote);
             sTempMiddle += sal_Unicode(9);
-            OUString sMiddle(sTempMiddle);
 
             String sLine;
             sal_Bool bRead = pStream->ReadByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
@@ -587,7 +585,6 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
         pStream->SetLineDelimiter( LINEEND_LF );
         pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
 
-        OUString sSemi(';');
         OUString sQuote('"');
         String sTempMiddle(sQuote);
         sTempMiddle += sal_Unicode(9);

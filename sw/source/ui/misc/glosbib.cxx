@@ -296,7 +296,6 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
 {
     SvTreeListEntry* pEntry = aGroupTLB.FirstSelected();
     GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
-    String sEntryText(aGroupTLB.GetEntryText(pEntry));
     String sEntry(pUserData->sGroupName);
 
     String sNewName(aNameED.GetText());

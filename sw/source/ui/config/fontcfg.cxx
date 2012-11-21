@@ -237,7 +237,6 @@ sal_Bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
 
 String  SwStdFontConfig::GetDefaultFor(sal_uInt16 nFontType, LanguageType eLang)
 {
-    String sRet;
     sal_uInt16 nFontId;
     switch( nFontType )
     {

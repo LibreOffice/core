@@ -524,7 +524,6 @@ void  SwSendMailDialog::SendMails()
         OSL_FAIL("config item not set");
         return;
     }
-    String sErrorMessage;
     bool bIsLoggedIn = false;
     EnterWait();
     //get a mail server connection

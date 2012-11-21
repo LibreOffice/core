@@ -1345,13 +1345,12 @@ SwView*  SwNavigationPI::GetCreateView() const
 SwNavigationChild::SwNavigationChild( Window* pParent,
                         sal_uInt16 nId,
                         SfxBindings* _pBindings,
-                        SfxChildWinInfo* pInfo )
+                        SfxChildWinInfo* )
     : SfxChildWindowContext( nId )
 {
     SwNavigationPI* pNavi  = new SwNavigationPI( _pBindings, this, pParent );
     SetWindow( pNavi );
     _pBindings->Invalidate(SID_NAVIGATOR);
-    String sExtra = pInfo->aExtraString;
 
     SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
 

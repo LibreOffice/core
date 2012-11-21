@@ -355,9 +355,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
 
 String SwReadOnlyPopup::SaveGraphic( sal_uInt16 nId )
 {
-
     // fish out the graphic's name
-    String aName;
     if ( MN_READONLY_SAVEBACKGROUND == nId )
     {
         if ( pItem->GetGraphicLink() )

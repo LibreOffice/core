@@ -150,8 +150,6 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFro
     String sReturn;
     if(bFromUI)
     {
-        String sChar;
-
         xub_StrLen i = 0;
         sal_Unicode c;
 

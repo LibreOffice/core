@@ -1303,7 +1303,6 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( sal_uInt16 nTxtColl,
         }
     }
 
-    String sName;
     if( USER_FMT & nTxtColl )       // eine vom Reader angelegte
     {
         OSL_ENSURE( !this, "Wo kommt die Benutzer-Vorlage her?" );

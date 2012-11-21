@@ -305,7 +305,6 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         Sequence< ::rtl::OUString > aAssignProperties(4 * aAssignments.getLength());
         ::rtl::OUString* pAssignProperties = aAssignProperties.getArray();
         sal_Int32 nAssign;
-        OUString sSlash = C2U("/");
         for(nAssign = 0; nAssign < aAssignProperties.getLength(); nAssign += 4)
         {
             String sAssignPath = rtl::OUString::createFromAscii(cAddressDataAssignments);

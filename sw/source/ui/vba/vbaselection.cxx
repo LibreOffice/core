@@ -570,7 +570,6 @@ uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _w
     {
         case word::WdGoToItem::wdGoToBookmark:
         {
-            rtl::OUString sName;
             uno::Reference< word::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
             uno::Reference< word::XBookmark > xBookmark( xApplication->getActiveDocument()->Bookmarks(_name), uno::UNO_QUERY_THROW );
             xBookmark->Select();

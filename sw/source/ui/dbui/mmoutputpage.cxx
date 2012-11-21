@@ -767,7 +767,6 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         {
             SwDocMergeInfo& rInfo = rConfigItem.GetDocumentMergeInfo(nDoc);
             INetURLObject aURL(sPath);
-            String sFile = aURL.GetBase();
             String sExtension = aURL.getExtension();
             if(!sExtension.Len())
             {

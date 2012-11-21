@@ -1697,8 +1697,6 @@ bool SwDoc::NumUpDown( const SwPaM& rPam, bool bDown )
                 GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
 
-            String sNumRule;
-
             for(sal_uLong nTmp = nStt; nTmp <= nEnd; ++nTmp )
             {
                 SwTxtNode* pTNd = GetNodes()[ nTmp ]->GetTxtNode();

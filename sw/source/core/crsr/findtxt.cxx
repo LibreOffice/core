@@ -665,7 +665,6 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
         {
             utl::TextSearch aSTxt( rSearchOpt );
             String aStr( pPam->GetTxt() );
-            String aSearchStr( rSearchOpt.searchString );
             String aReplaceStr( rSearchOpt.replaceString );
             aStr = comphelper::string::remove(aStr, CH_TXTATR_BREAKWORD);
             aStr = comphelper::string::remove(aStr, CH_TXTATR_INWORD);

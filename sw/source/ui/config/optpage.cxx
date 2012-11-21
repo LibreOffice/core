@@ -661,11 +661,6 @@ sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
     String sList        =  aListBox    .GetText();
     String sLabel       =  aLabelBox   .GetText();
     String sIdx         =  aIdxBox     .GetText();
-    String sStandardBak = aStandardBox.GetSavedValue();
-    String sTitleBak    = aTitleBox   .GetSavedValue();
-    String sListBak     = aListBox    .GetSavedValue();
-    String sLabelBak    = aLabelBox   .GetSavedValue();
-    String sIdxBak      = aIdxBox     .GetSavedValue();
 
     bool bStandardHeightChanged = aStandardHeightLB.GetSavedValue() != aStandardHeightLB.GetText();
     bool bTitleHeightChanged = aTitleHeightLB.GetSavedValue() != aTitleHeightLB.GetText();
@@ -1962,7 +1957,6 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     InitFontStyle(aChangedPreviewWN);
 
     // initialise colour list box
-    String sColor;
     aInsertColorLB.SetUpdateMode(sal_False);
     aDeletedColorLB.SetUpdateMode(sal_False);
     aChangedColorLB.SetUpdateMode(sal_False);

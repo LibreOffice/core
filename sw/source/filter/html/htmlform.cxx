@@ -2500,9 +2500,6 @@ void SwHTMLParser::EndSelect()
     const uno::Reference< beans::XPropertySet > & rPropSet =
         pFormImpl->GetFCompPropSet();
 
-    // die Groesse anpassen
-    Size aNewSz( MINFLY, MINFLY );
-
     size_t nEntryCnt = pFormImpl->GetStringList().size();
     if(!pFormImpl->GetStringList().empty())
     {

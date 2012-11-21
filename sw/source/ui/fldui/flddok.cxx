@@ -338,7 +338,6 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
                 {
                     sal_uInt16 nTmp = (sal_uInt16)(sal_uLong)aFormatLB.GetEntryData(
                                             aFormatLB.GetSelectEntryPos() );
-                    String sOldTxt(aValueFT.GetText());
 
                     if(SVX_NUM_CHAR_SPECIAL != nTmp)
                     {

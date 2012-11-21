@@ -1456,7 +1456,6 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
         }
         if ( !bTst && nChg )
         {
-            const SwRect aOldRect( pUp->Frm() );
             pUp->Frm().SSize().Height() += nChg;
             pUp->Prt().SSize().Height() += nChg;
             if ( pViewShell )

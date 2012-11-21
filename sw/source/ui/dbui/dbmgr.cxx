@@ -2252,7 +2252,6 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
             aURLAny <<= sDBURL;
             //set the filter to the file name without extension
             Sequence<rtl::OUString> aFilters(1);
-            rtl::OUString sTmp(aURL.getBase());
             aFilters[0] = aURL.getBase();
             aTableFilterAny <<= aFilters;
         }
@@ -2268,7 +2267,6 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
             bTextConnection = true;
             //set the filter to the file name without extension
             Sequence<rtl::OUString> aFilters(1);
-            rtl::OUString sTmp(aURL.getBase());
             aFilters[0] = aURL.getBase();
             aTableFilterAny <<= aFilters;
         }

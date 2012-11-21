@@ -208,7 +208,6 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     sal_uInt16 nType = 0;
                     String aPar1 = ((SfxStringItem *)pItem)->GetValue();
                     String aPar2;
-                    String aPar3;
                     sal_Int32 nCommand = 0;
 
                     if( SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,

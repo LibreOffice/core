@@ -62,7 +62,6 @@ sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
     sal_Int8 nRet = DND_ACTION_NONE;
     if( bEnableDrop )
     {
-        String sTxt;
         TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
 
             DataFlavorExVector& rVector = aData.GetDataFlavorExVector();

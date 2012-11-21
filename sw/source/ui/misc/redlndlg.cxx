@@ -136,7 +136,6 @@ void SwModelessRedlineAcceptDlg::Activate()
 
 void SwModelessRedlineAcceptDlg::Initialize(SfxChildWinInfo *pInfo)
 {
-    String aStr;
     if (pInfo != NULL)
         pImplDlg->Initialize(pInfo->aExtraString);
 
@@ -282,12 +281,10 @@ void SwRedlineAcceptDlg::InitAuthors()
 
     SvxTPFilter *pFilterPage = aTabPagesCTRL.GetFilterPage();
 
-    String sAuthor;
     std::vector<String> aStrings;
     String sOldAuthor(pFilterPage->GetSelectedAuthor());
     pFilterPage->ClearAuthors();
 
-    String sParent;
     sal_uInt16 nCount = pSh->GetRedlineCount();
 
     bOnlyFormatedRedlines = sal_True;

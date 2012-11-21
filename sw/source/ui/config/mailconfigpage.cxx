@@ -183,7 +183,6 @@ sal_Bool SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
         m_pConfigItem->SetMailDisplayName(m_aDisplayNameED.GetText());
     if(m_aAddressED.GetText() != m_aAddressED.GetSavedValue())
         m_pConfigItem->SetMailAddress(m_aAddressED.GetText());
-    String sReplyTo;
     if( m_aReplyToCB.GetSavedValue() != m_aReplyToCB.IsChecked())
         m_pConfigItem->SetMailReplyTo(m_aReplyToCB.IsChecked());
     if(m_aReplyToED.GetText() != m_aReplyToED.GetSavedValue())

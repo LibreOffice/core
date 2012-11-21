@@ -1090,7 +1090,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
 {
     OSL_ENSURE( pExpr, "no expression" );
 
-    String aName, aStyleName, aDfltName;
+    String aName, aStyleName;
     FontFamily eFamily = FAMILY_DONTKNOW;
     FontPitch ePitch = PITCH_DONTKNOW;
     rtl_TextEncoding eEnc = rParser.GetDfltEncoding();

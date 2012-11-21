@@ -2189,7 +2189,6 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
         }
         else
         {
-            SwRect aPageFrm;
             if ( !pPageFrm->IsEmptyPage() )
             {
                 nPageWidth  = pPageFrm->Frm().Width() + nSidebarWidth + (bStartOfRow ? 0 : nGapBetweenPages);

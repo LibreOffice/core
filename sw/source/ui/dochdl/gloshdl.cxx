@@ -530,7 +530,6 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
     }
     else
     {
-        String aLongName = pGlossary->GetLongName( nFound );
         SvxMacro aStartMacro(aEmptyStr, aEmptyStr, STARBASIC);
         SvxMacro aEndMacro(aEmptyStr, aEmptyStr, STARBASIC);
         GetMacros( aShortName, aStartMacro, aEndMacro, pGlossary );
