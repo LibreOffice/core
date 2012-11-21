@@ -196,6 +196,12 @@ public:
      */
     LanguageTag &                   makeFallback();
 
+    /* Test equality of two LangageTag. */
+    bool    operator==( const LanguageTag & rLanguageTag ) const;
+
+    /* Test inequality of two LangageTag. */
+    bool    operator!=( const LanguageTag & rLanguageTag ) const;
+
 private:
 
     enum Decision

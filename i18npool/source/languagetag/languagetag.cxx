@@ -839,4 +839,17 @@ LanguageTag & LanguageTag::makeFallback()
 }
 
 
+bool LanguageTag::operator==( const LanguageTag & rLanguageTag ) const
+{
+    // Compare full language tag strings but SYSTEM unresolved.
+    return getBcp47( false) == rLanguageTag.getBcp47( false);
+}
+
+
+bool LanguageTag::operator!=( const LanguageTag & rLanguageTag ) const
+{
+    return !operator==( rLanguageTag);
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
