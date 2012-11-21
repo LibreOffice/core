@@ -40,6 +40,7 @@ officecfg_XCSFILES := \
     Office/OOoImprovement/Settings \
     Office/OptionsDialog \
     Office/Paths \
+    Office/PresenterScreen \
     Office/ProtocolHandler \
     Office/Recovery \
     Office/SFX \

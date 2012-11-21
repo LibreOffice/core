@@ -22,7 +22,6 @@
 #include "PresenterSlideSorter.hxx"
 #include "PresenterButton.hxx"
 #include "PresenterCanvasHelper.hxx"
-#include "PresenterComponent.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterHelper.hxx"
 #include "PresenterPaintManager.hxx"
@@ -1725,7 +1724,7 @@ PresenterSlideSorter::CurrentSlideFrameRenderer::CurrentSlideFrameRenderer (
 {
     PresenterConfigurationAccess aConfiguration (
         rxContext,
-        OUString("/org.openoffice.Office.extension.PresenterScreen/"),
+        OUString("/org.openoffice.Office.PresenterScreen/"),
         PresenterConfigurationAccess::READ_ONLY);
     Reference<container::XHierarchicalNameAccess> xBitmaps (
         aConfiguration.GetConfigurationNode(
@@ -1738,8 +1737,7 @@ PresenterSlideSorter::CurrentSlideFrameRenderer::CurrentSlideFrameRenderer (
         A2S("PresenterScreenSettings/SlideSorter/CurrentSlideBorderBitmaps"),
         ::boost::shared_ptr<PresenterBitmapContainer>(),
         rxContext,
-        rxCanvas,
-        PresenterComponent::GetBasePath(rxContext));
+        rxCanvas);
 
     mpTopLeft = aContainer.GetBitmap(A2S("TopLeft"));
     mpTop = aContainer.GetBitmap(A2S("Top"));

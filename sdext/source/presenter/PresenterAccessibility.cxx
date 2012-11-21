@@ -435,7 +435,7 @@ public:
         OUString sName (A2S("Presenter Console"));
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            OUString("/org.openoffice.Office.extension.PresenterScreen/"),
+            OUString("/org.openoffice.Office.PresenterScreen/"),
             PresenterConfigurationAccess::READ_ONLY);
         aConfiguration.GetConfigurationNode(A2S("Presenter/Accessibility/Console/String"))
             >>= sName;
@@ -465,7 +465,7 @@ public:
         {
             PresenterConfigurationAccess aConfiguration (
                 rxContext,
-                OUString("/org.openoffice.Office.extension.PresenterScreen/"),
+                OUString("/org.openoffice.Office.PresenterScreen/"),
                 PresenterConfigurationAccess::READ_ONLY);
             aConfiguration.GetConfigurationNode(A2S("Presenter/Accessibility/Preview/String"))
                 >>= sName;
@@ -1886,7 +1886,7 @@ rtl::Reference<PresenterAccessible::AccessibleObject> AccessibleNotes::Create (
     {
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            OUString("/org.openoffice.Office.extension.PresenterScreen/"),
+            OUString("/org.openoffice.Office.PresenterScreen/"),
             PresenterConfigurationAccess::READ_ONLY);
         aConfiguration.GetConfigurationNode(A2S("Presenter/Accessibility/Notes/String"))
             >>= sName;

@@ -535,6 +535,7 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
+    PresenterScreen \
     basprov \
     cairocanvas \
     canvasfactory \
@@ -637,7 +638,6 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 
 $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
     pdfimport \
-    PresenterScreen \
 	SunPresentationMinimizer \
 ))
 

@@ -87,21 +87,6 @@ Module gid_Module_Optional_Extensions_MEDIAWIKI
 End
 #endif
 
-/* ** Presenter Screen ** */
-
-#ifndef WITHOUT_EXTENSION_PRESENTER_SCREEN
-Module gid_Module_Optional_Extensions_PRESENTER_SCREEN
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_PRESENTER_SCREEN);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_Presenter_Screen );
-    Minimal = NO;
-    Default = YES;
-    Styles = ( );
-End
-#endif
-
 /* ** PDF Import ** */
 
 #ifndef WITHOUT_EXTENSION_PDFIMPORT

@@ -8,12 +8,9 @@
  *
 -->
 <component xmlns="http://openoffice.org/2010/uno-components"
-        loader="com.sun.star.loader.SharedLibrary"
-	prefix="presenter">
-    <implementation name="com.sun.star.comp.Draw.framework.PresenterScreenJob">
-        <service name="com.sun.star.drawing.framework.PresenterScreenJob"/>
-    </implementation>
-    <implementation name="vnd.sun.star.sdext.presenter.PresenterProtocolHandler">
+        loader="com.sun.star.loader.SharedLibrary" prefix="presenter">
+    <implementation name="org.libreoffice.comp.PresenterScreenJob"/>
+    <implementation name="org.libreoffice.comp.PresenterScreenProtocolHandler">
         <service name="com.sun.star.frame.ProtocolHandler"/>
     </implementation>
 </component>

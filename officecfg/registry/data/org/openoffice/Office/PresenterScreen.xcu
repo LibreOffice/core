@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:package="org.openoffice.Office.extension" oor:name="PresenterScreen">
+<oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:package="org.openoffice.Office" oor:name="PresenterScreen">
   <node oor:name="PresenterScreenSettings">
     <node oor:name="ToolBars">
       <node oor:name="ToolBar" oor:op="replace">
@@ -30,7 +30,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>bitmaps/ButtonSlidePreviousNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:PrevSlide</value></prop>
+              <prop oor:name="Action"><value>vnd.org.libreoffice.presenterscreen:PrevSlide</value></prop>
               <node oor:name="Font">
                 <prop oor:name="Size"><value>12</value></prop>
                 <prop oor:name="Style"><value>Bold</value></prop>
@@ -60,7 +60,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>bitmaps/ButtonEffectNextNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:NextEffect</value></prop>
+              <prop oor:name="Action"><value>vnd.org.libreoffice.presenterscreen:NextEffect</value></prop>
               <node oor:name="Font">
                 <prop oor:name="Size"><value>12</value></prop>
                 <prop oor:name="Style"><value>Bold</value></prop>
@@ -90,7 +90,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>bitmaps/ButtonNotesNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:ShowNotes</value></prop>
+              <prop oor:name="Action"><value>vnd.org.libreoffice.presenterscreen:ShowNotes</value></prop>
               <node oor:name="Font">
                 <prop oor:name="Size"><value>12</value></prop>
                 <prop oor:name="Style"><value>Bold</value></prop>
@@ -113,7 +113,7 @@
               <node oor:name="Font">
                 <prop oor:name="Color"><value>FFFFFF</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:CloseNotes</value></prop>
+              <prop oor:name="Action"><value>vnd.org.libreoffice.presenterscreen:CloseNotes</value></prop>
             </node>
             <node oor:name="Disabled">
               <node oor:name="Icon">
@@ -129,7 +129,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>bitmaps/ButtonSlideSorterNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:ShowSlideSorter</value></prop>
+              <prop oor:name="Action"><value>vnd.org.libreoffice.presenterscreen:ShowSlideSorter</value></prop>
               <node oor:name="Font">
                 <prop oor:name="Size"><value>12</value></prop>
                 <prop oor:name="Style"><value>Bold</value></prop>
@@ -152,7 +152,7 @@
               <node oor:name="Font">
                 <prop oor:name="Color"><value>FFFFFF</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:CloseSlideSorter</value></prop>
+              <prop oor:name="Action"><value>vnd.org.libreoffice.presenterscreen:CloseSlideSorter</value></prop>
             </node>
             <node oor:name="Disabled">
               <node oor:name="Icon">
@@ -220,7 +220,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>bitmaps/ButtonSwitchMonitorNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:SwitchMonitor</value></prop>
+              <prop oor:name="Action"><value>vnd.org.libreoffice.presenterscreen:SwitchMonitor</value></prop>
               <node oor:name="Font">
                 <prop oor:name="Size"><value>12</value></prop>
                 <prop oor:name="Style"><value>Bold</value></prop>
@@ -258,7 +258,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>bitmaps/ButtonHelpNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:ShowHelp</value></prop>
+              <prop oor:name="Action"><value>vnd.org.libreoffice.presenterscreen:ShowHelp</value></prop>
               <node oor:name="Font">
                 <prop oor:name="Size"><value>12</value></prop>
                 <prop oor:name="Style"><value>Bold</value></prop>
@@ -281,7 +281,7 @@
               <node oor:name="Font">
                 <prop oor:name="Color"><value>FFFFFF</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:CloseHelp</value></prop>
+              <prop oor:name="Action"><value>vnd.org.libreoffice.presenterscreen:CloseHelp</value></prop>
             </node>
             <node oor:name="Disabled">
               <node oor:name="Icon">
@@ -312,7 +312,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>bitmaps/ButtonPlusNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:GrowNotesFont</value></prop>
+              <prop oor:name="Action"><value>vnd.org.libreoffice.presenterscreen:GrowNotesFont</value></prop>
             </node>
             <node oor:name="MouseOver">
               <node oor:name="Icon">
@@ -332,7 +332,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>bitmaps/ButtonMinusNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:ShrinkNotesFont</value></prop>
+              <prop oor:name="Action"><value>vnd.org.libreoffice.presenterscreen:ShrinkNotesFont</value></prop>
             </node>
             <node oor:name="MouseOver">
               <node oor:name="Icon">
@@ -354,21 +354,21 @@
         <prop oor:name="Text">
           <value xml:lang="en-US">Close</value>
         </prop>
-        <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:CloseSlideSorter</value></prop>
+        <prop oor:name="Action"><value>vnd.org.libreoffice.presenterscreen:CloseSlideSorter</value></prop>
       </node>
       <node oor:name="NotesViewCloser" oor:op="replace">
         <prop oor:name="Name"><value>NotesViewCloser</value></prop>
         <prop oor:name="Text">
           <value xml:lang="en-US">Close</value>
         </prop>
-        <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:CloseNotes</value></prop>
+        <prop oor:name="Action"><value>vnd.org.libreoffice.presenterscreen:CloseNotes</value></prop>
       </node>
       <node oor:name="HelpViewCloser" oor:op="replace">
         <prop oor:name="Name"><value>HelpViewCloser</value></prop>
         <prop oor:name="Text">
           <value xml:lang="en-US">Close</value>
         </prop>
-        <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:CloseHelp</value></prop>
+        <prop oor:name="Action"><value>vnd.org.libreoffice.presenterscreen:CloseHelp</value></prop>
       </node>
     </node>
     <node oor:name="ScrollBar">

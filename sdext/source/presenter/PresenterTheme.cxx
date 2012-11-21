@@ -20,7 +20,6 @@
 #include "PresenterTheme.hxx"
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterCanvasHelper.hxx"
-#include "PresenterComponent.hxx"
 #include "PresenterConfigurationAccess.hxx"
 #include "PresenterHelper.hxx"
 #include <com/sun/star/awt/Point.hpp>
@@ -93,7 +92,6 @@ public:
     Reference<XComponentContext> mxComponentContext;
     Reference<rendering::XCanvas> mxCanvas;
     Reference<drawing::XPresenterHelper> mxPresenterHelper;
-    OUString msBasePath;
 
     ReadContext (
         const Reference<XComponentContext>& rxContext,
@@ -118,8 +116,6 @@ public:
         const OUString& rsThemeName);
 
     BorderSize ReadBorderSize (const Reference<container::XNameAccess>& rxNode);
-
-    void SetBitmapSourceExtension (const OUString& rsExtensionName);
 
 private:
     Any GetByName (
@@ -293,7 +289,7 @@ PresenterTheme::~PresenterTheme (void)
 
     PresenterConfigurationAccess aConfiguration (
         mxContext,
-        OUString("/org.openoffice.Office.extension.PresenterScreen/"),
+        OUString("/org.openoffice.Office.PresenterScreen/"),
         PresenterConfigurationAccess::READ_ONLY);
 
     return aReadContext.ReadTheme(aConfiguration, msThemeName);
@@ -381,7 +377,7 @@ bool PresenterTheme::ConvertToColor (
     ::boost::shared_ptr<PresenterConfigurationAccess> pConfiguration (
         new PresenterConfigurationAccess(
             mxContext,
-            OUString("/org.openoffice.Office.extension.PresenterScreen/"),
+            OUString("/org.openoffice.Office.PresenterScreen/"),
             PresenterConfigurationAccess::READ_WRITE));
 
     // Get configuration node for the view style container of the current
@@ -625,26 +621,11 @@ void PresenterTheme::Theme::Read (
         mpParentTheme = rReadContext.ReadTheme(rConfiguration, sParentThemeName);
     }
 
-    // Read the extension that contains the bitmaps referenced in this
-    // theme.
-    OUString sBitmapSourceExtension;
-    if ((PresenterConfigurationAccess::GetConfigurationNode(
-        mxThemeRoot, A2S("BitmapSourceExtension")) >>= sBitmapSourceExtension)
-        && !sBitmapSourceExtension.isEmpty())
-    {
-        rReadContext.SetBitmapSourceExtension(sBitmapSourceExtension);
-    }
-    else
-    {
-        rReadContext.SetBitmapSourceExtension(PresenterComponent::gsExtensionIdentifier);
-    }
-
     // Background.
     mpBackground = PresenterBitmapContainer::LoadBitmap(
         mxThemeRoot,
         A2S("Background"),
         rReadContext.mxPresenterHelper,
-        rReadContext.msBasePath,
         rReadContext.mxCanvas,
         SharedBitmapDescriptor());
 
@@ -667,8 +648,7 @@ void PresenterTheme::Theme::Read (
                 ? mpParentTheme->mpIconContainer
                 : ::boost::shared_ptr<PresenterBitmapContainer>(),
             rReadContext.mxComponentContext,
-            rReadContext.mxCanvas,
-            rReadContext.msBasePath));
+            rReadContext.mxCanvas));
 
     // Read fonts.
     Reference<container::XNameAccess> xFontNode(
@@ -720,8 +700,7 @@ ReadContext::ReadContext (
     const Reference<rendering::XCanvas>& rxCanvas)
     : mxComponentContext(rxContext),
       mxCanvas(rxCanvas),
-      mxPresenterHelper(),
-      msBasePath()
+      mxPresenterHelper()
 {
     Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager());
     if (xFactory.is())
@@ -732,9 +711,6 @@ ReadContext::ReadContext (
                 rxContext),
             UNO_QUERY_THROW);
     }
-
-    // Get base path to bitmaps.
-    SetBitmapSourceExtension(PresenterComponent::gsExtensionIdentifier);
 }
 
 ReadContext::~ReadContext (void)
@@ -866,12 +842,6 @@ BorderSize ReadContext::ReadBorderSize (const Reference<container::XNameAccess>&
     return aBorderSize;
 }
 
-void ReadContext::SetBitmapSourceExtension (const OUString& rsExtensionIdentifier)
-{
-    // Get base path to bitmaps.
-    msBasePath = PresenterComponent::GetBasePath(mxComponentContext, rsExtensionIdentifier);
-}
-
 //===== PaneStyleContainer ====================================================
 
 void PaneStyleContainer::Read (
@@ -953,7 +923,6 @@ void PaneStyleContainer::ProcessPaneStyle(
                 : ::boost::shared_ptr<PresenterBitmapContainer>(),
             rReadContext.mxComponentContext,
             rReadContext.mxCanvas,
-            rReadContext.msBasePath,
             rReadContext.mxPresenterHelper));
     }
 
@@ -1088,7 +1057,6 @@ void ViewStyleContainer::ProcessViewStyle(
         xBackgroundNode,
         OUString(),
         rReadContext.mxPresenterHelper,
-        rReadContext.msBasePath,
         rReadContext.mxCanvas,
         SharedBitmapDescriptor()));
     if (pBackground.get() != NULL && pBackground->GetNormalBitmap().is())

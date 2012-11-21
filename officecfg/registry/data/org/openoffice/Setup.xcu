@@ -791,6 +791,11 @@
             <prop oor:name="MigrationService">
               <value>com.sun.star.migration.Extensions</value>
             </prop>
+            <prop oor:name="ExcludedExtensions">
+              <value>
+                <it>com.sun.PresenterScreen-*</it>
+              </value>
+            </prop>
           </node>
           <node oor:name="Inet" oor:op="replace">
             <prop oor:name="IncludedNodes">

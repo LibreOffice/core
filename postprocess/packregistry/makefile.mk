@@ -99,14 +99,18 @@ MY_FILES_graphicfilter = \
 
 MY_DEPS_impress = main
 MY_FILES_impress = \
+    $(MY_XCS)/Office/PresenterScreen.xcs \
     $(MY_XCS)/Office/UI/Effects.xcs \
     $(MY_XCS)/Office/UI/ImpressWindowState.xcs \
+    $(MY_XCU)/Office/PresenterScreen.xcu \
     $(MY_XCU)/Office/UI/Effects.xcu \
     $(MY_XCU)/Office/UI/ImpressWindowState.xcu \
     $(MY_MOD)/fcfg_impress_filters.xcu \
     $(MY_MOD)/fcfg_impress_types.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-impress.xcu \
     $(MY_MOD)/org/openoffice/Office/Embedding-impress.xcu \
+    $(MY_MOD)/org/openoffice/Office/Jobs-impress.xcu \
+    $(MY_MOD)/org/openoffice/Office/ProtocolHandler-impress.xcu \
     $(MY_MOD)/org/openoffice/Setup-impress.xcu
 
 MY_DEPS_korea = main

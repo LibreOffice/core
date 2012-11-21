@@ -626,11 +626,6 @@ AC_ARG_ENABLE(ext-pdfimport,
         [Disable the PDF Import extension.])
 )
 
-AC_ARG_ENABLE(ext-presenter-console,
-    AS_HELP_STRING([--disable-ext-presenter-console],
-        [Disable the Presenter Console extension.])
-)
-
 AC_ARG_ENABLE(ext-presenter-minimizer,
     AS_HELP_STRING([--disable-ext-presenter-minimizer],
         [Disable the Presentation Minimizer extension.])
@@ -9748,18 +9743,6 @@ else
 fi
 AC_SUBST(ENABLE_MINIMIZER)
 
-# presenter console extension?
-AC_MSG_CHECKING([whether to build the Presenter Console extension])
-if test "x$enable_ext_presenter_console" != "xno" -a "x$enable_extension_integration" != "xno"; then
-   AC_MSG_RESULT([yes])
-   ENABLE_PRESENTER_SCREEN=YES
-else
-   AC_MSG_RESULT([no])
-   ENABLE_PRESENTER_SCREEN=NO
-   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_PRESENTER_SCREEN"
-fi
-AC_SUBST(ENABLE_PRESENTER_SCREEN)
-
 # pdf import extension?
 AC_MSG_CHECKING([whether to build the PDF Import extension])
 if test "x$enable_ext_pdfimport" != "xno" -a "x$enable_extension_integration" != "xno"; then
@@ -9800,11 +9783,6 @@ AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
 AC_SUBST(XPDF_TARBALL)
-
-
-if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$ENABLE_PDFIMPORT" = "YES"; then
-   BUILD_TYPE="$BUILD_TYPE SDEXT"
-fi
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then

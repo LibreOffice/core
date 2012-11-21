@@ -66,17 +66,6 @@ End
 
 #endif
 
-/* ** Presenter Screen ** */
-
-#ifndef WITHOUT_EXTENSION_PRESENTER_SCREEN
-
-Directory gid_Brand_Dir_Share_Extensions_Presenter_Screen
-	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "presenter-screen";
-End
-
-#endif
-
 /* ** PDF Import ** */
 
 #ifndef WITHOUT_EXTENSION_PDFIMPORT

@@ -28,13 +28,13 @@
 
 module com { module sun { module star { module drawing {
 
-/** This interface is a collection of functions that are necessary to
+/** This interface is a collection of functions that were necessary to
     implement larger parts of the presenter screen as extension.  The
-    methods of this interface give access to services that can, at the
-    moment, only implemented in the Office core, not in an extension.
+    methods of this interface give access to services that could only be
+    implemented in the Office core, not in an extension.
 
-    <p>With time some, maybe all, methods can moved to other, better suited,
-    interfaces.</p>
+    <p>As the presenter screen is no extension any more, this hack can go again;
+    it just needs clean-up.</p>
 */
 interface XPresenterHelper
 {
@@ -114,17 +114,15 @@ interface XPresenterHelper
     void toTop (
         [in] ::com::sun::star::awt::XWindow xWindow);
 
-    /** Load a bitmap from a file or other accessible resource that can be
-        located via a URL.
-        @param sURL
-            The URL of the bitmap.  For a file URL the bitmap is loaded from
-            the specified file.
+    /** Load a bitmap with a given ID.
+        @param id
+            The ID of the bitmap.
         @param xCanvas
             The bitmap is created to be compatible, and possibly optimized,
             for this canvas.
     */
     ::com::sun::star::rendering::XBitmap loadBitmap (
-        [in] string sURL,
+        [in] string id,
         [in] ::com::sun::star::rendering::XCanvas xCanvas);
 
     /** Capture the mouse so that no other window will receive mouse events.

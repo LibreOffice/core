@@ -348,3 +348,460 @@ Bitmap BMP_COMMENTS_INDICATOR
 {
     File = "comments_indicator.bmp";
 };
+
+// Presenter Screen bitmaps:
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_LEFT
+{
+    File = "presenterscreen-BorderLeft.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_SLIDE_NEXT_DISABLED
+{
+    File = "presenterscreen-ButtonSlideNextDisabled.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_SLIDE_PREVIOUS_SELECTED
+{
+    File = "presenterscreen-ButtonSlidePreviousSelected.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_TOP
+{
+    File = "presenterscreen-BorderCurrentSlideTop.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_NOTES_SELECTED
+{
+    File = "presenterscreen-ButtonNotesSelected.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_DOWN_SELECTED
+{
+    File = "presenterscreen-ScrollbarArrowDownSelected.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BACKGROUND
+{
+    File = "presenterscreen-Background.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_RIGHT
+{
+    File = "presenterscreen-BorderRight.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_ACTIVE_TOP
+{
+    File = "presenterscreen-BorderActiveTop.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_HELP_DISABLED
+{
+    File = "presenterscreen-ButtonHelpDisabled.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_ACTIVE_RIGHT
+{
+    File = "presenterscreen-BorderActiveRight.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_FRAME_CENTER_NORMAL
+{
+    File = "presenterscreen-ButtonFrameCenterNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_MIDDLE_MOUSE_OVER
+{
+    File = "presenterscreen-ScrollbarThumbMiddleMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_BOTTOM_RIGHT
+{
+    File = "presenterscreen-BorderCurrentSlideBottomRight.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_TOP_LEFT
+{
+    File = "presenterscreen-BorderTopLeft.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM
+{
+    File = "presenterscreen-BorderActiveBottom.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_BOTTOM_LEFT
+{
+    File = "presenterscreen-BorderBottomLeft.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_TOOLBAR_TOP
+{
+    File = "presenterscreen-BorderToolbarTop.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_ACTIVE_LEFT
+{
+    File = "presenterscreen-BorderActiveLeft.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_HELP_NORMAL
+{
+    File = "presenterscreen-ButtonHelpNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM_CALLOUT
+{
+    File = "presenterscreen-BorderActiveBottomCallout.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_TOOLBAR_LEFT
+{
+    File = "presenterscreen-BorderToolbarLeft.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_SLIDE_SORTER_NORMAL
+{
+    File = "presenterscreen-ButtonSlideSorterNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_PAGER_MIDDLE_NORMAL
+{
+    File = "presenterscreen-ScrollbarPagerMiddleNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_FRAME_RIGHT_NORMAL
+{
+    File = "presenterscreen-ButtonFrameRightNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_EFFECT_NEXT_MOUSE_OVER
+{
+    File = "presenterscreen-ButtonEffectNextMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_TOP_MOUSE_OVER
+{
+    File = "presenterscreen-ScrollbarThumbTopMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_EFFECT_NEXT_DISABLED
+{
+    File = "presenterscreen-ButtonEffectNextDisabled.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_FRAME_CENTER_MOUSE_OVER
+{
+    File = "presenterscreen-ButtonFrameCenterMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_LEFT
+{
+    File = "presenterscreen-BorderCurrentSlideLeft.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_FRAME_LEFT_MOUSE_OVER
+{
+    File = "presenterscreen-ButtonFrameLeftMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_HELP_SELECTED
+{
+    File = "presenterscreen-ButtonHelpSelected.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_VIEW_BACKGROUND
+{
+    File = "presenterscreen-ViewBackground.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_NOTES_MOUSE_OVER
+{
+    File = "presenterscreen-ButtonNotesMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_PLUS_MOUSE_OVER
+{
+    File = "presenterscreen-ButtonPlusMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_SLIDE_SORTER_SELECTED
+{
+    File = "presenterscreen-ButtonSlideSorterSelected.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_LABEL_MOUSE_OVER_RIGHT
+{
+    File = "presenterscreen-LabelMouseOverRight.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_SWITCH_MONITOR_NORMAL
+{
+    File = "presenterscreen-ButtonSwitchMonitorNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_TOOLBAR_RIGHT
+{
+    File = "presenterscreen-BorderToolbarRight.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_MIDDLE_NORMAL
+{
+    File = "presenterscreen-ScrollbarThumbMiddleNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_EFFECT_NEXT_SELECTED
+{
+    File = "presenterscreen-ButtonEffectNextSelected.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_DOWN_NORMAL
+{
+    File = "presenterscreen-ScrollbarArrowDownNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_TOP_RIGHT
+{
+    File = "presenterscreen-BorderCurrentSlideTopRight.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_PLUS_NORMAL
+{
+    File = "presenterscreen-ButtonPlusNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_TOOLBAR_TOP_RIGHT
+{
+    File = "presenterscreen-BorderToolbarTopRight.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_MINUS_DISABLED
+{
+    File = "presenterscreen-ButtonMinusDisabled.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_DOWN_DISABLED
+{
+    File = "presenterscreen-ScrollbarArrowDownDisabled.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_FRAME_RIGHT_MOUSE_OVER
+{
+    File = "presenterscreen-ButtonFrameRightMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_SWITCH_MONITOR_MOUSE_OVER
+{
+    File = "presenterscreen-ButtonSwitchMonitorMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_SLIDE_PREVIOUS_DISABLED
+{
+    File = "presenterscreen-ButtonSlidePreviousDisabled.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_MINUS_SELECTED
+{
+    File = "presenterscreen-ButtonMinusSelected.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_LABEL_MOUSE_OVER_CENTER
+{
+    File = "presenterscreen-LabelMouseOverCenter.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_SLIDE_NEXT_MOUSE_OVER
+{
+    File = "presenterscreen-ButtonSlideNextMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_SLIDE_NEXT_NORMAL
+{
+    File = "presenterscreen-ButtonSlideNextNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_SLIDE_PREVIOUS_MOUSE_OVER
+{
+    File = "presenterscreen-ButtonSlidePreviousMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_TOP
+{
+    File = "presenterscreen-BorderTop.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_FRAME_LEFT_NORMAL
+{
+    File = "presenterscreen-ButtonFrameLeftNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_UP_MOUSE_OVER
+{
+    File = "presenterscreen-ScrollbarArrowUpMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_NOTES_NORMAL
+{
+    File = "presenterscreen-ButtonNotesNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_SLIDE_SORTER_DISABLED
+{
+    File = "presenterscreen-ButtonSlideSorterDisabled.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_EFFECT_NEXT_NORMAL
+{
+    File = "presenterscreen-ButtonEffectNextNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_TOOLBAR_TOP_LEFT
+{
+    File = "presenterscreen-BorderToolbarTopLeft.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM_RIGHT
+{
+    File = "presenterscreen-BorderActiveBottomRight.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_BOTTOM
+{
+    File = "presenterscreen-BorderBottom.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM_LEFT
+{
+    File = "presenterscreen-BorderActiveBottomLeft.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_DOWN_MOUSE_OVER
+{
+    File = "presenterscreen-ScrollbarArrowDownMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_PLUS_SELECTED
+{
+    File = "presenterscreen-ButtonPlusSelected.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_ACTIVE_TOP_RIGHT
+{
+    File = "presenterscreen-BorderActiveTopRight.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_SLIDE_PREVIOUS_NORMAL
+{
+    File = "presenterscreen-ButtonSlidePreviousNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_SLIDE_SORTER_MOUSE_OVER
+{
+    File = "presenterscreen-ButtonSlideSorterMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_MINUS_MOUSE_OVER
+{
+    File = "presenterscreen-ButtonMinusMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_NOTES_DISABLED
+{
+    File = "presenterscreen-ButtonNotesDisabled.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_BOTTOM_LEFT
+{
+    File = "presenterscreen-BorderCurrentSlideBottomLeft.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_TOP_RIGHT
+{
+    File = "presenterscreen-BorderTopRight.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_HELP_MOUSE_OVER
+{
+    File = "presenterscreen-ButtonHelpMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_TOP_NORMAL
+{
+    File = "presenterscreen-ScrollbarThumbTopNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_UP_SELECTED
+{
+    File = "presenterscreen-ScrollbarArrowUpSelected.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_UP_DISABLED
+{
+    File = "presenterscreen-ScrollbarArrowUpDisabled.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_UP_NORMAL
+{
+    File = "presenterscreen-ScrollbarArrowUpNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_TOOLBAR_BOTTOM
+{
+    File = "presenterscreen-BorderToolbarBottom.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_TOP_LEFT
+{
+    File = "presenterscreen-BorderCurrentSlideTopLeft.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_MINUS_NORMAL
+{
+    File = "presenterscreen-ButtonMinusNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_BOTTOM_MOUSE_OVER
+{
+    File = "presenterscreen-ScrollbarThumbBottomMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_ACTIVE_TOP_LEFT
+{
+    File = "presenterscreen-BorderActiveTopLeft.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_BOTTOM
+{
+    File = "presenterscreen-BorderCurrentSlideBottom.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_PAGER_MIDDLE_MOUSE_OVER
+{
+    File = "presenterscreen-ScrollbarPagerMiddleMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_LABEL_MOUSE_OVER_LEFT
+{
+    File = "presenterscreen-LabelMouseOverLeft.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_RIGHT
+{
+    File = "presenterscreen-BorderCurrentSlideRight.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BORDER_BOTTOM_RIGHT
+{
+    File = "presenterscreen-BorderBottomRight.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_BOTTOM_NORMAL
+{
+    File = "presenterscreen-ScrollbarThumbBottomNormal.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_PLUS_DISABLED
+{
+    File = "presenterscreen-ButtonPlusDisabled.png";
+};

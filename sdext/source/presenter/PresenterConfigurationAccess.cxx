@@ -34,7 +34,7 @@ using ::rtl::OUString;
 namespace sdext { namespace presenter {
 
 const ::rtl::OUString PresenterConfigurationAccess::msPresenterScreenRootName =
-    A2S("/org.openoffice.Office.extension.PresenterScreen/");
+    A2S("/org.openoffice.Office.PresenterScreen/");
 
 PresenterConfigurationAccess::PresenterConfigurationAccess (
     const Reference<XComponentContext>& rxContext,

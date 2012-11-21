@@ -95,14 +95,12 @@ namespace {
 
 OUString PresenterScreenJob::getImplementationName_static (void)
 {
-    return A2S("com.sun.star.comp.Draw.framework.PresenterScreenJob");
+    return OUString("org.libreoffice.comp.PresenterScreenJob");
 }
 
 Sequence<OUString> PresenterScreenJob::getSupportedServiceNames_static (void)
 {
-    static const ::rtl::OUString sServiceName(
-        A2S("com.sun.star.drawing.framework.PresenterScreenJob"));
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    return Sequence<rtl::OUString>();
 }
 
 Reference<XInterface> PresenterScreenJob::Create (const Reference<uno::XComponentContext>& rxContext)
@@ -505,7 +503,7 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
             Reference<XComponentContext> xContext (mxContextWeak);
             PresenterConfigurationAccess aConfiguration (
                 xContext,
-                OUString("/org.openoffice.Office.extension.PresenterScreen/"),
+                OUString("/org.openoffice.Office.PresenterScreen/"),
                 PresenterConfigurationAccess::READ_ONLY);
             bool bStartAlways (false);
             if (aConfiguration.GetConfigurationNode(
@@ -654,7 +652,7 @@ void PresenterScreen::SetupConfiguration (
     {
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            OUString("org.openoffice.Office.extension.PresenterScreen"),
+            OUString("org.openoffice.Office.PresenterScreen"),
             PresenterConfigurationAccess::READ_ONLY);
         maViewDescriptors.clear();
         ProcessViewDescriptions(aConfiguration);

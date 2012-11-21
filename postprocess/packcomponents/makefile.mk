@@ -80,6 +80,7 @@ my_components = \
     component/sd/util/sd \
     component/sd/util/sdd \
     component/sd/util/sdfilt \
+    component/sdext/source/presenter/presenter \
     component/sfx2/util/sfx \
     component/slideshow/util/slideshow \
     component/sot/util/sot \

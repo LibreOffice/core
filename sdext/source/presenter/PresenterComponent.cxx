@@ -17,13 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PresenterComponent.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
-#include <com/sun/star/deployment/DeploymentException.hpp>
-#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
 
-#include "PresenterExtensionIdentifier.hxx"
 #include "PresenterProtocolHandler.hxx"
 #include "PresenterScreen.hxx"
 
@@ -34,41 +30,6 @@ using namespace osl;
 using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
-
-::rtl::OUString PresenterComponent::GetBasePath (
-    const Reference<XComponentContext>& rxComponentContext)
-{
-    return GetBasePath(rxComponentContext, gsExtensionIdentifier);
-}
-
-::rtl::OUString PresenterComponent::GetBasePath (
-    const Reference<XComponentContext>& rxComponentContext,
-    const OUString& rsExtensionIdentifier)
-{
-    static ::rtl::OUString sBasePath;
-    if (sBasePath.isEmpty())
-    {
-        // Determine the base path of the bitmaps.
-        Reference<deployment::XPackageInformationProvider> xInformationProvider (
-            rxComponentContext->getValueByName(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "/singletons/com.sun.star.deployment.PackageInformationProvider"))),
-            UNO_QUERY);
-        if (xInformationProvider.is())
-        {
-            try
-            {
-                sBasePath = xInformationProvider->getPackageLocation(rsExtensionIdentifier)
-                    + OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-            }
-            catch (const deployment::DeploymentException&)
-            {
-            }
-        }
-    }
-
-    return sBasePath;
-}
 
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 

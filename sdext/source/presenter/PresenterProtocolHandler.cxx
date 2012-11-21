@@ -47,8 +47,6 @@ using ::rtl::OUString;
 namespace sdext { namespace presenter {
 
 namespace {
-    const static OUString gsProtocol (A2S("vnd.com.sun.star.comp.PresenterScreen:"));
-
     class Command
     {
     public:
@@ -240,7 +238,7 @@ private:
 
 OUString PresenterProtocolHandler::getImplementationName_static (void)
 {
-    return A2S("vnd.sun.star.sdext.presenter.PresenterProtocolHandler");
+    return OUString("org.libreoffice.comp.PresenterScreenProtocolHandler");
 }
 
 Sequence<OUString> PresenterProtocolHandler::getSupportedServiceNames_static (void)
@@ -309,7 +307,7 @@ Reference<frame::XDispatch> SAL_CALL PresenterProtocolHandler::queryDispatch (
 
     Reference<frame::XDispatch> xDispatch;
 
-    if (rURL.Protocol == gsProtocol)
+    if (rURL.Protocol == "vnd.org.libreoffice.presenterscreen:")
     {
         xDispatch.set(Dispatch::Create(rURL.Path, mpPresenterController));
     }
@@ -432,7 +430,7 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::dispatch(
     (void)rArguments;
     ThrowIfDisposed();
 
-    if (rURL.Protocol == gsProtocol
+    if (rURL.Protocol == "vnd.org.libreoffice.presenterscreen:"
         && rURL.Path == msURLPath)
     {
         if (mpCommand.get() != NULL)

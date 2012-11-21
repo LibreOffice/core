@@ -72,19 +72,6 @@ End
 
 #endif
 
-/* ** Presenter Screen ** */
-
-#ifndef WITHOUT_EXTENSION_PRESENTER_SCREEN
-
-File gid_File_Oxt_Presenter_Screen
-    TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_Presenter_Screen;
-    Name = "presenter-screen.oxt";
-End
-
-#endif
-
 /* ** PDF Import ** */
 
 #ifndef WITHOUT_EXTENSION_PDFIMPORT

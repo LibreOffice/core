@@ -82,7 +82,9 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Common-macosx.xcu \
 	org/openoffice/Office/Common-wnt.xcu \
 	org/openoffice/Office/Common-UseOOoFileDialogs.xcu \
+	org/openoffice/Office/Jobs-impress.xcu \
 	org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu \
+	org/openoffice/Office/ProtocolHandler-impress.xcu \
 	org/openoffice/Office/Scripting-python.xcu \
 	org/openoffice/Office/Common-cjk.xcu \
 	org/openoffice/Office/Common-ctl.xcu \
@@ -124,6 +126,7 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	org/openoffice/Office/Common.xcu \
 	org/openoffice/Office/SFX.xcu \
 	org/openoffice/Office/DataAccess.xcu \
+	org/openoffice/Office/PresenterScreen.xcu \
 	org/openoffice/Office/TableWizard.xcu \
 	org/openoffice/Office/UI.xcu \
 	org/openoffice/Office/Embedding.xcu \
