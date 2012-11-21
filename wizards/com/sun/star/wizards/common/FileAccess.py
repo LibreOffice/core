@@ -17,7 +17,6 @@
 #
 import traceback
 import types
-from collections import OrderedDict
 from os import path as osPath
 from .NoValidPathException import NoValidPathException
 
@@ -211,7 +210,8 @@ class FileAccess(object):
         except Exception:
             traceback.print_exc()
 
-        return OrderedDict(sorted(LocLayoutFiles.items(), key=lambda t: t[0]))
+        #TODO: return it sorted
+        return LocLayoutFiles
 
     @classmethod
     def addPath(self, _sPath, _sPath2):
