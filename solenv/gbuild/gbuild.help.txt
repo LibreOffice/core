@@ -69,6 +69,9 @@ INTERACTIVE VARIABLES:
                        If not empty enable the RTL_LOGFILE_* time logging facility.
                        export RTL_LOGFILE=rtl_logfile.nopid when running office, to
                        get timestamps written out.
+       PARALLELISM     If not empty, pass argument on as the -j switch
+                       to recursive make invocations. Useful to
+                       lower/increase build parallelism individually.
        LEXFLAGS        Add as flags for LEX scanner generator invocation.
        YACCFLAGS       Add as flags for YACC parser generator invocation.
        CPPFLAGS        Add as preprocessor flags for C/C++/ObjC/ObjC++ compilation.
