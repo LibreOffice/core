@@ -11358,8 +11358,6 @@ else
 fi
 AC_SUBST(ENABLE_SILENT_MSI)
 
-AC_SUBST(SCPDEFS)
-
 AC_MSG_CHECKING([whether and how to use Xinerama])
 if test "$_os" = "Darwin"; then
     USE_XINERAMA=YES
@@ -11473,6 +11471,7 @@ if test "$test_cairo" = "yes" ; then
         CAIRO_TARBALL="f101a9e88b783337b20b2e26dfd26d5f-cairo-1.10.2.tar.gz"
         PIXMAN_TARBALL="c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2"
         BUILD_TYPE="$BUILD_TYPE CAIRO"
+        SCPDEFS="$SCPDEFS -DNEED_CAIRO"
     fi
 fi
 
@@ -11824,6 +11823,8 @@ else
     fi
 fi
 AC_SUBST([DOXYGEN])
+
+AC_SUBST(SCPDEFS)
 
 dnl ===================================================================
 dnl Product version

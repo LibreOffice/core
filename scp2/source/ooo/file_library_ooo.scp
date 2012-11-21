@@ -569,11 +569,7 @@ End
 
 #endif
 
-#ifndef LIBO_HEADLESS
-
-#if !defined SYSTEM_CAIRO \
-    && (defined ENABLE_CAIRO_CANVAS \
-        || (defined WNT && !defined ENABLE_DIRECTX))
+#ifdef NEED_CAIRO
 
 File gid_File_Lib_Cairo
     LIB_FILE_BODY;
@@ -604,8 +600,6 @@ File gid_File_Lib_Pixman
        Name = STRING(CONCAT2(libpixman-1,UNXSUFFIX));
   #endif
 End
-
-#endif
 
 #endif
 
