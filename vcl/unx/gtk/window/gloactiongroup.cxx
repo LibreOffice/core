@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <unx/gtk/gtksalmenu.hxx>
+
 #ifdef ENABLE_GMENU_INTEGRATION
 
 #include <unx/gtk/gloactiongroup.h>
