@@ -23,6 +23,7 @@
 #include <tools/solar.h>
 
 #include <limits.h>
+#include <ostream>
 
 class SvStream;
 
