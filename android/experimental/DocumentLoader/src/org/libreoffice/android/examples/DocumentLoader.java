@@ -57,6 +57,8 @@
 package org.libreoffice.android.examples;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -74,12 +76,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 import android.widget.ViewSwitcher;
@@ -1004,6 +1010,44 @@ public class DocumentLoader
         new DocumentLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, "file://" + input);
     }
 
+    private void goToPage(int number)
+    {
+        // Remove old views.
+        flipper.removeAllViews();
+
+        // Add new ones.
+        flipper.addView(new PageViewer(number), 0, matchParent);
+        for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
+            flipper.addView(new PageViewer(number + i + 1), i + 1, matchParent);
+        for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
+            flipper.addView(new PageViewer(number + (i * -1) - 1), PAGECACHE_PLUSMINUS + i + 1, matchParent);
+    }
+
+    private void askPageNumber()
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(R.string.go_to_page);
+        final NumberPicker input = new NumberPicker(this);
+        input.setMinValue(1);
+        input.setMaxValue(documentContext.pageCount);
+        alert.setView(input);
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int whichButton)
+            {
+                goToPage(input.getValue() - 1);
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int whichButton)
+            {
+            }
+        });
+        alert.show();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -1048,11 +1092,7 @@ public class DocumentLoader
             int currentPageNumber = 0;
             if (savedInstanceState != null)
                 currentPageNumber = savedInstanceState.getInt("currentPageNumber");
-            flipper.addView(new PageViewer(currentPageNumber), 0, matchParent);
-            for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
-                flipper.addView(new PageViewer(currentPageNumber+i+1), i+1, matchParent);
-            for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
-                flipper.addView(new PageViewer(currentPageNumber+(i*-1)-1), PAGECACHE_PLUSMINUS + i+1, matchParent);
+            goToPage(currentPageNumber);
 
             setContentView(flipper);
         }
@@ -1066,6 +1106,27 @@ public class DocumentLoader
     public boolean onTouchEvent(MotionEvent event)
     {
         return gestureDetector.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.go_to_page:
+                askPageNumber();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
 
