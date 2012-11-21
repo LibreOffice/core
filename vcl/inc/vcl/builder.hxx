@@ -125,7 +125,7 @@ private:
         std::vector<ButtonImageWidgetMap> m_aButtonImageWidgetMaps;
         StockMap m_aStockMap;
         Translations m_aTranslations;
-        std::set<Window*> m_aRedundantParentWidgets;
+        std::map<Window*, Window*> m_aRedundantParentWidgets;
     };
 
     void loadTranslations(const com::sun::star::lang::Locale &rLocale, const OUString &rUri);

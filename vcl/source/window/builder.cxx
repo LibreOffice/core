@@ -224,10 +224,10 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
 
     //Remove ScrollWindow parent widgets whose children in vcl implement scrolling
     //internally.
-    for (std::set<Window*>::iterator aI = m_pParserState->m_aRedundantParentWidgets.begin(),
+    for (std::map<Window*, Window*>::iterator aI = m_pParserState->m_aRedundantParentWidgets.begin(),
         aEnd = m_pParserState->m_aRedundantParentWidgets.end(); aI != aEnd; ++aI)
     {
-        delete_by_window(*aI);
+        delete_by_window(aI->first);
     }
 
     //drop maps, etc. that we don't need again
@@ -795,23 +795,28 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         //so if it appears as a child of a scrolling window
         //shoehorn that scrolling settings to this
         //widget and remove the parent
+        Window *pScrollParent = NULL;
         if (pParent && pParent->GetType() == WINDOW_SCROLLWINDOW)
         {
             WinBits nScrollBits = pParent->GetStyle();
             nScrollBits &= (WB_AUTOHSCROLL|WB_HSCROLL|WB_AUTOVSCROLL|WB_VSCROLL);
             nWinStyle |= nScrollBits;
 
-            Window *pScrollParent = pParent;
+            pScrollParent = pParent;
             pParent = pParent->GetParent();
+        }
 
+        pWindow = new VclMultiLineEdit(pParent, nWinStyle);
+
+        if (pScrollParent)
+        {
             sal_Int32 nWidthReq = pScrollParent->get_width_request();
             rMap[OString("width-request")] = OString::valueOf(nWidthReq);
             sal_Int32 nHeightReq = pScrollParent->get_height_request();
             rMap[OString("height-request")] = OString::valueOf(nHeightReq);
 
-            m_pParserState->m_aRedundantParentWidgets.insert(pScrollParent);
+            m_pParserState->m_aRedundantParentWidgets[pScrollParent] = pWindow;
         }
-        pWindow = new VclMultiLineEdit(pParent, nWinStyle);
     }
     else
     {
@@ -1445,6 +1450,12 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
 
     xmlreader::Span name;
     int nsId;
+
+    if (pCurrent->GetType() == WINDOW_SCROLLWINDOW)
+    {
+        pCurrent = m_pParserState->m_aRedundantParentWidgets[pCurrent];
+        assert(pCurrent);
+    }
 
     while (reader.nextAttribute(&nsId, &name))
     {
