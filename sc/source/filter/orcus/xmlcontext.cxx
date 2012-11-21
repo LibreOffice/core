@@ -171,7 +171,7 @@ bool ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
     const char* path = aSysPath.getStr();
     try
     {
-        orcus::orcus_xml filter(&aFactory, NULL);
+        orcus::orcus_xml filter(maNsRepo, &aFactory, NULL);
 
         // Set cell links.
         {
