@@ -783,7 +783,7 @@ void XMLFilterSettingsDialog::onTest()
     {
         filter_info_impl* pInfo = (filter_info_impl*)pEntry->GetUserData();
 
-        XMLFilterTestDialog aDlg( this, *getXSLTDialogResMgr(), mxMSF );
+        XMLFilterTestDialog aDlg(this, mxMSF);
         aDlg.test( *pInfo );
     }
 }

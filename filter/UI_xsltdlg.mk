@@ -10,6 +10,7 @@
 $(eval $(call gb_UI_UI,filter))
 
 $(eval $(call gb_UI_add_uifiles,filter,\
+	filter/uiconfig/ui/testxmlfilter \
 	filter/uiconfig/ui/xmlfiltersettings \
 ))
 

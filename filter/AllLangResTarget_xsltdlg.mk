@@ -37,7 +37,6 @@ $(eval $(call gb_SrsTarget_add_files,filter/xsltdlg,\
 	filter/source/xsltdialog/xmlfiltertabdialog.src \
 	filter/source/xsltdialog/xmlfiltertabpagebasic.src \
 	filter/source/xsltdialog/xmlfiltertabpagexslt.src \
-	filter/source/xsltdialog/xmlfiltertestdialog.src \
 	filter/source/xsltdialog/xmlfileview.src \
 	filter/source/xsltdialog/xmlfilterdialogstrings.src \
 ))

@@ -22,10 +22,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
-#include <vcl/dialog.hxx>
 
 #include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <svl/poolitem.hxx>
 
 class filter_info_impl;
@@ -33,7 +34,8 @@ class filter_info_impl;
 class XMLFilterTestDialog : public ModalDialog
 {
 public:
-    XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF  );
+    XMLFilterTestDialog(Window* pParent,
+        const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF);
     virtual ~XMLFilterTestDialog();
 
     void test( const filter_info_impl& rFilterInfo );
@@ -60,34 +62,30 @@ private:
     com::sun::star::uno::Reference< com::sun::star::document::XEventListener > mxGlobalEventListener;
     com::sun::star::uno::WeakReference< com::sun::star::lang::XComponent > mxLastFocusModel;
 
-    rtl::OUString   maImportRecentFile;
-    rtl::OUString   maExportRecentFile;
+    OUString m_sImportRecentFile;
+    OUString m_sExportRecentFile;
 
-    FixedLine   maFLExport;
-    FixedText   maFTExportXSLT;
-    FixedText   maFTExportXSLTFile;
-    FixedText   maFTTransformDocument;
-    PushButton  maPBExportBrowse;
-    PushButton  maPBCurrentDocument;
-    FixedText   maFTNameOfCurentFile;
-    FixedLine   maFLImport;
-    FixedText   maFTImportXSLT;
-    FixedText   maFTImportXSLTFile;
-    FixedText   maFTImportTemplate;
-    FixedText   maFTImportTemplateFile;
-    FixedText   maFTTransformFile;
-    CheckBox    maCBXDisplaySource;
-    PushButton  maPBImportBrowse;
-    PushButton  maPBRecentDocument;
-    FixedText   maFTNameOfRecentFile;
-    PushButton  maPBClose;
-    HelpButton  maPBHelp;
+    VclContainer* m_pExport;
+    FixedText*  m_pFTExportXSLTFile;
+    PushButton* m_pPBExportBrowse;
+    PushButton* m_pPBCurrentDocument;
+    FixedText*  m_pFTNameOfCurrentFile;
 
-    filter_info_impl*       mpFilterInfo;
+    VclContainer* m_pImport;
+    FixedText*  m_pFTImportXSLTFile;
+    FixedText*  m_pFTImportTemplate;
+    FixedText*  m_pFTImportTemplateFile;
+    CheckBox*   m_pCBXDisplaySource;
+    PushButton* m_pPBImportBrowse;
+    PushButton* m_pPBRecentFile;
+    FixedText*  m_pFTNameOfRecentFile;
+    PushButton* m_pPBClose;
 
-    String maDialogTitle;
+    filter_info_impl* m_pFilterInfo;
 
-    ::rtl::OUString sDTDPath;
+    OUString m_sDialogTitle;
+
+    OUString m_sDTDPath;
 };
 
 #endif
