@@ -288,6 +288,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
     if (type == CTRL_PUSHBUTTON)
     {
+        m_image->fill( Qt::transparent );
         QStyleOptionButton option;
         draw( QStyle::CE_PushButton, &option, m_image,
               vclStateValue2StateFlag(nControlState, value) );
@@ -377,6 +378,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if ( (type == CTRL_TOOLBAR) && (part == PART_BUTTON) )
     {
+        m_image->fill( Qt::transparent );
         QStyleOptionToolButton option;
 
         option.arrowType = Qt::NoArrow;
@@ -451,6 +453,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == CTRL_LISTNODE)
     {
+        m_image->fill( Qt::transparent );
         QStyleOption option;
         option.state = QStyle::State_Item | QStyle::State_Children;
 
@@ -462,6 +465,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == CTRL_CHECKBOX)
     {
+        m_image->fill( Qt::transparent );
         QStyleOptionButton option;
         draw( QStyle::CE_CheckBox, &option, m_image,
                vclStateValue2StateFlag(nControlState, value) );
@@ -528,6 +532,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == CTRL_RADIOBUTTON)
     {
+        m_image->fill( Qt::transparent );
         QStyleOptionButton option;
         draw( QStyle::CE_RadioButton, &option, m_image,
               vclStateValue2StateFlag(nControlState, value) );
