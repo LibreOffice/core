@@ -1576,6 +1576,13 @@ AC_ARG_WITH(system-bluez,
         [Use bluetooth.h already on system.]),,
     [with_system_bluez="$with_system_headers"])
 
+AC_ARG_WITH(system-xextensions-headers,
+    AS_HELP_STRING([--with-system-xextensions-headers],
+        [To build without system X11 extensions headers, use
+         --without-system-xextensions-headers. This is possibly
+         useful on legacy unix systems which ship with the libs
+         but without the headers.]))
+
 AC_ARG_WITH(system-mesa-headers,
     AS_HELP_STRING([--with-system-mesa-headers],
         [Use Mesa headers already on system.]),,
@@ -8520,11 +8527,78 @@ fi
 AC_MSG_RESULT([$WANT_X11])
 
 if test "$WANT_X11" = "yes"; then
-    PKG_CHECK_MODULES(X11,x11 xt xcomposite xext)
-    SOLARLIB="$SOLARLIB $X11_LIBS"
-    SOLARINC="$SOLARINC $X11_CFLAGS"
-    x_includes=`$PKG_CONFIG --variable=includedir x11`
-    x_libraries=`$PKG_CONFIG --variable=libdir x11`
+    AC_PATH_X
+    AC_PATH_XTRA
+    CPPFLAGS="$CPPFLAGS $X_CFLAGS"
+
+    if test "x$x_includes" = "x"; then
+        x_includes="default_x_includes"
+    fi
+    if test "x$x_libraries" = "x"; then
+        x_libraries="default_x_libraries"
+    fi
+    dnl The variables $x_libraries and $x_includes are set.
+    if test -z "$x_libraries"; then
+        AC_MSG_ERROR([No X libraries found]) # Exit
+    fi
+    if test -z "$x_includes"; then
+        AC_MSG_ERROR([No X includes found]) # Exit
+    fi
+    CFLAGS="$CFLAGS $X_CFLAGS"
+    LDFLAGS="$LDFLAGS $X_LDFLAGS $X_LIBS"
+    AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS", [AC_MSG_ERROR([X Development libraries not found])])
+else
+    x_includes="no_x_includes"
+    x_libraries="no_x_libraries"
+fi
+if test -z "$x_includes"; then
+    x_includes="no_x_includes"
+fi
+if test -z "$x_libraries"; then
+    x_libraries="no_x_libraries"
+fi
+if test "$x_includes" = "default_x_includes"; then
+    XINC="/usr/include"
+else
+    XINC="$x_includes"
+fi
+AC_SUBST(XINC)
+if test "$x_libraries" = "default_x_libraries"; then
+    XLIB=`$PKG_CONFIG --variable=libdir x11`
+    if test "x$XLIB" = x; then
+        XLIB="/usr/lib"
+    fi
+else
+    XLIB="$x_libraries"
+fi
+if test "$XLIB" != "no_x_libraries" -a "$XLIB" != "/usr/lib" -a "$XLIB" != "/usr/lib64"; then
+    SOLARLIB="$SOLARLIB -L$XLIB"
+fi
+if test "$XINC" != "no_x_includes" -a "$XINC" != "/usr/include"; then
+    SOLARINC="$SOLARINC -I$XINC"
+fi
+AC_SUBST(XLIB)
+
+if test "$WANT_X11" = "yes"; then
+    dnl ===================================================================
+    dnl Check for Composite.h for Mozilla plugin
+    dnl ===================================================================
+    AC_CHECK_HEADERS(X11/Composite.h,[],[AC_MSG_ERROR([Xt headers not found])],
+     [#include <X11/Intrinsic.h>])
+
+    dnl ===================================================================
+    dnl Check for extension headers
+    dnl ===================================================================
+    AC_MSG_CHECKING([whether to use internal X11 extensions headers])
+    if test "$with_system_xextensions_headers" != "no"; then
+        AC_MSG_RESULT([no])
+        AC_CHECK_HEADERS(X11/extensions/shape.h,[],[AC_MSG_ERROR([libXext headers not found])],
+        [#include <X11/extensions/shape.h>])
+    else
+        AC_MSG_RESULT([yes])
+        BUILD_TYPE="$BUILD_TYPE X11_EXTENSIONS"
+    fi
+
 fi
 
 dnl ===================================================================
@@ -8534,6 +8608,16 @@ AC_MSG_CHECKING([whether to use Xrender])
 if test "$WANT_X11" = "yes" -a  "$test_xrender" = "yes"; then
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES(XRENDER, xrender)
+    AC_CHECK_LIB([Xrender], [XRenderQueryVersion], [:],
+      [AC_MSG_ERROR(libXrender not found or functional)], [])
+    AC_MSG_CHECKING([which Xrender headers to use])
+    if test "$with_system_xextensions_headers" != "no"; then
+        AC_MSG_RESULT([external])
+        AC_CHECK_HEADER(X11/extensions/Xrender.h, [],
+          [AC_MSG_ERROR(Xrender not found. install X)], [])
+    else
+        AC_MSG_RESULT([internal])
+    fi
 else
     AC_MSG_RESULT([no])
 fi
@@ -11287,6 +11371,7 @@ if test "$test_cairo" = "yes" ; then
         PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
 
         if test "$test_xrender" = "yes"; then
+            if test "$with_system_xextensions_headers" != "no"; then
                 AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
                 AC_LANG_PUSH([C])
                 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <X11/extensions/Xrender.h>]],[[
@@ -11297,6 +11382,7 @@ if test "$test_cairo" = "yes" ; then
 ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, X headers too old.])])
 
                 AC_LANG_POP([C])
+            fi
         fi
         libo_MINGW_CHECK_DLL([CAIRO], [libcairo])
         libo_MINGW_TRY_DLL([FONTCONFIG], [libfontconfig])

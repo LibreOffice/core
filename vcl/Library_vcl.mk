@@ -502,6 +502,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	fontconfig \
 	freetype \
 	valgrind \
+	x11extensions \
 ))
 endif
 
