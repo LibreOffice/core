@@ -64,8 +64,6 @@ namespace frm
     // free
     // free
     // free
-    // free
-    // free
 #define PROPERTY_ID_VALUE               (PROPERTY_ID_START + 31)    // INT32
     // free
 #define PROPERTY_ID_FORMATKEY           (PROPERTY_ID_START + 33)    // UINT32
