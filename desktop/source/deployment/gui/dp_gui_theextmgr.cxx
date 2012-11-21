@@ -33,11 +33,9 @@
 #include "dp_identifier.hxx"
 #include "dp_update.hxx"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
-#define USER_PACKAGE_MANAGER    OUSTR("user")
-#define SHARED_PACKAGE_MANAGER  OUSTR("shared")
-#define BUNDLED_PACKAGE_MANAGER OUSTR("bundled")
+#define USER_PACKAGE_MANAGER    OUString("user")
+#define SHARED_PACKAGE_MANAGER  OUString("shared")
+#define BUNDLED_PACKAGE_MANAGER OUString("bundled")
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -66,24 +64,24 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
     uno::Reference< lang::XMultiServiceFactory > xConfig(
         configuration::theDefaultProvider::get(xContext));
     uno::Any args[1];
-    beans::PropertyValue aValue( OUSTR("nodepath"), 0, uno::Any( OUSTR("/org.openoffice.Office.OptionsDialog/Nodes") ),
+    beans::PropertyValue aValue( OUString("nodepath"), 0, uno::Any( OUString("/org.openoffice.Office.OptionsDialog/Nodes") ),
                                  beans::PropertyState_DIRECT_VALUE );
     args[0] <<= aValue;
     m_xNameAccessNodes = uno::Reference< container::XNameAccess >(
-        xConfig->createInstanceWithArguments( OUSTR("com.sun.star.configuration.ConfigurationAccess"),
+        xConfig->createInstanceWithArguments( OUString("com.sun.star.configuration.ConfigurationAccess"),
                                               uno::Sequence< uno::Any >( args, 1 )), uno::UNO_QUERY_THROW);
 
     // get the 'get more extensions here' url
     uno::Reference< container::XNameAccess > xNameAccessRepositories;
-    beans::PropertyValue aValue2( OUSTR("nodepath"), 0, uno::Any( OUSTR("/org.openoffice.Office.ExtensionManager/ExtensionRepositories") ),
+    beans::PropertyValue aValue2( OUString("nodepath"), 0, uno::Any( OUString("/org.openoffice.Office.ExtensionManager/ExtensionRepositories") ),
                                   beans::PropertyState_DIRECT_VALUE );
     args[0] <<= aValue2;
     xNameAccessRepositories = uno::Reference< container::XNameAccess > (
-        xConfig->createInstanceWithArguments( OUSTR("com.sun.star.configuration.ConfigurationAccess"),
+        xConfig->createInstanceWithArguments( OUString("com.sun.star.configuration.ConfigurationAccess"),
                                               uno::Sequence< uno::Any >( args, 1 )), uno::UNO_QUERY_THROW);
     try
     {   //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-        uno::Any value = xNameAccessRepositories->getByName( OUSTR( "WebsiteLink" ) );
+        uno::Any value = xNameAccessRepositories->getByName( OUString( "WebsiteLink" ) );
         m_sGetExtensionsURL = value.get< OUString > ();
      }
     catch ( const uno::Exception& )
@@ -94,7 +92,7 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
         // the registration should be done after the construction has been ended
         // otherwise an exception prevents object creation, but it is registered as a listener
         m_xDesktop.set( xContext->getServiceManager()->createInstanceWithContext(
-                            OUSTR("com.sun.star.frame.Desktop"), xContext ), uno::UNO_QUERY );
+                            OUString("com.sun.star.frame.Desktop"), xContext ), uno::UNO_QUERY );
         if ( m_xDesktop.is() )
             m_xDesktop->addTerminateListener( this );
     }
@@ -385,7 +383,7 @@ bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPa
         uno::Reference< XInterface> xIntNode = anyNode.get< uno::Reference< XInterface > >();
         uno::Reference< container::XNameAccess > xNode( xIntNode, uno::UNO_QUERY_THROW );
 
-        uno::Any anyLeaves = xNode->getByName( OUSTR("Leaves") );
+        uno::Any anyLeaves = xNode->getByName( OUString("Leaves") );
         uno::Reference< XInterface > xIntLeaves = anyLeaves.get< uno::Reference< XInterface > >();
         uno::Reference< container::XNameAccess > xLeaves( xIntLeaves, uno::UNO_QUERY_THROW );
 
@@ -398,7 +396,7 @@ bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPa
             uno::Reference< beans::XPropertySet > xLeaf( xIntLeaf, uno::UNO_QUERY_THROW );
             //investigate the Id property if it matches the extension identifier which
             //has been passed in.
-            uno::Any anyValue = xLeaf->getPropertyValue( OUSTR("Id") );
+            uno::Any anyValue = xLeaf->getPropertyValue( OUString("Id") );
 
             OUString sId = anyValue.get< OUString >();
             if ( sId == aId.Value )
