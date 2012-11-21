@@ -6960,7 +6960,7 @@ elif test $_os = iOS; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBVISIO=NO
-    VISIO_TARBALL=2d8c3b50f77c544f317ab0a8838fadcb-libvisio-0.0.20.tar.bz2
+    VISIO_TARBALL=1e961f0112e5986105749640c2b9bc41-libvisio-0.0.21.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBVISIO)
 AC_SUBST(VISIO_CFLAGS)
