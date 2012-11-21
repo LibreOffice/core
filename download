@@ -71,12 +71,6 @@ if [ ! -d "$TARFILE_LOCATION" ]; then
     exit 1
 fi
 
-FILELIST="$1"
-if [ -z "$FILELIST" ]; then
-    echo "No filelist provided, using the default ooo.lst."
-    FILELIST="ooo.lst"
-fi
-
 start_dir=`pwd`
 logfile=$TARFILE_LOCATION/fetch.log
 date >> $logfile
@@ -122,22 +116,9 @@ downloaditem()
     fi
 }
 
-filelist=`cat $FILELIST`
 mkdir -p $TARFILE_LOCATION/tmp
 cd $TARFILE_LOCATION/tmp
 echo $$ > fetch-running
-for i in $filelist ; do
-#    echo $i
-    if [ "$i" != `echo $i | sed "s/^http:\///"` ]; then
-        tarurl=$i
-    # TODO: check for comment
-    else
-        if [ "$tarurl" != "" ]; then
-            sum=`echo $i | sed "s/-.*//"`
-            downloaditem $tarurl $i $sum
-        fi
-    fi
-done
 
 if [ -f $start_dir/sources.ver -a ! -d $start_dir/.git ] ; then
     # these sources are from a tarball, so get the other source tarballs

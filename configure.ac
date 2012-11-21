@@ -4113,7 +4113,6 @@ if test "$cross_compiling" = "yes"; then
         config.guess \
         config_host.mk.in \
         configure \
-        ooo.lst.in \
         oowintool \
         bin/get_config_variables \
         solenv/bin/getcompver.awk \
@@ -11196,7 +11195,7 @@ AC_SUBST(WITH_FONTS)
 
 
 # The agfa monotype fonts options seems broken
-# there is no assocaited entry in ooo.lst
+# there is no assocaited entry in Makefile.fetch
 # so we do not fetch the dependencies
 # there is no tie-up with MORE_FONTS, but in dmake mode
 # without more_fonts that option is meaningless
@@ -12575,7 +12574,7 @@ else
     echo > config_host.mk.last
 fi
 
-AC_CONFIG_FILES([config_host.mk ooo.lst])
+AC_CONFIG_FILES([config_host.mk])
 AC_OUTPUT
 
 # touch the config timestamp file

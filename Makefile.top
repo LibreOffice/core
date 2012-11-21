@@ -351,7 +351,7 @@ ifeq ($(BUILD_DMAKE),YES)
 	rm -f solenv/*/bin/dmake*
 endif
 	rm -fr config_host.mk config_build.mk aclocal.m4 autom4te.cache \
-	config.log config.status configure ooo.lst \
+	config.log config.status configure \
 	config_host.mk.last config_host.mk.stamp src.downloaded warn
 	find $(SOLARENV)/gdb -name "*.pyc" -exec rm {} \;
 
@@ -368,11 +368,14 @@ ifneq ($(filter-out clean distclean,$(MAKECMDGOALS)),)
 #
 # Fetch
 #
-fetch: src.downloaded
-
-src.downloaded : Makefile.top download ooo.lst
 ifeq ($(DO_FETCH_TARBALLS),YES)
-	@./download $(SRCDIR)/ooo.lst && touch $@
+include $(SRCDIR)/Makefile.fetch
+endif
+fetch: $(SRCDIR)/src.downloaded
+
+$(SRCDIR)/src.downloaded : $(SRCDIR)/download $(SRCDIR)/config_host.mk
+ifeq ($(DO_FETCH_TARBALLS),YES)
+	@$< && touch $@
 else
 	@echo "Automatic fetching of external tarballs is disabled."
 endif

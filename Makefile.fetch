@@ -1,0 +1,170 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+fetch_LOGFILE := $(TARFILE_LOCATION)/fetch.log
+
+ifneq (,$(WGET))
+define fetch_Download__wget_command
+&& $(WGET) --progress=dot:mega -Q 0 -P "." -l 0 -nd -nH -N $1/$2 2>&1 | tee -a $(fetch_LOGFILE)
+endef
+
+else
+define fetch_Download__wget_command
+&& echo fetching $2 && $(CURL) -O $1/$2 2>&1 | tee -a $(fetch_LOGFILE)
+endef
+
+endif
+
+ifneq (,$(MD5SUM))
+define fetch_Download__checksum_command
+&& SUM=`$(MD5SUM) $1 | sed "s/ .*//"` \
+&& if test "$$SUM" != "$2"; then \
+	echo ERROR: expected checksum for $1 is $2 2>&1 | tee -a $(fetch_LOGFILE); \
+	false; \
+fi
+endef
+
+else
+fetch_Download__checksum_command :=
+
+endif
+
+define fetch_Download_item
+$(if $(wildcard $(TARFILE_LOCATION)/$2),, \
+cd $(TARFILE_LOCATION)/tmp \
+$(call fetch_Download__wget_command,$1,$2) \
+$(call fetch_Download__checksum_command,$2,$(firstword $(subst -, ,$2))) \
+&& mv $2 ../ \
+)
+
+endef
+
+fetch :
+	$(foreach item, \
+		$(BUILD_TARBALLS) \
+		18f577b374d60b3c760a3a3350407632-STLport-4.5.tar.gz \
+		7376930b0d3f3d77a685d94c4a3acda8-STLport-4.5-0119.tar.gz \
+		c441926f3a552ed3e5b274b62e86af16-STLport-4.0.tar.gz \
+		4a660ce8466c9df01f19036435425c3a-glibc-2.1.3-stub.tar.gz \
+		$(AFMS_TARBALL) \
+		$(APACHE_COMMONS_CODEC_TARBALL) \
+		$(APACHE_COMMONS_HTTPCLIENT_TARBALL) \
+		$(APACHE_COMMONS_LANG_TARBALL) \
+		$(APACHE_COMMONS_LOGGING_TARBALL) \
+		$(BOOST_TARBALL) \
+		$(BSH_TARBALL) \
+		$(CAIRO_TARBALL) \
+		$(CDR_TARBALL) \
+		$(CLUCENE_TARBALL) \
+		$(CMIS_TARBALL) \
+		$(CPPUNIT_TARBALL) \
+		$(CT2N_TARBALL) \
+		$(CURL_TARBALL) \
+		$(EPM_TARBALL) \
+		$(EXPAT_TARBALL) \
+		$(FONT_DEJAVU_TARBALL) \
+		$(FONT_GENTIUM_TARBALL) \
+		$(FONT_LIBERATION_NARROW_TARBALL) \
+		$(FONT_LIBERATION_TARBALL) \
+		$(FONT_LINLIBERTINEG_TARBALL) \
+		$(FONT_PTSERIF_TARBALL) \
+		$(FONT_OPENSANS_TARBALL) \
+		$(FONT_SOURCESANS_TARBALL) \
+		$(FONT_SOURCECODE_TARBALL) \
+		$(FONTCONFIG_TARBALL) \
+		$(FREETYPE_TARBALL) \
+		$(GOOGLE_DOCS_EXTENSION_PACK) \
+		$(GRAPHITE_TARBALL) \
+		$(HSQLDB_TARBALL) \
+		$(HUNSPELL_TARBALL) \
+		$(HYPHEN_TARBALL) \
+		$(ICU_TARBALL) \
+		$(ICU_DATA_SUBSET_ZIP) \
+		$(JFREEREPORT_FLOW_ENGINE_TARBALL) \
+		$(JFREEREPORT_FLUTE_TARBALL) \
+		$(JFREEREPORT_LIBBASE_TARBALL) \
+		$(JFREEREPORT_LIBFONTS_TARBALL) \
+		$(JFREEREPORT_LIBFORMULA_TARBALL) \
+		$(JFREEREPORT_LIBLAYOUT_TARBALL) \
+		$(JFREEREPORT_LIBLOADER_TARBALL) \
+		$(JFREEREPORT_LIBREPOSITORY_TARBALL) \
+		$(JFREEREPORT_LIBSERIALIZER_TARBALL) \
+		$(JFREEREPORT_LIBXML_TARBALL) \
+		$(JFREEREPORT_SAC_TARBALL) \
+		$(JPEG_TARBALL) \
+		$(LANGUAGETOOL_TARBALL) \
+		$(LCMS2_TARBALL) \
+		$(LIBEXTTEXTCAT_TARBALL) \
+		$(LIBLANGTAG_TARBALL) \
+		$(LIBXML_TARBALL) \
+		$(LIBXMLSEC_TARBALL) \
+		$(LIBXSLT_TARBALL) \
+		$(LPSOLVE_TARBALL) \
+		$(MDDS_TARBALL) \
+		$(MOZ_TARBALL) \
+		$(MSPUB_TARBALL) \
+		$(MYSQLCPPCONN_TARBALL) \
+		$(MYTHES_TARBALL) \
+		$(NEON_TARBALL) \
+		$(NSS_TARBALL) \
+		$(OPENLDAP_TARBALL) \
+		$(OPENSSL_TARBALL) \
+		$(ORCUS_TARBALL) \
+		$(PIXMAN_TARBALL) \
+		$(PNG_TARBALL) \
+		$(POSTGRESQL_TARBALL) \
+		$(PYTHON_TARBALL) \
+		$(RAPTOR_TARBALL) \
+		$(RASQAL_TARBALL) \
+		$(REDLAND_TARBALL) \
+		$(RHINO_TARBALL) \
+		$(SWING_TARBALL) \
+		$(TOMCAT_TARBALL) \
+		$(UCPP_TARBALL) \
+		$(VIGRA_TARBALL) \
+		$(VISIO_TARBALL) \
+		$(WPD_TARBALL) \
+		$(WPG_TARBALL) \
+		$(WPS_TARBALL) \
+		$(XPDF_TARBALL) \
+		$(XSLTML_TARBALL) \
+		$(ZLIB_TARBALL) \
+	,$(call fetch_Download_item,http://dev-www.libreoffice.org/src,$(item)))
+	$(foreach item, \
+		$(DBGHELP_DLL) \
+		$(UNOWINREG_DLL) \
+	,$(call fetch_Download_item,http://dev-www.libreoffice.org/extern,$(item)))
+	$(foreach item, \
+		$(BARCODE_EXTENSION_PACK) \
+		$(DIAGRAM_EXTENSION_PACK) \
+		$(HUNART_EXTENSION_PACK) \
+		$(NUMBERTEXT_EXTENSION_PACK) \
+		$(OOOBLOGGER_EXTENSION_PACK) \
+		$(OOOP_FONTS_PACK) \
+		$(OOOP_GALLERY_PACK) \
+		$(OOOP_SAMPLES_PACK) \
+		$(OOOP_TEMPLATES_PACK) \
+		$(OXYGENOFFICE_PACK) \
+		$(SUNTEMPLATES_DE_PACK) \
+		$(SUNTEMPLATES_EN_US_PACK) \
+		$(SUNTEMPLATES_ES_PACK) \
+		$(SUNTEMPLATES_FR_PACK) \
+		$(SUNTEMPLATES_HU_PACK) \
+		$(SUNTEMPLATES_IT_PACK) \
+		$(TYPO_EXTENSION_PACK) \
+		$(VALIDATOR_EXTENSION_PACK) \
+		$(WATCH_WINDOW_EXTENSION_PACK) \
+	,$(call fetch_Download_item,http://ooo.itc.hu/oxygenoffice/download/libreoffice,$(item)))
+	$(foreach item, \
+		$(MOZ_ZIP_INC) \
+		$(MOZ_ZIP_LIB) \
+		$(MOZ_ZIP_RUNTIME) \
+	,$(call fetch_Download_item,http://dev-www.libreoffice.org/mozilla,$(item)))
+
+# vim: set noet sw=4 ts=4:
