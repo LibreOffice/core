@@ -120,6 +120,7 @@ public:
     }
     bool run() const
     {
+        bool bSuccess = false;
 #ifdef DISABLE_DYNLOADING
         // For iOS cppunit plugins aren't really "plugins" (shared
         // libraries), but just static archives. In the real main
@@ -127,9 +128,9 @@ public:
         // the SAL_IMPLEMENT_MAIN() below expands to, we specifically
         // call the initialize methods of the CppUnitTestPlugIns that
         // we statically link to the app executable.
+        bSuccess = true;
 #else
         CppUnit::PlugInManager manager;
-        bool bSuccess = false;
         try {
             manager.load(testlib, args);
             bSuccess = true;
