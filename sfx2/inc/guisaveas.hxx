@@ -35,7 +35,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace document {
-        class XDocumentInfo;
+        class XDocumentProperties;
     }
 } } }
 
@@ -75,7 +75,8 @@ public:
 
     static void SetDocInfoState(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentInfo>& i_xOldDocInfo,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::document::XDocumentProperties>& i_xOldDocInfo,
         sal_Bool bNoModify );
 
     static sal_Bool WarnUnacceptableFormat(

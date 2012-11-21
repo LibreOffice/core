@@ -106,7 +106,6 @@
 
 #include "ww8toolbar.hxx"
 #include <osl/file.hxx>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 
 #include <breakit.hxx>
 
@@ -1453,7 +1452,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
 
 void SwWW8ImplReader::ImportDop()
 {
-    // correct the LastPrinted date in DocumentInfo
+    // correct the LastPrinted date in DocumentProperties
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
         mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xDocuProps(
@@ -4561,8 +4560,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         if (mbNewDoc && pStg && !pGloss) /*meaningless for a glossary, cmc*/
         {
             mpDocShell->SetIsTemplate( pWwFib->fDot ); // point at tgc record
-            uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
-            uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
+            uno::Reference<document::XDocumentPropertiesSupplier> const
+                xDocPropSupp(mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
             uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
 
             rtl::OUString sCreatedFrom = xDocProps->getTemplateURL();

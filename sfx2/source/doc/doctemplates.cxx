@@ -42,7 +42,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
-#include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
+#include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -75,7 +75,6 @@
 #define TEMPLATE_IMPLEMENTATION_NAME        "com.sun.star.comp.sfx2.DocumentTemplates"
 
 #define SERVICENAME_TYPEDETECTION           "com.sun.star.document.TypeDetection"
-#define SERVICENAME_DOCINFO                 "com.sun.star.document.StandaloneDocumentInfo"
 
 #define TEMPLATE_ROOT_URL       "vnd.sun.star.hier:/templates"
 #define TITLE                   "Title"
@@ -177,7 +176,7 @@ class SfxDocTplService_Impl
 {
     uno::Reference< XMultiServiceFactory >           mxFactory;
     uno::Reference< XCommandEnvironment >            maCmdEnv;
-    uno::Reference< XStandaloneDocumentInfo >        mxInfo;
+    uno::Reference<XDocumentProperties>  m_xDocProps;
     uno::Reference< XTypeDetection >                 mxType;
 
     ::osl::Mutex                maMutex;
@@ -441,16 +440,15 @@ void SfxDocTplService_Impl::init_Impl()
 
     if ( bIsInitialized )
     {
-        OUString aService( SERVICENAME_DOCINFO  );
         try {
-            mxInfo = uno::Reference< XStandaloneDocumentInfo > (
-                mxFactory->createInstance( aService ), UNO_QUERY );
-        } catch (uno::RuntimeException &) {
-            OSL_FAIL("SfxDocTplService_Impl::init_Impl: "
-                "cannot create DocumentProperties service");
+            m_xDocProps.set(document::DocumentProperties::create(
+                        ::comphelper::getProcessComponentContext()));
+        } catch (uno::RuntimeException const& e) {
+            SAL_WARN("sfx.doc", "SfxDocTplService_Impl::init_Impl: "
+                "cannot create DocumentProperties service:" << e.Message);
         }
 
-        aService = OUString( SERVICENAME_TYPEDETECTION  );
+        OUString const aService = OUString( SERVICENAME_TYPEDETECTION  );
         mxType = uno::Reference< XTypeDetection > ( mxFactory->createInstance( aService ), UNO_QUERY );
 
         getDirList();
@@ -643,24 +641,20 @@ sal_Bool SfxDocTplService_Impl::needsUpdate()
 // -----------------------------------------------------------------------
 sal_Bool SfxDocTplService_Impl::setTitleForURL( const OUString& rURL, const OUString& aTitle )
 {
-    sal_Bool bResult = sal_False;
-    if ( mxInfo.is() )
+    if (m_xDocProps.is())
     {
         try
         {
-            mxInfo->loadFromURL( rURL );
-            uno::Reference< XPropertySet > xPropSet( mxInfo, UNO_QUERY_THROW );
-            OUString aPropName( TITLE  );
-            xPropSet->setPropertyValue( aPropName, uno::makeAny( aTitle ) );
-            mxInfo->storeIntoURL( rURL );
-            bResult = sal_True;
+            m_xDocProps->loadFromMedium(rURL, Sequence<PropertyValue>());
+            m_xDocProps->setTitle(aTitle );
+            m_xDocProps->storeToMedium(rURL, Sequence<PropertyValue>());
+            return true;
         }
         catch ( Exception& )
         {
         }
     }
-
-    return bResult;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -668,32 +662,16 @@ sal_Bool SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString&
 {
     bDocHasTitle = sal_False;
 
-    if ( mxInfo.is() )
+    if (m_xDocProps.is())
     {
         try
         {
-            mxInfo->loadFromURL( rURL );
+            m_xDocProps->loadFromMedium(rURL, Sequence<PropertyValue>());
+            aTitle = m_xDocProps->getTitle();
         }
         catch ( Exception& )
         {
         }
-
-        try
-        {
-            uno::Reference< XPropertySet > aPropSet( mxInfo, UNO_QUERY );
-            if ( aPropSet.is() )
-            {
-                OUString aPropName( TITLE  );
-                Any aValue = aPropSet->getPropertyValue( aPropName );
-                aValue >>= aTitle;
-
-                aPropName = OUString( "MIMEType"  );
-                aValue = aPropSet->getPropertyValue( aPropName );
-                aValue >>= aType;
-            }
-        }
-        catch ( UnknownPropertyException& ) {}
-        catch ( Exception& ) {}
     }
 
     if ( aType.isEmpty() && mxType.is() )

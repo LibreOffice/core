@@ -51,7 +51,8 @@ service DocumentDefinition
                 the <code>execute</code> method is the model of the loaded document.</li>
             <li><strong>preview</strong>: retrieves an image showing a preview of the sub document.</li>
             <li><strong>getDocumentInfo</strong>: retrieves the document information, as
-                <type scope="com::sun::star::document">XDocumentInfo</type> instance, of the sub document.</li>
+                <type scope="com::sun::star::document">XDocumentProperties</type>
+                instance, of the sub document.</li>
             <li><strong>delete</strong>: deletes the sub document from the database document.</li>
             <li><strong>close</strong>: closes the sub document, if it had previously been opened
                 using either the <code>open</code> or <code>openDesign</code> command. The return value

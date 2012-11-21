@@ -76,7 +76,8 @@ namespace basic
 
             @param _rxDocumentModel
                 denotes the document model whose BasicManager is to be retrieved. Must not be <NULL/>.
-                The document should support the XDocumentInfoSupplier interface, for retrieving
+                The document should support the XDocumentPropertiesSupplier
+                interface, for retrieving
                 its title, which is needed in some error conditions.
                 Also it <em>must</em> support the XStorageBasedDocument interface, since we
                 must be able to retrieve the document's storage. If this interface is <em>not</em>

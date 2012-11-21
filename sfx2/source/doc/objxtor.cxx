@@ -110,7 +110,6 @@ using ::basic::BasicManagerRepository;
 
 DBG_NAME(SfxObjectShell)
 
-#define DocumentInfo
 #include "sfxslots.hxx"
 
 namespace {

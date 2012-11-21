@@ -29,6 +29,7 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/document/DocumentProperties.hpp>
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
@@ -71,6 +72,8 @@ namespace svt
     using ::com::sun::star::ucb::XContentAccess;
     using ::com::sun::star::ucb::XCommandEnvironment;
     using ::com::sun::star::beans::XPropertySet;
+    using ::com::sun::star::beans::PropertyValue;
+    using ::com::sun::star::document::DocumentProperties;
     using ::rtl::OUString;
     using ::ucbhelper::ResultSetInclude;
     using ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
@@ -379,26 +382,20 @@ namespace svt
         try
         {
             ::osl::MutexGuard aGuard( m_aMutex );
-            if( !m_xDocInfo.is() )
+            if (!m_xDocProps.is())
             {
-                m_xDocInfo = m_xDocInfo.query(
-                    ::comphelper::getProcessServiceFactory()->createInstance(
-                        String( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.StandaloneDocumentInfo") )
-                    )
-                );
+                m_xDocProps.set(DocumentProperties::create(
+                            ::comphelper::getProcessComponentContext()));
             }
 
-            DBG_ASSERT( m_xDocInfo.is(), "FileViewContentEnumerator::implGetDocTitle: no DocumentProperties service!" );
-            if ( !m_xDocInfo.is() )
+            assert(m_xDocProps.is());
+            if (!m_xDocProps.is())
                 return sal_False;
 
-            m_xDocInfo->loadFromURL( _rTargetURL );
-            Reference< XPropertySet > xPropSet( m_xDocInfo, UNO_QUERY );
+            m_xDocProps->loadFromMedium(_rTargetURL, Sequence<PropertyValue>());
 
-            Any aAny = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" )) );
-
-            OUString sTitle;
-            if ( ( aAny >>= sTitle ) && !sTitle.isEmpty() )
+            OUString const sTitle(m_xDocProps->getTitle());
+            if (!sTitle.isEmpty())
             {
                 _rRet = sTitle;
                 bRet = sal_True;

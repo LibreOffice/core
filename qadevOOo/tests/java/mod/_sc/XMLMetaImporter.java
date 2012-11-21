@@ -27,7 +27,8 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.document.XDocumentPropertiesSupplier;
+import com.sun.star.document.XDocumentProperties;
 import com.sun.star.document.XImporter;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -160,24 +161,17 @@ public class XMLMetaImporter extends TestCase {
 
         tEnv.addObjRelation("XDocumentHandler.XMLData", xml) ;
 
-        XDocumentInfoSupplier infoSup = UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xSheetDoc) ;
-        final XPropertySet docInfo = UnoRuntime.queryInterface
-            (XPropertySet.class, infoSup.getDocumentInfo()) ;
+        XDocumentPropertiesSupplier xPropSup = UnoRuntime.queryInterface
+            (XDocumentPropertiesSupplier.class, xSheetDoc);
+        final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
         final PrintWriter logF = log ;
 
         tEnv.addObjRelation("XDocumentHandler.ImportChecker",
             new ifc.xml.sax._XDocumentHandler.ImportChecker() {
                 public boolean checkImport() {
-                    try {
-                        String title = (String) docInfo.getPropertyValue
-                            ("Title") ;
-                        logF.println("Title returned = '" + title + "'") ;
-                        return impTitle.equals(title) ;
-                    } catch (com.sun.star.uno.Exception e) {
-                        logF.println("Exception occurred while checking filter :") ;
-                        e.printStackTrace(logF) ;
-                        return false ;
-                    }
+                    String title = xDocProps.getTitle();
+                    logF.println("Title returned = '" + title + "'") ;
+                    return impTitle.equals(title) ;
                 }
             }) ;
 

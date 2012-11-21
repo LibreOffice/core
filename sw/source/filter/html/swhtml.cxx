@@ -845,7 +845,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
             }
         }
 
-        // und noch die DocumentInfo aufbereiten
+        // adjust AutoLoad in DocumentProperties
         if( IsNewDoc() )
         {
             SwDocShell *pDocShell(pDoc->GetDocShell());

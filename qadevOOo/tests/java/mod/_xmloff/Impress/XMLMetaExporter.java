@@ -28,7 +28,8 @@ import util.SOfficeFactory;
 import util.XMLTools;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.document.XDocumentPropertiesSupplier;
+import com.sun.star.document.XDocumentProperties;
 import com.sun.star.document.XExporter;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -128,12 +129,11 @@ public class XMLMetaExporter extends TestCase {
             XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
             xEx.setSourceDocument(xImpressDoc);
 
-        //change title name
-            XDocumentInfoSupplier infoSup = UnoRuntime.queryInterface
-            (XDocumentInfoSupplier.class, xImpressDoc) ;
-            XPropertySet docInfo = UnoRuntime.queryInterface
-                (XPropertySet.class, infoSup.getDocumentInfo()) ;
-            docInfo.setPropertyValue("Title", NAME);
+            // change title name
+            XDocumentPropertiesSupplier xPropSup = UnoRuntime.queryInterface
+                (XDocumentPropertiesSupplier.class, xImpressDoc);
+            final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
+            xDocProps.setTitle(NAME);
 
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;

@@ -29,8 +29,8 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#include <com/sun/star/document/XDocumentInfo.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -1579,11 +1579,11 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         // so the document info can be updated
 
         // on export document info must be preserved
-        uno::Reference<document::XDocumentInfoSupplier> xDIS(
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             aModelData.GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<util::XCloneable> xCloneable(
-            xDIS->getDocumentInfo(), uno::UNO_QUERY_THROW);
-        uno::Reference<document::XDocumentInfo> xOldDocInfo(
+            xDPS->getDocumentProperties(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xOldDocProps(
             xCloneable->createClone(), uno::UNO_QUERY_THROW);
 
         // use dispatch API to show document info dialog
@@ -1605,13 +1605,16 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         catch( const uno::Exception& )
         {
             if ( ( nStoreMode & EXPORT_REQUESTED ) )
-                SetDocInfoState( aModelData.GetModel(), xOldDocInfo, sal_True );
-
+            {
+                SetDocInfoState(aModelData.GetModel(), xOldDocProps, sal_True);
+            }
             throw;
         }
 
         if ( ( nStoreMode & EXPORT_REQUESTED ) )
-            SetDocInfoState( aModelData.GetModel(), xOldDocInfo, sal_True );
+        {
+            SetDocInfoState(aModelData.GetModel(), xOldDocProps, sal_True);
+        }
     }
     else
     {
@@ -1665,16 +1668,15 @@ sal_Bool SfxStoringHelper::CheckFilterOptionsAppearence(
 // static
 void SfxStoringHelper::SetDocInfoState(
         const uno::Reference< frame::XModel >& xModel,
-        const uno::Reference< document::XDocumentInfo >& i_xOldDocInfo,
+        const uno::Reference< document::XDocumentProperties>& i_xOldDocProps,
         sal_Bool bNoModify )
 {
-    uno::Reference< document::XDocumentInfoSupplier > xModelDocInfoSupplier( xModel, uno::UNO_QUERY );
-    if ( !xModelDocInfoSupplier.is() )
-        throw uno::RuntimeException(); // TODO:
-
-    uno::Reference< document::XDocumentInfo > xDocInfoToFill = xModelDocInfoSupplier->getDocumentInfo();
-    uno::Reference< beans::XPropertySet > xPropSet( i_xOldDocInfo,
-        uno::UNO_QUERY_THROW );
+    uno::Reference<document::XDocumentPropertiesSupplier> const
+        xModelDocPropsSupplier(xModel, uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> const xDocPropsToFill =
+        xModelDocPropsSupplier->getDocumentProperties();
+    uno::Reference< beans::XPropertySet > const xPropSet(
+            i_xOldDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
 
     uno::Reference< util::XModifiable > xModifiable( xModel, uno::UNO_QUERY );
     if ( bNoModify && !xModifiable.is() )
@@ -1684,7 +1686,8 @@ void SfxStoringHelper::SetDocInfoState(
 
     try
     {
-        uno::Reference< beans::XPropertySet > xSet( xDocInfoToFill, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > const xSet(
+                xDocPropsToFill->getUserDefinedProperties(), uno::UNO_QUERY);
         uno::Reference< beans::XPropertyContainer > xContainer( xSet, uno::UNO_QUERY );
         uno::Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
         uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
@@ -1695,8 +1698,12 @@ void SfxStoringHelper::SetDocInfoState(
         {
             uno::Any aValue = xPropSet->getPropertyValue( pProps[i].Name );
             if ( pProps[i].Attributes & ::com::sun::star::beans::PropertyAttribute::REMOVABLE )
+            try
+            {
                 // QUESTION: DefaultValue?!
                 xContainer->addProperty( pProps[i].Name, pProps[i].Attributes, aValue );
+            }
+            catch (beans::PropertyExistException const&) {}
             try
             {
                 // it is possible that the propertysets from XML and binary files differ; we shouldn't break then
@@ -1705,17 +1712,30 @@ void SfxStoringHelper::SetDocInfoState(
             catch ( const uno::Exception& ) {}
         }
 
-        sal_Int16 nCount = i_xOldDocInfo->getUserFieldCount();
-        sal_Int16 nSupportedCount = xDocInfoToFill->getUserFieldCount();
-        for ( sal_Int16 nInd = 0; nInd < nCount && nInd < nSupportedCount; nInd++ )
-        {
-            ::rtl::OUString aPropName = i_xOldDocInfo->getUserFieldName( nInd );
-            xDocInfoToFill->setUserFieldName( nInd, aPropName );
-            ::rtl::OUString aPropVal = i_xOldDocInfo->getUserFieldValue( nInd );
-            xDocInfoToFill->setUserFieldValue( nInd, aPropVal );
-        }
+        // sigh... have to set these manually i'm afraid... wonder why
+        // SfxObjectShell doesn't handle this internally, should be easier
+        xDocPropsToFill->setAuthor(i_xOldDocProps->getAuthor());
+        xDocPropsToFill->setGenerator(i_xOldDocProps->getGenerator());
+        xDocPropsToFill->setCreationDate(i_xOldDocProps->getCreationDate());
+        xDocPropsToFill->setTitle(i_xOldDocProps->getTitle());
+        xDocPropsToFill->setSubject(i_xOldDocProps->getSubject());
+        xDocPropsToFill->setDescription(i_xOldDocProps->getDescription());
+        xDocPropsToFill->setKeywords(i_xOldDocProps->getKeywords());
+        xDocPropsToFill->setModifiedBy(i_xOldDocProps->getModifiedBy());
+        xDocPropsToFill->setModificationDate(i_xOldDocProps->getModificationDate());
+        xDocPropsToFill->setPrintedBy(i_xOldDocProps->getPrintedBy());
+        xDocPropsToFill->setPrintDate(i_xOldDocProps->getPrintDate());
+        xDocPropsToFill->setAutoloadURL(i_xOldDocProps->getAutoloadURL());
+        xDocPropsToFill->setAutoloadSecs(i_xOldDocProps->getAutoloadSecs());
+        xDocPropsToFill->setDefaultTarget(i_xOldDocProps->getDefaultTarget());
+        xDocPropsToFill->setEditingCycles(i_xOldDocProps->getEditingCycles());
+        xDocPropsToFill->setEditingDuration(i_xOldDocProps->getEditingDuration());
+        // other attributes e.g. DocumentStatistics are not editable from dialog
     }
-    catch ( const uno::Exception& ) {}
+    catch (const uno::Exception& e)
+    {
+        SAL_INFO("sfx.doc", "SetDocInfoState: caught exception: " << e.Message);
+    }
 
     // set the modified flag back if required
     if ( bNoModify && bIsModified != xModifiable->isModified() )

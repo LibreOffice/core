@@ -25,7 +25,6 @@
 #include <basic/sbmeth.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
@@ -127,11 +126,13 @@ SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
 
             if ( sMacroURLOrPath.endsWithIgnoreAsciiCaseAsciiL( ".dot", 4 ) )
             {
-                uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( xModel, uno::UNO_QUERY );
-                if( xDocInfoSupp.is() )
+                uno::Reference<document::XDocumentPropertiesSupplier> const
+                    xDocPropSupp(xModel, uno::UNO_QUERY);
+                if (xDocPropSupp.is())
                 {
-                    uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
-                    uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
+                    uno::Reference< document::XDocumentProperties > const
+                        xDocProps(xDocPropSupp->getDocumentProperties(),
+                                    uno::UNO_QUERY_THROW);
                     rtl::OUString sCurrName = xDocProps->getTemplateName();
                     if( sMacroURLOrPath.lastIndexOf( sCurrName ) >= 0 )
                     {
@@ -391,8 +392,8 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& 
         if ( xPrjNameCache.is() )
         {
             // is this document created from a template?
-            uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( pShell->GetModel(), uno::UNO_QUERY_THROW );
-            uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
+            uno::Reference< document::XDocumentPropertiesSupplier > const
+                xDocPropSupp(pShell->GetModel(), uno::UNO_QUERY_THROW);
             uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
 
             rtl::OUString sCreatedFrom = xDocProps->getTemplateURL();

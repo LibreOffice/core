@@ -33,7 +33,6 @@
 #include "vbavariables.hxx"
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -260,8 +259,8 @@ uno::Any SAL_CALL
 SwVbaDocument::getAttachedTemplate() throw (uno::RuntimeException)
 {
     uno::Reference< word::XTemplate > xTemplate;
-    uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( getModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
+    uno::Reference<document::XDocumentPropertiesSupplier> const xDocPropSupp(
+            getModel(), uno::UNO_QUERY_THROW);
     uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
     rtl::OUString sTemplateUrl = xDocProps->getTemplateURL();
 
@@ -287,8 +286,8 @@ SwVbaDocument::setAttachedTemplate( const css::uno::Any& _attachedtemplate ) thr
         osl::FileBase::getFileURLFromSystemPath( sTemplate, aURL );
 
     uno::Reference< word::XTemplate > xTemplate;
-    uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( getModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
+    uno::Reference<document::XDocumentPropertiesSupplier> const xDocPropSupp(
+            getModel(), uno::UNO_QUERY_THROW );
     uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
     xDocProps->setTemplateURL( aURL );
 }

@@ -112,7 +112,7 @@ namespace comphelper {
                     return sTitle;
             }
 
-            // 3. try the UNO DocumentInfo
+            // 3. try the UNO XDocumentProperties
             Reference< XDocumentPropertiesSupplier > xDPS( _rxDocument, UNO_QUERY );
             if ( xDPS.is() )
             {

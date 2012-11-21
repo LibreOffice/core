@@ -27,8 +27,9 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 import util.XMLTools;
 
-import com.sun.star.document.XDocumentInfo;
-import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.beans.XPropertyContainer;
+import com.sun.star.document.XDocumentPropertiesSupplier;
+import com.sun.star.document.XDocumentProperties;
 import com.sun.star.document.XExporter;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -126,10 +127,11 @@ public class XMLMetaExporter extends TestCase {
             xEx.setSourceDocument(xMathDoc);
 
             // setting a new name and value for user info field
-            XDocumentInfoSupplier xDocInfoSup = UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xMathDoc) ;
-            XDocumentInfo xDocInfo = xDocInfoSup.getDocumentInfo() ;
-            xDocInfo.setUserFieldName((short) 0, expName) ;
-            xDocInfo.setUserFieldValue((short) 0, expValue) ;
+            XDocumentPropertiesSupplier xPropSup = UnoRuntime.queryInterface
+                (XDocumentPropertiesSupplier.class, xMathDoc);
+            final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
+            XPropertyContainer xProps = xDocProps.getUserDefinedProperties();
+            xProps.addProperty(expName, (short)0, expValue);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create component.", e) ;

@@ -223,7 +223,7 @@ void SetTemplate_Impl( const String &rFileName,
                         const String &rLongName,
                         SfxObjectShell *pDoc)
 {
-    // write TemplateName to DocumentInfo of document
+    // write TemplateName to DocumentProperties of document
     // TemplateDate stays as default (=current date)
     pDoc->ResetFromTemplate( rLongName, rFileName );
 }

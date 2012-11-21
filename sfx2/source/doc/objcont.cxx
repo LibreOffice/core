@@ -20,12 +20,11 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <vcl/msgbox.hxx>
 #include <svl/style.hxx>
 #include <vcl/wrkwin.hxx>
@@ -893,29 +892,22 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         // should the document checked against changes in the template ?
         if ( IsQueryLoadTemplate() )
         {
-            // load document info of template
-            sal_Bool bOK = sal_False;
+            // load document properties of template
+            bool bOK = false;
             util::DateTime aTemplDate;
             try
             {
-                Reference < document::XStandaloneDocumentInfo > xDocInfo (
-                    ::comphelper::getProcessServiceFactory()->createInstance(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.document.StandaloneDocumentInfo") ) ),
-                    UNO_QUERY_THROW );
-                Reference < beans::XFastPropertySet > xSet( xDocInfo,
-                    UNO_QUERY_THROW );
-                xDocInfo->loadFromURL( aTemplURL );
-                Any aAny = xSet->getFastPropertyValue( WID_DATE_MODIFIED );
-                ::com::sun::star::util::DateTime aTmp;
-                if ( aAny >>= aTemplDate )
-                {
-                    // get modify date from document info
-                    bOK = sal_True;
-                }
+                Reference<document::XDocumentProperties> const
+                    xTemplateDocProps( document::DocumentProperties::create(
+                            ::comphelper::getProcessComponentContext()));
+                xTemplateDocProps->loadFromMedium(aTemplURL,
+                        Sequence<beans::PropertyValue>());
+                aTemplDate = xTemplateDocProps->getModificationDate();
+                bOK = true;
             }
-            catch (const Exception&)
+            catch (const Exception& e)
             {
+                SAL_INFO("sfx.doc", "caught exception" << e.Message);
             }
 
             // if modify date was read successfully

@@ -1367,7 +1367,7 @@ sal_Bool ImplSdPPTImport::Import()
 
     delete pStbMgr;
 
-    // read DocumentInfo
+    // read DocumentProperties
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
         mpDoc->GetObjectShell()->GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xDocProps

@@ -2088,7 +2088,7 @@ com.sun.star.document.OfficeDocument
 com.sun.star.lang.XMultiServiceFactory
 com.sun.star.container.XChild
 com.sun.star.document.XEventsSupplier
-com.sun.star.document.XDocumentInfoSupplier
+com.sun.star.document.XDocumentPropertiesSupplier
 TOPIC:
 
 LINK:Documentation/DevGuide/GUI/The_Example_Listings
@@ -6599,12 +6599,12 @@ com.sun.star.document.ImportFilter
 com.sun.star.document.ExportFilter
 TOPIC:
 
-LINK:Documentation/DevGuide/OfficeDev/Component/Models#XDocumentInfoSupplier
-DESCR:OfficeDev - Component - Models - XDocumentInfoSupplier
+LINK:Documentation/DevGuide/OfficeDev/Component/Models#XDocumentPropertiesSupplier
+DESCR:OfficeDev - Component - Models - XDocumentPropertiesSupplier
 REF:
-com.sun.star.document.XDocumentInfoSupplier
+com.sun.star.document.XDocumentPropertiesSupplier
 TOPIC:
-com.sun.star.document.XDocumentInfoSupplier
+com.sun.star.document.XDocumentPropertiesSupplier
 
 LINK:Documentation/DevGuide/FirstSteps/Struct
 DESCR:FirstSteps - Struct
@@ -7024,10 +7024,10 @@ com.sun.star.lang.XComponent
 LINK:Documentation/DevGuide/Text/Settings#General_Document_Information
 DESCR:Text - Settings - General Document Information
 REF:
-com.sun.star.document.DocumentInfo
-com.sun.star.document.XDocumentInfoSupplier
+com.sun.star.document.DocumentProperties
+com.sun.star.document.XDocumentPropertiesSupplier
 TOPIC:
-com.sun.star.document.XDocumentInfoSupplier
+com.sun.star.document.XDocumentPropertiesSupplier
 
 LINK:Documentation/DevGuide/Text/Sorting_Text
 DESCR:Text - Sorting Text

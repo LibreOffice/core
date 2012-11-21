@@ -28,7 +28,8 @@ import util.SOfficeFactory;
 import util.XMLTools;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.document.XDocumentPropertiesSupplier;
+import com.sun.star.document.XDocumentProperties;
 import com.sun.star.document.XExporter;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -133,11 +134,10 @@ public class XMLMetaExporter extends TestCase {
             xEx.setSourceDocument(xSheetDoc);
 
             // Obtaining and changing property values
-            XDocumentInfoSupplier infoSup = UnoRuntime.queryInterface (XDocumentInfoSupplier.class,
-            xSheetDoc) ;
-            XPropertySet docInfo = UnoRuntime.queryInterface
-                (XPropertySet.class, infoSup.getDocumentInfo()) ;
-            docInfo.setPropertyValue("Title", "TestDocument");
+            XDocumentPropertiesSupplier xPropSup = UnoRuntime.queryInterface
+                (XDocumentPropertiesSupplier.class, xSheetDoc);
+            final XDocumentProperties xDocProps = xPropSup.getDocumentProperties();
+            xDocProps.setTitle("TestDocument");
 
             log.println("fill sheet 1 with contnet...");
             util.CalcTools.fillCalcSheetWithContent(xSheetDoc,1, 3, 3, 50, 50);

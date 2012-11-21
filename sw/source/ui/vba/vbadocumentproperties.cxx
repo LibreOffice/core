@@ -28,7 +28,7 @@
 #include "vbadocumentproperties.hxx"
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
@@ -73,17 +73,22 @@ class PropertGetSetHelper
 {
 protected:
     uno::Reference< frame::XModel > m_xModel;
-    uno::Reference< beans::XPropertySet > mxProps;
+    uno::Reference<document::XDocumentProperties> m_xDocProps;
 public:
     PropertGetSetHelper( const uno::Reference< frame::XModel >& xModel ):m_xModel( xModel )
     {
-        uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( m_xModel, uno::UNO_QUERY_THROW );
-        mxProps.set( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
+        uno::Reference<document::XDocumentPropertiesSupplier> const
+            xDocPropSupp(m_xModel, uno::UNO_QUERY_THROW);
+        m_xDocProps.set(xDocPropSupp->getDocumentProperties(),
+                uno::UNO_SET_THROW);
     }
     virtual ~PropertGetSetHelper() {}
     virtual uno::Any getPropertyValue( const rtl::OUString& rPropName ) = 0;
     virtual void setPropertyValue( const rtl::OUString& rPropName, const uno::Any& aValue ) = 0;
-    virtual uno::Reference< beans::XPropertySet > getUnoProperties() { return mxProps; }
+    virtual uno::Reference< beans::XPropertySet > getUserDefinedProperties() {
+        return uno::Reference<beans::XPropertySet>(
+                m_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
+    }
 
 };
 
@@ -97,15 +102,174 @@ public:
     {
         if ( rPropName == "EditingDuration" )
         {
-            sal_Int32 nSecs = 0;
-            mxProps->getPropertyValue( rPropName ) >>= nSecs;
+            sal_Int32 const nSecs = m_xDocProps->getEditingDuration();
             return uno::makeAny( nSecs/60 ); // minutes
         }
-        return mxProps->getPropertyValue( rPropName );
+        else if ("Title" == rPropName)
+        {
+            return uno::makeAny(m_xDocProps->getTitle());
+        }
+        else if ("Subject" == rPropName)
+        {
+            return uno::makeAny(m_xDocProps->getSubject());
+        }
+        else if ("Author" == rPropName)
+        {
+            return uno::makeAny(m_xDocProps->getAuthor());
+        }
+        else if ("Keywords" == rPropName)
+        {
+            return uno::makeAny(m_xDocProps->getKeywords());
+        }
+        else if ("Description" == rPropName)
+        {
+            return uno::makeAny(m_xDocProps->getDescription());
+        }
+        else if ("Template" == rPropName)
+        {
+            return uno::makeAny(m_xDocProps->getTemplateName());
+        }
+        else if ("ModifiedBy" == rPropName)
+        {
+            return uno::makeAny(m_xDocProps->getModifiedBy());
+        }
+        else if ("Generator" == rPropName)
+        {
+            return uno::makeAny(m_xDocProps->getGenerator());
+        }
+        else if ("PrintDate" == rPropName)
+        {
+            return uno::makeAny(m_xDocProps->getPrintDate());
+        }
+        else if ("CreationDate" == rPropName)
+        {
+            return uno::makeAny(m_xDocProps->getCreationDate());
+        }
+        else if ("ModifyDate" == rPropName)
+        {
+            return uno::makeAny(m_xDocProps->getModificationDate());
+        }
+        else if ("AutoloadURL" == rPropName)
+        {
+            return uno::makeAny(m_xDocProps->getAutoloadURL());
+        }
+        else
+        {
+            // fall back to user-defined properties
+            return getUserDefinedProperties()->getPropertyValue(rPropName);
+        }
     }
     virtual void setPropertyValue( const rtl::OUString& rPropName, const uno::Any& aValue )
     {
-        mxProps->setPropertyValue( rPropName, aValue );
+        if ("EditingDuration" == rPropName)
+        {
+            sal_Int32 nMins = 0;
+            if (aValue >>= nMins)
+            {
+                m_xDocProps->setEditingDuration(nMins * 60); // convert minutes
+            }
+        }
+        else if ("Title" == rPropName)
+        {
+            OUString str;
+            if (aValue >>= str)
+            {
+                m_xDocProps->setTitle(str);
+            }
+        }
+        else if ("Subject" == rPropName)
+        {
+            OUString str;
+            if (aValue >>= str)
+            {
+                m_xDocProps->setSubject(str);
+            }
+        }
+        else if ("Author" == rPropName)
+        {
+            OUString str;
+            if (aValue >>= str)
+            {
+                m_xDocProps->setAuthor(str);
+            }
+        }
+        else if ("Keywords" == rPropName)
+        {
+            uno::Sequence<OUString> keywords;
+            if (aValue >>= keywords)
+            {
+                m_xDocProps->setKeywords(keywords);
+            }
+        }
+        else if ("Description" == rPropName)
+        {
+            OUString str;
+            if (aValue >>= str)
+            {
+                m_xDocProps->setDescription(str);
+            }
+        }
+        else if ("Template" == rPropName)
+        {
+            OUString str;
+            if (aValue >>= str)
+            {
+                m_xDocProps->setTemplateName(str);
+            }
+        }
+        else if ("ModifiedBy" == rPropName)
+        {
+            OUString str;
+            if (aValue >>= str)
+            {
+                m_xDocProps->setModifiedBy(str);
+            }
+        }
+        else if ("Generator" == rPropName)
+        {
+            OUString str;
+            if (aValue >>= str)
+            {
+                return m_xDocProps->setGenerator(str);
+            }
+        }
+        else if ("PrintDate" == rPropName)
+        {
+            util::DateTime dt;
+            if (aValue >>= dt)
+            {
+                m_xDocProps->setPrintDate(dt);
+            }
+        }
+        else if ("CreationDate" == rPropName)
+        {
+            util::DateTime dt;
+            if (aValue >>= dt)
+            {
+                m_xDocProps->setCreationDate(dt);
+            }
+        }
+        else if ("ModifyDate" == rPropName)
+        {
+            util::DateTime dt;
+            if (aValue >>= dt)
+            {
+                m_xDocProps->setModificationDate(dt);
+            }
+        }
+        else if ("AutoloadURL" == rPropName)
+        {
+            OUString str;
+            if (aValue >>= str)
+            {
+                m_xDocProps->setAutoloadURL(str);
+            }
+        }
+        else
+        {
+            // fall back to user-defined properties
+            getUserDefinedProperties()->setPropertyValue(rPropName, aValue);
+        }
     }
 };
 
@@ -114,11 +278,18 @@ class CustomPropertyGetSetHelper : public BuiltinPropertyGetSetHelper
 public:
     CustomPropertyGetSetHelper( const uno::Reference< frame::XModel >& xModel ) :BuiltinPropertyGetSetHelper( xModel )
     {
-        uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( mxProps, uno::UNO_QUERY_THROW );
-        uno::Reference< document::XDocumentProperties > xDocProp( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
-        mxProps.set( xDocProp->getUserDefinedProperties(), uno::UNO_QUERY_THROW );
+    }
+    virtual uno::Any getPropertyValue( const rtl::OUString& rPropName )
+    {
+        return getUserDefinedProperties()->getPropertyValue(rPropName);
+    }
+    virtual void setPropertyValue(
+            const rtl::OUString& rPropName, const uno::Any& rValue)
+    {
+        return getUserDefinedProperties()->setPropertyValue(rPropName, rValue);
     }
 };
+
 class StatisticPropertyGetSetHelper : public PropertGetSetHelper
 {
     SwDocShell* mpDocShell;
@@ -131,7 +302,6 @@ public:
     }
     virtual uno::Any getPropertyValue( const rtl::OUString& rPropName )
     {
-        uno::Sequence< beans::NamedValue > stats;
         try
         {
             // Characters, ParagraphCount & WordCount are available from
@@ -156,8 +326,8 @@ public:
         }
         else
         {
-            mxModelProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParagraphCount") ) ) >>= stats;
-            mxProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DocumentStatistic") ) ) >>= stats;
+            uno::Sequence< beans::NamedValue > const stats(
+                m_xDocProps->getDocumentStatistics());
 
             sal_Int32 nLen = stats.getLength();
             bool bFound = false;
@@ -177,9 +347,8 @@ public:
 
     virtual void setPropertyValue( const rtl::OUString& rPropName, const uno::Any& aValue )
     {
-
-        uno::Sequence< beans::NamedValue > stats;
-        mxProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DocumentStatistic") ) ) >>= stats;
+        uno::Sequence< beans::NamedValue > stats(
+                m_xDocProps->getDocumentStatistics());
 
         sal_Int32 nLen = stats.getLength();
         for ( sal_Int32 index = 0; index < nLen; ++index )
@@ -187,7 +356,7 @@ public:
             if ( rPropName.equals( stats[ index ].Name ) )
             {
                 stats[ index ].Value = aValue;
-                mxProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DocumentStatistic") ), uno::makeAny( stats ) );
+                m_xDocProps->setDocumentStatistics(stats);
                 break;
             }
         }
@@ -225,12 +394,11 @@ public:
         if ( mpPropGetSetHelper.get() )
             mpPropGetSetHelper->setPropertyValue( msOOOPropName, rValue );
     }
-    uno::Reference< beans::XPropertySet > getUnoProperties()
+    uno::Reference< beans::XPropertySet > getUserDefinedProperties()
     {
-
         uno::Reference< beans::XPropertySet > xProps;
         if ( mpPropGetSetHelper.get() )
-            return mpPropGetSetHelper->getUnoProperties();
+            return mpPropGetSetHelper->getUserDefinedProperties();
         return xProps;
     }
 };
@@ -376,7 +544,8 @@ SwVbaCustomDocumentProperty::setType( ::sal_Int8 /*Type*/ ) throw (script::Basic
 void SAL_CALL
 SwVbaCustomDocumentProperty::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    uno::Reference< beans::XPropertyContainer > xContainer( mPropInfo.getUnoProperties(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertyContainer > xContainer(
+            mPropInfo.getUserDefinedProperties(), uno::UNO_QUERY_THROW);
     xContainer->removeProperty( getName() );
 }
 
@@ -512,7 +681,6 @@ protected:
     uno::Reference< XHelperInterface > m_xParent;
     uno::Reference< uno::XComponentContext > m_xContext;
     uno::Reference< frame::XModel > m_xModel;
-    uno::Reference< document::XDocumentInfo > m_xOOOBuiltIns;
 
     DocProps mDocProps;
     DocPropsByName mNamedDocProps;
@@ -643,11 +811,9 @@ public:
     CustomPropertiesImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : m_xParent( xParent ), m_xContext( xContext ), m_xModel( xModel )
     {
         // suck in the document( custom ) properties
-        uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( m_xModel, uno::UNO_QUERY_THROW );
-        uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
-        uno::Reference< document::XDocumentProperties > xDocProp( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
-        mxUserDefinedProp.set( xDocProp->getUserDefinedProperties(), uno::UNO_QUERY_THROW );
         mpPropGetSetHelper.reset( new CustomPropertyGetSetHelper( m_xModel ) );
+        mxUserDefinedProp.set(mpPropGetSetHelper->getUserDefinedProperties(),
+                uno::UNO_SET_THROW);
     };
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)

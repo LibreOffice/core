@@ -27,8 +27,10 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.document.XDocumentInfo;
-import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.beans.XPropertySetInfo;
+import com.sun.star.beans.Property;
+import com.sun.star.document.XDocumentPropertiesSupplier;
+import com.sun.star.document.XDocumentProperties;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
@@ -114,13 +116,9 @@ public class XMLMetaImporter extends TestCase {
         final String impValue = "XMLMetaImporter_Value" ;
         final String impTitle = "XMLMetaImporter Title" ;
 
-        final XDocumentInfoSupplier xDocInfoSup ;
         try {
             oObj = (XInterface)xMSF.createInstance(
                     "com.sun.star.comp.Math.XMLMetaImporter");
-
-            xDocInfoSup = UnoRuntime.queryInterface
-                (XDocumentInfoSupplier.class, xMathDoc) ;
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Unexpected exception", e);
@@ -156,20 +154,29 @@ public class XMLMetaImporter extends TestCase {
             new ifc.xml.sax._XDocumentHandler.ImportChecker() {
                 public boolean checkImport() {
                     try {
-                        XDocumentInfo xDocInfo = xDocInfoSup.getDocumentInfo() ;
-                        XPropertySet xDocInfoProp = UnoRuntime.queryInterface
-                        (XPropertySet.class, xDocInfo) ;
-                        boolean result = false ;
-                        for (short i = 0; i < xDocInfo.getUserFieldCount(); i++) {
-                            String gName = xDocInfo.getUserFieldName(i) ;
-                            String gValue = xDocInfo.getUserFieldValue(i) ;
+                        XDocumentPropertiesSupplier xPropSup =
+                            UnoRuntime.queryInterface
+                                (XDocumentPropertiesSupplier.class, xMathDoc);
+                        final XDocumentProperties xDocProps =
+                            xPropSup.getDocumentProperties();
+
+                        XPropertySet xUDProps = UnoRuntime.queryInterface(
+                            XPropertySet.class,
+                            xDocProps.getUserDefinedProperties());
+                        XPropertySetInfo xInfo =
+                            xUDProps.getPropertySetInfo();
+                        Property[] props = xInfo.getProperties();
+                        boolean result = false;
+                        for (int i = 0; i < props.length; i++) {
+                            String gName = props[i].Name;
+                            String gValue = (String)
+                                xUDProps.getPropertyValue(gName);
                             logF.println("Field '" + gName + "' = '"
                                 + gValue + "'") ;
                             if (impName.equals(gName) && impValue.equals(gValue))
                                 result = true ;
                         }
-                        String gTitle = (String) xDocInfoProp.getPropertyValue
-                            ("Title");
+                        String gTitle = xDocProps.getTitle();
                         logF.println("Title returned : '" + gTitle + "'");
                         result &= impTitle.equals(gTitle) ;
 

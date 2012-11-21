@@ -32,7 +32,8 @@ import com.sun.star.container.XContainerQuery;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.document.XDocumentPropertiesSupplier;
+import com.sun.star.document.XDocumentProperties;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XModuleManager;
 import com.sun.star.io.XInputStream;
@@ -462,37 +463,18 @@ public class Helper
 
     protected static String GetDocTitle( XModel xDoc )
     {
-        String sTitle = "";
-        XDocumentInfoSupplier xDocInfoSup = ( XDocumentInfoSupplier ) UnoRuntime.queryInterface( XDocumentInfoSupplier.class, xDoc );
-        XPropertySet xPropSet = ( XPropertySet ) UnoRuntime.queryInterface( XPropertySet.class, xDocInfoSup.getDocumentInfo() );
-        try
-        {
-            sTitle = ( String ) xPropSet.getPropertyValue( "Title" );
-        } catch ( Exception ex )
-        {
-            ex.printStackTrace();
-        }
-        return sTitle;
+        XDocumentPropertiesSupplier xDocPropSup =
+            UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xDoc);
+        XDocumentProperties xDocProps = xDocPropSup.getDocumentProperties();
+        return xDocProps.getTitle();
     }
 
     protected static void SetDocTitle( XModel xDoc, String sTitle )
     {
-        XDocumentInfoSupplier xDocInfoSup = ( XDocumentInfoSupplier ) UnoRuntime.queryInterface( XDocumentInfoSupplier.class, xDoc );
-        if ( xDocInfoSup != null )
-        {
-            XPropertySet xPropSet = ( XPropertySet ) UnoRuntime.queryInterface( XPropertySet.class, xDocInfoSup.getDocumentInfo() );
-            if ( xPropSet != null )
-            {
-                try
-                {
-                    xPropSet.setPropertyValue( "Title", sTitle );
-                }
-                catch ( Exception ex )
-                {
-                    ex.printStackTrace();
-                }
-            }
-        }
+        XDocumentPropertiesSupplier xDocPropSup =
+            UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xDoc);
+        XDocumentProperties xDocProps = xDocPropSup.getDocumentProperties();
+        xDocProps.setTitle(sTitle);
     }
 
     protected static String GetDocServiceName( XComponentContext xContext, XModel xModel )

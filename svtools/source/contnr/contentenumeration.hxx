@@ -21,7 +21,7 @@
 #define SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <salhelper/thread.hxx>
 #include <ucbhelper/content.hxx>
 #include <rtl/ustring.hxx>
@@ -198,8 +198,9 @@ namespace svt
         IEnumerationResultHandler*      m_pResultHandler;
         bool                            m_bCancelled;
 
-        mutable ::com::sun::star::uno::Reference< ::com::sun::star::document::XStandaloneDocumentInfo >
-                                        m_xDocInfo;
+        mutable ::com::sun::star::uno::Reference<
+            ::com::sun::star::document::XDocumentProperties>
+                                        m_xDocProps;
 
         ::com::sun::star::uno::Sequence< ::rtl::OUString > m_rBlackList;
 
