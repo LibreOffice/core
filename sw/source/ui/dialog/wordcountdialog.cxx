@@ -76,6 +76,16 @@ void SwWordCountFloatDlg::SetValues(const SwDocStat& rCurrent, const SwDocStat& 
     setValue(m_pDocCjkcharsFT, rDoc.nAsianWord);
 
     bool bShowCJK = (SvtCJKOptions().IsAnyEnabled() || rDoc.nAsianWord);
+    bool bToggleCJK = m_pCurrentCjkcharsFT->IsVisible() != bShowCJK;
+    if (bToggleCJK)
+    {
+        showCJK(bShowCJK);
+        setInitialLayoutSize(); //force resize of dialog
+    }
+}
+
+void SwWordCountFloatDlg::showCJK(bool bShowCJK)
+{
     m_pCurrentCjkcharsFT->Show(bShowCJK);
     m_pDocCjkcharsFT->Show(bShowCJK);
     m_pCjkcharsLabelFT->Show(bShowCJK);
@@ -111,6 +121,8 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
     m_pDocCharacterFT->set_width_request(nPrefWidth);
     m_pDocCharacterExcludingSpacesFT->set_width_request(nPrefWidth);
     m_pDocCjkcharsFT->set_width_request(nPrefWidth);
+
+    showCJK(SvtCJKOptions().IsAnyEnabled());
 
     Initialize(pInfo);
 

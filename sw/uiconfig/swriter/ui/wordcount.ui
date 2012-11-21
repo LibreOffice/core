@@ -77,7 +77,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="row_spacing">2</property>
-                    <property name="column_spacing">10</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
@@ -130,7 +130,7 @@
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">1</property>
-                        <property name="label">                        0</property>
+                        <property name="label">            0</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -147,7 +147,7 @@
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">1</property>
-                        <property name="label">                        0</property>
+                        <property name="label">            0</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -164,7 +164,7 @@
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">1</property>
-                        <property name="label">                        0</property>
+                        <property name="label">            0</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -215,7 +215,7 @@
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">1</property>
-                        <property name="label">                        0</property>
+                        <property name="label">            0</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -232,7 +232,7 @@
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">1</property>
-                        <property name="label">                        0</property>
+                        <property name="label">            0</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -249,7 +249,7 @@
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">1</property>
-                        <property name="label">                        0</property>
+                        <property name="label">            0</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -260,12 +260,9 @@
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="cjkcharsft">
-                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="no_show_all">True</property>
                         <property name="xalign">0</property>
                         <property name="xpad">10</property>
                         <property name="label" translatable="yes">Asian characters and Korean syllables</property>
@@ -279,12 +276,12 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="selectcjkchars">
-                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="no_show_all">True</property>
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">1</property>
-                        <property name="label">                        0</property>
+                        <property name="label">            0</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -296,12 +293,12 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="doccjkchars">
-                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="no_show_all">True</property>
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">1</property>
-                        <property name="label">                        0</property>
+                        <property name="label">            0</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -310,6 +307,9 @@
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                 </child>

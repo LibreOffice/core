@@ -38,7 +38,8 @@ struct SwDocStat;
 class SwWordCountFloatDlg : public SfxModelessDialog
 {
     virtual void    Activate();
-    void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
+    void SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
+    void showCJK(bool bShowCJK);
 
     FixedText* m_pCurrentWordFT;
     FixedText* m_pCurrentCharacterFT;
