@@ -354,27 +354,6 @@ SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
 |*
 *************************************************************************/
 
-static inline sal_Bool lcl_IsChild( SdrObject *pParent, SdrObject *pChild )
-{
-    if ( pParent->ISA(SwVirtFlyDrawObj) )
-    {
-        const SwFrm *pAnch = lcl_FindAnchor( pChild, sal_False );
-        if ( pAnch && ((SwVirtFlyDrawObj*)pParent)->GetFlyFrm()->IsAnLower( pAnch ))
-        {
-            return sal_True;
-        }
-    }
-    return sal_False;
-}
-
-static inline SdrObject *lcl_FindParent( SdrObject *pObj )
-{
-    const SwFrm *pAnch = lcl_FindAnchor( pObj, sal_False );
-    if ( pAnch && pAnch->IsInFly() )
-        return (SdrObject*)pAnch->FindFlyFrm()->GetVirtDrawObj();
-    return 0;
-}
-
 /** determine maximal order number for a 'child' object of given 'parent' object
 
     @author OD

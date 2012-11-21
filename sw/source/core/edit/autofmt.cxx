@@ -147,9 +147,6 @@ class SwAutoFormat
     sal_Bool bEmptyLine : 1;
     sal_Bool bMoreLines : 1;
 
-    static sal_Bool  m_bAskForCancelUndoWhileBufferOverflow;
-    static short m_nActionWhileAutoformatUndoBufferOverflow;
-
 
     // ------------- private methods -----------------------------
     void _GetCharClass( LanguageType eLang );
@@ -249,9 +246,6 @@ public:
         delete pCharClass;
     }
 };
-
-sal_Bool  SwAutoFormat::m_bAskForCancelUndoWhileBufferOverflow     = sal_True;
-short SwAutoFormat::m_nActionWhileAutoformatUndoBufferOverflow = RET_YES;
 
 const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
 {
