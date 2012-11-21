@@ -34,7 +34,12 @@
 #pragma warning(push, 1)
 #endif
 
-#if POPPLER_CHECK_VERSION(0, 21, 0)
+// sigh, UTF8.h was removed in poppler-0.21.0 and put back in 0.21.1
+// FIXME: we can't use #if POPPLER_CHECK_VERSION(0, 21, 0) && !POPPLER_CHECK_VERSION(0, 21, 1)
+//        because the internal poppler does not provide poppler-version.h and the macro always returns 0
+#if POPPLER_CHECK_VERSION(0, 21, 1)
+#include "UTF8.h"
+#elif POPPLER_CHECK_VERSION(0, 21, 0)
 #include "UTF.h"
 #else
 #include "UTF8.h"
