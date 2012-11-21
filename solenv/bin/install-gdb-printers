@@ -168,8 +168,8 @@ if [[ ${DESTDIR}${pythondir} != ${GDBDIR} ]]; then
     cp -pr "${GDBDIR}/libreoffice" "${DESTDIR}${pythondir}"
 fi
 
-make_autoload cppu ure/lib libuno_cppu."$DYLIB".3
-make_autoload sal ure/lib libuno_sal."$DYLIB".3
+make_autoload cppu ure-link/lib libuno_cppu."$DYLIB".3
+make_autoload sal ure-link/lib libuno_sal."$DYLIB".3
 make_autoload svl program libsvllo."$DYLIB"
 make_autoload sw program libswlo."$DYLIB"
 make_autoload tl program libtllo."$DYLIB"
