@@ -298,7 +298,7 @@ namespace svgio
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrText, SVGTokenText));
             }
 
-            const SVGTokenMapper::const_iterator aResult(aSVGTokenMapperList.find(rStr));
+            const SVGTokenMapper::const_iterator aResult(aSVGTokenMapperList.find(rStr.compareToAscii("svg:", 4) ? rStr : rStr.copy(4)));
 
             if(aResult == aSVGTokenMapperList.end())
             {
