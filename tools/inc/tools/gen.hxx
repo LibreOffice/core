@@ -190,6 +190,13 @@ inline Point operator/( const Point &rVal1, const long nVal2 )
     return Point( rVal1.nA/nVal2, rVal1.nB/nVal2 );
 }
 
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Point& point )
+{
+    return stream << point.X() << ',' << point.Y();
+}
+
 // Size
 
 class SAL_WARN_UNUSED Size : public Pair
@@ -217,6 +224,13 @@ inline Size::Size()
 inline Size::Size( long nWidth, long nHeight ) :
                 Pair( nWidth, nHeight )
 {
+}
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Size& size )
+{
+    return stream << size.Width() << 'x' << size.Height();
 }
 
 // Range
@@ -262,6 +276,13 @@ inline void Range::Justify()
         nA = nB;
         nB = nHelp;
     }
+}
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Range& range )
+{
+    return stream << range.Min() << '-' << range.Max();
 }
 
 // Selection
@@ -323,6 +344,12 @@ inline void Selection::Justify()
     }
 }
 
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Selection& selection )
+{
+    return stream << selection.Min() << '-' << selection.Max();
+}
 // Rectangle
 
 #define RECT_EMPTY  ((short)-32767)
@@ -645,6 +672,14 @@ inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
                      (rRect.nRight  == RECT_EMPTY) ? RECT_EMPTY : rRect.nRight - rPt.X(),
                      (rRect.nBottom == RECT_EMPTY) ? RECT_EMPTY : rRect.nBottom - rPt.Y() );
     return aRect;
+}
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Rectangle& rectangle )
+{
+    return stream << rectangle.getX() << ',' << rectangle.getY() << ' '
+        << rectangle.getWidth() << 'x' << rectangle.getHeight();
 }
 
 #endif
