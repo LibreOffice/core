@@ -78,7 +78,7 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(Window* pParent,
     m_pFilterListBox->SetDoubleClickHdl( LINK( this, XMLFilterSettingsDialog, DoubleClickHdl_Impl ) );
     m_pFilterListBox->SetAccessibleName(RESIDSTR(STR_XML_FILTER_LISTBOX));
     m_pCtrlFilterList->SetAccessibleName(RESIDSTR(STR_XML_FILTER_LISTBOX));
-    m_pFilterListBox->SetHelpId( HID_XML_FILTER_LIST );
+    m_pFilterListBox->SetHelpId(m_pCtrlFilterList->GetHelpId());
 
     m_pPBNew->SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
     m_pPBEdit->SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
