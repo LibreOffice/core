@@ -30,7 +30,7 @@ set -o pipefail
 
 # environment setup yet?
 if [ -z "$TARFILE_LOCATION" ]; then
-    . ./bin/get_config_variables TARFILE_LOCATION GIT_LINK_SRC GIT_NEEDED_SUBMODULES COM CPUNAME VCVER DBGHELP_DLL SRC_ROOT OXYGENOFFICE_PACK
+    . ./bin/get_config_variables TARFILE_LOCATION GIT_LINK_SRC GIT_NEEDED_SUBMODULES COM CPUNAME VCVER DBGHELP_DLL SRC_ROOT OXYGENOFFICE_PACK WGET CURL MD5SUM
 fi
 
 # we want to clone if we are in the bootstrap git repo and clone does not exist yet
@@ -77,50 +77,6 @@ if [ -z "$FILELIST" ]; then
     FILELIST="ooo.lst"
 fi
 
-# check for wget and md5sum
-wget=
-md5sum=
-curl=`which curl 2>/dev/null`
-
-for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget /opt/local/bin/wget; do
-    eval "$i --version" > /dev/null 2>&1
-    ret=$?
-    if [ $ret -eq 0 ]; then
-        wget=$i
-        break
-    fi
-done
-
-if [ -z "$wget" -a -z "$curl" ]; then
-    echo "ERROR: neither  wget nor curl found!"
-    exit 1
-fi
-
-for i in md5 md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/bin/gmd5sum /opt/local/bin/md5sum; do
-    if [ "$i" = "md5" ]; then
-        eval "$i -x" > /dev/null 2>&1
-    else
-        eval "$i --version" > /dev/null 2>&1
-    fi
-    ret=$?
-    if [ $ret -eq 0 ]; then
-        md5sum=$i
-        break
-    fi
-done
-
-if [ "$md5sum" = "md5" ]; then
-    if md5 -r < /dev/null > /dev/null 2>/dev/null; then
-        md5special=-r
-    elif md5 -n < /dev/null > /dev/null 2>/dev/null; then
-        md5special=-n
-    fi
-fi
-
-if [ -z "$md5sum" ]; then
-    echo "Warning: no md5sum: found!"
-fi
-
 start_dir=`pwd`
 logfile=$TARFILE_LOCATION/fetch.log
 date >> $logfile
@@ -130,11 +86,11 @@ downloaditem()
     if [ "$1" != "" ]; then
         if [ ! -f "../$2" ]; then
             echo $2
-            if [ ! -z "$wget" ]; then
-                $wget --progress=dot:mega -Q 0 -P "." -l 0 -nd -nH -N $1/$2 2>&1 | tee -a $logfile
+            if [ ! -z "$WGET" ]; then
+                $WGET --progress=dot:mega -Q 0 -P "." -l 0 -nd -nH -N $1/$2 2>&1 | tee -a $logfile
             else
                 echo fetching $2
-                $curl $file_date_check -O $1/$2 2>&1 | tee -a $logfile
+                $CURL $file_date_check -O $1/$2 2>&1 | tee -a $logfile
             fi
             wret=$?
             if [ $wret -ne 0 ]; then
@@ -142,8 +98,8 @@ downloaditem()
                 failed="$failed $2"
                 wret=0
             fi
-            if [ -f $2 -a -n "$3" -a -n "$md5sum" ]; then
-                sum=`$md5sum $md5special $2 | sed "s/ .*//"`
+            if [ -f $2 -a -n "$3" -a -n "$MD5SUM" ]; then
+                sum=`$MD5SUM $2 | sed "s/ .*//"`
                 if [ "$sum" != "$3" ]; then
                     echo checksum failure for $2 2>&1 | tee -a $logfile
                     failed="$failed $2"

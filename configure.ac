@@ -11835,6 +11835,56 @@ AC_SUBST([DOXYGEN])
 
 AC_SUBST(SCPDEFS)
 
+#
+# check for wget and md5sum
+#
+WGET=
+MD5SUM=
+CURL=`which curl 2>/dev/null`
+
+for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget /opt/local/bin/wget; do
+    eval "$i --version" > /dev/null 2>&1
+    ret=$?
+    if test $ret -eq 0; then
+        WGET=$i
+        break
+    fi
+done
+
+if test -z "$WGET" -a -z "$CURL"; then
+    AC_MSG_ERROR([neither wget nor curl found!])
+fi
+
+for i in md5 md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/bin/gmd5sum /opt/local/bin/md5sum; do
+    if test "$i" = "md5"; then
+        eval "$i -x" > /dev/null 2>&1
+    else
+        eval "$i --version" > /dev/null 2>&1
+    fi
+    ret=$?
+    if test $ret -eq 0; then
+        MD5SUM=$i
+        break
+    fi
+done
+
+if test "$MD5SUM" = "md5"; then
+    if md5 -r < /dev/null > /dev/null 2>/dev/null; then
+        MD5SUM="$MD5SUM -r"
+    elif md5 -n < /dev/null > /dev/null 2>/dev/null; then
+        MD5SUM="$MD5SUM -n"
+    fi
+fi
+
+if test -z "$MD5SUM"; then
+    AC_MSG_WARN([no md5sum: found!])
+    add_warning "no md5sum: found!"
+fi
+
+AC_SUBST(WGET)
+AC_SUBST(CURL)
+AC_SUBST(MD5SUM)
+
 dnl ===================================================================
 dnl Product version
 dnl ===================================================================
