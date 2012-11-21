@@ -28,6 +28,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/scrbar.hxx>
@@ -1967,7 +1968,7 @@ namespace
             if (aRet[nI] == '_')
             {
                 if (aRet[nI+1] != '_')
-                    aRet[nI] = '~';
+                    aRet[nI] = MNEMONIC_CHAR;
                 else
                     aRet.remove(nI, 1);
                 ++nI;
