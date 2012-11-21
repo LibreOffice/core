@@ -57,7 +57,7 @@ using ::rtl::Uri;
 
 XMLFilterSettingsDialog::XMLFilterSettingsDialog(Window* pParent,
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF)
-    : Dialog(pParent, "XMLFilterSettingsDialog", "filter/ui/xmlfiltersettings.ui")
+    : ModelessDialog(pParent, "XMLFilterSettingsDialog", "filter/ui/xmlfiltersettings.ui")
     , mxMSF( rxMSF )
     , m_bIsClosable(true)
     , m_sTemplatePath("$(user)/template/")
@@ -176,7 +176,7 @@ short XMLFilterSettingsDialog::Execute()
     initFilterList();
     updateStates();
 
-    return Dialog::Execute();
+    return ModelessDialog::Execute();
 }
 
 // -----------------------------------------------------------------------
@@ -1016,7 +1016,7 @@ void XMLFilterSettingsDialog::onClose()
 long XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
 {
     // Zuerst Basisklasse rufen wegen TabSteuerung
-    long nRet = Dialog::Notify( rNEvt );
+    long nRet = ModelessDialog::Notify( rNEvt );
     if ( !nRet )
     {
         if ( rNEvt.GetType() == EVENT_KEYINPUT )

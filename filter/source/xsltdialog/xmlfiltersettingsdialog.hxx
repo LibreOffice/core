@@ -82,7 +82,7 @@ public:
 
 // --------------------------------------------------------------------
 
-class XMLFilterSettingsDialog : public Dialog
+class XMLFilterSettingsDialog : public ModelessDialog
 {
 public:
     XMLFilterSettingsDialog(Window* pParent,

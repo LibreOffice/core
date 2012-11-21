@@ -22,7 +22,7 @@
 
 #include "osl/mutex.hxx"
 
-#include "toolkit/helper/vclunohelper.hxx"
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/configuration/theDefaultProvider.hpp"
@@ -103,12 +103,9 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
 //------------------------------------------------------------------------------
 TheExtensionManager::~TheExtensionManager()
 {
-    if ( m_pUpdReqDialog )
-        delete m_pUpdReqDialog;
-    if ( m_pExtMgrDialog )
-        delete m_pExtMgrDialog;
-    if ( m_pExecuteCmdQueue )
-        delete m_pExecuteCmdQueue;
+    delete m_pUpdReqDialog;
+    delete m_pExtMgrDialog;
+    delete m_pExecuteCmdQueue;
 }
 
 //------------------------------------------------------------------------------
@@ -454,7 +451,7 @@ void TheExtensionManager::queryTermination( ::lang::EventObject const & )
     {
         ToTop( TOTOP_RESTOREWHENMIN );
         throw frame::TerminationVetoException(
-            OUSTR("The office cannot be closed while the Extension Manager is running"),
+            OUString("The office cannot be closed while the Extension Manager is running"),
             uno::Reference<XInterface>(static_cast<frame::XTerminateListener*>(this), uno::UNO_QUERY));
     }
     else
@@ -496,8 +493,8 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
         return s_ExtMgr;
     }
 
-    Window * pParent = DIALOG_NO_PARENT;
-    if ( xParent.is() )
+    Window* pParent = DIALOG_NO_PARENT;
+    if (xParent.is())
         pParent = VCLUnoHelper::GetWindow(xParent);
 
     ::rtl::Reference<TheExtensionManager> that( new TheExtensionManager( pParent, xContext ) );

@@ -18,7 +18,7 @@
  */
 
 #include <osl/mutex.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
@@ -312,12 +312,19 @@ void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* 
 {
     ::SolarMutexGuard aGuard;
 
+    if (!mpDialog)
+        return;
+
     // we will never give a veto here
-    if( mpDialog && !mpDialog->isClosable() )
+    if (!mpDialog->isClosable())
     {
         mpDialog->ToTop();
-        throw TerminationVetoException();
+        throw TerminationVetoException(
+            OUString("The office cannot be closed while the XMLFilterDialog is running"),
+            Reference<XInterface>(static_cast<XTerminateListener*>(this), UNO_QUERY));
     }
+    else
+        mpDialog->Close();
 }
 
 //-------------------------------------------------------------------------
@@ -349,13 +356,9 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException)
 
     if( NULL == mpDialog )
     {
-        Window* pParent = NULL;
-        if( mxParent.is() )
-        {
-            VCLXWindow* pImplementation = VCLXWindow::GetImplementation(mxParent);
-            if (pImplementation)
-                pParent = pImplementation->GetWindow();
-        }
+        Window* pParent = DIALOG_NO_PARENT;
+        if (mxParent.is())
+            pParent = VCLUnoHelper::GetWindow(mxParent);
 
         Reference< XComponent > xComp( this );
         mpDialog = new XMLFilterSettingsDialog(pParent, mxMSF);
