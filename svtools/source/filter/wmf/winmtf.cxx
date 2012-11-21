@@ -1112,7 +1112,13 @@ void WinMtfOutput::MoveTo( const Point& rPoint, sal_Bool bRecordPath )
 {
     Point aDest( ImplMap( rPoint ) );
     if ( bRecordPath )
+    {
+        // fdo#57353 create new subpath for subsequent moves
+        if ( aPathObj.Count() )
+            if ( aPathObj[ aPathObj.Count() - 1 ].GetSize() )
+                aPathObj.Insert( Polygon(), POLYPOLY_APPEND );
         aPathObj.AddPoint( aDest );
+    }
     maActPos = aDest;
 }
 
