@@ -481,13 +481,6 @@ private:
     bool mbXMLExport : 1;                ///< sal_True: during XML export
 #endif
 
-    // Document flag to trigger conversion, which applys the workaround for documents,
-    // which uses a certain layout defect in OOo 1.x to layout the documents.
-    // This conversion is performed, when the frames for the layout are created.
-    // Thus, this document flag has to be set after load a document and before
-    // creating the document view.
-    bool mbApplyWorkaroundForB6375613 : 1;
-
     //
     // COMPATIBILITY FLAGS START
     //
@@ -2035,12 +2028,6 @@ public:
     /// initialize XForms models; turn this into an XForms document
     void initXForms( bool bCreateDefaultModel );
     // access methods for XForms model(s)
-
-    inline bool ApplyWorkaroundForB6375613() const
-    {
-        return mbApplyWorkaroundForB6375613;
-    }
-    void SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 );
 
     //Update all the page masters
     void SetDefaultPageMode(bool bSquaredPageMode);

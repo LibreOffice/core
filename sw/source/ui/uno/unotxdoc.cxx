@@ -1982,14 +1982,6 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         case WID_DOC_BUILDID:
             aValue >>= maBuildId;
         break;
-        //
-        case WID_APPLY_WORKAROUND_FOR_B6375613:
-        {
-            bool bApplyWorkaroundForB6375613( false );
-            aValue >>= bApplyWorkaroundForB6375613;
-            pDocShell->GetDoc()->SetApplyWorkaroundForB6375613( bApplyWorkaroundForB6375613 );
-        }
-        break;
 
         default:
         {
@@ -2143,12 +2135,6 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_HAS_VALID_SIGNATURES:
             aAny <<= hasValidSignatures();
-        break;
-        //
-        case WID_APPLY_WORKAROUND_FOR_B6375613:
-        {
-            aAny <<= pDocShell->GetDoc()->ApplyWorkaroundForB6375613();
-        }
         break;
 
         default:

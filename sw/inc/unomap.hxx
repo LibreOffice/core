@@ -238,7 +238,6 @@
 #define WID_DOC_HAS_VALID_SIGNATURES            1017
 #define WID_DOC_BUILDID                         1024
 #define WID_DOC_ISTEMPLATEID                        1025
-#define WID_APPLY_WORKAROUND_FOR_B6375613       1070
 
 // MailMerge
 #define WID_SELECTION                           1071

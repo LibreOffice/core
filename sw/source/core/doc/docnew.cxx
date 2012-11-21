@@ -102,17 +102,10 @@
 
 #include <cmdid.h>              // for the default printer in SetJob
 
-
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#include <com/sun/star/beans/XPropertyContainer.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-
 #include <pausethreadstarting.hxx>
 #include <numrule.hxx>
 #include <list.hxx>
 #include <listfunc.hxx>
-
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <sfx2/Metadatable.hxx>
 #include <fmtmeta.hxx> // MetaFieldManager
@@ -303,8 +296,6 @@ SwDoc::SwDoc()
 #ifdef DBG_UTIL
     mbXMLExport(false),
 #endif
-
-    mbApplyWorkaroundForB6375613(false),
 
     // COMPATIBILITY FLAGS START
 
@@ -998,44 +989,6 @@ void SwDoc::UpdateLinks( bool bUI )
         }
     }
 
-}
-
-void SwDoc::SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 )
-{
-    if ( mbApplyWorkaroundForB6375613 != p_bApplyWorkaroundForB6375613 )
-    {
-        mbApplyWorkaroundForB6375613 = p_bApplyWorkaroundForB6375613;
-
-        uno::Reference< document::XDocumentInfoSupplier > xDoc(
-                                                GetDocShell()->GetBaseModel(),
-                                                uno::UNO_QUERY);
-        if ( xDoc.is() )
-        {
-            uno::Reference< beans::XPropertyContainer > xDocInfo(
-                                                        xDoc->getDocumentInfo(),
-                                                        uno::UNO_QUERY );
-            if ( xDocInfo.is() )
-            {
-                try
-                {
-                    if ( mbApplyWorkaroundForB6375613 )
-                    {
-                        xDocInfo->addProperty(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkaroundForB6375613Applied")),
-                            beans::PropertyAttribute::TRANSIENT | beans::PropertyAttribute::REMOVABLE,
-                            uno::makeAny( false ) );
-                    }
-                    else
-                    {
-                        xDocInfo->removeProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkaroundForB6375613Applied")) );
-                    }
-                }
-                catch( uno::Exception& )
-                {
-                }
-            }
-        }
-    }
 }
 
 ::sfx2::IXmlIdRegistry&

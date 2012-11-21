@@ -61,8 +61,6 @@
 #include <pam.hxx>
 #include <docsh.hxx>
 #include <poolfmt.hxx>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <set>
 
@@ -682,69 +680,6 @@ sal_Bool SwLayHelper::CheckInsertPage()
     return sal_False;
 }
 
-//
-static bool lcl_HasTextFrmAnchoredObjs( SwTxtFrm* p_pTxtFrm )
-{
-    bool bHasTextFrmAnchoredObjs( false );
-
-    const SwFrmFmts* pSpzFrmFmts = p_pTxtFrm->GetTxtNode()->GetDoc()->GetSpzFrmFmts();
-    for ( sal_uInt16 i = 0; i < pSpzFrmFmts->size(); ++i )
-    {
-        SwFrmFmt *pFmt = (SwFrmFmt*)(*pSpzFrmFmts)[i];
-        const SwFmtAnchor &rAnch = pFmt->GetAnchor();
-        if ( rAnch.GetCntntAnchor() &&
-             ((rAnch.GetAnchorId() == FLY_AT_PARA) ||
-              (rAnch.GetAnchorId() == FLY_AT_CHAR)) &&
-             rAnch.GetCntntAnchor()->nNode.GetIndex() ==
-                                        p_pTxtFrm->GetTxtNode()->GetIndex() )
-        {
-            bHasTextFrmAnchoredObjs = true;
-            break;
-        }
-    }
-
-    return bHasTextFrmAnchoredObjs;
-}
-
-static void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
-{
-    SwTxtFrm* pFirstTextFrmOnNewPage = dynamic_cast<SwTxtFrm*>(p_pFirstFrmOnNewPage);
-    //
-    if ( pFirstTextFrmOnNewPage &&
-         !pFirstTextFrmOnNewPage->IsFollow() &&
-         pFirstTextFrmOnNewPage->GetTxt().Len() == 0 &&
-         lcl_HasTextFrmAnchoredObjs( pFirstTextFrmOnNewPage ) )
-    {
-        // apply page break before at this text frame to assure, that it doesn't flow backward.
-        const SvxBreak eBreak =
-                    pFirstTextFrmOnNewPage->GetAttrSet()->GetBreak().GetBreak();
-        if ( eBreak == SVX_BREAK_NONE )
-        {
-            pFirstTextFrmOnNewPage->GetTxtNode()->LockModify();
-            SwDoc* pDoc( pFirstTextFrmOnNewPage->GetTxtNode()->GetDoc() );
-            IDocumentContentOperations* pIDCO = pFirstTextFrmOnNewPage->GetTxtNode()->getIDocumentContentOperations();
-            const SwPaM aTmpPaM( *(pFirstTextFrmOnNewPage->GetTxtNode()) );
-            pIDCO->InsertPoolItem( aTmpPaM,
-                SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ), 0 );
-            pFirstTextFrmOnNewPage->GetTxtNode()->UnlockModify();
-
-            uno::Reference< document::XDocumentInfoSupplier > xDoc(
-                                        pDoc->GetDocShell()->GetBaseModel(),
-                                        uno::UNO_QUERY);
-            uno::Reference< beans::XPropertySet > xDocInfo(
-                                        xDoc->getDocumentInfo(),
-                                        uno::UNO_QUERY );
-            try
-            {
-                xDocInfo->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkaroundForB6375613Applied")), uno::makeAny( true ) );
-            }
-            catch( uno::Exception& )
-            {
-            }
-        }
-    }
-}
-
 /*
  * SwLayHelper::CheckInsert
  *  is the entry point for the _InsertCnt-function.
@@ -937,11 +872,6 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
             SwPageFrm* pLastPage = rpPage;
             if( CheckInsertPage() )
             {
-                //
-                if ( pDoc->ApplyWorkaroundForB6375613() )
-                {
-                    lcl_ApplyWorkaroundForB6375613( rpFrm );
-                }
                 _CheckFlyCache( pLastPage );
                 if( rpPrv && rpPrv->IsTxtFrm() && !rpPrv->GetValidSizeFlag() )
                     rpPrv->Frm().Height( rpPrv->GetUpper()->Prt().Height() );
