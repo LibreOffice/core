@@ -565,12 +565,8 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
     return aGP;
 }
 
-// FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-SdrObject* SdrRectObj::DoConvertToPolyObj(sal_Bool bBezier /*, bool bAddText */) const
+SdrObject* SdrRectObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
 {
-    // FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-    bool bAddText = true;
-
     XPolygon aXP(ImpCalcXPoly(aRect,GetEckenradius()));
     { // TODO: this is only for the moment, until we have the new TakeContour()
         aXP.Remove(0,1);

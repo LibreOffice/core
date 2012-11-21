@@ -194,11 +194,7 @@ public:
     bool isEmbeddedSvg() const;
     GDIMetaFile getMetafileFromEmbeddedSvg() const;
 
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-    virtual SdrObject*      DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
-#else
-    virtual SdrObject*      DoConvertToPolyObj(sal_Bool bBezier /*, bool bAddText */) const;
-#endif
+    virtual SdrObject*      DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 
     virtual void            AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
 

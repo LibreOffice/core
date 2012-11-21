@@ -2689,7 +2689,7 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) 
 
 SdrObject* SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) const
 {
-    SdrObject* pRet = DoConvertToPolyObj(bBezier /*, true */); // FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+    SdrObject* pRet = DoConvertToPolyObj(bBezier, true);
 
     if(pRet && bLineToArea)
     {
@@ -2709,8 +2709,7 @@ SdrObject* SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// FIXME_REMOVE_WHEN_RE_BASE_COMPLETE comment ..
-SdrObject* SdrObject::DoConvertToPolyObj(sal_Bool /*bBezier*/ /*, bool */ /*bAddText*/) const
+SdrObject* SdrObject::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
 {
     return NULL;
 }

@@ -1091,9 +1091,8 @@ GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedSvg() const
     return aRetval;
 }
 
-SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier /*, bool bAddText */ ) const
+SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText ) const
 {
-    bool bAddText = true; // FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
     SdrObject* pRetval = NULL;
     GraphicType aGraphicType(GetGraphicType());
     GDIMetaFile aMtf;
@@ -1158,8 +1157,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier /*, bool bAddText */ 
                 if( pRetval )
                 {
                     SdrObject* pHalfDone = pRetval;
-                    pRetval = pHalfDone->DoConvertToPolyObj(bBezier
-                                                            /*, bAddText */ ); // FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+                    pRetval = pHalfDone->DoConvertToPolyObj(bBezier, bAddText);
                     SdrObject::Free( pHalfDone ); // resulting object is newly created
 
                     if( pRetval )
@@ -1180,8 +1178,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier /*, bool bAddText */ 
             }
 
             // #i118485# convert line and fill
-            // FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-            SdrObject* pLineFill = SdrRectObj::DoConvertToPolyObj(bBezier /*, false */);
+            SdrObject* pLineFill = SdrRectObj::DoConvertToPolyObj(bBezier, false);
 
             if(pLineFill)
             {
@@ -1211,7 +1208,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier /*, bool bAddText */ 
         case GRAPHIC_BITMAP:
         {
             // create basic object and add fill
-            pRetval = SdrRectObj::DoConvertToPolyObj(bBezier /*, bAddText */); // FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+            pRetval = SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
 
             // save bitmap as an attribute
             if(pRetval)
@@ -1232,7 +1229,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier /*, bool bAddText */ 
         case GRAPHIC_NONE:
         case GRAPHIC_DEFAULT:
         {
-            pRetval = SdrRectObj::DoConvertToPolyObj(bBezier /*, bAddText */); // FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+            pRetval = SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
             break;
         }
     }

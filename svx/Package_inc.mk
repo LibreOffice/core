@@ -1,33 +1,25 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
-#*************************************************************************
 #
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# This file is part of the LibreOffice project.
 #
-# Copyright 2000, 2011 Oracle and/or its affiliates.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# OpenOffice.org - a multi-platform office productivity suite
+# This file incorporates work covered by the following license notice:
 #
-# This file is part of OpenOffice.org.
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-# OpenOffice.org is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License version 3
-# only, as published by the Free Software Foundation.
-#
-# OpenOffice.org is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License version 3 for more details
-# (a copy is included in the LICENSE file that accompanied this code).
-#
-# You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
-# <http://www.openoffice.org/license.html>
-# for a copy of the LGPLv3 License.
-#
-#*************************************************************************
 
 $(eval $(call gb_Package_Package,svx_inc,$(SRCDIR)/svx/inc))
 
+$(eval $(call gb_Package_add_file,svx_inc,inc/svx/charthelper.hxx,svx/charthelper.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sxsoitm.hxx,svx/sxsoitm.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdshtitm.hxx,svx/sdshtitm.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/polysc3d.hxx,svx/polysc3d.hxx))
@@ -57,7 +49,6 @@ $(eval $(call gb_Package_add_file,svx_inc,inc/svx/ucsubset.hxx,svx/ucsubset.hxx)
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sderitm.hxx,svx/sderitm.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/obj3d.hxx,svx/obj3d.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/dbcharsethelper.hxx,svx/dbcharsethelper.hxx))
-$(eval $(call gb_Package_add_file,svx_inc,inc/svx/charthelper.hxx,svx/charthelper.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdangitm.hxx,svx/sdangitm.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/grfcrop.hxx,svx/grfcrop.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sxtraitm.hxx,svx/sxtraitm.hxx))
@@ -175,6 +166,7 @@ $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdasaitm.hxx,svx/sdasaitm.hxx)
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/unomaster.hxx,svx/unomaster.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/svdedtv.hxx,svx/svdedtv.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/xlinjoit.hxx,svx/xlinjoit.hxx))
+$(eval $(call gb_Package_add_file,svx_inc,inc/svx/xlncapit.hxx,svx/xlncapit.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sxmbritm.hxx,svx/sxmbritm.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/AccessibleGraphicShape.hxx,svx/AccessibleGraphicShape.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/xlnstit.hxx,svx/xlnstit.hxx))
@@ -402,7 +394,6 @@ $(eval $(call gb_Package_add_file,svx_inc,inc/svx/svxgrahicitem.hxx,svx/svxgrahi
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/xflbstit.hxx,svx/xflbstit.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/galbrws.hxx,svx/galbrws.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/unomod.hxx,svx/unomod.hxx))
-$(eval $(call gb_Package_add_file,svx_inc,inc/svx/xlncapit.hxx,svx/xlncapit.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/xlnclit.hxx,svx/xlnclit.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/deflt3d.hxx,svx/deflt3d.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/e3dundo.hxx,svx/e3dundo.hxx))

@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include <comphelper/string.hxx>
@@ -90,12 +81,14 @@ public:
 };
 
 // ------------------------------------------------------------------------
+DBG_NAME(GalleryBackgroundPopup)
 
 GalleryBackgroundPopup::GalleryBackgroundPopup( const GalleryTheme* pTheme, sal_uIntPtr nObjectPos ) :
             SfxControllerItem   ( SID_GALLERY_BG_BRUSH, SfxViewFrame::Current()->GetBindings() ),
             mpTheme             ( pTheme ),
             mnObjectPos         ( nObjectPos )
 {
+    DBG_CTOR(GalleryBackgroundPopup,NULL);
     SfxViewFrame::Current()->GetBindings().Update( SID_GALLERY_BG_BRUSH );
     RemoveDisabledEntries();
 }
@@ -104,6 +97,7 @@ GalleryBackgroundPopup::GalleryBackgroundPopup( const GalleryTheme* pTheme, sal_
 
 GalleryBackgroundPopup::~GalleryBackgroundPopup()
 {
+    DBG_DTOR(GalleryBackgroundPopup,NULL);
 }
 
 // ------------------------------------------------------------------------
@@ -169,6 +163,7 @@ public:
 };
 
 // ------------------------------------------------------------------------
+DBG_NAME(GalleryThemePopup)
 
 GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, sal_uIntPtr nObjectPos, sal_Bool bPreview ) :
     PopupMenu           ( GAL_RES( RID_SVXMN_GALLERY2 ) ),
@@ -178,6 +173,8 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, sal_uIntPtr nO
     mnObjectPos         ( nObjectPos ),
     mbPreview           ( bPreview )
 {
+    DBG_CTOR(GalleryThemePopup,NULL);
+
     const SgaObjKind    eObjKind = mpTheme->GetObjectKind( mnObjectPos );
     PopupMenu*          pAddMenu = GetPopupMenu( MN_ADDMENU );
     SfxBindings&        rBindings = SfxViewFrame::Current()->GetBindings();
@@ -256,6 +253,7 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, sal_uIntPtr nO
 
 GalleryThemePopup::~GalleryThemePopup()
 {
+    DBG_DTOR(GalleryThemePopup,NULL);
 }
 
 // ------------------------------------------------------------------------
@@ -276,16 +274,19 @@ void GalleryThemePopup::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
 // ------------------
 // - GalleryToolBox -
 // ------------------
+DBG_NAME(GalleryToolBox)
 
 GalleryToolBox::GalleryToolBox( GalleryBrowser2* pParent ) :
     ToolBox( pParent, WB_TABSTOP )
 {
+    DBG_CTOR(GalleryToolBox,NULL);
 }
 
 // ------------------------------------------------------------------------
 
 GalleryToolBox::~GalleryToolBox()
 {
+    DBG_DTOR(GalleryToolBox,NULL);
 }
 
 // ------------------------------------------------------------------------
@@ -299,6 +300,7 @@ void GalleryToolBox::KeyInput( const KeyEvent& rKEvt )
 // -------------------
 // - GalleryBrowser2 -
 // -------------------
+DBG_NAME(GalleryBrowser2)
 
 GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, Gallery* pGallery ) :
     Control             ( pParent, rResId ),
@@ -315,6 +317,8 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     meLastMode          ( GALLERYBROWSERMODE_NONE ),
     mbCurActionIsLinkage( sal_False )
 {
+    DBG_CTOR(GalleryBrowser2,NULL);
+
     Image       aDummyImage;
     const Link  aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
     Font        aInfoFont( maInfoBar.GetControlFont() );
@@ -367,6 +371,8 @@ GalleryBrowser2::~GalleryBrowser2()
 
     if( mpCurTheme )
         mpGallery->ReleaseTheme( mpCurTheme, *this );
+
+    DBG_DTOR(GalleryBrowser2,NULL);
 }
 
 // -----------------------------------------------------------------------------

@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*h************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include <svx/svdoole2.hxx>
@@ -90,6 +81,11 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
+
+// #i118485#
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <editeng/outlobj.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -747,6 +743,7 @@ SdrOle2Obj::SdrOle2Obj(bool bFrame_) : m_bTypeAsked(false)
 {
     DBG_CTOR( SdrOle2Obj,NULL);
     bInDestruction = false;
+    mbSuppressSetVisAreaSize = false;
     Init();
     bFrame=bFrame_;
 }
@@ -761,6 +758,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const XubStri
 {
     DBG_CTOR( SdrOle2Obj,NULL);
     bInDestruction = false;
+    mbSuppressSetVisAreaSize = false;
     Init();
 
     mpImpl->aPersistName = rNewObjName;
@@ -824,6 +822,18 @@ SdrOle2Obj::~SdrOle2Obj()
 void SdrOle2Obj::SetAspect( sal_Int64 nAspect )
 {
     xObjRef.SetViewAspect( nAspect );
+}
+
+// -----------------------------------------------------------------------------
+bool SdrOle2Obj::isInplaceActive() const
+{
+    return xObjRef.is() && embed::EmbedStates::INPLACE_ACTIVE == xObjRef->getCurrentState();
+}
+
+// -----------------------------------------------------------------------------
+bool SdrOle2Obj::isUiActive() const
+{
+    return xObjRef.is() && embed::EmbedStates::UI_ACTIVE == xObjRef->getCurrentState();
 }
 
 // -----------------------------------------------------------------------------
@@ -1279,6 +1289,84 @@ void SdrOle2Obj::Disconnect_Impl()
 
 // -----------------------------------------------------------------------------
 
+SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText, bool /* bUseHCGraphic */) const
+{
+    Graphic* pOLEGraphic = GetGraphic();
+
+    if(pOLEGraphic)
+    {
+        // #i118485# allow creating a SdrGrafObj representation
+        SdrGrafObj* pClone = new SdrGrafObj(*pOLEGraphic);
+        pClone->SetModel(GetModel());
+
+        // copy transformation
+        basegfx::B2DHomMatrix aMatrix;
+        basegfx::B2DPolyPolygon aPolyPolygon;
+
+        TRGetBaseGeometry(aMatrix, aPolyPolygon);
+        pClone->TRSetBaseGeometry(aMatrix, aPolyPolygon);
+
+        // copy all attributes to support graphic styles for OLEs
+        pClone->SetStyleSheet(GetStyleSheet(), false);
+        pClone->SetMergedItemSet(GetMergedItemSet());
+
+        if(bAddText)
+        {
+            // #i118485# copy text (Caution! Model needed, as guaranteed in aw080)
+            OutlinerParaObject* pOPO = GetOutlinerParaObject();
+
+            if(pOPO && GetModel())
+            {
+                pClone->NbcSetOutlinerParaObject(new OutlinerParaObject(*pOPO));
+            }
+        }
+
+        return pClone;
+    }
+    else
+    {
+        // #i100710# pOLEGraphic may be zero (no visualisation available),
+        // so we need to use the OLE replacement graphic
+        SdrRectObj* pClone = new SdrRectObj(GetSnapRect());
+        pClone->SetModel(GetModel());
+
+        // gray outline
+        pClone->SetMergedItem(XLineStyleItem(XLINE_SOLID));
+        const svtools::ColorConfig aColorConfig;
+        const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES));
+        pClone->SetMergedItem(XLineColorItem(String(), aColor.nColor));
+
+        // bitmap fill
+        pClone->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
+        pClone->SetMergedItem(XFillBitmapItem(String(), GetEmtyOLEReplacementBitmap()));
+        pClone->SetMergedItem(XFillBmpTileItem(false));
+        pClone->SetMergedItem(XFillBmpStretchItem(false));
+
+        return pClone;
+    }
+}
+
+SdrObject* SdrOle2Obj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
+{
+    // #i118485# missing converter added
+    if(GetModel())
+    {
+        SdrObject* pRetval = createSdrGrafObjReplacement(true, false);
+
+        if(pRetval)
+        {
+            SdrObject* pRetval2 = pRetval->DoConvertToPolyObj(bBezier, bAddText);
+            SdrObject::Free(pRetval);
+
+            return pRetval2;
+        }
+    }
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 {
     ::comphelper::IEmbeddedHelper* pDestPers = pNewModel ? pNewModel->GetPersist() : 0;
@@ -1423,40 +1511,8 @@ void SdrOle2Obj::SetClosedObj( bool bIsClosed )
 
 SdrObject* SdrOle2Obj::getFullDragClone() const
 {
-    // special handling for OLE. The default handling works, but is too
-    // slow when the whole OLE needs to be cloned. Get the Metafile and
-    // create a graphic object with it
-    Graphic* pOLEGraphic = GetGraphic();
-    SdrObject* pClone = 0;
-
-    if(pOLEGraphic)
-    {
-        pClone = new SdrGrafObj(*pOLEGraphic, GetSnapRect());
-
-        // this would be the place where to copy all attributes
-        // when OLE will support fill and line style
-        // pClone->SetMergedItem(pOleObject->GetMergedItemSet());
-    }
-    else
-    {
-        // #i100710# pOLEGraphic may be zero (no visualisation available),
-        // so we need to use the OLE replacement graphic
-        pClone = new SdrRectObj(GetSnapRect());
-
-        // gray outline
-        pClone->SetMergedItem(XLineStyleItem(XLINE_SOLID));
-        const svtools::ColorConfig aColorConfig;
-        const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES));
-        pClone->SetMergedItem(XLineColorItem(String(), aColor.nColor));
-
-        // bitmap fill
-        pClone->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
-        pClone->SetMergedItem(XFillBitmapItem(String(), GetEmtyOLEReplacementBitmap()));
-        pClone->SetMergedItem(XFillBmpTileItem(false));
-        pClone->SetMergedItem(XFillBmpStretchItem(false));
-    }
-
-    return pClone;
+    // #i118485# use central replacement generator
+    return createSdrGrafObjReplacement(false, true);
 }
 
 // -----------------------------------------------------------------------------
@@ -1490,21 +1546,22 @@ String SdrOle2Obj::GetPersistName() const
 
 void SdrOle2Obj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bRotateFreeAllowed=sal_False;
-    rInfo.bRotate90Allowed  =sal_False;
-    rInfo.bMirrorFreeAllowed=sal_False;
-    rInfo.bMirror45Allowed  =sal_False;
-    rInfo.bMirror90Allowed  =sal_False;
-    rInfo.bTransparenceAllowed = sal_False;
-    rInfo.bGradientAllowed = sal_False;
-    rInfo.bShearAllowed     =sal_False;
-    rInfo.bEdgeRadiusAllowed=sal_False;
-    rInfo.bNoOrthoDesired   =sal_False;
-    rInfo.bCanConvToPath    =sal_False;
-    rInfo.bCanConvToPoly    =sal_False;
-    rInfo.bCanConvToPathLineToArea=sal_False;
-    rInfo.bCanConvToPolyLineToArea=sal_False;
-    rInfo.bCanConvToContour = sal_False;
+    // #i118485# Allowing much more attributes for OLEs
+    rInfo.bRotateFreeAllowed = true;
+    rInfo.bRotate90Allowed = true;
+    rInfo.bMirrorFreeAllowed = true;
+    rInfo.bMirror45Allowed = true;
+    rInfo.bMirror90Allowed = true;
+    rInfo.bTransparenceAllowed = true;
+    rInfo.bGradientAllowed = true;
+    rInfo.bShearAllowed = true;
+    rInfo.bEdgeRadiusAllowed = false;
+    rInfo.bNoOrthoDesired = false;
+    rInfo.bCanConvToPath = true;
+    rInfo.bCanConvToPoly = true;
+    rInfo.bCanConvToPathLineToArea = false;
+    rInfo.bCanConvToPolyLineToArea = false;
+    rInfo.bCanConvToContour = true;
 }
 
 // -----------------------------------------------------------------------------
@@ -1608,6 +1665,10 @@ SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
 
 void SdrOle2Obj::ImpSetVisAreaSize()
 {
+    // #i118524# do not again set VisAreaSize when the call comes from OLE client (e.g. ObjectAreaChanged)
+    if(mbSuppressSetVisAreaSize)
+        return;
+
     // currently there is no need to recalculate scaling for iconified objects
     // TODO/LATER: it might be needed in future when it is possible to change the icon
     if ( GetAspect() == embed::Aspects::MSOLE_ICON )
@@ -1752,17 +1813,6 @@ void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
 
     SdrRectObj::NbcResize(rRef,xFact,yFact);
-    if (aGeo.nShearWink!=0 || aGeo.nDrehWink!=0) { // little corrections
-        if (aGeo.nDrehWink>=9000 && aGeo.nDrehWink<27000) {
-            aRect.Move(aRect.Left()-aRect.Right(),aRect.Top()-aRect.Bottom());
-        }
-        aGeo.nDrehWink=0;
-        aGeo.nShearWink=0;
-        aGeo.nSin=0.0;
-        aGeo.nCos=1.0;
-        aGeo.nTan=0.0;
-        SetRectsDirty();
-    }
     if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
@@ -1772,6 +1822,7 @@ void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 void SdrOle2Obj::SetGeoData(const SdrObjGeoData& rGeo)
 {
     SdrRectObj::SetGeoData(rGeo);
+
     if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
@@ -1781,6 +1832,7 @@ void SdrOle2Obj::SetGeoData(const SdrObjGeoData& rGeo)
 void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
 {
     SdrRectObj::NbcSetSnapRect(rRect);
+
     if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 
@@ -1798,6 +1850,7 @@ void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
 void SdrOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
 {
     SdrRectObj::NbcSetLogicRect(rRect);
+
     if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
@@ -1827,6 +1880,7 @@ Size SdrOle2Obj::GetOrigObjSize( MapMode* pTargetMapMode ) const
 void SdrOle2Obj::NbcMove(const Size& rSize)
 {
     SdrRectObj::NbcMove(rSize);
+
     if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
