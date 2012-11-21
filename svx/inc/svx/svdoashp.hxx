@@ -135,9 +135,6 @@ protected:
     String      aName;
 
 public:
-    bool bPurposeFlipX;
-    bool bPurposeFlipY;
-
     sal_Bool UseNoFillStyle() const;
 
     sal_Bool IsMirroredX() const;

@@ -3299,13 +3299,11 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         if((bool)IsMirroredX() != bMirrorX)
         {
             SetMirroredX(bMirrorX);
-            bPurposeFlipX = !bPurposeFlipX;
         }
 
         if((bool)IsMirroredY() != bMirrorY)
         {
             SetMirroredY(bMirrorY);
-            bPurposeFlipY = !bPurposeFlipY;
         }
     }
 
