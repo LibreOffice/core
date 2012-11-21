@@ -360,6 +360,25 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
         rReq.SetReturnValue(SfxBoolItem( nSlot, bRet ));
     rReq.Done();
 
+    sal_Bool bInHeader = sal_True;
+    if ( rSh.IsInHeaderFooter( &bInHeader ) )
+    {
+        if ( !bInHeader )
+        {
+            rSh.SetShowHeaderFooterSeparator( Footer, true );
+            rSh.SetShowHeaderFooterSeparator( Header, false );
+        }
+        else
+        {
+            rSh.SetShowHeaderFooterSeparator( Header, true );
+            rSh.SetShowHeaderFooterSeparator( Footer, false );
+        }
+
+        // Force repaint
+        rSh.GetWin()->Invalidate();
+    }
+    if ( rSh.IsInHeaderFooter() != rSh.IsHeaderFooterEdit() )
+        rSh.ToggleHeaderFooterEdit();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

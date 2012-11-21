@@ -2848,8 +2848,33 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
             // Repaint everything
             Invalidate();
+        }
+        else
+        {
+            // Make sure we have the proper Header/Footer separators shown
+            // as these may be changed if clicking on an empty Header/Footer
+            rSh.SetShowHeaderFooterSeparator( Header, eControl == Header );
+            rSh.SetShowHeaderFooterSeparator( Footer, eControl == Footer );
 
-            return;
+            if ( !rSh.IsHeaderFooterEdit() )
+                rSh.ToggleHeaderFooterEdit();
+
+            // Repaint everything
+            rSh.GetWin()->Invalidate();
+        }
+    }
+    else
+    {
+        if ( rSh.IsHeaderFooterEdit( ) )
+            rSh.ToggleHeaderFooterEdit( );
+        else
+        {
+            // Make sure that the separators are hidden
+            rSh.SetShowHeaderFooterSeparator( Header, false );
+            rSh.SetShowHeaderFooterSeparator( Footer, false );
+
+            // Repaint everything
+            rSh.GetWin()->Invalidate();
         }
     }
 
