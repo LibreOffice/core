@@ -57,16 +57,47 @@ namespace abp
         Size  aItemSize( LogicToPixel( Size( 0, 8 ), MAP_APPFONT ) );
         aItemSize.Width() = GetOutputSizePixel().Width() - 30;
 
-        bool bWithMozilla = true, bUnx = true;
+        //TODO:  For now, try to keep offering the same choices like before the
+        // Mozilla/MORK cleanup, even if the status of what driver actually
+        // provides which functionality is somewhat unclear, see the discussions
+        // of fdo#57285 "Address Book Data Source Wizard lists 'Mac OS X address
+        // book' on Linux" and fdo#57322 "Moz-free LDAP Address Book driver."
+        // In accordance with ancient OOo 3.3, this is as follows:
+        //
+        // On Linux:
+        // - EVOLUTION, EVOLUTION_GROUPWISE, EVOLUTION_LDAP (if applicable)
+        // - MORK (via mork driver, which is built unconditionally)
+        // - THUNDERBIRD (via mork driver?, which is built unconditionally)
+        // - KAB (if applicable)
+        // - LDAP (via mork driver?, which is built unconditionally)
+        // - OTHER
+        //
+        // On Mac OS X:
+        // - MACAB (if applicable)
+        // - OTHER
+        //
+        // On Windows:
+        // - MORK, THUNDERBIRD, LDAP, OUTLOOK, OUTLOOKEXPRESS (via mozab driver,
+        //   if WITH_MOZILLA)
+        // - OTHER
+
+        bool bWithMozilla = false, bWindows = false;
         bool bHaveEvolution = false, bHaveKab = false;
         bool bHaveMacab = false;
 
-#if !defined WITH_MOZILLA || defined MACOSX
-        bWithMozilla = false;
+#if defined WNT
+
+#if defined WITH_MOZILLA
+        bWithMozilla = true;
 #endif
-#ifndef UNX
-        bUnx = false;
+        bWindows = true;
+
 #else
+
+#if !defined MACOSX
+        bWithMozilla = true;
+#endif
+
         Reference< XDriverAccess> xManager(_pParent->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager"))), UNO_QUERY);
 
         try
@@ -101,6 +132,7 @@ namespace abp
         catch(...)
         {
         }
+
 #endif
 
         // Items are displayed in list order
@@ -112,8 +144,8 @@ namespace abp
         m_aAllTypes.push_back( ButtonItem( &m_aKab, AST_KAB, bHaveKab ) );
         m_aAllTypes.push_back( ButtonItem( &m_aMacab, AST_MACAB, bHaveMacab ) );
         m_aAllTypes.push_back( ButtonItem( &m_aLDAP, AST_LDAP, bWithMozilla ) );
-        m_aAllTypes.push_back( ButtonItem( &m_aOutlook, AST_OUTLOOK, bWithMozilla && !bUnx ) );
-        m_aAllTypes.push_back( ButtonItem( &m_aOE, AST_OE, bWithMozilla && !bUnx ) );
+        m_aAllTypes.push_back( ButtonItem( &m_aOutlook, AST_OUTLOOK, bWithMozilla && bWindows ) );
+        m_aAllTypes.push_back( ButtonItem( &m_aOE, AST_OE, bWithMozilla && bWindows ) );
         m_aAllTypes.push_back( ButtonItem( &m_aOther, AST_OTHER, true ) );
 
         Link aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
