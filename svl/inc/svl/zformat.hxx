@@ -184,10 +184,10 @@ public:
     SvNumberformat( ImpSvNumberformatScan& rSc, LanguageType eLge );
 
     // Normal ctor
-    SvNumberformat( String& rString,
+    SvNumberformat( OUString& rString,
                    ImpSvNumberformatScan* pSc,
                    ImpSvNumberInputScan* pISc,
-                   xub_StrLen& nCheckPos,
+                   sal_Int32& nCheckPos,
                    LanguageType& eLan,
                    bool bStand = false );
 
@@ -487,7 +487,7 @@ private:
             double& fOrgDateTime, const ImpSvNumFor& rNumFor ) const;
 #endif
 
-    /** Whether to use possessive genitive case month name, or partitive case 
+    /** Whether to use possessive genitive case month name, or partitive case
         month name, instead of nominative name (noun).
 
         @param io_nState
@@ -502,7 +502,7 @@ private:
         @param eCodeType
             a NfKeywordIndex, must designate a month type code
 
-        @returns one of com::sun::star::i18n::CalendarDisplayCode values 
+        @returns one of com::sun::star::i18n::CalendarDisplayCode values
             according to eCodeType and the check executed (or passed).
      */
     SVL_DLLPRIVATE sal_Int32 ImpUseMonthCase( int & io_nState, const ImpSvNumFor& rNumFor, NfKeywordIndex eCodeType ) const;
@@ -518,14 +518,14 @@ private:
     const SvNumberFormatter& GetFormatter() const   { return *rScan.GetNumberformatter(); }
 
     // divide in substrings and color conditions
-    SVL_DLLPRIVATE short ImpNextSymbol( String& rString,
-                     xub_StrLen& nPos,
-                     String& sSymbol );
+    SVL_DLLPRIVATE short ImpNextSymbol( OUStringBuffer& rString,
+                                        sal_Int32& nPos,
+                                        OUString& sSymbol );
 
     // read string until ']' and strip blanks (after condition)
-    SVL_DLLPRIVATE static xub_StrLen ImpGetNumber( String& rString,
-                   xub_StrLen& nPos,
-                   String& sSymbol );
+    SVL_DLLPRIVATE static sal_Int32 ImpGetNumber( OUStringBuffer& rString,
+                                                  sal_Int32& nPos,
+                                                  OUString& sSymbol );
 
     /**
      * Parse the content of '[$-xxx] or '[$-xxxxxxxx]' and extract the locale
@@ -549,7 +549,7 @@ private:
      *         list of language types. These numbers also correspond with the
      *         numbers used by Microsoft Office.
      */
-    SVL_DLLPRIVATE static LocaleType ImpGetLocaleType( const String& rString, xub_StrLen& nPos );
+    SVL_DLLPRIVATE static LocaleType ImpGetLocaleType( const OUString& rString, sal_Int32& nPos );
 
     /** Obtain calendar and numerals from a LocaleType that was parsed from a
         LCID with ImpGetLocaleType().
@@ -564,8 +564,10 @@ private:
         calendar code, else an empty string. The calendar string needs to be
         inserted at a proper positon to rString after all bracketed prefixes.
      */
-    SVL_DLLPRIVATE String ImpObtainCalendarAndNumerals( String & rString,
-            xub_StrLen & nPos, LanguageType & nLang, const LocaleType & aTmpLocale );
+    SVL_DLLPRIVATE OUString ImpObtainCalendarAndNumerals( OUStringBuffer & rString,
+                                                          sal_Int32 & nPos,
+                                                          LanguageType & nLang,
+                                                          const LocaleType & aTmpLocale );
 
     // standard number output
     SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, String& OutString );

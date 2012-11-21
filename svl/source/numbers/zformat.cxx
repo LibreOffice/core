@@ -686,10 +686,10 @@ static bool lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
 }
 
 
-String SvNumberformat::ImpObtainCalendarAndNumerals( String & rString,
-        xub_StrLen & nPos, LanguageType & nLang, const LocaleType & aTmpLocale )
+OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer & rString, sal_Int32 & nPos,
+                                                       LanguageType & nLang, const LocaleType & aTmpLocale )
 {
-    String sCalendar;
+    OUString sCalendar;
     /* TODO: this could be enhanced to allow other possible locale dependent
      * calendars and numerals. BUT only if our locale data allows it! For LCID
      * numerals and calendars see
@@ -699,7 +699,7 @@ String SvNumberformat::ImpObtainCalendarAndNumerals( String & rString,
         // Numeral shape code "D" = Thai digits.
         if (aTmpLocale.mnNumeralShape == 0xD)
         {
-            rString.InsertAscii( "[NatNum1]", nPos);
+            rString.insert( nPos, "[NatNum1]");
         }
         // Calendar type code "07" = Thai Buddhist calendar, insert this after
         // all prefixes have been consumed as it is actually a format modifier
@@ -719,23 +719,25 @@ String SvNumberformat::ImpObtainCalendarAndNumerals( String & rString,
                 maLocale = aTmpLocale;
                 nLang = maLocale.meLanguage = LANGUAGE_THAI;
             }
-            sCalendar.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "[~buddhist]"));
+            sCalendar="[~buddhist]";
         }
     }
     return sCalendar;
 }
 
 
-SvNumberformat::SvNumberformat(String& rString,
+SvNumberformat::SvNumberformat(OUString& rString,
                                ImpSvNumberformatScan* pSc,
                                ImpSvNumberInputScan* pISc,
-                               xub_StrLen& nCheckPos,
+                               sal_Int32& nCheckPos,
                                LanguageType& eLan,
                                bool bStan)
         : rScan(*pSc)
         , nNewStandardDefined(0)
         , bStarFlag( false )
 {
+    OUStringBuffer sBuff(rString);
+
     // If the group (AKA thousand) separator is a Non-Breaking Space (French)
     // replace all occurrences by a simple space.
     // The tokens will be changed to the LocaleData separator again later on.
@@ -743,12 +745,7 @@ SvNumberformat::SvNumberformat(String& rString,
     const String& rThSep = GetFormatter().GetNumThousandSep();
     if ( rThSep.GetChar(0) == cNBSp && rThSep.Len() == 1 )
     {
-        xub_StrLen nIndex = 0;
-        do
-        {
-            nIndex = rString.SearchAndReplace( cNBSp, ' ', nIndex );
-        }
-        while ( nIndex != STRING_NOTFOUND );
+        sBuff.replace( cNBSp, ' ');
     }
 
     if (rScan.GetConvertMode())
@@ -771,8 +768,8 @@ SvNumberformat::SvNumberformat(String& rString,
     bool bCancel = false;
     bool bCondition = false;
     short eSymbolType;
-    xub_StrLen nPos = 0;
-    xub_StrLen nPosOld;
+    sal_Int32 nPos = 0;
+    sal_Int32 nPosOld;
     nCheckPos = 0;
 
     // Split into 4 sub formats
@@ -784,13 +781,13 @@ SvNumberformat::SvNumberformat(String& rString,
         {
             (rScan.GetNumberformatter())->ChangeIntl(rScan.GetTmpLnge());
         }
-        String sInsertCalendar;     // a calendar resulting from parsing LCID
-        String sStr;
+        OUString sInsertCalendar;     // a calendar resulting from parsing LCID
+        OUString sStr;
         nPosOld = nPos;                         // Start position of substring
         // first get bracketed prefixes; e.g. conditions, color
         do
         {
-            eSymbolType = ImpNextSymbol(rString, nPos, sStr);
+            eSymbolType = ImpNextSymbol(sBuff, nPos, sStr);
             if (eSymbolType > 0)                    // condition
             {
                 if ( nIndex == 0 && !bCondition )
@@ -810,7 +807,7 @@ SvNumberformat::SvNumberformat(String& rString,
                 if (!bCancel)
                 {
                     double fNumber;
-                    xub_StrLen nAnzChars = ImpGetNumber(rString, nPos, sStr);
+                    sal_Int32 nAnzChars = ImpGetNumber(sBuff, nPos, sStr);
                     if (nAnzChars > 0)
                     {
                         short F_Type = NUMBERFORMAT_UNDEFINED;
@@ -820,15 +817,15 @@ SvNumberformat::SvNumberformat(String& rString,
                         {
                             fNumber = 0.0;
                             nPos = nPos - nAnzChars;
-                            rString.Erase(nPos, nAnzChars);
-                            rString.Insert('0',nPos);
+                            sBuff.remove(nPos, nAnzChars);
+                            sBuff.insert(nPos, (sal_Unicode)'0');
                             nPos++;
                         }
                     }
                     else
                     {
                         fNumber = 0.0;
-                        rString.Insert('0',nPos++);
+                        sBuff.insert(nPos++,(sal_Unicode)'0');
                     }
                     if (nIndex == 0)
                     {
@@ -838,7 +835,7 @@ SvNumberformat::SvNumberformat(String& rString,
                     {
                         fLimit2 = fNumber;
                     }
-                    if ( rString.GetChar(nPos) == ']' )
+                    if ( sBuff[nPos] == ']' )
                     {
                         nPos++;
                     }
@@ -852,7 +849,7 @@ SvNumberformat::SvNumberformat(String& rString,
             }
             else if ( lcl_SvNumberformat_IsBracketedPrefix( eSymbolType ) )
             {
-                String sSymbol( sStr);
+                OUString sSymbol( sStr);
                 switch ( eSymbolType )
                 {
                 case BRACKET_SYMBOLTYPE_COLOR :
@@ -863,10 +860,8 @@ SvNumberformat::SvNumberformat(String& rString,
                     }
                     else
                     {
-                        OUString aStr(sStr);
-                        Color* pColor = pSc->GetColor( aStr);
-                        NumFor[nIndex].SetColor( pColor, aStr);
-                        sStr = aStr;
+                        Color* pColor = pSc->GetColor( sStr);
+                        NumFor[nIndex].SetColor( pColor, sStr);
                         if (pColor == NULL)
                         {                       // error
                             bCancel = true;     // break for
@@ -901,10 +896,10 @@ SvNumberformat::SvNumberformat(String& rString,
                     }
                     else
                     {
-                        sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "NatNum" ) );
+                        sStr = "NatNum";
                         //! eSymbolType is negative
-                        sal_uInt8 nNum = sal::static_int_cast< sal_uInt8 >(0 - (eSymbolType - BRACKET_SYMBOLTYPE_NATNUM0));
-                        sStr += String::CreateFromInt32( nNum );
+                        sal_uInt8 nNum = (sal_uInt8)(0 - (eSymbolType - BRACKET_SYMBOLTYPE_NATNUM0));
+                        sStr += OUString::valueOf( (sal_Int32)nNum );
                         NumFor[nIndex].SetNatNumNum( nNum, false );
                     }
                     break;
@@ -924,16 +919,16 @@ SvNumberformat::SvNumberformat(String& rString,
                     }
                     else
                     {
-                        sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DBNum" ) );
+                        sStr = "DBNum";
                         //! eSymbolType is negative
-                        sal_uInt8 nNum = sal::static_int_cast< sal_uInt8 >(1 - (eSymbolType - BRACKET_SYMBOLTYPE_DBNUM1));
-                        sStr += static_cast< sal_Unicode >('0' + nNum);
+                        sal_uInt8 nNum = (sal_uInt8)(1 - (eSymbolType - BRACKET_SYMBOLTYPE_DBNUM1));
+                        sStr += OUString((sal_Unicode)('0' + nNum));
                         NumFor[nIndex].SetNatNumNum( nNum, true );
                     }
                     break;
                 case BRACKET_SYMBOLTYPE_LOCALE :
                     if ( NumFor[nIndex].GetNatNum().GetLang() != LANGUAGE_DONTKNOW ||
-                         rString.GetChar(nPos-1) != ']' )
+                         sBuff[nPos-1] != ']' )
                         // Check also for ']' to avoid pulling in
                         // locale data for the preview string for not
                         // yet completed LCIDs in the dialog.
@@ -943,7 +938,7 @@ SvNumberformat::SvNumberformat(String& rString,
                     }
                     else
                     {
-                        xub_StrLen nTmp = 2;
+                        sal_Int32 nTmp = 2;
                         LocaleType aTmpLocale( ImpGetLocaleType( sStr, nTmp));
                         if (aTmpLocale.meLanguage == LANGUAGE_DONTKNOW)
                         {
@@ -976,14 +971,13 @@ SvNumberformat::SvNumberformat(String& rString,
                                  * the case.
                                  * */
                             }
-                            sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM("$-") );
-                            sStr += String( aTmpLocale.generateCode());
+                            sStr = "$-" + aTmpLocale.generateCode();
                             NumFor[nIndex].SetNatNumLang( MsLangId::getRealLanguage( aTmpLocale.meLanguage));
 
                             // "$-NNCCLLLL" Numerals and Calendar
-                            if (sSymbol.Len() > 6)
+                            if (sSymbol.getLength() > 6)
                             {
-                                sInsertCalendar = ImpObtainCalendarAndNumerals( rString, nPos, eLan, aTmpLocale);
+                                sInsertCalendar = ImpObtainCalendarAndNumerals( sBuff, nPos, eLan, aTmpLocale);
                             }
                             /* NOTE: there can be only one calendar
                              * inserted so the last one wins, though
@@ -1002,13 +996,13 @@ SvNumberformat::SvNumberformat(String& rString,
                     }
                     else
                     {
-                        rString.Erase(nPosOld,nPos-nPosOld);
-                        if (sStr.Len())
+                        sBuff.remove(nPosOld, nPos - nPosOld);
+                        if (!sStr.isEmpty())
                         {
-                            rString.Insert(sStr,nPosOld);
-                            nPos = nPosOld + sStr.Len();
-                            rString.Insert(']', nPos);
-                            rString.Insert('[', nPosOld);
+                            sBuff.insert(nPosOld, sStr);
+                            nPos = nPosOld + sStr.getLength();
+                            sBuff.insert(nPos, "]");
+                            sBuff.insert(nPosOld, "[");
                             nPos += 2;
                             nPosOld = nPos;     // position before string
                         }
@@ -1035,19 +1029,17 @@ SvNumberformat::SvNumberformat(String& rString,
                 {
                     eOp2 = NUMBERFORMAT_OP_LT;  // undefined condition, default: < 0
                 }
-                if (sStr.Len() == 0)
+                if (sStr.isEmpty())
                 {
                     // empty sub format
                 }
                 else
                 {
-                    if (sInsertCalendar.Len())
+                    if (!sInsertCalendar.isEmpty())
                     {
-                        sStr.Insert( sInsertCalendar, 0);
+                        sStr = sInsertCalendar + sStr;
                     }
-                    OUString aStr(sStr);
-                    sal_Int32 nStrPos = pSc->ScanFormat( aStr);
-                    sStr = aStr;
+                    sal_Int32 nStrPos = pSc->ScanFormat( sStr);
                     sal_uInt16 nAnz = pSc->GetAnzResStrings();
                     if (nAnz == 0)              // error
                     {
@@ -1058,10 +1050,7 @@ SvNumberformat::SvNumberformat(String& rString,
                         // e.g. Thai T speciality
                         if (pSc->GetNatNumModifier() && !NumFor[nIndex].GetNatNum().IsSet())
                         {
-                            rtl::OUString aNat( "[NatNum");
-                            aNat += rtl::OUString::valueOf( sal_Int32(pSc->GetNatNumModifier()));
-                            aNat += "]";
-                            sStr.Insert( aNat, 0);
+                            sStr = "[NatNum"  + OUString::valueOf( sal_Int32(pSc->GetNatNumModifier())) + "]" + sStr;
                             NumFor[nIndex].SetNatNumNum( pSc->GetNatNumModifier(), false );
                         }
                         // #i53826# #i42727# For the Thai T speciality we need
@@ -1081,18 +1070,15 @@ SvNumberformat::SvNumberformat(String& rString,
                             ((eLanguage = MsLangId::getRealLanguage( eLan)) == LANGUAGE_THAI) &&
                             NumFor[nIndex].GetNatNum().GetLang() == LANGUAGE_DONTKNOW)
                         {
-                            rtl::OUString aLID("[$-");
-                            aLID += rtl::OUString::valueOf( sal_Int32(eLanguage), 16 ).toAsciiUpperCase();
-                            aLID += "]";
-                            sStr.Insert( aLID, 0);
+                            sStr = "[$-" + OUString::valueOf( sal_Int32(eLanguage), 16 ).toAsciiUpperCase() + "]" + sStr;
                             NumFor[nIndex].SetNatNumLang( eLanguage);
                         }
-                        rString.Erase(nPosOld,nPos-nPosOld);
-                        rString.Insert(sStr,nPosOld);
-                        nPos = nPosOld + sStr.Len();
-                        if (nPos < rString.Len())
+                        sBuff.remove(nPosOld, nPos - nPosOld);
+                        sBuff.insert(nPosOld, sStr);
+                        nPos = nPosOld + sStr.getLength();
+                        if (nPos < sBuff.getLength())
                         {
-                            rString.Insert(';',nPos);
+                            sBuff.insert(nPos, ";");
                             nPos++;
                         }
                         NumFor[nIndex].Enlarge(nAnz);
@@ -1125,7 +1111,7 @@ SvNumberformat::SvNumberformat(String& rString,
             }
             else if ( lcl_SvNumberformat_IsBracketedPrefix( eSymbolType ) )
             {
-                nCheckPos = nPosOld+1;                  // error, prefix in string
+                nCheckPos = nPosOld + 1;                // error, prefix in string
                 bCancel = true;                         // break for
             }
         }
@@ -1141,10 +1127,10 @@ SvNumberformat::SvNumberformat(String& rString,
                  NumFor[nIndex].SetNatNumLang( eLan );
             }
         }
-        if (rString.Len() == nPos)
+        if (sBuff.getLength() == nPos)
         {
             if ( nIndex == 2 && eSymbolType == BRACKET_SYMBOLTYPE_FORMAT &&
-                 rString.GetChar(nPos-1) == ';' )
+                 sBuff[nPos - 1] == ';' )
             {
                 // #83510# A 4th subformat explicitly specified to be empty
                 // hides any text. Need the type here for HasTextFormat()
@@ -1161,7 +1147,7 @@ SvNumberformat::SvNumberformat(String& rString,
     if ( bCondition && !nCheckPos )
     {
         if ( nIndex == 1 && NumFor[0].GetCount() == 0 &&
-             rString.GetChar(rString.Len()-1) != ';' )
+             sBuff[sBuff.getLength() - 1] != ';' )
         {
             // No format code => GENERAL   but not if specified empty
             OUString aAdd( pSc->GetStandardName() );
@@ -1172,12 +1158,12 @@ SvNumberformat::SvNumberformat(String& rString,
                 {
                     NumFor[0].Enlarge(nAnz);
                     pSc->CopyInfo( &(NumFor[0].Info()), nAnz );
-                    rString += aAdd;
+                    sBuff.append(aAdd);
                 }
             }
         }
         else if ( nIndex == 1 && NumFor[nIndex].GetCount() == 0 &&
-                  rString.GetChar(rString.Len()-1) != ';' &&
+                  sBuff[sBuff.getLength() - 1] != ';' &&
                   (NumFor[0].GetCount() > 1 ||
                    (NumFor[0].GetCount() == 1 &&
                     NumFor[0].Info().nTypeArray[0] != NF_KEY_GENERAL)) )
@@ -1192,13 +1178,13 @@ SvNumberformat::SvNumberformat(String& rString,
                 {
                     NumFor[nIndex].Enlarge(nAnz);
                     pSc->CopyInfo( &(NumFor[nIndex].Info()), nAnz );
-                    rString += ';';
-                    rString += aAdd;
+                    sBuff.append(";");
+                    sBuff.append(aAdd);
                 }
             }
         }
         else if ( nIndex == 2 && NumFor[nIndex].GetCount() == 0 &&
-                  rString.GetChar(rString.Len()-1) != ';' &&
+                  sBuff[sBuff.getLength() - 1] != ';' &&
                   eOp2 != NUMBERFORMAT_OP_NO )
         {
             // No trailing third subformat => GENERAL   but not if specified empty
@@ -1210,12 +1196,13 @@ SvNumberformat::SvNumberformat(String& rString,
                 {
                     NumFor[nIndex].Enlarge(nAnz);
                     pSc->CopyInfo( &(NumFor[nIndex].Info()), nAnz );
-                    rString += ';';
-                    rString += aAdd;
+                    sBuff.append(";");
+                    sBuff.append(aAdd);
                 }
             }
         }
     }
+    rString = sBuff.makeStringAndClear();
     sFormatstring = rString;
 
     if (NumFor[2].GetCount() == 0 &&                 // kein 3. Teilstring
@@ -1283,27 +1270,28 @@ enum ScanState
 
 // read a string until ']' and delete spaces in input
 // static
-xub_StrLen SvNumberformat::ImpGetNumber(String& rString,
-                                        xub_StrLen& nPos,
-                                        String& sSymbol)
+sal_Int32 SvNumberformat::ImpGetNumber(OUStringBuffer& rString,
+                                       sal_Int32& nPos,
+                                       OUString& sSymbol)
 {
-    xub_StrLen nStartPos = nPos;
+    sal_Int32 nStartPos = nPos;
     sal_Unicode cToken;
-    xub_StrLen nLen = rString.Len();
-    sSymbol.Erase();
-    while ( nPos < nLen && ((cToken = rString.GetChar(nPos)) != ']') )
+    sal_Int32 nLen = rString.getLength();
+    OUStringBuffer sBuffSymbol;
+    while ( nPos < nLen && ((cToken = rString[nPos]) != ']') )
     {
         if (cToken == ' ')
         {                                               // delete spaces
-            rString.Erase(nPos,1);
+            rString.remove(nPos,1);
             nLen--;
         }
         else
         {
             nPos++;
-            sSymbol += cToken;
+            sBuffSymbol.append(cToken);
         }
     }
+    sSymbol = sBuffSymbol.makeStringAndClear();
     return nPos - nStartPos;
 }
 
@@ -1394,13 +1382,13 @@ SvNumberformat::LocaleType::LocaleType(sal_uInt32 nRawNum)
 }
 
 // static
-SvNumberformat::LocaleType SvNumberformat::ImpGetLocaleType(const String& rString, xub_StrLen& nPos )
+SvNumberformat::LocaleType SvNumberformat::ImpGetLocaleType(const OUString& rString, sal_Int32& nPos )
 {
     sal_uInt32 nNum = 0;
     sal_Unicode cToken = 0;
-    xub_StrLen nStart = nPos;
-    xub_StrLen nLen = rString.Len();
-    while ( nPos < nLen && (nPos - nStart < 8) && ((cToken = rString.GetChar(nPos)) != ']') )
+    sal_Int32 nStart = nPos;
+    sal_Int32 nLen = rString.getLength();
+    while ( nPos < nLen && (nPos - nStart < 8) && ((cToken = rString[nPos]) != ']') )
     {
         if ( '0' <= cToken && cToken <= '9' )
         {
@@ -1427,20 +1415,21 @@ SvNumberformat::LocaleType SvNumberformat::ImpGetLocaleType(const String& rStrin
     return (cToken == ']' || nPos == nLen) ? LocaleType(nNum) : LocaleType();
 }
 
-short SvNumberformat::ImpNextSymbol(String& rString,
-                                    xub_StrLen& nPos,
-                                    String& sSymbol)
+short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
+                                    sal_Int32& nPos,
+                                    OUString& sSymbol)
 {
     short eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
     sal_Unicode cToken;
     sal_Unicode cLetter = ' ';                               // Zwischenergebnis
-    xub_StrLen nLen = rString.Len();
+    sal_Int32 nLen = rString.getLength();
     ScanState eState = SsStart;
-    sSymbol.Erase();
+    OUStringBuffer sBuffSymbol;
+
     const NfKeywordTable & rKeywords = rScan.GetKeywords();
     while (nPos < nLen && eState != SsStop)
     {
-        cToken = rString.GetChar(nPos);
+        cToken = rString[nPos];
         nPos++;
         switch (eState)
         {
@@ -1448,7 +1437,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
             if (cToken == '[')
             {
                 eState = SsGetBracketed;
-                sSymbol += cToken;
+                sBuffSymbol.append(cToken);
             }
             else if (cToken == ';')
             {
@@ -1463,13 +1452,13 @@ short SvNumberformat::ImpNextSymbol(String& rString,
             }
             else if (cToken == ' ')             // Skip Blanks
             {
-                rString.Erase(nPos-1,1);
                 nPos--;
+                rString.remove(nPos, 1);
                 nLen--;
             }
             else
             {
-                sSymbol += cToken;
+                sBuffSymbol.append(cToken);
                 eState = SsGetString;
                 eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
             }
@@ -1480,8 +1469,8 @@ short SvNumberformat::ImpNextSymbol(String& rString,
             case '<':
             case '>':
             case '=':
-                sSymbol = comphelper::string::remove(sSymbol, '[');
-                sSymbol += cToken;
+                sBuffSymbol.stripStart((sal_Unicode)'[');
+                sBuffSymbol.append(cToken);
                 cLetter = cToken;
                 eState = SsGetCon;
                 switch (cToken)
@@ -1499,14 +1488,15 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                 }
                 break;
             case ' ':
-                rString.Erase(nPos-1,1);
                 nPos--;
+                rString.remove(nPos, 1);
                 nLen--;
                 break;
             case '$' :
-                if ( rString.GetChar(nPos) == '-' )
-                {   // [$-xxx] locale
-                    sSymbol = comphelper::string::remove(sSymbol, '[');
+                if ( rString[nPos] == '-' )
+                {
+                    // [$-xxx] locale
+                    sBuffSymbol.stripStart((sal_Unicode)'[');
                     eSymbolType = BRACKET_SYMBOLTYPE_LOCALE;
                     eState = SsGetPrefix;
                 }
@@ -1515,54 +1505,53 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
                     eState = SsGetString;
                 }
-                sSymbol += cToken;
+                sBuffSymbol.append(cToken);
                 break;
             case '~' :
                 // calendarID as of SV_NUMBERFORMATTER_VERSION_CALENDAR
                 eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
-                sSymbol += cToken;
+                sBuffSymbol.append(cToken);
                 eState = SsGetString;
                 break;
             default:
             {
-                const String aNatNum(RTL_CONSTASCII_USTRINGPARAM("NATNUM"));
-                const String aDBNum(RTL_CONSTASCII_USTRINGPARAM("DBNUM"));
-                String aUpperNatNum( rChrCls().uppercase( rString, nPos-1, aNatNum.Len() ) );
-                String aUpperDBNum( rChrCls().uppercase( rString, nPos-1, aDBNum.Len() ) );
-                sal_Unicode cUpper = aUpperNatNum.GetChar(0);
-                sal_Int32 nNatNumNum = rString.Copy( nPos-1+aNatNum.Len() ).ToInt32();
-                sal_Unicode cDBNum = rString.GetChar( nPos-1+aDBNum.Len() );
+                const OUString aNatNum("NATNUM");
+                const OUString aDBNum("DBNUM");
+                OUString aUpperNatNum( rChrCls().uppercase( rString.toString(), nPos-1, aNatNum.getLength() ) );
+                OUString aUpperDBNum( rChrCls().uppercase( rString.toString(), nPos-1, aDBNum.getLength() ) );
+                sal_Unicode cUpper = aUpperNatNum[0];
+                sal_Int32 nNatNumNum = rString.toString().copy( nPos - 1 + aNatNum.getLength() ).toInt32();
+                sal_Unicode cDBNum = rString[ nPos - 1 + aDBNum.getLength()];
                 if ( aUpperNatNum == aNatNum && 0 <= nNatNumNum && nNatNumNum <= 19 )
                 {
-                    sSymbol = comphelper::string::remove(sSymbol, '[');
-                    sSymbol += rString.Copy( --nPos, aNatNum.Len()+1 );
-                    nPos += aNatNum.Len()+1;
+                    sBuffSymbol.stripStart((sal_Unicode)'[');
+                    sBuffSymbol.append( rString.toString().copy( --nPos, aNatNum.getLength()+1 ));
+                    nPos += aNatNum.getLength()+1;
                     //! SymbolType is negative
                     eSymbolType = (short) (BRACKET_SYMBOLTYPE_NATNUM0 - nNatNumNum);
                     eState = SsGetPrefix;
                 }
                 else if ( aUpperDBNum == aDBNum && '1' <= cDBNum && cDBNum <= '9' )
                 {
-                    sSymbol = comphelper::string::remove(sSymbol, '[');
-                    sSymbol += rString.Copy( --nPos, aDBNum.Len()+1 );
-                    nPos += aDBNum.Len()+1;
+                    sBuffSymbol.stripStart((sal_Unicode)'[');
+                    sBuffSymbol.append(rString.toString().copy( --nPos, aDBNum.getLength()+1 ));
+                    nPos += aDBNum.getLength()+1;
                     //! SymbolType is negative
-                    eSymbolType = sal::static_int_cast< short >(
-                        BRACKET_SYMBOLTYPE_DBNUM1 - (cDBNum - '1'));
+                    eSymbolType = sal::static_int_cast< short >( BRACKET_SYMBOLTYPE_DBNUM1 - (cDBNum - '1'));
                     eState = SsGetPrefix;
                 }
                 else if (cUpper == rKeywords[NF_KEY_H][0] ||  // H
                          cUpper == rKeywords[NF_KEY_MI][0] ||  // M
                          cUpper == rKeywords[NF_KEY_S][0] )   // S
                 {
-                    sSymbol += cToken;
+                    sBuffSymbol.append(cToken);
                     eState = SsGetTime;
                     cLetter = cToken;
                 }
                 else
                 {
-                    sSymbol = comphelper::string::remove(sSymbol, '[');
-                    sSymbol += cToken;
+                    sBuffSymbol.stripStart((sal_Unicode)'[');
+                    sBuffSymbol.append(cToken);
                     eSymbolType = BRACKET_SYMBOLTYPE_COLOR;
                     eState = SsGetPrefix;
                 }
@@ -1576,39 +1565,39 @@ short SvNumberformat::ImpNextSymbol(String& rString,
             }
             else
             {
-                sSymbol += cToken;
+                sBuffSymbol.append(cToken);
             }
             break;
         case SsGetTime:
             if (cToken == ']')
             {
-                sSymbol += cToken;
+                sBuffSymbol.append(cToken);
                 eState = SsGetString;
                 eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
             }
             else
             {
-                sal_Unicode cUpper = rChrCls().uppercase(rString, nPos-1, 1)[0];
+                sal_Unicode cUpper = rChrCls().uppercase(rString.toString(), nPos-1, 1)[0];
                 if (cUpper == rKeywords[NF_KEY_H][0] ||  // H
                     cUpper == rKeywords[NF_KEY_MI][0] ||  // M
                     cUpper == rKeywords[NF_KEY_S][0] )   // S
                 {
                     if (cLetter == cToken)
                     {
-                        sSymbol += cToken;
+                        sBuffSymbol.append(cToken);
                         cLetter = ' ';
                     }
                     else
                     {
-                        sSymbol = comphelper::string::remove(sSymbol, '[');
-                        sSymbol += cToken;
+                        sBuffSymbol.stripStart((sal_Unicode)'[');
+                        sBuffSymbol.append(cToken);
                         eState = SsGetPrefix;
                     }
                 }
                 else
                 {
-                    sSymbol = comphelper::string::remove(sSymbol, '[');
-                    sSymbol += cToken;
+                    sBuffSymbol.stripStart((sal_Unicode)'[');
+                    sBuffSymbol.append(cToken);
                     eSymbolType = BRACKET_SYMBOLTYPE_COLOR;
                     eState = SsGetPrefix;
                 }
@@ -1624,7 +1613,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
             case '>':
                 if (cLetter == '<')
                 {
-                    sSymbol += cToken;
+                    sBuffSymbol.append(cToken);
                     cLetter = ' ';
                     eState = SsStop;
                     eSymbolType = NUMBERFORMAT_OP_NE;
@@ -1638,13 +1627,13 @@ short SvNumberformat::ImpNextSymbol(String& rString,
             case '=':
                 if (cLetter == '<')
                 {
-                    sSymbol += cToken;
+                    sBuffSymbol.append(cToken);
                     cLetter = ' ';
                     eSymbolType = NUMBERFORMAT_OP_LE;
                 }
                 else if (cLetter == '>')
                 {
-                    sSymbol += cToken;
+                    sBuffSymbol.append(cToken);
                     cLetter = ' ';
                     eSymbolType = NUMBERFORMAT_OP_GE;
                 }
@@ -1655,8 +1644,8 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                 }
                 break;
             case ' ':
-                rString.Erase(nPos-1,1);
                 nPos--;
+                rString.remove(nPos,1);
                 nLen--;
                 break;
             default:
@@ -1672,14 +1661,14 @@ short SvNumberformat::ImpNextSymbol(String& rString,
             }
             else
             {
-                sSymbol += cToken;
+                sBuffSymbol.append(cToken);
             }
             break;
         default:
             break;
         }                                   // of switch
     }                                       // of while
-
+    sSymbol = sBuffSymbol.makeStringAndClear();
     return eSymbolType;
 }
 
@@ -1815,8 +1804,8 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
         short nDefined = ( eType & NUMBERFORMAT_DEFINED );
         sal_uInt16 nNewStandard = nNewStandardDefined;
         // neu parsen etc.
-        String aStr( sFormatstring );
-        xub_StrLen nCheckPos = 0;
+        OUString aStr( sFormatstring );
+        sal_Int32 nCheckPos = 0;
         SvNumberformat* pFormat = new SvNumberformat( aStr, &rScan, &rISc,
                                                       nCheckPos, maLocale.meLanguage, bStandard );
         DBG_ASSERT( !nCheckPos, "SvNumberformat::Load: NewCurrencyRescan nCheckPos" );
