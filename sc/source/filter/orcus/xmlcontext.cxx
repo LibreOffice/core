@@ -31,13 +31,33 @@ ScOrcusXMLTreeParam::EntryData& setUserDataToEntry(
     return rStore.back();
 }
 
+OUString toString(const orcus::xml_structure_tree::entity_name& entity, const orcus::xml_structure_tree::walker& walker)
+{
+    OUStringBuffer aBuf;
+    if (entity.ns)
+    {
+        // Namespace exists.  Namespaces are displayed as ns0, ns1, ns2, ....
+        size_t index = walker.get_xmlns_index(entity.ns);
+        if (index == orcus::xml_structure_tree::walker::index_not_found)
+            // This namespace doesn't exist in this context. Something has gone wrong.
+            aBuf.append("???");
+        else
+        {
+            aBuf.append("ns");
+            aBuf.append(static_cast<sal_Int32>(index));
+        }
+        aBuf.append(':');
+    }
+    aBuf.append(OUString(entity.name.get(), entity.name.size(), RTL_TEXTENCODING_UTF8));
+    return aBuf.makeStringAndClear();
+}
+
 void populateTree(
    SvTreeListBox& rTreeCtrl, orcus::xml_structure_tree::walker& rWalker,
    const orcus::xml_structure_tree::entity_name& rElemName, bool bRepeat,
    SvTreeListEntry* pParent, ScOrcusXMLTreeParam& rParam)
 {
-    OUString aName(rElemName.name.get(), rElemName.name.size(), RTL_TEXTENCODING_UTF8);
-    SvTreeListEntry* pEntry = rTreeCtrl.InsertEntry(aName, pParent);
+    SvTreeListEntry* pEntry = rTreeCtrl.InsertEntry(toString(rElemName, rWalker), pParent);
     if (!pEntry)
         // Can this ever happen!?
         return;
@@ -65,8 +85,7 @@ void populateTree(
     for (; it != itEnd; ++it)
     {
         orcus::xml_structure_tree::entity_name aAttrName = *it;
-        SvTreeListEntry* pAttr = rTreeCtrl.InsertEntry(
-            OUString(aAttrName.name.get(), aAttrName.name.size(), RTL_TEXTENCODING_UTF8), pEntry);
+        SvTreeListEntry* pAttr = rTreeCtrl.InsertEntry(toString(aAttrName, rWalker), pEntry);
 
         if (!pAttr)
             continue;
