@@ -9,7 +9,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <dirent.h>
 #include <string>
 #include <vector>
 #include <map>
@@ -58,12 +57,10 @@ OString DelLocalId(const OString& rLine)
 }
 
 //Renew po files of the actual language
-void HandleLanguage(struct dirent* pLangEntry, const OString& rOldPath,
+void HandleLanguage(const OString& LangEntryName, const OString& rOldPath,
     const OString& rNewPath, const OString& rpo2loPath,
     const OString& rSDFPath)
 {
-    const OString LangEntryName = pLangEntry->d_name;
-
     //Generate and open sdf
     cout << "Process start with language: " <<  LangEntryName.getStr() << endl;
     OUString aTempUrl;
@@ -228,15 +225,27 @@ int main(int argc, char* argv[])
     }
 
     //Call processing function with all language directories
-    DIR* pTranslations = opendir(argv[1]);
-    while ( struct dirent* pActEntry = readdir(pTranslations) )
+    OUString pathUrl;
+    if( osl::Directory::getFileURLFromSystemPath(
+        OStringToOUString( argv[ 1 ], RTL_TEXTENCODING_UTF8 ), pathUrl ) == osl::Directory::E_None )
     {
-        if ( OString(pActEntry->d_name).indexOf('.')==-1 )
-            HandleLanguage(pActEntry,OString(argv[1]),
+        osl::Directory dir( pathUrl );
+        if( dir.reset() == osl::Directory::E_None )
+        {
+            for(;;)
+            {
+                osl::DirectoryItem item;
+                if( dir.getNextItem( item ) != osl::Directory::E_None )
+                    break;
+                osl::FileStatus status( osl_FileStatus_Mask_FileName );
+                if( item.getFileStatus( status ) == osl::File::E_None && status.getFileName().indexOf('.')==-1 )
+                    HandleLanguage( OUStringToOString(status.getFileName(), RTL_TEXTENCODING_UTF8),
+                           OString(argv[1]),
                            OString(argv[2]),OString(argv[3]),
                            OString(argv[4]));
+            }
+        }
     }
-    closedir(pTranslations);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
