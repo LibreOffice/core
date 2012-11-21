@@ -457,7 +457,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         QStyleOption option;
         option.state = QStyle::State_Item | QStyle::State_Children;
 
-        if (nControlState & CTRL_STATE_PRESSED)
+        if (value.getTristateVal() == BUTTONVALUE_ON)
             option.state |= QStyle::State_Open;
 
         draw( QStyle::PE_IndicatorBranch, &option, m_image,
