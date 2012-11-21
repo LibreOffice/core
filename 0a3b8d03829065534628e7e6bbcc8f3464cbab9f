@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQn///24\u003d",
+        "filename": "editeng/source/items/frmitems.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1797,
+      "author": {
+        "id": 1000078
+      },
+      "writtenOn": "2012-11-21T11:43:12Z",
+      "side": 1,
+      "message": "This did indeed trip me up - a BORDER_STYLE_MAX would certainly make it easier to add future styles. Personally, I\u0027d like a more flexible way of specifying border styles, but haven\u0027t come up with anything useful. I can add the *_MAX constant in BorderLineStyle.idl to make things easier for now.",
+      "parentUuid": "AAAAQn///40\u003d",
+      "revId": "0a3b8d03829065534628e7e6bbcc8f3464cbab9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQn///5s\u003d",
         "filename": "svtools/inc/svtools/ctrlbox.hxx",
         "patchSetId": 1
