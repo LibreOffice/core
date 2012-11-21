@@ -164,7 +164,9 @@ void HandleLanguage(const OString& LangEntryName, const OString& rOldPath,
                     << sOldPoFileName.getStr() << endl;
                 return;
             }
-            aNewPo.writeHeader(PoHeader(aOldPo));
+
+            PoHeader aTmp(aOldPo);
+            aNewPo.writeHeader(aTmp);
             aOldPo.close();
         }
 

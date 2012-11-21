@@ -272,7 +272,8 @@ void handleCommand(
                             inPath.lastIndexOf('/')- nProjectInd),
                         RTL_TEXTENCODING_UTF8 );
 
-                rPoOutPut.writeHeader(PoHeader(relativPath));
+                PoHeader aTmp(relativPath);
+                rPoOutPut.writeHeader(aTmp);
             }
         }
         while (!in.eof())
