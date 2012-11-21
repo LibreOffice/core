@@ -1106,7 +1106,7 @@ SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
 
 //FEATURE::CONDCOLL
         // TODO: HACK: We need to recheck this condition according to the new template!
-        if( sal_True /*pNewColl */ )
+        if( true /*pNewColl */ )
         {
             SetCondFmtColl( 0 );
         }

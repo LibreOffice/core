@@ -136,7 +136,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         return SUCCESS; // That's it!
     }
 
-    sal_Bool bUpdate = sal_False;
+    bool bUpdate = false;
     sal_Bool bGraphicArrived = sal_False;
     sal_Bool bGraphicPieceArrived = sal_False;
     sal_Bool bDontNotify = sal_False;
@@ -183,7 +183,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             }
 
             rGrfObj.SetGraphic( aGrf, rGrfObj.GetLink() );
-            bUpdate = sal_True;
+            bUpdate = true;
 
             // In order for the Node to have the right transparency status
             // without having to access the graphic.
@@ -201,7 +201,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             ((SwGrfNode*)pCntntNode)->SetTwipSize( Size(0,0) );
     }
     else if( pCntntNode->IsOLENode() )
-        bUpdate = sal_True;
+        bUpdate = true;
 
     ViewShell *pSh = 0;
     SwEditShell* pESh = pDoc->GetEditShell( &pSh );
@@ -213,11 +213,11 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         {
             SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
             pCntntNode->ModifyNotification( &aMsgHint, &aMsgHint );
-            bUpdate = sal_False;
+            bUpdate = false;
         }
     }
 
-    static sal_Bool bInNotifyLinks = sal_False;
+    static bool bInNotifyLinks = false;
     if( bUpdate && !bDontNotify && (!bSwapIn || bGraphicArrived) &&
         !bInNotifyLinks)
     {
@@ -239,7 +239,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         if ( bGraphicArrived )
         {
             // Notify all who are listening at the same link
-            bInNotifyLinks = sal_True;
+            bInNotifyLinks = true;
 
             const ::sfx2::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
             for( sal_uInt16 n = rLnks.size(); n; )
@@ -273,7 +273,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                 }
             }
 
-            bInNotifyLinks = sal_False;
+            bInNotifyLinks = false;
         }
         else
         {

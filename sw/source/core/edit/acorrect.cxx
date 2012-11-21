@@ -332,7 +332,7 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
         eLang = (LanguageType)GetAppLanguage();
 
     //JP 22.04.99: Bug 63883 - Sonderbehandlung fuer Punkte.
-    sal_Bool bLastCharIsPoint = nEndPos < pTxtNd->GetTxt().Len() &&
+    bool bLastCharIsPoint = nEndPos < pTxtNd->GetTxt().Len() &&
                             '.' == pTxtNd->GetTxt().GetChar( nEndPos );
 
     const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(

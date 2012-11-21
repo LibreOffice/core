@@ -72,7 +72,7 @@ using namespace ::com::sun::star;
 
 using namespace ::com::sun::star;
 
-static sal_Bool bInResize = sal_False;
+static bool bInResize = false;
 
 TYPEINIT1( SwFlyDrawObj, SdrObject )
 TYPEINIT1( SwVirtFlyDrawObj, SdrVirtObj )
@@ -510,11 +510,11 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject() const
     // be correct
     if ( pShell && pShell->IsDrawingLayerPaintInProgress() )
     {
-        sal_Bool bDrawObject(sal_True);
+        bool bDrawObject(true);
 
         if ( !SwFlyFrm::IsPaint( (SdrObject*)this, pShell ) )
         {
-            bDrawObject = sal_False;
+            bDrawObject = false;
         }
 
         if ( bDrawObject )
@@ -728,7 +728,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
                                             RES_VERT_ORIENT, RES_HORI_ORIENT );
     SwFmtHoriOrient aHori( pFmt->GetHoriOrient() );
     SwFmtVertOrient aVert( pFmt->GetVertOrient() );
-    sal_Bool bPut = sal_False;
+    bool bPut = false;
 
     if( !GetFlyFrm()->IsFlyLayFrm() &&
         ::GetHtmlMode(pFmt->GetDoc()->GetDocShell()) )
@@ -737,7 +737,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         //Einzig einen Snap auf Links/Rechts bzw. Linker-/Rechter-Rand koennen
         //wir versuchen.
         const SwFrm* pAnch = GetFlyFrm()->GetAnchorFrm();
-        sal_Bool bNextLine = sal_False;
+        bool bNextLine = false;
 
         if( !GetFlyFrm()->IsAutoPos() || text::RelOrientation::PAGE_FRAME != aHori.GetRelationOrient() )
         {
@@ -748,9 +748,9 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             }
             else
             {
-                bNextLine = sal_True;
+                bNextLine = true;
                 //Horizontale Ausrichtung:
-                const sal_Bool bLeftFrm =
+                const bool bLeftFrm =
                     aFlyRect.Left() < pAnch->Frm().Left() + pAnch->Prt().Left(),
                     bLeftPrt = aFlyRect.Left() + aFlyRect.Width() <
                                pAnch->Frm().Left() + pAnch->Prt().Width()/2;
@@ -761,7 +761,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
                 }
                 else
                 {
-                    const sal_Bool bRightFrm = aFlyRect.Left() >
+                    const bool bRightFrm = aFlyRect.Left() >
                                        pAnch->Frm().Left() + pAnch->Prt().Width();
                     aHori.SetHoriOrient( text::HoriOrientation::RIGHT );
                     aHori.SetRelationOrient( bRightFrm ? text::RelOrientation::FRAME : text::RelOrientation::PRINT_AREA );
@@ -771,7 +771,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         }
         //Vertikale Ausrichtung bleibt grundsaetzlich schlicht erhalten,
         //nur bei nicht automatischer Ausrichtung wird umgeschaltet.
-        sal_Bool bRelChar = text::RelOrientation::CHAR == eRelVert;
+        bool bRelChar = text::RelOrientation::CHAR == eRelVert;
         aVert.SetVertOrient( eVert != text::VertOrientation::NONE ? eVert :
                 GetFlyFrm()->IsFlyInCntFrm() ? text::VertOrientation::CHAR_CENTER :
                 bRelChar && bNextLine ? text::VertOrientation::CHAR_TOP : text::VertOrientation::TOP );
@@ -780,7 +780,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         else
             aVert.SetRelationOrient( text::RelOrientation::PRINT_AREA );
         aSet.Put( aVert );
-        bPut = sal_True;
+        bPut = true;
     }
 
     //Automatische Ausrichtungen wollen wir moeglichst nicht verlieren.
@@ -791,14 +791,14 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             aHori.SetHoriOrient( eHori );
             aHori.SetRelationOrient( eRelHori );
             aSet.Put( aHori );
-            bPut = sal_True;
+            bPut = true;
         }
         if ( text::VertOrientation::NONE != eVert )
         {
             aVert.SetVertOrient( eVert );
             aVert.SetRelationOrient( eRelVert );
             aSet.Put( aVert );
-            bPut = sal_True;
+            bPut = true;
         }
     }
     if ( bPut )
@@ -907,9 +907,9 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
         }
         else if ( aOutRect.TopLeft() != aNewPos )
             aOutRect.SetPos( aNewPos );
-        bInResize = sal_True;
+        bInResize = true;
         NbcMove( Size( 0, 0 ) );
-        bInResize = sal_False;
+        bInResize = false;
     }
 }
 

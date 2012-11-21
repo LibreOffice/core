@@ -859,12 +859,12 @@ void SwDrawView::ModelHasChanged()
     // will be fetched again (maybe textedit has ended).
     OutlinerView* pView = GetTextEditOutlinerView();
     Color aBackColor;
-    sal_Bool bColorWasSaved(sal_False);
+    bool bColorWasSaved(false);
 
     if(pView)
     {
         aBackColor = pView->GetBackgroundColor();
-        bColorWasSaved = sal_True;
+        bColorWasSaved = true;
     }
 
     // call parent

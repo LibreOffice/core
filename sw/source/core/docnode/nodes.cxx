@@ -118,7 +118,7 @@ SwNodes::~SwNodes()
     {
         SwNode *pNode;
         SwNodeIndex aNdIdx( *this );
-        while( sal_True )
+        while( true )
         {
             pNode = &aNdIdx.GetNode();
             if( pNode == pEndOfContent )
@@ -148,7 +148,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
     //JP 12.03.99: 63293 - Nodes vom RedlineBereich NIE aufnehmen
     sal_uLong nNd = rInsPos.GetIndex();
-    sal_Bool bInsOutlineIdx = !(
+    bool bInsOutlineIdx = !(
             rNds.GetEndOfRedlines().StartOfSectionNode()->GetIndex() < nNd &&
             nNd < rNds.GetEndOfRedlines().GetIndex() );
 
@@ -514,7 +514,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
                     //JP 12.03.99: 63293 - Nodes vom RedlineBereich NIE aufnehmen
                     sal_uLong nNd = aIdx.GetIndex();
-                    sal_Bool bInsOutlineIdx = !( rNodes.GetEndOfRedlines().
+                    bool bInsOutlineIdx = !( rNodes.GetEndOfRedlines().
                             StartOfSectionNode()->GetIndex() < nNd &&
                             nNd < rNodes.GetEndOfRedlines().GetIndex() );
 
@@ -665,7 +665,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
                         aRg.aEnd--;
                         aIdx--;
-                    } while( sal_False );
+                    } while( false );
                 }
                 else
                 {
@@ -1198,7 +1198,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
 
     sal_Bool bSaveInNodesDel = bInNodesDel;
     bInNodesDel = sal_True;
-    sal_Bool bUpdateOutline = sal_False;
+    bool bUpdateOutline = false;
 
     // bis alles geloescht ist
     while( aRg.aStart < aRg.aEnd )
@@ -1227,7 +1227,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
                         {
                             // loesche die Gliederungs-Indizies.
                             pOutlineNds->erase(nIdxPos);
-                            bUpdateOutline = sal_True;
+                            bUpdateOutline = true;
                         }
                         pTxtNode->InvalidateNumRule();
                     }
@@ -1289,7 +1289,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
                 if( pTxtNd->IsOutline())
                 {                   // loesche die Gliederungs-Indizies.
                     pOutlineNds->erase( pTxtNd );
-                    bUpdateOutline = sal_True;
+                    bUpdateOutline = true;
                 }
                 pTxtNd->InvalidateNumRule();
             }
@@ -1613,8 +1613,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     SwNodeIndex aSttIdx( pStt->nNode );
     SwTxtNode *const pSrcNd = aSttIdx.GetNode().GetTxtNode();
     SwTxtNode * pDestNd = rPos.nNode.GetNode().GetTxtNode();
-    sal_Bool bSplitDestNd = sal_True;
-    sal_Bool bCopyCollFmt = pDestNd && !pDestNd->GetTxt().Len();
+    bool bSplitDestNd = true;
+    bool bCopyCollFmt = pDestNd && !pDestNd->GetTxt().Len();
 
     if( pSrcNd )
     {
@@ -1625,27 +1625,27 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             pDestNd = rNodes.MakeTxtNode( rPos.nNode, pSrcNd->GetTxtColl() );
             rPos.nNode--;
             rPos.nContent.Assign( pDestNd, 0 );
-            bCopyCollFmt = sal_True;
+            bCopyCollFmt = true;
         }
         bSplitDestNd = pDestNd->Len() > rPos.nContent.GetIndex() ||
                         pEnd->nNode.GetNode().IsTxtNode();
 
         // verschiebe jetzt noch den Inhalt in den neuen Node
-        sal_Bool bOneNd = pStt->nNode == pEnd->nNode;
+        bool bOneNd = pStt->nNode == pEnd->nNode;
         const xub_StrLen nLen =
                 ( (bOneNd) ? pEnd->nContent.GetIndex() : pSrcNd->Len() )
                 - pStt->nContent.GetIndex();
 
         if( !pEnd->nNode.GetNode().IsCntntNode() )
         {
-            bOneNd = sal_True;
+            bOneNd = true;
             sal_uLong nSttNdIdx = pStt->nNode.GetIndex() + 1;
             const sal_uLong nEndNdIdx = pEnd->nNode.GetIndex();
             for( ; nSttNdIdx < nEndNdIdx; ++nSttNdIdx )
             {
                 if( (*this)[ nSttNdIdx ]->IsCntntNode() )
                 {
-                    bOneNd = sal_False;
+                    bOneNd = false;
                     break;
                 }
             }
@@ -1657,7 +1657,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         {
             if( !rPos.nContent.GetIndex() )
             {
-                bCopyCollFmt = sal_True;
+                bCopyCollFmt = true;
             }
             if( rNodes.IsDocNodes() )
             {
@@ -1674,7 +1674,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             {
                 aEndIdx--;
             }
-            bSplitDestNd = sal_True;
+            bSplitDestNd = true;
 
             pDestNd = rNodes[ rPos.nNode.GetIndex() - 1 ]->GetTxtNode();
             if( nLen )
@@ -1693,7 +1693,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             SwDoc* const pInsDoc = pDestNd->GetDoc();
             ::sw::UndoGuard const undoGuard(pInsDoc->GetIDocumentUndoRedo());
             pSrcNd->CopyCollFmt( *pDestNd );
-            bCopyCollFmt = sal_False;
+            bCopyCollFmt = false;
         }
 
         if( bOneNd )        // das wars schon
@@ -1745,7 +1745,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             }
         }
         // am Ende steht noch ein leerer Text Node herum.
-        bSplitDestNd = sal_True;
+        bSplitDestNd = true;
     }
 
     SwTxtNode* const pEndSrcNd = aEndIdx.GetNode().GetTxtNode();
@@ -2096,7 +2096,7 @@ SwStartNode* SwNodes::MakeTextSection( const SwNodeIndex & rWhere,
 SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
                             int bSkipHidden, int bSkipProtect ) const
 {
-    int bFirst = sal_True;
+    bool bFirst = true;
     SwNodeIndex aTmp( *pIdx );
     const SwNode* pNd;
     while( aTmp < Count() - 1 )
@@ -2109,11 +2109,11 @@ SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
                 (bSkipProtect && rSect.IsProtectFlag()) )
                 // dann diese Section ueberspringen
                 aTmp = *pNd->EndOfSectionNode();
-            bFirst = sal_False;
+            bFirst = false;
         }
         else if( bFirst )
         {
-            bFirst = sal_False;
+            bFirst = false;
             if( pNd->pStartOfSection->IsSectionNode() )
             {
                 const SwSection& rSect = ((SwSectionNode*)pNd->
@@ -2141,7 +2141,7 @@ SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
             }
         }
         ++aTmp;
-        bFirst = sal_False;
+        bFirst = false;
     }
     return 0;
 }
@@ -2149,7 +2149,7 @@ SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
 SwCntntNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
                             int bSkipHidden, int bSkipProtect ) const
 {
-    int bFirst = sal_True;
+    bool bFirst = true;
     SwNodeIndex aTmp( *pIdx );
     const SwNode* pNd;
     while( aTmp > 0 )
@@ -2166,11 +2166,11 @@ SwCntntNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
                     // dann diese Section ueberspringen
                     aTmp = *pNd->StartOfSectionNode();
             }
-            bFirst = sal_False;
+            bFirst = false;
         }
         else if( bFirst )
         {
-            bFirst = sal_False;
+            bFirst = false;
             if( pNd->pStartOfSection->IsSectionNode() )
             {
                 const SwSection& rSect = ((SwSectionNode*)pNd->

@@ -751,7 +751,7 @@ void SwSectionFmt::MakeFrms()
 
 void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    sal_Bool bClients = sal_False;
+    bool bClients = false;
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     switch( nWhich )
     {
@@ -799,7 +799,7 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     case RES_SECTION_RESETHIDDENFLAG:
     case RES_FTN_AT_TXTEND:
-    case RES_END_AT_TXTEND : bClients = sal_True;
+    case RES_END_AT_TXTEND : bClients = true;
                             // no break !!
     case RES_SECTION_HIDDEN:
     case RES_SECTION_NOT_HIDDEN:
@@ -1210,7 +1210,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
     TypeId aType( TYPE(SwDocShell) );
 
     SfxObjectShell* pShell = pDestSh;
-    sal_Bool bFirst = 0 != pShell;
+    bool bFirst = 0 != pShell;
 
     if( !bFirst )
         // No DocShell passed, starting with the first from the DocShell list
@@ -1236,7 +1236,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
 
         if( bFirst )
         {
-            bFirst = sal_False;
+            bFirst = false;
             pShell = SfxObjectShell::GetFirst( &aType );
         }
         else
@@ -1416,7 +1416,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
                 if( sRange.Len() )
                 {
                     // Catch recursion
-                    sal_Bool bRecursion = sal_False;
+                    bool bRecursion = false;
                     if( pSrcDoc == pDoc )
                     {
                         SwServerObjectRef refObj( (SwServerObject*)
