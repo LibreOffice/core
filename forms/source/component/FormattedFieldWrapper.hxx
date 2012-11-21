@@ -33,7 +33,6 @@
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include "rtl/ref.hxx"
 
 //.........................................................................
 namespace frm
@@ -55,7 +54,7 @@ class OFormattedFieldWrapper : public OFormattedFieldWrapper_Base
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>      m_xAggregate;
 
-    rtl::Reference< OEditModel > m_editPart;
+    OEditModel*     m_pEditPart;
         // if we act as formatted this is used to write the EditModel part
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>     m_xFormattedPart;
         // if we act as formatted, this is the PersistObject interface of our aggregate, used
