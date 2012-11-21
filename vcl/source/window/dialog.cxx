@@ -50,6 +50,8 @@
 
 // =======================================================================
 
+#ifndef ANDROID
+
 static rtl::OString ImplGetDialogText( Dialog* pDialog )
 {
     rtl::OStringBuffer aErrorStr(rtl::OUStringToOString(
@@ -66,6 +68,8 @@ static rtl::OString ImplGetDialogText( Dialog* pDialog )
     }
     return aErrorStr.makeStringAndClear();
 }
+
+#endif
 
 // =======================================================================
 
@@ -778,11 +782,9 @@ sal_Bool Dialog::ImplStartExecuteModal()
 {
 #ifdef ANDROID
     // If a non-NativeActivity app, we shouldn't be showing any dialogs
-    if (lo_get_app() == NULL) {
-        fprintf(stderr, "%s: Should not do anything, returning false\n", __FUNCTION__);
-        return sal_False;
-    }
-#endif
+    fprintf(stderr, "%s: Should not do anything, returning false\n", __FUNCTION__);
+    return sal_False;
+#else
 
     if ( mbInExecute )
     {
@@ -858,6 +860,7 @@ sal_Bool Dialog::ImplStartExecuteModal()
 
     pSVData->maAppData.mnModalMode++;
     return sal_True;
+#endif
 }
 
 // -----------------------------------------------------------------------

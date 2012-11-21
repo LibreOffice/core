@@ -60,8 +60,6 @@ int lo_dlcall_argc_argv(void *function,
 
 JavaVM *lo_get_javavm(void);
 
-struct android_app *lo_get_app(void);
-
 #ifdef __cplusplus
 }
 #endif

@@ -24,8 +24,9 @@ $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_afm_hash \
     Library_vcl \
     Package_inc \
-    StaticLibrary_vclmain \
-	Executable_ui-previewer \
+    $(if $(filter DESKTOP,$(BUILD_TYPE)), \
+		StaticLibrary_vclmain \
+		Executable_ui-previewer) \
     UI_vcl \
 ))
 
