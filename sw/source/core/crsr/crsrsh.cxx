@@ -686,22 +686,6 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
         // -> zurueck
         return bRet;
 
-    // Toggle the Header/Footer mode if needed
-    bool bInHeaderFooter = pFrm && ( pFrm->IsHeaderFrm() || pFrm->IsFooterFrm() );
-    if ( bInHeaderFooter != IsHeaderFooterEdit() )
-        ToggleHeaderFooterEdit();
-    else
-    {
-        // Make sure we have the proper Header/Footer separators shown
-        // as these may be changed if clicking on an empty Header/Footer
-        SetShowHeaderFooterSeparator( Header, pFrm != NULL && pFrm->IsHeaderFrm( ) );
-        SetShowHeaderFooterSeparator( Footer, pFrm != NULL && pFrm->IsFooterFrm( ) );
-
-        // Repaint everything
-        GetWin()->Invalidate();
-    }
-
-
     if( pBlockCrsr && bBlock )
     {
         pBlockCrsr->setEndPoint( rLPt );
@@ -1333,24 +1317,6 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             bIgnoreReadonly = sal_True;
         return;             // wenn nicht, dann kein Update !!
     }
-
-    sal_Bool bInHeader= sal_True;
-    if ( IsInHeaderFooter( &bInHeader ) )
-    {
-        if ( !bInHeader )
-        {
-            SetShowHeaderFooterSeparator( Footer, true );
-            SetShowHeaderFooterSeparator( Header, false );
-        }
-        else
-        {
-            SetShowHeaderFooterSeparator( Header, true );
-            SetShowHeaderFooterSeparator( Footer, false );
-        }
-    }
-    if ( IsInHeaderFooter() != IsHeaderFooterEdit() )
-        ToggleHeaderFooterEdit();
-
 
     // #i27301#
     SwNotifyAccAboutInvalidTextSelections aInvalidateTextSelections( *this );
