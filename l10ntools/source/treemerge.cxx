@@ -287,7 +287,7 @@ void TreeParser::Merge(
             std::cerr
                 << "Treex error: given language conflicts with "
                 << "language of Mergedata file: "
-                << m_sLang.getStr() << " - " << rMergeSrc.getStr() << std::endl;
+                << m_sLang.getStr() << " - " << vLanguages[0].getStr() << std::endl;
             return;
         }
         lcl_MergeLevel(

@@ -192,7 +192,7 @@ MergeDataFile::MergeDataFile(
         OString sLang;
         try
         {
-            sLang = aPoHeader.getLanguage();
+            sLang = aPoHeader.getLanguage().replaceAll("_","-");
         }
         catch( PoHeader::Exception& aException )
         {

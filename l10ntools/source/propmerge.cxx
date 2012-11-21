@@ -188,7 +188,7 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
         std::cerr
             << "Propex error: given language conflicts with "
             << "language of Mergedata file: "
-            << m_sLang.getStr() << " - " << rMergeSrc.getStr() << std::endl;
+            << m_sLang.getStr() << " - " << aLanguages[0].getStr() << std::endl;
         return;
     }
 
