@@ -102,7 +102,6 @@ pa-IN \
 pl \
 pt \
 pt-BR \
-qtz \
 ro \
 ru \
 rw \
