@@ -145,8 +145,6 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
     sal_Unicode encodedSlash[3] = { '%', '2', 'F' };
     sal_Unicode protocolDelimiter[3] = { ':', '/', '/' };
 
-    OSL_ASSERT(path != 0 && path->isEmpty());
-
     /* temporary hack: if already system path, return ustrFileURL */
     /*
     if( (sal_Unicode) '/' == ustrFileURL->buffer[0] )
