@@ -715,8 +715,8 @@ void FormattedField::SetThousandsSep(sal_Bool _bUseSeparator)
     // generate a new format ...
     OUString sFmtDescription = ImplGetFormatter()->GenerateFormat(m_nFormatKey, eLang, _bUseSeparator, IsRed, nPrecision, nAnzLeading);
     // ... and introduce it to the formatter
-    sal_Int32 nCheckPos;
-    sal_uInt32  nNewKey;
+    sal_Int32 nCheckPos = 0;
+    sal_uInt32 nNewKey;
     short nType;
     ImplGetFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
 
@@ -758,7 +758,7 @@ void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
     // generate a new format ...
     OUString sFmtDescription = ImplGetFormatter()->GenerateFormat(m_nFormatKey, eLang, bThousand, IsRed, _nPrecision, nAnzLeading);
     // ... and introduce it to the formatter
-    sal_Int32 nCheckPos;
+    sal_Int32 nCheckPos = 0;
     sal_uInt32 nNewKey;
     short nType;
     ImplGetFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
