@@ -39,7 +39,8 @@ bool isAttribute(const SvTreeListEntry& rEntry)
     return pUserData->meType == ScOrcusXMLTreeParam::Attribute;
 }
 
-OUString getXPath(const SvTreeListBox& rTree, const SvTreeListEntry& rEntry)
+OUString getXPath(
+    const SvTreeListBox& rTree, const SvTreeListEntry& rEntry, std::vector<size_t>& rNamespaces)
 {
     OUStringBuffer aBuf;
     for (const SvTreeListEntry* p = &rEntry; p; p = rTree.GetParent(p))
@@ -47,6 +48,11 @@ OUString getXPath(const SvTreeListBox& rTree, const SvTreeListEntry& rEntry)
         const SvLBoxItem* pItem = p->GetFirstItem(SV_ITEM_ID_LBOXSTRING);
         if (!pItem)
             continue;
+
+        // Collect used namespace.
+        const ScOrcusXMLTreeParam::EntryData* pData = ScOrcusXMLTreeParam::getUserData(*p);
+        if (pData)
+            rNamespaces.push_back(pData->mnNamespaceID);
 
         const SvLBoxString* pStr = static_cast<const SvLBoxString*>(pItem);
         aBuf.insert(0, pStr->GetText());
@@ -428,7 +434,9 @@ namespace {
 /**
  * Pick only the leaf elements.
  */
-void getFieldLinks(ScOrcusImportXMLParam::RangeLink& rRangeLink, const SvTreeListBox& rTree, const SvTreeListEntry& rEntry)
+void getFieldLinks(
+    ScOrcusImportXMLParam::RangeLink& rRangeLink, std::vector<size_t>& rNamespaces,
+    const SvTreeListBox& rTree, const SvTreeListEntry& rEntry)
 {
     const SvTreeListEntries& rChildren = rEntry.GetChildEntries();
     if (rChildren.empty())
@@ -439,7 +447,7 @@ void getFieldLinks(ScOrcusImportXMLParam::RangeLink& rRangeLink, const SvTreeLis
     for (; it != itEnd; ++it)
     {
         const SvTreeListEntry& rChild = *it;
-        OUString aPath = getXPath(rTree, rChild);
+        OUString aPath = getXPath(rTree, rChild, rNamespaces);
         const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rChild);
 
         if (pUserData && pUserData->mbLeafNode)
@@ -450,8 +458,15 @@ void getFieldLinks(ScOrcusImportXMLParam::RangeLink& rRangeLink, const SvTreeLis
         }
 
         // Walk recursively.
-        getFieldLinks(rRangeLink, rTree, rChild);
+        getFieldLinks(rRangeLink, rNamespaces, rTree, rChild);
     }
+}
+
+void removeDuplicates(std::vector<size_t>& rArray)
+{
+    std::sort(rArray.begin(), rArray.end());
+    std::vector<size_t>::iterator it = std::unique(rArray.begin(), rArray.end());
+    rArray.erase(it, rArray.end());
 }
 
 }
@@ -471,7 +486,7 @@ void ScXMLSourceDlg::OkPressed()
         for (; it != itEnd; ++it)
         {
             const SvTreeListEntry& rEntry = **it;
-            OUString aPath = getXPath(maLbTree, rEntry);
+            OUString aPath = getXPath(maLbTree, rEntry, aParam.maNamespaces);
             const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rEntry);
 
             aParam.maCellLinks.push_back(
@@ -493,14 +508,16 @@ void ScXMLSourceDlg::OkPressed()
             aRangeLink.maPos = pUserData->maLinkedPos;
 
             // Go through all its child elements.
-            getFieldLinks(aRangeLink, maLbTree, rEntry);
+            getFieldLinks(aRangeLink, aParam.maNamespaces, maLbTree, rEntry);
 
             aParam.maRangeLinks.push_back(aRangeLink);
         }
     }
 
-    // Now do the import.
+    // Remove duplicate namespace IDs.
+    removeDuplicates(aParam.maNamespaces);
 
+    // Now do the import.
     mpXMLContext->importXML(aParam);
 
     // Don't forget to broadcast the change.

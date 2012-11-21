@@ -29,6 +29,7 @@ struct ScOrcusXMLTreeParam
     /** Custom data stored with each tree item. */
     struct EntryData
     {
+        size_t mnNamespaceID; /// numerical ID for xml namespace
         EntryType meType;
         ScAddress maLinkedPos; /// linked cell position (invalid if unlinked)
         bool mbRangeParent:1;
@@ -72,8 +73,11 @@ struct ScOrcusImportXMLParam
     typedef std::vector<CellLink> CellLinksType;
     typedef std::vector<RangeLink> RangeLinksType;
 
+    std::vector<size_t> maNamespaces;
     CellLinksType maCellLinks;
     RangeLinksType maRangeLinks;
+
+    SC_DLLPUBLIC static rtl::OString getShortNamespaceName(size_t nIndex);
 };
 
 #endif

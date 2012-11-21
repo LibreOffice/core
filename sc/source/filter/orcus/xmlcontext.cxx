@@ -31,6 +31,13 @@ ScOrcusXMLTreeParam::EntryData& setUserDataToEntry(
     return rStore.back();
 }
 
+void setEntityNameToUserData(
+    ScOrcusXMLTreeParam::EntryData& rEntryData,
+    const orcus::xml_structure_tree::entity_name& entity, const orcus::xml_structure_tree::walker& walker)
+{
+    rEntryData.mnNamespaceID = walker.get_xmlns_index(entity.ns);
+}
+
 OUString toString(const orcus::xml_structure_tree::entity_name& entity, const orcus::xml_structure_tree::walker& walker)
 {
     OUStringBuffer aBuf;
@@ -43,9 +50,10 @@ OUString toString(const orcus::xml_structure_tree::entity_name& entity, const or
             aBuf.append("???");
         else
         {
-            aBuf.append("ns");
-            aBuf.append(static_cast<sal_Int32>(index));
+            OString aName = ScOrcusImportXMLParam::getShortNamespaceName(index);
+            aBuf.append(OUString(aName.getStr(), aName.getLength(), RTL_TEXTENCODING_UTF8));
         }
+
         aBuf.append(':');
     }
     aBuf.append(OUString(entity.name.get(), entity.name.size(), RTL_TEXTENCODING_UTF8));
@@ -66,6 +74,8 @@ void populateTree(
         *pEntry, rParam.maUserDataStore,
         bRepeat ? ScOrcusXMLTreeParam::ElementRepeat : ScOrcusXMLTreeParam::ElementDefault);
 
+    setEntityNameToUserData(rEntryData, rElemName, rWalker);
+
     if (bRepeat)
     {
         // Recurring elements use different icon.
@@ -84,13 +94,16 @@ void populateTree(
     orcus::xml_structure_tree::entity_names_type::const_iterator itEnd = aNames.end();
     for (; it != itEnd; ++it)
     {
-        orcus::xml_structure_tree::entity_name aAttrName = *it;
-        SvTreeListEntry* pAttr = rTreeCtrl.InsertEntry(toString(aAttrName, rWalker), pEntry);
+        const orcus::xml_structure_tree::entity_name& rAttrName = *it;
+        SvTreeListEntry* pAttr = rTreeCtrl.InsertEntry(toString(rAttrName, rWalker), pEntry);
 
         if (!pAttr)
             continue;
 
-        setUserDataToEntry(*pAttr, rParam.maUserDataStore, ScOrcusXMLTreeParam::Attribute);
+        ScOrcusXMLTreeParam::EntryData& rAttrData =
+            setUserDataToEntry(*pAttr, rParam.maUserDataStore, ScOrcusXMLTreeParam::Attribute);
+        setEntityNameToUserData(rAttrData, rAttrName, rWalker);
+
         rTreeCtrl.SetExpandedEntryBmp(pAttr, rParam.maImgAttribute);
         rTreeCtrl.SetCollapsedEntryBmp(pAttr, rParam.maImgAttribute);
     }
@@ -183,6 +196,30 @@ bool ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXM
     return true;
 }
 
+namespace {
+
+class SetNamespaceAlias : std::unary_function<size_t, void>
+{
+    orcus::orcus_xml& mrFilter;
+    orcus::xmlns_repository& mrNsRepo;
+public:
+    SetNamespaceAlias(orcus::orcus_xml& filter, orcus::xmlns_repository& repo) :
+        mrFilter(filter), mrNsRepo(repo) {}
+
+    void operator() (size_t index)
+    {
+        orcus::xmlns_id_t nsid = mrNsRepo.get_identifier(index);
+        if (nsid == orcus::XMLNS_UNKNOWN_ID)
+            return;
+
+        OString aAlias = ScOrcusImportXMLParam::getShortNamespaceName(index);
+        mrFilter.set_namespace_alias(aAlias.getStr(), nsid);
+    }
+};
+
+
+}
+
 bool ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
 {
     ScOrcusFactory aFactory(mrDoc);
@@ -192,8 +229,11 @@ bool ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
     {
         orcus::orcus_xml filter(maNsRepo, &aFactory, NULL);
 
-        // Set cell links.
+        // Define all used namespaces.
+        std::for_each(rParam.maNamespaces.begin(), rParam.maNamespaces.end(), SetNamespaceAlias(filter, maNsRepo));
+
         {
+            // Set cell links.
             ScOrcusImportXMLParam::CellLinksType::const_iterator it = rParam.maCellLinks.begin();
             ScOrcusImportXMLParam::CellLinksType::const_iterator itEnd = rParam.maCellLinks.end();
             for (; it != itEnd; ++it)
@@ -208,8 +248,8 @@ bool ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
             }
         }
 
-        // Set range links.
         {
+            // Set range links.
             ScOrcusImportXMLParam::RangeLinksType::const_iterator it = rParam.maRangeLinks.begin();
             ScOrcusImportXMLParam::RangeLinksType::const_iterator itEnd = rParam.maRangeLinks.end();
             for (; it != itEnd; ++it)
