@@ -26,17 +26,12 @@
 
 $(eval $(call gb_Module_Module,cpputools))
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+
 $(eval $(call gb_Module_add_targets,cpputools,\
     Executable_sp2bv \
 ))
 
-ifeq ($(OS),IOS)
-$(eval $(call gb_Module_add_targets,cpputools,\
-    StaticLibrary_uno \
-))
-else
-
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,cpputools,\
     Executable_regcomp \
     Executable_regsingleton \
@@ -49,7 +44,6 @@ $(eval $(call gb_Module_add_targets,cpputools,\
 ))
 endif
 
-endif
 endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
