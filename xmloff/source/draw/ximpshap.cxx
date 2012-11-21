@@ -33,7 +33,6 @@
 #include <com/sun/star/drawing/EscapeDirection.hpp>
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/extract.hxx>
@@ -69,7 +68,6 @@
 #include "XMLImageMapContext.hxx"
 #include "sdpropls.hxx"
 #include "eventimp.hxx"
-
 #include "descriptionimp.hxx"
 #include "ximpcustomshape.hxx"
 #include "XMLEmbeddedObjectImportContext.hxx"
@@ -79,6 +77,8 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dvector.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -153,6 +153,7 @@ SdXMLShapeContext::SdXMLShapeContext(
 ,   mnZOrder(-1)
 ,   maSize(1, 1)
 ,   maPosition(0, 0)
+,   maUsedTransformation()
 ,   mbVisible(true)
 ,   mbPrintable(true)
 ,   mbHaveXmlId(false)
@@ -529,7 +530,7 @@ void SdXMLShapeContext::SetTransformation()
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
         if(xPropSet.is())
         {
-            ::basegfx::B2DHomMatrix aTransformation;
+            maUsedTransformation.identity();
 
             if(maSize.Width != 1 || maSize.Height != 1)
             {
@@ -540,13 +541,13 @@ void SdXMLShapeContext::SetTransformation()
                     maSize.Height = 1;
 
                 // set global size. This should always be used.
-                aTransformation.scale(maSize.Width, maSize.Height);
+                maUsedTransformation.scale(maSize.Width, maSize.Height);
             }
 
             if(maPosition.X != 0 || maPosition.Y != 0)
             {
                 // if global position is used, add it to transformation
-                aTransformation.translate(maPosition.X, maPosition.Y);
+                maUsedTransformation.translate(maPosition.X, maPosition.Y);
             }
 
             if(mnTransform.NeedsAction())
@@ -560,24 +561,24 @@ void SdXMLShapeContext::SetTransformation()
                 mnTransform.GetFullTransform(aMat);
 
                 // now add to transformation
-                aTransformation *= aMat;
+                maUsedTransformation *= aMat;
             }
 
             // now set transformation for this object
             uno::Any aAny;
             drawing::HomogenMatrix3 aMatrix;
 
-            aMatrix.Line1.Column1 = aTransformation.get(0, 0);
-            aMatrix.Line1.Column2 = aTransformation.get(0, 1);
-            aMatrix.Line1.Column3 = aTransformation.get(0, 2);
+            aMatrix.Line1.Column1 = maUsedTransformation.get(0, 0);
+            aMatrix.Line1.Column2 = maUsedTransformation.get(0, 1);
+            aMatrix.Line1.Column3 = maUsedTransformation.get(0, 2);
 
-            aMatrix.Line2.Column1 = aTransformation.get(1, 0);
-            aMatrix.Line2.Column2 = aTransformation.get(1, 1);
-            aMatrix.Line2.Column3 = aTransformation.get(1, 2);
+            aMatrix.Line2.Column1 = maUsedTransformation.get(1, 0);
+            aMatrix.Line2.Column2 = maUsedTransformation.get(1, 1);
+            aMatrix.Line2.Column3 = maUsedTransformation.get(1, 2);
 
-            aMatrix.Line3.Column1 = aTransformation.get(2, 0);
-            aMatrix.Line3.Column2 = aTransformation.get(2, 1);
-            aMatrix.Line3.Column3 = aTransformation.get(2, 2);
+            aMatrix.Line3.Column1 = maUsedTransformation.get(2, 0);
+            aMatrix.Line3.Column2 = maUsedTransformation.get(2, 1);
+            aMatrix.Line3.Column3 = maUsedTransformation.get(2, 2);
 
             aAny <<= aMatrix;
 
@@ -3741,6 +3742,48 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
 
 void SdXMLCustomShapeContext::EndElement()
 {
+    // for backward compatibility, the above SetTransformation() may alraedy have
+    // applied a call to SetMirroredX/SetMirroredY. This is not yet added to the
+    // beans::PropertyValues in maCustomShapeGeometry. When applying these now, this
+    // would be lost again.
+    // TTTT: Remove again after aw080
+    if(!maUsedTransformation.isIdentity())
+    {
+        basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+
+        maUsedTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+
+        bool bFlippedX(aScale.getX() < 0.0);
+        bool bFlippedY(aScale.getY() < 0.0);
+
+        if(bFlippedX && bFlippedY)
+        {
+            // when both are used it is the same as 180 degree rotation; reset
+            bFlippedX = bFlippedY = false;
+        }
+
+        if(bFlippedX || bFlippedY)
+        {
+            beans::PropertyValue aNewPoroperty;
+
+            if(bFlippedX)
+            {
+                aNewPoroperty.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MirroredX"));
+            }
+            else
+            {
+                aNewPoroperty.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MirroredY"));
+            }
+
+            aNewPoroperty.Handle = -1;
+            aNewPoroperty.Value <<= sal_True;
+            aNewPoroperty.State = beans::PropertyState_DIRECT_VALUE;
+
+            maCustomShapeGeometry.push_back(aNewPoroperty);
+        }
+    }
+
     if ( !maCustomShapeGeometry.empty() )
     {
         const OUString sCustomShapeGeometry    (  "CustomShapeGeometry"  );

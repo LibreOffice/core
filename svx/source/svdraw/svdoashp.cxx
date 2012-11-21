@@ -3107,11 +3107,11 @@ sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, ba
             }
             // mirror polygon and move it a bit
             Polygon aPol0(aPol);
-            aPol[0]=aPol0[1];
-            aPol[1]=aPol0[0];
-            aPol[2]=aPol0[3];
-            aPol[3]=aPol0[2];
-            aPol[4]=aPol0[1];
+            aPol[0]=aPol0[3]; // This was WRONG for vertical (!)
+            aPol[1]=aPol0[2];
+            aPol[2]=aPol0[1];
+            aPol[3]=aPol0[0];
+            aPol[4]=aPol0[3];
             Poly2Rect(aPol,aRectangle,aNewGeo);
         }
     }
