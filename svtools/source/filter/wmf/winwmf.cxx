@@ -1419,12 +1419,8 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                 case W_META_EXTTEXTOUT:
                 {
                     sal_uInt16  nLen, nOptions;
-                    sal_Int32   nRecordSize;
                     Point       aPosition;
 
-                    pStm->SeekRel(-6);
-                    *pStm >> nRecordSize;
-                    pStm->SeekRel(2);
                     aPosition = ReadYX();
                     *pStm >> nLen >> nOptions;
                     // todo: we also have to take care of the text width
