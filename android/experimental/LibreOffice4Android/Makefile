@@ -40,7 +40,6 @@ copy-stuff:
 # extent).
 #
 	mkdir -p assets/bin/ure assets/lib assets/program assets/xml/ure assets/ComponentTarget/i18npool/util
-	cp $(OUTDIR)/bin/udkapi.rdb assets/bin
 	cp $(OUTDIR)/bin/offapi.rdb assets/bin
 	cp $(OUTDIR)/bin/oovbaapi.rdb assets/bin
 	cp $(OUTDIR)/bin/types.rdb assets/bin
