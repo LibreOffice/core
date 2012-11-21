@@ -12506,9 +12506,13 @@ fi
 
 AC_SUBST(LO_PATH)
 
-# We need at least berkeleydb for build platform in ooo.lst
+BUILD_TARBALLS=
+# Ugly hack to get what we need for build platform into ooo.lst
 if test "$CROSS_COMPILING" = "YES" ; then
-    BUILD_TARBALLS="d70951c80dabecc2892c919ff5d07172-db-4.7.25.NC-custom.tar.gz"
+    # BERKELEYDB_TARBALL
+    BUILD_TARBALLS="$BUILD_TARBALLS d70951c80dabecc2892c919ff5d07172-db-4.7.25.NC-custom.tar.gz" 
+    # ICU_DATA_SUBSET_ZIP
+    BUILD_TARBALLS="$BUILD_TARBALLS fc188d2ed5c2cbcf7a021b34b9f88478-icudt49l-subset.zip"
 fi
 AC_SUBST(BUILD_TARBALLS)
 
