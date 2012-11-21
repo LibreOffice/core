@@ -507,12 +507,9 @@ void SvtFileDialog::Init_Impl
     // Create control element, the order defines the tab control.
     _pImp->_pFtFileName = new FixedText( this, SvtResId( FT_EXPLORERFILE_FILENAME ) );
 
-    SvtURLBox* pURLBox = new SvtURLBox( this );
+    SvtURLBox* pURLBox = new SvtURLBox( this, SvtResId( ED_EXPLORERFILE_FILENAME ) );
     pURLBox->SetUrlFilter( &m_aURLFilter );
     _pImp->_pEdFileName = pURLBox;
-
-    Edit aDummy( this, SvtResId( ED_EXPLORERFILE_FILENAME ) );
-    _pImp->_pEdFileName->SetPosSizePixel( aDummy.GetPosPixel(), aDummy.GetSizePixel() );
     _pImp->_pEdFileName->Show();
     pURLBox->SetSelectHdl( LINK( this, SvtFileDialog, EntrySelectHdl_Impl ) );
     pURLBox->SetOpenHdl( STATIC_LINK( this, SvtFileDialog, OpenHdl_Impl ) );
@@ -547,10 +544,8 @@ void SvtFileDialog::Init_Impl
         }
     }
 
-    Edit anOtherDummy( this, SvtResId( ED_EXPLORERFILE_CURRENTPATH ) );
     _pImp->_pEdCurrentPath = new SvtURLBox( this, SvtResId(ED_EXPLORERFILE_CURRENTPATH) );
     _pImp->_pEdCurrentPath->SetUrlFilter( &m_aURLFilter );
-    _pImp->_pEdCurrentPath->SetPosSizePixel( anOtherDummy.GetPosPixel(), anOtherDummy.GetSizePixel() );
     _pImp->_pEdCurrentPath->Show();
 
     _pImp->_pBtnFileOpen = new PushButton( this, SvtResId( BTN_EXPLORERFILE_OPEN ) );

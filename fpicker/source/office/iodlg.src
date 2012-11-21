@@ -57,7 +57,7 @@ ModalDialog DLG_FPICKER_EXPLORERFILE
     Sizeable = TRUE;
     HelpId = HID_EXPLORERDLG_FILE ;
     Size = MAP_APPFONT ( 280 , 174 ) ;
-    Edit ED_EXPLORERFILE_CURRENTPATH
+    ComboBox ED_EXPLORERFILE_CURRENTPATH
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 90 , 12 ) ;
@@ -113,7 +113,7 @@ ModalDialog DLG_FPICKER_EXPLORERFILE
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ en-US ] = "File ~name:" ;
     };
-    Edit ED_EXPLORERFILE_FILENAME
+    ComboBox ED_EXPLORERFILE_FILENAME
     {
         HelpID = "fpicker:Edit:DLG_SVT_EXPLORERFILE:ED_EXPLORERFILE_FILENAME";
         Pos = MAP_APPFONT ( 59 , 117 ) ;
