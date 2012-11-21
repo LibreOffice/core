@@ -39,7 +39,7 @@ namespace
 
     static bool lcl_ReadPoChecked(
         PoEntry& o_rPoEntry, PoIfstream& rPoFile,
-        const std::string& rFileName)
+        const OString& rFileName)
     {
         try
         {
@@ -51,7 +51,7 @@ namespace
             {
                 printf(
                     "Warning : %s contains invalid entry\n",
-                    rFileName.c_str() );
+                    rFileName.getStr() );
                 return false;
             }
         }
@@ -159,19 +159,20 @@ MergeDataFile::MergeDataFile(
         printf("Warning : Can't open po path container file");
         return;
     }
-    std::string sPoFileName;
-    aInputStream >> sPoFileName;
+    std::string sPoFile;
+    aInputStream >> sPoFile;
     bool bFirstLang = true;
     while( !aInputStream.eof() )
     {
         const OString sHack("HACK");
         const OString sFileName( lcl_NormalizeFilename(rFile) );
         const bool bReadAll = sFileName.isEmpty();
+        const OString sPoFileName(sPoFile.data(), sPoFile.length());
         PoIfstream aPoInput;
-        aPoInput.open( OString(sPoFileName.data(), sPoFileName.length()) );
+        aPoInput.open( sPoFileName );
         if ( !aPoInput.isOpen() )
         {
-            printf( "Warning : Can't open %s\n", sPoFileName.c_str() );
+            printf( "Warning : Can't open %s\n", sPoFileName.getStr() );
             return;
         }
         PoHeader aPoHeader;
@@ -185,24 +186,20 @@ MergeDataFile::MergeDataFile(
             {
                 printf(
                     "Warning : %s has invalid header\n",
-                    sPoFileName.c_str() );
+                    sPoFileName.getStr() );
                 return;
             }
         }
+
         OString sLang;
-        try
+        //Get language id from path
         {
-            sLang = aPoHeader.getLanguage().replaceAll("_","-");
-        }
-        catch( PoHeader::Exception& aException )
-        {
-            if( aException == PoHeader::NOLANG )
-            {
-                printf(
-                    "Warning : %s' header not has language specification\n",
-                    sPoFileName.c_str() );
-                return;
-            }
+            const OString sTransSource("translations/source/");
+            const sal_Int32 nStart =
+                sPoFileName.indexOf(sTransSource)+sTransSource.getLength();
+            const sal_Int32 nCount =
+                sPoFileName.indexOf("/",nStart) - nStart;
+            sLang = sPoFileName.copy(nStart,nCount);
         }
         aLanguageSet.insert( sLang );
         PoEntry aNextPo;
@@ -276,7 +273,7 @@ MergeDataFile::MergeDataFile(
             }
         }
         aPoInput.close();
-        aInputStream >> sPoFileName;
+        aInputStream >> sPoFile;
         bFirstLang = false;
     }
     aInputStream.close();
