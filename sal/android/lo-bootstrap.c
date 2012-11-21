@@ -41,6 +41,7 @@
 #include <dlfcn.h>
 #include <sys/mman.h>
 
+#include <zlib.h>
 #include <jni.h>
 
 #include <android/log.h>
@@ -82,6 +83,7 @@ static int sleep_time = 0;
 
 /* These are valid / used in all apps. */
 static const char *data_dir;
+static const char *cache_dir;
 static const char **library_locations;
 static void *apk_file;
 static int apk_file_size;
@@ -312,21 +314,24 @@ JNI_OnLoad(JavaVM* vm, void* reserved)
 }
 
 // public static native boolean setup(String dataDir,
+//                                    String cacheDir,
 //                                    String apkFile,
 //                                    String[] ld_library_path);
 
 __attribute__ ((visibility("default")))
 jboolean
-Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_String_2_3Ljava_lang_String_2
+Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_String_2_3Ljava_lang_String_2
     (JNIEnv* env,
      jobject clazz,
      jstring dataDir,
+     jstring cacheDir,
      jstring apkFile,
      jobjectArray ld_library_path)
 {
     struct stat st;
     int i, n, fd;
     const char *dataDirPath;
+    const char *cacheDirPath;
     const char *apkFilePath;
     char *lib_dir;
 
@@ -358,6 +363,12 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
 
     for (n = 0; library_locations[n] != NULL; n++)
         LOGI("library_locations[%d] = %s", n, library_locations[n]);
+
+    cacheDirPath = (*env)->GetStringUTFChars(env, cacheDir, NULL);
+
+    cache_dir = strdup(cacheDirPath);
+
+    (*env)->ReleaseStringUTFChars(env, cacheDir, cacheDirPath);
 
     apkFilePath =  (*env)->GetStringUTFChars(env, apkFile, NULL);
 
@@ -743,6 +754,7 @@ lo_dlcall_argc_argv(void *function,
 }
 
 #define UNPACK_TREE "/assets/unpack"
+#define UNPACK_TREE_GZ "/assets/gz.unpack"
 
 static int
 mkdir_p(const char *dirname)
@@ -770,8 +782,70 @@ mkdir_p(const char *dirname)
     return 1;
 }
 
+static int
+extract_gzipped(const char *filename,
+                const char *apkentry,
+                int size,
+                FILE *f)
+{
+    gzFile gzfd;
+    int gzerrno;
+    int nbytes;
+    char buf[5000];
+    int total = 0;
+    char *tmpname;
+    FILE *tmp;
+
+    tmpname = malloc(strlen(cache_dir) + strlen("/tmp.gz") + 1);
+    strcpy(tmpname, cache_dir);
+    strcat(tmpname, "/tmp.gz");
+
+    tmp = fopen(tmpname, "w+");
+    unlink(tmpname);
+
+    if (tmp == NULL) {
+        LOGE("extract_gzipped: could not create %s: %s", tmpname, strerror(errno));
+        free(tmpname);
+        return 0;
+    }
+
+    if (fwrite(apkentry, size, 1, tmp) != 1) {
+        LOGE("extract_gzipped: could not write gzipped entry to %s: %s", tmpname, strerror(errno));
+        fclose(tmp);
+        free(tmpname);
+        return 0;
+    }
+
+    free(tmpname);
+    rewind(tmp);
+
+    gzfd = gzdopen(fileno(tmp), "rb");
+    if (gzfd == NULL) {
+        LOGE("extract_gzipped: gzdopen failed");
+        fclose(tmp);
+        return 0;
+    }
+
+    while ((nbytes = gzread(gzfd, buf, sizeof(buf))) > 0) {
+        fwrite(buf, nbytes, 1, f);
+        total += nbytes;
+    }
+    if (nbytes == -1) {
+        LOGE("extract_gzipped: Could not gzread from %s: %s", filename, gzerror(gzfd, &gzerrno));
+        return total;
+    }
+    if (gzclose(gzfd) == -1) {
+        LOGE("extract_gzipped: gzclose failed");
+        return total;
+    }
+
+    return total;
+}
+
 static void
-extract_files(const char *prefix)
+extract_files(const char *root,
+              const char *prefix,
+              int gzipped)
 {
     lo_apk_dir *tree = lo_apk_opendir(prefix);
     struct dirent *dent;
@@ -789,7 +863,7 @@ extract_files(const char *prefix)
             strcpy(subdir, prefix);
             strcat(subdir, "/");
             strcat(subdir, dent->d_name);
-            extract_files(subdir);
+            extract_files(root, subdir, gzipped);
             free(subdir);
         } else {
             char *filename;
@@ -811,10 +885,10 @@ extract_files(const char *prefix)
                 continue;
             }
 
-            newfilename = malloc(strlen(data_dir) + 1 + strlen(prefix) - sizeof(UNPACK_TREE) + 1 + strlen(dent->d_name) + 1);
+            newfilename = malloc(strlen(data_dir) + 1 + strlen(prefix) - strlen(root) + strlen(dent->d_name) + 1);
             strcpy(newfilename, data_dir);
             strcat(newfilename, "/");
-            strcat(newfilename, prefix + sizeof(UNPACK_TREE));
+            strcat(newfilename, prefix + strlen(root) + 1);
 
             if (!mkdir_p(newfilename)) {
                 free(filename);
@@ -826,7 +900,7 @@ extract_files(const char *prefix)
             strcat(newfilename, dent->d_name);
 
             if (stat(newfilename, &st) == 0 &&
-                st.st_size == size) {
+                (gzipped || st.st_size == size)) {
                 free(filename);
                 free(newfilename);
                 continue;
@@ -840,11 +914,16 @@ extract_files(const char *prefix)
                 continue;
             }
 
-            if (fwrite(apkentry, size, 1, f) != 1) {
-                LOGE("extract_files: Could not write %d bytes to %s: %s", size, newfilename, strerror(errno));
+            if (!gzipped) {
+                if (fwrite(apkentry, size, 1, f) != 1) {
+                    LOGE("extract_files: Could not write %d bytes to %s: %s", size, newfilename, strerror(errno));
+                } else {
+                    LOGI("extract_files: Copied %s to %s: %d bytes", filename, newfilename, size);
+                }
+            } else {
+                size = extract_gzipped(filename, apkentry, size, f);
+                LOGI("extract_files: Decompressed %s to %s: %d bytes", filename, newfilename, size);
             }
-
-            LOGI("extract_files: Copied %s to %s: %d bytes", filename, newfilename, size);
 
             fclose(f);
 
@@ -865,7 +944,8 @@ Java_org_libreoffice_android_Bootstrap_extract_1files(JNIEnv* env,
     (void) env;
     (void) clazz;
 
-    extract_files(UNPACK_TREE);
+    extract_files(UNPACK_TREE, UNPACK_TREE, 0);
+    extract_files(UNPACK_TREE_GZ, UNPACK_TREE_GZ, 1);
 }
 
 /* Android's JNI works only to libraries loaded through Java's

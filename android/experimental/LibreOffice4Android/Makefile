@@ -118,13 +118,13 @@ copy-stuff:
 # understand "/assets" paths.
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
-	mkdir -p assets/unpack/user/fonts
 # $UserInstallation/user/fonts is added to the fontconfig path in
 # vcl/generic/fontmanager/helper.cxx: psp::getFontPath(). UserInstallation is
 # set to the app's data dir above.
-	cp $(OUTDIR)/pck/Liberation*.ttf assets/unpack/user/fonts
-	cp $(OUTDIR)/pck/Gen*.ttf assets/unpack/user/fonts
-	cp $(OUTDIR)/pck/opens___.ttf assets/unpack/user/fonts
+	mkdir -p assets/gz.unpack/user/fonts
+	for F in $(OUTDIR)/pck/Liberation*.ttf $(OUTDIR)/pck/Gen*.ttf $(OUTDIR)/pck/opens___.ttf; do \
+		gzip -9 <$$F >assets/gz.unpack/user/fonts/`basename $$F`; \
+	done
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #

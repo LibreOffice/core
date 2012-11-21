@@ -59,6 +59,7 @@ public class Bootstrap extends NativeActivity
     // seems.
 
     private static native boolean setup(String dataDir,
+                                        String cacheDir,
                                         String apkFile,
                                         String[] ld_library_path);
 
@@ -133,7 +134,10 @@ public class Bootstrap extends NativeActivity
 
         String[] llpa = llp.split(":");
 
-        if (!setup(dataDir, activity.getApplication().getPackageResourcePath(), llpa))
+        if (!setup(dataDir,
+                   activity.getApplication().getCacheDir().getAbsolutePath(),
+                   activity.getApplication().getPackageResourcePath(),
+                   llpa))
             return;
 
         // Extract files from the .apk that can't be used mmapped directly from it
