@@ -404,7 +404,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
         if ( !bDefaultFound && aItem.sName.equals( COMPATIBILITY_DEFAULT_NAME ) != sal_False )
         {
             SvtSysLocale aSysLocale;
-            com::sun::star::lang::Locale aLocale = aSysLocale.GetLocale();
+            com::sun::star::lang::Locale aLocale = aSysLocale.GetLanguageTag().getLocale();
             if ( aLocale.Language == "zh" || aLocale.Language == "ja" || aLocale.Language == "ko" )
                 aItem.bExpandWordSpace = false;
 

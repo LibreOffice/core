@@ -20,9 +20,7 @@
 
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <i18npool/mslangid.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
@@ -57,7 +55,7 @@ private:
 
 SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(NULL)
 {
-    pLocaleData = new LocaleDataWrapper( aSysLocaleOptions.GetRealLocale() );
+    pLocaleData = new LocaleDataWrapper( aSysLocaleOptions.GetRealLanguageTag().getLocale() );
     setDateAcceptancePatternsConfig();
 
     // listen for further changes
@@ -75,7 +73,7 @@ SvtSysLocale_Impl::~SvtSysLocale_Impl()
 CharClass* SvtSysLocale_Impl::GetCharClass()
 {
     if ( !pCharClass )
-        pCharClass = new CharClass( aSysLocaleOptions.GetRealLocale() );
+        pCharClass = new CharClass( aSysLocaleOptions.GetRealLanguageTag().getLocale() );
     return pCharClass;
 }
 
@@ -85,7 +83,7 @@ void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, sa
 
     if ( nHint & SYSLOCALEOPTIONS_HINT_LOCALE )
     {
-        com::sun::star::lang::Locale aLocale( aSysLocaleOptions.GetRealLocale() );
+        com::sun::star::lang::Locale aLocale( aSysLocaleOptions.GetRealLanguageTag().getLocale() );
         pLocaleData->setLocale( aLocale );
         GetCharClass()->setLocale( aLocale );
     }
@@ -185,24 +183,14 @@ SvtSysLocaleOptions& SvtSysLocale::GetOptions() const
     return pImpl->aSysLocaleOptions;
 }
 
-com::sun::star::lang::Locale SvtSysLocale::GetLocale() const
+const LanguageTag& SvtSysLocale::GetLanguageTag() const
 {
-    return pImpl->aSysLocaleOptions.GetRealLocale();
+    return pImpl->aSysLocaleOptions.GetRealLanguageTag();
 }
 
-LanguageType SvtSysLocale::GetLanguage() const
+const LanguageTag& SvtSysLocale::GetUILanguageTag() const
 {
-    return pImpl->aSysLocaleOptions.GetRealLanguage();
-}
-
-com::sun::star::lang::Locale SvtSysLocale::GetUILocale() const
-{
-    return pImpl->aSysLocaleOptions.GetRealUILocale();
-}
-
-LanguageType SvtSysLocale::GetUILanguage() const
-{
-    return pImpl->aSysLocaleOptions.GetRealUILanguage();
+    return pImpl->aSysLocaleOptions.GetRealUILanguageTag();
 }
 
 //------------------------------------------------------------------------
@@ -216,7 +204,7 @@ rtl_TextEncoding SvtSysLocale::GetBestMimeEncoding()
     {
         // If the system locale is unknown to us, e.g. LC_ALL=xx, match the UI
         // language if possible.
-        ::com::sun::star::lang::Locale aLocale( SvtSysLocale().GetUILocale() );
+        ::com::sun::star::lang::Locale aLocale( SvtSysLocale().GetUILanguageTag().getLocale() );
         rtl_Locale * pLocale = rtl_locale_register( aLocale.Language.getStr(),
                 aLocale.Country.getStr(), aLocale.Variant.getStr() );
         rtl_TextEncoding nEnc = osl_getTextEncodingFromLocale( pLocale );

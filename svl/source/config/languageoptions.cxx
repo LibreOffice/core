@@ -149,7 +149,7 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
     if( LANGUAGE_DONTKNOW == nLang )
         nLang = LANGUAGE_ENGLISH_US;
     else if( LANGUAGE_SYSTEM == nLang  )
-        nLang = SvtSysLocale().GetLanguage();
+        nLang = SvtSysLocale().GetLanguageTag().getLanguageType();
 
     sal_Int16 nScriptType = MsLangId::getScriptType( nLang );
     sal_uInt16 nScript;

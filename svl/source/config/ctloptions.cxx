@@ -293,7 +293,7 @@ void SvtCTLOptions_Impl::Load()
             ((eSystemLanguage != LANGUAGE_SYSTEM)  && ( nWinScript & SCRIPTTYPE_COMPLEX )))  )
     {
         m_bCTLFontEnabled = sal_True;
-        sal_uInt16 nLanguage = SvtSysLocale().GetLanguage();
+        sal_uInt16 nLanguage = SvtSysLocale().GetLanguageTag().getLanguageType();
         //enable sequence checking for the appropriate languages
         m_bCTLSequenceChecking = m_bCTLRestricted = m_bCTLTypeAndReplace =
             (MsLangId::needsSequenceChecking( nLanguage) ||

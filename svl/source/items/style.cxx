@@ -334,7 +334,7 @@ XubString SfxStyleSheetBase::GetDescription( SfxMapUnit eMetric )
     const SfxPoolItem* pItem = aIter.FirstItem();
 
     IntlWrapper aIntlWrapper(comphelper::getProcessServiceFactory(),
-            SvtSysLocale().GetLanguage());
+            SvtSysLocale().GetLanguageTag().getLocale());
     while ( pItem )
     {
         XubString aItemPresentation;

@@ -146,7 +146,7 @@ namespace svt
                 ENSURE_OR_THROW( i_formatter.is(), "StandardFormatNormalizer: no formatter!" );
                 Reference< XNumberFormatsSupplier > const xSupplier( i_formatter->getNumberFormatsSupplier(), UNO_SET_THROW );
                 Reference< XNumberFormatTypes > const xTypes( xSupplier->getNumberFormats(), UNO_QUERY_THROW );
-                m_nFormatKey = xTypes->getStandardFormat( i_numberFormatType, SvtSysLocale().GetLocale() );
+                m_nFormatKey = xTypes->getStandardFormat( i_numberFormatType, SvtSysLocale().GetLanguageTag().getLocale() );
             }
             catch( const Exception& )
             {
@@ -341,7 +341,7 @@ namespace svt
 
                 // a supplier of number formats
                 Sequence< Any > aInitArgs(1);
-                aInitArgs[0] <<= SvtSysLocale().GetLocale();
+                aInitArgs[0] <<= SvtSysLocale().GetLanguageTag().getLocale();
 
                 Reference< XNumberFormatsSupplier > const xSupplier(
                     io_data.aContext.createComponentWithArguments( "com.sun.star.util.NumberFormatsSupplier", aInitArgs ),

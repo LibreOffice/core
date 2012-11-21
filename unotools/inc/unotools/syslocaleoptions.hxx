@@ -26,9 +26,9 @@
 #include <tools/solar.h>
 #include <tools/link.hxx>
 #include <i18npool/lang.h>
+#include <i18npool/languagetag.hxx>
 #include <tools/string.hxx>
 #include <unotools/options.hxx>
-#include <com/sun/star/lang/Locale.hpp>
 
 // bits for broadcasting hints of changes in a SfxSimpleHint, may be combined
 const sal_uLong SYSLOCALEOPTIONS_HINT_LOCALE       = 0x00000001;
@@ -99,14 +99,16 @@ public:
     /// The config string may be empty to denote the SYSTEM locale
             const ::rtl::OUString&  GetLocaleConfigString() const;
             void                SetLocaleConfigString( const ::rtl::OUString& rStr );
-            com::sun::star::lang::Locale GetLocale() const;
-            com::sun::star::lang::Locale GetRealLocale() const;
-            LanguageType        GetRealLanguage() const;
+            /** Get locale set, if empty denotes SYSTEM locale, not resolved
+                to the real locale. */
+            LanguageTag         GetLanguageTag() const;
+            /** Get locale set, always resolved to the real locale. */
+            const LanguageTag&  GetRealLanguageTag() const;
 
     /// The config string may be empty to denote the SYSTEM locale
             void                SetUILocaleConfigString( const ::rtl::OUString& rStr );
-            com::sun::star::lang::Locale GetRealUILocale() const;
-            LanguageType        GetRealUILanguage() const;
+            /** Get UI locale set, always resolved to the real locale. */
+            const LanguageTag&  GetRealUILanguageTag() const;
 
     /// The config string may be empty to denote the default currency of the locale
             const ::rtl::OUString&  GetCurrencyConfigString() const;

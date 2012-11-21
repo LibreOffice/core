@@ -1540,7 +1540,7 @@ bool AllSettings::GetLayoutRTL() const
 const ::com::sun::star::lang::Locale& AllSettings::GetLocale() const
 {
     if ( mpData->maLocale.Language.isEmpty() )
-        mpData->maLocale = mpData->maSysLocale.GetLocale();
+        mpData->maLocale = mpData->maSysLocale.GetLanguageTag().getLocale();
 
     return mpData->maLocale;
 }
@@ -1551,7 +1551,7 @@ const ::com::sun::star::lang::Locale& AllSettings::GetUILocale() const
 {
     // the UILocale is never changed
     if ( mpData->maUILocale.Language.isEmpty() )
-        mpData->maUILocale = mpData->maSysLocale.GetUILocale();
+        mpData->maUILocale = mpData->maSysLocale.GetUILanguageTag().getLocale();
 
     return mpData->maUILocale;
 }
@@ -1562,7 +1562,7 @@ LanguageType AllSettings::GetLanguage() const
 {
     // meLanguage == LANGUAGE_SYSTEM means: use settings from SvtSysLocale
     if ( mpData->meLanguage == LANGUAGE_SYSTEM )
-        return mpData->maSysLocale.GetLanguage();
+        return mpData->maSysLocale.GetLanguageTag().getLanguageType();
 
     return mpData->meLanguage;
 }
@@ -1572,7 +1572,7 @@ LanguageType AllSettings::GetLanguage() const
 LanguageType AllSettings::GetUILanguage() const
 {
     // the UILanguage is never changed
-    return mpData->maSysLocale.GetUILanguage();
+    return mpData->maSysLocale.GetUILanguageTag().getLanguageType();
 }
 
 // -----------------------------------------------------------------------
@@ -1628,7 +1628,7 @@ void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
     }
 
     if ( (nHint & SYSLOCALEOPTIONS_HINT_LOCALE) )
-        aAllSettings.SetLocale( aAllSettings.mpData->maSysLocale.GetOptions().GetLocale() );
+        aAllSettings.SetLocale( aAllSettings.mpData->maSysLocale.GetOptions().GetLanguageTag().getLocale() );
 
     Application::SetSettings( aAllSettings );
 }

@@ -49,26 +49,6 @@ namespace
         : public rtl::Static<Link, CurrencyChangeLink> {};
 }
 
-static com::sun::star::lang::Locale lcl_str_to_locale( const ::rtl::OUString rStr )
-{
-    com::sun::star::lang::Locale aRet;
-    if ( !rStr.isEmpty() )
-    {
-        aRet = com::sun::star::lang::Locale();
-        sal_Int32 nSep = rStr.indexOf('-');
-        if (nSep < 0)
-            aRet.Language = rStr;
-        else
-        {
-            aRet.Language = rStr.copy(0, nSep);
-            if (nSep < rStr.getLength())
-                aRet.Country = rStr.copy(nSep+1, rStr.getLength() - (nSep+1));
-        }
-    }
-
-    return aRet;
-}
-
 class SvtSysLocaleOptions_Impl : public utl::ConfigItem
 {
         LanguageTag             m_aRealLocale;
@@ -121,10 +101,8 @@ public:
             void                SetIgnoreLanguageChange( sal_Bool bSet);
 
             sal_Bool            IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const;
-            const Locale&       GetRealLocale() { return m_aRealLocale.getLocale(); }
-            const Locale&       GetRealUILocale() { return m_aRealUILocale.getLocale(); }
-            LanguageType        GetRealLanguage() { return m_aRealLocale.getLanguageType(); }
-            LanguageType        GetRealUILanguage() { return m_aRealUILocale.getLanguageType(); }
+            const LanguageTag&  GetRealLocale() { return m_aRealLocale; }
+            const LanguageTag&  GetRealUILocale() { return m_aRealUILocale; }
 };
 
 
@@ -755,29 +733,19 @@ void SvtSysLocaleOptions::ConfigurationChanged( utl::ConfigurationBroadcaster* p
     ::utl::detail::Options::ConfigurationChanged( p, nHint );
 }
 
-com::sun::star::lang::Locale SvtSysLocaleOptions::GetLocale() const
+LanguageTag SvtSysLocaleOptions::GetLanguageTag() const
 {
-    return lcl_str_to_locale( GetLocaleConfigString() );
+    return LanguageTag( GetLocaleConfigString() );
 }
 
-com::sun::star::lang::Locale SvtSysLocaleOptions::GetRealLocale() const
+const LanguageTag & SvtSysLocaleOptions::GetRealLanguageTag() const
 {
     return pOptions->GetRealLocale();
 }
 
-com::sun::star::lang::Locale SvtSysLocaleOptions::GetRealUILocale() const
+const LanguageTag & SvtSysLocaleOptions::GetRealUILanguageTag() const
 {
     return pOptions->GetRealUILocale();
-}
-
-LanguageType SvtSysLocaleOptions::GetRealLanguage() const
-{
-    return pOptions->GetRealLanguage();
-}
-
-LanguageType SvtSysLocaleOptions::GetRealUILanguage() const
-{
-    return pOptions->GetRealUILanguage();
 }
 
 

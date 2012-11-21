@@ -636,13 +636,13 @@ sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( String & rString,
     // #62389# empty format string (of Writer) => General standard format
     if (!rString.Len())
         ;   // nothing
-    else if (eLnge == LANGUAGE_SYSTEM && eSysLnge != SvtSysLocale().GetLanguage())
+    else if (eLnge == LANGUAGE_SYSTEM && eSysLnge != SvtSysLocale().GetLanguageTag().getLanguageType())
     {
         sal_uInt32 nOrig = GetEntryKey( rString, eSysLnge );
         if (nOrig == NUMBERFORMAT_ENTRY_NOT_FOUND)
             nKey = nOrig;   // none avaliable, maybe user-defined
         else
-            nKey = GetFormatForLanguageIfBuiltIn( nOrig, SvtSysLocale().GetLanguage() );
+            nKey = GetFormatForLanguageIfBuiltIn( nOrig, SvtSysLocale().GetLanguageTag().getLanguageType() );
 
         if (nKey == nOrig)
         {
@@ -651,7 +651,7 @@ sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( String & rString,
             // language and wouldn't match eSysLnge anymore, do that on a copy.
             String aTmp( rString);
             rNewInserted = PutandConvertEntrySystem( aTmp, rCheckPos, rType,
-                                                     nKey, eLnge, SvtSysLocale().GetLanguage());
+                                                     nKey, eLnge, SvtSysLocale().GetLanguageTag().getLanguageType());
             if (rCheckPos > 0)
             {
                 SAL_WARN( "svl.numbers", "SvNumberFormatter::GetIndexPuttingAndConverting: bad format code string for current locale");
@@ -702,7 +702,7 @@ void SvNumberFormatter::DeleteEntry(sal_uInt32 nKey)
 
 bool SvNumberFormatter::Load( SvStream& rStream )
 {
-    LanguageType eSysLang = SvtSysLocale().GetLanguage();
+    LanguageType eSysLang = SvtSysLocale().GetLanguageTag().getLanguageType();
     SvNumberFormatter* pConverter = NULL;
 
     ImpSvNumMultipleReadHeader aHdr( rStream );
@@ -802,7 +802,7 @@ bool SvNumberFormatter::Save( SvStream& rStream ) const
     // As of 364i we store what SYSTEM locale really was, before it was hard
     // coded LANGUAGE_SYSTEM.
     rStream << (sal_uInt16) SV_NUMBERFORMATTER_VERSION;
-    rStream << (sal_uInt16) SvtSysLocale().GetLanguage() << (sal_uInt16) IniLnge;
+    rStream << (sal_uInt16) SvtSysLocale().GetLanguageTag().getLanguageType() << (sal_uInt16) IniLnge;
     const SvNumberFormatTable* pTable = &aFTable;
     SvNumberFormatTable::const_iterator it = pTable->begin();
     while (it != pTable->end())
@@ -3167,7 +3167,7 @@ void SvNumberFormatter::SetDefaultSystemCurrency( const String& rAbbrev, Languag
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     if ( eLang == LANGUAGE_SYSTEM )
-        eLang = SvtSysLocale().GetLanguage();
+        eLang = SvtSysLocale().GetLanguageTag().getLanguageType();
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
     sal_uInt16 nCount = rTable.size();
     if ( rAbbrev.Len() )
@@ -3562,10 +3562,10 @@ void SvNumberFormatter::ImpInitCurrencyTable()
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svl", "er93726", "SvNumberFormatter::ImpInitCurrencyTable" );
 
-    LanguageType eSysLang = SvtSysLocale().GetLanguage();
+    LanguageType eSysLang = SvtSysLocale().GetLanguageTag().getLanguageType();
     LocaleDataWrapper* pLocaleData = new LocaleDataWrapper(
         ::comphelper::getProcessComponentContext(),
-        LanguageTag( eSysLang ).getLocale() );
+        SvtSysLocale().GetLanguageTag().getLocale() );
     // get user configured currency
     String aConfiguredCurrencyAbbrev;
     LanguageType eConfiguredCurrencyLanguage = LANGUAGE_SYSTEM;

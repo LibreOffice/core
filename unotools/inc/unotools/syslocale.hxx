@@ -23,15 +23,14 @@
 #include "unotools/unotoolsdllapi.h"
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
+#include <i18npool/languagetag.hxx>
 #include <sal/types.h>
-#include <i18npool/lang.h>
 #include <rtl/textenc.h>
 
 class SvtSysLocale_Impl;
 class SvtSysLocaleOptions;
 
 namespace osl { class Mutex; }
-class LocaleDataWrapper;
 
 /**
     SvtSysLocale provides a refcounted single instance of an application wide
@@ -65,10 +64,8 @@ public:
             const LocaleDataWrapper*    GetLocaleDataPtr() const;
             const CharClass*            GetCharClassPtr() const;
             SvtSysLocaleOptions&        GetOptions() const;
-            com::sun::star::lang::Locale GetLocale() const;
-            LanguageType                GetLanguage() const;
-            com::sun::star::lang::Locale GetUILocale() const;
-            LanguageType                GetUILanguage() const;
+            const LanguageTag&          GetLanguageTag() const;
+            const LanguageTag&          GetUILanguageTag() const;
 
     /** Get the best MIME encoding matching the system locale, or if that isn't
         determinable one that matches the UI locale, or UTF8 if everything else

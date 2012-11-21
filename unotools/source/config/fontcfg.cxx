@@ -252,7 +252,7 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
 {
     Locale aLocale = rLocale;
     if( aLocale.Language.isEmpty() )
-        aLocale = SvtSysLocale().GetUILocale();
+        aLocale = SvtSysLocale().GetUILanguageTag().getLocale();
 
     OUString aUIFont = getDefaultFont( aLocale, DEFAULTFONT_UI_SANS );
 
@@ -1160,7 +1160,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
     aLocale.Variant = rLocale.Variant.toAsciiUpperCase();
 
     if( aLocale.Language.isEmpty() )
-        aLocale = SvtSysLocale().GetUILocale();
+        aLocale = SvtSysLocale().GetUILanguageTag().getLocale();
 
     while( !aLocale.Language.isEmpty() )
     {
