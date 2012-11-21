@@ -258,14 +258,14 @@ static OUString & getIniFileName_Impl()
         // possibility to have several "applications" in the same
         // installation location with different inifiles.
         const char *inifile = [[@"vnd.sun.star.pathname:" stringByAppendingString: [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent: @"rc"]] UTF8String];
-        uri = rtl::OUString(inifile, strlen(inifile), RTL_TEXTENCODING_UTF8);
-        resolvePathnameUrl(&uri);
+        fileName = rtl::OUString(inifile, strlen(inifile), RTL_TEXTENCODING_UTF8);
+        resolvePathnameUrl(&fileName);
 #elif defined ANDROID
         // Apps are self-contained on Android, too, can as well hardcode
         // it as "rc" in the "/assets" directory, i.e.  inside the app's
         // .apk (zip) archive as the /assets/rc file.
-        uri = rtl::OUString("vnd.sun.star.pathname:/assets/rc");
-        resolvePathnameUrl(&uri);
+        fileName = rtl::OUString("vnd.sun.star.pathname:/assets/rc");
+        resolvePathnameUrl(&fileName);
 #else
         if(getFromCommandLineArgs(
                OUString(RTL_CONSTASCII_USTRINGPARAM("INIFILENAME")), &fileName))
