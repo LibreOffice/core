@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef _XIMPSHAPE_HXX
 #define _XIMPSHAPE_HXX
 
@@ -35,10 +33,10 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <tools/rtti.hxx>
 #include "xexptran.hxx"
-
 #include <vector>
 #include <xmloff/shapeimport.hxx>
 #include <xmloff/xmlmultiimagehelper.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // common shape context
@@ -79,6 +77,7 @@ protected:
     SdXMLImExTransform2D        mnTransform;
     com::sun::star::awt::Size   maSize;
     com::sun::star::awt::Point  maPosition;
+    basegfx::B2DHomMatrix       maUsedTransformation;
 
     bool                        mbVisible;
     bool                        mbPrintable;
