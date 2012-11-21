@@ -118,6 +118,9 @@ public:
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+
+    /// access to ShapeId for evtl. late adding
+    const rtl::OUString& getShapeId() const { return maShapeId; }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -404,6 +407,9 @@ private:
     ::rtl::OUString maURL;
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > mxBase64Stream;
 
+    /// bitfield
+    bool                mbLateAddToIdentifierMapper : 1;
+
 public:
     TYPEINFO();
 
@@ -421,6 +427,10 @@ public:
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+
+    /// support for LateAddToIdentifierMapper
+    bool getLateAddToIdentifierMapper() const { return mbLateAddToIdentifierMapper; }
+    void setLateAddToIdentifierMapper(bool bNew) { mbLateAddToIdentifierMapper = bNew; }
 };
 
 //////////////////////////////////////////////////////////////////////////////

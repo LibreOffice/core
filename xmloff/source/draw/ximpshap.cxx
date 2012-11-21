@@ -466,8 +466,16 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
 
         if( maShapeId.getLength() )
         {
-            uno::Reference< uno::XInterface > xRef( xShape, uno::UNO_QUERY );
-            GetImport().getInterfaceToIdentifierMapper().registerReference( maShapeId, xRef );
+            const SdXMLGraphicObjectShapeContext* pGSC = dynamic_cast< const SdXMLGraphicObjectShapeContext* >(this);
+
+            /* avoid registering when LateRegister is needed. E.g. MultiImage support where in-between multiple
+               xShapes with the same ID would be registered. Registration is done after deciding which image
+               to keep, see calls to solveMultipleImages */
+            if(!pGSC || !pGSC->getLateAddToIdentifierMapper())
+            {
+                uno::Reference< uno::XInterface > xRef( xShape, uno::UNO_QUERY );
+                GetImport().getInterfaceToIdentifierMapper().registerReference( maShapeId, xRef );
+            }
         }
 
         // #91065# count only if counting for shape import is enabled
@@ -2288,7 +2296,8 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    maURL()
+    maURL(),
+    mbLateAddToIdentifierMapper(false)
 {
 }
 
@@ -3428,9 +3437,16 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
         mbSupportsReplacement = IsXMLToken(rLocalName, XML_OBJECT ) || IsXMLToken(rLocalName, XML_OBJECT_OLE);
         setSupportsMultipleContents(IsXMLToken(rLocalName, XML_IMAGE));
 
-        if(getSupportsMultipleContents() && dynamic_cast< SdXMLGraphicObjectShapeContext* >(pContext))
+        if(getSupportsMultipleContents())
         {
-            addContent(*mxImplContext);
+            SdXMLGraphicObjectShapeContext* pGSC = dynamic_cast< SdXMLGraphicObjectShapeContext* >(pContext);
+
+            if(pGSC)
+            {
+                // mark context as LateAdd to avoid conflicts with multiple objects registering with the same ID
+                pGSC->setLateAddToIdentifierMapper(true);
+                addContent(*mxImplContext);
+            }
         }
     }
     else if(getSupportsMultipleContents() && XML_NAMESPACE_DRAW == nPrefix && IsXMLToken(rLocalName, XML_IMAGE))
@@ -3440,8 +3456,12 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
             GetImport(), nPrefix, rLocalName, xAttrList, mxShapes, mxAttrList);
         mxImplContext = pContext;
 
-        if(dynamic_cast< SdXMLGraphicObjectShapeContext* >(pContext))
+        SdXMLGraphicObjectShapeContext* pGSC = dynamic_cast< SdXMLGraphicObjectShapeContext* >(pContext);
+
+        if(pGSC)
         {
+            // mark context as LateAdd to avoid conflicts with multiple objects registering with the same ID
+            pGSC->setLateAddToIdentifierMapper(true);
             addContent(*mxImplContext);
         }
     }
@@ -3504,7 +3524,15 @@ void SdXMLFrameShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
 void SdXMLFrameShapeContext::EndElement()
 {
     /// solve if multiple image child contexts were imported
-    solveMultipleImages();
+    const SvXMLImportContext* pWinner = solveMultipleImages();
+    const SdXMLGraphicObjectShapeContext* pGSCWinner = dynamic_cast< const SdXMLGraphicObjectShapeContext* >(pWinner);
+
+    /// if we have a winner and it's on LateAdd, add it now
+    if(pGSCWinner && pGSCWinner->getLateAddToIdentifierMapper() && pGSCWinner->getShapeId().getLength())
+    {
+        uno::Reference< uno::XInterface > xRef( pGSCWinner->getShape(), uno::UNO_QUERY );
+        GetImport().getInterfaceToIdentifierMapper().registerReference( pGSCWinner->getShapeId(), xRef );
+    }
 
     if( !mxImplContext.Is() )
     {
