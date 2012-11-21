@@ -216,6 +216,7 @@ sub do_link($$$$@)
 	if ($src_mtime > $dest_mtime) {
 #	    print " copy $src/$src_name ($src_mtime) -> $dest/$dest_name ($dest_mtime)\n";
 	    print " copy $src/$src_name -> $dest/$dest_name\n";
+	    unlink ("$dest/$dest_name");
 	    copy("$src/$src_name", "$dest/$dest_name") || die "Failed top copy: $!";
 	} else {
 #	    print " up-to-date $src/$src_name -> $dest/$dest_name\n";
