@@ -49,7 +49,7 @@ $(eval $(call gb_Executable_add_scanners,idlc,\
 ifneq (,$(SYSTEM_UCPP))
 $(eval $(call gb_Executable_add_defs,idlc,\
     -DSYSTEM_UCPP \
-    -DUCPP=\"file:$(SYSTEM_UCPP)\" \
+    -DUCPP=\"file://$(SYSTEM_UCPP)\" \
 ))
 endif
 
