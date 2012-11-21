@@ -26,9 +26,6 @@
 
 $(eval $(call gb_Package_Package,l10ntools_scripts,$(SRCDIR)/l10ntools/scripts))
 
-$(eval $(call gb_Package_add_file,l10ntools_scripts,bin/addkeyid2pot.pl,addkeyid2pot.pl))
-$(eval $(call gb_Package_add_file,l10ntools_scripts,bin/fast_merge.pl,fast_merge.pl))
-$(eval $(call gb_Package_add_file,l10ntools_scripts,bin/keyidGen.pl,keyidGen.pl))
 $(eval $(call gb_Package_add_file,l10ntools_scripts,bin/po2lo,po2lo))
 
 # vim: set noet sw=4 ts=4:
