@@ -45,96 +45,97 @@ using namespace ::com::sun::star::util;
 // OFormattedFieldWrapper
 //==================================================================
 DBG_NAME(OFormattedFieldWrapper)
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OFormattedFieldWrapper(_rxFactory, sal_True));
+    return OFormattedFieldWrapper::createFormattedFieldWrapper(_rxFactory, true);
 }
 
-//------------------------------------------------------------------
 InterfaceRef SAL_CALL OFormattedFieldWrapper_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OFormattedFieldWrapper(_rxFactory, sal_False));
+    return OFormattedFieldWrapper::createFormattedFieldWrapper(_rxFactory, false);
 }
 
-//------------------------------------------------------------------
-OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XMultiServiceFactory>& _rxFactory, sal_Bool _bActAsFormatted)
+OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XMultiServiceFactory>& _rxFactory)
     :m_xServiceFactory(_rxFactory)
-    ,m_pEditPart(NULL)
 {
     DBG_CTOR(OFormattedFieldWrapper, NULL);
-
-    if (_bActAsFormatted)
-    {
-        increment(m_refCount);
-        {
-            // instantiate an FormattedModel
-            InterfaceRef  xFormattedModel;
-            // (instantiate it directly ..., as the OFormattedModel isn't registered for any service names anymore)
-            OFormattedModel* pModel = new OFormattedModel(m_xServiceFactory);
-            query_interface(static_cast<XWeak*>(pModel), xFormattedModel);
-
-            m_xAggregate = Reference<XAggregation> (xFormattedModel, UNO_QUERY);
-            DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::OFormattedFieldWrapper : the OFormattedModel didn't have an XAggregation interface !");
-
-            // _before_ setting the delegator, give it to the member references
-            query_interface(xFormattedModel, m_xFormattedPart);
-            m_pEditPart = new OEditModel(m_xServiceFactory);
-            m_pEditPart->acquire();
-        }
-        if (m_xAggregate.is())
-        {   // has to be in it's own block because of the temporary variable created by *this
-            m_xAggregate->setDelegator(static_cast<XWeak*>(this));
-        }
-        decrement(m_refCount);
-    }
 }
 
-//------------------------------------------------------------------
-OFormattedFieldWrapper::OFormattedFieldWrapper( const OFormattedFieldWrapper* _pCloneSource )
-    :m_xServiceFactory( _pCloneSource->m_xServiceFactory )
-    ,m_pEditPart( NULL )
+InterfaceRef OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, bool bActAsFormatted)
 {
+    OFormattedFieldWrapper *pRef = new OFormattedFieldWrapper(_rxFactory);
+
+    if (bActAsFormatted)
+    {
+        // instantiate an FormattedModel
+        InterfaceRef  xFormattedModel;
+        // (instantiate it directly ..., as the OFormattedModel isn't
+        // registered for any service names anymore)
+        OFormattedModel* pModel = new OFormattedModel(pRef->m_xServiceFactory);
+        query_interface(static_cast<XWeak*>(pModel), xFormattedModel);
+
+        pRef->m_xAggregate = Reference<XAggregation> (xFormattedModel, UNO_QUERY);
+        OSL_ENSURE(m_xAggregate.is(), "the OFormattedModel didn't have an XAggregation interface !");
+
+        // _before_ setting the delegator, give it to the member references
+        query_interface(xFormattedModel, pRef->m_xFormattedPart);
+        pRef->m_pEditPart = rtl::Reference< OEditModel >(new OEditModel(pRef->m_xServiceFactory));
+    }
+
+    increment(pRef->m_refCount);
+
+    if (pRef->m_xAggregate.is())
+    {   // has to be in it's own block because of the temporary variable created by *this
+        pRef->m_xAggregate->setDelegator(static_cast<XWeak*>(pRef));
+    }
+
+    InterfaceRef xRef(*pRef);
+    decrement(pRef->m_refCount);
+
+    return xRef;
+}
+
+Reference< XCloneable > SAL_CALL OFormattedFieldWrapper::createClone() throw (RuntimeException)
+{
+    ensureAggregate();
+
+    rtl::Reference< OFormattedFieldWrapper > xRef(new OFormattedFieldWrapper(m_xServiceFactory));
+
     Reference< XCloneable > xCloneAccess;
-    query_aggregation( _pCloneSource->m_xAggregate, xCloneAccess );
+    query_aggregation( m_xAggregate, xCloneAccess );
 
     // clone the aggregate
     if ( xCloneAccess.is() )
     {
-        increment( m_refCount );
+        Reference< XCloneable > xClone = xCloneAccess->createClone();
+        xRef->m_xAggregate = Reference< XAggregation >(xClone, UNO_QUERY);
+        OSL_ENSURE(xRef->m_xAggregate.is(), "invalid aggregate cloned !");
+
+        query_interface( Reference< XInterface >(xClone.get() ), xRef->m_xFormattedPart);
+
+        if ( m_pEditPart.is() )
         {
-            Reference< XCloneable > xClone = xCloneAccess->createClone();
-            m_xAggregate = Reference< XAggregation >( xClone, UNO_QUERY );
-            DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::OFormattedFieldWrapper : invalid aggregate clone!");
-
-            query_interface( Reference< XInterface >( xClone.get() ), m_xFormattedPart );
-
-            if ( _pCloneSource->m_pEditPart )
-            {
-                m_pEditPart = new OEditModel( _pCloneSource->m_pEditPart, _pCloneSource->m_xServiceFactory );
-                m_pEditPart->acquire();
-            }
+            xRef->m_pEditPart = rtl::Reference< OEditModel >( new OEditModel(m_pEditPart.get(), m_xServiceFactory));
         }
-        if ( m_xAggregate.is() )
-        {   // has to be in it's own block because of the temporary variable created by *this
-            m_xAggregate->setDelegator( static_cast< XWeak* >( this ) );
-        }
-        decrement( m_refCount );
     }
     else
     {   // the clone source does not yet have an aggregate -> we don't yet need one, too
     }
+
+    if ( xRef->m_xAggregate.is() )
+    {   // has to be in it's own block because of the temporary variable created by *this
+        xRef->m_xAggregate->setDelegator(static_cast< XWeak* >(xRef.get()));
+    }
+
+    return xRef.get();
 }
 
-//------------------------------------------------------------------
 OFormattedFieldWrapper::~OFormattedFieldWrapper()
 {
     // release the aggregated object (if any)
     if (m_xAggregate.is())
         m_xAggregate->setDelegator(InterfaceRef ());
-
-    if (m_pEditPart)
-        m_pEditPart->release();
 
     DBG_DTOR(OFormattedFieldWrapper, NULL);
 }
@@ -234,14 +235,14 @@ void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>
     }
 
     // else we have to write an edit part first
-    DBG_ASSERT(m_pEditPart, "OFormattedFieldWrapper::write : formatted part without edit part ?");
-    if ( !m_pEditPart )
+    OSL_ENSURE(m_pEditPart.is(), "OFormattedFieldWrapper::write : formatted part without edit part ?");
+    if ( !m_pEditPart.is() )
         throw RuntimeException( ::rtl::OUString(), *this );
 
     // for this we transfer the current props of the formatted part to the edit part
     Reference<XPropertySet>  xFormatProps(m_xFormattedPart, UNO_QUERY);
     Reference<XPropertySet>  xEditProps;
-    query_interface(static_cast<XWeak*>(m_pEditPart), xEditProps);
+    query_interface(static_cast<XWeak*>(m_pEditPart.get()), xEditProps);
 
     Locale aAppLanguage = Application::GetSettings().GetUILanguageTag().getLocale();
     dbtools::TransferFormComponentProperties(xFormatProps, xEditProps, aAppLanguage);
@@ -275,8 +276,8 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
             sal_Int32 nBeforeEditPart = xInMarkable->createMark();
 
             m_pEditPart->read(_rxInStream);
-                // this only works because an edit model can read the stuff written by a formatted model (maybe with
-                // some assertions) , but not vice versa
+            // this only works because an edit model can read the stuff written by a formatted model
+            // (maybe with some assertions) , but not vice versa
             if (!m_pEditPart->lastReadWasFormattedFake())
             {   // case a), written with a version without the edit part fake, so seek to the start position, again
                 xInMarkable->jumpToMark(nBeforeEditPart);
@@ -294,41 +295,32 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
         return;
     }
 
-    // we have to decide from the data within the stream whether we should be an EditModel or a FormattedModel
-    OEditBaseModel* pNewAggregate = NULL;
+    // we have to decide from the data within the stream whether we should
+    // be an EditModel or a FormattedModel
 
-    // let an OEditModel do the reading
-    OEditModel* pBasicReader = new OEditModel(m_xServiceFactory);
-    Reference< XInterface > xHoldBasicReaderAlive( *pBasicReader );
-    pBasicReader->read(_rxInStream);
+    {
+        // let an OEditModel do the reading
+        rtl::Reference< OEditModel > pBasicReader(new OEditModel(m_xServiceFactory));
+        pBasicReader->read(_rxInStream);
 
-    // was it really an edit model ?
-    if (!pBasicReader->lastReadWasFormattedFake())
-        // yes -> all fine
-        pNewAggregate = pBasicReader;
-    else
-    {   // no -> substitute it with a formatted model
-
-        // let the formmatted model do the reading
-        OFormattedModel* pFormattedReader = new OFormattedModel(m_xServiceFactory);
-        Reference< XInterface > xHoldAliveWhileRead( *pFormattedReader );
-        pFormattedReader->read(_rxInStream);
-
-        // for the next write (if any) : the FormattedModel and the EditModel parts
-        query_interface(static_cast<XWeak*>(pFormattedReader), m_xFormattedPart);
-        m_pEditPart = pBasicReader;
-        m_pEditPart->acquire();
-
-        // aggregate the formatted part below
-        pNewAggregate = pFormattedReader;
+        // was it really an edit model ?
+        if (!pBasicReader->lastReadWasFormattedFake())
+        {
+            // yes -> all fine
+            m_xAggregate = Reference< XAggregation >( pBasicReader.get() );
+        }
+        else
+        {   // no -> substitute it with a formatted model
+            // let the formmatted model do the reading
+            m_xFormattedPart = Reference< XPersistObject >(new OFormattedModel(m_xServiceFactory));
+            m_xFormattedPart->read(_rxInStream);
+            m_pEditPart = pBasicReader;
+            m_xAggregate = Reference< XAggregation >( m_xFormattedPart, UNO_QUERY );
+        }
     }
 
     // do the aggregation
     increment(m_refCount);
-    {
-        query_interface(static_cast<XWeak*>(pNewAggregate), m_xAggregate);
-        DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::read : the OEditModel didn't have an XAggregation interface !");
-    }
     if (m_xAggregate.is())
     {   // has to be in it's own block because of the temporary variable created by *this
         m_xAggregate->setDelegator(static_cast<XWeak*>(this));
@@ -337,20 +329,11 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
 }
 
 //------------------------------------------------------------------
-Reference< XCloneable > SAL_CALL OFormattedFieldWrapper::createClone(  ) throw (RuntimeException)
-{
-    ensureAggregate();
-
-    return new OFormattedFieldWrapper( this );
-}
-
-//------------------------------------------------------------------
 void OFormattedFieldWrapper::ensureAggregate()
 {
     if (m_xAggregate.is())
         return;
 
-    increment(m_refCount);
     {
         // instantiate an EditModel (the only place where we are allowed to decide that we're an FormattedModel
         // is in ::read)
@@ -374,6 +357,8 @@ void OFormattedFieldWrapper::ensureAggregate()
             }
         }
     }
+
+    increment(m_refCount);
     if (m_xAggregate.is())
     {   // has to be in it's own block because of the temporary variable created by *this
         m_xAggregate->setDelegator(static_cast<XWeak*>(this));

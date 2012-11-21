@@ -45,16 +45,19 @@ class OFormattedFieldWrapper : public OFormattedFieldWrapper_Base
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>      m_xAggregate;
 
-    OEditModel*     m_pEditPart;
+    rtl::Reference< OEditModel > m_pEditPart;
         // if we act as formatted this is used to write the EditModel part
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>     m_xFormattedPart;
-        // if we act as formatted, this is the PersistObject interface of our aggregate, used
-        // to read and write the FormattedModel part
+    // if we act as formatted, this is the PersistObject interface of our aggregate, used
+    // to read and write the FormattedModel part
+    // if bActAsFormatted is false, the state is undetermined until somebody calls
+    // ::read or does anything which requires a living aggregate
+    static InterfaceRef createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, bool bActAsFormatted);
 
-    OFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, sal_Bool _bActAsFormatted);
-        // if _bActAsFormatted is sal_False, the state is undetermined until somebody calls ::read or does
-        // anything which requires a living aggregate
-    OFormattedFieldWrapper( const OFormattedFieldWrapper* _pCloneSource );
+private:
+    OFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+
+protected:
     virtual ~OFormattedFieldWrapper();
 
     friend InterfaceRef SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
