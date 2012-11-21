@@ -9420,7 +9420,7 @@ AC_SUBST(GTK3_CFLAGS)
 AC_SUBST(ENABLE_GTK3)
 
 AC_MSG_CHECKING([which VCLplugs shall be built])
-if test $_os = Darwin -o $_os = iOS -o $_os = Android -o "$enable_headless" = "yes"; then
+if test "$GUIBASE" != "unx" -o "$enable_headless" = "yes"; then
     enable_gtk=no
 fi
 ENABLE_GTK=""
