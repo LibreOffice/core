@@ -60,8 +60,7 @@ public class Bootstrap extends NativeActivity
 
     private static native boolean setup(String dataDir,
                                         String cacheDir,
-                                        String apkFile,
-                                        String[] ld_library_path);
+                                        String apkFile);
 
     public static native boolean setup(Object lo_main_argument,
                                        int lo_main_delay);
@@ -128,16 +127,9 @@ public class Bootstrap extends NativeActivity
 
         redirect_stdio(true);
 
-        String llp = System.getenv("LD_LIBRARY_PATH");
-        if (llp == null)
-            llp = "/vendor/lib:/system/lib";
-
-        String[] llpa = llp.split(":");
-
         if (!setup(dataDir,
                    activity.getApplication().getCacheDir().getAbsolutePath(),
-                   activity.getApplication().getPackageResourcePath(),
-                   llpa))
+                   activity.getApplication().getPackageResourcePath()))
             return;
 
         // Extract files from the .apk that can't be used mmapped directly from it

@@ -84,7 +84,6 @@ static int sleep_time = 0;
 /* These are valid / used in all apps. */
 static const char *data_dir;
 static const char *cache_dir;
-static const char **library_locations;
 static void *apk_file;
 static int apk_file_size;
 static JavaVM *the_java_vm;
@@ -315,59 +314,31 @@ JNI_OnLoad(JavaVM* vm, void* reserved)
 
 // public static native boolean setup(String dataDir,
 //                                    String cacheDir,
-//                                    String apkFile,
-//                                    String[] ld_library_path);
+//                                    String apkFile)
 
 __attribute__ ((visibility("default")))
 jboolean
-Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_String_2_3Ljava_lang_String_2
+Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_String_2
     (JNIEnv* env,
      jobject clazz,
      jstring dataDir,
      jstring cacheDir,
-     jstring apkFile,
-     jobjectArray ld_library_path)
+     jstring apkFile)
 {
     struct stat st;
-    int i, n, fd;
+    int fd;
     const char *dataDirPath;
     const char *cacheDirPath;
     const char *apkFilePath;
-    char *lib_dir;
 
     (void) clazz;
 
-    n = (*env)->GetArrayLength(env, ld_library_path);
-
-    library_locations = malloc((n+2) * sizeof(char *));
-
     dataDirPath = (*env)->GetStringUTFChars(env, dataDir, NULL);
-
     data_dir = strdup(dataDirPath);
-
-    lib_dir = malloc(strlen(dataDirPath) + 5);
-    strcpy(lib_dir, dataDirPath);
-    strcat(lib_dir, "/lib");
-
     (*env)->ReleaseStringUTFChars(env, dataDir, dataDirPath);
 
-    library_locations[0] = lib_dir;
-
-    for (i = 0; i < n; i++) {
-        const char *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, ld_library_path, i), NULL);
-        library_locations[i+1] = strdup(s);
-        (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, ld_library_path, i), s);
-    }
-
-    library_locations[n+1] = NULL;
-
-    for (n = 0; library_locations[n] != NULL; n++)
-        LOGI("library_locations[%d] = %s", n, library_locations[n]);
-
     cacheDirPath = (*env)->GetStringUTFChars(env, cacheDir, NULL);
-
     cache_dir = strdup(cacheDirPath);
-
     (*env)->ReleaseStringUTFChars(env, cacheDir, cacheDirPath);
 
     apkFilePath =  (*env)->GetStringUTFChars(env, apkFile, NULL);
