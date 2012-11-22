@@ -359,6 +359,14 @@ namespace canvas
          */
         CANVASTOOLS_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XIntegerBitmapColorSpace> getStdColorSpace();
 
+        /** Return a color space for a default RGB integer format
+
+            Use this method for dead-simple bitmap implementations,
+            that map all their formats to 8888 RGB color (the last byte
+            is unused).
+         */
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XIntegerBitmapColorSpace> getStdColorSpaceWithoutAlpha();
+
         /** Return a memory layout for a default RGBA integer format
 
             Use this method for dead-simple bitmap implementations,

@@ -301,6 +301,8 @@ namespace cairocanvas
                         const ::com::sun::star::rendering::RenderState& renderState,
                         bool setColor );
 
+        com::sun::star::rendering::IntegerBitmapLayout impl_getMemoryLayout( sal_Int32 nWidth, sal_Int32 nHeight );
+
         /// When true, content is able to represent alpha
         bool mbHaveAlpha;
 

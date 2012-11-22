@@ -194,7 +194,9 @@ namespace vclcanvas
         {
             uno::Reference<rendering::XColorSpace> operator()()
             {
-                return vcl::unotools::createStandardColorSpace();
+                uno::Reference< rendering::XColorSpace > xColorSpace( canvas::tools::getStdColorSpace(), uno::UNO_QUERY );
+                assert( xColorSpace.is() );
+                return xColorSpace;
             }
         };
     }
