@@ -16,10 +16,9 @@
 #include <unx/salmenu.h>
 #include <unx/gtk/gtkframe.hxx>
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
-#  if GLIB_MAJOR_VERSION > 2 || GLIB_MINOR_VERSION >= 32
-#    define ENABLE_GMENU_INTEGRATION
-#  endif
+#if defined(ENABLE_DBUS) && defined(ENABLE_GIO) && \
+    (GLIB_MAJOR_VERSION > 2 || GLIB_MINOR_VERSION >= 32)
+#  define ENABLE_GMENU_INTEGRATION
 #  include <unx/gtk/glomenu.h>
 #  include <unx/gtk/gloactiongroup.h>
 #else

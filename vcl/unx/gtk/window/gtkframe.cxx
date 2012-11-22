@@ -36,6 +36,8 @@
 #endif
 #if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
 #  include <unx/gtk/gtksalmenu.hxx>
+#endif
+#if defined ENABLE_GMENU_INTEGRATION // defined in gtksalmenu.hxx above
 #  include <unx/gtk/hudawareness.h>
 #endif
 
@@ -99,7 +101,7 @@ using namespace com::sun::star;
 
 int GtkSalFrame::m_nFloats = 0;
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#if defined ENABLE_GMENU_INTEGRATION
 static GDBusConnection* pSessionBus = NULL;
 #endif
 
@@ -688,7 +690,7 @@ GtkSalFrame::~GtkSalFrame()
         gtk_widget_destroy( GTK_WIDGET( m_pFixedContainer ) );
     {
         SolarMutexGuard aGuard;
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#if defined ENABLE_GMENU_INTEGRATION
         if(m_nWatcherId)
             g_bus_unwatch_name(m_nWatcherId);
 #endif
@@ -696,7 +698,7 @@ GtkSalFrame::~GtkSalFrame()
         {
             g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", NULL );
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#if defined ENABLE_GMENU_INTEGRATION
             if ( pSessionBus )
             {
                 if ( m_nHudAwarenessId )
