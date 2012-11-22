@@ -263,7 +263,7 @@ public class PresentationFragment extends SherlockFragment {
 
                 if (aSlide == mTopView.getSelectedItemPosition())
                     return;
-                if ((System.currentTimeMillis() - lastUpdateTime) < 5000) {
+                if ((System.currentTimeMillis() - lastUpdateTime) < 500) {
                     return;
                 }
                 mTopView.setSelection(aSlide, true);
