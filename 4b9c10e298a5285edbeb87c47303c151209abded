@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQn///zM\u003d",
+        "filename": "sfx2/qa/complex/sfx2/undo/DrawingOrPresentationDocumentTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2012-11-22T07:11:18Z",
+      "side": 0,
+      "message": "Do not delete this line, comment lines below refer to this line.",
+      "revId": "4b9c10e298a5285edbeb87c47303c151209abded",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
