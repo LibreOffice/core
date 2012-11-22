@@ -694,7 +694,7 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::ve
                     bool bForceExpandAll = false;
                     sal_Int32 nExpandables = 0;
                     for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
-                        if (rWidths[y+nSpanY].m_bExpand)
+                        if (rHeights[y+nSpanY].m_bExpand)
                             ++nExpandables;
                     if (nExpandables == 0)
                     {
