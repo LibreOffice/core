@@ -445,6 +445,21 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #endif
 
 /**
+   This macro is used to tag interfaces that are deprecated for both
+   internal and external API users, but where we are still writing
+   out the internal usage. Ultimately these should be replaced by
+   SAL_DEPRECATED, and then removed.
+
+   Use as follows:
+        SAL_DEPRECATED_INTERNAL("Dont use, its evil.") void doit(int nPara);
+ */
+#ifdef LIBO_INTERNAL_ONLY
+#    define SAL_DEPRECATED_INTERNAL(message)
+#else
+#    define SAL_DEPRECATED_INTERNAL(message) SAL_DEPRECATED(message)
+#endif
+
+/**
     Use as follows:
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         \::std::auto_ptr<X> ...

@@ -231,6 +231,11 @@ gb_GLOBALDEFS := \
 	$(gb_COMPILERDEFS) \
 	$(gb_CPUDEFS) \
 
+# This is used to tag deprecation for API we want to
+# ensure is not used at all externally while we clean
+# out our internal usage.
+gb_GLOBALDEFS += \
+	-DLIBO_INTERNAL_ONLY \
 
 ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 gb_GLOBALDEFS += -DDBG_UTIL \

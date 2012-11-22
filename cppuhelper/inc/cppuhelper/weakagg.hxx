@@ -79,6 +79,7 @@ public:
 
         @param Delegator the object that delegate its queryInterface to this aggregate.
     */
+    SAL_DEPRECATED_INTERNAL("do not use XAggregation")
     virtual void SAL_CALL setDelegator( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & Delegator )
         throw(::com::sun::star::uno::RuntimeException);
     /** Called by the delegator or queryInterface. Re-implement this method instead of
