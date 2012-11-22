@@ -2867,7 +2867,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetIconFont( aIconFont );
     // We prefer Arial in the russian version, because MS Sans Serif
     // is to wide for the dialogs
-    if ( rSettings.GetLanguage() == LANGUAGE_RUSSIAN )
+    if ( rSettings.GetLanguageTag().getLanguageType() == LANGUAGE_RUSSIAN )
     {
         XubString aFontName = aAppFont.GetName();
         XubString aFirstName = aFontName.GetToken( 0, ';' );

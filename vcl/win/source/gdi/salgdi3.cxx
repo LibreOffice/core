@@ -419,7 +419,7 @@ LanguageType MapCharToLanguage( sal_UCS4 uChar )
         // TODO: use the default-CJK language selected in
         //  Tools->Options->LangSettings->Languages when it becomes available here
         if( !nDefaultLang )
-            nDefaultLang = Application::GetSettings().GetUILanguage();
+            nDefaultLang = Application::GetSettings().GetUILanguageTag().getLanguageType();
 
         LanguageType nDefaultCJK = MsLangId::isCJK(nDefaultLang) ? nDefaultLang : LANGUAGE_CHINESE;
 
@@ -555,7 +555,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
 
     // fall back to default UI locale if the missing characters are inconclusive
     if( eLang == LANGUAGE_DONTKNOW )
-        aLocale = Application::GetSettings().GetUILocale();
+        aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
 
     // first level fallback:
     // try use the locale specific default fonts defined in VCL.xcu
