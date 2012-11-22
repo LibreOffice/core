@@ -5113,7 +5113,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
         sal_uInt32 nCurrentPara = 0;
         size_t i = 1;                   // points to the next element to process
         sal_uInt32 nCurrentSpecMarker = aSpecMarkerList.empty() ? 0 : aSpecMarkerList[0];
-        sal_uInt16 nStringLen = aString.Len();
+        sal_uInt32 nStringLen = aString.Len();
 
         while ( nCharAnzRead < nStringLen )
         {
