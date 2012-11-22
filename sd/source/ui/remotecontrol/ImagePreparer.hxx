@@ -10,7 +10,6 @@
 #define _SD_IMPRESSREMOTE_IMAGEPREPARER_HXX
 
 #include <salhelper/thread.hxx>
-#include <rtl/ref.hxx>
 
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 
@@ -27,14 +26,12 @@ class ImagePreparer:
 public:
     ImagePreparer( const
         css::uno::Reference<css::presentation::XSlideShowController>&
-        rxController, sd::Transmitter *aTransmitter,
-        rtl::Reference<ImagePreparer>& rRef );
+        rxController, sd::Transmitter *aTransmitter );
     ~ImagePreparer();
 
 private:
     css::uno::Reference<css::presentation::XSlideShowController> xController;
     Transmitter *pTransmitter;
-    rtl::Reference<ImagePreparer>& mRef;
 
     // Thread method
     void execute();

@@ -26,8 +26,7 @@ Listener::Listener( const ::rtl::Reference<Communicator>& rCommunicator,
                     sd::Transmitter *aTransmitter  ):
       ::cppu::WeakComponentImplHelper1< XSlideShowListener >( m_aMutex ),
       mCommunicator( rCommunicator ),
-      pTransmitter( NULL ),
-      mPreparer()
+      pTransmitter( NULL )
 {
     pTransmitter = aTransmitter;
 }
@@ -53,8 +52,8 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
         pTransmitter->addMessage( aBuffer.makeStringAndClear(),
                                   Transmitter::PRIORITY_HIGH );
 
-        mPreparer.set( new ImagePreparer( aController, pTransmitter, mPreparer ) );
-        mPreparer->launch();
+        ImagePreparer* pPreparer = new ImagePreparer( aController, pTransmitter );
+        pPreparer->launch();
     }
     else
     {
@@ -135,12 +134,6 @@ void SAL_CALL Listener::slideAnimationsEnded (void)
 
 void SAL_CALL Listener::disposing (void)
 {
-    if ( mPreparer.is() )
-    {
-        delete mPreparer.get();
-        mPreparer = NULL;
-    }
-
     pTransmitter = NULL;
     if ( mController.is() )
     {

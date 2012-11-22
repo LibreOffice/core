@@ -54,11 +54,10 @@ using namespace ::com::sun::star::uno;
 
 ImagePreparer::ImagePreparer(
     const uno::Reference<presentation::XSlideShowController>& rxController,
-    Transmitter *aTransmitter, rtl::Reference<ImagePreparer>& rRef )
+    Transmitter *aTransmitter )
  :  Thread( "ImagePreparer Thread" ),
     xController( rxController ),
-    pTransmitter( aTransmitter ),
-    mRef( rRef )
+    pTransmitter( aTransmitter )
 {
 }
 
@@ -85,7 +84,7 @@ void ImagePreparer::execute()
         }
         sendNotes( i );
     }
-    mRef.clear();
+    delete this;
 }
 
 void ImagePreparer::sendPreview( sal_uInt32 aSlideNumber )

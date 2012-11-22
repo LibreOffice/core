@@ -17,7 +17,6 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <osl/socket.hxx>
-#include <rtl/ref.hxx>
 
 #include "Communicator.hxx"
 #include "Transmitter.hxx"
@@ -68,7 +67,6 @@ private:
     rtl::Reference<Communicator> mCommunicator;
     sd::Transmitter *pTransmitter;
     css::uno::Reference< css::presentation::XSlideShowController > mController;
-    rtl::Reference<sd::ImagePreparer> mPreparer;
 };
 }
 #endif // _SD_IMPRESSREMOTE_LISTENER_HXX
