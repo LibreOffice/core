@@ -192,7 +192,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         pKey = "titleFont";
         if ( aGroup.hasKey( pKey ) )
         {
-            Font aFont = toFont( aGroup.readEntry( pKey, QFont() ), rSettings.GetUILocale() );
+            Font aFont = toFont( aGroup.readEntry( pKey, QFont() ), rSettings.GetUILanguageTag().getLocale() );
             style.SetTitleFont( aFont );
             bSetTitleFont = true;
         }
@@ -207,7 +207,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         pKey = "toolbarFont";
         if ( aGroup.hasKey( pKey ) )
         {
-            Font aFont = toFont( aGroup.readEntry( pKey, QFont() ), rSettings.GetUILocale() );
+            Font aFont = toFont( aGroup.readEntry( pKey, QFont() ), rSettings.GetUILanguageTag().getLocale() );
             style.SetToolFont( aFont );
         }
     }
@@ -263,7 +263,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetHelpTextColor( toColor( QToolTip::palette().color( QPalette::Active, QPalette::ToolTipText )));
 
     // Font
-    Font aFont = toFont( kapp->font(), rSettings.GetUILocale() );
+    Font aFont = toFont( kapp->font(), rSettings.GetUILanguageTag().getLocale() );
 
     style.SetAppFont( aFont );
 
@@ -284,7 +284,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     }
     style.SetFloatTitleFont( aFont );
 
-    style.SetHelpFont( toFont( QToolTip::font(), rSettings.GetUILocale()));
+    style.SetHelpFont( toFont( QToolTip::font(), rSettings.GetUILanguageTag().getLocale()));
 
     int flash_time = QApplication::cursorFlashTime();
     style.SetCursorBlinkTime( flash_time != 0 ? flash_time/2 : STYLE_CURSOR_NOBLINKTIME );
@@ -320,7 +320,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
 
         // Font
-        aFont = toFont( pMenuBar->font(), rSettings.GetUILocale() );
+        aFont = toFont( pMenuBar->font(), rSettings.GetUILanguageTag().getLocale() );
         style.SetMenuFont( aFont );
     }
 

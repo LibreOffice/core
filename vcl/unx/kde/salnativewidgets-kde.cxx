@@ -1873,7 +1873,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         pKey = "titleFont";
         if ( pConfig->hasKey( pKey ) )
         {
-            Font aFont = toFont( pConfig->readFontEntry( pKey ), rSettings.GetUILocale() );
+            Font aFont = toFont( pConfig->readFontEntry( pKey ), rSettings.GetUILanguageTag().getLocale() );
             aStyleSettings.SetTitleFont( aFont );
             bSetTitleFont = true;
         }
@@ -1934,7 +1934,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetHighlightTextColor( toColor( qColorGroup.highlightedText() ) );
 
     // Font
-    Font aFont = toFont( kapp->font(), rSettings.GetUILocale() );
+    Font aFont = toFont( kapp->font(), rSettings.GetUILanguageTag().getLocale() );
 
     aStyleSettings.SetAppFont( aFont );
     aStyleSettings.SetHelpFont( aFont );
@@ -2005,7 +2005,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
 
         // Font
-        aFont = toFont( pMenuBar->font(), rSettings.GetUILocale() );
+        aFont = toFont( pMenuBar->font(), rSettings.GetUILanguageTag().getLocale() );
         aStyleSettings.SetMenuFont( aFont );
     }
 
@@ -2013,7 +2013,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     KToolBar *pToolBar = qMainWindow.toolBar();
     if ( pToolBar )
     {
-        aFont = toFont( pToolBar->font(), rSettings.GetUILocale() );
+        aFont = toFont( pToolBar->font(), rSettings.GetUILanguageTag().getLocale() );
         aStyleSettings.SetToolFont( aFont );
     }
 

@@ -1304,7 +1304,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     fprintf( stderr, "font name BEFORE system match: \"%s\"\n", aFamily.getStr() );
     // match font to e.g. resolve "Sans"
-    psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILocale() );
+    psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILanguageTag().getLocale() );
     fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
                   aInfo.m_nID != 0 ? "succeeded" : "failed",
                   rtl::OUStringToOString( aInfo.m_aStyleName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
