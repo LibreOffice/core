@@ -498,8 +498,6 @@ linux-android*)
     fi
 
     BUILD_TYPE="$BUILD_TYPE FONTCONFIG FREETYPE"
-    FREETYPE_TARBALL=dbf2caca1d3afd410a29217a9809d397-freetype-2.4.8.tar.bz2
-    FONTCONFIG_TARBALL=77e15a92006ddc2adbb06f840d591c0e-fontconfig-2.8.0.tar.gz
     ;;
 
 *)
@@ -521,9 +519,6 @@ AC_SUBST(WITH_MINGW)
 AC_SUBST(OSVERSION)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
-
-AC_SUBST(FREETYPE_TARBALL)
-AC_SUBST(FONTCONFIG_TARBALL)
 
 ###############################################################################
 # Extensions switches --enable/--disable
@@ -2119,6 +2114,10 @@ AC_ARG_WITH(check-jobs,
         [Maximum number of jobs that will be issued at the same time during 'make subsequenttest'.
          Default value is the same as 'parallelism'. Useful because the subsequent tests are very lightweight.]),
 ,)
+
+AC_ARG_WITH(all-tarballs,
+    AS_HELP_STRING([--with-all-tarballs],
+        [Download all external tarballs unconditionally]))
 
 dnl ===================================================================
 dnl Test whether build target is Release Build
@@ -4385,8 +4384,13 @@ AC_SUBST(TARFILE_LOCATION)
 
 AC_MSG_CHECKING([whether we want to fetch tarballs])
 if test "$enable_fetch_external" != "no"; then
-    AC_MSG_RESULT([yes])
-    DO_FETCH_TARBALLS="YES"
+    if test "$with_all_tarballs" = "yes"; then
+        AC_MSG_RESULT(["yes, all of them"])
+        DO_FETCH_TARBALLS="ALL"
+    else
+        AC_MSG_RESULT(["yes, if we use them"])
+        DO_FETCH_TARBALLS="YES"
+    fi
 else
     AC_MSG_RESULT([no])
     DO_FETCH_TARBALLS="NO"
@@ -6570,12 +6574,10 @@ else
         AC_PATH_PROG(SYSTEM_UCPP, ucpp)
     else
         AC_MSG_RESULT([internal])
-        UCPP_TARBALL="0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz"
         BUILD_TYPE="$BUILD_TYPE UCPP"
     fi
 fi
 AC_SUBST(SYSTEM_UCPP)
-AC_SUBST(UCPP_TARBALL)
 
 dnl ===================================================================
 dnl Check for epm (not needed for Windows)
@@ -6591,7 +6593,6 @@ if test "$enable_epm" = "yes"; then
         fi
         if test "$EPM" = "no" -o "$EPM" = "internal"; then
             echo "EPM will be built."
-            EPM_TARBALL="3ade8cfe7e59ca8e65052644fed9fca4-epm-3.7.tar.gz"
             BUILD_TYPE="$BUILD_TYPE EPM"
         else
             # Gentoo has some epm which is something different...
@@ -6620,7 +6621,6 @@ if test "$enable_epm" = "yes"; then
             else
                 AC_MSG_RESULT([too old. epm >= 3.7 is required.])
                 echo "EPM will be built."
-                EPM_TARBALL="3ade8cfe7e59ca8e65052644fed9fca4-epm-3.7.tar.gz"
                 BUILD_TYPE="$BUILD_TYPE EPM"
             fi
         fi
@@ -6708,7 +6708,6 @@ else
     EPM=NO
 fi
 AC_SUBST(EPM)
-AC_SUBST(EPM_TARBALL)
 
 dnl ===================================================================
 dnl We need winegcc when building MinGW build to be able to cross-build msi tools
@@ -6846,12 +6845,10 @@ else
     BUILD_TYPE="$BUILD_TYPE ZLIB"
     ZLIB_CFLAGS="-I${OUTDIR}/inc/external/zlib"
     ZLIB_LIBS="-L${OUTDIR}/lib -lz"
-    ZLIB_TARBALL="2ab442d169156f34c379c968f3f482dd-zlib-1.2.7.tar.bz2"
 fi
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
 AC_SUBST(SYSTEM_ZLIB)
-AC_SUBST(ZLIB_TARBALL)
 
 dnl ===================================================================
 dnl Check for system jpeg
@@ -6879,11 +6876,9 @@ if test "$with_system_jpeg" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_JPEG=NO
-    JPEG_TARBALL="a2c10c04f396a9ce72894beb18b4e1f9-jpeg-8c.tar.gz"
     BUILD_TYPE="$BUILD_TYPE JPEG"
 fi
 AC_SUBST(SYSTEM_JPEG)
-AC_SUBST(JPEG_TARBALL)
 AC_SUBST([MINGW_JPEG_DLL])
 
 dnl ===================================================================
@@ -6912,13 +6907,11 @@ if test "$with_system_clucene" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CLUCENE=NO
-    CLUCENE_TARBALL=48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz
     BUILD_TYPE="$BUILD_TYPE CLUCENE"
 fi
 AC_SUBST(SYSTEM_CLUCENE)
 AC_SUBST(CLUCENE_CFLAGS)
 AC_SUBST(CLUCENE_LIBS)
-AC_SUBST(CLUCENE_TARBALL)
 
 dnl ===================================================================
 dnl Check for system expat
@@ -6937,11 +6930,7 @@ else
     SYSTEM_EXPAT=NO
     BUILD_TYPE="$BUILD_TYPE EXPAT"
 fi
-if test "$with_system_expat" != "yes" -o "$with_system_expat_for_build" != "yes"; then
-    EXPAT_TARBALL="dd7dab7a5fea97d2a6a43f511449b7cd-expat-2.1.0.tar.gz"
-fi
 AC_SUBST(SYSTEM_EXPAT)
-AC_SUBST(EXPAT_TARBALL)
 AC_SUBST([MINGW_EXPAT_DLL])
 
 dnl ===================================================================
@@ -6959,12 +6948,10 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBCDR=NO
     BUILD_TYPE="$BUILD_TYPE CDR"
-    CDR_TARBALL=3c0037fb07dea2f0bbae8386fa7c6a9a-libcdr-0.0.9.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBCDR)
 AC_SUBST(CDR_CFLAGS)
 AC_SUBST(CDR_LIBS)
-AC_SUBST(CDR_TARBALL)
 
 dnl ===================================================================
 dnl Check for system libmspub
@@ -6981,12 +6968,10 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBMSPUB=NO
     BUILD_TYPE="$BUILD_TYPE MSPUB"
-    MSPUB_TARBALL=b2db54b6e96287ac995d7ed654ace4fc-libmspub-0.0.3.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBMSPUB)
 AC_SUBST(MSPUB_CFLAGS)
 AC_SUBST(MSPUB_LIBS)
-AC_SUBST(MSPUB_TARBALL)
 
 dnl ===================================================================
 dnl Check for system libvisio
@@ -7003,12 +6988,10 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBVISIO=NO
     BUILD_TYPE="$BUILD_TYPE VISIO"
-    VISIO_TARBALL=1e961f0112e5986105749640c2b9bc41-libvisio-0.0.21.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBVISIO)
 AC_SUBST(VISIO_CFLAGS)
 AC_SUBST(VISIO_LIBS)
-AC_SUBST(VISIO_TARBALL)
 
 dnl ===================================================================
 dnl Check for system libcmis
@@ -7022,12 +7005,10 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBCMIS=NO
     BUILD_TYPE="$BUILD_TYPE CMIS"
-    CMIS_TARBALL=b2371dc7cf4811c9d32146eec913d296-libcmis-0.3.0.tar.gz
 fi
 AC_SUBST(SYSTEM_LIBCMIS)
 AC_SUBST(CMIS_CFLAGS)
 AC_SUBST(CMIS_LIBS)
-AC_SUBST(CMIS_TARBALL)
 
 
 dnl ===================================================================
@@ -7045,13 +7026,11 @@ else
     SYSTEM_LIBWPD=NO
     WPD_CFLAGS="-I${OUTDIR}/inc/external"
     WPD_LIBS="-L${OUTDIR}/lib -lwpdlib"
-    WPD_TARBALL=e7f84e3199dfee9122949448cab3823f-libwpd-0.9.6.tar.bz2
     BUILD_TYPE="$BUILD_TYPE WPD"
 fi
 AC_SUBST(SYSTEM_LIBWPD)
 AC_SUBST(WPD_CFLAGS)
 AC_SUBST(WPD_LIBS)
-AC_SUBST(WPD_TARBALL)
 
 dnl ===================================================================
 dnl Check for system lcms2
@@ -7070,13 +7049,11 @@ else
     if test "$GCC" = "yes"; then
         LCMS2_CFLAGS="${LCMS2_CFLAGS} -Wno-long-long"
     fi
-    LCMS2_TARBALL="861ef15fa0bc018f9ddc932c4ad8b6dd-lcms2-2.4.tar.gz"
     BUILD_TYPE="$BUILD_TYPE LCMS2"
 fi
 AC_SUBST(SYSTEM_LCMS2)
 AC_SUBST(LCMS2_CFLAGS)
 AC_SUBST(LCMS2_LIBS)
-AC_SUBST(LCMS2_TARBALL)
 AC_SUBST([MINGW_LCMS2_DLL])
 
 dnl ===================================================================
@@ -7093,13 +7070,9 @@ else
     SYSTEM_CPPUNIT=NO
     BUILD_TYPE="$BUILD_TYPE CPPUNIT"
 fi
-if test "$with_system_cppunit" != "yes" -o "$with_system_cppunit_for_build" != "yes"; then
-    CPPUNIT_TARBALL="fa9aa839145cdf860bf596532bb8af97-cppunit-1.13.1.tar.gz"
-fi
 AC_SUBST(SYSTEM_CPPUNIT)
 AC_SUBST(CPPUNIT_CFLAGS)
 AC_SUBST(CPPUNIT_LIBS)
-AC_SUBST(CPPUNIT_TARBALL)
 
 dnl ===================================================================
 dnl Check whether freetype is available
@@ -7132,13 +7105,11 @@ else
     SYSTEM_LIBWPS=NO
     WPS_CFLAGS="-I${OUTDIR}/inc/external"
     WPS_LIBS="-L${OUTDIR}/lib -lwpslib"
-    WPS_TARBALL=d197bd6211669a2fa4ca648faf04bcb1-libwps-0.2.7.tar.bz2
     BUILD_TYPE="$BUILD_TYPE WPS"
 fi
 AC_SUBST(SYSTEM_LIBWPS)
 AC_SUBST(WPS_CFLAGS)
 AC_SUBST(WPS_LIBS)
-AC_SUBST(WPS_TARBALL)
 
 dnl ===================================================================
 dnl Check for system libwpg
@@ -7155,13 +7126,11 @@ else
     SYSTEM_LIBWPG=NO
     WPG_CFLAGS="-I${OUTDIR}/inc/external"
     WPG_LIBS="-L${OUTDIR}/lib -lwpglib"
-    WPG_TARBALL=9d283e02441d8cebdcd1e5d9df227d67-libwpg-0.2.1.tar.bz2
     BUILD_TYPE="$BUILD_TYPE WPG"
 fi
 AC_SUBST(SYSTEM_LIBWPG)
 AC_SUBST(WPG_CFLAGS)
 AC_SUBST(WPG_LIBS)
-AC_SUBST(WPG_TARBALL)
 
 dnl ===================================================================
 dnl Check whether freetype2 supports emboldening
@@ -7224,7 +7193,6 @@ if test "$with_system_libxml" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXSLT=NO
-    LIBXSLT_TARBALL="e61d0364a30146aaa3001296f853b2b9-libxslt-1.1.26.tar.gz"
     BUILD_TYPE="$BUILD_TYPE LIBXSLT"
 
     if test "$cross_compiling" = "yes"; then
@@ -7244,7 +7212,6 @@ AC_SUBST(LIBEXSLT_CFLAGS)
 AC_SUBST(LIBEXSLT_LIBS)
 AC_SUBST(LIBXSLT_CFLAGS)
 AC_SUBST(LIBXSLT_LIBS)
-AC_SUBST(LIBXSLT_TARBALL)
 AC_SUBST(XSLTPROC)
 AC_SUBST([MINGW_LIBEXSLT_DLL])
 AC_SUBST([MINGW_LIBXSLT_DLL])
@@ -7282,13 +7249,11 @@ if test "$with_system_libxml" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXML=NO
-    LIBXML_TARBALL="7740a8ec23878a2f50120e1faa2730f2-libxml2-2.7.6.tar.gz"
     BUILD_TYPE="$BUILD_TYPE LIBXML2"
 fi
 AC_SUBST(SYSTEM_LIBXML)
 AC_SUBST(LIBXML_CFLAGS)
 AC_SUBST(LIBXML_LIBS)
-AC_SUBST(LIBXML_TARBALL)
 AC_SUBST(XMLLINT)
 AC_SUBST([MINGW_LIBXML_DLL])
 AC_SUBST([MINGW_ZLIB_DLL])
@@ -7474,7 +7439,6 @@ internal)
     PYTHON_VERSION_MAJOR=3
     PYTHON_VERSION_MINOR=3
     PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.0
-    PYTHON_TARBALL="b3b2524f72409d919a4137826a870a8f-Python-3.3.0.tar.bz2"
     BUILD_TYPE="$BUILD_TYPE PYTHON"
     # Embedded Python dies without Home set
     if test "$HOME" = ""; then
@@ -7507,7 +7471,6 @@ fi
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
-AC_SUBST(PYTHON_TARBALL)
 AC_SUBST(PYTHON_VERSION)
 AC_SUBST(PYTHON_VERSION_MAJOR)
 AC_SUBST(PYTHON_VERSION_MINOR)
@@ -7622,14 +7585,12 @@ int main(int argc, char **argv) {
         else
             AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
         fi
-        MYSQLCPPCONN_TARBALL="0981bda6548a8c8233ffce2b6e4b2a23-mysql-connector-c++-1.1.0.tar.gz"
         BUILD_TYPE="$BUILD_TYPE MYSQLCPPCONN"
         SYSTEM_MYSQL_CPPCONN=NO
     fi
     AC_LANG_POP([C++])
 fi
 AC_SUBST(SYSTEM_MYSQL_CPPCONN)
-AC_SUBST(MYSQLCPPCONN_TARBALL)
 
 dnl ===================================================================
 dnl Check for system hsqldb
@@ -7675,7 +7636,6 @@ if test "$with_system_hsqldb" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HSQLDB=NO
-    HSQLDB_TARBALL="17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip"
     BUILD_TYPE="$BUILD_TYPE HSQLDB"
     AC_MSG_CHECKING([whether hsqldb should be built with JDBC 4.1])
     javanumver=`$JAVAINTERPRETER -version 2>&1 | $AWK -v num=true -f $SRC_ROOT/solenv/bin/getcompver.awk`
@@ -7688,7 +7648,6 @@ else
 fi
 AC_SUBST(SYSTEM_HSQLDB)
 AC_SUBST(HSQLDB_JAR)
-AC_SUBST(HSQLDB_TARBALL)
 AC_SUBST([HSQLDB_USE_JDBC_4_1])
 fi
 
@@ -7795,7 +7754,6 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
             POSTGRESQL_LIB=""
             POSTGRESQL_INC="%OVERRIDE_ME%"
             BUILD_TYPE="$BUILD_TYPE POSTGRESQL"
-        POSTGRESQL_TARBALL="c0b4799ea9850eae3ead14f0a60e9418-postgresql-9.2.1.tar.bz2"
         fi
     fi
     if test "${SYSTEM_POSTGRESQL}" = "YES"; then
@@ -7820,7 +7778,6 @@ AC_SUBST(BUILD_POSTGRESQL_SDBC)
 AC_SUBST(SYSTEM_POSTGRESQL)
 AC_SUBST(POSTGRESQL_INC)
 AC_SUBST(POSTGRESQL_LIB)
-AC_SUBST(POSTGRESQL_TARBALL)
 
 dnl ===================================================================
 dnl Check for system curl
@@ -7890,11 +7847,9 @@ if test "$with_system_curl" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CURL=NO
-    CURL_TARBALL="3fa4d5236f2a36ca5c3af6715e837691-curl-7.26.0.tar.gz"
     BUILD_TYPE="$BUILD_TYPE CURL"
 fi
 AC_SUBST(SYSTEM_CURL)
-AC_SUBST(CURL_TARBALL)
 AC_SUBST(CURL_CFLAGS)
 AC_SUBST(CURL_LIBS)
 AC_SUBST([MINGW_CURL_DLL])
@@ -7953,12 +7908,8 @@ else
     BUILD_TYPE="$BUILD_TYPE BOOST"
     SYSTEM_BOOST=NO
 fi
-if test "$with_system_boost" != "yes" -o "$with_system_boost_for_build" != "yes"; then
-    BOOST_TARBALL=f02578f5218f217a9f20e9c30e119c6a-boost_1_44_0.tar.bz2
-fi
 AC_SUBST([MINGW_BOOST_DATE_TIME_DLL])
 AC_SUBST(SYSTEM_BOOST)
-AC_SUBST(BOOST_TARBALL)
 
 dnl ===================================================================
 dnl Check for system mdds
@@ -7991,7 +7942,6 @@ if test "$with_system_mdds" = "yes"; then
     AC_LANG_POP([C++])
 else
     AC_MSG_RESULT([internal])
-    MDDS_TARBALL=9f9e15966b5624834157fe3d748312bc-mdds_0.6.1.tar.bz2
     BUILD_TYPE="$BUILD_TYPE MDDS"
     SYSTEM_MDDS=NO
 
@@ -8003,7 +7953,6 @@ else
     AC_MSG_RESULT([boost::unordered_map])
 fi
 AC_SUBST(SYSTEM_MDDS)
-AC_SUBST(MDDS_TARBALL)
 AC_SUBST([MDDS_CPPFLAGS])
 
 dnl ===================================================================
@@ -8019,12 +7968,10 @@ if test "$with_system_vigra" = "yes"; then
     AC_LANG_POP([C++])
 else
     AC_MSG_RESULT([internal])
-    VIGRA_TARBALL=ea91f2fb4212a21d708aced277e6e85a-vigra1.4.0.tar.gz
     BUILD_TYPE="$BUILD_TYPE VIGRA"
     SYSTEM_VIGRA=NO
 fi
 AC_SUBST(SYSTEM_VIGRA)
-AC_SUBST(VIGRA_TARBALL)
 
 dnl ===================================================================
 dnl Check for system odbc
@@ -8075,12 +8022,10 @@ if test "$with_system_openldap" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_OPENLDAP=NO
-    OPENLDAP_TARBALL="804c6cb5698db30b75ad0ff1c25baefd-openldap-2.4.31.tgz"
     BUILD_TYPE="$BUILD_TYPE OPENLDAP"
 fi
 fi
 AC_SUBST(SYSTEM_OPENLDAP)
-AC_SUBST(OPENLDAP_TARBALL)
 
 dnl ===================================================================
 dnl Check for system mozilla
@@ -8142,7 +8087,6 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_MOZILLA=NO
     BUILD_TYPE="$BUILD_TYPE MOZ"
-    MOZ_TARBALL=a169ab152209200a7bad29a275cb0333-seamonkey-1.1.14.source.tar.gz
     MOZILLA_VERSION=1.1.14
     AC_SUBST(MOZILLA_VERSION)
 
@@ -8230,19 +8174,7 @@ else
             fi
         fi
     else
-        AC_MSG_CHECKING([which pre-built Mozilla module in $TARFILE_LOCATION])
-        MOZ_ZIP_INC="${OS}${COM}${CPU}inc.zip"
-        MOZ_ZIP_LIB="${OS}${COM}${CPU}lib.zip"
-        MOZ_ZIP_RUNTIME="${OS}${COM}${CPU}runtime.zip"
         PREBUILD_MOZAB="YES"
-        if test -e "$TARFILE_LOCATION/${OS}${COM}${CPU}inc.zip" -a \
-                -e "$TARFILE_LOCATION/${OS}${COM}${CPU}lib.zip" -a \
-                -e "$TARFILE_LOCATION/${OS}${COM}${CPU}runtime.zip"; then
-            AC_MSG_RESULT([Found])
-            MOZ_ZIP_INC=
-            MOZ_ZIP_LIB=
-            MOZ_ZIP_RUNTIME=
-        fi
         if test "$_os" = "WINNT"; then
             AC_MSG_CHECKING([for MSVC 2005 runtime needed for prebuilt Mozilla])
             if test -e "$SRC_ROOT/external/msvcp80/Microsoft.VC80.CRT.manifest" -a \
@@ -8287,18 +8219,8 @@ AC_SUBST(MOZ_FLAVOUR)
 AC_SUBST(MOZ_INC)
 AC_SUBST(MOZ_LIB)
 AC_SUBST(MOZ_LIB_XPCOM)
-AC_SUBST(MOZ_TARBALL)
 AC_SUBST(MSVC80_DLL_DIR)
 AC_SUBST(MSVC80_MNFST)
-AC_SUBST(MOZ_ZIP_INC)
-AC_SUBST(MOZ_ZIP_LIB)
-AC_SUBST(MOZ_ZIP_RUNTIME)
-
-# libxmlsec is mandatory
-if test $_os != Android -a $_os != iOS ; then
-    LIBXMLSEC_TARBALL="1f24ab1d39f4a51faf22244c94a6203f-xmlsec1-1.2.14.tar.gz"
-fi
-AC_SUBST(LIBXMLSEC_TARBALL)
 
 dnl ===================================================================
 dnl Check for system NSS
@@ -8317,7 +8239,6 @@ if test "$with_system_nss" = "yes"; then
     libo_MINGW_CHECK_DLL([SSL3], [ssl3])
 else
     SYSTEM_NSS="NO"
-    NSS_TARBALL="a0a861f539f0e7a91d05e6b9457e4db1-nss-3.13.5-with-nspr-4.9.1.tar.gz"
     BUILD_TYPE="$BUILD_TYPE NSS"
     AC_MSG_RESULT([internal])
     if test "$build_os" = "cygwin"; then
@@ -8347,7 +8268,6 @@ fi # system nss
 AC_SUBST(SYSTEM_NSS)
 AC_SUBST(NSS_CFLAGS)
 AC_SUBST(NSS_LIBS)
-AC_SUBST(NSS_TARBALL)
 AC_SUBST([MINGW_SMIME3_DLL])
 
 dnl ===================================================================
@@ -8508,21 +8428,7 @@ You can use --with-system-icu-for-build=force to use it anyway.])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU="NO"
-
     BUILD_TYPE="$BUILD_TYPE ICU"
-fi
-if test "$with_system_icu" != "yes" -o "$with_system_icu_for_build" != "yes"; then
-    ICU_TARBALL="7c53f83e0327343f4060c0eb83842daf-icu4c-49_1_1-src.tgz"
-
-    # Save space when using a bundled ICU by leaving out unneeded parts of the ICU data. Generated by
-    # the interactive web tool at http://apps.icu-project.org/datacustom/ICUData49.html by dropping
-    # the "Charset Mapping Tables". Probably we could carefully cherry-pick other items in the data to
-    # be dropped, too. A bit tedious using that web tool, though.
-
-    # If you do that, upload a new subset data zip file with just the MD5 part of the name changed
-    # appropriately. Let's not bother trying to list what stuff has been removed in the file name.
-    # Describe it in the comment above instead.
-    ICU_DATA_SUBSET_ZIP=fc188d2ed5c2cbcf7a021b34b9f88478-icudt49l-subset.zip
 fi
 AC_SUBST(SYSTEM_ICU)
 AC_SUBST(SYSTEM_GENBRK)
@@ -8535,8 +8441,6 @@ AC_SUBST(ICU_RECLASSIFIED_CLOSE_PARENTHESIS)
 AC_SUBST([ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER])
 AC_SUBST([ICU_RECLASSIFIED_HEBREW_LETTER])
 AC_SUBST(ICU_RECLASSIFIED_PREPEND_SET_EMPTY)
-AC_SUBST(ICU_TARBALL)
-AC_SUBST(ICU_DATA_SUBSET_ZIP)
 AC_SUBST([MINGW_ICUDATA_DLL])
 AC_SUBST([MINGW_ICUI18N_DLL])
 AC_SUBST([MINGW_ICUUC_DLL])
@@ -8559,7 +8463,6 @@ if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "$enable_graphite" = "" -o 
         AC_MSG_RESULT([internal])
         SYSTEM_GRAPHITE=NO
         BUILD_TYPE="$BUILD_TYPE GRAPHITE"
-        GRAPHITE_TARBALL=f5ef3f7f10fa8c3542c6a085a233080b-graphite2-1.2.0.tgz
     fi
 else
     AC_MSG_RESULT([no])
@@ -8568,7 +8471,6 @@ AC_SUBST(ENABLE_GRAPHITE)
 AC_SUBST(SYSTEM_GRAPHITE)
 AC_SUBST(GRAPHITE_CFLAGS)
 AC_SUBST(GRAPHITE_LIBS)
-AC_SUBST(GRAPHITE_TARBALL)
 AC_SUBST([MINGW_GRAPHITE2_DLL])
 
 dnl ===================================================================
@@ -8765,13 +8667,11 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_NEON=NO
     BUILD_TYPE="$BUILD_TYPE NEON"
-    NEON_TARBALL=ff369e69ef0f0143beb5626164e87ae2-neon-0.29.5.tar.gz
     NEON_VERSION=0295
 fi
 AC_SUBST(SYSTEM_NEON)
 AC_SUBST(NEON_LIBS)
 AC_SUBST(NEON_CFLAGS)
-AC_SUBST(NEON_TARBALL)
 AC_SUBST(NEON_VERSION)
 AC_SUBST([MINGW_GNUTLS_DLL])
 AC_SUBST([MINGW_NEON_DLL])
@@ -8815,13 +8715,11 @@ if test "$with_system_openssl" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_OPENSSL=NO
-    OPENSSL_TARBALL="51a40a81b3b7abe8a5c33670bd3da0ce-openssl-0.9.8v.tar.gz"
     BUILD_TYPE="$BUILD_TYPE OPENSSL"
 fi
 AC_SUBST(SYSTEM_OPENSSL)
 AC_SUBST(OPENSSL_CFLAGS)
 AC_SUBST(OPENSSL_LIBS)
-AC_SUBST(OPENSSL_TARBALL)
 AC_SUBST([MINGW_SSL_DLL])
 AC_SUBST([MINGW_CRYPTO_DLL])
 
@@ -8840,18 +8738,12 @@ if test "$with_system_redland" = "yes"; then
     libo_MINGW_TRY_DLL([SQLITE3], [libsqlite3])
 else
     AC_MSG_RESULT([internal])
-    RAPTOR_TARBALL="284e768eeda0e2898b0d5bf7e26a016e-raptor-1.4.18.tar.gz"
-    RASQAL_TARBALL="fca8706f2c4619e2fa3f8f42f8fc1e9d-rasqal-0.9.16.tar.gz"
-    REDLAND_TARBALL="ca66e26082cab8bb817185a116db809b-redland-1.0.8.tar.gz"
     BUILD_TYPE="$BUILD_TYPE REDLAND"
     SYSTEM_REDLAND=NO
 fi
 AC_SUBST(SYSTEM_REDLAND)
-AC_SUBST(RAPTOR_TARBALL)
-AC_SUBST(RASQAL_TARBALL)
 AC_SUBST(REDLAND_CFLAGS)
 AC_SUBST(REDLAND_LIBS)
-AC_SUBST(REDLAND_TARBALL)
 AC_SUBST([MINGW_RAPTOR_DLL])
 AC_SUBST([MINGW_RASQAL_DLL])
 AC_SUBST([MINGW_REDLAND_DLL])
@@ -8867,7 +8759,6 @@ if test "$with_system_orcus" = "yes"; then
     PKG_CHECK_MODULES(ORCUS, liborcus-0.2 >= 0.1.0)
 else
     AC_MSG_RESULT([internal])
-    ORCUS_TARBALL=46d9f4cf8b145c21ce1056e116d2ce71-liborcus_0.1.0.tar.bz2
     BUILD_TYPE="$BUILD_TYPE ORCUS"
     SYSTEM_LIBORCUS=NO
 
@@ -8899,7 +8790,6 @@ AC_SUBST([BOOST_SYSTEM_LIB])
 AC_SUBST(SYSTEM_LIBORCUS)
 AC_SUBST(ORCUS_CFLAGS)
 AC_SUBST(ORCUS_LIBS)
-AC_SUBST(ORCUS_TARBALL)
 
 dnl ===================================================================
 dnl Check for system hunspell
@@ -8927,11 +8817,9 @@ else
     SYSTEM_HUNSPELL=NO
     HUNSPELL_CFLAGS="-I${WORKDIR}/UnpackedTarball/hunspell/src/hunspell"
     HUNSPELL_LIBS="-L${OUTDIR}/lib -lhunspell"
-    HUNSPELL_TARBALL="3121aaf3e13e5d88dfff13fb4a5f1ab8-hunspell-1.3.2.tar.gz"
     BUILD_TYPE="$BUILD_TYPE HUNSPELL"
 fi
 AC_SUBST(SYSTEM_HUNSPELL)
-AC_SUBST(HUNSPELL_TARBALL)
 AC_SUBST(HUNSPELL_CFLAGS)
 AC_SUBST(HUNSPELL_LIBS)
 AC_SUBST([MINGW_HUNSPELL_DLL])
@@ -8962,12 +8850,10 @@ if test "$with_system_altlinuxhyph" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HYPH=NO
-    HYPHEN_TARBALL="a2f6010987e1c601274ab5d63b72c944-hyphen-2.8.4.tar.gz"
     BUILD_TYPE="$BUILD_TYPE HYPHEN"
 fi
 AC_SUBST(SYSTEM_HYPH)
 AC_SUBST(HYPHEN_LIB)
-AC_SUBST(HYPHEN_TARBALL)
 AC_SUBST([MINGW_HYPHEN_DLL])
 
 dnl ===================================================================
@@ -8997,12 +8883,10 @@ if test "$with_system_mythes" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_MYTHES=NO
-    MYTHES_TARBALL="46e92b68e31e858512b680b3b61dc4c1-mythes-1.2.3.tar.gz"
     BUILD_TYPE="$BUILD_TYPE MYTHES"
 fi
 AC_SUBST(SYSTEM_MYTHES)
 AC_SUBST(MYTHES_CFLAGS)
-AC_SUBST(MYTHES_TARBALL)
 AC_SUBST(MYTHES_LIBS)
 AC_SUBST([MINGW_MYTHES_DLL])
 
@@ -9026,11 +8910,9 @@ if test "$with_system_lpsolve" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LPSOLVE=NO
-    LPSOLVE_TARBALL="26b3e95ddf3d9c077c480ea45874b3b8-lp_solve_5.5.tar.gz"
     BUILD_TYPE="$BUILD_TYPE LPSOLVE"
 fi
 AC_SUBST(SYSTEM_LPSOLVE)
-AC_SUBST(LPSOLVE_TARBALL)
 AC_SUBST([MINGW_LPSOLVE_DLL])
 
 dnl ===================================================================
@@ -9045,14 +8927,12 @@ if test "$with_system_libexttextcat" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBEXTTEXTCAT=NO
-    LIBEXTTEXTCAT_TARBALL="dc3d21a3921931096d6e80f6701f6763-libexttextcat-3.4.0.tar.bz2"
     BUILD_TYPE="$BUILD_TYPE LIBEXTTEXTCAT"
 fi
 AC_SUBST(SYSTEM_LIBEXTTEXTCAT)
 AC_SUBST(SYSTEM_LIBEXTTEXTCAT_DATA)
 AC_SUBST(LIBEXTTEXTCAT_CFLAGS)
 AC_SUBST(LIBEXTTEXTCAT_LIBS)
-AC_SUBST(LIBEXTTEXTCAT_TARBALL)
 
 dnl ***************************************
 dnl testing libc version for Linux...
@@ -9885,7 +9765,6 @@ if test "x$enable_pdfimport" != "xno"; then
   else
       AC_MSG_RESULT([internal])
       SYSTEM_POPPLER=NO
-      XPDF_TARBALL="599dc4cc65a07ee868cf92a667a913d2-xpdf-3.02.tar.gz"
       BUILD_TYPE="$BUILD_TYPE XPDF"
   fi
 else
@@ -9897,13 +9776,11 @@ AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
-AC_SUBST(XPDF_TARBALL)
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
   AC_MSG_RESULT([yes])
   ENABLE_MEDIAWIKI=YES
-  XSLTML_TARBALL=a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
   BUILD_TYPE="$BUILD_TYPE XSLTML"
   if test  "x$with_java" = "xno"; then
     AC_MSG_ERROR([Wiki Publisher requires Java! Enable Java if you want to build it.])
@@ -9914,7 +9791,6 @@ else
   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MEDIAWIKI"
 fi
 AC_SUBST(ENABLE_MEDIAWIKI)
-AC_SUBST(XSLTML_TARBALL)
 
 if test "$ENABLE_MEDIAWIKI" = "YES"; then
     AC_MSG_CHECKING([which Servlet API Jar to use])
@@ -9930,7 +9806,6 @@ if test "$ENABLE_MEDIAWIKI" = "YES"; then
         AC_MSG_RESULT([internal])
         SYSTEM_SERVLETAPI=NO
         BUILD_TYPE="$BUILD_TYPE TOMCAT"
-        TOMCAT_TARBALL="2a177023f9ea8ec8bd00837605c5df1b-jakarta-tomcat-5.0.30-src.tar.gz"
     fi
 fi
 AC_SUBST(SYSTEM_SERVLETAPI)
@@ -10104,17 +9979,6 @@ if test "$enable_ext_report_builder" != "no" -a "x$enable_extension_integration"
         AC_MSG_RESULT([internal])
         SYSTEM_JFREEREPORT=NO
         BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
-        JFREEREPORT_SAC_TARBALL="39bb3fcea1514f1369fcfc87542390fd-sacjava-1.3.zip"
-        JFREEREPORT_LIBBASE_TARBALL="eeb2c7ddf0d302fba4bfc6e97eac9624-libbase-1.1.6.zip"
-        JFREEREPORT_FLUTE_TARBALL="d8bd5eed178db6e2b18eeed243f85aa8-flute-1.1.6.zip"
-        JFREEREPORT_LIBLOADER_TARBALL="97b2d4dba862397f446b217e2b623e71-libloader-1.1.6.zip"
-        JFREEREPORT_LIBXML_TARBALL="ace6ab49184e329db254e454a010f56d-libxml-1.1.7.zip"
-        JFREEREPORT_LIBFORMULA_TARBALL="3404ab6b1792ae5f16bbd603bd1e1d03-libformula-1.1.7.zip"
-        JFREEREPORT_LIBFONTS_TARBALL="3bdf40c0d199af31923e900d082ca2dd-libfonts-1.1.6.zip"
-        JFREEREPORT_LIBREPOSITORY_TARBALL="8ce2fcd72becf06c41f7201d15373ed9-librepository-1.1.6.zip"
-        JFREEREPORT_LIBSERIALIZER_TARBALL="f94d9870737518e3b597f9265f4e9803-libserializer-1.1.6.zip"
-        JFREEREPORT_FLOW_ENGINE_TARBALL="ba2930200c9f019c2d93a8c88c651a0f-flow-engine-0.9.4.zip"
-        JFREEREPORT_LIBLAYOUT_TARBALL="db60e4fde8dd6d6807523deb71ee34dc-liblayout-0.2.10.zip"
     fi
 else
     AC_MSG_RESULT([no])
@@ -10125,17 +9989,6 @@ fi
 AC_SUBST(ENABLE_REPORTBUILDER)
 AC_SUBST(SYSTEM_JFREEREPORT)
 AC_SUBST(SAC_JAR)
-AC_SUBST(JFREEREPORT_SAC_TARBALL)
-AC_SUBST(JFREEREPORT_LIBBASE_TARBALL)
-AC_SUBST(JFREEREPORT_FLUTE_TARBALL)
-AC_SUBST(JFREEREPORT_LIBLOADER_TARBALL)
-AC_SUBST(JFREEREPORT_LIBXML_TARBALL)
-AC_SUBST(JFREEREPORT_LIBFORMULA_TARBALL)
-AC_SUBST(JFREEREPORT_LIBFONTS_TARBALL)
-AC_SUBST(JFREEREPORT_LIBREPOSITORY_TARBALL)
-AC_SUBST(JFREEREPORT_LIBSERIALIZER_TARBALL)
-AC_SUBST(JFREEREPORT_FLOW_ENGINE_TARBALL)
-AC_SUBST(JFREEREPORT_LIBLAYOUT_TARBALL)
 AC_SUBST(LIBXML_JAR)
 AC_SUBST(FLUTE_JAR)
 AC_SUBST(JFREEREPORT_JAR)
@@ -10219,24 +10072,14 @@ if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
     else
         AC_MSG_RESULT([internal])
         SYSTEM_APACHE_COMMONS=NO
-        APACHE_COMMONS_CODEC_TARBALL=af3c3acf618de6108d65fcdc92b492e1-commons-codec-1.3-src.tar.gz
-        APACHE_COMMONS_HTTPCLIENT_TARBALL=2c9b0f83ed5890af02c0df1c1776f39b-commons-httpclient-3.1-src.tar.gz
-        APACHE_COMMONS_LANG_TARBALL=2ae988b339daec234019a7066f96733e-commons-lang-2.3-src.tar.gz
-        APACHE_COMMONS_LOGGING_TARBALL=3c219630e4302863a9a83d0efde889db-commons-logging-1.1.1-src.tar.gz
-        TOMCAT_TARBALL="2a177023f9ea8ec8bd00837605c5df1b-jakarta-tomcat-5.0.30-src.tar.gz"
         BUILD_TYPE="$BUILD_TYPE APACHE_COMMONS TOMCAT"
     fi
 fi
-AC_SUBST(APACHE_COMMONS_CODEC_TARBALL)
-AC_SUBST(APACHE_COMMONS_HTTPCLIENT_TARBALL)
-AC_SUBST(APACHE_COMMONS_LANG_TARBALL)
-AC_SUBST(APACHE_COMMONS_LOGGING_TARBALL)
 AC_SUBST(SYSTEM_APACHE_COMMONS)
 AC_SUBST(COMMONS_CODEC_JAR)
 AC_SUBST(COMMONS_LANG_JAR)
 AC_SUBST(COMMONS_HTTPCLIENT_JAR)
 AC_SUBST(COMMONS_LOGGING_JAR)
-AC_SUBST(TOMCAT_TARBALL)
 
 # scripting provider for BeanShell?
 AC_MSG_CHECKING([whether to build support for scripts in BeanShell])
@@ -10259,7 +10102,6 @@ if test "${enable_scripting_beanshell}" != "no" -a "x$with_java" != "xno"; then
    else
        AC_MSG_RESULT([internal])
        SYSTEM_BSH=NO
-       BSH_TARBALL="ea570af93c284aa9e5621cd563f54f4d-bsh-2.0b1-src.tar.gz"
        BUILD_TYPE="$BUILD_TYPE BSH"
    fi
 else
@@ -10270,7 +10112,6 @@ fi
 AC_SUBST(ENABLE_SCRIPTING_BEANSHELL)
 AC_SUBST(SYSTEM_BSH)
 AC_SUBST(BSH_JAR)
-AC_SUBST(BSH_TARBALL)
 
 # scripting provider for JavaScript?
 AC_MSG_CHECKING([whether to build support for scripts in JavaScript])
@@ -10293,8 +10134,6 @@ if test "${enable_scripting_javascript}" != "no" -a "x$with_java" != "xno"; then
    else
        AC_MSG_RESULT([internal])
        SYSTEM_RHINO=NO
-       RHINO_TARBALL="798b2ffdc8bcfe7bca2cf92b62caf685-rhino1_5R5.zip"
-       SWING_TARBALL="35c94d2df8893241173de1d16b6034c0-swingExSrc.zip"
        BUILD_TYPE="$BUILD_TYPE RHINO"
    fi
 else
@@ -10305,8 +10144,6 @@ fi
 AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 AC_SUBST(SYSTEM_RHINO)
 AC_SUBST(RHINO_JAR)
-AC_SUBST(RHINO_TARBALL)
-AC_SUBST(SWING_TARBALL)
 
 dnl Scripting provider for Python extension?
 dnl We always provide this unless we have disabled Python completely
@@ -11002,12 +10839,10 @@ AC_MSG_CHECKING([for ConvertTextToNumber extension integration])
 if test "x$enable_ext_ct2n" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     BUILD_TYPE="$BUILD_TYPE CT2N"
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_CT2N"
-    CT2N_TARBALL="451ccf439a36a568653b024534669971-ConvertTextToNumber-1.3.2.oxt"
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
 fi
-AC_SUBST([CT2N_TARBALL])
 
 dnl ===================================================================
 dnl Test whether to include Numbertext extension
@@ -11088,12 +10923,10 @@ AC_MSG_CHECKING([for LanguageTool extension integration])
 if test "x$enable_ext_languagetool" = "xyes" -a "x$enable_extension_integration" != "xno" -a "x$with_java" != "xno"; then
     BUILD_TYPE="$BUILD_TYPE LANGUAGETOOL"
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LANGUAGETOOL"
-    LANGUAGETOOL_TARBALL="b63e6340a02ff1cacfeadb2c42286161-JLanguageTool-1.7.0.tar.bz2"
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
 fi
-AC_SUBST(LANGUAGETOOL_TARBALL)
 
 dnl ===================================================================
 dnl Test whether to include oooblogger extension
@@ -11170,38 +11003,11 @@ if test "$with_fonts" != "no"; then
     AC_MSG_RESULT([yes])
     WITH_FONTS=YES
     BUILD_TYPE="$BUILD_TYPE MORE_FONTS"
-    FONT_DEJAVU_TARBALL="f872f4ac066433d8ff92f5e316b36ff9-dejavu-fonts-ttf-2.33.zip"
-    FONT_GENTIUM_TARBALL="35efabc239af896dfb79be7ebdd6e6b9-gentiumbasic-fonts-1.10.zip"
-    FONT_LIBERATION_NARROW_TARBALL="0be45d54cc5e1c2e3102e32b8c190346-liberation-fonts-ttf-1.07.1.tar.gz"
-    FONT_LIBERATION_TARBALL="5c781723a0d9ed6188960defba8e91cf-liberation-fonts-ttf-2.00.1.tar.gz"
-    FONT_LINLIBERTINEG_TARBALL="e7a384790b13c29113e22e596ade9687-LinLibertineG-20120116.zip"
-    FONT_OPENSANS_TARBALL="7a15edea7d415ac5150ea403e27401fd-open-sans-font-ttf-1.10.tar.gz"
-    FONT_PTSERIF_TARBALL="c3c1a8ba7452950636e871d25020ce0d-pt-serif-font-1.0000W.tar.gz"
-    FONT_SOURCECODE_TARBALL="0279a21fab6f245e85a6f85fea54f511-source-code-font-1.009.tar.gz"
-    FONT_SOURCESANS_TARBALL="1e9ddfe25ac9577da709d7b2ea36f939-source-sans-font-1.036.tar.gz"
 else
     AC_MSG_RESULT([no])
     WITH_FONTS=NO
     SCPDEFS="$SCPDEFS -DWITHOUT_FONTS"
-    FONT_DEJAVU_TARBALL=
-    FONT_GENTIUM_TARBALL=
-    FONT_LIBERATION_NARROW_TARBALL=
-    FONT_LIBERATION_TARBALL=
-    FONT_LINLIBERTINEG_TARBALL=
-    FONT_OPENSANS_TARBALL=
-    FONT_PTSERIF_TARBALL=
-    FONT_SOURCECODE_TARBALL=
-    FONT_SOURCESANS_TARBALL=
 fi
-AC_SUBST(FONT_DEJAVU_TARBALL)
-AC_SUBST(FONT_GENTIUM_TARBALL)
-AC_SUBST(FONT_LIBERATION_TARBALL)
-AC_SUBST(FONT_LINLIBERTINEG_TARBALL)
-AC_SUBST(FONT_LIBERATION_NARROW_TARBALL)
-AC_SUBST(FONT_OPENSANS_TARBALL)
-AC_SUBST(FONT_PTSERIF_TARBALL)
-AC_SUBST(FONT_SOURCECODE_TARBALL)
-AC_SUBST(FONT_SOURCESANS_TARBALL)
 AC_SUBST(WITH_FONTS)
 
 
@@ -11243,15 +11049,12 @@ AC_MSG_CHECKING([whether to include AFMs])
 if test "$with_afms" != "no"; then
     AC_MSG_RESULT([yes])
     BUILD_TYPE="$BUILD_TYPE AFMS"
-    AFMS_TARBALL="1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz"
 else
     AC_MSG_RESULT([no])
     WITHOUT_AFMS=YES
     SCPDEFS="$SCPDEFS -DWITHOUT_AFMS"
-    AFMS_TARBALL=
 fi
 AC_SUBST(WITHOUT_AFMS)
-AC_SUBST(AFMS_TARBALL)
 
 dnl ===================================================================
 dnl Test whether to include extra galleries
@@ -11487,8 +11290,6 @@ if test "$test_cairo" = "yes" ; then
         SYSTEM_CAIRO=NO
         AC_MSG_RESULT([no])
 
-        CAIRO_TARBALL="f101a9e88b783337b20b2e26dfd26d5f-cairo-1.10.2.tar.gz"
-        PIXMAN_TARBALL="c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2"
         BUILD_TYPE="$BUILD_TYPE CAIRO"
         SCPDEFS="$SCPDEFS -DNEED_CAIRO"
     fi
@@ -11497,8 +11298,6 @@ fi
 AC_SUBST(SYSTEM_CAIRO)
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
-AC_SUBST(CAIRO_TARBALL)
-AC_SUBST(PIXMAN_TARBALL)
 AC_SUBST([MINGW_CAIRO_DLL])
 AC_SUBST([MINGW_FONTCONFIG_DLL])
 AC_SUBST([MINGW_FREETYPE_DLL])
@@ -11523,7 +11322,6 @@ if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a $_os != 
     else
         SYSTEM_LIBLANGTAG=NO
         AC_MSG_RESULT([no])
-        LIBLANGTAG_TARBALL="54e578c91b1b68e69c72be22adcb2195-liblangtag-0.4.0.tar.bz2"
         BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
     fi
 else
@@ -11534,7 +11332,6 @@ AC_SUBST(ENABLE_LIBLANGTAG)
 AC_SUBST(SYSTEM_LIBLANGTAG)
 AC_SUBST(LIBLANGTAG_CFLAGS)
 AC_SUBST(LIBLANGTAG_LIBS)
-AC_SUBST(LIBLANGTAG_TARBALL)
 AC_SUBST([MINGW_LIBLANGTAG_DLL])
 
 dnl ===================================================================
@@ -11564,11 +11361,9 @@ if test "$with_system_libpng" = yes; then
 else
     SYSTEM_LIBPNG=NO
     BUILD_TYPE="$BUILD_TYPE LIBPNG"
-    PNG_TARBALL=9e5d864bce8f06751bbd99962ecf4aad-libpng-1.5.10.tar.gz
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(SYSTEM_LIBPNG)
-AC_SUBST(PNG_TARBALL)
 
 dnl ===================================================================
 dnl Check for runtime JVM search path

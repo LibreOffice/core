@@ -46,12 +46,11 @@ $(call fetch_Download__checksum_command,$2,$(firstword $(subst -, ,$2))) \
 endef
 
 define fetch_Optional
-$(if $(filter $1,$(BUILD_TYPE)),$2)
+$(if $(filter ALL,$(DO_FETCH_TARBALLS))$(filter $1,$(BUILD_TYPE)),$2)
 endef
 
 fetch :
 	$(foreach item, \
-		$(if $(filter YES,$(CROSS_COMPILING)),$(BUILD_TARBALLS)) \
 		18f577b374d60b3c760a3a3350407632-STLport-4.5.tar.gz \
 		7376930b0d3f3d77a685d94c4a3acda8-STLport-4.5-0119.tar.gz \
 		c441926f3a552ed3e5b274b62e86af16-STLport-4.0.tar.gz \

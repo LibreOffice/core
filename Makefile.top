@@ -368,13 +368,13 @@ ifneq ($(filter-out clean distclean,$(MAKECMDGOALS)),)
 #
 # Fetch
 #
-ifeq ($(DO_FETCH_TARBALLS),YES)
+ifneq ($(DO_FETCH_TARBALLS),NO)
 include $(SRCDIR)/Makefile.fetch
 endif
 fetch: $(SRCDIR)/src.downloaded
 
 $(SRCDIR)/src.downloaded : $(SRCDIR)/download $(SRCDIR)/config_host.mk
-ifeq ($(DO_FETCH_TARBALLS),YES)
+ifneq ($(DO_FETCH_TARBALLS),NO)
 	@$< && touch $@
 else
 	@echo "Automatic fetching of external tarballs is disabled."
