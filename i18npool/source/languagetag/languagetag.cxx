@@ -584,7 +584,14 @@ rtl::OUString LanguageTag::getRegionFromLangtag() const
     if (maBcp47.isEmpty())
         return aRegion;
     const lt_region_t* pRegionT = lt_tag_get_region( MPLANGTAG);
-    SAL_WARN_IF( !pRegionT, "i18npool.langtag", "LanguageTag::getRegionFromLangtag: pRegionT==NULL");
+    // pRegionT==NULL is valid for language only tags, rough check here that
+    // does not take sophisticated tags into account that actually should have
+    // a region, check for ll, lll, ll-Ssss and lll-Ssss so that ll-CC and
+    // lll-CC actually fail.
+    SAL_WARN_IF( !pRegionT &&
+            maBcp47.getLength() != 2 && maBcp47.getLength() != 3 &&
+            maBcp47.getLength() != 7 && maBcp47.getLength() != 8,
+            "i18npool.langtag", "LanguageTag::getRegionFromLangtag: pRegionT==NULL");
     if (!pRegionT)
         return aRegion;
     const char* pRegion = lt_region_get_tag( pRegionT);
