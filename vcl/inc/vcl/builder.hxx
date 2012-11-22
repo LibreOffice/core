@@ -21,6 +21,7 @@
 class ListBox;
 class NumericFormatter;
 class ScrollBar;
+class VclMultiLineEdit;
 
 class VCL_DLLPUBLIC VclBuilder
 {
@@ -56,23 +57,6 @@ private:
     };
     std::vector<WinAndId> m_aChildren;
 
-    struct ListStore
-    {
-        typedef std::vector<OString> row;
-        std::vector<row> m_aEntries;
-    };
-
-    struct ModelAndId
-    {
-        OString m_sID;
-        ListStore *m_pModel;
-        ModelAndId(const OString &rId, ListStore *pListStore)
-            : m_sID(rId)
-            , m_pModel(pListStore)
-        {
-        }
-    };
-
     struct StringPair
     {
         OString m_sID;
@@ -87,44 +71,50 @@ private:
     typedef StringPair RadioButtonGroupMap;
     typedef StringPair ComboBoxModelMap;
     typedef StringPair ButtonImageWidgetMap;
-
-    ListStore *get_model_by_name(OString sID);
-    static void mungemodel(ListBox &rTarget, ListStore &rStore);
-
-    typedef stringmap Adjustment;
-
-    struct AdjustmentAndId
-    {
-        OString m_sID;
-        Adjustment m_aAdjustment;
-        AdjustmentAndId(const OString &rId, Adjustment &rAdjustment)
-            : m_sID(rId)
-        {
-            m_aAdjustment.swap(rAdjustment);
-        }
-    };
-
+    typedef StringPair TextBufferMap;
     typedef StringPair WidgetAdjustmentMap;
 
-    Adjustment *get_adjustment_by_name(OString sID);
-    static void mungeSpinAdjustment(NumericFormatter &rTarget, Adjustment &rAdjustment);
-    static void mungeScrollAdjustment(ScrollBar &rTarget, Adjustment &rAdjustment);
+    struct ListStore
+    {
+        typedef std::vector<OString> row;
+        std::vector<row> m_aEntries;
+    };
+    const ListStore* get_model_by_name(OString sID) const;
+    static void mungeModel(ListBox &rTarget, const ListStore &rStore);
+
+    typedef stringmap TextBuffer;
+    const TextBuffer* get_buffer_by_name(OString sID) const;
+    static void mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rTextBuffer);
+
+    typedef stringmap Adjustment;
+    const Adjustment *get_adjustment_by_name(OString sID) const;
+    static void mungeSpinAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment);
+    static void mungeScrollAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment);
 
     typedef std::map<OString, OString> WidgetTranslations;
     typedef std::map<OString, WidgetTranslations> Translations;
 
     typedef std::map<OString, OString> StockMap;
+
     struct ParserState
     {
         std::vector<RadioButtonGroupMap> m_aGroupMaps;
+
         std::vector<ComboBoxModelMap> m_aModelMaps;
-        std::vector<ModelAndId> m_aModels;
-        std::vector<AdjustmentAndId> m_aAdjustments;
+        std::map<OString, ListStore> m_aModels;
+
+        std::vector<TextBufferMap> m_aTextBufferMaps;
+        std::map<OString, TextBuffer> m_aTextBuffers;
+
         std::vector<WidgetAdjustmentMap> m_aSpinAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aScrollAdjustmentMaps;
+        std::map<OString, Adjustment> m_aAdjustments;
+
         std::vector<ButtonImageWidgetMap> m_aButtonImageWidgetMaps;
         StockMap m_aStockMap;
+
         Translations m_aTranslations;
+
         std::map<Window*, Window*> m_aRedundantParentWidgets;
     };
 
@@ -185,6 +175,7 @@ private:
     Window *makeObject(Window *pParent, const OString &rClass, const OString &rID, stringmap &rVec);
     bool extractGroup(const OString &id, stringmap &rVec);
     bool extractModel(const OString &id, stringmap &rVec);
+    bool extractBuffer(const OString &id, stringmap &rVec);
     bool extractSpinAdjustment(const OString &id, stringmap &rVec);
     bool extractScrollAdjustment(const OString &id, stringmap &rVec);
     bool extractImage(const OString &id, stringmap &rMap);
@@ -202,6 +193,7 @@ private:
     void handleListStore(xmlreader::XmlReader &reader, const OString &rID);
     void handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 nRowIndex);
     void handleAdjustment(const OString &rID, stringmap &rProperties);
+    void handleTextBuffer(const OString &rID, stringmap &rProperties);
     void handleTabChild(Window *pParent, xmlreader::XmlReader &reader);
 
     PackingData get_window_packing_data(const Window *pWindow) const;

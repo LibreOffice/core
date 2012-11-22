@@ -157,15 +157,21 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
          aEnd = m_pParserState->m_aModelMaps.end(); aI != aEnd; ++aI)
     {
         ListBox *pTarget = get<ListBox>(aI->m_sID);
-        ListStore *pStore = get_model_by_name(aI->m_sValue);
+        const ListStore *pStore = get_model_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pStore, "vcl", "missing elements of combobox/liststore");
         if (pTarget && pStore)
-            mungemodel(*pTarget, *pStore);
+            mungeModel(*pTarget, *pStore);
     }
-    for (std::vector<ModelAndId>::iterator aI = m_pParserState->m_aModels.begin(),
-         aEnd = m_pParserState->m_aModels.end(); aI != aEnd; ++aI)
+
+    //Set TextView buffers when everything has been imported
+    for (std::vector<TextBufferMap>::iterator aI = m_pParserState->m_aTextBufferMaps.begin(),
+         aEnd = m_pParserState->m_aTextBufferMaps.end(); aI != aEnd; ++aI)
     {
-        delete aI->m_pModel;
+        VclMultiLineEdit *pTarget = get<VclMultiLineEdit>(aI->m_sID);
+        const TextBuffer *pBuffer = get_buffer_by_name(aI->m_sValue);
+        SAL_WARN_IF(!pTarget || !pBuffer, "vcl", "missing elements of textview/textbuffer");
+        if (pTarget && pBuffer)
+            mungeTextBuffer(*pTarget, *pBuffer);
     }
 
     //Set SpinButton adjustments when everything has been imported
@@ -173,7 +179,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
          aEnd = m_pParserState->m_aSpinAdjustmentMaps.end(); aI != aEnd; ++aI)
     {
         NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get<Window>(aI->m_sID));
-        Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
+        const Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
         if (pTarget && pAdjustment)
             mungeSpinAdjustment(*pTarget, *pAdjustment);
@@ -184,7 +190,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
          aEnd = m_pParserState->m_aScrollAdjustmentMaps.end(); aI != aEnd; ++aI)
     {
         ScrollBar *pTarget = get<ScrollBar>(aI->m_sID);
-        Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
+        const Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of scrollbar/adjustment");
         if (pTarget && pAdjustment)
             mungeScrollAdjustment(*pTarget, *pAdjustment);
@@ -515,13 +521,24 @@ bool VclBuilder::extractScrollAdjustment(const OString &id, stringmap &rMap)
     return false;
 }
 
-
 bool VclBuilder::extractModel(const OString &id, stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("model"));
     if (aFind != rMap.end())
     {
         m_pParserState->m_aModelMaps.push_back(ComboBoxModelMap(id, aFind->second));
+        rMap.erase(aFind);
+        return true;
+    }
+    return false;
+}
+
+bool VclBuilder::extractBuffer(const OString &id, stringmap &rMap)
+{
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString("buffer"));
+    if (aFind != rMap.end())
+    {
+        m_pParserState->m_aTextBufferMaps.push_back(TextBufferMap(id, aFind->second));
         rMap.erase(aFind);
         return true;
     }
@@ -790,6 +807,8 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         pWindow = new Window(pParent);
     else if (name == "GtkTextView")
     {
+        extractBuffer(id, rMap);
+
         WinBits nWinStyle = WB_LEFT | WB_BORDER;
         //VclMultiLineEdit manage their own scrolling,
         //so if it appears as a child of a scrolling window
@@ -1213,7 +1232,12 @@ void VclBuilder::collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &
 
 void VclBuilder::handleAdjustment(const OString &rID, stringmap &rProperties)
 {
-    m_pParserState->m_aAdjustments.push_back(AdjustmentAndId(rID, rProperties));
+    m_pParserState->m_aAdjustments[rID] = rProperties;
+}
+
+void VclBuilder::handleTextBuffer(const OString &rID, stringmap &rProperties)
+{
+    m_pParserState->m_aTextBuffers[rID] = rProperties;
 }
 
 void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 nRowIndex)
@@ -1277,14 +1301,11 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
             break;
     }
 
-    if (!aRow.empty())
-        m_pParserState->m_aModels.back().m_pModel->m_aEntries.push_back(aRow);
+    m_pParserState->m_aModels[rID].m_aEntries.push_back(aRow);
 }
 
 void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rID)
 {
-    m_pParserState->m_aModels.push_back(ModelAndId(rID, new ListStore));
-
     int nLevel = 1;
     sal_Int32 nRowIndex = 0;
 
@@ -1401,6 +1422,11 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     if (sClass == "GtkAdjustment")
     {
         handleAdjustment(sID, aProperties);
+        return NULL;
+    }
+    else if (sClass == "GtkTextBuffer")
+    {
+        handleTextBuffer(sID, aProperties);
         return NULL;
     }
 
@@ -1654,27 +1680,27 @@ void VclBuilder::set_window_packing_position(const Window *pWindow, sal_Int32 nP
     }
 }
 
-VclBuilder::ListStore *VclBuilder::get_model_by_name(OString sID)
+const VclBuilder::ListStore *VclBuilder::get_model_by_name(OString sID) const
 {
-    for (std::vector<ModelAndId>::iterator aI = m_pParserState->m_aModels.begin(),
-         aEnd = m_pParserState->m_aModels.end(); aI != aEnd; ++aI)
-    {
-        if (aI->m_sID.equals(sID))
-            return aI->m_pModel;
-    }
-
+    std::map<OString, ListStore>::const_iterator aI = m_pParserState->m_aModels.find(sID);
+    if (aI != m_pParserState->m_aModels.end())
+        return &(aI->second);
     return NULL;
 }
 
-VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(OString sID)
+const VclBuilder::TextBuffer *VclBuilder::get_buffer_by_name(OString sID) const
 {
-    for (std::vector<AdjustmentAndId>::iterator aI = m_pParserState->m_aAdjustments.begin(),
-         aEnd = m_pParserState->m_aAdjustments.end(); aI != aEnd; ++aI)
-    {
-        if (aI->m_sID.equals(sID))
-            return &(aI->m_aAdjustment);
-    }
+    std::map<OString, TextBuffer>::const_iterator aI = m_pParserState->m_aTextBuffers.find(sID);
+    if (aI != m_pParserState->m_aTextBuffers.end())
+        return &(aI->second);
+    return NULL;
+}
 
+const VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(OString sID) const
+{
+    std::map<OString, Adjustment>::const_iterator aI = m_pParserState->m_aAdjustments.find(sID);
+    if (aI != m_pParserState->m_aAdjustments.end())
+        return &(aI->second);
     return NULL;
 }
 
@@ -1709,9 +1735,9 @@ bool VclBuilder::replace(OString sID, Window &rReplacement)
     return false;
 }
 
-void VclBuilder::mungemodel(ListBox &rTarget, ListStore &rStore)
+void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore)
 {
-    for (std::vector<ListStore::row>::iterator aI = rStore.m_aEntries.begin(), aEnd = rStore.m_aEntries.end();
+    for (std::vector<ListStore::row>::const_iterator aI = rStore.m_aEntries.begin(), aEnd = rStore.m_aEntries.end();
         aI != aEnd; ++aI)
     {
         const ListStore::row &rRow = *aI;
@@ -1726,11 +1752,11 @@ void VclBuilder::mungemodel(ListBox &rTarget, ListStore &rStore)
         rTarget.SelectEntryPos(0);
 }
 
-void VclBuilder::mungeSpinAdjustment(NumericFormatter &rTarget, Adjustment &rAdjustment)
+void VclBuilder::mungeSpinAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment)
 {
     int nMul = rtl_math_pow10Exp(1, rTarget.GetDecimalDigits());
 
-    for (stringmap::iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
+    for (stringmap::const_iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
     {
         const OString &rKey = aI->first;
         const OString &rValue = aI->second;
@@ -1764,9 +1790,9 @@ void VclBuilder::mungeSpinAdjustment(NumericFormatter &rTarget, Adjustment &rAdj
     }
 }
 
-void VclBuilder::mungeScrollAdjustment(ScrollBar &rTarget, Adjustment &rAdjustment)
+void VclBuilder::mungeScrollAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment)
 {
-    for (stringmap::iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
+    for (stringmap::const_iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
     {
         const OString &rKey = aI->first;
         const OString &rValue = aI->second;
@@ -1788,5 +1814,20 @@ void VclBuilder::mungeScrollAdjustment(ScrollBar &rTarget, Adjustment &rAdjustme
     }
 }
 
+void VclBuilder::mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rTextBuffer)
+{
+    for (stringmap::const_iterator aI = rTextBuffer.begin(), aEnd = rTextBuffer.end(); aI != aEnd; ++aI)
+    {
+        const OString &rKey = aI->first;
+        const OString &rValue = aI->second;
+
+        if (rKey == "text")
+            rTarget.SetText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        else
+        {
+            SAL_INFO("vcl.layout", "unhandled property :" << rKey.getStr());
+        }
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
