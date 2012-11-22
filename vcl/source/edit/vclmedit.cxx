@@ -559,6 +559,7 @@ void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
         else if( rTextHint.GetId() == TEXT_HINT_MODIFIED )
         {
+            ImpUpdateSrollBarVis(pVclMultiLineEdit->GetStyle());
             pVclMultiLineEdit->Modify();
         }
     }
