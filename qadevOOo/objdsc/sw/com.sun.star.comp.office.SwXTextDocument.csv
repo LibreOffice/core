@@ -58,7 +58,6 @@
 "SwXTextDocument";"com::sun::star::beans::XPropertySet#optional";"removePropertyChangeListener()"
 "SwXTextDocument";"com::sun::star::beans::XPropertySet#optional";"addVetoableChangeListener()"
 "SwXTextDocument";"com::sun::star::beans::XPropertySet#optional";"removeVetoableChangeListener()"
-"SwXTextDocument";"com::sun::star::document::XDocumentInfoSupplier#optional";"getDocumentInfo()"
 "SwXTextDocument";"com::sun::star::text::GenericTextDocument";"CharLocale#optional"
 "SwXTextDocument";"com::sun::star::text::GenericTextDocument";"CharacterCount#optional"
 "SwXTextDocument";"com::sun::star::text::GenericTextDocument";"ParagraphCount#optional"

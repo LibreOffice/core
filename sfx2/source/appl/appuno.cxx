@@ -105,7 +105,6 @@ using namespace ::com::sun::star::io;
 #include "frmload.hxx"
 #include <sfx2/frame.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/objuno.hxx>
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/dispatch.hxx>
 #include "doctemplates.hxx"
@@ -2218,7 +2217,6 @@ SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
         IF_NAME_CREATECOMPONENTFACTORY( SfxGlobalEvents_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxFrameLoader_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxMacroLoader )
-        IF_NAME_CREATECOMPONENTFACTORY( SfxStandaloneDocumentInfoObject )
         IF_NAME_CREATECOMPONENTFACTORY( SfxAppDispatchProvider )
         IF_NAME_CREATECOMPONENTFACTORY( SfxDocTplService )
         IF_NAME_CREATECOMPONENTFACTORY( ShutdownIcon )

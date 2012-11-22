@@ -63,7 +63,4 @@
   <implementation name="com.sun.star.comp.sfx2.SfxMacroLoader">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sfx2.StandaloneDocumentInfo">
-    <service name="com.sun.star.document.StandaloneDocumentInfo"/>
-  </implementation>
 </component>

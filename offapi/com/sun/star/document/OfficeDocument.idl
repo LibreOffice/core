@@ -26,7 +26,6 @@
 #include <com/sun/star/view/XPrintJobBroadcaster.idl>
 #include <com/sun/star/document/XEventBroadcaster.idl>
 #include <com/sun/star/document/XEventsSupplier.idl>
-#include <com/sun/star/document/XDocumentInfoSupplier.idl>
 #include <com/sun/star/document/XViewDataSupplier.idl>
 #include <com/sun/star/document/XDocumentEventBroadcaster.idl>
 #include <com/sun/star/document/XEmbeddedScripts.idl>
@@ -103,17 +102,6 @@ published service OfficeDocument
     /** access to bound event handlers
      */
     [optional] interface XEventsSupplier;
-
-    /** document can provide a <type>DocumentInfo</type>
-
-        <p>
-        Instead of the <type>StandaloneDocumentInfo</type> service the <type>DocumentInfo</type>
-        will be available on an already opened document only.
-        </p>
-
-        @deprecated     Use <type>XDocumentPropertiesSupplier</type> instead.
-     */
-    [optional] interface XDocumentInfoSupplier;
 
     /** access to some properties describing all open views to a document
      */
