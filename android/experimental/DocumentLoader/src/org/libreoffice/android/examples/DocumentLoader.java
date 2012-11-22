@@ -870,6 +870,8 @@ public class DocumentLoader
         public int pageCount;
         public XRenderable renderable;
         public String input;
+        // This is not updated constantly, just in onRetainNonConfigurationInstance()
+        public int currentPageNumber;
     }
 
     static void dumpUNOObject(String objectName, Object object)
@@ -933,16 +935,10 @@ public class DocumentLoader
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstance)
-    {
-        super.onSaveInstanceState(savedInstance);
-        savedInstance.putInt("currentPageNumber", ((PageViewer)flipper.getCurrentView()).currentPageNumber);
-    }
-
-    @Override
     public Object onRetainNonConfigurationInstance() {
         ArrayList ret = new ArrayList(2);
         ret.add(bootstrapContext);
+        documentContext.currentPageNumber = ((PageViewer)flipper.getCurrentView()).currentPageNumber;
         ret.add(documentContext);
         return ret;
     }
@@ -1089,10 +1085,7 @@ public class DocumentLoader
 
             matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-            int currentPageNumber = 0;
-            if (savedInstanceState != null)
-                currentPageNumber = savedInstanceState.getInt("currentPageNumber");
-            goToPage(currentPageNumber);
+            goToPage(documentContext.currentPageNumber);
 
             setContentView(flipper);
         }
