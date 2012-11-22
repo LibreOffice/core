@@ -376,7 +376,7 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
     if ( pImp->mpSecondary )
     {
 #ifdef DBG_UTIL
-        SAL_WARN( "svl.items", "fuer Image, dort gibt es derzeit keine Statics - Bug" );
+        SAL_INFO( "svl.items", "fuer Image, dort gibt es derzeit keine Statics - Bug" );
         if ( pImp->ppStaticDefaults )
         {
             // Delete() ist noch nicht gelaufen?
@@ -514,7 +514,7 @@ void SfxItemPool::Delete()
     sal_uInt16 nArrCnt;
 
     //Erst die SetItems abraeumen
-    SAL_WARN( "svl.items", "fuer Image, dort gibt es derzeit keine Statics - Bug" );
+    SAL_INFO( "svl.items", "fuer Image, dort gibt es derzeit keine Statics - Bug" );
     if ( pImp->ppStaticDefaults )
     {
         for ( nArrCnt = GetSize_Impl();
