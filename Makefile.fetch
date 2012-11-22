@@ -45,8 +45,13 @@ $(call fetch_Download__checksum_command,$2,$(firstword $(subst -, ,$2))) \
 
 endef
 
+fetch_BUILD_TYPE := $(sort $(BUILD_TYPE))
+ifeq ($(CROSS_COMPILING),YES)
+fetch_BUILD_TYPE := $(sort $(fetch_BUILD_TYPE) $(shell . $(SRCDIR)/bin/get_config_variables --build BUILD_TYPE && echo $$BUILD_TYPE))
+endif
+
 define fetch_Optional
-$(if $(filter ALL,$(DO_FETCH_TARBALLS))$(filter $1,$(BUILD_TYPE)),$2)
+$(if $(filter ALL,$(DO_FETCH_TARBALLS))$(filter $1,$(fetch_BUILD_TYPE)),$2)
 endef
 
 fetch :
