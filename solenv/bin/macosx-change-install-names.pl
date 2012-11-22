@@ -101,7 +101,7 @@ foreach $file (@ARGV)
     close(IN);
     if ($change ne "")
     {
-        $call = "install_name_tool$change $file";
+        $call = "$ENV{'XCRUN'} install_name_tool$change $file";
         system($call) == 0 or die "cannot $call";
     }
 }

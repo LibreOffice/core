@@ -256,7 +256,7 @@ cd \"$$origpath\"\n\
 
 $(PACKAGE_DIR)/fixinstallnames: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 	@echo remove build installdir from OOoPython
-	$(COMMAND_ECHO)install_name_tool -change \
+	$(COMMAND_ECHO)$(XCRUN) install_name_tool -change \
 		/$(my_prefix)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/OOoPython \
 		@executable_path/../../../../OOoPython \
 		$(MYCWD)/$(my_prefix)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/Resources/Python.app/Contents/MacOS/OOoPython

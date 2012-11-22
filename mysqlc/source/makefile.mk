@@ -251,7 +251,7 @@ $(COMPONENT_MYSQL_LIBFILE): $(MYSQL_LIBFILE)
     @@-$(MKDIRHIER) $(@:d)
     @$(COPY) $< $@ > $(NULLDEV)
     .IF "$(OS)" == "MACOSX"
-        install_name_tool -id @__________________________________________________OOO/$(MYSQL_LIBFILE:f) $@
+        $(XCRUN) install_name_tool -id @__________________________________________________OOO/$(MYSQL_LIBFILE:f) $@
     .ENDIF
 .ENDIF
 
@@ -261,7 +261,7 @@ $(COMPONENT_MYSQL_CPPCONN_FILE): $(MYSQL_CPPCONNFILE)
     @@-$(MKDIRHIER) $(@:d)
     @$(COPY) $< $@ > $(NULLDEV)
     .IF "$(OS)" == "MACOSX"
-        install_name_tool -change $(MYSQL_LIBFILE:f) @loader_path/$(MYSQL_LIBFILE:f) $@
+        $(XCRUN) install_name_tool -change $(MYSQL_LIBFILE:f) @loader_path/$(MYSQL_LIBFILE:f) $@
     .ENDIF
 .ENDIF
 
@@ -269,5 +269,5 @@ $(COMPONENT_MYSQL_CPPCONN_FILE): $(MYSQL_CPPCONNFILE)
 $(EXTENSION_TARGET): adjust_libmysql_path
 
 adjust_libmysql_path: $(EXTENSIONDIR)$/$(SHL1TARGET)$(DLLPOST)
-    install_name_tool -change $(MYSQL_LIBFILE:f) @loader_path/$(MYSQL_LIBFILE:f) $(EXTENSIONDIR)$/$(SHL1TARGET)$(DLLPOST)
+    $(XCRUN) install_name_tool -change $(MYSQL_LIBFILE:f) @loader_path/$(MYSQL_LIBFILE:f) $(EXTENSIONDIR)$/$(SHL1TARGET)$(DLLPOST)
 .ENDIF

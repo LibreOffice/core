@@ -2760,6 +2760,7 @@ if test "$_os" = "Darwin"; then
         10.7|10.8)
             CC="`xcrun -find clang` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             CXX="`xcrun -find clang++` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            XCRUN=xcrun
             ;;
         esac
         AC_MSG_RESULT([$CC and $CXX])
@@ -2808,6 +2809,7 @@ AC_SUBST(MACOSX_SDK_VERSION)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
 AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
 AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
+AC_SUBST(XCRUN)
 
 dnl ===================================================================
 dnl Windows specific tests and stuff
