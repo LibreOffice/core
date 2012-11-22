@@ -21,6 +21,8 @@
 #include <orcus/orcus_xml.hpp>
 #include <orcus/global.hpp>
 
+#include <string>
+
 namespace {
 
 ScOrcusXMLTreeParam::EntryData& setUserDataToEntry(
@@ -43,17 +45,9 @@ OUString toString(const orcus::xml_structure_tree::entity_name& entity, const or
     OUStringBuffer aBuf;
     if (entity.ns)
     {
-        // Namespace exists.  Namespaces are displayed as ns0, ns1, ns2, ....
-        size_t index = walker.get_xmlns_index(entity.ns);
-        if (index == orcus::xml_structure_tree::walker::index_not_found)
-            // This namespace doesn't exist in this context. Something has gone wrong.
-            aBuf.append("???");
-        else
-        {
-            OString aName = ScOrcusImportXMLParam::getShortNamespaceName(index);
-            aBuf.append(OUString(aName.getStr(), aName.getLength(), RTL_TEXTENCODING_UTF8));
-        }
-
+        // Namespace exists.  Use the short version of the xml namespace name for display.
+        std::string aShortName = walker.get_xmlns_short_name(entity.ns);
+        aBuf.appendAscii(aShortName.c_str());
         aBuf.append(':');
     }
     aBuf.append(OUString(entity.name.get(), entity.name.size(), RTL_TEXTENCODING_UTF8));
@@ -212,8 +206,8 @@ public:
         if (nsid == orcus::XMLNS_UNKNOWN_ID)
             return;
 
-        OString aAlias = ScOrcusImportXMLParam::getShortNamespaceName(index);
-        mrFilter.set_namespace_alias(aAlias.getStr(), nsid);
+        std::string alias = mrNsRepo.get_short_name(index);
+        mrFilter.set_namespace_alias(alias.c_str(), nsid);
     }
 };
 

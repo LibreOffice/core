@@ -76,8 +76,6 @@ struct ScOrcusImportXMLParam
     std::vector<size_t> maNamespaces;
     CellLinksType maCellLinks;
     RangeLinksType maRangeLinks;
-
-    SC_DLLPUBLIC static rtl::OString getShortNamespaceName(size_t nIndex);
 };
 
 #endif

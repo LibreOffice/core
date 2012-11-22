@@ -28,12 +28,4 @@ const ScOrcusXMLTreeParam::EntryData* ScOrcusXMLTreeParam::getUserData(const SvT
 ScOrcusImportXMLParam::CellLink::CellLink(const ScAddress& rPos, const OString& rPath) :
     maPos(rPos), maPath(rPath) {}
 
-OString ScOrcusImportXMLParam::getShortNamespaceName(size_t nIndex)
-{
-    OStringBuffer aBuf;
-    aBuf.append("ns");
-    aBuf.append(static_cast<sal_Int32>(nIndex));
-    return aBuf.makeStringAndClear();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
