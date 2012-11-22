@@ -6958,6 +6958,7 @@ elif test $_os = iOS; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBCDR=NO
+    BUILD_TYPE="$BUILD_TYPE CDR"
     CDR_TARBALL=3c0037fb07dea2f0bbae8386fa7c6a9a-libcdr-0.0.9.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBCDR)
@@ -6979,6 +6980,7 @@ elif test $_os = iOS; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBMSPUB=NO
+    BUILD_TYPE="$BUILD_TYPE MSPUB"
     MSPUB_TARBALL=b2db54b6e96287ac995d7ed654ace4fc-libmspub-0.0.3.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBMSPUB)
@@ -7000,6 +7002,7 @@ elif test $_os = iOS; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBVISIO=NO
+    BUILD_TYPE="$BUILD_TYPE VISIO"
     VISIO_TARBALL=1e961f0112e5986105749640c2b9bc41-libvisio-0.0.21.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBVISIO)
@@ -7018,6 +7021,7 @@ if test "$with_system_libcmis" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBCMIS=NO
+    BUILD_TYPE="$BUILD_TYPE CMIS"
     CMIS_TARBALL=b2371dc7cf4811c9d32146eec913d296-libcmis-0.3.0.tar.gz
 fi
 AC_SUBST(SYSTEM_LIBCMIS)
@@ -7042,6 +7046,7 @@ else
     WPD_CFLAGS="-I${OUTDIR}/inc/external"
     WPD_LIBS="-L${OUTDIR}/lib -lwpdlib"
     WPD_TARBALL=e7f84e3199dfee9122949448cab3823f-libwpd-0.9.6.tar.bz2
+    BUILD_TYPE="$BUILD_TYPE WPD"
 fi
 AC_SUBST(SYSTEM_LIBWPD)
 AC_SUBST(WPD_CFLAGS)
@@ -7128,6 +7133,7 @@ else
     WPS_CFLAGS="-I${OUTDIR}/inc/external"
     WPS_LIBS="-L${OUTDIR}/lib -lwpslib"
     WPS_TARBALL=d197bd6211669a2fa4ca648faf04bcb1-libwps-0.2.7.tar.bz2
+    BUILD_TYPE="$BUILD_TYPE WPS"
 fi
 AC_SUBST(SYSTEM_LIBWPS)
 AC_SUBST(WPS_CFLAGS)
@@ -7150,6 +7156,7 @@ else
     WPG_CFLAGS="-I${OUTDIR}/inc/external"
     WPG_LIBS="-L${OUTDIR}/lib -lwpglib"
     WPG_TARBALL=9d283e02441d8cebdcd1e5d9df227d67-libwpg-0.2.1.tar.bz2
+    BUILD_TYPE="$BUILD_TYPE WPG"
 fi
 AC_SUBST(SYSTEM_LIBWPG)
 AC_SUBST(WPG_CFLAGS)
@@ -7985,6 +7992,7 @@ if test "$with_system_mdds" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     MDDS_TARBALL=9f9e15966b5624834157fe3d748312bc-mdds_0.6.1.tar.bz2
+    BUILD_TYPE="$BUILD_TYPE MDDS"
     SYSTEM_MDDS=NO
 
     dnl ===================================================================
@@ -8012,6 +8020,7 @@ if test "$with_system_vigra" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     VIGRA_TARBALL=ea91f2fb4212a21d708aced277e6e85a-vigra1.4.0.tar.gz
+    BUILD_TYPE="$BUILD_TYPE VIGRA"
     SYSTEM_VIGRA=NO
 fi
 AC_SUBST(SYSTEM_VIGRA)
@@ -8859,6 +8868,7 @@ if test "$with_system_orcus" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     ORCUS_TARBALL=46d9f4cf8b145c21ce1056e116d2ce71-liborcus_0.1.0.tar.bz2
+    BUILD_TYPE="$BUILD_TYPE ORCUS"
     SYSTEM_LIBORCUS=NO
 
     if test "$SYSTEM_BOOST" = "YES"; then
@@ -9894,6 +9904,7 @@ if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integratio
   AC_MSG_RESULT([yes])
   ENABLE_MEDIAWIKI=YES
   XSLTML_TARBALL=a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
+  BUILD_TYPE="$BUILD_TYPE XSLTML"
   if test  "x$with_java" = "xno"; then
     AC_MSG_ERROR([Wiki Publisher requires Java! Enable Java if you want to build it.])
   fi
