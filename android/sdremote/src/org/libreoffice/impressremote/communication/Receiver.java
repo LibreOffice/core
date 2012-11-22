@@ -51,6 +51,10 @@ public class Receiver {
             Intent aIntent = new Intent(
                             CommunicationService.STATUS_CONNECTED_SLIDESHOW_RUNNING);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
+            aIntent = new Intent(
+                     CommunicationService.MSG_SLIDE_CHANGED);
+            aIntent.putExtra("slide_number", aCurrentSlide);
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
         } else if (aInstruction.equals("slideshow_finished")) {
             mSlideShow = new SlideShow(mContext);
             //            Intent aIntent = new Intent(mContext.getApplicationContext(),
