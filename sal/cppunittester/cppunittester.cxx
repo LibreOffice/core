@@ -120,7 +120,6 @@ public:
     }
     bool run() const
     {
-        bool bSuccess = false;
 #ifdef DISABLE_DYNLOADING
         // For iOS cppunit plugins aren't really "plugins" (shared
         // libraries), but just static archives. In the real main
@@ -128,14 +127,13 @@ public:
         // the SAL_IMPLEMENT_MAIN() below expands to, we specifically
         // call the initialize methods of the CppUnitTestPlugIns that
         // we statically link to the app executable.
-        bSuccess = true;
 #else
         CppUnit::PlugInManager manager;
         try {
             manager.load(testlib, args);
-            bSuccess = true;
         } catch (const CppUnit::DynamicLibraryManagerException &e) {
             std::cerr << "DynamicLibraryManagerException: \"" << e.what() << "\"\n";
+            return false;
         }
 #endif
         CppUnit::TestRunner runner;
@@ -158,7 +156,7 @@ public:
             result.popProtector();
 
         CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).write();
-        return bSuccess && collector.wasSuccessful();
+        return collector.wasSuccessful();
     }
     virtual bool operator()() const
     {
