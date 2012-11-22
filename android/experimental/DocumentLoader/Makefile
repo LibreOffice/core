@@ -49,7 +49,7 @@ properties:
 link-so:
 # Build the single .so for this app
 	mkdir -p $(OBJLOCAL)
-	$(CXX) -Wl,-Map,liblo-native-code.map -Wl,--gc-sections -Wl,--version-script=../../Bootstrap/version.map -Wl,--stats -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -o $(OBJLOCAL)/liblo-native-code.so -I$(OUTDIR)/inc native-code.cxx -L$(OUTDIR)/lib $(WHOLELIBS) $(LIBS) -lgnustl_static -landroid -llog -lz
+	$(CXX) -Wl,-Map,liblo-native-code.map -Wl,--gc-sections -Wl,--version-script=../../Bootstrap/version.map -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -o $(OBJLOCAL)/liblo-native-code.so -I$(OUTDIR)/inc native-code.cxx -L$(OUTDIR)/lib $(WHOLELIBS) $(LIBS) -lgnustl_static -landroid -llog -lz
 	mkdir -p $(SODEST)
 	$(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so
 
@@ -64,10 +64,11 @@ copy-stuff:
 # android/qa/desktop/Makefile (mmeeks's desktop demo, also works to some
 # extent).
 #
-	mkdir -p assets/bin/ure assets/lib assets/program assets/xml/ure assets/ComponentTarget/i18npool/util
-	cp $(OUTDIR)/bin/udkapi.rdb assets/bin
-	cp $(OUTDIR)/bin/types.rdb assets/bin
-	cp $(OUTDIR)/bin/ure/types.rdb assets/bin/ure
+	mkdir -p assets/gz.unpack/program/ure assets/lib assets/program assets/xml/ure assets/ComponentTarget/i18npool/util
+	gzip -9 <$(OUTDIR)/bin/offapi.rdb >assets/gz.unpack/program/offapi.rdb
+	gzip -9 <$(OUTDIR)/bin/oovbaapi.rdb >assets/gz.unpack/program/oovbaapi.rdb
+	gzip -9 <$(OUTDIR)/bin/types.rdb >assets/gz.unpack/program/types.rdb
+	gzip -9 <$(OUTDIR)/bin/ure/types.rdb >assets/gz.unpack/program/ure/types.rdb
 # For some reason the vnd.sun.star.expand:$LO_LIB_DIR doesn't seem to work, it expands to empty!?
 # So just hardcode the known APP_DATA_PATH for now...
 	for F in xml/services xml/ure/services; do \
@@ -106,13 +107,13 @@ copy-stuff:
 	echo 'BRAND_BASE_DIR=file:///assets' >> assets/program/fundamentalrc
 	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry module:$${BRAND_BASE_DIR}/share/registry/modules res:$${BRAND_BASE_DIR}/share/registry' >> assets/program/fundamentalrc
 	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway' >> assets/program/fundamentalrc
-	echo 'URE_MORE_TYPES=file:///assets/bin/ure/types.rdb file:///assets/bin/types.rdb' >> assets/program/fundamentalrc
+	echo 'URE_MORE_TYPES=$(APP_DATA_PATH)/program/offapi.rdb $(APP_DATA_PATH)/program/oovbaapi.rdb' >> assets/program/fundamentalrc
 	echo 'URE_MORE_SERVICES=file:///assets/xml/services.rdb <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
 #
 # Set up unorc
 	echo '[Bootstrap]' > assets/program/unorc
 	echo "URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/unorc
-	echo 'UNO_TYPES=file:///assets/bin/ure/types.rdb file:///assets/bin/types.rdb $${URE_MORE_TYPES}' >> assets/program/unorc
+	echo 'UNO_TYPES=$(APP_DATA_PATH)/program/ure/types.rdb $(APP_DATA_PATH)/program/types.rdb $${URE_MORE_TYPES}' >> assets/program/unorc
 	echo 'UNO_SERVICES=file:///assets/xml/ure/services.rdb $${URE_MORE_SERVICES}' >> assets/program/unorc
 #
 # Set up bootstraprc
@@ -141,13 +142,13 @@ copy-stuff:
 # understand "/assets" paths.
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
-	mkdir -p assets/unpack/user/fonts
 # $UserInstallation/user/fonts is added to the fontconfig path in
 # vcl/generic/fontmanager/helper.cxx: psp::getFontPath(). UserInstallation is
 # set to the app's data dir above.
-	cp $(OUTDIR)/pck/Liberation*.ttf assets/unpack/user/fonts
-	cp $(OUTDIR)/pck/Gen*.ttf assets/unpack/user/fonts
-	cp $(OUTDIR)/pck/opens___.ttf assets/unpack/user/fonts
+	mkdir -p assets/gz.unpack/user/fonts
+	for F in $(OUTDIR)/pck/Liberation*.ttf $(OUTDIR)/pck/Gen*.ttf $(OUTDIR)/pck/opens___.ttf; do \
+		gzip -9 <$$F >assets/gz.unpack/user/fonts/`basename $$F`; \
+	done
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
