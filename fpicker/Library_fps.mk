@@ -49,6 +49,7 @@ $(eval $(call gb_Library_use_libraries,fps,\
 	cppu \
 	cppuhelper \
 	sal \
+	i18nisolang1 \
 	tl \
 	utl \
 	vcl \
