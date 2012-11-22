@@ -11,6 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,langtag))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,langtag,$(LIBLANGTAG_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_add_patches,langtag,\
+	liblangtag/liblangtag-0.4.0-xmlDocCopyNode.patch \
+))
+
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 	liblangtag/liblangtag-0.4.0-mac.patch \
