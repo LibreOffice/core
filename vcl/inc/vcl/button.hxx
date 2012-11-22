@@ -28,7 +28,6 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/salnativewidgets.hxx>
 
-#include <set>
 #include <vector>
 
 class UserDrawEvent;
@@ -282,7 +281,7 @@ public:
 class VCL_DLLPUBLIC RadioButton : public Button
 {
 private:
-    boost::shared_ptr< std::set<RadioButton*> > m_xGroup;
+    boost::shared_ptr< std::vector<RadioButton*> > m_xGroup;
     Rectangle       maStateRect;
     Rectangle       maMouseRect;
     Image           maImage;

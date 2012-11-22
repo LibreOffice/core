@@ -526,6 +526,89 @@ void Window::ImplControlFocus( sal_uInt16 nFlags )
 
 // -----------------------------------------------------------------------
 
+namespace
+{
+    bool isSuitableDestination(Window *pWindow)
+    {
+        return (pWindow && isVisibleInLayout(pWindow) && isEnabledInLayout(pWindow) && pWindow->IsInputEnabled());
+    }
+
+    bool backInGroup(std::vector<RadioButton*>::reverse_iterator aRevStart, std::vector<RadioButton*> &rGroup)
+    {
+        std::vector<RadioButton*>::reverse_iterator aI(aRevStart);
+        while (aI != rGroup.rend())
+        {
+            Window *pWindow = *aI;
+
+            if (isSuitableDestination(pWindow))
+            {
+                pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
+                return true;
+            }
+        }
+
+        aI = rGroup.rbegin();
+        while (aI != aRevStart)
+        {
+            Window *pWindow = *aI;
+
+            if (isSuitableDestination(pWindow))
+            {
+                pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool forwardInGroup(std::vector<RadioButton*>::iterator aStart, std::vector<RadioButton*> &rGroup)
+    {
+        std::vector<RadioButton*>::iterator aI(aStart);
+        while (++aI != rGroup.end())
+        {
+            Window *pWindow = *aI;
+
+            if (isSuitableDestination(pWindow))
+            {
+                pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_FORWARD );
+                return true;
+            }
+        }
+
+        aI = rGroup.begin();
+        while (aI != aStart)
+        {
+            Window *pWindow = *aI;
+
+            if (isSuitableDestination(pWindow))
+            {
+                pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_FORWARD );
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool nextInGroup(RadioButton *pSourceWindow, bool bBackward)
+    {
+        std::vector<RadioButton*> aGroup(pSourceWindow->GetRadioButtonGroup(true));
+
+        if (aGroup.size() == 1) //only one button in group
+            return false;
+
+        std::vector<RadioButton*>::iterator aStart(std::find(aGroup.begin(), aGroup.end(), pSourceWindow));
+
+        assert(aStart != aGroup.end());
+
+        if (bBackward)
+            return backInGroup(std::vector<RadioButton*>::reverse_iterator(aStart), aGroup);
+        else
+            return forwardInGroup(aStart, aGroup);
+    }
+}
+
 sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
 {
     KeyCode aKeyCode = rKEvt.GetKeyCode();
@@ -796,50 +879,59 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
         }
         else if ( (nKeyCode == KEY_LEFT) || (nKeyCode == KEY_UP) )
         {
-            Window* pWindow = pSWindow;
-            WinBits nStyle = pSWindow->GetStyle();
-            if ( !(nStyle & WB_GROUP) )
+            if (pSWindow->GetType() == WINDOW_RADIOBUTTON)
+                return nextInGroup(static_cast<RadioButton*>(pSWindow), true);
+            else
             {
-                pWindow = prevLogicalChildOfParent(this, pWindow);
-                while ( pWindow )
+                WinBits nStyle = pSWindow->GetStyle();
+                if ( !(nStyle & WB_GROUP) )
                 {
-                    pWindow = pWindow->ImplGetWindow();
-
-                    nStyle = pWindow->GetStyle();
-
-                    if ( isVisibleInLayout(pWindow) && isEnabledInLayout(pWindow) && pWindow->IsInputEnabled() )
+                    Window* pWindow = prevLogicalChildOfParent(this, pSWindow);
+                    while ( pWindow )
                     {
-                        if ( pWindow != pSWindow )
-                            pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
-                        return sal_True;
+                        pWindow = pWindow->ImplGetWindow();
+
+                        nStyle = pWindow->GetStyle();
+
+                        if ( isVisibleInLayout(pWindow) && isEnabledInLayout(pWindow) && pWindow->IsInputEnabled() )
+                        {
+                            if ( pWindow != pSWindow )
+                                pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
+                            return sal_True;
+                        }
+
+                        if ( nStyle & WB_GROUP )
+                            break;
+
+                        pWindow = prevLogicalChildOfParent(this, pWindow);
                     }
-
-                    if ( nStyle & WB_GROUP )
-                        break;
-
-                    pWindow = prevLogicalChildOfParent(this, pWindow);
                 }
             }
         }
         else if ( (nKeyCode == KEY_RIGHT) || (nKeyCode == KEY_DOWN) )
         {
-            Window* pWindow = nextLogicalChildOfParent(this, pSWindow);
-            while ( pWindow )
+            if (pSWindow->GetType() == WINDOW_RADIOBUTTON)
+                return nextInGroup(static_cast<RadioButton*>(pSWindow), false);
+            else
             {
-                pWindow = pWindow->ImplGetWindow();
-
-                WinBits nStyle = pWindow->GetStyle();
-
-                if ( nStyle & WB_GROUP )
-                    break;
-
-                if ( isVisibleInLayout(pWindow) && isEnabledInLayout(pWindow) && pWindow->IsInputEnabled() )
+                Window* pWindow = nextLogicalChildOfParent(this, pSWindow);
+                while ( pWindow )
                 {
-                    pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
-                    return sal_True;
-                }
+                    pWindow = pWindow->ImplGetWindow();
 
-                pWindow = nextLogicalChildOfParent(this, pWindow);
+                    WinBits nStyle = pWindow->GetStyle();
+
+                    if ( nStyle & WB_GROUP )
+                        break;
+
+                    if (isSuitableDestination(pWindow))
+                    {
+                        pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
+                        return sal_True;
+                    }
+
+                    pWindow = nextLogicalChildOfParent(this, pWindow);
+                }
             }
         }
         else
@@ -860,7 +952,7 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
         }
     }
 
-    if ( pButtonWindow && isVisibleInLayout(pButtonWindow) && isEnabledInLayout(pButtonWindow) && pButtonWindow->IsInputEnabled() )
+    if (isSuitableDestination(pButtonWindow))
     {
         if ( bKeyInput )
         {

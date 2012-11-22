@@ -24,10 +24,12 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -39,9 +41,11 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -53,9 +57,11 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -96,12 +102,15 @@
                         <child>
                           <object class="GtkRadioButton" id="optimal">
                             <property name="label" translatable="yes">Optimal</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <property name="group">fitwandh</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -112,13 +121,15 @@
                         <child>
                           <object class="GtkRadioButton" id="fitwandh">
                             <property name="label" translatable="yes">Fit width and height</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">optimal</property>
+                            <property name="group">fitw</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -129,13 +140,15 @@
                         <child>
                           <object class="GtkRadioButton" id="fitw">
                             <property name="label" translatable="yes">Fit width</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">optimal</property>
+                            <property name="group">100pc</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -146,13 +159,15 @@
                         <child>
                           <object class="GtkRadioButton" id="100pc">
                             <property name="label" translatable="yes">100%</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">optimal</property>
+                            <property name="group">variable</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -168,9 +183,11 @@
                             <child>
                               <object class="GtkRadioButton" id="variable">
                                 <property name="label" translatable="yes">Variable</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
@@ -241,12 +258,15 @@
                         <child>
                           <object class="GtkRadioButton" id="automatic">
                             <property name="label" translatable="yes">Automatic</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <property name="group">singlepage</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -257,13 +277,15 @@
                         <child>
                           <object class="GtkRadioButton" id="singlepage">
                             <property name="label" translatable="yes">Single page</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">automatic</property>
+                            <property name="group">columns</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -279,9 +301,11 @@
                             <child>
                               <object class="GtkRadioButton" id="columns">
                                 <property name="label" translatable="yes">Columns</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
@@ -321,9 +345,11 @@
                             <child>
                               <object class="GtkCheckButton" id="bookmode">
                                 <property name="label" translatable="yes">Book mode</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                               </object>
