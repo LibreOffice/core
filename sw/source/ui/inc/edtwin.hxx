@@ -227,6 +227,8 @@ protected:
 
     /// Returns true if in header/footer area, or in the header/footer control.
     bool    IsInHeaderFooter( const Point &rDocPt, FrameControlType &rControl ) const;
+
+    bool    IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& rControl, bool& bOverFly ) const;
 public:
 
     void            UpdatePointer(const Point &, sal_uInt16 nButtons = 0);

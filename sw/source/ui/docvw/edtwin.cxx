@@ -199,37 +199,6 @@ static SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType );
 
 DBG_NAME(edithdl)
 
-namespace
-{
-    static bool lcl_CheckHeaderFooterClick( SwWrtShell& rSh, const Point &rDocPos, sal_uInt16 nClicks )
-    {
-        bool bRet = false;
-
-        sal_Bool bOverHdrFtr = rSh.IsOverHeaderFooterPos( rDocPos );
-        if ( ( rSh.IsHeaderFooterEdit( ) && !bOverHdrFtr ) ||
-             ( !rSh.IsHeaderFooterEdit() && bOverHdrFtr ) )
-        {
-            bRet = true;
-            // Check if there we are in a FlyFrm
-            Point aPt( rDocPos );
-            SwPaM aPam( *rSh.GetCurrentShellCursor().GetPoint() );
-            rSh.GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt );
-
-            const SwStartNode* pStartFly = aPam.GetPoint()->nNode.GetNode().FindFlyStartNode();
-            int nNbClicks = 1;
-            if ( pStartFly && !rSh.IsHeaderFooterEdit() )
-                nNbClicks = 2;
-
-            if ( nClicks == nNbClicks )
-            {
-                rSh.SwCrsrShell::SetCrsr( rDocPos );
-                bRet = false;
-            }
-        }
-        return bRet;
-    }
-}
-
 class SwAnchorMarker
 {
     SdrHdl* pHdl;
@@ -2807,9 +2776,22 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
     const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    // Are we clicking on a blank header/footer area?
+    // How many clicks do we need to select a fly frame?
     FrameControlType eControl;
-    if ( IsInHeaderFooter( aDocPos, eControl ) )
+    bool bOverFly = false;
+    bool bOverHeaderFooterFly = IsOverHeaderFooterFly( aDocPos, eControl, bOverFly );
+    int nNbFlyClicks = 1;
+    // !bOverHeaderFooterFly doesn't mean we have a frame to select
+    if ( ( rSh.IsHeaderFooterEdit( ) && !bOverHeaderFooterFly && bOverFly ) ||
+         ( !rSh.IsHeaderFooterEdit( ) && bOverHeaderFooterFly ) )
+    {
+        nNbFlyClicks = 2;
+        if ( _rMEvt.GetClicks( ) < nNbFlyClicks )
+            return;
+    }
+
+    // Are we clicking on a blank header/footer area?
+    if ( IsInHeaderFooter( aDocPos, eControl ) || bOverHeaderFooterFly )
     {
         const SwPageFrm* pPageFrm = rSh.GetLayout()->GetPageAtPos( aDocPos );
 
@@ -2877,9 +2859,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             rSh.GetWin()->Invalidate();
         }
     }
-
-    if ( lcl_CheckHeaderFooterClick( rSh, aDocPos, rMEvt.GetClicks() ) )
-        return;
 
 
     if ( IsChainMode() )
@@ -3103,6 +3082,129 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             case MOUSE_LEFT:
             case MOUSE_LEFT + KEY_MOD1:
             case MOUSE_LEFT + KEY_MOD2:
+            {
+
+                bool bHandledFlyClick = false;
+                if ( nNumberOfClicks == nNbFlyClicks )
+                {
+                    bHandledFlyClick = true;
+                    // only try to select frame, if pointer already was
+                    // switched accordingly
+                    if ( aActHitType != SDRHIT_NONE && !rSh.IsSelFrmMode() &&
+                        !GetView().GetViewFrame()->GetDispatcher()->IsLocked() &&
+                        !bExecDrawTextLink)
+                    {
+                        // Test if there is a draw object at that position and if it should be selected.
+                        sal_Bool bShould = rSh.ShouldObjectBeSelected(aDocPos);
+
+                        if(bShould)
+                        {
+                            rView.NoRotate();
+                            rSh.HideCrsr();
+
+                            sal_Bool bUnLockView = !rSh.IsViewLocked();
+                            rSh.LockView( sal_True );
+                            sal_Bool bSelObj = rSh.SelectObj( aDocPos,
+                                           rMEvt.IsMod1() ? SW_ENTER_GROUP : 0);
+                            if( bUnLockView )
+                                rSh.LockView( sal_False );
+
+                            if( bSelObj )
+                            {
+                                // if the frame was deselected in the macro
+                                // the cursor just has to be displayed again
+                                if( FRMTYPE_NONE == rSh.GetSelFrmType() )
+                                    rSh.ShowCrsr();
+                                else
+                                {
+                                    if (rSh.IsFrmSelected() && rView.GetDrawFuncPtr())
+                                    {
+                                        rView.GetDrawFuncPtr()->Deactivate();
+                                        rView.SetDrawFuncPtr(NULL);
+                                        rView.LeaveDrawCreate();
+                                        rView.AttrChangedNotify( &rSh );
+                                    }
+
+                                    rSh.EnterSelFrmMode( &aDocPos );
+                                    bFrmDrag = sal_True;
+                                    UpdatePointer( aDocPos, rMEvt.GetModifier() );
+                                }
+                                return;
+                            }
+                            else
+                                bOnlyText = static_cast< sal_Bool >(rSh.IsObjSelectable( aDocPos ));
+
+                            if (!rView.GetDrawFuncPtr())
+                                rSh.ShowCrsr();
+                        }
+                        else
+                            bOnlyText = KEY_MOD1 != rMEvt.GetModifier();
+                    }
+                    else if ( rSh.IsSelFrmMode() &&
+                              (aActHitType == SDRHIT_NONE ||
+                               !rSh.IsInsideSelectedObj( aDocPos )))
+                    {
+                        rView.NoRotate();
+                        SdrHdl *pHdl;
+                        if( !bIsDocReadOnly && !pAnchorMarker && 0 !=
+                            ( pHdl = pSdrView->PickHandle(aDocPos) ) &&
+                                ( pHdl->GetKind() == HDL_ANCHOR ||
+                                  pHdl->GetKind() == HDL_ANCHOR_TR ) )
+                        {
+                            pAnchorMarker = new SwAnchorMarker( pHdl );
+                            UpdatePointer( aDocPos, rMEvt.GetModifier() );
+                            return;
+                        }
+                        else
+                        {
+                            sal_Bool bUnLockView = !rSh.IsViewLocked();
+                            rSh.LockView( sal_True );
+                            sal_uInt8 nFlag = rMEvt.IsShift() ? SW_ADD_SELECT :0;
+                            if( rMEvt.IsMod1() )
+                                nFlag = nFlag | SW_ENTER_GROUP;
+
+                            if ( rSh.IsSelFrmMode() )
+                            {
+                                rSh.UnSelectFrm();
+                                rSh.LeaveSelFrmMode();
+                                rView.AttrChangedNotify(&rSh);
+                            }
+
+                            sal_Bool bSelObj = rSh.SelectObj( aDocPos, nFlag );
+                            if( bUnLockView )
+                                rSh.LockView( sal_False );
+
+                            if( !bSelObj )
+                            {
+                                // move cursor here so that it is not drawn in the
+                                // frame first; ShowCrsr() happens in LeaveSelFrmMode()
+                                bValidCrsrPos = !(CRSR_POSCHG & rSh.SetCursor(&aDocPos, false));
+                                rSh.LeaveSelFrmMode();
+                                rView.AttrChangedNotify( &rSh );
+                                bCallBase = sal_False;
+                            }
+                            else
+                            {
+                                rSh.HideCrsr();
+                                rSh.EnterSelFrmMode( &aDocPos );
+                                rSh.SelFlyGrabCrsr();
+                                rSh.MakeSelVisible();
+                                bFrmDrag = sal_True;
+                                if( rSh.IsFrmSelected() &&
+                                    rView.GetDrawFuncPtr() )
+                                {
+                                    rView.GetDrawFuncPtr()->Deactivate();
+                                    rView.SetDrawFuncPtr(NULL);
+                                    rView.LeaveDrawCreate();
+                                    rView.AttrChangedNotify( &rSh );
+                                }
+                                UpdatePointer( aDocPos, rMEvt.GetModifier() );
+                                return;
+                            }
+                        }
+                    }
+                }
+
                 switch ( nNumberOfClicks )
                 {
                     case 1:
@@ -3123,124 +3225,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                         SwContentAtPos aFieldAtPos ( SwContentAtPos::SW_FIELD );
 
-                        // only try to select frame, if pointer already was
-                        // switched accordingly
-                        if ( aActHitType != SDRHIT_NONE && !rSh.IsSelFrmMode() &&
-                            !GetView().GetViewFrame()->GetDispatcher()->IsLocked() &&
-                            !bExecDrawTextLink)
-                        {
-                            // Test if there is a draw object at that position and if it should be selected.
-                            sal_Bool bShould = rSh.ShouldObjectBeSelected(aDocPos);
-
-                            if(bShould)
-                            {
-                                rView.NoRotate();
-                                rSh.HideCrsr();
-
-                                sal_Bool bUnLockView = !rSh.IsViewLocked();
-                                rSh.LockView( sal_True );
-                                sal_Bool bSelObj = rSh.SelectObj( aDocPos,
-                                               rMEvt.IsMod1() ? SW_ENTER_GROUP : 0);
-                                if( bUnLockView )
-                                    rSh.LockView( sal_False );
-
-                                if( bSelObj )
-                                {
-                                    // if the frame was deselected in the macro
-                                    // the cursor just has to be displayed again
-                                    if( FRMTYPE_NONE == rSh.GetSelFrmType() )
-                                        rSh.ShowCrsr();
-                                    else
-                                    {
-                                        if (rSh.IsFrmSelected() && rView.GetDrawFuncPtr())
-                                        {
-                                            rView.GetDrawFuncPtr()->Deactivate();
-                                            rView.SetDrawFuncPtr(NULL);
-                                            rView.LeaveDrawCreate();
-                                            rView.AttrChangedNotify( &rSh );
-                                        }
-
-                                        rSh.EnterSelFrmMode( &aDocPos );
-                                        bFrmDrag = sal_True;
-                                        UpdatePointer( aDocPos, rMEvt.GetModifier() );
-                                    }
-                                    return;
-                                }
-                                else
-                                    bOnlyText = static_cast< sal_Bool >(rSh.IsObjSelectable( aDocPos ));
-
-                                if (!rView.GetDrawFuncPtr())
-                                    rSh.ShowCrsr();
-                            }
-                            else
-                                bOnlyText = KEY_MOD1 != rMEvt.GetModifier();
-                        }
-                        else if ( rSh.IsSelFrmMode() &&
-                                  (aActHitType == SDRHIT_NONE ||
-                                   !rSh.IsInsideSelectedObj( aDocPos )))
-                        {
-                            rView.NoRotate();
-                            SdrHdl *pHdl;
-                            if( !bIsDocReadOnly && !pAnchorMarker && 0 !=
-                                ( pHdl = pSdrView->PickHandle(aDocPos) ) &&
-                                    ( pHdl->GetKind() == HDL_ANCHOR ||
-                                      pHdl->GetKind() == HDL_ANCHOR_TR ) )
-                            {
-                                pAnchorMarker = new SwAnchorMarker( pHdl );
-                                UpdatePointer( aDocPos, rMEvt.GetModifier() );
-                                return;
-                            }
-                            else
-                            {
-                                sal_Bool bUnLockView = !rSh.IsViewLocked();
-                                rSh.LockView( sal_True );
-                                sal_uInt8 nFlag = rMEvt.IsShift() ? SW_ADD_SELECT :0;
-                                if( rMEvt.IsMod1() )
-                                    nFlag = nFlag | SW_ENTER_GROUP;
-
-                                if ( rSh.IsSelFrmMode() )
-                                {
-                                    rSh.UnSelectFrm();
-                                    rSh.LeaveSelFrmMode();
-                                    rView.AttrChangedNotify(&rSh);
-                                }
-
-                                sal_Bool bSelObj = rSh.SelectObj( aDocPos, nFlag );
-                                if( bUnLockView )
-                                    rSh.LockView( sal_False );
-
-                                if( !bSelObj )
-                                {
-                                    // move cursor here so that it is not drawn in the
-                                    // frame first; ShowCrsr() happens in LeaveSelFrmMode()
-                                    bValidCrsrPos = !(CRSR_POSCHG & rSh.SetCursor(&aDocPos, false));
-                                    rSh.LeaveSelFrmMode();
-                                    rView.AttrChangedNotify( &rSh );
-                                    bCallBase = sal_False;
-                                }
-                                else
-                                {
-                                    rSh.HideCrsr();
-                                    rSh.EnterSelFrmMode( &aDocPos );
-                                    rSh.SelFlyGrabCrsr();
-                                    rSh.MakeSelVisible();
-                                    bFrmDrag = sal_True;
-                                    if( rSh.IsFrmSelected() &&
-                                        rView.GetDrawFuncPtr() )
-                                    {
-                                        rView.GetDrawFuncPtr()->Deactivate();
-                                        rView.SetDrawFuncPtr(NULL);
-                                        rView.LeaveDrawCreate();
-                                        rView.AttrChangedNotify( &rSh );
-                                    }
-                                    UpdatePointer( aDocPos, rMEvt.GetModifier() );
-                                    return;
-                                }
-                            }
-                        }
-
                         // Are we selecting a field?
-                        else if ( rSh.GetContentAtPos( aDocPos, aFieldAtPos ) )
+                        if ( rSh.GetContentAtPos( aDocPos, aFieldAtPos ) )
                         {
                             // select work, AdditionalMode if applicable
                             if ( KEY_MOD1 == rMEvt.GetModifier() && !rSh.IsAddMode() )
@@ -3257,7 +3243,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     case 2:
                     {
                         bFrmDrag = sal_False;
-                        if ( !bIsDocReadOnly && rSh.IsInsideSelectedObj(aDocPos) &&
+                        if ( !bHandledFlyClick && !bIsDocReadOnly && rSh.IsInsideSelectedObj(aDocPos) &&
                              0 == rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) )
 
 /* this is no good, on the one hand GetSelectionType is used as flag field (take a look into the GetSelectionType method)
@@ -3389,6 +3375,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     default:
                         return;
                 }
+            }
                 /* no break */
             case MOUSE_LEFT + KEY_SHIFT:
             case MOUSE_LEFT + KEY_SHIFT + KEY_MOD1:
@@ -4974,9 +4961,17 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             if ( !rCEvt.IsMouseEvent() )
                 aDocPos = rSh.GetCharRect().Center();
 
-            if (rCEvt.IsMouseEvent() && lcl_CheckHeaderFooterClick( rSh, aDocPos, 1 ) )
+            // Don't trigger the command on a frame anchored to header/footer is not editing it
+            FrameControlType eControl;
+            bool bOverFly = false;
+            bool bOverHeaderFooterFly = IsOverHeaderFooterFly( aDocPos, eControl, bOverFly );
+            // !bOverHeaderFooterFly doesn't mean we have a frame to select
+            if ( rCEvt.IsMouseEvent( ) &&
+                 ( ( rSh.IsHeaderFooterEdit( ) && !bOverHeaderFooterFly && bOverFly ) ||
+                   ( !rSh.IsHeaderFooterEdit( ) && bOverHeaderFooterFly ) ) )
+            {
                 return;
-
+            }
 
             if((!pChildWin || pChildWin->GetView() != &rView) &&
                 !rSh.IsDrawCreate() && !IsDrawAction())
@@ -5953,6 +5948,40 @@ bool SwEditWin::IsInHeaderFooter( const Point &rDocPt, FrameControlType &rContro
     }
 
     return false;
+}
+
+bool SwEditWin::IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& rControl, bool& bOverFly ) const
+{
+    bool bRet = false;
+    Point aPt( rDocPos );
+    SwWrtShell &rSh = rView.GetWrtShell();
+    SwPaM aPam( *rSh.GetCurrentShellCursor().GetPoint() );
+    rSh.GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt );
+
+    const SwStartNode* pStartFly = aPam.GetPoint()->nNode.GetNode().FindFlyStartNode();
+    if ( pStartFly )
+    {
+        bOverFly = true;
+        SwFrmFmt* pFlyFmt = pStartFly->GetFlyFmt( );
+        if ( pFlyFmt )
+        {
+            const SwPosition* pAnchor = pFlyFmt->GetAnchor( ).GetCntntAnchor( );
+            if ( pAnchor )
+            {
+                bool bInHeader = pAnchor->nNode.GetNode( ).FindHeaderStartNode( ) != NULL;
+                bool bInFooter = pAnchor->nNode.GetNode( ).FindFooterStartNode( ) != NULL;
+
+                bRet = bInHeader || bInFooter;
+                if ( bInHeader )
+                    rControl = Header;
+                else if ( bInFooter )
+                    rControl = Footer;
+            }
+        }
+    }
+    else
+        bOverFly = false;
+    return bRet;
 }
 
 void SwEditWin::SetUseInputLanguage( sal_Bool bNew )
