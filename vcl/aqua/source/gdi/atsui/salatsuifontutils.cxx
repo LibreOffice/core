@@ -232,7 +232,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
     int nBestNameValue = 0;
     int nBestStyleValue = 0;
     FontLanguageCode eBestLangCode = 0;
-    const FontLanguageCode eUILangCode = Application::GetSettings().GetUILanguage();
+    const FontLanguageCode eUILangCode = Application::GetSettings().GetUILanguageTag().getLanguageType();
     typedef std::vector<char> NameBuffer;
     NameBuffer aNameBuffer( 256 );
 
