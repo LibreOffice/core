@@ -75,7 +75,6 @@ namespace sw { namespace mark
                 const ::rtl::OUString& rShortName);
             static ::rtl::OUString GenerateNewName();
             static bool IsLegalName(const ::rtl::OUString& rName);
-            static const ::rtl::OUString our_sNamePrefix;
     };
 
     class CrossRefNumItemBookmark

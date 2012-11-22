@@ -241,7 +241,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         eType = IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK;
     }
     else if ((eType == IDocumentMarkAccess::BOOKMARK) &&
-        ::sw::mark::CrossRefHeadingBookmark::IsLegalName(m_pImpl->m_sMarkName))
+        ::sw::mark::CrossRefHeadingBookmark::IsLegalName(m_pImpl->m_sMarkName) &&
+        IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( aPam ) )
     {
         eType = IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK;
     }

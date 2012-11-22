@@ -295,6 +295,26 @@ IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const IMark& rBkmk)
     }
 }
 
+const ::rtl::OUString& IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()
+{
+    static const ::rtl::OUString CrossRefHeadingBookmarkNamePrefix = ::rtl::OUString::createFromAscii("__RefHeading__");
+
+    return CrossRefHeadingBookmarkNamePrefix;
+}
+
+const bool SAL_DLLPUBLIC_EXPORT IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPaM )
+{
+    bool bRet( false );
+
+    bRet = rPaM.Start()->nNode.GetNode().IsTxtNode() &&
+           rPaM.Start()->nContent.GetIndex() == 0 &&
+           ( !rPaM.HasMark() ||
+             ( rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
+               rPaM.End()->nContent.GetIndex() == rPaM.End()->nNode.GetNode().GetTxtNode()->Len() ) );
+
+    return bRet;
+}
+
 namespace sw { namespace mark
 {
     MarkManager::MarkManager(SwDoc& rDoc)

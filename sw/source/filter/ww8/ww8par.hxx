@@ -313,14 +313,8 @@ private:
     Position& operator=(const Position&);
 };
 
-class SwWW8FltRefStack : public SwFltEndStack
+namespace SwWW8
 {
-public:
-    SwWW8FltRefStack(SwDoc* pDo, sal_uLong nFieldFl)
-        : SwFltEndStack( pDo, nFieldFl )
-    {}
-    bool IsFtnEdnBkmField(const SwFmtFld& rFmtFld, sal_uInt16& rBkmNo);
-
     struct ltstr
     {
         bool operator()(const String &r1, const String &r2) const
@@ -328,10 +322,37 @@ public:
             return r1.CompareIgnoreCaseToAscii(r2) == COMPARE_LESS;
         }
     };
+};
+
+class SwWW8ReferencedFltEndStack : public SwFltEndStack
+{
+public:
+    SwWW8ReferencedFltEndStack( SwDoc* pDo, sal_uLong nFieldFl )
+        : SwFltEndStack( pDo, nFieldFl )
+        , aReferencedTOCBookmarks()
+    {}
+
+    // Keep track of referenced TOC bookmarks in order to suppress the import
+    // of unreferenced ones.
+    std::set<String, SwWW8::ltstr> aReferencedTOCBookmarks;
+protected:
+    virtual void SetAttrInDoc( const SwPosition& rTmpPos,
+                               SwFltStackEntry* pEntry );
+};
+
+class SwWW8FltRefStack : public SwFltEndStack
+{
+public:
+    SwWW8FltRefStack(SwDoc* pDo, sal_uLong nFieldFl)
+        : SwFltEndStack( pDo, nFieldFl )
+        , aFieldVarNames()
+    {}
+    bool IsFtnEdnBkmField(const SwFmtFld& rFmtFld, sal_uInt16& rBkmNo);
+
     //Keep track of variable names created with fields, and the bookmark
     //mapped to their position, hopefully the same, but very possibly
     //an additional pseudo bookmark
-    std::map<String, String, ltstr> aFieldVarNames;
+    std::map<String, String, SwWW8::ltstr> aFieldVarNames;
 protected:
     SwFltStackEntry *RefToVar(const SwField* pFld,SwFltStackEntry *pEntry);
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
@@ -843,11 +864,11 @@ private:
     sw::util::RedlineStack *mpRedlineStack;
 
     /*
-    This stack is for fields that get referneced later, e.g. BookMarks and TOX.
+    This stack is for fields that get referenced later, e.g. BookMarks and TOX.
     They get inserted at the end of the document, it is the same stack for
     headers/footers/main text/textboxes/tables etc...
     */
-    SwFltEndStack *pReffedStck;
+    SwWW8ReferencedFltEndStack *pReffedStck;
 
     /*
     This stack is for fields whose true conversion cannot be determined until

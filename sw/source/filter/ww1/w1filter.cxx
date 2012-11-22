@@ -351,7 +351,7 @@ void Ww1Bookmarks::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16)
     String aVal( rMan.GetText().GetText( Where(), nLen ) );
 
     // in 2 Schritten, da OS/2 zu doof ist
-    SwFltBookmark aBook( rName, aVal, GetHandle(), sal_False );
+    SwFltBookmark aBook( rName, aVal, GetHandle() );
     rOut << aBook;
 }
 
