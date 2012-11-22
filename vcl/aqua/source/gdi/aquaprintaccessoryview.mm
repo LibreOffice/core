@@ -742,7 +742,7 @@ static sal_Int32 findBreak( const rtl::OUString& i_rText, sal_Int32 i_nPos )
     if( xBI.is() )
     {
         i18n::Boundary aBoundary = xBI->getWordBoundary( i_rText, i_nPos,
-                                                         Application::GetSettings().GetLocale(),
+                                                         Application::GetSettings().GetLanguageTag().getLocale(),
                                                          i18n::WordType::ANYWORD_IGNOREWHITESPACES,
                                                          sal_True );
         nRet = aBoundary.endPos;
