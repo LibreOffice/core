@@ -605,7 +605,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/datatra
 	X11DropTarget \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/document,\
-	DocumentInfo \
 	EventDescriptor \
 	Events \
 	ExportFilter \
@@ -621,7 +620,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/documen
 	OfficeDocument \
 	PDFDialog \
 	Settings \
-	StandaloneDocumentInfo \
 	TypeDetection \
 	XMLBasicExporter \
 	XMLBasicImporter \
@@ -2142,8 +2140,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/document,\
 	XCompatWriterDocProperties \
 	XDocumentEventBroadcaster \
 	XDocumentEventListener \
-	XDocumentInfo \
-	XDocumentInfoSupplier \
 	XDocumentInsertable \
 	XDocumentLanguages \
 	XDocumentProperties \
@@ -2171,7 +2167,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/document,\
 	XOOXMLDocumentPropertiesImporter \
 	XRedlinesSupplier \
 	XScriptInvocationContext \
-	XStandaloneDocumentInfo \
 	XStorageBasedDocument \
 	XStorageChangeListener \
 	XTypeDetection \

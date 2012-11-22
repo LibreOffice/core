@@ -33,8 +33,6 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/document/XCmisDocument.hpp>
-#include <com/sun/star/document/XDocumentInfo.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
@@ -88,9 +86,9 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 //________________________________________________________________________________________________________
-#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_33
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_33
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 33
+#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 32
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -123,8 +121,6 @@
 #define XNAMEREPLACE            ::com::sun::star::container::XNameReplace
 #define DOCEVENTOBJECT          ::com::sun::star::document::EventObject
 #define XDOCEVENTLISTENER       ::com::sun::star::document::XEventListener
-#define XDOCUMENTINFO           ::com::sun::star::document::XDocumentInfo
-#define XDOCUMENTINFOSUPPLIER   ::com::sun::star::document::XDocumentInfoSupplier
 #define XEVENTBROADCASTER       ::com::sun::star::document::XEventBroadcaster
 #define XDOCUMENTEVENTBROADCASTER   ::com::sun::star::document::XDocumentEventBroadcaster
 #define XEVENTSSUPPLIER         ::com::sun::star::document::XEventsSupplier
@@ -191,7 +187,6 @@ namespace sfx { namespace intern {
 
     @implements XChild
                 XComponent
-                XDocumentInfoSupplier
                 document::XDocumentPropertiesSupplier
                 rdf::XDocumentMetadataAccess
                 XEventListener
@@ -210,8 +205,7 @@ namespace sfx { namespace intern {
                  SfxListener
 */
 
-typedef ::comphelper::WeakImplHelper33  <   XCHILD
-                                        ,   XDOCUMENTINFOSUPPLIER
+typedef ::comphelper::WeakImplHelper32  <   XCHILD
                                         ,   ::com::sun::star::document::XDocumentPropertiesSupplier
                                         ,   ::com::sun::star::document::XCmisDocument
                                         ,   ::com::sun::star::rdf::XDocumentMetadataAccess
@@ -491,25 +485,6 @@ public:
     */
 
     virtual void SAL_CALL removeEventListener(const REFERENCE< XEVENTLISTENER >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-
-    //____________________________________________________________________________________________________
-    //  XDocumentInfoSupplier
-    //____________________________________________________________________________________________________
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
-    virtual REFERENCE< XDOCUMENTINFO > SAL_CALL getDocumentInfo() throw (::com::sun::star::uno::RuntimeException);
 
     // XDocumentPropertiesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties >

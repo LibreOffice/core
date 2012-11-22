@@ -70,18 +70,6 @@
         <supported-service> com.sun.star.frame.ProtocolHandler </supported-service>
     </component-description>
 
-    <component-description>
-        <author> Mathias Bauer </author>
-        <name> com.sun.star.comp.sfx2.StandaloneDocumentInfo </name>
-        <description>
-            StandaloneDocumentInfo.
-        </description>
-        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
-        <language> c++ </language>
-        <status value="final"/>
-        <supported-service> com.sun.star.document.StandaloneDocumentInfo </supported-service>
-    </component-description>
-
     <project-build-dependency>  cppu        </project-build-dependency>
     <project-build-dependency>  cppuhelper  </project-build-dependency>
     <project-build-dependency>  sal         </project-build-dependency>

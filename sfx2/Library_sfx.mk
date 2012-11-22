@@ -206,7 +206,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/objmisc \
     sfx2/source/doc/objserv \
     sfx2/source/doc/objstor \
-    sfx2/source/doc/objuno \
     sfx2/source/doc/objxtor \
     sfx2/source/doc/oleprops \
     sfx2/source/doc/ownsubfilterservice \

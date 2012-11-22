@@ -46,6 +46,7 @@
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 #include <comphelper/enumhelper.hxx>  // can be removed when this is a "real" service
 
 #include <cppuhelper/interfacecontainer.hxx>
@@ -91,7 +92,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/objuno.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/basmgr.hxx>
 #include <sfx2/event.hxx>
@@ -187,7 +187,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     ::cppu::OMultiTypeInterfaceContainerHelper              m_aInterfaceContainer   ;
     uno::Reference< uno::XInterface >                       m_xParent               ;
     uno::Reference< frame::XController >                    m_xCurrent              ;
-    uno::Reference< document::XDocumentInfo >               m_xDocumentInfo         ;
     uno::Reference< document::XDocumentProperties >         m_xDocumentProperties;
     uno::Reference< script::XStarBasicAccess >              m_xStarBasicAccess      ;
     uno::Reference< container::XNameReplace >               m_xEvents               ;
@@ -813,13 +812,6 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
     lang::EventObject aEvent( (frame::XModel *)this );
     m_pData->m_aInterfaceContainer.disposeAndClear( aEvent );
 
-    if ( m_pData->m_xDocumentInfo.is() )
-    {
-        // as long as an SfxObjectShell is assigned to an SfxBaseModel it is still existing here
-        // so we can't dispose the shared DocumentInfoObject here
-        m_pData->m_xDocumentInfo = 0;
-    }
-
     m_pData->m_xDocumentProperties.clear();
 
     m_pData->m_xDocumentMetadata.clear();
@@ -857,53 +849,6 @@ void SAL_CALL SfxBaseModel::removeEventListener( const uno::Reference< XEVENTLIS
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< XEVENTLISTENER >*)0), aListener );
-}
-
-//________________________________________________________________________________________________________
-//  document::XDocumentInfoSupplier
-//________________________________________________________________________________________________________
-
-uno::Reference< document::XDocumentInfo > SAL_CALL SfxBaseModel::getDocumentInfo() throw(::com::sun::star::uno::RuntimeException)
-{
-    SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
-    if ( !m_pData->m_xDocumentInfo.is() )
-    {
-        // WARNING: this will only work if (when loading a document) the
-        // document meta-data has already been read and completely written
-        // into the XDocumentProperties at this point
-        // ==> DO NOT call getDocumentInfo before document info has been read!
-        uno::Reference< document::XDocumentInfo > xDocInfo =
-            new SfxDocumentInfoObject;
-        uno::Reference< document::XDocumentProperties > xDocProps =
-            getDocumentProperties();
-        uno::Sequence< uno::Any > args(1);
-        args[0] <<= xDocProps;
-        uno::Reference< lang::XInitialization > xInit(
-            xDocInfo, uno::UNO_QUERY_THROW);
-        try {
-            xInit->initialize(args);
-            ((SfxBaseModel*)this)->m_pData->m_xDocumentInfo = xDocInfo;
-        } catch (uno::RuntimeException &) {
-            throw;
-        } catch (const uno::Exception & e) {
-            throw lang::WrappedTargetRuntimeException(::rtl::OUString(
-                "SfxBaseModel::getDocumentInfo: cannot initialize"), *this,
-                uno::makeAny(e));
-        }
-        try {
-            rtl::OUString aName("MediaType");
-            uno::Reference < beans::XPropertySet > xSet(
-                getDocumentStorage(), uno::UNO_QUERY_THROW );
-            uno::Any aMediaType = xSet->getPropertyValue( aName );
-            uno::Reference < beans::XPropertySet > xDocSet(
-                m_pData->m_xDocumentInfo, uno::UNO_QUERY_THROW );
-            xDocSet->setPropertyValue( aName, aMediaType );
-        } catch (uno::Exception &) {
-            //ignore
-        }
-    }
-
-    return m_pData->m_xDocumentInfo;
 }
 
 void
@@ -3086,47 +3031,28 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
         uno::Sequence< beans::PropertyValue > aOldModifyPasswordInfo = m_pData->m_pObjectShell->GetModifyPasswordInfo();
         m_pData->m_pObjectShell->SetModifyPasswordInfo( aModifyPasswordInfo );
 
-        // since saving a document modifies its DocumentInfo, the current
-        // DocumentInfo must be saved on "SaveTo", so it can be restored
+        // since saving a document modifies its DocumentProperties, the current
+        // DocumentProperties must be saved on "SaveTo", so it can be restored
         // after saving
         sal_Bool bCopyTo =  bSaveTo ||
             m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
         uno::Reference<document::XDocumentProperties> xOldDocProps;
-        uno::Reference<document::XDocumentInfo> xOldDocInfo;
         if ( bCopyTo )
         {
             xOldDocProps = getDocumentProperties();
-            if (m_pData->m_xDocumentInfo.is())
-            {
-                xOldDocInfo = getDocumentInfo();
-                const Reference<util::XCloneable> xCloneable(xOldDocInfo,
-                    UNO_QUERY_THROW);
-                const Reference<document::XDocumentInfo> xNewDocInfo(
-                    xCloneable->createClone(), UNO_QUERY_THROW);
-                const Reference<document::XDocumentPropertiesSupplier> xDPS(
-                    xNewDocInfo, UNO_QUERY_THROW);
-                const Reference<document::XDocumentProperties> xNewDocProps(
-                    xDPS->getDocumentProperties());
-                m_pData->m_xDocumentProperties = xNewDocProps;
-                m_pData->m_xDocumentInfo = xNewDocInfo;
-            }
-            else // try not to create DocumentInfo if it does not exist...
-            {
-                const Reference<util::XCloneable> xCloneable(xOldDocProps,
-                    UNO_QUERY_THROW);
-                const Reference<document::XDocumentProperties> xNewDocProps(
-                    xCloneable->createClone(), UNO_QUERY_THROW);
-                m_pData->m_xDocumentProperties = xNewDocProps;
-            }
+            const Reference<util::XCloneable> xCloneable(xOldDocProps,
+                UNO_QUERY_THROW);
+            const Reference<document::XDocumentProperties> xNewDocProps(
+                xCloneable->createClone(), UNO_QUERY_THROW);
+            m_pData->m_xDocumentProperties = xNewDocProps;
         }
 
         sal_Bool bRet = m_pData->m_pObjectShell->APISaveAs_Impl( sURL, aParams );
 
         if ( bCopyTo )
         {
-            // restore DocumentInfo if a copy was created
+            // restore DocumentProperties if a copy was created
             m_pData->m_xDocumentProperties = xOldDocProps;
-            m_pData->m_xDocumentInfo = xOldDocInfo;
         }
 
         uno::Reference < task::XInteractionHandler > xHandler;

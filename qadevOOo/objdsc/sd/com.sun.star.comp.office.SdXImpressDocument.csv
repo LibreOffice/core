@@ -40,7 +40,6 @@
 "SdXImpressDocument";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
 "SdXImpressDocument";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
 "SdXImpressDocument";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"
-"SdXImpressDocument";"com::sun::star::document::XDocumentInfoSupplier#optional";"getDocumentInfo()"
 "SdXImpressDocument";"com::sun::star::document::OfficeDocument";"AutomaticControlFocus#optional"
 "SdXImpressDocument";"com::sun::star::document::OfficeDocument";"ApplyFormDesignMode#optional"
 "SdXImpressDocument";"com::sun::star::document::OfficeDocument";"RuntimeUID#optional"

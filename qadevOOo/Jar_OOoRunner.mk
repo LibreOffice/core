@@ -410,15 +410,12 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/datatransfer/clipboard/_XFlushableClipboard \
     qadevOOo/tests/java/ifc/datatransfer/_XDataFormatTranslator \
     qadevOOo/tests/java/ifc/datatransfer/_XMimeContentTypeFactory \
-    qadevOOo/tests/java/ifc/document/_DocumentInfo \
     qadevOOo/tests/java/ifc/document/_ExportFilter \
     qadevOOo/tests/java/ifc/document/_ImportFilter \
     qadevOOo/tests/java/ifc/document/_LinkTarget \
     qadevOOo/tests/java/ifc/document/_OfficeDocument \
     qadevOOo/tests/java/ifc/document/_Settings \
     qadevOOo/tests/java/ifc/document/_XActionLockable \
-    qadevOOo/tests/java/ifc/document/_XDocumentInfo \
-    qadevOOo/tests/java/ifc/document/_XDocumentInfoSupplier \
     qadevOOo/tests/java/ifc/document/_XDocumentInsertable \
     qadevOOo/tests/java/ifc/document/_XEmbeddedObjectSupplier \
     qadevOOo/tests/java/ifc/document/_XEventBroadcaster \
@@ -428,7 +425,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/document/_XImporter \
     qadevOOo/tests/java/ifc/document/_XLinkTargetSupplier \
     qadevOOo/tests/java/ifc/document/_XMimeTypeInfo \
-    qadevOOo/tests/java/ifc/document/_XStandaloneDocumentInfo \
     qadevOOo/tests/java/ifc/document/_XTypeDetection \
     qadevOOo/tests/java/ifc/document/_XViewDataSupplier \
     qadevOOo/tests/java/ifc/drawing/_AreaShapeDescriptor \
@@ -1061,7 +1057,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_fwk/Desktop \
     qadevOOo/tests/java/mod/_fwk/DispatchRecorder \
     qadevOOo/tests/java/mod/_fwk/DispatchRecorderSupplier \
-    qadevOOo/tests/java/mod/_fwk/DocumentProperties \
     qadevOOo/tests/java/mod/_fwk/FontMenuController \
     qadevOOo/tests/java/mod/_fwk/FontSizeMenuController \
     qadevOOo/tests/java/mod/_fwk/FooterMenuController \
@@ -1322,7 +1317,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sfx/DocumentTemplates \
     qadevOOo/tests/java/mod/_sfx/FrameLoader \
     qadevOOo/tests/java/mod/_sfx/SfxMacroLoader \
-    qadevOOo/tests/java/mod/_sfx/StandaloneDocumentInfo \
     qadevOOo/tests/java/mod/_shlibloader/uno/DLLComponentLoader \
     qadevOOo/tests/java/mod/_simplereg/uno/SimpleRegistry \
     qadevOOo/tests/java/mod/_simreg/SimpleRegistry \
