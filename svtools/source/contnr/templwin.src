@@ -193,7 +193,7 @@ ModalDialog DLG_DOCTEMPLATE
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 6 , 208 ) ;
-        Size = MAP_APPFONT ( 311 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( 200, RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "~Get more templates online...";
     };
     FixedLine FL_DOCTEMPLATE
