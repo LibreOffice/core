@@ -724,13 +724,13 @@ namespace
 {
     String GetDateTimeString( sal_Int32 _nDate, sal_Int32 _nTime )
     {
-        LocaleDataWrapper aWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
+        const LocaleDataWrapper& rWrapper( Application::GetSettings().GetLocaleDataWrapper() );
 
         Date aDate( _nDate );
         Time aTime( _nTime );
-        String aStr( aWrapper.getDate( aDate ) );
+        String aStr( rWrapper.getDate( aDate ) );
         aStr.AppendAscii( ", " );
-        aStr += aWrapper.getTime( aTime );
+        aStr += rWrapper.getTime( aTime );
         return aStr;
     }
 
@@ -878,17 +878,17 @@ IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
     String aName;
     if ( bEnableUseUserData && aUseUserDataCB.IsChecked() )
         aName = SvtUserOptions().GetFullName();
-    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
+    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     DateTime now( DateTime::SYSTEM );
     util::DateTime uDT(
         now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
         now.GetDay(), now.GetMonth(), now.GetYear() );
-    aCreateValFt.SetText( ConvertDateTime_Impl( aName, uDT, aLocaleWrapper ) );
+    aCreateValFt.SetText( ConvertDateTime_Impl( aName, uDT, rLocaleWrapper ) );
     OUString aEmpty;
     aChangeValFt.SetText( aEmpty );
     aPrintValFt.SetText( aEmpty );
     const Time aTime( 0 );
-    aTimeLogValFt.SetText( aLocaleWrapper.getDuration( aTime ) );
+    aTimeLogValFt.SetText( rLocaleWrapper.getDuration( aTime ) );
     aDocNoValFt.SetText(rtl::OUString('1'));
     bHandleDelete = sal_True;
     return 0;
@@ -1148,22 +1148,22 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
 
     // handle access data
     sal_Bool m_bUseUserData = pInfoItem->IsUseUserData();
-    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
+    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     aCreateValFt.SetText( ConvertDateTime_Impl( pInfoItem->getAuthor(),
-        pInfoItem->getCreationDate(), aLocaleWrapper ) );
+        pInfoItem->getCreationDate(), rLocaleWrapper ) );
     util::DateTime aTime( pInfoItem->getModificationDate() );
     if ( aTime.Month > 0 )
         aChangeValFt.SetText( ConvertDateTime_Impl(
-            pInfoItem->getModifiedBy(), aTime, aLocaleWrapper ) );
+            pInfoItem->getModifiedBy(), aTime, rLocaleWrapper ) );
     aTime = pInfoItem->getPrintDate();
     if ( aTime.Month > 0 )
         aPrintValFt.SetText( ConvertDateTime_Impl( pInfoItem->getPrintedBy(),
-            aTime, aLocaleWrapper ) );
+            aTime, rLocaleWrapper ) );
     const long nTime = pInfoItem->getEditingDuration();
     if ( m_bUseUserData )
     {
         const Time aT( nTime/3600, (nTime%3600)/60, nTime%60 );
-        aTimeLogValFt.SetText( aLocaleWrapper.getDuration( aT ) );
+        aTimeLogValFt.SetText( rLocaleWrapper.getDuration( aT ) );
         aDocNoValFt.SetText( String::CreateFromInt32(
             pInfoItem->getEditingCycles() ) );
     }

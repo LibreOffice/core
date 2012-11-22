@@ -191,7 +191,6 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, sal_Bool bIsSaveVer
     , aHelpButton( this, SfxResId( PB_HELP ) )
     , pViewFrame( pVwFrame )
     , mpTable( NULL )
-    , mpLocaleWrapper( NULL )
     , mbIsSaveVersionOnClose( bIsSaveVersionOnClose )
 {
     FreeResource();
@@ -257,7 +256,7 @@ void SfxVersionDialog::Init_Impl()
         for ( size_t n = 0; n < mpTable->size(); ++n )
         {
             SfxVersionInfo *pInfo = mpTable->at( n );
-            String aEntry = ConvertDateTime_Impl( pInfo->aCreationDate, *mpLocaleWrapper );
+            String aEntry = ConvertDateTime_Impl( pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper() );
             aEntry += '\t';
             aEntry += pInfo->aAuthor;
             aEntry += '\t';
@@ -284,7 +283,6 @@ void SfxVersionDialog::Init_Impl()
 SfxVersionDialog::~SfxVersionDialog ()
 {
     delete mpTable;
-    delete mpLocaleWrapper;
 }
 
 void SfxVersionDialog::Open_Impl()
@@ -317,8 +315,7 @@ void SfxVersionDialog::RecalcDateColumn()
 {
     // recalculate the datetime column width
     DateTime aNow( DateTime::SYSTEM );
-    mpLocaleWrapper = new LocaleDataWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
-    String sDateTime = ConvertDateTime_Impl( aNow, *mpLocaleWrapper );
+    String sDateTime = ConvertDateTime_Impl( aNow, Application::GetSettings().GetLocaleDataWrapper() );
     long nWidth = aVersionBox.GetTextWidth( sDateTime );
     nWidth += 15; // a little offset
     long nTab = aVersionBox.GetTab(1);
@@ -451,8 +448,8 @@ SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl ( Window *pParent, SfxVersi
 {
     FreeResource();
 
-    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
-    aDateTimeText.SetText( aDateTimeText.GetText().Append(ConvertDateTime_Impl( pInfo->aCreationDate, aLocaleWrapper )) );
+    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
+    aDateTimeText.SetText( aDateTimeText.GetText().Append(ConvertDateTime_Impl( pInfo->aCreationDate, rLocaleWrapper )) );
     aSavedByText.SetText( aSavedByText.GetText().Append(pInfo->aAuthor) );
     aEdit.SetText( rInfo.aComment );
 

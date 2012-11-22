@@ -568,8 +568,8 @@ IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
     String aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Point& rMousePos = pWnd->GetMousePos();
-    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
-    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep()[0];
+    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
+    const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
 
     aStr.Assign( GetUnitString( rMousePos.X(), eFieldUnit, cSep ) );
     aStr.Append( rtl::OUString(" / ") );
@@ -585,8 +585,8 @@ IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
     String aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Size& rSize = pWnd->GetGraphicSize();
-    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
-    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep()[0];
+    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
+    const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
 
     aStr.Assign( GetUnitString( rSize.Width(), eFieldUnit, cSep ) );
     aStr.Append( rtl::OUString(" x ") );

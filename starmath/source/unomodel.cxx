@@ -953,8 +953,8 @@ sal_Int32 SAL_CALL SmModel::getRendererCount(
 static Size lcl_GuessPaperSize()
 {
     Size aRes;
-    LocaleDataWrapper aLocWrp( AllSettings().GetLanguageTag().getLocale() );
-    if( MEASURE_METRIC == aLocWrp.getMeasurementSystemEnum() )
+    const LocaleDataWrapper& rLocWrp( AllSettings().GetLocaleDataWrapper() );
+    if( MEASURE_METRIC == rLocWrp.getMeasurementSystemEnum() )
     {
         // in 100th mm
         PaperInfo aInfo( PAPER_A4 );

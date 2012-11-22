@@ -57,7 +57,6 @@ class SfxVersionDialog : public SfxModalDialog
     HelpButton                  aHelpButton;
     SfxViewFrame*               pViewFrame;
     SfxVersionTableDtor*        mpTable;
-    LocaleDataWrapper*          mpLocaleWrapper;
     sal_Bool                    mbIsSaveVersionOnClose;
 
     DECL_LINK(DClickHdl_Impl, void *);

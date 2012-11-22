@@ -1696,10 +1696,8 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     OUString aDatePatternsString = pLangConfig->aSysLocaleOptions.GetDatePatternsConfigString();
     if (aDatePatternsString.isEmpty())
     {
-        Locale aTempLocale;
-        SvxLanguageToLocale( aTempLocale, Application::GetSettings().GetLanguageTag().getLanguageType());
-        LocaleDataWrapper aLocaleWrapper( aTempLocale );
-        aDatePatternsString = lcl_getDatePatternsConfigString( aLocaleWrapper);
+        const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
+        aDatePatternsString = lcl_getDatePatternsConfigString( rLocaleWrapper);
     }
     aDatePatternsED.SetText( aDatePatternsString);
     bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_DATEPATTERNS);

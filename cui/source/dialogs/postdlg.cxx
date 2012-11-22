@@ -124,8 +124,8 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     }
     else
     {
-        LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
-        aDateStr = aLocaleWrapper.getDate( Date( Date::SYSTEM ) );
+        const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
+        aDateStr = rLocaleWrapper.getDate( Date( Date::SYSTEM ) );
     }
 
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT );
@@ -212,7 +212,7 @@ IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
     Date aDate( Date::SYSTEM );
     Time aTime( Time::SYSTEM );
     String aTmp( SvtUserOptions().GetID() );
-    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
+    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     String aStr( aEditED.GetText() );
     aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\n---- " ) );
 
@@ -221,9 +221,9 @@ IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
         aStr += aTmp;
         aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
     }
-    aStr += aLocaleWrapper.getDate(aDate);
+    aStr += rLocaleWrapper.getDate(aDate);
     aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
-    aStr += aLocaleWrapper.getTime(aTime, sal_False, sal_False);
+    aStr += rLocaleWrapper.getTime(aTime, sal_False, sal_False);
     aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " ----\n" ) );
 
     aStr = convertLineEnd(aStr, GetSystemLineEnd());
@@ -239,11 +239,11 @@ IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
 
 IMPL_LINK_NOARG(SvxPostItDialog, OKHdl)
 {
-    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
+    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     pOutSet = new SfxItemSet( rSet );
     pOutSet->Put( SvxPostItAuthorItem( SvtUserOptions().GetID(),
                                          rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_AUTHOR ) ) );
-    pOutSet->Put( SvxPostItDateItem( aLocaleWrapper.getDate( Date( Date::SYSTEM ) ),
+    pOutSet->Put( SvxPostItDateItem( rLocaleWrapper.getDate( Date( Date::SYSTEM ) ),
                                      rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_DATE ) ) );
     pOutSet->Put( SvxPostItTextItem( aEditED.GetText(),
                                      rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT ) ) );

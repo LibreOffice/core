@@ -155,10 +155,10 @@ void ODocumentInfoPreview::insertDateTime(
         Time(
             value.Hours, value.Minutes, value.Seconds, value.HundredthSeconds));
     if (aToolsDT.IsValidAndGregorian()) {
-        LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
-        rtl::OUStringBuffer buf(aLocaleWrapper.getDate(aToolsDT));
+        const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
+        rtl::OUStringBuffer buf(rLocaleWrapper.getDate(aToolsDT));
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-        buf.append(aLocaleWrapper.getTime(aToolsDT));
+        buf.append(rLocaleWrapper.getTime(aToolsDT));
         insertEntry(m_pInfoTable->GetString(id), buf.makeStringAndClear());
     }
 }

@@ -3172,7 +3172,14 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         Reference< XNumberFormatter> xFormatter( NumberFormatter::create(m_aContext.getUNOContext()), UNO_QUERY_THROW );
         xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
         Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-        LocaleDataWrapper aLocaleWrapper( m_aContext.getUNOContext(), aAppLocale );
+        const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetUILocaleDataWrapper() );
+        /* FIXME: casting this to sal_Char is plain wrong and of course only
+         * works for ASCII separators, but
+         * xParseNode->parseNodeToPredicateStr() expects a sal_Char. Fix it
+         * there. */
+        sal_Char cDecimalSeparator = (sal_Char)rLocaleWrapper.getNumDecimalSep()[0];
+        SAL_WARN_IF( (sal_Unicode)cDecimalSeparator != rLocaleWrapper.getNumDecimalSep()[0],
+                "svx.form", "FormController::setFilter: wrong cast of decimal separator to sal_Char!");
 
         // retrieving the filter
         const Sequence < PropertyValue >* pRow = aFilterRows.getConstArray();
@@ -3258,7 +3265,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                                                                     ,xFormatter
                                                                     ,xField
                                                                     ,aAppLocale
-                                                                    ,(sal_Char)aLocaleWrapper.getNumDecimalSep()[0]
+                                                                    ,cDecimalSeparator
                                                                     ,getParseContext());
                                 aRow[(*iter).xText] = sCriteria;
                             }

@@ -186,8 +186,8 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     aFillChar.SetAccessibleRelationLabeledBy(&aFillSpecial);
 
     // Get the default decimal char from the system
-    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
-    aAktTab.GetDecimal() = aLocaleWrapper.getNumDecimalSep()[0];
+    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
+    aAktTab.GetDecimal() = rLocaleWrapper.getNumDecimalSep()[0];
     FreeResource();
 }
 

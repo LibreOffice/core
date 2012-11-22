@@ -329,6 +329,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                 }
 
                 // the remaming is the locale
+                /* FIXME-BCP47: handle language tags! */
                 Locale aLocale;
                 nSepPos = sDefaultCurrency.indexOf( '-' );
                 if ( nSepPos >= 0 )
