@@ -60,6 +60,8 @@ int lo_dlcall_argc_argv(void *function,
 
 JavaVM *lo_get_javavm(void);
 
+const char *lo_get_app_data_dir(void);
+
 #ifdef __cplusplus
 }
 #endif

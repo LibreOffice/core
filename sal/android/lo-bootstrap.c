@@ -1250,4 +1250,11 @@ lo_get_javavm(void)
     return the_java_vm;
 }
 
+__attribute__ ((visibility("default")))
+const char *
+lo_get_app_data_dir(void)
+{
+    return data_dir;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
