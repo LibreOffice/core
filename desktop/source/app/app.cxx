@@ -1385,7 +1385,7 @@ int Desktop::Main()
 
     BootstrapStatus eStatus = GetBootstrapStatus();
     if (eStatus == BS_TERMINATE) {
-        return EXIT_FAILURE;
+        return EXIT_SUCCESS;
     }
 
     // Detect desktop environment - need to do this as early as possible
