@@ -191,6 +191,14 @@ static bool lcl_wontoverflow(short shift)
     return shift >= 0 && shift < (short)sizeof(short) * 8 - 1;
 }
 
+static bool isKnownSpecial(sal_Int32 nLocation)
+{
+    return (nLocation == STG_FREE ||
+            nLocation == STG_EOF ||
+            nLocation == STG_FAT ||
+            nLocation == STG_MASTER);
+}
+
 // Perform thorough checks also on unknown variables
 sal_Bool StgHeader::Check()
 {
@@ -202,8 +210,8 @@ sal_Bool StgHeader::Check()
             && nFATSize > 0
             && nTOCstrm >= 0
             && nThreshold > 0
-            && ( nDataFAT == -2 || ( nDataFAT >= 0 && nDataFATSize > 0 ) )
-            && ( nMasterChain == -2 || ( nMasterChain >=0 && nMaster > 109 ) )
+            && ( isKnownSpecial(nDataFAT) || ( nDataFAT >= 0 && nDataFATSize > 0 ) )
+            && ( isKnownSpecial(nMasterChain) || nMasterChain >=0 )
             && nMaster >= 0;
 }
 
@@ -404,7 +412,7 @@ sal_Bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
     if (n > nMaxLegalStr)
         return sal_False;
 
-	if ((nSize < 0 && cType != STG_STORAGE) || (nPage1 < 0 && nPage1 != -2))
+    if ((nSize < 0 && cType != STG_STORAGE) || (nPage1 < 0 && !isKnownSpecial(nPage1)))
     {
         // the size makes no sense for the substorage
         // TODO/LATER: actually the size should be an unsigned value, but in this case it would mean a stream of more than 2Gb
