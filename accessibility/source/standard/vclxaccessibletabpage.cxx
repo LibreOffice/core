@@ -224,7 +224,7 @@ OUString VCLXAccessibleTabPage::implGetText()
 
 lang::Locale VCLXAccessibleTabPage::implGetLocale()
 {
-    return Application::GetSettings().GetLocale();
+    return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
 // -----------------------------------------------------------------------------
@@ -429,7 +429,7 @@ Locale VCLXAccessibleTabPage::getLocale(  ) throw (IllegalAccessibleComponentSta
 {
     OExternalLockGuard aGuard( this );
 
-    return Application::GetSettings().GetLocale();
+    return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
 // -----------------------------------------------------------------------------

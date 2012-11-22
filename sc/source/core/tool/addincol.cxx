@@ -790,9 +790,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
     if ( xAddIn.is() && xName.is() )
     {
         //  AddIns must use the language for which the office is installed
-        LanguageType eOfficeLang = Application::GetSettings().GetUILanguage();
-
-        lang::Locale aLocale( LanguageTag( eOfficeLang ).getLocale());
+        lang::Locale aLocale( Application::GetSettings().GetUILanguageTag().getLocale());
         xAddIn->setLocale( aLocale );
 
         ::rtl::OUString aServiceName( xName->getServiceName() );
@@ -1046,8 +1044,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
     uno::Reference<lang::XLocalizable> xLoc( xInterface, uno::UNO_QUERY );
     if ( xLoc.is() )        // optional in new add-ins
     {
-        LanguageType eOfficeLang = Application::GetSettings().GetUILanguage();
-        lang::Locale aLocale( LanguageTag( eOfficeLang ).getLocale());
+        lang::Locale aLocale( Application::GetSettings().GetUILanguageTag().getLocale());
         xLoc->setLocale( aLocale );
     }
 

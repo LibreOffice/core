@@ -2251,7 +2251,7 @@ IMPL_LINK_NOARG(SwRedlineOptionsTabPage, ChangedMaskPrevHdl)
 void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 {
     const AllSettings&  rAllSettings = Application::GetSettings();
-    LanguageType        eLangType = rAllSettings.GetUILanguage();
+    LanguageType        eLangType = rAllSettings.GetUILanguageTag().getLanguageType();
     Color               aBackCol( rAllSettings.GetStyleSettings().GetWindowColor() );
     SvxFont&            rFont = rExampleWin.GetFont();
     SvxFont&            rCJKFont = rExampleWin.GetCJKFont();

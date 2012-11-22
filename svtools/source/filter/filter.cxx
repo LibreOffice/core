@@ -847,7 +847,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 {
     Graphic     aGraphic;
 
-    ResMgr*     pResMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILocale() );
+    ResMgr*     pResMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag().getLocale() );
 
     sal_Int32 nLogicalWidth = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "LogicalWidth" ) ), 0 );
     sal_Int32 nLogicalHeight = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "LogicalHeight" ) ), 0 );

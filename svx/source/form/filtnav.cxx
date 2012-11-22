@@ -914,7 +914,7 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
         if ( xParseNode.is() )
         {
             ::rtl::OUString aPreparedText;
-            Locale aAppLocale = Application::GetSettings().GetUILocale();
+            Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
             xParseNode->parseNodeToPredicateStr(
                 aPreparedText, xConnection, xFormatter, xField, aAppLocale, '.', getParseContext() );
             rText = aPreparedText;

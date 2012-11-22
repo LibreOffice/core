@@ -74,7 +74,7 @@ static Reference< XCalendar3 > getLocaleCalendar( void )
     static com::sun::star::lang::Locale aLastLocale;
     static bool bNeedsInit = true;
 
-    com::sun::star::lang::Locale aLocale = Application::GetSettings().GetLocale();
+    com::sun::star::lang::Locale aLocale = Application::GetSettings().GetLanguageTag().getLocale();
     bool bNeedsReload = false;
     if( bNeedsInit )
     {
@@ -82,7 +82,8 @@ static Reference< XCalendar3 > getLocaleCalendar( void )
         bNeedsReload = true;
     }
     else if( aLocale.Language != aLastLocale.Language ||
-             aLocale.Country  != aLastLocale.Country )
+             aLocale.Country  != aLastLocale.Country ||
+             aLocale.Variant  != aLastLocale.Variant )
     {
         bNeedsReload = true;
     }
@@ -2543,7 +2544,7 @@ RTLFUNC(FormatDateTime)
                 SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
             }
 
-            LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
+            LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
             sal_uIntPtr nIndex = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eLangType );
             Color* pCol;
             pFormatter->GetOutputString( dDate, nIndex, aRetStr, &pCol );

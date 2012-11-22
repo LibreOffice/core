@@ -38,6 +38,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_rtfimport, \
     cppu \
     cppuhelper \
     sal \
+	i18nisolang1 \
 	sw \
     test \
     unotest \

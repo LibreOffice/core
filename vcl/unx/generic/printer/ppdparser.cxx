@@ -132,7 +132,7 @@ namespace psp
         if( bInsertDefault && aLoc.Language.isEmpty() )
         {
             // empty locale requested, fill in application UI locale
-            aLoc = Application::GetSettings().GetUILocale();
+            aLoc = Application::GetSettings().GetUILanguageTag().getLocale();
 
             #if OSL_DEBUG_LEVEL > 1
             static const char* pEnvLocale = getenv( "SAL_PPDPARSER_LOCALE" );

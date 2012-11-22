@@ -281,7 +281,7 @@ namespace frm
     {
         ScriptType nScript = m_pView->GetSelectedScriptType();
         if ( !nScript )
-            nScript = SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguage() );
+            nScript = SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
         return nScript;
     }
 

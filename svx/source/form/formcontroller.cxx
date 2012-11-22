@@ -3171,7 +3171,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         Reference< XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats(xConnection, sal_True));
         Reference< XNumberFormatter> xFormatter( NumberFormatter::create(m_aContext.getUNOContext()), UNO_QUERY_THROW );
         xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
-        Locale aAppLocale = Application::GetSettings().GetUILocale();
+        Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
         LocaleDataWrapper aLocaleWrapper( m_aContext.getUNOContext(), aAppLocale );
 
         // retrieving the filter

@@ -361,7 +361,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
 
         // the collator for the string compares
         m_xCollator = Reference< XCollator >( getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.Collator")) ), UNO_QUERY_THROW );
-        m_xCollator->loadDefaultCollator( Application::GetSettings().GetLocale(), 0 );
+        m_xCollator->loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0 );
     }
     catch(const Exception&)
     {

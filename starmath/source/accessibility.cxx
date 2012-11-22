@@ -400,7 +400,7 @@ Locale SAL_CALL SmGraphicAccessible::getLocale()
     SolarMutexGuard aGuard;
     // should be the document language...
     // We use the language of the localized symbol names here.
-    return Application::GetSettings().GetUILocale();
+    return Application::GetSettings().GetUILanguageTag().getLocale();
 }
 
 
@@ -1918,7 +1918,7 @@ Locale SAL_CALL SmEditAccessible::getLocale(  )
     SolarMutexGuard aGuard;
     // should be the document language...
     // We use the language of the localized symbol names here.
-    return Application::GetSettings().GetUILocale();
+    return Application::GetSettings().GetUILanguageTag().getLocale();
 }
 
 

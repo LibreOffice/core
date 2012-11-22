@@ -321,7 +321,7 @@ SbiDllMgr* SbiInstance::GetDllMgr()
 // #39629 create NumberFormatter with the help of a static method now
 SvNumberFormatter* SbiInstance::GetNumberFormatter()
 {
-    LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
+    LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
     SvtSysLocale aSysLocale;
     DateFormat eDate = aSysLocale.GetLocaleData().getDateFormat();
     if( pNumberFormatter )
@@ -358,7 +358,7 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
     }
     else
     {
-        eLangType = GetpApp()->GetSettings().GetLanguage();
+        eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
     }
     DateFormat eDate;
     if( peFormatterDateFormat )

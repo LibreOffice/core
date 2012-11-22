@@ -45,11 +45,7 @@ using namespace ::com::sun::star;
 static CharSet lcl_GetDefaultTextEncodingForRTF()
 {
 
-    ::com::sun::star::lang::Locale aLocale;
-    ::rtl::OUString aLangString;
-
-    aLocale = Application::GetSettings().GetLocale();
-    aLangString = aLocale.Language;
+    ::rtl::OUString aLangString( Application::GetSettings().GetLanguageTag().getLanguage());
 
     if ( aLangString == "ru" || aLangString == "uk" )
         return RTL_TEXTENCODING_MS_1251;

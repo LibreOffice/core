@@ -1235,7 +1235,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
 
     String aUILang(aStr);
     aUILang += rtl::OUString(" - ");
-    aUILang += pLanguageTable->GetString( Application::GetSettings().GetUILanguage(), true );
+    aUILang += pLanguageTable->GetString( Application::GetSettings().GetUILanguageTag().getLanguageType(), true );
 
     aUserInterfaceLB.InsertEntry(aUILang);
     aUserInterfaceLB.SetEntryData(0, 0);
@@ -1697,7 +1697,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     if (aDatePatternsString.isEmpty())
     {
         Locale aTempLocale;
-        SvxLanguageToLocale( aTempLocale, Application::GetSettings().GetLanguage());
+        SvxLanguageToLocale( aTempLocale, Application::GetSettings().GetLanguageTag().getLanguageType());
         LocaleDataWrapper aLocaleWrapper( aTempLocale );
         aDatePatternsString = lcl_getDatePatternsConfigString( aLocaleWrapper);
     }

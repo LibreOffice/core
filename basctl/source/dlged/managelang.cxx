@@ -61,7 +61,7 @@ namespace {
         long nWidth = 0;
         Reference< XBreakIterator > xBreakIter( vcl::unohelper::CreateBreakIterator() );
         sal_Int32 nStartPos = 0;
-        const Locale aLocale = Application::GetSettings().GetUILocale();
+        const Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
         Boundary aBoundary = xBreakIter->getWordBoundary(
             rText, nStartPos, aLocale, WordType::ANYWORD_IGNOREWHITESPACES, true );
 
@@ -341,7 +341,7 @@ void SetDefaultLanguageDialog::FillLanguageBox()
     }
     else
         // preselect current UI language
-        m_pLanguageLB->SelectLanguage( Application::GetSettings().GetUILanguage() );
+        m_pLanguageLB->SelectLanguage( Application::GetSettings().GetUILanguageTag().getLanguageType() );
 }
 
 void SetDefaultLanguageDialog::CalcInfoSize()

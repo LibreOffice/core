@@ -71,7 +71,7 @@ using ::rtl::OUString;
 static String impl_getSvtResString( sal_uInt32 nId )
 {
     String aRet;
-    com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+    com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     ResMgr* pMgr = ResMgr::CreateResMgr( "svt", aLocale );
     if( pMgr )
     {

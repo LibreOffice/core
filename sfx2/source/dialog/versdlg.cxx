@@ -317,7 +317,7 @@ void SfxVersionDialog::RecalcDateColumn()
 {
     // recalculate the datetime column width
     DateTime aNow( DateTime::SYSTEM );
-    mpLocaleWrapper = new LocaleDataWrapper( Application::GetSettings().GetLocale() );
+    mpLocaleWrapper = new LocaleDataWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
     String sDateTime = ConvertDateTime_Impl( aNow, *mpLocaleWrapper );
     long nWidth = aVersionBox.GetTextWidth( sDateTime );
     nWidth += 15; // a little offset
@@ -451,7 +451,7 @@ SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl ( Window *pParent, SfxVersi
 {
     FreeResource();
 
-    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLocale() );
+    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
     aDateTimeText.SetText( aDateTimeText.GetText().Append(ConvertDateTime_Impl( pInfo->aCreationDate, aLocaleWrapper )) );
     aSavedByText.SetText( aSavedByText.GetText().Append(pInfo->aAuthor) );
     aEdit.SetText( rInfo.aComment );

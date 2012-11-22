@@ -500,7 +500,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     {
         Font aApplFont = OutputDevice::GetDefaultFont(
             DEFAULTFONT_SANS_UNICODE,
-            Application::GetSettings().GetUILanguage(),
+            Application::GetSettings().GetUILanguageTag().getLanguageType(),
             DEFAULTFONT_FLAGS_ONLYONE,
             this
         );

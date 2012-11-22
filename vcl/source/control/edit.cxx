@@ -795,9 +795,11 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
         {
             if ( nMode == EDIT_DELMODE_RESTOFWORD )
             {
-                i18n::Boundary aBoundary = xBI->getWordBoundary( maText, aSelection.Min(), GetSettings().GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+                i18n::Boundary aBoundary = xBI->getWordBoundary( maText, aSelection.Min(),
+                        GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
                 if ( aBoundary.startPos == aSelection.Min() )
-                    aBoundary = xBI->previousWord( maText, aSelection.Min(), GetSettings().GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+                    aBoundary = xBI->previousWord( maText, aSelection.Min(),
+                            GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
                 aSelection.Min() = aBoundary.startPos;
             }
             else if ( nMode == EDIT_DELMODE_RESTOFCONTENT )
@@ -807,14 +809,16 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
             else
             {
                 sal_Int32 nCount = 1;
-                aSelection.Min() = xBI->previousCharacters( maText, aSelection.Min(), GetSettings().GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
+                aSelection.Min() = xBI->previousCharacters( maText, aSelection.Min(),
+                        GetSettings().GetLanguageTag().getLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
             }
         }
         else
         {
             if ( nMode == EDIT_DELMODE_RESTOFWORD )
             {
-                i18n::Boundary aBoundary = xBI->nextWord( maText, aSelection.Max(), GetSettings().GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+                i18n::Boundary aBoundary = xBI->nextWord( maText, aSelection.Max(),
+                        GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
                 aSelection.Max() = aBoundary.startPos;
             }
             else if ( nMode == EDIT_DELMODE_RESTOFCONTENT )
@@ -824,7 +828,8 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
             else
             {
                 sal_Int32 nCount = 1;
-                aSelection.Max() = xBI->nextCharacters( maText, aSelection.Max(), GetSettings().GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
+                aSelection.Max() = xBI->nextCharacters( maText, aSelection.Max(),
+                        GetSettings().GetLanguageTag().getLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
             }
         }
     }
@@ -1509,7 +1514,8 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
         else if ( rMEvt.GetClicks() == 2 )
         {
             uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
-             i18n::Boundary aBoundary = xBI->getWordBoundary( maText, aSelection.Max(), GetSettings().GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+             i18n::Boundary aBoundary = xBI->getWordBoundary( maText, aSelection.Max(),
+                     GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
             ImplSetSelection( Selection( aBoundary.startPos, aBoundary.endPos ) );
             ImplCopyToSelectionClipboard();
         }
@@ -1742,28 +1748,33 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     {
                         if ( bWord )
                         {
-                            i18n::Boundary aBoundary = xBI->getWordBoundary( maText, aSel.Max(), GetSettings().GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+                            i18n::Boundary aBoundary = xBI->getWordBoundary( maText, aSel.Max(),
+                                    GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
                             if ( aBoundary.startPos == aSel.Max() )
-                                aBoundary = xBI->previousWord( maText, aSel.Max(), GetSettings().GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+                                aBoundary = xBI->previousWord( maText, aSel.Max(),
+                                        GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
                             aSel.Max() = aBoundary.startPos;
                         }
                         else
                         {
                             sal_Int32 nCount = 1;
-                            aSel.Max() = xBI->previousCharacters( maText, aSel.Max(), GetSettings().GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
+                            aSel.Max() = xBI->previousCharacters( maText, aSel.Max(),
+                                    GetSettings().GetLanguageTag().getLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
                         }
                     }
                     else if ( bGoRight && ( aSel.Max() < maText.Len() ) )
                     {
                         if ( bWord )
                            {
-                            i18n::Boundary aBoundary = xBI->nextWord( maText, aSel.Max(), GetSettings().GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+                            i18n::Boundary aBoundary = xBI->nextWord( maText, aSel.Max(),
+                                    GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
                             aSel.Max() = aBoundary.startPos;
                         }
                         else
                         {
                             sal_Int32 nCount = 1;
-                            aSel.Max() = xBI->nextCharacters( maText, aSel.Max(), GetSettings().GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
+                            aSel.Max() = xBI->nextCharacters( maText, aSel.Max(),
+                                    GetSettings().GetLanguageTag().getLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
                         }
                     }
                     else if ( bGoHome )

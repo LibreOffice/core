@@ -31,6 +31,7 @@ $(eval $(call gb_Library_use_libraries,flash,\
 	vcl \
 	utl \
 	tl \
+	i18nisolang1 \
 	comphelper \
 	basegfx \
 	cppuhelper \

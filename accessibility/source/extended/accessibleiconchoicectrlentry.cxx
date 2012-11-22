@@ -185,7 +185,7 @@ throw(RuntimeException)
     Locale AccessibleIconChoiceCtrlEntry::implGetLocale()
     {
         Locale aLocale;
-        aLocale = Application::GetSettings().GetUILocale();
+        aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
 
         return aLocale;
     }

@@ -417,7 +417,7 @@ static Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Uni
     if ( !xCharClass.is() )
         xCharClass = vcl::unohelper::CreateCharacterClassification();
 
-    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
+    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     cCharCode = xCharClass->toUpper( rtl::OUString(cCharCode), 0, 1, rLocale )[0];
 
     if ( i < nFormEnd )

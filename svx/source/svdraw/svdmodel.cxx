@@ -787,7 +787,7 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt 
     SvxFontItem aSvxFontItem( EE_CHAR_FONTINFO) ;
     SvxFontItem aSvxFontItemCJK(EE_CHAR_FONTINFO_CJK);
     SvxFontItem aSvxFontItemCTL(EE_CHAR_FONTINFO_CTL);
-    sal_uInt16 nLanguage(Application::GetSettings().GetLanguage());
+    sal_uInt16 nLanguage(Application::GetSettings().GetLanguageTag().getLanguageType());
 
     // get DEFAULTFONT_LATIN_TEXT and set at pool as dynamic default
     Font aFont(OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT, nLanguage, DEFAULTFONT_FLAGS_ONLYONE, 0));

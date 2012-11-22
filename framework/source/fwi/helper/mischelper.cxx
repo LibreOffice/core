@@ -159,7 +159,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
 
     //2--System
     const AllSettings& rAllSettings = Application::GetSettings();
-    LanguageType rSystemLanguage = rAllSettings.GetLanguage();
+    LanguageType rSystemLanguage = rAllSettings.GetLanguageTag().getLanguageType();
     if( rSystemLanguage != LANGUAGE_DONTKNOW )
     {
         if ( IsScriptTypeMatchingToLanguage( nScriptType, rSystemLanguage ))
@@ -167,7 +167,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
     }
 
     //3--UI
-    LanguageType rUILanguage = rAllSettings.GetUILanguage();
+    LanguageType rUILanguage = rAllSettings.GetUILanguageTag().getLanguageType();
     if( rUILanguage != LANGUAGE_DONTKNOW )
     {
         if ( IsScriptTypeMatchingToLanguage( nScriptType, rUILanguage ))

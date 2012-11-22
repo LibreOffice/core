@@ -289,7 +289,7 @@ void SbiRuntime::StepLIKE()
 
     aSearchOpt.algorithmType = com::sun::star::util::SearchAlgorithms_REGEXP;
 
-    aSearchOpt.Locale = Application::GetSettings().GetLocale();
+    aSearchOpt.Locale = Application::GetSettings().GetLanguageTag().getLocale();
     aSearchOpt.searchString = pattern;
 
     int bTextMode(1);

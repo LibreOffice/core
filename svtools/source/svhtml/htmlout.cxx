@@ -954,7 +954,7 @@ rtl::OString HTMLOutFuncs::CreateTableDataOptionsValNum(
             append(OOO_STRING_SVTOOLS_HTML_O_SDnum).
             append(RTL_CONSTASCII_STRINGPARAM("=\"")).
             append(static_cast<sal_Int32>(
-                Application::GetSettings().GetLanguage())).
+                Application::GetSettings().GetLanguageTag().getLanguageType())).
             append(';'); // Language fuer Format 0
         if ( nFormat )
         {

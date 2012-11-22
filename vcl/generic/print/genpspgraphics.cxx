@@ -1185,7 +1185,7 @@ namespace vcl
     const char* getLangBoost()
     {
         const char* pLangBoost;
-        const LanguageType eLang = Application::GetSettings().GetUILanguage();
+        const LanguageType eLang = Application::GetSettings().GetUILanguageTag().getLanguageType();
         if (eLang == LANGUAGE_JAPANESE)
             pLangBoost = "jan";
         else if (MsLangId::isKorean(eLang))

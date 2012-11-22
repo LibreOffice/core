@@ -239,7 +239,7 @@ namespace pcr
             aUnderlineItem.SetColor(Color(nTextLineColor));
 
             SvxColorItem aSvxColorItem(nColor32,CFID_CHARCOLOR);
-            SvxLanguageItem aLanguageItem(Application::GetSettings().GetUILanguage(), CFID_LANGUAGE);
+            SvxLanguageItem aLanguageItem(Application::GetSettings().GetUILanguageTag().getLanguageType(), CFID_LANGUAGE);
 
             // the 2 CJK props
             SvxCharReliefItem aFontReliefItem((FontRelief)nFontRelief, CFID_RELIEF);
@@ -494,7 +494,7 @@ namespace pcr
         *pCounter++ = new SvxFontHeightItem(aDefaultVCLFont.GetHeight(), 100, CFID_HEIGHT);
         *pCounter++ = new SvxWeightItem(aDefaultVCLFont.GetWeight(), CFID_WEIGHT);
         *pCounter++ = new SvxPostureItem(aDefaultVCLFont.GetItalic(), CFID_POSTURE);
-        *pCounter++ = new SvxLanguageItem(Application::GetSettings().GetUILanguage(), CFID_LANGUAGE);
+        *pCounter++ = new SvxLanguageItem(Application::GetSettings().GetUILanguageTag().getLanguageType(), CFID_LANGUAGE);
         *pCounter++ = new SvxUnderlineItem(aDefaultVCLFont.GetUnderline(), CFID_UNDERLINE);
         *pCounter++ = new SvxCrossedOutItem(aDefaultVCLFont.GetStrikeout(), CFID_STRIKEOUT);
         *pCounter++ = new SvxWordLineModeItem(aDefaultVCLFont.IsWordLineMode(), CFID_WORDLINEMODE);
@@ -506,7 +506,7 @@ namespace pcr
         *pCounter++ = new SvxFontHeightItem(aDefaultVCLFont.GetHeight(), 100, CFID_CJK_HEIGHT);
         *pCounter++ = new SvxWeightItem(aDefaultVCLFont.GetWeight(), CFID_CJK_WEIGHT);
         *pCounter++ = new SvxPostureItem(aDefaultVCLFont.GetItalic(), CFID_CJK_POSTURE);
-        *pCounter++ = new SvxLanguageItem(Application::GetSettings().GetUILanguage(), CFID_CJK_LANGUAGE);
+        *pCounter++ = new SvxLanguageItem(Application::GetSettings().GetUILanguageTag().getLanguageType(), CFID_CJK_LANGUAGE);
 
         *pCounter++ = new SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED, CFID_CASEMAP);
         *pCounter++ = new SvxContourItem(sal_False, CFID_CONTOUR);

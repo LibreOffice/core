@@ -737,7 +737,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     xLinguSrvcMgr = LinguServiceManager::create(comphelper::getComponentContext(xMSF));
 
     Locale aCurrentLocale;
-    LanguageType eLang = Application::GetSettings().GetLanguage();
+    LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
     SvxLanguageToLocale(aCurrentLocale, eLang);
     Sequence<Any> aArgs(2);//second arguments has to be empty!
     aArgs.getArray()[0] <<= SvxGetLinguPropertySet();

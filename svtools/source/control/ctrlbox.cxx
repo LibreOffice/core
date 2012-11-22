@@ -1460,7 +1460,7 @@ void FontStyleBox::LoseFocus()
 void FontStyleBox::Modify()
 {
     CharClass   aChrCls( ::comphelper::getProcessComponentContext(),
-                        GetSettings().GetLocale() );
+                        GetSettings().GetLanguageTag().getLocale() );
     XubString   aStr = GetText();
     sal_uInt16      nEntryCount = GetEntryCount();
 
@@ -1682,7 +1682,7 @@ void FontSizeBox::ImplInit()
 
 void FontSizeBox::Reformat()
 {
-    FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
+    FontSizeNames aFontSizeNames( GetSettings().GetUILanguageTag().getLanguageType() );
     if ( !bRelativeMode || !aFontSizeNames.IsEmpty() )
     {
         long nNewValue = aFontSizeNames.Name2Size( GetText() );
@@ -1776,7 +1776,7 @@ void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
     }
 
     // first insert font size names (for simplified/traditional chinese)
-    FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
+    FontSizeNames aFontSizeNames( GetSettings().GetUILanguageTag().getLanguageType() );
     if ( pAry == pList->GetStdSizeAry() )
     {
         // for standard sizes we don't need to bother
@@ -1943,7 +1943,7 @@ void FontSizeBox::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
     if ( !bRelative )
     {
         sal_Int64 nTempValue = MetricField::ConvertValue( nNewValue, GetBaseValue(), GetDecimalDigits(), eInUnit, GetUnit() );
-        FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
+        FontSizeNames aFontSizeNames( GetSettings().GetUILanguageTag().getLanguageType() );
         // conversion loses precision; however font sizes should
         // never have a problem with that
         String aName = aFontSizeNames.Size2Name( static_cast<long>(nTempValue) );
@@ -1971,7 +1971,7 @@ sal_Int64 FontSizeBox::GetValue( FieldUnit eOutUnit ) const
 {
     if ( !bRelative )
     {
-        FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
+        FontSizeNames aFontSizeNames( GetSettings().GetUILanguageTag().getLanguageType() );
         sal_Int64 nValue = aFontSizeNames.Name2Size( GetText() );
         if ( nValue)
             return MetricField::ConvertValue( nValue, GetBaseValue(), GetDecimalDigits(), GetUnit(), eOutUnit );

@@ -230,7 +230,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
                 {
                     LanguageType eLang = static_cast< LanguageType >( pLangItem->GetValue() );
                     if( eLang == LANGUAGE_SYSTEM )
-                        eLang = Application::GetSettings().GetLanguage();   // never use SYSTEM for spelling
+                        eLang = Application::GetSettings().GetLanguageTag().getLanguageType();   // never use SYSTEM for spelling
                     if( eLang != meCurrLang )
                     {
                         meCurrLang = eLang;

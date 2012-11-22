@@ -279,7 +279,7 @@ String EditorWindow::GetWordAtCursor()
             const TextPaM& rSelStart = rSelection.GetStart();
             const TextPaM& rSelEnd = rSelection.GetEnd();
             String aText = pTextEngine->GetText( rSelEnd.GetPara() );
-            CharClass aClass( ::comphelper::getProcessComponentContext() , Application::GetSettings().GetLocale() );
+            CharClass aClass( ::comphelper::getProcessComponentContext() , Application::GetSettings().GetLanguageTag().getLocale() );
             xub_StrLen nSelStart = static_cast< xub_StrLen >( rSelStart.GetIndex() );
             xub_StrLen nSelEnd = static_cast< xub_StrLen >( rSelEnd.GetIndex() );
             xub_StrLen nLength = static_cast< xub_StrLen >( aText.Len() );
@@ -826,7 +826,7 @@ void EditorWindow::ImplSetFont()
         get_value_or( OUString() ) );
     if ( sFontName.isEmpty() )
     {
-        Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0 , this ) );
+        Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), 0 , this ) );
         sFontName = aTmpFont.GetName();
     }
     Size aFontSize(0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get());

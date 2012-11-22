@@ -26,7 +26,7 @@
 #include "vcl/font.hxx"
 #include "vcl/accel.hxx"
 #include "vcl/wall.hxx"
-#include "com/sun/star/lang/Locale.hpp"
+#include <i18npool/languagetag.hxx>
 #include <unotools/syslocale.hxx>
 
 class CollatorWrapper;
@@ -992,17 +992,15 @@ class ImplAllSettingsData
                     ~ImplAllSettingsData();
 
 private:
-    sal_uLong                                   mnRefCount;
+    sal_uLong                               mnRefCount;
     MouseSettings                           maMouseSettings;
     StyleSettings                           maStyleSettings;
     MiscSettings                            maMiscSettings;
     HelpSettings                            maHelpSettings;
-    ::com::sun::star::lang::Locale          maLocale;
-    sal_uLong                                   mnSystemUpdate;
-    sal_uLong                                   mnWindowUpdate;
-    ::com::sun::star::lang::Locale          maUILocale;
-    LanguageType                            meLanguage;
-    LanguageType                            meUILanguage;
+    LanguageTag                             maLocale;
+    sal_uLong                               mnSystemUpdate;
+    sal_uLong                               mnWindowUpdate;
+    LanguageTag                             maUILocale;
     LocaleDataWrapper*                      mpLocaleDataWrapper;
     LocaleDataWrapper*                      mpUILocaleDataWrapper;
     vcl::I18nHelper*                        mpI18nHelper;
@@ -1062,14 +1060,10 @@ public:
     const HelpSettings&                     GetHelpSettings() const
                                                 { return mpData->maHelpSettings; }
 
-    void                                    SetLocale( const ::com::sun::star::lang::Locale& rLocale );
-    const ::com::sun::star::lang::Locale&   GetLocale() const;
-    void                                    SetUILocale( const ::com::sun::star::lang::Locale& rLocale );
-    const ::com::sun::star::lang::Locale&   GetUILocale() const;
-    void                                    SetLanguage( LanguageType eLang );
-    LanguageType                            GetLanguage() const;
-    void                                    SetUILanguage( LanguageType eLang );
-    LanguageType                            GetUILanguage() const;
+    void                                    SetLanguageTag( const LanguageTag& rLanguageTag );
+    const LanguageTag&                      GetLanguageTag() const;
+    void                                    SetUILanguageTag( const LanguageTag& rLanguageTag );
+    const LanguageTag&                      GetUILanguageTag() const;
     bool                                    GetLayoutRTL() const;   // returns true if UI language requires right-to-left UI
     const LocaleDataWrapper&                GetLocaleDataWrapper() const;
     const LocaleDataWrapper&                GetUILocaleDataWrapper() const;

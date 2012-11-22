@@ -45,7 +45,7 @@ namespace
                 comphelper::getProcessComponentContext(),
                 com::sun::star::i18n::TransliterationModules_IGNORE_CASE )
         {
-            const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
+            const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
             m_aTransliteration.loadModuleIfNeeded( eOfficeLanguage );
         }
         utl::TransliterationWrapper& getTransliteration() { return m_aTransliteration; }

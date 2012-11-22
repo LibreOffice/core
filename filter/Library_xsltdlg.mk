@@ -35,6 +35,7 @@ $(eval $(call gb_Library_use_libraries,xsltdlg,\
 	svl \
 	utl \
 	tl \
+	i18nisolang1 \
 	comphelper \
 	cppuhelper \
 	cppu \

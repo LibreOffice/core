@@ -273,7 +273,7 @@ DBG_NAME(OTableSubscriptionPage)
                 {
                     m_xCollator = Reference< XCollator >(m_xORB->createInstance(SERVICE_I18N_COLLATOR), UNO_QUERY);
                     if (m_xCollator.is())
-                        m_xCollator->loadDefaultCollator(Application::GetSettings().GetLocale(), 0);
+                        m_xCollator->loadDefaultCollator(Application::GetSettings().GetLanguageTag().getLocale(), 0);
                 }
                 catch(const Exception&)
                 {

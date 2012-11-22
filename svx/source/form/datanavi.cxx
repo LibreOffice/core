@@ -799,7 +799,7 @@ namespace svxform
             // create a resource manager, for the svx resource file
             // and the UI locale
             ResMgr* pResMgr = ResMgr::CreateResMgr(
-                "svx", Application::GetSettings().GetUILocale() );
+                "svx", Application::GetSettings().GetUILanguageTag().getLocale() );
 
             // load the resources for the AddSubmission modal dialog.
             // This will create our own resource context.

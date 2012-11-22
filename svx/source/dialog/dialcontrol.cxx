@@ -442,7 +442,7 @@ void DialControl::Init( const Size& rWinSize, const Font& rWinFont )
 void DialControl::Init( const Size& rWinSize )
 {
     Font aFont( OutputDevice::GetDefaultFont(
-        DEFAULTFONT_UI_SANS, Application::GetSettings().GetUILanguage(), DEFAULTFONT_FLAGS_ONLYONE ) );
+        DEFAULTFONT_UI_SANS, Application::GetSettings().GetUILanguageTag().getLanguageType(), DEFAULTFONT_FLAGS_ONLYONE ) );
     Init( rWinSize, aFont );
 }
 

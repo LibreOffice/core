@@ -157,7 +157,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
     else if ( SvtCTLOptions::NUMERALS_ARABIC == aCTLOptions.GetCTLTextNumerals() )
         eLang = LANGUAGE_ENGLISH;
     else
-        eLang = (LanguageType) Application::GetSettings().GetLanguage();
+        eLang = (LanguageType) Application::GetSettings().GetLanguageTag().getLanguageType();
 
     aDevice.SetDigitLanguage( eLang );
 

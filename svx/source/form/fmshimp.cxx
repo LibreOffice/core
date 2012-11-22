@@ -1188,7 +1188,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
             Reference< XPropertySet> xNewSet(xNewModel, UNO_QUERY);
 
 
-            Locale aNewLanguage = Application::GetSettings().GetUILocale();
+            Locale aNewLanguage = Application::GetSettings().GetUILanguageTag().getLocale();
             TransferFormComponentProperties(xOldSet, xNewSet, aNewLanguage);
 
             Sequence< ::com::sun::star::script::ScriptEventDescriptor> aOldScripts;

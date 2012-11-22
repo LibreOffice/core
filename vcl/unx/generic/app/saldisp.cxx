@@ -739,7 +739,7 @@ sal_uInt16 SalDisplay::GetIndicatorState() const
 
 rtl::OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
 {
-    rtl::OUString aLang = Application::GetSettings().GetUILocale().Language;
+    rtl::OUString aLang = Application::GetSettings().GetUILanguageTag().getLanguage();
     rtl::OUString aRet;
 
     // return an empty string for keysyms that are not bound to

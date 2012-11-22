@@ -206,7 +206,7 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
     if(xDefNum.is())
     {
         Sequence< Sequence< PropertyValue > > aNumberings;
-        LanguageType eLang = Application::GetSettings().GetLanguage();
+        LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
         Locale aLocale = SvxCreateLocale(eLang);
         try
         {
@@ -568,7 +568,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
     if(xDefNum.is())
     {
         Sequence<Reference<XIndexAccess> > aOutlineAccess;
-        LanguageType eLang = Application::GetSettings().GetLanguage();
+        LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
         Locale aLocale = SvxCreateLocale(eLang);
         try
         {

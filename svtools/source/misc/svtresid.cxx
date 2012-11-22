@@ -34,7 +34,7 @@ namespace
 
     ResMgr* getResMgr()
     {
-        return getResMgr(Application::GetSettings().GetUILocale());
+        return getResMgr(Application::GetSettings().GetUILanguageTag().getLocale());
     }
 }
 

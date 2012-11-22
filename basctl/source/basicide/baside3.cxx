@@ -1065,7 +1065,7 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
             }
 
             // Resource?
-            ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+            ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
             Reference< task::XInteractionHandler > xDummyHandler;
             bool bReadOnly = true;
             Reference< XStringResourceWithLocation > xImportStringResource =

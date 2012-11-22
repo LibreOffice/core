@@ -284,8 +284,9 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
         udat_toPattern(fmt,true,pattern,nLength,&status);
     }
 */
+    /* FIXME-BCP47: handle language tags! */
     //1 get locale for system
-    ::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLocale();
+    ::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLanguageTag().getLocale();
     rtl::OUString strLang = aLocale.Language;
     rtl::OUString strCountry = aLocale.Country;
     icu::Locale bLocale((char*)(OUStringToOString(strLang,RTL_TEXTENCODING_MS_1252).getStr()),
@@ -697,8 +698,9 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
         udat_toPattern(fmt,true,pattern,nLength,&status);
     }
 */
+    /* FIXME-BCP47: handle language tags! */
     //1 get locale for system
-    ::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLocale();
+    ::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLanguageTag().getLocale();
     rtl::OUString strLang = aLocale.Language;
     rtl::OUString strCountry = aLocale.Country;
     icu::Locale bLocale((char*)(OUStringToOString(strLang,RTL_TEXTENCODING_MS_1252).getStr()),

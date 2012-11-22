@@ -537,7 +537,7 @@ sal_Bool StyleTreeListBox_Impl::NotifyMoving(SvTreeListEntry*  pTarget,
     const sal_Bool bRet = (sal_Bool)aDropLink.Call(this);
     rpNewParent = pTarget;
     lPos=0;
-    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLanguageTag().getLocale() );
     const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
     for(SvTreeListEntry *pTmpEntry=FirstChild(pTarget);
         pTmpEntry && COMPARE_LESS==pCollator->compareString(
@@ -667,7 +667,7 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
 
     comphelper::string::NaturalStringSorter aSorter(
         ::comphelper::getProcessComponentContext(),
-        Application::GetSettings().GetLocale());
+        Application::GetSettings().GetLanguageTag().getLocale());
 
     // Arrange all under their Parents
     sal_uInt16 i;
@@ -1308,7 +1308,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
 
             comphelper::string::NaturalStringSorter aSorter(
                 ::comphelper::getProcessComponentContext(),
-                Application::GetSettings().GetLocale());
+                Application::GetSettings().GetLanguageTag().getLocale());
 
             while( pStyle )
             {

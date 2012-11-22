@@ -971,7 +971,7 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
 
 sal_Bool ScGlobal::IsSystemRTL()
 {
-    return MsLangId::isRightToLeft( Application::GetSettings().GetLanguage() );
+    return MsLangId::isRightToLeft( Application::GetSettings().GetLanguageTag().getLanguageType() );
 }
 
 sal_uInt8 ScGlobal::GetDefaultScriptType()
@@ -981,14 +981,14 @@ sal_uInt8 ScGlobal::GetDefaultScriptType()
     //  to get consistent behavior of text in simple cells and EditEngine,
     //  also same as GetAppLanguage() in Writer)
 
-    return (sal_uInt8) SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguage() );
+    return (sal_uInt8) SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 }
 
 LanguageType ScGlobal::GetEditDefaultLanguage()
 {
     //  used for EditEngine::SetDefaultLanguage
 
-    return Application::GetSettings().GetLanguage();
+    return Application::GetSettings().GetLanguageTag().getLanguageType();
 }
 
 sal_uInt16 ScGlobal::GetScriptedWhichID( sal_uInt8 nScriptType, sal_uInt16 nWhich )
@@ -1115,7 +1115,7 @@ utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
 {
     if ( !pTransliteration )
     {
-        const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
+        const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
         pTransliteration = new ::utl::TransliterationWrapper(
             ::comphelper::getProcessComponentContext(), SC_TRANSLITERATION_IGNORECASE );
         pTransliteration->loadModuleIfNeeded( eOfficeLanguage );
@@ -1164,7 +1164,7 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
 {
     if ( !pCaseTransliteration )
     {
-        const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
+        const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
         pCaseTransliteration = new ::utl::TransliterationWrapper(::comphelper::getProcessComponentContext(), SC_TRANSLITERATION_CASESENSE );
         pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
     }
@@ -1182,7 +1182,7 @@ IntlWrapper*         ScGlobal::GetScIntlWrapper()
 {
     if ( !pLocale )
     {
-        pLocale = new ::com::sun::star::lang::Locale( Application::GetSettings().GetLocale());
+        pLocale = new ::com::sun::star::lang::Locale( Application::GetSettings().GetLanguageTag().getLocale());
     }
     return pLocale;
 }

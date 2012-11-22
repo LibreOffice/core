@@ -1389,7 +1389,7 @@ void SdDrawDocument::getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rC
     //  If the UI language is Korean, the default Latin font has to
     //  be queried for Korean, too (the Latin language from the document can't be Korean).
     //  This is the same logic as in SwDocShell::InitNew.
-    LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();
+    LanguageType eUiLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
     if (MsLangId::isKorean(eUiLanguage))
         eLatin = eUiLanguage;
 
@@ -1401,7 +1401,7 @@ void SdDrawDocument::getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rC
 /* converts the given western font height to a corresponding ctl font height, deppending on the system language */
 sal_uInt32 SdDrawDocument::convertFontHeightToCTL( sal_uInt32 nWesternFontHeight )
 {
-    LanguageType eRealCTLLanguage = Application::GetSettings().GetLanguage();
+    LanguageType eRealCTLLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
     if( LANGUAGE_THAI == eRealCTLLanguage )
     {
         // http://specs.openoffice.org/g11n/font_sizes/42775_42725_Individual_configurable_font_size_for_default_fonts.odt

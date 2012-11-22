@@ -106,7 +106,7 @@ OUString VCLXAccessibleTextComponent::implGetText()
 
 lang::Locale VCLXAccessibleTextComponent::implGetLocale()
 {
-    return Application::GetSettings().GetLocale();
+    return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
 // -----------------------------------------------------------------------------

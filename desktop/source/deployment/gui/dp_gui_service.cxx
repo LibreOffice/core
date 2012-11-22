@@ -239,9 +239,7 @@ void ServiceImpl::startExecuteModal(
                 throw RuntimeException( OUSTR("Cannot initialize VCL!"),
                                         static_cast<OWeakObject *>(this) );
             AllSettings as = app->GetSettings();
-            as.SetUILanguage(
-                LanguageTag(
-                    utl::ConfigManager::getLocale() ).getLanguageType() );
+            as.SetUILanguageTag( LanguageTag( utl::ConfigManager::getLocale() ) );
             app->SetSettings( as );
             app->SetDisplayName(
                 utl::ConfigManager::getProductName() +

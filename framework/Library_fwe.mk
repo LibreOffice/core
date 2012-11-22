@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_libraries,fwe,\
     cppuhelper \
     fwi \
     sal \
+	i18nisolang1 \
     svl \
     svt \
     tl \

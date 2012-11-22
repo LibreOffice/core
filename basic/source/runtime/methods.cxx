@@ -137,7 +137,7 @@ static const CharClass& GetCharClass( void )
     if( bNeedsInit )
     {
         bNeedsInit = false;
-        aLocale = Application::GetSettings().GetLocale();
+        aLocale = Application::GetSettings().GetLanguageTag().getLocale();
     }
     static CharClass aCharClass( aLocale );
     return aCharClass;
@@ -1650,7 +1650,7 @@ RTLFUNC(StrComp)
                     i18n::TransliterationModules_IGNORE_WIDTH );
         }
 
-        LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
+        LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
         pTransliterationWrapper->loadModuleIfNeeded( eLangType );
         nRetValue = pTransliterationWrapper->compareString( rStr1, rStr2 );
     }
@@ -1953,7 +1953,7 @@ RTLFUNC(DateValue)
         // by using SbiInstance::GetNumberFormatter.
         // It seems that both locale number formatter and English number formatter
         // are supported in Visual Basic.
-        LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
+        LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
         if( !bSuccess && ( eLangType != LANGUAGE_ENGLISH_US ) )
         {
             // Create a new SvNumberFormatter by using LANGUAGE_ENGLISH to get the date value;

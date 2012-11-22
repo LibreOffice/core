@@ -999,7 +999,7 @@ void SmMathConfig::LoadFormat()
             ++pVal;
         }
 
-        LanguageType nLang = Application::GetSettings().GetUILanguage();
+        LanguageType nLang = Application::GetSettings().GetUILanguageTag().getLanguageType();
         for (i = FNT_BEGIN;  i < FNT_END;  ++i)
         {
             Font aFnt;

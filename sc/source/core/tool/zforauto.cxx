@@ -66,7 +66,7 @@ void ScNumFormatAbbrev::Load( SvStream& rStream, CharSet eByteStrSet )
     eLnge = (LanguageType) nLang;
     eSysLnge = (LanguageType) nSysLang;
     if ( eSysLnge == LANGUAGE_SYSTEM )          // old versions did write it
-        eSysLnge = Application::GetSettings().GetLanguage();
+        eSysLnge = Application::GetSettings().GetLanguageTag().getLanguageType();
 }
 
 void ScNumFormatAbbrev::Save( SvStream& rStream, CharSet eByteStrSet ) const
@@ -81,7 +81,7 @@ void ScNumFormatAbbrev::PutFormatIndex(sal_uLong nFormat,
     const SvNumberformat* pFormat = rFormatter.GetEntry(nFormat);
     if (pFormat)
     {
-        eSysLnge = Application::GetSettings().GetLanguage();
+        eSysLnge = Application::GetSettings().GetLanguageTag().getLanguageType();
         eLnge = pFormat->GetLanguage();
         sFormatstring = ((SvNumberformat*)pFormat)->GetFormatstring();
     }

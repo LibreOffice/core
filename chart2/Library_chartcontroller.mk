@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,chartcontroller,\
     drawinglayer \
     editeng \
     sal \
+	i18nisolang1 \
     sfx \
     sot \
     svl \

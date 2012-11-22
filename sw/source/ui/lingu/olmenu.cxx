@@ -118,7 +118,7 @@ static LanguageType lcl_CheckLanguage(
         lang::Locale aLocale( xLangGuess->guessPrimaryLanguage( rText, 0, rText.getLength()) );
 
         // get language as from "Tools/Options - Language Settings - Languages: Locale setting"
-        LanguageType nTmpLang = Application::GetSettings().GetLanguage();
+        LanguageType nTmpLang = Application::GetSettings().GetLanguageTag().getLanguageType();
 
         // if the result from language guessing does not provide a 'Country' part
         // try to get it by looking up the locale setting of the office.
@@ -150,9 +150,9 @@ static LanguageType lcl_CheckLanguage(
         // The default document language from "Tools/Options - Language Settings - Languages: Western"
         aLangList[0] = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN);
         // The one from "Tools/Options - Language Settings - Languages: User interface"
-        aLangList[1] = rSettings.GetUILanguage();
+        aLangList[1] = rSettings.GetUILanguageTag().getLanguageType();
         // The one from "Tools/Options - Language Settings - Languages: Locale setting"
-        aLangList[2] = rSettings.GetLanguage();
+        aLangList[2] = rSettings.GetLanguageTag().getLanguageType();
         // en-US
         aLangList[3] = LANGUAGE_ENGLISH_US;
 #if OSL_DEBUG_LEVEL > 1
@@ -223,7 +223,7 @@ void SwSpellPopup::fillLangPopupMenu(
 
     //2--System
     const AllSettings& rAllSettings = Application::GetSettings();
-    LanguageType rSystemLanguage = rAllSettings.GetLanguage();
+    LanguageType rSystemLanguage = rAllSettings.GetLanguageTag().getLanguageType();
     if (rSystemLanguage != LANGUAGE_DONTKNOW)
     {
         if (lcl_checkScriptType( nScriptType, rSystemLanguage ))
@@ -231,7 +231,7 @@ void SwSpellPopup::fillLangPopupMenu(
     }
 
     //3--UI
-    LanguageType rUILanguage = rAllSettings.GetUILanguage();
+    LanguageType rUILanguage = rAllSettings.GetUILanguageTag().getLanguageType();
     if (rUILanguage != LANGUAGE_DONTKNOW)
     {
         if (lcl_checkScriptType(nScriptType, rUILanguage ))

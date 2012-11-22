@@ -41,7 +41,7 @@
 
 static ResMgr& getPDFFilterResMgr()
 {
-    static ResMgr *pRes = ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILocale());
+    static ResMgr *pRes = ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILanguageTag().getLocale());
     return *pRes;
 }
 

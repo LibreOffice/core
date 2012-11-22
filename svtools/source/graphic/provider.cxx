@@ -280,7 +280,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const :
         rtl::OString aResMgrName(rtl::OUStringToOString(
             rResourceURL.getToken(0, '/', nIndex), RTL_TEXTENCODING_ASCII_US));
 
-        ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.getStr(), Application::GetSettings().GetUILocale() );
+        ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.getStr(), Application::GetSettings().GetUILanguageTag().getLocale() );
 
         if( pResMgr )
         {

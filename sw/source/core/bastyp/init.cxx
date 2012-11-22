@@ -824,7 +824,7 @@ void SwCalendarWrapper::LoadDefaultCalendar( sal_uInt16 eLang )
 
 LanguageType GetAppLanguage()
 {
-    return Application::GetSettings().GetLanguage();
+    return Application::GetSettings().GetLanguageTag().getLanguageType();
 }
 
 CollatorWrapper& GetAppCollator()

@@ -248,7 +248,7 @@ void OSqlEdit::ImplSetFont()
         get_value_or( rtl::OUString() ) );
     if ( sFontName.isEmpty() )
     {
-        Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0 , this ) );
+        Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), 0 , this ) );
         sFontName = aTmpFont.GetName();
     }
     Size aFontSize(

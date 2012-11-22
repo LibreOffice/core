@@ -132,7 +132,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
 
     OUString sUri = sUIDir + sUIFile;
 
-    com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+    com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     bool bEN_US = aLocale.Language == "en" && aLocale.Country == "US" && aLocale.Variant.isEmpty();
     if (!bEN_US)
         loadTranslations(aLocale, sUri);

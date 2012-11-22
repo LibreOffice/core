@@ -290,7 +290,7 @@ Locale AccFrameSelector::getLocale(  )
     throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
     Locale aRet;
-    SvxLanguageToLocale( aRet, Application::GetSettings().GetUILanguage() );
+    SvxLanguageToLocale( aRet, Application::GetSettings().GetUILanguageTag().getLanguageType() );
     return aRet;
 }
 

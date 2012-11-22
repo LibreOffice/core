@@ -229,7 +229,7 @@ OUString VCLXAccessibleToolBoxItem::implGetText()
 // -----------------------------------------------------------------------------
 Locale VCLXAccessibleToolBoxItem::implGetLocale()
 {
-    return Application::GetSettings().GetUILocale();
+    return Application::GetSettings().GetUILanguageTag().getLocale();
 }
 // -----------------------------------------------------------------------------
 void VCLXAccessibleToolBoxItem::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )

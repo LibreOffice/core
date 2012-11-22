@@ -5581,7 +5581,7 @@ WW8Fib::WW8Fib(sal_uInt8 nVer)
     // --> #i90932#
     lid = 0x409; // LANGUAGE_ENGLISH_US
 
-    LanguageType nLang = Application::GetSettings().GetLanguage();
+    LanguageType nLang = Application::GetSettings().GetLanguageTag().getLanguageType();
     fFarEast = MsLangId::isCJK(nLang);
     if (fFarEast)
         lidFE = nLang;

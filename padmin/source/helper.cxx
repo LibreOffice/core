@@ -70,6 +70,7 @@ ResId padmin::PaResId( sal_uInt32 nId )
             Any aValue = aNode.getNodeValue( OUString("ooLocale") );
             if( aValue >>= aLoc )
             {
+                /* FIXME-BCP47: handle language tags! */
                 sal_Int32 nIndex = 0;
                 aLocale.Language = aLoc.getToken( 0, '-', nIndex );
                 aLocale.Country = aLoc.getToken( 0, '-', nIndex );
@@ -78,7 +79,7 @@ ResId padmin::PaResId( sal_uInt32 nId )
         }
         pPaResMgr = ResMgr::SearchCreateResMgr( "spa", aLocale );
         AllSettings aSettings = Application::GetSettings();
-        aSettings.SetUILocale( aLocale );
+        aSettings.SetUILanguageTag( LanguageTag( aLocale) );
         Application::SetSettings( aSettings );
     }
     return ResId( nId, *pPaResMgr );

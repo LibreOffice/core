@@ -206,7 +206,7 @@ bool InitExternalFunc(const rtl::OUString& rModuleName)
             FARPROC fpSetLanguage = (FARPROC)pLib->getFunctionSymbol(SETLANGUAGE);
             if ( fpSetLanguage )
             {
-                LanguageType eLanguage = Application::GetSettings().GetUILanguage();
+                LanguageType eLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
                 sal_uInt16 nLanguage = (sal_uInt16) eLanguage;
                 (*((SetLanguagePtr)fpSetLanguage))( nLanguage );
             }

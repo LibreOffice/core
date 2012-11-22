@@ -176,7 +176,7 @@ void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
     sal_uInt16 nPos = 0;
 
     // first insert font size names (for simplified/traditional chinese)
-    FontSizeNames aFontSizeNames( Application::GetSettings().GetUILanguage() );
+    FontSizeNames aFontSizeNames( Application::GetSettings().GetUILanguageTag().getLanguageType() );
     mpHeightAry = new long[nSizeCount+aFontSizeNames.Count()];
     if ( !aFontSizeNames.IsEmpty() )
     {

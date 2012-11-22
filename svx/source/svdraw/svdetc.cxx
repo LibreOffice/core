@@ -446,7 +446,7 @@ ResMgr* ImpGetResMgr()
     if(!rGlobalData.pResMgr)
     {
         rGlobalData.pResMgr =
-            ResMgr::CreateResMgr( "svx", Application::GetSettings().GetUILocale() );
+            ResMgr::CreateResMgr( "svx", Application::GetSettings().GetUILanguageTag().getLocale() );
     }
 
     return rGlobalData.pResMgr;

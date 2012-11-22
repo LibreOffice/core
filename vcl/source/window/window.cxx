@@ -315,7 +315,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
     if ( !bUseSystemFont )
     {
         ImplInitFontList();
-        String aConfigFont = utl::DefaultFontConfiguration::get().getUserInterfaceFont( rSettings.GetUILocale() );
+        String aConfigFont = utl::DefaultFontConfiguration::get().getUserInterfaceFont( rSettings.GetUILanguageTag().getLocale() );
         xub_StrLen nIndex = 0;
         while( nIndex != STRING_NOTFOUND )
         {
@@ -397,7 +397,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
     // if the UI is korean, chinese or another locale
     // where the system font size is kown to be often too small to
     // generate readable fonts enforce a minimum font size of 9 points
-    bool bBrokenLangFontHeight = MsLangId::isCJK(Application::GetSettings().GetUILanguage());
+    bool bBrokenLangFontHeight = MsLangId::isCJK(Application::GetSettings().GetUILanguageTag().getLanguageType());
     if (bBrokenLangFontHeight)
         defFontheight = Max(9, defFontheight);
 

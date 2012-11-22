@@ -702,7 +702,7 @@ lang::Locale SAL_CALL SwAccessibleContext::getLocale (void)
 {
     SolarMutexGuard aGuard;
 
-    lang::Locale aLoc( Application::GetSettings().GetLocale() );
+    lang::Locale aLoc( Application::GetSettings().GetLanguageTag().getLocale() );
     return aLoc;
 }
 

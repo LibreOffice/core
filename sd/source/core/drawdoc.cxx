@@ -236,7 +236,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     mpCharClass = new CharClass( *mpLocale );
 
     // If the current application language is a language that uses right-to-left text...
-    LanguageType eRealCTLLanguage = Application::GetSettings().GetLanguage();
+    LanguageType eRealCTLLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
     if( MsLangId::isRightToLeft( eRealCTLLanguage ) )
     {
         // ... then we have to set this as a default
@@ -271,7 +271,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         OSL_FAIL("Can't get SpellChecker");
     }
 
-    rOutliner.SetDefaultLanguage( Application::GetSettings().GetLanguage() );
+    rOutliner.SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 
     if (mpDocSh)
     {
@@ -325,7 +325,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         OSL_FAIL("Can't get SpellChecker");
     }
 
-    pHitTestOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguage() );
+    pHitTestOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 
     sal_uLong nCntrl2 = pHitTestOutliner->GetControlWord();
     nCntrl2 |= EE_CNTRL_ALLOWBIGOBJS;

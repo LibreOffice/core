@@ -137,7 +137,7 @@ OUString VCLXAccessibleMenuItem::implGetText()
 
 Locale VCLXAccessibleMenuItem::implGetLocale()
 {
-    return Application::GetSettings().GetLocale();
+    return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
 // -----------------------------------------------------------------------------

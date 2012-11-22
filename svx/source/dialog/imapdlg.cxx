@@ -665,7 +665,7 @@ IMPL_LINK( SvxIMapDlg, MousePosHdl, IMapWindow*, pWnd )
     String aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Point& rMousePos = pWnd->GetMousePos();
-    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLocale() );
+    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
     const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep()[0];
 
     aStr.Assign( GetUnitString( rMousePos.X(), eFieldUnit, cSep ) );
@@ -682,7 +682,7 @@ IMPL_LINK( SvxIMapDlg, GraphSizeHdl, IMapWindow*, pWnd )
     String aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Size& rSize = pWnd->GetGraphicSize();
-    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLocale() );
+    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
     const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep()[0];
 
     aStr.Assign( GetUnitString( rSize.Width(), eFieldUnit, cSep ) );

@@ -396,7 +396,7 @@ StringCompare DictionaryList::ColumnCompare( SvTreeListEntry* pLeft, SvTreeListE
         if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
             nLeftKind == SV_ITEM_ID_LBOXSTRING )
         {
-            IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+            IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLanguageTag().getLocale() );
             const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
 
             eCompare=(StringCompare)pCollator->compareString( ((SvLBoxString*)pLeftItem)->GetText(),

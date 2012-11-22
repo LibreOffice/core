@@ -113,7 +113,7 @@ getLocalizedDatTimeStr(
     aDate = Date( rDateTime.Day, rDateTime.Month, rDateTime.Year );
     aTime = Time( rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds );
 
-    LanguageType eUILang = Application::GetSettings().GetUILanguage();
+    LanguageType eUILang = Application::GetSettings().GetUILanguageTag().getLanguageType();
     SvNumberFormatter *pNumberFormatter
         = new SvNumberFormatter( xServiceFactory, eUILang );
     String      aTmpStr;

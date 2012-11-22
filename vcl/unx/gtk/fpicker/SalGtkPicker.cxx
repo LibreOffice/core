@@ -187,7 +187,8 @@ void SalGtkPicker::setGtkLanguage()
     if (bSet)
         return;
 
-    ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+    /* FIXME-BCP47: let LanguageTag create glibc locale string! */
+    ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     rtl::OUStringBuffer aBuffer;
     aBuffer.append( aLocale.Language );
     aBuffer.appendAscii( "_" );

@@ -801,7 +801,7 @@ Locale AccessibleDialogWindow::getLocale(  ) throw (IllegalAccessibleComponentSt
 {
     OExternalLockGuard aGuard( this );
 
-    return Application::GetSettings().GetLocale();
+    return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
 // -----------------------------------------------------------------------------

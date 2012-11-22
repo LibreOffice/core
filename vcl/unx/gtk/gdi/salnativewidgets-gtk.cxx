@@ -3911,7 +3911,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 #endif
 
     // match font to e.g. resolve "Sans"
-    psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILocale() );
+    psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILanguageTag().getLocale() );
 
 #if OSL_DEBUG_LEVEL > 1
     std::fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",

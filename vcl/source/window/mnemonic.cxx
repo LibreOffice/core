@@ -82,7 +82,7 @@ sal_Unicode MnemonicGenerator::ImplFindMnemonic( const XubString& rKey )
 
 void MnemonicGenerator::RegisterMnemonic( const XubString& rKey )
 {
-    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
+    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
     // Don't crash even when we don't have access to i18n service
@@ -128,7 +128,7 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
     if ( !rKey.Len() || ImplFindMnemonic( rKey ) )
         return sal_False;
 
-    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
+    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
     // Don't crash even when we don't have access to i18n service
@@ -140,7 +140,7 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
     sal_Bool bChanged = sal_False;
     xub_StrLen nLen = aKey.Len();
 
-    bool bCJK = MsLangId::isCJK(Application::GetSettings().GetUILanguage());
+    bool bCJK = MsLangId::isCJK(Application::GetSettings().GetUILanguageTag().getLanguageType());
 
     // #107889# in CJK versions ALL strings (even those that contain latin characters)
     // will get mnemonics in the form: xyz (M)

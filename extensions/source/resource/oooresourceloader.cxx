@@ -164,7 +164,7 @@ namespace extensions { namespace resource
     //--------------------------------------------------------------------
     Reference< XResourceBundle > SAL_CALL OpenOfficeResourceLoader::loadBundle_Default( const ::rtl::OUString& _baseName ) throw (MissingResourceException, RuntimeException)
     {
-        return loadBundle( _baseName, Application::GetSettings().GetUILocale() );
+        return loadBundle( _baseName, Application::GetSettings().GetUILanguageTag().getLocale() );
     }
 
     //--------------------------------------------------------------------

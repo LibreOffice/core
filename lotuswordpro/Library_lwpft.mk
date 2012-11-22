@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,lwpft,\
     cppu \
     cppuhelper \
     sal \
+	i18nisolang1 \
     sfx \
     sot \
     svt \

@@ -133,7 +133,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
 
     // Initialisierung funktionier fuer static nicht unter Linux - deswegen hier
     if( LANGUAGE_SYSTEM == eLastDialogLanguage )
-        eLastDialogLanguage = Application::GetSettings().GetLanguage();
+        eLastDialogLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
 
     LanguageType nSelectLang = LANGUAGE_DONTKNOW;
     nPos = aLanguageLB.GetEntryPos( (void*)(long) eLastDialogLanguage );
@@ -2008,7 +2008,7 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
     pMap->SetText(nMode < SGL_END ? sStartQuoteDlg  :  sEndQuoteDlg );
     sal_UCS4 cDlg;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-    LanguageType eLang = Application::GetSettings().GetLanguage();
+    LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
     switch( nMode )
     {
         case SGL_START:

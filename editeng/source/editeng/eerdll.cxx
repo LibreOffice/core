@@ -211,7 +211,7 @@ EditResId::EditResId( sal_uInt16 nId ):
 EditDLL::EditDLL()
 {
     pGlobalData = new GlobalEditData;
-    pResMgr = ResMgr::CreateResMgr( "editeng", Application::GetSettings().GetUILocale() );
+    pResMgr = ResMgr::CreateResMgr( "editeng", Application::GetSettings().GetUILanguageTag().getLocale() );
 }
 
 EditDLL::~EditDLL()

@@ -1985,7 +1985,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
         static_cast< DoubleNumericField* >( m_pPainter )->SetFormatter( pFormatterUsed );
 
         // und dann ein Format generieren, dass die gewuenschten Nachkommastellen usw. hat
-        LanguageType aAppLanguage = Application::GetSettings().GetUILanguage();
+        LanguageType aAppLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
         OUString sFormatString = pFormatterUsed->GenerateFormat(0, aAppLanguage, bThousand, sal_False, nScale);
 
         static_cast< DoubleNumericField* >( m_pWindow )->SetFormat( sFormatString, aAppLanguage );
@@ -2985,7 +2985,7 @@ sal_Bool DbFilterField::commitControl()
             {
                 OUString aPreparedText;
 
-                ::com::sun::star::lang::Locale aAppLocale = Application::GetSettings().GetUILocale();
+                ::com::sun::star::lang::Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
 
                 Reference< XRowSet > xDataSourceRowSet(
                     (Reference< XInterface >)*m_rColumn.GetParent().getDataSource(), UNO_QUERY);

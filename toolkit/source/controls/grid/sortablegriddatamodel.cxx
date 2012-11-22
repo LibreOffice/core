@@ -216,7 +216,7 @@ namespace toolkit
         Reference< XCollator > lcl_loadDefaultCollator_throw( ::comphelper::ComponentContext const & i_context )
         {
             Reference< XCollator > const xCollator( i_context.createComponent( "com.sun.star.i18n.Collator" ), UNO_QUERY_THROW );
-            xCollator->loadDefaultCollator( Application::GetSettings().GetLocale(), 0 );
+            xCollator->loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0 );
             return xCollator;
         }
     }

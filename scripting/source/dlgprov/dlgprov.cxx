@@ -95,7 +95,7 @@ static ::rtl::OUString aResourceResolverPropName("ResourceResolver");
         aInetObj.removeSegment();
         ::rtl::OUString aDlgLocation = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
         bool bReadOnly = true;
-        ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+        ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
         ::rtl::OUString aComment;
 
         Sequence<Any> aArgs( 6 );

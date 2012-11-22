@@ -721,7 +721,7 @@ TextWindow::TextWindow( Window* pParent ) : Window( pParent )
     mpExtTextEngine->SetMaxTextLen( STRING_MAXLEN );
     if( pParent->GetStyle() & WB_BORDER )
         mpExtTextEngine->SetLeftMargin( 2 );
-    mpExtTextEngine->SetLocale( GetSettings().GetLocale() );
+    mpExtTextEngine->SetLocale( GetSettings().GetLanguageTag().getLocale() );
     mpExtTextView = new ExtTextView( mpExtTextEngine, this );
     mpExtTextEngine->InsertView( mpExtTextView );
     mpExtTextEngine->EnableUndo( sal_True );

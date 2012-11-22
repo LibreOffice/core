@@ -473,7 +473,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
     com::sun::star::lang::Locale aLocale;
     if( eLang == LANGUAGE_NONE || eLang == LANGUAGE_SYSTEM || eLang == LANGUAGE_DONTKNOW )
     {
-        aLocale = Application::GetSettings().GetUILocale();
+        aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     }
     else
     {
@@ -4945,7 +4945,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
 
                 if ( xBI.is() )
                 {
-                    const com::sun::star::lang::Locale& rDefLocale(Application::GetSettings().GetUILocale());
+                    const com::sun::star::lang::Locale& rDefLocale(Application::GetSettings().GetUILanguageTag().getLocale());
                     xub_StrLen nSoftBreak = _rLayout.GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
                     DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
                     //aHyphOptions.hyphenIndex = nSoftBreak;

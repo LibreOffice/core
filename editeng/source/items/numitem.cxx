@@ -100,7 +100,7 @@ SvxNumberType::~SvxNumberType()
 
 String SvxNumberType::GetNumStr( sal_uLong nNo ) const
 {
-    LanguageType eLang = Application::GetSettings().GetLanguage();
+    LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
     Locale aLocale = SvxCreateLocale(eLang);
     return GetNumStr( nNo, aLocale );
 }
@@ -562,7 +562,7 @@ SvxNumRule::SvxNumRule( sal_uLong nFeatures,
       bContinuousNumbering(bCont)
 {
     ++nRefCount;
-    LanguageType eLang = Application::GetSettings().GetLanguage();
+    LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
     aLocale = SvxCreateLocale(eLang);
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {

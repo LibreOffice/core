@@ -75,7 +75,7 @@ int RTFTokenizer::resolveParse()
 
     if (m_xStatusIndicator.is())
     {
-        static ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILocale());
+        static ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag().getLocale());
         OUString sDocLoad(ResId(RID_SVXSTR_DOC_LOAD, *pResMgr).toString());
 
         sal_uInt32 nCurrentPos = Strm().Tell();

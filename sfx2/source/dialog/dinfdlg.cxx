@@ -724,7 +724,7 @@ namespace
 {
     String GetDateTimeString( sal_Int32 _nDate, sal_Int32 _nTime )
     {
-        LocaleDataWrapper aWrapper( Application::GetSettings().GetLocale() );
+        LocaleDataWrapper aWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
 
         Date aDate( _nDate );
         Time aTime( _nTime );
@@ -878,7 +878,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
     String aName;
     if ( bEnableUseUserData && aUseUserDataCB.IsChecked() )
         aName = SvtUserOptions().GetFullName();
-    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLocale() );
+    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
     DateTime now( DateTime::SYSTEM );
     util::DateTime uDT(
         now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
@@ -1148,7 +1148,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
 
     // handle access data
     sal_Bool m_bUseUserData = pInfoItem->IsUseUserData();
-    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLocale() );
+    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
     aCreateValFt.SetText( ConvertDateTime_Impl( pInfoItem->getAuthor(),
         pInfoItem->getCreationDate(), aLocaleWrapper ) );
     util::DateTime aTime( pInfoItem->getModificationDate() );
@@ -1810,7 +1810,7 @@ CustomPropertiesWindow::CustomPropertiesWindow( Window* pParent, const ResId& rR
     m_aRemoveButton ( this, SfxResId( SFX_PB_PROPERTY_REMOVE ) ),
     m_nScrollPos (0),
     m_aNumberFormatter( ::comphelper::getProcessServiceFactory(),
-                        Application::GetSettings().GetLanguage() )
+                        Application::GetSettings().GetLanguageTag().getLanguageType() )
 
 {
     m_aEditLoseFocusTimer.SetTimeout( 300 );

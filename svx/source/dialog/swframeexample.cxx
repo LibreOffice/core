@@ -160,7 +160,7 @@ void SvxSwFrameExample::InitAllRects_Impl()
     if (nAnchor == TextContentAnchorType_AS_CHARACTER || nAnchor == TextContentAnchorType_AT_CHARACTER)
     {
         Font aFont = OutputDevice::GetDefaultFont(
-                                DEFAULTFONT_LATIN_TEXT, Application::GetSettings().GetLanguage(),
+                                DEFAULTFONT_LATIN_TEXT, Application::GetSettings().GetLanguageTag().getLanguageType(),
                                 DEFAULTFONT_FLAGS_ONLYONE, this );
         aFont.SetColor( m_aTxtCol );
         aFont.SetFillColor( m_aBgCol );

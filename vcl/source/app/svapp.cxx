@@ -619,17 +619,18 @@ void Application::SetSettings( const AllSettings& rSettings )
     {
         GetSettings();
         *pSVData->maAppData.mpSettings = rSettings;
-        ResMgr::SetDefaultLocale( rSettings.GetUILocale() );
+        ResMgr::SetDefaultLocale( rSettings.GetUILanguageTag().getLocale() );
     }
     else
     {
         AllSettings aOldSettings = *pSVData->maAppData.mpSettings;
-        if( aOldSettings.GetUILanguage() != rSettings.GetUILanguage() && pSVData->mpResMgr )
+        if( aOldSettings.GetUILanguageTag().getLanguageType() != rSettings.GetUILanguageTag().getLanguageType() &&
+                pSVData->mpResMgr )
         {
             delete pSVData->mpResMgr;
             pSVData->mpResMgr = NULL;
         }
-        ResMgr::SetDefaultLocale( rSettings.GetUILocale() );
+        ResMgr::SetDefaultLocale( rSettings.GetUILanguageTag().getLocale() );
         *pSVData->maAppData.mpSettings = rSettings;
         sal_uLong nChangeFlags = aOldSettings.GetChangeFlags( *pSVData->maAppData.mpSettings );
         if ( nChangeFlags )

@@ -191,7 +191,7 @@ OUString VCLXAccessibleStatusBarItem::implGetText()
 
 lang::Locale VCLXAccessibleStatusBarItem::implGetLocale()
 {
-    return Application::GetSettings().GetLocale();
+    return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
 // -----------------------------------------------------------------------------
@@ -381,7 +381,7 @@ Locale VCLXAccessibleStatusBarItem::getLocale(  ) throw (IllegalAccessibleCompon
 {
     OExternalLockGuard aGuard( this );
 
-    return Application::GetSettings().GetLocale();
+    return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
 // -----------------------------------------------------------------------------

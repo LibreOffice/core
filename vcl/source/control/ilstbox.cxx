@@ -146,7 +146,7 @@ namespace
         {
             return comphelper::string::NaturalStringSorter(
                 ::comphelper::getProcessComponentContext(),
-                Application::GetSettings().GetLocale());
+                Application::GetSettings().GetLanguageTag().getLocale());
         }
     };
 }

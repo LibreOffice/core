@@ -963,7 +963,7 @@ static sal_Bool  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType
         case RTL_TEXTENCODING_TIS_620          :
             aLanguages[0] = LANGUAGE_THAI;
         break;
-        default: aLanguages[0] = Application::GetSettings().GetUILanguage();
+        default: aLanguages[0] = Application::GetSettings().GetUILanguageTag().getLanguageType();
     }
     return aLanguages[0] != LANGUAGE_SYSTEM;
 }
@@ -986,7 +986,7 @@ void SwSrcEditWindow::SetFont()
         }
         else
             aFont = OutputDevice::GetDefaultFont(DEFAULTFONT_SANS_UNICODE,
-                        Application::GetSettings().GetLanguage(), 0, this);
+                        Application::GetSettings().GetLanguageTag().getLanguageType(), 0, this);
         sFontName = aFont.GetName();
     }
     const SvxFontListItem* pFontListItem =

@@ -294,7 +294,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     {
         ResMgr*     pResMgr;
 
-        pResMgr = ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILocale() );
+        pResMgr = ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILanguageTag().getLocale() );
 
         if( pResMgr )
         {
@@ -440,7 +440,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     if ( mbStatus && mnLevelWarning && pFilterConfigItem )
     {
         ResMgr* pResMgr;
-        pResMgr = ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILocale() );
+        pResMgr = ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILanguageTag().getLocale() );
         if( pResMgr )
         {
             InfoBox aInfoBox( NULL, String( ResId( KEY_VERSION_CHECK, *pResMgr ) ) );

@@ -198,7 +198,7 @@ static ::com::sun::star::uno::Reference<
 
 static sal_uInt16 GetAppLang()
 {
-    return Application::GetSettings().GetLanguage();
+    return Application::GetSettings().GetLanguageTag().getLanguageType();
 }
 static LocaleDataWrapper& GetLocaleDataWrapper( sal_uInt16 nLang )
 {

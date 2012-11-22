@@ -370,7 +370,8 @@ MenuItemData* MenuItemList::SearchItem(
                     sal_Unicode mnUnicode = pData->aText.GetChar(n+1);
                     Window* pDefWindow = ImplGetDefaultWindow();
                     if(  (  pDefWindow
-                         && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( mnUnicode, Application::GetSettings().GetUILanguage(), mnKeyCode )
+                         && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( mnUnicode,
+                             Application::GetSettings().GetUILanguageTag().getLanguageType(), mnKeyCode )
                          && aKeyCode.GetCode() == mnKeyCode.GetCode()
                          )
                       || (  ascii
@@ -430,7 +431,8 @@ size_t MenuItemList::GetItemCount( KeyCode aKeyCode ) const
                 // so we have working shortcuts when ascii mnemonics are used
                 Window* pDefWindow = ImplGetDefaultWindow();
                 if(  (  pDefWindow
-                     && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( pData->aText.GetChar(n+1), Application::GetSettings().GetUILanguage(), mnKeyCode )
+                     && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( pData->aText.GetChar(n+1),
+                         Application::GetSettings().GetUILanguageTag().getLanguageType(), mnKeyCode )
                      && aKeyCode.GetCode() == mnKeyCode.GetCode()
                      )
                   || (  ascii

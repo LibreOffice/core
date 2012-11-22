@@ -735,7 +735,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
                     Reference<XNumberFormatTypes>  xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
                     if (xTypes.is())
                     {
-                        Locale aApplicationLocale = Application::GetSettings().GetUILocale();
+                        Locale aApplicationLocale = Application::GetSettings().GetUILanguageTag().getLocale();
 
                         if (m_bOriginalNumeric)
                             aFmtKey <<= (sal_Int32)xTypes->getStandardFormat(NumberFormat::NUMBER, aApplicationLocale);

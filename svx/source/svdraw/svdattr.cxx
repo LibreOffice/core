@@ -878,7 +878,7 @@ SfxItemPresentation SdrAngleItem::GetPresentation(
         if(!pIntlWrapper)
             pIntlWrapper = pMyIntlWrapper = new IntlWrapper(
                 ::comphelper::getProcessServiceFactory(),
-                Application::GetSettings().GetLanguage() );
+                Application::GetSettings().GetLanguageTag().getLanguageType() );
 
         if(pIntlWrapper->getLocaleData()->isNumLeadingZero())
             nAnz++;

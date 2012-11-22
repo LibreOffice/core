@@ -36,7 +36,7 @@ BasResId::BasResId( sal_uInt32 nId ) :
 BasicDLL::BasicDLL()
 {
     BASIC_DLL() = this;
-    ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+    ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     pBasResMgr = ResMgr::CreateResMgr("sb", aLocale );
     bDebugMode = false;
     bBreakEnabled = true;

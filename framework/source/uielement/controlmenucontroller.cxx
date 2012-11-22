@@ -206,7 +206,7 @@ ControlMenuController::~ControlMenuController()
 // private function
 void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 {
-    ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILocale());
+    ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag().getLocale());
     ResId aResId( RID_SVXIMGLIST_FMEXPL, *pResMgr );
     aResId.SetRT( RSC_IMAGELIST );
 
@@ -355,7 +355,7 @@ void ControlMenuController::impl_setPopupMenu()
 {
     if ( m_pResPopupMenu == 0 )
     {
-        ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILocale());
+        ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag().getLocale());
         if ( pResMgr )
         {
             ResId aResId( RID_FMSHELL_CONVERSIONMENU, *pResMgr );

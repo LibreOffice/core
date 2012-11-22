@@ -138,7 +138,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
     // TriState der ::com::sun::star::form::CheckBox abschalten
     m_pVisibleCell->GetBox().EnableTriState( sal_False );
 
-    Font aTitleFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE,Window::GetSettings().GetLanguage(),DEFAULTFONT_FLAGS_ONLYONE);
+    Font aTitleFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE,Window::GetSettings().GetLanguageTag().getLanguageType(),DEFAULTFONT_FLAGS_ONLYONE);
     aTitleFont.SetSize(Size(0, 6));
     SetTitleFont(aTitleFont);
 

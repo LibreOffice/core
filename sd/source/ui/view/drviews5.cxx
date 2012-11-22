@@ -464,7 +464,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     /* This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
-    GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( Application::GetSettings().GetLanguage() );
+    GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 
     mpDrawView->CompleteRedraw( pWin, Region( rRect ) );
 

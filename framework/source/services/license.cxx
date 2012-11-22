@@ -224,7 +224,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         ::rtl::OUString  aLangString;
         ::com::sun::star::lang::Locale aLocale;
         AllSettings aSettings(Application::GetSettings());
-        aLocale = aSettings.GetUILocale();
+        aLocale = aSettings.GetUILanguageTag().getLocale();
         ResMgr* pResMgr = ResMgr::SearchCreateResMgr("fwe", aLocale);
 
         aLangString = aLocale.Language;

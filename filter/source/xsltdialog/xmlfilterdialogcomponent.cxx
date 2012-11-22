@@ -351,7 +351,7 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException)
 
     if( NULL == pXSLTResMgr )
     {
-        pXSLTResMgr = ResMgr::CreateResMgr( "xsltdlg", Application::GetSettings().GetUILocale() );
+        pXSLTResMgr = ResMgr::CreateResMgr( "xsltdlg", Application::GetSettings().GetUILanguageTag().getLocale() );
     }
 
     if( NULL == mpDialog )

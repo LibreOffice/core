@@ -720,7 +720,7 @@ bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
             sal_uInt16 nCellLang = ((const SvxLanguageItem&)
                                     pPattern->GetItem(ATTR_FONT_LANGUAGE)).GetValue();
             if ( nCellLang == LANGUAGE_SYSTEM )
-                nCellLang = Application::GetSettings().GetLanguage();   // never use SYSTEM for spelling
+                nCellLang = Application::GetSettings().GetLanguageTag().getLanguageType();   // never use SYSTEM for spelling
             pEngine->SetDefaultLanguage( nCellLang );
 
             if ( eType == CELLTYPE_STRING )

@@ -133,7 +133,7 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
             aTime = Time( lastCheckedDT.Hours, lastCheckedDT.Minutes );
         }
 
-        LanguageType eUILang = Application::GetSettings().GetUILanguage();
+        LanguageType eUILang = Application::GetSettings().GetUILanguageTag().getLanguageType();
         SvNumberFormatter *pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessServiceFactory(), eUILang );
         String      aTmpStr;
         Color*      pColor = NULL;

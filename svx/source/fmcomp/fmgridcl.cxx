@@ -937,7 +937,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
                 Reference< XPropertySet > xReplaced( xCols->getByIndex( nPos ), UNO_QUERY );
 
                 OStaticDataAccessTools().TransferFormComponentProperties(
-                    xReplaced, xNewCol, Application::GetSettings().GetUILocale() );
+                    xReplaced, xNewCol, Application::GetSettings().GetUILanguageTag().getLocale() );
 
                 xCols->replaceByIndex( nPos, makeAny( xNewCol ) );
                 ::comphelper::disposeComponent( xReplaced );

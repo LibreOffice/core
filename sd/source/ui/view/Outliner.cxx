@@ -235,7 +235,7 @@ Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
     if( xHyphenator.is() )
         SetHyphenator( xHyphenator );
 
-    SetDefaultLanguage( Application::GetSettings().GetLanguage() );
+    SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 }
 
 

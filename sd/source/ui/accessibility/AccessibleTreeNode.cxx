@@ -339,7 +339,7 @@ lang::Locale SAL_CALL AccessibleTreeNode::getLocale (void)
         return xParentContext->getLocale();
     else
         // Strange, no parent!  Anyway, return the default locale.
-        return Application::GetSettings().GetLocale();
+        return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
 

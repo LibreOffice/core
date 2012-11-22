@@ -139,7 +139,7 @@ void SVGFontExport::implCollectGlyphs()
 
                     if( xBI.is() )
                     {
-                        const ::com::sun::star::lang::Locale&   rLocale = Application::GetSettings().GetLocale();
+                        const ::com::sun::star::lang::Locale&   rLocale = Application::GetSettings().GetLanguageTag().getLocale();
                         sal_Int32                               nCurPos = 0, nLastPos = -1;
 
                         while( ( nCurPos < aText.getLength() ) && ( nCurPos > nLastPos ) )

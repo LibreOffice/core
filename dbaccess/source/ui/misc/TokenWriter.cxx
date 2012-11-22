@@ -345,7 +345,7 @@ void ODatabaseImportExport::initialize()
     {
         Font aApplicationFont = OutputDevice::GetDefaultFont(
             DEFAULTFONT_SANS_UNICODE,
-            Application::GetSettings().GetUILanguage(),
+            Application::GetSettings().GetUILanguageTag().getLanguageType(),
             DEFAULTFONT_FLAGS_ONLYONE
         );
         m_aFont = VCLUnoHelper::CreateFontDescriptor( aApplicationFont );

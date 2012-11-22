@@ -210,7 +210,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
 
             ResMgr*     pResMgr;
 
-            pResMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILocale() );
+            pResMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag().getLocale() );
             aFltCallDlgPara.pResMgr = pResMgr;
 
             aFltCallDlgPara.aFilterExt = aGraphicFilter.pConfig->GetExportFormatShortName( nFormat );

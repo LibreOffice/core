@@ -36,6 +36,7 @@ $(eval $(call gb_Library_use_sdk_api,res))
 
 $(eval $(call gb_Library_use_libraries,res,\
 	vcl \
+    i18nisolang1 \
 	tl \
 	comphelper \
 	cppu \

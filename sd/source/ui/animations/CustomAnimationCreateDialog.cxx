@@ -232,7 +232,7 @@ ImplStlEffectCategorySortHelper::ImplStlEffectCategorySortHelper()
 
         if( mxCollator.is() )
         {
-            const lang::Locale& rLocale = Application::GetSettings().GetLocale();
+            const lang::Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
             mxCollator->loadDefaultCollator(rLocale, 0);
         }
     }

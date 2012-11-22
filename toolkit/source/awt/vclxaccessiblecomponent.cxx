@@ -713,7 +713,7 @@ lang::Locale VCLXAccessibleComponent::getLocale() throw (accessibility::IllegalA
 {
     OExternalLockGuard aGuard( this );
 
-    return Application::GetSettings().GetLocale();
+    return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
 uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleAtPoint( const awt::Point& rPoint ) throw (uno::RuntimeException)

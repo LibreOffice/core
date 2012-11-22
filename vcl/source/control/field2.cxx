@@ -159,7 +159,8 @@ static int ImplIsPatternChar( sal_Unicode cChar, sal_Char cEditMask )
     try
     {
         rtl::OUString aCharStr(cChar);
-        nType = ImplGetCharClass()->getStringType( aCharStr, 0, aCharStr.getLength(), Application::GetSettings().GetLocale() );
+        nType = ImplGetCharClass()->getStringType( aCharStr, 0, aCharStr.getLength(),
+                Application::GetSettings().GetLanguageTag().getLocale() );
     }
     catch (const ::com::sun::star::uno::Exception&)
     {
@@ -208,7 +209,8 @@ static sal_Unicode ImplPatternChar( sal_Unicode cChar, sal_Char cEditMask )
              (cEditMask == EDITMASK_UPPERALPHANUM) ||
              ( cEditMask == EDITMASK_UPPERALLCHAR ) )
         {
-            cChar = ImplGetCharClass()->toUpper(rtl::OUString(cChar), 0, 1, Application::GetSettings().GetLocale())[0];
+            cChar = ImplGetCharClass()->toUpper(rtl::OUString(cChar), 0, 1,
+                    Application::GetSettings().GetLanguageTag().getLocale())[0];
         }
         return cChar;
     }
@@ -2011,7 +2013,7 @@ void DateField::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & (SETTINGS_LOCALE|SETTINGS_MISC)) )
     {
         if ( IsDefaultLocale() && ( rDCEvt.GetFlags() & SETTINGS_LOCALE ) )
-            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
+            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLanguageTag().getLocale() );
         ReformatAll();
     }
 }
@@ -2096,7 +2098,7 @@ void DateBox::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
         if ( IsDefaultLocale() )
-            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
+            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLanguageTag().getLocale() );
         ReformatAll();
     }
 }
@@ -2957,7 +2959,7 @@ void TimeField::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
         if ( IsDefaultLocale() )
-            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
+            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLanguageTag().getLocale() );
         ReformatAll();
     }
 }
@@ -3109,7 +3111,7 @@ void TimeBox::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
         if ( IsDefaultLocale() )
-            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
+            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLanguageTag().getLocale() );
         ReformatAll();
     }
 }

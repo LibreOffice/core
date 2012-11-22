@@ -125,7 +125,7 @@ SvImpLBox::~SvImpLBox()
 
 void SvImpLBox::UpdateStringSorter()
 {
-    const ::com::sun::star::lang::Locale& rNewLocale = Application::GetSettings().GetLocale();
+    const ::com::sun::star::lang::Locale& rNewLocale = Application::GetSettings().GetLanguageTag().getLocale();
 
     if( m_pStringSorter )
     {

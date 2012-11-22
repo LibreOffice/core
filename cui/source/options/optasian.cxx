@@ -290,7 +290,7 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& )
     if(USHRT_MAX == eLastUsedLanguageTypeForForbiddenCharacters)
     {
         eLastUsedLanguageTypeForForbiddenCharacters = SvxLocaleToLanguage(
-            Application::GetSettings().GetLocale() );
+            Application::GetSettings().GetLanguageTag().getLocale() );
         if (MsLangId::isSimplifiedChinese(eLastUsedLanguageTypeForForbiddenCharacters))
             eLastUsedLanguageTypeForForbiddenCharacters = LANGUAGE_CHINESE_SIMPLIFIED;
         else if (MsLangId::isTraditionalChinese(eLastUsedLanguageTypeForForbiddenCharacters))

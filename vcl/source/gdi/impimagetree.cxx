@@ -237,8 +237,9 @@ bool ImplImageTree::doLoadImage(
     if (localized) {
         sal_Int32 pos = name.lastIndexOf('/');
         if (pos != -1) {
+            /* FIXME-BCP47: this needs to be changed for language tags! */
             css::lang::Locale const & loc =
-                Application::GetSettings().GetUILocale();
+                Application::GetSettings().GetUILanguageTag().getLocale();
             paths.push_back(createPath(name, pos, loc.Language));
             if (!loc.Country.isEmpty()) {
                 rtl::OUStringBuffer b(loc.Language);

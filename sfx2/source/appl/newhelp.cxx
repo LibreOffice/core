@@ -205,7 +205,7 @@ namespace sfx2
     {
         String sSearchStr;
         sal_Int32 nStartPos = 0;
-        const Locale aLocale = Application::GetSettings().GetUILocale();
+        const Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
         Boundary aBoundary = xBreak->getWordBoundary(
             rSearchString, nStartPos, aLocale, WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
 

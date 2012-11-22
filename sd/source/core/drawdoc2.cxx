@@ -922,8 +922,8 @@ void SdDrawDocument::SetLanguage( const LanguageType eLang, const sal_uInt16 nId
 
     if( bChanged )
     {
-        GetDrawOutliner().SetDefaultLanguage( Application::GetSettings().GetLanguage() );
-        pHitTestOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguage() );
+        GetDrawOutliner().SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
+        pHitTestOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
         pItemPool->SetPoolDefaultItem( SvxLanguageItem( eLang, nId ) );
         SetChanged( bChanged );
     }

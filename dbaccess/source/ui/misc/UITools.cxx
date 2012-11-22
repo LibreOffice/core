@@ -937,7 +937,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
             pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_True));
             if (!_pFormatter->IsTextFormat(_nFormatKey))
                 // text fields can only have text formats
-                _nFormatKey = _pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT,_pParent->GetSettings().GetLanguage());
+                _nFormatKey = _pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT,_pParent->GetSettings().GetLanguageTag().getLanguageType());
         }
 
         pFormatDescriptor->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, _nFormatKey));

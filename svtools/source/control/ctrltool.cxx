@@ -779,7 +779,7 @@ static const ImplFSNameItem aImplSimplifiedChinese[] =
 FontSizeNames::FontSizeNames( LanguageType eLanguage )
 {
     if ( eLanguage == LANGUAGE_DONTKNOW )
-        eLanguage = Application::GetSettings().GetUILanguage();
+        eLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
     if ( eLanguage == LANGUAGE_SYSTEM )
         eLanguage = MsLangId::getSystemUILanguage();
 

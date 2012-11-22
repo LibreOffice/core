@@ -41,7 +41,7 @@ static ResMgr* pResMgr=0;
 ResMgr* DialogsResMgr::GetResMgr()
 {
     if ( !pResMgr )
-        pResMgr = ResMgr::CreateResMgr( "svx", Application::GetSettings().GetUILocale() );
+        pResMgr = ResMgr::CreateResMgr( "svx", Application::GetSettings().GetUILanguageTag().getLocale() );
 
     return pResMgr;
 }

@@ -43,6 +43,7 @@ $(eval $(call gb_Library_use_libraries,svgfilter,\
 	svl \
 	utl \
 	tl \
+	i18nisolang1 \
 	sax \
 	comphelper \
 	basegfx \

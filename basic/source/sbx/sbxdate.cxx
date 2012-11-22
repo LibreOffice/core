@@ -96,7 +96,7 @@ double ImpGetDate( const SbxValues* p )
         }
         else
         {
-            LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
+            LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
 
             SvNumberFormatter* pFormatter;
             com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
@@ -270,7 +270,7 @@ start:
             }
             Color* pColor;
 
-            LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
+            LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
             SvNumberFormatter* pFormatter;
             com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
                 xFactory = comphelper::getProcessServiceFactory();

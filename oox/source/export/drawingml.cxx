@@ -645,7 +645,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
     Reference< XPropertyState > rXPropState( rRun, UNO_QUERY );
     OUString usLanguage;
     PropertyState eState;
-    sal_Int16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguage() );
+    sal_Int16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
     sal_Bool bComplex = ( nScriptType == ScriptType::COMPLEX );
     const char* bold = NULL;
     const char* italic = NULL;

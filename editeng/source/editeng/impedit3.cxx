@@ -4246,7 +4246,7 @@ void ImpEditEngine::ImplInitDigitMode( OutputDevice* pOutDev, String* pString, x
     else if ( SvtCTLOptions::NUMERALS_ARABIC == nCTLTextNumerals )
         eLang = LANGUAGE_ENGLISH;
     else if ( SvtCTLOptions::NUMERALS_SYSTEM == nCTLTextNumerals )
-        eLang = (LanguageType) Application::GetSettings().GetLanguage();
+        eLang = (LanguageType) Application::GetSettings().GetLanguageTag().getLanguageType();
 
     if(pOutDev)
     {
@@ -4337,7 +4337,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_uInt16 nPara,
     else if ( SvtCTLOptions::NUMERALS_ARABIC == pCTLOptions->GetCTLTextNumerals() )
         eLang = LANGUAGE_ENGLISH;
     else
-        eLang = (LanguageType) Application::GetSettings().GetLanguage();
+        eLang = (LanguageType) Application::GetSettings().GetLanguageTag().getLanguageType();
 
     pOutDev->SetDigitLanguage( eLang );
 }

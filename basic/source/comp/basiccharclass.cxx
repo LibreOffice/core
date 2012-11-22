@@ -100,7 +100,7 @@ bool BasicCharClass::isLetterUnicode( sal_Unicode c )
 {
   static CharClass* pCharClass = NULL;
   if( pCharClass == NULL )
-    pCharClass = new CharClass( Application::GetSettings().GetLocale() );
+    pCharClass = new CharClass( Application::GetSettings().GetLanguageTag().getLocale() );
   // can we get pCharClass to accept a sal_Unicode instead of this waste?
   return pCharClass->isLetter( rtl::OUString(c), 0 );
 }

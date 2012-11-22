@@ -42,7 +42,7 @@ LanguageType drawinglayer::detail::getDigitLanguage() {
     case SvtCTLOptions::NUMERALS_HINDI:
         return LANGUAGE_ARABIC_SAUDI_ARABIA;
     default:
-        return Application::GetSettings().GetLanguage();
+        return Application::GetSettings().GetLanguageTag().getLanguageType();
     }
 }
 

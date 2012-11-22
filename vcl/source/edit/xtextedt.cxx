@@ -162,7 +162,7 @@ sal_Bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& 
     nStartNode = aStartPaM.GetPara();
 
     util::SearchOptions aOptions( rSearchOptions );
-    aOptions.Locale = Application::GetSettings().GetLocale();
+    aOptions.Locale = Application::GetSettings().GetLanguageTag().getLocale();
     utl::TextSearch aSearcher( rSearchOptions );
 
     // ueber die Absaetze iterieren...

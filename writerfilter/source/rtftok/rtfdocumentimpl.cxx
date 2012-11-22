@@ -544,7 +544,7 @@ rtl_TextEncoding RTFDocumentImpl::getEncoding(sal_uInt32 nFontIndex)
         std::map<int, rtl_TextEncoding>::iterator it = m_aFontEncodings.find(nFontIndex);
         if (it != m_aFontEncodings.end())
             return it->second;
-        return msfilter::util::getBestTextEncodingFromLocale(Application::GetSettings().GetLocale());
+        return msfilter::util::getBestTextEncodingFromLocale(Application::GetSettings().GetLanguageTag().getLocale());
     }
     else
         return m_pSuperstream->getEncoding(nFontIndex);

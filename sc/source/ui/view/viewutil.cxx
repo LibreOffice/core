@@ -104,7 +104,7 @@ sal_uInt16 ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
     else
         eLnge = LANGUAGE_ENGLISH_US;
     if ( eLnge == LANGUAGE_SYSTEM )
-        eLnge = Application::GetSettings().GetLanguage();   // never use SYSTEM for spelling
+        eLnge = Application::GetSettings().GetLanguageTag().getLanguageType();   // never use SYSTEM for spelling
 
     return eLnge;
 }

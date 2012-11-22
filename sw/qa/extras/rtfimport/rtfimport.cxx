@@ -210,17 +210,13 @@ void Test::run()
         if (OString(rEntry.pName) == "fdo48023.rtf")
         {
             AllSettings aSettings(aSavedSettings);
-            lang::Locale aLocale;
-            aLocale.Language = "ru";
-            aSettings.SetLocale(aLocale);
+            aSettings.SetLanguageTag(LanguageTag("ru"));
             Application::SetSettings(aSettings);
         }
         else if (OString(rEntry.pName) == "fdo44211.rtf")
         {
             AllSettings aSettings(aSavedSettings);
-            lang::Locale aLocale;
-            aLocale.Language = "lt";
-            aSettings.SetLocale(aLocale);
+            aSettings.SetLanguageTag(LanguageTag("lt"));
             Application::SetSettings(aSettings);
         }
         mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/rtfimport/data/") + OUString::createFromAscii(rEntry.pName));

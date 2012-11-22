@@ -146,7 +146,7 @@ namespace sd
 TemplateEntryCompare::TemplateEntryCompare():
     mpStringSorter(new comphelper::string::NaturalStringSorter(
                        ::comphelper::getProcessComponentContext(),
-                       Application::GetSettings().GetLocale())) {}
+                       Application::GetSettings().GetLanguageTag().getLocale())) {}
 
 bool TemplateEntryCompare::operator()(TemplateEntry* pA, TemplateEntry* pB) const
 {

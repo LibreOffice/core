@@ -106,7 +106,7 @@ CompressGraphicsDialog::~CompressGraphicsDialog()
 void CompressGraphicsDialog::Update()
 {
     const FieldUnit eFieldUnit = m_rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
-    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLocale() );
+    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLanguageTag().getLocale() );
     sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep()[0];
 
     VirtualDevice* pDummyVDev = new VirtualDevice();

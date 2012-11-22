@@ -141,7 +141,7 @@ ToolbarsMenuController::ToolbarsMenuController( const ::com::sun::star::uno::Ref
     m_aPropResourceURL( "ResourceURL" ),
     m_bModuleIdentified( sal_False ),
     m_bResetActive( sal_False ),
-    m_aIntlWrapper( xServiceManager, Application::GetSettings().GetLocale() )
+    m_aIntlWrapper( xServiceManager, Application::GetSettings().GetLanguageTag().getLocale() )
 {
 }
 

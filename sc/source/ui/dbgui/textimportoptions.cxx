@@ -82,7 +82,7 @@ void ScTextImportOptionsDlg::init()
     m_pLbCustomLang->SetLanguageList(
         LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, false, false);
 
-    LanguageType eLang = Application::GetSettings().GetLanguage();
+    LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
     m_pLbCustomLang->SelectLanguage(eLang);
     m_pLbCustomLang->Disable();
 }

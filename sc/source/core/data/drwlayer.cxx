@@ -240,7 +240,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     rPool.SetPoolDefaultItem(SdrShadowYDistItem(300));
 
     // default for script spacing depends on locale, see SdDrawDocument ctor in sd
-    LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
+    LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
     if (MsLangId::isKorean(eOfficeLanguage) || eOfficeLanguage == LANGUAGE_JAPANESE)
     {
         // secondary is edit engine pool

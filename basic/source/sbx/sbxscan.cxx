@@ -629,7 +629,7 @@ ResMgr* implGetResMgr( void )
     static ResMgr* pResMgr = NULL;
     if( !pResMgr )
     {
-        ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+        ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
         pResMgr = ResMgr::CreateResMgr("sb", aLocale );
     }
     return pResMgr;
@@ -725,7 +725,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
             return;
         }
 
-        LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
+        LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
             xFactory = comphelper::getProcessServiceFactory();
         SvNumberFormatter aFormatter( xFactory, eLangType );
@@ -853,7 +853,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
         {
             SbxAppData& rAppData = GetSbxData_Impl();
 
-            LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
+            LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
             if( rAppData.pBasicFormater )
             {
                 if( rAppData.eBasicFormaterLangType != eLangType )

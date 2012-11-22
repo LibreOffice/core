@@ -376,7 +376,7 @@ sal_uInt16 SvxEditDictionaryDialog::GetLBInsertPos(const String &rDicWord)
 {
     sal_uInt16 nPos = USHRT_MAX;
 
-    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLanguageTag().getLocale() );
     const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
     sal_uInt16 j;
     for( j = 0; j < aWordsLB.GetEntryCount(); j++ )

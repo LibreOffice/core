@@ -2423,7 +2423,7 @@ SmParser::SmParser()
 {
     m_eConversion = CONVERT_NONE;
     bImportSymNames = m_bExportSymNames = false;
-    m_nLang = Application::GetSettings().GetUILanguage();
+    m_nLang = Application::GetSettings().GetUILanguageTag().getLanguageType();
 }
 
 SmNode *SmParser::Parse(const String &rBuffer)
@@ -2444,7 +2444,7 @@ SmNode *SmParser::Parse(const String &rBuffer)
     while ( !m_aNodeStack.empty() )
         m_aNodeStack.pop();
 
-    SetLanguage( Application::GetSettings().GetUILanguage() );
+    SetLanguage( Application::GetSettings().GetUILanguageTag().getLanguageType() );
     NextToken();
     Table();
 
@@ -2468,7 +2468,7 @@ SmNode *SmParser::ParseExpression(const OUString &rBuffer)
     while ( !m_aNodeStack.empty() )
         m_aNodeStack.pop();
 
-    SetLanguage( Application::GetSettings().GetUILanguage() );
+    SetLanguage( Application::GetSettings().GetUILanguageTag().getLanguageType() );
     NextToken();
     Expression();
 

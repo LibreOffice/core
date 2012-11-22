@@ -247,7 +247,7 @@ void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>
 	Reference<XPropertySet>  xEditProps(
         static_cast< OWeakObject * >(m_editPart.get()), UNO_QUERY);
 
-    Locale aAppLanguage = Application::GetSettings().GetUILocale();
+    Locale aAppLanguage = Application::GetSettings().GetUILanguageTag().getLocale();
     dbtools::TransferFormComponentProperties(xFormatProps, xEditProps, aAppLanguage);
 
     // then write the edit part, after switching to "fake mode"

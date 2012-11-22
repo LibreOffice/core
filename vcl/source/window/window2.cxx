@@ -894,7 +894,7 @@ void Window::SetZoomedPointFont( const Font& rFont )
                 nType = DEFAULTFONT_FIXED;
             else
                 nType = DEFAULTFONT_UI_SANS;
-            Font aTempFont = GetDefaultFont( nType, GetSettings().GetLanguage(), 0 );
+            Font aTempFont = GetDefaultFont( nType, GetSettings().GetLanguageTag().getLanguageType(), 0 );
             aFont.SetName( aTempFont.GetName() );
             SetPointFont( aFont );
         }

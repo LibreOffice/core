@@ -47,6 +47,7 @@ $(eval $(call gb_Library_use_libraries,basctl,\
 	editeng \
 	fwe \
 	sal \
+	i18nisolang1 \
 	sb \
 	sfx \
 	sot \

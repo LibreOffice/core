@@ -1257,7 +1257,7 @@ void DbgDialogTest( Window* pWindow )
                 nAccelPos = aText.Search( '~' );
                 if ( nAccelPos != STRING_NOTFOUND )
                 {
-                    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLocale();
+                    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
                     uno::Reference < i18n::XCharacterClassification > xCharClass = vcl::unohelper::CreateCharacterClassification();
                     XubString aUpperText = xCharClass->toUpper( aText, 0, aText.Len(), rLocale );
                     cAccel = aUpperText.GetChar( nAccelPos+1 );

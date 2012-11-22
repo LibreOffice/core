@@ -134,7 +134,7 @@ OUString VCLXAccessibleListItem::implGetText()
 // -----------------------------------------------------------------------------
 Locale VCLXAccessibleListItem::implGetLocale()
 {
-    return Application::GetSettings().GetLocale();
+    return Application::GetSettings().GetLanguageTag().getLocale();
 }
 // -----------------------------------------------------------------------------
 void VCLXAccessibleListItem::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )

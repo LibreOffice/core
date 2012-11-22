@@ -57,7 +57,7 @@ namespace frm
         if (m_pImpl)
             return;
 
-        m_pImpl = SimpleResMgr::Create("frm", Application::GetSettings().GetUILocale());
+        m_pImpl = SimpleResMgr::Create("frm", Application::GetSettings().GetUILanguageTag().getLocale());
 
         if (m_pImpl)
         {

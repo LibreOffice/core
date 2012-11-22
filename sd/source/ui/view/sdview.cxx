@@ -737,7 +737,7 @@ sal_Bool View::SdrBeginTextEdit(
         if( xHyphenator.is() )
             pOutl->SetHyphenator( xHyphenator );
 
-        pOutl->SetDefaultLanguage( Application::GetSettings().GetLanguage() );
+        pOutl->SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
     }
 
     sal_Bool bReturn = FmFormView::SdrBeginTextEdit(

@@ -661,7 +661,7 @@ lang::Locale SAL_CALL AccessibleBase::getLocale()
 {
     CheckDisposeState();
 
-    return Application::GetSettings().GetLocale();
+    return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
 // ________ AccessibleBase::XAccessibleComponent ________
