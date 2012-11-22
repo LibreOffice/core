@@ -4853,8 +4853,9 @@ void SwWW8WrTabu::PutAll(WW8Export& rWrt)
 }
 
 
-static void ParaTabStopAdd( WW8Export& rWrt, const SvxTabStopItem& rTStops,
-    long nLParaMgn )
+static void ParaTabStopAdd( WW8Export& rWrt,
+                            const SvxTabStopItem& rTStops,
+                            const long nLParaMgn )
 {
     SwWW8WrTabu aTab( 0, rTStops.Count());
 
@@ -4879,8 +4880,11 @@ static bool lcl_IsEqual(long nOneLeft, const SvxTabStop &rOne,
           );
 }
 
-static void ParaTabStopDelAdd( WW8Export& rWrt, const SvxTabStopItem& rTStyle,
-    long nLStypeMgn, const SvxTabStopItem& rTNew, long nLParaMgn )
+static void ParaTabStopDelAdd( WW8Export& rWrt,
+                               const SvxTabStopItem& rTStyle,
+                               const long nLStypeMgn,
+                               const SvxTabStopItem& rTNew,
+                               const long nLParaMgn )
 {
     SwWW8WrTabu aTab(rTStyle.Count(), rTNew.Count());
 
@@ -4956,15 +4960,15 @@ static void ParaTabStopDelAdd( WW8Export& rWrt, const SvxTabStopItem& rTStyle,
 
 void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
 {
-    bool bTabsRelativeToIndex = m_rWW8Export.pCurPam->GetDoc()->get( IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT );
-    long nCurrentLeft = 0;
+    const bool bTabsRelativeToIndex = m_rWW8Export.pCurPam->GetDoc()->get( IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT );
 
+    long nCurrentLeft = 0;
     if ( bTabsRelativeToIndex )
     {
         const SfxPoolItem* pLR = m_rWW8Export.HasItem( RES_LR_SPACE );
 
         if ( pLR != NULL )
-            nCurrentLeft = ((const SvxLRSpaceItem*)pLR)->GetTxtLeft();
+            nCurrentLeft = static_cast<const SvxLRSpaceItem*>(pLR)->GetTxtLeft();
     }
 
     // #i100264#
@@ -4972,41 +4976,50 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
          m_rWW8Export.pCurrentStyle != NULL &&
          m_rWW8Export.pCurrentStyle->DerivedFrom() != NULL )
     {
-        SvxTabStopItem aTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
+        SvxTabStopItem aParentTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
         const SwFmt *pParentStyle = m_rWW8Export.pCurrentStyle->DerivedFrom();
-        const SvxTabStopItem* pParentTabs = HasItem<SvxTabStopItem>( pParentStyle->GetAttrSet(), RES_PARATR_TABSTOP );
-        if ( pParentTabs )
         {
-            aTabs.Insert( pParentTabs );
+            const SvxTabStopItem* pParentTabs = HasItem<SvxTabStopItem>( pParentStyle->GetAttrSet(), RES_PARATR_TABSTOP );
+            if ( pParentTabs )
+            {
+                aParentTabs.Insert( pParentTabs );
+            }
         }
 
-        ParaTabStopDelAdd( m_rWW8Export, aTabs, 0, rTabStops, 0 );
+        // #i120938# - consider left indentation of style and its parent style
+        long nParentLeft = 0;
+        if ( bTabsRelativeToIndex )
+        {
+            const SvxLRSpaceItem &rStyleLR = ItemGet<SvxLRSpaceItem>( pParentStyle->GetAttrSet(), RES_LR_SPACE );
+            nParentLeft = rStyleLR.GetTxtLeft();
+        }
+
+        ParaTabStopDelAdd( m_rWW8Export, aParentTabs, nParentLeft, rTabStops, nCurrentLeft );
         return;
     }
 
-    // StyleDef -> "einfach" eintragen || keine Style-Attrs -> dito
     const SvxTabStopItem* pStyleTabs = 0;
     if ( !m_rWW8Export.bStyDef && m_rWW8Export.pStyAttr )
     {
-        pStyleTabs =
-            HasItem<SvxTabStopItem>( *m_rWW8Export.pStyAttr, RES_PARATR_TABSTOP );
+        pStyleTabs = HasItem<SvxTabStopItem>( *m_rWW8Export.pStyAttr, RES_PARATR_TABSTOP );
     }
 
     if ( !pStyleTabs )
+    {
         ParaTabStopAdd(m_rWW8Export, rTabStops, nCurrentLeft);
+    }
     else
     {
         long nStyleLeft = 0;
-
-        if (bTabsRelativeToIndex)
+        if ( bTabsRelativeToIndex )
         {
-            const SvxLRSpaceItem &rStyleLR =
-            ItemGet<SvxLRSpaceItem>(*m_rWW8Export.pStyAttr, RES_LR_SPACE);
+            const SvxLRSpaceItem &rStyleLR = ItemGet<SvxLRSpaceItem>(*m_rWW8Export.pStyAttr, RES_LR_SPACE);
             nStyleLeft = rStyleLR.GetTxtLeft();
         }
 
-        ParaTabStopDelAdd(m_rWW8Export, *pStyleTabs, nStyleLeft, rTabStops,
-            nCurrentLeft);
+        ParaTabStopDelAdd( m_rWW8Export,
+                           *pStyleTabs, nStyleLeft,
+                           rTabStops, nCurrentLeft);
     }
 }
 
