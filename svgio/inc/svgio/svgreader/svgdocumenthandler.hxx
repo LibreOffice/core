@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVGIO_SVGREADER_SVGDOCUMENTHANDLER_HXX
 #define INCLUDED_SVGIO_SVGREADER_SVGDOCUMENTHANDLER_HXX
 
-#include <svgio/svgiodllapi.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <svgio/svgreader/svgdocument.hxx>
 

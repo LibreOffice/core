@@ -17,76 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svgio/svgiodllapi.h>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <uno/environment.h>
-#include <cppuhelper/factory.hxx>
+#include "sal/config.h"
 
-//////////////////////////////////////////////////////////////////////////////
+#include "cppuhelper/factory.hxx"
+#include "cppuhelper/implementationentry.hxx"
+#include "sal/types.h"
 
-using namespace ::com::sun::star;
+#include "xsvgparser.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
-// predefines
+namespace {
 
-namespace svgio
-{
-    namespace svgreader
-    {
-        extern uno::Sequence< rtl::OUString > SAL_CALL XSvgParser_getSupportedServiceNames();
-        extern rtl::OUString SAL_CALL XSvgParser_getImplementationName();
-        extern uno::Reference< uno::XInterface > SAL_CALL XSvgParser_createInstance( const uno::Reference< lang::XMultiServiceFactory > & );
-    } // end of namespace svgreader
-} // end of namespace svgio
+static cppu::ImplementationEntry const services[] = {
+    { &svgio::svgreader::XSvgParser_createInstance,
+      &svgio::svgreader::XSvgParser_getImplementationName,
+      &svgio::svgreader::XSvgParser_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { 0, 0, 0, 0, 0, 0 } };
 
-//////////////////////////////////////////////////////////////////////////////
-// component_getImplementationEnvironment
-
-extern "C"
-{
-    SVGIO_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
-    {
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// component_getFactory
-
-extern "C"
+extern "C" SAL_DLLPUBLIC void * SAL_CALL svgio_component_getFactory(
+    char const * pImplName, void * pServiceManager, void * pRegistryKey)
 {
-    SVGIO_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
-    {
-        uno::Reference< lang::XSingleServiceFactory > xFactory;
-        void* pRet = 0;
-
-        if(svgio::svgreader::XSvgParser_getImplementationName().equalsAscii(pImplName))
-        {
-            xFactory = ::cppu::createSingleFactory(
-                reinterpret_cast< lang::XMultiServiceFactory * >(pServiceManager),
-                svgio::svgreader::XSvgParser_getImplementationName(),
-                svgio::svgreader::XSvgParser_createInstance,
-                svgio::svgreader::XSvgParser_getSupportedServiceNames());
-        }
-
-        if(xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-
-        return pRet;
-    }
+    return cppu::component_getFactoryHelper(
+        pImplName, pServiceManager, pRegistryKey, services);
 }
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVGIO_SVGREADER_SVGPAINT_HXX
 #define INCLUDED_SVGIO_SVGREADER_SVGPAINT_HXX
 
-#include <svgio/svgiodllapi.h>
 #include <basegfx/color/bcolor.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

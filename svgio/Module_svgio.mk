@@ -20,7 +20,6 @@ $(eval $(call gb_Module_Module,svgio))
 
 $(eval $(call gb_Module_add_targets,svgio,\
     Library_svgio \
-    Package_inc \
 ))
 
 # vim: set noet ts=4 sw=4:

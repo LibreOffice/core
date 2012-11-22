@@ -16,18 +16,38 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVGIODLLAPI_H
-#define INCLUDED_SVGIODLLAPI_H
 
+#ifndef INCLUDED_SVGIO_SOURCE_SVGUNO_XSVGPARSER_HXX
+#define INCLUDED_SVGIO_SOURCE_SVGUNO_XSVGPARSER_HXX
+
+#include "sal/config.h"
+
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
 #include "sal/types.h"
 
-#if defined(SVGIO_DLLIMPLEMENTATION)
-#define SVGIO_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
-#else
-#define SVGIO_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
-#endif
-#define SVGIO_DLLPRIVATE SAL_DLLPRIVATE
+namespace com { namespace sun { namespace star {
+    namespace uno {
+        class XComponentContext;
+        class XInterface;
+    }
+} } }
+namespace rtl { class OUString; }
 
-#endif /* INCLUDED_SVGIODLLAPI_H */
+namespace svgio { namespace svgreader {
+
+com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
+XSvgParser_createInstance(
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        const &);
+
+rtl::OUString SAL_CALL XSvgParser_getImplementationName();
+
+com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+XSvgParser_getSupportedServiceNames();
+
+} }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

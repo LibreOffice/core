@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVGIO_SVGREADER_SVGTSPANNODE_HXX
 #define INCLUDED_SVGIO_SVGREADER_SVGTSPANNODE_HXX
 
-#include <svgio/svgiodllapi.h>
 #include <svgio/svgreader/svgcharacternode.hxx>
 #include <svgio/svgreader/svgstyleattributes.hxx>
 #include <svgio/svgreader/svgtools.hxx>

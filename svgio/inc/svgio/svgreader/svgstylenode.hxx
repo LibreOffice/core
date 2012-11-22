@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVGIO_SVGREADER_SVGSTYLENODE_HXX
 #define INCLUDED_SVGIO_SVGREADER_SVGSTYLENODE_HXX
 
-#include <svgio/svgiodllapi.h>
 #include <svgio/svgreader/svgnode.hxx>
 #include <svgio/svgreader/svgstyleattributes.hxx>
 

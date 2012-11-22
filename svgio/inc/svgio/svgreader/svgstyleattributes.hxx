@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVGIO_SVGREADER_SVGSTYLEATTRIBUTES_HXX
 #define INCLUDED_SVGIO_SVGREADER_SVGSTYLEATTRIBUTES_HXX
 
-#include <svgio/svgiodllapi.h>
 #include <svgio/svgreader/svgpaint.hxx>
 #include <svgio/svgreader/svgnode.hxx>
 #include <vcl/vclenum.hxx>

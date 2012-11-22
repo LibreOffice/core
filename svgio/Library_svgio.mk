@@ -20,20 +20,16 @@ $(eval $(call gb_Library_Library,svgio))
 
 $(eval $(call gb_Library_set_componentfile,svgio,svgio/svgio))
 
-$(eval $(call gb_Library_use_packages,svgio,\
-	svgio_inc \
+$(eval $(call gb_Library_set_include,svgio,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/svgio/inc \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,svgio))
 
-$(eval $(call gb_Library_add_defs,svgio,\
-    -DSVGIO_DLLIMPLEMENTATION \
-))
-
 $(eval $(call gb_Library_use_libraries,svgio,\
     basegfx \
     drawinglayer \
-    comphelper \
     cppu \
     cppuhelper \
     sal \

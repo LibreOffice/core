@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVGIO_SVGREADER_SVGNODE_HXX
 #define INCLUDED_SVGIO_SVGREADER_SVGNODE_HXX
 
-#include <svgio/svgiodllapi.h>
 #include <svgio/svgreader/svgtools.hxx>
 #include <svgio/svgreader/svgtoken.hxx>
 #include <svgio/svgreader/svgpaint.hxx>

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVGIO_SVGREADER_SVGTOOLS_HXX
 #define INCLUDED_SVGIO_SVGREADER_SVGTOOLS_HXX
 
-#include <svgio/svgiodllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

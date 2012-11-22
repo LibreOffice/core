@@ -17,14 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
 #include <com/sun/star/graphic/XSvgParser.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <svgio/svgreader/svgdocumenthandler.hxx>
 #include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <comphelper/processfactory.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+
+#include "xsvgparser.hxx"
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -42,9 +46,12 @@ namespace svgio
             XSvgParser(const XSvgParser&);
             XSvgParser& operator=(const XSvgParser&);
 
+            uno::Reference< uno::XComponentContext > context_;
+
         protected:
         public:
-            XSvgParser();
+            XSvgParser(
+                uno::Reference< uno::XComponentContext > const & context);
             virtual ~XSvgParser();
 
             // XSvgParser
@@ -80,9 +87,9 @@ namespace svgio
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "svgio::svgreader::XSvgParser" ) );
         }
 
-        uno::Reference< uno::XInterface > SAL_CALL XSvgParser_createInstance(const uno::Reference< lang::XMultiServiceFactory >&)
+        uno::Reference< uno::XInterface > SAL_CALL XSvgParser_createInstance(const uno::Reference< uno::XComponentContext >& context)
         {
-            return static_cast< ::cppu::OWeakObject* >(new XSvgParser);
+            return static_cast< ::cppu::OWeakObject* >(new XSvgParser(context));
         }
     } // end of namespace svgreader
 } // end of namespace svgio
@@ -93,7 +100,9 @@ namespace svgio
 {
     namespace svgreader
     {
-        XSvgParser::XSvgParser()
+        XSvgParser::XSvgParser(
+            uno::Reference< uno::XComponentContext > const & context):
+            context_(context)
         {
         }
 
@@ -121,9 +130,7 @@ namespace svgio
 
                     // get parser
                     uno::Reference< xml::sax::XParser > xParser(
-                        comphelper::getProcessServiceFactory()->createInstance(
-                            rtl::OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
-                        uno::UNO_QUERY_THROW );
+                        xml::sax::Parser::create(context_));
 
                     // connect parser and filter
                     xParser->setDocumentHandler(xSvgDocHdl);

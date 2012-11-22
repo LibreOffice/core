@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVGIO_SVGREADER_SVGTOKEN_HXX
 #define INCLUDED_SVGIO_SVGREADER_SVGTOKEN_HXX
 
-#include <svgio/svgiodllapi.h>
 #include <rtl/ustring.hxx>
 #include <boost/unordered_map.hpp>
 

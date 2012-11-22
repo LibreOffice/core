@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVGIO_SVGREADER_SVGDOCUMENT_HXX
 #define INCLUDED_SVGIO_SVGREADER_SVGDOCUMENT_HXX
 
-#include <svgio/svgiodllapi.h>
 #include <boost/utility.hpp>
 #include <svgio/svgreader/svgnode.hxx>
 
