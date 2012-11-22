@@ -107,7 +107,7 @@ public:
     {
         const SolarMutexGuard aGuard;
         m_ResMgr = new SimpleResMgr(
-            "fps_office", Application::GetSettings().GetUILocale());
+            "fps_office", Application::GetSettings().GetUILanguageTag().getLocale());
     }
 
     //-------------------------------------
