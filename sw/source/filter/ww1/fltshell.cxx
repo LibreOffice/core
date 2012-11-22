@@ -549,40 +549,36 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         break;
     case RES_FLTR_NUMRULE_NUM:
         break;
-    case RES_FLTR_BOOKMARK:         // eigentlich nur fuer den Ende-Stack
+    case RES_FLTR_BOOKMARK:
         {
             SwFltBookmark* pB = (SwFltBookmark*)rEntry.pAttr;
             const OUString& rName = ((SwFltBookmark*)rEntry.pAttr)->GetName();
 
             if (IsFlagSet(BOOK_TO_VAR_REF))
             {
-                if (pB->IsPgRef() && !pB->IsRef())
+                SwFieldType* pFT = pDoc->GetFldType(RES_SETEXPFLD, rName, false);
+                if (!pFT)
                 {
-                            // XRefs und Bookmarks sind bereits geUpcased
-                    MakeBookRegionOrPoint(rEntry, pDoc, aRegion, sal_True);
-                    pDoc->InsertPoolItem(aRegion, SwFmtRefMark(rName), 0);
+                    SwSetExpFieldType aS(pDoc, rName, nsSwGetSetExpType::GSE_STRING);
+                    pFT = pDoc->InsertFldType(aS);
                 }
-                else if( !pB->IsOnlyRef() )
-                {
-                    SwFieldType* pFT = pDoc->GetFldType(RES_SETEXPFLD, rName, false);
-                    if (!pFT)
-                    {                       // FieldType anlegen
-                        SwSetExpFieldType aS(pDoc, rName, nsSwGetSetExpType::GSE_STRING);
-                        pFT = pDoc->InsertFldType(aS);
-                    }
-                    SwSetExpField aFld((SwSetExpFieldType*)pFT,
-                                        pB->GetValSys());
-                    aFld.SetSubType( nsSwExtendedSubType::SUB_INVISIBLE );
-                    MakePoint(rEntry, pDoc, aRegion);
-                    pDoc->InsertPoolItem(aRegion, SwFmtFld(aFld), 0);
-                    MoveAttrs( *(aRegion.GetPoint()) );
-                }
+                SwSetExpField aFld((SwSetExpFieldType*)pFT, pB->GetValSys());
+                aFld.SetSubType( nsSwExtendedSubType::SUB_INVISIBLE );
+                MakePoint(rEntry, pDoc, aRegion);
+                pDoc->InsertPoolItem(aRegion, SwFmtFld(aFld), 0);
+                MoveAttrs( *(aRegion.GetPoint()) );
             }
-            if( !pB->IsOnlyRef() &&
-                ( !IsFlagSet(HYPO) || IsFlagSet(BOOK_AND_REF) ) && !rEntry.bConsumedByField)
+            if ( ( !IsFlagSet(HYPO) || IsFlagSet(BOOK_AND_REF) ) &&
+                 !rEntry.bConsumedByField )
             {
                 MakeBookRegionOrPoint(rEntry, pDoc, aRegion, sal_True);
-                pDoc->getIDocumentMarkAccess()->makeMark( aRegion, rName, IDocumentMarkAccess::BOOKMARK);
+                // #i120879# - create a cross reference heading bookmark if appropriate.
+                const IDocumentMarkAccess::MarkType eBookmarkType =
+                    ( pB->IsTOCBookmark() &&
+                      IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( aRegion ) )
+                    ? IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK
+                    : IDocumentMarkAccess::BOOKMARK;
+                pDoc->getIDocumentMarkAccess()->makeMark( aRegion, rName, eBookmarkType );
             }
         }
         break;
@@ -928,32 +924,39 @@ SfxPoolItem* SwFltRedline::Clone( SfxItemPool* ) const
 
 //------ hier stehen die Methoden von SwFltBookmark -----------
 SwFltBookmark::SwFltBookmark( const OUString& rNa, const OUString& rVa,
-                                long nHand, sal_Bool bOnlyR )
-    : SfxPoolItem(RES_FLTR_BOOKMARK), nHandle(nHand), aName(rNa), aVal(rVa),
-    bOnlyRef(bOnlyR), bRef(sal_False), bPgRef(sal_False)
+                              long nHand, const bool bIsTOCBookmark )
+    : SfxPoolItem( RES_FLTR_BOOKMARK )
+    , mnHandle( nHand )
+    , maName( rNa )
+    , maVal( rVa )
+    , mbIsTOCBookmark( bIsTOCBookmark )
 {
-        // eSrc: CHARSET_DONTKNOW fuer keine UEbersetzung bei operator <<
-        // Upcase wird immer gemacht.
-        // bei XXXStack.NewAttr(...) wird nie eine UEbersetzung vorgenommen.
-        // ansonsten: uebergebener Src-Charset fuer aName
-        // im Filter eingestellter Src-Charset fuer aVal ( Text )
+    // eSrc: CHARSET_DONTKNOW fuer keine UEbersetzung bei operator <<
+    // Upcase wird immer gemacht.
+    // bei XXXStack.NewAttr(...) wird nie eine UEbersetzung vorgenommen.
+    // ansonsten: uebergebener Src-Charset fuer aName
+    // im Filter eingestellter Src-Charset fuer aVal ( Text )
+
+    if ( IsTOCBookmark() )
+    {
+        maName = IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix();
+        maName += rNa;
+    }
 }
 
 SwFltBookmark::SwFltBookmark(const SwFltBookmark& rCpy)
-    : SfxPoolItem(RES_FLTR_BOOKMARK),
-    nHandle(rCpy.nHandle),
-    aName(rCpy.aName),
-    aVal(rCpy.aVal),
-    bOnlyRef(rCpy.bOnlyRef),
-    bRef(rCpy.bRef),
-    bPgRef(rCpy.bPgRef)
+    : SfxPoolItem( RES_FLTR_BOOKMARK )
+    , mnHandle( rCpy.mnHandle )
+    , maName( rCpy.maName )
+    , maVal( rCpy.maVal )
+    , mbIsTOCBookmark( rCpy.mbIsTOCBookmark )
 {
 }
 
 int SwFltBookmark::operator==(const SfxPoolItem& rItem) const
 {
-    return (aName == ((SwFltBookmark&)rItem).aName)
-            && (nHandle == ((SwFltBookmark&)rItem).nHandle);
+    return ( maName == ((SwFltBookmark&)rItem).maName)
+            && (mnHandle == ((SwFltBookmark&)rItem).mnHandle);
 }
 
 SfxPoolItem* SwFltBookmark::Clone(SfxItemPool*) const
@@ -1255,8 +1258,8 @@ SwFltShell& SwFltShell::SetStyle( sal_uInt16 nStyle )
 
 SwFltShell& SwFltShell::operator << (SwFltBookmark& aBook)
 {
-    aBook.aName = ConvertUStr(aBook.aName);
-    aBook.aVal = QuoteStr(aBook.aVal);
+    aBook.maName = ConvertUStr( aBook.maName );
+    aBook.maVal = QuoteStr(aBook.maVal);
     aEndStack.NewAttr(*pPaM->GetPoint(), aBook);
     return *this;
 }

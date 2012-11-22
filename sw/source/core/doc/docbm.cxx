@@ -288,6 +288,29 @@ IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const IMark& rBkmk)
     }
 }
 
+namespace
+{
+    const char CrossRefHeadingBookmark_NamePrefix[] = "__RefHeading__";
+}
+
+OUString IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()
+{
+    return OUString("__RefHeading__");
+}
+
+bool IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPaM )
+{
+    bool bRet( false );
+
+    bRet = rPaM.Start()->nNode.GetNode().IsTxtNode() &&
+           rPaM.Start()->nContent.GetIndex() == 0 &&
+           ( !rPaM.HasMark() ||
+             ( rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
+               rPaM.End()->nContent.GetIndex() == rPaM.End()->nNode.GetNode().GetTxtNode()->Len() ) );
+
+    return bRet;
+}
+
 namespace sw { namespace mark
 {
     MarkManager::MarkManager(SwDoc& rDoc)

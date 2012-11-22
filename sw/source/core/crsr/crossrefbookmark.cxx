@@ -17,15 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <IDocumentMarkAccess.hxx>
 #include <crossrefbookmark.hxx>
 #include <ndtxt.hxx>
 
 namespace
 {
-
-const char CrossRefHeadingBookmark_NamePrefix[] = "__RefHeading__";
-const char CrossRefNumItemBookmark_NamePrefix[] = "__RefNumPara__";
-
+    const char CrossRefNumItemBookmark_NamePrefix[] = "__RefNumPara__";
 }
 
 namespace sw { namespace mark
@@ -37,12 +35,9 @@ namespace sw { namespace mark
         const OUString& rPrefix)
         : Bookmark(rPaM, rCode, rName, rShortName)
     {
-        if(rPaM.HasMark())
-            OSL_ENSURE((rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
-                rPaM.Start()->nContent.GetIndex() == 0 &&
-                rPaM.End()->nContent.GetIndex() == rPaM.GetPoint()->nNode.GetNode().GetTxtNode()->Len()),
-                "<CrossRefBookmark::CrossRefBookmark(..)>"
-                "- creation of cross-reference bookmark with an expanded PaM that does not expand over exactly one whole paragraph.");
+        OSL_ENSURE( IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( rPaM ),
+                    "<CrossRefBookmark::CrossRefBookmark(..)>"
+                    "- creation of cross-reference bookmark with an illegal PaM that does not expand over exactly one whole paragraph.");
         SetMarkPos(*rPaM.Start());
         if(rName.isEmpty())
             m_aName = MarkBase::GenerateNewName(rPrefix);
@@ -71,19 +66,19 @@ namespace sw { namespace mark
         const KeyCode& rCode,
         const OUString& rName,
         const OUString& rShortName)
-        : CrossRefBookmark(rPaM, rCode, rName, rShortName, OUString(CrossRefHeadingBookmark_NamePrefix))
+        : CrossRefBookmark(rPaM, rCode, rName, rShortName, IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix())
     { }
 
     bool CrossRefHeadingBookmark::IsLegalName(const OUString& rName)
     {
-        return rName.match(CrossRefHeadingBookmark_NamePrefix);
+        return rName.match(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix());
     }
 
     CrossRefNumItemBookmark::CrossRefNumItemBookmark(const SwPaM& rPaM,
         const KeyCode& rCode,
         const OUString& rName,
         const OUString& rShortName)
-        : CrossRefBookmark(rPaM, rCode, rName, rShortName, OUString(CrossRefNumItemBookmark_NamePrefix))
+        : CrossRefBookmark(rPaM, rCode, rName, rShortName, IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix())
     { }
 
     bool CrossRefNumItemBookmark::IsLegalName(const OUString& rName)

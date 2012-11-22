@@ -1057,6 +1057,40 @@ bool SwWW8FltControlStack::CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd)
     return rReader.IsParaEndInCPs(nStart,nEnd);
 }
 
+void SwWW8ReferencedFltEndStack::SetAttrInDoc( const SwPosition& rTmpPos,
+                                               SwFltStackEntry& rEntry )
+{
+    switch( rEntry.pAttr->Which() )
+    {
+    case RES_FLTR_BOOKMARK:
+        {
+            // suppress insertion of bookmark, which is recognized as an internal bookmark used for table-of-content
+            // and which is not referenced.
+            bool bInsertBookmarkIntoDoc = true;
+
+            SwFltBookmark* pFltBookmark = dynamic_cast<SwFltBookmark*>(rEntry.pAttr);
+            if ( pFltBookmark != 0 && pFltBookmark->IsTOCBookmark() )
+            {
+                const OUString& rName = pFltBookmark->GetName();
+                ::std::set< OUString, SwWW8::ltstr >::const_iterator aResult = aReferencedTOCBookmarks.find(rName);
+                if ( aResult == aReferencedTOCBookmarks.end() )
+                {
+                    bInsertBookmarkIntoDoc = false;
+                }
+            }
+            if ( bInsertBookmarkIntoDoc )
+            {
+                SwFltEndStack::SetAttrInDoc( rTmpPos, rEntry );
+            }
+            break;
+        }
+    default:
+        SwFltEndStack::SetAttrInDoc( rTmpPos, rEntry );
+        break;
+    }
+
+}
+
 void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     SwFltStackEntry& rEntry)
 {
@@ -4499,7 +4533,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         RefFldStck: Keeps track of bookmarks which may be inserted as
         variables intstead.
     */
-    pReffedStck = new SwFltEndStack(&rDoc, nFieldFlags);
+    pReffedStck = new SwWW8ReferencedFltEndStack(&rDoc, nFieldFlags);
     pReffingStck = new SwWW8FltRefStack(&rDoc, nFieldFlags);
 
     pAnchorStck = new SwWW8FltAnchorStack(&rDoc, nFieldFlags);
