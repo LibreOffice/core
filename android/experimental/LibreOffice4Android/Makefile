@@ -45,9 +45,8 @@ copy-stuff:
 	gzip -9 <$(OUTDIR)/bin/types.rdb >assets/gz.unpack/program/types.rdb
 	gzip -9 <$(OUTDIR)/bin/ure/types.rdb >assets/gz.unpack/program/ure/types.rdb
 # For some reason the vnd.sun.star.expand:$LO_LIB_DIR doesn't seem to work, it expands to empty!?
-# So just hardcode the known APP_DATA_PATH for now...
 	for F in xml/services xml/ure/services; do \
-		sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="file://$(APP_DATA_PATH)/lib/!g' <$(OUTDIR)/$$F.rdb >assets/$$F.rdb; \
+		sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="file://$$APP_DATA_DIR/lib/!g' <$(OUTDIR)/$$F.rdb >assets/$$F.rdb; \
 	done
 	cp $(SRC_ROOT)/odk/examples/java/DocumentHandling/test/test1.odt \
 	   $(SRC_ROOT)/sc/qa/unit/data/xls/border.xls \
@@ -72,30 +71,30 @@ copy-stuff:
 	echo 'NativeProgress=1' >> assets/rc
 	echo 'URE_BOOTSTRAP=file:///assets/program/fundamentalrc' >> assets/rc
 #	echo 'RTL_LOGFILE=file:///dev/log/main' >> assets/rc
-	echo "HOME=$(APP_DATA_PATH)/cache" >> assets/rc
-	echo "OSL_SOCKET_PATH=$(APP_DATA_PATH)/cache" >> assets/rc
+	echo 'HOME=$$APP_DATA_DIR/cache' >> assets/rc
+	echo 'OSL_SOCKET_PATH=$$APP_DATA_DIR/cache' >> assets/rc
 #
 # Set up fundamentalrc
 	echo '[Bootstrap]' > assets/program/fundamentalrc
-	echo "LO_LIB_DIR=file:$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc
-	echo "URE_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc # checkme - is this used to find configs ?
+	echo 'LO_LIB_DIR=file://$$APP_DATA_DIR/lib/' >> assets/program/fundamentalrc
+	echo 'URE_LIB_DIR=file://$$APP_DATA_DIR/lib/' >> assets/program/fundamentalrc # checkme - is this used to find configs ?
 	echo 'BRAND_BASE_DIR=file:///assets' >> assets/program/fundamentalrc
 	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry module:$${BRAND_BASE_DIR}/share/registry/modules res:$${BRAND_BASE_DIR}/share/registry' >> assets/program/fundamentalrc
 	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway' >> assets/program/fundamentalrc
-	echo 'URE_MORE_TYPES=$(APP_DATA_PATH)/program/offapi.rdb $(APP_DATA_PATH)/program/oovbaapi.rdb' >> assets/program/fundamentalrc
+	echo 'URE_MORE_TYPES=$$APP_DATA_DIR/program/offapi.rdb $$APP_DATA_DIR/program/oovbaapi.rdb' >> assets/program/fundamentalrc
 	echo 'URE_MORE_SERVICES=file:///assets/xml/services.rdb <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
 #
 # Set up unorc
 	echo '[Bootstrap]' > assets/program/unorc
-	echo "URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/unorc
-	echo 'UNO_TYPES=$(APP_DATA_PATH)/program/ure/types.rdb $(APP_DATA_PATH)/program/types.rdb $${URE_MORE_TYPES}' >> assets/program/unorc
+	echo 'URE_INTERNAL_LIB_DIR=file://$$APP_DATA_DIR/lib/' >> assets/program/unorc
+	echo 'UNO_TYPES=$$APP_DATA_DIR/program/ure/types.rdb $$APP_DATA_DIR/program/types.rdb $${URE_MORE_TYPES}' >> assets/program/unorc
 	echo 'UNO_SERVICES=file:///assets/xml/ure/services.rdb $${URE_MORE_SERVICES}' >> assets/program/unorc
 #
 # Set up bootstraprc
 	echo '[Bootstrap]' > assets/program/bootstraprc
 	echo 'InstallMode=<installmode>' >> assets/program/bootstraprc
 	echo 'ProductKey=LibreOffice 3.6' >> assets/program/bootstraprc
-	echo "UserInstallation=file://$(APP_DATA_PATH)" >> assets/program/bootstraprc
+	echo 'UserInstallation=file://$$APP_DATA_DIR' >> assets/program/bootstraprc
 #
 # Set up versionrc
 	echo '[Version]' > assets/program/versionrc

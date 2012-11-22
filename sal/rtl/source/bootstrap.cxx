@@ -40,6 +40,10 @@
 #include <boost/unordered_map.hpp>
 #include <list>
 
+#ifdef ANDROID
+#include <osl/detail/android-bootstrap.h>
+#endif
+
 #ifdef IOS
 #include <premac.h>
 #import <Foundation/Foundation.h>
@@ -509,6 +513,14 @@ bool Bootstrap_Impl::getValue(
              pData));
         return true;
     }
+#ifdef ANDROID
+    if (key == "APP_DATA_DIR") {
+        const char *app_data_dir = lo_get_app_data_dir();
+        rtl_uString_assign(
+            value, rtl::OUString(app_data_dir, strlen(app_data_dir), RTL_TEXTENCODING_UTF8).pData);
+        return true;
+    }
+#endif
     if (key == "ORIGIN") {
         rtl_uString_assign(
             value,
