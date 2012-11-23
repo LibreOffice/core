@@ -4257,7 +4257,10 @@ SOURCEVERSION="OOO$UPD"
 AC_SUBST(UPD)
 AC_SUBST(SOURCEVERSION)
 
-
+dnl ===================================================================
+dnl Check for syslog header
+dnl ===================================================================
+AC_CHECK_HEADER(syslog.h, AC_DEFINE(HAVE_SYSLOG_H))
 
 dnl ===================================================================
 dnl Set the ENABLE_CRASHDUMP variable.

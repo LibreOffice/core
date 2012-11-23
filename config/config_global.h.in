@@ -13,3 +13,4 @@ Any change in this header will cause a rebuild of almost everything.
 #undef HAVE_GCC_BUILTIN_ATOMIC
 #undef HAVE_SFINAE_ANONYMOUS_BROKEN
 #undef HAVE_THREADSAFE_STATICS
+#undef HAVE_SYSLOG_H
