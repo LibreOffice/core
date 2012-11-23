@@ -162,6 +162,7 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/resourcemodel/TagLogger \
     writerfilter/source/resourcemodel/WW8Analyzer \
     writerfilter/source/resourcemodel/XPathLogger \
+    writerfilter/source/resourcemodel/qnametostrcore \
     writerfilter/source/resourcemodel/resourcemodel \
     writerfilter/source/resourcemodel/util \
 ))
@@ -172,24 +173,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,writerfilter,\
     CustomTarget/writerfilter/source/OOXMLFactory_generated \
     CustomTarget/writerfilter/source/OOXMLFactory_values \
     CustomTarget/writerfilter/source/sprmcodetostr \
+    CustomTarget/writerfilter/source/doctok/qnametostr \
+    CustomTarget/writerfilter/source/ooxml/qnametostr \
 ))
-
-ifneq ($(COM)-$(OS)-$(CPUNAME),GCC-LINUX-POWERPC64)
-#Apparently some compilers, according to the original .mk this was converted
-#from, require this to be noopt or they fail to compile it, probably good to
-#revisit that and narrow this down to where it's necessary
-$(eval $(call gb_Library_add_generated_cxxobjects,writerfilter,\
-    CustomTarget/writerfilter/source/qnametostr \
-	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
-#Ironically, on RHEL-6 PPC64 with no-opt the output is too large for the
-#toolchain, "Error: operand out of range", but it build fine with
-#normal flags
-$(eval $(call gb_Library_add_generated_cxxobjects,writerfilter,\
-    CustomTarget/writerfilter/source/qnametostr \
-	, $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
