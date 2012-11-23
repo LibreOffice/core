@@ -994,7 +994,7 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         return;
 
     //remove old notes
-    if (nFlags & IDF_CONTENTS)
+    if (nFlags & IDF_NOTE)
         pDestTab->maNotes.erase(nCol1, nRow1, nCol2, nRow2);
 
     bool bAddNotes = nFlags & (IDF_NOTE | IDF_ADDNOTES);
