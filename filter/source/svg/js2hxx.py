@@ -86,7 +86,7 @@ for line in in_lines:
     dline = dline.replace( 'DebugPrinter.on', 'DebugPrinter.off' )
 
     escaped_line = '%s' % dline
-    escaped_line = escaped_line.rstrip()
+    escaped_line = escaped_line.rstrip().lstrip()
 
     # no more than 2 consecutive empty lines
     if( escaped_line == '' ):
