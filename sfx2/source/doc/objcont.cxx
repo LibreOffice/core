@@ -255,11 +255,11 @@ void SfxObjectShell::UpdateTime_Impl(
             // If no day between now and last editing - calculate time directly.
             nAddTime    =   (const Time&)aNow - (const Time&)pImp->nTime ;
         }
-        else
-        // If time of working without save greater then 1 month (!) ....
-        // we add 0 to aOldTime!
-        if (nDays<=31)
+        else if (nDays<=31)
         {
+            // If time of working without save greater then 1 month (!) ....
+            // we add 0 to aOldTime!
+
             // If 1 or up to 31 days between now and last editing - calculate time indirectly.
             // nAddTime = (24h - nTime) + (nDays * 24h) + aNow
             --nDays;
