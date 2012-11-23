@@ -183,7 +183,7 @@ public:
     void PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt );
 
     virtual sal_Bool GetCrsrOfst( SwPosition *, Point&,
-                              SwCrsrMoveState* = 0 ) const;
+                              SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
         // erfrage vom Client Informationen
     virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 

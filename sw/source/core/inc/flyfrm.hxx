@@ -163,7 +163,7 @@ public:
                         SwPrintData const*const pPrintData = NULL ) const;
     virtual Size ChgSize( const Size& aNewSize );
     virtual sal_Bool GetCrsrOfst( SwPosition *, Point&,
-                              SwCrsrMoveState* = 0 ) const;
+                              SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
 
     virtual void  CheckDirection( sal_Bool bVert );
     virtual void Cut();

@@ -786,7 +786,7 @@ public:
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
     virtual sal_Bool    GetCrsrOfst( SwPosition *, Point&,
-                                 SwCrsrMoveState* = 0 ) const;
+                                 SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
     virtual sal_Bool    GetCharRect( SwRect &, const SwPosition&,
                                  SwCrsrMoveState* = 0 ) const;
     virtual void Paint( SwRect const&,
