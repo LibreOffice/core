@@ -2779,11 +2779,12 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     // How many clicks do we need to select a fly frame?
     FrameControlType eControl;
     bool bOverFly = false;
-    bool bOverHeaderFooterFly = IsOverHeaderFooterFly( aDocPos, eControl, bOverFly );
+    bool bPageAnchored = false;
+    bool bOverHeaderFooterFly = IsOverHeaderFooterFly( aDocPos, eControl, bOverFly, bPageAnchored );
     int nNbFlyClicks = 1;
     // !bOverHeaderFooterFly doesn't mean we have a frame to select
-    if ( ( rSh.IsHeaderFooterEdit( ) && !bOverHeaderFooterFly && bOverFly ) ||
-         ( !rSh.IsHeaderFooterEdit( ) && bOverHeaderFooterFly ) )
+    if ( !bPageAnchored && ( ( rSh.IsHeaderFooterEdit( ) && !bOverHeaderFooterFly && bOverFly ) ||
+         ( !rSh.IsHeaderFooterEdit( ) && bOverHeaderFooterFly ) ) )
     {
         nNbFlyClicks = 2;
         if ( _rMEvt.GetClicks( ) < nNbFlyClicks )
@@ -4964,9 +4965,10 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             // Don't trigger the command on a frame anchored to header/footer is not editing it
             FrameControlType eControl;
             bool bOverFly = false;
-            bool bOverHeaderFooterFly = IsOverHeaderFooterFly( aDocPos, eControl, bOverFly );
+            bool bPageAnchored = false;
+            bool bOverHeaderFooterFly = IsOverHeaderFooterFly( aDocPos, eControl, bOverFly, bPageAnchored );
             // !bOverHeaderFooterFly doesn't mean we have a frame to select
-            if ( rCEvt.IsMouseEvent( ) &&
+            if ( !bPageAnchored && rCEvt.IsMouseEvent( ) &&
                  ( ( rSh.IsHeaderFooterEdit( ) && !bOverHeaderFooterFly && bOverFly ) ||
                    ( !rSh.IsHeaderFooterEdit( ) && bOverHeaderFooterFly ) ) )
             {
@@ -5950,13 +5952,13 @@ bool SwEditWin::IsInHeaderFooter( const Point &rDocPt, FrameControlType &rContro
     return false;
 }
 
-bool SwEditWin::IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& rControl, bool& bOverFly ) const
+bool SwEditWin::IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& rControl, bool& bOverFly, bool& bPageAnchored ) const
 {
     bool bRet = false;
     Point aPt( rDocPos );
     SwWrtShell &rSh = rView.GetWrtShell();
     SwPaM aPam( *rSh.GetCurrentShellCursor().GetPoint() );
-    rSh.GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt );
+    rSh.GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt, NULL, true );
 
     const SwStartNode* pStartFly = aPam.GetPoint()->nNode.GetNode().FindFlyStartNode();
     if ( pStartFly )
@@ -5977,6 +5979,8 @@ bool SwEditWin::IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& r
                 else if ( bInFooter )
                     rControl = Footer;
             }
+            else
+                bPageAnchored = pFlyFmt->GetAnchor( ).GetAnchorId( ) == FLY_AT_PAGE;
         }
     }
     else
