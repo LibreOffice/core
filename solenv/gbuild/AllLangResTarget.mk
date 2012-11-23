@@ -79,7 +79,7 @@ endef
 define gb_SrsPartMergeTarget__SrsPartMergeTarget_impl
 $(call gb_SrsPartMergeTarget_get_target,$(1)) : POFILES := $(2)
 $(call gb_SrsPartMergeTarget_get_target,$(1)) : $(2)
-
+$(2) :
 endef
 
 # SrsPartTarget class

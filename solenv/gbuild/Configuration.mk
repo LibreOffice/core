@@ -282,6 +282,7 @@ $(call gb_XcuMergeTarget_get_target,$(1)) : \
 	$(wildcard $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po))
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
 	POFILES := $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
+$(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po) :
 endef
 
 

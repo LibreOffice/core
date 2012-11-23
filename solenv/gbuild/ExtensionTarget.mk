@@ -151,6 +151,7 @@ $(call gb_ExtensionTarget_get_target,$(1)) : \
 	POFILES := $(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : \
 	$(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
+$(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po) :
 endif
 
 $(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
@@ -248,6 +249,7 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
 	POFILE := $(gb_POLOCATION)/$(or $(5),$(4))/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
 	$(gb_POLOCATION)/$(or $(5),$(4))/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
+$(gb_POLOCATION)/$(or $(5),$(4))/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po :
 endif
 $(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) \
@@ -328,6 +330,7 @@ $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
 	POFILE := $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
+$(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3))))) :
 endif
 endif
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
@@ -369,6 +372,7 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
 	POFILE := $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(4))))
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(4))))
+$(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(4)))) :
 endif
 endif
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \

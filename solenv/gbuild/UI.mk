@@ -53,6 +53,7 @@ $(call gb_UILocalizeTarget_get_target,$(1)) : $(foreach lang,$(gb_UITarget_LANGS
 $(call gb_UILocalizeTarget_get_target,$(1)) : $(SRCDIR)/$(2).ui
 $(call gb_UILocalizeTarget_get_target,$(1)) :| $(dir $(call gb_UILocalizeTarget_get_target,$(1))).dir
 
+$(foreach lang,$(gb_UITarget_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(2))).po) :
 endef
 
 # class UITarget
