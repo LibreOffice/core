@@ -340,22 +340,6 @@ void FileStream::close()
     }
 }
 
-sal_uInt32 FileStream::checkAccessMode(FileAccessMode mode)
-{
-    switch( mode )
-    {
-    case FAM_READ:
-        return osl_File_OpenFlag_Read;
-    case FAM_WRITE:
-        return osl_File_OpenFlag_Write;
-    case FAM_READWRITE_EXIST:
-        return osl_File_OpenFlag_Read | osl_File_OpenFlag_Write;
-    case FAM_READWRITE:
-        return osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create;
-    }
-    return osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create;
-}
-
 bool FileStream::write(void const * buffer, sal_uInt64 size) {
     while (size > 0) {
         sal_uInt64 written;

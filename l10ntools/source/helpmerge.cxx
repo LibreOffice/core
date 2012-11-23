@@ -198,35 +198,6 @@ bool HelpParser::Merge( const rtl::OString &rSDFFile, const rtl::OString &rDesti
     return hasNoError;
 }
 
-void HelpParser::parse_languages( std::vector<rtl::OString>& aLanguages , MergeDataFile& aMergeDataFile ){
-    std::vector<rtl::OString> aTmp;
-
-    Export::InitLanguages( false );
-
-    if (Export::sLanguages.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")))
-    {
-        aLanguages = aMergeDataFile.GetLanguages();
-        aLanguages.push_back(rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US")));
-
-        if( !Export::sForcedLanguages.isEmpty() )
-        {
-            std::vector<rtl::OString> aFL = Export::GetForcedLanguages();
-            std::copy( aFL.begin() ,
-                       aFL.end() ,
-                       back_inserter( aLanguages )
-                     );
-            std::sort(   aLanguages.begin() , aLanguages.end() , std::less< rtl::OString >() );
-            std::vector<rtl::OString>::iterator unique_iter =  std::unique( aLanguages.begin() , aLanguages.end() , std::equal_to< rtl::OString >() );
-            std::copy( aLanguages.begin() , unique_iter , back_inserter( aTmp ) );
-            aLanguages = aTmp;
-        }
-    }
-    else{
-        aLanguages = Export::GetLanguages();
-    }
-
-}
-
 bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const rtl::OString& sLanguage ,
                                   rtl::OString const & sPath )
 {
@@ -256,41 +227,6 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
     file->Write(sPath);
     return true;
 }
-
-rtl::OString HelpParser::GetOutpath( const rtl::OString& rPathX , const rtl::OString& sCur , const rtl::OString& rPathY )
-{
-    rtl::OString testpath = rPathX;
-    if (!testpath.endsWithL(RTL_CONSTASCII_STRINGPARAM("/"))) {
-        testpath += "/";
-    }
-    testpath += sCur;
-    testpath += "/";
-    rtl::OString sRelativePath( rPathY );
-    if (sRelativePath.matchL(RTL_CONSTASCII_STRINGPARAM("/"))) {
-        sRelativePath = sRelativePath.copy(1);
-    }
-    testpath += sRelativePath;
-    testpath += "/";
-    return testpath;
-}
-
-void HelpParser::MakeDir(const rtl::OString& rPath)
-{
-    rtl::OString sTPath(rPath.replaceAll("\\", "/"));
-    sal_Int32 cnt = helper::countOccurrences(sTPath, '/');
-    rtl::OStringBuffer sCreateDir;
-    for (sal_uInt16 i = 0; i <= cnt; ++i)
-    {
-        sCreateDir.append(sTPath.getToken(i , '/'));
-        sCreateDir.append('/');
-#ifdef WNT
-        _mkdir( sCreateDir.getStr() );
-#else
-        mkdir( sCreateDir.getStr() , S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH );
-#endif
-    }
-}
-
 
 /* ProcessHelp Methode: search for en-US entry and replace it with the current language*/
 void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile ){

@@ -98,8 +98,6 @@ public:
     friend FileStream &operator<<(FileStream& o, const ::rtl::OStringBuffer& s);
 
 private:
-    sal_uInt32 checkAccessMode(FileAccessMode mode);
-
     oslFileHandle m_file;
     ::rtl::OString  m_name;
 };

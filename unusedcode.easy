@@ -1,13 +1,8 @@
-FileStream::checkAccessMode(FileAccessMode)
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
 GraphicObject::SwapIn(SvStream*)
-HelpParser::GetOutpath(rtl::OString const&, rtl::OString const&, rtl::OString const&)
-HelpParser::MakeDir(rtl::OString const&)
-HelpParser::parse_languages(std::__debug::vector<rtl::OString, std::allocator<rtl::OString> >&, MergeDataFile&)
 LiblantagDataRef::presetDataPath(rtl::OUString const&)
 Line::GetLength() const
 Line::Intersection(Rectangle const&, Line&) const
-OGLTransitionImpl::clearScene()
 PoHeader::getLanguage() const
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
 ScFiltersTest::testColorScaleODS()

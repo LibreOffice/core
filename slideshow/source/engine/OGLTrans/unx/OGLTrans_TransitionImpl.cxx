@@ -84,11 +84,6 @@ void OGLTransitionImpl::setScene(TransitionScene const& rScene)
     maScene = rScene;
 }
 
-void OGLTransitionImpl::clearScene()
-{
-    maScene.clear();
-}
-
 void OGLTransitionImpl::prepare( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex )
 {
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
