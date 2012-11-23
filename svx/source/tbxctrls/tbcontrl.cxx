@@ -31,6 +31,7 @@
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/bmpacc.hxx>
 #include <svtools/valueset.hxx>
@@ -66,13 +67,15 @@
 #include "helpid.hrc"
 #include "svx/htmlmode.hxx"
 #include <svx/xtable.hxx>
-#include "editeng/fontitem.hxx"
+#include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/colritem.hxx>
-#include "editeng/flstitem.hxx"
-#include "editeng/bolnitem.hxx"
+#include <editeng/flstitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include "svx/drawitem.hxx"
 #include <svx/tbcontrl.hxx>
 #include "svx/dlgutil.hxx"
@@ -139,6 +142,8 @@ public:
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     virtual void    StateChanged( StateChangedType nStateChange );
+
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     inline void     SetVisibilityListener( const Link& aVisListener ) { aVisibilityListener = aVisListener; }
     inline void     RemoveVisibilityListener() { aVisibilityListener = Link(); }
@@ -339,6 +344,8 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(
 {
     aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
     EnableAutocomplete( sal_True );
+    EnableUserDraw( true );
+    SetUserItemSize( Size( 0, 30 ) );
 }
 
 SvxStyleBox_Impl::~SvxStyleBox_Impl()
@@ -513,6 +520,99 @@ void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
         bVisible = sal_True;
         if ( aVisibilityListener.IsSet() )
             aVisibilityListener.Call( this );
+    }
+}
+
+void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
+{
+    sal_uInt16 nItem = rUDEvt.GetItemId();
+
+    if ( nItem == 0 || nItem == GetEntryCount() - 1 )
+    {
+        // draw the non-style entries, ie. "Clear Formatting" or "More..."
+        DrawEntry( rUDEvt, true, true );
+    }
+    else
+    {
+        SfxObjectShell *pShell = SfxObjectShell::Current();
+        SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
+        SfxStyleSheetBase* pStyle = NULL;
+
+        OUString aStyleName( GetEntry( nItem ) );
+
+        if ( pPool )
+        {
+            pPool->SetSearchMask( eStyleFamily, SFXSTYLEBIT_ALL );
+
+            pStyle = pPool->First();
+            while ( pStyle && OUString( pStyle->GetName() ) != aStyleName )
+                pStyle = pPool->Next();
+        }
+
+        if ( !pStyle )
+        {
+            // cannot find the style for whatever reason
+            DrawEntry( rUDEvt, true, true );
+        }
+        else
+        {
+            const SfxItemSet& aItemSet = pStyle->GetItemSet();
+
+            // all the font properties
+            //const SvxColorItem *pColorItem = static_cast< const SvxColorItem* >( aItemSet.GetItem( SID_ATTR_CHAR_COLOR ) );
+
+            const SvxFontItem *pFontItem = static_cast< const SvxFontItem* >( aItemSet.GetItem( SID_ATTR_CHAR_FONT ) );
+            const SvxFontHeightItem *pFontHeightItem = static_cast< const SvxFontHeightItem* >( aItemSet.GetItem( SID_ATTR_CHAR_FONTHEIGHT ) );
+
+            if ( pFontItem && pFontHeightItem )
+            {
+                OutputDevice *pDevice = rUDEvt.GetDevice();
+
+                Size aFontSize( pFontHeightItem->GetHeight(), pFontHeightItem->GetHeight() );
+                Size aPixelSize( pDevice->LogicToPixel( aFontSize, pShell->GetMapUnit() ) );
+
+                // setup the font properties
+                Font aFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), aPixelSize );
+
+                const SfxPoolItem *pItem = aItemSet.GetItem( SID_ATTR_CHAR_POSTURE );
+                if ( pItem )
+                    aFont.SetItalic( static_cast< const SvxPostureItem* >( pItem )->GetPosture() );
+
+                pItem = aItemSet.GetItem( SID_ATTR_CHAR_WEIGHT );
+                if ( pItem )
+                    aFont.SetWeight( static_cast< const SvxWeightItem* >( pItem )->GetWeight() );
+                // TODO more properties
+
+                // setup the device & draw
+                Font aOldFont( pDevice->GetFont() );
+                //Color aOldColor( pDevice->GetTextColor() );
+
+                pDevice->SetFont( aFont );
+                //pDevice->SetTextColor( pColorItem->GetValue() );
+
+                // IMG_TXT_DISTANCE in ilstbox.hxx is 6, then 1 is added as
+                // nBorder, and we are adding 1 in order to look better when
+                // italics is present
+                const int nLeftDistance = 8;
+
+                Rectangle aTextRect;
+                pDevice->GetTextBoundRect( aTextRect, aStyleName );
+
+                Point aPos( rUDEvt.GetRect().TopLeft() );
+                aPos.X() += nLeftDistance;
+                aPos.Y() += std::max( 0L, ( rUDEvt.GetRect().GetHeight() - aTextRect.Bottom() ) / 2 );
+
+                pDevice->DrawText( aPos, aStyleName );
+
+                //pDevice->SetTextColor( aOldColor );
+                pDevice->SetFont( aOldFont );
+
+                // draw separator, if present
+                DrawEntry( rUDEvt, false, false );
+            }
+            else
+                DrawEntry( rUDEvt, true, true );
+        }
     }
 }
 
