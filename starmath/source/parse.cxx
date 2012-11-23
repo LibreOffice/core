@@ -416,7 +416,7 @@ void SmParser::NextToken()
     xub_StrLen  nRealStart;
     bool        bCont;
     bool        bNumStart = false;
-    CharClass   aCC(SM_MOD()->GetSysLocale().GetCharClass().getLocale());
+    CharClass   aCC(SM_MOD()->GetSysLocale().GetLanguageTag());
     do
     {
         // skip white spaces
@@ -437,14 +437,14 @@ void SmParser::NextToken()
         if ((aRes.TokenType & KParseType::IDENTNAME) && IsDigit( cFirstChar ))
         {
             ParseResult aTmpRes;
-            lang::Locale aOldLoc( aCC.getLocale() );
-            aCC.setLocale( m_aDotLoc );
+            LanguageTag aOldLoc( aCC.getLanguageTag() );
+            aCC.setLanguageTag( LanguageTag( m_aDotLoc ));
             aTmpRes = aCC.parsePredefinedToken(
                             KParseType::ASC_NUMBER,
                             m_aBufferString, m_nBufferIndex,
                             KParseTokens::ASC_DIGIT, aEmptyStr,
                             KParseTokens::ASC_DIGIT | KParseTokens::ASC_DOT, aEmptyStr );
-            aCC.setLocale( aOldLoc );
+            aCC.setLanguageTag( aOldLoc );
             if (aTmpRes.TokenType & KParseType::ASC_NUMBER)
                 aRes.TokenType = aTmpRes.TokenType;
         }

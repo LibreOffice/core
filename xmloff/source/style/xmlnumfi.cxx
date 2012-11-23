@@ -602,9 +602,9 @@ const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
         pLocaleData = new LocaleDataWrapper(
             comphelper::getComponentContext(
                pFormatter ? pFormatter->GetServiceManager() : mxServiceFactory),
-            LanguageTag( nLang ).getLocale() );
+            LanguageTag( nLang ) );
     else
-        pLocaleData->setLocale( LanguageTag( nLang ).getLocale() );
+        pLocaleData->setLanguageTag( LanguageTag( nLang ) );
     return *pLocaleData;
 }
 

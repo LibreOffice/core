@@ -256,7 +256,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
 
     m_aCurrentColumns.resize(4);
 
-    m_aLocale = SvtSysLocale().GetLocaleData().getLocale();
+    m_aLocale = SvtSysLocale().GetLanguageTag().getLocale();
     m_xNumberFormatsSupplier = dbtools::getNumberFormats( m_xConnection, sal_True, m_aContext.getLegacyServiceFactory() );
     Reference< XLocaleData4 > xLocaleData( LocaleData::create(m_aContext.getUNOContext()) );
     LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);

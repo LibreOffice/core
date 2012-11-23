@@ -274,7 +274,7 @@ SwTxtFrm* SwAutoFormat::GetFrm( const SwTxtNode& rTxtNd ) const
 void SwAutoFormat::_GetCharClass( LanguageType eLang )
 {
     delete pCharClass;
-    pCharClass = new CharClass( SvxCreateLocale( eLang ));
+    pCharClass = new CharClass( LanguageTag( SvxCreateLocale( eLang )));
     eCharClassLang = eLang;
 }
 

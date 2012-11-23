@@ -1194,7 +1194,7 @@ namespace basctl
         if ( _eListType == DocumentsSorted )
         {
             CollatorWrapper aCollator( ::comphelper::getProcessServiceFactory() );
-            aCollator.loadDefaultCollator( SvtSysLocale().GetLocaleData().getLocale(), 0 );
+            aCollator.loadDefaultCollator( SvtSysLocale().GetLanguageTag().getLocale(), 0 );
             ::std::sort( aScriptDocs.begin(), aScriptDocs.end(), DocumentTitleLess( aCollator ) );
         }
 

@@ -77,14 +77,12 @@ osl::Mutex &    GetLinguMutex()
 LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang )
 {
     static LocaleDataWrapper aLclDtaWrp(
-                CreateLocale( SvtSysLocale().GetLanguageTag().getLanguageType() ) );
+                LanguageTag( CreateLocale( SvtSysLocale().GetLanguageTag().getLanguageType() )) );
 
-    const Locale &rLcl = aLclDtaWrp.getLoadedLocale();
-    Locale aLcl( CreateLocale( nLang ) );
-    if (aLcl.Language != rLcl.Language ||
-        aLcl.Country  != rLcl.Country  ||
-        aLcl.Variant  != rLcl.Variant)
-        aLclDtaWrp.setLocale( aLcl );
+    const LanguageTag &rLcl = aLclDtaWrp.getLoadedLanguageTag();
+    LanguageTag aLcl( CreateLocale( nLang ) );
+    if (aLcl != rLcl)
+        aLclDtaWrp.setLanguageTag( aLcl );
     return aLclDtaWrp;
 }
 
@@ -600,7 +598,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
 
 static CharClass & lcl_GetCharClass()
 {
-    static CharClass aCC( CreateLocale( LANGUAGE_ENGLISH_US ) );
+    static CharClass aCC( LanguageTag( CreateLocale( LANGUAGE_ENGLISH_US )) );
     return aCC;
 }
 
@@ -617,7 +615,7 @@ sal_Bool IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
     CharClass &rCC = lcl_GetCharClass();
-    rCC.setLocale( CreateLocale( nLanguage ) );
+    rCC.setLanguageTag( LanguageTag( CreateLocale( nLanguage )) );
     sal_Int32 nFlags = rCC.getStringType( rText, nPos, nLen );
     return      (nFlags & KCharacterType::UPPER)
             && !(nFlags & KCharacterType::LOWER);
@@ -629,7 +627,7 @@ String ToLower( const String &rText, sal_Int16 nLanguage )
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
     CharClass &rCC = lcl_GetCharClass();
-    rCC.setLocale( CreateLocale( nLanguage ) );
+    rCC.setLanguageTag( LanguageTag( CreateLocale( nLanguage )) );
     return rCC.lowercase( rText );
 }
 

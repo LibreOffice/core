@@ -139,7 +139,7 @@ SfxItemPresentation SfxDateTimeItem::GetPresentation
             DBG_WARNING("SfxDateTimeItem::GetPresentation():"
                          " Using default en_US IntlWrapper");
             const IntlWrapper aIntlWrapper(
-                ::comphelper::getProcessServiceFactory(), LANGUAGE_ENGLISH_US );
+                ::comphelper::getProcessServiceFactory(), LanguageTag( LANGUAGE_ENGLISH_US) );
             rText = aIntlWrapper.getLocaleData()->getDate(aDateTime);
             rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
             rText += aIntlWrapper.getLocaleData()->getTime(aDateTime);

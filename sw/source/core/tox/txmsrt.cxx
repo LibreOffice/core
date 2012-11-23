@@ -100,7 +100,7 @@ void SwTOXInternational::Init()
     else
         pIndexWrapper->LoadAlgorithm( aLcl, sSortAlgorithm, SW_COLLATOR_IGNORES );
 
-    pCharClass = new CharClass( aLcl );
+    pCharClass = new CharClass( LanguageTag( aLcl ));
 
 }
 

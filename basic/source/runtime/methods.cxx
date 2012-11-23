@@ -133,13 +133,13 @@ static long GetDayDiff( const Date& rDate );
 static const CharClass& GetCharClass( void )
 {
     static bool bNeedsInit = true;
-    static lang::Locale aLocale;
+    static LanguageTag aLanguageTag( LANGUAGE_SYSTEM);
     if( bNeedsInit )
     {
         bNeedsInit = false;
-        aLocale = Application::GetSettings().GetLanguageTag().getLocale();
+        aLanguageTag = Application::GetSettings().GetLanguageTag();
     }
-    static CharClass aCharClass( aLocale );
+    static CharClass aCharClass( aLanguageTag );
     return aCharClass;
 }
 

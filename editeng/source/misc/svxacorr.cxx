@@ -202,13 +202,11 @@ static sal_uInt16 GetAppLang()
 }
 static LocaleDataWrapper& GetLocaleDataWrapper( sal_uInt16 nLang )
 {
-    static LocaleDataWrapper aLclDtWrp(  SvxCreateLocale( GetAppLang() ) );
-    ::com::sun::star::lang::Locale aLcl( SvxCreateLocale( nLang ));
-    const ::com::sun::star::lang::Locale& rLcl = aLclDtWrp.getLoadedLocale();
-    if( aLcl.Language != rLcl.Language ||
-        aLcl.Country != rLcl.Country ||
-        aLcl.Variant != rLcl.Variant )
-        aLclDtWrp.setLocale( aLcl );
+    static LocaleDataWrapper aLclDtWrp(  LanguageTag( SvxCreateLocale( GetAppLang() )) );
+    LanguageTag aLcl( LanguageTag( SvxCreateLocale( nLang )));
+    const LanguageTag& rLcl = aLclDtWrp.getLoadedLanguageTag();
+    if( aLcl != rLcl )
+        aLclDtWrp.setLanguageTag( aLcl );
     return aLclDtWrp;
 }
 static TransliterationWrapper& GetIgnoreTranslWrapper()
@@ -339,7 +337,7 @@ SvxAutoCorrect::~SvxAutoCorrect()
 void SvxAutoCorrect::_GetCharClass( LanguageType eLang )
 {
     delete pCharClass;
-    pCharClass = new CharClass( SvxCreateLocale( eLang ));
+    pCharClass = new CharClass( LanguageTag( SvxCreateLocale( eLang )));
     eCharClassLang = eLang;
 }
 
@@ -468,7 +466,7 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
 
         if ( xOrdSuffix.is( ) )
         {
-            uno::Sequence< rtl::OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix( nNum, rCC.getLocale( ) );
+            uno::Sequence< rtl::OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix( nNum, rCC.getLanguageTag().getLocale( ) );
             for ( sal_Int32 nSuff = 0; nSuff < aSuffixes.getLength(); nSuff++ )
             {
                 String sSuffix( aSuffixes[ nSuff ] );
@@ -611,7 +609,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
     bool bRet = false;
 
     CharClass& rCC = GetCharClass( eLang );
-    const lang::Locale rLocale = rCC.getLocale( );
+    const lang::Locale rLocale = rCC.getLanguageTag().getLocale( );
 
     if ( rLocale.Language == OUString( "fr" ) )
     {

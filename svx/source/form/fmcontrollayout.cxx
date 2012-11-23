@@ -143,7 +143,7 @@ namespace svxform
                 // determine the script type associated with the system locale
                 const SvtSysLocale aSysLocale;
                 const LocaleDataWrapper& rSysLocaleData = aSysLocale.GetLocaleData();
-                const sal_Int16 eSysLocaleScriptType = MsLangId::getScriptType( LanguageTag( rSysLocaleData.getLocale() ).getLanguageType() );
+                const sal_Int16 eSysLocaleScriptType = MsLangId::getScriptType( rSysLocaleData.getLanguageTag().getLanguageType() );
 
                 // depending on this script type, use the right property from the document's style which controls the
                 // default locale for document content
@@ -182,7 +182,7 @@ namespace svxform
                 // fall back to the system locale
                 if ( aDocumentCharLocale.Language.isEmpty() )
                 {
-                    aDocumentCharLocale = rSysLocaleData.getLocale();
+                    aDocumentCharLocale = rSysLocaleData.getLanguageTag().getLocale();
                 }
 
                 // retrieve a default font for this locale, and set it at the control

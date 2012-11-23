@@ -330,7 +330,7 @@ bool LetterTable::isLetterUnicode( sal_Unicode c )
 {
     static CharClass* pCharClass = NULL;
     if( pCharClass == NULL )
-        pCharClass = new CharClass( Application::GetSettings().GetLanguageTag().getLocale() );
+        pCharClass = new CharClass( Application::GetSettings().GetLanguageTag() );
     rtl::OUString aStr( c );
     bool bRet = pCharClass->isLetter( aStr, 0 );
     return bRet;

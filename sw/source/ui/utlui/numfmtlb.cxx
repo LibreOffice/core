@@ -103,7 +103,7 @@ void NumFormatListBox::Init(short nFormatType, sal_Bool bUsrFmts)
     if (pView)
         eCurLanguage = pView->GetWrtShell().GetCurLang();
     else
-        eCurLanguage = SvxLocaleToLanguage( SvtSysLocale().GetLocaleData().getLocale() );
+        eCurLanguage = SvxLocaleToLanguage( SvtSysLocale().GetLanguageTag().getLocale() );
 
     if (bUsrFmts == sal_False)
        {

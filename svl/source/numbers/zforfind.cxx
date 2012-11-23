@@ -166,7 +166,7 @@ void ImpSvNumberInputScan::TransformInput( String& rStr )
     }
     if ( nPos < nLen )
         rStr = pFormatter->GetNatNum()->getNativeNumberString( rStr,
-                pFormatter->GetLocale(), 0 );
+                pFormatter->GetLanguageTag().getLocale(), 0 );
 }
 
 
@@ -1751,7 +1751,7 @@ input for the following reasons:
             res = false;
 
         if ( aOrgCalendar.Len() )
-            pCal->loadCalendar( aOrgCalendar, pLoc->getLocale() );  // restore calendar
+            pCal->loadCalendar( aOrgCalendar, pLoc->getLanguageTag().getLocale() );  // restore calendar
 
 #if NF_TEST_CALENDAR
 {

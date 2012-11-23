@@ -64,7 +64,7 @@ OSystemParseContext::~OSystemParseContext()
 //-----------------------------------------------------------------------------
 ::com::sun::star::lang::Locale OSystemParseContext::getPreferredLocale( ) const
 {
-    return SvtSysLocale().GetLocaleData().getLocale();
+    return SvtSysLocale().GetLanguageTag().getLocale();
 }
 
 //-----------------------------------------------------------------------------

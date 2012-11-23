@@ -223,9 +223,10 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     const LocaleDataWrapper* pLocaleData = pFormatter->GetLocaleData();
     // #80023# be sure to generate keywords for the loaded Locale, not for the
     // requested Locale, otherwise number format codes might not match
-    lang::Locale aLoadedLocale = pLocaleData->getLoadedLocale();
-    LanguageType eLang = LanguageTag( aLoadedLocale ).getLanguageType( false);
-    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(pFormatter->GetServiceManager()), aLoadedLocale );
+    const LanguageTag& rLoadedLocale = pLocaleData->getLoadedLanguageTag();
+    LanguageType eLang = rLoadedLocale.getLanguageType( false);
+    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(pFormatter->GetServiceManager()),
+            rLoadedLocale.getLocale() );
 
     i18n::NumberFormatCode aFormat = aNumberFormatCode.getFormatCode( NF_NUMBER_STANDARD );
     sNameStandardFormat = lcl_extractStandardGeneralName( aFormat.Code);

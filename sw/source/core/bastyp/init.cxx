@@ -810,7 +810,7 @@ CharClass& GetAppCharClass()
     {
         pAppCharClass = new CharClass(
             ::comphelper::getProcessComponentContext(),
-            SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));
+            LanguageTag( SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() )));
     }
     return *pAppCharClass;
 }

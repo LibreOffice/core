@@ -39,7 +39,7 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <unotools/configmgr.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include "connectivity/dbconversion.hxx"
 #include "file/quotedstring.hxx"
 #include <unotools/syslocale.hxx>
@@ -109,7 +109,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     m_aScales.assign(nFieldCount+1,-1);
 
     const sal_Bool bCase = m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers();
-    CharClass aCharClass( comphelper::getComponentContext(pConnection->getDriver()->getFactory()), _aLocale);
+    CharClass aCharClass( comphelper::getComponentContext(pConnection->getDriver()->getFactory()), LanguageTag( _aLocale));
     // read description
     const sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
@@ -418,7 +418,7 @@ void OFlatTable::construct()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::construct" );
     SvtSysLocale aLocale;
-    ::com::sun::star::lang::Locale aAppLocale(aLocale.GetLocaleDataPtr()->getLocale());
+    ::com::sun::star::lang::Locale aAppLocale(aLocale.GetLanguageTag().getLocale());
     Sequence< ::com::sun::star::uno::Any > aArg(1);
     aArg[0] <<= aAppLocale;
 

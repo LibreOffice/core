@@ -283,14 +283,7 @@ sal_Bool StgEntry::Init()
 static String ToUpperUnicode( const String & rStr )
 {
     // I don't know the locale, so en_US is hopefully fine
-    /*
-    com.sun.star.lang.Locale aLocale;
-    aLocale.Language = OUString("en");
-    aLocale.Country  = OUString("US");
-    */
-    static rtl::OUString aEN("en");
-    static rtl::OUString aUS("US");
-    static CharClass aCC( com::sun::star::lang::Locale( aEN, aUS, rtl::OUString() ) );
+    static CharClass aCC( LanguageTag( com::sun::star::lang::Locale( "en", "US", "" )) );
     return aCC.uppercase( rStr );
 }
 

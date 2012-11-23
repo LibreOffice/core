@@ -750,7 +750,7 @@ sal_Bool SwScanner::NextWord()
     Boundary aBound;
 
     CharClass& rCC = GetAppCharClass();
-    lang::Locale aOldLocale = rCC.getLocale();
+    LanguageTag aOldLanguageTag = rCC.getLanguageTag();
 
     while ( true )
     {
@@ -769,7 +769,7 @@ sal_Bool SwScanner::NextWord()
 
                 if ( nWordType != i18n::WordType::WORD_COUNT )
                 {
-                    rCC.setLocale( pBreakIt->GetLocale( aCurrLang ) );
+                    rCC.setLanguageTag( LanguageTag( pBreakIt->GetLocale( aCurrLang )) );
                     if ( rCC.isLetterNumeric(rtl::OUString(aText[nBegin])) )
                         break;
                 }
@@ -802,7 +802,7 @@ sal_Bool SwScanner::NextWord()
             break;
     } // end while( true )
 
-    rCC.setLocale( aOldLocale );
+    rCC.setLanguageTag( aOldLanguageTag );
 
     // #i89042, as discussed with HDU: don't evaluate script changes for word count. Use whole word.
     if ( nWordType == i18n::WordType::WORD_COUNT )

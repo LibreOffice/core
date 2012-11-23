@@ -67,27 +67,29 @@ sal_uInt8 LocaleDataWrapper::nLocaleDataChecking = 0;
 
 LocaleDataWrapper::LocaleDataWrapper(
             const Reference< uno::XComponentContext > & rxContext,
-            const lang::Locale& rLocale
+            const LanguageTag& rLanguageTag
             )
         :
         m_xContext( rxContext ),
         xLD( LocaleData::create(rxContext) ),
+        maLanguageTag( rLanguageTag ),
         bLocaleDataItemValid( sal_False ),
         bReservedWordValid( sal_False )
 {
-    setLocale( rLocale );
+    invalidateData();
 }
 
 LocaleDataWrapper::LocaleDataWrapper(
-            const lang::Locale& rLocale
+            const LanguageTag& rLanguageTag
             )
         :
         m_xContext( comphelper::getProcessComponentContext() ),
         xLD( LocaleData::create(m_xContext) ),
+        maLanguageTag( rLanguageTag ),
         bLocaleDataItemValid( sal_False ),
         bReservedWordValid( sal_False )
 {
-    setLocale( rLocale );
+    invalidateData();
 }
 
 LocaleDataWrapper::~LocaleDataWrapper()
@@ -95,18 +97,25 @@ LocaleDataWrapper::~LocaleDataWrapper()
 }
 
 
-void LocaleDataWrapper::setLocale( const ::com::sun::star::lang::Locale& rLocale )
+void LocaleDataWrapper::setLanguageTag( const LanguageTag& rLanguageTag )
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nCriticalChange );
-    aLocale = rLocale;
+    maLanguageTag = rLanguageTag;
     invalidateData();
 }
 
 
-const ::com::sun::star::lang::Locale& LocaleDataWrapper::getLocale() const
+const LanguageTag& LocaleDataWrapper::getLanguageTag() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
-    return aLocale;
+    return maLanguageTag;
+}
+
+
+const ::com::sun::star::lang::Locale& LocaleDataWrapper::getMyLocale() const
+{
+    ::utl::ReadWriteGuard aGuard( aMutex );
+    return maLanguageTag.getLocale();
 }
 
 
@@ -142,7 +151,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        return xLD->getLanguageCountryInfo( getLocale() );
+        return xLD->getLanguageCountryInfo( getMyLocale() );
     }
     catch (const Exception& e)
     {
@@ -156,7 +165,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        return xLD->getLocaleItem( getLocale() );
+        return xLD->getLocaleItem( getMyLocale() );
     }
     catch (const Exception& e)
     {
@@ -170,7 +179,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        return xLD->getAllCurrencies2( getLocale() );
+        return xLD->getAllCurrencies2( getMyLocale() );
     }
     catch (const Exception& e)
     {
@@ -184,7 +193,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        return xLD->getAllFormats( getLocale() );
+        return xLD->getAllFormats( getMyLocale() );
     }
     catch (const Exception& e)
     {
@@ -198,7 +207,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        return xLD->getForbiddenCharacters( getLocale() );
+        return xLD->getForbiddenCharacters( getMyLocale() );
     }
     catch (const Exception& e)
     {
@@ -212,7 +221,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        return xLD->getReservedWord( getLocale() );
+        return xLD->getReservedWord( getMyLocale() );
     }
     catch ( const Exception& e )
     {
@@ -251,7 +260,7 @@ void LocaleDataWrapper::invalidateData()
 
     if ( !rInstalledLocales.getLength() )
     {
-        LocaleDataWrapper aLDW( ::comphelper::getProcessComponentContext(), lang::Locale() );
+        LocaleDataWrapper aLDW( ::comphelper::getProcessComponentContext(), LanguageTag( lang::Locale()) );
         aLDW.getAllInstalledLocaleNames();
     }
     return rInstalledLocales;
@@ -279,11 +288,11 @@ void LocaleDataWrapper::invalidateData()
             aDebugLocale = xLoc[i].Language;
             if ( !xLoc[i].Country.isEmpty() )
             {
-                aDebugLocale += '_';
+                aDebugLocale += '-';
                 aDebugLocale += String( xLoc[i].Country);
                 if ( !xLoc[i].Variant.isEmpty() )
                 {
-                    aDebugLocale += '_';
+                    aDebugLocale += '-';
                     aDebugLocale += String( xLoc[i].Variant);
                 }
             }
@@ -299,7 +308,8 @@ void LocaleDataWrapper::invalidateData()
             }
             continue;
         }
-        LanguageType eLang = LanguageTag( xLoc[i] ).getLanguageType();
+        LanguageTag aLanguageTag( xLoc[i] );
+        LanguageType eLang = aLanguageTag.getLanguageType();
 
         // In checks, exclude known problems because no MS-LCID defined.
         if (areChecksEnabled() && eLang == LANGUAGE_DONTKNOW)
@@ -317,10 +327,8 @@ void LocaleDataWrapper::invalidateData()
         }
         if ( eLang != LANGUAGE_DONTKNOW )
         {
-            LanguageTag aLanguageTag( eLang);
-            lang::Locale aLocale = aLanguageTag.getLocale();
-            if ( xLoc[i].Language != aLocale.Language ||
-                    xLoc[i].Country != aLocale.Country )
+            LanguageTag aBackLanguageTag( eLang);
+            if ( aLanguageTag != aBackLanguageTag )
             {
                 // In checks, exclude known problems because no MS-LCID defined
                 // and default for Language found.
@@ -338,7 +346,7 @@ void LocaleDataWrapper::invalidateData()
                     aMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM( "  ->  0x"));
                     aMsg.append(static_cast<sal_Int32>(eLang), 16);
                     aMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM( "  ->  "));
-                    aMsg.append(aLanguageTag.getBcp47());
+                    aMsg.append(aBackLanguageTag.getBcp47());
                     outputCheckMessage( aMsg.makeStringAndClear() );
                 }
                 eLang = LANGUAGE_DONTKNOW;
@@ -704,7 +712,7 @@ void LocaleDataWrapper::scanCurrFormatImpl( const rtl::OUString& rCode,
 
 void LocaleDataWrapper::getCurrFormatsImpl()
 {
-    NumberFormatCodeWrapper aNumberFormatCode( m_xContext, getLocale() );
+    NumberFormatCodeWrapper aNumberFormatCode( m_xContext, getMyLocale() );
     uno::Sequence< NumberFormatCode > aFormatSeq
         = aNumberFormatCode.getAllFormatCode( KNumberFormatUsage::CURRENCY );
     sal_Int32 nCnt = aFormatSeq.getLength();
@@ -961,7 +969,7 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const rtl::OUString& rCode )
 
 void LocaleDataWrapper::getDateFormatsImpl()
 {
-    NumberFormatCodeWrapper aNumberFormatCode( m_xContext, getLocale() );
+    NumberFormatCodeWrapper aNumberFormatCode( m_xContext, getMyLocale() );
     uno::Sequence< NumberFormatCode > aFormatSeq
         = aNumberFormatCode.getAllFormatCode( KNumberFormatUsage::DATE );
     sal_Int32 nCnt = aFormatSeq.getLength();
@@ -1751,10 +1759,10 @@ rtl::OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimal
 
 // --- mixed ----------------------------------------------------------
 
-::com::sun::star::lang::Locale LocaleDataWrapper::getLoadedLocale() const
+LanguageTag LocaleDataWrapper::getLoadedLanguageTag() const
 {
     LanguageCountryInfo aLCInfo = getLanguageCountryInfo();
-    return lang::Locale( aLCInfo.Language, aLCInfo.Country, aLCInfo.Variant );
+    return LanguageTag( lang::Locale( aLCInfo.Language, aLCInfo.Country, aLCInfo.Variant ));
 }
 
 
@@ -1763,14 +1771,10 @@ rtl::OUString LocaleDataWrapper::appendLocaleInfo(const rtl::OUString& rDebugMsg
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     rtl::OUStringBuffer aDebugMsg(rDebugMsg);
     aDebugMsg.append(static_cast<sal_Unicode>('\n'));
-    aDebugMsg.append(aLocale.Language);
-    aDebugMsg.append(static_cast<sal_Unicode>('_'));
-    aDebugMsg.append(aLocale.Country);
+    aDebugMsg.append(maLanguageTag.getBcp47());
     aDebugMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM(" requested\n"));
-    lang::Locale aLoaded = getLoadedLocale();
-    aDebugMsg.append(aLoaded.Language);
-    aDebugMsg.append(static_cast<sal_Unicode>('_'));
-    aDebugMsg.append(aLoaded.Country);
+    LanguageTag aLoaded = getLoadedLanguageTag();
+    aDebugMsg.append(aLoaded.getBcp47());
     aDebugMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM(" loaded"));
     return aDebugMsg.makeStringAndClear();
 }
@@ -1831,7 +1835,7 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
 {
     try
     {
-        return xLD->getAllCalendars2( getLocale() );
+        return xLD->getAllCalendars2( getMyLocale() );
     }
     catch (const Exception& e)
     {
@@ -1855,7 +1859,7 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
     try
     {
         const_cast<LocaleDataWrapper*>(this)->aDateAcceptancePatterns =
-            xLD->getDateAcceptancePatterns( getLocale() );
+            xLD->getDateAcceptancePatterns( getMyLocale() );
         return aDateAcceptancePatterns;
     }
     catch (const Exception& e)
@@ -1876,7 +1880,7 @@ void LocaleDataWrapper::setDateAcceptancePatterns(
     {
         try
         {
-            aDateAcceptancePatterns = xLD->getDateAcceptancePatterns( getLocale() );
+            aDateAcceptancePatterns = xLD->getDateAcceptancePatterns( getMyLocale() );
         }
         catch (const Exception& e)
         {

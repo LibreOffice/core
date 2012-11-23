@@ -884,10 +884,10 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
     SfxModule *pMod = *(SfxModule**)GetAppData(SHL_WRITER);
     bSWriter = pMod == SfxModule::GetActiveModule();
 
-    ::com::sun::star::lang::Locale aLocale( SvxCreateLocale(eLastDialogLanguage ));
+    LanguageTag aLanguageTag( SvxCreateLocale(eLastDialogLanguage ));
     pCompareClass = new CollatorWrapper( GetProcessFact() );
-    pCompareClass->loadDefaultCollator( aLocale, 0 );
-    pCharClass = new CharClass( aLocale );
+    pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
+    pCharClass = new CharClass( aLanguageTag );
 
     static long nTabs[] = { 2 /* Tab-Count */, 1, 61 };
     aReplaceTLB.SetTabs( &nTabs[0], MAP_APPFONT );
@@ -1087,10 +1087,10 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
         delete pCompareClass;
         delete pCharClass;
 
-        ::com::sun::star::lang::Locale aLocale( SvxCreateLocale(eLastDialogLanguage ));
+        LanguageTag aLanguageTag( SvxCreateLocale(eLastDialogLanguage ));
         pCompareClass = new CollatorWrapper( GetProcessFact() );
-        pCompareClass->loadDefaultCollator( aLocale, 0 );
-        pCharClass = new CharClass( aLocale );
+        pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
+        pCharClass = new CharClass( aLanguageTag );
         ModifyHdl(&aShortED);
     }
 }

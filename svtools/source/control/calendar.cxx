@@ -195,24 +195,18 @@ void Calendar::ImplInit( WinBits nWinStyle )
 
     ::rtl::OUString aGregorian( RTL_CONSTASCII_USTRINGPARAM( "gregorian"));
     maCalendarWrapper.loadCalendar( aGregorian,
-            Application::GetAppLocaleDataWrapper().getLocale());
+            Application::GetAppLocaleDataWrapper().getLanguageTag().getLocale());
     if (maCalendarWrapper.getUniqueID() != aGregorian)
     {
-#ifdef SAL_LOG_WARN
-        lang::Locale aLoc( Application::GetAppLocaleDataWrapper().getLocale() );
         SAL_WARN( "svtools.control", "Calendar::ImplInit: No ``gregorian'' calendar available for locale ``"
-            << aLoc.Language << "-" << aLoc.Country
+            << Application::GetAppLocaleDataWrapper().getLanguageTag().getBcp47()
             << "'' and other calendars aren't supported. Using en-US fallback." );
-#endif
 
         /* If we ever wanted to support other calendars than Gregorian a lot of
          * rewrite would be necessary to internally replace use of class Date
          * with proper class CalendarWrapper methods, get rid of fixed 12
          * months, fixed 7 days, ... */
-        maCalendarWrapper.loadCalendar( aGregorian, lang::Locale(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en")),
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "US")),
-                    ::rtl::OUString()));
+        maCalendarWrapper.loadCalendar( aGregorian, lang::Locale( "en", "US", ""));
     }
 
     SetFirstDate( maCurDate );

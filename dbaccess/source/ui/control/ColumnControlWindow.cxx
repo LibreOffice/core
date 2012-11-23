@@ -50,7 +50,7 @@ OColumnControlWindow::OColumnControlWindow(Window* pParent
     DBG_CTOR(OColumnControlWindow,NULL);
 
     setRightAligned();
-    m_aLocale = SvtSysLocale().GetLocaleData().getLocale();
+    m_aLocale = SvtSysLocale().GetLanguageTag().getLocale();
 }
 // -----------------------------------------------------------------------------
 OColumnControlWindow::~OColumnControlWindow()

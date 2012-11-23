@@ -1533,7 +1533,7 @@ const LocaleDataWrapper& AllSettings::GetLocaleDataWrapper() const
 {
     if ( !mpData->mpLocaleDataWrapper )
         ((AllSettings*)this)->mpData->mpLocaleDataWrapper = new LocaleDataWrapper(
-            comphelper::getProcessComponentContext(), GetLanguageTag().getLocale() );
+            comphelper::getProcessComponentContext(), GetLanguageTag() );
     return *mpData->mpLocaleDataWrapper;
 }
 
@@ -1543,7 +1543,7 @@ const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
 {
     if ( !mpData->mpUILocaleDataWrapper )
         ((AllSettings*)this)->mpData->mpUILocaleDataWrapper = new LocaleDataWrapper(
-            comphelper::getProcessComponentContext(), GetUILanguageTag().getLocale() );
+            comphelper::getProcessComponentContext(), GetUILanguageTag() );
     return *mpData->mpUILocaleDataWrapper;
 }
 
@@ -1553,7 +1553,7 @@ const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
 {
     if ( !mpData->mpI18nHelper ) {
         ((AllSettings*)this)->mpData->mpI18nHelper = new vcl::I18nHelper(
-            comphelper::getProcessComponentContext(), GetLanguageTag().getLocale() );
+            comphelper::getProcessComponentContext(), GetLanguageTag() );
     }
     return *mpData->mpI18nHelper;
 }
@@ -1564,7 +1564,7 @@ const vcl::I18nHelper& AllSettings::GetUILocaleI18nHelper() const
 {
     if ( !mpData->mpUII18nHelper ) {
         ((AllSettings*)this)->mpData->mpUII18nHelper = new vcl::I18nHelper(
-            comphelper::getProcessComponentContext(), GetUILanguageTag().getLocale() );
+            comphelper::getProcessComponentContext(), GetUILanguageTag() );
     }
     return *mpData->mpUII18nHelper;
 }

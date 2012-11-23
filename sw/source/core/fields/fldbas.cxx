@@ -597,7 +597,7 @@ SwFieldType* SwValueField::ChgTyp( SwFieldType* pNewType )
 sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFmt)
 {
     const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
-    sal_uInt16 nLng = SvxLocaleToLanguage( SvtSysLocale().GetLocaleData().getLocale() );
+    sal_uInt16 nLng = SvxLocaleToLanguage( SvtSysLocale().GetLanguageTag().getLocale() );
 
     if (pEntry && nLng != pEntry->GetLanguage())
     {

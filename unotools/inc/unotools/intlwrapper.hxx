@@ -48,7 +48,7 @@ class UNOTOOLS_DLLPUBLIC IntlWrapper
 {
 private:
 
-            LanguageTag         aLanguageTag;
+            LanguageTag         maLanguageTag;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
 
             LocaleDataWrapper*  pLocaleData;
@@ -62,16 +62,11 @@ private:
 public:
                                 IntlWrapper(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSF,
-                                    const ::com::sun::star::lang::Locale& rLocale
-                                    );
-                                IntlWrapper(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSF,
-                                    LanguageType eLang
+                                    const LanguageTag& rLanguageTag
                                     );
                                 ~IntlWrapper();
 
-    LanguageType                getLanguage() const { return aLanguageTag.getLanguageType(); }
-    const ::com::sun::star::lang::Locale&   getLocale() const { return aLanguageTag.getLocale(); }
+    const LanguageTag&          getLanguageTag() const { return maLanguageTag; }
 
     const LocaleDataWrapper*    getLocaleData() const
                                     {

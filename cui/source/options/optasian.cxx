@@ -306,6 +306,7 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl)
     Locale aLocale;
     LanguageType eSelectLanguage = aLanguageLB.GetSelectLanguage();
     SvxLanguageToLocale(aLocale, eSelectLanguage );
+    LanguageTag aLanguageTag( aLocale);
 
     OUString sStart, sEnd;
     sal_Bool bAvail;
@@ -349,7 +350,7 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl)
     }
     if(!bAvail)
     {
-        LocaleDataWrapper aWrap( aLocale );
+        LocaleDataWrapper aWrap( aLanguageTag );
         ForbiddenCharacters aForbidden = aWrap.getForbiddenCharacters();
         sStart = aForbidden.beginLine;
         sEnd = aForbidden.endLine;

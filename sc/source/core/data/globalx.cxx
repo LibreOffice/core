@@ -153,7 +153,7 @@ String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
         try
         {
             uno::Sequence< rtl::OUString > aSuffixes = xOrdinalSuffix->getOrdinalSuffix( nNumber,
-                    ScGlobal::pLocaleData->getLocale());
+                    ScGlobal::pLocaleData->getLanguageTag().getLocale());
             if ( aSuffixes.getLength() > 0 )
                 return aSuffixes[0];
             else

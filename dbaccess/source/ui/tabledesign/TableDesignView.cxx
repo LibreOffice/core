@@ -198,7 +198,7 @@ OTableDesignView::OTableDesignView( Window* pParent,
 
     try
     {
-        m_aLocale = SvtSysLocale().GetLocaleData().getLocale();
+        m_aLocale = SvtSysLocale().GetLanguageTag().getLocale();
     }
     catch(Exception&)
     {

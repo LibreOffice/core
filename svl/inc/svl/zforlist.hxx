@@ -795,7 +795,7 @@ public:
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
-    ::com::sun::star::lang::Locale aLocale;
+    LanguageTag maLanguageTag;
     SvNumberFormatTable aFTable;            // Table of format keys to format entries
     typedef std::map<sal_uInt32, sal_uInt32> DefaultFormatKeysMap;
     DefaultFormatKeysMap aDefaultFormatKeys; // Table of default standard to format keys
@@ -965,7 +965,7 @@ public:
     //! public for the InputScanner and FormatScanner.
 
     // return current (!) Locale
-    inline const ::com::sun::star::lang::Locale& GetLocale() const { return aLocale; }
+    inline const LanguageTag& GetLanguageTag() const { return maLanguageTag; }
 
     // return corresponding Transliteration wrapper
     inline const ::utl::TransliterationWrapper* GetTransliteration() const

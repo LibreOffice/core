@@ -261,8 +261,7 @@ namespace pcr
         getTypedControlWindow()->EnableEmptyField( sal_True );
 
         // determine a default format
-        Locale aSysLocale = SvtSysLocale().GetLocaleData().getLocale();
-        LanguageType eSysLanguage = LanguageTag( aSysLocale ).getLanguageType( false);
+        LanguageType eSysLanguage = SvtSysLocale().GetLanguageTag().getLanguageType( false);
 
         getTypedControlWindow()->SetFormatter( getTypedControlWindow()->StandardFormatter() );
         SvNumberFormatter* pFormatter = getTypedControlWindow()->GetFormatter();

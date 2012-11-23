@@ -3341,7 +3341,8 @@ void SvNumberformat::SwitchToOtherCalendar( OUString& rOrgCalendar,
     if ( rCal.getUniqueID() == rGregorian )
     {
         using namespace ::com::sun::star::i18n;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > xCals = rCal.getAllCalendars( rLoc().getLocale() );
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > xCals = rCal.getAllCalendars(
+                rLoc().getLanguageTag().getLocale() );
         sal_Int32 nCnt = xCals.getLength();
         if ( nCnt > 1 )
         {
@@ -3354,7 +3355,7 @@ void SvNumberformat::SwitchToOtherCalendar( OUString& rOrgCalendar,
                         rOrgCalendar = rCal.getUniqueID();
                         fOrgDateTime = rCal.getDateTime();
                     }
-                    rCal.loadCalendar( xCals[j], rLoc().getLocale() );
+                    rCal.loadCalendar( xCals[j], rLoc().getLanguageTag().getLocale() );
                     rCal.setDateTime( fOrgDateTime );
                     break;  // for
                 }
@@ -3370,7 +3371,7 @@ void SvNumberformat::SwitchToGregorianCalendar( const OUString& rOrgCalendar,
     const rtl::OUString &rGregorian = Gregorian::get();
     if ( rOrgCalendar.getLength() && rCal.getUniqueID() != rGregorian )
     {
-        rCal.loadCalendar( rGregorian, rLoc().getLocale() );
+        rCal.loadCalendar( rGregorian, rLoc().getLanguageTag().getLocale() );
         rCal.setDateTime( fOrgDateTime );
     }
 }
@@ -3394,7 +3395,7 @@ bool SvNumberformat::ImpFallBackToGregorianCalendar( OUString& rOrgCalendar, dou
             {
                 rOrgCalendar = "";
             }
-            rCal.loadCalendar( rGregorian, rLoc().getLocale() );
+            rCal.loadCalendar( rGregorian, rLoc().getLanguageTag().getLocale() );
             rCal.setDateTime( fOrgDateTime );
             return true;
         }
@@ -3596,7 +3597,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
                 aOrgCalendar = rCal.getUniqueID();
                 fOrgDateTime = rCal.getDateTime();
             }
-            rCal.loadCalendar( rInfo.sStrArray[i], rLoc().getLocale() );
+            rCal.loadCalendar( rInfo.sStrArray[i], rLoc().getLanguageTag().getLocale() );
             rCal.setDateTime( fOrgDateTime );
             ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             break;
@@ -3746,7 +3747,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     }
     if ( aOrgCalendar.getLength() )
     {
-        rCal.loadCalendar( aOrgCalendar, rLoc().getLocale() );  // restore calendar
+        rCal.loadCalendar( aOrgCalendar, rLoc().getLanguageTag().getLocale() );  // restore calendar
     }
     return bRes;
 }
@@ -3889,7 +3890,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 aOrgCalendar = rCal.getUniqueID();
                 fOrgDateTime = rCal.getDateTime();
             }
-            rCal.loadCalendar( rInfo.sStrArray[i], rLoc().getLocale() );
+            rCal.loadCalendar( rInfo.sStrArray[i], rLoc().getLanguageTag().getLocale() );
             rCal.setDateTime( fOrgDateTime );
             ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             break;
@@ -4092,7 +4093,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     }
     if ( aOrgCalendar.getLength() )
     {
-        rCal.loadCalendar( aOrgCalendar, rLoc().getLocale() );  // restore calendar
+        rCal.loadCalendar( aOrgCalendar, rLoc().getLanguageTag().getLocale() );  // restore calendar
     }
     return bRes;
 }

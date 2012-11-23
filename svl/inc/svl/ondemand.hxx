@@ -76,8 +76,7 @@ public:
                                     }
                                 OnDemandLocaleDataWrapper(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                                    ::com::sun::star::lang::Locale& rLocale,
-                                    LanguageType eLang
+                                    const LanguageTag& rLanguageTag
                                     )
                                     : pEnglish(0)
                                     , pAny(0)
@@ -85,7 +84,7 @@ public:
                                     , bInitialized(false)
                                     {
                                         pSystem = aSysLocale.GetLocaleDataPtr();
-                                        init( rxContext, rLocale, eLang );
+                                        init( rxContext, rLanguageTag );
                                     }
                                 ~OnDemandLocaleDataWrapper()
                                     {
@@ -99,17 +98,17 @@ public:
 
             void                init(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                                    ::com::sun::star::lang::Locale& rLocale,
-                                    LanguageType eLang
+                                    const LanguageTag& rLanguageTag
                                     )
                                     {
                                         m_xContext = rxContext;
-                                        changeLocale( rLocale, eLang );
+                                        changeLocale( rLanguageTag );
                                         bInitialized = true;
                                     }
 
-            void                changeLocale( ::com::sun::star::lang::Locale& rLocale, LanguageType eLang )
+            void                changeLocale( const LanguageTag& rLanguageTag )
                                     {
+                                        LanguageType eLang = rLanguageTag.getLanguageType( false);
                                         switch ( eLang )
                                         {
                                             case LANGUAGE_SYSTEM :
@@ -117,18 +116,18 @@ public:
                                             break;
                                             case LANGUAGE_ENGLISH_US :
                                                 if ( !pEnglish )
-                                                    pEnglish = new LocaleDataWrapper( m_xContext, rLocale );
+                                                    pEnglish = new LocaleDataWrapper( m_xContext, rLanguageTag );
                                                 pCurrent = pEnglish;
                                             break;
                                             default:
                                                 if ( !pAny )
                                                 {
-                                                    pAny = new LocaleDataWrapper( m_xContext, rLocale );
+                                                    pAny = new LocaleDataWrapper( m_xContext, rLanguageTag );
                                                     eLastAnyLanguage = eLang;
                                                 }
                                                 else if ( eLastAnyLanguage != eLang )
                                                 {
-                                                    pAny->setLocale( rLocale );
+                                                    pAny->setLanguageTag( rLanguageTag );
                                                     eLastAnyLanguage = eLang;
                                                 }
                                                 pCurrent = pAny;
@@ -143,12 +142,12 @@ public:
                                     {
                                         if ( !pAny )
                                         {
-                                            pAny = new LocaleDataWrapper( m_xContext, pCurrent->getLocale() );
+                                            pAny = new LocaleDataWrapper( m_xContext, pCurrent->getLanguageTag() );
                                             eLastAnyLanguage = eCurrentLanguage;
                                         }
                                         else if ( pCurrent != pAny )
                                         {
-                                            pAny->setLocale( pCurrent->getLocale() );
+                                            pAny->setLanguageTag( pCurrent->getLanguageTag() );
                                             eLastAnyLanguage = eCurrentLanguage;
                                         }
                                         return pAny;
@@ -198,7 +197,7 @@ public:
 
             void                init(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                                    ::com::sun::star::lang::Locale& rLocale
+                                    const ::com::sun::star::lang::Locale& rLocale
                                     )
                                     {
                                         m_xContext = rxContext;
@@ -211,7 +210,7 @@ public:
                                         bInitialized = true;
                                     }
 
-            void                changeLocale( ::com::sun::star::lang::Locale& rLocale )
+            void                changeLocale( const ::com::sun::star::lang::Locale& rLocale )
                                     {
                                         bValid = false;
                                         aLocale = rLocale;

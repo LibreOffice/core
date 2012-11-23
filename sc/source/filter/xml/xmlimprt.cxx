@@ -2301,7 +2301,7 @@ void ScXMLImport::ExamineDefaultStyle()
                 else
                 {
                     LocaleDataWrapper aLocaleData( comphelper::getComponentContext(pDoc->GetServiceManager()),
-                        LanguageTag( nFormatLang ).getLocale() );
+                        LanguageTag( nFormatLang ) );
                     aDecSep = aLocaleData.getNumDecimalSep();
                 }
 
@@ -2520,7 +2520,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
                     {
                         {
                             ScXMLImport::MutexGuard aGuard(*this);
-                            LocaleDataWrapper aLocaleData( comphelper::getComponentContext(GetDocument()->GetServiceManager()), aLocale );
+                            LocaleDataWrapper aLocaleData( comphelper::getComponentContext(GetDocument()->GetServiceManager()), LanguageTag( aLocale) );
                             rtl::OUStringBuffer aBuffer(15);
                             aBuffer.appendAscii("#");
                             aBuffer.append( aLocaleData.getNumThousandSep() );

@@ -33,10 +33,11 @@
 
 using namespace ::com::sun::star;
 
-vcl::I18nHelper::I18nHelper(  const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const ::com::sun::star::lang::Locale& rLocale )
+vcl::I18nHelper::I18nHelper(  const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const LanguageTag& rLanguageTag )
+    :
+        maLanguageTag( rLanguageTag)
 {
     m_xContext = rxContext;
-    maLocale = rLocale;
     mpLocaleDataWrapper = NULL;
     mpTransliterationWrapper= NULL;
     mbTransliterateIgnoreCase = sal_False;
@@ -65,7 +66,7 @@ utl::TransliterationWrapper& vcl::I18nHelper::ImplGetTransliterationWrapper() co
             nModules |= i18n::TransliterationModules_IGNORE_CASE;
 
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = new utl::TransliterationWrapper( m_xContext, (i18n::TransliterationModules)nModules );
-        ((vcl::I18nHelper*)this)->mpTransliterationWrapper->loadModuleIfNeeded( LanguageTag( maLocale ).getLanguageType() );
+        ((vcl::I18nHelper*)this)->mpTransliterationWrapper->loadModuleIfNeeded( maLanguageTag.getLanguageType() );
     }
     return *mpTransliterationWrapper;
 }
@@ -74,7 +75,7 @@ LocaleDataWrapper& vcl::I18nHelper::ImplGetLocaleDataWrapper() const
 {
     if ( !mpLocaleDataWrapper )
     {
-        ((vcl::I18nHelper*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( m_xContext, maLocale );
+        ((vcl::I18nHelper*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( m_xContext, maLanguageTag );
     }
     return *mpLocaleDataWrapper;
 }

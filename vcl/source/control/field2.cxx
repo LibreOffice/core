@@ -2013,7 +2013,7 @@ void DateField::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & (SETTINGS_LOCALE|SETTINGS_MISC)) )
     {
         if ( IsDefaultLocale() && ( rDCEvt.GetFlags() & SETTINGS_LOCALE ) )
-            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLanguageTag().getLocale() );
+            ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
         ReformatAll();
     }
 }
@@ -2098,7 +2098,7 @@ void DateBox::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
         if ( IsDefaultLocale() )
-            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLanguageTag().getLocale() );
+            ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
         ReformatAll();
     }
 }
@@ -2959,7 +2959,7 @@ void TimeField::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
         if ( IsDefaultLocale() )
-            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLanguageTag().getLocale() );
+            ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
         ReformatAll();
     }
 }
@@ -3111,7 +3111,7 @@ void TimeBox::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
         if ( IsDefaultLocale() )
-            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLanguageTag().getLocale() );
+            ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
         ReformatAll();
     }
 }

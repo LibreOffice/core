@@ -21,8 +21,8 @@
 #define _VCL_I18NHELP_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/lang/Locale.hpp>
 #include <osl/mutex.hxx>
+#include <i18npool/languagetag.hxx>
 #include <tools/string.hxx>
 #include <vcl/dllapi.h>
 
@@ -49,7 +49,7 @@ class VCL_DLLPUBLIC I18nHelper
 {
 private:
     ::osl::Mutex                    maMutex;
-    ::com::sun::star::lang::Locale  maLocale;
+    LanguageTag                     maLanguageTag;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     LocaleDataWrapper*              mpLocaleDataWrapper;
@@ -67,7 +67,7 @@ protected:
 
 public:
 
-                I18nHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const ::com::sun::star::lang::Locale& rLocale );
+                I18nHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const LanguageTag& rLanguageTag );
                 ~I18nHelper();
 
     sal_Int32   CompareString( const rtl::OUString& rStr1, const rtl::OUString& rStr2 ) const;

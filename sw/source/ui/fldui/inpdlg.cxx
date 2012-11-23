@@ -111,7 +111,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
         pSetFld = (SwSetExpField*)pField;
         String sFormula(pSetFld->GetFormula());
         //values are formatted - formulas are not
-        CharClass aCC( SvxCreateLocale( pSetFld->GetLanguage() ));
+        CharClass aCC( LanguageTag( SvxCreateLocale( pSetFld->GetLanguage() )));
         if( aCC.isNumeric( sFormula ))
         {
             aStr = pSetFld->ExpandField(true);

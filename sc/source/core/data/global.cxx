@@ -1174,7 +1174,7 @@ IntlWrapper*         ScGlobal::GetScIntlWrapper()
 {
     if ( !pScIntlWrapper )
     {
-        pScIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), *GetLocale() );
+        pScIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), LanguageTag( *GetLocale()) );
     }
     return pScIntlWrapper;
 }

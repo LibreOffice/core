@@ -1605,7 +1605,7 @@ sal_uInt16 SwFldMgr::GetCurrLanguage() const
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
     if( pSh )
         return pSh->GetCurLang();
-    return SvxLocaleToLanguage( SvtSysLocale().GetLocaleData().getLocale() );
+    return SvxLocaleToLanguage( SvtSysLocale().GetLanguageTag().getLocale() );
 }
 
 void SwFieldType::_GetFldName()

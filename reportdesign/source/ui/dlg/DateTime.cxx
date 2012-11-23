@@ -74,7 +74,7 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
     try
     {
         SvtSysLocale aSysLocale;
-        m_nLocale = aSysLocale.GetLocaleData().getLocale();
+        m_nLocale = aSysLocale.GetLanguageTag().getLocale();
         // Fill listbox with all well known date types
         InsertEntry(util::NumberFormat::DATE);
         InsertEntry(util::NumberFormat::TIME);

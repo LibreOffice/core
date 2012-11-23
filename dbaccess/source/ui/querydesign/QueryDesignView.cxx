@@ -2514,7 +2514,7 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
     try
     {
         SvtSysLocale aSysLocale;
-        m_aLocale = aSysLocale.GetLocaleData().getLocale();
+        m_aLocale = aSysLocale.GetLanguageTag().getLocale();
         m_sDecimalSep = aSysLocale.GetLocaleData().getNumDecimalSep();
     }
     catch(Exception&)

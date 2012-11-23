@@ -1714,7 +1714,7 @@ void ORowSet::impl_initializeColumnSettings_nothrow( const Reference< XPropertyS
             bHaveAnyColumnSetting = true;
         }
         if ( !nFormatKey && m_xNumberFormatTypes.is() )
-            nFormatKey = ::dbtools::getDefaultNumberFormat( _rxTemplateColumn, m_xNumberFormatTypes, SvtSysLocale().GetLocaleData().getLocale() );
+            nFormatKey = ::dbtools::getDefaultNumberFormat( _rxTemplateColumn, m_xNumberFormatTypes, SvtSysLocale().GetLanguageTag().getLocale() );
         _rxRowSetColumn->setPropertyValue( PROPERTY_NUMBERFORMAT, makeAny( nFormatKey ) );
     }
     catch(Exception&)
@@ -1809,7 +1809,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
         }
 
         // get the locale
-        Locale aLocale = SvtSysLocale().GetLocaleData().getLocale();
+        Locale aLocale = SvtSysLocale().GetLanguageTag().getLocale();
 
         // get the numberformatTypes
         OSL_ENSURE(m_xActiveConnection.is(),"No ActiveConnection");
@@ -2746,7 +2746,7 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
     ::std::vector< ::rtl::OUString> aNames;
 
     ::rtl::OUString aDescription;
-    Locale aLocale = SvtSysLocale().GetLocaleData().getLocale();
+    Locale aLocale = SvtSysLocale().GetLanguageTag().getLocale();
 
     if ( rParent.m_pColumns )
     {

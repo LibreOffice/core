@@ -1893,7 +1893,8 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     // obtain corresponding locale data
     Locale aTempLocale;
     SvxLanguageToLocale( aTempLocale, eLang );
-    LocaleDataWrapper aLocaleWrapper( aTempLocale );
+    LanguageTag aLanguageTag( aTempLocale);
+    LocaleDataWrapper aLocaleWrapper( aLanguageTag );
 
     // update the decimal separator key of the related CheckBox
     String sTempLabel(sDecimalSeparatorLabel);

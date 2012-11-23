@@ -117,7 +117,7 @@ SwSortElement::~SwSortElement()
 double SwSortElement::StrToDouble( const String& rStr ) const
 {
     if( !pLclData )
-        pLclData = new LocaleDataWrapper( *pLocale );
+        pLclData = new LocaleDataWrapper( LanguageTag( *pLocale ));
 
     rtl_math_ConversionStatus eStatus;
     sal_Int32 nEnd;

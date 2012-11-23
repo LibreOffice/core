@@ -202,10 +202,11 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                     // Once for each of it's supported locales.
                     for (sal_Int32 i = 0;  i < nLocales;  ++i)
                     {
+                        LanguageTag aLanguageTag( aDictIt->aLocaleNames[i] );
                         aDicts[k].aPtr = NULL;
                         aDicts[k].eEnc = RTL_TEXTENCODING_DONTKNOW;
-                        aDicts[k].aLoc = LanguageTag( aDictIt->aLocaleNames[i] ).getLocale();
-                        aDicts[k].apCC = new CharClass( aDicts[k].aLoc );
+                        aDicts[k].aLoc = aLanguageTag.getLocale();
+                        aDicts[k].apCC = new CharClass( aLanguageTag );
                         // also both files have to be in the same directory and the
                         // file names must only differ in the extension (.aff/.dic).
                         // Thus we use the first location only and strip the extension part.

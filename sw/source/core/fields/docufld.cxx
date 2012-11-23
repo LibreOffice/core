@@ -893,9 +893,9 @@ static void lcl_GetLocalDataWrapper( sal_uLong nLang,
     SvtSysLocale aLocale;
     *ppAppLocalData = &aLocale.GetLocaleData();
     *ppLocalData = *ppAppLocalData;
-    if( nLang != SvxLocaleToLanguage( (*ppLocalData)->getLocale() ) )
+    if( nLang != SvxLocaleToLanguage( (*ppLocalData)->getLanguageTag().getLocale() ) )
         *ppLocalData = new LocaleDataWrapper(
-                        SvxCreateLocale( static_cast<LanguageType>(nLang) ) );
+                        LanguageTag( SvxCreateLocale( static_cast<LanguageType>(nLang) )) );
 }
 
 String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,

@@ -193,7 +193,8 @@ SvNumberFormatter::SvNumberFormatter(
             const Reference< XMultiServiceFactory >& xSMgr,
             LanguageType eLang )
         :
-        xServiceManager( xSMgr )
+        xServiceManager( xSMgr ),
+        maLanguageTag( eLang)
 {
     ImpConstruct( eLang );
 }
@@ -233,10 +234,10 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     eEvalDateFormat = NF_EVALDATEFORMAT_INTL;
     nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
-    aLocale = LanguageTag( eLang ).getLocale();
-    pCharClass = new CharClass( comphelper::getComponentContext(xServiceManager), aLocale );
-    xLocaleData.init( comphelper::getComponentContext(xServiceManager), aLocale, eLang );
-    xCalendar.init( comphelper::getComponentContext(xServiceManager), aLocale );
+    maLanguageTag.reset( eLang );
+    pCharClass = new CharClass( comphelper::getComponentContext(xServiceManager), maLanguageTag );
+    xLocaleData.init( comphelper::getComponentContext(xServiceManager), maLanguageTag );
+    xCalendar.init( comphelper::getComponentContext(xServiceManager), maLanguageTag.getLocale() );
     xTransliteration.init( comphelper::getComponentContext(xServiceManager), eLang,
         ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE );
     xNatNum.init( xServiceManager );
@@ -266,10 +267,10 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
     {
         ActLnge = eLnge;
 
-        aLocale = LanguageTag( eLnge ).getLocale();
-        pCharClass->setLocale( aLocale );
-        xLocaleData.changeLocale( aLocale, eLnge );
-        xCalendar.changeLocale( aLocale );
+        maLanguageTag.reset( eLnge );
+        pCharClass->setLanguageTag( maLanguageTag );
+        xLocaleData.changeLocale( maLanguageTag );
+        xCalendar.changeLocale( maLanguageTag.getLocale() );
         xTransliteration.changeLocale( eLnge );
 
         // cached locale data items, initialize BEFORE calling ChangeIntl below
@@ -459,7 +460,8 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
     pStdFormat->SetLastInsertKey( sal_uInt16(nLastKey - nCLOffset) );
 
     // append new system additional formats
-    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(xServiceManager), GetLocale() );
+    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(xServiceManager),
+            GetLanguageTag().getLocale() );
     ImpGenerateAdditionalFormats( nCLOffset, aNumberFormatCode, true );
 }
 
@@ -781,7 +783,8 @@ bool SvNumberFormatter::Load( SvStream& rStream )
 
     // generate additional i18n standard formats for all used locales
     LanguageType eOldLanguage = ActLnge;
-    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(xServiceManager), GetLocale() );
+    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(xServiceManager),
+            GetLanguageTag().getLocale() );
     std::vector<sal_uInt16> aList;
     GetUsedLanguages( aList );
     for ( std::vector<sal_uInt16>::const_iterator it(aList.begin()); it != aList.end(); ++it )
@@ -962,9 +965,8 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, bool bNoAdditio
     {   // new CL combination
         if (LocaleDataWrapper::areChecksEnabled())
         {
-            Locale aLoadedLocale = xLocaleData->getLoadedLocale();
-            if ( aLoadedLocale.Language != aLocale.Language ||
-                    aLoadedLocale.Country != aLocale.Country )
+            const LanguageTag& rLoadedLocale = xLocaleData->getLoadedLanguageTag();
+            if ( rLoadedLocale != maLanguageTag )
             {
                 OUString aMsg("SvNumerFormatter::ImpGenerateCL: locales don't match:");
                 LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg ));
@@ -1963,11 +1965,10 @@ String SvNumberFormatter::GetFormatDecimalSep( sal_uInt32 nFormat ) const
         aRet = xLocaleData->getNumDecimalSep();
     else
     {
-        ::com::sun::star::lang::Locale aSaveLocale( xLocaleData->getLocale() );
-        ::com::sun::star::lang::Locale aTmpLocale( LanguageTag( pFormat->GetLanguage()).getLocale());
-        ((SvNumberFormatter*)this)->xLocaleData.changeLocale(aTmpLocale, pFormat->GetLanguage() );
+        LanguageTag aSaveLocale( xLocaleData->getLanguageTag() );
+        ((SvNumberFormatter*)this)->xLocaleData.changeLocale( LanguageTag( pFormat->GetLanguage()) );
         aRet = xLocaleData->getNumDecimalSep();
-        ((SvNumberFormatter*)this)->xLocaleData.changeLocale( aSaveLocale, eSaveLang );
+        ((SvNumberFormatter*)this)->xLocaleData.changeLocale( aSaveLocale );
     }
     return aRet;
 }
@@ -2214,7 +2215,8 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         pFormatScanner->SetConvertMode(false);      // switch off for this function
     }
 
-    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(xServiceManager), GetLocale() );
+    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(xServiceManager),
+            GetLanguageTag().getLocale() );
     SvNumberformat* pNewFormat = NULL;
     sal_Int32 nIdx;
     bool bDefault;
@@ -2665,7 +2667,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
         return ;
     }
     sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey();
-    rNumberFormatCode.setLocale( GetLocale() );
+    rNumberFormatCode.setLocale( GetLanguageTag().getLocale() );
     sal_Int32 j;
 
     // All currencies, this time with [$...] which was stripped in
@@ -3604,7 +3606,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     LanguageType eSysLang = SvtSysLocale().GetLanguageTag().getLanguageType();
     LocaleDataWrapper* pLocaleData = new LocaleDataWrapper(
         ::comphelper::getProcessComponentContext(),
-        SvtSysLocale().GetLanguageTag().getLocale() );
+        SvtSysLocale().GetLanguageTag() );
     // get user configured currency
     String aConfiguredCurrencyAbbrev;
     LanguageType eConfiguredCurrencyLanguage = LANGUAGE_SYSTEM;
@@ -3632,7 +3634,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     {
         LanguageType eLang = LanguageTag( pLocales[nLocale]).getLanguageType( false);
         rInstalledLocales.insert( eLang);
-        pLocaleData->setLocale( pLocales[nLocale] );
+        pLocaleData->setLanguageTag( LanguageTag( pLocales[nLocale]) );
         Sequence< Currency2 > aCurrSeq = pLocaleData->getAllCurrencies();
         sal_Int32 nCurrencyCount = aCurrSeq.getLength();
         Currency2 const * const pCurrencies = aCurrSeq.getConstArray();

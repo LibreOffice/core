@@ -83,7 +83,7 @@ void SwAttrSet::GetPresentation(
     {
         SfxItemIter aIter( *this );
         const IntlWrapper rInt( ::comphelper::getProcessServiceFactory(),
-                                    GetAppLanguage() );
+                                    LanguageTag( GetAppLanguage()) );
         while( sal_True )
         {
             aIter.GetCurItem()->GetPresentation( ePres, eCoreMetric,

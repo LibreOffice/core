@@ -206,7 +206,7 @@ void SvNumberFormatsSupplierServiceObject::implEnsureFormatter()
     {
         // get the office's UI locale
         SvtSysLocale aSysLocale;
-        Locale aOfficeLocale = aSysLocale.GetLocaleData().getLocale();
+        Locale aOfficeLocale = aSysLocale.GetLocaleData().getLanguageTag().getLocale();
 
         // initi with this locale
         Sequence< Any > aFakedInitProps( 1 );

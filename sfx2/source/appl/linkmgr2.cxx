@@ -608,8 +608,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
     {
         // first only loop over the DocumentShells the shells and find those
         // with the name:
-        com::sun::star::lang::Locale aLocale( LanguageTag( LANGUAGE_SYSTEM).getLocale());
-        CharClass aCC( aLocale );
+        CharClass aCC( LanguageTag( LANGUAGE_SYSTEM) );
 
         TypeId aType( TYPE(SfxObjectShell) );
 

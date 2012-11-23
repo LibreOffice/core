@@ -211,12 +211,9 @@ bool ScCompiler::IsEnglishSymbol( const String& rName )
 
 void ScCompiler::InitCharClassEnglish()
 {
-    ::com::sun::star::lang::Locale aLocale(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "en")),
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "US")),
-            OUString());
+    ::com::sun::star::lang::Locale aLocale( "en", "US", "");
     pCharClassEnglish = new CharClass(
-            ::comphelper::getProcessComponentContext(), aLocale);
+            ::comphelper::getProcessComponentContext(), LanguageTag( aLocale));
 }
 
 

@@ -251,7 +251,7 @@ namespace rptui
             Reference< XNumberFormatTypes > xNumFmtTypes( xSuppNumFmts->getNumberFormats(), UNO_QUERY_THROW );
 
             nFormatKey = ::dbtools::getDefaultNumberFormat( field->nDataType, field->nScale, field->bIsCurrency, xNumFmtTypes,
-                SvtSysLocale().GetLocaleData().getLocale() );
+                SvtSysLocale().GetLanguageTag().getLocale() );
             _rxFormatted->setFormatKey( nFormatKey );
         }
         catch( const Exception& )

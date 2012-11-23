@@ -284,8 +284,7 @@ SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
     if (!s_cFormatter)
     {
         // get the Office's locale and translate
-        LanguageType eSysLanguage = LanguageTag(
-                SvtSysLocale().GetLocaleData().getLocale()).getLanguageType( false);
+        LanguageType eSysLanguage = SvtSysLocale().GetLanguageTag().getLanguageType( false);
         s_cFormatter = new SvNumberFormatter(
             ::comphelper::getProcessServiceFactory(),
             eSysLanguage);
@@ -618,8 +617,7 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bReset
         if ( m_pFormatter )
         {
             // get the Office's locale and translate
-            LanguageType eSysLanguage = LanguageTag(
-                    SvtSysLocale().GetLocaleData().getLocale()).getLanguageType( false);
+            LanguageType eSysLanguage = SvtSysLocale().GetLanguageTag().getLanguageType( false);
             // get the standard numeric format for this language
             m_nFormatKey = m_pFormatter->GetStandardFormat( NUMBERFORMAT_NUMBER, eSysLanguage );
         }
@@ -1152,8 +1150,7 @@ void DoubleNumericField::ResetConformanceTester()
     sal_Unicode cSeparatorDecimal = '.';
     if (pFormatEntry)
     {
-        Locale aLocale( LanguageTag( pFormatEntry->GetLanguage()).getLocale());
-        LocaleDataWrapper aLocaleInfo( aLocale );
+        LocaleDataWrapper aLocaleInfo( LanguageTag( pFormatEntry->GetLanguage()) );
 
         String sSeparator = aLocaleInfo.getNumThousandSep();
         if (sSeparator.Len())
@@ -1243,8 +1240,13 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     sal_uInt16 nDigits = GetDecimalDigits();
 
     // build a new format string with the base class' and my own settings
-    Locale aLocale( LanguageTag( eLanguage).getLocale());
-    LocaleDataWrapper aLocaleInfo( aLocale );
+
+    /* Strangely with gcc 4.6.3 this needs a temporary LanguageTag, otherwise
+     * there's
+     * error: request for member ‘getNumThousandSep’ in ‘aLocaleInfo’, which is
+     * of non-class type ‘LocaleDataWrapper(LanguageTag)’ */
+    LanguageTag aLanguageTag( eLanguage);
+    LocaleDataWrapper aLocaleInfo( aLanguageTag );
 
     XubString sNewFormat;
     if (bThSep)

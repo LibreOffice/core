@@ -1362,12 +1362,12 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                                 String aComplete;
 
                                 LanguageType eLang = pImpEditEngine->GetLanguage( EditPaM( aStart.GetNode(), aStart.GetIndex()+1));
-                                lang::Locale aLocale( LanguageTag( eLang).getLocale());
+                                LanguageTag aLanguageTag( eLang);
 
                                 if (!pImpEditEngine->xLocaleDataWrapper.isInitialized())
-                                    pImpEditEngine->xLocaleDataWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), aLocale, eLang);
+                                    pImpEditEngine->xLocaleDataWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), aLanguageTag);
                                 else
-                                    pImpEditEngine->xLocaleDataWrapper.changeLocale( aLocale, eLang);
+                                    pImpEditEngine->xLocaleDataWrapper.changeLocale( aLanguageTag);
 
                                 if (!pImpEditEngine->xTransliterationWrapper.isInitialized())
                                     pImpEditEngine->xTransliterationWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), eLang, i18n::TransliterationModules_IGNORE_CASE);

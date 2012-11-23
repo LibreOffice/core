@@ -23,6 +23,7 @@
 
 #include <ctype.h>      // isdigit(), isalpha()
 #include <boost/noncopyable.hpp>
+#include <i18npool/languagetag.hxx>
 #include <tools/string.hxx>
 #include <tools/solar.h>
 #include <com/sun/star/i18n/KCharacterType.hpp>
@@ -68,7 +69,7 @@ const sal_Int32 nCharClassNumericTypeMask =
 
 class UNOTOOLS_DLLPUBLIC CharClass : private boost::noncopyable
 {
-    ::com::sun::star::lang::Locale  aLocale;
+    LanguageTag                 maLanguageTag;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >    xCC;
     mutable ::osl::Mutex        aMutex;
 
@@ -76,19 +77,19 @@ public:
     /// Preferred ctor with service manager specified
     CharClass(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
-        const ::com::sun::star::lang::Locale& rLocale);
+        const LanguageTag& rLanguageTag );
 
     /// Depricated ctor, tries to get a process service manager or to load the
     /// library directly.
-    CharClass(const ::com::sun::star::lang::Locale& rLocale);
+    CharClass( const LanguageTag& rLanguageTag );
 
     ~CharClass();
 
     /// set a new Locale
-    void setLocale( const ::com::sun::star::lang::Locale& rLocale );
+    void setLanguageTag( const LanguageTag& rLanguageTag );
 
     /// get current Locale
-    const ::com::sun::star::lang::Locale& getLocale() const;
+    const LanguageTag& getLanguageTag() const;
 
 
     /// isdigit() on ascii values
@@ -213,6 +214,10 @@ public:
     sal_Bool isNumeric( const String& rStr ) const;
     sal_Bool isAlphaNumeric( const String& rStr ) const;
     sal_Bool isLetterNumeric( const String& rStr ) const;
+
+private:
+
+    const ::com::sun::star::lang::Locale &  getMyLocale() const;
 };
 
 #endif // _UNOTOOLS_CHARCLASS_HXX

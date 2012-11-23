@@ -586,7 +586,7 @@ namespace svxform
                     nFormatKey = OStaticDataAccessTools().getDefaultNumberFormat(
                         _rxDatabaseField,
                         Reference< XNumberFormatTypes >( _rxNumberFormats, UNO_QUERY ),
-                        SvtSysLocale().GetLocaleData().getLocale()
+                        SvtSysLocale().GetLanguageTag().getLocale()
                     );
                 }
 

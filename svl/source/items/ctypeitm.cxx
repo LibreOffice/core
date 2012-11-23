@@ -157,8 +157,7 @@ SfxItemPresentation CntContentTypeItem::GetPresentation(
         if (pIntlWrapper)
             (const_cast< CntContentTypeItem * >(this))->_aPresentation
              = INetContentTypes::GetPresentation(GetEnumValue(),
-                                                 pIntlWrapper->
-                                                  getLocale());
+                     pIntlWrapper->getLanguageTag().getLocale());
     }
     if (!_aPresentation.isEmpty())
     {

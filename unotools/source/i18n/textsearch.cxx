@@ -132,7 +132,7 @@ TextSearch::TextSearch(const SearchParam & rParam, LanguageType eLang )
 
 TextSearch::TextSearch(const SearchParam & rParam, const CharClass& rCClass )
 {
-    Init( rParam, rCClass.getLocale() );
+    Init( rParam, rCClass.getLanguageTag().getLocale() );
 }
 
 TextSearch::TextSearch( const SearchOptions& rPara )

@@ -238,16 +238,16 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     if ( pFormatter )
     {
         pCharClass = new CharClass( comphelper::getComponentContext(pFormatter->GetServiceManager()),
-            pFormatter->GetLocale() );
+            pFormatter->GetLanguageTag() );
         pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(pFormatter->GetServiceManager()),
-            pFormatter->GetLocale() );
+            pFormatter->GetLanguageTag() );
     }
     else
     {
-        lang::Locale aLocale( LanguageTag( MsLangId::getSystemLanguage() ).getLocale() );
+        LanguageTag aLanguageTag( MsLangId::getSystemLanguage() );
 
-        pCharClass = new CharClass( comphelper::getComponentContext(rExport.getServiceFactory()), aLocale );
-        pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(rExport.getServiceFactory()), aLocale );
+        pCharClass = new CharClass( comphelper::getComponentContext(rExport.getServiceFactory()), aLanguageTag );
+        pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(rExport.getServiceFactory()), aLanguageTag );
     }
 
     pUsedList = new SvXMLNumUsedList_Impl;
@@ -273,16 +273,16 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     if ( pFormatter )
     {
         pCharClass = new CharClass( comphelper::getComponentContext(pFormatter->GetServiceManager()),
-            pFormatter->GetLocale() );
+            pFormatter->GetLanguageTag() );
         pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(pFormatter->GetServiceManager()),
-            pFormatter->GetLocale() );
+            pFormatter->GetLanguageTag() );
     }
     else
     {
-        lang::Locale aLocale( LanguageTag( MsLangId::getSystemLanguage() ).getLocale() );
+        LanguageTag aLanguageTag( MsLangId::getSystemLanguage() );
 
-        pCharClass = new CharClass( comphelper::getComponentContext(rExport.getServiceFactory()), aLocale );
-        pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(rExport.getServiceFactory()), aLocale );
+        pCharClass = new CharClass( comphelper::getComponentContext(rExport.getServiceFactory()), aLanguageTag );
+        pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(rExport.getServiceFactory()), aLanguageTag );
     }
 
     pUsedList = new SvXMLNumUsedList_Impl;
@@ -803,12 +803,12 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
 
     sal_Bool bRet = sal_False;
 
-    LanguageType nLang = LanguageTag( rLocale ).getLanguageType( false);
-    pFormatter->ChangeIntl( nLang );
+    LanguageTag aLanguageTag( rLocale );
+    pFormatter->ChangeIntl( aLanguageTag.getLanguageType( false) );
     OUString sCurString, sDummy;
     pFormatter->GetCompatibilityCurrency( sCurString, sDummy );
 
-    pCharClass->setLocale( rLocale );
+    pCharClass->setLanguageTag( aLanguageTag );
     OUString sUpperStr = pCharClass->uppercase(rString);
     sal_Int32 nPos = lcl_FindSymbol( sUpperStr, sCurString );
     if ( nPos >= 0 )
@@ -1496,7 +1496,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         if ( nElemType == NF_KEY_NNNN )
                         {
                             //  write additional text element for separator
-                            pLocaleData->setLocale( LanguageTag( nLang ).getLocale() );
+                            pLocaleData->setLanguageTag( LanguageTag( nLang ) );
                             AddToTextElement_Impl( pLocaleData->getLongDateDayOfWeekSep() );
                         }
                     }

@@ -5589,8 +5589,8 @@ WW8Fib::WW8Fib(sal_uInt8 nVer)
         lidFE = lid;
 
     Locale aTempLocale;
-    SvxLanguageToLocale( aTempLocale, lid );
-    LocaleDataWrapper aLocaleWrapper( aTempLocale );
+    LanguageTag aLanguageTag( SvxLanguageToLocale( aTempLocale, lid ));
+    LocaleDataWrapper aLocaleWrapper( aLanguageTag );
     nNumDecimalSep = aLocaleWrapper.getNumDecimalSep()[0];
 }
 

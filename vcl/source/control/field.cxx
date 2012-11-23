@@ -309,7 +309,7 @@ LocaleDataWrapper& FormatterBase::ImplGetLocaleDataWrapper() const
 {
     if ( !mpLocaleDataWrapper )
     {
-        ((FormatterBase*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( GetLocale() );
+        ((FormatterBase*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( GetLanguageTag() );
     }
     return *mpLocaleDataWrapper;
 }
@@ -348,7 +348,7 @@ void FormatterBase::SetStrictFormat( sal_Bool bStrict )
 
 void FormatterBase::SetLocale( const lang::Locale& rLocale )
 {
-    ImplGetLocaleDataWrapper().setLocale( rLocale );
+    ImplGetLocaleDataWrapper().setLanguageTag( LanguageTag( rLocale) );
     mbDefaultLocale = sal_False;
     ReformatAll();
 }
@@ -365,7 +365,22 @@ const lang::Locale& FormatterBase::GetLocale() const
             return Application::GetSettings().GetLanguageTag().getLocale();
     }
 
-    return mpLocaleDataWrapper->getLocale();
+    return mpLocaleDataWrapper->getLanguageTag().getLocale();
+}
+
+// -----------------------------------------------------------------------
+
+const LanguageTag& FormatterBase::GetLanguageTag() const
+{
+    if ( !mpLocaleDataWrapper || mbDefaultLocale )
+    {
+        if ( mpField )
+            return mpField->GetSettings().GetLanguageTag();
+        else
+            return Application::GetSettings().GetLanguageTag();
+    }
+
+    return mpLocaleDataWrapper->getLanguageTag();
 }
 
 // -----------------------------------------------------------------------
@@ -885,7 +900,7 @@ void NumericField::DataChanged( const DataChangedEvent& rDCEvt )
         String sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         String sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         if ( IsDefaultLocale() )
-            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLanguageTag().getLocale() );
+            ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
         String sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         String sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
@@ -1043,7 +1058,7 @@ void NumericBox::DataChanged( const DataChangedEvent& rDCEvt )
         String sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         String sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         if ( IsDefaultLocale() )
-            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLanguageTag().getLocale() );
+            ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
         String sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         String sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
@@ -1887,7 +1902,7 @@ void MetricField::DataChanged( const DataChangedEvent& rDCEvt )
         String sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         String sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         if ( IsDefaultLocale() )
-            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLanguageTag().getLocale() );
+            ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
         String sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         String sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
@@ -2013,7 +2028,7 @@ void MetricBox::DataChanged( const DataChangedEvent& rDCEvt )
         String sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         String sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         if ( IsDefaultLocale() )
-            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLanguageTag().getLocale() );
+            ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
         String sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         String sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
@@ -2299,7 +2314,7 @@ void CurrencyField::DataChanged( const DataChangedEvent& rDCEvt )
         String sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         String sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         if ( IsDefaultLocale() )
-            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLanguageTag().getLocale() );
+            ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
         String sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         String sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
@@ -2401,7 +2416,7 @@ void CurrencyBox::DataChanged( const DataChangedEvent& rDCEvt )
         String sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         String sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         if ( IsDefaultLocale() )
-            ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLanguageTag().getLocale() );
+            ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
         String sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         String sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );

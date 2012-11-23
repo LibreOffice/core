@@ -148,9 +148,7 @@ Reference< XNumberFormatsSupplier > StandardFormatsSupplier::get( const Referenc
             return xSupplier;
 
         // get the Office's locale
-        const Locale& rSysLocale = SvtSysLocale().GetLocaleData().getLocale();
-        // translate
-        eSysLanguage = LanguageTag( rSysLocale ).getLanguageType( false);
+        eSysLanguage = SvtSysLocale().GetLanguageTag().getLanguageType( false);
     }
 
     StandardFormatsSupplier* pSupplier = new StandardFormatsSupplier( _rxORB, eSysLanguage );

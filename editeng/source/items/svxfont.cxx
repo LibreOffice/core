@@ -110,7 +110,7 @@ OUString SvxFont::CalcCaseMap(const OUString &rTxt) const
     const LanguageType eLng = LANGUAGE_DONTKNOW == eLang
                             ? LANGUAGE_SYSTEM : eLang;
 
-    CharClass aCharClass( SvxCreateLocale( eLng ) );
+    CharClass aCharClass( LanguageTag( SvxCreateLocale( eLng )) );
 
     switch( eCaseMap )
     {
@@ -221,7 +221,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
     const LanguageType eLng = LANGUAGE_DONTKNOW == eLang
                             ? LANGUAGE_SYSTEM : eLang;
 
-    CharClass   aCharClass( SvxCreateLocale( eLng ) );
+    CharClass   aCharClass( LanguageTag( SvxCreateLocale( eLng )) );
     String      aCharString;
 
     while( nPos < nTxtLen )

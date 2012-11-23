@@ -254,12 +254,12 @@ SwCalc::SwCalc( SwDoc& rD )
     memset( VarTable, 0, sizeof(VarTable) );
     LanguageType eLang = GetDocAppScriptLang( rDoc );
 
-    if( eLang != SvxLocaleToLanguage( pLclData->getLocale() ) ||
-        eLang != SvxLocaleToLanguage( pCharClass->getLocale() ) )
+    if( eLang != SvxLocaleToLanguage( pLclData->getLanguageTag().getLocale() ) ||
+        eLang != SvxLocaleToLanguage( pCharClass->getLanguageTag().getLocale() ) )
     {
-        ::com::sun::star::lang::Locale aLocale( SvxCreateLocale( eLang ));
-        pCharClass = new CharClass( ::comphelper::getProcessComponentContext(), aLocale );
-        pLclData = new LocaleDataWrapper( aLocale );
+        LanguageTag aLanguageTag( SvxCreateLocale( eLang ));
+        pCharClass = new CharClass( ::comphelper::getProcessComponentContext(), aLanguageTag );
+        pLclData = new LocaleDataWrapper( aLanguageTag );
     }
 
     sCurrSym = comphelper::string::strip(pLclData->getCurrSymbol(), ' ');
@@ -560,7 +560,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, sal_uInt16 ins )
             rtl::OUString sResult;
             double nNumber = DBL_MAX;
 
-            long nLang = SvxLocaleToLanguage( pLclData->getLocale() );
+            long nLang = SvxLocaleToLanguage( pLclData->getLanguageTag().getLocale() );
             if(pMgr->GetColumnCnt( sSourceName, sTableName, sColumnName,
                                     nTmpRec, nLang, sResult, &nNumber ))
             {
@@ -1539,9 +1539,9 @@ bool SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
     {
         LanguageType eLang = GetDocAppScriptLang( *pDoc );
         if (eLang !=
-                SvxLocaleToLanguage(aSysLocale.GetLocaleData().getLocale()))
+                SvxLocaleToLanguage(aSysLocale.GetLanguageTag().getLocale()))
         {
-            pLclD.reset( new LocaleDataWrapper( SvxCreateLocale( eLang ) ) );
+            pLclD.reset( new LocaleDataWrapper( LanguageTag( SvxCreateLocale( eLang )) ) );
         }
     }
 

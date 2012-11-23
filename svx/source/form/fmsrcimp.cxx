@@ -585,7 +585,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const ::rtl::O
         aParam.insertedChars = m_nLevLonger;
     }
     aParam.searchString = strExpression;
-    aParam.Locale = SvtSysLocale().GetLocaleData().getLocale();
+    aParam.Locale = SvtSysLocale().GetLanguageTag().getLocale();
     ::utl::TextSearch aLocalEngine(aParam);
 
     // --------------------------------------------------------------
@@ -686,7 +686,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
 
     :m_xSearchCursor(xCursor)
     ,m_xFormatSupplier(xFormatSupplier)
-    ,m_aCharacterClassficator( comphelper::getComponentContext(_rxORB), SvtSysLocale().GetLocaleData().getLocale() )
+    ,m_aCharacterClassficator( comphelper::getComponentContext(_rxORB), SvtSysLocale().GetLanguageTag() )
     ,m_aStringCompare( _rxORB )
     ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
     ,m_bUsingTextComponents(sal_False)
@@ -723,7 +723,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
         const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
         const InterfaceArray& arrFields, FMSEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
-    ,m_aCharacterClassficator( comphelper::getComponentContext(_rxORB), SvtSysLocale().GetLocaleData().getLocale() )
+    ,m_aCharacterClassficator( comphelper::getComponentContext(_rxORB), SvtSysLocale().GetLanguageTag() )
     ,m_aStringCompare( _rxORB )
     ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
     ,m_bUsingTextComponents(sal_True)
@@ -872,7 +872,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
         bCaseSensitiveIdentifiers = xMeta->supportsMixedCaseQuotedIdentifiers();
 
     // now that we have this information, we need a collator which is able to case (in)sentively compare strings
-    m_aStringCompare.loadDefaultCollator( SvtSysLocale().GetLocaleData().getLocale(),
+    m_aStringCompare.loadDefaultCollator( SvtSysLocale().GetLanguageTag().getLocale(),
         bCaseSensitiveIdentifiers ? 0 : ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
 
     try

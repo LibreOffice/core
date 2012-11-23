@@ -328,17 +328,9 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                     sDefaultCurrency = sDefaultCurrency.copy( nSepPos + 1 );
                 }
 
-                // the remaming is the locale
-                /* FIXME-BCP47: handle language tags! */
-                Locale aLocale;
-                nSepPos = sDefaultCurrency.indexOf( '-' );
-                if ( nSepPos >= 0 )
-                {
-                    aLocale.Language = sDefaultCurrency.copy( 0, nSepPos );
-                    aLocale.Country = sDefaultCurrency.copy( nSepPos + 1 );
-                }
-
-                LocaleDataWrapper aLocaleInfo( maContext.getUNOContext(), aLocale );
+                // the remaining is the locale
+                LanguageTag aLanguageTag( sDefaultCurrency);
+                LocaleDataWrapper aLocaleInfo( maContext.getUNOContext(), aLanguageTag );
                 if ( sBankSymbol.isEmpty() )
                     sBankSymbol = aLocaleInfo.getCurrBankSymbol();
 

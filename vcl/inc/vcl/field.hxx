@@ -32,6 +32,7 @@ namespace com { namespace sun { namespace star { namespace lang { struct Locale;
 
 class CalendarWrapper;
 class LocaleDataWrapper;
+class LanguageTag;
 
 // -----------------
 // - FormatterBase -
@@ -78,6 +79,7 @@ public:
 
     virtual void            SetLocale( const ::com::sun::star::lang::Locale& rLocale );
     const ::com::sun::star::lang::Locale&   GetLocale() const;
+    const LanguageTag&      GetLanguageTag() const;
 
     const AllSettings&      GetFieldSettings() const;
 

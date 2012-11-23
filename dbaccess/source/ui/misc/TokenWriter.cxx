@@ -142,7 +142,7 @@ ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection&
     try
     {
         SvtSysLocale aSysLocale;
-        m_aLocale = aSysLocale.GetLocaleData().getLocale();
+        m_aLocale = aSysLocale.GetLanguageTag().getLocale();
     }
     catch(Exception&)
     {
@@ -260,7 +260,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
     try
     {
         SvtSysLocale aSysLocale;
-        m_aLocale = aSysLocale.GetLocaleData().getLocale();
+        m_aLocale = aSysLocale.GetLanguageTag().getLocale();
     }
     catch(Exception&)
     {

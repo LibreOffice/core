@@ -458,7 +458,7 @@ StringCompare SvxSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry*
         if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
             nLeftKind == SV_ITEM_ID_LBOXSTRING )
         {
-            IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLanguageTag().getLocale() );
+            IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLanguageTag() );
             const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
 
             eCompare=(StringCompare)pCollator->compareString( ((SvLBoxString*)pLeftItem)->GetText(),

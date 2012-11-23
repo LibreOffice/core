@@ -26,6 +26,7 @@
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <rtl/ustring.hxx>
+#include <i18npool/languagetag.hxx>
 #include <unotools/readwritemutexguard.hxx>
 #include "unotools/unotoolsdllapi.h"
 
@@ -58,7 +59,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper : private boost::noncopyable
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData4 >            xLD;
-    ::com::sun::star::lang::Locale                                                      aLocale;
+    LanguageTag                                                                         maLanguageTag;
     ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 >                            xDefaultCalendar;
     ::com::sun::star::i18n::LocaleDataItem                                              aLocaleDataItem;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >                                  aReservedWordSeq;
@@ -112,10 +113,10 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper : private boost::noncopyable
 public:
                                 LocaleDataWrapper(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
-                                    const ::com::sun::star::lang::Locale& rLocale
+                                    const LanguageTag& rLanguageTag
                                     );
                                 LocaleDataWrapper(
-                                    const ::com::sun::star::lang::Locale& rLocale
+                                    const LanguageTag& rLanguageTag
                                     );
                                 ~LocaleDataWrapper();
 
@@ -129,13 +130,13 @@ public:
         const { return m_xContext; }
 
     /// set a new Locale to request
-            void                setLocale( const ::com::sun::star::lang::Locale& rLocale );
+            void                setLanguageTag( const LanguageTag& rLanguageTag );
 
     /// get current requested Locale
-    const ::com::sun::star::lang::Locale& getLocale() const;
+    const   LanguageTag&        getLanguageTag() const;
 
     /// get current loaded Locale, which might differ from the requested Locale
-    ::com::sun::star::lang::Locale getLoadedLocale() const;
+    LanguageTag                 getLoadedLanguageTag() const;
 
 
     // Wrapper implementations of service LocaleData
@@ -349,6 +350,9 @@ public:
     static  void                outputCheckMessage( const char* pStr);
 
 private:
+
+    const ::com::sun::star::lang::Locale &  getMyLocale() const;
+
     static  void                evaluateLocaleDataChecking();
 };
 

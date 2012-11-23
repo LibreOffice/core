@@ -135,7 +135,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     try
     {
         SvtSysLocale aSysLocale;
-        m_aLocale = aSysLocale.GetLocaleData().getLocale();
+        m_aLocale = aSysLocale.GetLanguageTag().getLocale();
     }
     catch(Exception&)
     {
@@ -177,7 +177,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     try
     {
         SvtSysLocale aSysLocale;
-        m_aLocale = aSysLocale.GetLocaleData().getLocale();
+        m_aLocale = aSysLocale.GetLanguageTag().getLocale();
     }
     catch(Exception&)
     {

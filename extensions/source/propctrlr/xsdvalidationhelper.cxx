@@ -353,7 +353,7 @@ namespace pcr
                     return;
 
                 // and the standard format for the given NumberFormat type
-                sal_Int32 nDesiredFormat = xFormatTypes->getStandardFormat( nNumberFormatType, SvtSysLocale().GetLocaleData().getLocale() );
+                sal_Int32 nDesiredFormat = xFormatTypes->getStandardFormat( nNumberFormatType, SvtSysLocale().GetLanguageTag().getLocale() );
 
                 // set this at the introspectee
                 m_xControlModel->setPropertyValue( PROPERTY_FORMATKEY, makeAny( nDesiredFormat ) );

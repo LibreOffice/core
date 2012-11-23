@@ -55,7 +55,7 @@ private:
 
 SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(NULL)
 {
-    pLocaleData = new LocaleDataWrapper( aSysLocaleOptions.GetRealLanguageTag().getLocale() );
+    pLocaleData = new LocaleDataWrapper( aSysLocaleOptions.GetRealLanguageTag() );
     setDateAcceptancePatternsConfig();
 
     // listen for further changes
@@ -73,7 +73,7 @@ SvtSysLocale_Impl::~SvtSysLocale_Impl()
 CharClass* SvtSysLocale_Impl::GetCharClass()
 {
     if ( !pCharClass )
-        pCharClass = new CharClass( aSysLocaleOptions.GetRealLanguageTag().getLocale() );
+        pCharClass = new CharClass( aSysLocaleOptions.GetRealLanguageTag() );
     return pCharClass;
 }
 
@@ -83,9 +83,9 @@ void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, sa
 
     if ( nHint & SYSLOCALEOPTIONS_HINT_LOCALE )
     {
-        com::sun::star::lang::Locale aLocale( aSysLocaleOptions.GetRealLanguageTag().getLocale() );
-        pLocaleData->setLocale( aLocale );
-        GetCharClass()->setLocale( aLocale );
+        const LanguageTag& rLanguageTag = aSysLocaleOptions.GetRealLanguageTag();
+        pLocaleData->setLanguageTag( rLanguageTag );
+        GetCharClass()->setLanguageTag( rLanguageTag );
     }
     if ( nHint & SYSLOCALEOPTIONS_HINT_DATEPATTERNS )
     {

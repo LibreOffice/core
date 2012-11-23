@@ -89,7 +89,7 @@ void SwBreakIt::_GetLocale( const LanguageType aLang )
 
 void SwBreakIt::_GetForbidden( const LanguageType aLang )
 {
-    LocaleDataWrapper aWrap( m_xContext, GetLocale( aLang ) );
+    LocaleDataWrapper aWrap( m_xContext, LanguageTag( GetLocale( aLang )) );
 
     aForbiddenLang = aLang;
     delete m_pForbidden;

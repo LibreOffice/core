@@ -232,8 +232,9 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
 
     LanguageType eRealLanguage = MsLangId::getRealLanguage( meLanguage );
-    mpLocale = new ::com::sun::star::lang::Locale( LanguageTag( eRealLanguage ).getLocale());
-    mpCharClass = new CharClass( *mpLocale );
+    LanguageTag aLanguageTag( eRealLanguage);
+    mpLocale = new ::com::sun::star::lang::Locale( aLanguageTag.getLocale());
+    mpCharClass = new CharClass( aLanguageTag );
 
     // If the current application language is a language that uses right-to-left text...
     LanguageType eRealCTLLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();

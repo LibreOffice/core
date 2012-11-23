@@ -32,18 +32,20 @@ using namespace ::com::sun::star::uno;
 
 CharClass::CharClass(
             const Reference< uno::XComponentContext > & rxContext,
-            const lang::Locale& rLocale
+            const LanguageTag& rLanguageTag
             )
+    :
+        maLanguageTag( rLanguageTag)
 {
-    setLocale( rLocale );
     xCC = CharacterClassification::create( rxContext );
 }
 
 
 CharClass::CharClass(
-            const ::com::sun::star::lang::Locale& rLocale )
+            const LanguageTag& rLanguageTag )
+    :
+        maLanguageTag( rLanguageTag)
 {
-    setLocale( rLocale );
     xCC = CharacterClassification::create( comphelper::getProcessComponentContext() );
 }
 
@@ -53,19 +55,24 @@ CharClass::~CharClass()
 }
 
 
-void CharClass::setLocale( const ::com::sun::star::lang::Locale& rLocale )
+void CharClass::setLanguageTag( const LanguageTag& rLanguageTag )
 {
     ::osl::MutexGuard aGuard( aMutex );
-    aLocale.Language = rLocale.Language;
-    aLocale.Country = rLocale.Country;
-    aLocale.Variant = rLocale.Variant;
+    maLanguageTag = rLanguageTag;
 }
 
 
-const ::com::sun::star::lang::Locale& CharClass::getLocale() const
+const LanguageTag& CharClass::getLanguageTag() const
 {
     ::osl::MutexGuard aGuard( aMutex );
-    return aLocale;
+    return maLanguageTag;
+}
+
+
+const ::com::sun::star::lang::Locale& CharClass::getMyLocale() const
+{
+    ::osl::MutexGuard aGuard( aMutex );
+    return maLanguageTag.getLocale();
 }
 
 
@@ -111,7 +118,7 @@ sal_Bool CharClass::isAlpha( const String& rStr, xub_StrLen nPos ) const
     try
     {
         if ( xCC.is() )
-            return  (xCC->getCharacterType( rStr, nPos, getLocale() ) &
+            return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                 nCharClassAlphaType) != 0;
         else
             return sal_False;
@@ -134,7 +141,7 @@ sal_Bool CharClass::isLetter( const String& rStr, xub_StrLen nPos ) const
     try
     {
         if ( xCC.is() )
-            return  (xCC->getCharacterType( rStr, nPos, getLocale() ) &
+            return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                 nCharClassLetterType) != 0;
         else
             return sal_False;
@@ -152,7 +159,7 @@ sal_Bool CharClass::isLetter( const String& rStr ) const
     try
     {
         if ( xCC.is() )
-            return isLetterType( xCC->getStringType( rStr, 0, rStr.Len(), getLocale() ) );
+            return isLetterType( xCC->getStringType( rStr, 0, rStr.Len(), getMyLocale() ) );
         else
             return sal_False;
     }
@@ -173,7 +180,7 @@ sal_Bool CharClass::isDigit( const String& rStr, xub_StrLen nPos ) const
     try
     {
         if ( xCC.is() )
-            return  (xCC->getCharacterType( rStr, nPos, getLocale() ) &
+            return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                 KCharacterType::DIGIT) != 0;
         else
             return sal_False;
@@ -191,7 +198,7 @@ sal_Bool CharClass::isNumeric( const String& rStr ) const
     try
     {
         if ( xCC.is() )
-            return isNumericType( xCC->getStringType( rStr, 0, rStr.Len(), getLocale() ) );
+            return isNumericType( xCC->getStringType( rStr, 0, rStr.Len(), getMyLocale() ) );
         else
             return sal_False;
     }
@@ -212,7 +219,7 @@ sal_Bool CharClass::isAlphaNumeric( const String& rStr, xub_StrLen nPos ) const
     try
     {
         if ( xCC.is() )
-            return  (xCC->getCharacterType( rStr, nPos, getLocale() ) &
+            return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                 (nCharClassAlphaType | KCharacterType::DIGIT)) != 0;
         else
             return sal_False;
@@ -234,7 +241,7 @@ sal_Bool CharClass::isLetterNumeric( const String& rStr, xub_StrLen nPos ) const
     try
     {
         if ( xCC.is() )
-            return  (xCC->getCharacterType( rStr, nPos, getLocale() ) &
+            return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                 (nCharClassLetterType | KCharacterType::DIGIT)) != 0;
         else
             return sal_False;
@@ -252,7 +259,7 @@ sal_Bool CharClass::isLetterNumeric( const String& rStr ) const
     try
     {
         if ( xCC.is() )
-            return isLetterNumericType( xCC->getStringType( rStr, 0, rStr.Len(), getLocale() ) );
+            return isLetterNumericType( xCC->getStringType( rStr, 0, rStr.Len(), getMyLocale() ) );
         else
             return sal_False;
     }
@@ -268,7 +275,7 @@ rtl::OUString CharClass::titlecase(const rtl::OUString& rStr, sal_Int32 nPos, sa
     try
     {
         if ( xCC.is() )
-            return xCC->toTitle( rStr, nPos, nCount, getLocale() );
+            return xCC->toTitle( rStr, nPos, nCount, getMyLocale() );
         else
             return rStr.copy( nPos, nCount );
     }
@@ -284,7 +291,7 @@ rtl::OUString CharClass::titlecase(const rtl::OUString& rStr, sal_Int32 nPos, sa
     try
     {
         if ( xCC.is() )
-            return xCC->toUpper( rStr, nPos, nCount, getLocale() );
+            return xCC->toUpper( rStr, nPos, nCount, getMyLocale() );
         else
             return rStr.copy( nPos, nCount );
     }
@@ -300,7 +307,7 @@ rtl::OUString CharClass::titlecase(const rtl::OUString& rStr, sal_Int32 nPos, sa
     try
     {
         if ( xCC.is() )
-            return xCC->toLower( rStr, nPos, nCount, getLocale() );
+            return xCC->toLower( rStr, nPos, nCount, getMyLocale() );
         else
             return rStr.copy( nPos, nCount );
     }
@@ -367,7 +374,7 @@ sal_Int32 CharClass::getCharacterType( const String& rStr, xub_StrLen nPos ) con
     try
     {
         if ( xCC.is() )
-            return xCC->getCharacterType( rStr, nPos, getLocale() );
+            return xCC->getCharacterType( rStr, nPos, getMyLocale() );
         else
             return 0;
     }
@@ -384,7 +391,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
     try
     {
         if ( xCC.is() )
-            return xCC->getStringType( rStr, nPos, nCount, getLocale() );
+            return xCC->getStringType( rStr, nPos, nCount, getMyLocale() );
         else
             return 0;
     }
@@ -407,7 +414,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
     try
     {
         if ( xCC.is() )
-            return xCC->parseAnyToken( rStr, nPos, getLocale(),
+            return xCC->parseAnyToken( rStr, nPos, getMyLocale(),
                 nStartCharFlags, userDefinedCharactersStart,
                 nContCharFlags, userDefinedCharactersCont );
         else
@@ -433,7 +440,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
     try
     {
         if ( xCC.is() )
-            return xCC->parsePredefinedToken( nTokenType, rStr, nPos, getLocale(),
+            return xCC->parsePredefinedToken( nTokenType, rStr, nPos, getMyLocale(),
                 nStartCharFlags, userDefinedCharactersStart,
                 nContCharFlags, userDefinedCharactersCont );
         else
