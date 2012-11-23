@@ -617,6 +617,9 @@ private:
     SVL_DLLPRIVATE bool ImpGetFractionOutput(double fNumber,
                                              sal_uInt16 nIx,
                                              String& OutString);
+    SVL_DLLPRIVATE bool ImpGetScientificOutput(double fNumber,
+                                               sal_uInt16 nIx,
+                                               String& OutString);
 
     SVL_DLLPRIVATE bool ImpGetDateOutput( double fNumber,
                        sal_uInt16 nIx,

@@ -2538,7 +2538,6 @@ bool SvNumberformat::GetOutputString(double fNumber,
         {
         case NUMBERFORMAT_TEXT:
         case NUMBERFORMAT_DEFINED:
-        {
             for (sal_uInt16 i = 0; i < nAnz; i++)
             {
                 switch (rInfo.nTypeArray[i])
@@ -2561,14 +2560,15 @@ bool SvNumberformat::GetOutputString(double fNumber,
                     break;
                 case NF_SYMBOLTYPE_THSEP:
                     if (rInfo.nThousand == 0)
+                    {
                         OutString += rInfo.sStrArray[i];
+                    }
                     break;
                 default:
                     break;
                 }
             }
-        }
-        break;
+            break;
         case NUMBERFORMAT_DATE:
             bRes |= ImpGetDateOutput(fNumber, nIx, OutString);
             break;
@@ -2586,113 +2586,132 @@ bool SvNumberformat::GetOutputString(double fNumber,
         case NUMBERFORMAT_FRACTION:
             bRes |= ImpGetFractionOutput(fNumber, nIx, OutString);
             break;
-        break;
         case NUMBERFORMAT_SCIENTIFIC:
+            bRes |= ImpGetScientificOutput(fNumber, nIx, OutString);
+            break;
+        }
+    }
+    return bRes;
+}
+
+bool SvNumberformat::ImpGetScientificOutput(double fNumber,
+                                            sal_uInt16 nIx,
+                                            String& OutString)
+{
+    bool bRes = false;
+    bool bSign = false;
+    const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
+    const sal_uInt16 nAnz = NumFor[nIx].GetCount();
+
+    if (fNumber < 0)
+    {
+        if (nIx == 0)                       // nicht in hinteren
         {
-            bool bSign = false;
-            if (fNumber < 0)
-            {
-                if (nIx == 0)                       // nicht in hinteren
-                    bSign = true;                   // Formaten
-                fNumber = -fNumber;
-            }
-            String sStr( ::rtl::math::doubleToUString( fNumber,
-                                                       rtl_math_StringFormat_E,
-                                                       rInfo.nCntPre + rInfo.nCntPost - 1, '.' ));
+            bSign = true;                   // Formaten
+        }
+        fNumber = -fNumber;
+    }
 
-            String ExpStr;
-            short nExpSign = 1;
-            xub_StrLen nExPos = sStr.Search('E');
-            if ( nExPos != STRING_NOTFOUND )
-            {
-                // split into mantisse and exponent and get rid of "E+" or "E-"
-                xub_StrLen nExpStart = nExPos + 1;
-                switch ( sStr.GetChar( nExpStart ) )
-                {
-                case '-' :
-                    nExpSign = -1;
-                    // fallthru
-                case '+' :
-                    ++nExpStart;
-                    break;
-                }
-                ExpStr = sStr.Copy( nExpStart );    // part following the "E+"
-                sStr.Erase( nExPos );
-                // cut any decimal delimiter
-                sStr = comphelper::string::remove(sStr, '.');
-                if ( rInfo.nCntPre != 1 )       // rescale Exp
-                {
-                    sal_Int32 nExp = ExpStr.ToInt32() * nExpSign;
-                    nExp -= sal_Int32(rInfo.nCntPre)-1;
-                    if ( nExp < 0 )
-                    {
-                        nExpSign = -1;
-                        nExp = -nExp;
-                    }
-                    else
-                    {
-                        nExpSign = 1;
-                    }
-                    ExpStr = String::CreateFromInt32( nExp );
-                }
-            }
-            sal_uInt16 j = nAnz-1;                  // last symbol
-            xub_StrLen k;                       // position in ExpStr
-            bRes |= ImpNumberFill(ExpStr, fNumber, k, j, nIx, NF_SYMBOLTYPE_EXP);
+    String sStr( ::rtl::math::doubleToUString( fNumber,
+                                               rtl_math_StringFormat_E,
+                                               rInfo.nCntPre + rInfo.nCntPost - 1, '.' ));
+    String ExpStr;
+    short nExpSign = 1;
+    xub_StrLen nExPos = sStr.Search('E');
 
-            xub_StrLen nZeros = 0;              // erase leading zeros
-            while (nZeros < k && ExpStr.GetChar(nZeros) == '0')
+    if ( nExPos != STRING_NOTFOUND )
+    {
+        // split into mantisse and exponent and get rid of "E+" or "E-"
+        xub_StrLen nExpStart = nExPos + 1;
+
+        switch ( sStr.GetChar( nExpStart ) )
+        {
+        case '-' :
+            nExpSign = -1;
+            // fallthru
+        case '+' :
+            ++nExpStart;
+            break;
+        }
+        ExpStr = sStr.Copy( nExpStart );    // part following the "E+"
+        sStr.Erase( nExPos );
+        // cut any decimal delimiter
+        sStr = comphelper::string::remove(sStr, '.');
+        if ( rInfo.nCntPre != 1 )       // rescale Exp
+        {
+            sal_Int32 nExp = ExpStr.ToInt32() * nExpSign;
+
+            nExp -= sal_Int32(rInfo.nCntPre)-1;
+            if ( nExp < 0 )
             {
-                ++nZeros;
-            }
-            if (nZeros)
-            {
-                ExpStr.Erase( 0, nZeros);
-            }
-            bool bCont = true;
-            if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_EXP)
-            {
-                const String& rStr = rInfo.sStrArray[j];
-                if (nExpSign == -1)
-                {
-                    ExpStr.Insert('-',0);
-                }
-                else if (rStr.Len() > 1 && rStr.GetChar(1) == '+')
-                {
-                    ExpStr.Insert('+',0);
-                }
-                ExpStr.Insert(rStr.GetChar(0),0);
-                if ( j )
-                {
-                    j--;
-                }
-                else
-                {
-                    bCont = false;
-                }
-            }
-            // weiter Hauptzahl:
-            if ( !bCont )
-            {
-                sStr.Erase();
+                nExpSign = -1;
+                nExp = -nExp;
             }
             else
             {
-                k = sStr.Len();                 // hinter letzter Ziffer
-                bRes |= ImpNumberFillWithThousands(sStr,fNumber, k,j,nIx,
-                                                   rInfo.nCntPre +
-                                                   rInfo.nCntPost);
+                nExpSign = 1;
             }
-            if (bSign)
-            {
-                sStr.Insert('-',0);
-            }
-            OutString = sStr;
-            OutString += ExpStr;
-        }
-        break;
+            ExpStr = String::CreateFromInt32( nExp );
         }
     }
+
+    sal_uInt16 j = nAnz-1;                  // last symbol
+    xub_StrLen k;                       // position in ExpStr
+    xub_StrLen nZeros = 0;              // erase leading zeros
+
+    bRes |= ImpNumberFill(ExpStr, fNumber, k, j, nIx, NF_SYMBOLTYPE_EXP);
+
+    while (nZeros < k && ExpStr.GetChar(nZeros) == '0')
+    {
+        ++nZeros;
+    }
+    if (nZeros)
+    {
+        ExpStr.Erase( 0, nZeros);
+    }
+
+    bool bCont = true;
+
+    if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_EXP)
+    {
+        const String& rStr = rInfo.sStrArray[j];
+        if (nExpSign == -1)
+        {
+            ExpStr.Insert('-',0);
+        }
+        else if (rStr.Len() > 1 && rStr.GetChar(1) == '+')
+        {
+            ExpStr.Insert('+',0);
+        }
+        ExpStr.Insert(rStr.GetChar(0),0);
+        if ( j )
+        {
+            j--;
+        }
+        else
+        {
+            bCont = false;
+        }
+    }
+    // weiter Hauptzahl:
+    if ( !bCont )
+    {
+        sStr.Erase();
+    }
+    else
+    {
+        k = sStr.Len();                 // hinter letzter Ziffer
+        bRes |= ImpNumberFillWithThousands(sStr,fNumber, k,j,nIx,
+                                           rInfo.nCntPre +
+                                           rInfo.nCntPost);
+    }
+    if (bSign)
+    {
+        sStr.Insert('-',0);
+    }
+    OutString = sStr;
+    OutString += ExpStr;
+
     return bRes;
 }
 
