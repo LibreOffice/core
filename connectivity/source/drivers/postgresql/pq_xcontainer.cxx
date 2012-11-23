@@ -339,7 +339,6 @@ void Container::rename( const rtl::OUString &oldName, const rtl::OUString &newNa
             newValue = m_values[nIndex];
             m_name2index.erase( ii );
             m_name2index[ newName ] = nIndex;
-            newValue = m_values[nIndex];
         }
     }
     fire( ReplacedBroadcaster( *this, newName, newValue, oldName ) );
