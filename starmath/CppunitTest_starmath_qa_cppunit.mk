@@ -58,8 +58,10 @@ $(eval $(call gb_CppunitTest_use_libraries,starmath_qa_cppunit,\
     svt \
     svxcore \
     svx \
+    test \
     tk \
     tl \
+    unotest \
     utl \
     vcl \
     xo \
@@ -78,8 +80,13 @@ $(eval $(call gb_CppunitTest_use_components,starmath_qa_cppunit,\
     dtrans/util/mcnttype \
     framework/util/fwk \
     i18npool/util/i18npool \
+    package/source/xstor/xstor \
+    package/util/package2 \
     toolkit/util/tk \
     sfx2/util/sfx \
+    ucb/source/core/ucb1 \
+    ucb/source/ucp/file/ucpfile1 \
+    unotools/util/utl \
 ))
 
 ifeq ($(strip $(OS)),WNT)
@@ -88,5 +95,7 @@ $(eval $(call gb_CppunitTest_use_components,starmath_qa_cppunit,\
     dtrans/util/sysdtrans \
 ))
 endif
+
+$(eval $(call gb_CppunitTest_use_configuration,starmath_qa_cppunit))
 
 # vim: set noet sw=4 ts=4:

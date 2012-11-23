@@ -27,16 +27,8 @@
  * instead of those above.
  */
 
-#include <sal/types.h>
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
-
-#include <cppuhelper/bootstrap.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <sal/config.h>
+#include <test/bootstrapfixture.hxx>
 
 #include <vcl/svapp.hxx>
 #include <smdll.hxx>
@@ -62,29 +54,25 @@ using namespace ::com::sun::star;
 
 namespace {
 
-class Test : public CppUnit::TestFixture {
+class Test : public test::BootstrapFixture
+{
 public:
-    Test();
-    ~Test();
-
     // init
     virtual void setUp();
     virtual void tearDown();
 
     // tests
-    void tmEditUndoRedo();
-    void tmEditAllClipboard();
-    void tmEditMarker();
-    void tmEditFailure();
+    void editUndoRedo();
+    void editMarker();
+    void editFailure();
 
-    void tViewZoom();
+    void viewZoom();
 
     CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(tmEditUndoRedo);
-    CPPUNIT_TEST(tmEditAllClipboard);
-    CPPUNIT_TEST(tmEditMarker);
-    CPPUNIT_TEST(tmEditFailure);
-    CPPUNIT_TEST(tViewZoom);
+    CPPUNIT_TEST(editUndoRedo);
+    CPPUNIT_TEST(editMarker);
+    CPPUNIT_TEST(editFailure);
+    CPPUNIT_TEST(viewZoom);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -99,29 +87,12 @@ private:
     SmViewShell *m_pViewShell;
 };
 
-Test::Test()
-    : m_pDispatcher(NULL)
-    , m_pSmCmdBoxWindow(NULL)
-    , m_pEditWindow(NULL)
-    , m_pViewShell(NULL)
-{
-    m_xContext = cppu::defaultBootstrap_InitialComponentContext();
-    m_xFactory = m_xContext->getServiceManager();
-
-    uno::Reference<lang::XMultiServiceFactory> xSM(m_xFactory, uno::UNO_QUERY_THROW);
-
-    //Without this we're crashing because callees are using
-    //getProcessServiceFactory.  In general those should be removed in favour
-    //of retaining references to the root ServiceFactory as its passed around
-    comphelper::setProcessServiceFactory(xSM);
-
-    InitVCL();
-
-    SmGlobals::ensure();
-}
-
 void Test::setUp()
 {
+    BootstrapFixture::setUp();
+
+    SmGlobals::ensure();
+
     m_xDocShRef = new SmDocShell(
         SFXMODEL_STANDARD |
         SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
@@ -148,13 +119,11 @@ void Test::tearDown()
     delete m_pSmCmdBoxWindow;
     delete m_pDispatcher;
     m_xDocShRef.Clear();
+
+    BootstrapFixture::tearDown();
 }
 
-Test::~Test()
-{
-}
-
-void Test::tmEditMarker()
+void Test::editMarker()
 {
     {
         rtl::OUString sMarkedText("<?> under <?> under <?>");
@@ -168,16 +137,16 @@ void Test::tmEditMarker()
         rtl::OUString sTargetText("a under b under c");
 
         m_pEditWindow->SelNextMark();
-        m_pEditWindow->Cut();
+        m_pEditWindow->Delete();
         m_pEditWindow->InsertText("a");
 
         m_pEditWindow->SelNextMark();
         m_pEditWindow->SelNextMark();
-        m_pEditWindow->Cut();
+        m_pEditWindow->Delete();
         m_pEditWindow->InsertText("c");
 
         m_pEditWindow->SelPrevMark();
-        m_pEditWindow->Cut();
+        m_pEditWindow->Delete();
         m_pEditWindow->InsertText("b");
 
         m_pEditWindow->Flush();
@@ -191,54 +160,7 @@ void Test::tmEditMarker()
     }
 }
 
-void Test::tmEditAllClipboard()
-{
-    rtl::OUString sOriginalText("a over b");
-
-    {
-        m_pEditWindow->SetText(sOriginalText);
-        m_pEditWindow->Flush();
-        rtl::OUString sFinalText = m_pEditWindow->GetText();
-        CPPUNIT_ASSERT_MESSAGE("Should be equal text", sFinalText == sOriginalText);
-    }
-
-    {
-        m_pEditWindow->SelectAll();
-        m_pEditWindow->Cut();
-        m_pEditWindow->Flush();
-        rtl::OUString sFinalText = m_pEditWindow->GetText();
-        CPPUNIT_ASSERT_MESSAGE("Should be empty", !sFinalText.getLength());
-    }
-
-    {
-        m_pEditWindow->Paste();
-        m_pEditWindow->Flush();
-        rtl::OUString sFinalText = m_pEditWindow->GetText();
-        CPPUNIT_ASSERT_MESSAGE("Should be equal text", sFinalText == sOriginalText);
-    }
-
-    {
-        m_pEditWindow->SelectAll();
-        m_pEditWindow->Copy();
-    }
-
-    {
-        rtl::OUString sExpectedText("a over ba over b");
-
-        m_pEditWindow->Paste();
-        m_pEditWindow->Paste();
-        m_pEditWindow->Flush();
-        rtl::OUString sFinalText = m_pEditWindow->GetText();
-        CPPUNIT_ASSERT_MESSAGE("Should be equal text", sFinalText == sExpectedText);
-    }
-
-    {
-        m_pEditWindow->SetText(rtl::OUString());
-        m_pEditWindow->Flush();
-    }
-}
-
-void Test::tmEditFailure()
+void Test::editFailure()
 {
     m_xDocShRef->SetText(String("color a b over {a/}"));
 
@@ -263,7 +185,7 @@ void Test::tmEditFailure()
         pLastErrorDesc && pLastErrorDesc == pErrorDesc);
 }
 
-void Test::tmEditUndoRedo()
+void Test::editUndoRedo()
 {
     EditEngine &rEditEngine = m_xDocShRef->GetEditEngine();
 
@@ -320,7 +242,7 @@ void Test::tmEditUndoRedo()
 
 }
 
-void Test::tViewZoom()
+void Test::viewZoom()
 {
     sal_uInt16 nOrigZoom, nNextZoom, nFinalZoom;
 

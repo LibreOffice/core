@@ -31,9 +31,9 @@ $(eval $(call gb_Module_add_targets,starmath,\
     UI_smath \
 ))
 
-#$(eval $(call gb_Module_add_check_targets,starmath,\
-#    CppunitTest_starmath_qa_cppunit \
-#))
+$(eval $(call gb_Module_add_check_targets,starmath,\
+    CppunitTest_starmath_qa_cppunit \
+))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,starmath,\
     JunitTest_starmath_unoapi \
