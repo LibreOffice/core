@@ -731,10 +731,6 @@ elide_dependency(const char* key, int key_len,
     }
 #endif
 
-    /* .hdl files are always matched by .hpp */
-    if (key_len > 4 && !PATHNCMP(key + key_len - 4, ".hdl", 4))
-        return 1;
-
     /* boost brings a plague of header files */
     int i;
     int boost = 0;
