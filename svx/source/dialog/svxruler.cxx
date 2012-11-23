@@ -2514,7 +2514,6 @@ void SvxRuler::PrepareProportional_Impl(RulerType eType)
             long lWidth=0;
             sal_uInt16 nStart;
             sal_uInt16 nIdx=GetDragAryPos();
-            lWidth=0;
             long lActWidth=0;
             long lActBorderSum;
             long lOrigLPos;

@@ -549,7 +549,6 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
 
         ScSheetDPData aDPData(GetDocPtr(), *pSrcDesc, *pCache);
         long nDim = GetFieldIndex();
-        const std::vector< SCROW > aOrignial = aDPData.GetColumnEntries(nDim);
         // get the string collection with generated grouping elements
         ScDPNumGroupDimension aTmpDim( rNumInfo );
         if( nDatePart != 0 )

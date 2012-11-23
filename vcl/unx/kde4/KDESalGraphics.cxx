@@ -177,7 +177,6 @@ namespace
         if( s_nFrameWidth < 0 )
         {
             // fill in a default
-            s_nFrameWidth = 2;
             QFrame aFrame( NULL );
             aFrame.setFrameRect( QRect(0, 0, 100, 30) );
             aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
