@@ -37,6 +37,7 @@ $(eval $(call gb_Library_set_componentfile,svl,svl/util/svl))
 
 $(eval $(call gb_Library_set_include,svl,\
     -I$(SRCDIR)/svl/source/inc \
+    -I$(SRCDIR)/svl/inc \
     $$(INCLUDE) \
 ))
 
