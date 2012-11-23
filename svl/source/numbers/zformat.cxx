@@ -4388,19 +4388,22 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
 
 bool SvNumberformat::ImpNumberFillWithThousands( String& sStr,       // number string
                                                  double& rNumber,    // number
-                                                 xub_StrLen k,       // position within string
+                                                 xub_StrLen kin,       // position within string
                                                  sal_uInt16 j,           // symbol index within format code
                                                  sal_uInt16 nIx,         // subformat index
                                                  sal_uInt16 nDigCnt)     // count of integer digits in format
 {
     bool bRes = false;
-    xub_StrLen nLeadingStringChars = 0; // inserted StringChars before number
-    xub_StrLen nDigitCount = 0;         // count of integer digits from the right
+    sal_Int32 k = (sal_Int32)kin;
+    OUStringBuffer sBuff(sStr);
+    sal_Int32 nLeadingStringChars = 0; // inserted StringChars before number
+    sal_Int32 nDigitCount = 0;         // count of integer digits from the right
     bool bStop = false;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     // no normal thousands separators if number divided by thousands
     bool bDoThousands = (rInfo.nThousand == 0);
     utl::DigitGroupingIterator aGrouping( GetFormatter().GetLocaleData()->getDigitGrouping());
+
     while (!bStop)                                      // backwards
     {
         if (j == 0)
@@ -4415,7 +4418,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( String& sStr,       // number s
         case NF_SYMBOLTYPE_STRING:
         case NF_SYMBOLTYPE_CURRENCY:
         case NF_SYMBOLTYPE_PERCENT:
-            sStr.Insert(rInfo.sStrArray[j],k);
+            sBuff.insert(k, rInfo.sStrArray[j]);
             if ( k == 0 )
             {
                 nLeadingStringChars = nLeadingStringChars + rInfo.sStrArray[j].getLength();
@@ -4424,13 +4427,13 @@ bool SvNumberformat::ImpNumberFillWithThousands( String& sStr,       // number s
         case NF_SYMBOLTYPE_STAR:
             if( bStarFlag )
             {
-                sStr.Insert(rInfo.sStrArray[j][1], k);
-                sStr.Insert( (sal_Unicode) 0x1B, k );
+                sBuff.insert(k, rInfo.sStrArray[j][1]);
+                sBuff.insert(k, (sal_Unicode) 0x1B);
                 bRes = true;
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
-            /*k = */ InsertBlanks( sStr,k,rInfo.sStrArray[j][1] );
+            /*k = */ InsertBlanks(sBuff, k, rInfo.sStrArray[j][1] );
             break;
         case NF_SYMBOLTYPE_THSEP:
             // #i7284# #102685# Insert separator also if number is divided
@@ -4453,7 +4456,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( String& sStr,       // number s
             {
                 if (k > 0)
                 {
-                    sStr.Insert(rInfo.sStrArray[j],k);
+                    sBuff.insert(k, rInfo.sStrArray[j]);
                 }
                 else if (nDigitCount < nDigCnt)
                 {
@@ -4465,11 +4468,11 @@ bool SvNumberformat::ImpNumberFillWithThousands( String& sStr,       // number s
                     sal_Unicode cLeader = 0;
                     if (j > 0 && rInfo.nTypeArray[j-1] == NF_SYMBOLTYPE_DIGIT)
                     {
-                        const String& rStr = rInfo.sStrArray[j-1];
-                        xub_StrLen nLen = rStr.Len();
+                        const OUString& rStr = rInfo.sStrArray[j-1];
+                        sal_Int32 nLen = rStr.getLength();
                         if (nLen)
                         {
-                            cLeader = rStr.GetChar(nLen-1);
+                            cLeader = rStr[ nLen - 1 ];
                         }
                     }
                     switch (cLeader)
@@ -4485,10 +4488,10 @@ bool SvNumberformat::ImpNumberFillWithThousands( String& sStr,       // number s
                         // a literal ',' character instead that is
                         // inserted unconditionally. Should be changed
                         // on some occasion.
-                        sStr.Insert(' ',k);
+                        sBuff.insert(k, (sal_Unicode)' ');
                         break;
                     default:
-                        sStr.Insert(rInfo.sStrArray[j],k);
+                        sBuff.insert(k, rInfo.sStrArray[j]);
                     }
                 }
                 aGrouping.advance();
@@ -4496,9 +4499,9 @@ bool SvNumberformat::ImpNumberFillWithThousands( String& sStr,       // number s
             break;
         case NF_SYMBOLTYPE_DIGIT:
         {
-            const String& rStr = rInfo.sStrArray[j];
-            const sal_Unicode* p1 = rStr.GetBuffer();
-            register const sal_Unicode* p = p1 + rStr.Len();
+            const OUString& rStr = rInfo.sStrArray[j];
+            const sal_Unicode* p1 = rStr.getStr();
+            register const sal_Unicode* p = p1 + rStr.getLength();
             while ( p1 < p-- )
             {
                 nDigitCount++;
@@ -4511,29 +4514,30 @@ bool SvNumberformat::ImpNumberFillWithThousands( String& sStr,       // number s
                     switch (*p)
                     {
                     case '0':
-                        sStr.Insert('0',0);
+                        sBuff.insert(0, (sal_Unicode)'0');
                         break;
                     case '?':
-                        sStr.Insert(' ',0);
+                        sBuff.insert(0, (sal_Unicode)' ');
                         break;
                     }
                 }
                 if (nDigitCount == nDigCnt && k > 0)
-                {   // more digits than specified
-                    ImpDigitFill(sStr, 0, k, nIx, nDigitCount, aGrouping);
+                {
+                    // more digits than specified
+                    ImpDigitFill(sBuff, 0, k, nIx, nDigitCount, aGrouping);
                 }
             }
             break;
         }
         case NF_KEY_CCC:                        // CCC currency
-            sStr.Insert(rScan.GetCurAbbrev(), k);
+            sBuff.insert(k, rScan.GetCurAbbrev());
             break;
         case NF_KEY_GENERAL:                    // "General" in string
         {
             String sNum;
             ImpGetOutputStandard(rNumber, sNum);
             sNum = comphelper::string::stripStart(sNum, '-');
-            sStr.Insert(sNum, k);
+            sBuff.insert(k, OUString(sNum));
             break;
         }
         default:
@@ -4545,26 +4549,27 @@ bool SvNumberformat::ImpNumberFillWithThousands( String& sStr,       // number s
     k = k + nLeadingStringChars;    // MSC converts += to int and then warns, so ...
     if (k > nLeadingStringChars)
     {
-        ImpDigitFill(sStr, nLeadingStringChars, k, nIx, nDigitCount, aGrouping);
+        ImpDigitFill(sBuff, nLeadingStringChars, k, nIx, nDigitCount, aGrouping);
     }
+    sStr = sBuff.makeStringAndClear();
     return bRes;
 }
 
-void SvNumberformat::ImpDigitFill(String& sStr,                   // number string
-                                  xub_StrLen nStart,              // start of digits
-                                  xub_StrLen& k,                  // position within string
+void SvNumberformat::ImpDigitFill(OUStringBuffer& sStr,                   // number string
+                                  sal_Int32 nStart,              // start of digits
+                                  sal_Int32 & k,                  // position within string
                                   sal_uInt16 nIx,                     // subformat index
-                                  xub_StrLen & nDigitCount,       // count of integer digits from the right so far
+                                  sal_Int32 & nDigitCount,       // count of integer digits from the right so far
                                   utl::DigitGroupingIterator & rGrouping )    // current grouping
 {
     if (NumFor[nIx].Info().bThousand)               // only if grouping
     {                                               // fill in separators
-        const String& rThousandSep = GetFormatter().GetNumThousandSep();
+        const OUString& rThousandSep = GetFormatter().GetNumThousandSep();
         while (k > nStart)
         {
             if (nDigitCount == rGrouping.getPos())
             {
-                sStr.Insert( rThousandSep, k );
+                sStr.insert( k, rThousandSep );
                 rGrouping.advance();
             }
             nDigitCount++;

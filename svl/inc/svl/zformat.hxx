@@ -607,12 +607,12 @@ private:
 
     // Helper function to fill in the group (AKA thousand) separators
     // or to skip additional digits
-    SVL_DLLPRIVATE void ImpDigitFill( String& sStr,
-                    xub_StrLen nStart,
-                    xub_StrLen& k,
-                    sal_uInt16 nIx,
-                    xub_StrLen & nDigitCount,
-                    utl::DigitGroupingIterator & );
+    SVL_DLLPRIVATE void ImpDigitFill( OUStringBuffer& sStr,
+                                      sal_Int32 nStart,
+                                      sal_Int32& k,
+                                      sal_uInt16 nIx,
+                                      sal_Int32 & nDigitCount,
+                                      utl::DigitGroupingIterator & );
 
     SVL_DLLPRIVATE bool ImpGetFractionOutput(double fNumber,
                                              sal_uInt16 nIx,
