@@ -93,9 +93,6 @@ local repo
 set_push_urls()
 {
     PUSH_USER="$1"
-    if [ -n "$PUSH_USER" ] ; then
-	PUSH_USER="${PUSH_USER}@"
-    fi
     set_push_url
     for repo in ${SUBMODULES_ACTIVE?} ; do
 	set_push_url "${repo?}"
@@ -277,7 +274,7 @@ while [ "${COMMAND:0:1}" = "-" ] ; do
 	    if [ -n "${PUSH_USER}" ] ; then
 		PUSH_USER="${PUSH_USER}@"
 	    fi
-	    set_push_urls
+	    set_push_urls "$PUSH_USER"
 	    exit 0;
 	    ;;
 	-*)
