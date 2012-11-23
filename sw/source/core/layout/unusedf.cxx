@@ -54,7 +54,7 @@ bool SwFrm::FillSelection( SwSelectionList& , const SwRect& ) const
     return false;
 }
 
-sal_Bool SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
+sal_Bool SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*, bool  ) const
 {
     OSL_FAIL( "GetCrsrOfst of the base class, hi!" );
     return sal_False;

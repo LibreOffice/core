@@ -684,7 +684,7 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
  *************************************************************************/
 
 sal_Bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
-                               SwCrsrMoveState* pCMS ) const
+                               SwCrsrMoveState* pCMS, bool ) const
 {
     MSHORT nChgFrm = 2;
     if( pCMS )

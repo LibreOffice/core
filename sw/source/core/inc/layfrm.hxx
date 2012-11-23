@@ -92,7 +92,7 @@ public:
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
     virtual sal_Bool  GetCrsrOfst( SwPosition *, Point&,
-                               SwCrsrMoveState* = 0 ) const;
+                               SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );

@@ -31,6 +31,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <tools/bigint.hxx>
+#include <tools/line.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/protitem.hxx>
 #include <vcl/settings.hxx>
@@ -65,9 +66,11 @@
 #include <cfloat>
 #include <swselectionlist.hxx>
 
+#include <basegfx/numeric/ftools.hxx>
+
 namespace {
     bool lcl_GetCrsrOfst_Objects( const SwPageFrm* pPageFrm, bool bSearchBackground,
-           SwPosition *pPos, Point& rPoint, SwCrsrMoveState* pCMS, long& rSurface )
+           SwPosition *pPos, Point& rPoint, SwCrsrMoveState* pCMS  )
     {
         bool bRet = false;
         Point aPoint( rPoint );
@@ -91,7 +94,6 @@ namespace {
                    !pFly->IsProtected() ) &&
                  pFly->GetCrsrOfst( pPos, aPoint, pCMS ) )
             {
-                rSurface = pFly->Frm().Width() * pFly->Frm().Height();
                 bRet = true;
                 break;
             }
@@ -103,18 +105,19 @@ namespace {
         return bRet;
     }
 
-    long lcl_GetSurface( SwPosition* pPos )
+    double lcl_getDistance( const SwRect& rRect, const Point& rPoint )
     {
-        SwRect aArea;
+        double nDist = 0.0;
 
-        SwNode& rNode = pPos->nNode.GetNode();
+        // If the point is inside the rectangle, then distance is 0
+        // Otherwise, compute the distance to the center of the rectangle.
+        if ( !rRect.IsInside( rPoint ) )
+        {
+            Line aLine( rPoint, rRect.Center( ) );
+            nDist = aLine.GetLength( );
+        }
 
-        if ( rNode.IsCntntNode() )
-            aArea = rNode.GetCntntNode()->FindLayoutRect();
-
-        // FIXME Handle the other kinds of nodes?
-
-        return aArea.Height() * aArea.Width();
+        return nDist;
     }
 }
 
@@ -166,7 +169,7 @@ static SwCrsrOszControl aOszCtrl = { 0, 0, 0 };
 |*
 |*************************************************************************/
 sal_Bool SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
-                               SwCrsrMoveState* pCMS ) const
+                               SwCrsrMoveState* pCMS, bool ) const
 {
     sal_Bool bRet = sal_False;
     const SwFrm *pFrm = Lower();
@@ -201,7 +204,7 @@ sal_Bool SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 |*************************************************************************/
 
 sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
-                             SwCrsrMoveState* pCMS ) const
+                             SwCrsrMoveState* pCMS, bool bTestBackground ) const
 {
     sal_Bool bRet     = sal_False;
     Point aPoint( rPoint );
@@ -222,14 +225,11 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     //hineinsetzen, dadurch sollten alle Aenderungen unmoeglich sein.
     if ( GetSortedObjs() )
     {
-        long nObjSurface = 0; // Unused
-        bRet = lcl_GetCrsrOfst_Objects( this, false, pPos, rPoint, pCMS, nObjSurface );
+        bRet = lcl_GetCrsrOfst_Objects( this, false, pPos, rPoint, pCMS );
     }
 
     if ( !bRet )
     {
-        long nTextSurface = 0;
-        long nBackSurface = 0;
         SwPosition aBackPos( *pPos );
         SwPosition aTextPos( *pPos );
 
@@ -238,7 +238,6 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         //aktuellen an. Mit Flys ist es dann allerdings vorbei.
         if ( SwLayoutFrm::GetCrsrOfst( &aTextPos, aPoint, pCMS ) )
         {
-            nTextSurface = lcl_GetSurface( &aTextPos );
             bTextRet = sal_True;
         }
         else
@@ -251,8 +250,6 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             const SwCntntFrm *pCnt = GetCntntPos( aPoint, sal_False, sal_False, sal_False, pCMS, sal_False );
             if ( pCMS && pCMS->bStop )
                 return sal_False;
-
-            nTextSurface = pCnt->Frm().Height() * pCnt->Frm().Width();
 
             OSL_ENSURE( pCnt, "Crsr is gone to a Black hole" );
             if( pCMS && pCMS->pFill && pCnt->IsTxtFrm() )
@@ -272,11 +269,10 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         // Check objects in the background if nothing else matched
         if ( GetSortedObjs() )
         {
-            bBackRet = lcl_GetCrsrOfst_Objects( this, true, &aBackPos, rPoint, pCMS, nBackSurface );
+            bBackRet = lcl_GetCrsrOfst_Objects( this, true, &aBackPos, rPoint, pCMS );
         }
 
-        // TODO Pick up the best approaching selection
-        if ( bTextRet && bBackRet && ( nTextSurface > nBackSurface ) )
+        if ( ( bTestBackground && bBackRet ) || !bTextRet )
         {
             bRet = bBackRet;
             pPos->nNode = aBackPos.nNode;
@@ -284,9 +280,49 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         }
         else
         {
-            bRet = bTextRet;
-            pPos->nNode = aTextPos.nNode;
-            pPos->nContent = aTextPos.nContent;
+            /* In order to provide a selection as accurable as possible when we have both
+             * text and brackground object, then we compute the distance between both
+             * would-be positions and the click point. The shortest distance wins.
+             */
+            SwCntntNode* pTextNd = aTextPos.nNode.GetNode( ).GetCntntNode( );
+            double nTextDistance = 0;
+            bool bValidTextDistance = false;
+            if ( pTextNd )
+            {
+                SwCntntFrm* pTextFrm = pTextNd->getLayoutFrm( getRootFrm( ) );
+                SwRect rTextRect;
+                pTextFrm->GetCharRect( rTextRect, aTextPos );
+
+                nTextDistance = lcl_getDistance( rTextRect, rPoint );
+                bValidTextDistance = true;
+            }
+
+            double nBackDistance = 0;
+            bool bValidBackDistance = false;
+            SwCntntNode* pBackNd = aBackPos.nNode.GetNode( ).GetCntntNode( );
+            if ( pBackNd )
+            {
+                // FIXME There are still cases were we don't have the proper node here.
+                SwCntntFrm* pBackFrm = pBackNd->getLayoutFrm( getRootFrm( ) );
+                SwRect rBackRect;
+                pBackFrm->GetCharRect( rBackRect, aBackPos );
+
+                nBackDistance = lcl_getDistance( rBackRect, rPoint );
+                bValidBackDistance = true;
+            }
+
+            if ( bValidTextDistance && bValidBackDistance && basegfx::fTools::more( nTextDistance, nBackDistance ) )
+            {
+                bRet = bBackRet;
+                pPos->nNode = aBackPos.nNode;
+                pPos->nContent = aBackPos.nContent;
+            }
+            else
+            {
+                bRet = bTextRet;
+                pPos->nNode = aTextPos.nNode;
+                pPos->nContent = aTextPos.nContent;
+            }
         }
     }
 
@@ -362,7 +398,7 @@ bool SwRootFrm::FillSelection( SwSelectionList& aSelList, const SwRect& rRect) c
 |*
 |*************************************************************************/
 sal_Bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
-                             SwCrsrMoveState* pCMS ) const
+                             SwCrsrMoveState* pCMS, bool bTestBackground ) const
 {
     sal_Bool bOldAction = IsCallbackActionEnabled();
     ((SwRootFrm*)this)->SetCallbackActionEnabled( sal_False );
@@ -389,7 +425,7 @@ sal_Bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     }
     if ( pPage )
     {
-        pPage->SwPageFrm::GetCrsrOfst( pPos, rPoint, pCMS );
+        pPage->SwPageFrm::GetCrsrOfst( pPos, rPoint, pCMS, bTestBackground );
     }
 
     ((SwRootFrm*)this)->SetCallbackActionEnabled( bOldAction );
@@ -414,7 +450,7 @@ sal_Bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 |*
 |*************************************************************************/
 sal_Bool SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
-                             SwCrsrMoveState* pCMS ) const
+                             SwCrsrMoveState* pCMS, bool ) const
 {
     // cell frame does not necessarily have a lower (split table cell)
     if ( !Lower() )
@@ -491,7 +527,7 @@ sal_Bool SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 //am weitesten oben liegt.
 
 sal_Bool SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
-                            SwCrsrMoveState* pCMS ) const
+                            SwCrsrMoveState* pCMS, bool ) const
 {
     aOszCtrl.Entry( this );
 
