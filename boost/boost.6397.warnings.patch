@@ -169,15 +169,28 @@
     } else {
       std::fill_n(index_base_list_.begin(),NumDims,0);
     }
+@@ -597,9 +597,9 @@
+ #endif // BOOST_MSVC
+   typename const_array_view<NDims>::type 
+   operator[](const detail::multi_array::
+-             index_gen<NumDims,NDims>& indices)
++             index_gen<NumDims,NDims>& indices_)
+     const {
+-    return super_type::operator[](indices);
++    return super_type::operator[](indices_);
+   }
+   
+   const_iterator begin() const {
 @@ -622,9 +622,9 @@
    // This is only supplied to support multi_array's default constructor
    explicit multi_array_ref(T* base,
                             const storage_order_type& so,
 -                           const index* index_bases,
-+                           const index* index_bases_,
-                            const size_type* extents) :
+-                           const size_type* extents) :
 -    super_type(base,so,index_bases,extents) { }
-+    super_type(base,so,index_bases_,extents) { }
++                           const index* index_bases_,
++                           const size_type* extents_) :
++    super_type(base,so,index_bases_,extents_) { }
  
  };
  
