@@ -29,6 +29,14 @@
 #include "sal/main.h"
 #include "sal/types.h"
 
+#ifdef HAVE_SYSLOG_H
+#include <string.h>
+#include <syslog.h>
+#endif
+
+// from sal/osl/all/log.cxx
+extern bool sal_use_syslog;
+
 extern "C" {
 
 void sal_detail_initialize(int argc, char ** argv) {
@@ -56,6 +64,12 @@ void sal_detail_initialize(int argc, char ** argv) {
     for (int fd = 3; fd < openMax; ++fd) {
         close(fd);
     }
+#endif
+#ifdef HAVE_SYSLOG_H
+    const char *use_syslog = getenv("SAL_LOG_SYSLOG");
+    sal_use_syslog = use_syslog != NULL && !strcmp(use_syslog, "1");
+    if (sal_use_syslog)
+        openlog("libreoffice", 0, LOG_USER);
 #endif
 
     osl_setCommandArgs(argc, argv);

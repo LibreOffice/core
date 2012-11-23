@@ -56,6 +56,12 @@
 #define OSL_DETAIL_GETPID getpid()
 #endif
 
+#ifdef HAVE_SYSLOG_H
+#include <syslog.h>
+// sal/osl/unx/salinit.cxx::sal_detail_initialize updates this
+bool sal_use_syslog;
+#endif
+
 // Avoid the use of other sal code in this file as much as possible, so that
 // this code can be called from other sal code without causing endless
 // recursion.
@@ -95,6 +101,22 @@ char const * getEnvironmentVariable() {
     }
     return p2;
 }
+
+#ifdef HAVE_SYSLOG_H
+int toSyslogPriority(sal_detail_LogLevel level) {
+    switch (level) {
+    default:
+        assert(false); // this cannot happen
+        // fall through
+    case SAL_DETAIL_LOG_LEVEL_INFO:
+        return LOG_INFO;
+    case SAL_DETAIL_LOG_LEVEL_WARN:
+        return LOG_WARNING;
+    case SAL_DETAIL_LOG_LEVEL_DEBUG:
+        return LOG_DEBUG;
+    }
+}
+#endif
 
 bool report(sal_detail_LogLevel level, char const * area) {
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG)
@@ -167,14 +189,26 @@ void log(
     char const * message)
 {
     std::ostringstream s;
+#ifdef HAVE_SYSLOG_H
+    if (!sal_use_syslog)
+        s << toString(level) << ':';
+#else
+    s << toString(level) << ':';
+#endif
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG) {
-        s << toString(level) << ':' << /*no where*/' ' << message << '\n';
+        s << /*no where*/' ' << message << '\n';
     } else {
-        s << toString(level) << ':' << area << ':' << OSL_DETAIL_GETPID << ':'
+        s << area << ':' << OSL_DETAIL_GETPID << ':'
             << osl::Thread::getCurrentIdentifier() << ':' << where << message
             << '\n';
     }
-    std::fputs(s.str().c_str(), stderr);
+
+#ifdef HAVE_SYSLOG_H
+    if (sal_use_syslog)
+        syslog(toSyslogPriority(level), "%s", s.str().c_str());
+    else
+#endif
+        std::fputs(s.str().c_str(), stderr);
 }
 
 }
