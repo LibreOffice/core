@@ -216,12 +216,12 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
 }
 
 ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
-        const String& rExpr1, const String& rExpr2, ScDocument* pDocument, const ScAddress& rPos,
-        const String& rExprNmsp1, const String& rExprNmsp2,
+        const rtl::OUString& rExpr1, const rtl::OUString& rExpr2, ScDocument* pDocument, const ScAddress& rPos,
+        const rtl::OUString& rExprNmsp1, const rtl::OUString& rExprNmsp2,
         FormulaGrammar::Grammar eGrammar1, FormulaGrammar::Grammar eGrammar2 ) :
     ScFormatEntry(pDocument),
     eOp(eOper),
-    nOptions(0),    // spaeter...
+    nOptions(0),
     nVal1(0.0),
     nVal2(0.0),
     aStrNmsp1(rExprNmsp1),
@@ -250,7 +250,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
                                 ScDocument* pDocument, const ScAddress& rPos ) :
     ScFormatEntry(pDocument),
     eOp(eOper),
-    nOptions(0),    // spaeter...
+    nOptions(0),
     nVal1(0.0),
     nVal2(0.0),
     eTempGrammar1(FormulaGrammar::GRAM_DEFAULT),
@@ -328,15 +328,15 @@ ScConditionEntry::~ScConditionEntry()
     delete pFormula2;
 }
 
-void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
-        const String& rExprNmsp1, const String& rExprNmsp2,
+void ScConditionEntry::Compile( const rtl::OUString& rExpr1, const rtl::OUString& rExpr2,
+        const rtl::OUString& rExprNmsp1, const rtl::OUString& rExprNmsp2,
         FormulaGrammar::Grammar eGrammar1, FormulaGrammar::Grammar eGrammar2, bool bTextToReal )
 {
-    if ( rExpr1.Len() || rExpr2.Len() )
+    if ( !rExpr1.isEmpty() || !rExpr2.isEmpty() )
     {
         ScCompiler aComp( mpDoc, aSrcPos );
 
-        if ( rExpr1.Len() )
+        if ( !rExpr1.isEmpty() )
         {
             aComp.SetGrammar( eGrammar1 );
             if ( mpDoc->IsImportingXML() && !bTextToReal )
@@ -373,7 +373,7 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
             }
         }
 
-        if ( rExpr2.Len() )
+        if ( !rExpr2.isEmpty() )
         {
             aComp.SetGrammar( eGrammar2 );
             if ( mpDoc->IsImportingXML() && !bTextToReal )
@@ -453,7 +453,7 @@ void ScConditionEntry::CompileXML()
 {
     //  First parse the formula source position if it was stored as text
 
-    if ( aSrcString.Len() )
+    if ( !aSrcString.isEmpty() )
     {
         ScAddress aNew;
         /* XML is always in OOo:A1 format, although R1C1 would be more amenable
@@ -461,7 +461,7 @@ void ScConditionEntry::CompileXML()
         if ( aNew.Parse( aSrcString, mpDoc ) & SCA_VALID )
             aSrcPos = aNew;
         // if the position is invalid, there isn't much we can do at this time
-        aSrcString.Erase();
+        aSrcString = rtl::OUString();
     }
 
     //  Convert the text tokens that were created during XML import into real tokens.
@@ -471,7 +471,7 @@ void ScConditionEntry::CompileXML()
              aStrNmsp1, aStrNmsp2, eTempGrammar1, eTempGrammar2, true );
 }
 
-void ScConditionEntry::SetSrcString( const String& rNew )
+void ScConditionEntry::SetSrcString( const rtl::OUString& rNew )
 {
     // aSrcString is only evaluated in CompileXML
     OSL_ENSURE( mpDoc->IsImportingXML(), "SetSrcString is only valid for XML import" );
@@ -671,7 +671,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
             {
                 bIsStr1 = false;
                 nVal1 = pEff1->GetValue();
-                aStrVal1.Erase();
+                aStrVal1 = rtl::OUString();
             }
             else
             {
@@ -700,7 +700,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
             {
                 bIsStr2 = false;
                 nVal2 = pEff2->GetValue();
-                aStrVal2.Erase();
+                aStrVal2 = rtl::OUString();
             }
             else
             {
@@ -1098,7 +1098,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
                 bValid = !bValid;
             break;
         case SC_COND_BEGINS_WITH:
-            if(!aStrVal1.Len())
+            if(aStrVal1.isEmpty())
             {
                 rtl::OUString aStr = rtl::OUString::valueOf(nVal1);
                 rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
@@ -1110,7 +1110,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
                 bValid = aStr2.indexOf(aStrVal1) == 0;
             }
         case SC_COND_ENDS_WITH:
-            if(!aStrVal1.Len())
+            if(aStrVal1.isEmpty())
             {
                 rtl::OUString aStr = rtl::OUString::valueOf(nVal1);
                 rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
@@ -1123,7 +1123,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
             }
         case SC_COND_CONTAINS_TEXT:
         case SC_COND_NOT_CONTAINS_TEXT:
-            if(!aStrVal1.Len())
+            if(aStrVal1.isEmpty())
             {
                 rtl::OUString aStr = rtl::OUString::valueOf(nVal1);
                 rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
@@ -1180,7 +1180,7 @@ bool ScConditionEntry::IsValidStr( const rtl::OUString& rArg, const ScAddress& r
                 == COMPARE_GREATER )
         {
             //  richtige Reihenfolge fuer Wertebereich
-            String aTemp( aUpVal1 ); aUpVal1 = aUpVal2; aUpVal2 = aTemp;
+            rtl::OUString aTemp( aUpVal1 ); aUpVal1 = aUpVal2; aUpVal2 = aTemp;
         }
 
     switch ( eOp )
@@ -1269,11 +1269,11 @@ bool ScConditionEntry::IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) c
         return IsValidStr( aArgStr, rPos );
 }
 
-String ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 nIndex,
+rtl::OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 nIndex,
                                         sal_uLong nNumFmt,
                                         const FormulaGrammar::Grammar eGrammar ) const
 {
-    String aRet;
+    rtl::OUString aRet;
 
     if ( FormulaGrammar::isEnglish( eGrammar) && nNumFmt == 0 )
         nNumFmt = mpDoc->GetFormatTable()->GetStandardIndex( LANGUAGE_ENGLISH_US );
@@ -1284,13 +1284,15 @@ String ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 nIn
         {
             ScCompiler aComp(mpDoc, rCursor, *pFormula1);
             aComp.SetGrammar(eGrammar);
-            aComp.CreateStringFromTokenArray( aRet );
+            rtl::OUStringBuffer aBuffer;
+            aComp.CreateStringFromTokenArray( aBuffer );
+            aRet = aBuffer.makeStringAndClear();
         }
         else if (bIsStr1)
         {
-            aRet = '"';
+            aRet = """";
             aRet += aStrVal1;
-            aRet += '"';
+            aRet += """";
         }
         else
             mpDoc->GetFormatTable()->GetInputLineString(nVal1, nNumFmt, aRet);
@@ -1301,13 +1303,15 @@ String ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 nIn
         {
             ScCompiler aComp(mpDoc, rCursor, *pFormula2);
             aComp.SetGrammar(eGrammar);
-            aComp.CreateStringFromTokenArray( aRet );
+            rtl::OUStringBuffer aBuffer;
+            aComp.CreateStringFromTokenArray( aBuffer );
+            aRet = aBuffer.makeStringAndClear();
         }
         else if (bIsStr2)
         {
-            aRet = '"';
+            aRet = """";
             aRet += aStrVal2;
-            aRet += '"';
+            aRet += """";
         }
         else
             mpDoc->GetFormatTable()->GetInputLineString(nVal2, nNumFmt, aRet);
@@ -1333,7 +1337,7 @@ ScTokenArray* ScConditionEntry::CreateTokenArry( sal_uInt16 nIndex ) const
         {
             pRet = new ScTokenArray();
             if (bIsStr1)
-                pRet->AddString( aStrVal1.GetBuffer() );
+                pRet->AddString( aStrVal1 );
             else
                 pRet->AddDouble( nVal1 );
         }
@@ -1346,7 +1350,7 @@ ScTokenArray* ScConditionEntry::CreateTokenArry( sal_uInt16 nIndex ) const
         {
             pRet = new ScTokenArray();
             if (bIsStr2)
-                pRet->AddString( aStrVal2.GetBuffer() );
+                pRet->AddString( aStrVal2 );
             else
                 pRet->AddDouble( nVal2 );
         }
@@ -1573,10 +1577,10 @@ void ScConditionEntry::endRendering()
 //------------------------------------------------------------------------
 
 ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
-                                        const String& rExpr1, const String& rExpr2,
+                                        const rtl::OUString& rExpr1, const rtl::OUString& rExpr2,
                                         ScDocument* pDocument, const ScAddress& rPos,
-                                        const String& rStyle,
-                                        const String& rExprNmsp1, const String& rExprNmsp2,
+                                        const rtl::OUString& rStyle,
+                                        const rtl::OUString& rExprNmsp1, const rtl::OUString& rExprNmsp2,
                                         FormulaGrammar::Grammar eGrammar1,
                                         FormulaGrammar::Grammar eGrammar2 ) :
     ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2 ),
@@ -1587,7 +1591,7 @@ ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
 ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
                                         const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                         ScDocument* pDocument, const ScAddress& rPos,
-                                        const String& rStyle ) :
+                                        const rtl::OUString& rStyle ) :
     ScConditionEntry( eOper, pArr1, pArr2, pDocument, rPos ),
     aStyleName( rStyle )
 {

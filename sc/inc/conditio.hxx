@@ -161,10 +161,10 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
     sal_uInt16              nOptions;
     double              nVal1;          // input or calculated
     double              nVal2;
-    String              aStrVal1;       // input or calculated
-    String              aStrVal2;
-    String              aStrNmsp1;      // namespace to be used on (re)compilation, e.g. in XML import
-    String              aStrNmsp2;      // namespace to be used on (re)compilation, e.g. in XML import
+    rtl::OUString              aStrVal1;       // input or calculated
+    rtl::OUString              aStrVal2;
+    rtl::OUString              aStrNmsp1;      // namespace to be used on (re)compilation, e.g. in XML import
+    rtl::OUString              aStrNmsp2;      // namespace to be used on (re)compilation, e.g. in XML import
     formula::FormulaGrammar::Grammar eTempGrammar1;  // grammar to be used on (re)compilation, e.g. in XML import
     formula::FormulaGrammar::Grammar eTempGrammar2;  // grammar to be used on (re)compilation, e.g. in XML import
     bool                bIsStr1;        // for recognition of empty strings
@@ -173,7 +173,7 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
     ScTokenArray*       pFormula2;
     ScAddress           aSrcPos;        // source position for formulas
                                         // temporary data:
-    String              aSrcString;     // formula source position as text during XML import
+    rtl::OUString              aSrcString;     // formula source position as text during XML import
     ScFormulaCell*      pFCell1;
     ScFormulaCell*      pFCell2;
     bool                bRelRef1;
@@ -181,8 +181,8 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
     bool                bFirstRun;
 
     void    MakeCells( const ScAddress& rPos );
-    void    Compile( const String& rExpr1, const String& rExpr2,
-                        const String& rExprNmsp1, const String& rExprNmsp2,
+    void    Compile( const rtl::OUString& rExpr1, const rtl::OUString& rExpr2,
+                        const rtl::OUString& rExprNmsp1, const rtl::OUString& rExprNmsp2,
                         formula::FormulaGrammar::Grammar eGrammar1,
                         formula::FormulaGrammar::Grammar eGrammar2,
                         bool bTextToReal );
@@ -193,9 +193,9 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
 
 public:
             ScConditionEntry( ScConditionMode eOper,
-                                const String& rExpr1, const String& rExpr2,
+                                const rtl::OUString& rExpr1, const rtl::OUString& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                const String& rExprNmsp1, const String& rExprNmsp2,
+                                const rtl::OUString& rExprNmsp1, const rtl::OUString& rExprNmsp2,
                                 formula::FormulaGrammar::Grammar eGrammar1,
                                 formula::FormulaGrammar::Grammar eGrammar2 );
             ScConditionEntry( ScConditionMode eOper,
@@ -219,12 +219,12 @@ public:
 
     ScAddress       GetValidSrcPos() const;     // adjusted to allow textual representation of expressions
 
-    void            SetSrcString( const String& rNew );     // for XML import
+    void            SetSrcString( const rtl::OUString& rNew );     // for XML import
 
     void            SetFormula1( const ScTokenArray& rArray );
     void            SetFormula2( const ScTokenArray& rArray );
 
-    String          GetExpression( const ScAddress& rCursor, sal_uInt16 nPos, sal_uLong nNumFmt = 0,
+    rtl::OUString          GetExpression( const ScAddress& rCursor, sal_uInt16 nPos, sal_uLong nNumFmt = 0,
                                     const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
     ScTokenArray*   CreateTokenArry( sal_uInt16 nPos ) const;
@@ -300,17 +300,17 @@ class SC_DLLPUBLIC ScCondFormatEntry : public ScConditionEntry
 
 public:
             ScCondFormatEntry( ScConditionMode eOper,
-                                const String& rExpr1, const String& rExpr2,
+                                const rtl::OUString& rExpr1, const rtl::OUString& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                const String& rStyle,
-                                const String& rExprNmsp1 = EMPTY_STRING,
-                                const String& rExprNmsp2 = EMPTY_STRING,
+                                const rtl::OUString& rStyle,
+                                const rtl::OUString& rExprNmsp1 = EMPTY_STRING,
+                                const rtl::OUString& rExprNmsp2 = EMPTY_STRING,
                                 formula::FormulaGrammar::Grammar eGrammar1 = formula::FormulaGrammar::GRAM_DEFAULT,
                                 formula::FormulaGrammar::Grammar eGrammar2 = formula::FormulaGrammar::GRAM_DEFAULT );
             ScCondFormatEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                const String& rStyle );
+                                const rtl::OUString& rStyle );
             ScCondFormatEntry( const ScCondFormatEntry& r );
             ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatEntry& r );
     virtual ~ScCondFormatEntry();
