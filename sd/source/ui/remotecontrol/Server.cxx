@@ -24,7 +24,6 @@
 #include "sddll.hxx"
 
 #include "DiscoveryService.hxx"
-#include "ImagePreparer.hxx"
 #include "Listener.hxx"
 #include "Receiver.hxx"
 #include "RemoteServer.hxx"

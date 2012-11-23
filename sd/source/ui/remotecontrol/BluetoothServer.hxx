@@ -9,7 +9,7 @@
 #ifndef _SD_IMPRESSREMOTE_BLUETOOTHSERVER_HXX
 #define _SD_IMPRESSREMOTE_BLUETOOTHSERVER_HXX
 
-#include <salhelper/thread.hxx>
+#include <osl/thread.hxx>
 #include <vector>
 
 namespace sd
@@ -17,7 +17,7 @@ namespace sd
     class Communicator;
 
     class BluetoothServer:
-        public salhelper::Thread
+        public osl::Thread
     {
     public:
         static void setup( std::vector<Communicator*>* pCommunicators );
@@ -29,7 +29,7 @@ namespace sd
         ~BluetoothServer();
         static BluetoothServer *spServer;
 
-        void execute(); // salhelper::Thread
+        virtual void SAL_CALL run();
         std::vector<Communicator*>* mpCommunicators;
 
     };

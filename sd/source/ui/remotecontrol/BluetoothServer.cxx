@@ -86,9 +86,8 @@ DBusGProxy* bluezGetDefaultAdapter( DBusGConnection* aConnection,
 }
 #endif // defined(LINUX) && defined(ENABLE_DBUS)
 
-BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators ):
-    Thread( "BluetoothServer" ),
-    mpCommunicators( pCommunicators )
+BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
+  : mpCommunicators( pCommunicators )
 {
 }
 
@@ -238,7 +237,7 @@ void BluetoothServer::setDiscoverable( bool aDiscoverable )
 #endif
 }
 
-void BluetoothServer::execute()
+void SAL_CALL BluetoothServer::run()
 {
     SAL_INFO( "sdremote.bluetooth", "BluetoothServer::execute called" );
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
@@ -435,7 +434,7 @@ void BluetoothServer::setup( std::vector<Communicator*>* pCommunicators )
         return;
 
     spServer = new BluetoothServer( pCommunicators );
-    spServer->launch();
+    spServer->create();
 }
 
 

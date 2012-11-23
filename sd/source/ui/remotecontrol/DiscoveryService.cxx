@@ -32,10 +32,8 @@ using namespace rtl;
 using namespace sd;
 using namespace std;
 
-DiscoveryService::DiscoveryService()
-    :
-    Thread( "sd::DiscoveryService" )
-//     mSocket()
+DiscoveryService::DiscoveryService() :
+    mSocket(0)
 {
     mSocket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
 
@@ -62,7 +60,7 @@ DiscoveryService::~DiscoveryService()
 {
 }
 
-void DiscoveryService::execute()
+void SAL_CALL DiscoveryService::run()
 {
     char aBuffer[BUFFER_SIZE];
     while ( true )
@@ -97,7 +95,7 @@ void DiscoveryService::setup()
     return;
 
   spService = new DiscoveryService();
-  spService->launch();
+  spService->create();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

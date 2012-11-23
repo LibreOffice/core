@@ -20,7 +20,6 @@
 
 #include "Communicator.hxx"
 #include "Transmitter.hxx"
-#include "ImagePreparer.hxx"
 
 namespace css = ::com::sun::star;
 

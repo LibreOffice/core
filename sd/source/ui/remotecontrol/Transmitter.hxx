@@ -12,7 +12,7 @@
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 #include "BufferedStreamSocket.hxx"
-#include <salhelper/thread.hxx>
+#include <osl/thread.hxx>
 #include <rtl/string.hxx>
 
 #include <queue>
@@ -21,7 +21,7 @@ namespace sd
 {
 
 class Transmitter
-: public salhelper::Thread
+: public osl::Thread
 {
 public:
     enum Priority { PRIORITY_LOW = 1, PRIORITY_HIGH };
@@ -31,7 +31,7 @@ public:
     void notifyFinished();
 
 private:
-    void execute();
+    virtual void SAL_CALL run();
 
     ::sd::BufferedStreamSocket* pStreamSocket;
 

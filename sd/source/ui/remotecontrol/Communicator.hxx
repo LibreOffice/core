@@ -32,7 +32,6 @@ namespace sd
 
     class Transmitter;
     class Listener;
-    class ImagePreparer;
 
     /** Class used for communication with one single client, dealing with all
      * tasks specific to this client.

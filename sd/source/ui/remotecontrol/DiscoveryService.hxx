@@ -16,7 +16,7 @@
 
 #include <osl/socket.hxx>
 #include <rtl/ref.hxx>
-#include <salhelper/thread.hxx>
+#include <osl/thread.hxx>
 
 namespace css = ::com::sun::star;
 
@@ -35,7 +35,7 @@ namespace sd
 
 
 
-    class DiscoveryService : public salhelper::Thread
+    class DiscoveryService : public osl::Thread
     {
         public:
             static void setup();
@@ -45,7 +45,7 @@ namespace sd
             ~DiscoveryService();
 
             static DiscoveryService *spService;
-            void execute();
+            virtual void SAL_CALL run();
 
 //             osl::DatagramSocket mSocket;
             int mSocket;

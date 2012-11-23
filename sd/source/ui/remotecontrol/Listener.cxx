@@ -14,6 +14,7 @@
 #include <rtl/strbuf.hxx>
 
 #include "Listener.hxx"
+#include "ImagePreparer.hxx"
 
 using namespace sd;
 using namespace ::com::sun::star::presentation;
@@ -53,7 +54,7 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
                                   Transmitter::PRIORITY_HIGH );
 
         ImagePreparer* pPreparer = new ImagePreparer( aController, pTransmitter );
-        pPreparer->launch();
+        pPreparer->create();
     }
     else
     {

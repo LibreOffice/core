@@ -12,7 +12,6 @@
 #include <comphelper/processfactory.hxx>
 
 #include "Communicator.hxx"
-#include "ImagePreparer.hxx"
 #include "Listener.hxx"
 #include "Receiver.hxx"
 #include "RemoteServer.hxx"
@@ -38,7 +37,7 @@ Communicator::~Communicator()
 void Communicator::execute()
 {
     pTransmitter = new Transmitter( mpSocket );
-    pTransmitter->launch();
+    pTransmitter->create();
 
     pTransmitter->addMessage( "LO_SERVER_SERVER_PAIRED\n\n",
                               Transmitter::PRIORITY_HIGH );
@@ -99,8 +98,9 @@ void Communicator::execute()
 
 void Communicator::informListenerDestroyed()
 {
-    pTransmitter->addMessage( "slideshow_finished\n\n",
-                               Transmitter::PRIORITY_HIGH );
+    if ( pTransmitter )
+        pTransmitter->addMessage( "slideshow_finished\n\n",
+                                  Transmitter::PRIORITY_HIGH );
     mListener.clear();
 }
 

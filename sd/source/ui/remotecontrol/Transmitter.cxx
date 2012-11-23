@@ -14,8 +14,7 @@ using namespace osl; // Sockets etc.
 using namespace sd;
 
 Transmitter::Transmitter( BufferedStreamSocket* aSocket )
-  : Thread( "TransmitterThread" ),
-    pStreamSocket( aSocket ),
+  : pStreamSocket( aSocket ),
     mQueuesNotEmpty(),
     mFinishRequested(),
     mQueueMutex(),
@@ -24,7 +23,7 @@ Transmitter::Transmitter( BufferedStreamSocket* aSocket )
 {
 }
 
-void Transmitter::execute()
+void SAL_CALL Transmitter::run()
 {
     while ( true )
     {
