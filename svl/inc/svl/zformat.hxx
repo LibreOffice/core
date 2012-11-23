@@ -614,6 +614,10 @@ private:
                     xub_StrLen & nDigitCount,
                     utl::DigitGroupingIterator & );
 
+    SVL_DLLPRIVATE bool ImpGetFractionOutput(double fNumber,
+                                             sal_uInt16 nIx,
+                                             String& OutString);
+
     SVL_DLLPRIVATE bool ImpGetDateOutput( double fNumber,
                        sal_uInt16 nIx,
                        String& OutString );

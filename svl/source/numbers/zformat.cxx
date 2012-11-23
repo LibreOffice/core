@@ -2584,276 +2584,8 @@ bool SvNumberformat::GetOutputString(double fNumber,
             bRes |= ImpGetNumberOutput(fNumber, nIx, OutString);
             break;
         case NUMBERFORMAT_FRACTION:
-        {
-            String sStr, sFrac, sDiv;               // Strings, Wert fuer
-            sal_uLong nFrac, nDiv;                      // Vorkommaanteil
-                                                        // Zaehler und Nenner
-            bool bSign = false;
-            if (fNumber < 0)
-            {
-                if (nIx == 0)                       // nicht in hinteren
-                    bSign = true;                   // Formaten
-                fNumber = -fNumber;
-            }
-            double fNum = floor(fNumber);           // Vorkommateil
-            fNumber -= fNum;                        // Nachkommateil
-            if (fNum > _D_MAX_U_LONG_ || rInfo.nCntExp > 9)
-                // zu gross
-            {
-                OutString = rScan.GetErrorString();
-                return false;
-            }
-            if (rInfo.nCntExp == 0)
-            {
-                SAL_WARN( "svl.numbers", "SvNumberformat:: Bruch, nCntExp == 0");
-                return false;
-            }
-            sal_uLong nBasis = ((sal_uLong)floor(           // 9, 99, 999 ,...
-                                    pow(10.0,rInfo.nCntExp))) - 1;
-            sal_uLong x0, y0, x1, y1;
-
-            if (rInfo.nCntExp <= _MAX_FRACTION_PREC)
-            {
-                bool bUpperHalf;
-                if (fNumber > 0.5)
-                {
-                    bUpperHalf = true;
-                    fNumber -= (fNumber - 0.5) * 2.0;
-                }
-                else
-                    bUpperHalf = false;
-                // Einstieg in Farey-Serie
-                // finden:
-                x0 = (sal_uLong) floor(fNumber*nBasis); // z.B. 2/9 <= x < 3/9
-                if (x0 == 0)                        //      => x0 = 2
-                {
-                    y0 = 1;
-                    x1 = 1;
-                    y1 = nBasis;
-                }
-                else if (x0 == (nBasis-1)/2)    // (b-1)/2, 1/2
-                {                               // geht (nBasis ungerade)
-                    y0 = nBasis;
-                    x1 = 1;
-                    y1 = 2;
-                }
-                else if (x0 == 1)
-                {
-                    y0 = nBasis;                    //  1/n; 1/(n-1)
-                    x1 = 1;
-                    y1 = nBasis - 1;
-                }
-                else
-                {
-                    y0 = nBasis;                    // z.B. 2/9   2/8
-                    x1 = x0;
-                    y1 = nBasis - 1;
-                    double fUg = (double) x0 / (double) y0;
-                    double fOg = (double) x1 / (double) y1;
-                    sal_uLong nGgt = ImpGGT(y0, x0);       // x0/y0 kuerzen
-                    x0 /= nGgt;
-                    y0 /= nGgt;                     // Einschachteln:
-                    sal_uLong x2 = 0;
-                    sal_uLong y2 = 0;
-                    bool bStop = false;
-                    while (!bStop)
-                    {
-#ifdef GCC
-                        // #i21648# GCC over-optimizes something resulting
-                        // in wrong fTest values throughout the loops.
-                        volatile
-#endif
-                            double fTest = (double)x1/(double)y1;
-                        while (!bStop)
-                        {
-                            while (fTest > fOg)
-                            {
-                                x1--;
-                                fTest = (double)x1/(double)y1;
-                            }
-                            while (fTest < fUg && y1 > 1)
-                            {
-                                y1--;
-                                fTest = (double)x1/(double)y1;
-                            }
-                            if (fTest <= fOg)
-                            {
-                                fOg = fTest;
-                                bStop = true;
-                            }
-                            else if (y1 == 1)
-                                bStop = true;
-                        }                               // of while
-                        nGgt = ImpGGT(y1, x1);             // x1/y1 kuerzen
-                        x2 = x1 / nGgt;
-                        y2 = y1 / nGgt;
-                        if (x2*y0 - x0*y2 == 1 || y1 <= 1)  // Test, ob x2/y2
-                            bStop = true;               // naechste Farey-Zahl
-                        else
-                        {
-                            y1--;
-                            bStop = false;
-                        }
-                    }                                   // of while
-                    x1 = x2;
-                    y1 = y2;
-                }                                       // of else
-                double fup, flow;
-                flow = (double)x0/(double)y0;
-                fup  = (double)x1/(double)y1;
-                while (fNumber > fup)
-                {
-                    sal_uLong x2 = ((y0+nBasis)/y1)*x1 - x0; // naechste Farey-Zahl
-                    sal_uLong y2 = ((y0+nBasis)/y1)*y1 - y0;
-                    x0 = x1;
-                    y0 = y1;
-                    x1 = x2;
-                    y1 = y2;
-                    flow = fup;
-                    fup  = (double)x1/(double)y1;
-                }
-                if (fNumber - flow < fup - fNumber)
-                {
-                    nFrac = x0;
-                    nDiv  = y0;
-                }
-                else
-                {
-                    nFrac = x1;
-                    nDiv  = y1;
-                }
-                if (bUpperHalf)                     // Original restaur.
-                {
-                    if (nFrac == 0 && nDiv == 1)    // 1/1
-                        fNum += 1.0;
-                    else
-                        nFrac = nDiv - nFrac;
-                }
-            }
-            else                                    // grosse Nenner
-            {                                       // 0,1234->123/1000
-                sal_uLong nGgt;
-                nDiv = 10000000;
-                nFrac = ((sal_uLong)floor(0.5 + fNumber * 10000000.0));
-                nGgt = ImpGGT(nDiv, nFrac);
-                if (nGgt > 1)
-                {
-                    nDiv  /= nGgt;
-                    nFrac /= nGgt;
-                }
-                if (nDiv > nBasis)
-                {
-                    nGgt = ImpGGTRound(nDiv, nFrac);
-                    if (nGgt > 1)
-                    {
-                        nDiv  /= nGgt;
-                        nFrac /= nGgt;
-                    }
-                }
-                if (nDiv > nBasis)
-                {
-                    nDiv = nBasis;
-                    nFrac = ((sal_uLong)floor(0.5 + fNumber *
-                                              pow(10.0,rInfo.nCntExp)));
-                    nGgt = ImpGGTRound(nDiv, nFrac);
-                    if (nGgt > 1)
-                    {
-                        nDiv  /= nGgt;
-                        nFrac /= nGgt;
-                    }
-                }
-            }
-
-            if( sal_Int32 nForcedDiv = lcl_GetForcedDenominator(NumFor[nIx].Info(), nAnz) )
-            {
-                lcl_ForcedDenominator(nFrac, nDiv, nForcedDiv);
-                if( nFrac >= nDiv )
-                {
-                    nFrac = nDiv = 0;
-                    fNum = fNum + 1.0;
-                }
-            }
-
-            if (rInfo.nCntPre == 0)    // unechter Bruch
-            {
-                double fNum1 = fNum * (double)nDiv + (double)nFrac;
-                if (fNum1 > _D_MAX_U_LONG_)
-                {
-                    OutString = rScan.GetErrorString();
-                    return false;
-                }
-                nFrac = (sal_uLong) floor(fNum1);
-                sStr.Erase();
-            }
-            else if (fNum == 0.0 && nFrac != 0)
-                sStr.Erase();
-            else
-            {
-                char aBuf[100];
-                sprintf( aBuf, "%.f", fNum );   // simple rounded integer (#100211# - checked)
-                sStr.AssignAscii( aBuf );
-                sStr = impTransliterate(sStr, NumFor[nIx].GetNatNum());
-            }
-            if (rInfo.nCntPre > 0 && nFrac == 0)
-            {
-                sFrac.Erase();
-                sDiv.Erase();
-            }
-            else
-            {
-                sFrac = ImpIntToString( nIx, nFrac );
-                sDiv = ImpIntToString( nIx, nDiv );
-            }
-
-            sal_uInt16 j = nAnz-1;                  // letztes Symbol->rueckw.
-            xub_StrLen k;                       // Nenner:
-            bRes |= ImpNumberFill(sDiv, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRAC);
-            bool bCont = true;
-            if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_FRAC)
-            {
-                if (rInfo.nCntPre > 0 && nFrac == 0)
-                    sDiv.Insert(' ',0);
-                else
-                    sDiv.Insert( rInfo.sStrArray[j][0], 0 );
-                if ( j )
-                    j--;
-                else
-                    bCont = false;
-            }
-            // weiter Zaehler:
-            if ( !bCont )
-                sFrac.Erase();
-            else
-            {
-                bRes |= ImpNumberFill(sFrac, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRACBLANK);
-                if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_FRACBLANK)
-                {
-                    sFrac.Insert(rInfo.sStrArray[j],0);
-                    if ( j )
-                        j--;
-                    else
-                        bCont = false;
-                }
-            }
-            // weiter Hauptzahl
-            if ( !bCont )
-            {
-                sStr.Erase();
-            }
-            else
-            {
-                k = sStr.Len();                 // hinter letzter Ziffer
-                bRes |= ImpNumberFillWithThousands(sStr, fNumber, k, j, nIx,
-                                                   rInfo.nCntPre);
-            }
-            if (bSign && !(nFrac == 0 && fNum == 0.0))
-            {
-                OutString.Insert('-',0);        // nicht -0
-            }
-            OutString += sStr;
-            OutString += sFrac;
-            OutString += sDiv;
-        }
+            bRes |= ImpGetFractionOutput(fNumber, nIx, OutString);
+            break;
         break;
         case NUMBERFORMAT_SCIENTIFIC:
         {
@@ -2961,6 +2693,319 @@ bool SvNumberformat::GetOutputString(double fNumber,
         break;
         }
     }
+    return bRes;
+}
+
+bool SvNumberformat::ImpGetFractionOutput(double fNumber,
+                                          sal_uInt16 nIx,
+                                          String& OutString)
+{
+    bool bRes = false;
+    const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
+    const sal_uInt16 nAnz = NumFor[nIx].GetCount();
+    String sStr, sFrac, sDiv;               // Strings, Wert fuer
+    sal_uLong nFrac, nDiv;                  // Vorkommaanteil
+    bool bSign = false;                    // Zaehler und Nenner
+
+    if (fNumber < 0)
+    {
+        if (nIx == 0)                       // nicht in hinteren
+            bSign = true;                   // Formaten
+        fNumber = -fNumber;
+    }
+
+    double fNum = floor(fNumber);           // Vorkommateil
+
+    fNumber -= fNum;                        // Nachkommateil
+    if (fNum > _D_MAX_U_LONG_ || rInfo.nCntExp > 9)
+        // zu gross
+    {
+        OutString = rScan.GetErrorString();
+        return false;
+    }
+    if (rInfo.nCntExp == 0)
+    {
+        SAL_WARN( "svl.numbers", "SvNumberformat:: Bruch, nCntExp == 0");
+        return false;
+    }
+
+    sal_uLong nBasis = ((sal_uLong)floor( pow(10.0,rInfo.nCntExp))) - 1; // 9, 99, 999 ,...
+    sal_uLong x0, y0, x1, y1;
+
+    if (rInfo.nCntExp <= _MAX_FRACTION_PREC)
+    {
+        bool bUpperHalf;
+
+        if (fNumber > 0.5)
+        {
+            bUpperHalf = true;
+            fNumber -= (fNumber - 0.5) * 2.0;
+        }
+        else
+        {
+            bUpperHalf = false;
+        }
+        // Einstieg in Farey-Serie
+        // finden:
+        x0 = (sal_uLong) floor(fNumber*nBasis); // z.B. 2/9 <= x < 3/9
+        if (x0 == 0)                        //      => x0 = 2
+        {
+            y0 = 1;
+            x1 = 1;
+            y1 = nBasis;
+        }
+        else if (x0 == (nBasis-1)/2)    // (b-1)/2, 1/2
+        {                               // geht (nBasis ungerade)
+            y0 = nBasis;
+            x1 = 1;
+            y1 = 2;
+        }
+        else if (x0 == 1)
+        {
+            y0 = nBasis;                    //  1/n; 1/(n-1)
+            x1 = 1;
+            y1 = nBasis - 1;
+        }
+        else
+        {
+            y0 = nBasis;                    // z.B. 2/9   2/8
+            x1 = x0;
+            y1 = nBasis - 1;
+            double fUg = (double) x0 / (double) y0;
+            double fOg = (double) x1 / (double) y1;
+            sal_uLong nGgt = ImpGGT(y0, x0);       // x0/y0 kuerzen
+            x0 /= nGgt;
+            y0 /= nGgt;                     // Einschachteln:
+            sal_uLong x2 = 0;
+            sal_uLong y2 = 0;
+            bool bStop = false;
+            while (!bStop)
+            {
+#ifdef GCC
+                // #i21648# GCC over-optimizes something resulting
+                // in wrong fTest values throughout the loops.
+                volatile
+#endif
+                    double fTest = (double)x1/(double)y1;
+                while (!bStop)
+                {
+                    while (fTest > fOg)
+                    {
+                        x1--;
+                        fTest = (double)x1/(double)y1;
+                    }
+                    while (fTest < fUg && y1 > 1)
+                    {
+                        y1--;
+                        fTest = (double)x1/(double)y1;
+                    }
+                    if (fTest <= fOg)
+                    {
+                        fOg = fTest;
+                        bStop = true;
+                    }
+                    else if (y1 == 1)
+                    {
+                        bStop = true;
+                    }
+                }                               // of while
+                nGgt = ImpGGT(y1, x1);             // x1/y1 kuerzen
+                x2 = x1 / nGgt;
+                y2 = y1 / nGgt;
+                if (x2*y0 - x0*y2 == 1 || y1 <= 1)  // Test, ob x2/y2
+                    bStop = true;               // naechste Farey-Zahl
+                else
+                {
+                    y1--;
+                    bStop = false;
+                }
+            }                                   // of while
+            x1 = x2;
+            y1 = y2;
+        }                                       // of else
+
+        double fup, flow;
+
+        flow = (double)x0/(double)y0;
+        fup  = (double)x1/(double)y1;
+        while (fNumber > fup)
+        {
+            sal_uLong x2 = ((y0+nBasis)/y1)*x1 - x0; // naechste Farey-Zahl
+            sal_uLong y2 = ((y0+nBasis)/y1)*y1 - y0;
+
+            x0 = x1;
+            y0 = y1;
+            x1 = x2;
+            y1 = y2;
+            flow = fup;
+            fup  = (double)x1/(double)y1;
+        }
+        if (fNumber - flow < fup - fNumber)
+        {
+            nFrac = x0;
+            nDiv  = y0;
+        }
+        else
+        {
+            nFrac = x1;
+            nDiv  = y1;
+        }
+        if (bUpperHalf)                     // Original restaur.
+        {
+            if (nFrac == 0 && nDiv == 1)    // 1/1
+            {
+                fNum += 1.0;
+            }
+            else
+            {
+                nFrac = nDiv - nFrac;
+            }
+        }
+    }
+    else                                    // grosse Nenner
+    {                                       // 0,1234->123/1000
+        sal_uLong nGgt;
+
+        nDiv = 10000000;
+        nFrac = ((sal_uLong)floor(0.5 + fNumber * 10000000.0));
+        nGgt = ImpGGT(nDiv, nFrac);
+        if (nGgt > 1)
+        {
+            nDiv  /= nGgt;
+            nFrac /= nGgt;
+        }
+        if (nDiv > nBasis)
+        {
+            nGgt = ImpGGTRound(nDiv, nFrac);
+            if (nGgt > 1)
+            {
+                nDiv  /= nGgt;
+                nFrac /= nGgt;
+            }
+        }
+        if (nDiv > nBasis)
+        {
+            nDiv = nBasis;
+            nFrac = ((sal_uLong)floor(0.5 + fNumber *
+                                      pow(10.0,rInfo.nCntExp)));
+            nGgt = ImpGGTRound(nDiv, nFrac);
+            if (nGgt > 1)
+            {
+                nDiv  /= nGgt;
+                nFrac /= nGgt;
+            }
+        }
+    }
+
+    if( sal_Int32 nForcedDiv = lcl_GetForcedDenominator(NumFor[nIx].Info(), nAnz) )
+    {
+        lcl_ForcedDenominator(nFrac, nDiv, nForcedDiv);
+        if( nFrac >= nDiv )
+        {
+            nFrac = nDiv = 0;
+            fNum = fNum + 1.0;
+        }
+    }
+
+    if (rInfo.nCntPre == 0)    // unechter Bruch
+    {
+        double fNum1 = fNum * (double)nDiv + (double)nFrac;
+
+        if (fNum1 > _D_MAX_U_LONG_)
+        {
+            OutString = rScan.GetErrorString();
+            return false;
+        }
+        nFrac = (sal_uLong) floor(fNum1);
+        sStr.Erase();
+    }
+    else if (fNum == 0.0 && nFrac != 0)
+    {
+        sStr.Erase();
+    }
+    else
+    {
+        char aBuf[100];
+        sprintf( aBuf, "%.f", fNum );   // simple rounded integer (#100211# - checked)
+        sStr.AssignAscii( aBuf );
+        sStr = impTransliterate(sStr, NumFor[nIx].GetNatNum());
+    }
+    if (rInfo.nCntPre > 0 && nFrac == 0)
+    {
+        sFrac.Erase();
+        sDiv.Erase();
+    }
+    else
+    {
+        sFrac = ImpIntToString( nIx, nFrac );
+        sDiv = ImpIntToString( nIx, nDiv );
+    }
+
+    sal_uInt16 j = nAnz-1;                  // letztes Symbol->rueckw.
+    xub_StrLen k;                       // Nenner:
+
+    bRes |= ImpNumberFill(sDiv, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRAC);
+
+    bool bCont = true;
+    if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_FRAC)
+    {
+        if (rInfo.nCntPre > 0 && nFrac == 0)
+        {
+            sDiv.Insert(' ',0);
+        }
+        else
+        {
+            sDiv.Insert( rInfo.sStrArray[j][0], 0 );
+        }
+        if ( j )
+        {
+            j--;
+        }
+        else
+        {
+            bCont = false;
+        }
+    }
+    // weiter Zaehler:
+    if ( !bCont )
+    {
+                sFrac.Erase();
+    }
+    else
+    {
+        bRes |= ImpNumberFill(sFrac, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRACBLANK);
+        if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_FRACBLANK)
+        {
+            sFrac.Insert(rInfo.sStrArray[j],0);
+            if ( j )
+            {
+                j--;
+            }
+            else
+            {
+                bCont = false;
+            }
+        }
+    }
+    // weiter Hauptzahl
+    if ( !bCont )
+    {
+        sStr.Erase();
+    }
+    else
+    {
+        k = sStr.Len();                 // hinter letzter Ziffer
+        bRes |= ImpNumberFillWithThousands(sStr, fNumber, k, j, nIx,
+                                           rInfo.nCntPre);
+    }
+    if (bSign && !(nFrac == 0 && fNum == 0.0))
+    {
+        OutString.Insert('-',0);        // nicht -0
+    }
+    OutString += sStr;
+    OutString += sFrac;
+    OutString += sDiv;
+
     return bRes;
 }
 
