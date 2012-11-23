@@ -2016,6 +2016,9 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),orcus)
+
+$(if $(filter YES,$(SYSTEM_BOOST)),$(call gb_LinkTarget_add_libs,$(1),$(BOOST_SYSTEM_LIB)))
+
 endef
 
 endif # SYSTEM_LIBORCUS
