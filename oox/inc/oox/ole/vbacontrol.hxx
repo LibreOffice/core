@@ -74,12 +74,6 @@ public:
                             ApiControlType eCtrlType,
                             sal_Int32 nCtrlIndex ) const;
 
-    /** Binds the passed control model to the data sources. The implementation
-        will check which source types are supported. */
-    void                bindToSources(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
-                            const ControlConverter& rConv ) const;
-
 protected:
     ::rtl::OUString     maName;             ///< Name of the control.
     ::rtl::OUString     maTag;              ///< User defined tag.

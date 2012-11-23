@@ -316,11 +316,6 @@ void VbaSiteModel::convertProperties( PropertyMap& rPropMap,
     }
 }
 
-void VbaSiteModel::bindToSources( const Reference< XControlModel >& rxCtrlModel, const ControlConverter& rConv ) const
-{
-    rConv.bindToSources( rxCtrlModel, maControlSource, maRowSource );
-}
-
 // ============================================================================
 
 VbaFormControl::VbaFormControl()

@@ -52,7 +52,6 @@ desktop::Lockfile::clean()
 framework::OReadMenuDocumentHandler::getServiceFactory()
 jfw_plugin::VendorBase::createInstance()
 oox::drawingml::TextListStyle::dump() const
-oox::ole::VbaSiteModel::bindToSources(com::sun::star::uno::Reference<com::sun::star::awt::XControlModel> const&, oox::ole::ControlConverter const&) const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
 oox::xls::FormulaProcessorBase::generateRangeList2dString(oox::xls::ApiCellRangeList const&, bool, unsigned short, bool)
 sc_apitest::main()
