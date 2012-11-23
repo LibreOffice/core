@@ -123,24 +123,19 @@ void LiblantagDataRef::presetDataPath( const rtl::OUString& rPath )
 void LiblantagDataRef::setupDataPath()
 {
     // maDataPath is assumed to be empty here.
-    OUString aURL;
+    OUString aURL("$BRAND_BASE_DIR/share/liblangtag");
+    rtl::Bootstrap::expandMacros(aURL); //TODO: detect failure
 
-    if (!rtl::Bootstrap::get("BRAND_BASE_DIR", aURL) && !rtl::Bootstrap::get("LIBLANGTAG_SHARE", aURL))
-        OSL_FAIL( "LiblantagDataRef: can't get BRAND_BASE_DIR");
-    else
+    // Check if data is in our own installation, else assume system
+    // installation.
+    OUString aData( aURL);
+    aData += "/language-subtag-registry.xml";
+    osl::DirectoryItem aDirItem;
+    if (osl::DirectoryItem::get( aData, aDirItem) == osl::DirectoryItem::E_None)
     {
-        // Check if data is in our own installation, else assume system
-        // installation.
-        aURL += "/share/liblangtag";
-        OUString aData( aURL);
-        aData += "/language-subtag-registry.xml";
-        osl::DirectoryItem aDirItem;
-        if (osl::DirectoryItem::get( aData, aDirItem) == osl::DirectoryItem::E_None)
-        {
-            OUString aPath;
-            if (osl::FileBase::getSystemPathFromFileURL( aURL, aPath) == osl::FileBase::E_None)
-                maDataPath = OUStringToOString( aPath, RTL_TEXTENCODING_UTF8);
-        }
+        OUString aPath;
+        if (osl::FileBase::getSystemPathFromFileURL( aURL, aPath) == osl::FileBase::E_None)
+            maDataPath = OUStringToOString( aPath, RTL_TEXTENCODING_UTF8);
     }
     if (maDataPath.isEmpty())
         maDataPath = "|";   // assume system
