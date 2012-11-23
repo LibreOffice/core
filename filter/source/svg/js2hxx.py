@@ -144,25 +144,11 @@ if( not os.path.isfile( outfile_name ) ):
 
 
 # C++ header
-header_info = """
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+header_info = '/* !! This file is auto-generated, do not edit !! */'
 
-/* !! This file is auto-generated, do not edit !! */
-"""
-
-vim_setup = '/* vim:set shiftwidth=4 softtabstop=4 expandtab: */'
-
-outfile.write( header_info +'\n' )
-outfile.write( '\n' )
+outfile.write( header_info +'\n\n' )
 
 for line in out_lines:
     outfile.write( line + '\n' )
 
-outfile.write( '\n' )
-outfile.write( '\n' )
-outfile.write( vim_setup + '\n' )
-
 outfile.close()
-
-
-
