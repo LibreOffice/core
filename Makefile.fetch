@@ -35,13 +35,28 @@ fetch_Download__checksum_command :=
 
 endif
 
-define fetch_Download_item
+# fetch__Download_item url tarball-name md5sum
+define fetch__Download_item
 $(if $(wildcard $(TARFILE_LOCATION)/$2),, \
 cd $(TARFILE_LOCATION)/tmp \
+&& set -o pipefail \
 $(call fetch_Download__wget_command,$1,$2) \
-$(call fetch_Download__checksum_command,$2,$(firstword $(subst -, ,$2))) \
+$(if $3,$(call fetch_Download__checksum_command,$2,$3)) \
 && mv $2 ../ \
 )
+
+endef
+
+# fetch_Download_item url tarball-name no-sum?
+define fetch_Download_item
+$(call fetch__Download_item,$1,$2,$(if $3,,$(firstword $(subst -, ,$2))))
+
+endef
+
+# fetch_Download_item_special url variable-name
+define fetch_Download_item_special
+$(if $($(subst _TARBALL,_MD5SUM,$(2))),,$(error "fetch_Download_item_special: $2_MD5SUM can't be empty"))
+$(call fetch__Download_item,$1,$($2),$($(subst _TARBALL,_MD5SUM,$(2))))
 
 endef
 
@@ -56,6 +71,11 @@ endef
 
 fetch :
 	$(foreach item, \
+		$(call fetch_Optional,CDR,CDR_TARBALL) \
+		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
+		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
+	,$(call fetch_Download_item_special,http://dev-www.libreoffice.org/src,$(item)))
+	$(foreach item, \
 		18f577b374d60b3c760a3a3350407632-STLport-4.5.tar.gz \
 		7376930b0d3f3d77a685d94c4a3acda8-STLport-4.5-0119.tar.gz \
 		c441926f3a552ed3e5b274b62e86af16-STLport-4.0.tar.gz \
@@ -68,7 +88,6 @@ fetch :
 		$(call fetch_Optional,BOOST,$(BOOST_TARBALL)) \
 		$(call fetch_Optional,BSH,$(BSH_TARBALL)) \
 		$(call fetch_Optional,CAIRO,$(CAIRO_TARBALL)) \
-		$(call fetch_Optional,CDR,$(CDR_TARBALL)) \
 		$(call fetch_Optional,CLUCENE,$(CLUCENE_TARBALL)) \
 		$(call fetch_Optional,CMIS,$(CMIS_TARBALL)) \
 		$(call fetch_Optional,CPPUNIT,$(CPPUNIT_TARBALL)) \
@@ -116,7 +135,6 @@ fetch :
 		$(call fetch_Optional,LPSOLVE,$(LPSOLVE_TARBALL)) \
 		$(call fetch_Optional,MDDS,$(MDDS_TARBALL)) \
 		$(call fetch_Optional,MOZ,$(MOZ_TARBALL)) \
-		$(call fetch_Optional,MSPUB,$(MSPUB_TARBALL)) \
 		$(call fetch_Optional,MYSQLCPPCONN,$(MYSQLCPPCONN_TARBALL)) \
 		$(call fetch_Optional,MYTHES,$(MYTHES_TARBALL)) \
 		$(call fetch_Optional,NEON,$(NEON_TARBALL)) \
@@ -136,7 +154,6 @@ fetch :
 		$(call fetch_Optional,TOMCAT,$(TOMCAT_TARBALL)) \
 		$(call fetch_Optional,UCPP,$(UCPP_TARBALL)) \
 		$(call fetch_Optional,VIGRA,$(VIGRA_TARBALL)) \
-		$(call fetch_Optional,VISIO,$(VISIO_TARBALL)) \
 		$(call fetch_Optional,WPD,$(WPD_TARBALL)) \
 		$(call fetch_Optional,WPG,$(WPG_TARBALL)) \
 		$(call fetch_Optional,WPS,$(WPS_TARBALL)) \
@@ -173,6 +190,6 @@ fetch :
 		$(call fetch_Optional,MOZ,$(MOZ_ZIP_INC)) \
 		$(call fetch_Optional,MOZ,$(MOZ_ZIP_LIB)) \
 		$(call fetch_Optional,MOZ,$(MOZ_ZIP_RUNTIME)) \
-	,$(call fetch_Download_item,http://dev-www.libreoffice.org/mozilla,$(item)))
+	,$(call fetch_Download_item,http://dev-www.libreoffice.org/mozilla,$(item),no-sum))
 
 # vim: set noet sw=4 ts=4:

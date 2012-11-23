@@ -639,4 +639,5 @@ export ZLIB_CFLAGS=$(gb_SPACE)@ZLIB_CFLAGS@
 export ZLIB_LIBS=$(gb_SPACE)@ZLIB_LIBS@
 
 # tarball names
+# does use some of the variables defined above
 include @SRC_ROOT@/download.lst
