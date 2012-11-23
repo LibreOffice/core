@@ -168,6 +168,8 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_REDLINE_REJECT_DIRECT     (FN_EDIT2 + 38)    /* reject redline at current position*/
 #define FN_REMOVE_HYPERLINK          (FN_EDIT2 + 39)    /* remove hyperlink attribute */
 #define FN_COPY_HYPERLINK_LOCATION   (FN_EDIT2 + 40)    /* copy hyperlink URL to clipboard */
+#define FN_REDLINE_NEXT_CHANGE       (FN_EDIT2 + 41)    /* Go to the next change */
+#define FN_REDLINE_PREV_CHANGE       (FN_EDIT2 + 42)    /* Go to the previous change */
 
 /*--------------------------------------------------------------------
     Region: Edit

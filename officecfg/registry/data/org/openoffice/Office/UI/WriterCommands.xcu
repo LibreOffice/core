@@ -176,6 +176,16 @@
                     <value xml:lang="en-US">Accept Change</value>
                 </prop>
             </node>
+            <node oor:name=".uno:NextTrackedChange" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Next Change</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:PreviousTrackedChange" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Pr~evious Change</value>
+                </prop>
+            </node>
             <node oor:name=".uno:UpdateAllLinks" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Links</value>

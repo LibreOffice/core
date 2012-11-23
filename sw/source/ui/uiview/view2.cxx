@@ -630,26 +630,69 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_REDLINE_ACCEPT_DIRECT:
         case FN_REDLINE_REJECT_DIRECT:
         {
-            SwContentAtPos aCntntAtPos( SwContentAtPos::SW_REDLINE );
-            Point aCrsrPos = pWrtShell->GetCrsrDocPos( sal_True );
-            if( pWrtShell->GetContentAtPos( aCrsrPos, aCntntAtPos ) )
+            // We check for a redline at the start of the selection/cursor, not the point.
+            // This ensures we work properly with FN_REDLINE_NEXT_CHANGE, which leaves the
+            // point at the *end* of the redline and the mark at the start (so GetRedline
+            // would return NULL if called on the point)
+            SwDoc *pDoc = pWrtShell->GetDoc();
+            SwPaM *pCursor = pWrtShell->GetCrsr();
+
+            sal_uInt16 nRedline = 0;
+            const SwRedline *pRedline = pDoc->GetRedline(*pCursor->Start(), &nRedline);
+            assert(pRedline != 0);
+            if (pRedline)
             {
-                sal_uInt16 nCount = pWrtShell->GetRedlineCount();
-                for( sal_uInt16 nRedline = 0; nRedline < nCount; ++nRedline )
-                {
-                    const SwRedline& rRedline = pWrtShell->GetRedline( nRedline );
-                    if( *aCntntAtPos.aFnd.pRedl == rRedline )
-                    {
-                        if( FN_REDLINE_ACCEPT_DIRECT == nSlot )
-                            pWrtShell->AcceptRedline( nRedline );
-                        else
-                            pWrtShell->RejectRedline( nRedline );
-                        break;
-                    }
-                }
+                if (FN_REDLINE_ACCEPT_DIRECT == nSlot)
+                    pWrtShell->AcceptRedline(nRedline);
+                else
+                    pWrtShell->RejectRedline(nRedline);
             }
         }
         break;
+
+        case FN_REDLINE_NEXT_CHANGE:
+        {
+            const SwRedline *pCurrent = pWrtShell->GetCurrRedline();
+            const SwRedline *pNext = pWrtShell->SelNextRedline();
+
+            // FN_REDLINE_PREV_CHANGE leaves the selection point at the start of the redline.
+            // In such cases, SelNextRedline (which starts searching from the selection point)
+            // immediately finds the current redline and advances the selection point to its end.
+            //
+            // This behavior means that PREV_CHANGE followed by NEXT_CHANGE would not change
+            // the current redline, so we detect it and select the next redline again.
+            if (pCurrent && pCurrent == pNext)
+                pNext = pWrtShell->SelNextRedline();
+
+            if (pNext)
+                pWrtShell->SetInSelect();
+        }
+        break;
+
+        case FN_REDLINE_PREV_CHANGE:
+        {
+            const SwPaM *pCursor = pWrtShell->GetCrsr();
+            const SwPosition initialCursorStart = *pCursor->Start();
+            const SwRedline *pPrev = pWrtShell->SelPrevRedline();
+
+            if (pPrev)
+            {
+                // FN_REDLINE_NEXT_CHANGE leaves the selection point at the end of the redline.
+                // In such cases, SelPrevRedline (which starts searching from the selection point)
+                // immediately finds the current redline and advances the selection point to its
+                // start.
+                //
+                // This behavior means that NEXT_CHANGE followed by PREV_CHANGE would not change
+                // the current redline, so we detect it and move to the previous redline again.
+                if (initialCursorStart == *pPrev->Start())
+                    pPrev = pWrtShell->SelPrevRedline();
+            }
+
+            if (pPrev)
+                pWrtShell->SetInSelect();
+        }
+        break;
+
         case SID_DOCUMENT_COMPARE:
         case SID_DOCUMENT_MERGE:
             {

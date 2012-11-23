@@ -87,6 +87,8 @@
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:AcceptTrackedChanges"/>
           <menu:menuitem menu:id=".uno:CommentChangeTracking"/>
+          <menu:menuitem menu:id=".uno:NextTrackedChange"/>
+          <menu:menuitem menu:id=".uno:PreviousTrackedChange"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:MergeDocuments"/>
         </menu:menupopup>

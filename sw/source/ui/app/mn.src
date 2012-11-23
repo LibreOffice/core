@@ -239,6 +239,18 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
             HelpId = CMD_FN_REDLINE_REJECT_DIRECT ;                                \
             Text [ en-US ] = "Reject Change" ;                       \
         };                              \
+        MenuItem                                                     \
+        {                                                            \
+            Identifier = FN_REDLINE_NEXT_CHANGE;                     \
+            HelpId = CMD_FN_REDLINE_NEXT_CHANGE ;                    \
+            Text [ en-US ] = "Next Change" ;                         \
+        };\
+        MenuItem                                                     \
+        {                                                            \
+            Identifier = FN_REDLINE_PREV_CHANGE;                     \
+            HelpId = CMD_FN_REDLINE_PREV_CHANGE ;                    \
+            Text [ en-US ] = "Previous Change" ;                     \
+        };\
     SEPARATOR ;
 #define _MN_EDIT_BIB_ENTRY_DLG                                              \
         MenuItem                                                            \

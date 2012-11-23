@@ -88,6 +88,8 @@
      <menu:menuseparator/>
      <menu:menuitem menu:id="slot:21829" menu:helpid="21829" menu:label="~Accept or Reject..."/>
      <menu:menuitem menu:id="slot:21827" menu:helpid="21827" menu:label="~Comment..."/>
+     <menu:menuitem menu:id="slot:21841" menu:helpid="21841" menu:label="~Next Change"/>
+     <menu:menuitem menu:id="slot:21842" menu:helpid="21842" menu:label="Pr~evious Change"/>
      <menu:menuseparator/>
      <menu:menuitem menu:id="slot:6587" menu:helpid="6587" menu:label="~Merge Document..."/>
     </menu:menupopup>
