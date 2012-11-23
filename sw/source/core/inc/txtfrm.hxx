@@ -285,7 +285,7 @@ public:
     //naechsten ist. Wenn der SPoint ausserhalb der SSize liegt,
     //liefert die Funktion sal_False, sal_True sonst.
     virtual sal_Bool GetCrsrOfst( SwPosition *, Point&,
-                                  SwCrsrMoveState* = 0) const;
+                                  SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
 
     // GetKeyCrsrOfst sorgt dafuer, dass der Frame nicht gewechselt wird
     // (z.B. Wechsel in den zeichengebundenen Frame).

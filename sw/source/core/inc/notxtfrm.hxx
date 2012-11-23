@@ -61,7 +61,7 @@ public:
     virtual sal_Bool GetCharRect( SwRect &, const SwPosition&,
                               SwCrsrMoveState* = 0) const;
     sal_Bool GetCrsrOfst(SwPosition* pPos, Point& aPoint,
-                     SwCrsrMoveState* = 0) const;
+                     SwCrsrMoveState* = 0, bool bTestBackground = false) const;
 
     const Size &GetGrfSize() const  { return GetSize(); }
     void GetGrfArea( SwRect &rRect, SwRect * = 0, sal_Bool bMirror = sal_True ) const;
