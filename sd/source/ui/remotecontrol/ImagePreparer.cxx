@@ -55,8 +55,7 @@ using namespace ::com::sun::star::uno;
 ImagePreparer::ImagePreparer(
     const uno::Reference<presentation::XSlideShowController>& rxController,
     Transmitter *aTransmitter )
- :  Thread( "ImagePreparer Thread" ),
-    xController( rxController ),
+ :  xController( rxController ),
     pTransmitter( aTransmitter )
 {
 }
@@ -65,7 +64,7 @@ ImagePreparer::~ImagePreparer()
 {
 }
 
-void ImagePreparer::execute()
+void SAL_CALL ImagePreparer::run()
 {
     sal_uInt32 aSlides = xController->getSlideCount();
     for ( sal_uInt32 i = 0; i < aSlides; i++ )
@@ -84,6 +83,10 @@ void ImagePreparer::execute()
         }
         sendNotes( i );
     }
+}
+
+void SAL_CALL ImagePreparer::onTerminated()
+{
     delete this;
 }
 

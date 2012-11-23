@@ -9,7 +9,7 @@
 #ifndef _SD_IMPRESSREMOTE_IMAGEPREPARER_HXX
 #define _SD_IMPRESSREMOTE_IMAGEPREPARER_HXX
 
-#include <salhelper/thread.hxx>
+#include <osl/thread.hxx>
 
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 
@@ -21,7 +21,7 @@ namespace sd
 {
 
 class ImagePreparer:
-    public salhelper::Thread
+    public osl::Thread
 {
 public:
     ImagePreparer( const
@@ -34,7 +34,8 @@ private:
     Transmitter *pTransmitter;
 
     // Thread method
-    void execute();
+    virtual void SAL_CALL run();
+    virtual void SAL_CALL onTerminated();
 
     void sendPreview( sal_uInt32 aSlideNumber );
     css::uno::Sequence<sal_Int8> preparePreview( sal_uInt32 aSlideNumber,
