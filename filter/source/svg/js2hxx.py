@@ -85,8 +85,7 @@ for line in in_lines:
     dline = dline.replace( 'ANIMDBG.on', 'ANIMDBG.off' )
     dline = dline.replace( 'DebugPrinter.on', 'DebugPrinter.off' )
 
-    # append a 4 spaces indentation to each line
-    escaped_line = '     %s' % dline
+    escaped_line = '%s' % dline
     escaped_line = escaped_line.rstrip()
 
     # no more than 2 consecutive empty lines
