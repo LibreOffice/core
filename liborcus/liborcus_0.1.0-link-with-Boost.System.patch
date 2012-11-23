@@ -595,28 +595,6 @@ diff -up ./configure.dt ./configure
 diff -up ./src/liborcus/Makefile.in.dt ./src/liborcus/Makefile.in
 --- ./src/liborcus/Makefile.in.dt	2012-11-22 15:20:12.680747546 +0100
 +++ ./src/liborcus/Makefile.in	2012-11-22 15:20:55.181954251 +0100
-@@ -90,7 +90,11 @@ subdir = src/liborcus
- DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
- 	$(top_srcdir)/depcomp
- ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
--am__aclocal_m4_deps = $(top_srcdir)/configure.ac
-+am__aclocal_m4_deps = $(top_srcdir)/m4/ax_boost_base.m4 \
-+	$(top_srcdir)/m4/ax_boost_system.m4 \
-+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/configure.ac
- am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
- 	$(ACLOCAL_M4)
- mkinstalldirs = $(install_sh) -d
-@@ -128,7 +132,7 @@ am__installdirs = "$(DESTDIR)$(libdir)"
- LTLIBRARIES = $(lib_LTLIBRARIES)
- am__DEPENDENCIES_1 =
- liborcus_@ORCUS_API_VERSION@_la_DEPENDENCIES = $(am__DEPENDENCIES_1) \
--	$(am__DEPENDENCIES_1)
-+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
- am__liborcus_@ORCUS_API_VERSION@_la_SOURCES_DIST = dom_tree.cpp \
- 	exception.cpp global.cpp spreadsheet_interface.cpp \
- 	orcus_css.cpp orcus_csv.cpp orcus_xml.cpp pstring.cpp \
 @@ -303,6 +307,9 @@ AUTOCONF = @AUTOCONF@
  AUTOHEADER = @AUTOHEADER@
  AUTOMAKE = @AUTOMAKE@
@@ -644,19 +622,6 @@ diff -up ./src/liborcus/Makefile.in.dt ./src/liborcus/Makefile.in
 diff -up ./src/Makefile.in.dt ./src/Makefile.in
 --- ./src/Makefile.in.dt	2012-11-22 15:20:04.274713103 +0100
 +++ ./src/Makefile.in	2012-11-22 15:20:55.059953542 +0100
-@@ -88,7 +88,11 @@ subdir = src
- DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
- 	$(top_srcdir)/depcomp
- ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
--am__aclocal_m4_deps = $(top_srcdir)/configure.ac
-+am__aclocal_m4_deps = $(top_srcdir)/m4/ax_boost_base.m4 \
-+	$(top_srcdir)/m4/ax_boost_system.m4 \
-+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/configure.ac
- am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
- 	$(ACLOCAL_M4)
- mkinstalldirs = $(install_sh) -d
 @@ -288,6 +292,9 @@ AUTOCONF = @AUTOCONF@
  AUTOHEADER = @AUTOHEADER@
  AUTOMAKE = @AUTOMAKE@
