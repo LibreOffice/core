@@ -55,23 +55,7 @@ using namespace ::com::sun::star;
 
 
 SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
-
-    SvxStandardDialog(pParent, SW_RES(DLG_JAVAEDIT)),
-
-    aTypeFT         ( this, SW_RES( FT_TYPE ) ),
-    aTypeED         ( this, SW_RES( ED_TYPE ) ),
-    aUrlRB          ( this, SW_RES( RB_URL ) ),
-    aEditRB         ( this, SW_RES( RB_EDIT ) ),
-    aUrlPB          ( this, SW_RES( PB_URL ) ),
-    aUrlED          ( this, SW_RES( ED_URL ) ),
-    aEditED         ( this, SW_RES( ED_EDIT ) ),
-    aPostItFL       ( this, SW_RES( FL_POSTIT ) ),
-
-    aOKBtn          ( this, SW_RES( BTN_POST_OK ) ),
-    aCancelBtn      ( this, SW_RES( BTN_POST_CANCEL ) ),
-    aPrevBtn        ( this, SW_RES( BTN_PREV ) ),
-    aNextBtn        ( this, SW_RES( BTN_NEXT ) ),
-    aHelpBtn        ( this, SW_RES( BTN_POST_HELP ) ),
+    SvxStandardDialog(pParent, "InsertScriptDialog", "modules/swriter/ui/insertscript.ui"),
 
     bNew(sal_True),
     bIsUrl(sal_False),
@@ -80,19 +64,30 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     pFileDlg(NULL),
     pOldDefDlgParent(NULL)
 {
+    get(m_pTypeED, "scripttype");
+    get(m_pUrlRB, "url");
+    get(m_pUrlED, "urlentry");
+    get(m_pUrlPB, "browse");
+    get(m_pEditRB, "text");
+    get(m_pEditED, "textentry");
+
+    get(m_pOKBtn, "ok");
+    get(m_pPrevBtn, "previous");
+    get(m_pNextBtn, "next");
+
     // install handler
-    aPrevBtn.SetClickHdl( LINK( this, SwJavaEditDialog, PrevHdl ) );
-    aNextBtn.SetClickHdl( LINK( this, SwJavaEditDialog, NextHdl ) );
-    aOKBtn.SetClickHdl( LINK( this, SwJavaEditDialog, OKHdl ) );
+    m_pPrevBtn->SetClickHdl( LINK( this, SwJavaEditDialog, PrevHdl ) );
+    m_pNextBtn->SetClickHdl( LINK( this, SwJavaEditDialog, NextHdl ) );
+    m_pOKBtn->SetClickHdl( LINK( this, SwJavaEditDialog, OKHdl ) );
 
     Link aLk = LINK(this, SwJavaEditDialog, RadioButtonHdl);
-    aUrlRB.SetClickHdl(aLk);
-    aEditRB.SetClickHdl(aLk);
-    aUrlPB.SetClickHdl(LINK(this, SwJavaEditDialog, InsertFileHdl));
+    m_pUrlRB->SetClickHdl(aLk);
+    m_pEditRB->SetClickHdl(aLk);
+    m_pUrlPB->SetClickHdl(LINK(this, SwJavaEditDialog, InsertFileHdl));
 
-    Font aFont( aEditED.GetFont() );
+    Font aFont( m_pEditED->GetFont() );
     aFont.SetWeight( WEIGHT_LIGHT );
-    aEditED.SetFont( aFont );
+    m_pEditED->SetFont( aFont );
 
     pMgr = new SwFldMgr;
     pFld = (SwScriptField*)pMgr->GetCurFld();
@@ -103,11 +98,6 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
 
     if( !bNew )
         SetText( SW_RES( STR_JAVA_EDIT ) );
-    else
-        // newly create
-        SetText( SW_RES( STR_JAVA_INSERT ) );
-
-    FreeResource();
 
     RadioButtonHdl(NULL);
 }
@@ -185,42 +175,42 @@ void SwJavaEditDialog::CheckTravel()
                 if(INET_PROT_FILE == aINetURL.GetProtocol())
                     sURL = aINetURL.PathToFileName();
             }
-            aUrlED.SetText(sURL);
-            aEditED.SetText(aEmptyStr);
-            aUrlRB.Check();
+            m_pUrlED->SetText(sURL);
+            m_pEditED->SetText(aEmptyStr);
+            m_pUrlRB->Check();
         }
         else
         {
-            aEditED.SetText(pFld->GetPar2());
-            aUrlED.SetText(aEmptyStr);
-            aEditRB.Check();
+            m_pEditED->SetText(pFld->GetPar2());
+            m_pUrlED->SetText(aEmptyStr);
+            m_pEditRB->Check();
         }
-        aTypeED.SetText(pFld->GetPar1());
+        m_pTypeED->SetText(pFld->GetPar1());
     }
 
     if ( !bTravel )
     {
-        aPrevBtn.Hide();
-        aNextBtn.Hide();
+        m_pPrevBtn->Hide();
+        m_pNextBtn->Hide();
     }
     else
     {
-        aPrevBtn.Enable(bPrev);
-        aNextBtn.Enable(bNext);
+        m_pPrevBtn->Enable(bPrev);
+        m_pNextBtn->Enable(bNext);
     }
 }
 
 void SwJavaEditDialog::SetFld()
 {
-    if( !aOKBtn.IsEnabled() )
+    if( !m_pOKBtn->IsEnabled() )
         return ;
 
-    aType = aTypeED.GetText();
-    bIsUrl = aUrlRB.IsChecked();
+    aType = m_pTypeED->GetText();
+    bIsUrl = m_pUrlRB->IsChecked();
 
     if( bIsUrl )
     {
-        aText = aUrlED.GetText();
+        aText = m_pUrlED->GetText();
         if (!aText.isEmpty())
         {
             SfxMedium* pMedium = pSh->GetView().GetDocShell()->GetMedium();
@@ -233,7 +223,7 @@ void SwJavaEditDialog::SetFld()
         }
     }
     else
-        aText = aEditED.GetText();
+        aText = m_pEditED->GetText();
 
     if( aType.isEmpty() )
         aType = "JavaScript";
@@ -246,20 +236,20 @@ sal_Bool SwJavaEditDialog::IsUpdate()
 
 IMPL_LINK_NOARG(SwJavaEditDialog, RadioButtonHdl)
 {
-    sal_Bool bEnable = aUrlRB.IsChecked();
-    aUrlPB.Enable(bEnable);
-    aUrlED.Enable(bEnable);
-    aEditED.Enable(!bEnable);
+    sal_Bool bEnable = m_pUrlRB->IsChecked();
+    m_pUrlPB->Enable(bEnable);
+    m_pUrlED->Enable(bEnable);
+    m_pEditED->Enable(!bEnable);
 
     if( !bNew )
     {
         bEnable = !pSh->IsReadOnlyAvailable() || !pSh->HasReadonlySel();
-        aOKBtn.Enable( bEnable );
-        aUrlED.SetReadOnly( !bEnable );
-        aEditED.SetReadOnly( !bEnable);
-        aTypeED.SetReadOnly( !bEnable);
-        if( aUrlPB.IsEnabled() && !bEnable )
-            aUrlPB.Enable( sal_False );
+        m_pOKBtn->Enable( bEnable );
+        m_pUrlED->SetReadOnly( !bEnable );
+        m_pEditED->SetReadOnly( !bEnable);
+        m_pTypeED->SetReadOnly( !bEnable);
+        if( m_pUrlPB->IsEnabled() && !bEnable )
+            m_pUrlPB->Enable( sal_False );
     }
     return 0;
 }
@@ -291,7 +281,7 @@ IMPL_LINK_NOARG(SwJavaEditDialog, DlgClosedHdl)
             if ( INET_PROT_FILE == aINetURL.GetProtocol() )
                 sFileName = aINetURL.PathToFileName();
         }
-        aUrlED.SetText( sFileName );
+        m_pUrlED->SetText( sFileName );
     }
 
     return 0;
