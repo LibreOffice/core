@@ -350,10 +350,10 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 GetDoc()->UpdateFld(pTxtFld, rFld, pMsgHnt, sal_True);
         }
 
-        // bOkay (statt return wg. EndAllAction) wird sal_False,
+        // bOkay (statt return wg. EndAllAction) wird false,
         // 1) wenn nur ein Pam mehr als ein Feld enthaelt oder
         // 2) bei gemischten Feldtypen
-        sal_Bool bOkay = sal_True;
+        bool bOkay = true;
         sal_Bool bTblSelBreak = sal_False;
 
         SwMsgPoolItem aHint( RES_TXTATR_FIELD );  // Such-Hint
@@ -381,7 +381,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 {
                     //  wenn nur ein Pam mehr als ein Feld enthaelt ...
                     if( aPam.Start()->nContent != pCurStt->nContent )
-                        bOkay = sal_False;
+                        bOkay = false;
 
                     if( 0 != (pTxtFld = GetDocTxtFld( pCurStt )) )
                     {
@@ -391,7 +391,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                         // bei gemischten Feldtypen
                         if( pCurFld->GetTyp()->Which() !=
                             rFld.GetTyp()->Which() )
-                            bOkay = sal_False;
+                            bOkay = false;
 
                         bTblSelBreak = GetDoc()->UpdateFld(pTxtFld, rFld,
                                                            pMsgHnt, sal_False);

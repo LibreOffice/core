@@ -200,7 +200,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
     pDestShell->StartAllAction();
     SwPosition *pPos = 0;
     sal_Bool bRet = sal_False;
-    sal_Bool bFirstMove = sal_True;
+    bool bFirstMove = true;
     SwNodeIndex aSttNdIdx( pDestShell->GetDoc()->GetNodes() );
     xub_StrLen nSttCntIdx = 0;
     // For block selection this list is filled with the insert positions
@@ -242,7 +242,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             // Anfangs-Position vom neuen Bereich merken
             aSttNdIdx = pPos->nNode.GetIndex()-1;
             nSttCntIdx = pPos->nContent.GetIndex();
-            bFirstMove = sal_False;
+            bFirstMove = false;
         }
 
         const bool bSuccess( GetDoc()->CopyRange( *PCURCRSR, *pPos, false ) );
@@ -281,7 +281,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
                     == pCmp->GetCntntNode(), "Point im falschen Node" );
         OSL_ENSURE( pCmp->GetMark()->nContent.GetIdxReg()
                     == pCmp->GetCntntNode(sal_False), "Mark im falschen Node" );
-        sal_Bool bTst = *pCmp->GetPoint() == *pCmp->GetMark();
+        bool bTst = *pCmp->GetPoint() == *pCmp->GetMark();
         (void) bTst;
     } while( pDestShell->GetCrsr() != ( pCmp = (SwPaM*)pCmp->GetNext() ) );
 }

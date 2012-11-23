@@ -159,14 +159,14 @@ sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     SwPosition& rPos = *pCrsr->GetPoint();
     rPos.nNode = rInsPos.GetDocPos();
 
-    sal_Bool bEndUndo = sal_False;
+    bool bEndUndo = false;
     SwDoc* pMyDoc = GetDoc();
     SwTxtNode *const pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( pTxtNd )
         rPos.nContent.Assign( pTxtNd, 0 );
     else
     {
-        bEndUndo = sal_True;
+        bEndUndo = true;
         pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         rPos.nNode--;
         pMyDoc->AppendTxtNode( rPos );
@@ -200,7 +200,7 @@ sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     SwPosition& rPos = *pCrsr->GetPoint();
     rPos.nNode = rInsPos.GetDocPos();
 
-    sal_Bool bEndUndo = sal_False;
+    bool bEndUndo = false;
     SwDoc* pMyDoc = GetDoc();
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( pTxtNd && pTxtNd->GetTxt().Len() && rPos.nNode.GetIndex() + 1 !=
@@ -208,7 +208,7 @@ sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
         rPos.nContent.Assign( pTxtNd, 0 );
     else
     {
-        bEndUndo = sal_True;
+        bEndUndo = true;
         pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         rPos.nNode--;
         pMyDoc->AppendTxtNode( rPos );

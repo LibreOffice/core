@@ -48,7 +48,7 @@ void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr( );
 
     StartAllAction();
-    sal_Bool bUndoGroup = pCrsr->GetNext() != pCrsr;
+    bool bUndoGroup = pCrsr->GetNext() != pCrsr;
     if( bUndoGroup )
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_RESETATTR, NULL);

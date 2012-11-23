@@ -228,7 +228,7 @@ void SwLinguIter::_Start( SwEditShell *pShell, SwDocPositions eStart,
     if( pSh )
         return;
 
-    sal_Bool bSetCurr;
+    bool bSetCurr;
 
     pSh = pShell;
 
@@ -256,7 +256,7 @@ void SwLinguIter::_Start( SwEditShell *pShell, SwDocPositions eStart,
     }
     else
     {
-        bSetCurr = sal_False;
+        bSetCurr = false;
         nCrsrCnt = 1;
         pSh->Push();
         pSh->SetLinguRange( eStart, eEnd );
@@ -546,7 +546,7 @@ uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
     if( !pMySh )
         return aHyphRet;
 
-    const sal_Bool bAuto = IsAuto();
+    const bool bAuto = IsAuto();
      uno::Reference< XHyphenatedWord >  xHyphWord;
     bool bGoOn = false;
     do {
@@ -1575,7 +1575,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
         //the cursor has to be collapsed on the left to go to the start of the sentence - if sentence ends inside of the error
         pCrsr->DeleteMark();
         pCrsr->SetMark();
-        sal_Bool bStartSent = 0 != pMySh->GoStartSentence();
+        bool bStartSent = 0 != pMySh->GoStartSentence();
         SpellContentPositions aDeletedRedlines = lcl_CollectDeletedRedlines(pMySh);
         if(bStartSent)
         {

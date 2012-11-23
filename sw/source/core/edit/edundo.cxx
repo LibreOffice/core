@@ -111,7 +111,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
 
     // current undo state was not saved
     ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     StartAllAction();
     {
@@ -170,7 +170,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
 {
     SET_CURR_SHELL( this );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // undo state was not saved
     ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
@@ -221,7 +221,7 @@ bool SwEditShell::Repeat(sal_uInt16 const nCount)
 {
     SET_CURR_SHELL( this );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     StartAllAction();
 
     try {

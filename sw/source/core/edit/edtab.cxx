@@ -60,7 +60,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts
     StartAllAction();
     SwPosition* pPos = GetCrsr()->GetPoint();
 
-    sal_Bool bEndUndo = 0 != pPos->nContent.GetIndex();
+    bool bEndUndo = 0 != pPos->nContent.GetIndex();
     if( bEndUndo )
     {
         StartUndo( UNDO_START );
@@ -179,7 +179,7 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTblOpts,
 
     StartAllAction();
 
-    sal_Bool bEndUndo = 0 != pPos->nContent.GetIndex();
+    bool bEndUndo = 0 != pPos->nContent.GetIndex();
     if( bEndUndo )
     {
         StartUndo( UNDO_START );
@@ -269,7 +269,7 @@ sal_Bool SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
                 SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
                 aBoxes.insert( pBox );
             }
-        } while( sal_False );
+        } while( false );
     }
 
     for (size_t n = 0; n < aBoxes.size(); ++n)
@@ -311,7 +311,7 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
                 SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
                 aBoxes.insert( pBox );
             }
-        } while( sal_False );
+        } while( false );
     }
 
     // beim setzen einer Formel keine Ueberpruefung mehr vornehmen!

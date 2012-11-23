@@ -329,9 +329,9 @@ bool SwEditShell::HasFtns( bool bEndNotes ) const
     {
         const SwFmtFtn &rFtn = rIdxs[i]->GetFtn();
         if ( bEndNotes == rFtn.IsEndNote() )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -461,17 +461,17 @@ static inline sal_uInt16 lcl_SetScriptFlags( sal_uInt16 nType )
     return nRet;
 }
 
-static sal_Bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
-                            sal_uInt16 &rScrpt, sal_Bool bInSelection, sal_Bool bNum )
+static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
+                            sal_uInt16 &rScrpt, bool bInSelection, bool bNum )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const String& rTxt = rTNd.GetTxt();
     String sExp;
 
     // consider numbering
     if ( bNum )
     {
-        bRet = sal_False;
+        bRet = false;
 
         if ( rTNd.IsInList() )
         {
@@ -498,7 +498,7 @@ static sal_Bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
         const SwTxtAttr* const pAttr = rTNd.GetTxtAttrForCharAt( nPos );
         if (pAttr)
         {
-            bRet = sal_True; // all other than fields can be
+            bRet = true; // all other than fields can be
                          // defined as weak-script ?
             if ( RES_TXTATR_FIELD == pAttr->Which() )
             {
@@ -575,7 +575,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
                     else
                         nScript = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
 
-                    if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nPos, nRet, sal_False, sal_False ))
+                    if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nPos, nRet, false, false ))
                         nRet |= lcl_SetScriptFlags( nScript );
                 }
             }
@@ -611,7 +611,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
                                       pBreakIt->GetBreakIter()->getScriptType(
                                                                 rTxt, nChg );
 
-                            if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nChg, nRet, sal_True,
+                            if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nChg, nRet, true,
                                                           0 == nChg && rTxt.Len() == nEndPos ) )
                                 nRet |= lcl_SetScriptFlags( nScript );
 

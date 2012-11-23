@@ -191,7 +191,7 @@ sal_Bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pS
         SwDoc* pMyDoc = GetDoc();
         SwDocShell* pDocSh = pMyDoc->GetDocShell();
 
-        sal_Bool bInIndex = pTOX == GetCurTOX();
+        bool bInIndex = pTOX == GetCurTOX();
         SET_CURR_SHELL( this );
         StartAllAction();
 
@@ -347,10 +347,10 @@ void SwEditShell::ApplyAutoMark()
         //
         // SearchOptions to be used in loop below
         //
-        sal_Bool bCaseSensitive = sal_True;
-        sal_Bool bWordOnly      = sal_False;
-        sal_Bool bSrchInSel     = sal_False;
-        sal_Bool bLEV_Relaxed   = sal_True;
+        bool bCaseSensitive = true;
+        bool bWordOnly      = false;
+        bool bSrchInSel     = false;
+        bool bLEV_Relaxed   = true;
         sal_Int32 nLEV_Other    = 2;    //  -> changedChars;
         sal_Int32 nLEV_Longer   = 3;    //! -> deletedChars;
         sal_Int32 nLEV_Shorter  = 1;    //! -> insertedChars;

@@ -133,7 +133,7 @@ void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
 
     // calculate cursor bidi level
     SwCursor* pTmpCrsr = _GetCrsr();
-    const sal_Bool bDoNotSetBidiLevel = ! pTmpCrsr ||
+    const bool bDoNotSetBidiLevel = ! pTmpCrsr ||
                                 ( 0 != dynamic_cast<SwUnoCrsr*>(pTmpCrsr) );
 
     if ( ! bDoNotSetBidiLevel )
@@ -613,7 +613,7 @@ String SwEditShell::Calculate()
             aStr = rCC.lowercase( aStr );
 
             sal_Unicode ch;
-            sal_Bool    bValidFlds = sal_False;
+            bool bValidFlds = false;
             xub_StrLen nPos = 0;
 
             while( nPos < aStr.Len() )
@@ -641,7 +641,7 @@ String SwEditShell::Calculate()
                             GetDoc()->FldsToCalc( aCalc,
                                                   pStart->nNode.GetIndex(),
                                                   pStart->nContent.GetIndex() );
-                            bValidFlds = sal_True;
+                            bValidFlds = true;
                         }
                         (( aFormel += '(' ) +=
                                 aCalc.GetStrResult( aCalc.VarLook( sVar )
@@ -719,7 +719,7 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, s
         return sal_False;
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_UI_INSERT_URLTXT, NULL);
-    sal_Bool bInsTxt = sal_True;
+    bool bInsTxt = true;
 
     if( rStr.Len() )
     {
@@ -727,22 +727,22 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, s
         if( pCrsr->HasMark() && *pCrsr->GetPoint() != *pCrsr->GetMark() )
         {
             // Selection vorhanden, MehrfachSelektion?
-            sal_Bool bDelTxt = sal_True;
+            bool bDelTxt = true;
             if( pCrsr->GetNext() == pCrsr )
             {
                 // einfach Selection -> Text ueberpruefen
                 String sTxt(comphelper::string::stripEnd(GetSelTxt(), ' '));
                 if( sTxt == rStr )
-                    bDelTxt = bInsTxt = sal_False;
+                    bDelTxt = bInsTxt = false;
             }
             else if( rFmt.GetValue() == rStr )      // Name und URL gleich?
-                bDelTxt = bInsTxt = sal_False;
+                bDelTxt = bInsTxt = false;
 
             if( bDelTxt )
                 Delete();
         }
         else if( pCrsr->GetNext() != pCrsr && rFmt.GetValue() == rStr )
-            bInsTxt = sal_False;
+            bInsTxt = false;
 
         if( bInsTxt )
         {
@@ -752,7 +752,7 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, s
         }
     }
     else
-        bInsTxt = sal_False;
+        bInsTxt = false;
 
     SetAttr( rFmt );
     if (bInsTxt && !IsCrsrPtAtEnd())
@@ -860,7 +860,7 @@ void SwEditShell::SetNumberingRestart()
         if( nCurrNd <= nEndNd )
         {
             SwCntntFrm* pCntFrm;
-            sal_Bool bGoOn = sal_True;
+            bool bGoOn = true;
             //iterate over all paragraphs
             while( bGoOn )
             {

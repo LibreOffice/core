@@ -67,9 +67,9 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
             return; // done, because by precondition everything is combined
     }
 
-    sal_Bool bEnde;
+    bool bEnde;
     do {
-        bEnde = sal_True;
+        bEnde = true;
 
         // combine with predecessor?
         if( nPos > 0 )
@@ -79,7 +79,7 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
                 || rTmp.nEnd+1 == aRg.nStart )
             {
                 aRg.nStart = rTmp.nStart;
-                bEnde = sal_False;
+                bEnde = false;
                 erase( begin() + --nPos ); // combine
             }
             // range contained in rTmp?
@@ -94,7 +94,7 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
                 rTmp.nStart == aRg.nEnd+1 )
             {
                 aRg.nEnd = rTmp.nEnd;
-                bEnde = sal_False;
+                bEnde = false;
                 erase( begin() + nPos ); // combine
             }
 
@@ -531,7 +531,7 @@ sal_Bool SwEditShell::IsProtectedOutlinePara() const
     {
         const SwOutlineNodes& rOutlNd = GetDoc()->GetNodes().GetOutLineNds();
         SwNodePtr pNd = (SwNodePtr)&rNd;
-        sal_Bool bFirst = sal_True;
+        bool bFirst = true;
         sal_uInt16 nPos;
         int nLvl(0);
         if( !rOutlNd.Seek_Entry( pNd, &nPos ) && nPos )
@@ -549,7 +549,7 @@ sal_Bool SwEditShell::IsProtectedOutlinePara() const
             if( bFirst )
             {
                 nLvl = nTmpLvl;
-                bFirst = sal_False;
+                bFirst = false;
             }
             else if( nLvl >= nTmpLvl )
                 break;
