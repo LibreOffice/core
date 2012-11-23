@@ -70,7 +70,7 @@ endef
 $(call gb_UnoApiPartTarget_get_target,%.done) : \
 		$(gb_UnoApiPartTarget_IDLCTARGET) \
 		| $(gb_UCPPTARGET)
-	$(call gb_UnoApiPartTarget__command,$@,$*,$(filter-out $(gb_UnoApiPartTarget_IDLCTARGET),$?))
+	$(call gb_UnoApiPartTarget__command,$@,$*,$(filter-out $(gb_UnoApiPartTarget_IDLCTARGET),$^))
 
 ifeq ($(gb_FULLDEPS),$(true))
 
