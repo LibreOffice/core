@@ -59,11 +59,9 @@ private:
 protected:
                         WorkWindow( WindowType nType );
     SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData = NULL );
-    SAL_DLLPRIVATE void ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void ImplSetFrameState( sal_uLong aFrameState );
 
 public:
-                    WorkWindow( Window* pParent, const ResId& rResId );
                     WorkWindow( Window* pParent, WinBits nStyle = WB_STDWORK );
                     WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle = WB_STDWORK );
                     WorkWindow( SystemParentData* pParent ); // Not in the REMOTE-Version

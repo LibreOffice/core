@@ -2399,15 +2399,6 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxUnoText::getImplementationId(  ) throw( un
     return theSvxUnoTextImplementationId::get().getSeq();
 }
 
-SvxUnoText* SvxUnoText::getImplementation( const uno::Reference< uno::XInterface >& xInt )
-{
-    uno::Reference< lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
-    if( xUT.is() )
-        return reinterpret_cast<SvxUnoText*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( SvxUnoText::getUnoTunnelId())));
-    else
-        return NULL;
-}
-
 namespace
 {
     class theSvxUnoTextUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextUnoTunnelId > {};

@@ -119,18 +119,6 @@ WorkWindow::WorkWindow( Window* pParent, WinBits nStyle ) :
 
 // -----------------------------------------------------------------------
 
-WorkWindow::WorkWindow( Window* pParent, const ResId& rResId ) :
-    SystemWindow( WINDOW_WORKWINDOW )
-{
-    ImplInitWorkWindowData();
-    rResId.SetRT( RSC_WORKWIN );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-}
-
-// -----------------------------------------------------------------------
-
 WorkWindow::WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle ) :
     SystemWindow( WINDOW_WORKWINDOW )
 {
@@ -147,17 +135,6 @@ WorkWindow::WorkWindow( SystemParentData* pParent ) :
     ImplInitWorkWindowData();
     mbSysChild = sal_True;
     ImplInit( NULL, 0, pParent );
-}
-
-// -----------------------------------------------------------------------
-
-void WorkWindow::ImplLoadRes( const ResId& rResId )
-{
-    SystemWindow::ImplLoadRes( rResId );
-
-    ReadLongRes();
-    if ( !(rResId.GetWinBits() & WB_HIDE) && (RSC_WORKWIN == rResId.GetRT()) )
-        Show();
 }
 
 // -----------------------------------------------------------------------

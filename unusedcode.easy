@@ -1,8 +1,14 @@
+FileStream::checkAccessMode(FileAccessMode)
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
 GraphicObject::SwapIn(SvStream*)
+HelpParser::GetOutpath(rtl::OString const&, rtl::OString const&, rtl::OString const&)
+HelpParser::MakeDir(rtl::OString const&)
+HelpParser::parse_languages(std::__debug::vector<rtl::OString, std::allocator<rtl::OString> >&, MergeDataFile&)
 LiblantagDataRef::presetDataPath(rtl::OUString const&)
 Line::GetLength() const
 Line::Intersection(Rectangle const&, Line&) const
+OGLTransitionImpl::clearScene()
+PoHeader::getLanguage() const
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
 ScFiltersTest::testColorScaleODS()
 ScFiltersTest::testColorScaleXLSX()
@@ -10,7 +16,9 @@ ScMenuFloatingWindow::getDoc()
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 String::String(unsigned short)
+SvNumberFormatter::PutandConvertEntrySystem(rtl::OUString&, int&, short&, unsigned int&, unsigned short, unsigned short)
 SvTreeList::GetChildIterators(SvTreeListEntry const*) const
+SvTreeListBox::GetParent(SvTreeListEntry const*) const
 SvtGraphicStroke::toString() const
 TextEngine::GetLeftMargin() const
 ThumbnailViewItemAcc::FireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
@@ -45,9 +53,11 @@ connectivity::file::OStatement_Base::reset()
 connectivity::mork::OColumnAlias::OColumnAlias()
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
+desktop::Lockfile::clean()
 framework::OReadMenuDocumentHandler::getServiceFactory()
 jfw_plugin::VendorBase::createInstance()
 oox::drawingml::TextListStyle::dump() const
+oox::ole::VbaSiteModel::bindToSources(com::sun::star::uno::Reference<com::sun::star::awt::XControlModel> const&, oox::ole::ControlConverter const&) const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
 oox::xls::FormulaProcessorBase::generateRangeList2dString(oox::xls::ApiCellRangeList const&, bool, unsigned short, bool)
 sc_apitest::main()
@@ -64,4 +74,9 @@ unicode::isDigit(unsigned short)
 unicode::isLower(unsigned short)
 unicode::isPrint(unsigned short)
 unicode::isUpper(unsigned short)
+writerfilter::WW8Analyzer::WW8Analyzer()
 writerfilter::createStreamHandler()
+writerfilter::doctokidsToXML(std::basic_ostream<char, std::char_traits<char> >&)
+writerfilter::ooxmlidsToXML(std::basic_ostream<char, std::char_traits<char> >&)
+writerfilter::ooxmlsprmidsToXML(std::basic_ostream<char, std::char_traits<char> >&)
+writerfilter::sprmidsToXML(std::basic_ostream<char, std::char_traits<char> >&)
