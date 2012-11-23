@@ -274,11 +274,19 @@ void Idlc::reset()
     m_includes.clear();
 }
 
-sal_Bool Idlc::isDocValid()
+OUString Idlc::processDocumentation()
 {
-    if ( m_bGenerateDoc )
-        return m_bIsDocValid;
-    return sal_False;;
+    OUString doc;
+    if (m_bIsDocValid) {
+        OString raw(getDocumentation());
+        if (m_bGenerateDoc) {
+            doc = OStringToOUString(raw, RTL_TEXTENCODING_UTF8);
+        } else if (raw.indexOf("@deprecated") != -1) {
+            //TODO: this check is somewhat crude
+            doc = "@deprecated";
+        }
+    }
+    return doc;
 }
 
 static void lcl_writeString(::osl::File & rFile, ::osl::FileBase::RC & o_rRC,

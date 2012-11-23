@@ -1354,6 +1354,22 @@ OString CppuType::indent() const
 //*************************************************************************
 // InterfaceType
 //*************************************************************************
+
+namespace {
+
+bool isDocumentedDeprecated(OUString const & documentation) {
+    return documentation.indexOf("@deprecated") != -1;
+        //TODO: this check is somewhat crude
+}
+
+void dumpDeprecation(FileStream & o, bool deprecated) {
+    if (deprecated) {
+        o << "SAL_DEPRECATED_INTERNAL(\"marked @deprecated in UNOIDL\") ";
+    }
+}
+
+}
+
 InterfaceType::InterfaceType(typereg::Reader& typeReader,
                               const OString& typeName,
                              const TypeManager& typeMgr)
@@ -1362,6 +1378,7 @@ InterfaceType::InterfaceType(typereg::Reader& typeReader,
     m_inheritedMemberCount = 0;
     m_hasAttributes = false;
     m_hasMethods = false;
+    m_isDeprecated = isDocumentedDeprecated(m_reader.getDocumentation());
 }
 
 InterfaceType::~InterfaceType()
@@ -1465,13 +1482,18 @@ void InterfaceType::dumpAttributes(FileStream& o)
         fieldType = rtl::OUStringToOString(
             m_reader.getFieldTypeName(i), RTL_TEXTENCODING_UTF8);
 
+        bool depr = m_isDeprecated
+            || isDocumentedDeprecated(m_reader.getFieldDocumentation(i));
+
         if (first)
         {
             first = sal_False;
             o << "\n" << indent() << "// Attributes\n";
         }
 
-        o << indent() << "virtual ";
+        o << indent();
+        dumpDeprecation(o, depr);
+        o << "virtual ";
         dumpType(o, fieldType);
         o << " SAL_CALL get" << fieldName << "()";
         dumpAttributeExceptionSpecification(o, name, RT_MODE_ATTRIBUTE_GET);
@@ -1480,7 +1502,9 @@ void InterfaceType::dumpAttributes(FileStream& o)
         if ((access & RT_ACCESS_READONLY) == 0)
         {
             bool byRef = passByReference(fieldType);
-            o << indent() << "virtual void SAL_CALL set" << fieldName << "( ";
+            o << indent();
+            dumpDeprecation(o, depr);
+            o << "virtual void SAL_CALL set" << fieldName << "( ";
             dumpType(o, fieldType, byRef, byRef);
             o << " _" << fieldName.toAsciiLowerCase() << " )";
             dumpAttributeExceptionSpecification(o, name, RT_MODE_ATTRIBUTE_SET);
@@ -1529,7 +1553,12 @@ void InterfaceType::dumpMethods(FileStream& o)
             o << "\n" << indent() << "// Methods\n";
         }
 
-        o << indent() << "virtual ";
+        o << indent();
+        dumpDeprecation(
+            o,
+            (m_isDeprecated
+             || isDocumentedDeprecated(m_reader.getMethodDocumentation(i))));
+        o << "virtual ";
         dumpType(o, returnType);
         o << " SAL_CALL " << methodName << "( ";
         for (sal_uInt16 j=0; j < paramCount; j++)

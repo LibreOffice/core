@@ -78,7 +78,7 @@ public:
             m_documentation = documentation;
             m_bIsDocValid = sal_True;
         }
-    sal_Bool isDocValid();
+    OUString processDocumentation();
     sal_Bool isInMainFile()
         { return m_bIsInMainfile; }
     void setInMainfile(sal_Bool bInMainfile)

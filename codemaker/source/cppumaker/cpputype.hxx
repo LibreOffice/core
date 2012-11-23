@@ -191,6 +191,7 @@ protected:
     sal_uInt32  m_inheritedMemberCount;
     bool        m_hasAttributes;
     bool        m_hasMethods;
+    bool        m_isDeprecated;
 
 private:
     void dumpExceptionSpecification(

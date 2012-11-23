@@ -76,8 +76,7 @@ AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pSc
         m_bImported = sal_True;
     }
 
-    if ( idlc()->isDocValid() )
-        m_documentation = OStringToOUString(idlc()->getDocumentation(), RTL_TEXTENCODING_UTF8);
+    m_documentation = idlc()->processDocumentation();
 
     m_bPublished = idlc()->isPublished();
 }
