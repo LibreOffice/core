@@ -549,6 +549,12 @@ AC_ARG_ENABLE(ext-barcode,
         [Enable the Barcode extension.])
 )
 
+AC_ARG_ENABLE(export,
+    AS_HELP_STRING([--disable-export],
+        [Disable (some) code for document format export. Useful when building *viewer* apps to avoid
+         having export-related code and data linked in. Work in progress, use only if you are hacking on it.])
+)
+
 AC_ARG_ENABLE(database-connectivity,
     AS_HELP_STRING([--disable-database-connectivity],
         [Disable various database connectivity. Work in progress, use only if you are hacking on it.])
@@ -2299,6 +2305,27 @@ dnl cross-compiling would imply a non-desktop OS.
 if test $_os != iOS -a $_os != Android; then
     BUILD_TYPE="$BUILD_TYPE DESKTOP"
 fi
+
+# Currently we build only viewer apps for Android (and for iOS not even that yet), so to avoid getting
+# some pathological export-related code and data linked in, we will add some judicious #ifndef
+# DISABLE_EXPORT in the code in places where the linker map shows it has a big impact. Places that
+# generate large amounts of code or data related to export only but still gets linked in. At least
+# that is the theory, let's see...
+
+if test -z "$enable_export"; then
+    if test $_os != Android -a $_os != iOS; then
+        enable_export=yes
+    fi
+fi
+
+DISABLE_EXPORT=''
+if test "$enable_export" = yes; then
+    BUILD_TYPE="$BUILD_TYPE EXPORT"
+else
+    DISABLE_EXPORT='TRUE'
+    SCPDEFS="$SCPDES -DDISABLE_EXPORT"
+fi
+AC_SUBST(DISABLE_EXPORT)
 
 dnl Decide whether to build database connectivity stuff (including
 dnl Base) or not. We probably don't want to on non-desktop OSes.
