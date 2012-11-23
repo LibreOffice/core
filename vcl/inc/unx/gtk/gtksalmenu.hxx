@@ -11,7 +11,9 @@
 #define GTKSALMENU_HXX
 
 #include <vector>
+#ifdef ENABLE_GIO
 #include <gio/gio.h>
+#endif
 
 #include <unx/salmenu.h>
 #include <unx/gtk/gtkframe.hxx>
