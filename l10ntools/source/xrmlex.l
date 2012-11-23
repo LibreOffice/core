@@ -156,7 +156,8 @@ int bText=0;
 
 
 "<!--"	{
-	char c1 = 0, c2 = 0, c3 = yyinput();
+	char c1 = 0, c2 = 0;
+	int c3 = yyinput();
 	char pChar[2];
 	pChar[1] = 0x00;
 	pChar[0] = c3;

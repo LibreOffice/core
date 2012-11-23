@@ -94,7 +94,8 @@ void YYWarning();
 	WorkOnTokenSet( IGNOREDTOKENS, yytext );
 }
 "/*"	{
-	char c1 = 0,c2 = yyinput();
+	char c1 = 0;
+	int c2 = yyinput();
 	char pChar[2];
 	pChar[1] = 0x00;
 	pChar[0] = c2;
