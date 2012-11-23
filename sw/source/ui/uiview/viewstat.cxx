@@ -65,6 +65,7 @@
 #include <cmdid.h>
 
 #include <IDocumentRedlineAccess.hxx>
+#include <doc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -274,12 +275,26 @@ void SwView::GetState(SfxItemSet &rSet)
             case FN_REDLINE_ACCEPT_DIRECT:
             case FN_REDLINE_REJECT_DIRECT:
             {
-                SwContentAtPos aCntntAtPos( SwContentAtPos::SW_REDLINE );
-                Point aCrsrPos = pWrtShell->GetCrsrDocPos( sal_True );
-                if( !pWrtShell->GetContentAtPos( aCrsrPos, aCntntAtPos ) )
-                    rSet.DisableItem( nWhich );
+                // If the selection/cursor start position isn't on a redline, disable
+                // accepting/rejecting changes.
+                SwDoc *pDoc = pWrtShell->GetDoc();
+                SwPaM *pCursor = pWrtShell->GetCrsr();
+                if (0 == pDoc->GetRedline(*pCursor->Start(), 0))
+                    rSet.DisableItem(nWhich);
             }
             break;
+
+            case FN_REDLINE_NEXT_CHANGE:
+            case FN_REDLINE_PREV_CHANGE:
+            {
+                // Enable change navigation if we have any redlines. Ideally we should disable
+                // "Next Change" if we're at or past the last change, and similarly for
+                // "Previous Change"
+                if (0 == pWrtShell->GetRedlineCount())
+                    rSet.DisableItem(nWhich);
+            }
+            break;
+
             case SID_THESAURUS:
             {
                 SwWrtShell  &rSh = GetWrtShell();
