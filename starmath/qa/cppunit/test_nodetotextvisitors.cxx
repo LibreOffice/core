@@ -26,18 +26,8 @@
  * instead of those above.
  */
 
-#include <sal/types.h>
-#include <cppunit/TestSuite.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestCase.h>
-#include <cppunit/plugin/TestPlugIn.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/TestAssert.h>
-
 #include <sal/config.h>
-
-#include <cppuhelper/bootstrap.hxx>
-#include <comphelper/processfactory.hxx>
+#include <test/bootstrapfixture.hxx>
 
 #include <vcl/svapp.hxx>
 #include <smdll.hxx>
@@ -80,11 +70,9 @@ using namespace ::com::sun::star;
 
 namespace {
 
-class Test : public CppUnit::TestFixture {
-public:
-    Test();
-    ~Test();
+class Test : public test::BootstrapFixture {
 
+public:
     // init
     virtual void setUp();
     virtual void tearDown();
@@ -133,35 +121,19 @@ private:
     void ParseAndCheck(const char *input, const char *expected, const char *test_name);
 };
 
-Test::Test()
-{
-    m_context = cppu::defaultBootstrap_InitialComponentContext();
-
-    uno::Reference<lang::XMultiComponentFactory> xFactory(m_context->getServiceManager());
-    uno::Reference<lang::XMultiServiceFactory> xSM(xFactory, uno::UNO_QUERY_THROW);
-
-    //Without this we're crashing because callees are using
-    //getProcessServiceFactory.  In general those should be removed in favour
-    //of retaining references to the root ServiceFactory as its passed around
-    comphelper::setProcessServiceFactory(xSM);
-
-    InitVCL();
-
-    SmGlobals::ensure();
-}
-
 void Test::setUp()
 {
+    BootstrapFixture::setUp();
+
+    SmGlobals::ensure();
+
     xDocShRef = new SmDocShell(SFXOBJECTSHELL_STD_NORMAL);
 }
 
 void Test::tearDown()
 {
     xDocShRef.Clear();
-}
-
-Test::~Test()
-{
+    BootstrapFixture::tearDown();
 }
 
 /*
