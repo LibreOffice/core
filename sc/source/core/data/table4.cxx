@@ -71,6 +71,7 @@
 #include "docpool.hxx"
 #include "progress.hxx"
 #include "segmenttree.hxx"
+#include "conditio.hxx"
 
 #include <math.h>
 
@@ -603,6 +604,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         pNewPattern = NULL;
                 }
 
+                const ScCondFormatItem& rCondFormatItem = static_cast<const ScCondFormatItem&>(pSrcPattern->GetItem(ATTR_CONDITIONAL));
+                const std::vector<sal_uInt32>& rCondFormatIndex = rCondFormatItem.GetCondFormatData();
+
                 if ( bVertical && nISrcStart == nISrcEnd && !bHasFiltered )
                 {
                     //  Attribute komplett am Stueck setzen
@@ -617,7 +621,18 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             aCol[nCol].ApplyPatternArea( nY1, nY2, *pNewPattern );
                         else
                             aCol[nCol].ApplyPatternArea( nY1, nY2, *pSrcPattern );
+
+                        for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatIndex.begin(), itrEnd = rCondFormatIndex.end();
+                                                        itr != itrEnd; ++itr)
+                        {
+                            ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(*itr);
+                            ScRangeList aRange = pCondFormat->GetRange();
+                            aRange.Join(ScRange(nCol, nY1, nTab, nCol, nY2, nTab));
+                            pCondFormat->AddRange(aRange);
+                        }
                     }
+
+
                     break;      // Schleife abbrechen
                 }
 
@@ -637,6 +652,15 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         aCol[nCol].ApplyPattern( static_cast<SCROW>(nRow), *pNewPattern );
                     else
                         aCol[nCol].ApplyPattern( static_cast<SCROW>(nRow), *pSrcPattern );
+
+                    for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatIndex.begin(), itrEnd = rCondFormatIndex.end();
+                            itr != itrEnd; ++itr)
+                    {
+                        ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(*itr);
+                        ScRangeList aRange = pCondFormat->GetRange();
+                        aRange.Join(ScRange(nCol, nRow, nTab, nCol, nRow, nTab));
+                        pCondFormat->AddRange(aRange);
+                    }
                 }
 
                 if (nAtSrc==nISrcEnd)
@@ -1384,6 +1408,10 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         if (bAttribs)
         {
             const ScPatternAttr* pSrcPattern = aCol[nCol].GetPattern(static_cast<SCROW>(nRow));
+
+            const ScCondFormatItem& rCondFormatItem = static_cast<const ScCondFormatItem&>(pSrcPattern->GetItem(ATTR_CONDITIONAL));
+            const std::vector<sal_uInt32>& rCondFormatIndex = rCondFormatItem.GetCondFormatData();
+
             if (bVertical)
             {
                 // if not filtered use the faster method
@@ -1392,14 +1420,33 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     aCol[nCol].SetPatternArea( static_cast<SCROW>(nIMin),
                             static_cast<SCROW>(nIMax), *pSrcPattern, true );
+
+                    for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatIndex.begin(), itrEnd = rCondFormatIndex.end();
+                            itr != itrEnd; ++itr)
+                    {
+                        ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(*itr);
+                        ScRangeList aRange = pCondFormat->GetRange();
+                        aRange.Join(ScRange(nCol, nIMin, nTab, nCol, nIMax, nTab));
+                        pCondFormat->AddRange(aRange);
+                    }
                 }
                 else
                 {
                     for(SCROW nAtRow = static_cast<SCROW>(nIMin); nAtRow <= static_cast<SCROW>(nIMax); ++nAtRow)
                     {
                         if(!RowHidden(nAtRow))
+                        {
                             aCol[nCol].SetPatternArea( static_cast<SCROW>(nAtRow),
                                     static_cast<SCROW>(nAtRow), *pSrcPattern, true);
+                            for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatIndex.begin(), itrEnd = rCondFormatIndex.end();
+                                    itr != itrEnd; ++itr)
+                            {
+                                ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(*itr);
+                                ScRangeList aRange = pCondFormat->GetRange();
+                                aRange.Join(ScRange(nCol, nAtRow, nTab, nCol, nAtRow, nTab));
+                                pCondFormat->AddRange(aRange);
+                            }
+                        }
                     }
 
                 }
@@ -1407,7 +1454,17 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             else
                 for (SCCOL nAtCol = static_cast<SCCOL>(nIMin); nAtCol <= sal::static_int_cast<SCCOL>(nIMax); nAtCol++)
                     if(!ColHidden(nAtCol))
+                    {
                         aCol[nAtCol].SetPattern(static_cast<SCROW>(nRow), *pSrcPattern, true);
+                        for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatIndex.begin(), itrEnd = rCondFormatIndex.end();
+                                itr != itrEnd; ++itr)
+                        {
+                            ScConditionalFormat* pCondFormat = mpCondFormatList->GetFormat(*itr);
+                            ScRangeList aRange = pCondFormat->GetRange();
+                            aRange.Join(ScRange(nAtCol, static_cast<SCROW>(nRow), nTab, nAtCol, static_cast<SCROW>(nRow), nTab));
+                            pCondFormat->AddRange(aRange);
+                        }
+                    }
         }
 
         if (pSrcCell)
