@@ -895,11 +895,8 @@ endef
 # gb_LinkTarget_add_scanner(<component>,<scanner file>)
 define gb_LinkTarget_add_scanner
 $(call gb_LexTarget_LexTarget,$(2))
-ifeq ($(OS),MACOSX)
-$(call gb_LinkTarget_add_generated_exception_object,$(1),LexTarget/$(2),$(3),-Wno-error)
-else
 $(call gb_LinkTarget_add_generated_exception_object,$(1),LexTarget/$(2),$(3))
-endif
+$(call gb_GenCxxObject_get_target,LexTarget/$(2)) : WARNINGS_NOT_ERRORS := $(true)
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_LexTarget_get_clean_target,$(2))
 
 endef
