@@ -297,7 +297,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_SBA_BRW_INSERT       (FN_INSERT2 + 8)    /* insert records into text */
 #define FN_SBA_BRW_MERGE        (FN_INSERT2 + 9)    /* serial letter print */
 #define FN_JAVAEDIT             (FN_INSERT2 + 10)   /* edit script field */
-#define FN_INSERT_HRULER        (FN_INSERT2 + 11)   /* insert horizontal ruler */
 #define FN_TOOL_ANCHOR_AT_CHAR  (FN_INSERT2 + 12)   /* anchor object to character*/
 
 #define FN_INSERT_PAGEHEADER    (FN_INSERT2 + 13)   /* insert default header */

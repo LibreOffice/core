@@ -258,12 +258,6 @@ File gid_File_Extra_Gallroot
     Name = "gallroot.zip";
 End
 
-File gid_File_Extra_Gallrulers
-    Dir = gid_Dir_Gallery_Rulers;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "gallrulers.zip";
-End
-
 File gid_File_Extra_Gallsound
     Dir = gid_Dir_User_Gallery;
     USER_FILE_BODY;

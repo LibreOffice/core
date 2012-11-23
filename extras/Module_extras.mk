@@ -24,7 +24,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Zip_gallbullets \
 	Zip_gallhtmlexpo \
 	Zip_gallroot \
-	Zip_gallrulers \
 	Zip_gallsound \
 	Zip_gallsounds \
 	Zip_gallsystem \

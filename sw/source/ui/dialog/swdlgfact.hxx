@@ -288,17 +288,6 @@ class AbstractInsFootNoteDlg_Impl : public AbstractInsFootNoteDlg
 };
 //for SwInsFootNoteDlg end
 
-//for SwInsertGrfRulerDlg begin
-class SwInsertGrfRulerDlg;
-class AbstractInsertGrfRulerDlg_Impl : public AbstractInsertGrfRulerDlg
-{
-    DECL_ABSTDLG_BASE(AbstractInsertGrfRulerDlg_Impl,SwInsertGrfRulerDlg)
-    virtual String          GetGraphicName();
-    virtual sal_Bool            IsSimpleLine();
-    virtual sal_Bool            HasImages() const ;
-};
-//for SwInsertGrfRulerDlg end
-
 //for SwInsTableDlg begin
 class SwInsTableDlg;
 class AbstractInsTableDlg_Impl : public AbstractInsTableDlg
@@ -523,7 +512,6 @@ public:
    virtual VclAbstractDialog *         CreateTitlePageDlg ( Window * pParent );
     virtual VclAbstractDialog *         CreateVclSwViewDialog( int nResId,
                                                 SwView& rView, sal_Bool bCol = sal_False ); //add for SwInsRowColDlg, SwLineNumberingDlg
-    virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg(Window * pParent); //add for SwInsertGrfRulerDlg
     virtual AbstractInsTableDlg*        CreateInsTableDlg(SwView& rView); //add for SwInsTableDlg
     virtual AbstractJavaEditDialog*     CreateJavaEditDialog( int nResId,
                                                 Window* pParent, SwWrtShell* pWrtSh ); //add for SwJavaEditDialog

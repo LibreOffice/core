@@ -137,10 +137,6 @@ String STR_DRAG_AND_MOVE
 {
     Text [ en-US ] = "Move: $1" ;
 };
-String STR_INSERT_RULER
-{
-    Text [ en-US ] = "Insert horizontal rule" ;
-};
 String STR_INSERT_CHART
 {
     Text [ en-US ] = "Insert %PRODUCTNAME Chart" ;

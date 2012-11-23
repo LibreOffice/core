@@ -4239,33 +4239,6 @@ SfxVoidItem InsertFrameInteractNoColumns FN_INSERT_FRAME_INTERACT_NOCOL
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem InsertGraphicRuler FN_INSERT_HRULER
-(SfxStringItem GraphicName FN_INSERT_HRULER,SfxBoolItem IsSimpleLine FN_PARAM_1)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
-]
-
-
-
-//--------------------------------------------------------------------------
 SfxVoidItem InsertHyperlinkDlg FN_INSERT_HYPERLINK
 ()
 [

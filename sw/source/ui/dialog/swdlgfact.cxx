@@ -81,7 +81,6 @@
 #include <glossary.hxx> //add for SwGlossaryDlg
 #include <inpdlg.hxx> //add for SwFldInputDlg
 #include <insfnote.hxx> //add for SwInsFootNoteDlg
-#include <insrule.hxx> //add for SwInsertGrfRulerDlg
 #include <instable.hxx> //add for SwInsTableDlg
 #include <javaedit.hxx> //add for SwJavaEditDialog
 #include <linenum.hxx> //add for SwLineNumberingDlg
@@ -125,7 +124,6 @@ IMPL_ABSTDLG_BASE(AbstractSwModalRedlineAcceptDlg_Impl); //add for SwModalRedlin
 IMPL_ABSTDLG_BASE(AbstractGlossaryDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractFldInputDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractInsFootNoteDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractInsertGrfRulerDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractInsTableDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractJavaEditDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractMailMergeDlg_Impl);
@@ -419,19 +417,6 @@ void AbstractInsFootNoteDlg_Impl::SetHelpId( const rtl::OString& sHelpId )
 void AbstractInsFootNoteDlg_Impl::SetText( const XubString& rStr )
 {
     pDlg->SetText( rStr );
-}
-
-String AbstractInsertGrfRulerDlg_Impl::GetGraphicName()
-{
-    return pDlg->GetGraphicName();
-}
-sal_Bool AbstractInsertGrfRulerDlg_Impl::IsSimpleLine()
-{
-    return pDlg->IsSimpleLine();
-}
-sal_Bool AbstractInsertGrfRulerDlg_Impl::HasImages() const
-{
-    return pDlg->HasImages();
 }
 
 void AbstractInsTableDlg_Impl::GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol,
@@ -1228,13 +1213,6 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclSwViewDialog( int nRe
     if ( pDlg )
         return new VclAbstractDialog_Impl( pDlg );
     return 0;
-}
-
-//add for SwInsertGrfRulerDlg
-AbstractInsertGrfRulerDlg * SwAbstractDialogFactory_Impl::CreateInsertGrfRulerDlg(Window * pParent)
-{
-    SwInsertGrfRulerDlg* pDlg = new SwInsertGrfRulerDlg(pParent);
-    return new AbstractInsertGrfRulerDlg_Impl(pDlg);
 }
 
 AbstractInsTableDlg * SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwView& rView) //add for SwInsTableDlg

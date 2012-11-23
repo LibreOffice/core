@@ -508,9 +508,6 @@ rtl::OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
             case( GALLERY_THEME_FONTWORK_VERTICAL ):
                 aFallback = "private://gallery/hidden/fontworkvertical";
                 break;
-            case( GALLERY_THEME_RULERS ):
-                aFallback = "Rulers";
-                break;
             case( GALLERY_THEME_SOUNDS ):
                 aFallback = "Sounds";
                 break;

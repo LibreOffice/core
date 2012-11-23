@@ -19,9 +19,6 @@ $(eval $(call gb_Zip_add_files,gallsystem,\
 	sg25.sdg \
 	sg25.sdv \
 	sg25.thm \
-	sg2.sdg \
-	sg2.sdv \
-	sg2.thm \
 	sg36.sdg \
 	sg36.sdv \
 	sg36.thm \

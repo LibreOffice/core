@@ -151,7 +151,6 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertFrame"/>
       <menu:menuitem menu:id=".uno:InsertTable"/>
-      <menu:menuitem menu:id=".uno:InsertGraphicRuler"/>
       <menu:menuitem menu:id=".uno:InsertGraphic"/>
       <menu:menuitem menu:id=".uno:InsertAVMedia"/>
       <menu:menu menu:id=".uno:ObjectMenu">

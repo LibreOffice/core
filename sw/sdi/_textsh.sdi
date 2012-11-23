@@ -278,11 +278,6 @@ interface BaseText
         StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    FN_INSERT_HRULER // status()
-    [
-        ExecMethod = ExecInsert ;
-        StateMethod = StateInsert ;
-    ]
     SID_INSERT_DIAGRAM // status(final|play)
     [
         ExecMethod = ExecInsert ;

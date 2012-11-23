@@ -143,13 +143,6 @@ String RID_GALLERYSTR_THEME_POWERPOINT
 
 // -----------------------------------------------------------------------------
 
-String RID_GALLERYSTR_THEME_RULERS
-{
-    Text [ en-US ] = "Rulers";
-};
-
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_SOUNDS
 {
     Text [ en-US ] = "Sounds";

@@ -132,7 +132,6 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/misc/glosbib \
     sw/source/ui/misc/glossary \
     sw/source/ui/misc/insfnote \
-    sw/source/ui/misc/insrule \
     sw/source/ui/misc/linenum \
     sw/source/ui/misc/num \
     sw/source/ui/misc/outline \

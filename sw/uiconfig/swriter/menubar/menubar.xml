@@ -199,7 +199,6 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertFrame"/>
       <menu:menuitem menu:id=".uno:InsertTable"/>
-      <menu:menuitem menu:id=".uno:InsertGraphicRuler"/>
       <menu:menu menu:id=".uno:GraphicMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertGraphic"/>
