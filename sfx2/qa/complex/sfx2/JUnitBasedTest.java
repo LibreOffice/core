@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package complex.sfx2;
 
 import org.openoffice.test.OfficeConnection;
@@ -12,10 +7,6 @@ import com.sun.star.uno.XComponentContext;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-/**
- *
- * @author Frank
- */
 public class JUnitBasedTest
 {
     // -----------------------------------------------------------------------------------------------------------------

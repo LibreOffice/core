@@ -16,11 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package complex.sfx2.undo;
 
 import com.sun.star.awt.Rectangle;
@@ -42,7 +37,6 @@ import static org.junit.Assert.*;
 
 /**
  * implements the {@link DocumentTest} interface on top of a drawing document
- * @author frank.schoenheit@oracle.com
  */
 public abstract class DrawingOrPresentationDocumentTest extends DocumentTestBase
 {

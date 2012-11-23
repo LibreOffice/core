@@ -16,11 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.openoffice.xforms;
 
 import com.sun.star.beans.XPropertySet;
