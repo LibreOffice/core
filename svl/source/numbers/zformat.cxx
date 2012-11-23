@@ -4584,17 +4584,19 @@ void SvNumberformat::ImpDigitFill(OUStringBuffer& sStr,                   // num
 
 bool SvNumberformat::ImpNumberFill( String& sStr,       // number string
                                     double& rNumber,        // number for "General" format
-                                    xub_StrLen& k,          // position within string
+                                    xub_StrLen& kin,          // position within string
                                     sal_uInt16& j,              // symbol index within format code
                                     sal_uInt16 nIx,             // subformat index
                                     short eSymbolType )     // type of stop condition
 {
     bool bRes = false;
-    k = sStr.Len();                         // behind last digit
+    OUStringBuffer sBuff(sStr);
+    sal_Int32 k = sBuff.getLength();                         // behind last digit
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     // no normal thousands separators if number divided by thousands
     bool bDoThousands = (rInfo.nThousand == 0);
     short nType;
+
     while (j > 0 && (nType = rInfo.nTypeArray[j]) != eSymbolType )
     {                                       // rueckwaerts:
         switch ( nType )
@@ -4602,49 +4604,51 @@ bool SvNumberformat::ImpNumberFill( String& sStr,       // number string
         case NF_SYMBOLTYPE_STAR:
             if( bStarFlag )
             {
-                sStr.Insert(rInfo.sStrArray[j][1], k);
-                sStr.Insert( sal_Unicode(0x1B), k );
+                sBuff.insert(k, rInfo.sStrArray[j][1]);
+                sBuff.insert(k, sal_Unicode(0x1B));
                 bRes = true;
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
-            k = InsertBlanks( sStr,k,rInfo.sStrArray[j][1] );
+            k = InsertBlanks(sBuff, k, rInfo.sStrArray[j][1] );
             break;
         case NF_SYMBOLTYPE_THSEP:
-        {
             // Same as in ImpNumberFillWithThousands() above, do not insert
             // if divided and regex [0#,],[^0#] and no other digit symbol
             // follows (which was already detected during scan of format
             // code, otherwise there would be no division), else do insert.
             if ( !bDoThousands && j < NumFor[nIx].GetCount()-1 )
+            {
                 bDoThousands = ((j == 0) ||
                                 (rInfo.nTypeArray[j-1] != NF_SYMBOLTYPE_DIGIT &&
                                  rInfo.nTypeArray[j-1] != NF_SYMBOLTYPE_THSEP) ||
                                 (rInfo.nTypeArray[j+1] == NF_SYMBOLTYPE_DIGIT));
+            }
             if ( bDoThousands && k > 0 )
             {
-                sStr.Insert(rInfo.sStrArray[j],k);
+                sBuff.insert(k, rInfo.sStrArray[j]);
             }
-        }
-        break;
+            break;
         case NF_SYMBOLTYPE_DIGIT:
         {
-            const String& rStr = rInfo.sStrArray[j];
-            const sal_Unicode* p1 = rStr.GetBuffer();
-            register const sal_Unicode* p = p1 + rStr.Len();
+            const OUString& rStr = rInfo.sStrArray[j];
+            const sal_Unicode* p1 = rStr.getStr();
+            register const sal_Unicode* p = p1 + rStr.getLength();
             while ( p1 < p-- )
             {
                 if (k > 0)
+                {
                     k--;
+                }
                 else
                 {
                     switch (*p)
                     {
                     case '0':
-                        sStr.Insert('0',0);
+                        sBuff.insert(0, (sal_Unicode)'0');
                         break;
                     case '?':
-                        sStr.Insert(' ',0);
+                        sBuff.insert(0, (sal_Unicode)' ');
                         break;
                     }
                 }
@@ -4652,25 +4656,27 @@ bool SvNumberformat::ImpNumberFill( String& sStr,       // number string
         }
         break;
         case NF_KEY_CCC:                // CCC-Waehrung
-            sStr.Insert(rScan.GetCurAbbrev(), k);
+            sBuff.insert(k, rScan.GetCurAbbrev());
             break;
         case NF_KEY_GENERAL:            // Standard im String
         {
             String sNum;
             ImpGetOutputStandard(rNumber, sNum);
             sNum = comphelper::string::stripStart(sNum, '-');    // Vorzeichen weg!!
-            sStr.Insert(sNum, k);
+            sBuff.insert(k, OUString(sNum));
         }
         break;
         case NF_SYMBOLTYPE_FRAC_FDIV:       // Do Nothing
             break;
 
         default:
-            sStr.Insert(rInfo.sStrArray[j],k);
+            sBuff.insert(k, rInfo.sStrArray[j]);
             break;
         }                                       // of switch
         j--;                                    // naechster String
     }                                           // of while
+    sStr = sBuff.makeStringAndClear();
+    kin = (xub_StrLen)k;
     return bRes;
 }
 
