@@ -1004,6 +1004,9 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         pDestTab->maNotes.CopyFromClip(maNotes, pDestTab->pDocument, nCol1, nRow1, nCol2, nRow2, 0, 0, pDestTab->nTab, bCloneCaption);
     }
 
+    if(pDestTab->pDocument->IsUndo() && (nFlags & IDF_ATTRIB))
+        pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(pDestTab->pDocument, *mpCondFormatList));
+
     if (pDBDataNoName)
     {
         ScDBData* pNewDBData = new ScDBData(*pDBDataNoName);
@@ -1118,6 +1121,9 @@ void ScTable::UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         //remove old notes
         if (nFlags & IDF_CONTENTS)
             pDestTab->maNotes.erase(nCol1, nRow1, nCol2, nRow2);
+
+        if (nFlags & IDF_ATTRIB)
+            pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(pDestTab->pDocument, *mpCondFormatList));
 
         bool bAddNotes = nFlags & (IDF_NOTE | IDF_ADDNOTES);
         if (bAddNotes)
