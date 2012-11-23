@@ -42,16 +42,23 @@ using rtl::OUStringToOString;
 namespace writerfilter {
 namespace rtftok {
 
+std::vector<RTFSymbol> RTFTokenizer::m_aRTFControlWords;
+bool RTFTokenizer::m_bControlWordsSorted;
+
 RTFTokenizer::RTFTokenizer(RTFDocumentImpl& rImport, SvStream* pInStream, uno::Reference<task::XStatusIndicator> const& xStatusIndicator)
     : m_rImport(rImport),
     m_pInStream(pInStream),
     m_xStatusIndicator(xStatusIndicator),
-    m_aRTFControlWords(std::vector<RTFSymbol>(aRTFControlWords, aRTFControlWords + nRTFControlWords)),
     m_nGroup(0),
     m_nLineNumber(0),
     m_nLineStartPos(0)
 {
-    std::sort(m_aRTFControlWords.begin(), m_aRTFControlWords.end());
+    if (!RTFTokenizer::m_bControlWordsSorted)
+    {
+        RTFTokenizer::m_bControlWordsSorted = true;
+        m_aRTFControlWords = std::vector<RTFSymbol>(aRTFControlWords, aRTFControlWords + nRTFControlWords);
+        std::sort(m_aRTFControlWords.begin(), m_aRTFControlWords.end());
+    }
 }
 
 RTFTokenizer::~RTFTokenizer()

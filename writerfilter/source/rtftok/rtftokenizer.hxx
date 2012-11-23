@@ -58,8 +58,9 @@ namespace writerfilter {
                 RTFDocumentImpl& m_rImport;
                 SvStream* m_pInStream;
                 uno::Reference<task::XStatusIndicator> const& m_xStatusIndicator;
-                // This is the same as m_aRTFControlWords, but sorted
-                std::vector<RTFSymbol> m_aRTFControlWords;
+                // This is the same as aRTFControlWords, but sorted
+                static std::vector<RTFSymbol> m_aRTFControlWords;
+                static bool m_bControlWordsSorted;
                 /// Same as the size of the importer's states, except that this can be negative for invalid input.
                 int m_nGroup;
                 sal_Int32 m_nLineNumber;
