@@ -1388,6 +1388,28 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                     if(bOldShellWasPagePreView|| bIsOwnDocument)
                     {
                         pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
+
+                        // Update the shell to toggle Header/Footer edit if needed
+                        sal_Bool bInHeader = sal_True;
+                        if ( pWrtShell->IsInHeaderFooter( &bInHeader ) )
+                        {
+                            if ( !bInHeader )
+                            {
+                                pWrtShell->SetShowHeaderFooterSeparator( Footer, true );
+                                pWrtShell->SetShowHeaderFooterSeparator( Header, false );
+                            }
+                            else
+                            {
+                                pWrtShell->SetShowHeaderFooterSeparator( Header, true );
+                                pWrtShell->SetShowHeaderFooterSeparator( Footer, false );
+                            }
+
+                            // Force repaint
+                            pWrtShell->GetWin()->Invalidate();
+                        }
+                        if ( pWrtShell->IsInHeaderFooter() != pWrtShell->IsHeaderFooterEdit() )
+                            pWrtShell->ToggleHeaderFooterEdit();
+
                         if( bSelectObj )
                         {
                             pWrtShell->SelectObj( aCrsrPos );
