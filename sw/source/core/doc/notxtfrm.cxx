@@ -609,7 +609,7 @@ sal_Bool SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
 
 
 sal_Bool SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
-                             SwCrsrMoveState* ) const
+                             SwCrsrMoveState*, bool ) const
 {
     SwCntntNode* pCNd = (SwCntntNode*)GetNode();
     pPos->nNode = *pCNd;
