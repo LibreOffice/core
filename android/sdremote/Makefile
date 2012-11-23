@@ -8,6 +8,9 @@
 
 include ../../config_host.mk
 
+install: all
+	$(ANDROID_SDK_HOME)/platform-tools/adb install -r ./bin/ImpressRemote-debug.apk
+
 all: properties
 	mkdir -p ../abs-lib/libs
 	cp $(ANDROID_SDK_HOME)/extras/android/support/v4/android-support-v4.jar ../abs-lib/libs
