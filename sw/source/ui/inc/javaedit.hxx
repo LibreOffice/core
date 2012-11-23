@@ -49,20 +49,16 @@ namespace sfx2 { class FileDialogHelper; }
 class SwJavaEditDialog : public SvxStandardDialog
 {
 private:
-    FixedText           aTypeFT;
-    Edit                aTypeED;
-    RadioButton         aUrlRB;
-    RadioButton         aEditRB;
-    PushButton          aUrlPB;
-    Edit                aUrlED;
-    MultiLineEdit       aEditED;
-    FixedLine           aPostItFL;
+    Edit*               m_pTypeED;
+    RadioButton*        m_pUrlRB;
+    RadioButton*        m_pEditRB;
+    PushButton*         m_pUrlPB;
+    Edit*               m_pUrlED;
+    VclMultiLineEdit*   m_pEditED;
 
-    OKButton            aOKBtn;
-    CancelButton        aCancelBtn;
-    ImageButton         aPrevBtn;
-    ImageButton         aNextBtn;
-    HelpButton          aHelpBtn;
+    OKButton*           m_pOKBtn;
+    PushButton*         m_pPrevBtn;
+    PushButton*         m_pNextBtn;
 
     rtl::OUString       aText;
     rtl::OUString       aType;
@@ -80,7 +76,7 @@ private:
     DECL_LINK(PrevHdl, void *);
     DECL_LINK(NextHdl, void *);
     DECL_LINK(RadioButtonHdl, void *);
-    DECL_LINK( InsertFileHdl, PushButton * );
+    DECL_LINK(InsertFileHdl, PushButton *);
     DECL_LINK(DlgClosedHdl, void *);
 
     virtual void    Apply();

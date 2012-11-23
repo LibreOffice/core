@@ -18,25 +18,7 @@
 #ifndef _SW_JAVAEDIT_HRC
 #define _SW_JAVAEDIT_HRC
 
-// defines ------------------------------------------------------------------
-
-#define FT_TYPE             10
-#define ED_TYPE             11
-#define RB_EDIT             12
-#define ED_EDIT             13
-#define FL_POSTIT                       14
-#define BTN_PREV            15
-#define BTN_NEXT            16
 #define STR_JAVA_EDIT       17
-#define STR_JAVA_INSERT     18
-#define RB_URL              19
-#define ED_URL              20
-#define PB_URL              21
-
-#define BTN_POST_OK         30
-#define BTN_POST_CANCEL     31
-#define BTN_POST_HELP       32
-
 
 #endif
 
