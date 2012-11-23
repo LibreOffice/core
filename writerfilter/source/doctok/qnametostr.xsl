@@ -22,8 +22,14 @@
 <xsl:include href="resourcetools.xsl"/>
 
 <xsl:template match="/">
+#include "doctok/resourceids.hxx"
+#include "resourcemodel/QNameToString.hxx"
+
+namespace writerfilter
+{
   <xsl:apply-templates select=".//UML:Model" mode="qnametostr"/>
   <xsl:apply-templates select='.//UML:Model' mode='sprmidstoxml'/>
   <xsl:apply-templates select='.//UML:Model' mode='analyzerdoctokids'/>
+}
 </xsl:template>
 </xsl:stylesheet>

@@ -16,10 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <doctok/resourceids.hxx>
-#include <ooxml/resourceids.hxx>
 #include <resourcemodel/QNameToString.hxx>
-#include <stdio.h>
 
 namespace writerfilter
 {
@@ -46,3 +43,10 @@ string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC QNameToString::operator()(Id qName)
     return mMap[qName];
 }
 
+QNameToString::QNameToString()
+{
+    init_doctok();
+    init_ooxml();
+}
+
+}

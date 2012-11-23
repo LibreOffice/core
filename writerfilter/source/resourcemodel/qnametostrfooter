@@ -1,7 +1,0 @@
-QNameToString::QNameToString()
-{
-    init_doctok();
-    init_ooxml();
-}
-
-}

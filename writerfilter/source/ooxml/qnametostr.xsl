@@ -113,8 +113,14 @@ void ooxmlidsToXML(::std::ostream &amp; out)
   </xsl:template>
 
   <xsl:template match="/">
+#include "ooxml/resourceids.hxx"
+#include "resourcemodel/QNameToString.hxx"
+
+namespace writerfilter
+{
     <xsl:call-template name="qnametostr"/>
     <xsl:call-template name="ooxmlidstoxml"/>
+}
   </xsl:template>
 
 </xsl:stylesheet>
