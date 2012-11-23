@@ -320,6 +320,8 @@ define gb_ExtensionTarget__localize_helpfile_onelang
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : HELPFILES += $(3)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
         $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3)
+$(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)-xhp.done : \
+        $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3)
 ifneq ($(strip $(gb_WITH_LANG)),)
 ifneq ($(filter-out en-US,$(5)),)
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
@@ -342,7 +344,8 @@ $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
             $(gb_ExtensionTarget_HELPEXCOMMAND) -i $$< -o $$@ -l $(5) \
                 -m $$$${MERGEINPUT} && \
             rm -rf $$$${MERGEINPUT}, \
-            cp $$< $$@))
+            cp $$< $$@)) && \
+            touch $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)-xhp.done
 
 endef
 
@@ -368,6 +371,8 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(4))))
 endif
 endif
+$(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
+        $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)-xhp.done
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(gb_ExtensionTarget_TREEXTARGET) | \
         $(2)/$(4)
