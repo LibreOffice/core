@@ -119,13 +119,15 @@ public class PresentationFragment extends SherlockFragment {
         if (mNewCoverflowHeight != 0) {
             ThumbnailAdapter aAdapter = (ThumbnailAdapter) mTopView
                             .getAdapter();
-            aAdapter.setHeight(mNewCoverflowHeight);
-            mTopView.setImageHeight(mNewCoverflowHeight);
-            aAdapter.setWidth(mNewCoverflowWidth);
-            mTopView.setImageWidth(mNewCoverflowWidth);
+            if ( aAdapter != null ) {
+                aAdapter.setHeight(mNewCoverflowHeight);
+                mTopView.setImageHeight(mNewCoverflowHeight);
+                aAdapter.setWidth(mNewCoverflowWidth);
+                mTopView.setImageWidth(mNewCoverflowWidth);
 
-            // We need to update the view now
-            aAdapter.notifyDataSetChanged();
+                // We need to update the view now
+                aAdapter.notifyDataSetChanged();
+            }
         }
 
         IntentFilter aFilter = new IntentFilter(

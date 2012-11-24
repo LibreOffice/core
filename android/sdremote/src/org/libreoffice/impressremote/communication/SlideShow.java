@@ -54,7 +54,12 @@ public class SlideShow {
             return BitmapFactory.decodeResource(mContext.getResources(),
                             R.drawable.image_loading);
         }
-        return BitmapFactory.decodeByteArray(aImage, 0, aImage.length);
+        Bitmap aBitmap = BitmapFactory.decodeByteArray(aImage, 0, aImage.length);
+        if (aBitmap == null) {
+            return BitmapFactory.decodeResource(mContext.getResources(),
+                            R.drawable.image_loading);
+        }
+        return aBitmap;
     }
 
     protected void putNotes(int aSlide, String aNotes) {

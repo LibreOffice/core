@@ -83,16 +83,20 @@ public class Receiver {
             } else if (aInstruction.equals("slide_preview")) {
                 int aSlideNumber = Integer.parseInt(aCommand.get(1));
                 String aImageString = aCommand.get(2);
-                byte[] aImage = Base64.decode(aImageString, Base64.DEFAULT);
+                try {
+                    byte[] aImage = Base64.decode(aImageString, Base64.DEFAULT);
 
-                // Store image internally
-                mSlideShow.putImage(aSlideNumber, aImage);
+                    // Store image internally
+                    mSlideShow.putImage(aSlideNumber, aImage);
 
-                Intent aIntent = new Intent(
-                                CommunicationService.MSG_SLIDE_PREVIEW);
-                aIntent.putExtra("slide_number", aSlideNumber);
-                LocalBroadcastManager.getInstance(mContext).sendBroadcast(
-                                aIntent);
+                    Intent aIntent = new Intent(
+                        CommunicationService.MSG_SLIDE_PREVIEW);
+                    aIntent.putExtra("slide_number", aSlideNumber);
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(
+                        aIntent);
+                } catch (IllegalArgumentException e) {
+                    // Bad data - tough luck
+                }
             } else if (aInstruction.equals("slide_notes")) {
                 int aSlideNumber = Integer.parseInt(aCommand.get(1));
                 String aNotes = new String();

@@ -95,7 +95,8 @@ public class PresentationActivity extends SherlockFragmentActivity {
         Intent aIntent = new Intent(this, SelectorActivity.class);
         aIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(aIntent);
-        mCommunicationService.disconnect();
+        if ( mCommunicationService != null )
+            mCommunicationService.disconnect();
     }
 
     @Override
