@@ -3032,11 +3032,12 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
 }
 
 bool SvNumberformat::ImpGetTimeOutput(double fNumber,
-                                   sal_uInt16 nIx,
-                                   String& OutString)
+                                      sal_uInt16 nIx,
+                                      String& OutString)
 {
     using namespace ::com::sun::star::i18n;
     bool bCalendarSet = false;
+    OUStringBuffer sBuff(OutString);
     double fNumberOrig = fNumber;
     bool bRes = false;
     bool bSign = false;
@@ -3062,7 +3063,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         fNumber -= floor(fNumber);          // sonst Datum abtrennen
     }
     bool bInputLine;
-    xub_StrLen nCntPost;
+    sal_Int32 nCntPost;
     if ( rScan.GetStandardPrec() == 300 &&
          0 < rInfo.nCntPost && rInfo.nCntPost < 7 )
     {   // round at 7 decimals (+5 of 86400 == 12 significant digits)
@@ -3072,7 +3073,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     else
     {
         bInputLine = false;
-        nCntPost = xub_StrLen(rInfo.nCntPost);
+        nCntPost = rInfo.nCntPost;
     }
     if (bSign && !rInfo.bThousand)     // kein []-Format
     {
@@ -3091,25 +3092,26 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     }
     sal_uLong nSeconds = (sal_uLong)floor( fTime );
 
-    String sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
-                                                  rtl_math_StringFormat_F, int(nCntPost), '.'));
-    sSecStr = comphelper::string::stripStart(sSecStr, '0');
-    sSecStr = comphelper::string::stripStart(sSecStr, '.');
+    OUStringBuffer sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
+                                                          rtl_math_StringFormat_F, int(nCntPost), '.'));
+    sSecStr.stripStart((sal_Unicode)'0');
+    sSecStr.stripStart((sal_Unicode)'.');
     if ( bInputLine )
     {
-        using namespace comphelper::string;
-        OUStringBuffer aBuf(stripEnd(sSecStr, '0'));
-        if (aBuf.getLength() < rInfo.nCntPost)
-            padToLength(aBuf, rInfo.nCntPost, '0');
-        sSecStr = aBuf.makeStringAndClear();
-        sSecStr = impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
-        nCntPost = sSecStr.Len();
+        sSecStr.stripEnd((sal_Unicode)'0');
+        for(sal_Int32 index = sSecStr.getLength(); index < rInfo.nCntPost; ++index)
+        {
+            sSecStr.append((sal_Unicode)'0');
+        }
+        impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
+        nCntPost = sSecStr.getLength();
     }
     else
     {
-        sSecStr = impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
+        impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
     }
-    xub_StrLen nSecPos = 0;                 // Zum Ziffernweisen
+
+    sal_Int32 nSecPos = 0;                 // Zum Ziffernweisen
                                             // abarbeiten
     sal_uLong nHour, nMin, nSec;
     if (!rInfo.bThousand)      // kein [] Format
@@ -3168,36 +3170,36 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     const sal_uInt16 nAnz = NumFor[nIx].GetCount();
     for (sal_uInt16 i = 0; i < nAnz; i++)
     {
-        xub_StrLen nLen;
+        sal_Int32 nLen;
         switch (rInfo.nTypeArray[i])
         {
         case NF_SYMBOLTYPE_STAR:
             if( bStarFlag )
             {
-                OutString += (sal_Unicode) 0x1B;
-                OutString += rInfo.sStrArray[i][1];
+                sBuff.append((sal_Unicode)0x1B);
+                sBuff.append(rInfo.sStrArray[i][1]);
                 bRes = true;
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
-            InsertBlanks( OutString, OutString.Len(),
-                          rInfo.sStrArray[i][1] );
+            InsertBlanks(sBuff, sBuff.getLength(),
+                         rInfo.sStrArray[i][1] );
             break;
         case NF_SYMBOLTYPE_STRING:
         case NF_SYMBOLTYPE_CURRENCY:
         case NF_SYMBOLTYPE_DATESEP:
         case NF_SYMBOLTYPE_TIMESEP:
         case NF_SYMBOLTYPE_TIME100SECSEP:
-            OutString += rInfo.sStrArray[i];
+            sBuff.append(rInfo.sStrArray[i]);
             break;
         case NF_SYMBOLTYPE_DIGIT:
             nLen = ( bInputLine && i > 0 &&
                      (rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_STRING ||
                       rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_TIME100SECSEP) ?
                      nCntPost : rInfo.sStrArray[i].getLength() );
-            for (xub_StrLen j = 0; j < nLen && nSecPos < nCntPost; j++)
+            for (sal_Int32 j = 0; j < nLen && nSecPos < nCntPost; j++)
             {
-                OutString += sSecStr.GetChar(nSecPos);
+                sBuff.append(sSecStr[nSecPos]);
                 nSecPos++;
             }
             break;
@@ -3211,42 +3213,42 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
             }
             if (cAmPm == 'a')
             {
-                OutString += GetCal().getDisplayName(
-                    CalendarDisplayIndex::AM_PM, AmPmValue::AM, 0 );
+                sBuff.append(GetCal().getDisplayName(
+                                 CalendarDisplayIndex::AM_PM, AmPmValue::AM, 0 ));
             }
             else
             {
-                OutString += GetCal().getDisplayName(
-                    CalendarDisplayIndex::AM_PM, AmPmValue::PM, 0 );
+                sBuff.append(GetCal().getDisplayName(
+                                 CalendarDisplayIndex::AM_PM, AmPmValue::PM, 0 ));
             }
             break;
         case NF_KEY_AP:                 // A/P
             if (cAmPm == 'a')
             {
-                OutString += 'a';
+                sBuff.append((sal_Unicode)'a');
             }
             else
             {
-                OutString += 'p';
+                sBuff.append((sal_Unicode)'p');
             }
             break;
         case NF_KEY_MI:                 // M
-            OutString += ImpIntToString( nIx, nMin );
+            sBuff.append(ImpIntToString( nIx, nMin ));
             break;
         case NF_KEY_MMI:                // MM
-            OutString += ImpIntToString( nIx, nMin, 2 );
+            sBuff.append(ImpIntToString( nIx, nMin, 2 ));
             break;
         case NF_KEY_H:                  // H
-            OutString += ImpIntToString( nIx, nHour );
+            sBuff.append(ImpIntToString( nIx, nHour ));
             break;
         case NF_KEY_HH:                 // HH
-            OutString += ImpIntToString( nIx, nHour, 2 );
+            sBuff.append(ImpIntToString( nIx, nHour, 2 ));
             break;
         case NF_KEY_S:                  // S
-            OutString += ImpIntToString( nIx, nSec );
+            sBuff.append(ImpIntToString( nIx, nSec ));
             break;
         case NF_KEY_SS:                 // SS
-            OutString += ImpIntToString( nIx, nSec, 2 );
+            sBuff.append(ImpIntToString( nIx, nSec, 2 ));
             break;
         default:
             break;
@@ -3254,8 +3256,9 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     }
     if (bSign && rInfo.bThousand)
     {
-        OutString.Insert('-',0);
+        sBuff.insert(0, (sal_Unicode)'-');
     }
+    OutString = sBuff.makeStringAndClear();
     return bRes;
 }
 
@@ -3503,7 +3506,7 @@ bool SvNumberformat::ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
 #endif
 
 // static
-void SvNumberformat::ImpAppendEraG( String& OutString,
+void SvNumberformat::ImpAppendEraG( OUStringBuffer& OutString,
                                     const CalendarWrapper& rCal,
                                     sal_Int16 nNatNum )
 {
@@ -3530,11 +3533,11 @@ void SvNumberformat::ImpAppendEraG( String& OutString,
             cEra = '?';
             break;
         }
-        OutString += cEra;
+        OutString.append(cEra);
     }
     else
     {
-        OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_ERA, nNatNum );
+        OutString.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_ERA, nNatNum ));
     }
 }
 
@@ -3632,6 +3635,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
 {
     using namespace ::com::sun::star::i18n;
     bool bRes = false;
+    OUStringBuffer sBuff(OutString);
     CalendarWrapper& rCal = GetCal();
     double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
     fNumber += fDiff;
@@ -3652,7 +3656,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     const sal_uInt16 nAnz = NumFor[nIx].GetCount();
     sal_Int16 nNatNum = NumFor[nIx].GetNatNum().GetNatNum();
-    String aYear;
+    OUString aYear;
 
     for (sal_uInt16 i = 0; i < nAnz; i++)
     {
@@ -3671,60 +3675,60 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
         case NF_SYMBOLTYPE_STAR:
             if( bStarFlag )
             {
-                OutString += (sal_Unicode) 0x1B;
-                OutString += rInfo.sStrArray[i][1];
+                sBuff.append((sal_Unicode) 0x1B);
+                sBuff.append(rInfo.sStrArray[i][1]);
                 bRes = true;
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
-            InsertBlanks( OutString, OutString.Len(), rInfo.sStrArray[i][1] );
+            InsertBlanks( sBuff, sBuff.getLength(), rInfo.sStrArray[i][1] );
             break;
         case NF_SYMBOLTYPE_STRING:
         case NF_SYMBOLTYPE_CURRENCY:
         case NF_SYMBOLTYPE_DATESEP:
         case NF_SYMBOLTYPE_TIMESEP:
         case NF_SYMBOLTYPE_TIME100SECSEP:
-            OutString += rInfo.sStrArray[i];
+            sBuff.append(rInfo.sStrArray[i]);
             break;
         case NF_KEY_M:                  // M
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_MONTH, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_MONTH, nNatNum ));
             break;
         case NF_KEY_MM:                 // MM
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_MONTH, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_MONTH, nNatNum ));
             break;
         case NF_KEY_MMM:                // MMM
-            OutString += rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
+            sBuff.append(rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
                                                                  static_cast<NfKeywordIndex>(rInfo.nTypeArray[i])),
-                                                nNatNum);
+                                                nNatNum));
             break;
         case NF_KEY_MMMM:               // MMMM
-            OutString += rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
+            sBuff.append(rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
                                                                  static_cast<NfKeywordIndex>(rInfo.nTypeArray[i])),
-                                                nNatNum);
+                                                nNatNum));
             break;
         case NF_KEY_MMMMM:              // MMMMM
-            OutString += rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
+            sBuff.append(rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
                                                                  static_cast<NfKeywordIndex>(rInfo.nTypeArray[i])),
-                                                nNatNum);
+                                                nNatNum));
             break;
         case NF_KEY_Q:                  // Q
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_QUARTER, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_QUARTER, nNatNum ));
             break;
         case NF_KEY_QQ:                 // QQ
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_QUARTER, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_QUARTER, nNatNum ));
             break;
         case NF_KEY_D:                  // D
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY, nNatNum ));
             break;
         case NF_KEY_DD:                 // DD
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_DAY, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_DAY, nNatNum ));
             break;
         case NF_KEY_DDD:                // DDD
             if ( bOtherCalendar )
             {
                 SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             }
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY_NAME, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY_NAME, nNatNum ));
             if ( bOtherCalendar )
             {
                 SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
@@ -3735,7 +3739,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             {
                 SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             }
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum ));
             if ( bOtherCalendar )
             {
                 SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
@@ -3746,7 +3750,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             {
                 SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             }
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNatNum ));
             if ( bOtherCalendar )
             {
                 SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
@@ -3758,57 +3762,61 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
                 SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             }
             aYear = rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum );
-            if (aYear.Len() < 4)
+            if (aYear.getLength() < 4)
             {
                 using namespace comphelper::string;
                 // Ensure that year consists of at least 4 digits, so it
                 // can be distinguished from 2 digits display and edited
                 // without suddenly being hit by the 2-digit year magic.
                 OUStringBuffer aBuf;
-                padToLength(aBuf, 4 - aYear.Len(), sal_Unicode('0'));
-                OUString aZero = impTransliterate(aBuf.makeStringAndClear(), NumFor[nIx].GetNatNum());
-                aYear.Insert(aZero, 0);
+                padToLength(aBuf, 4 - aYear.getLength(), sal_Unicode('0'));
+                impTransliterate(aBuf, NumFor[nIx].GetNatNum());
+                aBuf.append(aYear);
+                sBuff.append(aBuf);
             }
-            OutString += aYear;
+            else
+            {
+                sBuff.append(aYear);
+            }
             if ( bOtherCalendar )
             {
                 SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
         case NF_KEY_EC:                 // E
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNatNum ));
             break;
         case NF_KEY_EEC:                // EE
         case NF_KEY_R:                  // R
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum ));
             break;
         case NF_KEY_NN:                 // NN
         case NF_KEY_AAA:                // AAA
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY_NAME, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY_NAME, nNatNum ));
             break;
         case NF_KEY_NNN:                // NNN
         case NF_KEY_AAAA:               // AAAA
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum ));
             break;
         case NF_KEY_NNNN:               // NNNN
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
-            OutString += rLoc().getLongDateDayOfWeekSep();
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum ));
+            sBuff.append(rLoc().getLongDateDayOfWeekSep());
             break;
         case NF_KEY_WW :                // WW
-            OutString += ImpIntToString( nIx,
-                                         rCal.getValue( CalendarFieldIndex::WEEK_OF_YEAR ));
+            sBuff.append(ImpIntToString( nIx,
+                                         rCal.getValue( CalendarFieldIndex::WEEK_OF_YEAR )));
             break;
         case NF_KEY_G:                  // G
-            ImpAppendEraG( OutString, rCal, nNatNum );
+            ImpAppendEraG(sBuff, rCal, nNatNum );
             break;
         case NF_KEY_GG:                 // GG
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_ERA, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_ERA, nNatNum ));
             break;
         case NF_KEY_GGG:                // GGG
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_ERA, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_ERA, nNatNum ));
             break;
         case NF_KEY_RR:                 // RR => GGGEE
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR_AND_ERA, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR_AND_ERA, nNatNum ));
             break;
         }
     }
@@ -3816,6 +3824,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     {
         rCal.loadCalendar( aOrgCalendar, rLoc().getLanguageTag().getLocale() );  // restore calendar
     }
+    OutString = sBuff.makeStringAndClear();
     return bRes;
 }
 
@@ -3825,6 +3834,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
 {
     using namespace ::com::sun::star::i18n;
     bool bRes = false;
+    OUStringBuffer sBuff(OutString);
 
     CalendarWrapper& rCal = GetCal();
     double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
@@ -3832,7 +3842,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     bool bInputLine;
-    xub_StrLen nCntPost;
+    sal_Int32 nCntPost;
     if ( rScan.GetStandardPrec() == 300 &&
          0 < rInfo.nCntPost && rInfo.nCntPost < 7 )
     {
@@ -3870,28 +3880,27 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     sal_Int16 nNatNum = NumFor[nIx].GetNatNum().GetNatNum();
 
     sal_uLong nSeconds = (sal_uLong)floor( fTime );
-    String sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
+    OUStringBuffer sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
                                                   rtl_math_StringFormat_F, int(nCntPost), '.'));
-    sSecStr = comphelper::string::stripStart(sSecStr, '0');
-    sSecStr = comphelper::string::stripStart(sSecStr, '.');
+    sSecStr.stripStart((sal_Unicode)'0');
+    sSecStr.stripStart((sal_Unicode)'.');
     if ( bInputLine )
     {
-        using namespace comphelper::string;
-        OUStringBuffer aBuf(stripEnd(sSecStr, '0'));
-        if (aBuf.getLength() < rInfo.nCntPost)
+        sSecStr.stripEnd((sal_Unicode)'0');
+        for(sal_Int32 index = sSecStr.getLength(); index < rInfo.nCntPost; ++index)
         {
-            padToLength(aBuf, rInfo.nCntPost, '0');
+            sSecStr.append((sal_Unicode)'0');
         }
-        sSecStr = aBuf.makeStringAndClear();
-        sSecStr = impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
-        nCntPost = sSecStr.Len();
+        impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
+        nCntPost = sSecStr.getLength();
     }
     else
     {
-        sSecStr = impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
+        impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
     }
-    xub_StrLen nSecPos = 0;                     // Zum Ziffernweisen
-                                            // abarbeiten
+
+    sal_Int32 nSecPos = 0;                     // Zum Ziffernweisen
+                                               // abarbeiten
     sal_uLong nHour, nMin, nSec;
     if (!rInfo.bThousand)      // [] Format
     {
@@ -3945,8 +3954,8 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         }
     }
     const sal_uInt16 nAnz = NumFor[nIx].GetCount();
-    xub_StrLen nLen;
-    String aYear;
+    sal_Int32 nLen;
+    OUString aYear;
     for (sal_uInt16 i = 0; i < nAnz; i++)
     {
         switch (rInfo.nTypeArray[i])
@@ -3964,13 +3973,13 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         case NF_SYMBOLTYPE_STAR:
             if( bStarFlag )
             {
-                OutString += (sal_Unicode) 0x1B;
-                OutString += rInfo.sStrArray[i][1];
+                sBuff.append((sal_Unicode) 0x1B);
+                sBuff.append(rInfo.sStrArray[i][1]);
                 bRes = true;
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
-            InsertBlanks( OutString, OutString.Len(),
+            InsertBlanks( sBuff, sBuff.getLength(),
                           rInfo.sStrArray[i][1] );
             break;
         case NF_SYMBOLTYPE_STRING:
@@ -3978,100 +3987,100 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         case NF_SYMBOLTYPE_DATESEP:
         case NF_SYMBOLTYPE_TIMESEP:
         case NF_SYMBOLTYPE_TIME100SECSEP:
-            OutString += rInfo.sStrArray[i];
+            sBuff.append(rInfo.sStrArray[i]);
             break;
         case NF_SYMBOLTYPE_DIGIT:
             nLen = ( bInputLine && i > 0 &&
                      (rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_STRING ||
                       rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_TIME100SECSEP) ?
                      nCntPost : rInfo.sStrArray[i].getLength() );
-            for (xub_StrLen j = 0; j < nLen && nSecPos < nCntPost; j++)
+            for (sal_Int32 j = 0; j < nLen && nSecPos < nCntPost; j++)
             {
-                OutString += sSecStr.GetChar(nSecPos);
+                sBuff.append(sSecStr[ nSecPos ]);
                 nSecPos++;
             }
             break;
         case NF_KEY_AMPM:               // AM/PM
             if (cAmPm == 'a')
             {
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::AM_PM,
-                                                  AmPmValue::AM, 0 );
+                sBuff.append(rCal.getDisplayName( CalendarDisplayIndex::AM_PM,
+                                                  AmPmValue::AM, 0 ));
             }
             else
             {
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::AM_PM,
-                                                  AmPmValue::PM, 0 );
+                sBuff.append(rCal.getDisplayName( CalendarDisplayIndex::AM_PM,
+                                                  AmPmValue::PM, 0 ));
             }
             break;
         case NF_KEY_AP:                 // A/P
             if (cAmPm == 'a')
             {
-                OutString += 'a';
+                sBuff.append((sal_Unicode)'a');
             }
             else
             {
-                OutString += 'p';
+                sBuff.append((sal_Unicode)'p');
             }
             break;
         case NF_KEY_MI:                 // M
-            OutString += ImpIntToString( nIx, nMin );
+            sBuff.append(ImpIntToString( nIx, nMin ));
             break;
         case NF_KEY_MMI:                // MM
-            OutString += ImpIntToString( nIx, nMin, 2 );
+            sBuff.append(ImpIntToString( nIx, nMin, 2 ));
             break;
         case NF_KEY_H:                  // H
-            OutString += ImpIntToString( nIx, nHour );
+            sBuff.append(ImpIntToString( nIx, nHour ));
             break;
         case NF_KEY_HH:                 // HH
-            OutString += ImpIntToString( nIx, nHour, 2 );
+            sBuff.append(ImpIntToString( nIx, nHour, 2 ));
             break;
         case NF_KEY_S:                  // S
-            OutString += ImpIntToString( nIx, nSec );
+            sBuff.append(ImpIntToString( nIx, nSec ));
             break;
         case NF_KEY_SS:                 // SS
-            OutString += ImpIntToString( nIx, nSec, 2 );
+            sBuff.append(ImpIntToString( nIx, nSec, 2 ));
             break;
         case NF_KEY_M:                  // M
-            OutString += rCal.getDisplayString(
-                CalendarDisplayCode::SHORT_MONTH, nNatNum );
+            sBuff.append(rCal.getDisplayString(
+                             CalendarDisplayCode::SHORT_MONTH, nNatNum ));
             break;
         case NF_KEY_MM:                 // MM
-            OutString += rCal.getDisplayString(
-                CalendarDisplayCode::LONG_MONTH, nNatNum );
+            sBuff.append(rCal.getDisplayString(
+                             CalendarDisplayCode::LONG_MONTH, nNatNum ));
             break;
         case NF_KEY_MMM:                // MMM
-            OutString += rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
+            sBuff.append(rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
                                                                  static_cast<NfKeywordIndex>(rInfo.nTypeArray[i])),
-                                                nNatNum);
+                                                nNatNum));
             break;
         case NF_KEY_MMMM:               // MMMM
-            OutString += rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
+            sBuff.append(rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
                                                                  static_cast<NfKeywordIndex>(rInfo.nTypeArray[i])),
-                                                nNatNum);
+                                                nNatNum));
             break;
         case NF_KEY_MMMMM:              // MMMMM
-            OutString += rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
+            sBuff.append(rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
                                                                  static_cast<NfKeywordIndex>(rInfo.nTypeArray[i])),
-                                                nNatNum);
+                                                nNatNum));
             break;
         case NF_KEY_Q:                  // Q
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_QUARTER, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_QUARTER, nNatNum ));
             break;
         case NF_KEY_QQ:                 // QQ
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_QUARTER, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_QUARTER, nNatNum ));
             break;
         case NF_KEY_D:                  // D
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY, nNatNum ));
             break;
         case NF_KEY_DD:                 // DD
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_DAY, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_DAY, nNatNum ));
             break;
         case NF_KEY_DDD:                // DDD
             if ( bOtherCalendar )
             {
                 SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             }
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY_NAME, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY_NAME, nNatNum ));
             if ( bOtherCalendar )
             {
                 SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
@@ -4082,7 +4091,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             {
                 SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             }
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum ));
             if ( bOtherCalendar )
             {
                 SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
@@ -4093,68 +4102,72 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             {
                 SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             }
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNatNum ));
             if ( bOtherCalendar )
             {
                 SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
-        break;
+            break;
         case NF_KEY_YYYY:               // YYYY
             if ( bOtherCalendar )
             {
                 SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             }
             aYear = rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum );
-            if (aYear.Len() < 4)
+            if (aYear.getLength() < 4)
             {
                 using namespace comphelper::string;
                 // Ensure that year consists of at least 4 digits, so it
                 // can be distinguished from 2 digits display and edited
                 // without suddenly being hit by the 2-digit year magic.
                 OUStringBuffer aBuf;
-                padToLength(aBuf, 4 - aYear.Len(), sal_Unicode('0'));
-                OUString aZero = impTransliterate(aBuf.makeStringAndClear(), NumFor[nIx].GetNatNum());
-                aYear.Insert(aZero, 0);
+                padToLength(aBuf, 4 - aYear.getLength(), sal_Unicode('0'));
+                impTransliterate(aBuf, NumFor[nIx].GetNatNum());
+                aBuf.append(aYear);
+                sBuff.append(aBuf);
             }
-            OutString += aYear;
+            else
+            {
+                sBuff.append(aYear);
+            }
             if ( bOtherCalendar )
             {
                 SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
         case NF_KEY_EC:                 // E
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNatNum ));
             break;
         case NF_KEY_EEC:                // EE
         case NF_KEY_R:                  // R
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum ));
             break;
         case NF_KEY_NN:                 // NN
         case NF_KEY_AAA:                // AAA
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY_NAME, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY_NAME, nNatNum ));
             break;
         case NF_KEY_NNN:                // NNN
         case NF_KEY_AAAA:               // AAAA
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum ));
             break;
         case NF_KEY_NNNN:               // NNNN
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
-            OutString += rLoc().getLongDateDayOfWeekSep();
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum ));
+            sBuff.append(rLoc().getLongDateDayOfWeekSep());
             break;
         case NF_KEY_WW :                // WW
-            OutString += ImpIntToString( nIx, rCal.getValue( CalendarFieldIndex::WEEK_OF_YEAR ));
+            sBuff.append(ImpIntToString( nIx, rCal.getValue( CalendarFieldIndex::WEEK_OF_YEAR )));
             break;
         case NF_KEY_G:                  // G
-            ImpAppendEraG( OutString, rCal, nNatNum );
+            ImpAppendEraG( sBuff, rCal, nNatNum );
             break;
         case NF_KEY_GG:                 // GG
-            OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_ERA, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_ERA, nNatNum ));
             break;
         case NF_KEY_GGG:                // GGG
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_ERA, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_ERA, nNatNum ));
             break;
         case NF_KEY_RR:                 // RR => GGGEE
-            OutString += rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR_AND_ERA, nNatNum );
+            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR_AND_ERA, nNatNum ));
             break;
         }
     }
@@ -4162,6 +4175,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     {
         rCal.loadCalendar( aOrgCalendar, rLoc().getLanguageTag().getLocale() );  // restore calendar
     }
+    OutString = sBuff.makeStringAndClear();
     return bRes;
 }
 

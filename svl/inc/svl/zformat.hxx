@@ -641,8 +641,8 @@ private:
     // Append a "G" short era string of the given calendar. In the case of a
     // Gengou calendar this is a one character abbreviation, for other
     // calendars the XExtendedCalendar::getDisplayString() method is called.
-    SVL_DLLPRIVATE static void ImpAppendEraG( String& OutString, const CalendarWrapper& rCal,
-            sal_Int16 nNatNum );
+    SVL_DLLPRIVATE static void ImpAppendEraG( OUStringBuffer& OutStringBuffer, const CalendarWrapper& rCal,
+                                              sal_Int16 nNatNum );
 
     SVL_DLLPRIVATE bool ImpGetNumberOutput( double fNumber,
                          sal_uInt16 nIx,
