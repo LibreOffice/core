@@ -266,9 +266,9 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                 utl::SearchParam param(m_aBlackList[i], utl::SearchParam::SRCH_REGEXP);
                 utl::TextSearch  ts(param, LANGUAGE_DONTKNOW);
 
-                xub_StrLen start = 0;
-                xub_StrLen end   = static_cast<sal_uInt16>(aExtIdentifier.getLength());
-                if (ts.SearchFrwrd(aExtIdentifier, &start, &end))
+                sal_Int32 start = 0;
+                sal_Int32 end = aExtIdentifier.getLength();
+                if (ts.SearchForward(aExtIdentifier, &start, &end))
                     return false;
             }
         }
