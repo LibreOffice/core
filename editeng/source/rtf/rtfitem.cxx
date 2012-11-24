@@ -220,8 +220,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 
     int bChkStkPos = !bNewGroup && !aAttrStack.empty();
 
-    while( bWeiter && IsParserWorking() )  // as long as known 
-Attribute are recognized
+    while( bWeiter && IsParserWorking() )  // as long as known Attribute are recognized
     {
         switch( nToken )
         {
