@@ -71,10 +71,16 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/cntritem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/emphitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/bolnitem.hxx>
 #include <editeng/postitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include "svx/drawitem.hxx"
 #include <svx/tbcontrl.hxx>
@@ -571,14 +577,41 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                 // setup the font properties
                 Font aFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), aPixelSize );
 
-                const SfxPoolItem *pItem = aItemSet.GetItem( SID_ATTR_CHAR_POSTURE );
+                const SfxPoolItem *pItem = aItemSet.GetItem( SID_ATTR_CHAR_WEIGHT );
+                if ( pItem )
+                    aFont.SetWeight( static_cast< const SvxWeightItem* >( pItem )->GetWeight() );
+
+                pItem = aItemSet.GetItem( SID_ATTR_CHAR_POSTURE );
                 if ( pItem )
                     aFont.SetItalic( static_cast< const SvxPostureItem* >( pItem )->GetPosture() );
 
-                pItem = aItemSet.GetItem( SID_ATTR_CHAR_WEIGHT );
+                pItem = aItemSet.GetItem( SID_ATTR_CHAR_CONTOUR );
                 if ( pItem )
-                    aFont.SetWeight( static_cast< const SvxWeightItem* >( pItem )->GetWeight() );
-                // TODO more properties
+                    aFont.SetOutline( static_cast< const SvxContourItem* >( pItem )->GetValue() );
+
+                pItem = aItemSet.GetItem( SID_ATTR_CHAR_SHADOWED );
+                if ( pItem )
+                    aFont.SetShadow( static_cast< const SvxShadowedItem* >( pItem )->GetValue() );
+
+                pItem = aItemSet.GetItem( SID_ATTR_CHAR_RELIEF );
+                if ( pItem )
+                    aFont.SetRelief( static_cast< FontRelief >( static_cast< const SvxCharReliefItem* >( pItem )->GetValue() ) );
+
+                pItem = aItemSet.GetItem( SID_ATTR_CHAR_UNDERLINE );
+                if ( pItem )
+                    aFont.SetUnderline( static_cast< const SvxUnderlineItem* >( pItem )->GetLineStyle() );
+
+                pItem = aItemSet.GetItem( SID_ATTR_CHAR_OVERLINE );
+                if ( pItem )
+                    aFont.SetOverline( static_cast< FontUnderline >( static_cast< const SvxOverlineItem* >( pItem )->GetValue() ) );
+
+                pItem = aItemSet.GetItem( SID_ATTR_CHAR_STRIKEOUT );
+                if ( pItem )
+                    aFont.SetStrikeout( static_cast< const SvxCrossedOutItem* >( pItem )->GetStrikeout() );
+
+                pItem = aItemSet.GetItem( SID_ATTR_CHAR_EMPHASISMARK );
+                if ( pItem )
+                    aFont.SetEmphasisMark( static_cast< const SvxEmphasisMarkItem* >( pItem )->GetEmphasisMark() );
 
                 // setup the device & draw
                 Font aOldFont( pDevice->GetFont() );
