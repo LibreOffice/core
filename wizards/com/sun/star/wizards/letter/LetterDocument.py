@@ -35,8 +35,6 @@ from com.sun.star.awt.FontWeight import BOLD
 
 class LetterDocument(TextDocument):
 
-    TextDocument = None
-
     def __init__(self, xMSF, listener):
         super(LetterDocument,self).__init__(xMSF, listener, None,
             "WIZARD_LIVE_PREVIEW")
@@ -175,7 +173,8 @@ class LetterDocument(TextDocument):
 
 class BusinessPaperObject(object):
 
-    def __init__(self, FrameText, Width, Height, XPos, YPos):
+    def __init__(self, xTextDocument, FrameText, Width, Height, XPos, YPos):
+        self.xTextDocument = xTextDocument
         self.iWidth = Width
         self.iHeight = Height
         self.iXPos = XPos

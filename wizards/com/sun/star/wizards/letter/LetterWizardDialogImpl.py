@@ -454,7 +454,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             if self.numLogoHeight.Value == 0:
                 self.numLogoHeight.Value = 0.1
             self.BusCompanyLogo = BusinessPaperObject(
-                "Company Logo", int(self.numLogoWidth.Value * 1000),
+                self.myLetterDoc.xTextDocument, "Company Logo",
+                int(self.numLogoWidth.Value * 1000),
                 int(self.numLogoHeight.Value * 1000),
                 int(self.numLogoX.Value * 1000),
                 self.numLogoY.Value * 1000)
@@ -506,7 +507,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.numAddressHeight.Value = 0.1
 
             self.BusCompanyAddress = BusinessPaperObject(
-                "Company Address", int(self.numAddressWidth.Value * 1000),
+                self.myLetterDoc.xTextDocument, "Company Address",
+                int(self.numAddressWidth.Value * 1000),
                 int(self.numAddressHeight.Value * 1000),
                 int(self.numAddressX.Value * 1000),
                 int(self.numAddressY.Value * 1000))
@@ -576,8 +578,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                     xReceiverFrame, "VertOrientPosition"))
                 iReceiverHeight = int(0.5 * 1000)
                 self.BusCompanyAddressReceiver = BusinessPaperObject(
-                    " ", iFrameWidth, iReceiverHeight, iFrameX,
-                    iFrameY - iReceiverHeight)
+                    self.myLetterDoc.xTextDocument, " ", iFrameWidth, iReceiverHeight,
+                    iFrameX, iFrameY - iReceiverHeight)
                 self.setPossibleAddressReceiver(False)
             except NoSuchElementException:
                 traceback.print_exc()
@@ -605,7 +607,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.numFooterHeight.Value = 0.1
 
             self.BusFooter = BusinessPaperObject(
-                "Footer", self.myLetterDoc.DocSize.Width,
+                self.myLetterDoc.xTextDocument, "Footer",
+                self.myLetterDoc.DocSize.Width,
                 int(self.numFooterHeight.Value * 1000), 0,
                 int(self.myLetterDoc.DocSize.Height - \
                     (self.numFooterHeight.Value * 1000)))
