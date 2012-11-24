@@ -2080,13 +2080,6 @@ void SvNumberformat::Build50Formatstring( OUString& rStr ) const
     rStr = StripNewCurrencyDelimiters( sFormatstring, true );
 }
 
-void SvNumberformat::ImpGetOutputStandard(double& fNumber, String& OutString)
-{
-    OUString sTemp(OutString);
-    ImpGetOutputStandard(fNumber, sTemp);
-    OutString = sTemp;
-}
-
 void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUStringBuffer& OutString)
 {
     OUString sTemp;

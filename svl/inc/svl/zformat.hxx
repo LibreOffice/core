@@ -570,7 +570,6 @@ private:
                                                           const LocaleType & aTmpLocale );
 
     // standard number output
-    SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, String& OutString );
     SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, OUString& OutString );
     SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, OUStringBuffer& OutString );
     SVL_DLLPRIVATE void ImpGetOutputStdToPrecision( double& rNumber, OUString& rOutString, sal_uInt16 nPrecision ) const;
