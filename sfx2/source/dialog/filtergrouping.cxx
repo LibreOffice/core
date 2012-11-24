@@ -354,11 +354,11 @@ namespace sfx2
         // operate on a single filter name
         void operator() ( const FilterName& _rName )
         {
-#ifdef DBG_UTIL
             ::std::pair< FilterGroupEntryReferrer::iterator, bool > aInsertRes =
-#endif
             m_rEntryReferrer.insert( FilterGroupEntryReferrer::value_type( _rName, m_aClassPos ) );
-            DBG_ASSERT( aInsertRes.second, "ReferToFilterEntry::operator(): already have an element for this name!" );
+            SAL_WARN_IF(
+                !aInsertRes.second, "sfx2.dialog",
+                "already have an element for " << _rName);
         }
     };
 
