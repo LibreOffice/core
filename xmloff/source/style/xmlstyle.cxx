@@ -418,7 +418,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
     {
         const SvXMLTokenMap& rTokenMap = GetStyleStylesElemTokenMap();
         sal_uInt16 nToken = rTokenMap.Get( p_nPrefix, rLocalName );
-        switch( nToken  )
+        switch( nToken )
         {
             case XML_TOK_STYLE_STYLE:
             case XML_TOK_STYLE_DEFAULT_STYLE:
@@ -804,8 +804,8 @@ SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                         const OUString& rLName,
                                         const uno::Reference< xml::sax::XAttributeList > &, sal_Bool bAuto ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    msParaStyleServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.ParagraphStyle" ) ),
-    msTextStyleServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CharacterStyle" ) ),
+    msParaStyleServiceName( "com.sun.star.style.ParagraphStyle" ),
+    msTextStyleServiceName( "com.sun.star.style.CharacterStyle" ),
     mpImpl( new SvXMLStylesContext_Impl( bAuto ) ),
     mpStyleStylesElemTokenMap( 0 )
 {
