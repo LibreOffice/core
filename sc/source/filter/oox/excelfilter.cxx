@@ -129,7 +129,14 @@ bool ExcelFilter::importDocument() throw()
     WorkbookGlobalsRef xBookGlob = WorkbookHelper::constructGlobals( *this );
     if ( xBookGlob.get() && importFragment( new WorkbookFragment( *xBookGlob, aWorkbookPath ) ) )
     {
-        importDocumentProperties();
+        try
+        {
+            importDocumentProperties();
+        }
+        catch( const Exception& e )
+        {
+            SAL_WARN("sc", "exception when importing document properties " << e.Message);
+        }
         return true;
     }
     return false;
