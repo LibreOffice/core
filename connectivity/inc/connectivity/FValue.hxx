@@ -46,10 +46,21 @@ namespace connectivity
     {
         union
         {
-            sal_Bool        m_bBool;
+            bool            m_bBool;
+
             sal_Int8        m_nInt8;
+            // doesn't work: Any doesn't have UNSIGNED_BYTE type
+            sal_uInt8       m_uInt8;
+
             sal_Int16       m_nInt16;
+            sal_uInt16      m_uInt16;
+
             sal_Int32       m_nInt32;
+            sal_uInt32      m_uInt32;
+
+            sal_Int64       m_nInt64;
+            sal_uInt64      m_uInt64;
+
             rtl_uString*    m_pString;
 
             void*           m_pValue;           // can contains double, etc
@@ -128,12 +139,33 @@ namespace connectivity
             m_aValue.m_pString = NULL;
             operator=(_rRH);
         }
+
+        ORowSetValue(const sal_uInt8& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::TINYINT)
+            ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
+            ,m_bSigned(sal_False)
+        {
+            m_aValue.m_pString = NULL;
+            operator=(_rRH);
+        }
         ORowSetValue(const sal_Int16& _rRH)
             :m_eTypeKind(::com::sun::star::sdbc::DataType::SMALLINT)
             ,m_bNull(sal_True)
             ,m_bBound(sal_True)
             ,m_bModified(sal_False)
             ,m_bSigned(sal_True)
+        {
+            m_aValue.m_pString = NULL;
+            operator=(_rRH);
+        }
+        ORowSetValue(const sal_uInt16& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::SMALLINT)
+            ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
+            ,m_bSigned(sal_False)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
@@ -148,6 +180,16 @@ namespace connectivity
             m_aValue.m_pString = NULL;
             operator=(_rRH);
         }
+        ORowSetValue(const sal_uInt32& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::INTEGER)
+            ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
+            ,m_bSigned(sal_False)
+        {
+            m_aValue.m_pString = NULL;
+            operator=(_rRH);
+        }
         ORowSetValue(const sal_Int64& _rRH)
             :m_eTypeKind(::com::sun::star::sdbc::DataType::BIGINT)
             ,m_bNull(sal_True)
@@ -158,8 +200,18 @@ namespace connectivity
             m_aValue.m_pString = NULL;
             operator=(_rRH);
         }
+        ORowSetValue(const sal_uInt64& _rRH)
+            :m_eTypeKind(::com::sun::star::sdbc::DataType::BIGINT)
+            ,m_bNull(sal_True)
+            ,m_bBound(sal_True)
+            ,m_bModified(sal_False)
+            ,m_bSigned(sal_False)
+        {
+            m_aValue.m_pString = NULL;
+            operator=(_rRH);
+        }
 
-        ORowSetValue(const sal_Bool& _rRH)
+        ORowSetValue(const bool& _rRH)
             :m_eTypeKind(::com::sun::star::sdbc::DataType::BIT)
             ,m_bNull(sal_True)
             ,m_bBound(sal_True)
@@ -231,11 +283,20 @@ namespace connectivity
         ORowSetValue& operator=(const ORowSetValue& _rRH);
 
         // simple types
-        ORowSetValue& operator=(const sal_Bool _rRH);
+        ORowSetValue& operator=(const bool _rRH);
+
         ORowSetValue& operator=(const sal_Int8& _rRH);
+        ORowSetValue& operator=(const sal_uInt8& _rRH);
+
         ORowSetValue& operator=(const sal_Int16& _rRH);
+        ORowSetValue& operator=(const sal_uInt16& _rRH);
+
         ORowSetValue& operator=(const sal_Int32& _rRH);
+        ORowSetValue& operator=(const sal_uInt32& _rRH);
+
         ORowSetValue& operator=(const sal_Int64& _rRH);
+        ORowSetValue& operator=(const sal_uInt64& _rRH);
+
         ORowSetValue& operator=(const double& _rRH);
         ORowSetValue& operator=(const float& _rRH);
 
@@ -250,11 +311,19 @@ namespace connectivity
         // we the possiblity to save a any for bookmarks
         ORowSetValue& operator=(const ::com::sun::star::uno::Any& _rAny);
 
-        operator sal_Bool() const   {   return isNull() ? sal_False : getBool();    }
-        operator sal_Int8() const   {   return isNull() ? static_cast<sal_Int8>(0) : getInt8(); }
+        operator bool() const   {   return isNull() ? sal_False : getBool();    }
+        operator sal_Int8() const   {   return isNull() ? static_cast<sal_Int8>(0) : getInt8();   }
+        operator sal_uInt8() const  {   return isNull() ? static_cast<sal_uInt8>(0) : getUInt8(); }
+
         operator sal_Int16() const  {   return isNull() ? static_cast<sal_Int16>(0) : getInt16();   }
+        operator sal_uInt16() const {   return isNull() ? static_cast<sal_uInt16>(0) : getUInt16(); }
+
         operator sal_Int32() const  {   return isNull() ? 0         : getInt32();   }
+        operator sal_uInt32() const {   return isNull() ? 0         : getUInt32();  }
+
         operator sal_Int64() const  {   return isNull() ? 0         : getLong();    }
+        operator sal_uInt64() const {   return isNull() ? 0         : getULong();   }
+
         operator float() const      {   return isNull() ? (float)0.0: getFloat();   }
         operator double() const     {   return isNull() ? 0.0       : getDouble();  }
 
@@ -314,13 +383,22 @@ namespace connectivity
 
         // before calling one of this methods, be sure that the value is not null
         void*           getValue()  const               { OSL_ENSURE(m_bBound,"Value is not bound!");return m_aValue.m_pValue;              }
-        sal_Bool        getBool()   const;
+        bool           getBool()   const;
+
         sal_Int8        getInt8()   const;
+        sal_uInt8       getUInt8()  const;
+
         sal_Int16       getInt16()  const;
+        sal_uInt16      getUInt16() const;
+
         sal_Int32       getInt32()  const;
+        sal_uInt32      getUInt32() const;
+
         sal_Int64       getLong()   const;
+        sal_uInt64      getULong()  const;
+
         double          getDouble() const;
-        float           getFloat() const;
+        float           getFloat()  const;
 
         ::rtl::OUString getString() const;      // makes a automatic conversion if type isn't a string
         ::com::sun::star::util::Date                getDate()       const;

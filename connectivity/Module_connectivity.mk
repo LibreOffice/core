@@ -160,6 +160,11 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
 
 endif
 
+# general tests
+$(eval $(call gb_Module_add_check_targets,connectivity,\
+	CppunitTest_connectivity_commontools \
+))
+
 endif
 
 # vim: set noet sw=4 ts=4:
