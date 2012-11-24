@@ -341,6 +341,9 @@ MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu
 MY_DRIVERS += hsqldb jdbc
 .END
+.IF "$(ENABLE_PDFIMPORT)" == "YES"
+MY_FILES_main += pdfimport/pdf_import_filter.xcu
+.END
 .IF "$(ENABLE_TDEAB)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-tdeab.xcu
 .END

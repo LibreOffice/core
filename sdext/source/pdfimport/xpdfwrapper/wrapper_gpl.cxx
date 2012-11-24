@@ -80,7 +80,7 @@ int main(int argc, char **argv)
     }
 #endif
 
-    if( argc < 2 )
+    if( argc != 3 )
         return 1;
 
     // read config file
@@ -113,11 +113,7 @@ int main(int argc, char **argv)
 
     // PDFDoc takes over ownership for all strings below
     GooString* pFileName    = new GooString(argv[1]);
-    GooString* pTempErrFileName     = new GooString("_err.pdf");
-    GooString* pTempErrFileNamePath = new GooString(argv[0]);
-
-    GooString* pErrFileName = new GooString(pTempErrFileNamePath,pTempErrFileName);
-
+    GooString* pErrFileName = new GooString(argv[2]);
 
     // check for password string(s)
     GooString* pOwnerPasswordStr( aPwBuf[0] != 0

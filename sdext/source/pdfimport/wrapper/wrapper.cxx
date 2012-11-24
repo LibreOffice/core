@@ -23,9 +23,11 @@
 #include "pdfihelper.hxx"
 
 #include "osl/file.h"
+#include "osl/file.hxx"
 #include "osl/thread.h"
 #include "osl/process.h"
 #include "osl/diagnose.h"
+#include "rtl/bootstrap.hxx"
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/strbuf.hxx"
@@ -35,7 +37,6 @@
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/awt/FontDescriptor.hpp"
-#include "com/sun/star/deployment/PackageInformationProvider.hpp"
 #include "com/sun/star/beans/XMaterialHolder.hpp"
 #include "com/sun/star/rendering/PathCapType.hpp"
 #include "com/sun/star/rendering/PathJoinType.hpp"
@@ -64,10 +65,6 @@
 #include "rtl/bootstrap.h"
 
 #include <string.h> // memcmp
-
-#ifndef PDFI_IMPL_IDENTIFIER
-# error define implementation name for pdfi extension, please!
-#endif
 
 using namespace com::sun::star;
 
@@ -981,30 +978,40 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
 
     ::rtl::OUString aSysUPath;
     if( osl_getSystemPathFromFileURL( rURL.pData, &aSysUPath.pData ) != osl_File_E_None )
+    {
+        SAL_WARN(
+            "sdext.pdfimport",
+            "getSystemPathFromFileURL(" << rURL << ") failed");
         return false;
+    }
     rtl::OUString aDocName( rURL.copy( rURL.lastIndexOf( sal_Unicode('/') )+1 ) );
 
     // check for encryption, if necessary get password
     rtl::OUString aPwd( rPwd );
     bool bIsEncrypted = false;
     if( checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) == false )
+    {
+        SAL_INFO(
+            "sdext.pdfimport",
+            "checkEncryption(" << aSysUPath << ") failed");
         return false;
+    }
 
-    // Retrieve package location URL, xpdfimport executable is located there:
-    OUString location(
-        deployment::PackageInformationProvider::get(xContext)->
-        getPackageLocation(PDFI_IMPL_IDENTIFIER));
-    if (location.isEmpty()) {
+    // Determine xpdfimport executable URL:
+    OUString converterURL("$BRAND_BASE_DIR/program/xpdfimport");
+    rtl::Bootstrap::expandMacros(converterURL); //TODO: detect failure
+
+    // Determine pathname of xpdfimport_err.pdf:
+    OUString errPathname("$BRAND_BASE_DIR/share/xpdfimport/xpdfimport_err.pdf");
+    rtl::Bootstrap::expandMacros(errPathname); //TODO: detect failure
+    if (osl::FileBase::getSystemPathFromFileURL(errPathname, errPathname)
+        != osl::FileBase::E_None)
+    {
         SAL_WARN(
             "sdext.pdfimport",
-            "getPackageLocation(" PDFI_IMPL_IDENTIFIER ") failed");
+            "getSystemPathFromFileURL(" << errPathname << ") failed");
         return false;
     }
-    rtl::OUStringBuffer converterURL(location);
-    if (!location.endsWith("/")) {
-        converterURL.append('/');
-    }
-    converterURL.append("xpdfimport");
 
     // spawn separate process to keep LGPL/GPL code apart.
     // ---------------------------------------------------
@@ -1024,15 +1031,15 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
     nEnv = 1;
     #endif
 
-    rtl_uString*  args[] = { aSysUPath.pData };
-    sal_Int32 nArgs = 1;
+    rtl_uString*  args[] = { aSysUPath.pData, errPathname.pData };
+    sal_Int32 nArgs = 2;
 
     oslProcess    aProcess;
     oslFileHandle pIn  = NULL;
     oslFileHandle pOut = NULL;
     oslFileHandle pErr = NULL;
     const oslProcessError eErr =
-        osl_executeProcess_WithRedirectedIO(converterURL.makeStringAndClear().pData,
+        osl_executeProcess_WithRedirectedIO(converterURL.pData,
                                             args,
                                             nArgs,
                                             osl_Process_SEARCHPATH|osl_Process_HIDDEN,
@@ -1044,7 +1051,13 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
     try
     {
         if( eErr!=osl_Process_E_None )
+        {
+            SAL_WARN(
+                "sdext.pdfimport",
+                "executeProcess of " << converterURL << " failed with "
+                    << +eErr);
             return false;
+        }
 
         if( pIn )
         {

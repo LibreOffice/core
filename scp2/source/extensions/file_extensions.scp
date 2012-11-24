@@ -72,19 +72,6 @@ End
 
 #endif
 
-/* ** PDF Import ** */
-
-#ifndef WITHOUT_EXTENSION_PDFIMPORT
-
-File gid_File_Oxt_PDF_Import
-    TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_PDF_Import;
-    Name = "pdfimport.oxt";
-End
-
-#endif
-
 /* ** Numbertext ** */
 
 #ifdef WITH_EXTENSION_NUMBERTEXT

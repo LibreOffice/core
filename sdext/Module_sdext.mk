@@ -42,18 +42,18 @@ endif
 
 ifeq ($(ENABLE_PDFIMPORT),YES)
 $(eval $(call gb_Module_add_targets,sdext,\
-    CustomTarget_pdfimport \
-    Executable_pdf2xml \
-    Executable_pdfunzip \
     Executable_xpdfimport \
-    Extension_pdfimport \
     Library_pdfimport \
-    Rdb_pdfimport \
+    Package_pdfimport_xcu \
+    Package_pdfimport_xpdfimport \
     StaticLibrary_pdfimport_s \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sdext,\
     CppunitTest_pdfimport \
+    CustomTarget_pdfimport \
+    Executable_pdf2xml \
+    Executable_pdfunzip \
 ))
 endif
 

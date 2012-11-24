@@ -37,6 +37,7 @@ $(eval $(call gb_Library_set_include,pdfimport,\
 ))
 
 $(eval $(call gb_Library_use_libraries,pdfimport,\
+    basegfx \
     cppu \
     cppuhelper \
     sal \
@@ -45,8 +46,6 @@ $(eval $(call gb_Library_use_libraries,pdfimport,\
 $(eval $(call gb_Library_use_static_libraries,pdfimport,\
     pdfimport_s \
 ))
-
-$(eval $(call gb_Library_use_library_objects,pdfimport,basegfx))
 
 $(eval $(call gb_Library_use_externals,pdfimport,\
     zlib \

@@ -87,21 +87,6 @@ Module gid_Module_Optional_Extensions_MEDIAWIKI
 End
 #endif
 
-/* ** PDF Import ** */
-
-#ifndef WITHOUT_EXTENSION_PDFIMPORT
-Module gid_Module_Optional_Extensions_PDFIMPORT
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_PDFIMPORT);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_PDF_Import );
-    Minimal = NO;
-    Default = YES;
-    Styles = ( );
-End
-#endif
-
 /* ** Numbertext ** */
 
 #ifdef WITH_EXTENSION_NUMBERTEXT

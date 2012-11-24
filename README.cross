@@ -139,8 +139,6 @@ CXX_FOR_BUILD=ccache g++
 --disable-build-mozilla
 --disable-directx
 --disable-ext-nlpsolver
---disable-ext-pdfimport
---disable-ext-presenter-console
 --disable-ext-presenter-minimizer
 --disable-ext-report-builder
 --disable-ext-scripting-beanshell
@@ -149,6 +147,7 @@ CXX_FOR_BUILD=ccache g++
 --disable-ext-wiki-publisher
 --disable-mozilla
 --disable-nss-module
+--disable-pdfimport
 --disable-zenity
 --enable-python=system
 --with-system-altlinuxhyph

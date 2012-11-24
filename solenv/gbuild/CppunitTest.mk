@@ -305,8 +305,14 @@ $(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(OUTDIR)/unittest/registry
 
 endef
 
+gb_CppunitTest__program_symlink = $(OUTDIR)/unittest/installation/program
+$(gb_CppunitTest__program_symlink) :
+	mkdir -p $(dir $@)
+	ln -s ../../bin $@
+
 define gb_CppunitTest_use_executable
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Executable_get_target,$(2))
+$(call gb_CppunitTest_get_target,$(1)) :| $(gb_CppunitTest__program_symlink)
 endef
 
 define gb_CppunitTest__forward_to_Linktarget

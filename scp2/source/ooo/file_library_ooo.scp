@@ -903,6 +903,19 @@ STD_LIB_FILE( gid_File_Lib_Log, log)
 
 STD_LIB_FILE( gid_File_Lib_Pdffilter, pdffilter)
 
+#if !defined WITHOUT_PDFIMPORT
+File gid_File_PDFImport
+    TXT_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+#if defined UNX
+    Name = STRING(CONCAT2(pdfimport.uno,UNXSUFFIX));
+#else
+    Name = "pdfimport.uno.dll";
+#endif
+    Styles = (PACKED);
+End
+#endif
+
 SPECIAL_LIB_FILE(gid_File_Lib_Deployment,deployment)
 
 SPECIAL_LIB_FILE(gid_File_Lib_DeploymentGui,deploymentgui)

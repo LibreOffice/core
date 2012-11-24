@@ -32,12 +32,7 @@
 
 #include <rtl/math.hxx>
 #include <osl/file.hxx>
-#include <osl/process.h>
-#include <cppuhelper/compbase1.hxx>
-#include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
@@ -45,15 +40,11 @@
 #include "cppunit/plugin/TestPlugIn.h"
 #include <test/bootstrapfixture.hxx>
 
-#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XColorSpace.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/BlendMode.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tools/canvastools.hxx>
@@ -461,92 +452,6 @@ namespace
         bool                      m_bDashedLineSeen;
     };
 
-    /*
-      This is a (hackish) way to set correct path to the xpdfimport executable
-      during build. Because $OUTDIR/bin is not in $PATH, it will not be found
-      directly. We also know that xpdf_ImportFromFile() tries to get the path
-      through the extension mechanism, but there are no registered extensions
-      available when this test is run. So we create a phony
-      PackageInformationProvider that pretends such extension exists and passes
-      out the path we need .-)
-     */
-
-    typedef cppu::WeakComponentImplHelper1<deployment::XPackageInformationProvider> PackageInformationProvider_Base;
-
-    class PackageInformationProvider
-        : private cppu::BaseMutex
-        , public PackageInformationProvider_Base
-    {
-    public:
-        PackageInformationProvider()
-            : PackageInformationProvider_Base(m_aMutex)
-        {
-        }
-
-    private:
-        virtual rtl::OUString SAL_CALL getPackageLocation(rtl::OUString const&)
-            throw()
-        {
-            rtl::OUString const aLocation(PDFIMPORT_EXECUTABLE_LOCATION);
-            return aLocation;
-        }
-
-        virtual uno::Sequence<uno::Sequence<rtl::OUString> > SAL_CALL isUpdateAvailable(rtl::OUString const&)
-            throw()
-        {
-            // dummy impl.
-            uno::Sequence<uno::Sequence<rtl::OUString> > const aSeq;
-            return aSeq;
-        }
-
-        virtual uno::Sequence<uno::Sequence<rtl::OUString> > SAL_CALL getExtensionList()
-            throw()
-        {
-            // dummy impl.
-            uno::Sequence<uno::Sequence<rtl::OUString> > const aSeq;
-            return aSeq;
-        }
-    };
-
-    typedef cppu::WeakComponentImplHelper1<uno::XComponentContext> ComponentContext_Base;
-
-    class ComponentContext
-        : private cppu::BaseMutex
-        , public ComponentContext_Base
-    {
-    public:
-        explicit ComponentContext(uno::Reference<uno::XComponentContext> const& xParent)
-            : ComponentContext_Base(m_aMutex)
-            , m_xParent(xParent)
-        {
-            assert(m_xParent.is());
-        }
-
-    private:
-        virtual uno::Any SAL_CALL getValueByName(rtl::OUString const& rName)
-            throw()
-        {
-            if ( rName == "/singletons/com.sun.star.deployment.PackageInformationProvider" )
-            {
-                uno::Reference<deployment::XPackageInformationProvider> const xProvider(new PackageInformationProvider());
-                uno::Any aComponent;
-                aComponent <<= xProvider;
-                return aComponent;
-            }
-
-            return m_xParent->getValueByName(rName);
-        }
-
-        virtual uno::Reference<lang::XMultiComponentFactory> SAL_CALL getServiceManager()
-            throw()
-        {
-            return m_xParent->getServiceManager();
-        }
-
-    private:
-        uno::Reference<uno::XComponentContext> m_xParent;
-    };
-
     class PDFITest : public test::BootstrapFixture
     {
     public:
@@ -557,7 +462,7 @@ namespace
                                        pSink,
                                        uno::Reference< task::XInteractionHandler >(),
                                        rtl::OUString(),
-                                       impl_getComponentContext() );
+                                       getComponentContext() );
 
             // make destruction explicit, a bunch of things are
             // checked in the destructor
@@ -566,7 +471,7 @@ namespace
 
         void testOdfDrawExport()
         {
-            pdfi::PDFIRawAdaptor aAdaptor( impl_getComponentContext() );
+            pdfi::PDFIRawAdaptor aAdaptor( getComponentContext() );
             aAdaptor.setTreeVisitorFactory( createDrawTreeVisitorFactory() );
 
             ::rtl::OUString tempFileURL;
@@ -581,7 +486,7 @@ namespace
 
         void testOdfWriterExport()
         {
-            pdfi::PDFIRawAdaptor aAdaptor( impl_getComponentContext() );
+            pdfi::PDFIRawAdaptor aAdaptor( getComponentContext() );
             aAdaptor.setTreeVisitorFactory( createWriterTreeVisitorFactory() );
 
             ::rtl::OUString tempFileURL;
@@ -599,13 +504,6 @@ namespace
         CPPUNIT_TEST(testOdfWriterExport);
         CPPUNIT_TEST(testOdfDrawExport);
         CPPUNIT_TEST_SUITE_END();
-
-    private:
-        uno::Reference<uno::XComponentContext> impl_getComponentContext()
-        {
-            uno::Reference<uno::XComponentContext> const xCtxt(new ComponentContext(getComponentContext()));
-            return xCtxt;
-        }
     };
 
 }

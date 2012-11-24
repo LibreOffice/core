@@ -10,19 +10,19 @@
 <component xmlns="http://openoffice.org/2010/uno-components"
         loader="com.sun.star.loader.SharedLibrary"
 	prefix="pdfimport">
-    <implementation name="com.sun.star.comp.documents.HybridPDFImport">
+    <implementation name="org.libreoffice.comp.documents.HybridPDFImport">
         <service name="com.sun.star.document.ImportFilter"/>
     </implementation>
-    <implementation name="com.sun.star.comp.documents.WriterPDFImport">
+    <implementation name="org.libreoffice.comp.documents.WriterPDFImport">
         <service name="com.sun.star.document.ImportFilter"/>
     </implementation>
-    <implementation name="com.sun.star.comp.documents.DrawPDFImport">
+    <implementation name="org.libreoffice.comp.documents.DrawPDFImport">
         <service name="com.sun.star.document.ImportFilter"/>
     </implementation>
-    <implementation name="com.sun.star.comp.documents.ImpressPDFImport">
+    <implementation name="org.libreoffice.comp.documents.ImpressPDFImport">
         <service name="com.sun.star.document.ImportFilter"/>
     </implementation>
-    <implementation name="com.sun.star.comp.documents.PDFDetector">
+    <implementation name="org.libreoffice.comp.documents.PDFDetector">
         <service name="com.sun.star.document.ImportFilter"/>
     </implementation>
 </component>

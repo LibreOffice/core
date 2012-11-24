@@ -303,6 +303,10 @@ my_components += \
 my_components += component/extensions/source/plugin/pl
 .END
 
+.IF "$(ENABLE_PDFIMPORT)" == "YES"
+my_components += component/sdext/source/pdfimport/pdfimport
+.END
+
 .IF "$(OS)" == "WNT"
 my_components += component/xmlsecurity/util/xsec_xmlsec.windows
 .ELIF "$(OS)" != "ANDROID" && "$(OS)" != "IOS" #FIXME, get nss&xmlsec building

@@ -569,6 +569,11 @@ AC_ARG_ENABLE(extensions,
         [Disable all add-on extension functionality. Work in progress, use only if you are hacking on it.])
 )
 
+AC_ARG_ENABLE(pdfimport,
+    AS_HELP_STRING([--disable-pdfimport],
+        [Disable PDF import.])
+)
+
 AC_ARG_ENABLE(scripting,
     AS_HELP_STRING([--disable-scripting],
         [Disable BASIC, Java and Python. Work in progress, use only if you are hacking on it.])
@@ -625,11 +630,6 @@ AC_ARG_ENABLE(ext-numbertext,
 AC_ARG_ENABLE(ext-oooblogger,
     AS_HELP_STRING([--enable-ext-oooblogger],
         [Enable the OOo Blogger extension.])
-)
-
-AC_ARG_ENABLE(ext-pdfimport,
-    AS_HELP_STRING([--disable-ext-pdfimport],
-        [Disable the PDF Import extension.])
 )
 
 AC_ARG_ENABLE(ext-presenter-minimizer,
@@ -1383,7 +1383,7 @@ AC_ARG_WITH(system-openldap,
 
 AC_ARG_WITH(system-poppler,
     AS_HELP_STRING([--with-system-poppler],
-        [Use system poppler. (only needed for pdfimport extension)]),,
+        [Use system poppler (only needed for PDF import).]),,
     [with_system_poppler="$with_system_libs"])
 
 AC_ARG_WITH(system-apache-commons,
@@ -9824,9 +9824,9 @@ else
 fi
 AC_SUBST(ENABLE_MINIMIZER)
 
-# pdf import extension?
-AC_MSG_CHECKING([whether to build the PDF Import extension])
-if test "x$enable_ext_pdfimport" != "xno" -a "x$enable_extension_integration" != "xno"; then
+# pdf import?
+AC_MSG_CHECKING([whether to build the PDF import])
+if test "x$enable_pdfimport" != "xno"; then
   AC_MSG_RESULT([yes])
   ENABLE_PDFIMPORT=YES
 
@@ -9857,7 +9857,7 @@ if test "x$enable_ext_pdfimport" != "xno" -a "x$enable_extension_integration" !=
 else
   AC_MSG_RESULT([no])
   ENABLE_PDFIMPORT=NO
-  SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_PDFIMPORT"
+  SCPDEFS="$SCPDEFS -DWITHOUT_PDFIMPORT"
 fi
 AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
