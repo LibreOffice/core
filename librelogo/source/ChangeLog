@@ -1,3 +1,7 @@
+
+2012-11-24 László Németh:
+    * zero turtle width in hideturtle mode to draw at the left border of the page
+
 2012-11-06 László Németh:
     * uppercase/translation icon:
     - expands and uppercase Logo commands (fd -> FORWARD)

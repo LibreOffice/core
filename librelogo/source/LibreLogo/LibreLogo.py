@@ -12,7 +12,7 @@ import re, random, traceback, itertools
 import threading, time as __time__
 
 ctx = uno.getComponentContext()
-__lngpath__ = re.sub("[\w_.]*$", "", ctx.ServiceManager.createInstanceWithContext("org.openoffice.LibreLogo.LibreLogoDummy", ctx).get_path())
+__lngpath__ = re.sub("[\w_.]*$", "", ctx.ServiceManager.createInstanceWithContext("org.openoffice.LibreLogo.LibreLogoDummy", ctx).get_path()) # instead of PackageInformationProvider, see #115393#
 __translang__ = "cz|de|dk|en_US|es|fr|hu|it|nl|no|pl|pt|ru|se|sl" # FIXME supported languages for language guessing, expand this list, according to the localizations
 __lng__ = {}
 __docs__ = {}
@@ -137,6 +137,12 @@ for i in range(32):
     __dots__ += [__Point__(round(sin(360.0/32 * i * pi/180.0) * 1000), round(cos(360.0/32 * i * pi/180) * 1000))]
 __bezierdot__.Coordinates = (tuple(__dots__),)
 __bezierdot__.Flags = ((0,) * 32,)
+
+# turtle shape
+__TURTLESHAPE__ = [((__Point__(-60, 0), __Point__(0, -100), __Point__(60, 0)), (__Point__(0, 0), __Point__(0, 100)), \
+            (__Point__(-250, 0),), (__Point__(0, 250),), (__Point__(250, 0),), (__Point__(0, -250),), # single points for wider selection
+            (__Point__(0, 0),)), # last point for position handling
+            ((__Point__(0, 0),),)] # hidden turtle (single point to draw at the left border of the page area)
 
 def __getdocument__():
     global __docs__, _
@@ -397,9 +403,7 @@ def __initialize__():
         shape.TextWrap = __THROUGHT__
         shape.Opaque = True
         _.drawpage.add(shape) 
-        shape.PolyPolygon = ((__Point__(-60, 0), __Point__(0, -100), __Point__(60, 0)), (__Point__(0, 0), __Point__(0, 100)), \
-            (__Point__(-250, 0),), (__Point__(0, 250),), (__Point__(250, 0),), (__Point__(0, -250),), # single points for wider selection
-            (__Point__(0, 0),)) # last point for position handling
+        shape.PolyPolygon = __TURTLESHAPE__[0]
         _.shapecache[__TURTLE__] = shape
         shape.Name = __TURTLE__
         _.initialize()
@@ -461,6 +465,7 @@ def hideturtle():
     turtle = __getshape__(__TURTLE__)
     if turtle:
         __visible__(turtle, False)
+        turtle.PolyPolygon = __TURTLESHAPE__[1]
         turtle.LineTransparence, turtle.FillTransparence = 100, 100 # for saved files
     __dispatcher__(".uno:Escape")
 
@@ -472,6 +477,7 @@ def showturtle():
         pencolor(_.pencolor)
         fillcolor(_.areacolor)
         pensize(_.pensize/__PT_TO_TWIP__)
+        turtle.PolyPolygon = __TURTLESHAPE__[0]
         __visible__(turtle, True)
         _.doc.CurrentController.select(__getshape__(__TURTLE__))
     else:
@@ -1308,7 +1314,6 @@ def __compil__(s):
     s = re.sub(ur"(?i)\n[ ]*(%s)[ ]+" % __l12n__(_.lng)['TO'], "\n__def__ ", s)
     subnames = re.findall(u"(?iu)(?<=__def__ )\w+", s)
     globs = ""
-
     functions = ["range", "__int__", "__float__", "Random", "Input", "__string__", "len", "round", "abs", "sin", "cos", "sqrt", "set", "list", "tuple", "re.sub", "re.search", "re.findall", "sorted", "min", "max"]
 
     if len(subnames) > 0:
