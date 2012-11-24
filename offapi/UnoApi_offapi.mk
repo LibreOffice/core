@@ -247,6 +247,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb/applic
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdbc,\
 	ConnectionPool \
+	DriverManager \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/security,\
 	CertificateContainer \
@@ -3194,6 +3195,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdbc,\
 	XDriver \
 	XDriverAccess \
 	XDriverManager \
+	XDriverManager2 \
 	XGeneratedResultSet \
 	XIsolatedConnection \
 	XMultipleResults \
