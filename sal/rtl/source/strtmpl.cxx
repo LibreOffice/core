@@ -844,6 +844,49 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
 
 /* ----------------------------------------------------------------------- */
 
+sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfuInt64 )( IMPL_RTL_STRCODE* pStr,
+                                                     sal_uInt64 n,
+                                                     sal_Int16 nRadix )
+    SAL_THROW_EXTERN_C()
+{
+    sal_Char    aBuf[RTL_STR_MAX_VALUEOFINT64];
+    sal_Char*   pBuf = aBuf;
+    sal_Int32   nLen = 0;
+    sal_uInt64  nValue = n;
+
+    /* Radix must be valid */
+    if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
+        nRadix = 10;
+
+    /* create a recursive buffer with all values, except the last one */
+    do
+    {
+        sal_Char nDigit = (sal_Char)(nValue % nRadix);
+        nValue /= nRadix;
+        if ( nDigit > 9 )
+            *pBuf = (nDigit-10) + 'a';
+        else
+            *pBuf = (nDigit + '0' );
+        pBuf++;
+    }
+    while ( nValue > 0 );
+
+    /* copy the values in the right direction into the destination buffer */
+    do
+    {
+        pBuf--;
+        *pStr = *pBuf;
+        pStr++;
+        nLen++;
+    }
+    while ( pBuf != aBuf );
+    *pStr = 0;
+
+    return nLen;
+}
+
+/* ----------------------------------------------------------------------- */
+
 sal_Bool SAL_CALL IMPL_RTL_STRNAME( toBoolean )( const IMPL_RTL_STRCODE* pStr )
     SAL_THROW_EXTERN_C()
 {

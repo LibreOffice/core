@@ -1982,6 +1982,23 @@ public:
     }
 
     /**
+      Returns the string representation of the long argument.
+
+      This function can't be used for language specific conversion.
+
+      @param    ll          a uInt64.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+    */
+    static OUString valueOf( sal_uInt64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
+    {
+        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT64];
+        rtl_uString* pNewData = 0;
+        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt64( aBuf, ll, radix ) );
+        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
       Returns the string representation of the float argument.
 
       This function can't be used for language specific conversion.
