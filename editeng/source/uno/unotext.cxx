@@ -2173,6 +2173,15 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendParagraph(
     return xRet;
 }
 
+uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::finishParagraphInsert(
+        const uno::Sequence< beans::PropertyValue >& /*rCharAndParaProps*/,
+        const uno::Reference< text::XTextRange >& /*rTextRange*/ )
+    throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
+{
+    uno::Reference< text::XTextRange > xRet;
+    return xRet;
+}
+
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::finishParagraph(
         const uno::Sequence< beans::PropertyValue >& rCharAndParaProps )
     throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
@@ -2200,6 +2209,16 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::finishParagraph(
         xRet = pRange;
         pRange->SetSelection( aSel );
     }
+    return xRet;
+}
+
+uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::insertTextPortion(
+        const ::rtl::OUString& /*rText*/,
+        const uno::Sequence< beans::PropertyValue >& /*rCharAndParaProps*/,
+        const uno::Reference< text::XTextRange>& /*rTextRange*/ )
+    throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
+{
+    uno::Reference< text::XTextRange > xRet;
     return xRet;
 }
 

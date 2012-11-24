@@ -220,6 +220,17 @@ public:
                 rCharacterAndParagraphProperties)
         throw (::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextRange > SAL_CALL
+        finishParagraphInsert(
+            const ::com::sun::star::uno::Sequence<
+                    ::com::sun::star::beans::PropertyValue >&
+                rCharacterAndParagraphProperties,
+            const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::text::XTextRange >&
+                xInsertPosition)
+        throw (::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::uno::RuntimeException);
 
     // XTextPortionAppend
     virtual ::com::sun::star::uno::Reference<
@@ -229,6 +240,19 @@ public:
             const ::com::sun::star::uno::Sequence<
                     ::com::sun::star::beans::PropertyValue >&
                 rCharacterAndParagraphProperties)
+        throw (::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextRange > SAL_CALL
+        insertTextPortion(
+            const ::rtl::OUString& rText,
+            const ::com::sun::star::uno::Sequence<
+                    ::com::sun::star::beans::PropertyValue >&
+                rCharacterAndParagraphProperties,
+            const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::text::XTextRange >&
+                rTextRange)
         throw (::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::uno::RuntimeException);
 

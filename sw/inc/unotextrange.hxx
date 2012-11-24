@@ -43,7 +43,7 @@ class SwPaM;
 class SwUnoCrsr;
 class SwFrmFmt;
 
-class SwUnoInternalPaM
+class SW_DLLPUBLIC SwUnoInternalPaM
     : public SwPaM
 {
 
@@ -62,7 +62,7 @@ namespace sw {
 
     void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget);
 
-    bool XTextRangeToSwPaM(SwUnoInternalPaM& rToFill,
+    SW_DLLPUBLIC bool XTextRangeToSwPaM(SwUnoInternalPaM& rToFill,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > & xTextRange);
 

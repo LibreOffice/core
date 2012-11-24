@@ -53,6 +53,29 @@ interface XTextPortionAppend : com::sun::star::uno::XInterface
                         raises( com::sun::star::lang::IllegalArgumentException,
                                         com::sun::star::beans::UnknownPropertyException );
 
+        /** inserts a new text portion to the paragraph at a given position.
+
+                <p> The sequence can contain all the properties defined by the service <type scope="com::sun::star::text">TextPortion.
+        </p>
+
+        @param
+            Text contains the text to be inserted.
+
+        @param
+            CharacterAndParagraphProperties can contain all the properties defined by the service
+                      <type scope="com::sun::star::text">Paragraph.
+
+        @param
+            TextRange specifies the position of the insert.
+
+     */
+         com::sun::star::text::XTextRange  insertTextPortion(
+                                [in] string Text,
+                                [in] com::sun::star::beans::PropertyValues CharacterAndParagraphProperties,
+                                [in] com::sun::star::text::XTextRange TextRange)
+                        raises( com::sun::star::lang::IllegalArgumentException,
+                                        com::sun::star::beans::UnknownPropertyException );
+
 };
 
 
