@@ -841,14 +841,16 @@ void SwFEShell::Insert( const String& rGrfName, const String& rFltName,
         const Point aPt( GetCrsrDocPos() );
         SwFlyFrm* pFrm = pFmt->GetFrm( &aPt );
 
-        // fdo#36681: Invalidate the content and layout to refresh the picture anchoring
-        // properly
-        SwPageFrm* pPageFrm = pFrm->FindPageFrmOfAnchor();
-        pPageFrm->InvalidateFlyLayout();
-        pPageFrm->InvalidateCntnt();
-
         if( pFrm )
+        {
+            // fdo#36681: Invalidate the content and layout to refresh
+            // the picture anchoring properly
+            SwPageFrm* pPageFrm = pFrm->FindPageFrmOfAnchor();
+            pPageFrm->InvalidateFlyLayout();
+            pPageFrm->InvalidateCntnt();
+
             SelectFlyFrm( *pFrm, sal_True );
+        }
         else
             GetLayout()->SetAssertFlyPages();
     }
