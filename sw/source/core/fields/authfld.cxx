@@ -95,7 +95,7 @@ SwFieldType*    SwAuthorityFieldType::Copy()  const
 void    SwAuthorityFieldType::RemoveField(long nHandle)
 {
 #if OSL_DEBUG_LEVEL > 0
-    sal_Bool bRemoved = sal_False;
+    bool bRemoved = false;
 #endif
     for(sal_uInt16 j = 0; j < m_DataArr.size(); j++)
     {
@@ -104,7 +104,7 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
         if(nRet == nHandle)
         {
 #if OSL_DEBUG_LEVEL > 0
-            bRemoved = sal_True;
+            bRemoved = true;
 #endif
             pTemp->RemoveRef();
             if(!pTemp->GetRefCount())
@@ -271,7 +271,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
 {
     //find the field in a sorted array of handles,
 #if OSL_DEBUG_LEVEL > 0
-    sal_Bool bCurrentFieldWithoutTextNode = sal_False;
+    bool bCurrentFieldWithoutTextNode = false;
 #endif
     if(!m_SequArr.empty() && m_SequArr.size() != m_DataArr.size())
         DelSequenceArray();
@@ -289,7 +289,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
             {
 #if OSL_DEBUG_LEVEL > 0
                 if(nHandle == ((SwAuthorityField*)pFmtFld->GetFld())->GetHandle())
-                    bCurrentFieldWithoutTextNode = sal_True;
+                    bCurrentFieldWithoutTextNode = true;
 #endif
                 continue;
             }

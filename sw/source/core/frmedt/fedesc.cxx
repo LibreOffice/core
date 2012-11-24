@@ -63,10 +63,10 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 #if OSL_DEBUG_LEVEL > 0
     // SS does not change PageDesc, but only sets the attibute.
     // The Pagedesc should be available in the document
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     for ( sal_uInt16 nTst = 0; nTst < GetPageDescCnt(); ++nTst )
         if ( &rDesc == &GetPageDesc( nTst ) )
-            bFound = sal_True;
+            bFound = true;
     OSL_ENSURE( bFound, "ChgCurPageDesc with invalid descriptor." );
 #endif
 

@@ -151,7 +151,7 @@ sal_Bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pOb
                       // (e.g. due to Unmark->MarkListHasChgd) arrives
 
     const SdrMarkList &rMrkList = pDView->GetMarkedObjectList();
-    const sal_Bool bHadSelection = rMrkList.GetMarkCount() ? sal_True : sal_False;
+    const bool bHadSelection = rMrkList.GetMarkCount();
     const sal_Bool bAddSelect = 0 != (SW_ADD_SELECT & nFlag);
     const sal_Bool bEnterGroup = 0 != (SW_ENTER_GROUP & nFlag);
     SwFlyFrm* pOldSelFly = 0;
@@ -160,7 +160,7 @@ sal_Bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pOb
     if( bHadSelection )
     {
         // call Unmark when !bAddSelect or if fly was selected
-        sal_Bool bUnmark = !bAddSelect;
+        bool bUnmark = !bAddSelect;
 
         if ( rMrkList.GetMarkCount() == 1 )
         {
@@ -180,7 +180,7 @@ sal_Bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pOb
                     // corner.
                     Point aPt( pOldSelFly->Frm().Pos() );
                     aPt.X() -= 1;
-                    sal_Bool bUnLockView = !IsViewLocked();
+                    bool bUnLockView = !IsViewLocked();
                     LockView( sal_True );
                     SetCrsr( aPt, sal_True );
                     if( bUnLockView )
@@ -191,7 +191,7 @@ sal_Bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pOb
                 {
                     GetWin()->Invalidate( pOldSelFly->Frm().SVRect() );
                 }
-                bUnmark = sal_True;
+                bUnmark = true;
             }
         }
         if ( bUnmark )
@@ -413,7 +413,7 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                 if( pPage->GetSortedObjs() )
                 {
                     int i;
-                    sal_Bool bOld = sal_False;
+                    bool bOld = false;
                     Point aCenter( pOld->Frm().Left() + pOld->Frm().Width()/2,
                                    pOld->Frm().Top() + pOld->Frm().Height()/2 );
                     Point aBest;
@@ -425,7 +425,7 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                         {
                             SwFlyFrm* pTmp = static_cast<SwFlyFrm*>(pAnchObj);
                             if( pTmp == pOld )
-                                bOld = sal_True;
+                                bOld = true;
                             else
                             {
                                 const SwFlyFrm* pCheck = pFly ? pTmp : 0;
@@ -442,34 +442,34 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                                             pTmp->Frm().Width()/2,
                                             pTmp->Frm().Top() +
                                             pTmp->Frm().Height()/2 );
-                                sal_Bool bAccept = sal_False;
+                                bool bAccept = false;
                                 switch( nDir ) {
                                     case SW_MOVE_RIGHT:
                                     {
                                         bAccept = LESS_X( aCenter, aNew, bOld )
                                              && ( !pNewFly ||
-                                             LESS_X( aNew, aBest, sal_False ) );
+                                             LESS_X( aNew, aBest, false ) );
                                         break;
                                     }
                                     case SW_MOVE_LEFT:
                                     {
                                         bAccept = LESS_X( aNew, aCenter, !bOld )
                                              && ( !pNewFly ||
-                                             LESS_X( aBest, aNew, sal_True ) );
+                                             LESS_X( aBest, aNew, true ) );
                                         break;
                                     }
                                     case SW_MOVE_UP:
                                     {
                                         bAccept = LESS_Y( aNew, aCenter, !bOld )
                                              && ( !pNewFly ||
-                                             LESS_Y( aBest, aNew, sal_True ) );
+                                             LESS_Y( aBest, aNew, true ) );
                                         break;
                                     }
                                     case SW_MOVE_DOWN:
                                     {
                                         bAccept = LESS_Y( aCenter, aNew, bOld )
                                              && ( !pNewFly ||
-                                             LESS_Y( aNew, aBest, sal_False ) );
+                                             LESS_Y( aNew, aBest, false ) );
                                         break;
                                     }
                                 }
@@ -780,7 +780,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
     for( sal_uInt16 j = 0; j < pLst->GetMarkCount(); ++j )
     {
         SwPageFrm *pPage;
-        sal_Bool bCheckNeighbours = sal_False;
+        bool bCheckNeighbours = false;
         sal_Int16 aHori = text::HoriOrientation::NONE;
         SwRect aRect;
         SdrObject *pO = pLst->GetMark( 0 )->GetMarkedSdrObj();
@@ -793,7 +793,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
             if( text::HoriOrientation::NONE != aHori && text::HoriOrientation::CENTER != aHori &&
                 pFly->IsFlyAtCntFrm() )
             {
-                bCheckNeighbours = sal_True;
+                bCheckNeighbours = true;
                 pFly->InvalidatePos();
                 pFly->Frm().Pos().Y() += 1;
             }
@@ -1252,18 +1252,18 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
  * Does the object include a control or groups,
  * which comprise only controls
  * --------------------------------------------------*/
-static sal_Bool lcl_IsControlGroup( const SdrObject *pObj )
+static bool lcl_IsControlGroup( const SdrObject *pObj )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if(pObj->ISA(SdrUnoObj))
         bRet = sal_True;
     else if( pObj->ISA( SdrObjGroup ) )
     {
-        bRet = sal_True;
+        bRet = true;
         const SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
         for ( sal_uInt16 i = 0; i < pLst->GetObjCount(); ++i )
             if( !::lcl_IsControlGroup( pLst->GetObj( i ) ) )
-                return sal_False;
+                return false;
     }
     return bRet;
 }
@@ -1301,8 +1301,8 @@ const SdrObject* SwFEShell::GetBestObject( sal_Bool bNext, sal_uInt16 /*GOTOOBJ_
     Point aTopPos(  nTmp, nTmp );
     Point aCurPos;
     Point aPos;
-    sal_Bool bNoDraw = 0 == (GOTOOBJ_DRAW_ANY & eType);
-    sal_Bool bNoFly = 0 == (GOTOOBJ_FLY_ANY & eType);
+    bool bNoDraw = 0 == (GOTOOBJ_DRAW_ANY & eType);
+    bool bNoFly = 0 == (GOTOOBJ_FLY_ANY & eType);
 
     if( !bNoFly && bNoDraw )
     {
@@ -1818,7 +1818,7 @@ sal_Bool SwFEShell::ImpEndCreate()
         {
             SfxItemSet aHtmlSet( GetDoc()->GetAttrPool(), RES_VERT_ORIENT, RES_HORI_ORIENT );
             // horizontal orientation:
-            const sal_Bool bLeftFrm = aFlyRect.Left() <
+            const bool bLeftFrm = aFlyRect.Left() <
                                       pAnch->Frm().Left() + pAnch->Prt().Left(),
                            bLeftPrt = aFlyRect.Left() + aFlyRect.Width() <
                                       pAnch->Frm().Left() + pAnch->Prt().Width()/2;
@@ -1829,7 +1829,7 @@ sal_Bool SwFEShell::ImpEndCreate()
             }
             else
             {
-                const sal_Bool bRightFrm = aFlyRect.Left() >
+                const bool bRightFrm = aFlyRect.Left() >
                                            pAnch->Frm().Left() + pAnch->Prt().Width();
                 aHori.SetHoriOrient( text::HoriOrientation::RIGHT );
                 aHori.SetRelationOrient( bRightFrm ? text::RelOrientation::FRAME : text::RelOrientation::PRINT_AREA );
@@ -2015,7 +2015,7 @@ sal_Bool SwFEShell::EndMark()
 
         if ( bRet )
         {
-            sal_Bool bShowHdl = sal_False;
+            bool bShowHdl = false;
             SwDrawView* pDView = Imp()->GetDrawView();
             // frames are not selected this way, except when
             // it is only one frame
@@ -2030,7 +2030,7 @@ sal_Bool SwFEShell::EndMark()
                     {
                         if ( !bShowHdl )
                         {
-                            bShowHdl = sal_True;
+                            bShowHdl = true;
                         }
                         rMrkList.DeleteMark( i );
                         --i;    // no exceptions
@@ -2752,15 +2752,15 @@ void SwFEShell::HideChainMarker()
 
 void SwFEShell::SetChainMarker()
 {
-    sal_Bool bDelFrom = sal_True,
-             bDelTo   = sal_True;
+    bool bDelFrom = true,
+         bDelTo   = true;
     if ( IsFrmSelected() )
     {
         SwFlyFrm *pFly = FindFlyFrm();
 
         if ( pFly->GetPrevLink() )
         {
-            bDelFrom = sal_False;
+            bDelFrom = false;
             const SwFrm *pPre = pFly->GetPrevLink();
 
             Point aStart( pPre->Frm().Right(), pPre->Frm().Bottom());
@@ -2773,7 +2773,7 @@ void SwFEShell::SetChainMarker()
         }
         if ( pFly->GetNextLink() )
         {
-            bDelTo = sal_False;
+            bDelTo = false;
             const SwFlyFrm *pNxt = pFly->GetNextLink();
 
             Point aStart( pFly->Frm().Right(), pFly->Frm().Bottom());
@@ -2975,7 +2975,7 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
             pText->SetLogicRect(aRect);
 
             sal_Bool bVertical = (SID_DRAW_TEXT_VERTICAL == nSlotId);
-            sal_Bool bMarquee = (SID_DRAW_TEXT_MARQUEE == nSlotId);
+            bool bMarquee = (SID_DRAW_TEXT_MARQUEE == nSlotId);
 
             pText->SetVerticalWriting(bVertical);
 

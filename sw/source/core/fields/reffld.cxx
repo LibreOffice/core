@@ -942,18 +942,18 @@ private:
     std::set<sal_uInt16> aIds;
     std::set<sal_uInt16> aDstIds;
     std::map<sal_uInt16, sal_uInt16> sequencedIds; /// ID numbers sorted by sequence number.
-    sal_Bool bInit;
+    bool bInit;
 
-    void       Init(SwDoc& rDoc, SwDoc& rDestDoc, sal_Bool bField );
+    void       Init(SwDoc& rDoc, SwDoc& rDestDoc, bool bField );
     void       GetNoteIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds );
     void       GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds );
     void       AddId( sal_uInt16 id, sal_uInt16 seqNum );
     sal_uInt16 GetFirstUnusedId( std::set<sal_uInt16> &rIds );
 
 public:
-    _RefIdsMap( const String& rName ) : aName( rName ), bInit( sal_False ) {}
+    _RefIdsMap( const String& rName ) : aName( rName ), bInit( false ) {}
 
-    void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld, sal_Bool bField );
+    void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld, bool bField );
 
     String GetName() { return aName; }
 };
@@ -992,7 +992,7 @@ void _RefIdsMap::GetNoteIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 /// @param[in] rDoc     The source document.
 /// @param[in] rDestDoc The destination document.
 /// @param[in] bField   True if we're interested in all fields, false for footnotes.
-void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, sal_Bool bField )
+void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
 {
     if( bInit )
         return;
@@ -1029,7 +1029,7 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, sal_Bool bField )
         GetNoteIdsFromDoc( rDestDoc, aIds );
         GetNoteIdsFromDoc( rDoc, aDstIds );
     }
-    bInit = sal_True;
+    bInit = true;
 }
 
 /// Get the lowest unused ID in the passed set.
@@ -1061,7 +1061,7 @@ void _RefIdsMap::AddId( sal_uInt16 id, sal_uInt16 seqNum )
 }
 
 void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
-                        sal_Bool bField )
+                        bool bField )
 {
     Init( rDoc, rDestDoc, bField);
 
@@ -1134,13 +1134,13 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
                         aFldMap.push_back( pMap );
                     }
 
-                    pMap->Check( *pDoc, rDestDoc, rRefFld, sal_True );
+                    pMap->Check( *pDoc, rDestDoc, rRefFld, true );
                 }
                 break;
 
             case REF_FOOTNOTE:
             case REF_ENDNOTE:
-                aFntMap.Check( *pDoc, rDestDoc, rRefFld, sal_False );
+                aFntMap.Check( *pDoc, rDestDoc, rRefFld, false );
                 break;
             }
         }

@@ -92,16 +92,16 @@ void RegistFlys( SwPageFrm*, const SwLayoutFrm* );
 #*                 will be made, to fit to the format
 #***********************************************************************/
 
-static sal_Bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
+static bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
                         const Point& rPt )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwStartNode* pStNode = rNode.FindFlyStartNode();
     if( pStNode )
     {
         SwPosition aPos( *pStNode );
         rAnchor.SetAnchor( &aPos );
-        bRet = sal_True;
+        bRet = true;
     }
     else
     {
@@ -668,7 +668,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSLAYFMT, NULL );
         SwFmtAnchor* pOldAnchor = 0;
-        sal_Bool bHOriChgd = sal_False, bVOriChgd = sal_False;
+        bool bHOriChgd = false, bVOriChgd = false;
         SwFmtVertOrient aOldV;
         SwFmtHoriOrient aOldH;
 
@@ -685,14 +685,14 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
             if( SFX_ITEM_SET == rSet.GetItemState( RES_HORI_ORIENT, sal_False, &pItem )
                 && text::HoriOrientation::NONE == ((SwFmtHoriOrient*)pItem)->GetHoriOrient() )
             {
-                bHOriChgd = sal_True;
+                bHOriChgd = true;
                 aOldH = *((SwFmtHoriOrient*)pItem);
                 ((SfxItemSet&)rSet).Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT ) );
             }
             if( SFX_ITEM_SET == rSet.GetItemState( RES_VERT_ORIENT, sal_False, &pItem )
                 && text::VertOrientation::NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient() )
             {
-                bVOriChgd = sal_True;
+                bVOriChgd = true;
                 aOldV = *((SwFmtVertOrient*)pItem);
                 ((SfxItemSet&)rSet).Put( SwFmtVertOrient( 0, text::VertOrientation::TOP ) );
             }
@@ -965,7 +965,7 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrmFmt*>& rFillArr, int nOffse
     long nNewPage;
     SwRootFrm* pTmpRootFrm = GetLayout();//swmod 080317
     sal_uInt16 nMaxPage = pTmpRootFrm->GetPageNum();
-    sal_Bool bTmpAssert = sal_False;
+    bool bTmpAssert = false;
     for( sal_uInt16 n = 0; n < rFillArr.size(); ++n )
     {
         SwFrmFmt* pFmt = rFillArr[n];
@@ -990,7 +990,7 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrmFmt*>& rFillArr, int nOffse
                 }
                 else
                     pFmt->DelFrms();
-                bTmpAssert = sal_True;
+                bTmpAssert = true;
             }
             aNewAnchor.SetPageNum( sal_uInt16(nNewPage) );
             pDoc->SetAttr( aNewAnchor, *pFmt );
@@ -1574,8 +1574,8 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
         const SwFmtURL &rURL = pFly->GetFmt()->GetURL();
         if( rURL.GetURL().Len() || rURL.GetMap() )
         {
-            sal_Bool bSetTargetFrameName = pTargetFrameName != 0;
-            sal_Bool bSetDescription = pDescription != 0;
+            bool bSetTargetFrameName = pTargetFrameName != 0;
+            bool bSetDescription = pDescription != 0;
             if ( rURL.GetMap() )
             {
                 IMapObject *pObject = pFly->GetFmt()->GetIMapObject( rPt, pFly );
@@ -1585,12 +1585,12 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
                         *pURL = pObject->GetURL();
                     if ( bSetTargetFrameName && pObject->GetTarget().Len() )
                     {
-                        bSetTargetFrameName = sal_False;
+                        bSetTargetFrameName = false;
                         *pTargetFrameName = pObject->GetTarget();
                     }
                     if ( bSetDescription )
                     {
-                        bSetDescription = sal_False;
+                        bSetDescription = false;
                         *pDescription = pObject->GetAltText();
                     }
                     pRet = pFly->GetFmt();

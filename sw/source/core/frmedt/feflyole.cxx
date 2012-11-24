@@ -65,7 +65,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
     if ( !pFly )
     {
         // No or wrong fly selected: we have to search.
-        sal_Bool bExist = sal_False;
+        bool bExist = false;
         SwStartNode *pStNd;
         sal_uLong nSttIdx = GetNodes().GetEndOfAutotext().StartOfSectionIndex() + 1,
               nEndIdx = GetNodes().GetEndOfAutotext().GetIndex();
@@ -76,7 +76,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
             if ( pNd->IsOLENode() &&
                  ((SwOLENode*)pNd)->GetOLEObj().GetOleRef() == xObj )
             {
-                bExist = sal_True;
+                bExist = true;
                 SwFrm *pFrm = ((SwOLENode*)pNd)->getLayoutFrm( GetLayout() );
                 if ( pFrm )
                     pFly = pFrm->FindFlyFrm();

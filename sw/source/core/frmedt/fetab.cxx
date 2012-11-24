@@ -2333,7 +2333,7 @@ sal_Bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
     return bRet;
 }
 
-static sal_Bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& rFml,
+static bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& rFml,
                             SwCellFrms& rCells )
 {
     SwTblBoxFormula aTmp( rFml );
@@ -2348,10 +2348,10 @@ static sal_Bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormul
                 break;      // found
 
         if( iC == rCells.end() )
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
     // ask formula for auto-sum

@@ -129,10 +129,10 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
     if( !pFrm )
         return GetLayout()->Frm();
 
-    sal_Bool  bFrm  = sal_True;
+    bool bFrm = true;
     switch ( eType )
     {
-        case RECT_PAGE_PRT:         bFrm = sal_False; /* no break */
+        case RECT_PAGE_PRT:         bFrm = false; /* no break */
         case RECT_PAGE :            pFrm = pFrm->FindPageFrm();
                                     break;
 
@@ -141,7 +141,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                     pFrm->Calc();
                                     break;
 
-        case RECT_FLY_PRT_EMBEDDED: bFrm = sal_False; /* no break */
+        case RECT_FLY_PRT_EMBEDDED: bFrm = false; /* no break */
         case RECT_FLY_EMBEDDED:     pFrm = xObj.is() ? FindFlyFrm( xObj )
                                                 : pFrm->IsFlyFrm()
                                                     ? pFrm
@@ -164,10 +164,10 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
 
                                     if( RECT_OUTTABSECTION_PRT == eType ||
                                         RECT_SECTION_PRT == eType )
-                                        bFrm = sal_False;
+                                        bFrm = false;
                                     break;
 
-        case RECT_HEADERFOOTER_PRT: bFrm = sal_False; /* no break */
+        case RECT_HEADERFOOTER_PRT: bFrm = false; /* no break */
         case RECT_HEADERFOOTER:     if( 0 == (pFrm = pFrm->FindFooterOrHeader()) )
                                         return GetLayout()->Frm();
                                     break;

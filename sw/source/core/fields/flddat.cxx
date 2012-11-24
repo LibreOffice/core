@@ -246,7 +246,7 @@ bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
         {
             util::DateTime aDateTimeValue;
             if(!(rVal >>= aDateTimeValue))
-                return sal_False;
+                return false;
             DateTime aDateTime( DateTime::EMPTY );
             aDateTime.Set100Sec(aDateTimeValue.HundredthSeconds);
             aDateTime.SetSec(aDateTimeValue.Seconds);

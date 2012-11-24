@@ -79,21 +79,19 @@ struct _CmpLPt
 {
     Point aPos;
     const SwTableBox* pSelBox;
-    sal_Bool bVert;
+    bool bVert;
 
-    _CmpLPt( const Point& rPt, const SwTableBox* pBox, sal_Bool bVertical );
+    _CmpLPt( const Point& rPt, const SwTableBox* pBox, bool bVertical );
 
     bool operator==( const _CmpLPt& rCmp ) const
-    {   return X() == rCmp.X() && Y() == rCmp.Y() ? sal_True : sal_False; }
+    {   return X() == rCmp.X() && Y() == rCmp.Y(); }
 
     bool operator<( const _CmpLPt& rCmp ) const
     {
         if ( bVert )
-            return X() > rCmp.X() || ( X() == rCmp.X() && Y() < rCmp.Y() )
-                    ? sal_True : sal_False;
+            return X() > rCmp.X() || ( X() == rCmp.X() && Y() < rCmp.Y() );
         else
-            return Y() < rCmp.Y() || ( Y() == rCmp.Y() && X() < rCmp.X() )
-                    ? sal_True : sal_False;
+            return Y() < rCmp.Y() || ( Y() == rCmp.Y() && X() < rCmp.X() );
     }
 
     long X() const { return aPos.X(); }
@@ -268,12 +266,12 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
 
     int bChkProtected = nsSwTblSearchType::TBLSEARCH_PROTECT & eSearchType;
 
-    sal_Bool bTblIsValid;
+    bool bTblIsValid;
     // #i55421# Reduced value 10
     int nLoopMax = 10;
 
     do {
-        bTblIsValid = sal_True;
+        bTblIsValid = true;
 
         // First, compute tables and rectangles
         SwSelUnions aUnions;
@@ -295,7 +293,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
             const SwTabFrm *pTable = pUnion->GetTable();
             if( !pTable->IsValid() && nLoopMax )
             {
-                bTblIsValid = sal_False;
+                bTblIsValid = false;
                 break;
             }
 
@@ -308,7 +306,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
             {
                 if( !pRow->IsValid() && nLoopMax )
                 {
-                    bTblIsValid = sal_False;
+                    bTblIsValid = false;
                     break;
                 }
 
@@ -320,7 +318,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                     {
                         if( !pCell->IsValid() && nLoopMax )
                         {
-                            bTblIsValid = sal_False;
+                            bTblIsValid = false;
                             break;
                         }
 
@@ -427,7 +425,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
         rBoxes.clear();
         --nLoopMax;
 
-    } while( sal_True );
+    } while( true );
     OSL_ENSURE( nLoopMax, "Table layout is still invalid!" );
 }
 
@@ -472,14 +470,14 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
     OSL_ENSURE( pEnd, "without frame nothing works" );
 
 
-    sal_Bool bTblIsValid, bValidChartSel;
+    bool bTblIsValid, bValidChartSel;
     // #i55421# Reduced value 10
     int nLoopMax = 10;      //JP 28.06.99: max 100 loops - Bug 67292
     sal_uInt16 i = 0;
 
     do {
-        bTblIsValid = sal_True;
-        bValidChartSel = sal_True;
+        bTblIsValid = true;
+        bValidChartSel = true;
 
         sal_uInt16 nRowCells = USHRT_MAX;
 
@@ -499,7 +497,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
 
             if( !pTable->IsValid() && nLoopMax  )
             {
-                bTblIsValid = sal_False;
+                bTblIsValid = false;
                 break;
             }
 
@@ -514,7 +512,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
             {
                 if( !pRow->IsValid() && nLoopMax )
                 {
-                    bTblIsValid = sal_False;
+                    bTblIsValid = false;
                     break;
                 }
 
@@ -527,7 +525,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                     {
                         if( !pCell->IsValid() && nLoopMax  )
                         {
-                            bTblIsValid = sal_False;
+                            bTblIsValid = false;
                             break;
                         }
 
@@ -567,7 +565,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                                         _Sort_CellFrm( *(SwCellFrm*)pCell) );
                             else
                             {
-                                bValidChartSel = sal_False;
+                                bValidChartSel = false;
                                 break;
                             }
                         }
@@ -606,7 +604,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                             nRowCells = nCellCnt;
                         else if( nRowCells != nCellCnt )
                         {
-                            bValidChartSel = sal_False;
+                            bValidChartSel = false;
                             break;
                         }
                     }
@@ -629,7 +627,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                 }
                 else
                 {
-                    bValidChartSel = sal_False;
+                    bValidChartSel = false;
                     break;
                 }
             }
@@ -638,7 +636,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                 if( USHRT_MAX == nRowCells )
                     nRowCells = nCellCnt;
                 else if( nRowCells != nCellCnt )
-                    bValidChartSel = sal_False;
+                    bValidChartSel = false;
             }
         }
 
@@ -658,11 +656,11 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                 break;
         }
         --nLoopMax;
-    } while( sal_True );
+    } while( true );
 
     OSL_ENSURE( nLoopMax, "table layout is still invalid!" );
 
-    return bValidChartSel;
+    return bValidChartSel ? sal_True : sal_False;
 }
 
 
@@ -710,7 +708,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
     // by default, first test above and then to the left
     ::MakeSelUnions( aUnions, pStart, pEnd, nsSwTblSearchType::TBLSEARCH_COL );
 
-    sal_Bool bTstRow = sal_True, bFound = sal_False;
+    bool bTstRow = true, bFound = false;
     sal_uInt16 i;
 
     // 1. check if box above contains value/formula
@@ -744,7 +742,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                         // all boxes together, do not check the
                         // row, if a formula or value was found
                         bTstRow = 0 == nWhichId || USHRT_MAX == nWhichId;
-                        bFound = sal_True;
+                        bFound = true;
                         break;
                     }
 
@@ -778,7 +776,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
     // 2. check if box on left contains value/formula
     if( bTstRow )
     {
-        bFound = sal_False;
+        bFound = false;
 
         rBoxes.clear();
         aUnions.clear();
@@ -813,7 +811,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                             // all boxes together, do not check the
                             // row if a formula or value was found
                             bFound = 0 != nWhichId && USHRT_MAX != nWhichId;
-                            bTstRow = sal_False;
+                            bTstRow = false;
                             break;
                         }
 
@@ -844,7 +842,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
         }
     }
 
-    return bFound;
+    return bFound ? sal_True : sal_False;
 }
 
 sal_Bool HasProtectedCells( const SwSelBoxes& rBoxes )
@@ -862,7 +860,7 @@ sal_Bool HasProtectedCells( const SwSelBoxes& rBoxes )
 }
 
 
-_CmpLPt::_CmpLPt( const Point& rPt, const SwTableBox* pBox, sal_Bool bVertical )
+_CmpLPt::_CmpLPt( const Point& rPt, const SwTableBox* pBox, bool bVertical )
     : aPos( rPt ), pSelBox( pBox ), bVert( bVertical )
 {}
 
@@ -1148,7 +1146,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     // 1. Solution: map array and all on same Y-level
     //      are separated with blanks
     //      all others are separated with paragraphs
-    sal_Bool bCalcWidth = sal_True;
+    bool bCalcWidth = true;
     const SwTableBox* pFirstBox = aPosArr[ 0 ].pSelBox;
 
     // JP 27.03.98:  Optimise - if boxes on one row are empty,
@@ -1175,7 +1173,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             else
             {
                 if( bCalcWidth && n )
-                    bCalcWidth = sal_False;     // one line is ready
+                    bCalcWidth = false;     // one line is ready
 
                 if( bEmptyLine && nSttPos < n )
                 {
@@ -1226,7 +1224,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             else
             {
                 if( bCalcWidth && n )
-                    bCalcWidth = sal_False;     // one line ready
+                    bCalcWidth = false;     // one line ready
 
                 // first those at the beginning
                 if( nSttPos < nSEndPos )
@@ -1307,7 +1305,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 if( nY == ( bVert ? rPt.X() : rPt.Y() ) ) // same Y level?
                     nWidth += rPt.pSelBox->GetFrmFmt()->GetFrmSize().GetWidth();
                 else
-                    bCalcWidth = sal_False;     // one line ready
+                    bCalcWidth = false;     // one line ready
             }
 
             if( IsEmptyBox( *rPt.pSelBox, aPam ) )
@@ -1391,7 +1389,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             // where is now aInsPos ??
 
             if( bCalcWidth )
-                bCalcWidth = sal_False;     // one line is ready
+                bCalcWidth = false;     // one line is ready
 
             // skip the first TextNode
             rInsPosNd.Assign( pDoc->GetNodes(),
@@ -1417,9 +1415,9 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 }
 
 
-static sal_Bool lcl_CheckCol(_FndBox const&, sal_Bool* pPara);
+static bool lcl_CheckCol(_FndBox const&, bool* pPara);
 
-static sal_Bool lcl_CheckRow( const _FndLine& rFndLine, sal_Bool* pPara )
+static bool lcl_CheckRow( const _FndLine& rFndLine, bool* pPara )
 {
     for (_FndBoxes::const_iterator it = rFndLine.GetBoxes().begin();
          it != rFndLine.GetBoxes().end(); ++it)
@@ -1429,14 +1427,14 @@ static sal_Bool lcl_CheckRow( const _FndLine& rFndLine, sal_Bool* pPara )
     return *pPara;
 }
 
-static sal_Bool lcl_CheckCol( _FndBox const& rFndBox, sal_Bool* pPara )
+static bool lcl_CheckCol( _FndBox const& rFndBox, bool* pPara )
 {
     if (!rFndBox.GetBox()->GetSttNd())
     {
         if (rFndBox.GetLines().size() !=
             rFndBox.GetBox()->GetTabLines().size())
         {
-            *pPara = sal_False;
+            *pPara = false;
         }
         else
             BOOST_FOREACH( _FndLine const& rFndLine, rFndBox.GetLines() )
@@ -1444,7 +1442,7 @@ static sal_Bool lcl_CheckCol( _FndBox const& rFndBox, sal_Bool* pPara )
     }
     // is box protected ??
     else if (rFndBox.GetBox()->GetFrmFmt()->GetProtect().IsCntntProtected())
-        *pPara = sal_False;
+        *pPara = false;
     return *pPara;
 }
 
@@ -1480,7 +1478,7 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
         ForEach_FndLineCopyCol( (SwTableLines&)pTblNd->GetTable().GetTabLines(), &aPara );
         if( !aFndBox.GetLines().empty() )
         {
-            sal_Bool bMergeSelOk = sal_True;
+            bool bMergeSelOk = true;
             _FndBox* pFndBox = &aFndBox;
             _FndLine* pFndLine = 0;
             while( pFndBox && 1 == pFndBox->GetLines().size() )
@@ -1779,14 +1777,14 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     const SwTabFrm *pEndTable = pEnd->FindTabFrm();
     if( !pTable || !pEndTable )
         return;
-    sal_Bool bExchange = sal_False;
+    bool bExchange = false;
 
     if ( pTable != pEndTable )
     {
         if ( !pTable->IsAnFollow( pEndTable ) )
         {
             OSL_ENSURE( pEndTable->IsAnFollow( pTable ), "Tabchain in knots." );
-            bExchange = sal_True;
+            bExchange = true;
         }
     }
     else
@@ -1798,10 +1796,10 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
         {
             if( (pStart->Frm().*fnRect->fnGetLeft)() >
                 (pEnd->Frm().*fnRect->fnGetLeft)() )
-                bExchange = sal_True;
+                bExchange = true;
         }
         else if( bVert == ( nSttTop < nEndTop ) )
-            bExchange = sal_True;
+            bExchange = true;
     }
     if ( bExchange )
     {
@@ -2204,7 +2202,7 @@ void _FndBox::DelFrms( SwTable &rTable )
         {
                 if ( pFrm->GetTabLine() == rTable.GetTabLines()[i] )
                 {
-                    sal_Bool bDel = sal_True;
+                    bool bDel = true;
                     SwTabFrm *pUp = !pFrm->GetPrev() && !pFrm->GetNext() ?
                                             (SwTabFrm*)pFrm->GetUpper() : 0;
                     if ( !pUp )
@@ -2268,7 +2266,7 @@ void _FndBox::DelFrms( SwTable &rTable )
                                 }
                             }
                             delete pUp;
-                            bDel = sal_False; // Row goes to /dev/null.
+                            bDel = false; // Row goes to /dev/null.
                         }
                     }
                     if ( bDel )
@@ -2292,7 +2290,7 @@ void _FndBox::DelFrms( SwTable &rTable )
     }
 }
 
-static sal_Bool lcl_IsLineOfTblFrm( const SwTabFrm& rTable, const SwFrm& rChk )
+static bool lcl_IsLineOfTblFrm( const SwTabFrm& rTable, const SwFrm& rChk )
 {
     const SwTabFrm* pTblFrm = rChk.FindTabFrm();
     if( pTblFrm->IsFollow() )

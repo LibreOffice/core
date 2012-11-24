@@ -244,7 +244,7 @@ static const Point &lcl_FindBasePos( const SwFrm *pFrm, const Point &rPt )
 
 static sal_Bool lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrm* pFly,
                 const Point& rInsPt, SwFEShell& rDestShell, SwFmtAnchor& rAnchor,
-                Point& rNewPos, sal_Bool bCheckFlyRecur )
+                Point& rNewPos, bool bCheckFlyRecur )
 {
     sal_Bool bRet = sal_True;
     rAnchor.SetAnchor( &rPos );
@@ -305,7 +305,7 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
         SwFrmFmt *pFmt = pContact->GetFmt();
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
 
-        sal_Bool bInsWithFmt = sal_True;
+        bool bInsWithFmt = true;
 
         if( pDestDrwView->IsGroupEntered() )
         {
@@ -319,7 +319,7 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                                         GetDoc() == pDestDoc, false );
                 pNew->NbcMove( aSiz );
                 pDestDrwView->InsertObjectAtView( pNew, *pDestPgView );
-                bInsWithFmt = sal_False;
+                bInsWithFmt = false;
             }
         }
 
@@ -347,7 +347,7 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                         bRet = sal_False;
                     else
                         bRet = ::lcl_SetAnchor( aPos, *pNd, 0, rInsPt,
-                                *pDestShell, aAnchor, aNewAnch, sal_False );
+                                *pDestShell, aAnchor, aNewAnch, false );
                 }
                 else
                 {
@@ -358,7 +358,7 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                         bRet = ::lcl_SetAnchor( *pCrsr->GetPoint(),
                                                 *pCrsr->GetNode(), 0, rInsPt,
                                                 *pDestShell, aAnchor,
-                                                aNewAnch, sal_False );
+                                                aNewAnch, false );
                 }
             }
             else if ( FLY_AT_PAGE == aAnchor.GetAnchorId() )
@@ -505,7 +505,7 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                     }
                     else
                         bRet = ::lcl_SetAnchor( aPos, *pNd, pFly, rInsPt,
-                                        *pDestShell, aAnchor, aNewAnch, sal_True );
+                                        *pDestShell, aAnchor, aNewAnch, true );
                 }
             }
             else
@@ -828,7 +828,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
         {
             SwPosition aDestPos( *PCURCRSR->GetPoint() );
 
-            sal_Bool bParkTblCrsr = sal_False;
+            bool bParkTblCrsr = false;
             const SwStartNode* pSttNd =  PCURCRSR->GetNode()->FindTableBoxStartNode();
 
             // TABLE IN TABLE: copy table in table
@@ -838,7 +838,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
             {
                 GetTblSel( *this, aBoxes );
                 ParkTblCrsr();
-                bParkTblCrsr = sal_True;
+                bParkTblCrsr = true;
             }
             else if( !PCURCRSR->HasMark() && PCURCRSR->GetNext() == PCURCRSR &&
                      ( !pSrcNd->GetTable().IsTblComplex() ||
@@ -893,7 +893,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
 
             for ( sal_uInt16 i = 0; i < pClpDoc->GetSpzFrmFmts()->size(); ++i )
             {
-                sal_Bool bInsWithFmt = sal_True;
+                bool bInsWithFmt = true;
                 const SwFrmFmt& rCpyFmt = *(*pClpDoc->GetSpzFrmFmts())[i];
 
                 if( Imp()->GetDrawView()->IsGroupEntered() &&
@@ -939,7 +939,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                         pNew->NbcSetAnchorPos( aGrpAnchor );
                         pNew->SetSnapRect( aSnapRect );
 
-                        bInsWithFmt = sal_False;
+                        bInsWithFmt = false;
                     }
                 }
 
@@ -967,7 +967,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                     {
                         Point aPt;
                         lcl_SetAnchor( *PCURCRSR->GetPoint(), *PCURCRSR->GetNode(),
-                                        0, aPt, *this, aAnchor, aPt, sal_False );
+                                        0, aPt, *this, aAnchor, aPt, false );
                     }
 
                     SwFrmFmt * pNew = GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
@@ -1081,7 +1081,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
 
                 for ( sal_uInt16 i = 0; i < pClpDoc->GetSpzFrmFmts()->size(); ++i )
                 {
-                    sal_Bool bInsWithFmt = sal_True;
+                    bool bInsWithFmt = true;
                     const SwFrmFmt& rCpyFmt = *(*pClpDoc->GetSpzFrmFmts())[i];
                     if( bInsWithFmt  )
                     {
