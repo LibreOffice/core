@@ -158,9 +158,9 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     sal_Bool                    bError = false;
     sal_Bool                    bArrayFormula = false;
     TokenId                 nMerk0;
-    const sal_Bool              bRangeName = eFT == FT_RangeName;
-    const sal_Bool              bSharedFormula = eFT == FT_SharedFormula;
-    const sal_Bool              bRNorSF = bRangeName || bSharedFormula;
+    const bool              bRangeName = eFT == FT_RangeName;
+    const bool              bSharedFormula = eFT == FT_SharedFormula;
+    const bool              bRNorSF = bRangeName || bSharedFormula;
 
     ScSingleRefData         aSRD;
     ScComplexRefData            aCRD;
@@ -945,9 +945,9 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
 {
     sal_uInt8                   nOp, nLen;
     sal_Bool                    bError = false;
-    const sal_Bool              bRangeName = eFT == FT_RangeName;
-    const sal_Bool              bSharedFormula = eFT == FT_SharedFormula;
-    const sal_Bool              bRNorSF = bRangeName || bSharedFormula;
+    const bool              bRangeName = eFT == FT_RangeName;
+    const bool              bSharedFormula = eFT == FT_SharedFormula;
+    const bool              bRNorSF = bRangeName || bSharedFormula;
 
     ScSingleRefData         aSRD;
     ScComplexRefData            aCRD;
