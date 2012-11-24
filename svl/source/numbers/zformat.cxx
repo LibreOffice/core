@@ -2087,6 +2087,13 @@ void SvNumberformat::ImpGetOutputStandard(double& fNumber, String& OutString)
     OutString = sTemp;
 }
 
+void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUStringBuffer& OutString)
+{
+    OUString sTemp;
+    ImpGetOutputStandard(fNumber, sTemp);
+    OutString = sTemp;
+}
+
 void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& OutString)
 {
     sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
@@ -4377,10 +4384,10 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                 break;
             case NF_KEY_GENERAL:            // Standard im String
             {
-                String sNum;
+                OUStringBuffer sNum;
                 ImpGetOutputStandard(fNumber, sNum);
-                sNum = comphelper::string::stripStart(sNum, '-');
-                sStr.insert(k, OUString(sNum));
+                sNum.stripStart((sal_Unicode)'-');
+                sStr.insert(k, sNum.makeStringAndClear());
                 break;
             }
             default:
@@ -4556,10 +4563,10 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,       //
             break;
         case NF_KEY_GENERAL:                    // "General" in string
         {
-            String sNum;
+            OUStringBuffer sNum;
             ImpGetOutputStandard(rNumber, sNum);
-            sNum = comphelper::string::stripStart(sNum, '-');
-            sBuff.insert(k, OUString(sNum));
+            sNum.stripStart((sal_Unicode)'-');
+            sBuff.insert(k, sNum.makeStringAndClear());
             break;
         }
         default:
@@ -4681,10 +4688,10 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff,       // number strin
             break;
         case NF_KEY_GENERAL:            // Standard im String
         {
-            String sNum;
+            OUStringBuffer sNum;
             ImpGetOutputStandard(rNumber, sNum);
-            sNum = comphelper::string::stripStart(sNum, '-');    // Vorzeichen weg!!
-            sBuff.insert(k, OUString(sNum));
+            sNum.stripStart((sal_Unicode)'-');
+            sBuff.insert(k, sNum.makeStringAndClear());
         }
         break;
         case NF_SYMBOLTYPE_FRAC_FDIV:       // Do Nothing
