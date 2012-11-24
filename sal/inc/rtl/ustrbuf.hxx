@@ -223,6 +223,15 @@ public:
         return *this;
     }
 
+    /** Assign to this a copy of value.
+     */
+    OUStringBuffer& operator = ( const OUString& value )
+    {
+        remove();
+        append(value);
+        return *this;
+    }
+
     /**
         Release the string data.
      */
@@ -385,7 +394,7 @@ public:
     /**
         Appends the string to this string buffer.
 
-        The characters of the <code>String</code> argument are appended, in
+        The characters of the <code>OUString</code> argument are appended, in
         order, to the contents of this string buffer, increasing the
         length of this string buffer by the length of the argument.
 
@@ -395,6 +404,25 @@ public:
     OUStringBuffer & append(const OUString &str)
     {
         return append( str.getStr(), str.getLength() );
+    }
+
+    /**
+        Appends the content of a stringbuffer to this string buffer.
+
+        The characters of the <code>OUStringBuffer</code> argument are appended, in
+        order, to the contents of this string buffer, increasing the
+        length of this string buffer by the length of the argument.
+
+        @param   str   a string.
+        @return  this string buffer.
+     */
+    OUStringBuffer & append(OUStringBuffer &str)
+    {
+        if(str.getLength() > 0)
+        {
+            append( str.getStr(), str.getLength() );
+        }
+        return *this;
     }
 
     /**
