@@ -3487,7 +3487,7 @@ bool SvNumberformat::ImpFallBackToGregorianCalendar( OUString& rOrgCalendar, dou
  * SwitchToSpecifiedCalendar(), see comment in
  * ImpSvNumberInputScan::GetDateRef() */
 
-bool SvNumberformat::ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
+bool SvNumberformat::ImpSwitchToSpecifiedCalendar( OUString& rOrgCalendar,
                                                    double& fOrgDateTime,
                                                    const ImpSvNumFor& rNumFor ) const
 {
@@ -3498,7 +3498,7 @@ bool SvNumberformat::ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
         if ( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_CALENDAR )
         {
             CalendarWrapper& rCal = GetCal();
-            if ( !rOrgCalendar.Len() )
+            if ( !rOrgCalendar.getLength() )
             {
                 rOrgCalendar = rCal.getUniqueID();
                 fOrgDateTime = rCal.getDateTime();
@@ -5004,7 +5004,7 @@ Color* SvNumberformat::GetColor( sal_uInt16 nNumFor ) const
     return NumFor[nNumFor].GetColor();
 }
 
-static void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
+static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
                                                    SvNumberformatLimitOps eOp,
                                                    double fLimit, const String& rDecSep )
 {
@@ -5013,31 +5013,31 @@ static void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
         switch ( eOp )
         {
         case NUMBERFORMAT_OP_EQ :
-            rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "[=" ) );
+            rStr = "[=";
             break;
         case NUMBERFORMAT_OP_NE :
-            rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "[<>" ) );
+            rStr = "[<>";
             break;
         case NUMBERFORMAT_OP_LT :
-            rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "[<" ) );
+            rStr = "[<";
             break;
         case NUMBERFORMAT_OP_LE :
-            rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "[<=" ) );
+            rStr = "[<=";
             break;
         case NUMBERFORMAT_OP_GT :
-            rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "[>" ) );
+            rStr = "[>";
             break;
         case NUMBERFORMAT_OP_GE :
-            rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "[>=" ) );
+            rStr = "[>=";
             break;
         default:
             SAL_WARN( "svl.numbers", "unsupported number format" );
             break;
         }
-        rStr += String( ::rtl::math::doubleToUString( fLimit,
-                                                      rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                                                      rDecSep.GetChar(0), true));
-        rStr += ']';
+        rStr +=  ::rtl::math::doubleToUString( fLimit,
+                                               rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+                                               rDecSep.GetChar(0), true);
+        rStr += "]";
     }
 }
 
@@ -5098,7 +5098,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         {
             nSem++;
         }
-        String aPrefix;
+        OUString aPrefix;
         bool LCIDInserted = false;
 
         if ( !bDefaults )
@@ -5124,9 +5124,9 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             {
                 if ( rKey[j] == rColorName )
                 {
-                    aPrefix += '[';
-                    aPrefix += String(rKeywords[j]);
-                    aPrefix += ']';
+                    aPrefix += "[";
+                    aPrefix += rKeywords[j];
+                    aPrefix += "]";
                     break;  // for
                 }
             }
@@ -5135,7 +5135,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         const SvNumberNatNum& rNum = NumFor[n].GetNatNum();
 
         sal_uInt16 nAnz = NumFor[n].GetCount();
-        if ( nSem && (nAnz || aPrefix.Len()) )
+        if ( nSem && (nAnz || !aPrefix.isEmpty()) )
         {
             for ( ; nSem; --nSem )
             {
@@ -5147,7 +5147,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             }
         }
 
-        if ( aPrefix.Len() )
+        if ( !aPrefix.isEmpty() )
         {
             aStr.append( aPrefix );
         }
@@ -5161,7 +5161,9 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                 {
                     aStr.append( rKeywords[pType[j]] );
                     if( NF_KEY_NNNN == pType[j] )
+                    {
                         aStr.append( rLocWrp.getLongDateDayOfWeekSep() );
+                    }
                 }
                 else
                 {
@@ -5235,12 +5237,12 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
     }
     for ( ; nSub<4 && bDefault[nSub]; ++nSub )
     {   // append empty subformats
-        aStr.append( ';' );
+        aStr.append( (sal_Unicode)';' );
     }
     return aStr.makeStringAndClear();
 }
 
-String SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
+OUString SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
                                            sal_Int32 nVal, sal_uInt16 nMinDigits ) const
 {
     OUString aStr;
@@ -5263,16 +5265,18 @@ String SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
         }
         else
         {
-            String aValStr( rtl::OUString::valueOf( nVal ) );
-            if ( aValStr.Len() >= nMinDigits )
+            OUString aValStr( rtl::OUString::valueOf( nVal ) );
+            if ( aValStr.getLength() >= nMinDigits )
             {
                 aStr = aValStr;
             }
             else
             {
-                using namespace comphelper::string;
                 OUStringBuffer aBuf;
-                padToLength(aBuf, nMinDigits - aValStr.Len(), '0' );
+                for(sal_Int32 index = 0; index < nMinDigits - aValStr.getLength(); ++index)
+                {
+                    aBuf.append((sal_Unicode)'0');
+                }
                 aBuf.append(aValStr);
                 aStr = aBuf.makeStringAndClear();
             }
@@ -5328,47 +5332,49 @@ void SvNumberformat::GetNatNumXml( com::sun::star::i18n::NativeNumberXmlAttribut
 }
 
 // static
-bool SvNumberformat::HasStringNegativeSign( const String& rStr )
+bool SvNumberformat::HasStringNegativeSign( const OUString& rStr )
 {
     // fuer Sign muss '-' am Anfang oder am Ende des TeilStrings sein (Blanks ignored)
-    xub_StrLen nLen = rStr.Len();
+    sal_Int32 nLen = rStr.getLength();
     if ( !nLen )
     {
         return false;
     }
-    const sal_Unicode* const pBeg = rStr.GetBuffer();
+    const sal_Unicode* const pBeg = rStr.getStr();
     const sal_Unicode* const pEnd = pBeg + nLen;
     register const sal_Unicode* p = pBeg;
     do
     {   // Anfang
-        if ( *p == '-' )
+        if ( *p == (sal_Unicode)'-' )
         {
             return true;
         }
     }
-    while ( *p == ' ' && ++p < pEnd );
+    while ( *p == (sal_Unicode)' ' && ++p < pEnd );
+
     p = pEnd - 1;
+
     do
     {   // Ende
-        if ( *p == '-' )
+        if ( *p == (sal_Unicode)'-' )
         {
             return true;
         }
     }
-    while ( *p == ' ' && pBeg < --p );
+    while ( *p == (sal_Unicode)' ' && pBeg < --p );
     return false;
 }
 
 // static
-bool SvNumberformat::IsInQuote( const String& rStr, xub_StrLen nPos,
+bool SvNumberformat::IsInQuote( const OUString& rStr, sal_Int32 nPos,
                                 sal_Unicode cQuote, sal_Unicode cEscIn, sal_Unicode cEscOut )
 {
-    xub_StrLen nLen = rStr.Len();
+    sal_Int32 nLen = rStr.getLength();
     if ( nPos >= nLen )
     {
         return false;
     }
-    register const sal_Unicode* p0 = rStr.GetBuffer();
+    register const sal_Unicode* p0 = rStr.getStr();
     register const sal_Unicode* p = p0;
     register const sal_Unicode* p1 = p0 + nPos;
     bool bQuoted = false;

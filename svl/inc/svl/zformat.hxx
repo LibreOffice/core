@@ -347,7 +347,7 @@ public:
     // of [$xxx-nnn] are returned
     bool GetNewCurrencySymbol( OUString& rSymbol, OUString& rExtension ) const;
 
-    static bool HasStringNegativeSign( const String& rStr );
+    static bool HasStringNegativeSign( const OUString& rStr );
 
     /**
         Whether a character at position nPos is somewhere between two matching
@@ -359,9 +359,9 @@ public:
         The default '\0' results in no escapement possible.
         Defaults are set right according to the "unlogic" of the Numberformatter
      */
-    static bool IsInQuote( const String& rString, xub_StrLen nPos,
-            sal_Unicode cQuote = '"',
-            sal_Unicode cEscIn = '\0', sal_Unicode cEscOut = '\\' );
+    static bool IsInQuote( const OUString& rString, sal_Int32 nPos,
+                           sal_Unicode cQuote = '"',
+                           sal_Unicode cEscIn = '\0', sal_Unicode cEscOut = '\\' );
 
     /**
         Return the position of a matching closing cQuote if the character at
@@ -483,8 +483,9 @@ private:
     SVL_DLLPRIVATE bool ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const;
 
 #ifdef THE_FUTURE
-    SVL_DLLPRIVATE bool ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
-            double& fOrgDateTime, const ImpSvNumFor& rNumFor ) const;
+    SVL_DLLPRIVATE bool ImpSwitchToSpecifiedCalendar( OUString& rOrgCalendar,
+                                                      double& fOrgDateTime,
+                                                      const ImpSvNumFor& rNumFor ) const;
 #endif
 
     /** Whether to use possessive genitive case month name, or partitive case
@@ -652,14 +653,16 @@ private:
 
     // normal digits or other digits, depending on ImpSvNumFor.aNatNum,
     // [NatNum1], [NatNum2], ...
-    SVL_DLLPRIVATE String ImpGetNatNumString( const SvNumberNatNum& rNum, sal_Int32 nVal,
-            sal_uInt16 nMinDigits = 0  ) const;
+    SVL_DLLPRIVATE OUString ImpGetNatNumString( const SvNumberNatNum& rNum, sal_Int32 nVal,
+                                              sal_uInt16 nMinDigits = 0  ) const;
 
-    String ImpIntToString( sal_uInt16 nIx, sal_Int32 nVal, sal_uInt16 nMinDigits = 0 ) const
+    OUString ImpIntToString( sal_uInt16 nIx, sal_Int32 nVal, sal_uInt16 nMinDigits = 0 ) const
     {
         const SvNumberNatNum& rNum = NumFor[nIx].GetNatNum();
         if ( nMinDigits || rNum.IsComplete() )
+        {
             return ImpGetNatNumString( rNum, nVal, nMinDigits );
+        }
         return rtl::OUString::valueOf(nVal);
     }
 
