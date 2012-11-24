@@ -1858,10 +1858,10 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
                                       LanguageType eConvertFrom,
                                       LanguageType eConvertTo, bool bSystem )
 {
-    xub_StrLen nCheckPos;
+    sal_Int32 nCheckPos;
     sal_uInt32 nKey;
     short nType = eType;
-    String aFormatString( sFormatstring );
+    OUString aFormatString( sFormatstring );
     if ( bSystem )
     {
         rConverter.PutandConvertEntrySystem( aFormatString, nCheckPos, nType,
