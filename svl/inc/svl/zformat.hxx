@@ -588,20 +588,20 @@ private:
 
     // Helper function for number strings
     // append string symbols, insert leading 0 or ' ', or ...
-    SVL_DLLPRIVATE bool ImpNumberFill( String& sStr,
+    SVL_DLLPRIVATE bool ImpNumberFill( OUStringBuffer& sStr,
                     double& rNumber,
-                    xub_StrLen& k,
+                    sal_Int32& k,
                     sal_uInt16& j,
                     sal_uInt16 nIx,
                     short eSymbolType );
 
     // Helper function to fill in the integer part and the group (AKA thousand) separators
-    SVL_DLLPRIVATE bool ImpNumberFillWithThousands( String& sStr,
+    SVL_DLLPRIVATE bool ImpNumberFillWithThousands( OUStringBuffer& sStr,
                                  double& rNumber,
-                                 xub_StrLen k,
+                                 sal_Int32 k,
                                  sal_uInt16 j,
                                  sal_uInt16 nIx,
-                                 sal_uInt16 nDigCnt );
+                                 sal_Int32 nDigCnt );
                                     // Hilfsfunktion zum Auffuellen der Vor-
                                     // kommazahl auch mit Tausenderpunkt
 
@@ -665,10 +665,19 @@ private:
 
     // transliterate according to NativeNumber
     SVL_DLLPRIVATE OUString impTransliterateImpl(const OUString& rStr, const SvNumberNatNum& rNum) const;
+    SVL_DLLPRIVATE void impTransliterateImpl(OUStringBuffer& rStr, const SvNumberNatNum& rNum) const;
 
     OUString impTransliterate(const OUString& rStr, const SvNumberNatNum& rNum) const
     {
         return rNum.IsComplete() ? impTransliterateImpl(rStr, rNum) : rStr;
+    }
+
+    SVL_DLLPRIVATE void impTransliterate(OUStringBuffer& rStr, const SvNumberNatNum& rNum) const
+    {
+        if(rNum.IsComplete())
+        {
+            impTransliterateImpl(rStr, rNum);
+        }
     }
 
 #endif // _ZFORMAT_CXX
