@@ -158,7 +158,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     sal_Bool                    bError = false;
     sal_Bool                    bArrayFormula = false;
     TokenId                 nMerk0;
-    const bool              bRangeName = eFT == FT_RangeName;
+    const bool              bCondFormat = eFT == FT_CondFormat;
+    const bool              bRangeName = eFT == FT_RangeName || bCondFormat;
     const bool              bSharedFormula = eFT == FT_SharedFormula;
     const bool              bRNorSF = bRangeName || bSharedFormula;
 
@@ -510,7 +511,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aSRD.nRow = nRow & 0x3FFF;
                 aSRD.nRelTab = 0;
                 aSRD.SetTabRel( sal_True );
-                aSRD.SetFlag3D( bRangeName );
+                aSRD.SetFlag3D( bRangeName && !bCondFormat );
 
                 ExcRelToScRel8( nRow, nCol, aSRD, bRangeName );
 
@@ -544,8 +545,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 rSRef1.nRelTab = rSRef2.nRelTab = 0;
                 rSRef1.SetTabRel( sal_True );
                 rSRef2.SetTabRel( sal_True );
-                rSRef1.SetFlag3D( bRangeName );
-                rSRef2.SetFlag3D( bRangeName );
+                rSRef1.SetFlag3D( bRangeName && !bCondFormat );
+                rSRef2.SetFlag3D( bRangeName && !bCondFormat );
 
                 ExcRelToScRel8( nRowFirst, nColFirst, aCRD.Ref1, bRangeName );
                 ExcRelToScRel8( nRowLast, nColLast, aCRD.Ref2, bRangeName );
@@ -945,7 +946,8 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
 {
     sal_uInt8                   nOp, nLen;
     sal_Bool                    bError = false;
-    const bool              bRangeName = eFT == FT_RangeName;
+    const bool              bCondFormat = eFT == FT_CondFormat;
+    const bool              bRangeName = eFT == FT_RangeName || bCondFormat;
     const bool              bSharedFormula = eFT == FT_SharedFormula;
     const bool              bRNorSF = bRangeName || bSharedFormula;
 
@@ -1065,7 +1067,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 aSRD.nRow = nRow & 0x3FFF;
                 aSRD.nRelTab = 0;
                 aSRD.SetTabRel( sal_True );
-                aSRD.SetFlag3D( bRangeName );
+                aSRD.SetFlag3D( bRangeName && !bCondFormat );
 
                 ExcRelToScRel8( nRow, nCol, aSRD, bRangeName );
 
@@ -1086,8 +1088,8 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 rSRef1.nRelTab = rSRef2.nRelTab = 0;
                 rSRef1.SetTabRel( sal_True );
                 rSRef2.SetTabRel( sal_True );
-                rSRef1.SetFlag3D( bRangeName );
-                rSRef2.SetFlag3D( bRangeName );
+                rSRef1.SetFlag3D( bRangeName && !bCondFormat );
+                rSRef2.SetFlag3D( bRangeName && !bCondFormat );
 
                 ExcRelToScRel8( nRowFirst, nColFirst, aCRD.Ref1, bRangeName );
                 ExcRelToScRel8( nRowLast, nColLast, aCRD.Ref2, bRangeName );
