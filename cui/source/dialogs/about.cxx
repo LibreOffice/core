@@ -235,9 +235,11 @@ void AboutDialog::LayoutControls()
     sal_Int32 aLogoVersionSpacing = aLogoSize.Height() * 0.15;
     Point aVersionPos( aDialogBorder,
                        aLogoPos.Y() + aLogoSize.Height() + aLogoVersionSpacing );
-    Size aVersionSize = aVersionText.CalcMinimumSize();
+    Size aVersionSize = aVersionText.GetSizePixel();
     aVersionSize.Width() = aIdealTextWidth;
     aVersionText.SetPosSizePixel( aVersionPos, aVersionSize );
+    aVersionSize = aVersionText.CalcMinimumSize();
+    aVersionText.SetSizePixel( aVersionSize );
 
     // Position description text
     sal_Int32 aVersionDescriptionSpacing = aLogoSize.Height() * 0.45;
