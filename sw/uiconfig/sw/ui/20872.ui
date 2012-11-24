@@ -36,7 +36,7 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Tap stop</col>
+        <col id="0" translatable="yes">Tab stop</col>
       </row>
       <row>
         <col id="0" translatable="yes">Space</col>
