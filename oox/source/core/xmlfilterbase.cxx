@@ -236,7 +236,7 @@ XmlFilterBase::~XmlFilterBase()
 
 // ----------------------------------------------------------------------------
 
-void XmlFilterBase::importDocumentProperties() throw()
+void XmlFilterBase::importDocumentProperties()
 {
     Reference< XMultiServiceFactory > xFactory( getServiceFactory(), UNO_QUERY );
     MediaDescriptor aMediaDesc( getMediaDescriptor() );
