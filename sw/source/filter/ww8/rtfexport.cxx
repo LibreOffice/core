@@ -1144,7 +1144,8 @@ SwRTFWriter::~SwRTFWriter()
 sal_uLong SwRTFWriter::WriteStream()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-    RtfExport aExport( NULL, pDoc, new SwPaM( *pCurPam->End(), *pCurPam->Start() ), pCurPam, this, m_bOutOutlineOnly );
+    SwPaM aPam(*pCurPam->End(), *pCurPam->Start());
+    RtfExport aExport( NULL, pDoc, &aPam, pCurPam, this, m_bOutOutlineOnly );
     aExport.ExportDocument( true );
     return 0;
 }
