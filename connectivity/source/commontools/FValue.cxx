@@ -274,28 +274,6 @@ void ORowSetValue::free()
                 rtl_uString_release(m_aValue.m_pString);
                 m_aValue.m_pString = NULL;
                 break;
-            case DataType::INTEGER:
-                if ( !m_bSigned )
-                {
-                    delete (sal_Int64*)m_aValue.m_pValue;
-                    TRACE_FREE( sal_Int64 )
-                    m_aValue.m_pValue = NULL;
-                }
-                break;
-            case DataType::BIGINT:
-                if ( m_bSigned )
-                {
-                    delete (sal_Int64*)m_aValue.m_pValue;
-                    TRACE_FREE( sal_Int64 )
-                    m_aValue.m_pValue = NULL;
-                }
-                else
-                {
-                    OSL_ENSURE(m_aValue.m_pString,"String pointer is null!");
-                    rtl_uString_release(m_aValue.m_pString);
-                    m_aValue.m_pString = NULL;
-                }
-                break;
             case DataType::FLOAT:
                 delete (float*)m_aValue.m_pValue;
                 TRACE_FREE( float )
@@ -339,6 +317,8 @@ void ORowSetValue::free()
             case DataType::BIT:
             case DataType::TINYINT:
             case DataType::SMALLINT:
+            case DataType::INTEGER:
+            case DataType::BIGINT:
             case DataType::BOOLEAN:
                 break;
             default:
@@ -378,18 +358,6 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
             case DataType::LONGVARCHAR:
                 rtl_uString_acquire(_rRH.m_aValue.m_pString);
                 m_aValue.m_pString = _rRH.m_aValue.m_pString;
-                break;
-            case DataType::BIGINT:
-                if ( _rRH.m_bSigned )
-                {
-                    m_aValue.m_pValue   = new sal_Int64(*(sal_Int64*)_rRH.m_aValue.m_pValue);
-                    TRACE_ALLOC( sal_Int64 )
-                }
-                else
-                {
-                    rtl_uString_acquire(_rRH.m_aValue.m_pString);
-                    m_aValue.m_pString = _rRH.m_aValue.m_pString;
-                }
                 break;
             case DataType::FLOAT:
                 m_aValue.m_pValue   = new float(*(float*)_rRH.m_aValue.m_pValue);
@@ -438,10 +406,10 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 if ( _rRH.m_bSigned )
                     m_aValue.m_nInt32   = _rRH.m_aValue.m_nInt32;
                 else
-                {
-                    m_aValue.m_pValue   = new sal_Int64(*(sal_Int64*)_rRH.m_aValue.m_pValue);
-                    TRACE_ALLOC( sal_Int64 )
-                }
+                    m_aValue.m_nInt64   = _rRH.m_aValue.m_nInt64;
+                break;
+            case DataType::BIGINT:
+                m_aValue.m_nInt64   = _rRH.m_aValue.m_nInt64;
                 break;
             default:
                 m_aValue.m_pValue   = new Any(*(Any*)_rRH.m_aValue.m_pValue);
@@ -458,12 +426,6 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
                 (*this) = ::rtl::OUString(_rRH.m_aValue.m_pString);
-                break;
-            case DataType::BIGINT:
-                if ( _rRH.m_bSigned )
-                    (*this) = *(sal_Int64*)_rRH.m_aValue.m_pValue;
-                else
-                    (*this) = ::rtl::OUString(_rRH.m_aValue.m_pString);
                 break;
             case DataType::FLOAT:
                 (*this) = *(float*)_rRH.m_aValue.m_pValue;
@@ -506,7 +468,10 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 if ( _rRH.m_bSigned )
                     m_aValue.m_nInt32   = _rRH.m_aValue.m_nInt32;
                 else
-                    *static_cast<sal_Int64*>(m_aValue.m_pValue) = *(sal_Int64*)_rRH.m_aValue.m_pValue;
+                    m_aValue.m_nInt64   = _rRH.m_aValue.m_nInt64;
+                break;
+            case DataType::BIGINT:
+                m_aValue.m_nInt64       = _rRH.m_aValue.m_nInt64;
                 break;
             default:
                 (*(Any*)m_aValue.m_pValue)  = (*(Any*)_rRH.m_aValue.m_pValue);
@@ -661,15 +626,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int32& _rRH)
     if ( m_bSigned )
         m_aValue.m_nInt32 = _rRH;
     else
-    {
-        if ( m_bNull )
-        {
-            m_aValue.m_pValue = new sal_Int64(_rRH);
-            TRACE_ALLOC( sal_Int64 )
-        }
-        else
-            *static_cast<sal_Int64*>(m_aValue.m_pValue) = static_cast<sal_Int64>(_rRH);
-    }
+        m_aValue.m_nInt64 = _rRH;
 
     m_eTypeKind = DataType::INTEGER;
     m_bNull = sal_False;
@@ -695,23 +652,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int64& _rRH)
     if ( DataType::BIGINT != m_eTypeKind || !m_bSigned )
         free();
 
-    if ( m_bSigned )
-    {
-        if(m_bNull)
-        {
-            m_aValue.m_pValue = new sal_Int64(_rRH);
-            TRACE_ALLOC( sal_Int64 )
-        }
-        else
-            *static_cast<sal_Int64*>(m_aValue.m_pValue) = _rRH;
-    }
-    else
-    {
-        ::rtl::OUString aVal = ::rtl::OUString::valueOf(_rRH);
-        m_aValue.m_pString = aVal.pData;
-        rtl_uString_acquire(m_aValue.m_pString);
-    }
-
+    m_aValue.m_nInt64 = _rRH;
     m_eTypeKind = DataType::BIGINT;
     m_bNull = sal_False;
 
@@ -849,17 +790,10 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
             bRet = m_bSigned ? ( m_aValue.m_nInt16 == _rRH.m_aValue.m_nInt16 ) : (m_aValue.m_nInt32 == _rRH.m_aValue.m_nInt32);
             break;
         case DataType::INTEGER:
-            bRet = m_bSigned ? ( m_aValue.m_nInt32 == _rRH.m_aValue.m_nInt32 ) : (*(sal_Int64*)m_aValue.m_pValue == *(sal_Int64*)_rRH.m_aValue.m_pValue);
+            bRet = m_bSigned ? ( m_aValue.m_nInt32 == _rRH.m_aValue.m_nInt32 ) : (m_aValue.m_nInt64 == _rRH.m_aValue.m_nInt64);
             break;
         case DataType::BIGINT:
-            if ( m_bSigned )
-                bRet = *(sal_Int64*)m_aValue.m_pValue == *(sal_Int64*)_rRH.m_aValue.m_pValue;
-            else
-            {
-                ::rtl::OUString aVal1(m_aValue.m_pString);
-                ::rtl::OUString aVal2(_rRH.m_aValue.m_pString);
-                bRet = aVal1 == aVal2;
-            }
+            bRet = m_aValue.m_nInt64 == _rRH.m_aValue.m_nInt64;
             break;
         case DataType::BIT:
         case DataType::BOOLEAN:
@@ -908,18 +842,6 @@ Any ORowSetValue::makeAny() const
             case DataType::LONGVARCHAR:
                 OSL_ENSURE(m_aValue.m_pString,"Value is null!");
                 rValue <<= (::rtl::OUString)m_aValue.m_pString;
-                break;
-            case DataType::BIGINT:
-                if ( m_bSigned )
-                {
-                    OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
-                    rValue <<= *(sal_Int64*)m_aValue.m_pValue;
-                }
-                else
-                {
-                    OSL_ENSURE(m_aValue.m_pString,"Value is null!");
-                    rValue <<= (::rtl::OUString)m_aValue.m_pString;
-                }
                 break;
             case DataType::FLOAT:
                 OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
@@ -974,10 +896,10 @@ Any ORowSetValue::makeAny() const
                 if ( m_bSigned )
                     rValue <<= m_aValue.m_nInt32;
                 else
-                {
-                    OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
-                    rValue <<= *(sal_Int64*)m_aValue.m_pValue;
-                }
+                    rValue <<= m_aValue.m_nInt64;
+                break;
+            case DataType::BIGINT:
+                rValue <<= m_aValue.m_nInt64;
                 break;
             default:
                 OSL_FAIL("ORowSetValue::makeAny(): UNSPUPPORTED TYPE!");
@@ -1002,12 +924,6 @@ Any ORowSetValue::makeAny() const
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
                 aRet = m_aValue.m_pString;
-                break;
-            case DataType::BIGINT:
-                if ( m_bSigned )
-                    aRet = ::rtl::OUString::valueOf((sal_Int64)*this);
-                else
-                    aRet = m_aValue.m_pString;
                 break;
             case DataType::FLOAT:
                 aRet = ::rtl::OUString::valueOf((float)*this);
@@ -1059,6 +975,9 @@ Any ORowSetValue::makeAny() const
                     aRet = ::rtl::OUString::valueOf((sal_Int32)*this);
                 else
                     aRet = ::rtl::OUString::valueOf((sal_Int64)*this);
+                break;
+            case DataType::BIGINT:
+                aRet = ::rtl::OUString::valueOf((sal_Int64)*this);
                 break;
             case DataType::CLOB:
                 {
@@ -1116,12 +1035,6 @@ sal_Bool ORowSetValue::getBool()    const
 
                 bRet = ::rtl::OUString(m_aValue.m_pString).toInt32() != 0;
                 break;
-            case DataType::BIGINT:
-                if ( m_bSigned )
-                    bRet = *(sal_Int64*)m_aValue.m_pValue != 0;
-                else
-                    bRet = ::rtl::OUString(m_aValue.m_pString).toInt64() != 0;
-                break;
             case DataType::FLOAT:
                 bRet = *(float*)m_aValue.m_pValue != 0.0;
                 break;
@@ -1148,7 +1061,10 @@ sal_Bool ORowSetValue::getBool()    const
                 bRet = m_bSigned ? (m_aValue.m_nInt16  != 0) : (m_aValue.m_nInt32 != 0);
                 break;
             case DataType::INTEGER:
-                bRet = m_bSigned ? (m_aValue.m_nInt32 != 0) : (*static_cast<sal_Int64*>(m_aValue.m_pValue) != sal_Int64(0));
+                bRet = m_bSigned ? (m_aValue.m_nInt32 != 0) : (m_aValue.m_nInt64 != 0);
+                break;
+            case DataType::BIGINT:
+                bRet = m_aValue.m_nInt64 != 0;
                 break;
             default:
                 {
@@ -1177,12 +1093,6 @@ sal_Int8 ORowSetValue::getInt8()    const
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
                 nRet = sal_Int8(::rtl::OUString(m_aValue.m_pString).toInt32());
-                break;
-            case DataType::BIGINT:
-                if ( m_bSigned )
-                    nRet = sal_Int8(*(sal_Int64*)m_aValue.m_pValue);
-                else
-                    nRet = sal_Int8(::rtl::OUString(m_aValue.m_pString).toInt32());
                 break;
             case DataType::FLOAT:
                 nRet = sal_Int8(*(float*)m_aValue.m_pValue);
@@ -1221,7 +1131,10 @@ sal_Int8 ORowSetValue::getInt8()    const
                 if ( m_bSigned )
                     nRet = static_cast<sal_Int8>(m_aValue.m_nInt32);
                 else
-                    nRet = static_cast<sal_Int8>(*static_cast<sal_Int64*>(m_aValue.m_pValue));
+                    nRet = static_cast<sal_Int8>(m_aValue.m_nInt64);
+                break;
+            case DataType::BIGINT:
+                nRet = static_cast<sal_Int8>(m_aValue.m_nInt64);
                 break;
             default:
                 {
@@ -1250,12 +1163,6 @@ sal_Int16 ORowSetValue::getInt16()  const
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
                 nRet = sal_Int16(::rtl::OUString(m_aValue.m_pString).toInt32());
-                break;
-            case DataType::BIGINT:
-                if ( m_bSigned )
-                    nRet = sal_Int16(*(sal_Int64*)m_aValue.m_pValue);
-                else
-                    nRet = sal_Int16(::rtl::OUString(m_aValue.m_pString).toInt32());
                 break;
             case DataType::FLOAT:
                 nRet = sal_Int16(*(float*)m_aValue.m_pValue);
@@ -1294,7 +1201,10 @@ sal_Int16 ORowSetValue::getInt16()  const
                 if ( m_bSigned )
                     nRet = static_cast<sal_Int16>(m_aValue.m_nInt32);
                 else
-                    nRet = static_cast<sal_Int16>(*static_cast<sal_Int64*>(m_aValue.m_pValue));
+                    nRet = static_cast<sal_Int16>(m_aValue.m_nInt64);
+                break;
+            case DataType::BIGINT:
+                nRet = static_cast<sal_Int16>(m_aValue.m_nInt64);
                 break;
             default:
                 {
@@ -1321,12 +1231,6 @@ sal_Int32 ORowSetValue::getInt32()  const
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
                 nRet = ::rtl::OUString(m_aValue.m_pString).toInt32();
-                break;
-            case DataType::BIGINT:
-                if ( m_bSigned )
-                    nRet = sal_Int32(*(sal_Int64*)m_aValue.m_pValue);
-                else
-                    nRet = ::rtl::OUString(m_aValue.m_pString).toInt32();
                 break;
             case DataType::FLOAT:
                 nRet = sal_Int32(*(float*)m_aValue.m_pValue);
@@ -1367,7 +1271,10 @@ sal_Int32 ORowSetValue::getInt32()  const
                 if ( m_bSigned )
                     nRet = m_aValue.m_nInt32;
                 else
-                    nRet = static_cast<sal_Int32>(*static_cast<sal_Int64*>(m_aValue.m_pValue));
+                    nRet = static_cast<sal_Int32>(m_aValue.m_nInt64);
+                break;
+            case DataType::BIGINT:
+                nRet = static_cast<sal_Int32>(m_aValue.m_nInt64);
                 break;
             default:
                 {
@@ -1394,12 +1301,6 @@ sal_Int64 ORowSetValue::getLong()   const
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
                 nRet = ::rtl::OUString(m_aValue.m_pString).toInt64();
-                break;
-            case DataType::BIGINT:
-                if ( m_bSigned )
-                    nRet = *(sal_Int64*)m_aValue.m_pValue;
-                else
-                    nRet = ::rtl::OUString(m_aValue.m_pString).toInt64();
                 break;
             case DataType::FLOAT:
                 nRet = sal_Int64(*(float*)m_aValue.m_pValue);
@@ -1440,7 +1341,10 @@ sal_Int64 ORowSetValue::getLong()   const
                 if ( m_bSigned )
                     nRet = m_aValue.m_nInt32;
                 else
-                    nRet = *(sal_Int64*)m_aValue.m_pValue;
+                    nRet = m_aValue.m_nInt64;
+                break;
+            case DataType::BIGINT:
+                nRet = m_aValue.m_nInt64;
                 break;
             default:
                 {
@@ -1467,12 +1371,6 @@ float ORowSetValue::getFloat()  const
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
                 nRet = ::rtl::OUString(m_aValue.m_pString).toFloat();
-                break;
-            case DataType::BIGINT:
-                if ( m_bSigned )
-                    nRet = float(*(sal_Int64*)m_aValue.m_pValue);
-                else
-                    nRet = ::rtl::OUString(m_aValue.m_pString).toFloat();
                 break;
             case DataType::FLOAT:
                 nRet = *(float*)m_aValue.m_pValue;
@@ -1517,7 +1415,10 @@ float ORowSetValue::getFloat()  const
                 if ( m_bSigned )
                     nRet = (float)m_aValue.m_nInt32;
                 else
-                    nRet = float(*(sal_Int64*)m_aValue.m_pValue);
+                    nRet = (float)m_aValue.m_nInt64;
+                break;
+            case DataType::BIGINT:
+                nRet = (float)m_aValue.m_nInt64;
                 break;
             default:
                 {
@@ -1546,12 +1447,6 @@ double ORowSetValue::getDouble()    const
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
                 nRet = ::rtl::OUString(m_aValue.m_pString).toDouble();
-                break;
-            case DataType::BIGINT:
-                if ( m_bSigned )
-                    nRet = double(*(sal_Int64*)m_aValue.m_pValue);
-                else
-                    nRet = ::rtl::OUString(m_aValue.m_pString).toDouble();
                 break;
             case DataType::FLOAT:
                 nRet = *(float*)m_aValue.m_pValue;
@@ -1596,7 +1491,10 @@ double ORowSetValue::getDouble()    const
                 if ( m_bSigned )
                     nRet = m_aValue.m_nInt32;
                 else
-                    nRet = double(*(sal_Int64*)m_aValue.m_pValue);
+                    nRet = m_aValue.m_nInt64;
+                break;
+            case DataType::BIGINT:
+                nRet = m_aValue.m_nInt64;
                 break;
             default:
                 {
@@ -1850,24 +1748,6 @@ void ORowSetValue::setSigned(sal_Bool _bMod)
             sal_Int32 nType = m_eTypeKind;
             switch(m_eTypeKind)
             {
-                case DataType::BIGINT:
-                    if ( m_bSigned ) // now we are signed, so we were unsigned and need to call getString()
-                    {
-                        m_bSigned = !m_bSigned;
-                        const ::rtl::OUString sValue = getString();
-                        free();
-                        m_bSigned = !m_bSigned;
-                        (*this) = sValue;
-                    }
-                    else
-                    {
-                        m_bSigned = !m_bSigned;
-                        const sal_Int64 nValue = getLong();
-                        free();
-                        m_bSigned = !m_bSigned;
-                        (*this) = nValue;
-                    }
-                    break;
                 case DataType::TINYINT:
                     if ( m_bSigned )
                         (*this) = getInt8();
@@ -1897,6 +1777,9 @@ void ORowSetValue::setSigned(sal_Bool _bMod)
                         (*this) = getLong();
                         m_bSigned = !m_bSigned;
                     }
+                    break;
+                case DataType::BIGINT:
+                    m_bSigned = !m_bSigned;
                     break;
             }
             m_eTypeKind = nType;

@@ -50,6 +50,7 @@ namespace connectivity
             sal_Int8        m_nInt8;
             sal_Int16       m_nInt16;
             sal_Int32       m_nInt32;
+            sal_Int64       m_nInt64;
             rtl_uString*    m_pString;
 
             void*           m_pValue;           // can contains double, etc
