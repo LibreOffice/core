@@ -335,12 +335,12 @@ public:
     bool HasNewCurrency() const;
 
     // Build string from NewCurrency for saving it SO50 compatible
-    void Build50Formatstring( String& rStr ) const;
+    void Build50Formatstring( OUString& rStr ) const;
 
     // strip [$-yyy] from all [$xxx-yyy] leaving only xxx's,
     // if bQuoteSymbol==true the xxx will become "xxx"
-    static String StripNewCurrencyDelimiters( const String& rStr,
-        bool bQuoteSymbol );
+    static OUString StripNewCurrencyDelimiters( const OUString& rStr,
+                                                bool bQuoteSymbol );
 
     // If a new SYMBOLTYPE_CURRENCY is contained if the format is of type
     // NUMBERFORMAT_CURRENCY, and if so the symbol xxx and the extension nnn

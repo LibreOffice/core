@@ -1913,16 +1913,16 @@ rtl::OUString SvNumberformat::LoadString( SvStream& rStream )
 
 void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr ) const
 {
-    String aFormatstring( sFormatstring );
-    String aComment( sComment );
+    OUString aFormatstring( sFormatstring );
+    OUStringBuffer aComment( sComment.getLength() + sFormatstring.getLength() + 2 );
 
     bool bNewCurrency = HasNewCurrency();
     if ( bNewCurrency )
     {
         // SV_NUMBERFORMATTER_VERSION_NEW_CURR im Kommentar speichern
-        aComment.Insert( cNewCurrencyMagic, 0 );
-        aComment.Insert( cNewCurrencyMagic, 0 );
-        aComment.Insert( aFormatstring, 1 );
+        aComment.insert( 0, cNewCurrencyMagic );
+        aComment.insert( 0, cNewCurrencyMagic );
+        aComment.insert( 1, aFormatstring );
         Build50Formatstring( aFormatstring );       // alten Formatstring generieren
     }
 
@@ -1955,7 +1955,7 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
         NumFor[i].Save(rStream);
     }
     // ab SV_NUMBERFORMATTER_VERSION_NEWSTANDARD
-    rStream.WriteUniOrByteString( aComment, rStream.GetStreamCharSet() );
+    rStream.WriteUniOrByteString( aComment.makeStringAndClear(), rStream.GetStreamCharSet() );
     rStream << nNewStandardDefined;
     // ab SV_NUMBERFORMATTER_VERSION_NEW_CURR
     rStream << nNewCurrencyVersionId;
@@ -2006,8 +2006,8 @@ bool SvNumberformat::GetNewCurrencySymbol( OUString& rSymbol,
 }
 
 // static
-String SvNumberformat::StripNewCurrencyDelimiters( const String& rStr,
-                                                   bool bQuoteSymbol )
+OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr,
+                                                     bool bQuoteSymbol )
 {
     OUString aTmp;
     OUString aSource(rStr);
@@ -2075,7 +2075,7 @@ String SvNumberformat::StripNewCurrencyDelimiters( const String& rStr,
     return aTmp;
 }
 
-void SvNumberformat::Build50Formatstring( String& rStr ) const
+void SvNumberformat::Build50Formatstring( OUString& rStr ) const
 {
     rStr = StripNewCurrencyDelimiters( sFormatstring, true );
 }
