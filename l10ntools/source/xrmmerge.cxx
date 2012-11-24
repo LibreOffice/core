@@ -73,7 +73,7 @@ extern char *GetOutputFile( int argc, char* argv[])
         sOutputFile = aArgs.m_sOutputFile;
         sMergeSrc = aArgs.m_sMergeSrc;
         char *pReturn = new char[ sOutputFile.getLength() + 1 ];
-        std::strcpy( pReturn, sOutputFile.getStr());  // #100211# - checked
+        std::strcpy( pReturn, sOutputFile.getStr());
         return pReturn;
     }
     else
