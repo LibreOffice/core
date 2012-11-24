@@ -638,7 +638,17 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
                 Point aPos( rUDEvt.GetRect().TopLeft() );
                 aPos.X() += nLeftDistance;
-                aPos.Y() += std::max( 0L, ( rUDEvt.GetRect().GetHeight() - aTextRect.Bottom() ) / 2 );
+                if ( aTextRect.Bottom() > rUDEvt.GetRect().GetHeight() )
+                {
+                    // the text does not fit, adjust the font size
+                    double ratio = static_cast< double >( rUDEvt.GetRect().GetHeight() ) / aTextRect.Bottom();
+                    aPixelSize.Width() *= ratio;
+                    aPixelSize.Height() *= ratio;
+                    aFont.SetSize( aPixelSize );
+                    pDevice->SetFont( aFont );
+                }
+                else
+                    aPos.Y() += ( rUDEvt.GetRect().GetHeight() - aTextRect.Bottom() ) / 2;
 
                 pDevice->DrawText( aPos, aStyleName );
 
