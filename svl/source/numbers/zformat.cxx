@@ -1738,7 +1738,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
     }
     eOp1 = (SvNumberformatLimitOps) nOp1;
     eOp2 = (SvNumberformatLimitOps) nOp2;
-    String aComment;        // wird nach dem NewCurrency-Geraffel richtig gesetzt
+    OUString aComment;        // wird nach dem NewCurrency-Geraffel richtig gesetzt
     if ( rHdr.BytesLeft() )
     {
         // ab SV_NUMBERFORMATTER_VERSION_NEWSTANDARD
@@ -1746,9 +1746,9 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
         rStream >> nNewStandardDefined;
     }
 
-    xub_StrLen nNewCurrencyEnd = STRING_NOTFOUND;
-    bool bNewCurrencyComment = ( aComment.GetChar(0) == cNewCurrencyMagic &&
-                                 (nNewCurrencyEnd = aComment.Search( cNewCurrencyMagic, 1 )) != STRING_NOTFOUND );
+    sal_Int32 nNewCurrencyEnd = -1;
+    bool bNewCurrencyComment = ( aComment.getLength() > 1 && aComment[0] == cNewCurrencyMagic &&
+                                 (nNewCurrencyEnd = aComment.indexOf( cNewCurrencyMagic, 1 )) >= 0 );
     bool bNewCurrencyLoaded = false;
     bool bNewCurrency = false;
 
@@ -1790,16 +1790,30 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
     {
         if ( bNewCurrency && bNewCurrencyComment )
         {   // original Formatstring und Kommentar wiederherstellen
-            sFormatstring = aComment.Copy( 1, nNewCurrencyEnd-1 );
-            aComment.Erase( 0, nNewCurrencyEnd+1 );
+            sFormatstring = aComment.copy( 1, nNewCurrencyEnd-1 );
+            if(nNewCurrencyEnd + 1 < aComment.getLength())
+            {
+                aComment = aComment.copy(nNewCurrencyEnd + 1 );
+            }
+            else
+            {
+                aComment = "";
+            }
         }
     }
     else if ( bNewCurrencyComment )
     {
         // neu, aber mit Version vor SV_NUMBERFORMATTER_VERSION_NEW_CURR gespeichert
         // original Formatstring und Kommentar wiederherstellen
-        sFormatstring = aComment.Copy( 1, nNewCurrencyEnd-1 );
-        aComment.Erase( 0, nNewCurrencyEnd+1 );
+        sFormatstring = aComment.copy( 1, nNewCurrencyEnd - 1 );
+        if(nNewCurrencyEnd + 1 < aComment.getLength())
+        {
+            aComment = aComment.copy(nNewCurrencyEnd + 1 );
+        }
+        else
+        {
+            aComment = "";
+        }
         // Zustaende merken
         short nDefined = ( eType & NUMBERFORMAT_DEFINED );
         sal_uInt16 nNewStandard = nNewStandardDefined;
