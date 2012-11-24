@@ -558,9 +558,6 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
         {
             const SfxItemSet& aItemSet = pStyle->GetItemSet();
 
-            // all the font properties
-            //const SvxColorItem *pColorItem = static_cast< const SvxColorItem* >( aItemSet.GetItem( SID_ATTR_CHAR_COLOR ) );
-
             const SvxFontItem *pFontItem = static_cast< const SvxFontItem* >( aItemSet.GetItem( SID_ATTR_CHAR_FONT ) );
             const SvxFontHeightItem *pFontHeightItem = static_cast< const SvxFontHeightItem* >( aItemSet.GetItem( SID_ATTR_CHAR_FONTHEIGHT ) );
 
@@ -585,10 +582,18 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
                 // setup the device & draw
                 Font aOldFont( pDevice->GetFont() );
-                //Color aOldColor( pDevice->GetTextColor() );
+                Color aOldColor( pDevice->GetTextColor() );
 
                 pDevice->SetFont( aFont );
-                //pDevice->SetTextColor( pColorItem->GetValue() );
+
+                // text color, when we are not selected
+                pItem = aItemSet.GetItem( SID_ATTR_CHAR_COLOR );
+                if ( pItem && rUDEvt.GetItemId() != GetSelectEntryPos() )
+                {
+                    Color aColor( static_cast< const SvxColorItem* >( pItem )->GetValue() );
+                    if ( aColor != COL_AUTO )
+                        pDevice->SetTextColor( aColor );
+                }
 
                 // IMG_TXT_DISTANCE in ilstbox.hxx is 6, then 1 is added as
                 // nBorder, and we are adding 1 in order to look better when
@@ -604,7 +609,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
                 pDevice->DrawText( aPos, aStyleName );
 
-                //pDevice->SetTextColor( aOldColor );
+                pDevice->SetTextColor( aOldColor );
                 pDevice->SetFont( aOldFont );
 
                 // draw separator, if present
