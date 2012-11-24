@@ -575,7 +575,7 @@ private:
     SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, OUStringBuffer& OutString );
     SVL_DLLPRIVATE void ImpGetOutputStdToPrecision( double& rNumber, OUString& rOutString, sal_uInt16 nPrecision ) const;
     // numbers in input line
-    SVL_DLLPRIVATE void ImpGetOutputInputLine( double fNumber, String& OutString );
+    SVL_DLLPRIVATE void ImpGetOutputInputLine( double fNumber, OUString& OutString );
 
     // check subcondition
     // OP undefined => -1
@@ -617,20 +617,20 @@ private:
 
     SVL_DLLPRIVATE bool ImpGetFractionOutput(double fNumber,
                                              sal_uInt16 nIx,
-                                             String& OutString);
+                                             OUStringBuffer& OutString);
     SVL_DLLPRIVATE bool ImpGetScientificOutput(double fNumber,
                                                sal_uInt16 nIx,
-                                               String& OutString);
+                                               OUStringBuffer& OutString);
 
     SVL_DLLPRIVATE bool ImpGetDateOutput( double fNumber,
-                       sal_uInt16 nIx,
-                       String& OutString );
+                                          sal_uInt16 nIx,
+                                          OUStringBuffer& OutString );
     SVL_DLLPRIVATE bool ImpGetTimeOutput( double fNumber,
-                       sal_uInt16 nIx,
-                       String& OutString );
+                                          sal_uInt16 nIx,
+                                          OUStringBuffer& OutString );
     SVL_DLLPRIVATE bool ImpGetDateTimeOutput( double fNumber,
-                           sal_uInt16 nIx,
-                           String& OutString );
+                                              sal_uInt16 nIx,
+                                              OUStringBuffer& OutString );
 
     // Switches to the "gregorian" calendar if the current calendar is
     // non-"gregorian" and the era is a "Dummy" era of a calendar which doesn't
@@ -646,8 +646,8 @@ private:
                                               sal_Int16 nNatNum );
 
     SVL_DLLPRIVATE bool ImpGetNumberOutput( double fNumber,
-                         sal_uInt16 nIx,
-                         String& OutString );
+                                            sal_uInt16 nIx,
+                                            OUStringBuffer& OutString );
 
     SVL_DLLPRIVATE void ImpCopyNumberformat( const SvNumberformat& rFormat );
 
