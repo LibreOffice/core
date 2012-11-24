@@ -76,6 +76,8 @@ SearchParam::SearchParam( const SearchParam& rParam )
     nTransliterationFlags = rParam.nTransliterationFlags;
 }
 
+SearchParam::~SearchParam() {}
+
 static bool lcl_Equals( const SearchOptions& rSO1, const SearchOptions& rSO2 )
 {
     return rSO1.algorithmType == rSO2.algorithmType &&

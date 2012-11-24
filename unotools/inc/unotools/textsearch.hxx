@@ -79,6 +79,8 @@ public:
 
     SearchParam( const SearchParam& );
 
+    ~SearchParam();
+
     const String&   GetSrchStr() const          { return sSrchStr; }
     const String&   GetReplaceStr() const       { return sReplaceStr; }
     SearchType      GetSrchType() const         { return m_eSrchType; }
