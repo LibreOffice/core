@@ -37,6 +37,13 @@
 #include "lngsvcmgr.hxx"
 #include "linguistic/lngprops.hxx"
 
+// values asigned to capitalization types
+#define CAPTYPE_UNKNOWN 0
+#define CAPTYPE_NOCAP   1
+#define CAPTYPE_INITCAP 2
+#define CAPTYPE_ALLCAP  3
+#define CAPTYPE_MIXED   4
+
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
@@ -180,6 +187,7 @@ SpellCheckerDispatcher::SpellCheckerDispatcher( LngSvcMgr &rLngSvcMgr ) :
     rMgr    (rLngSvcMgr)
 {
     pCache = NULL;
+    pCharClass = NULL;
 }
 
 
@@ -187,6 +195,7 @@ SpellCheckerDispatcher::~SpellCheckerDispatcher()
 {
     ClearSvcList();
     delete pCache;
+    delete pCharClass;
 }
 
 
@@ -428,8 +437,18 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
             GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
             Reference< XDictionaryEntry > xTmp( lcl_GetRulingDictionaryEntry( aChkWord, nLanguage ) );
-            if (xTmp.is())
+            if (xTmp.is()) {
                 bRes = !xTmp->isNegative();
+            } else {
+                setCharClass(LanguageTag(nLanguage));
+                sal_uInt16 ct = capitalType(aChkWord, pCharClass);
+                if (ct == CAPTYPE_INITCAP || ct == CAPTYPE_ALLCAP) {
+                    Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, pCharClass), nLanguage ) );
+                    if (xTmp2.is()) {
+                        bRes = !xTmp2->isNegative();
+                    }
+                }
+            }
         }
     }
 
@@ -810,5 +829,53 @@ void SpellCheckerDispatcher::FlushSpellCache()
     if (pCache)
         pCache->Flush();
 }
+
+void SpellCheckerDispatcher::setCharClass(const LanguageTag& rLanguageTag)
+{
+    if (!pCharClass)
+        pCharClass = new CharClass(rLanguageTag);
+    pCharClass->setLanguageTag(rLanguageTag);
+}
+
+sal_uInt16 SAL_CALL SpellCheckerDispatcher::capitalType(const OUString& aTerm, CharClass * pCC)
+{
+        sal_Int32 tlen = aTerm.getLength();
+        if ((pCC) && (tlen))
+        {
+            String aStr(aTerm);
+            sal_Int32 nc = 0;
+            for (sal_uInt16 tindex = 0; tindex < tlen;  tindex++)
+            {
+                if (pCC->getCharacterType(aStr,tindex) &
+                   ::com::sun::star::i18n::KCharacterType::UPPER) nc++;
+            }
+
+            if (nc == 0)
+                return (sal_uInt16) CAPTYPE_NOCAP;
+            if (nc == tlen)
+                return (sal_uInt16) CAPTYPE_ALLCAP;
+            if ((nc == 1) && (pCC->getCharacterType(aStr,0) &
+                  ::com::sun::star::i18n::KCharacterType::UPPER))
+                return (sal_uInt16) CAPTYPE_INITCAP;
+
+            return (sal_uInt16) CAPTYPE_MIXED;
+        }
+        return (sal_uInt16) CAPTYPE_UNKNOWN;
+}
+
+
+
+OUString SAL_CALL SpellCheckerDispatcher::makeLowerCase(const OUString& aTerm, CharClass * pCC)
+{
+    if (pCC)
+        return pCC->lowercase(aTerm);
+    return aTerm;
+}
+
+#undef CAPTYPE_UNKNOWN
+#undef CAPTYPE_NOCAP
+#undef CAPTYPE_INITCAP
+#undef CAPTYPE_ALLCAP
+#undef CAPTYPE_MIXED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

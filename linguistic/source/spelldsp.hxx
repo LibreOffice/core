@@ -41,6 +41,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <map>
+#include <unotools/charclass.hxx>
 
 class LngSvcMgr;
 
@@ -65,6 +66,7 @@ class SpellCheckerDispatcher :
 
     LngSvcMgr                   &rMgr;
     mutable linguistic::SpellCache      *pCache; // Spell Cache (holds known words)
+    CharClass                   * pCharClass;
 
     // disallow copy-constructor and assignment-operator for now
     SpellCheckerDispatcher(const SpellCheckerDispatcher &);
@@ -119,8 +121,13 @@ public:
     virtual DspType GetDspType() const;
 
     void    FlushSpellCache();
-};
 
+private:
+    void setCharClass(const LanguageTag& rLanguageTag);
+    sal_uInt16 SAL_CALL capitalType(const OUString&, CharClass *);
+    OUString SAL_CALL makeLowerCase(const OUString&, CharClass *);
+
+};
 
 inline linguistic::SpellCache & SpellCheckerDispatcher::GetCache() const
 {
@@ -146,7 +153,6 @@ inline ::com::sun::star::uno::Reference<
     return xDicList.is() ?
         xDicList : xDicList = linguistic::GetSearchableDictionaryList();
 }
-
 
 
 #endif
