@@ -34,6 +34,7 @@
 #include "resource/common_res.hrc"
 
 #include <connectivity/dbexception.hxx>
+#include <unotools/textsearch.hxx>
 
 using namespace connectivity::mork;
 using namespace connectivity;
@@ -329,9 +330,14 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
                     SAL_INFO("connectivity.mork", "MQueryOp::DoesNotContain; done");
                     resultVector.push_back((currentValue.indexOf(searchedValue) == -1) ? sal_True : sal_False);
                 } else if (evStr->getCond() == MQueryOp::RegExp) {
-                    SAL_WARN("connectivity.mork", "MQueryOp::RegExp; TODO");
-                    OSL_FAIL("regexp criterion is not yet implemented");
-                    _aQuery->getError().setResId(STR_ERROR_GET_ROW);
+                    SAL_INFO("connectivity.mork", "MQueryOp::RegExp; done");
+                    utl::SearchParam param(
+                        searchedValue, utl::SearchParam::SRCH_REGEXP);
+                    utl::TextSearch ts(param, LANGUAGE_DONTKNOW);
+                    sal_Int32 start = 0;
+                    sal_Int32 end = currentValue.getLength();
+                    resultVector.push_back(
+                        ts.SearchForward(currentValue, &start, &end));
                 }
             } else if (evStr->getCond() == MQueryOp::Exists) {
                 SAL_INFO("connectivity.mork", "MQueryOp::Exists; done");

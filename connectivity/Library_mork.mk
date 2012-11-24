@@ -27,6 +27,7 @@ $(eval $(call gb_Library_use_libraries,mork, \
     dbtools \
     sal \
     salhelper \
+    utl \
 	$(gb_UWINAPI) \
 ))
 
