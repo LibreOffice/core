@@ -150,7 +150,7 @@ class FileAccess(object):
     def getFolderTitles(self, xMSF, FilterName, FolderName, resDict=None):
         #Returns and ordered dict containing the template's name and path
         
-        LocLayoutFiles = {}
+        locLayoutFiles = []
         try:
             xDocInterface = xMSF.createInstance(
                 "com.sun.star.document.DocumentProperties")
@@ -162,6 +162,7 @@ class FileAccess(object):
             else:
                 FilterName += "-"
             
+            locLayoutDict = {}
             for i in nameList:
                 fileName = self.getFilename(i)
                 if FilterName is None or fileName.startswith(FilterName):
@@ -174,13 +175,20 @@ class FileAccess(object):
                             title = resDict[xDocInterface.Title]
                         else:
                             title = xDocInterface.Title
-                    LocLayoutFiles[title] = i
-
+                    locLayoutDict[title] = i
+            
+            #sort the dictionary and create a list containing the
+            #keys list and the values list
+            keysList = sorted(locLayoutDict.keys())
+            valuesList= []
+            for i in keysList:
+                valuesList.append(locLayoutDict[i])
+            locLayoutFiles.append(keysList)
+            locLayoutFiles.append(valuesList)          
         except Exception:
             traceback.print_exc()
 
-        #TODO: return it sorted
-        return LocLayoutFiles
+        return locLayoutFiles
 
     @classmethod
     def addPath(self, _sPath, _sPath2):

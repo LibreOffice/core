@@ -155,7 +155,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
         self.setControlProperty(
             "listPageDesign", "StringItemList",
-            tuple(self.agendaTemplates.keys()))
+            tuple(self.agendaTemplates[0]))
         UnoDataAware.attachListBox(
             self.agenda, "cp_AgendaType", self.listPageDesign, True).updateUI()
         UnoDataAware.attachCheckBox(
@@ -252,7 +252,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             if AgendaWizardDialogImpl.pageDesign is not SelectedItemPos:
                 AgendaWizardDialogImpl.pageDesign = SelectedItemPos
                 self.agendaTemplate.load(
-                    self.agendaTemplates.values()[SelectedItemPos],
+                    self.agendaTemplates[1][SelectedItemPos],
                     self.topicsControl.scrollfields)
         except Exception:
             traceback.print_exc()

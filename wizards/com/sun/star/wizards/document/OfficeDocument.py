@@ -277,7 +277,6 @@ class OfficeDocument(object):
             "com.sun.star.document.TypeDetection")
         return typeDetect.getByName(type)
 
-
     def showMessageBox(
         self, xMSF, windowServiceName, windowAttribute, MessageText):
 

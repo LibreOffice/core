@@ -280,9 +280,9 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 self.sFaxPath, self.resources.dictPrivateTemplate)
             
             self.setControlProperty("lstBusinessStyle", "StringItemList",
-                tuple(self.BusinessFiles.keys()))
+                tuple(self.BusinessFiles[0]))
             self.setControlProperty("lstPrivateStyle", "StringItemList",
-                tuple(self.PrivateFiles.keys()))
+                tuple(self.PrivateFiles[0]))
             self.setControlProperty("lstBusinessStyle", "SelectedItems", (0,))
             self.setControlProperty("lstPrivateStyle", "SelectedItems" , (0,))
             return True
@@ -433,7 +433,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         if self.lstBusinessStylePos != selectedItemPos:
             self.lstBusinessStylePos = selectedItemPos
             self.myFaxDoc.loadAsPreview(
-                self.BusinessFiles.values()[selectedItemPos], False)
+                self.BusinessFiles[1][selectedItemPos], False)
             self.initializeElements()
             self.setElements()
             self.drawConstants()
@@ -458,7 +458,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         if self.lstPrivateStylePos != selectedItemPos:
             self.lstPrivateStylePos = selectedItemPos
             self.myFaxDoc.loadAsPreview(
-                self.PrivateFiles.values()[selectedItemPos], False)
+                self.PrivateFiles[1][selectedItemPos], False)
             self.initializeElements()
             self.setElements()
 

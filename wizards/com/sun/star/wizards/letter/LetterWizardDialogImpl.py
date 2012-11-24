@@ -381,7 +381,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         if self.lstBusinessStylePos != selectedItemPos:
             self.lstBusinessStylePos = selectedItemPos
             self.myLetterDoc.loadAsPreview(
-                self.BusinessFiles.values()[selectedItemPos], False)
+                self.BusinessFiles[1][selectedItemPos], False)
             self.initializeElements()
             self.chkBusinessPaperItemChanged()
             self.setElements(False)
@@ -392,7 +392,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         if self.lstPrivOfficialStylePos != selectedItemPos:
             self.lstPrivOfficialStylePos = selectedItemPos
             self.myLetterDoc.loadAsPreview(
-                self.OfficialFiles.values()[selectedItemPos], False)
+                self.OfficialFiles[1][selectedItemPos], False)
             self.initializeElements()
             self.setPossibleSenderData(True)
             self.setElements(False)
@@ -404,7 +404,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.lstPrivateStylePos = selectedItemPos
             self.myLetterDoc.xTextDocument = \
             self.myLetterDoc.loadAsPreview(
-                self.PrivateFiles.values()[selectedItemPos], False)
+                self.PrivateFiles[1][selectedItemPos], False)
             self.initializeElements()
             self.setElements(True)
 
@@ -916,13 +916,13 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 xMSF, "pri", sLetterPath, self.resources.dictPrivateTemplate)
         self.setControlProperty(
             "lstBusinessStyle", "StringItemList",
-            tuple(self.BusinessFiles.keys()))
+            tuple(self.BusinessFiles[0]))
         self.setControlProperty(
             "lstPrivOfficialStyle", "StringItemList",
-            tuple(self.OfficialFiles.keys()))
+            tuple(self.OfficialFiles[0]))
         self.setControlProperty(
             "lstPrivateStyle", "StringItemList",
-            tuple(self.PrivateFiles.keys()))
+            tuple(self.PrivateFiles[0]))
         self.setControlProperty(
             "lstBusinessStyle", "SelectedItems", (0,))
         self.setControlProperty(
