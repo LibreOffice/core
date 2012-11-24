@@ -130,8 +130,7 @@ void ThesDummy_Impl::GetCfgLocales()
         Locale *pLocale = pLocaleSeq->getArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            pLocale[i] = SvxCreateLocale(
-                            LanguageTag( pNodeNames[i] ).getLanguageType() );
+            pLocale[i] = LanguageTag( pNodeNames[i] ).getLocale();
         }
     }
 }
@@ -694,7 +693,7 @@ uno::Reference< XDictionary > LinguMgr::GetChangeAll()
         xChangeAll = uno::Reference< XDictionary > (
                         _xDicList->createDictionary(
                             A2OU("ChangeAllList"),
-                            SvxCreateLocale( LANGUAGE_NONE ),
+                            LanguageTag( LANGUAGE_NONE ).getLocale(),
                             DictionaryType_NEGATIVE, String() ), UNO_QUERY );
     }
     return xChangeAll;
@@ -722,7 +721,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
         try
         {
             xTmp =  xTmpDicList->createDictionary( aDicName,
-                        SvxCreateLocale( LANGUAGE_NONE ),
+                        LanguageTag( LANGUAGE_NONE ).getLocale(),
                         DictionaryType_POSITIVE,
                         linguistic::GetWritableDictionaryURL( aDicName ) );
         }
@@ -870,33 +869,6 @@ short SvxDicError( Window *pParent, sal_Int16 nError )
         nRes = InfoBox( pParent, EE_RESSTR( nRid ) ).Execute();
     }
     return nRes;
-}
-
-LanguageType SvxLocaleToLanguage( const Locale& rLocale )
-{
-    if ( rLocale.Language.isEmpty() )
-        return LANGUAGE_NONE;
-
-    return LanguageTag( rLocale ).getLanguageType();
-}
-
-Locale& SvxLanguageToLocale( Locale& rLocale, LanguageType eLang )
-{
-    if ( eLang != LANGUAGE_NONE )
-        rLocale = LanguageTag( eLang ).getLocale();
-    else
-        rLocale = Locale();
-
-    return rLocale;
-}
-
-Locale SvxCreateLocale( LanguageType eLang )
-{
-    Locale aLocale;
-    if ( eLang != LANGUAGE_NONE )
-        aLocale = LanguageTag( eLang ).getLocale();
-
-    return aLocale;
 }
 
 

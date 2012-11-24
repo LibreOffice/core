@@ -358,8 +358,7 @@ String  SwIndexMarkPane::GetDefaultPhoneticReading( const String& rText )
     if( !bIsPhoneticReadingEnabled )
         return aEmptyStr;
 
-    lang::Locale aLocale( SvxCreateLocale( LanguageType( nLangForPhoneticReading ) ) );
-    return xExtendedIndexEntrySupplier->getPhoneticCandidate(rText, aLocale);
+    return xExtendedIndexEntrySupplier->getPhoneticCandidate(rText, LanguageTag( nLangForPhoneticReading ).getLocale());
 }
 
 /* --------------------------------------------------
@@ -451,7 +450,7 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, sal_Bool bWordOnly, sal_Bool 
                         SearchAlgorithms_ABSOLUTE,
                         ( bWordOnly ? SearchFlags::NORM_WORD_ONLY : 0 ),
                         rSh.GetSelTxt(), OUString(),
-                        SvxCreateLocale( GetAppLanguage() ),
+                        LanguageTag( GetAppLanguage() ).getLocale(),
                         0, 0, 0,
                         (bCaseSensitive
                             ? 0

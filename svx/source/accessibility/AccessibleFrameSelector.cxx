@@ -289,9 +289,7 @@ Reference< XAccessibleStateSet > AccFrameSelector::getAccessibleStateSet(  )
 Locale AccFrameSelector::getLocale(  )
     throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
-    Locale aRet;
-    SvxLanguageToLocale( aRet, Application::GetSettings().GetUILanguageTag().getLanguageType() );
-    return aRet;
+    return Application::GetSettings().GetUILanguageTag().getLocale();
 }
 
 // ----------------------------------------------------------------------------

@@ -84,7 +84,7 @@ void SwBreakIt::_GetLocale( const LanguageType aLang )
 {
     aLast = aLang;
     delete m_pLocale;
-    m_pLocale = new lang::Locale( SvxCreateLocale( aLast ) );
+    m_pLocale = new lang::Locale( LanguageTag( aLast ).getLocale() );
 }
 
 void SwBreakIt::_GetForbidden( const LanguageType aLang )

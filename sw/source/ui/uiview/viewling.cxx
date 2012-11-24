@@ -593,7 +593,7 @@ void SwView::StartThesaurus()
     Reference< XThesaurus >  xThes( ::GetThesaurus() );
     AbstractThesaurusDialog *pDlg = NULL;
 
-    if ( !xThes.is() || !xThes->hasLocale( SvxCreateLocale( eLang ) ) )
+    if ( !xThes.is() || !xThes->hasLocale( LanguageTag( eLang ).getLocale() ) )
         SpellError( eLang );
     else
     {

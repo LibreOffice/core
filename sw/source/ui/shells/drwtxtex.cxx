@@ -571,9 +571,8 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
 
                 // disable "Thesaurus" context menu entry if there is nothing to look up
                 uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
-                lang::Locale aLocale( SvxCreateLocale( nLang ) );
                 if (!bIsLookUpWord ||
-                    !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
+                    !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( LanguageTag( nLang ).getLocale() ))
                     rSet.DisableItem( SID_THES );
 
                 //! avoid puting the same item as SfxBoolItem at the end of this function
@@ -641,7 +640,7 @@ ASK_ESCAPE:
             LanguageType nLang = ((const SvxLanguageItem &) rItem).GetLanguage();
 
             uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
-            if (!xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( SvxCreateLocale( nLang ) ))
+            if (!xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( LanguageTag( nLang ).getLocale() ))
                 rSet.DisableItem( SID_THESAURUS );
             nSlotId = 0;
         }

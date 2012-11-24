@@ -29,6 +29,7 @@
 #include <editeng/unolingu.hxx>
 #include <unotools/lingucfg.hxx>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -77,15 +78,12 @@ sal_Bool ScModule::HasThesaurusLanguage( sal_uInt16 nLang )
     if ( nLang == LANGUAGE_NONE )
         return false;
 
-    lang::Locale aLocale;
-    SvxLanguageToLocale( aLocale, nLang );
-
     sal_Bool bHasLang = false;
     try
     {
         uno::Reference< linguistic2::XThesaurus > xThes(LinguMgr::GetThesaurus());
         if ( xThes.is() )
-            bHasLang = xThes->hasLocale( aLocale );
+            bHasLang = xThes->hasLocale( LanguageTag( nLang ).getLocale() );
     }
     catch( uno::Exception& )
     {

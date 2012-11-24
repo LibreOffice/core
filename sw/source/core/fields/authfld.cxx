@@ -397,7 +397,7 @@ bool SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
         break;
 
     case FIELD_PROP_LOCALE:
-        rVal <<= SvxCreateLocale(GetLanguage());
+        rVal <<= LanguageTag(GetLanguage()).getLocale();
         break;
 
     case FIELD_PROP_PROP_SEQ:
@@ -457,7 +457,7 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
         {
             com::sun::star::lang::Locale aLocale;
             if( 0 != (bRet = rAny >>= aLocale ))
-                SetLanguage( SvxLocaleToLanguage( aLocale ));
+                SetLanguage( LanguageTag( aLocale ).getLanguageType());
         }
         break;
 

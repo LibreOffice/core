@@ -202,13 +202,11 @@ namespace accessibility
 
         SolarMutexGuard aGuard;
 
-        lang::Locale        aLocale;
-
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleImageBullet::getLocale: paragraph index value overflow");
 
         // return locale of first character in the paragraph
-        return SvxLanguageToLocale(aLocale, GetTextForwarder().GetLanguage( static_cast< sal_uInt16 >( GetParagraphIndex() ), 0 ));
+        return LanguageTag(GetTextForwarder().GetLanguage( static_cast< sal_uInt16 >( GetParagraphIndex() ), 0 )).getLocale();
     }
 
     void SAL_CALL AccessibleImageBullet::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)

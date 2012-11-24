@@ -122,9 +122,10 @@ static LanguageType lcl_CheckLanguage(
 
         // if the result from language guessing does not provide a 'Country' part
         // try to get it by looking up the locale setting of the office.
+        /* FIXME-BCP47: handle language tags */
         if (aLocale.Country.isEmpty())
         {
-            lang::Locale aTmpLocale = SvxCreateLocale( nTmpLang );
+            lang::Locale aTmpLocale = LanguageTag( nTmpLang ).getLocale();
             if (aTmpLocale.Language == aLocale.Language)
                 nLang = nTmpLang;
         }
@@ -384,7 +385,7 @@ SwSpellPopup::SwSpellPopup(
     nCheckedLanguage = LANGUAGE_NONE;
     if (xSpellAlt.is())
     {
-        nCheckedLanguage = SvxLocaleToLanguage( xSpellAlt->getLocale() );
+        nCheckedLanguage = LanguageTag( xSpellAlt->getLocale() ).getLanguageType();
         aSuggestions = xSpellAlt->getAlternatives();
     }
     sal_Int16 nStringCount = static_cast< sal_Int16 >( aSuggestions.getLength() );
@@ -479,7 +480,7 @@ SwSpellPopup::SwSpellPopup(
                 continue;
 
             uno::Reference< frame::XStorable > xStor( xDicTmp, uno::UNO_QUERY );
-            LanguageType nActLanguage = SvxLocaleToLanguage( xDicTmp->getLocale() );
+            LanguageType nActLanguage = LanguageTag( xDicTmp->getLocale() ).getLanguageType();
             if( xDicTmp->isActive()
                 &&  xDicTmp->getDictionaryType() != linguistic2::DictionaryType_NEGATIVE
                 && (nCheckedLanguage == nActLanguage || LANGUAGE_NONE == nActLanguage )
@@ -574,7 +575,7 @@ sExplanationLink( ),
 bGrammarResults( true ),
 aInfo16( SW_RES(IMG_INFO_16) )
 {
-    nCheckedLanguage = SvxLocaleToLanguage( rResult.aLocale );
+    nCheckedLanguage = LanguageTag( rResult.aLocale ).getLanguageType();
     nGrammarError = nErrorInResult;
     bool bUseImagesInMenus = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
 

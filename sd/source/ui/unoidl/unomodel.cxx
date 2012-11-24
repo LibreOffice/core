@@ -1213,7 +1213,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
             if(!(aValue >>= aLocale))
                 throw lang::IllegalArgumentException();
 
-            mpDoc->SetLanguage( SvxLocaleToLanguage(aLocale), EE_CHAR_LANGUAGE );
+            mpDoc->SetLanguage( LanguageTag(aLocale).getLanguageType(), EE_CHAR_LANGUAGE );
             break;
         }
         case WID_MODEL_TABSTOP:
@@ -1285,9 +1285,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
         case WID_MODEL_LANGUAGE:
         {
             LanguageType eLang = mpDoc->GetLanguage( EE_CHAR_LANGUAGE );
-            lang::Locale aLocale;
-            SvxLanguageToLocale( aLocale, eLang );
-            aAny <<= aLocale;
+            aAny <<= LanguageTag( eLang).getLocale();
             break;
         }
         case WID_MODEL_TABSTOP:

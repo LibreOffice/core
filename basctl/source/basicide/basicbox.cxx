@@ -416,7 +416,7 @@ void LanguageBox::FillBox()
         {
             bool bIsDefault = localesAreEqual( aDefaultLocale, pLocale[i] );
             bool bIsCurrent = localesAreEqual( aCurrentLocale, pLocale[i] );
-            LanguageType eLangType = SvxLocaleToLanguage( pLocale[i] );
+            LanguageType eLangType = LanguageTag( pLocale[i] ).getLanguageType();
             String sLanguage = aLangTable.GetString( eLangType );
             if ( bIsDefault )
             {

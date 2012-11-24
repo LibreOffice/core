@@ -730,7 +730,7 @@ void SwXTextSearch::FillSearchOptions( util::SearchOptions& rSearchOpt ) const
     else
         rSearchOpt.algorithmType = util::SearchAlgorithms_ABSOLUTE;
 
-    rSearchOpt.Locale = SvxCreateLocale( GetAppLanguage() );
+    rSearchOpt.Locale = LanguageTag( GetAppLanguage() ).getLocale();
     rSearchOpt.searchString = sSearchText;
     rSearchOpt.replaceString = sReplaceText;
 

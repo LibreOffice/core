@@ -202,8 +202,7 @@ sal_Bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
             for( itElem = pImpl->aChangedLanguagesMap.begin();
                 itElem != pImpl->aChangedLanguagesMap.end(); ++itElem )
             {
-                Locale aLocale;
-                SvxLanguageToLocale( aLocale, itElem->first );
+                Locale aLocale( LanguageTag( itElem->first ).getLocale());
                 if(itElem->second->bRemoved)
                     pImpl->xForbidden->removeForbiddenCharacters( aLocale );
                 else if(itElem->second->pCharacters)
@@ -289,8 +288,8 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& )
     //preselect the system language in the box - if available
     if(USHRT_MAX == eLastUsedLanguageTypeForForbiddenCharacters)
     {
-        eLastUsedLanguageTypeForForbiddenCharacters = SvxLocaleToLanguage(
-            Application::GetSettings().GetLanguageTag().getLocale() );
+        eLastUsedLanguageTypeForForbiddenCharacters =
+            Application::GetSettings().GetLanguageTag().getLanguageType();
         if (MsLangId::isSimplifiedChinese(eLastUsedLanguageTypeForForbiddenCharacters))
             eLastUsedLanguageTypeForForbiddenCharacters = LANGUAGE_CHINESE_SIMPLIFIED;
         else if (MsLangId::isTraditionalChinese(eLastUsedLanguageTypeForForbiddenCharacters))
@@ -303,10 +302,9 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& )
 IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl)
 {
     //set current value
-    Locale aLocale;
     LanguageType eSelectLanguage = aLanguageLB.GetSelectLanguage();
-    SvxLanguageToLocale(aLocale, eSelectLanguage );
-    LanguageTag aLanguageTag( aLocale);
+    LanguageTag aLanguageTag( eSelectLanguage);
+    Locale aLocale( aLanguageTag.getLocale());
 
     OUString sStart, sEnd;
     sal_Bool bAvail;
@@ -380,9 +378,8 @@ IMPL_LINK(SvxAsianLayoutPage, ChangeStandardHdl, CheckBox*, pBox)
 
 IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit*, pEdit)
 {
-    Locale aLocale;
     LanguageType eSelectLanguage = aLanguageLB.GetSelectLanguage();
-    SvxLanguageToLocale(aLocale, eSelectLanguage );
+    Locale aLocale( LanguageTag( eSelectLanguage ).getLocale());
     OUString sStart = aStartED.GetText();
     OUString sEnd = aEndED.GetText();
     sal_Bool bEnable = pEdit->IsEnabled();

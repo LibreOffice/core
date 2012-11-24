@@ -884,7 +884,7 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
     SfxModule *pMod = *(SfxModule**)GetAppData(SHL_WRITER);
     bSWriter = pMod == SfxModule::GetActiveModule();
 
-    LanguageTag aLanguageTag( SvxCreateLocale(eLastDialogLanguage ));
+    LanguageTag aLanguageTag( eLastDialogLanguage );
     pCompareClass = new CollatorWrapper( GetProcessFact() );
     pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
     pCharClass = new CharClass( aLanguageTag );
@@ -1087,7 +1087,7 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
         delete pCompareClass;
         delete pCharClass;
 
-        LanguageTag aLanguageTag( SvxCreateLocale(eLastDialogLanguage ));
+        LanguageTag aLanguageTag( eLastDialogLanguage );
         pCompareClass = new CollatorWrapper( GetProcessFact() );
         pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
         pCharClass = new CharClass( aLanguageTag );
@@ -1378,7 +1378,7 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
 
     FreeResource();
 
-    ::com::sun::star::lang::Locale aLcl( SvxCreateLocale(eLastDialogLanguage ));
+    ::com::sun::star::lang::Locale aLcl( LanguageTag(eLastDialogLanguage ).getLocale());
     pCompareClass = new CollatorWrapper( GetProcessFact() );
     pCompareClass->loadDefaultCollator( aLcl, 0 );
 
@@ -1554,7 +1554,7 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
         eLastDialogLanguage = eSet;
         delete pCompareClass;
         pCompareClass = new CollatorWrapper( GetProcessFact() );
-        pCompareClass->loadDefaultCollator( SvxCreateLocale( eLastDialogLanguage ), 0 );
+        pCompareClass->loadDefaultCollator( LanguageTag( eLastDialogLanguage ).getLocale(), 0 );
         ModifyHdl(&aAbbrevED);
         ModifyHdl(&aDoubleCapsED);
     }
@@ -2436,7 +2436,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
 
     // fill list box:
     const sal_uInt32 nNumberOfRecognizers = rSmartTagMgr.NumberOfRecognizers();
-    const lang::Locale aLocale( SvxCreateLocale( eLastDialogLanguage ) );
+    const lang::Locale aLocale( LanguageTag( eLastDialogLanguage ).getLocale() );
 
     for ( sal_uInt32 i = 0; i < nNumberOfRecognizers; ++i )
     {
@@ -2480,7 +2480,7 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, ClickHdl)
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;
     const sal_Int32 nSmartTagIdx = pUserData->mnSmartTagIdx;
 
-     const lang::Locale aLocale( SvxCreateLocale( eLastDialogLanguage ) );
+     const lang::Locale aLocale( LanguageTag( eLastDialogLanguage ).getLocale() );
     if ( xRec->hasPropertyPage( nSmartTagIdx, aLocale ) )
         xRec->displayPropertyPage( nSmartTagIdx, aLocale );
 
@@ -2519,7 +2519,7 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl)
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;
     const sal_Int32 nSmartTagIdx = pUserData->mnSmartTagIdx;
 
-    const lang::Locale aLocale( SvxCreateLocale( eLastDialogLanguage ) );
+    const lang::Locale aLocale( LanguageTag( eLastDialogLanguage ).getLocale() );
     if ( xRec->hasPropertyPage( nSmartTagIdx, aLocale ) )
         m_aPropertiesPB.Enable( sal_True );
     else

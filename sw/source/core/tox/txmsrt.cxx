@@ -85,7 +85,7 @@ void SwTOXInternational::Init()
 {
     pIndexWrapper = new IndexEntrySupplierWrapper();
 
-    const lang::Locale aLcl( SvxCreateLocale( eLang ) );
+    const lang::Locale aLcl( LanguageTag( eLang ).getLocale() );
     pIndexWrapper->SetLocale( aLcl );
 
     if(!sSortAlgorithm.Len())

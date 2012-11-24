@@ -52,7 +52,7 @@ ForbiddenCharacters SvxUnoForbiddenCharsTable::getForbiddenCharacters( const Loc
     if(!mxForbiddenChars.is())
         throw RuntimeException();
 
-    const LanguageType eLang = SvxLocaleToLanguage( rLocale );
+    const LanguageType eLang = LanguageTag( rLocale ).getLanguageType();
     const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, sal_False );
     if(!pForbidden)
         throw NoSuchElementException();
@@ -68,7 +68,7 @@ sal_Bool SvxUnoForbiddenCharsTable::hasForbiddenCharacters( const Locale& rLocal
     if(!mxForbiddenChars.is())
         return sal_False;
 
-    const LanguageType eLang = SvxLocaleToLanguage( rLocale );
+    const LanguageType eLang = LanguageTag( rLocale ).getLanguageType();
     const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, sal_False );
 
     return NULL != pForbidden;
@@ -82,7 +82,7 @@ void SvxUnoForbiddenCharsTable::setForbiddenCharacters(const Locale& rLocale, co
     if(!mxForbiddenChars.is())
         throw RuntimeException();
 
-    const LanguageType eLang = SvxLocaleToLanguage( rLocale );
+    const LanguageType eLang = LanguageTag( rLocale ).getLanguageType();
     mxForbiddenChars->SetForbiddenCharacters( eLang, rForbiddenCharacters );
 
     onChange();
@@ -96,7 +96,7 @@ void SvxUnoForbiddenCharsTable::removeForbiddenCharacters( const Locale& rLocale
     if(!mxForbiddenChars.is())
         throw RuntimeException();
 
-    const LanguageType eLang = SvxLocaleToLanguage( rLocale );
+    const LanguageType eLang = LanguageTag( rLocale ).getLanguageType();
     mxForbiddenChars->ClearForbiddenCharacters( eLang );
 
     onChange();
@@ -119,7 +119,7 @@ Sequence< Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
              it != mxForbiddenChars->GetMap().end(); ++it )
         {
             const sal_uLong nLanguage = it->first;
-            SvxLanguageToLocale ( *pLocales++, static_cast < LanguageType > (nLanguage) );
+            *pLocales++ = LanguageTag( static_cast < LanguageType > (nLanguage) ).getLocale();
         }
     }
 

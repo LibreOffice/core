@@ -654,7 +654,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             {
                 throw lang::IllegalArgumentException();
             }
-            rTOXBase.SetLanguage(SvxLocaleToLanguage(aLocale));
+            rTOXBase.SetLanguage( LanguageTag(aLocale).getLanguageType());
         }
         break;
         case WID_IDX_SORT_ALGORITHM:
@@ -970,7 +970,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             }
             break;
             case WID_IDX_LOCALE:
-                aRet <<= SvxCreateLocale(pTOXBase->GetLanguage());
+                aRet <<= LanguageTag(pTOXBase->GetLanguage()).getLocale();
             break;
             case WID_IDX_SORT_ALGORITHM:
                 aRet <<= OUString(pTOXBase->GetSortAlgorithm());

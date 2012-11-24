@@ -1364,8 +1364,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                aText = rSh.HasSelection()? rSh.GetSelTxt() : rSh.GetCurWord();
 
             LanguageType nLang = rSh.GetCurLang();
-            lang::Locale aLocale = SvxCreateLocale( nLang );
-            String aLangText( LanguageTag( nLang ).getBcp47() );
+            LanguageTag aLanguageTag( nLang);
+            lang::Locale aLocale( aLanguageTag.getLocale());
+            String aLangText( aLanguageTag.getBcp47() );
 
             // set word and locale to look up as status value
             String aStatusVal( aText );

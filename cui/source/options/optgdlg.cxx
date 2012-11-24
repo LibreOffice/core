@@ -1375,7 +1375,7 @@ static LanguageType lcl_LangStringToLangType(const OUString& rLang)
         if (nSep < rLang.getLength())
             aLocale.Country = rLang.copy(nSep+1, rLang.getLength() - (nSep+1));
     }
-    LanguageType eLangType = SvxLocaleToLanguage( aLocale );
+    LanguageType eLangType = LanguageTag( aLocale ).getLanguageType();
     return eLangType;
 }
 
@@ -1492,16 +1492,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         // an empty string denotes SYSTEM locale
         OUString sNewLang;
         if ( eNewLocale != LANGUAGE_SYSTEM )
-        {
-            Locale aLocale;
-            SvxLanguageToLocale( aLocale, eNewLocale );
-            sNewLang = aLocale.Language;
-            if ( !aLocale.Country.isEmpty() )
-            {
-                sNewLang += "-";
-                sNewLang += aLocale.Country;
-            }
-        }
+            sNewLang = LanguageTag( eNewLocale).getBcp47();
 
         // locale nowadays get to AppSettings via notification
         // this will happen after releasing the lock on the ConfigurationBroadcaster at
@@ -1891,9 +1882,7 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     aCurrencyLB.SelectEntryPos( nPos );
 
     // obtain corresponding locale data
-    Locale aTempLocale;
-    SvxLanguageToLocale( aTempLocale, eLang );
-    LanguageTag aLanguageTag( aTempLocale);
+    LanguageTag aLanguageTag( eLang);
     LocaleDataWrapper aLocaleWrapper( aLanguageTag );
 
     // update the decimal separator key of the related CheckBox

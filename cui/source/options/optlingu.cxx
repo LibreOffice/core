@@ -100,7 +100,7 @@ static Sequence< sal_Int16 > lcl_LocaleSeqToLangSeq( const Sequence< Locale > &r
     const Locale *pSeq = rSeq.getConstArray();
     for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
-        pRes[i] = SvxLocaleToLanguage( pSeq[i] );
+        pRes[i] = LanguageTag( pSeq[i] ).getLanguageType();
     }
     return aRes;
 }
@@ -734,9 +734,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     xMSF = ::comphelper::getProcessServiceFactory();
     xLinguSrvcMgr = LinguServiceManager::create(comphelper::getComponentContext(xMSF));
 
-    Locale aCurrentLocale;
-    LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
-    SvxLanguageToLocale(aCurrentLocale, eLang);
+    const Locale& rCurrentLocale = Application::GetSettings().GetLanguageTag().getLocale();
     Sequence<Any> aArgs(2);//second arguments has to be empty!
     aArgs.getArray()[0] <<= SvxGetLinguPropertySet();
 
@@ -755,7 +753,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
         uno::Reference<XServiceDisplayName> xDispName(aInfo.xSpell, UNO_QUERY);
         if(xDispName.is())
-            aInfo.sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
+            aInfo.sDisplayName = xDispName->getServiceDisplayName( rCurrentLocale );
 
         const Sequence< Locale > aLocales( aInfo.xSpell->getLocales() );
         //! suppress display of entries with no supported languages (see feature 110994)
@@ -779,7 +777,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
         uno::Reference<XServiceDisplayName> xDispName(aInfo.xGrammar, UNO_QUERY);
         if(xDispName.is())
-            aInfo.sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
+            aInfo.sDisplayName = xDispName->getServiceDisplayName( rCurrentLocale );
 
         const Sequence< Locale > aLocales( aInfo.xGrammar->getLocales() );
         //! suppress display of entries with no supported languages (see feature 110994)
@@ -803,7 +801,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
         uno::Reference<XServiceDisplayName> xDispName(aInfo.xHyph, UNO_QUERY);
         if(xDispName.is())
-            aInfo.sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
+            aInfo.sDisplayName = xDispName->getServiceDisplayName( rCurrentLocale );
 
         const Sequence< Locale > aLocales( aInfo.xHyph->getLocales() );
         //! suppress display of entries with no supported languages (see feature 110994)
@@ -827,7 +825,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
         uno::Reference<XServiceDisplayName> xDispName(aInfo.xThes, UNO_QUERY);
         if(xDispName.is())
-            aInfo.sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
+            aInfo.sDisplayName = xDispName->getServiceDisplayName( rCurrentLocale );
 
         const Sequence< Locale > aLocales( aInfo.xThes->getLocales() );
         //! suppress display of entries with no supported languages (see feature 110994)
@@ -842,7 +840,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     const Locale* pAllLocales = aAllServiceLocales.getConstArray();
     for(sal_Int32 nLocale = 0; nLocale < aAllServiceLocales.getLength(); nLocale++)
     {
-        sal_Int16 nLang = SvxLocaleToLanguage( pAllLocales[nLocale] );
+        sal_Int16 nLang = LanguageTag( pAllLocales[nLocale] ).getLanguageType();
 
         aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cSpell, pAllLocales[nLocale]);
         SetChecked( aCfgSvcs );
@@ -985,7 +983,7 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, sal_Bool bEna
             nLocales = aLocales.getLength();
             for (i = 0;  i < nLocales;  ++i)
             {
-                sal_Int16 nLang = SvxLocaleToLanguage( pLocale[i] );
+                sal_Int16 nLang = LanguageTag( pLocale[i] ).getLanguageType();
                 if (!aCfgSpellTable.count( nLang ) && bEnable)
                     aCfgSpellTable[ nLang ] = Sequence< OUString >();
                 if (aCfgSpellTable.count( nLang ))
@@ -1001,7 +999,7 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, sal_Bool bEna
             nLocales = aLocales.getLength();
             for (i = 0;  i < nLocales;  ++i)
             {
-                sal_Int16 nLang = SvxLocaleToLanguage( pLocale[i] );
+                sal_Int16 nLang = LanguageTag( pLocale[i] ).getLanguageType();
                 if (!aCfgGrammarTable.count( nLang ) && bEnable)
                     aCfgGrammarTable[ nLang ] = Sequence< OUString >();
                 if (aCfgGrammarTable.count( nLang ))
@@ -1017,7 +1015,7 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, sal_Bool bEna
             nLocales = aLocales.getLength();
             for (i = 0;  i < nLocales;  ++i)
             {
-                sal_Int16 nLang = SvxLocaleToLanguage( pLocale[i] );
+                sal_Int16 nLang = LanguageTag( pLocale[i] ).getLanguageType();
                 if (!aCfgHyphTable.count( nLang ) && bEnable)
                     aCfgHyphTable[ nLang ] = Sequence< OUString >();
                 if (aCfgHyphTable.count( nLang ))
@@ -1033,7 +1031,7 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, sal_Bool bEna
             nLocales = aLocales.getLength();
             for (i = 0;  i < nLocales;  ++i)
             {
-                sal_Int16 nLang = SvxLocaleToLanguage( pLocale[i] );
+                sal_Int16 nLang = LanguageTag( pLocale[i] ).getLanguageType();
                 if (!aCfgThesTable.count( nLang ) && bEnable)
                     aCfgThesTable[ nLang ] = Sequence< OUString >();
                 if (aCfgThesTable.count( nLang ))
@@ -1210,7 +1208,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             sal_Int16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
             uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
-            Locale aLocale( SvxCreateLocale(nLang) );
+            Locale aLocale( LanguageTag(nLang).getLocale() );
             if (xMgr.is())
                 xMgr->setConfiguredServices( cSpell, aLocale, aImplNames );
         }
@@ -1222,7 +1220,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             sal_Int16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
             uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
-            Locale aLocale( SvxCreateLocale(nLang) );
+            Locale aLocale( LanguageTag(nLang).getLocale() );
             if (xMgr.is())
                 xMgr->setConfiguredServices( cGrammar, aLocale, aImplNames );
         }
@@ -1234,7 +1232,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             sal_Int16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
             uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
-            Locale aLocale( SvxCreateLocale(nLang) );
+            Locale aLocale( LanguageTag(nLang).getLocale() );
             if (xMgr.is())
                 xMgr->setConfiguredServices( cHyph, aLocale, aImplNames );
         }
@@ -1246,7 +1244,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             sal_Int16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
             uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
-            Locale aLocale( SvxCreateLocale(nLang) );
+            Locale aLocale( LanguageTag(nLang).getLocale() );
             if (xMgr.is())
                 xMgr->setConfiguredServices( cThes, aLocale, aImplNames );
         }
@@ -1381,7 +1379,7 @@ void SvxLinguTabPage::AddDicBoxEntry(
     aLinguDicsCLB.SetUpdateMode(sal_False);
 
     String aTxt( ::GetDicInfoStr( rxDic->getName(),
-                        SvxLocaleToLanguage( rxDic->getLocale() ),
+                        LanguageTag( rxDic->getLocale() ).getLanguageType(),
                         DictionaryType_NEGATIVE == rxDic->getDictionaryType() ) );
     aLinguDicsCLB.InsertEntry( aTxt, (sal_uInt16)LISTBOX_APPEND );  // append at end
     SvTreeListEntry* pEntry = aLinguDicsCLB.GetEntry( aLinguDicsCLB.GetEntryCount() - 1 );
@@ -1638,7 +1636,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
         sal_Int32 nLocales = pLinguData->GetAllSupportedLocales().getLength();
         for (sal_Int32 k = 0;  k < nLocales;  ++k)
         {
-            sal_Int16 nLang = SvxLocaleToLanguage( pAllLocales[k] );
+            sal_Int16 nLang = LanguageTag( pAllLocales[k] ).getLanguageType();
             if (pLinguData->GetSpellTable().count( nLang ))
                 pLinguData->SetChecked( pLinguData->GetSpellTable()[ nLang ] );
             if (pLinguData->GetGrammarTable().count( nLang ))
@@ -1990,7 +1988,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
     aLanguageLB.Clear();
     for(long i = 0; i < rLoc.getLength(); i++)
     {
-        sal_Int16 nLang = SvxLocaleToLanguage( pLocales[i] );
+        sal_Int16 nLang = LanguageTag( pLocales[i] ).getLanguageType();
         aLanguageLB.InsertLanguage( nLang, lcl_SeqHasLang( aAvailLang, nLang ) );
     }
     LanguageType eSysLang = MsLangId::getSystemLanguage();
@@ -2099,8 +2097,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
 {
     LanguageType  eCurLanguage = aLanguageLB.GetSelectLanguage();
     static Locale aLastLocale;
-    Locale aCurLocale;
-    SvxLanguageToLocale(aCurLocale, eCurLanguage);
+    Locale aCurLocale( LanguageTag( eCurLanguage).getLocale());
     SvTreeList *pModel = aModulesCLB.GetModel();
 
     if (pBox)
@@ -2108,7 +2105,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         // save old probably changed settings
         // before switching to new language entries
 
-        sal_Int16 nLang = SvxLocaleToLanguage( aLastLocale );
+        sal_Int16 nLang = LanguageTag( aLastLocale ).getLanguageType();
 
         sal_Int32 nStart = 0, nLocalIndex = 0;
         Sequence< OUString > aChange;
@@ -2347,8 +2344,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             }
         }
     }
-    aLastLocale.Language = aCurLocale.Language;
-    aLastLocale.Country = aCurLocale.Country;
+    aLastLocale = aCurLocale;
     return 0;
 }
 

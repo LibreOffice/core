@@ -2518,7 +2518,7 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
     uno::Sequence< table::TableSortField > aFields(3);
     table::TableSortField* pFields = aFields.getArray();
 
-    lang::Locale aLang( SvxCreateLocale( LANGUAGE_SYSTEM ) );
+    lang::Locale aLang( LanguageTag( LANGUAGE_SYSTEM).getLocale());
     // get collator algorithm to be used for the locale
     uno::Sequence< OUString > aSeq(
             GetAppCollator().listCollatorAlgorithms( aLang ) );
@@ -2664,7 +2664,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
             lang::Locale aLocale;
             if (aValue >>= aLocale)
             {
-                rSortOpt.nLanguage = SvxLocaleToLanguage( aLocale );
+                rSortOpt.nLanguage = LanguageTag( aLocale).getLanguageType();
             }
             else
             {
@@ -2773,7 +2773,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                     {
                         rSortOpt.bIgnoreCase = !pFields[i].IsCaseSensitive;
                         rSortOpt.nLanguage =
-                            SvxLocaleToLanguage( pFields[i].CollatorLocale );
+                            LanguageTag( pFields[i].CollatorLocale ).getLanguageType();
                         aKeys[i]->sSortType = pFields[i].CollatorAlgorithm;
                         aKeys[i]->nColumnId =
                             static_cast<sal_uInt16>(pFields[i].Field);

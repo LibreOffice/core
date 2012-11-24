@@ -1502,7 +1502,7 @@ IMPL_LINK_NOARG(SwTOXSelectTabPage, RadioButtonHdl)
 
 IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 {
-    lang::Locale aLcl( SvxCreateLocale( aLanguageLB.GetSelectLanguage() ) );
+    lang::Locale aLcl( LanguageTag( aLanguageLB.GetSelectLanguage() ).getLocale() );
     Sequence< OUString > aSeq = pIndexEntryWrapper->GetAlgorithmList( aLcl );
 
     if( !pIndexRes )

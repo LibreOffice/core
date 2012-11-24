@@ -179,7 +179,7 @@ lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sa
 {
     SolarMutexGuard aGuard;
     if (!mpTxtNode)
-        return SvxCreateLocale( LANGUAGE_NONE );
+        return LanguageTag( LANGUAGE_NONE ).getLocale();
 
     const lang::Locale aLocale( SW_BREAKITER()->GetLocale( mpTxtNode->GetLang( static_cast<sal_uInt16>(nPos), static_cast<sal_uInt16>(nLen) ) ) );
     return aLocale;
@@ -192,7 +192,7 @@ lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPo
     SolarMutexGuard aGuard;
 
     if (!mpTxtNode)
-        return SvxCreateLocale( LANGUAGE_NONE );
+        return LanguageTag( LANGUAGE_NONE ).getLocale();
 
     const lang::Locale aLocale( SW_BREAKITER()->GetLocale( mpTxtNode->GetLang( static_cast<sal_uInt16>(nPos), static_cast<sal_uInt16>(nLen) ) ) );
     return aLocale;

@@ -341,7 +341,7 @@ void SpellDialog::UpdateBoxes_Impl()
     bool bIsGrammarError = false;
     if( pSpellErrorDescription )
     {
-        nAltLanguage    = SvxLocaleToLanguage( pSpellErrorDescription->aLocale );
+        nAltLanguage    = LanguageTag( pSpellErrorDescription->aLocale ).getLanguageType();
         aNewWords       = pSpellErrorDescription->aSuggestions;
         bIsGrammarError = pSpellErrorDescription->bIsGrammarError;
         aExplainLink.SetURL( pSpellErrorDescription->sExplanationURL );
@@ -985,7 +985,7 @@ int SpellDialog::InitUserDicts()
             continue;
 
         uno::Reference< frame::XStorable > xStor( xDicTmp, uno::UNO_QUERY );
-        LanguageType nActLanguage = SvxLocaleToLanguage( xDicTmp->getLocale() );
+        LanguageType nActLanguage = LanguageTag( xDicTmp->getLocale() ).getLanguageType();
         if( xDicTmp->isActive()
             &&  xDicTmp->getDictionaryType() != linguistic2::DictionaryType_NEGATIVE
             && (nLang == nActLanguage || LANGUAGE_NONE == nActLanguage )
@@ -1266,7 +1266,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                     uno::Reference< lang::XServiceInfo > xInfo( aStart->xGrammarChecker, uno::UNO_QUERY );
                     SpellErrorDescription aDesc( true,
                         aStart->sText,
-                        SvxCreateLocale( aStart->eLanguage ),
+                        LanguageTag( aStart->eLanguage ).getLocale(),
                         aStart->aGrammarError.aSuggestions,
                         aStart->xGrammarChecker,
                         xInfo->getImplementationName(),
@@ -1732,7 +1732,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError )
 
             String sReplacement(getDotReplacementString(GetErrorText(), xEntry->getReplacementText()));
 
-            ChangeMarkedWord(sReplacement, SvxLocaleToLanguage( pSpellErrorDescription->aLocale ));
+            ChangeMarkedWord(sReplacement, LanguageTag( pSpellErrorDescription->aLocale ).getLanguageType());
 
             aCursor.GetIndex() = aCursor.GetIndex() + (sal_uInt16)(xEntry->getReplacementText().getLength());
         }
@@ -1754,7 +1754,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError )
         const SpellErrorAttrib* pOldAttrib = static_cast<const SpellErrorAttrib*>(
                 pTextEngine->FindAttrib( TextPaM(0, nOldErrorStart), TEXTATTR_SPELL_ERROR ));
         pAction->SetErrorLanguageSelected(pOldAttrib && pOldAttrib->GetErrorDescription().aSuggestions.getLength() &&
-                SvxLocaleToLanguage( pOldAttrib->GetErrorDescription().aLocale) ==
+                LanguageTag( pOldAttrib->GetErrorDescription().aLocale).getLanguageType() ==
                                         GetSpellDialog()->aLanguageLB.GetSelectLanguage());
         AddUndoAction(pAction);
     }
@@ -1871,7 +1871,7 @@ void SentenceEditWindow_Impl::RestoreCurrentError()
     {
         const SpellErrorDescription& rDesc = pAttrib->GetErrorDescription();
         if( !rDesc.sErrorText.equals( GetErrorText() ) )
-            ChangeMarkedWord(rDesc.sErrorText, SvxLocaleToLanguage( rDesc.aLocale ));
+            ChangeMarkedWord(rDesc.sErrorText, LanguageTag( rDesc.aLocale ).getLanguageType());
     }
 }
 

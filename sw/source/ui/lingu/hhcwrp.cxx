@@ -107,8 +107,8 @@ SwHHCWrapper::SwHHCWrapper(
         sal_Bool bIsInteractive,
         sal_Bool bStart, sal_Bool bOther, sal_Bool bSelection ) :
     editeng::HangulHanjaConversion( &pSwView->GetEditWin(), rxContext,
-                                SvxCreateLocale( nSourceLanguage ),
-                                SvxCreateLocale( nTargetLanguage ),
+                                LanguageTag( nSourceLanguage ).getLocale(),
+                                LanguageTag( nTargetLanguage ).getLocale(),
                                 pTargetFont,
                                 nConvOptions,
                                 bIsInteractive ),

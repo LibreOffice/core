@@ -1239,9 +1239,8 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
 
                 // disable "Thesaurus" context menu entry if there is nothing to look up
                 uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
-                lang::Locale aLocale( SvxCreateLocale( nLang ) );
                 if (!bIsLookUpWord ||
-                    !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
+                    !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( LanguageTag( nLang ).getLocale() ))
                     rSet.DisableItem( SID_THES );
                 break;
             }
@@ -1256,7 +1255,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
                                                         rItem).GetLanguage();
                 uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
                 if (!xThes.is() || nLang == LANGUAGE_NONE ||
-                    !xThes->hasLocale( SvxCreateLocale( nLang ) ))
+                    !xThes->hasLocale( LanguageTag( nLang ).getLocale() ))
                     rSet.DisableItem( SID_THESAURUS );
             }
             break;

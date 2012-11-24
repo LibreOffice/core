@@ -38,7 +38,7 @@ const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::Ge
         pForbiddenCharacters = &(it->second);
     else if ( bGetDefault && m_xContext.is() )
     {
-        LocaleDataWrapper aWrapper( m_xContext, LanguageTag( SvxCreateLocale( nLanguage )) );
+        LocaleDataWrapper aWrapper( m_xContext, LanguageTag( nLanguage ) );
         maMap[ nLanguage ] = aWrapper.getForbiddenCharacters();
         pForbiddenCharacters = &maMap[ nLanguage ];
     }

@@ -382,10 +382,9 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
                     // disable "Thesaurus" context menu entry if there is nothing to look up
-                    lang::Locale aLocale( SvxCreateLocale( nLang ) );
                     uno::Reference< linguistic2::XThesaurus > xThes( LinguMgr::GetThesaurus() );
                     if (!bIsLookUpWord ||
-                        !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
+                        !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( LanguageTag( nLang). getLocale() ))
                         rSet.DisableItem( SID_THES );
                 }
                 else

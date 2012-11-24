@@ -143,7 +143,7 @@ void ScDocShell::InitItems()
                 {
                     i18n::ForbiddenCharacters aForbidden;
                     aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine );
-                    LanguageType eLang = SvxLocaleToLanguage(pLocales[i]);
+                    LanguageType eLang = LanguageTag(pLocales[i]).getLanguageType();
 
                     xForbiddenTable->SetForbiddenCharacters( eLang, aForbidden );
                 }

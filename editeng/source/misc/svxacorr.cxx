@@ -196,14 +196,14 @@ static ::com::sun::star::uno::Reference<
     return xMSF;
 }
 
-static sal_uInt16 GetAppLang()
+static const LanguageTag& GetAppLang()
 {
-    return Application::GetSettings().GetLanguageTag().getLanguageType();
+    return Application::GetSettings().GetLanguageTag();
 }
 static LocaleDataWrapper& GetLocaleDataWrapper( sal_uInt16 nLang )
 {
-    static LocaleDataWrapper aLclDtWrp(  LanguageTag( SvxCreateLocale( GetAppLang() )) );
-    LanguageTag aLcl( LanguageTag( SvxCreateLocale( nLang )));
+    static LocaleDataWrapper aLclDtWrp( GetAppLang() );
+    LanguageTag aLcl( nLang );
     const LanguageTag& rLcl = aLclDtWrp.getLoadedLanguageTag();
     if( aLcl != rLcl )
         aLclDtWrp.setLanguageTag( aLcl );
@@ -217,7 +217,7 @@ static TransliterationWrapper& GetIgnoreTranslWrapper()
                 ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH );
     if( !bIsInit )
     {
-        aWrp.loadModuleIfNeeded( GetAppLang() );
+        aWrp.loadModuleIfNeeded( GetAppLang().getLanguageType() );
         bIsInit = 1;
     }
     return aWrp;
@@ -228,7 +228,7 @@ static CollatorWrapper& GetCollatorWrapper()
     static CollatorWrapper aCollWrp( GetProcessFact() );
     if( !bIsInit )
     {
-        aCollWrp.loadDefaultCollator( SvxCreateLocale( GetAppLang() ), 0 );
+        aCollWrp.loadDefaultCollator( GetAppLang().getLocale(), 0 );
         bIsInit = 1;
     }
     return aCollWrp;
@@ -276,7 +276,7 @@ long SvxAutoCorrect::GetDefaultFlags()
                     | SaveWordCplSttLst
                     | SaveWordWrdSttLst
                     | CorrectCapsLock;
-    LanguageType eLang = GetAppLang();
+    LanguageType eLang = GetAppLang().getLanguageType();
     switch( eLang )
     {
     case LANGUAGE_ENGLISH:
@@ -337,7 +337,7 @@ SvxAutoCorrect::~SvxAutoCorrect()
 void SvxAutoCorrect::_GetCharClass( LanguageType eLang )
 {
     delete pCharClass;
-    pCharClass = new CharClass( LanguageTag( SvxCreateLocale( eLang )));
+    pCharClass = new CharClass( LanguageTag( eLang ));
     eCharClassLang = eLang;
 }
 
@@ -501,7 +501,7 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
     sal_Bool bRet = sal_False;
     CharClass& rCC = GetCharClass( eLang );
     if (eLang == LANGUAGE_SYSTEM)
-        eLang = GetAppLang();
+        eLang = GetAppLang().getLanguageType();
     bool bAlwaysUseEmDash = (cEmDash && (eLang == LANGUAGE_RUSSIAN || eLang == LANGUAGE_UKRAINIAN));
 
     // replace " - " or " --" with "enDash"
@@ -1126,7 +1126,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
     if( '\"' == cInsChar )
     {
         if( LANGUAGE_SYSTEM == eLang )
-            eLang = GetAppLang();
+            eLang = GetAppLang().getLanguageType();
         switch( eLang )
         {
         case LANGUAGE_FRENCH:
@@ -1161,7 +1161,7 @@ String SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
     if( '\"' == cInsChar )
     {
         if( LANGUAGE_SYSTEM == eLang )
-            eLang = GetAppLang();
+            eLang = GetAppLang().getLanguageType();
         switch( eLang )
         {
         case LANGUAGE_FRENCH:

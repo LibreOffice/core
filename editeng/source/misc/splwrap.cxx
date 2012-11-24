@@ -231,7 +231,7 @@ sal_Int16 SvxSpellWrapper::CheckHyphLang(
     if (SVX_LANG_NEED_CHECK == ((nVal >> 8) & 0x00FF))
     {
         sal_uInt16 nTmpVal = SVX_LANG_MISSING_DO_WARN;
-        if (xHyph.is()  &&  xHyph->hasLocale( SvxCreateLocale( nLang ) ))
+        if (xHyph.is()  &&  xHyph->hasLocale( LanguageTag( nLang ).getLocale() ))
             nTmpVal = SVX_LANG_OK;
         nVal &= 0x00FF;
         nVal |= nTmpVal << 8;
@@ -391,7 +391,7 @@ void SvxSpellWrapper::SpellDocument( )
             EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
             AbstractHyphenWordDialog* pDlg = pFact->CreateHyphenWordDialog( pWin,
                             xHyphWord->getWord(),
-                            SvxLocaleToLanguage( xHyphWord->getLocale() ),
+                            LanguageTag( xHyphWord->getLocale() ).getLanguageType(),
                             xHyph, this );
             pWin = pDlg->GetWindow();
             pDlg->Execute();
@@ -521,7 +521,7 @@ Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic() const
             {
                 if ( xTmp->isActive() &&
                      xTmp->getDictionaryType() != DictionaryType_NEGATIVE &&
-                     SvxLocaleToLanguage( xTmp->getLocale() ) == LANGUAGE_NONE )
+                     LanguageTag( xTmp->getLocale() ).getLanguageType() == LANGUAGE_NONE )
                 {
                     Reference< frame::XStorable >  xStor( xTmp, UNO_QUERY );
                     if (xStor.is() && xStor->hasLocation() && !xStor->isReadonly())
@@ -585,7 +585,7 @@ sal_Bool SvxSpellWrapper::FindSpellError()
                 {
                     // replace word without asking
                     ReplaceAll( xEntry->getReplacementText(),
-                                SvxLocaleToLanguage( xAlt->getLocale() ) );
+                                LanguageTag( xAlt->getLocale() ).getLanguageType() );
                 }
                 else
                     bSpell = sal_False;

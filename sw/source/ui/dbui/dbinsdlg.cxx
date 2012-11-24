@@ -256,7 +256,6 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     if(xColSupp.is())
     {
         SwWrtShell& rSh = pView->GetWrtShell();
-        lang::Locale aDocLocale( SvxCreateLocale( rSh.GetCurLang() ));
         SvNumberFormatter* pNumFmtr = rSh.GetNumberFormatter();
         SvNumberFormatsSupplierObj* pNumFmt = new SvNumberFormatsSupplierObj( pNumFmtr );
         Reference< util::XNumberFormatsSupplier >  xDocNumFmtsSupplier = pNumFmt;
@@ -341,7 +340,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                     else
                     {
                         pNew->nDBNumFmt = SwNewDBMgr::GetDbtoolsClient().getDefaultNumberFormat(xCol,
-                                                    xDocNumberFormatTypes, aDocLocale);
+                                xDocNumberFormatTypes, LanguageTag( rSh.GetCurLang() ).getLocale());
                     }
 
                 }
@@ -1247,7 +1246,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                   }
               }
             }
-            aDBFormatData.aLocale = SvxCreateLocale( rSh.GetCurLang() );
+            aDBFormatData.aLocale = LanguageTag( rSh.GetCurLang() ).getLocale();
             SwDBNextSetField aNxtDBFld( (SwDBNextSetFieldType*)rSh.
                                         GetFldType( 0, RES_DBNEXTSETFLD ),
                                         rtl::OUString("1"), aEmptyStr, aDBData );
@@ -1679,8 +1678,10 @@ void SwInsertDBColAutoPilot::Commit()
 
         if( eLang != ePrevLang )
         {
-            lang::Locale aLocale;
-            aLocale = SvxLanguageToLocale( aLocale, eLang );
+            /* FIXME-BCP47: handle language tags! */
+            lang::Locale aLocale( LanguageTag( eLang ).getLocale());
+            /* umm.. what's this string anyway, "Country-Language" instead of
+             * "Language-Country" ??? */
             (( sPrevLang = aLocale.Country ) += rtl::OUString( '-' )) += aLocale.Language;
             ePrevLang = eLang;
         }
@@ -1767,7 +1768,7 @@ void SwInsertDBColAutoPilot::Load()
                 lang::Locale aLocale;
                 aLocale.Language = sNumberFormatLocale.copy(0, 2);
                 aLocale.Country = sNumberFormatLocale.copy(3, 2);
-                pInsDBColumn->eUsrNumFmtLng = SvxLocaleToLanguage( aLocale );
+                pInsDBColumn->eUsrNumFmtLng = LanguageTag( aLocale ).getLanguageType();
 
                 pInsDBColumn->nUsrNumFmt = rNFmtr.GetEntryKey( pInsDBColumn->sUsrNumFmt,
                                                         pInsDBColumn->eUsrNumFmtLng );

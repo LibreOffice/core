@@ -95,9 +95,10 @@ static LanguageType lcl_CheckLanguage(
 
         // if the result from language guessing does not provide a 'Country' part
         // try to get it by looking up the locale setting of the office.
+        /* FIXME-BCP47: handle language tags */
         if ( aLocale.Country.isEmpty( ) )
         {
-            lang::Locale aTmpLocale = SvxCreateLocale( nTmpLang );
+            lang::Locale aTmpLocale = LanguageTag( nTmpLang ).getLocale();
             if (aTmpLocale.Language == aLocale.Language)
                 nLang = nTmpLang;
         }
@@ -1018,7 +1019,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                     continue;
 
                 uno::Reference< frame::XStorable > xStor( xDicTmp, uno::UNO_QUERY );
-                LanguageType nActLanguage = SvxLocaleToLanguage( xDicTmp->getLocale() );
+                LanguageType nActLanguage = LanguageTag( xDicTmp->getLocale() ).getLanguageType();
                 if( xDicTmp->isActive()
                     &&  xDicTmp->getDictionaryType() != linguistic2::DictionaryType_NEGATIVE
                     && (nCheckedLanguage == nActLanguage || LANGUAGE_NONE == nActLanguage )

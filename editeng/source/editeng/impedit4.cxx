@@ -1405,7 +1405,7 @@ LanguageType ImpEditEngine::GetLanguage( const EditPaM& rPaM, sal_uInt16* pEndPo
 
 ::com::sun::star::lang::Locale ImpEditEngine::GetLocale( const EditPaM& rPaM ) const
 {
-    return SvxCreateLocale( GetLanguage( rPaM ) );
+    return LanguageTag( GetLanguage( rPaM ) ).getLocale();
 }
 
 Reference< XSpellChecker1 > ImpEditEngine::GetSpeller()
@@ -1565,7 +1565,8 @@ void ImpEditEngine::Convert( EditView* pEditView,
 
     TextConvWrapper aWrp( Application::GetDefDialogParent(),
                           ::comphelper::getProcessComponentContext(),
-                          SvxCreateLocale( nSrcLang ), SvxCreateLocale( nDestLang ),
+                          LanguageTag( nSrcLang ).getLocale(),
+                          LanguageTag( nDestLang ).getLocale(),
                           pDestFont,
                           nOptions, bIsInteractive,
                           bIsStart, pEditView );
@@ -2737,11 +2738,11 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
             i18n::Boundary aEndBndry;
             aSttBndry = _xBI->getWordBoundary(
                         aNodeStr, nStartPos,
-                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nStartPos + 1 ) ) ),
+                        GetLocale( EditPaM( pNode, nStartPos + 1 ) ),
                         nWordType, true /*prefer forward direction*/);
             aEndBndry = _xBI->getWordBoundary(
                         aNodeStr, nEndPos,
-                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nEndPos + 1 ) ) ),
+                        GetLocale( EditPaM( pNode, nEndPos + 1 ) ),
                         nWordType, false /*prefer backward direction*/);
 
             // prevent backtracking to the previous word if selection is at word boundary
@@ -2749,7 +2750,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
             {
                 aSttBndry = _xBI->nextWord(
                         aNodeStr, aSttBndry.endPos,
-                        SvxCreateLocale( GetLanguage( EditPaM( pNode, aSttBndry.endPos + 1 ) ) ),
+                        GetLocale( EditPaM( pNode, aSttBndry.endPos + 1 ) ),
                         nWordType);
             }
             // prevent advancing to the next word if selection is at word boundary
@@ -2757,7 +2758,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
             {
                 aEndBndry = _xBI->previousWord(
                         aNodeStr, aEndBndry.startPos,
-                        SvxCreateLocale( GetLanguage( EditPaM( pNode, aEndBndry.startPos + 1 ) ) ),
+                        GetLocale( EditPaM( pNode, aEndBndry.startPos + 1 ) ),
                         nWordType);
             }
 
@@ -2792,7 +2793,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 #endif
 
                 aCurWordBndry = _xBI->nextWord(aNodeStr, nCurrentEnd,
-                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentEnd + 1 ) ) ),
+                        GetLocale( EditPaM( pNode, nCurrentEnd + 1 ) ),
                         nWordType);
             }
             DBG_ASSERT( nCurrentEnd >= aEndBndry.endPos, "failed to reach end of transliteration" );
@@ -2803,18 +2804,18 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
             sal_Int32 nLastStart = _xBI->beginOfSentence(
                     aNodeStr, nEndPos,
-                    SvxCreateLocale( GetLanguage( EditPaM( pNode, nEndPos + 1 ) ) ) );
+                    GetLocale( EditPaM( pNode, nEndPos + 1 ) ) );
             sal_Int32 nLastEnd = _xBI->endOfSentence(
                     aNodeStr, nLastStart,
-                    SvxCreateLocale( GetLanguage( EditPaM( pNode, nLastStart + 1 ) ) ) );
+                    GetLocale( EditPaM( pNode, nLastStart + 1 ) ) );
 
             // extend nCurrentStart, nCurrentEnd to the current sentence boundaries
             nCurrentStart = _xBI->beginOfSentence(
                     aNodeStr, nStartPos,
-                    SvxCreateLocale( GetLanguage( EditPaM( pNode, nStartPos + 1 ) ) ) );
+                    GetLocale( EditPaM( pNode, nStartPos + 1 ) ) );
             nCurrentEnd = _xBI->endOfSentence(
                     aNodeStr, nCurrentStart,
-                    SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ) ) );
+                    GetLocale( EditPaM( pNode, nCurrentStart + 1 ) ) );
 
             // prevent backtracking to the previous sentence if selection starts at end of a sentence
             if (nCurrentEnd <= nStartPos)
@@ -2824,16 +2825,16 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 // Thus to get the real sentence start we should locate the next real word,
                 // that is one found by DICTIONARY_WORD
                 i18n::Boundary aBndry = _xBI->nextWord( aNodeStr, nCurrentEnd,
-                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentEnd + 1 ) ) ),
+                        GetLocale( EditPaM( pNode, nCurrentEnd + 1 ) ),
                         i18n::WordType::DICTIONARY_WORD);
 
                 // now get new current sentence boundaries
                 nCurrentStart = _xBI->beginOfSentence(
                         aNodeStr, aBndry.startPos,
-                        SvxCreateLocale( GetLanguage( EditPaM( pNode, aBndry.startPos + 1 ) ) ) );
+                        GetLocale( EditPaM( pNode, aBndry.startPos + 1 ) ) );
                 nCurrentEnd = _xBI->endOfSentence(
                         aNodeStr, nCurrentStart,
-                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ) ) );
+                        GetLocale( EditPaM( pNode, nCurrentStart + 1 ) ) );
             }
             // prevent advancing to the next sentence if selection ends at start of a sentence
             if (nLastStart >= nEndPos)
@@ -2843,11 +2844,11 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 // Thus to get the real sentence start we should locate the previous real word,
                 // that is one found by DICTIONARY_WORD
                 i18n::Boundary aBndry = _xBI->previousWord( aNodeStr, nLastStart,
-                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nLastStart + 1 ) ) ),
+                        GetLocale( EditPaM( pNode, nLastStart + 1 ) ),
                         i18n::WordType::DICTIONARY_WORD);
                 nLastEnd = _xBI->endOfSentence(
                         aNodeStr, aBndry.startPos,
-                        SvxCreateLocale( GetLanguage( EditPaM( pNode, aBndry.startPos + 1 ) ) ) );
+                        GetLocale( EditPaM( pNode, aBndry.startPos + 1 ) ) );
                 if (nCurrentEnd > nLastEnd)
                     nCurrentEnd = nLastEnd;
             }
@@ -2878,12 +2879,12 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 i18n::Boundary aFirstWordBndry;
                 aFirstWordBndry = _xBI->nextWord(
                         aNodeStr, nCurrentEnd,
-                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentEnd + 1 ) ) ),
+                        GetLocale( EditPaM( pNode, nCurrentEnd + 1 ) ),
                         nWordType);
                 nCurrentStart = aFirstWordBndry.startPos;
                 nCurrentEnd = _xBI->endOfSentence(
                         aNodeStr, nCurrentStart,
-                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ) ) );
+                        GetLocale( EditPaM( pNode, nCurrentStart + 1 ) ) );
             }
             DBG_ASSERT( nCurrentEnd >= nLastEnd, "failed to reach end of transliteration" );
         }

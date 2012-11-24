@@ -170,7 +170,7 @@ void ManageLanguageDialog::FillLanguageBox()
         for ( i = 0;  i < nCount;  ++i )
         {
             bool bIsDefault = localesAreEqual( aDefaultLocale, pLocale[i] );
-            LanguageType eLangType = SvxLocaleToLanguage( pLocale[i] );
+            LanguageType eLangType = LanguageTag( pLocale[i] ).getLanguageType();
             OUStringBuffer sLanguageBuf(aLangTable.GetString( eLangType ));
             if ( bIsDefault )
             {
@@ -325,7 +325,7 @@ void SetDefaultLanguageDialog::FillLanguageBox()
     const Locale* pLocale = aLocaleSeq.getConstArray();
     sal_Int32 i, nCount = aLocaleSeq.getLength();
     for ( i = 0;  i < nCount;  ++i )
-        m_pLanguageLB->RemoveLanguage( SvxLocaleToLanguage( pLocale[i] ) );
+        m_pLanguageLB->RemoveLanguage( LanguageTag( pLocale[i] ).getLanguageType() );
 
     // fill checklistbox if not in default mode
     if ( m_pLocalizationMgr->isLibraryLocalized() )
@@ -379,9 +379,7 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
     Sequence< Locale > aLocaleSeq( nSize );
     if ( bNotLocalized )
     {
-        Locale aLocale;
-        SvxLanguageToLocale( aLocale, m_pLanguageLB->GetSelectLanguage() );
-        aLocaleSeq[0] = aLocale;
+        aLocaleSeq[0] = LanguageTag( m_pLanguageLB->GetSelectLanguage() ).getLocale();
     }
     else
     {
@@ -392,9 +390,7 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
             if ( m_pCheckLangLB->IsChecked(i) )
             {
                 LanguageType eType = LanguageType( (sal_uLong)m_pCheckLangLB->GetEntryData(i) );
-                Locale aLocale;
-                SvxLanguageToLocale( aLocale, eType );
-                aLocaleSeq[j++] = aLocale;
+                aLocaleSeq[j++] = LanguageTag( eType ).getLocale();
             }
         }
         DBG_ASSERT( nSize == j, "SetDefaultLanguageDialog::GetLocales(): invalid indexes" );

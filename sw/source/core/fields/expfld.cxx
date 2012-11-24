@@ -927,7 +927,8 @@ xub_StrLen SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc
         {
             LanguageType eLang = ((SvxLanguageItem&)aSet.Get(
                 GetWhichOfScript( RES_CHRATR_LANGUAGE, nSrcpt )) ).GetLanguage();
-            CharClass aCC( LanguageTag( SvxCreateLocale( eLang )));
+            LanguageTag aLanguageTag( eLang);
+            CharClass aCC( aLanguageTag);
             sal_Unicode c0 = sNodeText.GetChar(0);
             sal_Bool bIsAlphaNum = aCC.isAlphaNumeric( sNodeText, 0 );
             if( !bIsAlphaNum ||

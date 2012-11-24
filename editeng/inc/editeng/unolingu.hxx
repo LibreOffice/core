@@ -23,7 +23,6 @@
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
 #include <com/sun/star/util/Language.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
@@ -182,13 +181,6 @@ EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
 ///////////////////////////////////////////////////////////////////////////
 // misc functions
 //
-
-EDITENG_DLLPUBLIC LanguageType                      SvxLocaleToLanguage(
-        const ::com::sun::star::lang::Locale& rLocale );
-EDITENG_DLLPUBLIC ::com::sun::star::lang::Locale&   SvxLanguageToLocale(
-        ::com::sun::star::lang::Locale& rLocale, LanguageType eLang );
-EDITENG_DLLPUBLIC ::com::sun::star::lang::Locale    SvxCreateLocale( LanguageType eLang );
-
 
 EDITENG_DLLPUBLIC short SvxDicError( Window *pParent, sal_Int16 nError );
 

@@ -206,12 +206,11 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
     if(xDefNum.is())
     {
         Sequence< Sequence< PropertyValue > > aNumberings;
-        LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
-        Locale aLocale = SvxCreateLocale(eLang);
+        const Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
         try
         {
             aNumberings =
-                xDefNum->getDefaultContinuousNumberingLevels( aLocale );
+                xDefNum->getDefaultContinuousNumberingLevels( rLocale );
 
 
             sal_Int32 nLength = aNumberings.getLength() > NUM_VALUSET_COUNT ? NUM_VALUSET_COUNT :aNumberings.getLength();
@@ -227,7 +226,7 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
         {
         }
         Reference<XNumberingFormatter> xFormat(xDefNum, UNO_QUERY);
-        pExamplesVS->SetNumberingSettings(aNumberings, xFormat, aLocale);
+        pExamplesVS->SetNumberingSettings(aNumberings, xFormat, rLocale);
     }
 }
 
@@ -568,11 +567,10 @@ SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
     if(xDefNum.is())
     {
         Sequence<Reference<XIndexAccess> > aOutlineAccess;
-        LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
-        Locale aLocale = SvxCreateLocale(eLang);
+        const Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
         try
         {
-            aOutlineAccess = xDefNum->getDefaultOutlineNumberings( aLocale );
+            aOutlineAccess = xDefNum->getDefaultOutlineNumberings( rLocale );
 
             for(sal_Int32 nItem = 0;
                 nItem < aOutlineAccess.getLength() && nItem < NUM_VALUSET_COUNT;
@@ -595,7 +593,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
         {
         }
         Reference<XNumberingFormatter> xFormat(xDefNum, UNO_QUERY);
-        pExamplesVS->SetOutlineNumberingSettings(aOutlineAccess, xFormat, aLocale);
+        pExamplesVS->SetOutlineNumberingSettings(aOutlineAccess, xFormat, rLocale);
     }
 }
 

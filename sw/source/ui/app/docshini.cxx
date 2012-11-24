@@ -141,7 +141,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             {
                 ForbiddenCharacters aForbidden;
                 aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine);
-                LanguageType  eLang = SvxLocaleToLanguage(pLocales[i]);
+                LanguageType  eLang = LanguageTag(pLocales[i]).getLanguageType();
                 pDoc->setForbiddenCharacters( eLang, aForbidden);
             }
         }

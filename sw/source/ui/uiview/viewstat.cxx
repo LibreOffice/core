@@ -293,7 +293,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     // language is not supported (by default it is enabled)
                     uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
                     if (!xThes.is() || nLang == LANGUAGE_NONE ||
-                        !xThes->hasLocale( SvxCreateLocale( nLang ) ))
+                        !xThes->hasLocale( LanguageTag( nLang ).getLocale() ))
                         rSet.DisableItem(nWhich);
                 }
             }

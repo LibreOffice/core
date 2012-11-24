@@ -438,9 +438,8 @@ IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
 
 IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
 {
-    lang::Locale aLcl( SvxCreateLocale( m_pLangLB->GetSelectLanguage() ) );
-    Sequence < OUString > aSeq(
-                            GetAppCollator().listCollatorAlgorithms( aLcl ));
+    Sequence < OUString > aSeq( GetAppCollator().listCollatorAlgorithms(
+                LanguageTag( m_pLangLB->GetSelectLanguage()).getLocale() ));
 
     if( !pColRes )
         pColRes = new CollatorResource();

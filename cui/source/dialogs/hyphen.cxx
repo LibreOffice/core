@@ -207,7 +207,7 @@ void SvxHyphenWordDialog::InitControls_Impl()
     xPossHyph = NULL;
     if (xHyphenator.is())
     {
-        lang::Locale aLocale( SvxCreateLocale(nActLanguage) );
+        lang::Locale aLocale( LanguageTag(nActLanguage).getLocale() );
         xPossHyph = xHyphenator->createPossibleHyphens( aActWord, aLocale,
                                                         uno::Sequence< beans::PropertyValue >() );
         if (xPossHyph.is())
@@ -265,7 +265,7 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_uInt16 nInsPos )
         if(xHyphWord.is())
         {
             aActWord    = String( xHyphWord->getWord() );
-            nActLanguage = SvxLocaleToLanguage( xHyphWord->getLocale() );
+            nActLanguage = LanguageTag( xHyphWord->getLocale() ).getLanguageType();
             nMaxHyphenationPos = xHyphWord->getHyphenationPos();
             InitControls_Impl();
             SetWindowTitle( nActLanguage );
@@ -489,7 +489,7 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     if (xHyphWord.is())
     {
         DBG_ASSERT( aActWord == String( xHyphWord->getWord() ), "word mismatch" );
-        DBG_ASSERT( nActLanguage == SvxLocaleToLanguage( xHyphWord->getLocale() ), "language mismatch" );
+        DBG_ASSERT( nActLanguage == LanguageTag( xHyphWord->getLocale() ).getLanguageType(), "language mismatch" );
         nMaxHyphenationPos = xHyphWord->getHyphenationPos();
     }
 

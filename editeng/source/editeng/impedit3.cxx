@@ -1779,7 +1779,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, Sequence< PropertyValue >(), 1 );
         i18n::LineBreakUserOptions aUserOptions;
 
-        const i18n::ForbiddenCharacters* pForbidden = GetForbiddenCharsTable()->GetForbiddenCharacters( SvxLocaleToLanguage( aLocale ), sal_True );
+        const i18n::ForbiddenCharacters* pForbidden = GetForbiddenCharsTable()->GetForbiddenCharacters( LanguageTag( aLocale ).getLanguageType(), sal_True );
         aUserOptions.forbiddenBeginCharacters = pForbidden->beginLine;
         aUserOptions.forbiddenEndCharacters = pForbidden->endLine;
         aUserOptions.applyForbiddenRules = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_FORBIDDENRULES )).GetValue();
