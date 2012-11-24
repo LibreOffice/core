@@ -277,15 +277,6 @@ class OfficeDocument(object):
             "com.sun.star.document.TypeDetection")
         return typeDetect.getByName(type)
 
-    '''
-    returns the count of slides in a presentation,
-    or the count of pages in a draw document.
-    @param model a presentation or a draw document
-    @return the number of slides/pages in the given document.
-    '''
-
-    def getSlideCount(self, model):
-        return model.getDrawPages().getCount()
 
     def showMessageBox(
         self, xMSF, windowServiceName, windowAttribute, MessageText):

@@ -16,6 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
+import os.path
 from .LetterWizardDialog import LetterWizardDialog, Helper, \
     PropertyNames, uno, HelpIds, HID
 from .LetterDocument import LetterDocument, BusinessPaperObject
@@ -169,13 +170,12 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         try:
             fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
-            if not self.sPath:
+            if not self.sPath or not os.path.exists(self.sPath):
                 self.myPathSelection.triggerPathPicker()
                 self.sPath = self.myPathSelection.getSelectedPath()
 
             self.sPath = fileAccess.getURL(self.sPath)
             if not self.filenameChanged:
-                if fileAccess.exists(self.sPath, True):
                     answer = SystemDialog.showMessageBox(
                         self.xMSF, "MessBox", YES_NO + DEF_NO,
                         self.resources.resOverwriteWarning,

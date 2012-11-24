@@ -37,30 +37,11 @@ These Convenince methods include mainly Exception-handling.
 
 class FileAccess(object):
 
-    @classmethod
-    def addOfficePath(self, xMSF, sPath, sAddPath):
-        xSimpleFileAccess = None
-        ResultPath = getOfficePath(xMSF, sPath, xSimpleFileAccess)
-        '''
-        As there are several conventions about the look of Url
-        (e.g. with " " or with "%20") you cannot make a
-        simple String comparison to find out, if a path
-        is already in "ResultPath
-        '''
-        PathList = JavaTools.ArrayoutofString(ResultPath, ";")
-        MaxIndex = PathList.length - 1
-        CompAddPath = JavaTools.replaceSubString(sAddPath, "", "/")
-        i = 0
-        while i <= MaxIndex:
-            CurPath = JavaTools.convertfromURLNotation(PathList[i])
-            CompCurPath = JavaTools.replaceSubString(CurPath, "", "/")
-            if CompCurPath.equals(CompAddPath):
-                return
-
-            i += 1
-        ResultPath += ";" + sAddPath
-        return
-
+    def __init__(self, xmsf):
+        #get the file identifier converter
+        self.filenameConverter = xmsf.createInstance(
+            "com.sun.star.ucb.FileContentProvider")
+            
     @classmethod
     def deleteLastSlashfromUrl(self, _sPath):
         if _sPath.endswith("/"):
@@ -148,18 +129,6 @@ class FileAccess(object):
         return ResultPath
 
     @classmethod
-    def isPathValid(self, xMSF, _sPath):
-        bExists = False
-        try:
-            xUcbInterface = xMSF.createInstance(
-                "com.sun.star.ucb.SimpleFileAccess")
-            bExists = xUcbInterface.exists(_sPath)
-        except Exception:
-            traceback.print_exc()
-
-        return bExists
-
-    @classmethod
     def combinePaths(self, xMSF, _sFirstPath, _sSecondPath):
         bexists = False
         ReturnPath = ""
@@ -238,14 +207,6 @@ class FileAccess(object):
 
         return sTitle
 
-    def __init__(self, xmsf):
-        #get a simple file access...
-        self.fileAccess = xmsf.createInstance(
-            "com.sun.star.ucb.SimpleFileAccess")
-        #get the file identifier converter
-        self.filenameConverter = xmsf.createInstance(
-            "com.sun.star.ucb.FileContentProvider")
-
     def getURL(self, path, childPath=None):
         try:
             f = open(path, 'w')
@@ -263,101 +224,6 @@ class FileAccess(object):
             string = "/" + childURL
         return self.filenameConverter.getSystemPathFromFileURL(
             parentURL + string)
-
-    '''
-    @author rpiterman
-    @param filename
-    @return the extension of the given filename.
-    '''
-
-    @classmethod
-    def getExtension(self, filename):
-        p = filename.indexOf(".")
-        if p == -1:
-            return ""
-        else:
-            while p > -1:
-                filename = filename.substring(p + 1)
-                p = filename.indexOf(".")
-
-        return filename
-
-    '''
-    @author rpiterman
-    @param s
-    @return
-    '''
-
-    def mkdir(self, s):
-        try:
-            self.fileAccess.createFolder(s)
-            return True
-        except Exception:
-            traceback.print_exc()
-
-        return False
-
-    '''
-    @author rpiterman
-    @param filename
-    @param def what to return in case of an exception
-    @return true if the given file exists or not.
-    if an exception accures, returns the def value.
-    '''
-
-    def exists(self, filename, defe):
-        try:
-            return self.fileAccess.exists(filename)
-        except Exception:
-            traceback.print_exc()
-
-        return defe
-
-    '''
-    @author rpiterman
-    @param filename
-    @return
-    '''
-
-    def isDirectory(self, filename):
-        try:
-            return self.fileAccess.isFolder(filename)
-        except Exception:
-            traceback.print_exc()
-
-        return False
-
-    '''
-    lists the files in a given directory
-    @author rpiterman
-    @param dir
-    @param includeFolders
-    @return
-    '''
-
-    def listFiles(self, dir, includeFolders):
-        try:
-            return self.fileAccess.getFolderContents(dir, includeFolders)
-        except Exception:
-            traceback.print_exc()
-
-        return range(0)
-
-    '''
-    @author rpiterman
-    @param file
-    @return
-    '''
-
-    def delete(self, file):
-        try:
-            self.fileAccess.kill(file)
-            return True
-        except Exception:
-            traceback.print_exc()
-
-        return False
-
 
     '''
     return the filename out of a system-dependent path
@@ -380,38 +246,6 @@ class FileAccess(object):
     def getFilename(self, path, pathSeparator = "/"):
         return path.split(pathSeparator)[-1]
 
-    @classmethod
-    def getBasename(self, path, pathSeparator):
-        filename = self.getFilename(path, pathSeparator)
-        sExtension = getExtension(filename)
-        basename = filename.substring(0, filename.length() - \
-            (sExtension.length() + 1))
-        return basename
-
-    '''
-    @author rpiterman
-    @param source
-    @param target
-    @return
-    '''
-
-    def copy(self, source, target):
-        try:
-            self.fileAccess.copy(source, target)
-            return True
-        except Exception:
-            traceback.print_exc()
-
-        return False
-
-    def getLastModified(self, url):
-        try:
-            return self.fileAccess.getDateTimeModified(url)
-        except Exception:
-            traceback.print_exc()
-
-        return None
-
     '''
     @param url
     @return the parent dir of the given url.
@@ -423,34 +257,6 @@ class FileAccess(object):
         while url[-1] == "/":
             url = hello[:-1]
         return url[:url.rfind("/")]
-
-    def createNewDir(self, parentDir, name):
-        s = self.getNewFile(parentDir, name, "")
-        if self.mkdir(s):
-            return s
-        else:
-            return None
-
-    def getNewFile(self, parentDir, name, extension):
-        i = 0
-        temp = True
-        while temp:
-            filename = self.filename(name, extension, i)
-            url = parentDir + "/" + filename
-            temp = self.exists(url, True)
-            i += 1
-        return url
-
-    @classmethod
-    def filename(self, name, ext, i):
-        stringI = ""
-        stringExt = ""
-        if i != 0:
-            stringI = str(i)
-        if ext !=  "":
-            stringExt = "." + ext
-
-        return name + stringI + stringExt
 
     @classmethod
     def connectURLs(self, urlFolder, urlFilename):

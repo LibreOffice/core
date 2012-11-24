@@ -16,6 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
+import os.path
 from .FaxWizardDialog import FaxWizardDialog, Helper, PropertyNames, uno, HID
 from .CGFaxWizard import CGFaxWizard
 from .FaxDocument import FaxDocument
@@ -150,7 +151,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         try:
             fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
-            if not self.sPath:
+            print os.path.exists(self.sPath)
+            if not self.sPath or not os.path.exists(self.sPath):
                 self.myPathSelection.triggerPathPicker()
                 self.sPath = self.myPathSelection.getSelectedPath()
 
@@ -159,15 +161,14 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             #it is coming from a saved session, check if the
             # file exists and warn the user.
             if not self.filenameChanged:
-                if fileAccess.exists(self.sPath, True):
-                    answer = SystemDialog.showMessageBox(
-                        self.xMSF, "MessBox", YES_NO + DEF_NO,
-                        self.resources.resOverwriteWarning,
-                        self.xUnoDialog.Peer)
-                    if answer == 3:
-                        # user said: no, do not overwrite...
-                        endWizard = False
-                        return False
+                answer = SystemDialog.showMessageBox(
+                    self.xMSF, "MessBox", YES_NO + DEF_NO,
+                    self.resources.resOverwriteWarning,
+                    self.xUnoDialog.Peer)
+                if answer == 3:
+                    # user said: no, do not overwrite...
+                    endWizard = False
+                    return False
 
             self.myFaxDoc.setWizardTemplateDocInfo( \
                 self.resources.resFaxWizardDialog_title,
