@@ -429,7 +429,7 @@ namespace
 
         ComparisonData( const SortDescriptor& _rSortOrder, const Reference< XMultiServiceFactory >& _rxFactory )
             :rSortOrder( _rSortOrder )
-            ,aIntlWrapper( _rxFactory, SvtSysLocale().GetLocaleData().getLocale() )
+            ,aIntlWrapper( _rxFactory, SvtSysLocale().GetLanguageTag() )
         {
         }
     };
