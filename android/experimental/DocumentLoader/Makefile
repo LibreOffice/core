@@ -1,5 +1,8 @@
 include ../../../config_host.mk
 
+BOOTSTRAPDIR=../../Bootstrap
+include $(BOOTSTRAPDIR)/Makefile.shared
+
 # The package of this app
 APP_PACKAGE=org.libreoffice.android.examples
 
@@ -38,13 +41,6 @@ WHOLELIBS = \
 # The default target just builds.
 
 all: build-ant
-
-properties:
-	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
-	echo sdk.dir=$(ANDROID_SDK_HOME) >../../Bootstrap/local.properties
-	echo "# File needed by ndk-gdb" >jni/Application.mk
-	echo "APP_ABI := $(ANDROID_APP_ABI)" >>jni/Application.mk
-	echo "APP_PLATFORM := android-14" >>jni/Application.mk
 
 link-so:
 # Build the single .so for this app
@@ -156,7 +152,7 @@ copy-stuff:
 	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
 	echo set solib-search-path ./obj/local/$(ANDROID_APP_ABI) >$(SODEST)/gdb.setup
 
-build-ant: copy-stuff link-so properties
+build-ant: android_version_setup copy-stuff link-so properties
 #
 # Copy jar files we need
 #
@@ -173,19 +169,5 @@ build-ant: copy-stuff link-so properties
 #
 	unset JAVA_HOME && $(ANT) debug
 
-install: build-ant
-	unset JAVA_HOME && $(ANT) debug install
-	@echo
-	@echo 'Run it with "make run"'
-	@echo
-
-uninstall:
-	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
-
 run:
 	adb shell am start -n org.libreoffice.android.examples/.DocumentLoader -e input /assets/test1.odt
-
-
-clean: properties
-	$(ANT) clean
-	rm -rf assets libs $(SODEST) $(OBJLOCAL)

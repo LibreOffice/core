@@ -2,6 +2,10 @@
 # Common Makefile pieces for building Java / Android apps.
 #
 
+#
+# BOOTSTRAPDIR needs to be set to this directory before starting this
+#
+
 # Probably would be best to just stop fooling around with the possibilities to
 # set various stuff with the -env command line parameters (and environment
 # variables?) and in a plethora of rc files, and hardcode construction of
@@ -26,9 +30,31 @@ endef
 # Helpful rules ...
 #
 
+#
+# The Android SDK recommends you copy/paste some big -package-resources
+# rule in order to not pack certain kinds of resources. Unfortunately this
+# rule interacts with the rest of the ant code in horrible ways such that
+# upgrading your SDK auto-breaks everything.
+#
+# Horrors below:
+#
+$(BOOTSTRAPDIR)/no-resource-compress.xml :
+	( \
+	android_sdk_ver=`grep 'Pkg.Revision' /opt/libreoffice/android-sdk-linux/tools/source.properties | sed 's/^.*=//' | sed 's/\..*//'` ; \
+	echo "Android SDK version is: $$android_sdk_ver"; \
+	cp -a $(BOOTSTRAPDIR)/no-resource-compress-$$android_sdk_ver.xml $(BOOTSTRAPDIR)/no-resource-compress.xml ; \
+	if ! test -f $(BOOTSTRAPDIR)/no-resource-compress.xml; then \
+	   echo "Unknown Android SDK version: $$android_sdk_ver - failing hard" \
+	   exit 1; \
+	fi \
+	) || exit 1
+
+android_version_setup : $(BOOTSTRAPDIR)/no-resource-compress.xml
+
 properties:
 	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
 	echo sdk.dir=$(ANDROID_SDK_HOME) >../../Bootstrap/local.properties
+	echo "# File needed by ndk-gdb" >jni/Application.mk
 	echo "APP_ABI := $(ANDROID_APP_ABI)" > jni/Application.mk
 	echo "APP_PLATFORM := android-14" >> jni/Application.mk
 
@@ -43,7 +69,7 @@ uninstall:
 
 clean: properties
 	$(ANT) clean
-	rm -rf assets $(SODEST) $(OBJLOCAL)
+	rm -rf assets libs $(SODEST) $(OBJLOCAL) $(BOOTSTRAPDIR)/no-resource-compress.xml
 
 # If you reinstall an app several times *on the simulator*, even if you
 # uninstall it between, disk space seems to leak that won't get recycled until

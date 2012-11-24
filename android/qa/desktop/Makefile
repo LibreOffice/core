@@ -2,7 +2,9 @@
 # 'lo_main' from
 
 include ../../../config_host.mk
-include ../../Bootstrap/Makefile.shared
+
+BOOTSTRAPDIR=../../Bootstrap
+include $(BOOTSTRAPDIR)/Makefile.shared
 
 # The package of this app
 APP_PACKAGE=org.libreoffice.android.libo

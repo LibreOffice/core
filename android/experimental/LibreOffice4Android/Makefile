@@ -16,7 +16,8 @@ WHOLELIBS = \
 
 all: build-ant
 
-include ../../Bootstrap/Makefile.shared
+BOOTSTRAPDIR=../../Bootstrap
+include $(BOOTSTRAPDIR)/Makefile.shared
 
 # The package of this app
 APP_PACKAGE=org.libreoffice
@@ -128,7 +129,7 @@ copy-stuff:
 	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
 	echo set solib-search-path ./obj/local/$(ANDROID_APP_ABI) >$(SODEST)/gdb.setup
 
-build-ant: copy-stuff link-so properties
+build-ant: android_version_setup copy-stuff link-so properties
 	echo sdk.dir=$(ANDROID_SDK_HOME) >../../abs-lib/local.properties
 # ActionBarSherlock uses the v4 support library, apparently one needs to copy
 # it like this for it to be found
