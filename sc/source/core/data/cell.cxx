@@ -303,7 +303,7 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc )
             && !((ScFormulaCell*)this)->IsInChangeTrack()
         )
     {
-        pDoc->SetDetectiveDirty(true);  // es hat sich was geaendert...
+        pDoc->SetDetectiveDirty(true);  // It has changed something
 
         ScFormulaCell* pFormCell = (ScFormulaCell*)this;
         ScTokenArray* pArr = pFormCell->GetCode();
@@ -380,7 +380,7 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc )
 }
 
 //  pArr gesetzt -> Referenzen von anderer Zelle nehmen
-// dann muss auch aPos uebergeben werden!
+// Then aPos must also be commited
 
 void ScBaseCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
         ScAddress aPos )
@@ -389,7 +389,7 @@ void ScBaseCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
             && !((ScFormulaCell*)this)->IsInChangeTrack()
         )
     {
-        pDoc->SetDetectiveDirty(true);  // es hat sich was geaendert...
+        pDoc->SetDetectiveDirty(true);  // It has changed something
 
         ScFormulaCell* pFormCell = (ScFormulaCell*)this;
         if( pFormCell->GetCode()->IsRecalcModeAlways() )
@@ -535,7 +535,7 @@ rtl::OUString ScBaseCell::GetStringData() const
             aStr = ((const ScEditCell*)this)->GetString();
             break;
         case CELLTYPE_FORMULA:
-            aStr = ((ScFormulaCell*)this)->GetString();      // an der Formelzelle nicht-const
+            aStr = ((ScFormulaCell*)this)->GetString();      // On the Formula cells are not constant
             break;
     }
     return aStr;
@@ -564,14 +564,14 @@ bool ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
     if ( eType1 != eType2 )
         return false;
 
-    switch ( eType1 )               // beide Typen gleich
+    switch ( eType1 )               // Both Types are the same
     {
-        case CELLTYPE_NONE:         // beide leer
+        case CELLTYPE_NONE:         // Both Empty
             return true;
-        case CELLTYPE_VALUE:        // wirklich Value-Zellen
+        case CELLTYPE_VALUE:        // Really Value-Cells
             return ( ((const ScValueCell*)pCell1)->GetValue() ==
                      ((const ScValueCell*)pCell2)->GetValue() );
-        case CELLTYPE_STRING:       // String oder Edit
+        case CELLTYPE_STRING:       // String or Edit
             {
                 rtl::OUString aText1;
                 if ( pCell1->GetCellType() == CELLTYPE_STRING )
@@ -587,9 +587,9 @@ bool ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
             }
         case CELLTYPE_FORMULA:
             {
-                //! eingefuegte Zeilen / Spalten beruecksichtigen !!!!!
-                //! Vergleichsfunktion an der Formelzelle ???
-                //! Abfrage mit ScColumn::SwapRow zusammenfassen!
+                //! pasted Lines / allow Slots!!!!!
+                //! Comparsion Function of the Formula Cell???
+                //! To request with ScColumn::SwapRow to catch together!
 
                 ScTokenArray* pCode1 = ((ScFormulaCell*)pCell1)->GetCode();
                 ScTokenArray* pCode2 = ((ScFormulaCell*)pCell2)->GetCode();
@@ -611,10 +611,10 @@ bool ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
                         return true;
                 }
 
-                return false;       // unterschiedlich lang oder unterschiedliche Tokens
+                return false;       // varying long or varying Tokens
             }
         default:
-            OSL_FAIL("huch, was fuer Zellen???");
+            OSL_FAIL("oops, something for the Cells???");
     }
     return false;
 }
@@ -686,7 +686,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     nFormatType( NUMBERFORMAT_NUMBER ),
     nSeenInIteration(0),
     cMatrixFlag ( cMatInd ),
-    bDirty( true ), // -> wg. Benutzung im Fkt.AutoPiloten, war: cMatInd != 0
+    bDirty( true ), // -> Because of the use of the Auto Pilot Function was: cMatInd != 0
     bChanged( false ),
     bRunning( false ),
     bCompile( false ),
@@ -703,7 +703,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
         pCode = new ScTokenArray;
 }
 
-// Wird von den Importfiltern verwendet
+// Used by import filters
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
                               const ScTokenArray* pArr,
@@ -720,7 +720,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     nFormatType( NUMBERFORMAT_NUMBER ),
     nSeenInIteration(0),
     cMatrixFlag ( cInd ),
-    bDirty( NULL != pArr ), // -> wg. Benutzung im Fkt.AutoPiloten, war: cInd != 0
+    bDirty( NULL != pArr ), // -> Because of the use of the Auto Pilot Function was: cInd != 0
     bChanged( false ),
     bRunning( false ),
     bCompile( false ),
@@ -731,7 +731,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     bNeedListening( false ),
     aPos( rPos )
 {
-    // UPN-Array erzeugen
+    // UPN-Array generation
     if( pCode->GetLen() && !pCode->GetCodeError() && !pCode->GetCodeLen() )
     {
         ScCompiler aComp( pDocument, aPos, *pCode);
@@ -777,9 +777,9 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
 {
     pCode = rCell.pCode->Clone();
 
-    // evtl. Fehler zuruecksetzen und neu kompilieren
-    //  nicht im Clipboard - da muss das Fehlerflag erhalten bleiben
-    //  Spezialfall Laenge=0: als Fehlerzelle erzeugt, dann auch Fehler behalten
+    //  set back any errors and recompile
+    //  not in the Clipboard - it must keep the recieved error flag
+    //  Special Length=0: as bad cells are generated, then they are also retained
     if ( pCode->GetCodeError() && !pDocument->IsClipboard() && pCode->GetLen() )
     {
         pCode->SetCodeError( 0 );
@@ -976,7 +976,7 @@ void ScFormulaCell::Compile( const rtl::OUString& rFormula, bool bNoListening,
     bool bWasInFormulaTree = pDocument->IsInFormulaTree( this );
     if ( bWasInFormulaTree )
         pDocument->RemoveFromFormulaTree( this );
-    // pCode darf fuer Abfragen noch nicht geloescht, muss aber leer sein
+    // pCode may not deleted for queries, but must be empty
     if ( pCode )
         pCode->Clear();
     ScTokenArray* pCodeOld = pCode;
@@ -988,7 +988,7 @@ void ScFormulaCell::Compile( const rtl::OUString& rFormula, bool bNoListening,
     if( !pCode->GetCodeError() )
     {
         if ( !pCode->GetLen() && aResult.GetHybridFormula().Len() && rFormula == rtl::OUString(aResult.GetHybridFormula()) )
-        {   // nicht rekursiv CompileTokenArray/Compile/CompileTokenArray
+        {   // not recursive CompileTokenArray/Compile/CompileTokenArray
             if ( rFormula[0] == '=' )
                 pCode->AddBad( rFormula.copy(1) );
             else
@@ -1063,7 +1063,7 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
     aComp.CreateStringFromXMLTokenArray( aFormula, aFormulaNmsp );
     pDocument->DecXMLImportedFormulaCount( aFormula.getLength() );
     rProgress.SetStateCountDownOnPercent( pDocument->GetXMLImportedFormulaCount() );
-    // pCode darf fuer Abfragen noch nicht geloescht, muss aber leer sein
+    // pCode may not deleted for queries, but must be empty
     if ( pCode )
         pCode->Clear();
     ScTokenArray* pCodeOld = pCode;
@@ -1113,8 +1113,7 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
 void ScFormulaCell::CalcAfterLoad()
 {
     bool bNewCompiled = false;
-    // Falls ein Calc 1.0-Doc eingelesen wird, haben wir ein Ergebnis,
-    // aber kein TokenArray
+    // If a Calc 1.0-doc is read, we have a result, but no token array
     if( !pCode->GetLen() && aResult.GetHybridFormula().Len() )
     {
         Compile( aResult.GetHybridFormula(), true, eTempGrammar);
@@ -1122,8 +1121,7 @@ void ScFormulaCell::CalcAfterLoad()
         bDirty = true;
         bNewCompiled = true;
     }
-    // Das UPN-Array wird nicht erzeugt, wenn ein Calc 3.0-Doc eingelesen
-    // wurde, da die RangeNames erst jetzt existieren.
+    // The UPN array is not created when a Calc 3.0-Doc has been read as the Range Names exist until now.
     if( pCode->GetLen() && !pCode->GetCodeLen() && !pCode->GetCodeError() )
     {
         ScCompiler aComp(pDocument, aPos, *pCode);
@@ -1138,10 +1136,15 @@ void ScFormulaCell::CalcAfterLoad()
         if (bSubTotal)
             pDocument->AddSubTotalCell(this);
     }
-    // irgendwie koennen unter os/2 mit rotter FPU-Exception /0 ohne Err503
-    // gespeichert werden, woraufhin spaeter im NumberFormatter die BLC Lib
-    // bei einem fabs(-NAN) abstuerzt (#32739#)
-    // hier fuer alle Systeme ausbuegeln, damit da auch Err503 steht
+
+    // irgendwie koennen unter os/2 mit rotter FPU-Exception /0 ohne Err503 gespeichert
+    // werden, woraufhin spaeter im NumberFormatter die BLC Lib bei einem fabs(-NAN) abstuerzt
+    //(#32739#) hier fuer alle Systeme ausbuegeln, damit da auch Err503 steht
+
+    // somehow we can under os / 2 store without Err503 with rotter FPU / 0, followed later
+    // in the BLC Lib NumberFormatter a fabs (NAN) is crashing (# 32739 #) iron out here for all
+    // the systems, so there is also Err503
+
     if ( aResult.IsValue() && !::rtl::math::isFinite( aResult.GetDouble() ) )
     {
         OSL_FAIL("Formelzelle INFINITY !!! Woher kommt das Dokument?");
@@ -1150,15 +1153,19 @@ void ScFormulaCell::CalcAfterLoad()
     }
     // DoubleRefs bei binaeren Operatoren waren vor v5.0 immer Matrix,
     // jetzt nur noch wenn in Matrixformel, sonst implizite Schnittmenge
+
+    // Double Refs in binary operators were always in front of Matrix v5.0, now only when in an
+    // array formula, otherwise an implicit intersection
     if ( pDocument->GetSrcVersion() < SC_MATRIX_DOUBLEREF &&
             GetMatrixFlag() == MM_NONE && pCode->HasMatrixDoubleRefOps() )
     {
         cMatrixFlag = MM_FORMULA;
         SetMatColsRows( 1, 1);
     }
-    // Muss die Zelle berechnet werden?
-    // Nach Load koennen Zellen einen Fehlercode enthalten, auch dann
-    // Listener starten und ggbf. neu berechnen wenn nicht RECALCMODE_NORMAL
+
+    // Must the cells be calculated? After Load cells can contain an error code, and then start
+    // the listener and ggbf. Recalculate if not RECALCMODE_NORMAL
+
     if( !bNewCompiled || !pCode->GetCodeError() )
     {
         StartListeningTo( pDocument );
@@ -1168,10 +1175,14 @@ void ScFormulaCell::CalcAfterLoad()
     if ( pCode->IsRecalcModeAlways() )
     {   // zufall(), heute(), jetzt() bleiben immer im FormulaTree, damit sie
         // auch bei jedem F9 berechnet werden.
+
+        // accident(), today(), now() always stay in the FormulaTree, so that they
+        // can also be calculated for each F9.
         bDirty = true;
     }
     // Noch kein SetDirty weil noch nicht alle Listener bekannt, erst in
     // SetDirtyAfterLoad.
+    // Still no SetDirty because all Listeners are not know, first in SetDirtyAfterLoad.
 }
 
 
@@ -1189,6 +1200,9 @@ void ScFormulaCell::Interpret()
     //! HACK:
     //  Wenn der Aufruf aus einem Reschedule im DdeLink-Update kommt, dirty stehenlassen
     //  Besser: Dde-Link Update ohne Reschedule oder ganz asynchron !!!
+
+    //  If the call comes from a Reschedule in the DdeLink-Update, dirty let stand
+    //  Better: Dde-Link Update without Reschdule or completely asynchronously !!!
 
     if ( pDocument->IsInDdeLinkUpdate() )
         return;
@@ -1671,7 +1685,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         if ( !pCode->IsRecalcModeAlways() )
             pDocument->RemoveFromFormulaTree( this );
 
-        //  FORCED Zellen auch sofort auf Gueltigkeit testen (evtl. Makro starten)
+    //  FORCED cells also immediately tested for validity (start macro possibly)
 
         if ( pCode->IsRecalcModeForced() )
         {
@@ -1721,8 +1735,8 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
     }
     else
     {
-        //  Zelle bei Compiler-Fehlern nicht ewig auf dirty stehenlassen
-        OSL_ENSURE( pCode->GetCodeError(), "kein UPN-Code und kein Fehler ?!?!" );
+    //  Cells with compiler errors should not be marked dirty forever
+        OSL_ENSURE( pCode->GetCodeError(), "no UPN-Code und no errors ?!?!" );
         bDirty = false;
         bTableOpDirty = false;
     }
@@ -1820,6 +1834,11 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
             // nach CopyScenario und CopyBlockFromClip vermeiden.
             // Wenn unbedingtes FormulaTracking noetig, vor SetDirty bDirty=false
             // setzen, z.B. in CompileTokenArray
+
+            // Multiple Formulas avoid tracking in Load and Copy compileAll
+            // by Scenario and Copy Block From Clip.
+            // If unconditional required Formula tracking is set before SetDirty
+            // bDirty = false, eg in CompileTokenArray
             if ( !bDirty || !pDocument->IsInFormulaTree( this ) )
             {
                 if( bDirtyFlag )
