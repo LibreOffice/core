@@ -90,7 +90,7 @@ Sequence< Locale > SAL_CALL
     ThesSvcByLangMap_t::const_iterator aIt;
     for (aIt = aSvcMap.begin();  aIt != aSvcMap.end();  ++aIt)
     {
-        *pLocales++ = CreateLocale( aIt->first );
+        *pLocales++ = LanguageTag( aIt->first ).getLocale();
     }
     return aLocales;
 }
@@ -101,7 +101,7 @@ sal_Bool SAL_CALL
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    ThesSvcByLangMap_t::const_iterator aIt( aSvcMap.find( LocaleToLanguage( rLocale ) ) );
+    ThesSvcByLangMap_t::const_iterator aIt( aSvcMap.find( LanguageTag( rLocale ).getLanguageType() ) );
     return aIt != aSvcMap.end();
 }
 
@@ -116,7 +116,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
 
     Sequence< Reference< XMeaning > >   aMeanings;
 
-    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
+    sal_Int16 nLanguage = LanguageTag( rLocale ).getLanguageType();
     if (nLanguage == LANGUAGE_NONE || rTerm.isEmpty())
         return aMeanings;
 
@@ -210,7 +210,7 @@ void ThesaurusDispatcher::SetServiceList( const Locale &rLocale,
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
+    sal_Int16 nLanguage = LanguageTag( rLocale ).getLanguageType();
 
     sal_Int32 nLen = rSvcImplNames.getLength();
     if (0 == nLen)
@@ -244,7 +244,7 @@ Sequence< OUString >
     Sequence< OUString > aRes;
 
     // search for entry with that language and use data from that
-    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
+    sal_Int16 nLanguage = LanguageTag( rLocale ).getLanguageType();
     ThesaurusDispatcher             *pThis = (ThesaurusDispatcher *) this;
     const ThesSvcByLangMap_t::iterator  aIt( pThis->aSvcMap.find( nLanguage ) );
     const LangSvcEntries_Thes       *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;

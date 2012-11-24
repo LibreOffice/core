@@ -362,7 +362,7 @@ Locale SAL_CALL ConvDic::getLocale(  )
     throw (RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return CreateLocale( nLanguage );
+    return LanguageTag( nLanguage ).getLocale();
 }
 
 

@@ -76,11 +76,10 @@ osl::Mutex &    GetLinguMutex()
 
 LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang )
 {
-    static LocaleDataWrapper aLclDtaWrp(
-                LanguageTag( CreateLocale( SvtSysLocale().GetLanguageTag().getLanguageType() )) );
+    static LocaleDataWrapper aLclDtaWrp( SvtSysLocale().GetLanguageTag() );
 
     const LanguageTag &rLcl = aLclDtaWrp.getLoadedLanguageTag();
-    LanguageTag aLcl( CreateLocale( nLang ) );
+    LanguageTag aLcl( nLang );
     if (aLcl != rLcl)
         aLclDtaWrp.setLanguageTag( aLcl );
     return aLclDtaWrp;
@@ -267,7 +266,7 @@ uno::Reference< XDictionaryEntry > SearchDicList(
         uno::Reference< XDictionary > axDic( pDic[i], UNO_QUERY );
 
         DictionaryType  eType = axDic->getDictionaryType();
-        sal_Int16           nLang = LocaleToLanguage( axDic->getLocale() );
+        sal_Int16           nLang = LanguageTag( axDic->getLocale() ).getLanguageType();
 
         if ( axDic.is() && axDic->isActive()
             && (nLang == nLanguage  ||  nLang == LANGUAGE_NONE) )
@@ -364,34 +363,6 @@ sal_uInt8 AddEntryToDic(
 }
 
 
-
-LanguageType LocaleToLanguage( const Locale& rLocale )
-{
-    //  empty Locale -> LANGUAGE_NONE
-    if ( rLocale.Language.isEmpty() )
-        return LANGUAGE_NONE;
-
-    return LanguageTag( rLocale ).getLanguageType();
-}
-
-
-Locale& LanguageToLocale( Locale& rLocale, LanguageType eLang )
-{
-    if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
-        rLocale = LanguageTag( eLang ).getLocale();
-
-    return rLocale;
-}
-
-Locale CreateLocale( LanguageType eLang )
-{
-    Locale aLocale;
-    if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
-        return LanguageTag( eLang ).getLocale();
-
-    return aLocale;
-}
-
 uno::Sequence< sal_Int16 >
     LocaleSeqToLangSeq( uno::Sequence< Locale > &rLocaleSeq )
 {
@@ -402,7 +373,7 @@ uno::Sequence< sal_Int16 >
     sal_Int16 *pLang = aLangs.getArray();
     for (sal_Int32 i = 0;  i < nCount;  ++i)
     {
-        pLang[i] = LocaleToLanguage( pLocale[i] );
+        pLang[i] = LanguageTag( pLocale[i] ).getLanguageType();
     }
 
     return aLangs;
@@ -583,7 +554,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         }
         else
         {
-            sal_Int16 nLang = LocaleToLanguage( rxHyphWord->getLocale() );
+            sal_Int16 nLang = LanguageTag( rxHyphWord->getLocale() ).getLanguageType();
             xRes = new HyphenatedWord(
                         rOrigWord, nLang, nOrigHyphenationPos,
                         aOrigHyphenatedWord, nOrigHyphenPos );
@@ -598,7 +569,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
 
 static CharClass & lcl_GetCharClass()
 {
-    static CharClass aCC( LanguageTag( CreateLocale( LANGUAGE_ENGLISH_US )) );
+    static CharClass aCC( LanguageTag( LANGUAGE_ENGLISH_US ));
     return aCC;
 }
 
@@ -615,7 +586,7 @@ sal_Bool IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
     CharClass &rCC = lcl_GetCharClass();
-    rCC.setLanguageTag( LanguageTag( CreateLocale( nLanguage )) );
+    rCC.setLanguageTag( LanguageTag( nLanguage ));
     sal_Int32 nFlags = rCC.getStringType( rText, nPos, nLen );
     return      (nFlags & KCharacterType::UPPER)
             && !(nFlags & KCharacterType::LOWER);
@@ -627,7 +598,7 @@ String ToLower( const String &rText, sal_Int16 nLanguage )
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
     CharClass &rCC = lcl_GetCharClass();
-    rCC.setLanguageTag( LanguageTag( CreateLocale( nLanguage )) );
+    rCC.setLanguageTag( LanguageTag( nLanguage ));
     return rCC.lowercase( rText );
 }
 

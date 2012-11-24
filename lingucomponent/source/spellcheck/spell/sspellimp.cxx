@@ -375,7 +375,7 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     sal_Int16 nFailure = GetSpellFailure( rWord, rLocale );
     if (nFailure != -1 && !rWord.match(A2OU(SPELLML_HEADER), 0))
     {
-        sal_Int16 nLang = LocaleToLanguage( rLocale );
+        sal_Int16 nLang = LanguageTag( rLocale ).getLanguageType();
         // postprocess result for errors that should be ignored
         const bool bIgnoreError =
                 (!rHelper.IsSpellUpperCase()  && IsUpper( rWord, nLang )) ||
@@ -418,7 +418,7 @@ Reference< XSpellAlternatives >
 
     if (n)
     {
-        sal_Int16 nLang = LocaleToLanguage( rLocale );
+        sal_Int16 nLang = LanguageTag( rLocale ).getLanguageType();
         int numsug = 0;
 
         Sequence< OUString > aStr( 0 );

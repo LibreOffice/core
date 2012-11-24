@@ -78,7 +78,7 @@ void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
     {
         Reference< XDictionary > xDic( pDic[i], UNO_QUERY );
 
-        sal_Int16           nLang = LocaleToLanguage( xDic->getLocale() );
+        sal_Int16           nLang = LanguageTag( xDic->getLocale() ).getLanguageType();
 
         if ( xDic.is() && xDic->isActive()
             && (nLang == nLanguage  ||  nLang == LANGUAGE_NONE) )
@@ -213,7 +213,7 @@ Locale SAL_CALL SpellAlternatives::getLocale()
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return CreateLocale( nLanguage );
+    return LanguageTag( nLanguage ).getLocale();
 }
 
 

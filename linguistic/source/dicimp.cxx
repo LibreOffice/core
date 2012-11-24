@@ -766,15 +766,14 @@ Locale SAL_CALL DictionaryNeo::getLocale(  )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    Locale aRes;
-    return LanguageToLocale( aRes, nLanguage );
+    return LanguageTag( nLanguage ).getLocale();
 }
 
 void SAL_CALL DictionaryNeo::setLocale( const Locale& aLocale )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    sal_Int16 nLanguageP = LocaleToLanguage( aLocale );
+    sal_Int16 nLanguageP = LanguageTag( aLocale ).getLanguageType();
     if (!bIsReadonly  &&  nLanguage != nLanguageP)
     {
         nLanguage = nLanguageP;

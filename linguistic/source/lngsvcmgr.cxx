@@ -115,7 +115,7 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
                 for (sal_Int32 k = 0;  k < nLoc;  ++k)
                 {
                     const lang::Locale *pLoc = aLoc.getConstArray();
-                    LanguageType nLang = LocaleToLanguage( pLoc[k] );
+                    LanguageType nLang = LanguageTag( pLoc[k] ).getLanguageType();
 
                     // language not already added?
                     if (aLanguages.find( nLang ) == aLanguages.end())
@@ -136,7 +136,7 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
         for (i = 0;  aIt != aLanguages.end();  ++aIt, ++i)
         {
             LanguageType nLang = *aIt;
-            pRes[i] = CreateLocale( nLang );
+            pRes[i] = LanguageTag( nLang ).getLocale();
         }
     }
 
@@ -611,8 +611,7 @@ namespace
     {
         Sequence< OUString > aRes;
 
-        OUString aCfgLocaleStr( LanguageTag(
-                                    LocaleToLanguage( rAvailLocale ) ).getBcp47() );
+        OUString aCfgLocaleStr( LanguageTag( rAvailLocale ).getBcp47() );
 
         Sequence< OUString > aNodeNames( rCfg.GetNodeNames(rLastFoundList) );
         sal_Bool bFound = lcl_FindEntry( aCfgLocaleStr, aNodeNames);
@@ -745,7 +744,7 @@ void LngSvcMgr::UpdateAll()
         const OUString *pNodeName = aNodeNames.getConstArray();
         for (i = 0;  i < nNodeNames;  ++i)
         {
-            Locale aLocale( CreateLocale( LanguageTag( pNodeName[i]).getLanguageType() ) );
+            Locale aLocale( LanguageTag( pNodeName[i]).getLocale() );
             Sequence< OUString > aCfgSvcs( getConfiguredServices( aService, aLocale ));
             Sequence< OUString > aAvailSvcs( getAvailableServices( aService, aLocale ));
 
@@ -764,8 +763,7 @@ void LngSvcMgr::UpdateAll()
         const Locale *pAvailLocale = aAvailLocales.getConstArray();
         for (i = 0;  i < nAvailLocales;  ++i)
         {
-            OUString aCfgLocaleStr( LanguageTag(
-                                        LocaleToLanguage( pAvailLocale[i] ) ).getBcp47() );
+            OUString aCfgLocaleStr( LanguageTag( pAvailLocale[i] ).getBcp47() );
 
             Sequence< OUString > aAvailSvcs( getAvailableServices( aService, pAvailLocale[i] ));
 
@@ -884,7 +882,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                     nLang = LanguageTag( aKeyText ).getLanguageType();
 
                 GetSpellCheckerDsp_Impl( sal_False );     // don't set service list, it will be done below
-                pSpellDsp->SetServiceList( CreateLocale(nLang), aSvcImplNames );
+                pSpellDsp->SetServiceList( LanguageTag(nLang).getLocale(), aSvcImplNames );
             }
         }
         else if (0 == rName.compareTo( aGrammarCheckerList, aGrammarCheckerList.getLength() ))
@@ -911,7 +909,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                 if (SvtLinguConfig().HasGrammarChecker())
                 {
                     GetGrammarCheckerDsp_Impl( sal_False );   // don't set service list, it will be done below
-                    pGrammarDsp->SetServiceList( CreateLocale(nLang), aSvcImplNames );
+                    pGrammarDsp->SetServiceList( LanguageTag(nLang).getLocale(), aSvcImplNames );
                 }
             }
         }
@@ -937,7 +935,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                     nLang = LanguageTag( aKeyText ).getLanguageType();
 
                 GetHyphenatorDsp_Impl( sal_False );   // don't set service list, it will be done below
-                pHyphDsp->SetServiceList( CreateLocale(nLang), aSvcImplNames );
+                pHyphDsp->SetServiceList( LanguageTag(nLang).getLocale(), aSvcImplNames );
             }
         }
         else if (0 == rName.compareTo( aThesaurusList, aThesaurusList.getLength() ))
@@ -962,7 +960,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                     nLang = LanguageTag( aKeyText ).getLanguageType();
 
                 GetThesaurusDsp_Impl( sal_False );  // don't set service list, it will be done below
-                pThesDsp->SetServiceList( CreateLocale(nLang), aSvcImplNames );
+                pThesDsp->SetServiceList( LanguageTag(nLang).getLocale(), aSvcImplNames );
             }
         }
         else
@@ -1338,8 +1336,7 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
-                lang::Locale aLocale( CreateLocale( LanguageTag(aLocaleStr).getLanguageType() ) );
-                rSpellDsp.SetServiceList( aLocale, aSvcImplNames );
+                rSpellDsp.SetServiceList( LanguageTag(aLocaleStr).getLocale(), aSvcImplNames );
             }
         }
     }
@@ -1381,8 +1378,7 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
-                lang::Locale aLocale( CreateLocale( LanguageTag(aLocaleStr).getLanguageType() ) );
-                rGrammarDsp.SetServiceList( aLocale, aSvcImplNames );
+                rGrammarDsp.SetServiceList( LanguageTag(aLocaleStr).getLocale(), aSvcImplNames );
             }
         }
     }
@@ -1424,8 +1420,7 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
-                lang::Locale aLocale( CreateLocale( LanguageTag(aLocaleStr).getLanguageType() ) );
-                rHyphDsp.SetServiceList( aLocale, aSvcImplNames );
+                rHyphDsp.SetServiceList( LanguageTag(aLocaleStr).getLocale(), aSvcImplNames );
             }
         }
     }
@@ -1463,8 +1458,7 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
-                lang::Locale aLocale( CreateLocale( LanguageTag(aLocaleStr).getLanguageType() ) );
-                rThesDsp.SetServiceList( aLocale, aSvcImplNames );
+                rThesDsp.SetServiceList( LanguageTag(aLocaleStr).getLocale(), aSvcImplNames );
             }
         }
     }
@@ -1608,7 +1602,7 @@ uno::Sequence< OUString > SAL_CALL
         OUString *pImplName = aRes.getArray();
 
         sal_uInt16 nCnt = 0;
-        LanguageType nLanguage = LocaleToLanguage( rLocale );
+        LanguageType nLanguage = LanguageTag( rLocale ).getLanguageType();
         for (size_t i = 0;  i < nMaxCnt; ++i)
         {
             const SvcInfo &rInfo = (*pInfoArray)[i];
@@ -1695,7 +1689,7 @@ void SAL_CALL
 #if OSL_DEBUG_LEVEL > 1
 #endif
 
-    LanguageType nLanguage = LocaleToLanguage( rLocale );
+    LanguageType nLanguage = LanguageTag( rLocale ).getLanguageType();
     if (LANGUAGE_NONE != nLanguage)
     {
         if (0 == rServiceName.compareToAscii( SN_SPELLCHECKER ))
@@ -1846,8 +1840,7 @@ sal_Bool LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
             aCfgAny <<= aSvcImplNames;
             DBG_ASSERT( aCfgAny.hasValue(), "missing value for 'Any' type" );
 
-            OUString aCfgLocaleStr( LanguageTag(
-                                        LocaleToLanguage( pLocale[i] ) ).getBcp47() );
+            OUString aCfgLocaleStr( LanguageTag( pLocale[i] ).getBcp47() );
             pValue->Value = aCfgAny;
             pValue->Name  = aNodeName;
             pValue->Name += OUString::valueOf( (sal_Unicode) '/' );
@@ -1935,7 +1928,7 @@ uno::Sequence< OUString > SAL_CALL
 
     uno::Sequence< OUString > aSvcImplNames;
 
-    LanguageType nLanguage = LocaleToLanguage( rLocale );
+    LanguageType nLanguage = LanguageTag( rLocale ).getLanguageType();
     OUString aCfgLocale( LanguageTag( nLanguage ).getBcp47() );
 
     uno::Sequence< uno::Any > aValues;

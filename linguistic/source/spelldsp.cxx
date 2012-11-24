@@ -168,7 +168,7 @@ sal_Bool SvcListHasLanguage(
         if (pRef[k].is())
         {
             if (aTmpLocale.Language.isEmpty())
-                aTmpLocale = CreateLocale( nLanguage );
+                aTmpLocale = LanguageTag( nLanguage ).getLocale();
             bHasLanguage = pRef[k]->hasLocale( aTmpLocale );
         }
     }
@@ -208,7 +208,7 @@ Sequence< Locale > SAL_CALL SpellCheckerDispatcher::getLocales()
     SpellSvcByLangMap_t::const_iterator aIt;
     for (aIt = aSvcMap.begin();  aIt != aSvcMap.end();  ++aIt)
     {
-        *pLocales++ = CreateLocale( aIt->first );
+        *pLocales++ = LanguageTag( aIt->first ).getLocale();
     }
     return aLocales;
 }
@@ -218,7 +218,7 @@ sal_Bool SAL_CALL SpellCheckerDispatcher::hasLocale( const Locale& rLocale )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    SpellSvcByLangMap_t::const_iterator aIt( aSvcMap.find( LocaleToLanguage( rLocale ) ) );
+    SpellSvcByLangMap_t::const_iterator aIt( aSvcMap.find( LanguageTag( rLocale ).getLanguageType() ) );
     return aIt != aSvcMap.end();
 }
 
@@ -229,7 +229,7 @@ sal_Bool SAL_CALL
         throw(IllegalArgumentException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return isValid_Impl( rWord, LocaleToLanguage( rLocale ), rProperties, sal_True );
+    return isValid_Impl( rWord, LanguageTag( rLocale ).getLanguageType(), rProperties, sal_True );
 }
 
 
@@ -239,7 +239,7 @@ Reference< XSpellAlternatives > SAL_CALL
         throw(IllegalArgumentException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return spell_Impl( rWord, LocaleToLanguage( rLocale ), rProperties, sal_True );
+    return spell_Impl( rWord, LanguageTag( rLocale ).getLanguageType(), rProperties, sal_True );
 }
 
 
@@ -298,7 +298,7 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
     if (pEntry)
     {
         OUString aChkWord( rWord );
-        Locale aLocale( CreateLocale( nLanguage ) );
+        Locale aLocale( LanguageTag( nLanguage ).getLocale() );
 
         // replace typographical apostroph by ascii apostroph
         String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
@@ -458,7 +458,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
     if (pEntry)
     {
         OUString aChkWord( rWord );
-        Locale aLocale( CreateLocale( nLanguage ) );
+        Locale aLocale( LanguageTag( nLanguage ).getLocale() );
 
         // replace typographical apostroph by ascii apostroph
         String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
@@ -721,8 +721,7 @@ sal_Bool SAL_CALL SpellCheckerDispatcher::hasLanguage(
 throw (uno::RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    Locale aLocale( CreateLocale( nLanguage ) );
-    return hasLocale( aLocale );
+    return hasLocale( LanguageTag( nLanguage).getLocale() );
 }
 
 
@@ -733,8 +732,7 @@ sal_Bool SAL_CALL SpellCheckerDispatcher::isValid(
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    Locale aLocale( CreateLocale( nLanguage ) );
-    return isValid( rWord, aLocale, rProperties);
+    return isValid( rWord, LanguageTag( nLanguage ).getLocale(), rProperties);
 }
 
 
@@ -745,8 +743,7 @@ uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL SpellCheckerDispatche
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    Locale aLocale( CreateLocale( nLanguage ) );
-    return spell( rWord, aLocale, rProperties);
+    return spell( rWord, LanguageTag( nLanguage).getLocale(), rProperties);
 }
 
 
@@ -758,7 +755,7 @@ void SpellCheckerDispatcher::SetServiceList( const Locale &rLocale,
     if (pCache)
         pCache->Flush();    // new services may spell differently...
 
-    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
+    sal_Int16 nLanguage = LanguageTag( rLocale ).getLanguageType();
 
     sal_Int32 nLen = rSvcImplNames.getLength();
     if (0 == nLen)
@@ -792,7 +789,7 @@ Sequence< OUString >
     Sequence< OUString > aRes;
 
     // search for entry with that language and use data from that
-    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
+    sal_Int16 nLanguage = LanguageTag( rLocale ).getLanguageType();
     SpellCheckerDispatcher          *pThis = (SpellCheckerDispatcher *) this;
     const SpellSvcByLangMap_t::iterator aIt( pThis->aSvcMap.find( nLanguage ) );
     const LangSvcEntries_Spell      *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;

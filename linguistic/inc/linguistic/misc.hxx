@@ -90,15 +90,6 @@ LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang );
 
 sal_Int32 LevDistance( const rtl::OUString &rTxt1, const rtl::OUString &rTxt2 );
 
-::com::sun::star::lang::Locale
-    CreateLocale( LanguageType eLang );
-
-LNG_DLLPUBLIC LanguageType
-     LocaleToLanguage( const ::com::sun::star::lang::Locale& rLocale );
-
-::com::sun::star::lang::Locale&
-    LanguageToLocale( ::com::sun::star::lang::Locale& rLocale, LanguageType eLang );
-
 ::com::sun::star::uno::Sequence< sal_Int16 >
     LocaleSeqToLangSeq( ::com::sun::star::uno::Sequence<
         ::com::sun::star::lang::Locale > &rLocaleSeq );

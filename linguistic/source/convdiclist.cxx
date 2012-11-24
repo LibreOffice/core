@@ -483,7 +483,7 @@ uno::Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Int16 nLang = LocaleToLanguage( rLocale );
+    sal_Int16 nLang = LanguageTag( rLocale ).getLanguageType();
 
     if (GetNameContainer().hasByName( rName ))
         throw ElementExistException();

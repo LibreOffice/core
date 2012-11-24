@@ -308,7 +308,7 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
     sal_Int32 stem = 0;
     sal_Int32 stem2 = 0;
 
-    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
+    sal_Int16 nLanguage = LanguageTag( rLocale ).getLanguageType();
 
     if (nLanguage == LANGUAGE_NONE || rTerm.isEmpty())
         return noMeanings;

@@ -485,13 +485,13 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const ::rtl::OUStri
                 sal_Int16 nPos = (sal_Int16) ((nHyphenationPosAltHyph < nHyphenationPos) ?
                 nHyphenationPosAltHyph : nHyphenationPos);
                 // dicretionary hyphenation
-                xRes = HyphenatedWord::CreateHyphenatedWord( aWord, LocaleToLanguage( aLocale ), nPos,
+                xRes = HyphenatedWord::CreateHyphenatedWord( aWord, LanguageTag( aLocale ).getLanguageType(), nPos,
                     aWord.replaceAt(nHyphenationPosAlt + 1, cut[nHyphenationPos], repHyph),
                     (sal_Int16) nHyphenationPosAltHyph);
             }
             else
             {
-                xRes = HyphenatedWord::CreateHyphenatedWord( aWord, LocaleToLanguage( aLocale ),
+                xRes = HyphenatedWord::CreateHyphenatedWord( aWord, LanguageTag( aLocale ).getLanguageType(),
                     (sal_Int16)nHyphenationPos, aWord, (sal_Int16) nHyphenationPos);
             }
         }
@@ -542,7 +542,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
     //well as "hyphenate"
     if (aWord.getLength() < minLen)
     {
-        return PossibleHyphens::CreatePossibleHyphens( aWord, LocaleToLanguage( aLocale ),
+        return PossibleHyphens::CreatePossibleHyphens( aWord, LanguageTag( aLocale ).getLanguageType(),
                       aWord, Sequence< sal_Int16 >() );
     }
 
@@ -689,7 +689,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         OUString hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
 
         Reference< XPossibleHyphens > xRes = PossibleHyphens::CreatePossibleHyphens(
-            aWord, LocaleToLanguage( aLocale ), hyphenatedWord, aHyphPos);
+            aWord, LanguageTag( aLocale ).getLanguageType(), hyphenatedWord, aHyphPos);
 
         delete[] hyphens;
         delete[] lcword;
