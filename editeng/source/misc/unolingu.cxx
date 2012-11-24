@@ -741,7 +741,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
     uno::Reference< XStorable >      xStor( xDic, UNO_QUERY );
     OSL_ENSURE( xDic.is() && xDic->getDictionaryType() == DictionaryType_POSITIVE,
             "wrong dictionary type");
-    OSL_ENSURE( xDic.is() && SvxLocaleToLanguage( xDic->getLocale() ) == LANGUAGE_NONE,
+    OSL_ENSURE( xDic.is() && LanguageTag( xDic->getLocale() ).getLanguageType() == LANGUAGE_NONE,
             "wrong dictionary language");
     OSL_ENSURE( !xStor.is() || (xStor->hasLocation() && !xStor->isReadonly()),
             "dictionary not editable" );

@@ -1500,7 +1500,7 @@ sal_Bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
                 ++nStart;
             LanguageType nLangFound = pEditEngine->GetLanguage( k, nStart );
 #ifdef DEBUG
-            lang::Locale aLocale( SvxCreateLocale( nLangFound ) );
+            lang::Locale aLocale( LanguageTag( nLangFound ).getLocale() );
 #endif
             bHasConvTxt =   (nSrcLang == nLangFound) ||
                             (editeng::HangulHanjaConversion::IsChinese( nLangFound ) &&
@@ -1692,7 +1692,7 @@ void ImpEditEngine::ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtL
             sal_uInt16 nLangIdx = nEnd > nStart ? nStart + 1 : nStart;
             LanguageType nLangFound = pEditEngine->GetLanguage( aCurStart.nPara, nLangIdx );
 #ifdef DEBUG
-            lang::Locale aLocale( SvxCreateLocale( nLangFound ) );
+            lang::Locale aLocale( LanguageTag( nLangFound ).getLocale() );
 #endif
             sal_Bool bLangOk =  (nLangFound == nSrcLang) ||
                                 (editeng::HangulHanjaConversion::IsChinese( nLangFound ) &&

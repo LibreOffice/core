@@ -130,10 +130,10 @@ static LanguageType lcl_CheckLanguage(
         // en-US
         aLangList[3] = LANGUAGE_ENGLISH_US;
 #ifdef DEBUG
-        lang::Locale a0( SvxCreateLocale( aLangList[0] ) );
-        lang::Locale a1( SvxCreateLocale( aLangList[1] ) );
-        lang::Locale a2( SvxCreateLocale( aLangList[2] ) );
-        lang::Locale a3( SvxCreateLocale( aLangList[3] ) );
+        lang::Locale a0( LanguageTag( aLangList[0] ).getLocale() );
+        lang::Locale a1( LanguageTag( aLangList[1] ).getLocale() );
+        lang::Locale a2( LanguageTag( aLangList[2] ).getLocale() );
+        lang::Locale a3( LanguageTag( aLangList[3] ).getLocale() );
 #endif
 
         sal_Int32 nCount = sizeof (aLangList) / sizeof (aLangList[0]);
