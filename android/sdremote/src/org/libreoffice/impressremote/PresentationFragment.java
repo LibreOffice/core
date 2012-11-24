@@ -277,7 +277,11 @@ public class PresentationFragment extends SherlockFragment {
                 //                mTopView.requestLayout();
             } else if (aIntent.getAction().equals(
                             CommunicationService.MSG_SLIDE_NOTES)) {
-                // TODO: update me
+                int aPosition = aIntent.getExtras().getInt("slide_number");
+                if ( aPosition == mTopView.getSelectedItemPosition() ) {
+                    mNotes.loadData(mCommunicationService.getSlideShow()
+                                    .getNotes(aPosition), "text/html", null);
+                }
             }
 
         }
