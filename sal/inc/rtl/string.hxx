@@ -1453,6 +1453,14 @@ public:
         return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
     }
 
+    static OString valueOf( sal_uInt64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
+    {
+        sal_Char aBuf[RTL_STR_MAX_VALUEOFINT64];
+        rtl_String* pNewData = 0;
+        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfuInt64( aBuf, ll, radix ) );
+        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
     /**
       Returns the string representation of the float argument.
 

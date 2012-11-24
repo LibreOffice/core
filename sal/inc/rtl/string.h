@@ -649,6 +649,29 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfInt64(
         sal_Char * str, sal_Int64 l, sal_Int16 radix ) SAL_THROW_EXTERN_C();
 #define RTL_STR_MAX_VALUEOFINT64 65
 
+/** Create the string representation of an unsigned long integer.
+
+    This function cannot be used for language-specific operations.
+
+    @param str
+    a buffer that is big enough to hold the result and the terminating NUL
+    character.  You should use the RTL_STR_MAX_VALUEOFUINT64 define to create a
+    buffer that is big enough.
+
+    @param l
+    a long integer value.
+
+    @param radix
+    the radix.  Must be between RTL_STR_MIN_RADIX (2) and RTL_STR_MAX_RADIX
+    (36), inclusive.
+
+    @return
+    the length of the string.
+ */
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfuInt64(
+        sal_Char * str, sal_uInt64 l, sal_Int16 radix ) SAL_THROW_EXTERN_C();
+#define RTL_STR_MAX_VALUEOFUINT64 65
+
 /** Create the string representation of a float.
 
     This function cannot be used for language-specific conversion.
