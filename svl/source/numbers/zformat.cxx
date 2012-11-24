@@ -1898,25 +1898,15 @@ rtl::OUString SvNumberformat::LoadString( SvStream& rStream )
     CharSet eStream = rStream.GetStreamCharSet();
     rtl::OString aStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
     sal_Char cStream = NfCurrencyEntry::GetEuroSymbol( eStream );
-    if (aStr.indexOf(cStream) == -1)
+    if (aStr.indexOf(cStream) < 0)
     {
         // simple conversion to unicode
         return rtl::OStringToOUString(aStr, eStream);
     }
-
+    sal_Unicode cSource = OUString(&cStream, 1, eStream).toChar();
     sal_Unicode cTarget = NfCurrencyEntry::GetEuroSymbol();
-    rtl::OUStringBuffer aBuf(aStr.getLength());
-    for (sal_Int32 i = 0; i < aStr.getLength(); ++i)
-    {
-        if (aStr[i] == cStream)
-        {
-            aBuf.append(cTarget);
-        }
-        else
-        {
-            aBuf.append(rtl::OUString(aStr.getStr()+i, 1, eStream).toChar());
-        }
-    }
+    rtl::OUStringBuffer aBuf(rtl::OStringToOUString(aStr, eStream));
+    aBuf.replace(cSource, cTarget);
 
     return aBuf.makeStringAndClear();
 }
