@@ -29,7 +29,6 @@
 
 #define STR_CAPITAL_WORDS       201
 #define STR_WORDS_WITH_DIGITS   202
-#define STR_CAPITALIZATION      203
 #define STR_SPELL_SPECIAL       204
 #define STR_SPELL_AUTO          206
 #define STR_NUM_PRE_BREAK       209

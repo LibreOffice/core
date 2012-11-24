@@ -347,7 +347,6 @@ enum EID_OPTIONS
     EID_GRAMMAR_AUTO,
     EID_CAPITAL_WORDS,
     EID_WORDS_WITH_DIGITS,
-    EID_CAPITALIZATION,
     EID_SPELL_SPECIAL,
     EID_NUM_MIN_WORDLEN,
     EID_NUM_PRE_BREAK,
@@ -364,7 +363,6 @@ static const char * aEidToPropName[] =
     UPN_IS_GRAMMAR_AUTO,            // EID_GRAMMAR_AUTO
     UPN_IS_SPELL_UPPER_CASE,        // EID_CAPITAL_WORDS
     UPN_IS_SPELL_WITH_DIGITS,       // EID_WORDS_WITH_DIGITS
-    UPN_IS_SPELL_CAPITALIZATION,    // EID_CAPITALIZATION
     UPN_IS_SPELL_SPECIAL,           // EID_SPELL_SPECIAL
     UPN_HYPH_MIN_WORD_LENGTH,       // EID_NUM_MIN_WORDLEN,
     UPN_HYPH_MIN_LEADING,           // EID_NUM_PRE_BREAK
@@ -1068,7 +1066,6 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aMoreDictsLink      ( this, CUI_RES( FT_LINGU_OPTIONS_MOREDICTS ) ),
     sCapitalWords       ( CUI_RES( STR_CAPITAL_WORDS ) ),
     sWordsWithDigits    ( CUI_RES( STR_WORDS_WITH_DIGITS ) ),
-    sCapitalization     ( CUI_RES( STR_CAPITALIZATION ) ),
     sSpellSpecial       ( CUI_RES( STR_SPELL_SPECIAL ) ),
     sSpellAuto          ( CUI_RES( STR_SPELL_AUTO ) ),
     sGrammarAuto        ( CUI_RES( STR_GRAMMAR_AUTO ) ),
@@ -1497,13 +1494,6 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
     pEntry = CreateEntry( sWordsWithDigits, CBCOL_FIRST );
     aLngCfg.GetProperty( UPN_IS_SPELL_WITH_DIGITS ) >>= bVal;
     nUserData = OptionsUserData( EID_WORDS_WITH_DIGITS, sal_False, 0, sal_True, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    pEntry = CreateEntry( sCapitalization,  CBCOL_FIRST );
-    aLngCfg.GetProperty( UPN_IS_SPELL_CAPITALIZATION ) >>= bVal;
-    nUserData = OptionsUserData( EID_CAPITALIZATION, sal_False, 0, sal_True, bVal).GetUserData();
     pEntry->SetUserData( (void *)nUserData );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );

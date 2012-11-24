@@ -297,10 +297,6 @@ TabPage RID_SFXPAGE_LINGU
     {
         Text [ en-US ] = "Check words with numbers ";
     };
-    String STR_CAPITALIZATION
-    {
-        Text [ en-US ] = "Check capitalization";
-    };
     String STR_SPELL_SPECIAL
     {
         Text [ en-US ] = "Check special regions";
