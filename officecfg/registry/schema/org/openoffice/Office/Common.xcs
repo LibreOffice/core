@@ -3291,7 +3291,7 @@
             <desc>Indicates whether icons in the office menus should
             shown/hidden by following the System theme.</desc>
           </info>
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop
             oor:name="ShowIconsInMenues" oor:type="xs:boolean"
