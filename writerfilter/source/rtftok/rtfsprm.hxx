@@ -47,6 +47,8 @@ namespace writerfilter {
                 /// Does the same as ->push_back(), except that it can overwrite existing entries.
                 void set(Id nKeyword, RTFValue::Pointer_t pValue, bool bOverwrite = true);
                 bool erase(Id nKeyword);
+                /// Removes elements, which are already in the reference set.
+                void deduplicate(RTFSprms& rReference);
                 void swap(RTFSprms& rOther);
                 size_t size() const { return m_aSprms.size(); }
                 bool empty() const { return m_aSprms.empty(); }

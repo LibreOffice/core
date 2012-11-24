@@ -399,6 +399,9 @@ namespace writerfilter {
 
                 /// Text from special destinations.
                 rtl::OUStringBuffer aDestinationText;
+
+                /// Same as the int value of NS_rtf::LN_ISTD in aParagraphAttributes, for performance reasons.
+                int nCurrentStyleIndex;
         };
 
         class RTFTokenizer;
@@ -478,6 +481,7 @@ namespace writerfilter {
                 void runBreak();
                 void parBreak();
                 void tableBreak();
+                writerfilter::Reference<Properties>::Pointer_t getProperties(RTFSprms& rAttributes, RTFSprms& rSprms);
                 void checkNeedPap();
                 void sectBreak(bool bFinal);
                 void replayBuffer(RTFBuffer_t& rBuffer);

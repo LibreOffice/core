@@ -62,6 +62,7 @@ namespace writerfilter {
                 virtual RTFValue* Clone();
                 RTFSprms& getAttributes();
                 RTFSprms& getSprms();
+                bool equals(RTFValue& rOther);
             private:
                 RTFValue& operator=(RTFValue const& rOther);
                 int m_nValue;

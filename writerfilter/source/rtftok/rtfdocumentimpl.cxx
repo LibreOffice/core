@@ -399,6 +399,21 @@ void RTFDocumentImpl::setNeedPar(bool bNeedPar)
     m_bNeedPar = bNeedPar;
 }
 
+writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms& rSprms)
+{
+    int nStyle = m_aStates.top().nCurrentStyleIndex;
+    RTFReferenceTable::Entries_t::iterator it = m_aStyleTableEntries.find(nStyle);
+    if (it != m_aStyleTableEntries.end())
+    {
+        RTFReferenceProperties& rProps = *(RTFReferenceProperties*)it->second.get();
+        // Get rid of direct formatting what is already in the style.
+        rSprms.deduplicate(rProps.getSprms());
+        rAttributes.deduplicate(rProps.getAttributes());
+    }
+    writerfilter::Reference<Properties>::Pointer_t pRet(new RTFReferenceProperties(rAttributes, rSprms));
+    return pRet;
+}
+
 void RTFDocumentImpl::checkNeedPap()
 {
     if (m_bNeedPap)
@@ -407,7 +422,7 @@ void RTFDocumentImpl::checkNeedPap()
         if (!m_pCurrentBuffer)
         {
             writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
-                    new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
+                    getProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
                     );
 
             // Writer will ignore a page break before a text frame, so guard it with empty paragraphs
@@ -441,9 +456,7 @@ void RTFDocumentImpl::runProps()
 {
     if (!m_pCurrentBuffer)
     {
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(
-                new RTFReferenceProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms)
-                );
+        writerfilter::Reference<Properties>::Pointer_t const pProperties = getProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms);
         Mapper().props(pProperties);
     }
     else
@@ -1677,7 +1690,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
 
                 writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
-                        new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
+                        getProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
                         );
                 Mapper().props(pParagraphProperties);
 
@@ -2623,6 +2636,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_S:
+            m_aStates.top().nCurrentStyleIndex = nParam;
             if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET || m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
             {
                 m_nCurrentStyleIndex = nParam;
@@ -4206,7 +4220,8 @@ RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
     nMonth(0),
     nDay(0),
     nHour(0),
-    nMinute(0)
+    nMinute(0),
+    nCurrentStyleIndex(-1)
 {
 }
 

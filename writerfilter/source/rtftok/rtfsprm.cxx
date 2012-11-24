@@ -29,6 +29,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <resourcemodel/QNameToString.hxx>
+#include <doctok/resourceids.hxx> // NS_rtf namespace
 
 using rtl::OStringBuffer;
 
@@ -128,6 +129,25 @@ bool RTFSprms::erase(Id nKeyword)
             return true;
         }
     return false;
+}
+
+void RTFSprms::deduplicate(RTFSprms& rReference)
+{
+    RTFSprms::Iterator_t i = m_aSprms.begin();
+    while (i != m_aSprms.end())
+    {
+        bool bIgnore = false;
+        if (i->first != NS_rtf::LN_ISTD)
+        {
+            RTFValue::Pointer_t pValue(rReference.find(i->first));
+            if (pValue.get() && i->second->equals(*pValue))
+                bIgnore = true;
+        }
+        if (bIgnore)
+            i = m_aSprms.erase(i);
+        else
+            ++i;
+    }
 }
 
 RTFSprms::RTFSprms()
