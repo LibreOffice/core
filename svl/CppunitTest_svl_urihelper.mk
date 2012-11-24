@@ -45,6 +45,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svl_urihelper, \
     cppu \
     cppuhelper \
     sal \
+	i18nisolang1 \
     svl \
     tl \
     utl \
