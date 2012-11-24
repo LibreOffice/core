@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_libraries,MacOSXSpell,\
 	cppuhelper \
 	lng \
 	sal \
+	i18nisolang1 \
 	svl \
 	tl \
 	ucbhelper \
