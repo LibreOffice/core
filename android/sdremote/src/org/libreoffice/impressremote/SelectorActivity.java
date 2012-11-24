@@ -260,6 +260,7 @@ public class SelectorActivity extends SherlockActivity {
 
             Server[] aServers = mCommunicationService.getServers();
 
+/* TODO: this crashes currently - some concurrent modification on mBluetoothServers
             // Bluetooth -- Remove old
             for (Entry<Server, View> aEntry : mBluetoothServers.entrySet()) {
                 if (!Arrays.asList(aServers).contains(aEntry.getKey())) {
@@ -268,6 +269,7 @@ public class SelectorActivity extends SherlockActivity {
                                     .getParent());
                 }
             }
+*/
             // Network -- Remove old
             for (Entry<Server, View> aEntry : mNetworkServers.entrySet()) {
                 if (!Arrays.asList(aServers).contains(aEntry.getKey())) {
