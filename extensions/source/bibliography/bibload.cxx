@@ -262,10 +262,10 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const rtl::OUS
         try
         {
             using namespace org::freedesktop::PackageKit;
-            Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()), UNO_QUERY);
+            Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
             Sequence< ::rtl::OUString > vPackages(1);
             vPackages[0] = "libreoffice-base";
-            ::rtl::OUString sInteraction("");
+            ::rtl::OUString sInteraction;
             xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
             // FIXME: notify user to restart here
         }
