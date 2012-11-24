@@ -261,7 +261,7 @@ MergeDataFile::MergeDataFile(
                 aActPo.getLocalId(), sHack, sLang, sText,
                 sQHText, sTitle, aActPo.getSourceFile(), bCaseSensitive );
 
-            if( bFirstLang )
+            if( bFirstLang && ( strcmp(getenv("ENABLE_RELEASE_BUILD"),"TRUE") ) )
             {
                 aLanguageSet.insert("qtz");
                 InsertEntry(
