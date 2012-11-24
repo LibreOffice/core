@@ -21,21 +21,17 @@ import unicodedata
 from ..common.PropertyNames import PropertyNames
 
 from com.sun.star.util import DateTime
+from com.sun.star.uno import RuntimeException
 
 class TextFieldHandler(object):
-    '''
-    Creates a new instance of TextFieldHandler
-    @param xMSF
-    @param xTextDocument
-    '''
 
     xTextFieldsSupplierAux = None
+    arrayTextFields = []
+    dictTextFields = {}
 
     def __init__(self, xMSF, xTextDocument):
         self.xMSFDoc = xMSF
         self.xTextFieldsSupplier = xTextDocument
-        self.arrayTextFields = []
-        self.dictTextFields = {}
         if TextFieldHandler.xTextFieldsSupplierAux is not \
                 self.xTextFieldsSupplier:
             self.__getTextFields()
@@ -93,10 +89,10 @@ class TextFieldHandler(object):
                     self.xTextFieldsSupplier.TextFields.createEnumeration()
                 while xEnum.hasMoreElements():
                     oTextField = xEnum.nextElement()
-                    self.arrayTextFields.append(oTextField)
+                    TextFieldHandler.arrayTextFields.append(oTextField)
                     xPropertySet = oTextField.TextFieldMaster
                     if xPropertySet.Name:
-                        self.dictTextFields[xPropertySet.Name] = \
+                        TextFieldHandler.dictTextFields[xPropertySet.Name] = \
                             oTextField
         except Exception:
             traceback.print_exc()
@@ -104,7 +100,7 @@ class TextFieldHandler(object):
     def __getTextFieldsByProperty(
             self, _PropertyName, _aPropertyValue):
         try:
-            xProperty = self.dictTextFields[_aPropertyValue]
+            xProperty = TextFieldHandler.dictTextFields[_aPropertyValue]
             xPropertySet = xProperty.TextFieldMaster
             if xPropertySet.PropertySetInfo.hasPropertyByName(
                     _PropertyName):
@@ -118,15 +114,18 @@ class TextFieldHandler(object):
             return None
 
     def changeUserFieldContent(self, _FieldName, _FieldContent):
-        DependentTextFields = self.__getTextFieldsByProperty(
-                PropertyNames.PROPERTY_NAME, _FieldName)
-        if DependentTextFields is not None:
-            DependentTextFields.TextFieldMaster.setPropertyValue("Content", _FieldContent)
-            self.refreshTextFields()
+        try:
+            DependentTextFields = self.__getTextFieldsByProperty(
+                    PropertyNames.PROPERTY_NAME, _FieldName)
+            if DependentTextFields is not None:
+                DependentTextFields.TextFieldMaster.setPropertyValue("Content", _FieldContent)
+                self.refreshTextFields()
+        except Exception:
+            traceback.print_exc()
 
     def updateDocInfoFields(self):
         try:
-            for i in self.arrayTextFields:
+            for i in TextFieldHandler.arrayTextFields:
                 if i.supportsService(
                     "com.sun.star.text.TextField.ExtendedUser"):
                     i.update()
@@ -146,18 +145,21 @@ class TextFieldHandler(object):
             dt.Year = time.strftime("%Y", now)
             dt.Month = time.strftime("%m", now)
             dt.Month += 1
-            for i in self.arrayTextFields:
+            for i in TextFieldHandler.arrayTextFields:
                 if i.supportsService(
                     "com.sun.star.text.TextField.DateTime"):
-                    i.setPropertyValue("IsFixed", False)
-                    i.setPropertyValue("DateTimeValue", dt)
+                    try:
+                        i.setPropertyValue("IsFixed", False)
+                        i.setPropertyValue("DateTimeValue", dt)
+                    except RuntimeException:
+                        pass
 
         except Exception:
             traceback.print_exc()
 
     def fixDateFields(self, _bSetFixed):
         try:
-            for i in self.arrayTextFields:
+            for i in TextFieldHandler.arrayTextFields:
                 if i.supportsService(
                     "com.sun.star.text.TextField.DateTime"):
                     i.setPropertyValue("IsFixed", _bSetFixed)

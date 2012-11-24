@@ -95,8 +95,7 @@ class FaxDocument(TextDocument):
             return False
 
     def switchUserField(self, sFieldName, sNewContent, bState):
-        myFieldHandler = TextFieldHandler(
-            self.xMSF, self.xTextDocument)
+        myFieldHandler = TextFieldHandler( self.xMSF, self.xTextDocument)
         if bState:
             myFieldHandler.changeUserFieldContent(sFieldName, sNewContent)
         else:
