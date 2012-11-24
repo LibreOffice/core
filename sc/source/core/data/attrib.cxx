@@ -65,7 +65,7 @@ TYPEINIT1(ScCondFormatItem,    SfxPoolItem);
 //------------------------------------------------------------------------
 
 //
-//      allgemeine Hilfsfunktionen
+//      General Help Function
 //
 
 bool ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxBorderLine* pOther )
@@ -493,7 +493,7 @@ SfxItemPresentation ScRangeItem::GetPresentation
 }
 
 // -----------------------------------------------------------------------
-//      ScTableListItem - Liste von Tabellen(-nummern)
+//      ScTableListItem - List from Tables (-numbers)
 // -----------------------------------------------------------------------
 
 ScTableListItem::ScTableListItem( const ScTableListItem& rCpy )
@@ -618,7 +618,7 @@ SfxItemPresentation ScTableListItem::GetPresentation
 
 
 // -----------------------------------------------------------------------
-//      ScPageHFItem - Daten der Kopf-/Fusszeilen
+//      ScPageHFItem - Dates from the Head and Foot lines
 // -----------------------------------------------------------------------
 
 ScPageHFItem::ScPageHFItem( sal_uInt16 nWhichP )
@@ -691,7 +691,7 @@ bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
 
                 if ( !pLeftArea || !pCenterArea || !pRightArea )
                 {
-                    // keine Texte auf NULL stehen lassen
+                    // no Text with Null are left
                     ScEditEngineDefaulter aEngine( EditEngine::CreatePool(), true );
                     if (!pLeftArea)
                         pLeftArea = aEngine.CreateTextObject();
@@ -745,7 +745,7 @@ SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
 
 static void lcl_SetSpace( String& rStr, const ESelection& rSel )
 {
-    // Text durch ein Leerzeichen ersetzen, damit Positionen stimmen:
+    // Text replaced by a space to ensure they are positions:
 
     xub_StrLen nLen = rSel.nEndPos-rSel.nStartPos;
     rStr.Erase( rSel.nStartPos, nLen-1 );
@@ -837,7 +837,7 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
         }
     }
 
-    if ( nVer < 1 )             // alte Feldbefehle umsetzen
+    if ( nVer < 1 )             //old field command conversions
     {
         sal_uInt16 i;
         const String& rDel = ScGlobal::GetRscString( STR_HFCMD_DELIMITER );
@@ -874,7 +874,7 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
         }
     }
     else if ( nVer < 2 )
-    {   // nichts tun, SvxFileField nicht gegen SvxExtFileField austauschen
+    {   // not to do, SvxFileField is not exchanged for SvxExtFileField
     }
 
     ScPageHFItem* pItem = new ScPageHFItem( Which() );
@@ -923,7 +923,7 @@ void ScPageHFItem::SetArea( EditTextObject *pNew, int nArea )
 }
 
 //-----------------------------------------------------------------------
-//  ScViewObjectModeItem - Darstellungsmodus von ViewObjekten
+//  ScViewObjectModeItem - Display Mode of View Objects
 //-----------------------------------------------------------------------
 
 ScViewObjectModeItem::ScViewObjectModeItem( sal_uInt16 nWhichP )
@@ -979,7 +979,7 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
             break;
 
             default:
-            ePres = SFX_ITEM_PRESENTATION_NAMELESS;//das geht immer!
+            ePres = SFX_ITEM_PRESENTATION_NAMELESS;//this always goes!
             break;
         }
         /* !!! fall-through !!! */
@@ -1035,7 +1035,7 @@ SfxPoolItem* ScViewObjectModeItem::Create(
 {
     if ( nVersion == 0 )
     {
-        // alte Version mit AllEnumItem -> mit Mode "Show" erzeugen
+        // Old Version with AllEnuItem -> produce with Mode "Show"
         return new ScViewObjectModeItem( Which() );
     }
     else

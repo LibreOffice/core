@@ -220,7 +220,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 
     int bChkStkPos = !bNewGroup && !aAttrStack.empty();
 
-    while( bWeiter && IsParserWorking() )  // as long as known Attribute are recognized
+    while( bWeiter && IsParserWorking() )  // as long as known 
+Attribute are recognized
     {
         switch( nToken )
         {
@@ -293,7 +294,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 else
                 {
                     nStyleNo = -1 == nTokenValue ? 0 : sal_uInt16(nTokenValue);
-                    // setze am akt. auf dem AttrStack stehenden Style die
+                    /* setze am akt. auf dem AttrStack stehenden Style die
+                       I sit on akt. which is on the immiediate sytle AttrStack */
                     // StyleNummer
                     SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
                     if( !pAkt )

@@ -55,7 +55,7 @@
 #include "scmod.hxx"
 #include "markdata.hxx"
 #include "globstr.hrc"
-#include "sc.hrc"           // fuer ShellInvalidate
+#include "sc.hrc"           // for ShellInvalidate
 #include "AccessibleDocumentPagePreview.hxx"
 #include <vcl/lineinfo.hxx>
 #include <svx/algitem.hxx>
@@ -149,10 +149,10 @@ ScPreview::~ScPreview()
     delete pLocationData;
 }
 
-void ScPreview::UpdateDrawView()        // nTab muss richtig sein
+void ScPreview::UpdateDrawView()        // nTab must be right
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScDrawLayer* pModel = pDoc->GetDrawLayer();     // ist nicht 0
+    ScDrawLayer* pModel = pDoc->GetDrawLayer();     // is not 0
 
     // #114135#
     if ( pModel )
@@ -165,11 +165,12 @@ void ScPreview::UpdateDrawView()        // nTab muss richtig sein
             pDrawView = NULL;
         }
 
-        if ( !pDrawView )                                   // neu anlegen?
+        if ( !pDrawView )                                   // New Drawing?
         {
             pDrawView = new FmFormView( pModel, this );
-            // die DrawView uebernimmt den Design-Modus vom Model
-            // (Einstellung "Im Entwurfsmodus oeffnen"), darum hier zuruecksetzen
+
+            // The DrawView takes over the Design-Mode from the Model
+            // (Settings "In opening Draftmode"), therefore to restore here
             pDrawView->SetDesignMode( true );
             pDrawView->SetPrintPreview( true );
             pDrawView->ShowSdrPage(pPage);
@@ -177,7 +178,7 @@ void ScPreview::UpdateDrawView()        // nTab muss richtig sein
     }
     else if ( pDrawView )
     {
-        delete pDrawView;           // fuer diese Tabelle nicht gebraucht
+        delete pDrawView;           // for this Chart is not needed
         pDrawView = NULL;
     }
 }
@@ -191,9 +192,9 @@ void ScPreview::TestLastPage()
         {
             nPageNo = nTotalPages - 1;
             nTab = static_cast<SCTAB>(nPages.size()) -1;
-            while (nTab > 0 && !nPages[nTab])       // letzte nicht leere Tabelle
+            while (nTab > 0 && !nPages[nTab])       // not the last empty Table
                 --nTab;
-            OSL_ENSURE(0 < static_cast<SCTAB>(nPages.size()),"alle Tabellen leer?");
+            OSL_ENSURE(0 < static_cast<SCTAB>(nPages.size()),"are all tables empty?");
             nTabPage = nPages[nTab] - 1;
             nTabStart = 0;
             for (sal_uInt16 i=0; i<nTab; i++)
@@ -202,7 +203,7 @@ void ScPreview::TestLastPage()
             ScDocument* pDoc = pDocShell->GetDocument();
             nDisplayStart = lcl_GetDisplayStart( nTab, pDoc, nPages );
         }
-        else        // leeres Dokument
+        else        // empty Document
         {
             nTab = 0;
             nPageNo = nTabPage = nTabStart = nDisplayStart = 0;
@@ -266,7 +267,7 @@ void ScPreview::CalcPages()
         long nThisTab = aPrintFunc.GetTotalPages();
         nPages[i] = nThisTab;
         nTotalPages += nThisTab;
-        nFirstAttr[i] = aPrintFunc.GetFirstPageNo();    // behalten oder aus Vorlage
+        nFirstAttr[i] = aPrintFunc.GetFirstPageNo();    // to keep or from template
 
         if (nPageNo>=nThisStart && nPageNo<nTotalPages)
         {
@@ -294,10 +295,10 @@ void ScPreview::CalcPages()
 }
 
 
-void ScPreview::RecalcPages()                   // nur nPageNo geaendert
+void ScPreview::RecalcPages()                   // only nPageNo is changed
 {
     if (!bValid)
-        return;                         // dann wird CalcPages aufgerufen
+        return;                         // then CalcPages is called
 
     SCTAB nOldTab = nTab;
 
@@ -328,7 +329,7 @@ void ScPreview::RecalcPages()                   // nur nPageNo geaendert
         nDisplayStart = lcl_GetDisplayStart( nTab, pDoc, nPages );
     }
 
-    TestLastPage();         // testen, ob hinter letzter Seite
+    TestLastPage();         // to test, if after last page
 
     if ( nTab != nOldTab )
         bStateValid = false;
@@ -343,7 +344,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     {
         CalcPages();
         RecalcPages();
-        UpdateDrawView();       // Tabelle evtl. geaendert
+        UpdateDrawView();       // Spreedsheet eventually changes
     }
 
     Fraction aPreviewZoom( nZoom, 100 );
@@ -399,7 +400,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
         pPrintFunc->SetDrawView( pDrawView );
 
-        // MultiSelection fuer die eine Seite muss etwas umstaendlich erzeugt werden...
+        // MultiSelection for the one Page must produce something inconvenient
         Range aPageRange( nPageNo+1, nPageNo+1 );
         MultiSelection aPage( aPageRange );
         aPage.SetTotalRange( Range(0,RANGE_MAX) );
@@ -452,7 +453,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             }
         }
 
-        if (nPrinted)   // wenn nichts, alles grau zeichnen
+        if (nPrinted)   // if not, draw everything grey
         {
             aLocalPageSize = pPrintFunc->GetPageSize();
             aLocalPageSize.Width()  = (long) (aLocalPageSize.Width()  * HMM_PER_TWIPS );
@@ -526,7 +527,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             if (bBottom)
             {
                 if (bRight)
-                    DrawRect(Rectangle(0,nPageEndY, nPageEndX,aWinEnd.Y()));    // Ecke nicht doppelt
+                    DrawRect(Rectangle(0,nPageEndY, nPageEndX,aWinEnd.Y()));    // Corner not duplicated
                 else
                     DrawRect(Rectangle(0,nPageEndY, aWinEnd.X(),aWinEnd.Y()));
             }
@@ -665,7 +666,7 @@ String ScPreview::GetPosString()
     if (!bValid)
     {
         CalcPages();
-        UpdateDrawView();       // Tabelle evtl. geaendert
+        UpdateDrawView();       // The table eventually changes
     }
 
     String aString( ScGlobal::GetRscString( STR_PAGE ) );
@@ -715,7 +716,7 @@ void ScPreview::SetPageNo( long nPage )
 {
     nPageNo = nPage;
     RecalcPages();
-    UpdateDrawView();       // Tabelle evtl. geaendert
+    UpdateDrawView();       // The table eventually changes
     InvalidateLocationData( SC_HINT_DATACHANGED );
     Invalidate();
 }
@@ -733,12 +734,12 @@ long ScPreview::GetFirstPage(SCTAB nTabP)
         CalcPages();
         if (nTabP >= static_cast<SCTAB>(nPages.size()) )
             OSL_FAIL("nPages out ouf bounds, FIX IT");
-        UpdateDrawView();       // Tabelle evtl. geaendert
+        UpdateDrawView();       // The table eventually changes
 
         for (SCTAB i=0; i<nTabP; i++)
             nPage += nPages[i];
 
-        // bei leerer Tabelle vorhergehende Seite
+        // An empty Table on the previous Page
 
         if ( nPages[nTabP]==0 && nPage > 0 )
             --nPage;
@@ -857,13 +858,13 @@ void ScPreview::SetYOffset( long nY )
 
 void ScPreview::DoInvalidate()
 {
-    //  Wenn das ganze aus dem GetState der Shell gerufen wird,
-    //  muss das Invalidate hinterher asynchron kommen...
-
-    if (bInGetState)
+    //  If the whole GetState of the shell is called
+    //  The Invalidate must come behind asynchronously
+ 
+   if (bInGetState)
         Application::PostUserEvent( STATIC_LINK( this, ScPreview, InvalidateHdl ) );
     else
-        StaticInvalidate();     // sofort
+        StaticInvalidate();     // Immediately
 }
 
 void ScPreview::StaticInvalidate()
