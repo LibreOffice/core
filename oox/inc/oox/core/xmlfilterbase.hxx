@@ -226,7 +226,7 @@ public:
 
     sal_Int32 getNamespaceId( const ::rtl::OUString& rUrl );
 
-    void importDocumentProperties() throw();
+    void importDocumentProperties();
 
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
