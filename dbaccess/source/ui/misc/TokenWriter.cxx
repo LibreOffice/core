@@ -887,7 +887,7 @@ void OHTMLImportExport::WriteTables()
                 IncIndent(-1);
 
             WriteCell(pFormat[i],pColWidth[i],nHeight,pHorJustify[i],*pIter,OOO_STRING_SVTOOLS_HTML_tableheader);
-        }libreOffice SetModifyHdl
+        }
 
         IncIndent(-1);
         TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
