@@ -2188,7 +2188,7 @@ short SvNumberformat::ImpCheckCondition(double& fNumber,
     }
 }
 
-bool SvNumberformat::GetOutputString(OUString& sString,
+bool SvNumberformat::GetOutputString(const OUString& sString,
                                      OUString& OutString,
                                      Color** ppColor)
 {

@@ -233,7 +233,7 @@ public:
     void SetStarFormatSupport( bool b )         { bStarFlag = b; }
 
     NfHackConversion Load( SvStream& rStream, ImpSvNumMultipleReadHeader& rHdr,
-        SvNumberFormatter* pConverter, ImpSvNumberInputScan& rISc );
+                           SvNumberFormatter* pConverter, ImpSvNumberInputScan& rISc );
     void Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr  ) const;
 
     // Load a string which might contain an Euro symbol,
@@ -247,7 +247,7 @@ public:
     bool GetOutputString( double fNumber, sal_uInt16 nCharCount, OUString& rOutString ) const;
 
     bool GetOutputString( double fNumber, OUString& OutString, Color** ppColor );
-    bool GetOutputString( OUString& sString, OUString& OutString, Color** ppColor );
+    bool GetOutputString( const OUString& sString, OUString& OutString, Color** ppColor );
 
     // True if type text
     bool IsTextFormat() const { return (eType & NUMBERFORMAT_TEXT) != 0; }
