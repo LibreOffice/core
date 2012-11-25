@@ -42,7 +42,7 @@ $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),LCX,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(SRCDIR)/shell/source/win32/shlxthandler/res && \
-		BRAND_BASE_DIR=$(call gb_Helper_make_url,$(OUTDIR)/unittest/installation) \
+		BRAND_BASE_DIR=$(call gb_Helper_make_url,$(OUTDIR)/unittest/install) \
 		$(call gb_Executable_get_target_for_build,lngconvex) \
 			-ulf shlxthdl.ulf \
 			-rc $@ \
