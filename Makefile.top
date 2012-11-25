@@ -62,6 +62,7 @@ cosv\
 cppcanvas\
 cppu\
 cppuhelper\
+cppunit\
 cpputools\
 ct2n\
 cui\
@@ -218,7 +219,6 @@ xsltml\
 zlib\
 
 dmake_modules:=\
-cppunit\
 crashrep\
 external\
 helpcontent2 \
