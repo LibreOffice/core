@@ -118,44 +118,20 @@
 
 	<xsl:template name="write-mapped-CSS-styles">
 		<xsl:param name="globalData" />
-		<xsl:param name="styleNo" select="1"/>
 		<xsl:param name="emptyStyles"/>
 
-		<xsl:choose>
-			<xsl:when test="$globalData/all-styles/style[$styleNo]">
-			<!-- If there is still a style to be written -->
-				<!-- setting the context -->
-				<xsl:for-each select="$globalData/all-styles/style[$styleNo]">
-				<xsl:choose>
-					<xsl:when test="final-properties != ''">
-					<!-- NOTE: easy process, as only the style family in conjunction with the style name, makes the style unambigous -->
-				<xsl:text>.</xsl:text><!--<xsl:value-of select="@style:family" /><xsl:text>:</xsl:text>--><xsl:value-of select="translate(@style:name, '.,;: %()[]/\+', '_____________')"/><xsl:text> { </xsl:text> <xsl:value-of select="final-properties" /><xsl:text>}
+			<xsl:for-each select="$globalData/all-styles/style">
+					<xsl:if test="final-properties != ''">
+						<!-- NOTE: easy process, as only the style family in conjunction with the style name, makes the style unambigous -->
+						<xsl:text>.</xsl:text><!--<xsl:value-of select="@style:family" /><xsl:text>:</xsl:text>--><xsl:value-of select="translate(@style:name, '.,;: %()[]/\+', '_____________')"/><xsl:text> { </xsl:text> <xsl:value-of select="final-properties" /><xsl:text>}
 	</xsl:text>
-						<xsl:call-template name="write-mapped-CSS-styles">
-							<xsl:with-param name="globalData" select="$globalData" />
-							<xsl:with-param name="emptyStyles" select="$emptyStyles"/>
-							<xsl:with-param name="styleNo" select="$styleNo + 1"/>
-						</xsl:call-template>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:call-template name="write-mapped-CSS-styles">
-							<xsl:with-param name="globalData" select="$globalData" />
-							<xsl:with-param name="emptyStyles" select="concat($emptyStyles, '.', @style:name, ' ')"/>
-							<xsl:with-param name="styleNo" select="$styleNo + 1"/>
-						</xsl:call-template>
-					</xsl:otherwise>
-				</xsl:choose>
-				</xsl:for-each>
-			</xsl:when>
-			<xsl:otherwise>
+					</xsl:if>
+					
+			</xsl:for-each>
 			<!-- Otherwise all styles have been processed and the empty styles have to be given out -->
 				<xsl:comment> ODF styles with no properties representable as CSS </xsl:comment><xsl:text>
-	</xsl:text><xsl:value-of select="$emptyStyles"/><xsl:text>{ }
-	</xsl:text>
-			</xsl:otherwise>
-		</xsl:choose>
+	</xsl:text><xsl:for-each select="$globalData/all-styles/style[final-properties = '']"><xsl:value-of select="concat('.', @style:name, ' ')"/></xsl:for-each> { }
 	</xsl:template>
-
 
 	<!-- Creating CSS page layout based on first office master style -->
 	<xsl:template name='create-page-layout'>
