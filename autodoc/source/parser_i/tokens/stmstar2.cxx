@@ -44,10 +44,10 @@ StmArrayStatu2::StmArrayStatu2( intt            i_nStatusSize,
         for (const INT16 * get = in_aArrayModel; count < nNrOfBranches; count++, get++)
             dpBranches[count] = *get;
     }
-    else //
+    else
     {
         memset(dpBranches, 0, nNrOfBranches);
-    }  // endif
+    }
 }
 
 StmArrayStatu2::~StmArrayStatu2()
