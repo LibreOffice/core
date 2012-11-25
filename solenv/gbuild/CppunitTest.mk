@@ -312,16 +312,16 @@ $(call gb_CppunitTest_get_target,$(1)) : \
 $(call gb_CppunitTest_get_clean_target,$(1)) : \
         $(call gb_CppunitTestFakeExecutable_get_clean_target,$(2))
 
-endef
+$(call gb_CppunitTestFakeExecutable_get_target,$(2)) : \
+        $(call gb_Executable_get_target,$(2))
+	$(call gb_Helper_abbreviate_dirs,mkdir -p $$(dir $$@) && cp $$< $$@)
 
-$(call gb_CppunitTestFakeExecutable_get_target,%) : \
-        $(call gb_Executable_get_target,%)
-	$(call gb_Helper_abbreviate_dirs,mkdir -p $(dir $@) && cp $< $@)
-
-.PHONY : $(call gb_CppunitTestFakeExecutable_get_clean_target,%)
-$(call gb_CppunitTestFakeExecutable_get_clean_target,%) :
+.PHONY : $(call gb_CppunitTestFakeExecutable_get_clean_target,$(2))
+$(call gb_CppunitTestFakeExecutable_get_clean_target,$(2)) :
 	$(call gb_Helper_abbreviate_dirs, \
-        rm -f $(call gb_CppunitTestFakeExecutable_get_target,$*))
+        rm -f $(call gb_CppunitTestFakeExecutable_get_target,$(2)))
+
+endef
 
 define gb_CppunitTest__forward_to_Linktarget
 gb_CppunitTest_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_CppunitTest__get_linktargetname,$$(1)),$$(2),$$(3),CppunitTest_$$(1))
