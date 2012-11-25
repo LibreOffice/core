@@ -1659,7 +1659,7 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
     long nCurrentDate = aActDate - *(pFormatter->GetNullDate());
 
     double nVal = mpDoc->GetValue(rPos);
-    long nCellDate = (long) ::rtl::Math::approxFloor(nVal);
+    long nCellDate = (long) ::rtl::math::approxFloor(nVal);
     Date aCellDate = *(pFormatter->GetNullDate());
     aCellDate += (long) ::rtl::math::approxFloor(nVal);
 

@@ -29,6 +29,8 @@
 
 #include "globstr.hrc"
 
+#include <set>
+
 ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScAddress& rPos):
     Control(pParent, ScResId( RID_COND_ENTRY ) ),
     mbActive(false),
@@ -135,6 +137,27 @@ IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
 
 //
 //condition
+//
+namespace {
+
+void FillStlyeListBox( ScDocument* pDoc, ListBox& rLbStyle )
+{
+    rLbStyle.SetSeparatorPos(0);
+    std::set<rtl::OUString> aStyleNames;
+    SfxStyleSheetIterator aStyleIter( pDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
+    for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
+    {
+        rtl::OUString aName = pStyle->GetName();
+        aStyleNames.insert(aName);
+    }
+    for(std::set<rtl::OUString>::const_iterator itr = aStyleNames.begin(), itrEnd = aStyleNames.end();
+                        itr != itrEnd; ++itr)
+    {
+        rLbStyle.InsertEntry( *itr );
+    }
+}
+
+}
 
 ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
@@ -265,13 +288,7 @@ void ScConditionFrmtEntry::Init()
     maEdVal1.SetModifyHdl( LINK( this, ScCondFrmtEntry, EdModifyHdl ) );
     maEdVal2.SetModifyHdl( LINK( this, ScCondFrmtEntry, EdModifyHdl ) );
 
-    maLbStyle.SetSeparatorPos(0);
-    SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
-    for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
-    {
-        rtl::OUString aName = pStyle->GetName();
-        maLbStyle.InsertEntry( aName );
-    }
+    FillStlyeListBox( mpDoc, maLbStyle );
     maLbStyle.SetSelectHdl( LINK( this, ScConditionFrmtEntry, StyleSelectHdl ) );
 
     maLbCondType.SetSelectHdl( LINK( this, ScConditionFrmtEntry, ConditionTypeSelectHdl ) );
@@ -433,13 +450,28 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
         // Find the new style and add it into the style list boxes
         rtl::OUString aNewStyle;
         SfxStyleSheetIterator aStyleIter( pDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
-        for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
+        bool bFound = false;
+        for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle && !bFound; pStyle = aStyleIter.Next() )
         {
             rtl::OUString aName = pStyle->GetName();
             if ( rLbStyle.GetEntryPos(aName) == LISTBOX_ENTRY_NOTFOUND )    // all lists contain the same entries
             {
-                rLbStyle.InsertEntry(aName);
-                rLbStyle.SelectEntry(aName);
+                for( sal_uInt16 i = 1, n = rLbStyle.GetEntryCount(); i <= n && !bFound; ++i)
+                {
+                    rtl::OUString aStyleName = ScGlobal::pCharClass->uppercase(rtl::OUString(rLbStyle.GetEntry(i)));
+                    if( i == n )
+                    {
+                        rLbStyle.InsertEntry(aName);
+                        rLbStyle.SelectEntry(aName);
+                        bFound = true;
+                    }
+                    else if( aStyleName > ScGlobal::pCharClass->uppercase(aName) )
+                    {
+                        rLbStyle.InsertEntry(aName, i);
+                        rLbStyle.SelectEntry(aName);
+                        bFound = true;
+                    }
+                }
             }
         }
     }
@@ -488,16 +520,10 @@ ScFormulaFrmtEntry::ScFormulaFrmtEntry( Window* pParent, ScDocument* pDoc, const
 
 void ScFormulaFrmtEntry::Init()
 {
-    maLbStyle.SetSeparatorPos(0);
     maEdFormula.SetGetFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeGetFocusHdl ) );
     maEdFormula.SetLoseFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeLoseFocusHdl ) );
 
-    SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
-    for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
-    {
-        rtl::OUString aName = pStyle->GetName();
-        maLbStyle.InsertEntry( aName );
-    }
+    FillStlyeListBox( mpDoc, maLbStyle );
     maLbStyle.SetSelectHdl( LINK( this, ScFormulaFrmtEntry, StyleSelectHdl ) );
 }
 
@@ -1155,13 +1181,7 @@ void ScDateFrmtEntry::Init()
     maLbDateEntry.SelectEntryPos(0);
     maLbType.SelectEntryPos(3);
 
-    maLbStyle.SetSeparatorPos(0);
-    SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
-    for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
-    {
-        rtl::OUString aName = pStyle->GetName();
-        maLbStyle.InsertEntry( aName );
-    }
+    FillStlyeListBox( mpDoc, maLbStyle );
     maLbStyle.SetSelectHdl( LINK( this, ScDateFrmtEntry, StyleSelectHdl ) );
 }
 
