@@ -22,7 +22,13 @@ import sys
 import os
 import imp
 import time
-import compiler
+import ast
+
+try:
+    unicode
+except NameError:
+    # Python 3 compatibility
+    unicode = str
 
 class LogLevel:
     NONE = 0
@@ -66,7 +72,7 @@ def getLogTarget():
                 systemPath = uno.fileUrlToSystemPath( userInstallation + "/Scripts/python/log.txt" )
                 ret = file( systemPath , "a" )
         except:
-            print "Exception during creation of pythonscript logfile: "+ lastException2String() + "\n, delagating log to stdout\n"
+            print("Exception during creation of pythonscript logfile: "+ lastException2String() + "\n, delagating log to stdout\n")
     return ret
   
 class Logger(LogLevel):
@@ -99,7 +105,7 @@ class Logger(LogLevel):
                     "\n" )
                 self.target.flush()
             except:
-                print "Error during writing to stdout: " +lastException2String() + "\n"
+                print("Error during writing to stdout: " +lastException2String() + "\n")
 
 log = Logger( getLogTarget() )
 
@@ -200,10 +206,10 @@ class MyUriHelper:
             ret = self.m_baseUri + "/" + myUri.getName().replace( "|", "/" )
             log.isDebugLevel() and log.debug( "converting scriptURI="+scriptURI + " to storageURI=" + ret )
             return ret
-        except UnoException, e:
+        except UnoException as e:
             log.error( "error during converting scriptURI="+scriptURI + ": " + e.Message)
             raise RuntimeException( "pythonscript:scriptURI2StorageUri: " +e.getMessage(), None )
-        except Exception, e:
+        except Exception as e:
             log.error( "error during converting scriptURI="+scriptURI + ": " + str(e))
             raise RuntimeException( "pythonscript:scriptURI2StorageUri: " + str(e), None )
         
@@ -223,9 +229,9 @@ def hasChanged( oldDate, newDate ):
            newDate.HundredthSeconds > oldDate.HundredthSeconds
 
 def ensureSourceState( code ):
-    if not code.endswith( "\n" ):
-        code = code + "\n"
-    code = code.replace( "\r", "" )
+    if code.endswith(b"\n"):
+        code = code + b"\n"
+    code = code.replace(b"\r", b"")
     return code
 
 
@@ -332,10 +338,10 @@ class ProviderContext:
     def isUrlInPackage( self, url ):
         values = self.mapPackageName2Path.values()
         for i in values:
-#	    print "checking " + url + " in " + str(i.pathes)
+#	    print ("checking " + url + " in " + str(i.pathes))
             if url in i.pathes:
                return True
-#        print "false"
+#        print ("false")
         return False
             
     def setPackageAttributes( self, mapPackageName2Path, rootUrl ):
@@ -366,27 +372,42 @@ class ProviderContext:
         checkForPythonPathBesideScript( url[0:url.rfind('/')] )
         src = ensureSourceState( src )
 
-        code = compiler.parse( src )
+        try:
+            code = ast.parse( src )
+        except:
+            log.isDebugLevel() and log.debug( "pythonscript: getFuncsByUrl: exception while parsing: " + lastException2String())
+            raise
 
         allFuncs = []
 
         if code == None:
             return allFuncs
-        
+
         g_exportedScripts = []
-        for node in code.node.nodes:
-            if node.__class__.__name__ == 'Function':
+        for node in ast.iter_child_nodes(code):
+            if isinstance(node, ast.FunctionDef):
                 allFuncs.append(node.name)
-            elif node.__class__.__name__ == 'Assign':
-                for assignee in node.nodes:
-                    if assignee.name == 'g_exportedScripts':
-                        for item in node.expr.nodes:
-                            if item.__class__.__name__ == 'Name':
-                                g_exportedScripts.append(item.name)
+            elif isinstance(node, ast.Assign):
+                for target in node.targets:
+                    if target.id == "g_exportedScripts":
+                        for value in node.value.elts:
+                            g_exportedScripts.append(value.id)
                         return g_exportedScripts
 
+# Python 2 only
+#        for node in code.node.nodes:
+#            if node.__class__.__name__ == 'Function':
+#                allFuncs.append(node.name)
+#            elif node.__class__.__name__ == 'Assign':
+#                for assignee in node.nodes:
+#                    if assignee.name == 'g_exportedScripts':
+#                        for item in node.expr.nodes:
+#                            if item.__class__.__name__ == 'Name':
+#                                g_exportedScripts.append(item.name)
+#                        return g_exportedScripts
+
         return allFuncs
-    
+
     def getModuleByUrl( self, url ):
         entry =  self.modules.get(url)
         load = True
@@ -413,7 +434,7 @@ class ProviderContext:
                 code = compile( src, encfile(uno.fileUrlToSystemPath( url ) ), "exec" )
             else:
                 code = compile( src, url, "exec" )
-            exec code in entry.module.__dict__
+            exec(code, entry.module.__dict__)
             entry.module.__file__ = url
             self.modules[ url ] = entry
             log.isDebugLevel() and log.debug( "mapped " + url + " to " + str( entry.module ) )
@@ -501,7 +522,7 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
                 code = ensureSourceState( code )
                 mod = imp.new_module("ooo_script_framework")
                 mod.__dict__[GLOBAL_SCRIPTCONTEXT_NAME] = self.provCtx.scriptContext
-                exec code in mod.__dict__
+                exec(code, mod.__dict__)
                 values = mod.__dict__.get( CALLABLE_CONTAINER_NAME , None )
                 if not values:
                     values = mod.__dict__.values()
@@ -606,7 +627,7 @@ class DirBrowseNode( unohelper.Base, XBrowseNode ):
                     log.isDebugLevel() and log.debug( "adding DirBrowseNode " + i )
                     browseNodeList.append( DirBrowseNode( self.provCtx, i[i.rfind("/")+1:len(i)],i))
             return tuple( browseNodeList )
-        except Exception, e:
+        except Exception as e:
             text = lastException2String()
             log.error( "DirBrowseNode error: " + str(e) + " while evaluating " + self.rootUrl)
             log.error( text)
@@ -807,7 +828,7 @@ class PythonScript( unohelper.Base, XScript ):
         log.isDebugLevel() and log.debug( "PythonScript.invoke " + str( args ) )
         try:
             ret = self.func( *args )
-        except UnoException,e:
+        except UnoException as e:
             # UNO Exception continue to fly ...
             text = lastException2String()
             complete = "Error during invoking function " + \
@@ -820,7 +841,7 @@ class PythonScript( unohelper.Base, XScript ):
             # this is really bad for most users. 
             e.Message = e.Message + " (" + complete + ")"
             raise
-        except Exception,e:
+        except Exception as e:
             # General python exception are converted to uno RuntimeException
             text = lastException2String()
             complete = "Error during invoking function " + \
@@ -882,7 +903,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
             else:
                 self.dirBrowseNode = DirBrowseNode( self.provCtx, LANGUAGENAME, rootUrl )
             
-        except Exception, e:
+        except Exception as e:
             text = lastException2String()
             log.debug( "PythonScriptProvider could not be instantiated because of : " + text )
             raise e
