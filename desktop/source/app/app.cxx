@@ -58,6 +58,7 @@
 #include <com/sun/star/configuration/backend/BackendSetupException.hpp>
 #include <com/sun/star/configuration/backend/BackendAccessException.hpp>
 #include <com/sun/star/task/JobExecutor.hpp>
+#include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
@@ -66,7 +67,6 @@
 
 #include <toolkit/unohlp.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -1445,8 +1445,10 @@ int Desktop::Main()
     Reference< XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
 
+    Reference< XRestartManager > xRestartManager(
+        OfficeRestartManager::get(comphelper::getProcessComponentContext()));
+
     Reference< XDesktop > xDesktop;
-    Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
     try
     {
         RegisterServices();
@@ -1555,14 +1557,6 @@ int Desktop::Main()
         if ( bAbort )
             return EXIT_FAILURE;
 
-        {
-            ::comphelper::ComponentContext aContext( xSMgr );
-            xRestartManager.set( aContext.getSingleton( ::rtl::OUString( "com.sun.star.task.OfficeRestartManager"  ) ), UNO_QUERY );
-        }
-
-        // check whether the shutdown is caused by restart
-        pExecGlobals->bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
-
         if (inst_fin == UserInstall::Created)
         {
             Migration::migrateSettingsIfNecessary();
@@ -1587,14 +1581,6 @@ int Desktop::Main()
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} impl_checkRecoveryState" );
 
-        {
-            ::comphelper::ComponentContext aContext( xSMgr );
-            xRestartManager.set( aContext.getSingleton( ::rtl::OUString( "com.sun.star.task.OfficeRestartManager"  ) ), UNO_QUERY );
-        }
-
-        // check whether the shutdown is caused by restart
-        pExecGlobals->bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
-
         if ( rCmdLineArgs.IsHeadless() )
         {
             // Ensure that we use not the system file dialogs as
@@ -1605,6 +1591,8 @@ int Desktop::Main()
             aMiscOptions.SetUseSystemFileDialog( sal_False );
         }
 
+        pExecGlobals->bRestartRequested = xRestartManager->isRestartRequested(
+            true);
         if ( !pExecGlobals->bRestartRequested )
         {
             if ((!rCmdLineArgs.WantsToLoadDocument() && !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsQuickstart()) &&
@@ -1706,7 +1694,8 @@ int Desktop::Main()
                 new svt::JavaContext( com::sun::star::uno::getCurrentContext() ) );
 
             // check whether the shutdown is caused by restart just before entering the Execute
-            pExecGlobals->bRestartRequested = pExecGlobals->bRestartRequested || ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
+            pExecGlobals->bRestartRequested = pExecGlobals->bRestartRequested ||
+                xRestartManager->isRestartRequested(true);
 
             if ( !pExecGlobals->bRestartRequested )
             {
