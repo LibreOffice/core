@@ -290,7 +290,7 @@ IMPL_LINK( OWizTypeSelect, ColumnSelectHdl, MultiListBox *, /*pListBox*/ )
 // -----------------------------------------------------------------------
 void OWizTypeSelect::Reset()
 {
-    // urspr"unglichen zustand wiederherstellen
+    // restore original state
     DBG_CHKTHIS(OWizTypeSelect,NULL);
 
     while(m_lbColumnNames.GetEntryCount())
@@ -412,7 +412,7 @@ long OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
             const CommandEvent* pComEvt = rEvt.GetCommandEvent();
             if(pComEvt->GetCommand() != COMMAND_CONTEXTMENU)
                 break;
-            // die Stelle, an der geklickt wurde
+            // the place, at which was clicked
             Point ptWhere(0,0);
             if (pComEvt->IsMouseEvent())
                 ptWhere = pComEvt->GetMousePosPixel();

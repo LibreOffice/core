@@ -334,7 +334,7 @@ namespace dbaui
         OKButton&           GetOKButton() { return m_pbFinish; }
         Wizard_Button_Style GetPressedButton() const { return m_ePressed; }
         void                EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable);
-        void                AddWizardPage(OWizardPage* pPage); // Page wird von OCopyTableWizard gelöscht
+        void                AddWizardPage(OWizardPage* pPage); // Page wird von OCopyTableWizard gelÃ¶scht
         void                RemoveWizardPage(OWizardPage* pPage); // Page goes again to user
         void                CheckButtons(); // checks which button can be disabled, enabled
 

@@ -3308,7 +3308,7 @@ sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam, sal_Int16 nFirstDay
 {
     Date aRefDate( 1,1,1900 );
     long nDays = (long) aDate;
-    nDays -= 2; // normieren: 1.1.1900 => 0
+    nDays -= 2; // normalize: 1.1.1900 => 0
     aRefDate += nDays;
     DayOfWeek aDay = aRefDate.GetDayOfWeek();
     sal_Int16 nDay;

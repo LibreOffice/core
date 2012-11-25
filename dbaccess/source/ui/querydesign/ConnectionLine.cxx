@@ -145,9 +145,9 @@ OConnectionLine& OConnectionLine::operator=( const OConnectionLine& rLine )
 {
     if( &rLine != this )
     {
-        // da mir die Daten nicht gehoeren, loesche ich die alten nicht
+        // as the data does not belong to me, I don't delete the old one
         m_pData->CopyFrom(*rLine.GetData());
-            // CopyFrom ist virtuell, damit ist es kein Problem, wenn m_pData von einem von OTableConnectionData abgeleiteten Typ ist
+            // CopyFrom is virtual, therefore it is not a problem, if m_pData is of a type derived from OTableConnectionData
 
         m_pTabConn = rLine.m_pTabConn;
         m_aSourceConnPos = rLine.m_aSourceConnPos;
@@ -163,7 +163,7 @@ OConnectionLine& OConnectionLine::operator=( const OConnectionLine& rLine )
 Rectangle OConnectionLine::GetBoundingRect()
 {
     //////////////////////////////////////////////////////////////////////
-    // Umgebendes Rechteck bestimmen
+    // determine surrounding rectangle
     Rectangle aBoundingRect( Point(0,0), Point(0,0) );
     if( !IsValid() )
         return aBoundingRect;
@@ -196,7 +196,7 @@ Rectangle OConnectionLine::GetBoundingRect()
     const OTableWindow* pSourceWin = m_pTabConn->GetSourceWin();
     const OTableWindow* pDestWin = m_pTabConn->GetDestWin();
     //////////////////////////////////////////////////////////////////////
-    // Linie verlaeuft in z-Form
+    // line proceeds in in z-Form
     if( pSourceWin == pDestWin || Abs(m_aSourceConnPos.X() - m_aDestConnPos.X()) > Abs(m_aSourceDescrLinePos.X() - m_aDestDescrLinePos.X()) )
     {
         aTopLeft.X() -= DESCRIPT_LINE_WIDTH;
@@ -225,7 +225,7 @@ void calcPointX2(const OTableWindow* _pWin,Point& _rNewConPos,Point& _rNewDescrP
 sal_Bool OConnectionLine::RecalcLine()
 {
     //////////////////////////////////////////////////////////////////////
-    // Fenster und Entries muessen gesetzt sein
+    // Windows and entries must be set
     const OTableWindow* pSourceWin = m_pTabConn->GetSourceWin();
     const OTableWindow* pDestWin = m_pTabConn->GetDestWin();
 
@@ -236,7 +236,7 @@ sal_Bool OConnectionLine::RecalcLine()
     SvTreeListEntry* pDestEntry = pDestWin->GetListBox()->GetEntryFromText( GetData()->GetDestFieldName() );
 
     //////////////////////////////////////////////////////////////////////
-    // X-Koordinaten bestimmen
+    // determine X-coordinates
     Point aSourceCenter( 0, 0 );
     Point aDestCenter( 0, 0 );
 
@@ -266,11 +266,11 @@ sal_Bool OConnectionLine::RecalcLine()
     calcPointX2(pSecondWin,*pSecondConPos,*pSecondDescrPos);
 
     //////////////////////////////////////////////////////////////////////
-    // aSourceConnPosY bestimmen
+    // determine aSourceConnPosY
     calcPointsYValue(pSourceWin,pSourceEntry,m_aSourceConnPos,m_aSourceDescrLinePos);
 
     //////////////////////////////////////////////////////////////////////
-    // aDestConnPosY bestimmen
+    // determine aDestConnPosY
     calcPointsYValue(pDestWin,pDestEntry,m_aDestConnPos,m_aDestDescrLinePos);
 
     return sal_True;
@@ -283,12 +283,12 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
     const sal_uInt16 nRectSize = 3;
 
     //////////////////////////////////////////////////////////////////////
-    // Neue Dimensionen berechnen
+    // calculate new dimension
     if( !RecalcLine() )
         return;
 
     //////////////////////////////////////////////////////////////////////
-    // Zeichnen der Linien
+    // draw lines
     if (m_pTabConn->IsSelected())
         pOutDev->SetLineColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
     else
@@ -335,8 +335,8 @@ bool OConnectionLine::CheckHit( const Point& rMousePos ) const
 {
     //////////////////////////////////////////////////////////////////////
     /*
-        Vorgehensweise beim HitTest:
-        Es wird der Abstand nach Euklid berechnet.
+        course of action with HitTest:
+        the distance is calculated according to Euklid.
     */
     Point q;
     double l = fabs(dist_Euklid(m_aSourceConnPos,m_aDestConnPos,rMousePos,q));

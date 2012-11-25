@@ -44,7 +44,7 @@ namespace dbaui
             static_cast<OQueryTableWindowData*>(GetData().get())->SetAliasName(strNewAlias);
         }
 
-        // spaeter Constructor, die Basisklasse ERZEUGT beim ersten Aufruf die Listbox
+        // late Constructor, the base class CREATES Listbox on first call
         virtual sal_Bool    Init();
 
         inline sal_Int32        GetAliasNum() const { return m_nAliasNum; }
@@ -58,7 +58,7 @@ namespace dbaui
         virtual void    KeyInput( const KeyEvent& rEvt );
 
         virtual void    OnEntryDoubleClicked(SvTreeListEntry* pEntry);
-            // wird aus dem DoubleClickHdl der ListBox heraus aufgerufen
+            // is called from DoubleClickHdl of the ListBox
         /** delete the user data with the equal type as created within createUserData
             @param  _pUserData
                 The user data store in the listbox entries. Created with a call to createUserData.

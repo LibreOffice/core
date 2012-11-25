@@ -49,7 +49,7 @@ namespace com { namespace sun { namespace star {
 namespace dbaui
 {
     // =========================================================================
-    // ODatabaseImportExport Basisklasse f"ur Import/Export
+    // ODatabaseImportExport base class for import/export
     // =========================================================================
     class ODatabaseExport;
     typedef ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener> ODatabaseImportExport_BASE;
@@ -90,7 +90,7 @@ namespace dbaui
 #endif
 
         ODatabaseExport*    m_pReader;
-        sal_Int32*          m_pRowMarker; // wenn gesetzt, dann nur diese Rows kopieren
+        sal_Int32*          m_pRowMarker; // if set, then copy only these rows
         rtl_TextEncoding    m_eDestEnc;
         sal_Bool            m_bInInitialize;
         sal_Bool            m_bCheckOnly;
@@ -131,7 +131,7 @@ namespace dbaui
     };
 
     // =========================================================================
-    // RTF Im- und Export
+    // RTF Import and Export
     // =========================================================================
 
     class ORTFImportExport : public ODatabaseImportExport
@@ -156,7 +156,7 @@ namespace dbaui
         virtual sal_Bool Read();
     };
     // =========================================================================
-    // HTML Im- und Export
+    // HTML Import and Export
     // =========================================================================
     #define SBA_HTML_FONTSIZES 7
     const sal_Int16 nIndentMax = 23;
@@ -201,7 +201,7 @@ namespace dbaui
 
     };
     // =========================================================================
-    // normal RowSet Im- und Export
+    // normal RowSet Import and Export
     // =========================================================================
 
     class ORowSetImportExport : public ODatabaseImportExport

@@ -32,7 +32,7 @@
 namespace dbaui
 {
 //========================================================================
-// Anhand dieser Ids werden die sprachabhaengigen ::rtl::OUString aus der Resource geholt
+// Based on these ids the language dependent ::rtl::OUString are fetched from the resource
 const sal_uInt16 TYPE_UNKNOWN   = 0;
 const sal_uInt16 TYPE_TEXT      = 1;
 const sal_uInt16 TYPE_NUMERIC   = 2;
@@ -70,26 +70,26 @@ const sal_uInt16 TYPE_BIT       = 31;
     {
     public:
         ::rtl::OUString aUIName;        // the name which is the user see (a combination of resource text and aTypeName)
-        ::rtl::OUString aTypeName;      // Name des Types in der Datenbank
-        ::rtl::OUString aLiteralPrefix; // Prefix zum Quoten
-        ::rtl::OUString aLiteralSuffix; // Suffix zum Quoten
-        ::rtl::OUString aCreateParams;  // Parameter zum Erstellen
+        ::rtl::OUString aTypeName;      // name of type in database
+        ::rtl::OUString aLiteralPrefix; // prefix for quoting
+        ::rtl::OUString aLiteralSuffix; // suffix for quoting
+        ::rtl::OUString aCreateParams;  // parameter for creation
         ::rtl::OUString aLocalTypeName;
 
-        sal_Int32       nPrecision;     // Laenge des Types
-        sal_Int32       nType;          // Datenbanktyp
+        sal_Int32       nPrecision;     // length of type
+        sal_Int32       nType;          // database type
 
-        sal_Int16       nMaximumScale;  // Nachkommastellen
-        sal_Int16       nMinimumScale;  // Min Nachkommastellen
+        sal_Int16       nMaximumScale;  // decimal places after decimal point
+        sal_Int16       nMinimumScale;  // min decimal places after decimal point
 
-        sal_Int16       nSearchType;    // kann nach dem Typen gesucht werden
+        sal_Int16       nSearchType;    // if it is possible to search for type
 
 
-        sal_Bool        bCurrency       : 1,    // Waehrung
-                        bAutoIncrement  : 1,    // Ist es ein automatisch incrementierendes Feld
-                        bNullable       : 1,    // Kann das Feld NULL annehmen
-                        bCaseSensitive  : 1,    // Ist der Type Casesensitive
-                        bUnsigned       : 1;    // Ist der Type Unsigned
+        sal_Bool        bCurrency       : 1,    // currency
+                        bAutoIncrement  : 1,    // if automatic incrementing field
+                        bNullable       : 1,    // if field can be NULL
+                        bCaseSensitive  : 1,    // if type is case sensitive
+                        bUnsigned       : 1;    // if type is unsigned
 
         OTypeInfo()
                 :nPrecision(0)

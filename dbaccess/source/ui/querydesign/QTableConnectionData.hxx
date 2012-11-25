@@ -37,7 +37,7 @@ namespace dbaui
         ETableFieldType m_eDestType;
 
     protected:
-        // fuer das Anlegen und Duplizieren von Lines vom eigenen Typ
+        // for creation and duplication of lines of own type
         virtual OConnectionLineDataRef CreateLineDataObj();
         virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData );
 

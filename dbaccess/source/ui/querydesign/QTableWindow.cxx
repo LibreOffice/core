@@ -63,8 +63,8 @@ OQueryTableWindow::OQueryTableWindow( Window* pParent, const TTableWindowData::v
     else
         m_strInitialAlias = GetAliasName();
 
-    // wenn der Tabellen- gleich dem Aliasnamen ist, dann darf ich das nicht an InitialAlias weiterreichen, denn das Anhaengen
-    // eines eventuelle Tokens nicht klappen ...
+    // if table name matches alias, do not pass to InitialAlias,
+    // as the appending of a possible token could not succeed...
     if (m_strInitialAlias == pTabWinData->GetTableName())
         m_strInitialAlias = ::rtl::OUString();
 
@@ -86,20 +86,20 @@ sal_Bool OQueryTableWindow::Init()
 
     OQueryTableView* pContainer = static_cast<OQueryTableView*>(getTableView());
 
-    // zuerst Alias bestimmen
+    // first determine Alias
     ::rtl::OUString sAliasName;
 
     TTableWindowData::value_type pWinData = GetData();
 
     if (!m_strInitialAlias.isEmpty() )
-        // Der Alias wurde explizit mit angegeben
+        // Alias was explicitly given
         sAliasName = m_strInitialAlias;
     else if ( GetTable().is() )
         GetTable()->getPropertyValue( PROPERTY_NAME ) >>= sAliasName;
     else
         return sal_False;
 
-    // Alias mit fortlaufender Nummer versehen
+    // Alias with successive number
     if (pContainer->CountTableAlias(sAliasName, m_nAliasNum))
     {
         sAliasName += ::rtl::OUString('_');
@@ -109,26 +109,26 @@ sal_Bool OQueryTableWindow::Init()
 
     sAliasName = comphelper::string::remove(sAliasName, '"');
     SetAliasName(sAliasName);
-        // SetAliasName reicht das als WinName weiter, dadurch benutzt es die Basisklasse
+        // SetAliasName passes it as WinName, hence it uses the base class
     // reset the title
     m_aTitle.SetText( pWinData->GetWinName() );
     m_aTitle.Show();
 
     if (!bSuccess)
-    {   // es soll nur ein Dummy-Window aufgemacht werden ...
+    {   // it should just open a dummy window...
         OSL_ENSURE(!GetAliasName().isEmpty(), "OQueryTableWindow::Init : kein Alias- UND kein Tabellenname geht nicht !");
-            // .. aber das braucht wenigstens einen Alias
+            // .. but that needs at least an Alias
 
-        // ::com::sun::star::form::ListBox anlegen
+        // create ::com::sun::star::form::ListBox
         if (!m_pListBox)
             m_pListBox = CreateListBox();
 
-        // Titel setzen
+        // set titel
         m_aTitle.SetText(GetAliasName());
         m_aTitle.Show();
 
         clearListBox();
-            // neu zu fuellen brauche ich die nicht, da ich ja keine Tabelle habe
+            // don't need to refill them as I don't have a table
         m_pListBox->Show();
     }
 
@@ -153,31 +153,31 @@ void OQueryTableWindow::deleteUserData(void*& _pUserData)
 //------------------------------------------------------------------------------
 void OQueryTableWindow::OnEntryDoubleClicked(SvTreeListEntry* pEntry)
 {
-    OSL_ENSURE(pEntry != NULL, "OQueryTableWindow::OnEntryDoubleClicked : pEntry darf nicht NULL sein !");
-        // man koennte das auch abfragen und dann ein return hinsetzen, aber so weist es vielleicht auf Fehler bei Aufrufer hin
+    OSL_ENSURE(pEntry != NULL, "OQueryTableWindow::OnEntryDoubleClicked : pEntry must not be NULL !");
+        // you could also scan that and then return, but like this it could possibly hint to faults at the caller
 
     if (getTableView()->getDesignView()->getController().isReadOnly())
         return;
 
     OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
-    OSL_ENSURE(pInf != NULL, "OQueryTableWindow::OnEntryDoubleClicked : Feld hat keine FieldInfo !");
+    OSL_ENSURE(pInf != NULL, "OQueryTableWindow::OnEntryDoubleClicked : field doesn't have FieldInfo !");
 
-    // eine DragInfo aufbauen
+    // build up DragInfo
     OTableFieldDescRef aInfo = new OTableFieldDesc(GetTableName(),m_pListBox->GetEntryText(pEntry));
     aInfo->SetTabWindow(this);
     aInfo->SetAlias(GetAliasName());
     aInfo->SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
     aInfo->SetDataType(pInf->GetDataType());
 
-    // und das entsprechende Feld einfuegen
+    // and insert corresponding field
     static_cast<OQueryTableView*>(getTableView())->InsertField(aInfo);
 }
 
 //------------------------------------------------------------------------------
 sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDescRef& rInfo)
 {
-    OSL_ENSURE(m_pListBox != NULL, "OQueryTableWindow::ExistsField : habe keine ::com::sun::star::form::ListBox !");
-    OSL_ENSURE(rInfo.is(),"OQueryTableWindow::ExistsField: invlid argument for OTableFieldDescRef!");
+    OSL_ENSURE(m_pListBox != NULL, "OQueryTableWindow::ExistsField : doesn't have ::com::sun::star::form::ListBox !");
+    OSL_ENSURE(rInfo.is(),"OQueryTableWindow::ExistsField: invalid argument for OTableFieldDescRef!");
     Reference< XConnection> xConnection = getTableView()->getDesignView()->getController().getConnection();
     sal_Bool bExists = sal_False;
     if(xConnection.is())
@@ -193,7 +193,7 @@ sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTa
                 if (bCase(strFieldName,::rtl::OUString(m_pListBox->GetEntryText(pEntry))))
                 {
                     OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
-                    OSL_ENSURE(pInf != NULL, "OQueryTableWindow::ExistsField : Feld hat keine FieldInfo !");
+                    OSL_ENSURE(pInf != NULL, "OQueryTableWindow::ExistsField : field doesn't have FieldInfo !");
 
                     rInfo->SetTabWindow(this);
                     rInfo->SetField(strFieldName);

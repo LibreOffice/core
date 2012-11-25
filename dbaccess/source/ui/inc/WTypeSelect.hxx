@@ -62,7 +62,7 @@ namespace dbaui
 
     // ========================================================
     // Wizard Page: OWizTypeSelectList
-    // definiert nur das ::com::sun::star::ucb::Command f"ur das Contextmenu
+    // just defines the ::com::sun::star::ucb::Command for the Contextmenu
     // ========================================================
     class OWizTypeSelectList : public MultiListBox
     {
@@ -81,8 +81,8 @@ namespace dbaui
 
     // ========================================================
     // Wizard Page: OWizTypeSelect
-    // Dient als Basis Klasse fuer unterschiedliche Kopiereigenschaften
-    // FillColumnList wird aufgerufen, wenn der Button AUTO ausgeloest wird.
+    // Serves as base class for different copy properties.
+    // Calls FillColumnList, when button AUTO is triggered
     // ========================================================
     class OWizTypeSelect : public OWizardPage
     {

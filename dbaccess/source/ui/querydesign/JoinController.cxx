@@ -219,11 +219,11 @@ void OJoinController::impl_onModifyChanged()
 // -----------------------------------------------------------------------------
 void OJoinController::SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY)
 {
-    // die Daten zum Fenster
+    // the data for the window
     TTableWindowData::value_type pData = pTabWin->GetData();
     OSL_ENSURE(pData != NULL, "SaveTabWinPosSize : TabWin hat keine Daten !");
 
-    // Position & Size der Daten neu setzen (aus den aktuellen Fenster-Parametern)
+    // set Position & Size of data anew (with current window parameters)
     Point aPos = pTabWin->GetPosPixel();
     aPos.X() += nOffsetX;
     aPos.Y() += nOffsetY;
@@ -320,12 +320,10 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
 // -----------------------------------------------------------------------------
 void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY )
 {
-    // Das Loeschen und Neuanlegen der alten Implementation ist unter dem aktuellen Modell nicht mehr richtig : Die TabWins
-    // habe einen Zeiger auf ihre Daten, verwaltet werden sie aber von mir. Wenn ich die alten loesche, haben die TabWins
-    // ploetzlich Zeiger auf nicht mehr existente Objekte.
-    // Wenn die TabWins ein SetData haetten, koennte ich mir das sparen ... haben sie aber nicht, ausserdem muesste ich dann immer
-    // noch Informationen, die sich eigentlich nicht geaendert haben, auch neu setzen.
-    // Also loesche ich die TabWinDatas nicht, sondern aktualisiere sie nur.
+    // Deletion and recreation of the old implementation with the current model is not correct anymore:
+    // The TabWins have a pointer to their data, but they are managed by me. When I delete the old ones, the TabWins suddenly have a pointer to objects, which no longer exist.
+    // If the TabWins had a SetData, I could save that effort... but they don't, further I also would still have to set information anew, which actually didn't change.
+    // So I don't delete the TabWinDatas, but only update them.
     OSL_ENSURE(m_vTableData.size() == pTabWinList->size(),
         "OJoinController::SaveTabWinsPosSize : inkonsistenter Zustand : sollte genausviel TabWinDatas haben wie TabWins !");
 

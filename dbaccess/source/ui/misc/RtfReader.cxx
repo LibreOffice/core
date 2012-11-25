@@ -109,10 +109,10 @@ void ORTFReader::NextToken( int nToken )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::NextToken" );
     DBG_CHKTHIS(ORTFReader,NULL);
-    if(m_bError || !m_nRows) // falls Fehler oder keine Rows mehr zur "Uberpr"ufung dann gleich zur"uck
+    if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediatelly
         return;
 
-    if(m_xConnection.is())    // gibt an welcher CTOR gerufen wurde und damit, ob eine Tabelle erstellt werden soll
+    if(m_xConnection.is())    // names, which CTOR was called and hence, if a table should be created
     {
         switch(nToken)
         {
@@ -144,15 +144,15 @@ void ORTFReader::NextToken( int nToken )
                 break;
 
             case RTF_DEFLANG:
-            case RTF_LANG: // Sprache abfragen
+            case RTF_LANG: // inquire language
                 m_nDefToken = (rtl_TextEncoding)nTokenValue;
                 break;
             case RTF_TROWD:
                 {
                     bool bInsertRow = true;
-                    if ( !m_xTable.is() ) // erste Zeile als Header verwenden
+                    if ( !m_xTable.is() ) // use first line as header
                     {
-                        sal_uInt32 nTell = rInput.Tell(); // ver�ndert vielleicht die Position des Streams
+                        sal_uInt32 nTell = rInput.Tell(); // perhaps alters position of the stream
 
                         m_bError = !CreateTable(nToken);
                         bInsertRow = m_bAppendFirstLine;
@@ -166,10 +166,10 @@ void ORTFReader::NextToken( int nToken )
                     {
                         try
                         {
-                            m_pUpdateHelper->moveToInsertRow(); // sonst neue Zeile anh"angen
+                            m_pUpdateHelper->moveToInsertRow(); // otherwise append new line
                         }
                         catch(SQLException& e)
-                        // UpdateFehlerbehandlung
+                        // handling update failure
                         {
                             showErrorDialog(e);
                         }
@@ -182,11 +182,11 @@ void ORTFReader::NextToken( int nToken )
                     eraseTokens();
                 }
 
-                m_bInTbl = sal_True; // jetzt befinden wir uns in einer Tabellenbeschreibung
+                m_bInTbl = sal_True; // Now we are in a table description
                 break;
             case RTF_TEXTTOKEN:
             case RTF_SINGLECHAR:
-                if(m_bInTbl) // wichtig, da wir sonst auch die Namen der Fonts bekommen
+                if(m_bInTbl) // important, as otherwise we also get the names of the fonts
                     m_sTextToken += aToken;
                 break;
             case RTF_CELL:
@@ -196,7 +196,7 @@ void ORTFReader::NextToken( int nToken )
                         insertValueIntoColumn();
                     }
                     catch(SQLException& e)
-                    // UpdateFehlerbehandlung
+                    // handling update failure
                     {
                         showErrorDialog(e);
                     }
@@ -205,7 +205,7 @@ void ORTFReader::NextToken( int nToken )
                 }
                 break;
             case RTF_ROW:
-                // es kann vorkommen, da� die letzte Celle nicht mit \cell abgeschlossen ist
+                // it can happen that the last cell is not concluded with \cell
                 try
                 {
                     insertValueIntoColumn();
@@ -216,7 +216,7 @@ void ORTFReader::NextToken( int nToken )
                 }
                 catch(SQLException& e)
                 //////////////////////////////////////////////////////////////////////
-                // UpdateFehlerbehandlung
+                // handling update failure
                 {
                     showErrorDialog(e);
                 }
@@ -224,12 +224,12 @@ void ORTFReader::NextToken( int nToken )
                 break;
         }
     }
-    else // Zweig nur f"ur Typpr"ufung g"ultig
+    else // branch only valid for type checking
     {
         switch(nToken)
         {
             case RTF_TROWD:
-                // Der Spalten Kopf z"ahlt nicht mit
+                // The head of the column is not included
                 if(m_bHead)
                 {
                     do

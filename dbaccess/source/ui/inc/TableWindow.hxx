@@ -54,7 +54,7 @@ namespace dbaui
         friend class OTableWindowTitle;
         friend class OTableWindowListBox;
     protected:
-        // und die Tabelle selber (brauche ich, da ich sie locken will, solange das Fenster lebt)
+        // and the table itself (needed for me as I want to lock it as long as the window is alive)
         FixedImage              m_aTypeImage;
         OTableWindowTitle       m_aTitle;
         OTableWindowListBox*    m_pListBox;
@@ -84,14 +84,14 @@ namespace dbaui
         virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
         virtual OTableWindowListBox*    CreateListBox();
-            // wird im ERSTEN Init aufgerufen
+            // called at FIRST Init
         sal_Bool FillListBox();
-            // wird in JEDEM Init aufgerufen
+            // called at EACH Init
 
         virtual void OnEntryDoubleClicked(SvTreeListEntry* /*pEntry*/) { }
-            // wird aus dem DoubleClickHdl der ListBox heraus aufgerufen
+            // called from the DoubleClickHdl of the ListBox
 
-        /** HandleKeyInput triues to handle the KeyEvent. Movement or deletion
+        /** HandleKeyInput tries to handle the KeyEvent. Movement or deletion
             @param  rEvt
                 The KEyEvent
             @return
@@ -127,7 +127,7 @@ namespace dbaui
     public:
         virtual ~OTableWindow();
 
-        // spaeter Constructor, siehe auch CreateListbox und FillListbox
+        // late Constructor, see also CreateListbox and FillListbox
         virtual sal_Bool Init();
 
         OJoinTableView*             getTableView();
@@ -183,7 +183,7 @@ namespace dbaui
         // Accessibility
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-        // habe ich Connections nach aussen ?
+        // do I have connections to the outside?
         sal_Bool ExistsAConn() const;
 
         void EnumValidFields(::std::vector< ::rtl::OUString>& arrstrFields);

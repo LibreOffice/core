@@ -40,7 +40,7 @@ OQueryTableConnection::OQueryTableConnection(const OQueryTableConnection& rConn)
     :OTableConnection( rConn )
 {
     DBG_CTOR(OQueryTableConnection,NULL);
-    // keine eigenen Members, also reicht die Basisklassenfunktionalitaet
+    // no own members, so base class functionality is sufficient
 }
 //------------------------------------------------------------------------
 OQueryTableConnection::~OQueryTableConnection()
@@ -55,27 +55,26 @@ OQueryTableConnection& OQueryTableConnection::operator=(const OQueryTableConnect
         return *this;
 
     OTableConnection::operator=(rConn);
-    // keine eigenen Members ...
+    // no own members ...
     return *this;
 }
 
 //------------------------------------------------------------------------
 sal_Bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare)
 {
-    OSL_ENSURE(GetData() && rCompare.GetData(), "OQueryTableConnection::operator== : einer der beiden Teilnehmer hat keine Daten !");
+    OSL_ENSURE(GetData() && rCompare.GetData(), "OQueryTableConnection::operator== : one of the two participants has no data!");
 
-    // allzuviel brauche ich nicht vergleichen (schon gar nicht alle Member) : lediglich die Fenster, an denen wir haengen, und
-    // die Indizies in der entsprechenden Tabelle muessen uebereinstimmen
+    // I don't have to compare all too much (especially not all the members) : merely the windows, which we are connected to, and the indices in the corresponding table have to match.
     OQueryTableConnectionData* pMyData = static_cast<OQueryTableConnectionData*>(GetData().get());
     OQueryTableConnectionData* pCompData = static_cast<OQueryTableConnectionData*>(rCompare.GetData().get());
 
-    // Connections werden als gleich angesehen, wenn sie in Source-/Dest-Fenstername und Source-/Dest-FieldIndex uebereinstimmen ...
+    // Connections are seen as equal, if source and destination window names and source and destination field Indices match...
     return  (   (   (pMyData->getReferencedTable() == pCompData->getReferencedTable()) &&
                     (pMyData->getReferencingTable() == pCompData->getReferencingTable()) &&
                     (pMyData->GetFieldIndex(JTCS_TO) == pCompData->GetFieldIndex(JTCS_TO)) &&
                     (pMyData->GetFieldIndex(JTCS_FROM) == pCompData->GetFieldIndex(JTCS_FROM))
                 )
-                ||  // ... oder diese Uebereinstimmung ueber Kreuz besteht
+                ||  // ... or this cross matching is given
                 (   (pMyData->getReferencingTable() == pCompData->getReferencedTable()) &&
                     (pMyData->getReferencedTable() == pCompData->getReferencingTable()) &&
                     (pMyData->GetFieldIndex(JTCS_TO) == pCompData->GetFieldIndex(JTCS_FROM)) &&

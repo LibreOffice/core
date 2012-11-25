@@ -58,7 +58,7 @@ OConnectionLineData::~OConnectionLineData()
 void OConnectionLineData::CopyFrom(const OConnectionLineData& rSource)
 {
     *this = rSource;
-    // hier ziehe ich mich auf das (nicht-virtuelle) operator= zurueck, das nur meine Members kopiert
+    // Here I rely on the (non-virtual) operator=, which only copies my members
 }
 
 //------------------------------------------------------------------------

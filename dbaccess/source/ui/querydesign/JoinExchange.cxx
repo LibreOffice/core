@@ -40,7 +40,7 @@ namespace dbaui
         ,m_pDragListener(NULL)
     {
         DBG_CTOR(OJoinExchObj,NULL);
-        // Verfuegbare Typen in Liste einfuegen
+        // add available types to list
     }
 
     //------------------------------------------------------------------------

@@ -75,7 +75,7 @@ OQueryTableConnectionData::~OQueryTableConnectionData()
 OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj()
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
-    // keine Spezialisierung bei den LineDatas, also eine Instanz der Standard-Klasse
+    // no specializing of LineDatas, so it is an instance of standard class
     return new OConnectionLineData();
 }
 
@@ -90,7 +90,7 @@ OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj( const OConn
 void OQueryTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
-    // wie in der Basisklasse zurueckziehen auf das (nicht-virtuelle) operator=
+    // same as in base class, use of (non-virtual) operator=
     *this = (const OQueryTableConnectionData&)rSource;
 }
 
@@ -125,7 +125,7 @@ OQueryTableConnectionData& OQueryTableConnectionData::operator=(const OQueryTabl
 void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft, const OTableFieldDescRef& rDragRight)
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
-    // die Infos in rDrag in Parameter fuer das Basisklassen-Init umsetzen ...
+    // convert Information in rDrag into parameters for the base class init
     OQueryTableWindow* pSourceWin = static_cast<OQueryTableWindow*>(rDragLeft->GetTabWindow());
     OQueryTableWindow* pDestWin = static_cast<OQueryTableWindow*>(rDragRight->GetTabWindow());
     OSL_ENSURE(pSourceWin,"NO Source window found!");
@@ -133,7 +133,7 @@ void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft
     m_pReferencingTable = pSourceWin->GetData();
     m_pReferencedTable  = pDestWin->GetData();
 
-    // und dann meine Members setzen
+    // set members
     SetFieldIndex(JTCS_FROM, rDragLeft->GetFieldIndex());
     SetFieldIndex(JTCS_TO, rDragRight->GetFieldIndex());
 

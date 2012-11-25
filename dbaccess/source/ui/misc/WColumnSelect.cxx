@@ -97,7 +97,7 @@ OWizColumnSelect::~OWizColumnSelect()
 // -----------------------------------------------------------------------
 void OWizColumnSelect::Reset()
 {
-    // urspr"unglichen zustand wiederherstellen
+    // restore original state
     DBG_CHKTHIS(OWizColumnSelect,NULL);
 
     clearListBox(m_lbOrgColumnNames);
@@ -248,7 +248,7 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
     }
 
     //////////////////////////////////////////////////////////////////////
-    // Wenn Datenbank PrimaryKeys verarbeiten kann, PrimaryKey anlegen
+    // If database is able to process PrimaryKeys, set PrimaryKey
     Reference< XDatabaseMetaData >  xMetaData( m_pParent->m_xDestConnection->getMetaData() );
     ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
     sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();

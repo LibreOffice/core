@@ -80,7 +80,7 @@ using namespace dbtools;
 
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
-#define MAX_PAGES   4   // max. Pages die angezeigt werden
+#define MAX_PAGES   4   // max. number of pages, which are shown
 
 DBG_NAME(OCopyTableWizard)
 namespace
@@ -804,7 +804,7 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
 
     OSL_ENSURE( m_xDestConnection.is(), "OCopyTableWizard::CheckColumns: No connection!" );
     //////////////////////////////////////////////////////////////////////
-    // Wenn Datenbank PrimaryKeys verarbeiten kann, PrimaryKey anlegen
+    // If database is able to process PrimaryKeys, set PrimaryKey
     if ( m_xDestConnection.is() )
     {
         sal_Bool bPKeyAllowed = supportsPrimaryKey();
@@ -1118,9 +1118,9 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
     ::rtl::OUString sCreateParam(RTL_CONSTASCII_USTRINGPARAM("x"));
     //////////////////////////////////////////////////////////////////////
     // ReadOnly-Flag
-    // Bei Drop darf keine Zeile editierbar sein.
-    // Bei Add duerfen nur die leeren Zeilen editierbar sein.
-    // Bei Add und Drop koennen alle Zeilen editiert werden.
+    // On drop no line must be editable.
+    // On add only empty lines must be editable.
+    // On Add and Drop all lines can be edited.
     Sequence< ::rtl::OUString > aColumns( _rSourceObject.getColumnNames() );
     const ::rtl::OUString* pColumn      = aColumns.getConstArray();
     const ::rtl::OUString* pColumnEnd   = pColumn + aColumns.getLength();

@@ -30,8 +30,8 @@ namespace dbaui
     struct OJoinExchangeData
     {
     public:
-        OTableWindowListBox*    pListBox;       // die ListBox innerhalb desselben (daraus kann man sich das TabWin und daraus den WinName besorgen)
-        SvTreeListEntry*            pEntry;         // der Eintrag, der gedraggt oder auf den gedroppt wurde
+        OTableWindowListBox*    pListBox;       // the ListBox inside the same (you can get the TabWin and the WinName out of it)
+        SvTreeListEntry*            pEntry;         // the entry, which was dragged or to which was dropped on
 
         OJoinExchangeData(OTableWindowListBox* pBox);
         OJoinExchangeData() : pListBox(NULL), pEntry(NULL) { }

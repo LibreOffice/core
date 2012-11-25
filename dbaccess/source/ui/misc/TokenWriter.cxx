@@ -465,7 +465,7 @@ sal_Bool ORTFImportExport::Write()
             (*m_pStream) << ODatabaseImportExport::sNewLine;
         }
 
-        // Spaltenbeschreibung
+        // column description
         (*m_pStream) << '{' << ODatabaseImportExport::sNewLine;
         (*m_pStream) << aTRRH;
 
@@ -496,7 +496,7 @@ sal_Bool ORTFImportExport::Write()
                 default:pChar = OOO_STRING_SVTOOLS_RTF_QL;  break;
             }
 
-            pHorzChar[i-1] = pChar; // um sp"ater nicht immer im ITEMSET zuw"uhlen
+            pHorzChar[i-1] = pChar; // to avoid to always rummage in the ITEMSET later on
 
             (*m_pStream) << ODatabaseImportExport::sNewLine;
             (*m_pStream) << '{';
@@ -858,7 +858,7 @@ void OHTMLImportExport::WriteTables()
         sal_Int32 nHeight = 0;
         m_xObject->getPropertyValue(PROPERTY_ROW_HEIGHT) >>= nHeight;
 
-        // 1. die Spaltenbeschreibung rauspusten
+        // 1. writing the column description
         const ::rtl::OUString* pIter = aNames.getConstArray();
         const ::rtl::OUString* pEnd = pIter + aNames.getLength();
 
@@ -887,7 +887,7 @@ void OHTMLImportExport::WriteTables()
                 IncIndent(-1);
 
             WriteCell(pFormat[i],pColWidth[i],nHeight,pHorJustify[i],*pIter,OOO_STRING_SVTOOLS_HTML_tableheader);
-        }
+        }libreOffice SetModifyHdl
 
         IncIndent(-1);
         TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
@@ -896,7 +896,7 @@ void OHTMLImportExport::WriteTables()
         IncIndent(1);
         TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tbody );
 
-        // 2. und jetzt die Daten
+        // 2. and now the data
         ::comphelper::ComponentContext aContext(m_xFactory);
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
         sal_Int32 j=1;
@@ -964,14 +964,14 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     nWidthPixel  = nWidthPixel  ? nWidthPixel   : 86;
     nHeightPixel = nHeightPixel ? nHeightPixel  : 17;
 
-    // trotz der <TABLE COLS=n> und <COL WIDTH=x> Angaben noetig,
-    // da die nicht von Netscape beachtet werden..
-    // Spaltenbreite
+    // despite the <TABLE COLS=n> and <COL WIDTH=x> designation necessary,
+    // as Netscape is not paying attention to them.
+    // column width
     aStrTD = aStrTD + " ";
     aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_width;
     aStrTD = aStrTD + "=";
     aStrTD = aStrTD + ::rtl::OString::valueOf((sal_Int32)nWidthPixel);
-    // Zeilenhoehe
+    // line height
     aStrTD = aStrTD + " ";
     aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_height;
     aStrTD = aStrTD + "=";
@@ -1015,7 +1015,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     if ( bStrikeout )   TAG_ON( OOO_STRING_SVTOOLS_HTML_strike );
 
     if ( !rValue.Len() )
-        TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // keine komplett leere Zelle
+        TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // no completely empty cell
     else
         HTMLOutFuncs::Out_String( (*m_pStream), rValue ,m_eDestEnc);
 

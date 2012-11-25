@@ -20,7 +20,7 @@
 
 #include "sbcomp.hxx"
 
-// Single-line IF und Multiline IF
+// Single-line IF and Multiline IF
 
 void SbiParser::If()
 {

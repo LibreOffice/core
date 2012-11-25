@@ -56,11 +56,10 @@ namespace dbaui
         OConnectionLineData();
         OConnectionLineData( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
         OConnectionLineData( const OConnectionLineData& rConnLineData );
-
-        // eine Kopie der eigenen Instanz liefern (das ist mir irgendwie angenehmer als ein virtueller Zuweisungsoperator)
+        // provide a copy of own instance (this is somehow more acceptable for me compared to a virtual assignment operator
         void CopyFrom(const OConnectionLineData& rSource);
 
-        // Memberzugriff (schreiben)
+        // member access (write)
         void SetFieldName(EConnectionSide nWhich, const ::rtl::OUString& strFieldName)
         {
             if (nWhich==JTCS_FROM)
@@ -74,7 +73,7 @@ namespace dbaui
         inline bool clearSourceFieldName() { SetSourceFieldName(::rtl::OUString()); return true;}
         inline bool clearDestFieldName() { SetDestFieldName(::rtl::OUString());     return true;}
 
-        // Memberzugriff (lesen)
+        // member access (read)
         ::rtl::OUString GetFieldName(EConnectionSide nWhich) const { return (nWhich == JTCS_FROM) ? m_aSourceFieldName : m_aDestFieldName; }
         ::rtl::OUString GetSourceFieldName() const { return GetFieldName(JTCS_FROM); }
         ::rtl::OUString GetDestFieldName() const { return GetFieldName(JTCS_TO); }

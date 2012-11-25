@@ -42,10 +42,10 @@ namespace dbaui
         Timer                   m_timerInvalidate;
         Timer                   m_timerUndoActionCreation;
         Link                    m_lnkTextModifyHdl;
-        String                  m_strOrigText;      // wird beim Undo wiederhergestellt
+        String                  m_strOrigText;      // is restored on undo
         OQueryTextView*         m_pView;
-        sal_Bool                    m_bAccelAction;     // Wird bei Cut, Copy, Paste gesetzt
-        sal_Bool                    m_bStopTimer;
+        sal_Bool                m_bAccelAction;     // is set on cut, copy, paste
+        sal_Bool                m_bStopTimer;
         svtools::ColorConfig    m_ColorConfig;
 
         rtl::Reference< ChangesListener > m_listener;
@@ -77,9 +77,8 @@ namespace dbaui
         sal_Bool IsInAccelAct();
 
         void SetTextModifyHdl(const Link& lnk) { m_lnkTextModifyHdl = lnk; }
-            // bitte nicht SetModifyHdl benutzen, den brauche ich selber, der hier wird von dem damit gesetzten Handler
-            // gerufen
-            // der Link bekommt einen Pointer-to-string, der nach dem Link nicht mehr gueltig ist
+            // please don't use SetModifyHdl, I need it for myself, this here is called from the handler set with that
+            // the link gets a pointer-to-string, which is invalid after the link
 
         void stopTimer();
         void startTimer();

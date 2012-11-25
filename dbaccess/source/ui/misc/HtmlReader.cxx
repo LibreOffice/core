@@ -64,7 +64,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
-#define DBAUI_HTML_FONTSIZES    8       // wie Export, HTML-Options
+#define DBAUI_HTML_FONTSIZES    8       // like export, HTML-Options
 #define HTML_META_NONE          0
 #define HTML_META_AUTHOR        1
 #define HTML_META_DESCRIPTION   2
@@ -145,18 +145,18 @@ void OHTMLReader::NextToken( int nToken )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::NextToken" );
     DBG_CHKTHIS(OHTMLReader,NULL);
-    if(m_bError || !m_nRows) // falls Fehler oder keine Rows mehr zur "Uberpr"ufung dann gleich zur"uck
+    if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediatelly
         return;
     if ( nToken ==  HTML_META )
         setTextEncoding();
 
-    if(m_xConnection.is())    // gibt an welcher CTOR gerufen wurde und damit, ob eine Tabelle erstellt werden soll
+    if(m_xConnection.is())    // names, which CTOR was called and hence, if a table should be created
     {
         switch(nToken)
         {
             case HTML_TABLE_ON:
                 ++m_nTableCount;
-                {   // es kann auch TD oder TH sein, wenn es vorher kein TABLE gab
+                {   // can also be TD or TH, if there was no TABLE before
                     const HTMLOptions& rHtmlOptions = GetOptions();
                     for (size_t i = 0, n = rHtmlOptions.size(); i < n; ++i)
                     {
@@ -164,7 +164,7 @@ void OHTMLReader::NextToken( int nToken )
                         switch( rOption.GetToken() )
                         {
                             case HTML_O_WIDTH:
-                            {   // Prozent: von Dokumentbreite bzw. aeusserer Zelle
+                            {   // percentage: of document width respectively outer cell
                                 m_nColumnWidth = GetWidthPixel( rOption );
                             }
                             break;
@@ -174,9 +174,9 @@ void OHTMLReader::NextToken( int nToken )
             case HTML_THEAD_ON:
             case HTML_TBODY_ON:
                 {
-                    sal_uInt32 nTell = rInput.Tell(); // ver�ndert vielleicht die Position des Streams
+                    sal_uInt32 nTell = rInput.Tell(); // perhaps alters position of the stream
                     if ( !m_xTable.is() )
-                    {// erste Zeile als Header verwenden
+                    {// use first line as header
                         m_bError = !CreateTable(nToken);
                         if ( m_bAppendFirstLine )
                             rInput.Seek(nTell);
@@ -194,10 +194,10 @@ void OHTMLReader::NextToken( int nToken )
                 {
                     try
                     {
-                        m_pUpdateHelper->moveToInsertRow(); // sonst neue Zeile anh"angen
+                        m_pUpdateHelper->moveToInsertRow(); // otherwise append new line
                     }
                     catch(SQLException& e)
-                    // UpdateFehlerbehandlung
+                    // handling update failure
                     {
                         showErrorDialog(e);
                     }
@@ -207,7 +207,7 @@ void OHTMLReader::NextToken( int nToken )
                 break;
             case HTML_TEXTTOKEN:
             case HTML_SINGLECHAR:
-                if ( m_bInTbl ) //&& !m_bSDNum ) // wichtig, da wir sonst auch die Namen der Fonts bekommen
+                if ( m_bInTbl ) //&& !m_bSDNum ) // important, as otherwise we also get the names of the fonts
                     m_sTextToken += aToken;
                 break;
             case HTML_PARABREAK_OFF:
@@ -228,7 +228,7 @@ void OHTMLReader::NextToken( int nToken )
                         insertValueIntoColumn();
                     }
                     catch(SQLException& e)
-                    // UpdateFehlerbehandlung
+                    // handling update failure
                     {
                         showErrorDialog(e);
                     }
@@ -253,7 +253,7 @@ void OHTMLReader::NextToken( int nToken )
                 }
                 catch(SQLException& e)
                 //////////////////////////////////////////////////////////////////////
-                // UpdateFehlerbehandlung
+                // handling update failure
                 {
                     showErrorDialog(e);
                 }
@@ -261,13 +261,13 @@ void OHTMLReader::NextToken( int nToken )
                 break;
         }
     }
-    else // Zweig nur f"ur Typpr"ufung g"ultig
+    else // branch only valid for type checking
     {
         switch(nToken)
         {
             case HTML_THEAD_ON:
             case HTML_TBODY_ON:
-                // Der Spalten Kopf z"ahlt nicht mit
+                // The head of the column is not included
                 if(m_bHead)
                 {
                     do
@@ -282,7 +282,7 @@ void OHTMLReader::NextToken( int nToken )
                 break;
             case HTML_TEXTTOKEN:
             case HTML_SINGLECHAR:
-                if ( m_bInTbl ) // && !m_bSDNum ) // wichtig, da wir sonst auch die Namen der Fonts bekommen
+                if ( m_bInTbl ) // && !m_bSDNum ) // important, as otherwise we also get the names of the fonts
                     m_sTextToken += aToken;
                 break;
             case HTML_PARABREAK_OFF:
@@ -389,7 +389,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
                 xub_StrLen nPos = 0;
                 while( nPos != STRING_NOTFOUND )
                 {
-                    // Fontliste, VCL: Semikolon als Separator, HTML: Komma
+                    // list fo fonts, VCL: semicolon as separator, HTML: comma
                     String aFName = rFace.GetToken( 0, ',', nPos );
                     aFName = comphelper::string::strip(aFName, ' ');
                     if( aFontName.Len() )
@@ -421,19 +421,19 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
     DBG_CHKTHIS(OHTMLReader,NULL);
     const String& rOptVal = rOption.GetString();
     if ( rOptVal.Search('%') != STRING_NOTFOUND )
-    {   // Prozent
+    {   // percentage
         OSL_ENSURE( m_nColumnWidth, "WIDTH Option: m_nColumnWidth==0 und Width%" );
         return (sal_Int16)((rOption.GetNumber() * m_nColumnWidth) / 100);
     }
     else
     {
         if ( rOptVal.Search('*') != STRING_NOTFOUND )
-        {   // relativ zu was?!?
-//TODO: ColArray aller relativen Werte sammeln und dann MakeCol
+        {   // relativ to what?!?
+//TODO: collect ColArray of all relevant values and then MakeCol
             return 0;
         }
         else
-            return (sal_Int16)rOption.GetNumber();  // Pixel
+            return (sal_Int16)rOption.GetNumber();  // pixel
     }
 }
 // ---------------------------------------------------------------------------

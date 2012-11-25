@@ -209,7 +209,7 @@ class SweListCIterator
     const elem *        pElem;
 };
 
-// Implementierung
+// IMPLEMENTATION
 
 template <class XX>
 void

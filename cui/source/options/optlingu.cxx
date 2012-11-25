@@ -1152,7 +1152,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     eItemState = rSet.GetItemState( GetWhich( SID_ATTR_SPELL ),
                                     sal_False, (const SfxPoolItem**)&pItem );
 
-    // handelt es sich um ein Default-Item?
+    // is it about a default-item?
     if ( eItemState == SFX_ITEM_DEFAULT )
         pItem = (const SfxSpellCheckItem*)&(rSet.Get( GetWhich( SID_ATTR_SPELL ) ) );
     else if ( eItemState == SFX_ITEM_DONTCARE )

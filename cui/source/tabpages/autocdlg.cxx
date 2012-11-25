@@ -131,7 +131,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
     DBG_ASSERT( LISTBOX_ENTRY_NOTFOUND != nPos, "listbox entry missing" );
     aLanguageLB.SetEntryData( nPos, (void*)(long) LANGUAGE_DONTKNOW );
 
-    // Initialisierung funktionier fuer static nicht unter Linux - deswegen hier
+    // Initializing doesn't work for static on linux - therefore here
     if( LANGUAGE_SYSTEM == eLastDialogLanguage )
         eLastDialogLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
 

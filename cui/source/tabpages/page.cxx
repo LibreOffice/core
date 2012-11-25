@@ -162,8 +162,7 @@ struct SvxPage_Impl
 
 // class SvxPageDescPage --------------------------------------------------
 
-// gibt den Bereich der Which-Werte zur"uck
-
+// returns the range of the Which values
 sal_uInt16* SvxPageDescPage::GetRanges()
 {
     return pRanges;

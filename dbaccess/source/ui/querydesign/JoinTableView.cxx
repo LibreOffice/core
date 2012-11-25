@@ -55,7 +55,7 @@ using namespace ::com::sun::star::lang;
 
 #define LINE_SIZE           50
 ////////////////////////////////////////////////////////////////
-// Konstanten fuer das Fensterlayout
+// Constants for the window layout
 #define TABWIN_SPACING_X    17
 #define TABWIN_SPACING_Y    17
 
@@ -195,14 +195,14 @@ OJoinTableView::~OJoinTableView()
         m_pAccessible = NULL;
     }
     //////////////////////////////////////////////////////////////////////
-    // Listen loeschen
+    // delete lists
     clearLayoutInformation();
 }
 //------------------------------------------------------------------------------
 IMPL_LINK( OJoinTableView, ScrollHdl, ScrollBar*, pScrollBar )
 {
     //////////////////////////////////////////////////////////////////////
-    // Alle Fenster verschieben
+    // move all windows
     ScrollPane( pScrollBar->GetDelta(), (pScrollBar == GetHScrollBar()), sal_False );
 
     return 0;
@@ -332,7 +332,7 @@ void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rt
     TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
 
     //////////////////////////////////////////////////////////////////
-    // Neues Fenster in Fensterliste eintragen
+    // insert new window in window list
     OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
     if ( pNewTabWin->Init() )
     {
@@ -542,10 +542,10 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
     //////////////////////////////////////////////////////////////////
-    // Position bestimmen:
-    // Das Fenster wird in Zeilen der Hoehe TABWIN_SPACING_Y+TABWIN_HEIGTH_STD aufgeteilt.
-    // Dann wird fuer jede Zeile geprueft, ob noch Platz fuer ein weiteres Fenster ist.
-    // Wenn kein Platz ist, wird die naechste Zeile ueberprueft.
+    // determine position:
+    // the window is divided into lines with height TABWIN_SPACING_Y+TABWIN_HEIGTH_STD.
+    // Then for each line is checked, if there is space for another window.
+    // If there is no space, the next line is checked.
     Size aOutSize = GetSizePixel();
     Point aNewPos( 0,0 );
     sal_uInt16 nRow = 0;
@@ -553,18 +553,18 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
     while( !bEnd )
     {
         //////////////////////////////////////////////////////////////////
-        // Neue Position auf Zeilenbeginn setzen
+        // Set new position to start of line
         aNewPos.X() = TABWIN_SPACING_X;
         aNewPos.Y() = (nRow+1) * TABWIN_SPACING_Y;
 
         //////////////////////////////////////////////////////////////////
-        // Rectangle fuer die jeweilige Zeile bestimmen
+        // determine rectangle for the corresponding line
         Rectangle aRowRect( Point(0,0), aOutSize );
         aRowRect.Top() = nRow * ( TABWIN_SPACING_Y + TABWIN_HEIGHT_STD );
         aRowRect.Bottom() = (nRow+1) * ( TABWIN_SPACING_Y + TABWIN_HEIGHT_STD );
 
         //////////////////////////////////////////////////////////////////
-        // Belegte Bereiche dieser Zeile pruefen
+        // check occupied areas of this line
         OTableWindow* pOtherTabWin;
         OTableWindowMapIterator aIter = m_aTableMap.begin();
         OTableWindowMapIterator aEnd = m_aTableMap.end();
@@ -579,14 +579,14 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
               )
             {
                 //////////////////////////////////////////////////////////////////
-                // TabWin liegt in der Zeile
+                // TabWin is in the line
                 if( aOtherTabWinRect.Right()>aNewPos.X() )
                     aNewPos.X() = aOtherTabWinRect.Right() + TABWIN_SPACING_X;
             }
         }
 
         //////////////////////////////////////////////////////////////////
-        // Ist in dieser Zeile noch Platz?
+        // Is there space left in this line?
         if( (aNewPos.X()+TABWIN_WIDTH_STD)<aRowRect.Right() )
         {
             aNewPos.Y() = aRowRect.Top() + TABWIN_SPACING_Y;
@@ -609,7 +609,7 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
     }
 
     //////////////////////////////////////////////////////////////////
-    // Groesse bestimmen
+    // determine size
     Size aNewSize( CalcZoom(TABWIN_WIDTH_STD), CalcZoom(TABWIN_HEIGHT_STD) );
 
     // check if the new position in inside the scrollbars ranges
@@ -631,12 +631,10 @@ void OJoinTableView::DataChanged(const DataChangedEvent& rDCEvt)
     DBG_CHKTHIS(OJoinTableView,NULL);
     if (rDCEvt.GetType() == DATACHANGED_SETTINGS)
     {
-        // nehmen wir den worst-case an : die Farben haben sich geaendert, also
-        // mich anpassen
+        // consider the worst case: the colors changed, so adjust me
         InitColors();
         Invalidate(INVALIDATE_NOCHILDREN);
-        // durch das Invalidate werden auch die Connections neu gezeichnet, so dass die auch
-        // gleich in den neuen Farben dargestellt werden
+        // due to the Invalidate, the connections are redrawn, so that they are also pictured in the new colors
     }
 }
 
@@ -644,7 +642,7 @@ void OJoinTableView::DataChanged(const DataChangedEvent& rDCEvt)
 void OJoinTableView::InitColors()
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
-    // die Farben fuer die Darstellung sollten die Systemfarben sein
+    // the colors for the illustration should be the system colors
     StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
     SetBackground(Wallpaper(Color(aSystemStyle.GetDialogColor())));
 }
@@ -693,7 +691,7 @@ sal_Bool OJoinTableView::ScrollPane( long nDelta, sal_Bool bHoriz, sal_Bool bPai
     sal_Bool bRet = sal_True;
 
     //////////////////////////////////////////////////////////////////////
-    // ScrollBar-Positionen anpassen
+    // adjust ScrollBar-Positions
     if( bPaintScrollBars )
     {
         if( bHoriz )
@@ -733,20 +731,20 @@ sal_Bool OJoinTableView::ScrollPane( long nDelta, sal_Bool bHoriz, sal_Bool bPai
     }
 
     //////////////////////////////////////////////////////////////////////
-    // Wenn ScrollOffset bereits an den Grenzen liegt, kein Neuzeichnen
+    // If ScrollOffset hitting borders, no redrawing.
     if( (GetHScrollBar()->GetThumbPos()==m_aScrollOffset.X()) &&
         (GetVScrollBar()->GetThumbPos()==m_aScrollOffset.Y()) )
         return sal_False;
 
     //////////////////////////////////////////////////////////////////////
-    // ScrollOffset neu setzen
+    // set ScrollOffset anew
     if (bHoriz)
         m_aScrollOffset.X() = GetHScrollBar()->GetThumbPos();
     else
         m_aScrollOffset.Y() = GetVScrollBar()->GetThumbPos();
 
     //////////////////////////////////////////////////////////////////////
-    // Alle Fenster verschieben
+    // move all windows
     OTableWindow* pTabWin;
     Point aPos;
 
@@ -783,9 +781,9 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
                 m_aDragScrollTimer.Stop();
 
             //////////////////////////////////////////////////////////////////////
-            // Position des Childs nach Verschieben anpassen
+            // adjust position of child after moving
             //////////////////////////////////////////////////////////////////////
-            // Fenster duerfen nicht aus Anzeigebereich herausbewegt werden
+            // windows are not allowed to leave display range
             Point aDragWinPos = rTEvt.GetMouseEvent().GetPosPixel() - m_aDragOffset;
             Size aDragWinSize = m_pDragWin->GetSizePixel();
             if( aDragWinPos.X() < 0 )
@@ -800,21 +798,21 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
                 aDragWinPos.X() = 0;
             if( aDragWinPos.Y() < 0 )
                 aDragWinPos.Y() = 0;
-            // TODO : nicht das Fenster neu positionieren, wenn es uebersteht, sondern einfach meinen Bereich erweitern
+            // TODO : don't position window anew, if it is leaving range, but just expand the range
 
 
             //////////////////////////////////////////////////////////////////////
-            // Fenster positionieren
+            // position window
             EndTracking();
             m_pDragWin->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
-            // erst mal testen, ob ich mich ueberhaupt bewegt habe
-            // (das verhindert das Setzen des modified-Flags, wenn sich eigentlich gar nichts getan hat)
+            // check, if I really moved
+            // (this prevents setting the modified-Flag, when there actually was no change0
             TTableWindowData::value_type pData = m_pDragWin->GetData();
             if ( ! (pData && pData->HasPosition() && (pData->GetPosition() == aDragWinPos)))
             {
-                // die alten logischen Koordinaten
+                // old logic coordinates
                 Point ptOldPos = m_pDragWin->GetPosPixel() + Point(GetHScrollBar()->GetThumbPos(), GetVScrollBar()->GetThumbPos());
-                // neu positionieren
+                // new positioning
                 m_pDragWin->SetPosPixel(aDragWinPos);
                 TabWinMoved(m_pDragWin, ptOldPos);
 
@@ -829,7 +827,7 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
             SetPointer( Pointer() );
             EndTracking();
 
-            // die alten physikalischen Koordinaten
+            // old physical coordinates
 
             Size szOld = m_pSizingWin->GetSizePixel();
             Point ptOld = m_pSizingWin->GetPosPixel();
@@ -852,7 +850,7 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
         if( m_pDragWin )
         {
             m_ptPrevDraggingPos = rTEvt.GetMouseEvent().GetPosPixel();
-            // an Fenstergrenzen scrollen
+            // scroll at window borders
             ScrollWhileDragging();
         }
 
@@ -886,7 +884,7 @@ void OJoinTableView::MouseButtonUp( const MouseEvent& rEvt )
     DBG_CHKTHIS(OJoinTableView,NULL);
     Window::MouseButtonUp(rEvt);
     //////////////////////////////////////////////////////////////////////
-    // Wurde eine Connection ausgewaehlt?
+    // Has a connection been selected?
     if( !m_vTableConnection.empty() )
     {
         DeselectConn(GetSelectedConn());
@@ -899,7 +897,7 @@ void OJoinTableView::MouseButtonUp( const MouseEvent& rEvt )
             {
                 SelectConn((*aIter));
 
-                // Doppelclick
+                // Double-click
                 if( rEvt.GetClicks() == 2 )
                     ConnDoubleClicked( (*aIter) );
 
@@ -933,7 +931,7 @@ void OJoinTableView::DeselectConn(OTableConnection* pConn)
     if (!pConn || !pConn->IsSelected())
         return;
 
-    // die zugehoerigen Eitnraege in der ListBox des Tabellenfenster deselektieren
+    // deselect the corresponding entries in the ListBox of the table window
     OTableWindow* pWin = pConn->GetSourceWin();
     if (pWin && pWin->GetListBox())
         pWin->GetListBox()->SelectAll(sal_False);
@@ -956,7 +954,7 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
     m_pSelectedConn = pConn;
     GrabFocus(); // has to be called here because a table window may still be focused
 
-    // die betroffenene Eintraege in den Windows selektieren
+    // select the concerned entries in the windows
     OTableWindow* pConnSource = pConn->GetSourceWin();
     OTableWindow* pConnDest = pConn->GetDestWin();
     if (pConnSource && pConnDest)
@@ -996,7 +994,7 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
 
             if ((pFirstSourceVisible != pSourceBox->GetFirstEntryInView())
                 || (pFirstDestVisible != pDestBox->GetFirstEntryInView()))
-                // es wurde gescrollt -> neu zeichnen
+                // scrolling was done -> redraw
                 Invalidate(INVALIDATE_NOCHILDREN);
         }
     }
@@ -1013,7 +1011,7 @@ void OJoinTableView::InvalidateConnections()
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
     //////////////////////////////////////////////////////////////////////
-    // Die Joins zeichnen
+    // draw Joins
     ::std::for_each(m_vTableConnection.begin(),m_vTableConnection.end(),
         ::std::mem_fun(& OTableConnection::InvalidateConnection));
 }
@@ -1023,9 +1021,9 @@ void OJoinTableView::DrawConnections( const Rectangle& rRect )
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
     //////////////////////////////////////////////////////////////////////
-    // Die Joins zeichnen
+    // draw Joins
     ::std::for_each(m_vTableConnection.begin(),m_vTableConnection.end(),boost::bind( &OTableConnection::Draw, _1, boost::cref( rRect )));
-    // zum Schluss noch mal die selektierte ueber alle anderen drueber
+    // finally redraw the selected one above all others
     if (GetSelectedConn())
         GetSelectedConn()->Draw( rRect );
 }
@@ -1059,7 +1057,7 @@ void OJoinTableView::ClearAll()
 
     HideTabWins();
 
-    // und das selbe mit den Connections
+    // and the same with the Connections
     ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
     ::std::vector<OTableConnection*>::iterator aEnd = m_vTableConnection.end();
     for(;aIter != aEnd;++aIter)
@@ -1081,7 +1079,7 @@ sal_Bool OJoinTableView::ScrollWhileDragging()
     DBG_CHKTHIS(OJoinTableView,NULL);
     OSL_ENSURE(m_pDragWin != NULL, "OJoinTableView::ScrollWhileDragging darf nur waehrend Dragging eines Fensters aufgerufen werden !");
 
-    // den Timer schon mal killen
+    // kill the timer
     if (m_aDragScrollTimer.IsActive())
         m_aDragScrollTimer.Stop();
 
@@ -1092,21 +1090,21 @@ sal_Bool OJoinTableView::ScrollWhileDragging()
     if (!m_bTrackingInitiallyMoved && (aDragWinPos == m_pDragWin->GetPosPixel()))
         return sal_True;
 
-    // Darstellungsfehler vermeiden (wenn bei aktivem TrackingRect gescrollt wird)
+    // avoid illustration errors (when scrolling with active TrackingRect)
     HideTracking();
 
     sal_Bool bScrolling = sal_False;
     sal_Bool bNeedScrollTimer = sal_False;
 
-    // An Fenstergrenzen scrollen
-    // TODO : nur dann abfangen, wenn das Fenster komplett verschwinden wuerde (nicht, solange noch ein Pixel sichtbar ist)
+    // scroll at window borders
+    // TODO : only catch, if window would disappear completely (don't, if there is still a pixel visible)
     if( aDragWinPos.X() < 5 )
     {
         bScrolling = ScrollPane( -LINE_SIZE, sal_True, sal_True );
         if( !bScrolling && (aDragWinPos.X()<0) )
             aDragWinPos.X() = 0;
 
-        // brauche ich weiteres (timergesteuertes) Scrolling ?
+        // do I need further (timer controlled) scrolling ?
         bNeedScrollTimer = bScrolling && (aDragWinPos.X() < 5);
     }
 
@@ -1116,7 +1114,7 @@ sal_Bool OJoinTableView::ScrollWhileDragging()
         if( !bScrolling && ( aLowerRight.X() > m_aOutputSize.Width() ) )
             aDragWinPos.X() = m_aOutputSize.Width() - aDragWinSize.Width();
 
-        // brauche ich weiteres (timergesteuertes) Scrolling ?
+        // do I need further (timer controlled) scrolling ?
         bNeedScrollTimer = bScrolling && (aLowerRight.X() > m_aOutputSize.Width() - 5);
     }
 
@@ -1138,14 +1136,14 @@ sal_Bool OJoinTableView::ScrollWhileDragging()
         bNeedScrollTimer = bScrolling && (aLowerRight.Y() > m_aOutputSize.Height() - 5);
     }
 
-    // Timer neu setzen, wenn noch notwendig
+    // resetting timer, if still necessary
     if (bNeedScrollTimer)
     {
         m_aDragScrollTimer.SetTimeout(100);
         m_aDragScrollTimer.Start();
     }
 
-    // das DraggingRect neu zeichnen
+    // redraw DraggingRect
     m_aDragRect = Rectangle(m_ptPrevDraggingPos - m_aDragOffset, m_pDragWin->GetSizePixel());
     Update();
     ShowTracking( m_aDragRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
@@ -1190,7 +1188,7 @@ sal_Bool OJoinTableView::IsAddAllowed()
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
 
-    // nicht wenn Db readonly
+    // not, if Db readonly
     if (m_pView->getController().isReadOnly())
         return sal_False;
 
@@ -1199,7 +1197,7 @@ sal_Bool OJoinTableView::IsAddAllowed()
         Reference< XConnection> xConnection = m_pView->getController().getConnection();
         if(!xConnection.is())
             return sal_False;
-        // nicht wenn schon zuviele Tabellen
+        // not, if too many tables already
         Reference < XDatabaseMetaData > xMetaData( xConnection->getMetaData() );
 
         sal_Int32 nMax = xMetaData.is() ? xMetaData->getMaxTablesInSelect() : 0;
@@ -1616,7 +1614,7 @@ void OJoinTableView::clearLayoutInformation()
     m_pLastFocusTabWin  = NULL;
     m_pSelectedConn     = NULL;
     //////////////////////////////////////////////////////////////////////
-    // Listen loeschen
+    // delete lists
     OTableWindowMapIterator aIter = m_aTableMap.begin();
     OTableWindowMapIterator aEnd  = m_aTableMap.end();
     for(;aIter != aEnd;++aIter)
