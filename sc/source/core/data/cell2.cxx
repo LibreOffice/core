@@ -125,7 +125,7 @@ rtl::OUString ScEditCell::GetString() const
 
     if ( pData )
     {
-        // Also Text from URL errors, Doc-Engine is a ScFieldEditEngine
+        // Also Text from URL fields, Doc-Engine is a ScFieldEditEngine
         EditEngine& rEngine = pDoc->GetEditEngine();
         rEngine.SetText( *pData );
         rtl::OUString sRet = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
