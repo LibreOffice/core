@@ -30,8 +30,6 @@
 
 $(eval $(call gb_Executable_Executable,pluginapp.bin))
 
-$(eval $(call gb_Executable_use_package,pluginapp.bin,np_sdk_inc))
-
 $(eval $(call gb_Executable_use_external,pluginapp.bin,npapi_headers))
 
 $(eval $(call gb_Executable_set_include,pluginapp.bin,\

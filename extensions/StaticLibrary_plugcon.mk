@@ -31,7 +31,16 @@ endif
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,plugcon))
 
-$(eval $(call gb_StaticLibrary_use_package,plugcon,np_sdk_inc))
+$(eval $(call gb_StaticLibrary_use_packages,plugcon,\
+    basegfx_inc \
+    comphelper_inc \
+    cppu_inc \
+    i18npool_inc \
+    np_sdk_inc \
+    tools_inc \
+    unotools_inc \
+    vcl_inc \
+))
 
 $(eval $(call gb_StaticLibrary_use_external,plugcon,npapi_headers))
 
