@@ -372,9 +372,9 @@ void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
 DbGridControl::NavigationBar::NavigationBar(Window* pParent, WinBits nStyle)
           :Control(pParent, nStyle)
           ,m_aRecordText(this, WB_VCENTER)
-          ,m_aAbsolute(this, WB_VCENTER)
+          ,m_aAbsolute(this, WB_CENTER | WB_VCENTER)
           ,m_aRecordOf(this, WB_VCENTER)
-          ,m_aRecordCount(this, WB_CENTER | WB_VCENTER)
+          ,m_aRecordCount(this, WB_VCENTER)
           ,m_aFirstBtn(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS)
           ,m_aPrevBtn(this, WB_REPEAT|WB_RECTSTYLE|WB_NOPOINTERFOCUS)
           ,m_aNextBtn(this, WB_REPEAT|WB_RECTSTYLE|WB_NOPOINTERFOCUS)
@@ -453,58 +453,19 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
 {
     // Positionierung der Controls
     // Basisgroessen ermitteln
-    sal_uInt16      nX = 0;
-    sal_uInt16      nY = 0;
     Rectangle   aRect(((DbGridControl*)GetParent())->GetControlArea());
     const long  nH      = aRect.GetSize().Height();
-    Size        aBorder = LogicToPixel(Size(3, 3),MAP_APPFONT);
-                aBorder = Size(CalcZoom(aBorder.Width()), CalcZoom(aBorder.Height()));
-
-    // Controls Groessen und Positionen setzen
-    //
-    XubString aText    = m_aRecordText.GetText();
-    long nTextWidth = m_aRecordText.GetTextWidth(aText);
-    m_aRecordText.SetPosPixel(Point(nX,nY) );
-    m_aRecordText.SetSizePixel(Size(nTextWidth,nH));
-    nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
-
-    m_aAbsolute.SetPosPixel( Point(nX,nY));
-    m_aAbsolute.SetSizePixel( Size(3*nH,aRect.GetSize().Height()) ); // Heuristik XXXXXXX
-    nX = sal::static_int_cast< sal_uInt16 >(nX + (3*nH) + aBorder.Width());
-
-    aText      = m_aRecordOf.GetText();
-    nTextWidth = m_aRecordOf.GetTextWidth(aText);
-    m_aRecordOf.SetPosPixel(Point(nX,nY) );
-    m_aRecordOf.SetSizePixel(Size(nTextWidth,nH));
-    nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
-
-    nTextWidth = m_aRecordCount.GetTextWidth( rtl::OUString("0000000 (00000) *") );
-    m_aRecordCount.SetPosPixel(Point(nX,nY) );
-    m_aRecordCount.SetSizePixel(Size(nTextWidth,nH));
-    nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
-
-    Point aButtonPos(nX,nY);
-    Size  aButtonSize(nH,nH);
-    SetPosAndSize(m_aFirstBtn, aButtonPos, aButtonSize);
-    SetPosAndSize(m_aPrevBtn, aButtonPos, aButtonSize);
-    SetPosAndSize(m_aNextBtn, aButtonPos, aButtonSize);
-    SetPosAndSize(m_aLastBtn, aButtonPos, aButtonSize);
-    SetPosAndSize(m_aNewBtn, aButtonPos, aButtonSize);
-
-    nX = sal::static_int_cast< sal_uInt16 >(
-        aButtonPos.X() + (sal_uInt16)(nH + aBorder.Width()));
+    Size        aBorder = LogicToPixel(Size(2, 2),MAP_APPFONT);
+    aBorder = Size(CalcZoom(aBorder.Width()), CalcZoom(aBorder.Height()));
+    sal_uInt16      nX = 1;
+    sal_uInt16      nY = 0;
 
     // Ist der Font des Edits groesser als das Feld?
-    Font aOutputFont = m_aAbsolute.GetFont();
-    if (aOutputFont.GetSize().Height() > nH)
+    if (m_aAbsolute.GetTextHeight() > nH)
     {
-        Font aApplFont = OutputDevice::GetDefaultFont(
-            DEFAULTFONT_SANS_UNICODE,
-            Application::GetSettings().GetUILanguageTag().getLanguageType(),
-            DEFAULTFONT_FLAGS_ONLYONE,
-            this
-        );
-        aApplFont.SetSize( Size( 0, nH - 2 ) );
+        Font aApplFont (m_aAbsolute.GetFont());
+        const Size pointAbsoluteSize(m_aAbsolute.PixelToLogic( Size( 0, nH - 2 ), MapMode(MAP_POINT) ));
+        aApplFont.SetSize( pointAbsoluteSize );
         m_aAbsolute.SetControlFont( aApplFont );
 
         aApplFont.SetTransparent( sal_True );
@@ -512,6 +473,48 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
         m_aRecordOf.SetControlFont( aApplFont );
         m_aRecordCount.SetControlFont( aApplFont );
     }
+
+    // Controls Groessen und Positionen setzen
+    //
+    XubString aText = m_aRecordText.GetText();
+    long nTextWidth = m_aRecordText.GetTextWidth(aText);
+    m_aRecordText.SetPosPixel(Point(nX,nY));
+    m_aRecordText.SetSizePixel(Size(nTextWidth,nH));
+    nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
+
+    // count an extra hairspace (U+200A) left and right
+    const rtl::OUString sevenDigits(m_aAbsolute.CreateFieldText(6000000));
+    const rtl::OUString hairSpace(static_cast<sal_Unicode>(0x200A));
+    rtl::OUString textPattern(hairSpace);
+    textPattern += sevenDigits;
+    textPattern += hairSpace;
+    nTextWidth = m_aAbsolute.GetTextWidth( textPattern );
+    m_aAbsolute.SetPosPixel(Point(nX,nY));
+    m_aAbsolute.SetSizePixel(Size(nTextWidth, nH));
+    nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
+
+    aText      = m_aRecordOf.GetText();
+    nTextWidth = m_aRecordOf.GetTextWidth(aText);
+    m_aRecordOf.SetPosPixel(Point(nX,nY));
+    m_aRecordOf.SetSizePixel(Size(nTextWidth,nH));
+    nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
+
+    textPattern = sevenDigits + " * (" + sevenDigits + ")";
+    nTextWidth = m_aRecordCount.GetTextWidth( textPattern );
+    m_aRecordCount.SetPosPixel(Point(nX,nY));
+    m_aRecordCount.SetSizePixel(Size(nTextWidth,nH));
+    nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
+
+    Point aButtonPos(nX,nY);
+    const Size  aButtonSize(nH,nH);
+    SetPosAndSize(m_aFirstBtn, aButtonPos, aButtonSize);
+    SetPosAndSize(m_aPrevBtn, aButtonPos, aButtonSize);
+    SetPosAndSize(m_aNextBtn, aButtonPos, aButtonSize);
+    SetPosAndSize(m_aLastBtn, aButtonPos, aButtonSize);
+    SetPosAndSize(m_aNewBtn, aButtonPos, aButtonSize);
+
+    nX = sal::static_int_cast< sal_uInt16 >(aButtonPos.X() + 1);
+
     return nX;
 }
 
@@ -561,7 +564,7 @@ void DbGridControl::NavigationBar::InvalidateAll(sal_Int32 nCurrentPos, sal_Bool
 
         sal_Int32 nAdjustedRowCount = pParent->GetRowCount() - ((pParent->GetOptions() & DbGridControl::OPT_INSERT) ? 2 : 1);
 
-        // Wann mu� alles invalidiert werden
+        // Wann muß alles invalidiert werden
         bAll = bAll || m_nCurrentPos <= 0;
         bAll = bAll || nCurrentPos <= 0;
         bAll = bAll || m_nCurrentPos >= nAdjustedRowCount;
@@ -695,12 +698,12 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
                 if (pParent->GetOptions() & DbGridControl::OPT_INSERT)
                 {
                     if (pParent->IsCurrentAppending() && !pParent->IsModified())
-                        aText = String::CreateFromInt32(pParent->GetRowCount());
+                        aText = m_aAbsolute.CreateFieldText(pParent->GetRowCount());
                     else
-                        aText = String::CreateFromInt32(pParent->GetRowCount() - 1);
+                        aText = m_aAbsolute.CreateFieldText(pParent->GetRowCount() - 1);
                 }
                 else
-                    aText = String::CreateFromInt32(pParent->GetRowCount());
+                    aText = m_aAbsolute.CreateFieldText(pParent->GetRowCount());
                 if(!pParent->m_bRecordCountFinal)
                     aText += rtl::OUString(" *");
             }
@@ -712,7 +715,7 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
             {
                 String aExtendedInfo(aText);
                 aExtendedInfo.AppendAscii(" (");
-                aExtendedInfo += String::CreateFromInt32(pParent->GetSelectRowCount());
+                aExtendedInfo += m_aAbsolute.CreateFieldText(pParent->GetSelectRowCount());
                 aExtendedInfo += ')';
                 pWnd->SetText(aExtendedInfo);
             }
