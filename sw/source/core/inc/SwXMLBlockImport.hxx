@@ -30,6 +30,7 @@
 #define _SW_XMLBLOCKIMPORT_HXX
 
 #include <xmloff/xmlimp.hxx>
+#include <tools/string.hxx>
 
 class SwXMLTextBlocks;
 class SwXMLBlockListImport : public SvXMLImport

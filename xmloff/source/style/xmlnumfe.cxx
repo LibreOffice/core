@@ -1795,7 +1795,7 @@ sal_uInt32 SvXMLNumFmtExport::ForceSystemLanguage( sal_uInt32 nKey )
     {
         DBG_ASSERT( pFormatter != NULL, "format without formatter?" );
 
-        xub_StrLen nErrorPos;
+        sal_Int32 nErrorPos;
         short nType = pFormat->GetType();
 
         sal_uInt32 nNewKey = pFormatter->GetFormatForLanguageIfBuiltIn(
@@ -1807,7 +1807,7 @@ sal_uInt32 SvXMLNumFmtExport::ForceSystemLanguage( sal_uInt32 nKey )
         }
         else
         {
-            String aFormatString( pFormat->GetFormatstring() );
+            OUString aFormatString( pFormat->GetFormatstring() );
             pFormatter->PutandConvertEntry(
                             aFormatString,
                             nErrorPos, nType, nNewKey,

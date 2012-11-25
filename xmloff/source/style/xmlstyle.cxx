@@ -56,8 +56,6 @@
 #include <set>
 #include <vector>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::std::vector;
 
 using namespace ::com::sun::star;
@@ -101,7 +99,7 @@ const SvXMLTokenMap& SvXMLStylesContext::GetStyleStylesElemTokenMap()
 
 void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                       const OUString& rLocalName,
-                                         const OUString& rValue )
+                                      const OUString& rValue )
 {
     // TODO: use a map here
     if( XML_NAMESPACE_STYLE == nPrefixKey )
@@ -164,8 +162,8 @@ SvXMLStyleContext::~SvXMLStyleContext()
 }
 
 SvXMLImportContext *SvXMLStyleContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLocalName,
-                                            const uno::Reference< xml::sax::XAttributeList > & )
+                                                           const OUString& rLocalName,
+                                                           const uno::Reference< xml::sax::XAttributeList > & )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
@@ -290,7 +288,8 @@ public:
     void Clear();
 
     const SvXMLStyleContext *FindStyleChildContext( sal_uInt16 nFamily,
-                            const OUString& rName, sal_Bool bCreateIndex ) const;
+                                                    const OUString& rName,
+                                                    sal_Bool bCreateIndex ) const;
     sal_Bool IsAutomaticStyle() const { return bAutomaticStyle; }
 };
 
@@ -334,10 +333,9 @@ void SvXMLStylesContext_Impl::Clear()
     aStyles.clear();
 }
 
-const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
-                                  sal_uInt16 nFamily,
-                                  const OUString& rName,
-                                  sal_Bool bCreateIndex ) const
+const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uInt16 nFamily,
+                                                                         const OUString& rName,
+                                                                         sal_Bool bCreateIndex ) const
 {
     const SvXMLStyleContext *pStyle = 0;
 
@@ -399,10 +397,9 @@ sal_Bool SvXMLStylesContext::IsAutomaticStyle() const
     return mpImpl->IsAutomaticStyle();
 }
 
-SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
-        sal_uInt16 p_nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPrefix,
+                                                                const OUString& rLocalName,
+                                                                const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = NULL;
 
@@ -566,8 +563,7 @@ sal_Bool SvXMLStylesContext::InsertStyleFamily( sal_uInt16 ) const
     return sal_True;
 }
 
-sal_uInt16 SvXMLStylesContext::GetFamily(
-        const ::rtl::OUString& rValue ) const
+sal_uInt16 SvXMLStylesContext::GetFamily( const OUString& rValue ) const
 {
     sal_uInt16 nFamily = 0U;
     if( IsXMLToken( rValue, XML_PARAGRAPH ) )
@@ -716,9 +712,7 @@ Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( sal_uInt16 nFa
             xAutoStyles = mxParaAutoStyles;
         else
         {
-            sName = bPara ?
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphStyles" ) ):
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "CharacterStyles" ) );
+            sName = bPara ? OUString( "ParagraphStyles" ): OUString( "CharacterStyles" );
             Reference< XAutoStylesSupplier > xAutoStylesSupp(   GetImport().GetModel(), UNO_QUERY );
             Reference< XAutoStyles > xAutoStyleFamilies = xAutoStylesSupp->getAutoStyles();
             if (xAutoStyleFamilies->hasByName(sName))
@@ -746,16 +740,14 @@ Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
         if( mxParaStyles.is() )
             xStyles = mxParaStyles;
         else
-            sName =
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphStyles" ) );
+            sName = "ParagraphStyles";
         break;
 
     case XML_STYLE_FAMILY_TEXT_TEXT:
         if( mxTextStyles.is() )
             xStyles = mxTextStyles;
         else
-            sName =
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "CharacterStyles" ) );
+            sName = "CharacterStyles";
         break;
     }
     if( !xStyles.is() && !sName.isEmpty() )
@@ -788,7 +780,7 @@ Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
 
 OUString SvXMLStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 {
-    String sServiceName;
+    OUString sServiceName;
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
@@ -822,8 +814,8 @@ SvXMLStylesContext::~SvXMLStylesContext()
 }
 
 SvXMLImportContext *SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,
-                                         const OUString& rLocalName,
-                                         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+                                                            const OUString& rLocalName,
+                                                            const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
 

@@ -18,7 +18,6 @@
  */
 
 #include <tools/debug.hxx>
-#include <tools/string.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -42,9 +41,6 @@
 #include <set>
 #include <boost/scoped_ptr.hpp>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
@@ -57,7 +53,7 @@ using ::com::sun::star::document::XEventsSupplier;
 
 XMLStyleExport::XMLStyleExport(
         SvXMLExport& rExp,
-        const ::rtl::OUString& rPoolStyleName,
+        const OUString& rPoolStyleName,
         SvXMLAutoStylePoolP *pAutoStyleP ) :
     rExport( rExp ),
     sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
@@ -84,7 +80,7 @@ void XMLStyleExport::exportStyleContent( const Reference< XStyle >& )
 
 sal_Bool XMLStyleExport::exportStyle(
         const Reference< XStyle >& rStyle,
-          const OUString& rXMLFamily,
+        const OUString& rXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
         const Reference< XNameAccess >& xStyles,
         const OUString* pPrefix )
@@ -396,12 +392,12 @@ void XMLStyleExport::exportStyleFamily(
        // If next styles are supported and used styles should be exported only,
     // the next style may be unused but has to be exported, too. In this case
     // the names of all exported styles are remembered.
-    boost::scoped_ptr<std::set<String> > pExportedStyles(0);
+    boost::scoped_ptr<std::set<OUString> > pExportedStyles(0);
     sal_Bool bFirstStyle = sal_True;
 
-    const uno::Sequence< ::rtl::OUString> aSeq = xStyles->getElementNames();
-    const ::rtl::OUString* pIter = aSeq.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+    const uno::Sequence< OUString> aSeq = xStyles->getElementNames();
+    const OUString* pIter = aSeq.getConstArray();
+    const OUString* pEnd   = pIter + aSeq.getLength();
     for(;pIter != pEnd;++pIter)
     {
         Reference< XStyle > xStyle;
@@ -434,7 +430,7 @@ void XMLStyleExport::exportStyleFamily(
                         xPropSet->getPropertySetInfo();
 
                     if( xPropSetInfo->hasPropertyByName( sFollowStyle ) )
-                        pExportedStyles.reset(new std::set<String>());
+                        pExportedStyles.reset(new std::set<OUString>());
                     bFirstStyle = sal_False;
                 }
 
@@ -487,7 +483,7 @@ void XMLStyleExport::exportStyleFamily(
 
                 OUString sNextName;
                 xPropSet->getPropertyValue( sFollowStyle ) >>= sNextName;
-                String sTmp( sNextName );
+                OUString sTmp( sNextName );
                 // if the next style hasn't been exported by now, export it now
                 // and remember its name.
                 if( xStyle->getName() != sNextName &&

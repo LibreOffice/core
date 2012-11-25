@@ -59,10 +59,7 @@
 #include <txtlists.hxx>
 #include <xmloff/odffields.hxx>
 #include <comphelper/stlunosequence.hxx>
-#include <tools/string.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::ucb::XAnyCompare;
 
 using namespace ::std;
@@ -504,8 +501,8 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
     ::std::auto_ptr<SvXMLTokenMap> m_pTextContourAttrTokenMap;
     ::std::auto_ptr<SvXMLTokenMap> m_pTextHyperlinkAttrTokenMap;
     ::std::auto_ptr<SvXMLTokenMap> m_pTextMasterPageElemTokenMap;
-    ::std::auto_ptr< std::vector<rtl::OUString> > m_pPrevFrmNames;
-    ::std::auto_ptr< std::vector<rtl::OUString> > m_pNextFrmNames;
+    ::std::auto_ptr< std::vector<OUString> > m_pPrevFrmNames;
+    ::std::auto_ptr< std::vector<OUString> > m_pNextFrmNames;
     ::std::auto_ptr<XMLTextListsHelper> m_pTextListsHelper;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
@@ -527,23 +524,23 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
        - data structure contains more than one candidate for each list level
          of the outline style (#i69629#)
     */
-    ::boost::scoped_array< ::std::vector< ::rtl::OUString > >
+    ::boost::scoped_array< ::std::vector< OUString > >
         m_pOutlineStylesCandidates;
 
     // start range, xml:id, RDFa stuff
     typedef ::boost::tuple<
-        uno::Reference<text::XTextRange>, ::rtl::OUString,
+        uno::Reference<text::XTextRange>, OUString,
         ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > >
             BookmarkMapEntry_t;
     /// start ranges for open bookmarks
-    ::std::map< ::rtl::OUString, BookmarkMapEntry_t,
+    ::std::map< OUString, BookmarkMapEntry_t,
                 ::comphelper::UStringLess> m_BookmarkStartRanges;
 
-    typedef ::std::vector< ::rtl::OUString > BookmarkVector_t;
+    typedef ::std::vector< OUString > BookmarkVector_t;
     BookmarkVector_t m_BookmarkVector;
 
     /// name of the last 'open' redline that started between paragraphs
-    ::rtl::OUString m_sOpenRedlineIdentifier;
+    OUString m_sOpenRedlineIdentifier;
 
     uno::Reference<text::XText> m_xText;
     uno::Reference<text::XTextCursor> m_xCursor;
@@ -572,15 +569,15 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
     // One more flag to remember if we are inside a deleted redline section
     bool m_bInsideDeleteContext : 1;
 
-    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString> field_name_type_t;
-    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > field_param_t;
+    typedef ::std::pair< OUString, OUString> field_name_type_t;
+    typedef ::std::pair< OUString, OUString > field_param_t;
     typedef ::std::vector< field_param_t > field_params_t;
     typedef ::std::pair< field_name_type_t, field_params_t > field_stack_item_t;
     typedef ::std::stack< field_stack_item_t > field_stack_t;
 
     field_stack_t m_FieldStack;
 
-    ::rtl::OUString m_sCellParaStyleDefault;
+    OUString m_sCellParaStyleDefault;
 
     Impl(       uno::Reference<frame::XModel> const& rModel,
                 SvXMLImport & rImport,
@@ -623,7 +620,7 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
         {
             size_t const size(m_xChapterNumbering->getCount());
             m_pOutlineStylesCandidates.reset(
-                new ::std::vector< ::rtl::OUString >[size] );
+                new ::std::vector< OUString >[size] );
         }
     }
 
@@ -906,8 +903,7 @@ XMLTextImportHelper::XMLTextImportHelper(
                     bProgress, bBlockMode, bOrganizerMode) )
     , m_pBackpatcherImpl( MakeBackpatcherImpl() )
 {
-    static ::rtl::OUString s_PropNameDefaultListId(
-        "DefaultListId");
+    static OUString s_PropNameDefaultListId( "DefaultListId");
 
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
 
@@ -926,7 +922,7 @@ XMLTextImportHelper::XMLTextImportHelper(
                     xNumRulePropSetInfo->hasPropertyByName(
                          s_PropNameDefaultListId))
                 {
-                    ::rtl::OUString sListId;
+                    OUString sListId;
                     xNumRuleProps->getPropertyValue(s_PropNameDefaultListId)
                         >>= sListId;
                     DBG_ASSERT( !sListId.isEmpty(),
@@ -940,7 +936,7 @@ XMLTextImportHelper::XMLTextImportHelper(
                             m_pImpl->m_pTextListsHelper->KeepListAsProcessed(
                                                     sListId,
                                                     xChapterNumNamed->getName(),
-                                                    ::rtl::OUString() );
+                                                    OUString() );
                         }
                     }
                 }
@@ -1125,7 +1121,7 @@ void XMLTextImportHelper::InsertString( const OUString& rChars )
 }
 
 void XMLTextImportHelper::InsertString( const OUString& rChars,
-                                         sal_Bool& rIgnoreLeadingSpace )
+                                        sal_Bool& rIgnoreLeadingSpace )
 {
     DBG_ASSERT(m_pImpl->m_xText.is(), "no text");
     DBG_ASSERT(m_pImpl->m_xCursorAsRange.is(), "no range");
@@ -1154,7 +1150,7 @@ void XMLTextImportHelper::InsertString( const OUString& rChars,
             }
         }
         m_pImpl->m_xText->insertString(m_pImpl->m_xCursorAsRange,
-            sChars.makeStringAndClear(), sal_False);
+                                       sChars.makeStringAndClear(), sal_False);
     }
 }
 
@@ -1211,7 +1207,7 @@ void XMLTextImportHelper::DeleteParagraph()
         {
             OUString sEmpty;
             m_pImpl->m_xText->insertString(m_pImpl->m_xCursorAsRange,
-                    sEmpty, sal_True);
+                                           sEmpty, sal_True);
         }
     }
 }
@@ -1219,7 +1215,7 @@ void XMLTextImportHelper::DeleteParagraph()
 OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
                                                 const OUString& rStyleName,
                                                 sal_uInt8& rFlags,
-                                                 sal_Bool bPara,
+                                                sal_Bool bPara,
                                                 SvXMLImport& rImport ) const
 {
     OUStringBuffer sChars( rChars );
@@ -1304,10 +1300,10 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
    to the found list styles of the parent styles. (#i73973#)
 */
 static sal_Bool lcl_HasListStyle( OUString sStyleName,
-                           const Reference < XNameContainer >& xParaStyles,
-                           SvXMLImport& rImport,
-                           const OUString& sNumberingStyleName,
-                           const OUString& sOutlineStyleName )
+                                  const Reference < XNameContainer >& xParaStyles,
+                                  SvXMLImport& rImport,
+                                  const OUString& sNumberingStyleName,
+                                  const OUString& sOutlineStyleName )
 {
     sal_Bool bRet( sal_False );
 
@@ -1426,19 +1422,19 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         // Numberings/Bullets in table not visible aftzer save/reload (#i80724#)
         sal_Bool bSetListAttrs )
 {
-    static ::rtl::OUString s_ParaStyleName( "ParaStyleName");
-    static ::rtl::OUString s_CharStyleName( "CharStyleName");
-    static ::rtl::OUString s_NumberingRules( "NumberingRules");
-    static ::rtl::OUString s_NumberingIsNumber( "NumberingIsNumber");
-    static ::rtl::OUString s_NumberingLevel( "NumberingLevel");
-    static ::rtl::OUString s_ParaIsNumberingRestart( "ParaIsNumberingRestart");
-    static ::rtl::OUString s_NumberingStartValue( "NumberingStartValue");
-    static ::rtl::OUString s_PropNameListId( "ListId");
-    static ::rtl::OUString s_PageDescName( "PageDescName");
-    static ::rtl::OUString s_ServiceCombinedCharacters( "com.sun.star.text.TextField.CombinedCharacters");
-    static ::rtl::OUString s_Content("Content");
-    static ::rtl::OUString s_OutlineLevel( "OutlineLevel");
-    static ::rtl::OUString s_NumberingStyleName( "NumberingStyleName");
+    static OUString s_ParaStyleName( "ParaStyleName");
+    static OUString s_CharStyleName( "CharStyleName");
+    static OUString s_NumberingRules( "NumberingRules");
+    static OUString s_NumberingIsNumber( "NumberingIsNumber");
+    static OUString s_NumberingLevel( "NumberingLevel");
+    static OUString s_ParaIsNumberingRestart( "ParaIsNumberingRestart");
+    static OUString s_NumberingStartValue( "NumberingStartValue");
+    static OUString s_PropNameListId( "ListId");
+    static OUString s_PageDescName( "PageDescName");
+    static OUString s_ServiceCombinedCharacters( "com.sun.star.text.TextField.CombinedCharacters");
+    static OUString s_Content("Content");
+    static OUString s_OutlineLevel( "OutlineLevel");
+    static OUString s_NumberingStyleName( "NumberingStyleName");
 
     const sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
                                      : XML_STYLE_FAMILY_TEXT_TEXT;
@@ -1462,7 +1458,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     if( !sStyleName.isEmpty() )
     {
         sStyleName = rImport.GetStyleDisplayName( nFamily, sStyleName );
-        const String& rPropName = (bPara) ? s_ParaStyleName : s_CharStyleName;
+        const OUString& rPropName = (bPara) ? s_ParaStyleName : s_CharStyleName;
         const Reference < XNameContainer > & rStyles = (bPara)
             ? m_pImpl->m_xParaStyles
             : m_pImpl->m_xTextStyles;
@@ -1499,7 +1495,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
 
         Reference < XIndexReplace > xNewNumRules;
         sal_Int8 nLevel(-1);
-        ::rtl::OUString sListId;
+        OUString sListId;
         sal_Int16 nStartValue(-1);
         bool bNumberingIsNumber(true);
 
@@ -1740,7 +1736,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                                 pStyle->FillPropertySet( xCrsrProperties );
                                 xCrsr->collapseToEnd();
                                 xCrsr->gotoRange( xRange->getEnd(), true );
-                                xCrsr->setString( ::rtl::OUString() );
+                                xCrsr->setString( OUString() );
                             }
                             catch(const uno::Exception&)
                             {
@@ -1865,11 +1861,10 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     return sStyleName;
 }
 
-void XMLTextImportHelper::FindOutlineStyleName( ::rtl::OUString& rStyleName,
+void XMLTextImportHelper::FindOutlineStyleName( OUString& rStyleName,
                                                 sal_Int8 nOutlineLevel )
 {
-    static ::rtl::OUString s_HeadingStyleName(
-        "HeadingStyleName");
+    static OUString s_HeadingStyleName( "HeadingStyleName");
 
     // style name empty?
     if( rStyleName.isEmpty() )
@@ -1897,7 +1892,7 @@ void XMLTextImportHelper::FindOutlineStyleName( ::rtl::OUString& rStyleName,
                 {
                     if (aProperties[i].Name == s_HeadingStyleName)
                     {
-                        rtl::OUString aOutlineStyle;
+                        OUString aOutlineStyle;
                         aProperties[i].Value >>= aOutlineStyle;
                         m_pImpl->m_pOutlineStylesCandidates[nOutlineLevel]
                             .push_back( aOutlineStyle );
@@ -1933,8 +1928,8 @@ void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel
 
 void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
 {
-    static ::rtl::OUString s_NumberingStyleName( "NumberingStyleName");
-    static ::rtl::OUString s_HeadingStyleName( "HeadingStyleName");
+    static OUString s_NumberingStyleName( "NumberingStyleName");
+    static OUString s_HeadingStyleName( "HeadingStyleName");
 
     if ((m_pImpl->m_pOutlineStylesCandidates != NULL || bSetEmptyLevels) &&
          m_pImpl->m_xChapterNumbering.is() &&
@@ -2039,12 +2034,12 @@ void XMLTextImportHelper::SetHyperlink(
     const OUString& rVisitedStyleName,
     XMLEventsImportContext* pEvents)
 {
-    static ::rtl::OUString s_HyperLinkURL( "HyperLinkURL");
-    static ::rtl::OUString s_HyperLinkName( "HyperLinkName");
-    static ::rtl::OUString s_HyperLinkTarget( "HyperLinkTarget");
-    static ::rtl::OUString s_UnvisitedCharStyleName( "UnvisitedCharStyleName");
-    static ::rtl::OUString s_VisitedCharStyleName( "VisitedCharStyleName");
-    static ::rtl::OUString s_HyperLinkEvents( "HyperLinkEvents");
+    static OUString s_HyperLinkURL( "HyperLinkURL");
+    static OUString s_HyperLinkName( "HyperLinkName");
+    static OUString s_HyperLinkTarget( "HyperLinkTarget");
+    static OUString s_UnvisitedCharStyleName( "UnvisitedCharStyleName");
+    static OUString s_VisitedCharStyleName( "VisitedCharStyleName");
+    static OUString s_HyperLinkEvents( "HyperLinkEvents");
 
     Reference < XPropertySet > xPropSet( rCursor, UNO_QUERY );
     Reference < XPropertySetInfo > xPropSetInfo(
@@ -2557,7 +2552,8 @@ sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
         {
             ++it;
         }
-        if (it!=m_pImpl->m_BookmarkVector.end()) {
+        if (it!=m_pImpl->m_BookmarkVector.end())
+        {
             m_pImpl->m_BookmarkVector.erase(it);
         }
         return sal_True;
@@ -2568,14 +2564,19 @@ sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
     }
 }
 
-::rtl::OUString XMLTextImportHelper::FindActiveBookmarkName()
+OUString XMLTextImportHelper::FindActiveBookmarkName()
 {
-    if (!m_pImpl->m_BookmarkVector.empty()) {
+    if (!m_pImpl->m_BookmarkVector.empty())
+    {
         return m_pImpl->m_BookmarkVector.back();
-    } else return ::rtl::OUString(); // return the empty string on error...
+    }
+    else
+    {
+        return OUString(); // return the empty string on error...
+    }
 }
 
-void XMLTextImportHelper::pushFieldCtx( ::rtl::OUString name, ::rtl::OUString type )
+void XMLTextImportHelper::pushFieldCtx( OUString name, OUString type )
 {
     m_pImpl->m_FieldStack.push(Impl::field_stack_item_t(
         Impl::field_name_type_t(name, type), Impl::field_params_t()));
@@ -2587,7 +2588,7 @@ void XMLTextImportHelper::popFieldCtx()
         m_pImpl->m_FieldStack.pop();
 }
 
-void XMLTextImportHelper::addFieldParam( ::rtl::OUString name, ::rtl::OUString value )
+void XMLTextImportHelper::addFieldParam( OUString name, OUString value )
 {
     DBG_ASSERT(!m_pImpl->m_FieldStack.empty(),
         "stack is empty: not good! Do a pushFieldCtx before...");
@@ -2597,13 +2598,18 @@ void XMLTextImportHelper::addFieldParam( ::rtl::OUString name, ::rtl::OUString v
     }
 }
 
-::rtl::OUString XMLTextImportHelper::getCurrentFieldType()
+OUString XMLTextImportHelper::getCurrentFieldType()
 {
     DBG_ASSERT(!m_pImpl->m_FieldStack.empty(),
         "stack is empty: not good! Do a pushFieldCtx before...");
-    if (!m_pImpl->m_FieldStack.empty()) {
+    if (!m_pImpl->m_FieldStack.empty())
+    {
         return m_pImpl->m_FieldStack.top().first.second;
-    } else  return ::rtl::OUString();
+    }
+    else
+    {
+        return OUString();
+    }
 }
 
 bool XMLTextImportHelper::hasCurrentFieldCtx()
@@ -2628,8 +2634,8 @@ void XMLTextImportHelper::ConnectFrameChains(
         const OUString& rNextFrmName,
         const Reference < XPropertySet >& rFrmPropSet )
 {
-    static ::rtl::OUString s_ChainNextName( "ChainNextName");
-    static ::rtl::OUString s_ChainPrevName( "ChainPrevName");
+    static OUString s_ChainNextName( "ChainNextName");
+    static OUString s_ChainPrevName( "ChainPrevName");
 
     if( rFrmName.isEmpty() )
         return;
@@ -2648,8 +2654,8 @@ void XMLTextImportHelper::ConnectFrameChains(
         {
             if (!m_pImpl->m_pPrevFrmNames.get())
             {
-                m_pImpl->m_pPrevFrmNames.reset( new std::vector<rtl::OUString> );
-                m_pImpl->m_pNextFrmNames.reset( new std::vector<rtl::OUString> );
+                m_pImpl->m_pPrevFrmNames.reset( new std::vector<OUString> );
+                m_pImpl->m_pNextFrmNames.reset( new std::vector<OUString> );
             }
             m_pImpl->m_pPrevFrmNames->push_back(rFrmName);
             m_pImpl->m_pNextFrmNames->push_back(sNextFrmName);
@@ -2657,7 +2663,7 @@ void XMLTextImportHelper::ConnectFrameChains(
     }
     if (m_pImpl->m_pPrevFrmNames.get() && !m_pImpl->m_pPrevFrmNames->empty())
     {
-        for(std::vector<rtl::OUString>::iterator i = m_pImpl->m_pPrevFrmNames->begin(), j = m_pImpl->m_pNextFrmNames->begin(); i != m_pImpl->m_pPrevFrmNames->end() && j != m_pImpl->m_pNextFrmNames->end(); ++i, ++j)
+        for(std::vector<OUString>::iterator i = m_pImpl->m_pPrevFrmNames->begin(), j = m_pImpl->m_pNextFrmNames->begin(); i != m_pImpl->m_pPrevFrmNames->end() && j != m_pImpl->m_pNextFrmNames->end(); ++i, ++j)
         {
             if((*j).equals(rFrmName))
             {
@@ -2677,7 +2683,7 @@ void XMLTextImportHelper::ConnectFrameChains(
 
 sal_Bool XMLTextImportHelper::IsInFrame() const
 {
-    static ::rtl::OUString s_TextFrame( "TextFrame");
+    static OUString s_TextFrame( "TextFrame");
 
     sal_Bool bIsInFrame = sal_False;
 
@@ -2730,26 +2736,26 @@ Reference< XPropertySet> XMLTextImportHelper::createAndInsertOOoLink(
 
 Reference< XPropertySet> XMLTextImportHelper::createAndInsertApplet(
                                         const OUString& /*rCode*/,
-                                          const OUString& /*rName*/,
-                                          sal_Bool /*bMayScript*/,
-                                          const OUString& /*rHRef*/,
+                                        const OUString& /*rName*/,
+                                        sal_Bool /*bMayScript*/,
+                                        const OUString& /*rHRef*/,
                                         sal_Int32 /*nWidth*/, sal_Int32 /*nHeight*/ )
 {
     Reference< XPropertySet> xPropSet;
     return xPropSet;
 }
 Reference< XPropertySet> XMLTextImportHelper::createAndInsertPlugin(
-                                          const OUString& /*rMimeType*/,
-                                          const OUString& /*rHRef*/,
+                                        const OUString& /*rMimeType*/,
+                                        const OUString& /*rHRef*/,
                                         sal_Int32 /*nWidth*/, sal_Int32 /*nHeight*/ )
 {
     Reference< XPropertySet> xPropSet;
     return xPropSet;
 }
 Reference< XPropertySet> XMLTextImportHelper::createAndInsertFloatingFrame(
-                                          const OUString& /*rName*/,
-                                          const OUString& /*rHRef*/,
-                                          const OUString& /*rStyleName*/,
+                                        const OUString& /*rName*/,
+                                        const OUString& /*rHRef*/,
+                                        const OUString& /*rStyleName*/,
                                         sal_Int32 /*nWidth*/, sal_Int32 /*nHeight*/ )
 {
     Reference< XPropertySet> xPropSet;
@@ -2758,17 +2764,16 @@ Reference< XPropertySet> XMLTextImportHelper::createAndInsertFloatingFrame(
 
 void XMLTextImportHelper::endAppletOrPlugin(
         const Reference < XPropertySet> &,
-        std::map < const rtl::OUString, rtl::OUString, UStringLess > &)
+        std::map < const OUString, OUString, UStringLess > &)
 {
 }
 // redline helper: dummy implementation to be overridden in sw/filter/xml
-void XMLTextImportHelper::RedlineAdd(
-    const OUString& /*rType*/,
-    const OUString& /*rId*/,
-    const OUString& /*rAuthor*/,
-    const OUString& /*rComment*/,
-    const DateTime& /*rDateTime*/,
-    sal_Bool /*bMergeLastPara*/)
+void XMLTextImportHelper::RedlineAdd( const OUString& /*rType*/,
+                                      const OUString& /*rId*/,
+                                      const OUString& /*rAuthor*/,
+                                      const OUString& /*rComment*/,
+                                      const DateTime& /*rDateTime*/,
+                                      sal_Bool /*bMergeLastPara*/)
 {
     // dummy implementation: do nothing
 }
@@ -2815,7 +2820,7 @@ OUString XMLTextImportHelper::GetOpenRedlineId()
     return m_pImpl->m_sOpenRedlineIdentifier;
 }
 
-void XMLTextImportHelper::SetOpenRedlineId( ::rtl::OUString& rId)
+void XMLTextImportHelper::SetOpenRedlineId( OUString& rId)
 {
     m_pImpl->m_sOpenRedlineIdentifier = rId;
 }
@@ -2827,12 +2832,12 @@ void XMLTextImportHelper::ResetOpenRedlineId()
 }
 
 void
-XMLTextImportHelper::SetCellParaStyleDefault(::rtl::OUString const& rNewValue)
+XMLTextImportHelper::SetCellParaStyleDefault(OUString const& rNewValue)
 {
     m_pImpl->m_sCellParaStyleDefault = rNewValue;
 }
 
-::rtl::OUString const& XMLTextImportHelper::GetCellParaStyleDefault()
+OUString const& XMLTextImportHelper::GetCellParaStyleDefault()
 {
     return m_pImpl->m_sCellParaStyleDefault;
 }

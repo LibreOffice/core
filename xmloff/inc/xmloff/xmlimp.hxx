@@ -49,7 +49,6 @@
 
 #include <com/sun/star/beans/NamedValue.hpp>
 
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
     namespace frame { class XModel; }
@@ -68,7 +67,6 @@ class XMLFontStylesContext;
 class XMLEventImportHelper;
 class XMLErrors;
 class StyleMap;
-class String;
 
 namespace xmloff {
     class RDFaImportHelper;
@@ -134,7 +132,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper6<
     XMLEventImportHelper        *mpEventImportHelper;
     XMLErrors                   *mpXMLErrors;
     StyleMap                    *mpStyleMap;
-    ::rtl::OUString             msPackageProtocol;
+    OUString                    msPackageProtocol;
 
     SAL_DLLPRIVATE void _InitCtor();
 
@@ -153,8 +151,8 @@ protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
-                                      const ::rtl::OUString& rLocalName,
-                                      const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+                                               const OUString& rLocalName,
+                                               const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual XMLTextImportHelper* CreateTextImport();
     virtual XMLShapeImportHelper* CreateShapeImport();
@@ -169,7 +167,7 @@ protected:
     void SetAutoStyles( SvXMLStylesContext *pAutoStyles );
     void SetMasterStyles( SvXMLStylesContext *pMasterStyles );
 
-    sal_Bool IsODFVersionConsistent( const ::rtl::OUString& aODFVersion );
+    sal_Bool IsODFVersionConsistent( const OUString& aODFVersion );
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
     inline void SetEmbeddedResolver( com::sun::star::uno::Reference< com::sun::star::document::XEmbeddedObjectResolver >& _xEmbeddedResolver );
@@ -197,17 +195,17 @@ public:
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL startElement(const ::rtl::OUString& aName,
-                              const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
+    virtual void SAL_CALL startElement(const OUString& aName,
+                                       const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL endElement(const ::rtl::OUString& aName)
+    virtual void SAL_CALL endElement(const OUString& aName)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL characters(const ::rtl::OUString& aChars)
+    virtual void SAL_CALL characters(const OUString& aChars)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL ignorableWhitespace(const ::rtl::OUString& aWhitespaces)
+    virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL processingInstruction(const ::rtl::OUString& aTarget,
-                                       const ::rtl::OUString& aData)
+    virtual void SAL_CALL processingInstruction(const OUString& aTarget,
+                                                const OUString& aData)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setDocumentLocator(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > & xLocator)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
@@ -215,11 +213,11 @@ public:
     // ::com::sun::star::xml::sax::XExtendedDocumentHandler
     virtual void SAL_CALL startCDATA(void) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL endCDATA(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL comment(const ::rtl::OUString& sComment)
+    virtual void SAL_CALL comment(const OUString& sComment)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL allowLineBreak(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL unknown(const ::rtl::OUString& sString)
+    virtual void SAL_CALL unknown(const OUString& sString)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
     // XImporter
@@ -236,9 +234,12 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  )
+        throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+        throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw(::com::sun::star::uno::RuntimeException);
 
     // may be called by certain subclasses that handle document meta-data
     // override to provide customized handling of document statistics
@@ -288,36 +289,36 @@ public:
 
     // Convert a local packe URL into either a graphic manager or a
     // internal package URL. The later one happens only if bLoadURL is true
-    ::rtl::OUString ResolveGraphicObjectURL( const ::rtl::OUString& rURL, sal_Bool bLoadOnDemand );
+    OUString ResolveGraphicObjectURL( const OUString& rURL, sal_Bool bLoadOnDemand );
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
-        GetStreamForGraphicObjectURLFromBase64();
-    ::rtl::OUString ResolveGraphicObjectURLFromBase64(
+          GetStreamForGraphicObjectURLFromBase64();
+    OUString ResolveGraphicObjectURLFromBase64(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOut );
 
-    sal_Bool IsPackageURL( const ::rtl::OUString& rURL ) const;
-    ::rtl::OUString ResolveEmbeddedObjectURL( const ::rtl::OUString& rURL,
-                                              const ::rtl::OUString& rClassId );
+    sal_Bool IsPackageURL( const OUString& rURL ) const;
+    OUString ResolveEmbeddedObjectURL( const OUString& rURL,
+                                       const OUString& rClassId );
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
         GetStreamForEmbeddedObjectURLFromBase64();
-    ::rtl::OUString ResolveEmbeddedObjectURLFromBase64();
+    OUString ResolveEmbeddedObjectURLFromBase64();
 
     // get source storage we're importing from (if available)
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
           GetSourceStorage();
 
     void AddStyleDisplayName( sal_uInt16 nFamily,
-                              const ::rtl::OUString& rName,
-                              const ::rtl::OUString& rDisplayName );
-    ::rtl::OUString GetStyleDisplayName( sal_uInt16 nFamily,
-                                      const ::rtl::OUString& rName ) const;
+                              const OUString& rName,
+                              const OUString& rDisplayName );
+    OUString GetStyleDisplayName( sal_uInt16 nFamily,
+                                  const OUString& rName ) const;
 
     ProgressBarHelper*  GetProgressBarHelper();
 
-    void AddNumberStyle(sal_Int32 nKey, const rtl::OUString& sName);
+    void AddNumberStyle(sal_Int32 nKey, const OUString& sName);
 
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
-    virtual void SetDocumentSpecificSettings(const ::rtl::OUString& _rSettingsGroupName,
+    virtual void SetDocumentSpecificSettings(const OUString& _rSettingsGroupName,
                     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& _rSettings);
 
     XMLFontStylesContext *GetFontDecls();
@@ -329,14 +330,14 @@ public:
 
     sal_uInt16  getImportFlags() const { return mnImportFlags; }
     sal_Bool    IsFormsSupported() const { return mbIsFormsSupported; }
-    rtl::OUString GetAbsoluteReference(const rtl::OUString& rValue) const;
+    OUString GetAbsoluteReference(const OUString& rValue) const;
 
     sal_Unicode ConvStarBatsCharToStarSymbol( sal_Unicode c );
     sal_Unicode ConvStarMathCharToStarSymbol( sal_Unicode c );
 
     bool IsTableShapeSupported() const { return mbIsTableShapeSupported; }
 
-    ::rtl::OUString GetODFVersion() const;
+    OUString GetODFVersion() const;
 
     /**
      * Record an error condition that occurred during import. The
@@ -347,21 +348,21 @@ public:
         /// error ID, may contain an error flag
         sal_Int32 nId,
         /// string parameters for the error message
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString> & rMsgParams,
+        const ::com::sun::star::uno::Sequence< OUString > & rMsgParams,
         /// original exception message (if applicable)
-        const ::rtl::OUString& rExceptionMessage,
+        const OUString& rExceptionMessage,
         /// error location (if applicable)
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XLocator> & rLocator );
 
     void SetError(
         sal_Int32 nId,
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString> & rMsgParams);
+        const ::com::sun::star::uno::Sequence< OUString> & rMsgParams);
 
     void SetError( sal_Int32 nId );
-    void SetError( sal_Int32 nId, const rtl::OUString& rMsg1 );
-    void SetError( sal_Int32 nId, const rtl::OUString& rMsg1,
-                                  const rtl::OUString& rMsg2 );
+    void SetError( sal_Int32 nId, const OUString& rMsg1 );
+    void SetError( sal_Int32 nId, const OUString& rMsg1,
+                                  const OUString& rMsg2 );
 
     /** return current error flags */
     sal_uInt16 GetErrorFlags()  { return mnErrorFlags; }
@@ -381,25 +382,23 @@ public:
 
     sal_Bool IsTextDocInOOoFileFormat() const;
 
-    ::rtl::OUString GetBaseURL() const;
-    ::rtl::OUString GetDocumentBase() const;
+    OUString GetBaseURL() const;
+    OUString GetDocumentBase() const;
 
     /// name of stream in package, e.g., "content.xml"
-    ::rtl::OUString GetStreamName() const;
+    OUString GetStreamName() const;
 
     /// set the XmlId attribute of given UNO object (for RDF metadata)
     void SetXmlId(::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface> const & i_xIfc,
-        ::rtl::OUString const & i_rXmlId);
+                  ::com::sun::star::uno::XInterface> const & i_xIfc,
+                  OUString const & i_rXmlId);
 
     /// Add a RDFa statement; parameters are XML attribute values
-    void AddRDFa(
-        ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable>
-            i_xObject,
-        ::rtl::OUString const & i_rAbout,
-        ::rtl::OUString const & i_rProperty,
-        ::rtl::OUString const & i_rContent,
-        ::rtl::OUString const & i_rDatatype);
+    void AddRDFa( ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable> i_xObject,
+                  OUString const & i_rAbout,
+                  OUString const & i_rProperty,
+                  OUString const & i_rContent,
+                  OUString const & i_rDatatype);
 
     /// do not dllexport this; only for advanced cases (bookmark-start)
     SAL_DLLPRIVATE ::xmloff::RDFaImportHelper & GetRDFaImportHelper();

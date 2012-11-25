@@ -54,9 +54,6 @@
 
 #include "xmloff/xmlnmspe.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -140,17 +137,18 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
 
     if( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 )
     {
-        String aType( (OUString)xShape->getShapeType() );
-        if( aType.EqualsAscii( (const sal_Char*)"com.sun.star.drawing.CustomShape" ) )
+        OUString aType( xShape->getShapeType() );
+        if( aType.equalsAscii( "com.sun.star.drawing.CustomShape" ) )
         {
             uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
             if( xSet.is() )
             {
-                rtl::OUString aEngine;
+                OUString aEngine;
                 xSet->getPropertyValue( OUString(  "CustomShapeEngine"  ) ) >>= aEngine;
                 if ( aEngine.isEmpty() )
-                    aEngine = OUString(  "com.sun.star.drawing.EnhancedCustomShapeEngine"  );
-
+                {
+                    aEngine = "com.sun.star.drawing.EnhancedCustomShapeEngine";
+                }
                 uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 
                 if ( !aEngine.isEmpty() && xFactory.is() )
@@ -1032,43 +1030,43 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
     uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor(xShape, uno::UNO_QUERY);
     if(xShapeDescriptor.is())
     {
-        String aType((OUString)xShapeDescriptor->getShapeType());
+        OUString aType(xShapeDescriptor->getShapeType());
 
-        if(aType.EqualsAscii((const sal_Char*)"com.sun.star.", 0, 13))
+        if(aType.match("com.sun.star."))
         {
-            if(aType.EqualsAscii("drawing.", 13, 8))
+            if(aType.match("drawing.", 13))
             {
                 // drawing shapes
-                if     (aType.EqualsAscii("Rectangle", 21, 9)) { eShapeType = XmlShapeTypeDrawRectangleShape; }
+                if     (aType.match("Rectangle", 21)) { eShapeType = XmlShapeTypeDrawRectangleShape; }
 
                 // #i72177# Note: Correcting CustomShape, CustomShape->Custom, len from 9 (was wrong anyways) to 6.
                 // As can be seen at the other compares, the appendix "Shape" is left out of the comparison.
-                else if(aType.EqualsAscii("Custom", 21, 6)) { eShapeType = XmlShapeTypeDrawCustomShape; }
+                else if(aType.match("Custom", 21)) { eShapeType = XmlShapeTypeDrawCustomShape; }
 
-                else if(aType.EqualsAscii("Ellipse", 21, 7)) { eShapeType = XmlShapeTypeDrawEllipseShape; }
-                else if(aType.EqualsAscii("Control", 21, 7)) { eShapeType = XmlShapeTypeDrawControlShape; }
-                else if(aType.EqualsAscii("Connector", 21, 9)) { eShapeType = XmlShapeTypeDrawConnectorShape; }
-                else if(aType.EqualsAscii("Measure", 21, 7)) { eShapeType = XmlShapeTypeDrawMeasureShape; }
-                else if(aType.EqualsAscii("Line", 21, 4)) { eShapeType = XmlShapeTypeDrawLineShape; }
+                else if(aType.match("Ellipse", 21)) { eShapeType = XmlShapeTypeDrawEllipseShape; }
+                else if(aType.match("Control", 21)) { eShapeType = XmlShapeTypeDrawControlShape; }
+                else if(aType.match("Connector", 21)) { eShapeType = XmlShapeTypeDrawConnectorShape; }
+            else if(aType.match("Measure", 21)) { eShapeType = XmlShapeTypeDrawMeasureShape; }
+                else if(aType.match("Line", 21)) { eShapeType = XmlShapeTypeDrawLineShape; }
 
                 // #i72177# Note: This covers two types by purpose, PolyPolygonShape and PolyPolygonPathShape
-                else if(aType.EqualsAscii("PolyPolygon", 21, 11)) { eShapeType = XmlShapeTypeDrawPolyPolygonShape; }
+                else if(aType.match("PolyPolygon", 21)) { eShapeType = XmlShapeTypeDrawPolyPolygonShape; }
 
                 // #i72177# Note: This covers two types by purpose, PolyLineShape and PolyLinePathShape
-                else if(aType.EqualsAscii("PolyLine", 21, 8)) { eShapeType = XmlShapeTypeDrawPolyLineShape; }
+                else if(aType.match("PolyLine", 21)) { eShapeType = XmlShapeTypeDrawPolyLineShape; }
 
-                else if(aType.EqualsAscii("OpenBezier", 21, 10)) { eShapeType = XmlShapeTypeDrawOpenBezierShape; }
-                else if(aType.EqualsAscii("ClosedBezier", 21, 12)) { eShapeType = XmlShapeTypeDrawClosedBezierShape; }
+                else if(aType.match("OpenBezier", 21)) { eShapeType = XmlShapeTypeDrawOpenBezierShape; }
+                else if(aType.match("ClosedBezier", 21)) { eShapeType = XmlShapeTypeDrawClosedBezierShape; }
 
                 // #i72177# FreeHand (opened and closed) now supports the types OpenFreeHandShape and
                 // ClosedFreeHandShape respectively. Represent them as bezier shapes
-                else if(aType.EqualsAscii("OpenFreeHand", 21, 12)) { eShapeType = XmlShapeTypeDrawOpenBezierShape; }
-                else if(aType.EqualsAscii("ClosedFreeHand", 21, 14)) { eShapeType = XmlShapeTypeDrawClosedBezierShape; }
+                else if(aType.match("OpenFreeHand", 21)) { eShapeType = XmlShapeTypeDrawOpenBezierShape; }
+                else if(aType.match("ClosedFreeHand", 21)) { eShapeType = XmlShapeTypeDrawClosedBezierShape; }
 
-                else if(aType.EqualsAscii("GraphicObject", 21, 13)) { eShapeType = XmlShapeTypeDrawGraphicObjectShape; }
-                else if(aType.EqualsAscii("Group", 21, 5)) { eShapeType = XmlShapeTypeDrawGroupShape; }
-                else if(aType.EqualsAscii("Text", 21, 4)) { eShapeType = XmlShapeTypeDrawTextShape; }
-                else if(aType.EqualsAscii("OLE2", 21, 4))
+                else if(aType.match("GraphicObject", 21)) { eShapeType = XmlShapeTypeDrawGraphicObjectShape; }
+                else if(aType.match("Group", 21)) { eShapeType = XmlShapeTypeDrawGroupShape; }
+                else if(aType.match("Text", 21)) { eShapeType = XmlShapeTypeDrawTextShape; }
+                else if(aType.match("OLE2", 21))
                 {
                     eShapeType = XmlShapeTypeDrawOLE2Shape;
 
@@ -1100,30 +1098,30 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                         }
                     }
                 }
-                else if(aType.EqualsAscii("Page", 21, 4)) { eShapeType = XmlShapeTypeDrawPageShape; }
-                else if(aType.EqualsAscii("Frame", 21, 5)) { eShapeType = XmlShapeTypeDrawFrameShape; }
-                else if(aType.EqualsAscii("Caption", 21, 7)) { eShapeType = XmlShapeTypeDrawCaptionShape; }
-                else if(aType.EqualsAscii("Plugin", 21, 6)) { eShapeType = XmlShapeTypeDrawPluginShape; }
-                else if(aType.EqualsAscii("Applet", 21, 6)) { eShapeType = XmlShapeTypeDrawAppletShape; }
-                else if(aType.EqualsAscii("MediaShape", 21, 10)) { eShapeType = XmlShapeTypeDrawMediaShape; }
-                else if(aType.EqualsAscii("TableShape", 21, 10)) { eShapeType = XmlShapeTypeDrawTableShape; }
+                else if(aType.match("Page", 21)) { eShapeType = XmlShapeTypeDrawPageShape; }
+                else if(aType.match("Frame", 21)) { eShapeType = XmlShapeTypeDrawFrameShape; }
+                else if(aType.match("Caption", 21)) { eShapeType = XmlShapeTypeDrawCaptionShape; }
+                else if(aType.match("Plugin", 21)) { eShapeType = XmlShapeTypeDrawPluginShape; }
+                else if(aType.match("Applet", 21)) { eShapeType = XmlShapeTypeDrawAppletShape; }
+                else if(aType.match("MediaShape", 21)) { eShapeType = XmlShapeTypeDrawMediaShape; }
+                else if(aType.match("TableShape", 21)) { eShapeType = XmlShapeTypeDrawTableShape; }
 
                 // 3D shapes
-                else if(aType.EqualsAscii("Scene", 21 + 7, 5)) { eShapeType = XmlShapeTypeDraw3DSceneObject; }
-                else if(aType.EqualsAscii("Cube", 21 + 7, 4)) { eShapeType = XmlShapeTypeDraw3DCubeObject; }
-                else if(aType.EqualsAscii("Sphere", 21 + 7, 6)) { eShapeType = XmlShapeTypeDraw3DSphereObject; }
-                else if(aType.EqualsAscii("Lathe", 21 + 7, 5)) { eShapeType = XmlShapeTypeDraw3DLatheObject; }
-                else if(aType.EqualsAscii("Extrude", 21 + 7, 7)) { eShapeType = XmlShapeTypeDraw3DExtrudeObject; }
+                else if(aType.match("Scene", 21 + 7)) { eShapeType = XmlShapeTypeDraw3DSceneObject; }
+                else if(aType.match("Cube", 21 + 7)) { eShapeType = XmlShapeTypeDraw3DCubeObject; }
+                else if(aType.match("Sphere", 21 + 7)) { eShapeType = XmlShapeTypeDraw3DSphereObject; }
+                else if(aType.match("Lathe", 21 + 7)) { eShapeType = XmlShapeTypeDraw3DLatheObject; }
+                else if(aType.match("Extrude", 21 + 7)) { eShapeType = XmlShapeTypeDraw3DExtrudeObject; }
             }
-            else if(aType.EqualsAscii("presentation.", 13, 13))
+            else if(aType.match("presentation.", 13))
             {
                 // presentation shapes
-                if     (aType.EqualsAscii("TitleText", 26, 9)) { eShapeType = XmlShapeTypePresTitleTextShape; }
-                else if(aType.EqualsAscii("Outliner", 26, 8)) { eShapeType = XmlShapeTypePresOutlinerShape;  }
-                else if(aType.EqualsAscii("Subtitle", 26, 8)) { eShapeType = XmlShapeTypePresSubtitleShape;  }
-                else if(aType.EqualsAscii("GraphicObject", 26, 13)) { eShapeType = XmlShapeTypePresGraphicObjectShape;  }
-                else if(aType.EqualsAscii("Page", 26, 4)) { eShapeType = XmlShapeTypePresPageShape;  }
-                else if(aType.EqualsAscii("OLE2", 26, 4))
+                if     (aType.match("TitleText", 26)) { eShapeType = XmlShapeTypePresTitleTextShape; }
+                else if(aType.match("Outliner", 26)) { eShapeType = XmlShapeTypePresOutlinerShape;  }
+                else if(aType.match("Subtitle", 26)) { eShapeType = XmlShapeTypePresSubtitleShape;  }
+                else if(aType.match("GraphicObject", 26)) { eShapeType = XmlShapeTypePresGraphicObjectShape;  }
+                else if(aType.match("Page", 26)) { eShapeType = XmlShapeTypePresPageShape;  }
+                else if(aType.match("OLE2", 26))
                 {
                     eShapeType = XmlShapeTypePresOLE2Shape;
 
@@ -1135,8 +1133,8 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                         rtl::OUString sCLSID;
                         if(xPropSet->getPropertyValue(OUString("CLSID")) >>= sCLSID)
                         {
-                            if( sCLSID.equals(rtl::OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())) ||
-                                sCLSID.equals(rtl::OUString( SvGlobalName( BF_SO3_SC_CLASSID ).GetHexName())) )
+                            if( sCLSID.equals(OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())) ||
+                                sCLSID.equals(OUString( SvGlobalName( BF_SO3_SC_CLASSID ).GetHexName())) )
                             {
                                 eShapeType = XmlShapeTypePresSheetShape;
                             }
@@ -1147,17 +1145,17 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                         OSL_FAIL( "XMLShapeExport::ImpCalcShapeType(), expected ole shape to have the CLSID property?" );
                     }
                 }
-                else if(aType.EqualsAscii("Chart", 26, 5)) { eShapeType = XmlShapeTypePresChartShape;  }
-                else if(aType.EqualsAscii("OrgChart", 26, 8)) { eShapeType = XmlShapeTypePresOrgChartShape;  }
-                else if(aType.EqualsAscii("CalcShape", 26, 9)) { eShapeType = XmlShapeTypePresSheetShape; }
-                else if(aType.EqualsAscii("TableShape", 26, 10)) { eShapeType = XmlShapeTypePresTableShape; }
-                else if(aType.EqualsAscii("Notes", 26, 5)) { eShapeType = XmlShapeTypePresNotesShape;  }
-                else if(aType.EqualsAscii("HandoutShape", 26, 12)) { eShapeType = XmlShapeTypeHandoutShape; }
-                else if(aType.EqualsAscii("HeaderShape", 26, 11)) { eShapeType = XmlShapeTypePresHeaderShape; }
-                else if(aType.EqualsAscii("FooterShape", 26, 11)) { eShapeType = XmlShapeTypePresFooterShape; }
-                else if(aType.EqualsAscii("SlideNumberShape", 26, 16)) { eShapeType = XmlShapeTypePresSlideNumberShape; }
-                else if(aType.EqualsAscii("DateTimeShape", 26, 13)) { eShapeType = XmlShapeTypePresDateTimeShape; }
-                else if(aType.EqualsAscii("MediaShape", 26, 10)) { eShapeType = XmlShapeTypePresMediaShape; }
+                else if(aType.match("Chart", 26)) { eShapeType = XmlShapeTypePresChartShape;  }
+                else if(aType.match("OrgChart", 26)) { eShapeType = XmlShapeTypePresOrgChartShape;  }
+                else if(aType.match("CalcShape", 26)) { eShapeType = XmlShapeTypePresSheetShape; }
+                else if(aType.match("TableShape", 26)) { eShapeType = XmlShapeTypePresTableShape; }
+                else if(aType.match("Notes", 26)) { eShapeType = XmlShapeTypePresNotesShape;  }
+                else if(aType.match("HandoutShape", 26)) { eShapeType = XmlShapeTypeHandoutShape; }
+                else if(aType.match("HeaderShape", 26)) { eShapeType = XmlShapeTypePresHeaderShape; }
+                else if(aType.match("FooterShape", 26)) { eShapeType = XmlShapeTypePresFooterShape; }
+                else if(aType.match("SlideNumberShape", 26)) { eShapeType = XmlShapeTypePresSlideNumberShape; }
+                else if(aType.match("DateTimeShape", 26)) { eShapeType = XmlShapeTypePresDateTimeShape; }
+                else if(aType.match("MediaShape", 26)) { eShapeType = XmlShapeTypePresMediaShape; }
             }
         }
     }

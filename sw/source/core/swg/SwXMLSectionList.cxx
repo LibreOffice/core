@@ -26,10 +26,10 @@
  *
  ************************************************************************/
 
+#include <tools/string.hxx>
 #include <SwXMLSectionList.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <tools/string.hxx>
 #include <vector>
 
 using namespace ::com::sun::star;

@@ -868,13 +868,12 @@ static void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNu
     if ( bQuote )
     {
         // #i55469# quotes in the string itself have to be escaped
-        rtl::OUString aString( rContent.getStr() );
-        bool bEscape = ( aString.indexOf( (sal_Unicode) '"' ) >= 0 );
+        bool bEscape = ( rContent.indexOf( (sal_Unicode) '"' ) >= 0 );
         if ( bEscape )
         {
             // A quote is turned into "\"" - a quote to end quoted text, an escaped quote,
             // and a quote to resume quoting.
-            rtl::OUString aInsert(  "\"\\\""  );
+            OUString aInsert(  "\"\\\""  );
 
             sal_Int32 nPos = 0;
             while ( nPos < rContent.getLength() )
@@ -899,8 +898,7 @@ static void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNu
                  rContent[0] == (sal_Unicode) '"' &&
                  rContent[1] == (sal_Unicode) '"' )
             {
-                String aTrimmed( rContent.makeStringAndClear().copy(2) );
-                rContent = rtl::OUStringBuffer( aTrimmed );
+                rContent.remove(0, 2);
             }
 
             sal_Int32 nLen = rContent.getLength();
@@ -908,8 +906,7 @@ static void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNu
                  rContent[nLen - 1] == (sal_Unicode) '"' &&
                  rContent[nLen - 2] == (sal_Unicode) '"' )
             {
-                String aTrimmed( rContent.makeStringAndClear().copy( 0, nLen - 2 ) );
-                rContent = rtl::OUStringBuffer( aTrimmed );
+                rContent.remove(nLen - 2);
             }
         }
     }
@@ -1632,14 +1629,14 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
     {
         //  insert by format string
 
-        String aFormatStr( sFormat );
+        OUString aFormatStr( sFormat );
         nIndex = pFormatter->GetEntryKey( aFormatStr, nFormatLang );
         if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
-            xub_StrLen  nErrPos = 0;
+            sal_Int32  nErrPos = 0;
             short       l_nType = 0;
             sal_Bool bOk = pFormatter->PutEntry( aFormatStr, nErrPos, l_nType, nIndex, nFormatLang );
-            if ( !bOk && nErrPos == 0 && aFormatStr != String(sFormat) )
+            if ( !bOk && nErrPos == 0 && aFormatStr != sFormat )
             {
                 //  if the string was modified by PutEntry, look for an existing format
                 //  with the modified string
@@ -1682,8 +1679,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         SvNumberformat* pFormat = const_cast<SvNumberformat*>(pFormatter->GetEntry( nIndex ));
         if (pFormat)
         {
-            String sTitle (sFormatTitle);
-            pFormat->SetComment(sTitle);
+            pFormat->SetComment(sFormatTitle);
         }
     }
 
@@ -1780,15 +1776,15 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         bGrouping = sal_False;      // grouping and embedded characters can't be used together
 
     sal_uInt32 nStdIndex = pFormatter->GetStandardIndex( nFormatLang );
-    String aNumStr = pFormatter->GenerateFormat( nStdIndex, nFormatLang,
-                                bGrouping, sal_False, nGenPrec, nLeading );
+    OUStringBuffer aNumStr = pFormatter->GenerateFormat( nStdIndex, nFormatLang,
+                                                         bGrouping, sal_False, nGenPrec, nLeading );
 
     if ( rInfo.nExpDigits >= 0 && nLeading == 0 && !bGrouping && nEmbeddedCount == 0 )
     {
         // #i43959# For scientific numbers, "#" in the integer part forces a digit,
         // so it has to be removed if nLeading is 0 (".00E+0", not "#.00E+0").
 
-        aNumStr = comphelper::string::stripStart(aNumStr, '#');
+        aNumStr.stripStart((sal_Unicode)'#');
     }
 
     if ( nEmbeddedCount )
@@ -1797,9 +1793,11 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         //  only the integer part is supported
         //  nZeroPos is the string position where format position 0 is inserted
 
-        xub_StrLen nZeroPos = aNumStr.Search( pData->GetLocaleData( nFormatLang ).getNumDecimalSep() );
-        if ( nZeroPos == STRING_NOTFOUND )
-            nZeroPos = aNumStr.Len();
+        sal_Int32 nZeroPos = aNumStr.indexOf( pData->GetLocaleData( nFormatLang ).getNumDecimalSep() );
+        if ( nZeroPos < 0 )
+        {
+            nZeroPos = aNumStr.getLength();
+        }
 
         //  aEmbeddedElements is sorted - last entry has the largest position (leftmost)
         const SvXMLEmbeddedElement* pLastObj = &*rInfo.aEmbeddedElements.rbegin();
@@ -1809,10 +1807,11 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
             //  add '#' characters so all embedded texts are really embedded in digits
             //  (there always has to be a digit before the leftmost embedded text)
 
-            xub_StrLen nAddCount = (xub_StrLen)nLastFormatPos + 1 - nZeroPos;
-            OUStringBuffer aDigitStr;
-            comphelper::string::padToLength(aDigitStr, nAddCount, (sal_Unicode)'#');
-            aNumStr.Insert(aDigitStr.makeStringAndClear(), 0);
+            sal_Int32 nAddCount = nLastFormatPos + 1 - nZeroPos;
+            for(sal_Int32 index = 0; index < nAddCount; ++index)
+            {
+                aNumStr.insert(0, (sal_Unicode)'#');
+            }
             nZeroPos = nZeroPos + nAddCount;
         }
 
@@ -1825,18 +1824,17 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
             sal_Int32 nInsertPos = nZeroPos - nFormatPos;
             if ( nFormatPos >= 0 && nInsertPos >= 0 )
             {
-                rtl::OUStringBuffer aContent( pObj->aText );
                 //  #107805# always quote embedded strings - even space would otherwise
                 //  be recognized as thousands separator in French.
-                aContent.insert( 0, (sal_Unicode) '"' );
-                aContent.append( (sal_Unicode) '"' );
 
-                aNumStr.Insert( String( aContent.makeStringAndClear() ), (xub_StrLen)nInsertPos );
+                aNumStr.insert(nInsertPos, '"');
+                aNumStr.insert(nInsertPos, pObj->aText);
+                aNumStr.insert(nInsertPos, '"');
             }
         }
     }
 
-    aFormatCode.append( aNumStr );
+    aFormatCode.append( aNumStr.makeStringAndClear() );
 
     if ( ( rInfo.bDecReplace || rInfo.bVarDecimals ) && nPrec )     // add decimal replacement (dashes)
     {
@@ -1948,7 +1946,7 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
         bHasLongDoW = sal_True;         // to remove string constant with separator
     }
 
-    String sKeyword = pFormatter->GetKeyword( nFormatLang, nIndex );
+    OUString sKeyword = pFormatter->GetKeyword( nFormatLang, nIndex );
 
     if ( nIndex == NF_KEY_H  || nIndex == NF_KEY_HH  ||
          nIndex == NF_KEY_MI || nIndex == NF_KEY_MMI ||
@@ -1957,15 +1955,20 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
         if ( !bTruncate && !bHasDateTime )
         {
             //  with truncate-on-overflow = false, add "[]" to first time part
-
-            sKeyword.Insert( (sal_Unicode) '[', 0 );
-            sKeyword.Append( (sal_Unicode) ']' );
+            aFormatCode.append( (sal_Unicode)'[' );
+            aFormatCode.append( sKeyword );
+            aFormatCode.append( (sal_Unicode)']' );
+        }
+        else
+        {
+            aFormatCode.append( sKeyword );
         }
         bHasDateTime = sal_True;
     }
-
-    aFormatCode.append( sKeyword );
-
+    else
+    {
+        aFormatCode.append( sKeyword );
+    }
     //  collect the date elements that the format contains, to recognize default date formats
     switch ( nIndex )
     {
@@ -1993,17 +1996,17 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
     }
 }
 
-static sal_Bool lcl_IsAtEnd( rtl::OUStringBuffer& rBuffer, const String& rToken )
+static sal_Bool lcl_IsAtEnd( rtl::OUStringBuffer& rBuffer, const OUString& rToken )
 {
     sal_Int32 nBufLen = rBuffer.getLength();
-    xub_StrLen nTokLen = rToken.Len();
+    sal_Int32 nTokLen = rToken.getLength();
 
     if ( nTokLen > nBufLen )
         return sal_False;
 
     sal_Int32 nStartPos = nBufLen - nTokLen;
-    for ( xub_StrLen nTokPos = 0; nTokPos < nTokLen; nTokPos++ )
-        if ( rToken.GetChar( nTokPos ) != rBuffer[nStartPos + nTokPos] )
+    for ( sal_Int32 nTokPos = 0; nTokPos < nTokLen; nTokPos++ )
+        if ( rToken[ nTokPos ] != rBuffer[nStartPos + nTokPos] )
             return sal_False;
 
     return sal_True;
@@ -2017,14 +2020,14 @@ sal_Bool SvXMLNumFormatContext::ReplaceNfKeyword( sal_uInt16 nOld, sal_uInt16 nN
     if (!pFormatter)
         return sal_False;
 
-    String sOldStr = pFormatter->GetKeyword( nFormatLang, nOld );
+    OUString sOldStr = pFormatter->GetKeyword( nFormatLang, nOld );
     if ( lcl_IsAtEnd( aFormatCode, sOldStr ) )
     {
         // remove old keyword
-        aFormatCode.setLength( aFormatCode.getLength() - sOldStr.Len() );
+        aFormatCode.setLength( aFormatCode.getLength() - sOldStr.getLength() );
 
         // add new keyword
-        String sNewStr = pFormatter->GetKeyword( nFormatLang, nNew );
+        OUString sNewStr = pFormatter->GetKeyword( nFormatLang, nNew );
         aFormatCode.append( sNewStr );
 
         return sal_True;    // changed
@@ -2034,8 +2037,8 @@ sal_Bool SvXMLNumFormatContext::ReplaceNfKeyword( sal_uInt16 nOld, sal_uInt16 nN
 
 void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
 {
-    rtl::OUString rApplyName = aMyConditions[nIndex].sMapName;
-    rtl::OUString rCondition = aMyConditions[nIndex].sCondition;
+    OUString rApplyName = aMyConditions[nIndex].sMapName;
+    OUString rCondition = aMyConditions[nIndex].sCondition;
     SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
     sal_uInt32 l_nKey = pData->GetKeyForName( rApplyName );
     OUString sValue("value()");        //! define constant
@@ -2067,10 +2070,13 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
         {
             sal_Int32 nPos = sRealCond.indexOf( '.' );
             if ( nPos >= 0 )
-            {   // #i8026# #103991# localize decimal separator
-                const String& rDecSep = GetLocaleData().getNumDecimalSep();
-                if ( rDecSep.Len() > 1 || rDecSep.GetChar(0) != '.' )
+            {
+                // #i8026# #103991# localize decimal separator
+                const OUString& rDecSep = GetLocaleData().getNumDecimalSep();
+                if ( rDecSep.getLength() > 1 || rDecSep[0] != '.' )
+                {
                     sRealCond = sRealCond.replaceAt( nPos, 1, rDecSep );
+                }
             }
             aConditions.append( (sal_Unicode) '[' );
             aConditions.append( sRealCond );

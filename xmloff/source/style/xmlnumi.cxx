@@ -34,7 +34,6 @@
 
 #include <tools/debug.hxx>
 #include <tools/fontenum.hxx>
-#include <tools/string.hxx>
 
 #include <sax/tools/converter.hxx>
 
@@ -55,9 +54,6 @@
 #include <xmloff/xmlnumi.hxx>
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
@@ -68,9 +64,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::io;
-
-using rtl::OUString;
-using rtl::OUStringBuffer;
 
 static sal_Char const XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE[] =
         "SymbolTextDistance";
@@ -491,7 +484,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                 || ((300 == nUPD) && (nBuildId <= 9573))))
         {
             // #i93908# OOo < 3.4 wrote a bogus suffix for bullet chars
-            sSuffix = ::rtl::OUString(); // clear it
+            sSuffix = OUString(); // clear it
         }
     }
 
