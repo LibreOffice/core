@@ -162,8 +162,8 @@ static PyRef importUnoModule( ) throw ( RuntimeException )
         OUStringBuffer buf;
         buf.appendAscii( "python object raised an unknown exception (" );
         PyRef valueRep( PyObject_Repr( excValue.get() ), SAL_NO_ACQUIRE );
-        buf.appendAscii( PyString_AsString( valueRep.get())).appendAscii( ", traceback follows\n" );
-        buf.appendAscii( PyString_AsString( str.get() ) );
+        buf.appendAscii( PyStr_AsString( valueRep.get())).appendAscii( ", traceback follows\n" );
+        buf.appendAscii( PyStr_AsString( str.get() ) );
         buf.appendAscii( ")" );
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > () );
     }
@@ -613,7 +613,7 @@ lcl_ExceptionMessage(PyObject *const o, OUString const*const pWrapped)
     OUStringBuffer buf;
     buf.appendAscii("Couldn't convert ");
     PyRef reprString( PyObject_Str(o), SAL_NO_ACQUIRE );
-    buf.appendAscii( PyString_AsString(reprString.get()) );
+    buf.appendAscii( PyStr_AsString(reprString.get()) );
     buf.appendAscii(" to a UNO type");
     if (pWrapped)
     {
@@ -719,7 +719,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         double d = PyFloat_AsDouble (o);
         a <<= d;
     }
-    else if (PyString_Check(o) || PyUnicode_Check(o))
+    else if (PyStrBytes_Check(o) || PyUnicode_Check(o))
     {
         a <<= pyString2ustring(o);
     }
@@ -740,10 +740,10 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         {
             PyRef str(PyObject_GetAttrString( o , "value" ),SAL_NO_ACQUIRE);
             Sequence< sal_Int8 > seq;
-            if( PyString_Check( str.get() ) )
+            if( PyStrBytes_Check( str.get() ) )
             {
                 seq = Sequence<sal_Int8 > (
-                    (sal_Int8*) PyString_AsString(str.get()), PyString_Size(str.get()));
+                    (sal_Int8*) PyStrBytes_AsString(str.get()), PyStrBytes_Size(str.get()));
             }
             a <<= seq;
         }
@@ -916,7 +916,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
                 PyRef args( PyTuple_New( 1), SAL_NO_ACQUIRE );
                 PyTuple_SetItem( args.get(), 0, excTraceback.getAcquired() );
                 PyRef pyStr( PyObject_CallObject( extractTraceback.get(),args.get() ), SAL_NO_ACQUIRE);
-                str = rtl::OUString::createFromAscii( PyString_AsString(pyStr.get()) );
+                str = rtl::OUString::createFromAscii( PyStr_AsString(pyStr.get()) );
             }
             else
             {
@@ -951,7 +951,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
         PyRef typeName( PyObject_Str( excType.get() ), SAL_NO_ACQUIRE );
         if( typeName.is() )
         {
-            buf.appendAscii( PyString_AsString( typeName.get() ) );
+            buf.appendAscii( PyStr_AsString( typeName.get() ) );
         }
         else
         {
@@ -961,7 +961,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
         PyRef valueRep( PyObject_Str( excValue.get() ), SAL_NO_ACQUIRE );
         if( valueRep.is() )
         {
-            buf.appendAscii( PyString_AsString( valueRep.get()));
+            buf.appendAscii( PyStr_AsString( valueRep.get()));
         }
         else
         {

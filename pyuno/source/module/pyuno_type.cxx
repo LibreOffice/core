@@ -162,15 +162,15 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
     Any ret;
     PyRef typeName( PyObject_GetAttrString( obj,"typeName" ), SAL_NO_ACQUIRE);
     PyRef value( PyObject_GetAttrString( obj, "value" ), SAL_NO_ACQUIRE);
-    if( !PyString_Check( typeName.get() ) || ! PyString_Check( value.get() ) )
+    if( !PyStr_Check( typeName.get() ) || ! PyStr_Check( value.get() ) )
     {
         throw RuntimeException(
             USTR_ASCII( "attributes typeName and/or value of uno.Enum are not strings" ),
             Reference< XInterface > () );
     }
 
-    OUString strTypeName( OUString::createFromAscii( PyString_AsString( typeName.get() ) ) );
-    char *stringValue = PyString_AsString( value.get() );
+    OUString strTypeName( OUString::createFromAscii( PyStr_AsString( typeName.get() ) ) );
+    char *stringValue = PyStr_AsString( value.get() );
 
     TypeDescription desc( strTypeName );
     if( desc.is() )
@@ -200,7 +200,7 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
         {
             OUStringBuffer buf;
             buf.appendAscii( "value " ).appendAscii( stringValue ).appendAscii( "is unknown in enum " );
-            buf.appendAscii( PyString_AsString( typeName.get() ) );
+            buf.appendAscii( PyStr_AsString( typeName.get() ) );
             throw RuntimeException( buf.makeStringAndClear(), Reference<XInterface> () );
         }
         ret = Any( &pEnumDesc->pEnumValues[i], desc.get()->pWeakRef );
@@ -208,7 +208,7 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
     else
     {
         OUStringBuffer buf;
-        buf.appendAscii( "enum " ).appendAscii( PyString_AsString(typeName.get()) ).appendAscii( " is unknown" );
+        buf.appendAscii( "enum " ).appendAscii( PyStr_AsString(typeName.get()) ).appendAscii( " is unknown" );
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface>  () );
     }
     return ret;
@@ -218,7 +218,7 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
 Type PyType2Type( PyObject * o ) throw(RuntimeException )
 {
     PyRef pyName( PyObject_GetAttrString( o, "typeName" ), SAL_NO_ACQUIRE);
-    if( !PyString_Check( pyName.get() ) )
+    if( !PyStr_Check( pyName.get() ) )
     {
         throw RuntimeException(
             USTR_ASCII( "type object does not have typeName property" ),
@@ -228,7 +228,7 @@ Type PyType2Type( PyObject * o ) throw(RuntimeException )
     PyRef pyTC( PyObject_GetAttrString( o, "typeClass" ), SAL_NO_ACQUIRE );
     Any enumValue = PyEnum2Enum( pyTC.get() );
 
-    OUString name( OUString::createFromAscii( PyString_AsString( pyName.get() ) ) );
+    OUString name( OUString::createFromAscii( PyStr_AsString( pyName.get() ) ) );
     TypeDescription desc( name );
     if( ! desc.is() )
     {
@@ -271,8 +271,8 @@ static PyObject* callCtor( const Runtime &r , const char * clazz, const PyRef & 
 PyObject *PyUNO_Enum_new( const char *enumBase, const char *enumValue, const Runtime &r )
 {
     PyRef args( PyTuple_New( 2 ), SAL_NO_ACQUIRE );
-    PyTuple_SetItem( args.get() , 0 , PyString_FromString( enumBase ) );
-    PyTuple_SetItem( args.get() , 1 , PyString_FromString( enumValue ) );
+    PyTuple_SetItem( args.get() , 0 , PyStr_FromString( enumBase ) );
+    PyTuple_SetItem( args.get() , 1 , PyStr_FromString( enumValue ) );
 
     return callCtor( r, "Enum" , args );
 }
@@ -283,7 +283,7 @@ PyObject* PyUNO_Type_new (const char *typeName , TypeClass t , const Runtime &r 
     // retrieve type object
     PyRef args( PyTuple_New( 2 ), SAL_NO_ACQUIRE );
 
-    PyTuple_SetItem( args.get() , 0 , PyString_FromString( typeName ) );
+    PyTuple_SetItem( args.get() , 0 , PyStr_FromString( typeName ) );
     PyObject *typeClass = PyUNO_Enum_new( "com.sun.star.uno.TypeClass" , typeClassToString(t), r );
     if( ! typeClass )
         return NULL;
@@ -309,7 +309,7 @@ PyObject *PyUNO_ByteSequence_new(
     const com::sun::star::uno::Sequence< sal_Int8 > &byteSequence, const Runtime &r )
 {
     PyRef str(
-        PyString_FromStringAndSize( (char*)byteSequence.getConstArray(), byteSequence.getLength()),
+        PyStrBytes_FromStringAndSize( (char*)byteSequence.getConstArray(), byteSequence.getLength()),
         SAL_NO_ACQUIRE );
     PyRef args( PyTuple_New( 1 ), SAL_NO_ACQUIRE );
     PyTuple_SetItem( args.get() , 0 , str.getAcquired() );

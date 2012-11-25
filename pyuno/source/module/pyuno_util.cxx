@@ -69,7 +69,7 @@ PyRef ustring2PyUnicode( const OUString & str )
 PyRef ustring2PyString( const OUString &str )
 {
     OString o = OUStringToOString( str, osl_getThreadTextEncoding() );
-    return PyRef( PyString_FromString( o.getStr() ), SAL_NO_ACQUIRE );
+    return PyRef( PyStr_FromString( o.getStr() ), SAL_NO_ACQUIRE );
 }
 
 OUString pyString2ustring( PyObject *pystr )
@@ -80,14 +80,24 @@ OUString pyString2ustring( PyObject *pystr )
 #if Py_UNICODE_SIZE == 2
     ret = OUString( (sal_Unicode * ) PyUnicode_AS_UNICODE( pystr ) );
 #else
+#if PY_MAJOR_VERSION >= 3
+    Py_ssize_t size(0);
+    char *pUtf8(PyUnicode_AsUTF8AndSize(pystr, &size));
+    ret = OUString(pUtf8, size, RTL_TEXTENCODING_UTF8);
+#else
     PyObject* pUtf8 = PyUnicode_AsUTF8String(pystr);
-    ret = OUString(PyString_AsString(pUtf8), PyString_Size(pUtf8), RTL_TEXTENCODING_UTF8);
+    ret = OUString(PyStr_AsString(pUtf8), PyStr_Size(pUtf8), RTL_TEXTENCODING_UTF8);
     Py_DECREF(pUtf8);
+#endif
 #endif
     }
     else
     {
-        char *name = PyString_AsString(pystr );
+#if PY_MAJOR_VERSION >= 3
+        char *name = PyBytes_AsString(pystr); // hmmm... is this a good idea?
+#else
+        char *name = PyString_AsString(pystr);
+#endif
         ret = OUString( name, strlen(name), osl_getThreadTextEncoding() );
     }
     return ret;

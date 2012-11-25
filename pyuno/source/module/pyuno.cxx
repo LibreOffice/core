@@ -428,7 +428,7 @@ PyObject *PyUNO_str( PyObject * self )
         buf.append( OUStringToOString(s,RTL_TEXTENCODING_ASCII_US) );
     }
 
-    return PyString_FromString( buf.getStr());
+    return PyStr_FromString( buf.getStr());
 }
 
 PyObject* PyUNO_getattr (PyObject* self, char* name)

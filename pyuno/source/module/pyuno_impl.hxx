@@ -49,43 +49,77 @@
 // In Python 3, the PyString_* functions have been replaced by PyBytes_*
 // and PyUnicode_* functions.
 #if PY_MAJOR_VERSION >= 3
-inline char* PyString_AsString(PyObject *object)
-{
-    // check whether object is already of type "PyBytes"
-    if(PyBytes_Check(object))
-    {
-        return PyBytes_AsString(object);
-    }
 
-    // object is not encoded yet, so encode it to utf-8
-    PyObject *pystring;
-    pystring = PyUnicode_AsUTF8String(object);
-    if(!pystring)
-    {
-       PyErr_SetString(PyExc_ValueError, "cannot utf-8 decode string");
-       return 0;
-    }
-    return PyBytes_AsString(pystring);
-}
-
-inline PyObject* PyString_FromString(const char *string)
+// compatibility wrappers for Python "str" type (PyUnicode in 3, PyString in 2)
+inline PyObject* PyStr_FromString(const char *string)
 {
     return PyUnicode_FromString(string);
 }
 
-inline int PyString_Check(PyObject *object)
+inline char * PyStr_AsString(PyObject *object)
+{
+    return PyUnicode_AsUTF8(object);
+}
+
+inline int PyStr_Check(PyObject *object)
+{
+    return PyUnicode_Check(object);
+}
+
+// compatibility wrappers for Python non-Unicode string/buffer type
+// (PyBytes in 3, PyString in 2)
+inline int PyStrBytes_Check(PyObject *object)
 {
     return PyBytes_Check(object);
 }
 
-inline Py_ssize_t PyString_Size(PyObject *object)
+inline char* PyStrBytes_AsString(PyObject *object)
+{
+    return PyBytes_AsString(object);
+}
+
+inline Py_ssize_t PyStrBytes_Size(PyObject *object)
 {
     return PyBytes_Size(object);
 }
 
-inline PyObject* PyString_FromStringAndSize(const char *string, Py_ssize_t len)
+inline PyObject* PyStrBytes_FromStringAndSize(const char *string, Py_ssize_t len)
 {
     return PyBytes_FromStringAndSize(string, len);
+}
+#else
+inline char * PyStr_AsString(PyObject *object)
+{
+    return PyString_AsString(object);
+}
+
+inline PyObject* PyStr_FromString(const char *string)
+{
+    return PyString_FromString(string);
+}
+
+inline int PyStr_Check(PyObject *object)
+{
+    return PyString_Check(object);
+}
+inline int PyStrBytes_Check(PyObject *object)
+{
+    return PyString_Check(object);
+}
+
+inline char* PyStrBytes_AsString(PyObject *object)
+{
+    return PyString_AsString(object);
+}
+
+inline Py_ssize_t PyStrBytes_Size(PyObject *object)
+{
+    return PyString_Size(object);
+}
+
+inline PyObject* PyStrBytes_FromStringAndSize(const char *string, Py_ssize_t len)
+{
+    return PyString_FromStringAndSize(string, len);
 }
 #endif /* PY_MAJOR_VERSION >= 3 */
 
