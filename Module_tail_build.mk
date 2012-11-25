@@ -55,6 +55,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	cppcanvas \
 	cppu \
 	cppuhelper \
+	$(call gb_Helper_optional,CPPUNIT,cppunit) \
 	cpputools \
 	$(call gb_Helper_optional,CT2N,ct2n) \
 	cui \
