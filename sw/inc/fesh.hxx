@@ -101,7 +101,7 @@ namespace svx
 #define FLYPROTECT_SIZE         (sal_uInt16)  2
 #define FLYPROTECT_POS          (sal_uInt16)  4
 #define FLYPROTECT_PARENT       (sal_uInt16)  8     ///< Check only parents.
-#define FLYPROTECT_FIXED        (sal_uInt16) 16     /** Only protection that cannot be withdrawn
+#define FLYPROTECT_FIXED        (sal_uInt16) 16     /**< Only protection that cannot be withdrawn
                                                     e.g. by OLE-server; also relevant for dialog. */
 
 // For figuring out contents by position (D&D)
