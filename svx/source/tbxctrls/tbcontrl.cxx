@@ -756,7 +756,7 @@ SvxFontNameBox_Impl::SvxFontNameBox_Impl( Window* pParent, const Reference< XDis
 
     FontNameBox        ( pParent, nStyle | WinBits( WB_DROPDOWN | WB_AUTOHSCROLL ) ),
     pFontList          ( NULL ),
-    aLogicalSize       ( 75,160 ),
+    aLogicalSize       ( 60,160 ),
     nFtCount           ( 0 ),
     bRelease           ( sal_True ),
     m_xDispatchProvider( rDispatchProvider ),
