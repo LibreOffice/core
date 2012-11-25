@@ -86,7 +86,8 @@ OUString pyString2ustring( PyObject *pystr )
     ret = OUString(pUtf8, size, RTL_TEXTENCODING_UTF8);
 #else
     PyObject* pUtf8 = PyUnicode_AsUTF8String(pystr);
-    ret = OUString(PyStr_AsString(pUtf8), PyStr_Size(pUtf8), RTL_TEXTENCODING_UTF8);
+    char *pStr = PyStr_AsString(pUtf8);
+    ret = OUString(pUtf8, strlen(pUtf8), RTL_TEXTENCODING_UTF8);
     Py_DECREF(pUtf8);
 #endif
 #endif
