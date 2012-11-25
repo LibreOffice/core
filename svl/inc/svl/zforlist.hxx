@@ -463,6 +463,10 @@ public:
                                         bool & rNewInserted,
                                         xub_StrLen & rCheckPos );
 
+    sal_uInt32 GetIndexPuttingAndConverting( OUString & rString, LanguageType eLnge,
+                                             LanguageType eSysLnge, short & rType,
+                                             bool & rNewInserted, sal_Int32 & rCheckPos );
+
     /** Create a format code string using format nIndex as a template and
         applying other settings (passed from the dialog) */
     OUString GenerateFormat(sal_uInt32 nIndex,
@@ -510,6 +514,13 @@ public:
                           String& sOutString, Color** ppColor,
                           LanguageType eLnge = LANGUAGE_DONTKNOW,
                           bool bUseStarFormat = false );
+
+    bool GetPreviewString(const OUString& sFormatString,
+                          double fPreviewNumber,
+                          OUString& sOutString,
+                          Color** ppColor,
+                          LanguageType eLnge,
+                          bool bUseStarFormat );
 
     /** Same as <method>GetPreviewString</method> but the format code string
         may be either language/country eLnge or en_US english US */
@@ -784,11 +795,11 @@ public:
 
     /** Return a keyword for a language/country and <type>NfKeywordIndex</type>
         for XML import, to generate number format strings. */
-    String GetKeyword( LanguageType eLnge, sal_uInt16 nIndex );
+    OUString GetKeyword( LanguageType eLnge, sal_uInt16 nIndex );
 
     /** Return the GENERAL keyword in proper case ("General") for a
         language/country, used in XML import */
-    String GetStandardName( LanguageType eLnge );
+    OUString GetStandardName( LanguageType eLnge );
 
     /** Check if a specific locale has supported locale data. */
     static bool IsLocaleInstalled( LanguageType eLang );

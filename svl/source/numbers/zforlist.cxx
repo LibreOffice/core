@@ -646,18 +646,32 @@ bool SvNumberFormatter::PutandConvertEntrySystem(String& rString,
     return bRes;
 }
 
+sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( String & rString, LanguageType eLnge,
+                                                            LanguageType eSysLnge, short & rType,
+                                                            bool & rNewInserted, xub_StrLen & rCheckPos )
+{
+    sal_uInt32 result;
+    OUString sTemp(rString);
+    sal_Int32 nCheckPos = (rCheckPos == (xub_StrLen)0xFFFF) ? -1 : (sal_Int32)rCheckPos;
+    result = GetIndexPuttingAndConverting(sTemp, eLnge, eSysLnge, rType, rNewInserted, nCheckPos);
+    rCheckPos = nCheckPos < 0 ? (xub_StrLen)0xFFFF : (xub_StrLen)nCheckPos;
+    rString = sTemp;
+    return result;
+}
 
-sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( String & rString,
-        LanguageType eLnge, LanguageType eSysLnge, short & rType,
-        bool & rNewInserted, xub_StrLen & rCheckPos )
+sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( OUString & rString, LanguageType eLnge,
+                                                            LanguageType eSysLnge, short & rType,
+                                                            bool & rNewInserted, sal_Int32 & rCheckPos )
 {
     sal_uInt32 nKey = NUMBERFORMAT_ENTRY_NOT_FOUND;
     rNewInserted = false;
     rCheckPos = 0;
 
     // #62389# empty format string (of Writer) => General standard format
-    if (!rString.Len())
-        ;   // nothing
+    if (rString.isEmpty())
+    {
+        // nothing
+    }
     else if (eLnge == LANGUAGE_SYSTEM && eSysLnge != SvtSysLocale().GetLanguageTag().getLanguageType())
     {
         sal_uInt32 nOrig = GetEntryKey( rString, eSysLnge );
@@ -674,7 +688,7 @@ sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( String & rString,
             // Not a builtin format, convert.
             // The format code string may get modified and adapted to the real
             // language and wouldn't match eSysLnge anymore, do that on a copy.
-            String aTmp( rString);
+            OUString aTmp( rString);
             rNewInserted = PutandConvertEntrySystem( aTmp, rCheckPos, rType,
                                                      nKey, eLnge, SvtSysLocale().GetLanguageTag().getLanguageType());
             if (rCheckPos > 0)
@@ -896,19 +910,20 @@ void SvNumberFormatter::FillKeywordTable( NfKeywordTable& rKeywords,
 }
 
 
-String SvNumberFormatter::GetKeyword( LanguageType eLnge, sal_uInt16 nIndex )
+OUString SvNumberFormatter::GetKeyword( LanguageType eLnge, sal_uInt16 nIndex )
 {
     ChangeIntl(eLnge);
     const NfKeywordTable & rTable = pFormatScanner->GetKeywords();
     if ( nIndex < NF_KEYWORD_ENTRIES_COUNT )
+    {
         return rTable[nIndex];
-
+    }
     SAL_WARN( "svl.numbers", "GetKeyword: invalid index");
-    return String();
+    return OUString();
 }
 
 
-String SvNumberFormatter::GetStandardName( LanguageType eLnge )
+OUString SvNumberFormatter::GetStandardName( LanguageType eLnge )
 {
     ChangeIntl( eLnge );
     return pFormatScanner->GetStandardName();
@@ -1021,29 +1036,29 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, bool bNoAdditio
                 for ( sal_Int32 j = 0; j < xSeq.getLength(); j++ )
                 {
                     sal_Int16 nIdx = xSeq[j].formatIndex;
-                    OUString aDupes;
+                    OUStringBuffer aDupes;
                     for ( sal_Int32 i = 0; i < xSeq.getLength(); i++ )
                     {
                         if ( i != j && xSeq[i].formatIndex == nIdx )
                         {
-                            aDupes += OUString::valueOf( i );
-                            aDupes += "(";
-                            aDupes += OUString( xSeq[i].formatKey );
-                            aDupes += ") ";
+                            aDupes.append(OUString::valueOf( i ));
+                            aDupes.append("(");
+                            aDupes.append(xSeq[i].formatKey);
+                            aDupes.append( ") ");
                         }
                     }
-                    if ( !aDupes.isEmpty() )
+                    if ( aDupes.getLength() > 0 )
                     {
-                        OUString aMsg("XML locale data FormatElement formatindex dupe: ");
-                        aMsg += OUString::valueOf( sal_Int32(nIdx) );
-                        aMsg += "\nFormatElements: ";
-                        aMsg += OUString::valueOf( j );
-                        aMsg += "(";
-                        aMsg += OUString( xSeq[j].formatKey );
-                        aMsg += ") ";
-                        aMsg += aDupes;
-                        LocaleDataWrapper::outputCheckMessage(
-                                xLocaleData->appendLocaleInfo( aMsg ));
+                        OUStringBuffer aMsg(aDupes.getLength() + xSeq[j].formatKey.getLength() + 100);
+                        aMsg.append("XML locale data FormatElement formatindex dupe: ");
+                        aMsg.append(OUString::valueOf((sal_Int32)nIdx));
+                        aMsg.append("\nFormatElements: ");
+                        aMsg.append(OUString::valueOf( j ));
+                        aMsg.append("(");
+                        aMsg.append( xSeq[j].formatKey );
+                        aMsg.append( ") ");
+                        aMsg.append(aDupes.makeStringAndClear());
+                        LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg.makeStringAndClear() ));
                     }
                 }
             }
@@ -1593,16 +1608,28 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
         pFormat->SetStarFormatSupport( false );
 }
 
-bool SvNumberFormatter::GetPreviewString(const String& sFormatString,
+void SvNumberFormatter::GetOutputString(const double& fOutNumber,
+                                        sal_uInt32 nFIndex,
+                                        String& sOutString,
+                                        Color** ppColor,
+                                        bool bUseStarFormat )
+{
+    OUString sTemp(sOutString);
+    GetOutputString(fOutNumber, nFIndex, sTemp, ppColor, bUseStarFormat);
+    sOutString = sTemp;
+}
+
+bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
                                          double fPreviewNumber,
-                                         String& sOutString,
+                                         OUString& sOutString,
                                          Color** ppColor,
                                          LanguageType eLnge,
                                          bool bUseStarFormat )
 {
-    if (sFormatString.Len() == 0)                       // no empty string
+    if (sFormatString.isEmpty())                       // no empty string
+    {
         return false;
-
+    }
     sal_uInt32 nKey;
     if (eLnge == LANGUAGE_DONTKNOW)
     {
@@ -1631,9 +1658,7 @@ bool SvNumberFormatter::GetPreviewString(const String& sFormatString,
             {
                 p_Entry->SetStarFormatSupport( true );
             }
-            OUString sTemp(sOutString);
-            p_Entry->GetOutputString(fPreviewNumber, sTemp, ppColor);
-            sOutString = sTemp;
+            p_Entry->GetOutputString(fPreviewNumber, sOutString, ppColor);
             if ( bUseStarFormat )
             {
                 p_Entry->SetStarFormatSupport( false );
@@ -1647,6 +1672,21 @@ bool SvNumberFormatter::GetPreviewString(const String& sFormatString,
         delete p_Entry;
         return false;
     }
+}
+
+bool SvNumberFormatter::GetPreviewString(const String& sFormatString,
+                                         double fPreviewNumber,
+                                         String& sOutString,
+                                         Color** ppColor,
+                                         LanguageType eLnge,
+                                         bool bUseStarFormat )
+{
+    bool result;
+    OUString sTemp(sOutString);
+    result = GetPreviewString(sFormatString, fPreviewNumber, sTemp,
+                              ppColor, eLnge, bUseStarFormat );
+    sOutString = sTemp;
+    return result;
 }
 
 bool SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
@@ -2218,17 +2258,17 @@ sal_Int32 SvNumberFormatter::ImpAdjustFormatCodeDefault(
         {
             switch ( pFormatArr[nElem].Type )
             {
-                case i18n::KNumberFormatType::MEDIUM :
-                    nDef = nMedium = nElem;
+            case i18n::KNumberFormatType::MEDIUM :
+                nDef = nMedium = nElem;
                 break;
-                case i18n::KNumberFormatType::LONG :
-                    if ( nMedium == -1 )
-                        nDef = nElem;
+            case i18n::KNumberFormatType::LONG :
+                if ( nMedium == -1 )
+                    nDef = nElem;
                 // fallthru
-                default:
-                    if ( nDef == -1 )
-                        nDef = nElem;
-                    pFormatArr[nElem].Default = false;
+            default:
+                if ( nDef == -1 )
+                    nDef = nElem;
+                pFormatArr[nElem].Default = false;
             }
         }
     }
@@ -2808,14 +2848,16 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
                                            sal_uInt16 nAnzLeading)
 {
     if (eLnge == LANGUAGE_DONTKNOW)
+    {
         eLnge = IniLnge;
+    }
     short eType = GetType(nIndex);
     sal_uInt16 i;
     ImpGenerateCL(eLnge);           // create new standard formats if necessary
 
     utl::DigitGroupingIterator aGrouping( xLocaleData->getDigitGrouping());
-    const xub_StrLen nDigitsInFirstGroup = static_cast<xub_StrLen>(aGrouping.get());
-    const String& rThSep = GetNumThousandSep();
+    const sal_Int32 nDigitsInFirstGroup = aGrouping.get();
+    const OUString& rThSep = GetNumThousandSep();
 
     SvNumberformat* pFormat = GetFormatEntry( nIndex );
 
