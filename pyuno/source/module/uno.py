@@ -199,8 +199,10 @@ class Char:
 
 class ByteSequence:
     def __init__(self, value):
-        if isinstance(value, str):
+        if isinstance(value, bytes):
             self.value = value
+        elif isinstance(value, str):
+            self.value = value.encode("utf-8") # Python 2 compatibility
         elif isinstance(value, ByteSequence):
             self.value = value.value
         else:
@@ -212,8 +214,10 @@ class ByteSequence:
     def __eq__(self, that):
         if isinstance( that, ByteSequence):
             return self.value == that.value
-        if isinstance(that, str):
+        if isinstance(that, bytes):
             return self.value == that
+        if isinstance(that, str):
+            return self.value == that.encode("utf-8")
         return False
 
     def __len__(self):
@@ -226,8 +230,10 @@ class ByteSequence:
         return self.value.__iter__()
 
     def __add__( self , b ):
-        if isinstance( b, str ):
-            return ByteSequence( self.value + b )
+        if isinstance( b, bytes):
+            return ByteSequence(self.value + b)
+        elif isinstance( b, str ):
+            return ByteSequence( self.value + b.encode("utf-8") )
         elif isinstance( b, ByteSequence ):
             return ByteSequence( self.value + b.value )
         raise TypeError( "expected string or ByteSequence as operand" )
