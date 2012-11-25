@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQ3///+Y\u003d",
+        "filename": "linguistic/source/spelldsp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-11-25T11:41:56Z",
+      "side": 1,
+      "message": "There\u0027s nothing wrong with the defines, personally I\u0027d prefer an enum though for such type of enumeration (defined as private to the class and used as return type of the capitalType() method). Has also the advantage of the enum name being displayed in the debugger instead of the value. Just saying ;-)",
+      "revId": "7f308c34929e01a39095c640c56cdfc0dc952225",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQ3///+M\u003d",
+        "filename": "linguistic/source/spelldsp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-11-25T11:41:56Z",
+      "side": 1,
+      "message": "I\u0027m not sure if we should accept the CAPTYPE_INITCAP here. Capitalizing only one letter of an otherwise lower case word in most languages is wrong.",
+      "revId": "7f308c34929e01a39095c640c56cdfc0dc952225",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQ3///+U\u003d",
+        "filename": "linguistic/source/spelldsp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-11-25T11:41:56Z",
+      "side": 1,
+      "message": "A newline between the if() condition and nc++ would increase readability.",
+      "revId": "7f308c34929e01a39095c640c56cdfc0dc952225",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
