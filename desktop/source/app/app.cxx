@@ -1731,6 +1731,9 @@ int Desktop::doShutdown()
     if( ! pExecGlobals )
         return EXIT_SUCCESS;
 
+    pExecGlobals->bRestartRequested = pExecGlobals->bRestartRequested ||
+        OfficeRestartManager::get(comphelper::getProcessComponentContext())->
+        isRestartRequested(true);
     if ( pExecGlobals->bRestartRequested )
         SetRestartState();
 
