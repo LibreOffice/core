@@ -100,7 +100,7 @@ namespace svx
 #define FLYPROTECT_CONTENT      (sal_uInt16)  1
 #define FLYPROTECT_SIZE         (sal_uInt16)  2
 #define FLYPROTECT_POS          (sal_uInt16)  4
-#define FLYPROTECT_PARENT       (sal_uInt16)  8     /// Check only parents.
+#define FLYPROTECT_PARENT       (sal_uInt16)  8     ///< Check only parents.
 #define FLYPROTECT_FIXED        (sal_uInt16) 16     /** Only protection that cannot be withdrawn
                                                     e.g. by OLE-server; also relevant for dialog. */
 
@@ -116,7 +116,7 @@ enum ObjCntType
     OBJCNT_URLBUTTON,
 
     OBJCNT_GROUPOBJ,
-    OBJCNT_DONTCARE     /// Not determinable - different objects are selected.
+    OBJCNT_DONTCARE     ///< Not determinable - different objects are selected.
 };
 
 //For GetAnyCurRect
