@@ -647,7 +647,7 @@ String STR_POOLCOLL_HTML_DT
 //page style names
 String STR_POOLPAGE_STANDARD
 {
-    Text [ en-US ] = "Default" ;
+    Text [ en-US ] = "Default Style" ;
 };
 String STR_POOLPAGE_FIRST
 {
