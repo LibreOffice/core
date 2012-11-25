@@ -49,8 +49,6 @@
 #include <cmath>
 
 using namespace svt;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 namespace {
 struct Gregorian : public rtl::StaticWithInit<const OUString, Gregorian>
@@ -2393,12 +2391,12 @@ bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, OUSt
 }
 
 bool SvNumberformat::GetOutputString(double fNumber,
-                                     String& OutString,
+                                     OUString& OutString,
                                      Color** ppColor)
 {
     bool bRes = false;
     OUStringBuffer sBuff;
-    OutString.Erase();
+    OutString = "";
     *ppColor = NULL;                            // keine Farbaenderung
     if (eType & NUMBERFORMAT_LOGICAL)
     {
@@ -2423,9 +2421,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
     {
         if (rScan.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION)     // alle Zahlformate InputLine
         {
-            OUString sTemp;
-            ImpGetOutputInputLine(fNumber, sTemp);
-            OutString = sTemp;
+            ImpGetOutputInputLine(fNumber, OutString);
             return false;
         }
         switch (eType)

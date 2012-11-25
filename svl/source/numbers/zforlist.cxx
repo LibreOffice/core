@@ -1449,7 +1449,9 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
             ChangeStandardPrec(INPUTSTRING_PRECISION);
             bPrecChanged = true;
         }
-        pFormat->GetOutputString(fOutNumber, sOutString, &pColor);
+        OUString sTemp(sOutString);
+        pFormat->GetOutputString(fOutNumber, sTemp, &pColor);
+        sOutString = sTemp;
     }
     if (bPrecChanged)
         ChangeStandardPrec(nOldPrec);
@@ -1481,7 +1483,9 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
     ChangeIntl(pFormat->GetLanguage());
     if ( bUseStarFormat )
         pFormat->SetStarFormatSupport( true );
-    pFormat->GetOutputString(fOutNumber, sOutString, ppColor);
+    OUString sTemp(sOutString);
+    pFormat->GetOutputString(fOutNumber, sTemp, ppColor);
+    sOutString = sTemp;
     if ( bUseStarFormat )
         pFormat->SetStarFormatSupport( false );
 }
@@ -1532,13 +1536,11 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
     if (!pFormat)
         pFormat = GetFormatEntry(ZF_STANDARD);
     ChangeIntl(pFormat->GetLanguage());
-    String aOutString;
     if ( bUseStarFormat )
         pFormat->SetStarFormatSupport( true );
-    pFormat->GetOutputString(fOutNumber, aOutString, ppColor);
+    pFormat->GetOutputString(fOutNumber, sOutString, ppColor);
     if ( bUseStarFormat )
         pFormat->SetStarFormatSupport( false );
-    sOutString = aOutString;
 }
 
 bool SvNumberFormatter::GetPreviewString(const String& sFormatString,
@@ -1579,7 +1581,9 @@ bool SvNumberFormatter::GetPreviewString(const String& sFormatString,
             {
                 p_Entry->SetStarFormatSupport( true );
             }
-            p_Entry->GetOutputString(fPreviewNumber, sOutString, ppColor);
+            OUString sTemp(sOutString);
+            p_Entry->GetOutputString(fPreviewNumber, sTemp, ppColor);
+            sOutString = sTemp;
             if ( bUseStarFormat )
             {
                 p_Entry->SetStarFormatSupport( false );
@@ -1688,7 +1692,9 @@ bool SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
     if (nCheckPos == 0)                                 // String ok
     {
         ImpGenerateCL( eLnge );     // create new standard formats if necessary
-        pEntry->GetOutputString( fPreviewNumber, sOutString, ppColor );
+        OUString sTemp(sOutString);
+        pEntry->GetOutputString( fPreviewNumber, sTemp, ppColor );
+        sOutString = sTemp;
         delete pEntry;
         return true;
     }

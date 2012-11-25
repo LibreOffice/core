@@ -220,7 +220,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
         sal_uLong  nFormat;
         Color* pCol;
         double fVal = GetDefValue( nFormatType );
-        String sValue;
+        OUString sValue;
 
         sal_uLong nSysNumFmt = pFormatter->GetFormatIndex(
                                         NF_NUMBER_SYSTEM, eCurLanguage );
@@ -239,13 +239,13 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
                                                         eCurLanguage )
                 || ((SvNumberformat*)pFmt)->GetOutputString( fVal, sValue, &pCol )
                 || nFormatType == NUMBERFORMAT_UNDEFINED )
-                    sValue = pFmt->GetFormatstring();
+            {
+                sValue = pFmt->GetFormatstring();
+            }
             else if( nFormatType == NUMBERFORMAT_TEXT )
             {
                 OUString sTxt("\"ABC\"");
-                OUString sTempOut(sValue);
-                pFormatter->GetOutputString( sTxt, nFormat, sTempOut, &pCol);
-                sValue = sTempOut;
+                pFormatter->GetOutputString( sTxt, nFormat, sValue, &pCol);
             }
 
             if (nFormat != nSysNumFmt       &&

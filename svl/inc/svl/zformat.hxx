@@ -20,7 +20,6 @@
 #define _ZFORMAT_HXX
 
 #include "svl/svldllapi.h"
-#include <tools/string.hxx>
 #include <i18npool/mslangid.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/nfversi.hxx>
@@ -173,7 +172,7 @@ class SVL_DLLPUBLIC SvNumberformat
         sal_uInt8 mnCalendarType;
         LanguageType meLanguage;
 
-        ::rtl::OUString generateCode() const;
+        OUString generateCode() const;
 
         LocaleType();
         LocaleType(sal_uInt32 nRawCode);
@@ -239,7 +238,7 @@ public:
 
     // Load a string which might contain an Euro symbol,
     // in fact that could be any string used in number formats.
-    static rtl::OUString LoadString( SvStream& rStream );
+    static OUString LoadString( SvStream& rStream );
 
     /**
      * Get output string from a numeric value that fits the number of
@@ -247,7 +246,7 @@ public:
      */
     bool GetOutputString( double fNumber, sal_uInt16 nCharCount, OUString& rOutString ) const;
 
-    bool GetOutputString( double fNumber, String& OutString, Color** ppColor );
+    bool GetOutputString( double fNumber, OUString& OutString, Color** ppColor );
     bool GetOutputString( OUString& sString, OUString& OutString, Color** ppColor );
 
     // True if type text
@@ -282,7 +281,7 @@ public:
     // nPos == 0xFFFF => last substring
     // bString==true: first/last SYMBOLTYPE_STRING or SYMBOLTYPE_CURRENCY
     const OUString* GetNumForString( sal_uInt16 nNumFor, sal_uInt16 nPos,
-            bool bString = false ) const;
+                                     bool bString = false ) const;
 
     // Subtype of a subformat code nNumFor (0..3)
     // nPos == 0xFFFF => last substring

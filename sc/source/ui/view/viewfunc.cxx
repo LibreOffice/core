@@ -2686,20 +2686,20 @@ void ScViewFunc::ChangeNumFmtDecimals( sal_Bool bIncrement )
         double nVal = pDoc->GetValue( ScAddress( nCol, nRow, nTab ) );
 
         //  the ways of the Numberformatters are unfathomable, so try:
-        String aOut;
+        OUString aOut;
         Color* pCol;
         ((SvNumberformat*)pOldEntry)->GetOutputString( nVal, aOut, &pCol );
 
         nPrecision = 0;
         // 'E' for exponential is fixed in Numberformatter
-        if ( aOut.Search('E') != STRING_NOTFOUND )
+        if ( aOut.indexOf((sal_Unicode)'E') >= 0 )
             bError = sal_True;                              // exponential not changed
         else
         {
-            String aDecSep( pFormatter->GetFormatDecimalSep( nOldFormat ) );
-            xub_StrLen nPos = aOut.Search( aDecSep );
-            if ( nPos != STRING_NOTFOUND )
-                nPrecision = aOut.Len() - nPos - aDecSep.Len();
+            OUString aDecSep( pFormatter->GetFormatDecimalSep( nOldFormat ) );
+            sal_Int32 nPos = aOut.indexOf( aDecSep );
+            if ( nPos >= 0 )
+                nPrecision = aOut.getLength() - nPos - aDecSep.getLength();
             // else keep 0
         }
     }

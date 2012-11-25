@@ -1329,7 +1329,7 @@ String GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumberF
         {
             // build Boolean number format
             Color* pColor = 0;
-            String aTemp;
+            OUString aTemp;
             const_cast< SvNumberformat* >( pEntry )->GetOutputString( 1.0, aTemp, &pColor );
             aFormatStr.Append( '"' ).Append( aTemp ).AppendAscii( "\";\"" ).Append( aTemp ).AppendAscii( "\";\"" );
             const_cast< SvNumberformat* >( pEntry )->GetOutputString( 0.0, aTemp, &pColor );
