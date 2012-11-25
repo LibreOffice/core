@@ -14,6 +14,12 @@
 #include <rtl/string.hxx>
 #include <vector>
 
+/** Class for tree localization
+
+    Parse *.tree files, extract translatable strings,
+    merge translated strings and update reference and title
+    of referred help files.
+*/
 class TreeParser
 {
 private:

@@ -18,6 +18,16 @@ class PoOfstream;
 class PoIfstream;
 class GenPoEntry;
 
+
+/** Interface to use po entries in localization
+
+    PoEntry based on GenPoEntry class which stores attributes
+    of general po entry(see po.cxx). It makes easy to get/set
+    all information needed to localize one english(US) string.
+    It contains some basic checkings and some string
+    transformations between po string and string used by
+    localization tools.
+*/
 class PoEntry
 {
 private:
@@ -61,6 +71,12 @@ public:
 
 };
 
+/** Interface to work with header of po/pot files
+
+    This class stores informations which are in header of
+    a po file. It's main function to generate header to
+    template po files(pot).
+*/
 class PoHeader: private boost::noncopyable
 {
 private:
@@ -73,16 +89,14 @@ public:
     friend class PoOfstream;
     friend class PoIfstream;
 
-    enum Exception { NOLANG };
-
                     PoHeader();
                     PoHeader( const OString& rExtSrc );
                     PoHeader( std::ifstream& rOldPo );
                     ~PoHeader();
-
-    OString         getLanguage() const;
 };
 
+/** Interface to write po entry to files as output streams
+*/
 class PoOfstream: private boost::noncopyable
 {
 private:
@@ -101,6 +115,8 @@ public:
     void    writeEntry(const PoEntry& rPo);
 };
 
+/** Interface to read po entry from files as input streams
+*/
 class PoIfstream: private boost::noncopyable
 {
 private:

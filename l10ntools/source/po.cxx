@@ -26,8 +26,11 @@
 
 using namespace U_ICU_NAMESPACE;
 
-//Class GenPoEntry
+/** Container of po entry
 
+    Provide all file operations related to LibreOffice specific
+    po entry and store it's attributes.
+*/
 class GenPoEntry
 {
 private:
@@ -54,12 +57,30 @@ public:
     virtual bool        isFuzzy() const         { return m_bFuzzy; }
     virtual bool        isNull() const          { return m_bNull; }
 
-    virtual void        setExtractCom(const OString& rExtractCom);
-    virtual void        setReference(const OString& rReference);
-    virtual void        setMsgCtxt(const OString& rMsgCtxt);
-    virtual void        setMsgId(const OString& rMsgId);
-    virtual void        setMsgStr(const OString& rMsgStr);
-    virtual void        setFuzzy(const bool bFuzzy);
+    virtual void        setExtractCom(const OString& rExtractCom)
+                        {
+                            m_sExtractCom = rExtractCom;
+                        }
+    virtual void        setReference(const OString& rReference)
+                        {
+                            m_sReference = rReference;
+                        }
+    virtual void        setMsgCtxt(const OString& rMsgCtxt)
+                        {
+                            m_sMsgCtxt = rMsgCtxt;
+                        }
+    virtual void        setMsgId(const OString& rMsgId)
+                        {
+                            m_sMsgId = rMsgId;
+                        }
+    virtual void        setMsgStr(const OString& rMsgStr)
+                        {
+                            m_sMsgStr = rMsgStr;
+                        }
+    virtual void        setFuzzy(const bool bFuzzy)
+                        {
+                            m_bFuzzy = bFuzzy;
+                        }
 
     virtual void        writeToFile(std::ofstream& rOFStream) const;
     virtual void        readFromFile(std::ifstream& rIFStream);
@@ -149,37 +170,6 @@ GenPoEntry::GenPoEntry()
 //Destructor
 GenPoEntry::~GenPoEntry()
 {
-}
-
-//Set class members
-void GenPoEntry::setExtractCom(const OString& rExtractCom)
-{
-    m_sExtractCom = rExtractCom;
-}
-
-void GenPoEntry::setReference(const OString& rReference)
-{
-    m_sReference = rReference;
-}
-
-void GenPoEntry::setMsgCtxt(const OString& rMsgCtxt)
-{
-    m_sMsgCtxt = rMsgCtxt;
-}
-
-void GenPoEntry::setMsgId(const OString& rMsgId)
-{
-    m_sMsgId = rMsgId;
-}
-
-void GenPoEntry::setMsgStr(const OString& rMsgStr)
-{
-    m_sMsgStr = rMsgStr;
-}
-
-void GenPoEntry::setFuzzy(const bool bFuzzy)
-{
-    m_bFuzzy = bFuzzy;
 }
 
 //Write to file
@@ -274,7 +264,7 @@ namespace
         boost::crc_32_type aCRC32;
         aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
         sal_uInt32 nCRC = aCRC32.checksum();
-        //Use all readable ASCII charachter exclude xml special tags: ",',&,<,>
+        //Use all readable ASCII character exclude xml special tags: ",',&,<,>
         const OString sSymbols = "!#$%()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
         char sKeyId[5];
         for( short nKeyInd = 0; nKeyInd < 4; ++nKeyInd )
@@ -286,7 +276,7 @@ namespace
         return OString(sKeyId);
     }
 
-    //Split string at the delimiter char
+    //Split string at the delimiter character
     static void lcl_SplitAt(const OString& rSource, const sal_Char nDelimiter,
                      std::vector<OString>& o_vParts)
     {
@@ -696,21 +686,6 @@ PoHeader::PoHeader(  std::ifstream& rOldPo )
 PoHeader::~PoHeader()
 {
     delete m_pGenPo;
-}
-
-//Get the language of header
-OString PoHeader::getLanguage() const
-{
-    assert( m_bIsInitialized );
-    const OString sLang = "Language: ";
-    const OString sMsgStr = m_pGenPo->getMsgStr();
-    const sal_Int32 nFirstIndex = sMsgStr.indexOf(sLang)+sLang.getLength();
-    const sal_Int32 nCount = sMsgStr.indexOf('\n',nFirstIndex)-nFirstIndex;
-    if( nFirstIndex == sLang.getLength()-1 || nCount == -nFirstIndex-1 )
-    {
-        throw NOLANG;
-    }
-    return sMsgStr.copy( nFirstIndex, nCount );
 }
 
 //Class PoOfstream

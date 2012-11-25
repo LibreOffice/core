@@ -13,6 +13,11 @@
 #include <rtl/string.hxx>
 #include <vector>
 
+/** Class for properties localization
+
+    Parse *.properties files, extract translatable strings
+    and merge translated strings.
+*/
 class PropParser
 {
 private:
