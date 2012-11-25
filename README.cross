@@ -78,7 +78,7 @@ where <your_os> is one of SLE_11, SLE_11_SP1, openSUSE_11.3, openSUSE_11.4 or
 openSUSE_Factory.
 
 zypper in mingw32-cross-gcc mingw32-cross-gcc-c++ mingw32-python-devel \
-    mingw32-python \
+    mingw32-python mingw32-libboost_date_time \
     mingw32-libexpat-devel mingw32-libexpat mingw32-boost-devel \
     mingw32-libhyphen-devel mingw32-libhyphen mingw32-hyphen-en \
     mingw32-liblpsolve mingw32-liblpsolve-devel \
@@ -91,7 +91,8 @@ zypper in mingw32-cross-gcc mingw32-cross-gcc-c++ mingw32-python-devel \
     mingw32-libexttextcat-devel mingw32-libdb mingw32-libdb-devel \
     mingw32-cross-pkg-config mingw32-pkg-config mingw32-libcppunit \
     mingw32-libcppunit-devel mingw32-libredland mingw32-libredland-devel \
-    mingw32-libmythes mingw32-libmythes-devel
+    mingw32-libmythes mingw32-libmythes-devel mingw32-mozilla-nss \
+    mingw32-mozilla-nss-devel mingw32-mozilla-nspr mingw32-mozilla-nspr-devel
 
 You also need wine, ideally:
 
@@ -155,7 +156,6 @@ CXX_FOR_BUILD=ccache g++
 --with-system-cairo
 --with-system-cppunit
 --with-system-curl
---with-system-db
 --with-system-expat
 --with-system-hunspell
 --with-system-icu
