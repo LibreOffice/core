@@ -616,6 +616,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                 // setup the device & draw
                 Font aOldFont( pDevice->GetFont() );
                 Color aOldColor( pDevice->GetTextColor() );
+                Color aOldFillColor( pDevice->GetFillColor() );
 
                 pDevice->SetFont( aFont );
 
@@ -626,6 +627,18 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                     Color aColor( static_cast< const SvxColorItem* >( pItem )->GetValue() );
                     if ( aColor != COL_AUTO )
                         pDevice->SetTextColor( aColor );
+                }
+
+                // background color
+                pItem = aItemSet.GetItem( SID_ATTR_BRUSH );
+                if ( pItem && rUDEvt.GetItemId() != GetSelectEntryPos() )
+                {
+                    Color aColor( static_cast< const SvxBrushItem* >( pItem )->GetColor() );
+                    if ( aColor != COL_AUTO )
+                    {
+                        pDevice->SetFillColor( aColor );
+                        pDevice->DrawRect( rUDEvt.GetRect() );
+                    }
                 }
 
                 // IMG_TXT_DISTANCE in ilstbox.hxx is 6, then 1 is added as
@@ -652,6 +665,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
                 pDevice->DrawText( aPos, aStyleName );
 
+                pDevice->SetFillColor( aOldFillColor );
                 pDevice->SetTextColor( aOldColor );
                 pDevice->SetFont( aOldFont );
 
