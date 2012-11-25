@@ -1261,12 +1261,15 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         {
                             //  text (literal or underscore) within the integer part of a number:number element
 
-                            String aEmbeddedStr;
+                            OUString aEmbeddedStr;
                             if ( nElemType == NF_SYMBOLTYPE_STRING || nElemType == NF_SYMBOLTYPE_PERCENT )
+                            {
                                 aEmbeddedStr = *pElemStr;
+                            }
                             else
+                            {
                                 SvNumberformat::InsertBlanks( aEmbeddedStr, 0, (*pElemStr)[1] );
-
+                            }
                             sal_Int32 nEmbedPos = nIntegerSymbols - nDigitsPassed;
 
                             SvXMLEmbeddedTextEntry* pObj = new SvXMLEmbeddedTextEntry( nPos, nEmbedPos, aEmbeddedStr );
@@ -1334,7 +1337,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         //  turn "_x" into the number of spaces used for x in InsertBlanks in the NumberFormat
                         //  (#i20396# the spaces may also be in embedded-text elements)
 
-                        String aBlanks;
+                        OUString aBlanks;
                         SvNumberformat::InsertBlanks( aBlanks, 0, (*pElemStr)[1] );
                         AddToTextElement_Impl( aBlanks );
                     }

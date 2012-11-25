@@ -386,7 +386,16 @@ public:
 
     /** Insert the number of blanks into the string that is needed to simulate
         the width of character c for underscore formats */
-    static xub_StrLen InsertBlanks( String& r, xub_StrLen nPos, sal_Unicode c );
+    static sal_Int32 InsertBlanks( OUString& r, sal_Int32 nPos, sal_Unicode c )
+    {
+        sal_Int32 result;
+        OUStringBuffer sBuff(r);
+
+        result = InsertBlanks(sBuff, nPos, c);
+        r = sBuff.makeStringAndClear();
+
+        return result;
+    }
 
     /** Insert the number of blanks into the string that is needed to simulate
         the width of character c for underscore formats */

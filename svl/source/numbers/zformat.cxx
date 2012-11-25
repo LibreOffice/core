@@ -84,23 +84,6 @@ static sal_uInt8 cCharWidths[ 128-32 ] = {
 };
 
 // static
-xub_StrLen SvNumberformat::InsertBlanks( String& r, xub_StrLen nPos, sal_Unicode c )
-{
-    if( c >= 32 )
-    {
-        sal_uInt16 n = 2;   // Default fuer Zeichen > 128 (HACK!)
-        if( c <= 127 )
-        {
-            n = cCharWidths[ c - 32 ];
-        }
-        while( n-- )
-        {
-            r.Insert( ' ', nPos++ );
-        }
-    }
-    return nPos;
-}
-
 sal_Int32 SvNumberformat::InsertBlanks( OUStringBuffer& r, sal_Int32 nPos, sal_Unicode c )
 {
     if( c >= 32 )
@@ -3294,7 +3277,7 @@ sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& r
         const sal_uInt16 nCount = rNumFor.GetCount();
         for (sal_uInt16 i = 0; i < nCount && io_nState == 0; ++i)
         {
-            xub_StrLen nLen;
+            sal_Int32 nLen;
             switch (rInfo.nTypeArray[i])
             {
             case NF_KEY_D :
@@ -3858,7 +3841,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     else
     {
         bInputLine = false;
-        nCntPost = xub_StrLen(rInfo.nCntPost);
+        nCntPost = rInfo.nCntPost;
     }
     double fTime = (fNumber - floor( fNumber )) * 86400.0;
     fTime = ::rtl::math::round( fTime, int(nCntPost) );
