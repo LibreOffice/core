@@ -463,7 +463,7 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
         }
         else
         {
-            sal_Bool bUnlock = !((SwFtnFrm*)pLay)->IsBackMoveLocked();
+            bool bUnlock = !((SwFtnFrm*)pLay)->IsBackMoveLocked();
             ((SwFtnFrm*)pLay)->LockBackMove();
             pLay->InvalidateSize();
             pLay->Calc();
@@ -613,7 +613,7 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
     // Be economical with notifications if an action is running.
     ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
     const SwViewImp *pImp = pSh ? pSh->Imp() : 0;
-    const sal_Bool bComplete = pImp && pImp->IsAction() && pImp->GetLayAction().IsComplete();
+    const bool bComplete = pImp && pImp->IsAction() && pImp->GetLayAction().IsComplete();
 
     if ( !bComplete )
     {
@@ -803,7 +803,7 @@ const SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, sal_Bool bFwd,
         return 0;
 
     const SwFrm *pLeaf = this;
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     do
     {   pLeaf = ((SwFrm*)pLeaf)->GetLeaf( eMakePage, bFwd );
@@ -814,7 +814,7 @@ const SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, sal_Bool bFwd,
             if ( pAnch->IsInDocBody() == pLeaf->IsInDocBody() &&
                  pAnch->IsInFtn()     == pLeaf->IsInFtn() )
             {
-                bFound = sal_True;
+                bFound = true;
             }
         }
     } while ( !bFound && pLeaf );
@@ -979,9 +979,9 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
     SwLayoutFrm *pOldLayLeaf = 0;           // Make sure that we don't have to
                                             // start searching from top when we
                                             // have a freshly created page.
-    sal_Bool bNewPg = sal_False;    // Only insert a new page once.
+    bool bNewPg = false;    // Only insert a new page once.
 
-    while ( sal_True )
+    while ( true )
     {
         if ( pLayLeaf )
         {
@@ -1040,7 +1040,7 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
                     //insert a new one.
                     if ( eMakePage == MAKEPAGE_INSERT )
                     {
-                        bNewPg = sal_True;
+                        bNewPg = true;
 
                         SwPageFrm *pPg = pOldLayLeaf ?
                                     pOldLayLeaf->FindPageFrm() : 0;
@@ -1867,16 +1867,16 @@ sal_Bool SwFlowFrm::CheckMoveFwd( bool& rbMakePage, sal_Bool bKeep, sal_Bool )
         }
         if( pNxt && pNxt->GetValidPosFlag() )
         {
-            sal_Bool bMove = sal_False;
+            bool bMove = false;
             const SwSectionFrm *pSct = rThis.FindSctFrm();
             if( pSct && !pSct->GetValidSizeFlag() )
             {
                 const SwSectionFrm* pNxtSct = pNxt->FindSctFrm();
                 if( pNxtSct && pSct->IsAnFollow( pNxtSct ) )
-                    bMove = sal_True;
+                    bMove = true;
             }
             else
-                bMove = sal_True;
+                bMove = true;
             if( bMove )
             {
                 //Keep together with the following frame
@@ -1947,7 +1947,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
 
     if( !IsFwdMoveAllowed() && !bMoveAlways )
     {
-        sal_Bool bNoFwd = sal_True;
+        bool bNoFwd = true;
         if( rThis.IsInSct() )
         {
             SwFtnBossFrm* pBoss = rThis.FindFtnBossFrm();
@@ -1962,7 +1962,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
                   rThis.GetUpper()->FindTabFrm()->IsFwdMoveAllowed() ) ) &&
              0 != const_cast<SwFrm&>(rThis).GetNextCellLeaf( MAKEPAGE_NONE ) )
         {
-            bNoFwd = sal_False;
+            bNoFwd = false;
         }
 
         if( bNoFwd )
@@ -1992,7 +1992,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
         // If our NewUpper lies in a SectionFrm, we need to make sure
         // that it won't destroy itself in Calc.
         SwSectionFrm* pSect = pNewUpper->FindSctFrm();
-        sal_Bool bUnlock = sal_False;
+        bool bUnlock = false;
         if( pSect )
         {
             // If we only switch column within our SectionFrm, we better don't
@@ -2012,7 +2012,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
             pNewUpper->Calc();
 
         SwFtnBossFrm *pNewBoss = pNewUpper->FindFtnBossFrm();
-        sal_Bool bBossChg = pNewBoss != pOldBoss;
+        bool bBossChg = pNewBoss != pOldBoss;
         pNewBoss = pNewBoss->FindFtnBossFrm( sal_True );
         pOldBoss = pOldBoss->FindFtnBossFrm( sal_True );
         SwPageFrm* pNewPage = pOldPage;
@@ -2166,7 +2166,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
     SwFtnBossFrm * pOldBoss = rThis.FindFtnBossFrm();
     SwPageFrm * const pOldPage = pOldBoss->FindPageFrm();
     SwLayoutFrm *pNewUpper = 0;
-    sal_Bool bCheckPageDescs = sal_False;
+    bool bCheckPageDescs = false;
     bool bCheckPageDescOfNextPage = false;
 
     if ( pFtn )
@@ -2261,7 +2261,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                         }
                     }
 
-                    bCheckPageDescs = sal_True;
+                    bCheckPageDescs = true;
                 }
             }
         }
@@ -2313,15 +2313,15 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         else
         {
             const SwFrm *pCol = rThis.FindColFrm();
-            sal_Bool bGoOn = sal_True;
-            sal_Bool bJump = sal_False;
+            bool bGoOn = true;
+            bool bJump = false;
             do
             {
                 if ( pCol->GetPrev() )
                     pCol = pCol->GetPrev();
                 else
                 {
-                    bGoOn = sal_False;
+                    bGoOn = false;
                     pCol = rThis.GetLeaf( MAKEPAGE_NONE, sal_False );
                 }
                 if ( pCol )
@@ -2332,7 +2332,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                         (SwLayoutFrm*)pCol;
                     if ( pColBody->ContainsCntnt() )
                     {
-                        bGoOn = sal_False; // We have content here! we accept this
+                        bGoOn = false; // We have content here! we accept this
                         // only if GetLeaf() has set the MoveBwdJump.
                         if( SwFlowFrm::IsMoveBwdJump() )
                         {
@@ -2368,7 +2368,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                     else
                     {
                         if( pNewUpper )        // We already had an empty column, in other
-                            bJump = sal_True;  // words we skipped one.
+                            bJump = true;      // words we skipped one.
                         pNewUpper = pColBody;  // this empty column could be considered,
                                                // but we continue searching nevertheless.
                     }
@@ -2596,7 +2596,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                 }
             }
         }
-        sal_Bool bUnlock = sal_False;
+        bool bUnlock = false;
         sal_Bool bFollow = sal_False;
         // Lock section. Otherwise, it could get destroyed if the only Cntnt
         // moves e.g. from the second into the first column.

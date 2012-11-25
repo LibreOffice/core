@@ -683,7 +683,7 @@ void SwGrfNode::ScaleImageMap()
     if ( !aURL.GetMap() )
         return;
 
-    sal_Bool bScale = sal_False;
+    bool bScale = false;
     Fraction aScaleX( 1, 1 );
     Fraction aScaleY( 1, 1 );
 
@@ -702,7 +702,7 @@ void SwGrfNode::ScaleImageMap()
         if( nGrfSize.Width() != nWidth )
         {
             aScaleX = Fraction( nGrfSize.Width(), nWidth );
-            bScale = sal_True;
+            bScale = true;
         }
     }
     if( !rFrmSize.GetHeightPercent() )
@@ -717,7 +717,7 @@ void SwGrfNode::ScaleImageMap()
         if( nGrfSize.Height() != nHeight )
         {
             aScaleY = Fraction( nGrfSize.Height(), nHeight );
-            bScale = sal_True;
+            bScale = true;
         }
     }
 

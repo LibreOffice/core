@@ -238,7 +238,7 @@ public:
     SwOszControl( const SwFlyFrm *pFrm );
     ~SwOszControl();
     bool ChkOsz();
-    static sal_Bool IsInProgress( const SwFlyFrm *pFly );
+    static bool IsInProgress( const SwFlyFrm *pFly );
 };
 const SwFlyFrm *SwOszControl::pStk1 = 0;
 const SwFlyFrm *SwOszControl::pStk2 = 0;
@@ -285,19 +285,19 @@ SwOszControl::~SwOszControl()
     }
 }
 
-sal_Bool SwOszControl::IsInProgress( const SwFlyFrm *pFly )
+bool SwOszControl::IsInProgress( const SwFlyFrm *pFly )
 {
     if ( SwOszControl::pStk1 && !pFly->IsLowerOf( SwOszControl::pStk1 ) )
-        return sal_True;
+        return true;
     if ( SwOszControl::pStk2 && !pFly->IsLowerOf( SwOszControl::pStk2 ) )
-        return sal_True;
+        return true;
     if ( SwOszControl::pStk3 && !pFly->IsLowerOf( SwOszControl::pStk3 ) )
-        return sal_True;
+        return true;
     if ( SwOszControl::pStk4 && !pFly->IsLowerOf( SwOszControl::pStk4 ) )
-        return sal_True;
+        return true;
     if ( SwOszControl::pStk5 && !pFly->IsLowerOf( SwOszControl::pStk5 ) )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 bool SwOszControl::ChkOsz()
@@ -573,10 +573,10 @@ public:
     SwDistance() { nMain = nSub = 0; }
     SwDistance& operator=( const SwDistance &rTwo )
         { nMain = rTwo.nMain; nSub = rTwo.nSub; return *this; }
-    sal_Bool operator<( const SwDistance& rTwo ) const
+    bool operator<( const SwDistance& rTwo ) const
         { return nMain < rTwo.nMain || ( nMain == rTwo.nMain && nSub &&
           rTwo.nSub && nSub < rTwo.nSub ); }
-    sal_Bool operator<=( const SwDistance& rTwo ) const
+    bool operator<=( const SwDistance& rTwo ) const
         { return nMain < rTwo.nMain || ( nMain == rTwo.nMain && ( !nSub ||
           !rTwo.nSub || nSub <= rTwo.nSub ) ); }
 };
@@ -678,7 +678,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
             const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, sal_True, pCnt );
             SwTwips nFrmTop = 0;
             SwTwips nPrtHeight = 0;
-            sal_Bool bSct = sal_False;
+            bool bSct = false;
             const SwSectionFrm *pSect = pUp->FindSctFrm();
             if( pSect )
             {
@@ -687,7 +687,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
             }
             if( pSect && !pSect->IsAnLower( pLay ) )
             {
-                bSct = sal_False;
+                bSct = false;
                 const SwSectionFrm* pNxtSect = pLay ? pLay->FindSctFrm() : 0;
                 if( pSect->IsAnFollow( pNxtSect ) )
                 {
@@ -789,7 +789,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                         // is the part of the upper below the SectionFrm.
                         const SwSectionFrm* pNxtSect = pLay ?
                             pLay->FindSctFrm() : NULL;
-                        bSct = sal_False;
+                        bSct = false;
                         if( pSect->IsAnFollow( pNxtSect ) )
                         {
                             pSect = pNxtSect;
@@ -1119,7 +1119,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
     SwDistance nUp, nUpLst;
     ::lcl_CalcDownDist( nUp, aNew, pUpFrm );
     SwDistance nDown = nUp;
-    sal_Bool bNegAllowed = sal_True;// Make it possible to leave the negative section once.
+    bool bNegAllowed = true;// Make it possible to leave the negative section once.
     do
     {
         pUpLst = pUpFrm; nUpLst = nUp;
@@ -1147,7 +1147,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
             nUp.nMain = LONG_MAX;
         if ( nUp.nMain >= 0 && LONG_MAX != nUp.nMain )
         {
-            bNegAllowed = sal_False;
+            bNegAllowed = false;
             if ( nUpLst.nMain < 0 ) //don't take the wrong one, if the value
                                     //just changed from negative to positive.
             {   pUpLst = pUpFrm;

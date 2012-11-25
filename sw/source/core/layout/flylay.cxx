@@ -309,11 +309,11 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
     const long nClipBot = aClip.Top() + aClip.Height();
     const long nClipRig = aClip.Left() + aClip.Width();
 
-    const sal_Bool bBot = nBot > nClipBot;
-    const sal_Bool bRig = nRig > nClipRig;
+    const bool bBot = nBot > nClipBot;
+    const bool bRig = nRig > nClipRig;
     if ( bBot || bRig )
     {
-        sal_Bool bAgain = sal_False;
+        bool bAgain = false;
         // #i37068# - no move, if it's requested
         if ( bBot && !IsNoMoveOnCheckClip() &&
              !GetDrawObjs() && !GetAnchorFrm()->IsInTab() )
@@ -328,7 +328,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 const long nOld = Frm().Top();
                 Frm().Pos().Y() = Max( aClip.Top(), nClipBot - Frm().Height() );
                 if ( Frm().Top() != nOld )
-                    bAgain = sal_True;
+                    bAgain = true;
                 bHeightClipped = sal_True;
             }
         }
@@ -344,7 +344,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 if( rH.GetHoriOrient() == text::HoriOrientation::LEFT )
                     Frm().Pos().X() = nOld;
                 else
-                    bAgain = sal_True;
+                    bAgain = true;
             }
             bWidthClipped = sal_True;
         }

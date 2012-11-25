@@ -490,7 +490,7 @@ void SwFrm::PrepareCrsr()
 |*************************************************************************/
 
 // Here we return GetPrev(); however we will ignore empty SectionFrms
-static SwFrm* lcl_Prev( SwFrm* pFrm, sal_Bool bSectPrv = sal_True )
+static SwFrm* lcl_Prev( SwFrm* pFrm, bool bSectPrv = true )
 {
     SwFrm* pRet = pFrm->GetPrev();
     if( !pRet && pFrm->GetUpper() && pFrm->GetUpper()->IsSctFrm() &&
@@ -517,7 +517,7 @@ void SwFrm::MakePos()
     if ( !bValidPos )
     {
         bValidPos = sal_True;
-        sal_Bool bUseUpper = sal_False;
+        bool bUseUpper = false;
         SwFrm* pPrv = lcl_Prev( this );
         if ( pPrv &&
              ( !pPrv->IsCntntFrm() ||
@@ -534,11 +534,11 @@ void SwFrm::MakePos()
             }
             else if ( pPrv->Frm().Top() == 0 )
             {
-                bUseUpper = sal_True;
+                bUseUpper = true;
             }
         }
 
-        pPrv = lcl_Prev( this, sal_False );
+        pPrv = lcl_Prev( this, false );
         sal_uInt16 nMyType = GetType();
         SWRECTFN( ( IsCellFrm() && GetUpper() ? GetUpper() : this  ) )
         if ( !bUseUpper && pPrv )
@@ -595,7 +595,7 @@ void SwFrm::MakePos()
             {
                 GetUpper()->Calc();
             }
-            pPrv = lcl_Prev( this, sal_False );
+            pPrv = lcl_Prev( this, false );
             if ( !bUseUpper && pPrv )
             {
                 aFrm.Pos( pPrv->Frm().Pos() );
@@ -1132,14 +1132,14 @@ void SwCntntFrm::MakeAll()
     const SwDoc *pDoc = GetAttrSet()->GetDoc();
     if( pDoc )
     {
-        static sal_Bool bWarned = sal_False;
+        static bool bWarned = false;
         if( pDoc->InXMLExport() )
         {
             SAL_WARN_IF( !bWarned, "sw", "Formatting during XML-export!" );
-            bWarned = sal_True;
+            bWarned = true;
         }
         else
-            bWarned = sal_False;
+            bWarned = false;
     }
 #endif
 
@@ -1157,9 +1157,9 @@ void SwCntntFrm::MakeAll()
                                             // last CntntFrm of a chain to format. This only
                                             // needs to happen once. Every time the Frm is
                                             // moved, the flag will have to be reset.
-    sal_Bool    bMustFit    = sal_False;    // Once the emergency brake is pulled,
+    bool bMustFit = false;                  // Once the emergency brake is pulled,
                                             // no other prepares will be triggered
-    sal_Bool    bFitPromise = sal_False;    // If a paragraph didn't fit, but promises
+    bool bFitPromise = false;               // If a paragraph didn't fit, but promises
                                             // with WouldFit that it would adjust accordingly,
                                             // this flag is set. If it turns out that it
                                             // didn't keep it's promise, we can act in a
@@ -1556,8 +1556,8 @@ void SwCntntFrm::MakeAll()
                 }
                 if ( pNxt )
                 {
-                    const sal_Bool bMoveFwdInvalid = 0 != GetIndNext();
-                    const sal_Bool bNxtNew =
+                    const bool bMoveFwdInvalid = 0 != GetIndNext();
+                    const bool bNxtNew =
                         ( 0 == (pNxt->Prt().*fnRect->fnGetHeight)() ) &&
                         (!pNxt->IsTxtFrm() ||!((SwTxtFrm*)pNxt)->IsHiddenNow());
 
@@ -1604,8 +1604,8 @@ void SwCntntFrm::MakeAll()
         // If I'm unable to split (WouldFit()) and can't be fitted, I'm going
         // to tell my TxtFrm part that, if possible, we still need to split despite
         // the "don't split" attribute.
-        sal_Bool bMoveOrFit = sal_False;
-        sal_Bool bDontMoveMe = !GetIndPrev();
+        bool bMoveOrFit = false;
+        bool bDontMoveMe = !GetIndPrev();
         if( bDontMoveMe && IsInSct() )
         {
             SwFtnBossFrm* pBoss = FindFtnBossFrm();
@@ -1614,10 +1614,10 @@ void SwCntntFrm::MakeAll()
         }
 
         // Finally, we are able to split table rows. Therefore, bDontMoveMe
-        // can be set to sal_False:
+        // can be set to false:
         if( bDontMoveMe && IsInTab() &&
             0 != const_cast<SwCntntFrm*>(this)->GetNextCellLeaf( MAKEPAGE_NONE ) )
-            bDontMoveMe = sal_False;
+            bDontMoveMe = false;
 
         if ( bDontMoveMe && (Frm().*fnRect->fnGetHeight)() >
                             (GetUpper()->Prt().*fnRect->fnGetHeight)() )
@@ -1631,7 +1631,7 @@ void SwCntntFrm::MakeAll()
                 {
                     Prepare( PREP_WIDOWS_ORPHANS, 0, sal_False );
                     bValidSize = sal_False;
-                    bFitPromise = sal_True;
+                    bFitPromise = true;
                     continue;
                 }
                 /* --------------------------------------------------
@@ -1646,7 +1646,7 @@ void SwCntntFrm::MakeAll()
                 else if ( !bFtn && bMoveable &&
                       ( !bFly || !FindFlyFrm()->IsColLocked() ) &&
                       ( !bSct || !FindSctFrm()->IsColLocked() ) )
-                    bMoveOrFit = sal_True;
+                    bMoveOrFit = true;
             }
 #if OSL_DEBUG_LEVEL > 0
             else
@@ -1705,7 +1705,7 @@ void SwCntntFrm::MakeAll()
             {
                 Prepare( PREP_MUST_FIT, 0, sal_False );
                 bValidSize = sal_False;
-                bMustFit = sal_True;
+                bMustFit = true;
                 continue;
             }
 
@@ -1813,7 +1813,7 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
 // This routine checks whether there are no other FtnBosses
 // between the pFrm's FtnBoss and the pNxt's FtnBoss.
 
-static sal_Bool lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
+static bool lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
 {
     OSL_ENSURE( pFrm && pNxt, "lcl_IsNextFtnBoss: No Frames?" );
     pFrm = pFrm->FindFtnBossFrm();

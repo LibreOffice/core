@@ -775,7 +775,7 @@ void SwFlyFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         SfxItemIter aOIter( *((SwAttrSetChg*)pOld)->GetChgSet() );
         SwAttrSetChg aOldSet( *(SwAttrSetChg*)pOld );
         SwAttrSetChg aNewSet( *(SwAttrSetChg*)pNew );
-        while( sal_True )
+        while( true )
         {
             _UpdateAttr( (SfxPoolItem*)aOIter.GetCurItem(),
                          (SfxPoolItem*)aNIter.GetCurItem(), nInvFlags,
@@ -833,7 +833,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                             sal_uInt8 &rInvFlags,
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
-    sal_Bool bClear = sal_True;
+    bool bClear = true;
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     ViewShell *pSh = getRootFrm()->GetCurrShell();
     switch( nWhich )
@@ -1123,7 +1123,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             }
 
         default:
-            bClear = sal_False;
+            bClear = false;
     }
     if ( bClear )
     {
@@ -1507,13 +1507,13 @@ void CalcCntnt( SwLayoutFrm *pLay,
                 bool bNoCalcFollow )
 {
     SwSectionFrm* pSect;
-    sal_Bool bCollect = sal_False;
+    bool bCollect = false;
     if( pLay->IsSctFrm() )
     {
         pSect = (SwSectionFrm*)pLay;
         if( pSect->IsEndnAtEnd() && !bNoColl )
         {
-            bCollect = sal_True;
+            bCollect = true;
             SwLayouter::CollectEndnotes( pLay->GetFmt()->GetDoc(), pSect );
         }
         pSect->CalcFtnCntnt();
@@ -1800,14 +1800,14 @@ void CalcCntnt( SwLayoutFrm *pLay,
             if( bCollect )
             {
                 pFrm = pLay->ContainsAny();
-                bCollect = sal_False;
+                bCollect = false;
                 if( pFrm )
                     continue;
             }
         }
         break;
     }
-    while( sal_True );
+    while( true );
 }
 
 /*************************************************************************
@@ -2621,7 +2621,7 @@ sal_Bool SwFlyFrm::GetContour( PolyPolygon&   rContour,
         // in order to avoid load of graphic, if <SwNoTxtNode> contains a graphic
         // node and method is called for paint.
         const GraphicObject* pGrfObj = NULL;
-        sal_Bool bGrfObjCreated = sal_False;
+        bool bGrfObjCreated = false;
         const SwGrfNode* pGrfNd = pNd->GetGrfNode();
         if ( pGrfNd && _bForPaint )
         {
@@ -2630,7 +2630,7 @@ sal_Bool SwFlyFrm::GetContour( PolyPolygon&   rContour,
         else
         {
             pGrfObj = new GraphicObject( pNd->GetGraphic() );
-            bGrfObjCreated = sal_True;
+            bGrfObjCreated = true;
         }
         OSL_ENSURE( pGrfObj, "SwFlyFrm::GetContour() - No Graphic/GraphicObject found at <SwNoTxtNode>." );
         if ( pGrfObj && pGrfObj->GetType() != GRAPHIC_NONE )
@@ -2663,7 +2663,7 @@ sal_Bool SwFlyFrm::GetContour( PolyPolygon&   rContour,
                 const Size      aGrfSize( pGrfObj->GetPrefSize() );
                 Size            aOrgSize;
                 Point           aNewPoint;
-                sal_Bool            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
+                bool            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
 
                 if ( bPixelMap )
                     aOrgSize = pOutDev->PixelToLogic( aGrfSize, aDispMap );

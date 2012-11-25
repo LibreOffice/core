@@ -176,7 +176,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
     }
 
     // Anything other than frames registered?
-    sal_Bool bDel = sal_True;
+    bool bDel = true;
     {
         // nested scope because DTOR of SwClientIter resets the flag bTreeChg.
         // It's suboptimal if the format is deleted beforehand.
@@ -334,7 +334,7 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    sal_Bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
     switch ( nMemberId )
@@ -765,7 +765,7 @@ bool SwFmtPageDesc::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch ( nMemberId )
     {
         case MID_PAGEDESC_PAGENUMOFFSET:
@@ -897,7 +897,7 @@ sal_uInt16 SwFmtCol::GetGutterWidth( sal_Bool bMin ) const
         nRet = aColumns[0].GetRight() + aColumns[1].GetLeft();
     else if ( aColumns.size() > 2 )
     {
-        sal_Bool bSet = sal_False;
+        bool bSet = false;
         for ( sal_uInt16 i = 1; i < aColumns.size()-1; ++i )
         {
             const sal_uInt16 nTmp = aColumns[i].GetRight() + aColumns[i+1].GetLeft();
@@ -912,7 +912,7 @@ sal_uInt16 SwFmtCol::GetGutterWidth( sal_Bool bMin ) const
                 }
             }
             else
-            {   bSet = sal_True;
+            {   bSet = true;
                 nRet = nTmp;
             }
         }
@@ -1319,7 +1319,7 @@ bool SwFmtVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SwFmtVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    sal_Bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
     switch ( nMemberId )
@@ -1441,7 +1441,7 @@ bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    sal_Bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
     switch ( nMemberId )
@@ -1722,7 +1722,7 @@ int SwFmtURL::operator==( const SfxPoolItem &rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "not the same attributes" );
     const SwFmtURL &rCmp = (SwFmtURL&)rAttr;
-    sal_Bool bRet = bIsServerMap     == rCmp.IsServerMap() &&
+    bool bRet = bIsServerMap     == rCmp.IsServerMap() &&
                 sURL             == rCmp.GetURL() &&
                 sTargetFrameName == rCmp.GetTargetFrameName() &&
                 sName            == rCmp.GetName();

@@ -113,7 +113,7 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
 |*************************************************************************/
 void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
-    sal_Bool bCallPrepare = sal_False;
+    bool bCallPrepare = false;
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     if( RES_ATTRSET_CHG == nWhich )
     {
@@ -132,19 +132,19 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             if( aNew.Count() )
             {
                 SwFlyFrm::Modify( &aOld, &aNew );
-                bCallPrepare = sal_True;
+                bCallPrepare = true;
             }
         }
         else if( ((SwAttrSetChg*)pNew)->GetChgSet()->Count())
         {
             SwFlyFrm::Modify( pOld, pNew );
-            bCallPrepare = sal_True;
+            bCallPrepare = true;
         }
     }
     else if( nWhich != RES_SURROUND && RES_FRMMACRO != nWhich )
     {
         SwFlyFrm::Modify( pOld, pNew );
-        bCallPrepare = sal_True;
+        bCallPrepare = true;
     }
 
     if ( bCallPrepare && GetAnchorFrm() )

@@ -179,7 +179,7 @@ SwImplProtocol* SwProtocol::pImpl = NULL;
 static sal_uLong lcl_GetFrameId( const SwFrm* pFrm )
 {
 #if OSL_DEBUG_LEVEL > 1
-    static sal_Bool bFrameId = sal_False;
+    static bool bFrameId = false;
     if( bFrameId )
         return pFrm->GetFrmId();
 #endif
@@ -200,7 +200,7 @@ class SwImplProtocol
     sal_uInt8 nInitFile;            // range (FrmId,FrmType,Record) during reading of the INI file
     sal_uInt8 nTestMode;            // special for test formating, logging may only be done in test formating.
     void _Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam );
-    sal_Bool NewStream();
+    bool NewStream();
     void CheckLine( rtl::OString& rLine );
     void SectFunc( rtl::OStringBuffer& rOut, const SwFrm* pFrm, sal_uLong nAct, void* pParam );
 public:
@@ -209,8 +209,8 @@ public:
     // logging
     void Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam )
         { if( pStream ) _Record( pFrm, nFunction, nAct, pParam ); }
-    sal_Bool InsertFrm( sal_uInt16 nFrmId );    // take FrmId for logging
-    sal_Bool DeleteFrm( sal_uInt16 nFrmId );    // remove FrmId; don't log him anymore
+    bool InsertFrm( sal_uInt16 nFrmId );    // take FrmId for logging
+    bool DeleteFrm( sal_uInt16 nFrmId );    // remove FrmId; don't log him anymore
     void FileInit();                    // read the INI file
     void ChkStream() { if( !pStream ) NewStream(); }
 };
@@ -277,7 +277,7 @@ void SwProtocol::Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct,
 {
     if( Start() )
     {   // We reach this point if SwProtocol::nRecord is binary OR'd with PROT_INIT(0x1) using the debugger
-        sal_Bool bFinit = sal_False; // This gives the possibility to stop logging of this action in the debugger
+        bool bFinit = false; // This gives the possibility to stop logging of this action in the debugger
         if( bFinit )
         {
             nRecord &= ~nFunction;  // Don't log this function any longer
@@ -332,7 +332,7 @@ SwImplProtocol::SwImplProtocol()
     NewStream();
 }
 
-sal_Bool SwImplProtocol::NewStream()
+bool SwImplProtocol::NewStream()
 {
     rtl::OUString aName("dbg_lay.out");
     nLineCount = 0;
@@ -411,10 +411,10 @@ void SwImplProtocol::CheckLine( rtl::OString& rLine )
     do
     {
         rtl::OString aTok = rLine.getToken( 0, ' ', nIndex );
-        sal_Bool bNo = sal_False;
+        bool bNo = false;
         if( '!' == aTok[0] )
         {
-            bNo = sal_True;                 // remove this function/type
+            bNo = true;                 // remove this function/type
             aTok = aTok.copy(1);
         }
         if( !aTok.isEmpty() )
@@ -750,13 +750,13 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
 
 void SwImplProtocol::SectFunc(rtl::OStringBuffer &rOut, const SwFrm* , sal_uLong nAct, void* pParam)
 {
-    sal_Bool bTmp = sal_False;
+    bool bTmp = false;
     switch( nAct )
     {
         case ACT_MERGE:         rOut.append(RTL_CONSTASCII_STRINGPARAM("Merge Section "));
                                 rOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
                                 break;
-        case ACT_CREATE_MASTER: bTmp = sal_True; // NoBreak
+        case ACT_CREATE_MASTER: bTmp = true; // NoBreak
         case ACT_CREATE_FOLLOW: rOut.append(RTL_CONSTASCII_STRINGPARAM("Create Section "));
                                 if (bTmp)
                                     rOut.append(RTL_CONSTASCII_STRINGPARAM("Master to "));
@@ -764,7 +764,7 @@ void SwImplProtocol::SectFunc(rtl::OStringBuffer &rOut, const SwFrm* , sal_uLong
                                     rOut.append(RTL_CONSTASCII_STRINGPARAM("Follow from "));
                                 rOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
                                 break;
-        case ACT_DEL_MASTER:    bTmp = sal_True; // NoBreak
+        case ACT_DEL_MASTER:    bTmp = true; // NoBreak
         case ACT_DEL_FOLLOW:    rOut.append(RTL_CONSTASCII_STRINGPARAM("Delete Section "));
                                 if (bTmp)
                                     rOut.append(RTL_CONSTASCII_STRINGPARAM("Master to "));
@@ -781,27 +781,27 @@ void SwImplProtocol::SectFunc(rtl::OStringBuffer &rOut, const SwFrm* , sal_uLong
  * InsertFrm(..) only the added FrmIds are being logged.
  * --------------------------------------------------*/
 
-sal_Bool SwImplProtocol::InsertFrm( sal_uInt16 nId )
+bool SwImplProtocol::InsertFrm( sal_uInt16 nId )
 {
     if( !pFrmIds )
         pFrmIds = new std::set<sal_uInt16>;
     if( pFrmIds->count( nId ) )
-        return sal_False;
+        return false;
     pFrmIds->insert( nId );
-    return sal_True;
+    return true;
 }
 
 /* --------------------------------------------------
  * SwImplProtocol::DeleteFrm(..) removes a FrmId from the pFrmIds array, so they
  * won't be logged anymore.
  * --------------------------------------------------*/
-sal_Bool SwImplProtocol::DeleteFrm( sal_uInt16 nId )
+bool SwImplProtocol::DeleteFrm( sal_uInt16 nId )
 {
     if( !pFrmIds )
-        return sal_False;
+        return false;
     if ( pFrmIds->erase(nId) )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 /* --------------------------------------------------

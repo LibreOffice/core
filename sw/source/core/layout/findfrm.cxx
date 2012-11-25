@@ -391,12 +391,12 @@ const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
     const SwFrm *pFrm = this;
     // #100926#
     SwCntntFrm *pCntntFrm = 0;
-    sal_Bool bGoingUp = sal_False;
+    bool bGoingUp = false;
     do {
         const SwFrm *p = 0;
-        sal_Bool bGoingFwdOrBwd = sal_False;
+        bool bGoingFwdOrBwd = false;
 
-        sal_Bool bGoingDown = ( !bGoingUp && ( 0 != ( p = lcl_GetLower( pFrm, true ) ) ) );
+        bool bGoingDown = ( !bGoingUp && ( 0 != ( p = lcl_GetLower( pFrm, true ) ) ) );
         if ( !bGoingDown )
         {
             bGoingFwdOrBwd = ( 0 != ( p = lcl_FindLayoutFrame( pFrm, bFwd ) ) );
@@ -657,12 +657,12 @@ const SwAttrSet* SwFrm::GetAttrSet() const
 static SwFrm* lcl_NextFrm( SwFrm* pFrm )
 {
     SwFrm *pRet = 0;
-    sal_Bool bGoingUp = sal_False;
+    bool bGoingUp = false;
     do {
         SwFrm *p = 0;
 
-        sal_Bool bGoingFwd = sal_False;
-        sal_Bool bGoingDown = (!bGoingUp && ( 0 != (p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0)));
+        bool bGoingFwd = false;
+        bool bGoingDown = (!bGoingUp && ( 0 != (p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0)));
 
         if( !bGoingDown )
         {
@@ -685,7 +685,7 @@ static SwFrm* lcl_NextFrm( SwFrm* pFrm )
 
 SwFrm *SwFrm::_FindNext()
 {
-    sal_Bool bIgnoreTab = sal_False;
+    bool bIgnoreTab = false;
     SwFrm *pThis = this;
 
     if ( IsTabFrm() )
@@ -699,7 +699,7 @@ SwFrm *SwFrm::_FindNext()
         pThis = ((SwTabFrm*)this)->FindLastCntnt();
         if ( !pThis )
             pThis = this;
-        bIgnoreTab = sal_True;
+        bIgnoreTab = true;
     }
     else if ( IsSctFrm() )
     {
@@ -1069,7 +1069,7 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
 
 SwFrm *SwFrm::_FindPrev()
 {
-    sal_Bool bIgnoreTab = sal_False;
+    bool bIgnoreTab = false;
     SwFrm *pThis = this;
 
     if ( IsTabFrm() )
@@ -1081,7 +1081,7 @@ SwFrm *SwFrm::_FindPrev()
             return ((SwTabFrm*)this)->FindMaster();
         else
             pThis = ((SwTabFrm*)this)->ContainsCntnt();
-        bIgnoreTab = sal_True;
+        bIgnoreTab = true;
     }
 
     if ( pThis && pThis->IsCntntFrm() )
@@ -1248,20 +1248,20 @@ void SwFrm::InvalidateNextPrtArea()
 |* but not if it sits in a table which itself sits in a section with columns.
 |*************************************************************************/
 
-static sal_Bool lcl_IsInColSct( const SwFrm *pUp )
+static bool lcl_IsInColSct( const SwFrm *pUp )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     while( pUp )
     {
         if( pUp->IsColumnFrm() )
-            bRet = sal_True;
+            bRet = true;
         else if( pUp->IsSctFrm() )
             return bRet;
         else if( pUp->IsTabFrm() )
-            return sal_False;
+            return false;
         pUp = pUp->GetUpper();
     }
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
