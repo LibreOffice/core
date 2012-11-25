@@ -140,7 +140,7 @@ IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
 //
 namespace {
 
-void FillStlyeListBox( ScDocument* pDoc, ListBox& rLbStyle )
+void FillStyleListBox( ScDocument* pDoc, ListBox& rLbStyle )
 {
     rLbStyle.SetSeparatorPos(0);
     std::set<rtl::OUString> aStyleNames;
@@ -288,7 +288,7 @@ void ScConditionFrmtEntry::Init()
     maEdVal1.SetModifyHdl( LINK( this, ScCondFrmtEntry, EdModifyHdl ) );
     maEdVal2.SetModifyHdl( LINK( this, ScCondFrmtEntry, EdModifyHdl ) );
 
-    FillStlyeListBox( mpDoc, maLbStyle );
+    FillStyleListBox( mpDoc, maLbStyle );
     maLbStyle.SetSelectHdl( LINK( this, ScConditionFrmtEntry, StyleSelectHdl ) );
 
     maLbCondType.SetSelectHdl( LINK( this, ScConditionFrmtEntry, ConditionTypeSelectHdl ) );
@@ -523,7 +523,7 @@ void ScFormulaFrmtEntry::Init()
     maEdFormula.SetGetFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeGetFocusHdl ) );
     maEdFormula.SetLoseFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeLoseFocusHdl ) );
 
-    FillStlyeListBox( mpDoc, maLbStyle );
+    FillStyleListBox( mpDoc, maLbStyle );
     maLbStyle.SetSelectHdl( LINK( this, ScFormulaFrmtEntry, StyleSelectHdl ) );
 }
 
@@ -1181,7 +1181,7 @@ void ScDateFrmtEntry::Init()
     maLbDateEntry.SelectEntryPos(0);
     maLbType.SelectEntryPos(3);
 
-    FillStlyeListBox( mpDoc, maLbStyle );
+    FillStyleListBox( mpDoc, maLbStyle );
     maLbStyle.SetSelectHdl( LINK( this, ScDateFrmtEntry, StyleSelectHdl ) );
 }
 
