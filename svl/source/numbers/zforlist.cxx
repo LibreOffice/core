@@ -1555,7 +1555,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
     rOutString = aTmp;
 }
 
-void SvNumberFormatter::GetOutputString(OUString& sString,
+void SvNumberFormatter::GetOutputString(const OUString& sString,
                                         sal_uInt32 nFIndex,
                                         OUString& sOutString,
                                         Color** ppColor,
@@ -1683,7 +1683,7 @@ bool SvNumberFormatter::GetPreviewString(const String& sFormatString,
 {
     bool result;
     OUString sTemp(sOutString);
-    result = GetPreviewString(sFormatString, fPreviewNumber, sTemp,
+    result = GetPreviewString(OUString(sFormatString), fPreviewNumber, sTemp,
                               ppColor, eLnge, bUseStarFormat );
     sOutString = sTemp;
     return result;
@@ -1695,7 +1695,21 @@ bool SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
                                          Color** ppColor,
                                          LanguageType eLnge )
 {
-    if (sFormatString.Len() == 0)                       // no empty string
+    bool result;
+    OUString sTemp(sOutString);
+    result = GetPreviewStringGuess( OUString(sFormatString), fPreviewNumber,
+                                    sTemp, ppColor, eLnge );
+    sOutString = sTemp;
+    return result;
+}
+
+bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
+                                               double fPreviewNumber,
+                                               OUString& sOutString,
+                                               Color** ppColor,
+                                               LanguageType eLnge )
+{
+    if (sFormatString.isEmpty())                       // no empty string
     {
         return false;
     }
@@ -1707,7 +1721,7 @@ bool SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
     eLnge = ActLnge;
     bool bEnglish = (eLnge == LANGUAGE_ENGLISH_US);
 
-    String aFormatStringUpper( pCharClass->uppercase( sFormatString ) );
+    OUString aFormatStringUpper( pCharClass->uppercase( sFormatString ) );
     sal_uInt32 nCLOffset = ImpGenerateCL( eLnge );
     sal_uInt32 nKey = ImpIsEntry( aFormatStringUpper, nCLOffset, eLnge );
     if ( nKey != NUMBERFORMAT_ENTRY_NOT_FOUND )
@@ -1782,9 +1796,7 @@ bool SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
     if (nCheckPos == 0)                                 // String ok
     {
         ImpGenerateCL( eLnge );     // create new standard formats if necessary
-        OUString sTemp(sOutString);
-        pEntry->GetOutputString( fPreviewNumber, sTemp, ppColor );
-        sOutString = sTemp;
+        pEntry->GetOutputString( fPreviewNumber, sOutString, ppColor );
         delete pEntry;
         return true;
     }
@@ -1798,7 +1810,21 @@ bool SvNumberFormatter::GetPreviewString( const String& sFormatString,
                                           Color** ppColor,
                                           LanguageType eLnge )
 {
-    if (sFormatString.Len() == 0)               // no empty string
+    bool result;
+    OUString sTemp(sOutString);
+    result = GetPreviewString( OUString(sFormatString), OUString(sPreviewString),
+                               sTemp, ppColor, eLnge );
+    sOutString = sTemp;
+    return result;
+}
+
+bool SvNumberFormatter::GetPreviewString( const OUString& sFormatString,
+                                          const OUString& sPreviewString,
+                                          OUString& sOutString,
+                                          Color** ppColor,
+                                          LanguageType eLnge )
+{
+    if (sFormatString.isEmpty())               // no empty string
     {
         return false;
     }
@@ -1818,15 +1844,12 @@ bool SvNumberFormatter::GetPreviewString( const String& sFormatString,
                                                   eLnge);
     if (nCheckPos == 0)                          // String ok
     {
-        OUString aNonConstPreview( sPreviewString);
-        OUString sTemp;
         // May have to create standard formats for this locale.
         sal_uInt32 CLOffset = ImpGenerateCL(eLnge);
         nKey = ImpIsEntry( p_Entry->GetFormatstring(), CLOffset, eLnge);
         if (nKey != NUMBERFORMAT_ENTRY_NOT_FOUND)       // already present
         {
-            GetOutputString( aNonConstPreview, nKey, sTemp, ppColor);
-            sOutString = sTemp;
+            GetOutputString( sPreviewString, nKey, sOutString, ppColor);
         }
         else
         {
@@ -1835,8 +1858,7 @@ bool SvNumberFormatter::GetPreviewString( const String& sFormatString,
             // in SvNumberFormatter::GetOutputString()
             if (p_Entry->IsTextFormat() || p_Entry->HasTextFormat())
             {
-                p_Entry->GetOutputString( aNonConstPreview, sTemp, ppColor);
-                sOutString = sTemp;
+                p_Entry->GetOutputString( sPreviewString, sOutString, ppColor);
             }
             else
             {

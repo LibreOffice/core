@@ -494,7 +494,7 @@ public:
     /** Format a string according to a format index, return string and color.
         Formats only if the format code is of type text or the 4th subcode
         of a format code is specified, otherwise sOutString will be == "" */
-    void GetOutputString( OUString& sString, sal_uInt32 nFIndex,
+    void GetOutputString( const OUString& sString, sal_uInt32 nFIndex,
                           OUString& sOutString, Color** ppColor, bool bUseStarFormat = false );
 
     /** Format a number according to the standard default format matching
@@ -524,18 +524,26 @@ public:
 
     /** Same as <method>GetPreviewString</method> but the format code string
         may be either language/country eLnge or en_US english US */
+    bool GetPreviewStringGuess( const OUString& sFormatString, double fPreviewNumber,
+                                OUString& sOutString, Color** ppColor,
+                                LanguageType eLnge = LANGUAGE_DONTKNOW );
+
     bool GetPreviewStringGuess( const String& sFormatString, double fPreviewNumber,
-                          String& sOutString, Color** ppColor,
-                          LanguageType eLnge = LANGUAGE_DONTKNOW );
+                                String& sOutString, Color** ppColor,
+                                LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /** Format a string according to a format code string to be scanned.
         @return
             <FALSE/> if format code contains an error
             <TRUE/> else, in which case the string and color are returned.
      */
+    bool GetPreviewString( const OUString& sFormatString, const OUString& sPreviewString,
+                           OUString& sOutString, Color** ppColor,
+                           LanguageType eLnge = LANGUAGE_DONTKNOW );
+
     bool GetPreviewString( const String& sFormatString, const String& sPreviewString,
-                          String& sOutString, Color** ppColor,
-                          LanguageType eLnge = LANGUAGE_DONTKNOW );
+                           String& sOutString, Color** ppColor,
+                           LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /** Test whether the format code string is already present in container
         @return
