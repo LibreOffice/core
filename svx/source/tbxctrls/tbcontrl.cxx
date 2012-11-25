@@ -571,7 +571,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
             {
                 OutputDevice *pDevice = rUDEvt.GetDevice();
 
-                Size aFontSize( pFontHeightItem->GetHeight(), pFontHeightItem->GetHeight() );
+                Size aFontSize( 0, pFontHeightItem->GetHeight() );
                 Size aPixelSize( pDevice->LogicToPixel( aFontSize, pShell->GetMapUnit() ) );
 
                 // setup the font properties
