@@ -57,6 +57,7 @@ interface TableDraw
     SID_STYLE_NEW               [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_STYLE_EDIT              [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_STYLE_DELETE            [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_HIDE              [ StateMethod = StateDisableItems; Export = FALSE; ]
 
      //----------------------------------------------------------------------------
     SID_TEXT_STANDARD       [ ExecMethod = ExecDrawAttr; StateMethod = NoState; Export = FALSE; ]

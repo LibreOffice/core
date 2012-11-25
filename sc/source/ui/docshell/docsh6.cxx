@@ -241,7 +241,7 @@ SfxStyleSheetBasePool* ScDocShell::GetStyleSheetPool()
 
 static void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
 {
-    pStylePool->SetSearchMask(SFX_STYLE_FAMILY_PAGE, 0xffff);
+    pStylePool->SetSearchMask(SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL);
     SfxStyleSheetBase *pStyle = pStylePool->First();
     while ( pStyle )
     {

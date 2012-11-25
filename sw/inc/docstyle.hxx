@@ -97,6 +97,9 @@ public:
     sal_Bool                    IsPhysical() const              { return bPhysical; }
     void                    SetPhysical(sal_Bool bPhys);
 
+    virtual void            SetHidden( sal_Bool bHidden );
+    virtual sal_Bool        IsHidden( ) const;
+
     /** add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value sal_False,
      which indicates that the indent attributes at a paragraph style should
      be reset in case that a list style is applied to the paragraph style and
@@ -155,12 +158,13 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
 
     void                AppendStyleList(const boost::ptr_vector<String>& rLst,
                                         sal_Bool    bUsed,
+                                        sal_Bool    bTestHidden,
                                         sal_uInt16  nSection,
                                         char    cType);
 
 public:
     SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
-                          SfxStyleFamily eFam, sal_uInt16 n=0xFFFF );
+                          SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
     virtual ~SwStyleSheetIterator();
 
     virtual sal_uInt16 Count();
@@ -193,7 +197,7 @@ public:
     virtual SfxStyleSheetBase& Make(const String&, SfxStyleFamily, sal_uInt16 nMask, sal_uInt16 nPos = 0xffff);
 
     virtual SfxStyleSheetBase* Find( const String&, SfxStyleFamily eFam,
-                                    sal_uInt16 n=0xFFFF );
+                                    sal_uInt16 n=SFXSTYLEBIT_ALL );
 
     virtual bool SetParent( SfxStyleFamily eFam, const String &rStyle,
                             const String &rParent );

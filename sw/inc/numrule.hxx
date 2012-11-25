@@ -132,6 +132,7 @@ private:
     sal_Bool bInvalidRuleFlag : 1;
     sal_Bool bContinusNum : 1;  ///< Continuous numbering without levels.
     sal_Bool bAbsSpaces : 1;    ///< Levels represent absolute indents.
+    sal_Bool bHidden : 1;       ///< Is the numering rule to be hidden in the UI?
     bool mbCountPhantoms;
 
     const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
@@ -153,6 +154,9 @@ public:
 
     const SwNumFmt* GetNumFmt( sal_uInt16 i ) const;
     const SwNumFmt& Get( sal_uInt16 i ) const;
+
+    sal_Bool IsHidden( ) const { return bHidden; }
+    void SetHidden( sal_Bool bValue ) { bHidden = bValue; }
 
     void Set( sal_uInt16 i, const SwNumFmt* );
     void Set( sal_uInt16 i, const SwNumFmt& );

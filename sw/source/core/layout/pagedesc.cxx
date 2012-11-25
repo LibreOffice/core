@@ -56,6 +56,7 @@ SwPageDesc::SwPageDesc( const String& rName, SwFrmFmt *pFmt, SwDoc *pDc ) :
     nRegAscent( 0 ),
     eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_FIRSTSHARE ) ),
     bLandscape( sal_False ),
+    bHidden( sal_False ),
     aFtnInfo()
 {
 }
@@ -73,6 +74,7 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy ) :
     nRegAscent( rCpy.GetRegAscent() ),
     eUse( rCpy.ReadUseOn() ),
     bLandscape( rCpy.GetLandscape() ),
+    bHidden( rCpy.IsHidden() ),
     aFtnInfo( rCpy.GetFtnInfo() )
 {
 }

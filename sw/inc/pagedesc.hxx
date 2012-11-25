@@ -144,6 +144,7 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
     sal_uInt16  nRegAscent; ///< For grid alignment (Registerhaltigkeit).
     UseOnPage   eUse;
     sal_Bool        bLandscape;
+    sal_Bool    bHidden;
 
     /// Footnote information.
     SwPageFtnInfo aFtnInfo;
@@ -179,6 +180,9 @@ public:
     inline void ChgFooterShare( sal_Bool bNew );
     sal_Bool IsFirstShared() const;
     void ChgFirstShare( sal_Bool bNew );
+
+    sal_Bool IsHidden( ) const { return bHidden; }
+    void SetHidden( sal_Bool bValue ) { bHidden = bValue; }
 
     inline void      SetUseOn( UseOnPage eNew );
     inline UseOnPage GetUseOn() const;

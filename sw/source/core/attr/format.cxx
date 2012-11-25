@@ -43,6 +43,7 @@ SwFmt::SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
     aFmtName.AssignAscii( pFmtNm );
     bWritten = bFmtInDTOR = bAutoUpdateFmt = sal_False; // LAYER_IMPL
     bAutoFmt = sal_True;
+    bHidden = false;
 
     if( pDrvdFrm )
         aSet.SetParent( &pDrvdFrm->aSet );
@@ -62,6 +63,7 @@ SwFmt::SwFmt( SwAttrPool& rPool, const String& rFmtNm,
 {
     bWritten = bFmtInDTOR = bAutoUpdateFmt = sal_False; // LAYER_IMPL
     bAutoFmt = sal_True;
+    bHidden = false;
 
     if( pDrvdFrm )
         aSet.SetParent( &pDrvdFrm->aSet );
@@ -79,6 +81,7 @@ SwFmt::SwFmt( const SwFmt& rFmt )
 {
     bWritten = bFmtInDTOR = sal_False; // LAYER_IMPL
     bAutoFmt = rFmt.bAutoFmt;
+    bHidden = rFmt.bHidden;
     bAutoUpdateFmt = rFmt.bAutoUpdateFmt;
 
     if( rFmt.DerivedFrom() )
@@ -133,6 +136,7 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
         }
     }
     bAutoFmt = rFmt.bAutoFmt;
+    bHidden = rFmt.bHidden;
     bAutoUpdateFmt = rFmt.bAutoUpdateFmt;
     return *this;
 }

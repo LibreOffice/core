@@ -54,7 +54,7 @@ public:
     const String*       GetForceStdName() const { return pForceStdName; }
 
     virtual SfxStyleSheetBase& Make( const String&, SfxStyleFamily eFam,
-                                     sal_uInt16 nMask = 0xffff, sal_uInt16 nPos = 0xffff );
+                                     sal_uInt16 nMask = SFXSTYLEBIT_ALL, sal_uInt16 nPos = 0xffff );
 
 protected:
     virtual             ~ScStyleSheetPool();

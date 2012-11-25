@@ -258,7 +258,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 {
     sal_uInt16  nSlot   = rReq.GetSlot();
-    sal_uInt16  nRet    = 0xffff;
+    sal_uInt16  nRet    = SFXSTYLEBIT_ALL;
 
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
@@ -325,6 +325,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 
         case SID_STYLE_EDIT:
         case SID_STYLE_DELETE:
+        case SID_STYLE_HIDE:
         case SID_STYLE_WATERCAN:
         case SID_STYLE_FAMILY:
         case SID_STYLE_UPDATE_BY_EXAMPLE:
@@ -449,6 +450,9 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         break;
                     case SID_STYLE_DELETE:
                         nRet = Delete(aParam, nFamily);
+                        break;
+                    case SID_STYLE_HIDE:
+                        nRet = Hide(aParam, nFamily, true);
                         break;
                     case SID_STYLE_APPLY:
                         // Shell-switch in ApplyStyles
@@ -813,6 +817,24 @@ sal_uInt16 SwDocShell::Delete(const String &rName, sal_uInt16 nFamily)
 
         GetWrtShell()->StartAllAction();
         mxBasePool->Remove(pStyle);
+        GetWrtShell()->EndAllAction();
+
+        return sal_True;
+    }
+    return sal_False;
+}
+
+sal_uInt16 SwDocShell::Hide(const String &rName, sal_uInt16 nFamily, bool bHidden)
+{
+    SfxStyleSheetBase *pStyle = mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
+
+    if(pStyle)
+    {
+        OSL_ENSURE(GetWrtShell(), "No Shell, no Styles");
+
+        GetWrtShell()->StartAllAction();
+        rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *(SwDocStyleSheet*)pStyle ) );
+        xTmp->SetHidden( bHidden );
         GetWrtShell()->EndAllAction();
 
         return sal_True;

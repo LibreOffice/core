@@ -1661,6 +1661,31 @@ SfxUInt16Item EditStyle SID_STYLE_EDIT
 ]
 
 //--------------------------------------------------------------------------
+SfxUInt16Item HideStyle SID_STYLE_HIDE
+(SfxStringItem Param SID_STYLE_HIDE,SfxUInt16Item Family SID_STYLE_FAMILY)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_TEMPLATE;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem ExecuteSearch FID_SEARCH_NOW
 (SvxSearchItem SearchItem SID_SEARCH_ITEM, SfxBoolItem Quiet SID_SEARCH_QUIET )
 [

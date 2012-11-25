@@ -26,6 +26,7 @@
 #define ID_NEW                          1
 #define ID_EDIT                         2
 #define ID_DELETE                       3
+#define ID_HIDE                         4
 
 #define RC_DIALOG_BEGIN                 RID_SFX_DIALOG_START
 

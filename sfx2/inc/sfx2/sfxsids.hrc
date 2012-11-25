@@ -359,6 +359,7 @@
 #define SID_STYLE_UPDATE_BY_EXAMPLE         (SID_SFX_START + 556)
 #define SID_STYLE_DRAGHIERARCHIE            (SID_SFX_START + 565)
 #define SID_STYLE_MASK                      (SID_SFX_START + 562)
+#define SID_STYLE_HIDE                      (SID_SFX_START + 1603)
 #define SID_STYLE_UPD_BY_EX_NAME            (SID_SFX_START + 1585)
 #define SID_STYLE_REFERENCE                 (SID_SFX_START + 1602)
 

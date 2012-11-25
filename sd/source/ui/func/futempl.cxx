@@ -128,13 +128,14 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     }
 
     String aStyleName;
-    sal_uInt16 nRetMask = 0xffff;
+    sal_uInt16 nRetMask = SFXSTYLEBIT_ALL;
 
     switch( nSId )
     {
         case SID_STYLE_APPLY:
         case SID_STYLE_EDIT:
         case SID_STYLE_DELETE:
+        case SID_STYLE_HIDE:
         case SID_STYLE_FAMILY:
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
@@ -223,6 +224,12 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             {
                 nRetMask = sal_False;
             }
+        break;
+
+        case SID_STYLE_HIDE:
+            pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
+            pStyleSheet->SetHidden( true );
+            nRetMask = sal_True;
         break;
 
         case SID_STYLE_APPLY:
@@ -666,7 +673,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         break;
 
     }
-    if( nRetMask != 0xffff )
+    if( nRetMask != SFXSTYLEBIT_ALL )
         rReq.SetReturnValue( SfxUInt16Item( nSId, nRetMask ) );
 }
 

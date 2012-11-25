@@ -233,6 +233,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
 
             case SID_STYLE_EDIT:
             case SID_STYLE_DELETE:
+            case SID_STYLE_HIDE:
             {
                 ISfxTemplateCommon* pDesigner = SFX_APP()->
                         GetCurrentTemplateCommon(pTabViewShell->GetViewFrame()->GetBindings());
@@ -278,6 +279,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     if (   (nSlotId == SID_STYLE_NEW)
         || (nSlotId == SID_STYLE_EDIT)
         || (nSlotId == SID_STYLE_DELETE)
+        || (nSlotId == SID_STYLE_HIDE)
         || (nSlotId == SID_STYLE_APPLY)
         || (nSlotId == SID_STYLE_WATERCAN)
         || (nSlotId == SID_STYLE_FAMILY)
@@ -362,6 +364,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             }
             case SID_STYLE_EDIT:
             case SID_STYLE_DELETE:
+            case SID_STYLE_HIDE:
             case SID_STYLE_NEW_BY_EXAMPLE:
                 {
                     const SfxPoolItem* pNameItem;
@@ -438,6 +441,19 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             pTabViewShell->InvalidateAttribs();
                             nRetMask = true;
                             bAddUndo = true;
+                            rReq.Done();
+                        }
+                        else
+                            nRetMask = false;
+                    }
+                    break;
+
+                    case SID_STYLE_HIDE:
+                    {
+                        if ( pStyleSheet )
+                        {
+                            pStyleSheet->SetHidden( true );
+                            pTabViewShell->InvalidateAttribs();
                             rReq.Done();
                         }
                         else
@@ -597,6 +613,19 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             rBindings.Invalidate( SID_STYLE_FAMILY4 );
                             pDocSh->SetDocumentModified();
                             bAddUndo = true;
+                            rReq.Done();
+                        }
+                    }
+                    break;
+
+                    case SID_STYLE_HIDE:
+                    {
+                        nRetMask = ( NULL != pStyleSheet );
+                        if ( pStyleSheet )
+                        {
+                            pStyleSheet->SetHidden( true );
+                            rBindings.Invalidate( SID_STYLE_FAMILY4 );
+                            pDocSh->SetDocumentModified();
                             rReq.Done();
                         }
                     }

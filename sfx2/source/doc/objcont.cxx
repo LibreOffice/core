@@ -793,7 +793,7 @@ void SfxObjectShell::LoadStyles
     DBG_ASSERT(pSourcePool, "Source-DocumentShell ohne StyleSheetPool");
     SfxStyleSheetBasePool *pMyPool = GetStyleSheetPool();
     DBG_ASSERT(pMyPool, "Dest-DocumentShell ohne StyleSheetPool");
-    pSourcePool->SetSearchMask(SFX_STYLE_FAMILY_ALL, 0xffff);
+    pSourcePool->SetSearchMask(SFX_STYLE_FAMILY_ALL, SFXSTYLEBIT_ALL);
     Styles_Impl *pFound = new Styles_Impl[pSourcePool->Count()];
     sal_uInt16 nFound = 0;
 

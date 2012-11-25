@@ -398,6 +398,7 @@ SwNumRule::SwNumRule( const String& rNm,
     bInvalidRuleFlag( sal_True ),
     bContinusNum( sal_False ),
     bAbsSpaces( sal_False ),
+    bHidden( sal_False ),
     mbCountPhantoms( true ),
     meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
     msDefaultListId()
@@ -496,6 +497,7 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
       bInvalidRuleFlag( sal_True ),
       bContinusNum( rNumRule.bContinusNum ),
       bAbsSpaces( rNumRule.bAbsSpaces ),
+      bHidden( rNumRule.bHidden ),
       mbCountPhantoms( true ),
       meDefaultNumberFormatPositionAndSpaceMode( rNumRule.meDefaultNumberFormatPositionAndSpaceMode ),
       msDefaultListId( rNumRule.msDefaultListId )
@@ -569,6 +571,7 @@ SwNumRule& SwNumRule::operator=( const SwNumRule& rNumRule )
         bInvalidRuleFlag = sal_True;
         bContinusNum = rNumRule.bContinusNum;
         bAbsSpaces = rNumRule.bAbsSpaces;
+        bHidden = rNumRule.bHidden;
         nPoolFmtId = rNumRule.GetPoolFmtId();
         nPoolHelpId = rNumRule.GetPoolHelpId();
         nPoolHlpFileId = rNumRule.GetPoolHlpFileId();

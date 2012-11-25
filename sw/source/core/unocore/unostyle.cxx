@@ -785,7 +785,7 @@ uno::Sequence< OUString > SwXStyleFamily::getElementNames(void) throw( uno::Runt
     uno::Sequence< OUString > aRet;
     if(pBasePool)
     {
-        SfxStyleSheetIterator* pIterator = pBasePool->CreateIterator(eFamily, 0xffff);
+        SfxStyleSheetIterator* pIterator = pBasePool->CreateIterator(eFamily, SFXSTYLEBIT_ALL);
         sal_uInt16 nCount = pIterator->Count();
         aRet.realloc(nCount);
         OUString* pArray = aRet.getArray();
@@ -867,7 +867,7 @@ void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElemen
                         throw lang::IllegalArgumentException();
                 if(pNewStyle)
                 {
-                    sal_uInt16 nMask = 0xffff;
+                    sal_uInt16 nMask = SFXSTYLEBIT_ALL;
                     if(eFamily == SFX_STYLE_FAMILY_PARA && !pNewStyle->IsConditional())
                         nMask &= ~SWSTYLEBIT_CONDCOLL;
 #if OSL_DEBUG_LEVEL > 1

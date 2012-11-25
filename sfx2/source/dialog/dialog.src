@@ -81,6 +81,11 @@ Menu MN_CONTEXT_TEMPLDLG
         };
         MenuItem
         {
+            Identifier = ID_HIDE ;
+            Text [ en-US ] = "Hide..." ;
+        };
+        MenuItem
+        {
             Identifier = ID_DELETE ;
             Text [ en-US ] = "Delete..." ;
             HelpId = HID_STYLIST_DELETE ;

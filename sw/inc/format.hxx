@@ -52,6 +52,7 @@ class SW_DLLPUBLIC SwFmt : public SwModify
                                        to recognize this in FmtChg-message!! */
     sal_Bool   bAutoUpdateFmt : 1;/**< TRUE: Set attributes of a whole paragraph
                                        at format (UI-side!). */
+    bool bHidden : 1;
 
 protected:
     SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
@@ -154,6 +155,9 @@ public:
     /// Query / set AutoFmt-flag.
     bool IsAuto() const                 { return bAutoFmt; }
     void SetAuto( bool bNew = false )   { bAutoFmt = bNew; }
+
+    bool IsHidden() const                 { return bHidden; }
+    void SetHidden( bool bValue = false ) { bHidden = bValue; }
 
     /// Query / set bAutoUpdateFmt-flag.
     sal_Bool IsAutoUpdateFmt() const                { return bAutoUpdateFmt; }

@@ -763,6 +763,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     bCanEdit                ( sal_False ),
     bCanDel                 ( sal_False ),
     bCanNew                 ( sal_True ),
+    bCanHide                ( sal_True ),
     bWaterDisabled          ( sal_False ),
     bNewByExampleDisabled   ( sal_False ),
     bUpdateByExampleDisabled( sal_False ),
@@ -808,6 +809,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Mod
     bCanEdit                ( sal_False ),
     bCanDel                 ( sal_False ),
     bCanNew                 ( sal_True ),
+    bCanHide                ( sal_True ),
     bWaterDisabled          ( sal_False ),
     bNewByExampleDisabled   ( sal_False ),
     bUpdateByExampleDisabled( sal_False ),
@@ -856,8 +858,8 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     else
         pStyleFamilies = new SfxStyleFamilies( aFamId );
 
-    nActFilter = pCurObjShell ? static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pCurObjShell ) ) : 0xFFFF;
-    if ( pCurObjShell && 0xFFFF == nActFilter )
+    nActFilter = pCurObjShell ? static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pCurObjShell ) ) : SFXSTYLEBIT_ALL;
+    if ( pCurObjShell && SFXSTYLEBIT_ALL == nActFilter )
         nActFilter = pCurObjShell->GetAutoStyleFilterIndex();
 
     // Paste in the toolbox
@@ -1062,11 +1064,18 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
     if ( !pItem )
         return;
     const SfxStyleFamily eFam = pItem->GetFamily();
-    SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( rStr, eFam, SFXSTYLEBIT_ALL );
+    SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( rStr, eFam, SFXSTYLEBIT_ALL | SFXSTYLEBIT_HIDDEN );
     if( pStyle )
-        EnableEdit( !(pStyle->GetMask() & SFXSTYLEBIT_READONLY) );
+    {
+        bool bReadWrite = !(pStyle->GetMask() & SFXSTYLEBIT_READONLY);
+        EnableEdit( bReadWrite );
+        EnableHide( bReadWrite && !pStyle->IsHidden( ) && !pStyle->IsUsed( ) );
+    }
     else
-        EnableEdit(sal_False);
+    {
+        EnableEdit( sal_False );
+        EnableHide( sal_False );
+    }
 
     if ( pTreeBox )
     {
@@ -1110,6 +1119,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
         {
             aFmtLb.SelectAll( sal_False );
             EnableEdit(sal_False);
+            EnableHide( sal_False );
         }
     }
 }
@@ -1477,7 +1487,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          // other DocShell -> all new
          CheckItem( nActFamily, sal_True );
          nActFilter = static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pDocShell ) );
-         if ( 0xFFFF == nActFilter )
+         if ( SFXSTYLEBIT_ALL == nActFilter )
             nActFilter = pDocShell->GetAutoStyleFilterIndex();
 
          nAppFilter = pItem->GetValue();
@@ -1579,12 +1589,18 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
                         const SfxStyleFamily eFam = pItem->GetFamily();
                         SfxStyleSheetBase *pStyle =
                             pStyleSheetPool->Find(
-                                aStr, eFam, SFXSTYLEBIT_ALL );
+                                aStr, eFam, SFXSTYLEBIT_ALL | SFXSTYLEBIT_HIDDEN );
                         if( pStyle )
-                            EnableEdit(
-                                !(pStyle->GetMask() & SFXSTYLEBIT_READONLY) );
+                        {
+                            bool bReadWrite = !(pStyle->GetMask() & SFXSTYLEBIT_READONLY);
+                            EnableEdit( bReadWrite );
+                            EnableHide( bReadWrite && !pStyle->IsUsed( ) && !pStyle->IsHidden( ) );
+                        }
                         else
+                        {
                             EnableEdit(sal_False);
+                            EnableHide(sal_False);
+                        }
                     }
                 }
                 break;
@@ -1834,7 +1850,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
                 const SfxStyleFamily eFam=GetFamilyItem_Impl()->GetFamily();
                 const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
                 sal_uInt16 nFilter;
-                if( pItem && nActFilter != 0xffff )
+                if( pItem && nActFilter != SFXSTYLEBIT_ALL )
                 {
                     nFilter = pItem->GetFilterList()[ nActFilter ]->nFlags;
                     if(!nFilter)    // automatisch
@@ -1956,7 +1972,7 @@ void SfxCommonTemplateDialog_Impl::NewHdl(void *)
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         const SfxStyleFamily eFam=pItem->GetFamily();
         sal_uInt16 nMask;
-        if( pItem && nActFilter != 0xffff )
+        if( pItem && nActFilter != SFXSTYLEBIT_ALL )
         {
             nMask = pItem->GetFilterList()[ nActFilter ]->nFlags;
             if(!nMask)    // automatic
@@ -2044,6 +2060,20 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
     }
 }
 
+void SfxCommonTemplateDialog_Impl::HideHdl(void *)
+{
+    if ( IsInitialized() && HasSelectedStyle() )
+    {
+        const String aTemplName( GetSelectedEntry() );
+        SfxStyleSheetBase* pStyle = GetSelectedStyle();
+        if ( pStyle )
+        {
+            Execute_Impl( SID_STYLE_HIDE, aTemplName,
+                          String(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
+        }
+    }
+}
+
 //-------------------------------------------------------------------------
 
 void    SfxCommonTemplateDialog_Impl::EnableDelete()
@@ -2060,7 +2090,7 @@ void    SfxCommonTemplateDialog_Impl::EnableDelete()
         if(!nFilter)    // automatic
             nFilter = nAppFilter;
         const SfxStyleSheetBase *pStyle =
-            pStyleSheetPool->Find(aTemplName,eFam, pTreeBox? SFXSTYLEBIT_ALL: nFilter);
+            pStyleSheetPool->Find(aTemplName,eFam, pTreeBox? SFXSTYLEBIT_ALL | SFXSTYLEBIT_HIDDEN : nFilter);
 
         OSL_ENSURE(pStyle, "Style ot found");
         if(pStyle && pStyle->IsUserDefined())
@@ -2160,6 +2190,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu *, pMenu )
     case ID_NEW: NewHdl(0); break;
     case ID_EDIT: EditHdl(0); break;
     case ID_DELETE: DeleteHdl(0); break;
+    case ID_HIDE: HideHdl(0); break;
     default: return sal_False;
     }
     return sal_True;
@@ -2218,6 +2249,7 @@ PopupMenu* SfxCommonTemplateDialog_Impl::CreateContextMenu( void )
     pMenu->EnableItem( ID_EDIT, bCanEdit );
     pMenu->EnableItem( ID_DELETE, bCanDel );
     pMenu->EnableItem( ID_NEW, bCanNew );
+    pMenu->EnableItem( ID_HIDE, bCanHide );
 
     return pMenu;
 }

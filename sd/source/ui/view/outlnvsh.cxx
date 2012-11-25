@@ -1518,6 +1518,7 @@ sal_Bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     Invalidate(SID_STYLE_EDIT);
     Invalidate(SID_STYLE_NEW);
     Invalidate(SID_STYLE_DELETE);
+    Invalidate(SID_STYLE_HIDE);
     Invalidate(SID_STYLE_UPDATE_BY_EXAMPLE);
     Invalidate(SID_STYLE_NEW_BY_EXAMPLE);
     Invalidate(SID_STYLE_WATERCAN);
@@ -1710,6 +1711,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_STYLE_NEW:
             case SID_STYLE_DELETE:
+            case SID_STYLE_HIDE:
             case SID_STYLE_NEW_BY_EXAMPLE:
             case SID_STYLE_WATERCAN:
             {
@@ -1740,6 +1742,7 @@ void OutlineViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin
     Invalidate(SID_STYLE_EDIT);
     Invalidate(SID_STYLE_NEW);
     Invalidate(SID_STYLE_DELETE);
+    Invalidate(SID_STYLE_HIDE);
     Invalidate(SID_STYLE_UPDATE_BY_EXAMPLE);
     Invalidate(SID_STYLE_NEW_BY_EXAMPLE);
     Invalidate(SID_STYLE_WATERCAN);

@@ -89,7 +89,6 @@ SfxStyleSheetHint::SfxStyleSheetHint
 class SfxStyleSheetBasePool_Impl
 {
   public:
-    SfxStyles aStyles;
     SfxStyleSheetIterator *pIter;
     SfxStyleSheetBasePool_Impl() : pIter(0){}
     ~SfxStyleSheetBasePool_Impl(){delete pIter;}
@@ -110,6 +109,7 @@ SfxStyleSheetBase::SfxStyleSheetBase( const XubString& rName, SfxStyleSheetBaseP
     , nMask(mask)
     , nHelpId( 0 )
     , bMySet( sal_False )
+    , bHidden( sal_False )
 {
 #ifdef DBG_UTIL
     aDbgStyleSheetReferences.mnStyles++;
@@ -127,6 +127,7 @@ SfxStyleSheetBase::SfxStyleSheetBase( const SfxStyleSheetBase& r )
     , nMask( r.nMask )
     , nHelpId( r.nHelpId )
     , bMySet( r.bMySet )
+    , bHidden( r.bHidden )
 {
 #ifdef DBG_UTIL
     aDbgStyleSheetReferences.mnStyles++;
@@ -239,6 +240,12 @@ bool SfxStyleSheetBase::SetParent( const XubString& rName )
     }
     pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
     return true;
+}
+
+void SfxStyleSheetBase::SetHidden( sal_Bool hidden )
+{
+    bHidden = hidden;
+    pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
 }
 
 // Follow aendern
@@ -362,16 +369,21 @@ SfxStyleFamily SfxStyleSheetIterator::GetSearchFamily() const
 
 inline bool SfxStyleSheetIterator::IsTrivialSearch()
 {
-    return nMask == 0xFFFF && GetSearchFamily() == SFX_STYLE_FAMILY_ALL;
+    return nMask == SFXSTYLEBIT_ALL && GetSearchFamily() == SFX_STYLE_FAMILY_ALL;
 }
 
 bool SfxStyleSheetIterator::DoesStyleMatch(SfxStyleSheetBase *pStyle)
 {
-    return ((GetSearchFamily() == SFX_STYLE_FAMILY_ALL) ||
+    bool bSearchHidden = ( GetSearchMask() & SFXSTYLEBIT_HIDDEN );
+    bool bMatchVisibility = bSearchHidden || !pStyle->IsHidden();
+
+    bool bMatches = ((GetSearchFamily() == SFX_STYLE_FAMILY_ALL) ||
             ( pStyle->GetFamily() == GetSearchFamily() ))
         && (( pStyle->GetMask() & ( GetSearchMask() & ~SFXSTYLEBIT_USED )) ||
             ( bSearchUsed ? pStyle->IsUsed() : false ) ||
-            GetSearchMask() == SFXSTYLEBIT_ALL );
+            GetSearchMask() == SFXSTYLEBIT_ALL )
+        && bMatchVisibility;
+    return bMatches;
 }
 
 
@@ -544,7 +556,7 @@ SfxStyleSheetBasePool::SfxStyleSheetBasePool( SfxItemPool& r )
     : aAppName(r.GetName())
     , rPool(r)
     , nSearchFamily(SFX_STYLE_FAMILY_PARA)
-    , nMask(0xFFFF)
+    , nMask(SFXSTYLEBIT_ALL)
 {
 #ifdef DBG_UTIL
     aDbgStyleSheetReferences.mnPools++;
@@ -808,7 +820,7 @@ void SfxStyleSheetBasePool::ChangeParent(const XubString& rOld,
                                          bool bVirtual)
 {
     const sal_uInt16 nTmpMask = GetSearchMask();
-    SetSearchMask(GetSearchFamily(), 0xffff);
+    SetSearchMask(GetSearchFamily(), SFXSTYLEBIT_ALL);
     for( SfxStyleSheetBase* p = First(); p; p = Next() )
     {
         if( p->GetParent().Equals( rOld ) )
@@ -872,14 +884,14 @@ bool SfxStyleSheet::SetParent( const XubString& rName )
             // aus der Benachrichtigungskette des alten
             // Parents gfs. austragen
         if(aOldParent.Len()) {
-            SfxStyleSheet *pParent = (SfxStyleSheet *)pPool->Find(aOldParent, nFamily, 0xffff);
+            SfxStyleSheet *pParent = (SfxStyleSheet *)pPool->Find(aOldParent, nFamily, SFXSTYLEBIT_ALL);
             if(pParent)
                 EndListening(*pParent);
         }
             // in die Benachrichtigungskette des neuen
             // Parents eintragen
         if(aParent.Len()) {
-            SfxStyleSheet *pParent = (SfxStyleSheet *)pPool->Find(aParent, nFamily, 0xffff);
+            SfxStyleSheet *pParent = (SfxStyleSheet *)pPool->Find(aParent, nFamily, SFXSTYLEBIT_ALL);
             if(pParent)
                 StartListening(*pParent);
         }

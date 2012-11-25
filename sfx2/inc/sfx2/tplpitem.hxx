@@ -24,6 +24,7 @@
 #include <tools/string.hxx>
 #include <tools/rtti.hxx>
 #include <svl/flagitem.hxx>
+#include <svl/style.hrc>
 
 class SFX2_DLLPUBLIC SfxTemplateItem: public SfxFlagItem
 {
@@ -33,7 +34,7 @@ public:
     SfxTemplateItem();
     SfxTemplateItem( sal_uInt16 nWhich,
                      const String &rStyle,
-                     sal_uInt16 nMask = 0xffff );
+                     sal_uInt16 nMask = SFXSTYLEBIT_ALL );
     SfxTemplateItem( const SfxTemplateItem& );
 
     const String&           GetStyleName() const { return aStyle; }

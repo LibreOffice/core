@@ -326,6 +326,13 @@ interface OutlineView
         GroupId = GID_DOCUMENT ;
         Cachable ;
     ]
+    SID_STYLE_HIDE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
     SID_AUTOSPELL_CHECK // ole : no, status : play rec
     [
         ExecMethod = FuSupport ;

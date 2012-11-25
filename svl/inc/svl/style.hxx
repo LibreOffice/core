@@ -90,6 +90,7 @@ protected:
     sal_uLong               nHelpId;        // Hilfe-ID
 
     bool                    bMySet;         // sal_True: Set loeschen im dtor
+    bool                    bHidden;
 
     SfxStyleSheetBase( const UniString&, SfxStyleSheetBasePool*, SfxStyleFamily eFam, sal_uInt16 mask );
     SfxStyleSheetBase( const SfxStyleSheetBase& );
@@ -133,6 +134,9 @@ public:
     bool     IsUserDefined() const
            { return ( nMask & SFXSTYLEBIT_USERDEF) != 0; }
 
+    virtual sal_Bool IsHidden() const { return bHidden; }
+    virtual void SetHidden( sal_Bool bValue );
+
     virtual sal_uLong GetHelpId( String& rFile );
     virtual void   SetHelpId( const String& r, sal_uLong nId );
 
@@ -157,7 +161,7 @@ class SVL_DLLPUBLIC SfxStyleSheetIterator
 {
 public:
     SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
-                          SfxStyleFamily eFam, sal_uInt16 n=0xFFFF );
+                          SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
     virtual sal_uInt16 GetSearchMask() const;
     virtual SfxStyleFamily GetSearchFamily() const;
     virtual sal_uInt16 Count();
@@ -229,7 +233,7 @@ public:
 
     virtual SfxStyleSheetBase&  Make(const UniString&,
                                      SfxStyleFamily eFam,
-                                     sal_uInt16 nMask = 0xffff ,
+                                     sal_uInt16 nMask = SFXSTYLEBIT_ALL ,
                                      sal_uInt16 nPos = 0xffff);
 
     virtual void             Replace(
@@ -246,7 +250,7 @@ public:
     const SfxStyles&            GetStyles();
     virtual SfxStyleSheetBase*  First();
     virtual SfxStyleSheetBase*  Next();
-    virtual SfxStyleSheetBase*  Find( const UniString&, SfxStyleFamily eFam, sal_uInt16 n=0xFFFF );
+    virtual SfxStyleSheetBase*  Find( const UniString&, SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
 
     virtual bool                SetParent(SfxStyleFamily eFam,
                                           const UniString &rStyle,
@@ -255,7 +259,7 @@ public:
     SfxStyleSheetBase*          Find(const UniString& rStr)
                                 { return Find(rStr, nSearchFamily, nMask); }
 
-    void                        SetSearchMask(SfxStyleFamily eFam, sal_uInt16 n=0xFFFF );
+    void                        SetSearchMask(SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
     sal_uInt16                      GetSearchMask() const;
     SfxStyleFamily              GetSearchFamily() const  { return nSearchFamily; }
 };
