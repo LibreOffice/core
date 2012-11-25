@@ -428,9 +428,15 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< :
         {
             ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
             if ( sItemCommand == COMMAND_DOWNSEARCH )
+            {
+                pToolBox->EnableItem(i, sal_False);
                 m_nDownSearchId = i;
+            }
             else if ( sItemCommand == COMMAND_UPSEARCH )
+            {
+                pToolBox->EnableItem(i, sal_False);
                 m_nUpSearchId = i;
+            }
         }
     }
 
