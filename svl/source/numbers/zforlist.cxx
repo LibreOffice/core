@@ -1130,7 +1130,7 @@ SvNumberFormatTable& SvNumberFormatter::GetEntryTable(
     return *pFormatTable;
 }
 
-bool SvNumberFormatter::IsNumberFormat(const String& sString,
+bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
                                        sal_uInt32& F_Index,
                                        double& fOutNumber)
 {
@@ -1145,7 +1145,9 @@ bool SvNumberFormatter::IsNumberFormat(const String& sString,
     {
         FType = pFormat->GetType() &~NUMBERFORMAT_DEFINED;
         if (FType == 0)
+        {
             FType = NUMBERFORMAT_DEFINED;
+        }
         ChangeIntl(pFormat->GetLanguage());
     }
 
@@ -1876,10 +1878,10 @@ bool SvNumberFormatter::GetPreviewString( const OUString& sFormatString,
     }
 }
 
-sal_uInt32 SvNumberFormatter::TestNewString(const String& sFormatString,
+sal_uInt32 SvNumberFormatter::TestNewString(const OUString& sFormatString,
                                             LanguageType eLnge)
 {
-    if (sFormatString.Len() == 0)                       // no empty string
+    if (sFormatString.isEmpty())                       // no empty string
     {
         return NUMBERFORMAT_ENTRY_NOT_FOUND;
     }
@@ -2071,16 +2073,19 @@ sal_uInt16 SvNumberFormatter::GetFormatPrecision( sal_uInt32 nFormat ) const
 }
 
 
-String SvNumberFormatter::GetFormatDecimalSep( sal_uInt32 nFormat ) const
+OUString SvNumberFormatter::GetFormatDecimalSep( sal_uInt32 nFormat ) const
 {
     const SvNumberformat* pFormat = GetFormatEntry(nFormat);
     if ( !pFormat || pFormat->GetLanguage() == ActLnge )
+    {
         return GetNumDecimalSep();
-
-    String aRet;
+    }
+    OUString aRet;
     LanguageType eSaveLang = xLocaleData.getCurrentLanguage();
     if ( pFormat->GetLanguage() == eSaveLang )
+    {
         aRet = xLocaleData->getNumDecimalSep();
+    }
     else
     {
         LanguageTag aSaveLocale( xLocaleData->getLanguageTag() );
@@ -2092,9 +2097,9 @@ String SvNumberFormatter::GetFormatDecimalSep( sal_uInt32 nFormat ) const
 }
 
 
-sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const String& rFormatString,
-            bool& bThousand, bool& IsRed, sal_uInt16& nPrecision,
-            sal_uInt16& nAnzLeading, LanguageType eLnge )
+sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const OUString& rFormatString,
+                                                    bool& bThousand, bool& IsRed, sal_uInt16& nPrecision,
+                                                    sal_uInt16& nAnzLeading, LanguageType eLnge )
 
 {
     if (eLnge == LANGUAGE_DONTKNOW)
@@ -3020,7 +3025,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
     return sString.makeStringAndClear();
 }
 
-bool SvNumberFormatter::IsUserDefined(const String& sStr,
+bool SvNumberFormatter::IsUserDefined(const OUString& sStr,
                                       LanguageType eLnge)
 {
     if (eLnge == LANGUAGE_DONTKNOW)
@@ -3043,8 +3048,8 @@ bool SvNumberFormatter::IsUserDefined(const String& sStr,
     return false;
 }
 
-sal_uInt32 SvNumberFormatter::GetEntryKey(const String& sStr,
-                                     LanguageType eLnge)
+sal_uInt32 SvNumberFormatter::GetEntryKey(const OUString& sStr,
+                                          LanguageType eLnge)
 {
     if (eLnge == LANGUAGE_DONTKNOW)
     {
@@ -3319,8 +3324,7 @@ const NfCurrencyEntry& SvNumberFormatter::GetCurrencyEntry( LanguageType eLang )
 
 
 // static
-const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry(
-        const String& rAbbrev, LanguageType eLang )
+const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry(const OUString& rAbbrev, LanguageType eLang )
 {
     eLang = MsLangId::getRealLanguage( eLang );
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
@@ -3328,26 +3332,32 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry(
     for ( sal_uInt16 j = 0; j < nCount; j++ )
     {
         if ( rTable[j].GetLanguage() == eLang &&
-                rTable[j].GetBankSymbol() == rAbbrev )
+             rTable[j].GetBankSymbol() == rAbbrev )
+        {
             return &rTable[j];
+        }
     }
     return NULL;
 }
 
 
 // static
-const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry(
-        const String& rSymbol, const String& rAbbrev )
+const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry( const OUString& rSymbol,
+                                                                      const OUString& rAbbrev )
 {
     if (!bCurrencyTableInitialized)
+    {
         GetTheCurrencyTable();      // just for initialization
+    }
     const NfCurrencyTable& rTable = theLegacyOnlyCurrencyTable::get();
     sal_uInt16 nCount = rTable.size();
     for ( sal_uInt16 j = 0; j < nCount; j++ )
     {
         if ( rTable[j].GetSymbol() == rSymbol &&
-                rTable[j].GetBankSymbol() == rAbbrev )
+             rTable[j].GetBankSymbol() == rAbbrev )
+        {
             return &rTable[j];
+        }
     }
     return NULL;
 }
@@ -3366,14 +3376,16 @@ IMPL_STATIC_LINK_NOINSTANCE( SvNumberFormatter, CurrencyChangeLink, SAL_UNUSED_P
 
 
 // static
-void SvNumberFormatter::SetDefaultSystemCurrency( const String& rAbbrev, LanguageType eLang )
+void SvNumberFormatter::SetDefaultSystemCurrency( const OUString& rAbbrev, LanguageType eLang )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     if ( eLang == LANGUAGE_SYSTEM )
+    {
         eLang = SvtSysLocale().GetLanguageTag().getLanguageType();
+    }
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
     sal_uInt16 nCount = rTable.size();
-    if ( rAbbrev.Len() )
+    if ( !rAbbrev.isEmpty() )
     {
         for ( sal_uInt16 j = 0; j < nCount; j++ )
         {
@@ -3496,9 +3508,9 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
 #ifndef DBG_UTIL
 inline
 #endif
-    bool SvNumberFormatter::ImpLookupCurrencyEntryLoopBody(
-        const NfCurrencyEntry*& pFoundEntry, bool& bFoundBank,
-        const NfCurrencyEntry* pData, sal_uInt16 nPos, const String& rSymbol )
+    bool SvNumberFormatter::ImpLookupCurrencyEntryLoopBody( const NfCurrencyEntry*& pFoundEntry, bool& bFoundBank,
+                                                            const NfCurrencyEntry* pData, sal_uInt16 nPos,
+                                                            const OUString& rSymbol )
 {
     bool bFound;
     if ( pData->GetSymbol() == rSymbol )
@@ -3524,22 +3536,28 @@ inline
         {   // first entry is SYSTEM
             pFoundEntry = MatchSystemCurrency();
             if ( pFoundEntry )
+            {
                 return false;   // break loop
                 // even if there are more matching entries
                 // this one is propably the one we are looking for
+            }
             else
+            {
                 pFoundEntry = pData;
+            }
         }
         else
+        {
             pFoundEntry = pData;
+        }
     }
     return true;
 }
 
 
-bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat,
-            String& rStr, const NfCurrencyEntry** ppEntry /* = NULL */,
-            bool* pBank /* = NULL */ ) const
+bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, String& rStr,
+                                                    const NfCurrencyEntry** ppEntry /* = NULL */,
+                                                    bool* pBank /* = NULL */ ) const
 {
     rStr.Erase();
     if ( ppEntry )
@@ -3593,16 +3611,16 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat,
 
 // static
 const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
-                                                            const String& rSymbol,
-                                                            const String& rExtension,
+                                                            const OUString& rSymbol,
+                                                            const OUString& rExtension,
                                                             LanguageType eFormatLanguage,
                                                             bool bOnlyStringLanguage )
 {
-    xub_StrLen nExtLen = rExtension.Len();
+    sal_Int32 nExtLen = rExtension.getLength();
     LanguageType eExtLang;
     if ( nExtLen )
     {
-        sal_Int32 nExtLang = OUString( rExtension ).toInt32( 16 );
+        sal_Int32 nExtLang = rExtension.toInt32( 16 );
         if ( !nExtLang )
         {
             eExtLang = LANGUAGE_DONTKNOW;
@@ -3831,7 +3849,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         }
         rCurrencyTable.insert( rCurrencyTable.begin() + nCurrencyPos++, pEntry );
         if ( !nSystemCurrencyPosition && (aConfiguredCurrencyAbbrev.Len() ?
-                                          pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev &&
+                                          pEntry->GetBankSymbol() == OUString(aConfiguredCurrencyAbbrev) &&
                                           pEntry->GetLanguage() == eConfiguredCurrencyLanguage : false) )
         {
             nSystemCurrencyPosition = nCurrencyPos-1;
@@ -3876,7 +3894,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                         rCurrencyTable.insert( rCurrencyTable.begin() + nCurrencyPos++, pEntry );
                         if ( !nSecondarySystemCurrencyPosition &&
                              (aConfiguredCurrencyAbbrev.Len() ?
-                              pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev :
+                              pEntry->GetBankSymbol() == OUString(aConfiguredCurrencyAbbrev) :
                               pEntry->GetLanguage() == eConfiguredCurrencyLanguage) )
                         {
                             nSecondarySystemCurrencyPosition = nCurrencyPos-1;
@@ -4056,7 +4074,8 @@ OUString NfCurrencyEntry::BuildSymbolString(bool bBank,
         aBuf.append(aBankSymbol);
     else
     {
-        if ( aSymbol.Search( '-' ) != STRING_NOTFOUND || aSymbol.Search( ']' ) != STRING_NOTFOUND )
+        if ( aSymbol.indexOf( (sal_Unicode)'-' ) >= 0 ||
+             aSymbol.indexOf( (sal_Unicode)']' ) >= 0)
         {
             aBuf.append('"').append(aSymbol).append('"');
         }
@@ -4114,7 +4133,7 @@ OUString NfCurrencyEntry::BuildNegativeFormatString(bool bBank,
 
 
 void NfCurrencyEntry::CompletePositiveFormatString(OUStringBuffer& rStr, bool bBank,
-            sal_uInt16 nPosiForm) const
+                                                   sal_uInt16 nPosiForm) const
 {
     OUString aSymStr = BuildSymbolString(bBank);
     NfCurrencyEntry::CompletePositiveFormatString( rStr, aSymStr, nPosiForm );
@@ -4122,7 +4141,7 @@ void NfCurrencyEntry::CompletePositiveFormatString(OUStringBuffer& rStr, bool bB
 
 
 void NfCurrencyEntry::CompleteNegativeFormatString(OUStringBuffer& rStr, bool bBank,
-            sal_uInt16 nNegaForm) const
+                                                   sal_uInt16 nNegaForm) const
 {
     OUString aSymStr = BuildSymbolString(bBank);
     NfCurrencyEntry::CompleteNegativeFormatString( rStr, aSymStr, nNegaForm );
@@ -4130,8 +4149,8 @@ void NfCurrencyEntry::CompleteNegativeFormatString(OUStringBuffer& rStr, bool bB
 
 
 // static
-void NfCurrencyEntry::CompletePositiveFormatString(OUStringBuffer& rStr,
-        const String& rSymStr, sal_uInt16 nPositiveFormat)
+void NfCurrencyEntry::CompletePositiveFormatString(OUStringBuffer& rStr, const OUString& rSymStr,
+                                                   sal_uInt16 nPositiveFormat)
 {
     switch( nPositiveFormat )
     {
@@ -4162,7 +4181,7 @@ void NfCurrencyEntry::CompletePositiveFormatString(OUStringBuffer& rStr,
 
 // static
 void NfCurrencyEntry::CompleteNegativeFormatString(OUStringBuffer& rStr,
-                                                   const String& rSymStr,
+                                                   const OUString& rSymStr,
                                                    sal_uInt16 nNegativeFormat)
 {
     switch( nNegativeFormat )

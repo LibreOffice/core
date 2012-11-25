@@ -2609,7 +2609,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain(
                 if (eSetType == NUMBERFORMAT_FRACTION)  // Fraction 1 = 1/1
                 {
                     if (i >= nAnzStrings ||     // no end string nor decimal separator
-                        sStrArray[i] == pFormatter->GetNumDecimalSep())
+                        sStrArray[i] == (String)pFormatter->GetNumDecimalSep())
                     {
                         eScannedType = NUMBERFORMAT_FRACTION;
                         nMatchedAllStrings &= ~nMatchedVirgin;
@@ -2630,7 +2630,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain(
                     eScannedType == NUMBERFORMAT_UNDEFINED &&   // not date or currency
                     nDecPos == 0 &&             // no previous decimal separator
                     (i >= nAnzStrings ||        // no end string nor decimal separator
-                        sStrArray[i] == pFormatter->GetNumDecimalSep())
+                     sStrArray[i] == (String)pFormatter->GetNumDecimalSep())
                 )
                 {
                     eScannedType = NUMBERFORMAT_FRACTION;
@@ -2909,9 +2909,9 @@ void ImpSvNumberInputScan::InitText()
 
 void ImpSvNumberInputScan::ChangeIntl()
 {
-    sal_Unicode cDecSep = pFormatter->GetNumDecimalSep().GetChar(0);
-    bDecSepInDateSeps = ( cDecSep == '-' ||
-                          cDecSep == pFormatter->GetDateSep().GetChar(0) );
+    sal_Unicode cDecSep = pFormatter->GetNumDecimalSep()[0];
+    bDecSepInDateSeps = ( cDecSep == (sal_Unicode)'-' ||
+                          cDecSep == pFormatter->GetDateSep()[0] );
     bTextInitialized = false;
     aUpperCurrSymbol.Erase();
     InvalidateDateAcceptancePatterns();

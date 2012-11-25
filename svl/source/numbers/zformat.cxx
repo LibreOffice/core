@@ -2077,7 +2077,7 @@ void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& OutString)
         nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
         OutString = ::rtl::math::doubleToUString( fNumber,
                                                   rtl_math_StringFormat_E, nStandardPrec /*2*/,
-                                                  GetFormatter().GetNumDecimalSep().GetChar(0));
+                                                  GetFormatter().GetNumDecimalSep()[0]);
     }
     else
     {
@@ -2122,7 +2122,7 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutS
 
     rOutString = ::rtl::math::doubleToUString( rNumber,
                                                rtl_math_StringFormat_F, nPrecision /*2*/,
-                                               GetFormatter().GetNumDecimalSep().GetChar(0), true );
+                                               GetFormatter().GetNumDecimalSep()[0], true );
     if (rOutString[0] == (sal_Unicode)'-' &&
         comphelper::string::getTokenCount(rOutString, '0') == rOutString.getLength())
     {
@@ -2154,7 +2154,7 @@ void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString)
     OutString = ::rtl::math::doubleToUString( fNumber,
                                               rtl_math_StringFormat_Automatic,
                                               rtl_math_DecimalPlaces_Max,
-                                              GetFormatter().GetNumDecimalSep().GetChar(0), true );
+                                              GetFormatter().GetNumDecimalSep()[0], true );
 
     if ( eType & NUMBERFORMAT_PERCENT && bModified)
     {
@@ -2297,7 +2297,7 @@ void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
     nPrec = ::std::min(nPrec, static_cast<sal_uInt16>(14)); // limit to 14 decimals.
 
     rOutString = ::rtl::math::doubleToUString(fNumber, rtl_math_StringFormat_E,
-                                              nPrec, rFormatter.GetNumDecimalSep().GetChar(0));
+                                              nPrec, rFormatter.GetNumDecimalSep()[0]);
 }
 
 sal_Int32 lcl_GetForcedDenominator(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
@@ -2458,7 +2458,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
                         nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
                         sBuff = ::rtl::math::doubleToUString( fNumber,
                                                               rtl_math_StringFormat_E, nStandardPrec /*2*/,
-                                                              GetFormatter().GetNumDecimalSep().GetChar(0), true);
+                                                              GetFormatter().GetNumDecimalSep()[0], true);
                     }
                 }
                 if (bSign)

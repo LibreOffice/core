@@ -224,8 +224,8 @@ typedef ::std::set< LanguageType > NfInstalledLocales;
  */
 class SVL_DLLPUBLIC NfCurrencyEntry
 {
-    String          aSymbol;            /// currency symbol
-    String          aBankSymbol;        /// currency abbreviation
+    OUString        aSymbol;            /// currency symbol
+    OUString        aBankSymbol;        /// currency abbreviation
     LanguageType    eLanguage;          /// language/country value
     sal_uInt16      nPositiveFormat;    /// position of symbol
     sal_uInt16      nNegativeFormat;    /// position of symbol and type and position of negative sign
@@ -241,24 +241,22 @@ private:
 
                         // nDecimalFormat := 0, 1, 2
                         // #,##0 or #,##0.00 or #,##0.-- is returned
-    SVL_DLLPRIVATE OUString Impl_BuildFormatStringNumChars(
-        const LocaleDataWrapper&, sal_uInt16 nDecimalFormat) const;
+    SVL_DLLPRIVATE OUString Impl_BuildFormatStringNumChars( const LocaleDataWrapper&, sal_uInt16 nDecimalFormat) const;
 
 public:
 
                         NfCurrencyEntry( const LocaleDataWrapper& rLocaleData,
-                            LanguageType eLang );
-                        NfCurrencyEntry(
-                            const ::com::sun::star::i18n::Currency & rCurr,
-                            const LocaleDataWrapper& rLocaleData,
-                            LanguageType eLang );
+                                         LanguageType eLang );
+                        NfCurrencyEntry( const ::com::sun::star::i18n::Currency & rCurr,
+                                         const LocaleDataWrapper& rLocaleData,
+                                         LanguageType eLang );
                         ~NfCurrencyEntry() {}
 
                         /// Symbols and language identical
     bool                operator==( const NfCurrencyEntry& r ) const;
 
-    const String&       GetSymbol() const           { return aSymbol; }
-    const String&       GetBankSymbol() const       { return aBankSymbol; }
+    const OUString&     GetSymbol() const           { return aSymbol; }
+    const OUString&     GetBankSymbol() const       { return aBankSymbol; }
     LanguageType        GetLanguage() const         { return eLanguage; }
     sal_uInt16          GetPositiveFormat() const   { return nPositiveFormat; }
     sal_uInt16          GetNegativeFormat() const   { return nNegativeFormat; }
@@ -268,35 +266,34 @@ public:
                         /** [$DM-407] (bBank==false) or [$DEM] (bBank==true)
                             is returned. If bBank==false and
                             bWithoutExtension==true only [$DM] */
-    OUString            BuildSymbolString(bool bBank,
-                            bool bWithoutExtension = false) const;
+    OUString            BuildSymbolString(bool bBank, bool bWithoutExtension = false) const;
 
                         /** #,##0.00 [$DM-407] is returned, separators
                               from rLoc,    incl. minus sign but without [RED] */
-    OUString            BuildPositiveFormatString(bool bBank,
-                            const LocaleDataWrapper&, sal_uInt16 nDecimalFormat = 1) const;
-    OUString            BuildNegativeFormatString(bool bBank,
-                            const LocaleDataWrapper&, sal_uInt16 nDecimalFormat = 1) const;
+    OUString            BuildPositiveFormatString(bool bBank, const LocaleDataWrapper&,
+                                                  sal_uInt16 nDecimalFormat = 1) const;
+    OUString            BuildNegativeFormatString(bool bBank, const LocaleDataWrapper&,
+                                                  sal_uInt16 nDecimalFormat = 1) const;
 
                         /** [$DM-407] (or [$DEM] if bBank==true)
                             is appended/prepended to rStr, incl. minus sign */
     void                CompletePositiveFormatString(OUStringBuffer& rStr, bool bBank,
-                            sal_uInt16 nPosiFormat) const;
+                                                     sal_uInt16 nPosiFormat) const;
     void                CompleteNegativeFormatString(OUStringBuffer& rStr, bool bBank,
-                            sal_uInt16 nNegaFormat) const;
+                                                     sal_uInt16 nNegaFormat) const;
 
                         /// rSymStr is appended/prepended to rStr, incl. minus sign
     static  void        CompletePositiveFormatString(OUStringBuffer& rStr,
-                            const String& rSymStr, sal_uInt16 nPosiFormat);
+                                                     const OUString& rSymStr, sal_uInt16 nPosiFormat);
     static  void        CompleteNegativeFormatString(OUStringBuffer& rStr,
-                            const String& rSymStr, sal_uInt16 nNegaFormat);
+                                                     const OUString& rSymStr, sal_uInt16 nNegaFormat);
 
                         /** Representation of a currency (symbol position and
                              negative sign) in other language settings */
     static  sal_uInt16  GetEffectivePositiveFormat( sal_uInt16 nIntlFormat,
-                            sal_uInt16 nCurrFormat, bool bBank );
+                                                    sal_uInt16 nCurrFormat, bool bBank );
     static  sal_uInt16  GetEffectiveNegativeFormat( sal_uInt16 nIntlFormat,
-                            sal_uInt16 nCurrFormat, bool bBank );
+                                                    sal_uInt16 nCurrFormat, bool bBank );
 
                         /// General Unicode Euro symbol
     static inline sal_Unicode   GetEuroSymbol() { return sal_Unicode(0x20AC); }
@@ -393,10 +390,10 @@ public:
             nKey contains the index key of the format.
      */
     bool PutEntry( String& rString, xub_StrLen& nCheckPos, short& nType, sal_uInt32& nKey,
-                  LanguageType eLnge = LANGUAGE_DONTKNOW );
+                   LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     bool PutEntry( OUString& rString, sal_Int32& nCheckPos, short& nType, sal_uInt32& nKey,
-                  LanguageType eLnge = LANGUAGE_DONTKNOW );
+                   LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /** Same as <method>PutEntry</method> but the format code string is
          considered to be of language/country eLnge and is converted to
@@ -414,12 +411,12 @@ public:
         converted to another System language/country eNewLnge. In this case
          the automatic currency is converted too. */
     bool PutandConvertEntrySystem( OUString& rString, sal_Int32& nCheckPos,
-                             short& nType, sal_uInt32& nKey,
-                             LanguageType eLnge, LanguageType eNewLnge );
+                                   short& nType, sal_uInt32& nKey,
+                                   LanguageType eLnge, LanguageType eNewLnge );
 
     bool PutandConvertEntrySystem( String& rString, xub_StrLen& nCheckPos,
-                             short& nType, sal_uInt32& nKey,
-                             LanguageType eLnge, LanguageType eNewLnge );
+                                   short& nType, sal_uInt32& nKey,
+                                   LanguageType eLnge, LanguageType eNewLnge );
 
     /** Similar to <method>PutEntry</method> and
         <method>PutandConvertEntry</method> or
@@ -459,9 +456,9 @@ public:
             and/or could not be converted.
      */
     sal_uInt32 GetIndexPuttingAndConverting( String & rString, LanguageType eLnge,
-                                        LanguageType eSysLnge, short & rType,
-                                        bool & rNewInserted,
-                                        xub_StrLen & rCheckPos );
+                                             LanguageType eSysLnge, short & rType,
+                                             bool & rNewInserted,
+                                             xub_StrLen & rCheckPos );
 
     sal_uInt32 GetIndexPuttingAndConverting( OUString & rString, LanguageType eLnge,
                                              LanguageType eSysLnge, short & rType,
@@ -481,7 +478,7 @@ public:
                 returned in fOutNumber
             <FALSE/> if input is not a number
      */
-    bool IsNumberFormat( const String& sString, sal_uInt32& F_Index, double& fOutNumber );
+    bool IsNumberFormat( const OUString& sString, sal_uInt32& F_Index, double& fOutNumber );
 
     /// Format a number according to a format index, return string and color
     void GetOutputString( const double& fOutNumber, sal_uInt32 nFIndex,
@@ -511,9 +508,9 @@ public:
             <TRUE/> else, in which case the string and color are returned.
      */
     bool GetPreviewString( const String& sFormatString, double fPreviewNumber,
-                          String& sOutString, Color** ppColor,
-                          LanguageType eLnge = LANGUAGE_DONTKNOW,
-                          bool bUseStarFormat = false );
+                           String& sOutString, Color** ppColor,
+                           LanguageType eLnge = LANGUAGE_DONTKNOW,
+                           bool bUseStarFormat = false );
 
     bool GetPreviewString(const OUString& sFormatString,
                           double fPreviewNumber,
@@ -549,8 +546,8 @@ public:
         @return
             NUMBERFORMAT_ENTRY_NOT_FOUND if not found, else the format index.
      */
-    sal_uInt32 TestNewString( const String& sFormatString,
-                        LanguageType eLnge = LANGUAGE_DONTKNOW );
+    sal_uInt32 TestNewString( const OUString& sFormatString,
+                              LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /// Whether format index nFIndex is of type text or not
     bool IsTextFormat(sal_uInt32 nFIndex) const;
@@ -574,16 +571,16 @@ public:
             0 if format code string parsed without errors, otherwise error
             position (like nCheckPos on <method>PutEntry</method>)
      */
-    sal_uInt32 GetFormatSpecialInfo( const String&, bool& bThousand, bool& IsRed,
-                              sal_uInt16& nPrecision, sal_uInt16& nAnzLeading,
-                              LanguageType eLnge = LANGUAGE_DONTKNOW );
+    sal_uInt32 GetFormatSpecialInfo( const OUString&, bool& bThousand, bool& IsRed,
+                                     sal_uInt16& nPrecision, sal_uInt16& nAnzLeading,
+                                     LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /// Check if format code string may be deleted by user
-    bool IsUserDefined( const String& sStr, LanguageType eLnge = LANGUAGE_DONTKNOW );
+    bool IsUserDefined( const OUString& sStr, LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /** Return the format index of the format code string for language/country,
         or NUMBERFORMAT_ENTRY_NOT_FOUND */
-    sal_uInt32 GetEntryKey( const String& sStr, LanguageType eLnge = LANGUAGE_DONTKNOW );
+    sal_uInt32 GetEntryKey( const OUString& sStr, LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /// Return the format for a format index
     const SvNumberformat* GetEntry( sal_uInt32 nKey ) const;
@@ -603,14 +600,14 @@ public:
         Maybe not the default format but a special builtin format, e.g. for
         NF_TIME_HH_MMSS00, or NF_TIME_HH_MMSS if fNumber >= 1.0  */
     sal_uInt32 GetStandardFormat( double fNumber, sal_uInt32 nFIndex, short eType,
-                            LanguageType eLnge );
+                                  LanguageType eLnge );
 
     /// Whether nFIndex is a special builtin format
     bool IsSpecialStandardFormat( sal_uInt32 nFIndex, LanguageType eLnge );
 
     /** Return the corresponding edit format of a format. */
     sal_uInt32 GetEditFormat( double fNumber, sal_uInt32 nFIndex, short eType,
-            LanguageType eLnge, SvNumberformat* pFormat );
+                              LanguageType eLnge, SvNumberformat* pFormat );
 
     /// Return the reference date
     Date* GetNullDate();
@@ -679,12 +676,12 @@ public:
     inline  static  sal_uInt16  ExpandTwoDigitYear( sal_uInt16 nYear, sal_uInt16 nTwoDigitYearStart );
 
     /// DEPRICATED: Return first character of the decimal separator of the current language/country
-    sal_Unicode GetDecSep() const { return GetNumDecimalSep().GetChar(0); }
+    sal_Unicode GetDecSep() const { return GetNumDecimalSep()[0]; }
     /// Return the decimal separator of the current language/country
-    String GetDecimalSep() const { return GetNumDecimalSep(); }
+    OUString GetDecimalSep() const { return GetNumDecimalSep(); }
 
     /// Return the decimal separator matching the locale of the given format
-    String GetFormatDecimalSep( sal_uInt32 nFormat ) const;
+    OUString GetFormatDecimalSep( sal_uInt32 nFormat ) const;
 
     /// Return a <type>NfCurrencyTable</type> with pointers to <type>NfCurrencyEntry</type> entries
     static const NfCurrencyTable& GetTheCurrencyTable();
@@ -711,8 +708,8 @@ public:
             <NULL/> if not found
             else pointer to <type>NfCurrencyEntry</type>
      */
-    static const NfCurrencyEntry*  GetCurrencyEntry( const String& rAbbrev,
-                LanguageType eLang );
+    static const NfCurrencyEntry*  GetCurrencyEntry( const OUString& rAbbrev,
+                                                     LanguageType eLang );
 
     /** Return a <type>NfCurrencyEntry</type> pointer matching the symbol
         combination of a LegacyOnly currency. Note that this means only that
@@ -723,15 +720,14 @@ public:
         @return
             A matching entry, or else <NULL/>.
      */
-    static const NfCurrencyEntry* GetLegacyOnlyCurrencyEntry(
-            const String& rSymbol, const String& rAbbrev );
+    static const NfCurrencyEntry* GetLegacyOnlyCurrencyEntry( const OUString& rSymbol, const OUString& rAbbrev );
 
     /** Set the default system currency. The combination of abbreviation and
         language must match an existent element of theCurrencyTable. If not,
         the SYSTEM (current locale) entry becomes the default.
         This method is meant for the configuration of the default currency.
      */
-    static void SetDefaultSystemCurrency( const String& rAbbrev, LanguageType eLang );
+    static void SetDefaultSystemCurrency( const OUString& rAbbrev, LanguageType eLang );
 
     /** Get all standard formats for a specific currency, formats are
         appended to the <type>NfWSStringsDtor</type> list.
@@ -742,7 +738,7 @@ public:
             position of default format
      */
     sal_uInt16  GetCurrencyFormatStrings( NfWSStringsDtor&, const NfCurrencyEntry&,
-                bool bBank ) const;
+                                          bool bBank ) const;
 
     /** Whether nFormat is of type NUMBERFORMAT_CURRENCY and the format code
         contains a new SYMBOLTYPE_CURRENCY and if so which one [$xxx-nnn].
@@ -750,7 +746,8 @@ public:
         returned, even if the format code only contains [$xxx] !
      */
     bool    GetNewCurrencySymbolString( sal_uInt32 nFormat, String& rSymbol,
-                const NfCurrencyEntry** ppEntry = NULL, bool* pBank = NULL ) const;
+                                        const NfCurrencyEntry** ppEntry = NULL,
+                                        bool* pBank = NULL ) const;
 
     /** Look up the corresponding <type>NfCurrencyEntry</type> matching
         rSymbol (may be CurrencySymbol or CurrencyAbbreviation) and possibly
@@ -789,8 +786,10 @@ public:
              else <NULL/>.
      */
     static const NfCurrencyEntry* GetCurrencyEntry( bool & bFoundBank,
-                const String& rSymbol, const String& rExtension,
-                LanguageType eFormatLanguage, bool bOnlyStringLanguage = false );
+                                                    const OUString& rSymbol,
+                                                    const OUString& rExtension,
+                                                    LanguageType eFormatLanguage,
+                                                    bool bOnlyStringLanguage = false );
 
     /// Get compatibility ("automatic" old style) currency from I18N locale data
     void GetCompatibilityCurrency( OUString& rSymbol, OUString& rAbbrev ) const;
@@ -836,9 +835,9 @@ private:
     bool bNoZero;                           // Zero value suppression
 
     // cached locale data items needed almost any time
-    String aDecimalSep;
-    String aThousandSep;
-    String aDateSep;
+    OUString aDecimalSep;
+    OUString aThousandSep;
+    OUString aDateSep;
 
 #ifdef _ZFORLIST_CXX                // ----- private Methoden -----
 
@@ -940,9 +939,9 @@ private:
 #ifndef DBG_UTIL
     inline
 #endif
-        static bool ImpLookupCurrencyEntryLoopBody(
-            const NfCurrencyEntry*& pFoundEntry, bool& bFoundBank,
-            const NfCurrencyEntry* pData, sal_uInt16 nPos, const String& rSymbol );
+        static bool ImpLookupCurrencyEntryLoopBody( const NfCurrencyEntry*& pFoundEntry,
+                                                    bool& bFoundBank, const NfCurrencyEntry* pData,
+                                                    sal_uInt16 nPos, const OUString& rSymbol );
 
     // link to be set at <method>SvtSysLocaleOptions::SetCurrencyChangeLink()</method>
     DECL_DLLPRIVATE_STATIC_LINK( SvNumberFormatter, CurrencyChangeLink, void* );
@@ -1010,13 +1009,13 @@ public:
     // cached locale data items
 
     // return the corresponding decimal separator
-    inline const String& GetNumDecimalSep() const { return aDecimalSep; }
+    inline const OUString& GetNumDecimalSep() const { return aDecimalSep; }
 
     // return the corresponding group (AKA thousand) separator
-    inline const String& GetNumThousandSep() const { return aThousandSep; }
+    inline const OUString& GetNumThousandSep() const { return aThousandSep; }
 
     // return the corresponding date separator
-    inline const String& GetDateSep() const { return aDateSep; }
+    inline const OUString& GetDateSep() const { return aDateSep; }
 
 };
 
