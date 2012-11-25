@@ -40,14 +40,13 @@ endef
 #
 $(BOOTSTRAPDIR)/no-resource-compress.xml :
 	( \
-	android_sdk_ver=`grep 'Pkg.Revision' /opt/libreoffice/android-sdk-linux/tools/source.properties | sed 's/^.*=//' | sed 's/\..*//'` ; \
-	echo "Android SDK version is: $$android_sdk_ver"; \
-	cp -a $(BOOTSTRAPDIR)/no-resource-compress-$$android_sdk_ver.xml $(BOOTSTRAPDIR)/no-resource-compress.xml ; \
+	android_sdk_ver=`grep 'Pkg.Revision' $(ANDROID_SDK_HOME)/tools/source.properties | sed 's/^.*=//' | sed 's/\..*//'` ; \
+	cp $(BOOTSTRAPDIR)/no-resource-compress-$$android_sdk_ver.xml $(BOOTSTRAPDIR)/no-resource-compress.xml ; \
 	if ! test -f $(BOOTSTRAPDIR)/no-resource-compress.xml; then \
-	   echo "Unknown Android SDK version: $$android_sdk_ver - failing hard" \
+	   echo "Unknown Android SDK version: $$android_sdk_ver"; \
 	   exit 1; \
 	fi \
-	) || exit 1
+	)
 
 android_version_setup : $(BOOTSTRAPDIR)/no-resource-compress.xml
 
@@ -67,7 +66,7 @@ install: build-ant
 uninstall:
 	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
 
-clean: properties
+clean: android_version_setup properties
 	$(ANT) clean
 	rm -rf assets libs $(SODEST) $(OBJLOCAL) $(BOOTSTRAPDIR)/no-resource-compress.xml
 
