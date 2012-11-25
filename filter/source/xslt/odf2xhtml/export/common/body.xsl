@@ -358,6 +358,10 @@
 								<xsl:value-of select="concat($href, $optionalURLSuffix)"/>
 							</xsl:when>
 							 <!-- for relative URLs -->
+							 <xsl:when test="starts-with($href, '#')">
+							   <!-- intra document ref -->
+							   <xsl:value-of select="$href"/>
+							 </xsl:when>
 							<xsl:otherwise>
 								<xsl:value-of select="concat($sourceBaseURL, $href, $optionalURLSuffix)"/>
 							</xsl:otherwise>
