@@ -15,6 +15,8 @@ APPDIR=build/Debug-$(PLATFORM)/$(APP).app
 
 # Stuff lifted from solenv/gbuild
 
+COMMA := ,
+
 gb_CPUDEFS := -DARM32
 
 gb_CPUDEFS += -D$(CPUNAME)
@@ -43,6 +45,7 @@ gb_GLOBALDEFS := \
 	$(gb_OSDEFS) \
 	$(gb_COMPILERDEFS) \
 	$(gb_CPUDEFS) \
+	-DDISABLE_DYNLOADING \
 
 gb_OBJC_OBJCXX_COMMON_FLAGS := -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300 -g
 gb_OBJCFLAGS := -x objective-c $(gb_OBJC_OBJCXX_COMMON_FLAGS)
@@ -61,13 +64,17 @@ CFLAGS = $(SOLARINC)
 
 MOREINCLUDES = -I$(OUTDIR)/inc/udkapi -I$(OUTDIR)/inc/offapi
 
-LIBS = $(foreach LIB, bin/cppunit/cppunittester lib/bootstrap.uno lib/configmgr.uno lib/expwrap.uno lib/fastsax.uno lib/i18npool.uno lib/introspection.uno lib/reflection.uno lib/stocservices.uno lib/unobootstrapprotector lib/unoexceptionprotector, -Wl,$(OUTDIR)/$(LIB).a) $(SOLARLIB) -lacclo -lanalysislo -lascii_expat_xmlparse -lavmedialo -lbasegfxlo -lcanvastoolslo -llcms2 -lcollator_data -lcomphelpgcc3 -lcppcanvaslo -lcppunit -lcrypto -lcuilo -ldatelo -ldbtoolslo -ldict_ja -ldict_zh -ldrawinglayerlo -leditenglo  -legilo -lemelo -lepblo -lepglo -lepplo -lepslo -leptlo -leralo -letilo -lexpat_xmlparse -lexpat_xmltok -lexplo -lfilterconfiglo -lforlo -lforuilo -lfwelo -lfwilo -lfwklo -lgcc3_uno -li18nisolang1gcc3 -li18nutilgcc3 -licdlo -licudata -licui18n -licuuc -lidxlo -limelo -lindex_data -lipblo -lipdlo -lipslo -liptlo -lipxlo -liralo -litglo -litilo -ljpeg -ljvmfwk -llnglo -llocaledata_en -llocaledata_es -llocaledata_euro -llocaledata_others -lmsfilterlo -lorcus -looxlo -lpackage2 -lreg -lsal_textenc -lsalcpprt -lsaxlo -lsax_shared -lscfiltlo -lsclo -lscuilo -lsfxlo -lsotlo -lstore -lsvllo -lsvtlo -lsvxlo -lsvxcorelo -ltest -ltextconv_dict -ltklo -ltllo -lucb1 -lucbhelper4gcc3 -lucpfile1 -lunoxmllo -luno_cppuhelpergcc3 -luno_cppu -luno_sal -luno_salhelpergcc3 -lunotest -lutllo -lvcllo -lxmlscriptlo -lxml2 -lxmlreader -lxolo -lxstor -lz $(addprefix -framework , $(gb_Library__FRAMEWORKS)) -liconv -lobjc
+LIBS = \
+  $(addprefix -Wl$(COMMA),$(wildcard $(OUTDIR)/lib/*.a)) \
+  $(addprefix -framework , $(gb_Library__FRAMEWORKS)) \
+  -lz \
+  -liconv
 
 all: $(APPDIR)/$(APP) stuff
 
 $(APPDIR)/$(APP): $(SRCS)
 	mkdir -p $(APPDIR)
-	$(CXX) -Wl,-map,$(APP).map.mangled -o $@ $(gb_GLOBALDEFS) $(CFLAGS) $(gb_OBJCXXFLAGS) $(MOREINCLUDES) $(SRCS) $(LIBS)
+	$(CXX) -v -miphoneos-version-min=4.3 -fobjc-link-runtime -Wl,-map,$(APP).map.mangled -o $@ $(gb_GLOBALDEFS) $(CFLAGS) $(gb_OBJCXXFLAGS) $(MOREINCLUDES) $(SRCS) $(LIBS)
 	c++filt <$(APP).map.mangled >$(APP).map && rm $(APP).map.mangled
 
 stuff:
