@@ -617,14 +617,14 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( rInf.GetFont()->IsPaintBlank() )
     {
         // tabs with filling / filled tabs
-        UniString aTxt = OUString(' ');
+        OUString aTxt = OUString(' ');
         const KSHORT nCharWidth = rInf.GetTxtSize( aTxt ).Width();
         // robust:
         if( nCharWidth )
         {
             // 6864: always with kerning, also on printer!
             KSHORT nChar = Width() / nCharWidth;
-            rInf.DrawText( aTxt.Fill( nChar, ' ' ), *this, 0, nChar, sal_True );
+            rInf.DrawText( aTxt.padRight( nChar, ' ' ), *this, 0, nChar, sal_True );
         }
     }
 
@@ -632,7 +632,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( IsFilled() )
     {
         // tabs with filling / filled tabs
-        UniString aTxt = OUString(cFill);
+        OUString aTxt = OUString(cFill);
         const KSHORT nCharWidth = rInf.GetTxtSize( aTxt ).Width();
         OSL_ENSURE( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
         // robust:
@@ -642,7 +642,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
             KSHORT nChar = Width() / nCharWidth;
             if ( cFill == '_' )
                 ++nChar; // to avoid gaps (Bug 13430)
-            rInf.DrawText( aTxt.Fill( nChar, cFill ), *this, 0, nChar, sal_True );
+            rInf.DrawText( aTxt.padRight( nChar, cFill ), *this, 0, nChar, sal_True );
         }
     }
 }
