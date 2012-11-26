@@ -46,7 +46,7 @@ class OfficeDocument(object):
     @classmethod
     def attachEventCall(self, xComponent, EventName, EventType, EventURL):
         try:
-            oEventProperties = range(2)
+            oEventProperties = list(range(2))
             oEventProperties[0] = uno.createUnoStruct(
                 'com.sun.star.beans.PropertyValue')
             oEventProperties[0].Name = "EventType"
@@ -85,7 +85,7 @@ class OfficeDocument(object):
 
     @classmethod
     def createNewDocument(self, frame, sDocumentType, preview, readonly):
-        loadValues = range(2)
+        loadValues = list(range(2))
         loadValues[0] = uno.createUnoStruct(
             'com.sun.star.beans.PropertyValue')
         loadValues[0].Name = "ReadOnly"
@@ -194,7 +194,7 @@ class OfficeDocument(object):
     def store(self, xMSF, xComponent, StorePath, FilterName):
         try:
             if len(FilterName):
-                oStoreProperties = range(2)
+                oStoreProperties = list(range(2))
                 oStoreProperties[0] = uno.createUnoStruct(
                     'com.sun.star.beans.PropertyValue')
                 oStoreProperties[0].Name = "FilterName"
@@ -205,7 +205,7 @@ class OfficeDocument(object):
                 oStoreProperties[1].Value = xMSF.createInstance(
                     "com.sun.star.comp.uui.UUIInteractionHandler")
             else:
-                oStoreProperties = range(0)
+                oStoreProperties = list(range(0))
 
             if StorePath.startswith("file://"):
                 #Unix
@@ -260,7 +260,7 @@ class OfficeDocument(object):
     def getFileMediaDecriptor(self, xmsf, url):
         typeDetect = xmsf.createInstance(
             "com.sun.star.document.TypeDetection")
-        mediaDescr = range(1)
+        mediaDescr = list(range(1))
         mediaDescr[0] = uno.createUnoStruct(
             'com.sun.star.beans.PropertyValue')
         mediaDescr[0].Name = "URL"

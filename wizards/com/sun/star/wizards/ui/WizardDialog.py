@@ -161,7 +161,7 @@ class WizardDialog(UnoDialog2):
     def getRoadmapItemByID(self, _ID):
         try:
             getByIndex = self.oRoadmap.getByIndex
-            for i in xrange(self.oRoadmap.Count):
+            for i in range(self.oRoadmap.Count):
                 CurRoadmapItem = getByIndex(i)
                 CurID = int(Helper.getUnoPropertyValue(CurRoadmapItem, "ID"))
                 if CurID == _ID:
@@ -339,7 +339,7 @@ class WizardDialog(UnoDialog2):
 
     def enablefromStep(self, _iStep, _bDoEnable):
         if _iStep <= self.nMaxStep:
-            for i in xrange(_iStep, self.nMaxStep):
+            for i in range(_iStep, self.nMaxStep):
                 self.setStepEnabled(i, _bDoEnable)
             enableFinishButton(_bDoEnable)
             if not _bDoEnable:

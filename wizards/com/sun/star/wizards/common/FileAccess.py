@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-import types
 from os import path as osPath
 from .NoValidPathException import NoValidPathException
 
@@ -101,9 +100,9 @@ class FileAccess(object):
                 sPath + "_internal")
             Template_user = xPathInterface.getPropertyValue(
                 sPath + "_user")
-            if type(Template_internal) is not types.InstanceType:
+            if not hasattr(Template_internal, '__dict__'):
                 ReadPaths = ReadPaths + Template_internal
-            if type(Template_user) is not types.InstanceType:
+            if not hasattr(Template_user, '__dict__'):
                 ReadPaths = ReadPaths + Template_user
             ReadPaths = ReadPaths + (Template_writable,)
             if sType.lower() == "user":
@@ -125,7 +124,6 @@ class FileAccess(object):
 
         if not bexists:
             raise NoValidPathException (xMSF, "");
-
         return ResultPath
 
     @classmethod

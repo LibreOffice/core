@@ -120,7 +120,7 @@ class TextDocument(object):
         self.xProgressBar.setValue(5)
 
     def loadAsPreview(self, sDefaultTemplate, asTemplate):
-        loadValues = range(3)
+        loadValues = list(range(3))
         #      open document in the Preview mode
         loadValues[0] = uno.createUnoStruct(
             'com.sun.star.beans.PropertyValue')
@@ -244,7 +244,7 @@ class TextDocument(object):
         
         auxList = []
         allItems = self.xTextDocument.findAll(sd)
-        for i in xrange(allItems.Count):
+        for i in range(allItems.Count):
             auxList.append(allItems.getByIndex(i))
             
         return auxList

@@ -151,7 +151,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         try:
             fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
-            print os.path.exists(self.sPath)
             if not self.sPath or not os.path.exists(self.sPath):
                 self.myPathSelection.triggerPathPicker()
                 self.sPath = self.myPathSelection.getSelectedPath()
@@ -184,7 +183,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 self.saveConfiguration()
                 xIH = self.xMSF.createInstance( \
                     "com.sun.star.comp.uui.UUIInteractionHandler")
-                loadValues = range(4)
+                loadValues = list(range(4))
                 loadValues[0] = uno.createUnoStruct( \
                     'com.sun.star.beans.PropertyValue')
                 loadValues[0].Name = "AsTemplate"
