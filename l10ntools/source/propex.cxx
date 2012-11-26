@@ -21,23 +21,20 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         return 1;
     }
 
-    if( aArgs.m_sInputFile.indexOf("en_US") != -1 )
+    PropParser aParser(
+        aArgs.m_sInputFile, Export::sLanguages, aArgs.m_bMergeMode );
+    if( !aParser.isInitialized() )
     {
-        PropParser aParser(
-            aArgs.m_sInputFile, Export::sLanguages, aArgs.m_bMergeMode );
-        if( !aParser.isInitialized() )
-        {
-            return 1;
-        }
-        if( aArgs.m_bMergeMode )
-        {
-           aParser.Merge(aArgs.m_sMergeSrc, aArgs.m_sOutputFile);
-        }
-        else
-        {
-            aParser.Extract(
-                aArgs.m_sOutputFile, aArgs.m_sPrj, aArgs.m_sPrjRoot );
-        }
+        return 1;
+    }
+    if( aArgs.m_bMergeMode )
+    {
+        aParser.Merge(aArgs.m_sMergeSrc, aArgs.m_sOutputFile);
+    }
+    else
+    {
+        aParser.Extract(
+            aArgs.m_sOutputFile, aArgs.m_sPrj, aArgs.m_sPrjRoot );
     }
     return 0;
 }
