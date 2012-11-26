@@ -50,8 +50,6 @@ boost_patches += boost_1_44_0-clang-warnings.patch
 # in GCC-4.7 experimental":
 boost_patches += boost_1_44_0-gthreads.patch
 
-boost_patches += boost_1_44_0-crc-shadow-warning.patch
-
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))
