@@ -96,7 +96,7 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     get(m_pDontSplitCB, "dontsplitcb");
     get(m_pBorderCB, "bordercb");
     get(m_pAutoFmtBtn, "autoformat");
-    get(m_pOkBtn, "ok");
+    get(m_pInsertBtn, "ok");
     get(m_pRepeatGroup, "repeatgroup");
     get(m_pRepeatHeaderNF, "repeatheaderspin");
 
@@ -108,6 +108,8 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     m_pRowNF->SetMax(ROW_COL_PROD/m_pColNF->GetValue());
     m_pColNF->SetMax(ROW_COL_PROD/m_pRowNF->GetValue());
     m_pAutoFmtBtn->SetClickHdl(LINK(this, SwInsTableDlg, AutoFmtHdl));
+
+    m_pInsertBtn->SetClickHdl(LINK(this, SwInsTableDlg, OKHdl));
 
     sal_Bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
@@ -142,6 +144,12 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     m_pRepeatHeaderNF->SetMax( nMax );
 }
 
+IMPL_LINK_NOARG(SwInsTableDlg, OKHdl)
+{
+    EndDialog(RET_OK);
+    return 0;
+}
+
 SwInsTableDlg::~SwInsTableDlg()
 {
     delete pTAutoFmt;
@@ -156,7 +164,7 @@ IMPL_LINK_INLINE_START( SwInsTableDlg, ModifyName, Edit *, pEdit )
         pEdit->SetText(sTblName);
     }
 
-    m_pOkBtn->Enable(pShell->GetTblStyle( sTblName ) == 0);
+    m_pInsertBtn->Enable(pShell->GetTblStyle( sTblName ) == 0);
     return 0;
 }
 IMPL_LINK_INLINE_END( SwInsTableDlg, ModifyName, Edit *, pEdit )

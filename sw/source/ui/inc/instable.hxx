@@ -57,7 +57,7 @@ class SwInsTableDlg : public SfxModalDialog
     CheckBox*       m_pDontSplitCB;
     CheckBox*       m_pBorderCB;
 
-    OKButton*       m_pOkBtn;
+    PushButton*     m_pInsertBtn;
     PushButton*     m_pAutoFmtBtn;
 
     SwWrtShell*     pShell;
@@ -67,6 +67,7 @@ class SwInsTableDlg : public SfxModalDialog
     DECL_LINK( ModifyName, Edit * );
     DECL_LINK( ModifyRowCol, NumericField * );
     DECL_LINK( AutoFmtHdl, PushButton* );
+    DECL_LINK(OKHdl, void*);
     DECL_LINK(CheckBoxHdl, void * = 0);
     DECL_LINK( ReapeatHeaderCheckBoxHdl, void* p = 0 );
     DECL_LINK( ModifyRepeatHeaderNF_Hdl, void* p = 0 );
