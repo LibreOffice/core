@@ -138,7 +138,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/fldui/fldui.src \
     sw/source/ui/fldui/fldvar.src \
     sw/source/ui/fldui/inpdlg.src \
-    sw/source/ui/fldui/javaedit.src \
     sw/source/ui/fmtui/tmpdlg.src \
     sw/source/ui/frmdlg/column.src \
     sw/source/ui/frmdlg/cption.src \

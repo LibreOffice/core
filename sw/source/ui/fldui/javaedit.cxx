@@ -43,7 +43,7 @@
 #include <javaedit.hxx>
 
 #include <fldui.hrc>
-#include <javaedit.hrc>
+#include <globals.hrc>
 
 
 using namespace ::com::sun::star;

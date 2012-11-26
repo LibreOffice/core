@@ -35,6 +35,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">•</property>
+                <property name="text" translatable="yes">JavaScript</property>
                 <property name="invisible_char_set">True</property>
               </object>
               <packing>
@@ -54,7 +55,6 @@
                 <property name="halign">start</property>
                 <property name="use_action_appearance">False</property>
                 <property name="xalign">0</property>
-                <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">text</property>
               </object>
@@ -107,6 +107,7 @@
                 <property name="halign">start</property>
                 <property name="use_action_appearance">False</property>
                 <property name="xalign">0</property>
+                <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">url</property>
               </object>

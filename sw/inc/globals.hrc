@@ -54,12 +54,14 @@
 #define STR_TOP_BASE                (RC_GLOBALS_BEGIN + 30)
 #define STR_BOTTOM_BASE             (RC_GLOBALS_BEGIN + 31)
 #define STR_CENTER_BASE             (RC_GLOBALS_BEGIN + 32)
-#define STR_TOP                   (RC_GLOBALS_BEGIN + 33)
-#define STR_BOTTOM                (RC_GLOBALS_BEGIN + 34)
-#define STR_CENTER_HORI               (RC_GLOBALS_BEGIN + 35)
-#define STR_CENTER_VERT               (RC_GLOBALS_BEGIN + 36)
+#define STR_TOP                     (RC_GLOBALS_BEGIN + 33)
+#define STR_BOTTOM                  (RC_GLOBALS_BEGIN + 34)
+#define STR_CENTER_HORI             (RC_GLOBALS_BEGIN + 35)
+#define STR_CENTER_VERT             (RC_GLOBALS_BEGIN + 36)
 
 #define STR_LOAD_HTML_DOC           (RC_GLOBALS_BEGIN + 37)
+
+#define STR_JAVA_EDIT               (RC_GLOBALS_BEGIN + 38)
 
 // DIALOGS -----------------------------------------------------------
 
