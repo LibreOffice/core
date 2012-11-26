@@ -353,6 +353,20 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Veps" ; LANGUAGE_USER_VEPS ; > ;
         < "Võro" ; LANGUAGE_USER_VORO ; > ;
         < "Nenets" ; LANGUAGE_USER_NENETS ; > ;
+        < "Aka" ; LANGUAGE_USER_AKA ; > ;
+        < "Dibole" ; LANGUAGE_USER_DIBOLE ; > ;
+        < "Doondo" ; LANGUAGE_USER_DOONDO ; > ;
+        < "Kaamba" ; LANGUAGE_USER_KAAMBA ; > ;
+        < "Kikongo" ; LANGUAGE_USER_KIKONGO ; > ;
+        < "Kunyi" ; LANGUAGE_USER_KUNYI ; > ;
+        < "Ngungwel" ; LANGUAGE_USER_NGUNGWEL ; > ;
+        < "Njyem" ; LANGUAGE_USER_NJYEM ; > ;
+        < "Punu" ; LANGUAGE_USER_PUNU ; > ;
+        < "Suundi" ; LANGUAGE_USER_SUUNDI ; > ;
+        < "Teke-Kukuya" ; LANGUAGE_USER_TEKE_KUKUYA ; > ;
+        < "Tsaangi" ; LANGUAGE_USER_TSAANGI ; > ;
+        < "Yaka" ; LANGUAGE_USER_YAKA ; > ;
+        < "Yombe" ; LANGUAGE_USER_YOMBE ; > ;
     };
 };
 
