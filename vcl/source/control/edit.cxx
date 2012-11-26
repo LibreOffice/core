@@ -238,6 +238,8 @@ bool Edit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
             nBits |= WB_PASSWORD;
         SetStyle(nBits);
     }
+    else if (rKey == "placeholder-text")
+        SetPlaceholderText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else
         return Control::set_property(rKey, rValue);
     return true;
@@ -255,6 +257,7 @@ void Edit::take_properties(Window &rOther)
 
     Edit &rOtherEdit = static_cast<Edit&>(rOther);
     maText = rOtherEdit.maText;
+    maPlaceholderText = rOtherEdit.maPlaceholderText;
     maSaveValue = rOtherEdit.maSaveValue;
     maUndoText = rOtherEdit.maUndoText;
     maRedoText = rOtherEdit.maRedoText;
@@ -601,10 +604,12 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
     ImplClearBackground( 0, GetOutputSizePixel().Width() );
 
+    bool bPaintPlaceholderText = aText.Len() == 0 && !maPlaceholderText.isEmpty();
+
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if ( IsEnabled() )
         ImplInitSettings( sal_False, sal_True, sal_False );
-    else
+    if ( !IsEnabled() || bPaintPlaceholderText )
         SetTextColor( rStyleSettings.GetDisableColor() );
 
     // Set background color of the normal text
@@ -630,7 +635,11 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
     long nPos = nStart ? pDX[2*nStart] : 0;
     aPos.X() = nPos + mnXOffset + ImplGetExtraOffset();
-    if ( !bDrawSelection && !mpIMEInfos )
+    if ( bPaintPlaceholderText )
+    {
+        DrawText( aPos, maPlaceholderText );
+    }
+    else if ( !bDrawSelection && !mpIMEInfos )
     {
         DrawText( aPos, aText, nStart, nEnd - nStart );
     }
@@ -2859,6 +2868,30 @@ XubString Edit::GetText() const
         return mpSubEdit->GetText();
     else
         return maText;
+}
+
+// -----------------------------------------------------------------------
+
+void Edit::SetPlaceholderText( const OUString& rStr )
+{
+    if ( mpSubEdit )
+        mpSubEdit->SetPlaceholderText( rStr );
+    else if ( maPlaceholderText != rStr )
+    {
+        maPlaceholderText = rStr;
+        if ( GetText().Len() == 0 )
+            Invalidate();
+    }
+}
+
+// -----------------------------------------------------------------------
+
+OUString Edit::GetPlaceholderText() const
+{
+    if ( mpSubEdit )
+        return mpSubEdit->GetPlaceholderText();
+
+    return maPlaceholderText;
 }
 
 // -----------------------------------------------------------------------

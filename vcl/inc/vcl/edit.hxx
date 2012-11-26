@@ -62,6 +62,7 @@ private:
     DDInfo*             mpDDInfo;
     Impl_IMEInfos*      mpIMEInfos;
     XubString           maText;
+    OUString            maPlaceholderText;
     XubString           maSaveValue;
     XubString           maUndoText;
     XubString           maRedoText;
@@ -208,6 +209,9 @@ public:
     virtual void        SetText( const XubString& rStr );
     virtual void        SetText( const XubString& rStr, const Selection& rNewSelection );
     virtual XubString   GetText() const;
+
+    virtual void        SetPlaceholderText( const OUString& rStr );
+    virtual OUString    GetPlaceholderText() const;
 
     void                SaveValue() { maSaveValue = GetText(); }
     const XubString&    GetSavedValue() const { return maSaveValue; }
