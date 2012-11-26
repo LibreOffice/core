@@ -1130,7 +1130,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     XclExpRecord( EXC_ID_CONDFMT ),
     XclExpRoot( rRoot )
 {
-    ScRangeList aScRanges = rCondFormat.GetRange();
+    const ScRangeList& aScRanges = rCondFormat.GetRange();
     GetAddressConverter().ConvertRangeList( maXclRanges, aScRanges, true );
     if( !maXclRanges.empty() )
     {
