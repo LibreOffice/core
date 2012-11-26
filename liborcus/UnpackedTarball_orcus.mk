@@ -14,8 +14,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,orcus,$(ORCUS_TARBALL)))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,orcus,0))
 
 orcus_patches :=
-# -Werror,-Wunused-variable -Werror,-Wunused-private-field
-orcus_patches += liborcus_0.1.0-warnings.patch
 # make config.sub recognize arm-linux-androideabi
 orcus_patches += liborcus_0.1.0-configure.patch
 # fix MinGW build
