@@ -251,6 +251,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
 
     aCbxStartWithActualPage     ( this, SdResId( CBX_START_WITH_ACTUAL_PAGE ) ),
     aGrpStartWithActualPage     ( this, SdResId( GRP_START_WITH_ACTUAL_PAGE ) ),
+    aCbxEnableSdremote          ( this, SdResId( CBX_ENABLE_SDREMOTE ) ),
     aTxtCompatibility           ( this, SdResId( FT_COMPATIBILITY ) ),
     aCbxUsePrinterMetrics       ( this, SdResId( CB_USE_PRINTER_METRICS ) ),
     aCbxCompatibility           ( this, SdResId( CB_MERGE_PARA_DIST ) ),
@@ -416,6 +417,7 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         aCbxMasterPageCache.GetSavedValue()     != aCbxMasterPageCache.IsChecked() ||
         aCbxCopy.GetSavedValue()                != aCbxCopy.IsChecked() ||
         aCbxStartWithActualPage.GetSavedValue() != aCbxStartWithActualPage.IsChecked() ||
+        aCbxEnableSdremote.GetSavedValue()      != aCbxEnableSdremote.IsChecked() ||
         aCbxCompatibility.GetSavedValue()       != aCbxCompatibility.IsChecked() ||
         aCbxUsePrinterMetrics.GetSavedValue()   != aCbxUsePrinterMetrics.IsChecked() )
     {
@@ -429,6 +431,7 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         aOptsItem.GetOptionsMisc().SetMasterPagePaintCaching( aCbxMasterPageCache.IsChecked() );
         aOptsItem.GetOptionsMisc().SetDragWithCopy( aCbxCopy.IsChecked() );
         aOptsItem.GetOptionsMisc().SetStartWithActualPage( aCbxStartWithActualPage.IsChecked() );
+        aOptsItem.GetOptionsMisc().SetEnableSdremote( aCbxEnableSdremote.IsChecked() );
         aOptsItem.GetOptionsMisc().SetSummationOfParagraphs( aCbxCompatibility.IsChecked() );
         aOptsItem.GetOptionsMisc().SetPrinterIndependentLayout (
             aCbxUsePrinterMetrics.IsChecked()
@@ -486,6 +489,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     aCbxMasterPageCache.Check( aOptsItem.GetOptionsMisc().IsMasterPagePaintCaching() );
     aCbxCopy.Check( aOptsItem.GetOptionsMisc().IsDragWithCopy() );
     aCbxStartWithActualPage.Check( aOptsItem.GetOptionsMisc().IsStartWithActualPage() );
+    aCbxEnableSdremote.Check( aOptsItem.GetOptionsMisc().IsEnableSdremote() );
     aCbxCompatibility.Check( aOptsItem.GetOptionsMisc().IsSummationOfParagraphs() );
     aCbxUsePrinterMetrics.Check( aOptsItem.GetOptionsMisc().GetPrinterIndependentLayout()==1 );
     aCbxStartWithTemplate.SaveValue();
@@ -496,7 +500,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
 
     aCbxMasterPageCache.SaveValue();
     aCbxCopy.SaveValue();
-    aCbxStartWithActualPage.SaveValue();
+    aCbxEnableSdremote.SaveValue();
     aCbxCompatibility.SaveValue();
     aCbxUsePrinterMetrics.SaveValue();
 
@@ -622,6 +626,7 @@ void SdTpOptionsMisc::SetImpressMode (void)
     lcl_MoveWin (aMtrFldTabstop, -nLineHeight);
     lcl_MoveWin (aGrpStartWithActualPage, -nLineHeight);
     lcl_MoveWin (aCbxStartWithActualPage, -nLineHeight);
+    lcl_MoveWin (aCbxEnableSdremote, -nLineHeight);
     lcl_MoveWin (aTxtCompatibility, -nLineHeight);
 
     // Move the printer-independent-metrics check box up two lines to change
@@ -634,6 +639,7 @@ void    SdTpOptionsMisc::SetDrawMode()
     aCbxStartWithTemplate.Hide();
     aGrpProgramStart.Hide();
     aCbxStartWithActualPage.Hide();
+    aCbxEnableSdremote.Hide();
     aCbxCompatibility.Hide();
     aGrpStartWithActualPage.Hide();
     aCbxCrookNoContortion.Show();

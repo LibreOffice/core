@@ -110,6 +110,7 @@ private:
 
     CheckBox    aCbxStartWithActualPage;
     FixedLine   aGrpStartWithActualPage;
+    CheckBox    aCbxEnableSdremote;
     FixedLine   aTxtCompatibility;
     CheckBox    aCbxUsePrinterMetrics;
     CheckBox    aCbxCompatibility;

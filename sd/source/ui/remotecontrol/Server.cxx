@@ -298,7 +298,7 @@ void SdDLL::RegisterRemotes()
     // Disable unless in experimental mode for now
     SAL_INFO( "sdremote", "SdDLL::RegisterRemotes called" );
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-    if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+    if (!xContext.is() || !officecfg::Office::Impress::Misc::Start::EnableSdremote::get(xContext))
         return;
 
     sd::RemoteServer::setup();

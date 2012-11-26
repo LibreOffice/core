@@ -204,7 +204,7 @@ TabPage TP_OPTIONS_MISC
     {
         Pos = MAP_APPFONT ( 6 , 134  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Start presentation" ;
+        Text [ en-US ] = "Presentation" ;
     };
     CheckBox CBX_START_WITH_ACTUAL_PAGE
     {
@@ -214,9 +214,17 @@ TabPage TP_OPTIONS_MISC
         TabStop = TRUE ;
         Text [ en-US ] = "Always with current page" ;
     };
+    CheckBox CBX_ENABLE_SDREMOTE
+    {
+        HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CBX_ENABLE_SDREMOTE";
+        Pos = MAP_APPFONT ( 12 , 158  ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Enable remote control" ;
+    };
     FixedLine FT_COMPATIBILITY
     {
-        Pos = MAP_APPFONT ( 6 , 160 ) ;
+        Pos = MAP_APPFONT ( 6 , 173 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Compatibility" ;
     };
@@ -226,14 +234,14 @@ TabPage TP_OPTIONS_MISC
         // This checkbox and the following one will change places when this
         // one is wired in into the dialog.  At the moment exists only for
         // translation to work on.
-        Pos = MAP_APPFONT ( 12 , 184 ) ;
+        Pos = MAP_APPFONT ( 12 , 197 ) ;
         Size = MAP_APPFONT ( 242, 10 ) ;
         Text [ en-US ] = "Us~e printer metrics for document formatting";
     };
     CheckBox CB_MERGE_PARA_DIST
     {
         HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CB_MERGE_PARA_DIST";
-        Pos = MAP_APPFONT ( 12 , 171 ) ;
+        Pos = MAP_APPFONT ( 12 , 184 ) ;
         Size = MAP_APPFONT ( 242, 10 ) ;
         Text [ en-US ] = "Add ~spacing between paragraphs and tables (in current document)";
     };

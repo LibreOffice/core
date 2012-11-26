@@ -497,6 +497,7 @@ SdOptionsMisc::SdOptionsMisc( sal_uInt16 nConfigId, sal_Bool bUseConfig ) :
     bDoubleClickTextEdit( sal_True ),
     bClickChangeRotation( sal_False ),
     bStartWithActualPage( sal_False ),
+    bEnableSdremote( sal_False ),
     bSolidDragging( sal_True ),
     bSummationOfParagraphs( sal_False ),
     bShowUndoDeleteWarning( sal_True ),
@@ -531,6 +532,7 @@ sal_Bool SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsDoubleClickTextEdit() == rOpt.IsDoubleClickTextEdit() &&
             IsClickChangeRotation() == rOpt.IsClickChangeRotation() &&
             IsStartWithActualPage() == rOpt.IsStartWithActualPage() &&
+            IsEnableSdremote() == rOpt.IsEnableSdremote() &&
             IsSummationOfParagraphs() == rOpt.IsSummationOfParagraphs() &&
             IsSolidDragging() == rOpt.IsSolidDragging() &&
             IsShowUndoDeleteWarning() == rOpt.IsShowUndoDeleteWarning() &&
@@ -586,10 +588,11 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "Display",
 
         "PenColor",
-        "PenWidth"
+        "PenWidth",
+        "Start/EnableSdremote"
     };
 
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 25 : 14 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 26 : 14 );
     ppNames = aPropNames;
 }
 
@@ -645,6 +648,9 @@ sal_Bool SdOptionsMisc::ReadData( const Any* pValues )
 
         if( pValues[24].hasValue() )
             SetPresentationPenWidth( getSafeValue< double >( pValues[ 24 ] ) );
+
+        if( pValues[25].hasValue() )
+            SetEnableSdremote( *(sal_Bool*) pValues[ 25 ].getValue() );
     }
 
     return sal_True;
@@ -687,6 +693,7 @@ sal_Bool SdOptionsMisc::WriteData( Any* pValues ) const
 
         pValues[ 23 ] <<= GetPresentationPenColor();
         pValues[ 24 ] <<= GetPresentationPenWidth();
+        pValues[ 25 ] <<= IsEnableSdremote();
     }
 
     return sal_True;
@@ -714,6 +721,7 @@ SdOptionsMiscItem::SdOptionsMiscItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd
     {
         maOptionsMisc.SetStartWithTemplate( pOpts->IsStartWithTemplate() );
         maOptionsMisc.SetStartWithActualPage( pOpts->IsStartWithActualPage() );
+        maOptionsMisc.SetEnableSdremote( pOpts->IsEnableSdremote() );
         maOptionsMisc.SetSummationOfParagraphs( pOpts->IsSummationOfParagraphs() );
         maOptionsMisc.SetShowUndoDeleteWarning( pOpts->IsShowUndoDeleteWarning() );
         maOptionsMisc.SetPrinterIndependentLayout( pOpts->GetPrinterIndependentLayout() );
@@ -796,6 +804,7 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
         pOpts->SetDoubleClickTextEdit( maOptionsMisc.IsDoubleClickTextEdit() );
         pOpts->SetClickChangeRotation( maOptionsMisc.IsClickChangeRotation() );
         pOpts->SetStartWithActualPage( maOptionsMisc.IsStartWithActualPage() );
+        pOpts->SetEnableSdremote( maOptionsMisc.IsEnableSdremote() );
         pOpts->SetSummationOfParagraphs( maOptionsMisc.IsSummationOfParagraphs() );
         pOpts->SetSolidDragging( maOptionsMisc.IsSolidDragging() );
         pOpts->SetShowUndoDeleteWarning( maOptionsMisc.IsShowUndoDeleteWarning() );
