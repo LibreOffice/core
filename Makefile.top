@@ -1,6 +1,6 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 
-.PHONY : all bootstrap build check clean clean-build clean-host dev-install distclean distro-pack-install docs fetch findunusedcode id install install-strip install-tb subsequentcheck tags
+.PHONY : all bootstrap build check clean clean-build clean-host dev-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip install-tb subsequentcheck tags
 
 ifeq ($(MAKECMDGOALS),)
 MAKECMDGOALS:=all
@@ -370,14 +370,48 @@ ifneq ($(filter-out clean distclean,$(MAKECMDGOALS)),)
 #
 ifneq ($(DO_FETCH_TARBALLS),NO)
 include $(SRCDIR)/Makefile.fetch
-endif
+fetch: download
+fetch: get-submodules
 fetch: $(SRCDIR)/src.downloaded
 
-$(SRCDIR)/src.downloaded : $(SRCDIR)/download $(SRCDIR)/config_host.mk
-ifneq ($(DO_FETCH_TARBALLS),NO)
-	@$< && touch $@
+ifneq (,$(wildcard .git))
+get-submodules:
+ifneq ($(foreach i,$(GIT_NEEDED_SUBMODULES),$(i)/.git),$(wildcard $(foreach i,$(GIT_NEEDED_SUBMODULES),$(i)/.git)))
+ifeq (,$(GIT_LINK_SRC))
+	./g -f clone
+else # space-saving clone from another local workdir
+	@echo "FIXME: GIT_LINK_SRC method is not yet implemented with submodules" 1>&2
+	$(foreach i,$(GIT_NEEDED_SUBMODULES),\
+		rm -r $(i) && cp -R $(GIT_LINK_SRC)/$(i) $(i))
+#		bin/git-new-workdir $GIT_LINK_SRC/$i $i
+	git submodule update $(GIT_NEEDED_SUBMODULES)
+endif
+endif
+
+else # these sources are from a tarball, so get the other source tarballs
+gb_LO_VER := $(shell . $(SRCDIR)/sources.ver && echo $$lo_sources_ver)
+$(if $(gb_LO_VER),,$(error Error while retrieving $$lo_sources_ver from $(SRCDIR)/sources.ver))
+
+get-submodules: | download
+ifneq ($(foreach i,$(subst helpcontent2,help,$(GIT_NEEDED_SUBMODULES)),$(SRCDIR)/src/libreoffice-$(i)-$(gb_LO_VER)),$(wildcard $(foreach i,$(subst helpcontent2,help,$(GIT_NEEDED_SUBMODULES)),$(SRCDIR)/src/libreoffice-$(i)-$(gb_LO_VER))))
+	$(foreach i,$(subst helpcontent2,help,$(GIT_NEEDED_SUBMODULES)),\
+		$(call fetch_Download_item,http://download.documentfoundation.org/libreoffice/src/$(shell echo $(gb_LO_VER) | sed -e "s/\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/"),libreoffice-$(i)-$(gb_LO_VER).tar.xz,no-check))
+	$(SRCDIR)/bin/unpack-sources $(SRCDIR) $(foreach i,$(subst helpcontent2,help,$(GIT_NEEDED_SUBMODULES)),\
+		$(TARFILE_LOCATION)/libreoffice-$(i)-$(gb_LO_VER).tar.xz)
+endif
+
+endif
+
+# TODO: This should be really in external/ module, I think.
+$(SRCDIR)/src.downloaded : $(SRCDIR)/download $(SRCDIR)/config_host.mk | download
+ifneq ($(COM),MSC)
+	$< && touch $@
+endif
+
 else
+fetch:
 	@echo "Automatic fetching of external tarballs is disabled."
+
 endif
 
 #

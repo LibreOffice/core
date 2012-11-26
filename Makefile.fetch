@@ -69,7 +69,11 @@ define fetch_Optional
 $(if $(filter ALL,$(DO_FETCH_TARBALLS))$(filter $1,$(fetch_BUILD_TYPE)),$2)
 endef
 
-fetch :
+download: $(fetch_LOGFILE)
+
+$(fetch_LOGFILE): $(SRCDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)/Makefile.fetch
+	@mkdir -p $(TARFILE_LOCATION)/tmp
+	@date >> $(fetch_LOGFILE)
 	$(foreach item, \
 		$(call fetch_Optional,CDR,CDR_TARBALL) \
 		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
