@@ -403,7 +403,7 @@ bool excludeDirectory(OString const & directory) {
         "unxubt",
         "wntmsc" };
     for (size_t i = 0; i != SAL_N_ELEMENTS(excluded); ++i) {
-        if (directory == excluded[i]) {
+        if (directory.startsWith(excluded[i])) {
             return true;
         }
     }
