@@ -144,7 +144,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/lotus/lotus \
 	sc/source/filter/lotus/memory \
 	sc/source/filter/lotus/op \
-        sc/source/filter/lotus/optab \
+	sc/source/filter/lotus/optab \
 	sc/source/filter/lotus/tool \
 	sc/source/filter/qpro/biff \
 	sc/source/filter/qpro/qpro \
@@ -162,64 +162,64 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/xcl97/XclImpChangeTrack \
 	sc/source/filter/xcl97/xcl97esc \
 	sc/source/filter/xcl97/xcl97rec \
-        sc/source/filter/oox/excelfilter \
-        sc/source/filter/oox/addressconverter \
-        sc/source/filter/oox/autofilterbuffer \
-        sc/source/filter/oox/autofiltercontext \
-        sc/source/filter/oox/biffcodec \
-        sc/source/filter/oox/biffhelper \
-        sc/source/filter/oox/biffinputstream \
-        sc/source/filter/oox/chartsheetfragment \
-        sc/source/filter/oox/commentsbuffer \
-        sc/source/filter/oox/commentsfragment \
-        sc/source/filter/oox/condformatbuffer \
-        sc/source/filter/oox/condformatcontext \
-        sc/source/filter/oox/connectionsbuffer \
-        sc/source/filter/oox/connectionsfragment \
-        sc/source/filter/oox/defnamesbuffer \
-        sc/source/filter/oox/drawingbase \
-        sc/source/filter/oox/drawingfragment \
-        sc/source/filter/oox/drawingmanager \
-        sc/source/filter/oox/excelchartconverter \
-        sc/source/filter/oox/excelhandlers \
-        sc/source/filter/oox/excelvbaproject \
-        sc/source/filter/oox/externallinkbuffer \
-        sc/source/filter/oox/externallinkfragment \
+	sc/source/filter/oox/excelfilter \
+	sc/source/filter/oox/addressconverter \
+	sc/source/filter/oox/autofilterbuffer \
+	sc/source/filter/oox/autofiltercontext \
+	sc/source/filter/oox/biffcodec \
+	sc/source/filter/oox/biffhelper \
+	sc/source/filter/oox/biffinputstream \
+	sc/source/filter/oox/chartsheetfragment \
+	sc/source/filter/oox/commentsbuffer \
+	sc/source/filter/oox/commentsfragment \
+	sc/source/filter/oox/condformatbuffer \
+	sc/source/filter/oox/condformatcontext \
+	sc/source/filter/oox/connectionsbuffer \
+	sc/source/filter/oox/connectionsfragment \
+	sc/source/filter/oox/defnamesbuffer \
+	sc/source/filter/oox/drawingbase \
+	sc/source/filter/oox/drawingfragment \
+	sc/source/filter/oox/drawingmanager \
+	sc/source/filter/oox/excelchartconverter \
+	sc/source/filter/oox/excelhandlers \
+	sc/source/filter/oox/excelvbaproject \
+	sc/source/filter/oox/externallinkbuffer \
+	sc/source/filter/oox/externallinkfragment \
 	sc/source/filter/oox/extlstcontext \
-        sc/source/filter/oox/formulabase \
-        sc/source/filter/oox/formulabuffer \
-        sc/source/filter/oox/formulaparser \
-        sc/source/filter/oox/numberformatsbuffer \
-        sc/source/filter/oox/pagesettings \
-        sc/source/filter/oox/pivotcachebuffer \
-        sc/source/filter/oox/pivotcachefragment \
-        sc/source/filter/oox/pivottablebuffer \
-        sc/source/filter/oox/pivottablefragment \
-        sc/source/filter/oox/querytablebuffer \
-        sc/source/filter/oox/querytablefragment \
-        sc/source/filter/oox/richstringcontext \
-        sc/source/filter/oox/richstring \
-        sc/source/filter/oox/scenariobuffer \
-        sc/source/filter/oox/scenariocontext \
-        sc/source/filter/oox/sharedstringsbuffer \
-        sc/source/filter/oox/sharedstringsfragment \
-        sc/source/filter/oox/sheetdatabuffer \
-        sc/source/filter/oox/sheetdatacontext \
-        sc/source/filter/oox/stylesbuffer \
-        sc/source/filter/oox/stylesfragment \
-        sc/source/filter/oox/tablebuffer \
-        sc/source/filter/oox/tablefragment \
-        sc/source/filter/oox/themebuffer \
-        sc/source/filter/oox/unitconverter \
-        sc/source/filter/oox/viewsettings \
-        sc/source/filter/oox/workbookfragment \
-        sc/source/filter/oox/workbookhelper \
-        sc/source/filter/oox/workbooksettings \
-        sc/source/filter/oox/worksheetbuffer \
-        sc/source/filter/oox/worksheetfragment \
-        sc/source/filter/oox/worksheethelper \
-        sc/source/filter/oox/worksheetsettings \
-        sc/source/filter/orcus/orcusfiltersimpl \
+	sc/source/filter/oox/formulabase \
+	sc/source/filter/oox/formulabuffer \
+	sc/source/filter/oox/formulaparser \
+	sc/source/filter/oox/numberformatsbuffer \
+	sc/source/filter/oox/pagesettings \
+	sc/source/filter/oox/pivotcachebuffer \
+	sc/source/filter/oox/pivotcachefragment \
+	sc/source/filter/oox/pivottablebuffer \
+	sc/source/filter/oox/pivottablefragment \
+	sc/source/filter/oox/querytablebuffer \
+	sc/source/filter/oox/querytablefragment \
+	sc/source/filter/oox/richstringcontext \
+	sc/source/filter/oox/richstring \
+	sc/source/filter/oox/scenariobuffer \
+	sc/source/filter/oox/scenariocontext \
+	sc/source/filter/oox/sharedstringsbuffer \
+	sc/source/filter/oox/sharedstringsfragment \
+	sc/source/filter/oox/sheetdatabuffer \
+	sc/source/filter/oox/sheetdatacontext \
+	sc/source/filter/oox/stylesbuffer \
+	sc/source/filter/oox/stylesfragment \
+	sc/source/filter/oox/tablebuffer \
+	sc/source/filter/oox/tablefragment \
+	sc/source/filter/oox/themebuffer \
+	sc/source/filter/oox/unitconverter \
+	sc/source/filter/oox/viewsettings \
+	sc/source/filter/oox/workbookfragment \
+	sc/source/filter/oox/workbookhelper \
+	sc/source/filter/oox/workbooksettings \
+	sc/source/filter/oox/worksheetbuffer \
+	sc/source/filter/oox/worksheetfragment \
+	sc/source/filter/oox/worksheethelper \
+	sc/source/filter/oox/worksheetsettings \
+	sc/source/filter/orcus/orcusfiltersimpl \
 ))
 
 # vim: set noet sw=4 ts=4:
