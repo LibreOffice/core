@@ -207,12 +207,13 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/dump/dumperbase \
     oox/source/dump/oledumper \
     oox/source/dump/pptxdumper \
-    oox/source/export/chartexport \
-    oox/source/export/ColorPropertySet \
-    oox/source/export/drawingml \
-    oox/source/export/SchXMLSeriesHelper \
-    oox/source/export/shapes \
-    oox/source/export/vmlexport \
+	$(if $(filter EXPORT,$(BUILD_TYPE)), \
+		oox/source/export/chartexport \
+		oox/source/export/ColorPropertySet \
+		oox/source/export/drawingml \
+		oox/source/export/SchXMLSeriesHelper \
+		oox/source/export/shapes \
+		oox/source/export/vmlexport) \
     oox/source/helper/attributelist \
     oox/source/helper/binaryinputstream \
     oox/source/helper/binaryoutputstream \
