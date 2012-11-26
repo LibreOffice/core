@@ -41,6 +41,7 @@ $(eval $(call gb_Library_add_exception_objects,sal_textenc,\
 	sal/textenc/convertbig5hkscs \
 	sal/textenc/converteuctw \
 	sal/textenc/convertgb18030 \
+	sal/textenc/convertisciidevangari \
 	sal/textenc/convertiso2022cn \
 	sal/textenc/convertiso2022jp \
 	sal/textenc/convertiso2022kr \

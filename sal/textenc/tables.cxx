@@ -100,13 +100,14 @@ static sal_uInt16 const aImplDoubleByteIdentifierTab[1] = { 0 };
 #include "tcvttcn6.tab"
 #include "tcvtuni1.tab"
 
+#include "convertadobe.tab"
 #include "convertbig5hkscs.tab"
 #include "converteuctw.tab"
 #include "convertgb18030.tab"
+#include "convertisciidevangari.tab"
 #include "convertiso2022cn.tab"
 #include "convertiso2022jp.tab"
 #include "convertiso2022kr.tab"
-#include "convertadobe.tab"
 
 extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
     sal_getFullTextEncodingData( rtl_TextEncoding nEncoding )
@@ -208,7 +209,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
             &aImplBig5HkscsTextEncodingData, /* BIG5_HKSCS */
             &aImplTis620TextEncodingData, /* TIS_620 */
             &aImplKoi8UTextEncodingData, /* KOI8_U */
-            NULL, /* TODO! ISCII_DEVANAGARI */
+            &aImplIsciiDevanagariTextEncodingData, /* ISCII_DEVANAGARI */
             NULL, /* JAVA_UTF8, see above */
             &adobeStandardEncodingData, /* ADOBE_STANDARD */
             &adobeSymbolEncodingData, /* ADOBE_SYMBOL */

@@ -509,8 +509,8 @@ namespace
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_BIG5_HKSCS );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_TIS_620 );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_KOI8_U );
-#if 0
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_ISCII_DEVANAGARI );
+#if 0
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_JAVA_UTF8 );
 #endif
 
