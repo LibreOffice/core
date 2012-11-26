@@ -447,7 +447,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     static ::rtl::OUString aEqual(" = ?");
 
 
-    // use keys and indexes for excat postioning
+    // use keys and indexes for exact postioning
     // first the keys
     Reference<XNameAccess> xKeyColumns = getKeyColumns();
 
