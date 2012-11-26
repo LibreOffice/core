@@ -550,7 +550,11 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
             if ( bDeleteTab )
                 aComp.UpdateDeleteTab( rRange.aStart.Tab(), false, true, bChanged1, static_cast<SCTAB>(-1 * nDz) );
             else
-                aComp.UpdateNameReference( eUpdateRefMode, rRange, nDx, nDy, nDz, bChanged1 );
+            {
+                bool bSizeChanged;
+                aComp.UpdateReference( eUpdateRefMode, aSrcPos, rRange, nDx,
+                        nDy, nDz, bChanged1, bSizeChanged );
+            }
         }
 
         if (bChanged1)
@@ -567,7 +571,11 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
             if ( bDeleteTab )
                 aComp.UpdateDeleteTab( rRange.aStart.Tab(), false, true, bChanged2, static_cast<SCTAB>(-1*nDz) );
             else
-                aComp.UpdateNameReference( eUpdateRefMode, rRange, nDx, nDy, nDz, bChanged2 );
+            {
+                bool bSizeChanged;
+                aComp.UpdateReference( eUpdateRefMode, aSrcPos, rRange, nDx,
+                        nDy, nDz, bChanged2, bSizeChanged );
+            }
         }
 
         if (bChanged2)
