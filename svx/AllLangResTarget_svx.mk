@@ -26,19 +26,19 @@ $(eval $(call gb_AllLangResTarget_AllLangResTarget,svx))
 $(eval $(call gb_AllLangResTarget_set_reslocation,svx,svx))
 
 $(eval $(call gb_AllLangResTarget_add_srs,svx,\
-    svx/res \
+	svx/res \
 ))
 
 $(eval $(call gb_SrsTarget_SrsTarget,svx/res))
 
 $(eval $(call gb_SrsTarget_set_include,svx/res,\
-    $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
-    -I$(WORKDIR)/inc \
-    -I$(WORKDIR)/inc/svx \
-    -I$(SRCDIR)/svx/source/inc \
-    -I$(SRCDIR)/svx/source/dialog \
-    -I$(SRCDIR)/svx/inc/ \
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc \
+	-I$(WORKDIR)/inc \
+	-I$(WORKDIR)/inc/svx \
+	-I$(SRCDIR)/svx/source/inc \
+	-I$(SRCDIR)/svx/source/dialog \
+	-I$(SRCDIR)/svx/inc/ \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svx/res,\
@@ -100,36 +100,36 @@ $(call gb_SrsPartTarget_get_target,svx/source/form/formshell.src) : $(WORKDIR)/i
 $(call gb_SrsTarget_get_clean_target,svx/res) : $(WORKDIR)/inc/svx/globlmn.hrc_clean
 
 $(OUTDIR)/inc/svx/globlmn.hrc : $(WORKDIR)/inc/svx/globlmn.hrc
-    $(call gb_Deliver_deliver,$<,$@)
+	$(call gb_Deliver_deliver,$<,$@)
 
 # hack !!!
 # just a temporary - globlmn.hrc about to be removed!
 ifeq ($(strip $(WITH_LANG)),)
 $(WORKDIR)/inc/svx/globlmn.hrc : $(SRCDIR)/svx/inc/globlmn_tmpl.hrc
-    echo copying $@
-    -mkdir -p $(WORKDIR)/inc/svx
-    cp $(SRCDIR)/svx/inc/globlmn_tmpl.hrc $(WORKDIR)/inc/svx/globlmn.hrc
-    rm -f $(WORKDIR)/inc/svx/lastrun.mk 
+	echo copying $@
+	-mkdir -p $(WORKDIR)/inc/svx
+	cp $(SRCDIR)/svx/inc/globlmn_tmpl.hrc $(WORKDIR)/inc/svx/globlmn.hrc
+	rm -f $(WORKDIR)/inc/svx/lastrun.mk 
 else
 -include $(WORKDIR)/inc/svx/lastrun.mk
 ifneq ($(gb_lastrun_globlmn),MERGED)
 .PHONY : $(WORKDIR)/inc/svx/globlmn.hrc
 endif
 $(WORKDIR)/inc/svx/globlmn.hrc : $(SRCDIR)/svx/inc/globlmn_tmpl.hrc $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf
-    echo merging $@
-    -mkdir -p $(WORKDIR)/inc/svx
-    rm -f $(WORKDIR)/inc/svx/lastrun.mk
-    echo gb_lastrun_globlmn:=MERGED > $(WORKDIR)/inc/svx/lastrun.mk
-    $(call gb_Helper_abbreviate_dirs_native, \
-        $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
-        -p svx \
-         -i $< -o $@ -m $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf -l all)
+	echo merging $@
+	-mkdir -p $(WORKDIR)/inc/svx
+	rm -f $(WORKDIR)/inc/svx/lastrun.mk
+	echo gb_lastrun_globlmn:=MERGED > $(WORKDIR)/inc/svx/lastrun.mk
+	$(call gb_Helper_abbreviate_dirs_native, \
+		$(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
+		-p svx \
+		 -i $< -o $@ -m $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf -l all)
 endif
 
 .PHONY : $(WORKDIR)/inc/svx/globlmn.hrc_clean
 $(WORKDIR)/inc/svx/globlmn.hrc_clean :
-    rm -f $(WORKDIR)/inc/svx/lastrun.mk \
-        $(WORKDIR)/inc/svx/globlmn.hrc
+	rm -f $(WORKDIR)/inc/svx/lastrun.mk \
+		$(WORKDIR)/inc/svx/globlmn.hrc
 
 
 # vim: set noet sw=4 ts=4:

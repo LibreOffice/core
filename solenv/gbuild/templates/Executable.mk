@@ -24,11 +24,11 @@
 $(eval $(call gb_Executable_Executable,EXEC))
 
 $(eval $(call gb_Executable_set_include,EXEC,\
-    $$(INCLUDE) \
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Executable_set_cxxflags,EXEC,\
-    $$(CXXFLAGS) \
+	$$(CXXFLAGS) \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,EXEC,\

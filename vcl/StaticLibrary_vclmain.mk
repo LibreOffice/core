@@ -24,17 +24,17 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,vclmain))
 
 $(eval $(call gb_StaticLibrary_set_include,vclmain,\
-    $$(INCLUDE) \
-    -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/vcl/inc/pch \
-    -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc/stl \
-    -I$(OUTDIR)/inc \
+	$$(INCLUDE) \
+	-I$(SRCDIR)/vcl/inc \
+	-I$(SRCDIR)/vcl/inc/pch \
+	-I$(SRCDIR)/solenv/inc \
+	-I$(OUTDIR)/inc/offuh \
+	-I$(OUTDIR)/inc/stl \
+	-I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,vclmain,\
-    vcl/source/salmain/salmain \
+	vcl/source/salmain/salmain \
 ))
 
 # HACK for now
@@ -45,7 +45,7 @@ $(call gb_StaticLibrary_get_target,vclmain) : $(OUTDIR)/lib/$(1)
 $$(eval $$(call gb_Deliver_add_deliverable,$(OUTDIR)/lib/$(1),$(call gb_CxxObject_get_target,vcl/source/salmain/salmain)))
 
 $(OUTDIR)/lib/$(1) : $(call gb_CxxObject_get_target,vcl/source/salmain/salmain)
-    $$(call gb_Deliver_deliver,$$<,$$@)
+	$$(call gb_Deliver_deliver,$$<,$$@)
 
 endef
 

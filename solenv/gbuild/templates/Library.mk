@@ -40,13 +40,13 @@ $(eval $(call gb_Library_set_componentfile,LIB,MODULE/COMPONENT_FILE))
 
 # add any additional include paths for this library here
 $(eval $(call gb_Library_set_include,LIB,\
-    $$(INCLUDE) \
+	$$(INCLUDE) \
 ))
 
 # add any additional definitions to be set for compilation here
 # (e.g. -DLIB_DLLIMPLEMENTATION)
 $(eval $(call gb_Library_set_defs,LIB,\
-    $$(DEFS) \
+	$$(DEFS) \
 ))
 
 # add libraries to be linked to LIB; again these names need to be given as
@@ -67,7 +67,7 @@ $(eval $(call gb_SdiTarget_SdiTarget,MODULE/sdi/ROOT_SDI_FILE,MODULE/sdi/LIB))
 
 # add any additional include paths for sdi processing here
 $(eval $(call gb_SdiTarget_set_include,MODULE/sdi/ROOT_SDI_FILE,\
-    $$(INCLUDE) \
+	$$(INCLUDE) \
 ))
 
 # this is an example how files can be added that require special compiler settings, e.g. building without optimizing
