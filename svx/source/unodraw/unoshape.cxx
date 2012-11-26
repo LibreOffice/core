@@ -1101,8 +1101,11 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 
     if( bClearMe )
     {
-        if( !HasSdrObjectOwnership() )
+        if( !HasSdrObjectOwnership() ) {
+            if( mpObj.is() )
+                mpObj->setUnoShape( NULL );
             mpObj.reset( NULL );
+        }
         if ( !mpImpl->mbDisposing )
             dispose();
     }
