@@ -57,27 +57,26 @@ namespace rtl
 /* ======================================================================= */
 
 /**
-  This String class provide base functionality for C++ like Unicode
-  character array handling. The advantage of this class is, that it
-  handle all the memory management for you - and it do it
-  more efficient. If you assign a string to another string, the
+  This String class provides base functionality for C++ like Unicode
+  character array handling. The advantage of this class is that it
+  handles all the memory management for you - and it does it
+  more efficiently. If you assign a string to another string, the
   data of both strings are shared (without any copy operation or
   memory allocation) as long as you do not change the string. This class
-  stores also the length of the string, so that many operations are
-  faster as the C-str-functions.
+  also stores the length of the string, so that many operations are
+  faster than the C-str-functions.
 
-  This class provide only readonly string handling. So you could create
+  This class provides only readonly string handling. So you could create
   a string and you could only query the content from this string.
-  It provide also functionality to change the string, but this results
-  in every case in a new string instance (in the most cases with an
+  It provides also functionality to change the string, but this results
+  in every case in a new string instance (in the most cases with a
   memory allocation). You don't have functionality to change the
-  content of the string. If you want change the string content, than
-  you should us the OStringBuffer class, which provide these
-  functionality and avoid to much memory allocation.
+  content of the string. If you want to change the string content, then
+  you should use the OStringBuffer class, which provides these
+  functionalities and avoids too much memory allocation.
 
-  The design of this class is similar to the string classes in Java
-  and so more people should have fewer understanding problems when they
-  use this class.
+  The design of this class is similar to the string classes in Java so
+  less people should have understanding problems when they use this class.
 */
 
 class SAL_WARN_UNUSED OUString
@@ -165,8 +164,8 @@ public:
 
       @param    value       a Unicode character array.
       @param    length      the number of character which should be copied.
-                            The character array length must be greater or
-                            equal than this value.
+                            The character array length must be greater than
+                            or equal to this value.
     */
     OUString( const sal_Unicode * value, sal_Int32 length ) SAL_THROW(())
     {
@@ -258,15 +257,15 @@ public:
 #endif
 
     /**
-      New string from a 8-Bit character buffer array.
+      New string from an 8-Bit character buffer array.
 
-      @param    value           a 8-Bit character array.
-      @param    length          the number of character which should be converted.
+      @param    value           An 8-Bit character array.
+      @param    length          The number of character which should be converted.
                                 The 8-Bit character array length must be
-                                greater or equal than this value.
-      @param    encoding        the text encoding from which the 8-Bit character
+                                greater than or equal to this value.
+      @param    encoding        The text encoding from which the 8-Bit character
                                 sequence should be converted.
-      @param    convertFlags    flags which controls the conversion.
+      @param    convertFlags    Flags which control the conversion.
                                 see RTL_TEXTTOUNICODE_FLAGS_...
 
       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
@@ -403,11 +402,11 @@ public:
     }
 
     /**
-      Returns a pointer to the Unicode character buffer from this string.
+      Returns a pointer to the Unicode character buffer for this string.
 
       It isn't necessarily NULL terminated.
 
-      @return   a pointer to the Unicode characters buffer from this object.
+      @return   a pointer to the Unicode characters buffer for this object.
     */
     const sal_Unicode * getStr() const SAL_THROW(()) { return pData->buffer; }
 
@@ -441,7 +440,7 @@ public:
     }
 
     /**
-      Compares two strings with an maximum count of characters.
+      Compares two strings with a maximum count of characters.
 
       The comparison is based on the numeric value of each character in
       the strings and return a value indicating their relationship.
@@ -569,7 +568,7 @@ public:
 
       @param    str         the object (substring) to be compared.
       @param    fromIndex   the index to start the comparion from.
-                            The index must be greater or equal than 0
+                            The index must be greater than or equal to 0
                             and less or equal as the string length.
       @return   sal_True if str match with the characters in the string
                 at the given position;
@@ -605,8 +604,8 @@ public:
 
       @param    str         the object (substring) to be compared.
       @param    fromIndex   the index to start the comparion from.
-                            The index must be greater or equal than 0
-                            and less or equal as the string length.
+                            The index must be greater than or equal to 0
+                            and less than or equal to the string length.
       @return   sal_True if str match with the characters in the string
                 at the given position;
                 sal_False, otherwise.
@@ -652,7 +651,7 @@ public:
     }
 
     /**
-      Compares two strings with an maximum count of characters.
+      Compares two strings with a maximum count of characters.
 
       The comparison is based on the numeric value of each character in
       the strings and return a value indicating their relationship.
@@ -682,9 +681,9 @@ public:
       in the strings and return a value indicating their relationship.
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
-      all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated and must be greater or
-      equal as asciiStrLength.
+      all ASCII characters are in the allowed range between 0 and 127.
+      The ASCII string must be NULL-terminated and must be greater than
+      or equal to asciiStrLength.
       This function can't be used for language specific sorting.
 
       @param    asciiStr        the 8-Bit ASCII character string to be compared.
@@ -728,8 +727,8 @@ public:
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
       all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated and must be greater or
-      equal as asciiStrLength.
+      127. The ASCII string must be NULL-terminated and must be greater than
+      or equal to asciiStrLength.
       This function can't be used for language specific comparison.
 
       @param    asciiStr         the 8-Bit ASCII character string to be compared.
@@ -793,7 +792,7 @@ public:
     }
 
     /**
-      Perform a ASCII lowercase comparison of two strings.
+      Perform an ASCII lowercase comparison of two strings.
 
       The result is true if and only if second string
       represents the same sequence of characters as the first string,
@@ -802,9 +801,9 @@ public:
       values between 97 and 122 (ASCII a-z).
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
-      all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated and must be greater or
-      equal as asciiStrLength.
+      all ASCII characters are in the allowed range between 0 and 127.
+      The ASCII string must be NULL-terminated and must be greater than
+      or equal to asciiStrLength.
       This function can't be used for language specific comparison.
 
       @param    asciiStr        the 8-Bit ASCII character string to be compared.
@@ -828,15 +827,15 @@ public:
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
       all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated and must be greater or
-      equal as asciiStrLength.
+      127. The ASCII string must be NULL-terminated and must be greater than or
+      equal to asciiStrLength.
       This function can't be used for language specific comparison.
 
       @param    asciiStr    the object (substring) to be compared.
       @param    asciiStrLength the length of asciiStr.
       @param    fromIndex   the index to start the comparion from.
-                            The index must be greater or equal than 0
-                            and less or equal as the string length.
+                            The index must be greater than or equal to 0
+                            and less than or equal to the string length.
       @return   sal_True if str match with the characters in the string
                 at the given position;
                 sal_False, otherwise.
@@ -866,15 +865,15 @@ public:
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
       all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated and must be greater or
-      equal as asciiStrLength.
+      127. The ASCII string must be NULL-terminated and must be greater than or
+      equal to asciiStrLength.
       This function can't be used for language specific comparison.
 
       @param    asciiStr        the 8-Bit ASCII character string to be compared.
       @param    asciiStrLength  the length of the ascii string
       @param    fromIndex       the index to start the comparion from.
-                                The index must be greater or equal than 0
-                                and less or equal as the string length.
+                                The index must be greater than or equal to 0
+                                and less than or equal to the string length.
       @return   sal_True if str match with the characters in the string
                 at the given position;
                 sal_False, otherwise.
@@ -1148,8 +1147,8 @@ public:
 
       @param    ch          character to be located.
       @param    fromIndex   the index to start the search from.
-                            The index must be greater or equal than 0
-                            and less or equal as the string length.
+                            The index must be greater than or equal to 0
+                            and less than or equal to the string length.
       @return   the index of the first occurrence of the character in the
                 character sequence represented by this string that is
                 greater than or equal to fromIndex, or
@@ -1411,11 +1410,11 @@ public:
       from position index in this string with newStr.
 
       @param  index   the replacing index in str.
-                      The index must be greater or equal as 0 and
-                      less or equal as the length of the string.
-      @param  count   the count of charcters that will replaced
-                      The count must be greater or equal as 0 and
-                      less or equal as the length of the string minus index.
+                      The index must be greater than or equal to 0 and
+                      less than or equal to the length of the string.
+      @param  count   the count of charcters that will be replaced
+                      The count must be greater than or equal to 0 and
+                      less than or equal to the length of the string minus index.
       @param  newStr  the new substring.
       @return the new string.
     */
@@ -1455,10 +1454,10 @@ public:
       @param to  the replacing substring
 
       @param[in,out] index  pointer to a start index; if the pointer is
-      non-null: upon entry to the function, its value is the index into the this
+      non-null: upon entry to the function, its value is the index into this
       string at which to start searching for the \p from substring, the value
-      must be non-negative and not greater than this string's length; upon exit
-      from the function its value is the index into this string at which the
+      must be non-negative and not greater than this string's length; upon exiting
+      the function its value is the index into this string at which the
       replacement took place or -1 if no replacement took place; if the pointer
       is null, searching always starts at index 0
 
@@ -1485,8 +1484,8 @@ public:
       @param[in,out] index  pointer to a start index; if the pointer is
       non-null: upon entry to the function, its value is the index into the this
       string at which to start searching for the \p from substring, the value
-      must be non-negative and not greater than this string's length; upon exit
-      from the function its value is the index into this string at which the
+      must be non-negative and not greater than this string's length; upon exiting
+      the function its value is the index into this string at which the
       replacement took place or -1 if no replacement took place; if the pointer
       is null, searching always starts at index 0
 
@@ -1514,8 +1513,8 @@ public:
       @param[in,out] index  pointer to a start index; if the pointer is
       non-null: upon entry to the function, its value is the index into the this
       string at which to start searching for the \p from substring, the value
-      must be non-negative and not greater than this string's length; upon exit
-      from the function its value is the index into this string at which the
+      must be non-negative and not greater than this string's length; upon exiting
+      the function its value is the index into this string at which the
       replacement took place or -1 if no replacement took place; if the pointer
       is null, searching always starts at index 0
 
@@ -1819,7 +1818,7 @@ public:
        @param    value           a 8-Bit character array.
        @param    length          the number of character which should be converted.
                                  The 8-Bit character array length must be
-                                 greater or equal than this value.
+                                 greater than or equal to this value.
        @param    encoding        the text encoding from which the 8-Bit character
                                  sequence should be converted.
        @param    convertFlags    flags which controls the conversion.
