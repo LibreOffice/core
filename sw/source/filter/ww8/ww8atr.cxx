@@ -437,15 +437,6 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     //section.
     bool bBreakSet = false;
 
-    const SwPageDesc * pPageDesc = rNd.FindPageDesc(sal_False);
-
-    if (pAktPageDesc != pPageDesc)
-    {
-        bBreakSet = true;
-        bNewPageDesc = true;
-        pAktPageDesc = pPageDesc;
-    }
-
     if ( pSet && pSet->Count() )
     {
         if ( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem ) &&
