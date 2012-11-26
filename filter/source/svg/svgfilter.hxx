@@ -293,9 +293,10 @@ private:
     UCharSetMapMap                      mTextFieldCharSets;
     Reference< XInterface >             mCreateOjectsCurrentMasterPage;
     UOStringMap                         mTextShapeIdListMap;
+#ifndef DISABLE_EXPORT
     MetaBitmapActionSet                 mEmbeddedBitmapActionSet;
     ObjectMap                           mEmbeddedBitmapActionMap;
-
+#endif
     ObjectMap*                          mpObjects;
     Reference< XComponent >             mxSrcDoc;
     Reference< XComponent >             mxDstDoc;

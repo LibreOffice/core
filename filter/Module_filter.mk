@@ -26,16 +26,17 @@ $(eval $(call gb_Module_add_targets,filter,\
 	AllLangResTarget_xsltdlg \
 	Configuration_filter \
 	CustomTarget_svg \
-	Library_egi \
-	Library_eme \
-	Library_epb \
-	Library_epg \
-	Library_epp \
-	Library_eps \
-	Library_ept \
-	Library_era \
-	Library_eti \
-	Library_exp \
+	$(if $(filter EXPORT,$(BUILD_TYPE)), \
+	    Library_egi \
+	    Library_eme \
+	    Library_epb \
+	    Library_epg \
+	    Library_epp \
+	    Library_eps \
+	    Library_ept \
+	    Library_era \
+	    Library_eti \
+	    Library_exp) \
 	Library_filterconfig \
 	Library_flash \
 	Library_icd \
