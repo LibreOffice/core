@@ -1105,11 +1105,11 @@ void Window::ImplRemoveWindow( sal_Bool bRemoveFrameData )
         {
             if ( mpWindowImpl->mpPrev )
                 mpWindowImpl->mpPrev->mpWindowImpl->mpNext = mpWindowImpl->mpNext;
-            else
+            else if ( mpWindowImpl->mpParent )
                 mpWindowImpl->mpParent->mpWindowImpl->mpFirstChild = mpWindowImpl->mpNext;
             if ( mpWindowImpl->mpNext )
                 mpWindowImpl->mpNext->mpWindowImpl->mpPrev = mpWindowImpl->mpPrev;
-            else
+            else if ( mpWindowImpl->mpParent )
                 mpWindowImpl->mpParent->mpWindowImpl->mpLastChild = mpWindowImpl->mpPrev;
         }
 
@@ -4368,29 +4368,33 @@ Window::~Window()
     {
         rtl::OStringBuffer aErrorStr;
         sal_Bool        bError = sal_False;
-        Window*     pTempWin = mpWindowImpl->mpFrameData->mpFirstOverlap;
-        while ( pTempWin )
+        Window*     pTempWin;
+        if (mpWindowImpl->mpFrameData != 0)
         {
-            if ( ImplIsRealParentPath( pTempWin ) )
+            pTempWin = mpWindowImpl->mpFrameData->mpFirstOverlap;
+            while ( pTempWin )
             {
-                bError = sal_True;
-                aErrorStr.append(lcl_createWindowInfo(*pTempWin));
+                if ( ImplIsRealParentPath( pTempWin ) )
+                {
+                    bError = sal_True;
+                    aErrorStr.append(lcl_createWindowInfo(*pTempWin));
+                }
+                pTempWin = pTempWin->mpWindowImpl->mpNextOverlap;
             }
-            pTempWin = pTempWin->mpWindowImpl->mpNextOverlap;
-        }
-        if ( bError )
-        {
-            rtl::OStringBuffer aTempStr;
-            aTempStr.append(RTL_CONSTASCII_STRINGPARAM("Window ("));
-            aTempStr.append(rtl::OUStringToOString(GetText(),
-                RTL_TEXTENCODING_UTF8));
-            aTempStr.append(RTL_CONSTASCII_STRINGPARAM(
-                ") with living SystemWindow(s) destroyed: "));
-            aTempStr.append(aErrorStr.toString());
-            OSL_FAIL(aTempStr.getStr());
-            // abort in non-pro version, this must be fixed!
-            GetpApp()->Abort(rtl::OStringToOUString(
-                aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+            if ( bError )
+            {
+                rtl::OStringBuffer aTempStr;
+                aTempStr.append(RTL_CONSTASCII_STRINGPARAM("Window ("));
+                aTempStr.append(rtl::OUStringToOString(GetText(),
+                                                       RTL_TEXTENCODING_UTF8));
+                aTempStr.append(RTL_CONSTASCII_STRINGPARAM(
+                                    ") with living SystemWindow(s) destroyed: "));
+                aTempStr.append(aErrorStr.toString());
+                OSL_FAIL(aTempStr.getStr());
+                // abort in non-pro version, this must be fixed!
+                GetpApp()->Abort(rtl::OStringToOUString(
+                                     aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+            }
         }
 
         bError = sal_False;
@@ -4562,7 +4566,8 @@ Window::~Window()
     }
 
 
-    if ( pOverlapWindow->mpWindowImpl->mpLastFocusWindow == this )
+    if ( pOverlapWindow != 0 &&
+         pOverlapWindow->mpWindowImpl->mpLastFocusWindow == this )
         pOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
 
     // reset hint for DefModalDialogParent
@@ -4570,12 +4575,15 @@ Window::~Window()
         pSVData->maWinData.mpActiveApplicationFrame = NULL;
 
     // reset marked windows
-    if ( mpWindowImpl->mpFrameData->mpFocusWin == this )
-        mpWindowImpl->mpFrameData->mpFocusWin = NULL;
-    if ( mpWindowImpl->mpFrameData->mpMouseMoveWin == this )
-        mpWindowImpl->mpFrameData->mpMouseMoveWin = NULL;
-    if ( mpWindowImpl->mpFrameData->mpMouseDownWin == this )
-        mpWindowImpl->mpFrameData->mpMouseDownWin = NULL;
+    if ( mpWindowImpl->mpFrameData != 0 )
+    {
+        if ( mpWindowImpl->mpFrameData->mpFocusWin == this )
+            mpWindowImpl->mpFrameData->mpFocusWin = NULL;
+        if ( mpWindowImpl->mpFrameData->mpMouseMoveWin == this )
+            mpWindowImpl->mpFrameData->mpMouseMoveWin = NULL;
+        if ( mpWindowImpl->mpFrameData->mpMouseDownWin == this )
+            mpWindowImpl->mpFrameData->mpMouseDownWin = NULL;
+    }
 
     // reset Deactivate-Window
     if ( pSVData->maWinData.mpLastDeacWin == this )

@@ -268,19 +268,22 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
 
     // ::com::sun::star::chaos::System-Windows suchen...
     Window* pOverlap = pWindow->GetWindow( WINDOW_OVERLAP );
-    pOverlap = pOverlap->GetWindow( WINDOW_FIRSTOVERLAP );
-    while ( pOverlap )
+    if ( pOverlap )
     {
-        Window* pNextOverlap = pOverlap->GetWindow( WINDOW_NEXT );
-        Window* pClient = pOverlap->GetWindow( WINDOW_CLIENT );
-
-        if ( pClient->GetWindowPeer() && lcl_ImplIsParent( pWindow, pClient ) )
+        pOverlap = pOverlap->GetWindow( WINDOW_FIRSTOVERLAP );
+        while ( pOverlap )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( sal_False ), ::com::sun::star::uno::UNO_QUERY );
-            xComp->dispose();
-        }
+            Window* pNextOverlap = pOverlap->GetWindow( WINDOW_NEXT );
+            Window* pClient = pOverlap->GetWindow( WINDOW_CLIENT );
 
-        pOverlap = pNextOverlap;
+            if ( pClient->GetWindowPeer() && lcl_ImplIsParent( pWindow, pClient ) )
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( sal_False ), ::com::sun::star::uno::UNO_QUERY );
+                xComp->dispose();
+            }
+
+            pOverlap = pNextOverlap;
+        }
     }
 
     Window* pParent = pWindow->GetParent();
