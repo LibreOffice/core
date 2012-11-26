@@ -7448,6 +7448,20 @@ system)
        [])
     CPPFLAGS="$save_CPPFLAGS"
 
+    AC_LANG_PUSH(C)
+    CFLAGS="$CFLAGS $PYTHON_CFLAGS"
+    AC_MSG_CHECKING([for correct python library version])
+       AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#include <Python.h>
+
+int main(int argc, char **argv) {
+       if (PY_MAJOR_VERSION < 3 || (PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 3)) return 0;
+       else return 1;
+}
+       ]])],[AC_MSG_RESULT([ok])],[AC_MSG_ERROR([Python >= 3.3 is needed when building with Python 3])],[])
+    CFLAGS=$save_CFLAGS
+    AC_LANG_POP(C)
+
     dnl FIXME Check if the Python library can be linked with, too?
     ;;
 
