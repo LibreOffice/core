@@ -59,11 +59,11 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		--with-system-expat \
 		$(if $(strip $(VALGRIND_CFLAGS)),--with-valgrind) \
-		--prefix=/$(if $(filter MACOSX,$(OS)),@__________________________________________________OOO,python-inst) \
+		--prefix=/python-inst \
 		$(if $(filter AIX,$(OS)),--disable-ipv6 --with-threads CFLAGS="-g0") \
 		$(if $(filter WNT-GCC,$(OS)-$(COM)),--with-threads ac_cv_printf_zd_format=no) \
 		$(if $(filter MACOSX,$(OS)), \
-			--enable-universalsdk=$(MACOSX_SDK_PATH) --with-universal-archs=32-bit --enable-framework=/SomeDirThatIsNotLibraryOrSystemOrFrameworks --with-framework-name=LibreOfficePython, \
+			--enable-universalsdk=$(MACOSX_SDK_PATH) --with-universal-archs=32-bit --enable-framework=/@__________________________________________________OOO --with-framework-name=LibreOfficePython, \
 			--enable-shared \
 		) \
 		CC="$(strip $(CC) \
@@ -78,7 +78,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(filter WNT-GCC,$(OS)-$(COM)), -shared-libgcc \
 				$(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols)) \
 			)" \
-	&& MAKEFLAGS=$(if $(VERBOSE)$(verbose),,s) $(MAKE) \
+	&& MAKEFLAGS=$(if $(VERBOSE)$(verbose),,s) $(MAKE) $(if $(filter MACOSX,$(OS)), DESTDIR=$(EXTERNAL_WORKDIR)/python-inst install) \
 	&& ln -s build/lib.* LO_lib \
 	&& touch $@
 

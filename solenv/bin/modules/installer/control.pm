@@ -332,6 +332,7 @@ sub check_logfile
         $compareline =~ s/Error\.idl//g;    # removing all occurrences of "Error.idl"
         $compareline =~ s/Error\.html//g;   # removing all occurrences of "Error.html"
         $compareline =~ s/error\.py//g;     # removing all occurrences of "error.py"
+        $compareline =~ s/error\.cpython-33\.py[oc]//g;  # removing all occurrences of "error-cpython"
         $compareline =~ s/libgpg-error-0.dll//g;
 
         if ( $compareline =~ /\bError\b/i )
