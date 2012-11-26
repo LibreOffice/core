@@ -7377,11 +7377,11 @@ else
             PYTHON_LIBS="-framework Python"
         else
             # This causes an error if no python command is found
-            AM_PATH_PYTHON([2.6])
+            AM_PATH_PYTHON([3.3])
         fi
     elif test $enable_python = auto; then
         dnl This allows lack of system Python
-        AM_PATH_PYTHON([2.6],, [:])
+        AM_PATH_PYTHON([3.3],, [:])
 
         if test "$PYTHON" = :; then
             enable_python=internal
