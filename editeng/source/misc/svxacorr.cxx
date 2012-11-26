@@ -690,8 +690,13 @@ sal_Bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const String& rTxt
                                     xub_StrLen nSttPos, xub_StrLen nEndPos,
                                     LanguageType eLang )
 {
-    String sURL( URIHelper::FindFirstURLInText( rTxt, nSttPos, nEndPos,
+    sal_Int32 nStart(nSttPos);
+    sal_Int32 nEnd(nEndPos);
+
+    String sURL( URIHelper::FindFirstURLInText( rTxt, nStart, nEnd,
                                                 GetCharClass( eLang ) ));
+    nSttPos = (xub_StrLen)nStart;
+    nEndPos = (xub_StrLen)nEnd;
     sal_Bool bRet = 0 != sURL.Len();
     if( bRet )          // also Attribut setzen:
         rDoc.SetINetAttr( nSttPos, nEndPos, sURL );

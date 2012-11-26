@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
     namespace uri { class XUriReference; }
 } } }
-namespace rtl { class OUString; }
+
 class CharClass;
 
 //============================================================================
@@ -51,19 +51,16 @@ namespace URIHelper {
    existence (see URIHelper::GetMaybeFileHdl), or use bCheckFileExists = false
    if you want to generate file URLs without checking for their existence.
 */
-SVL_DLLPUBLIC rtl::OUString
-SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
-             rtl::OUString const & rTheRelURIRef,
-             Link const & rMaybeFileHdl = Link(),
-             bool bCheckFileExists = true,
-             bool bIgnoreFragment = false,
-             INetURLObject::EncodeMechanism eEncodeMechanism
-                 = INetURLObject::WAS_ENCODED,
-             INetURLObject::DecodeMechanism eDecodeMechanism
-                 = INetURLObject::DECODE_TO_IURI,
-             rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
-             bool bRelativeNonURIs = false,
-             INetURLObject::FSysStyle eStyle = INetURLObject::FSYS_DETECT);
+SVL_DLLPUBLIC OUString SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
+                                    OUString const & rTheRelURIRef,
+                                    Link const & rMaybeFileHdl = Link(),
+                                    bool bCheckFileExists = true,
+                                    bool bIgnoreFragment = false,
+                                    INetURLObject::EncodeMechanism eEncodeMechanism = INetURLObject::WAS_ENCODED,
+                                    INetURLObject::DecodeMechanism eDecodeMechanism = INetURLObject::DECODE_TO_IURI,
+                                    rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
+                                    bool bRelativeNonURIs = false,
+                                    INetURLObject::FSysStyle eStyle = INetURLObject::FSYS_DETECT);
 
 //============================================================================
 SVL_DLLPUBLIC void SetMaybeFileHdl(Link const & rTheMaybeFileHdl);
@@ -119,20 +116,17 @@ normalizedMakeRelative(
    @deprecated
    No code should rely on the default component context.
 */
-SVL_DLLPUBLIC rtl::OUString simpleNormalizedMakeRelative(
-    rtl::OUString const & baseUriReference, rtl::OUString const & uriReference);
+SVL_DLLPUBLIC OUString simpleNormalizedMakeRelative( OUString const & baseUriReference,
+                                                     OUString const & uriReference);
 
 //============================================================================
-SVL_DLLPUBLIC rtl::OUString
-FindFirstURLInText(rtl::OUString const & rText,
-                   xub_StrLen & rBegin,
-                   xub_StrLen & rEnd,
-                   CharClass const & rCharClass,
-                   INetURLObject::EncodeMechanism eMechanism
-                       = INetURLObject::WAS_ENCODED,
-                   rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
-                   INetURLObject::FSysStyle eStyle
-                       = INetURLObject::FSYS_DETECT);
+SVL_DLLPUBLIC OUString FindFirstURLInText(OUString const & rText,
+                                          sal_Int32 & rBegin,
+                                          sal_Int32 & rEnd,
+                                          CharClass const & rCharClass,
+                                          INetURLObject::EncodeMechanism eMechanism = INetURLObject::WAS_ENCODED,
+                                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
+                                          INetURLObject::FSysStyle eStyle = INetURLObject::FSYS_DETECT);
 
 //============================================================================
 /** Remove any password component from both absolute and relative URLs.
@@ -160,13 +154,10 @@ FindFirstURLInText(rtl::OUString const & rText,
 
     @return  The input URI with any password component removed.
  */
-SVL_DLLPUBLIC rtl::OUString
-removePassword(rtl::OUString const & rURI,
-               INetURLObject::EncodeMechanism eEncodeMechanism
-                   = INetURLObject::WAS_ENCODED,
-               INetURLObject::DecodeMechanism eDecodeMechanism
-                   = INetURLObject::DECODE_TO_IURI,
-               rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
+SVL_DLLPUBLIC OUString removePassword(OUString const & rURI,
+                                      INetURLObject::EncodeMechanism eEncodeMechanism = INetURLObject::WAS_ENCODED,
+                                      INetURLObject::DecodeMechanism eDecodeMechanism = INetURLObject::DECODE_TO_IURI,
+                                      rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 }
 
 #endif // SVTOOLS_URIHELPER_HXX

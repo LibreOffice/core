@@ -278,16 +278,16 @@ String EditorWindow::GetWordAtCursor()
             const TextSelection& rSelection = pEditView->GetSelection();
             const TextPaM& rSelStart = rSelection.GetStart();
             const TextPaM& rSelEnd = rSelection.GetEnd();
-            String aText = pTextEngine->GetText( rSelEnd.GetPara() );
+            OUString aText = pTextEngine->GetText( rSelEnd.GetPara() );
             CharClass aClass( ::comphelper::getProcessComponentContext() , Application::GetSettings().GetLanguageTag() );
-            xub_StrLen nSelStart = static_cast< xub_StrLen >( rSelStart.GetIndex() );
-            xub_StrLen nSelEnd = static_cast< xub_StrLen >( rSelEnd.GetIndex() );
-            xub_StrLen nLength = static_cast< xub_StrLen >( aText.Len() );
-            xub_StrLen nStart = 0;
-            xub_StrLen nEnd = nLength;
+            sal_Int32 nSelStart = rSelStart.GetIndex();
+            sal_Int32 nSelEnd = rSelEnd.GetIndex();
+            sal_Int32 nLength = aText.getLength();
+            sal_Int32 nStart = 0;
+            sal_Int32 nEnd = nLength;
             while ( nStart < nLength )
             {
-                String aURL( URIHelper::FindFirstURLInText( aText, nStart, nEnd, aClass ) );
+                OUString aURL( URIHelper::FindFirstURLInText( aText, nStart, nEnd, aClass ) );
                 INetURLObject aURLObj( aURL );
                 if ( aURLObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP
                      && nSelStart >= nStart && nSelStart <= nEnd && nSelEnd >= nStart && nSelEnd <= nEnd )

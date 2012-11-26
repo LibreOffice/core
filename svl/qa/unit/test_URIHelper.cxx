@@ -301,8 +301,8 @@ void Test::testFindFirstURLInText() {
     struct Data {
         char const * input;
         char const * result;
-        xub_StrLen begin;
-        xub_StrLen end;
+        sal_Int32 begin;
+        sal_Int32 end;
     };
     static Data const tests[] = {
         { "...ftp://bla.bla.bla/blubber/...",
@@ -390,8 +390,8 @@ void Test::testFindFirstURLInText() {
     CharClass charClass( m_context, LanguageTag( com::sun::star::lang::Locale("en", "US", "")));
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
         rtl::OUString input(rtl::OUString::createFromAscii(tests[i].input));
-        xub_StrLen begin = 0;
-        xub_StrLen end = static_cast< xub_StrLen >(input.getLength());
+        sal_Int32 begin = 0;
+        sal_Int32 end = input.getLength();
         rtl::OUString result(
             URIHelper::FindFirstURLInText(input, begin, end, charClass));
         bool ok = tests[i].result == 0

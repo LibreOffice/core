@@ -53,17 +53,16 @@ using namespace com::sun::star;
 //
 //============================================================================
 
-rtl::OUString
-URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
-                        rtl::OUString const & rTheRelURIRef,
-                        Link const & rMaybeFileHdl,
-                        bool bCheckFileExists,
-                        bool bIgnoreFragment,
-                        INetURLObject::EncodeMechanism eEncodeMechanism,
-                        INetURLObject::DecodeMechanism eDecodeMechanism,
-                        rtl_TextEncoding eCharset,
-                        bool bRelativeNonURIs,
-                        INetURLObject::FSysStyle eStyle)
+OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
+                                 OUString const & rTheRelURIRef,
+                                 Link const & rMaybeFileHdl,
+                                 bool bCheckFileExists,
+                                 bool bIgnoreFragment,
+                                 INetURLObject::EncodeMechanism eEncodeMechanism,
+                                 INetURLObject::DecodeMechanism eDecodeMechanism,
+                                 rtl_TextEncoding eCharset,
+                                 bool bRelativeNonURIs,
+                                 INetURLObject::FSysStyle eStyle)
 {
     // Backwards compatibility:
     if (!rTheRelURIRef.isEmpty() && rTheRelURIRef[0] == '#')
@@ -71,8 +70,7 @@ URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
 
     INetURLObject aAbsURIRef;
     if (rTheBaseURIRef.HasError())
-        aAbsURIRef.
-            SetSmartURL(rTheRelURIRef, eEncodeMechanism, eCharset, eStyle);
+        aAbsURIRef. SetSmartURL(rTheRelURIRef, eEncodeMechanism, eCharset, eStyle);
     else
     {
         bool bWasAbsolute;
@@ -98,7 +96,7 @@ URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                 bool bMaybeFile = false;
                 if (rMaybeFileHdl.IsSet())
                 {
-                    UniString aFilePath(rTheRelURIRef);
+                    OUString aFilePath(rTheRelURIRef);
                     bMaybeFile = rMaybeFileHdl.Call(&aFilePath) != 0;
                 }
                 if (!bMaybeFile)
@@ -148,9 +146,8 @@ bool isAbsoluteHierarchicalUriReference(
 // any other prefix URL of the given URL, too:
 enum Result { Success, GeneralFailure, SpecificFailure };
 
-Result normalizePrefix(
-    css::uno::Reference< css::ucb::XUniversalContentBroker > const & broker,
-    rtl::OUString const & uri, rtl::OUString * normalized)
+Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker > const & broker,
+                        OUString const & uri, OUString * normalized)
 {
     OSL_ASSERT(broker.is() && normalized != 0);
     css::uno::Reference< css::ucb::XContent > content;
@@ -182,16 +179,16 @@ Result normalizePrefix(
     return Success;
 }
 
-rtl::OUString normalize(
+OUString normalize(
     css::uno::Reference< css::ucb::XUniversalContentBroker > const & broker,
     css::uno::Reference< css::uri::XUriReferenceFactory > const & uriFactory,
-    rtl::OUString const & uriReference)
+    OUString const & uriReference)
 {
     // normalizePrefix can potentially fail (a typically example being a file
     // URL that denotes a non-existing resource); in such a case, try to
     // normalize as long a prefix of the given URL as possible (i.e., normalize
     // all the existing directories within the path):
-    rtl::OUString normalized;
+    OUString normalized;
     sal_Int32 n = uriReference.indexOf('#');
     normalized = n == -1 ? uriReference : uriReference.copy(0, n);
     switch (normalizePrefix(broker, normalized, &normalized)) {
@@ -212,14 +209,14 @@ rtl::OUString normalize(
     if (count < 2) {
         return uriReference;
     }
-    rtl::OUStringBuffer head(ref->getScheme());
+    OUStringBuffer head(ref->getScheme());
     head.append(static_cast< sal_Unicode >(':'));
     if (ref->hasAuthority()) {
         head.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
         head.append(ref->getAuthority());
     }
     for (sal_Int32 i = count - 1; i > 0; --i) {
-        rtl::OUStringBuffer buf(head);
+        OUStringBuffer buf(head);
         for (sal_Int32 j = 0; j < i; ++j) {
             buf.append(static_cast< sal_Unicode >('/'));
             buf.append(ref->getPathSegment(j));
@@ -271,7 +268,7 @@ rtl::OUString normalize(
 css::uno::Reference< css::uri::XUriReference >
 URIHelper::normalizedMakeRelative(
     css::uno::Reference< css::uno::XComponentContext > const & context,
-    rtl::OUString const & baseUriReference, rtl::OUString const & uriReference)
+    OUString const & baseUriReference, OUString const & uriReference)
 {
     OSL_ASSERT(context.is());
     css::uno::Reference< css::ucb::XUniversalContentBroker > broker(
@@ -284,8 +281,8 @@ URIHelper::normalizedMakeRelative(
         true, false);
 }
 
-rtl::OUString URIHelper::simpleNormalizedMakeRelative(
-    rtl::OUString const & baseUriReference, rtl::OUString const & uriReference)
+OUString URIHelper::simpleNormalizedMakeRelative(
+    OUString const & baseUriReference, OUString const & uriReference)
 {
     com::sun::star::uno::Reference< com::sun::star::uri::XUriReference > rel(
         URIHelper::normalizedMakeRelative(
@@ -302,22 +299,22 @@ rtl::OUString URIHelper::simpleNormalizedMakeRelative(
 
 namespace {
 
-inline xub_StrLen nextChar(UniString const & rStr, xub_StrLen nPos)
+inline sal_Int32 nextChar(OUString const & rStr, sal_Int32 nPos)
 {
-    return INetMIME::isHighSurrogate(rStr.GetChar(nPos))
-           && rStr.Len() - nPos >= 2
-           && INetMIME::isLowSurrogate(rStr.GetChar(nPos + 1)) ?
-               nPos + 2 : nPos + 1;
+    return INetMIME::isHighSurrogate(rStr[nPos])
+           && rStr.getLength() - nPos >= 2
+           && INetMIME::isLowSurrogate(rStr[nPos + 1]) ?
+        nPos + 2 : nPos + 1;
 }
 
-bool isBoundary1(CharClass const & rCharClass, UniString const & rStr,
-                 xub_StrLen nPos, xub_StrLen nEnd)
+bool isBoundary1(CharClass const & rCharClass, OUString const & rStr,
+                 sal_Int32 nPos, sal_Int32 nEnd)
 {
     if (nPos == nEnd)
         return true;
     if (rCharClass.isLetterNumeric(rStr, nPos))
         return false;
-    switch (rStr.GetChar(nPos))
+    switch (rStr[nPos])
     {
     case '$':
     case '%':
@@ -332,14 +329,14 @@ bool isBoundary1(CharClass const & rCharClass, UniString const & rStr,
     }
 }
 
-bool isBoundary2(CharClass const & rCharClass, UniString const & rStr,
-                 xub_StrLen nPos, xub_StrLen nEnd)
+bool isBoundary2(CharClass const & rCharClass, OUString const & rStr,
+                 sal_Int32 nPos, sal_Int32 nEnd)
 {
     if (nPos == nEnd)
         return true;
     if (rCharClass.isLetterNumeric(rStr, nPos))
         return false;
-    switch (rStr.GetChar(nPos))
+    switch (rStr[nPos])
     {
     case '!':
     case '#':
@@ -367,11 +364,11 @@ bool isBoundary2(CharClass const & rCharClass, UniString const & rStr,
     }
 }
 
-bool checkWChar(CharClass const & rCharClass, UniString const & rStr,
-                xub_StrLen * pPos, xub_StrLen * pEnd, bool bBackslash = false,
+bool checkWChar(CharClass const & rCharClass, OUString const & rStr,
+                sal_Int32 * pPos, sal_Int32 * pEnd, bool bBackslash = false,
                 bool bPipe = false)
 {
-    sal_Unicode c = rStr.GetChar(*pPos);
+    sal_Unicode c = rStr[*pPos];
     if (INetMIME::isUSASCII(c))
     {
         static sal_uInt8 const aMap[128]
@@ -433,29 +430,28 @@ bool checkWChar(CharClass const & rCharClass, UniString const & rStr,
         return false;
 }
 
-sal_uInt32 scanDomain(UniString const & rStr, xub_StrLen * pPos,
-                      xub_StrLen nEnd)
+sal_uInt32 scanDomain(OUString const & rStr, sal_Int32 * pPos,
+                      sal_Int32 nEnd)
 {
-    sal_Unicode const * pBuffer = rStr.GetBuffer();
+    sal_Unicode const * pBuffer = rStr.getStr();
     sal_Unicode const * p = pBuffer + *pPos;
     sal_uInt32 nLabels = INetURLObject::scanDomain(p, pBuffer + nEnd, false);
-    *pPos = sal::static_int_cast< xub_StrLen >(p - pBuffer);
+    *pPos = sal::static_int_cast< sal_Int32 >(p - pBuffer);
     return nLabels;
 }
 
 }
 
-rtl::OUString
-URIHelper::FindFirstURLInText(rtl::OUString const & rText,
-                              xub_StrLen & rBegin,
-                              xub_StrLen & rEnd,
-                              CharClass const & rCharClass,
-                              INetURLObject::EncodeMechanism eMechanism,
-                              rtl_TextEncoding eCharset,
-                              INetURLObject::FSysStyle eStyle)
+OUString URIHelper::FindFirstURLInText(OUString const & rText,
+                                       sal_Int32 & rBegin,
+                                       sal_Int32 & rEnd,
+                                       CharClass const & rCharClass,
+                                       INetURLObject::EncodeMechanism eMechanism,
+                                       rtl_TextEncoding eCharset,
+                                       INetURLObject::FSysStyle eStyle)
 {
     if (!(rBegin <= rEnd && rEnd <= rText.getLength()))
-        return rtl::OUString();
+        return OUString();
 
     // Search for the first substring of [rBegin..rEnd[ that matches any of the
     // following productions (for which the appropriate style bit is set in
@@ -523,26 +519,24 @@ URIHelper::FindFirstURLInText(rtl::OUString const & rText,
 
     bool bBoundary1 = true;
     bool bBoundary2 = true;
-    for (xub_StrLen nPos = rBegin; nPos != rEnd; nPos = nextChar(rText, nPos))
+    for (sal_Int32 nPos = rBegin; nPos != rEnd; nPos = nextChar(rText, nPos))
     {
         sal_Unicode c = rText[nPos];
         if (bBoundary1)
         {
             if (INetMIME::isAlpha(c))
             {
-                xub_StrLen i = nPos;
-                INetProtocol eScheme
-                    = INetURLObject::CompareProtocolScheme(UniString(rText, i,
-                                                                     rEnd));
+                sal_Int32 i = nPos;
+                INetProtocol eScheme = INetURLObject::CompareProtocolScheme(rText.copy(i, rEnd - i));
                 if (eScheme == INET_PROT_FILE) // 2nd
                 {
                     while (rText[i++] != ':') ;
-                    xub_StrLen nPrefixEnd = i;
-                    xub_StrLen nUriEnd = i;
+                    sal_Int32 nPrefixEnd = i;
+                    sal_Int32 nUriEnd = i;
                     while (i != rEnd
                            && checkWChar(rCharClass, rText, &i, &nUriEnd, true,
                                          true)) ;
-                    if (i != nPrefixEnd && rText[i] == '#')
+                    if (i != nPrefixEnd && rText[i] == (sal_Unicode)'#')
                     {
                         ++i;
                         while (i != rEnd
@@ -551,8 +545,7 @@ URIHelper::FindFirstURLInText(rtl::OUString const & rText,
                     if (nUriEnd != nPrefixEnd
                         && isBoundary1(rCharClass, rText, nUriEnd, rEnd))
                     {
-                        INetURLObject aUri(UniString(rText, nPos,
-                                                     nUriEnd - nPos),
+                        INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
                                            INET_PROT_FILE, eMechanism, eCharset,
                                            eStyle);
                         if (!aUri.HasError())
@@ -567,8 +560,8 @@ URIHelper::FindFirstURLInText(rtl::OUString const & rText,
                 else if (eScheme != INET_PROT_NOT_VALID) // 1st
                 {
                     while (rText[i++] != ':') ;
-                    xub_StrLen nPrefixEnd = i;
-                    xub_StrLen nUriEnd = i;
+                    sal_Int32 nPrefixEnd = i;
+                    sal_Int32 nUriEnd = i;
                     while (i != rEnd
                            && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
                     if (i != nPrefixEnd && rText[i] == '#')
@@ -581,8 +574,7 @@ URIHelper::FindFirstURLInText(rtl::OUString const & rText,
                         && (isBoundary1(rCharClass, rText, nUriEnd, rEnd)
                             || rText[nUriEnd] == '\\'))
                     {
-                        INetURLObject aUri(UniString(rText, nPos,
-                                                     nUriEnd - nPos),
+                        INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
                                            INET_PROT_HTTP, eMechanism,
                                            eCharset);
                         if (!aUri.HasError())
@@ -615,7 +607,7 @@ URIHelper::FindFirstURLInText(rtl::OUString const & rText,
                     // (note that rText.GetChar(nPos + 3) is guaranteed to be
                     // valid)
                 {
-                    xub_StrLen nUriEnd = i;
+                    sal_Int32 nUriEnd = i;
                     if (i != rEnd && rText[i] == '/')
                     {
                         nUriEnd = ++i;
@@ -631,8 +623,7 @@ URIHelper::FindFirstURLInText(rtl::OUString const & rText,
                     if (isBoundary1(rCharClass, rText, nUriEnd, rEnd)
                         || rText[nUriEnd] == '\\')
                     {
-                        INetURLObject aUri(UniString(rText, nPos,
-                                                     nUriEnd - nPos),
+                        INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
                                            INET_PROT_HTTP, eMechanism,
                                            eCharset);
                         if (!aUri.HasError())
@@ -651,13 +642,12 @@ URIHelper::FindFirstURLInText(rtl::OUString const & rText,
                         || rText[nPos + 2] == '\\')) // 7th, 8th
                 {
                     i = nPos + 3;
-                    xub_StrLen nUriEnd = i;
+                    sal_Int32 nUriEnd = i;
                     while (i != rEnd
                            && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
                     if (isBoundary1(rCharClass, rText, nUriEnd, rEnd))
                     {
-                        INetURLObject aUri(UniString(rText, nPos,
-                                                     nUriEnd - nPos),
+                        INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
                                            INET_PROT_FILE,
                                            INetURLObject::ENCODE_ALL,
                                            RTL_TEXTENCODING_UTF8,
@@ -676,18 +666,17 @@ URIHelper::FindFirstURLInText(rtl::OUString const & rText,
                      && rText[nPos] == '\\'
                      && rText[nPos + 1] == '\\') // 6th
             {
-                xub_StrLen i = nPos + 2;
+                sal_Int32 i = nPos + 2;
                 sal_uInt32 nLabels = scanDomain(rText, &i, rEnd);
                 if (nLabels >= 1 && i != rEnd && rText[i] == '\\')
                 {
-                    xub_StrLen nUriEnd = ++i;
+                    sal_Int32 nUriEnd = ++i;
                     while (i != rEnd
                            && checkWChar(rCharClass, rText, &i, &nUriEnd,
                                          true)) ;
                     if (isBoundary1(rCharClass, rText, nUriEnd, rEnd))
                     {
-                        INetURLObject aUri(UniString(rText, nPos,
-                                                     nUriEnd - nPos),
+                        INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
                                            INET_PROT_FILE,
                                            INetURLObject::ENCODE_ALL,
                                            RTL_TEXTENCODING_UTF8,
@@ -706,7 +695,7 @@ URIHelper::FindFirstURLInText(rtl::OUString const & rText,
         if (bBoundary2 && INetMIME::isAtomChar(c)) // 5th
         {
             bool bDot = false;
-            for (xub_StrLen i = nPos + 1; i != rEnd; ++i)
+            for (sal_Int32 i = nPos + 1; i != rEnd; ++i)
             {
                 sal_Unicode c2 = rText[i];
                 if (INetMIME::isAtomChar(c2))
@@ -724,7 +713,7 @@ URIHelper::FindFirstURLInText(rtl::OUString const & rText,
                         if (nLabels >= 1
                             && isBoundary1(rCharClass, rText, i, rEnd))
                         {
-                            INetURLObject aUri(UniString(rText, nPos, i - nPos),
+                            INetURLObject aUri(rText.copy(nPos, i - nPos),
                                                INET_PROT_MAILTO,
                                                INetURLObject::ENCODE_ALL);
                             if (!aUri.HasError())
@@ -744,7 +733,7 @@ URIHelper::FindFirstURLInText(rtl::OUString const & rText,
         bBoundary2 = isBoundary2(rCharClass, rText, nPos, rEnd);
     }
     rBegin = rEnd;
-    return rtl::OUString();
+    return OUString();
 }
 
 //============================================================================
@@ -753,11 +742,10 @@ URIHelper::FindFirstURLInText(rtl::OUString const & rText,
 //
 //============================================================================
 
-rtl::OUString
-URIHelper::removePassword(rtl::OUString const & rURI,
-                          INetURLObject::EncodeMechanism eEncodeMechanism,
-                          INetURLObject::DecodeMechanism eDecodeMechanism,
-                          rtl_TextEncoding eCharset)
+OUString URIHelper::removePassword(OUString const & rURI,
+                                   INetURLObject::EncodeMechanism eEncodeMechanism,
+                                   INetURLObject::DecodeMechanism eDecodeMechanism,
+                                   rtl_TextEncoding eCharset)
 {
     INetURLObject aObj(rURI, eEncodeMechanism, eCharset);
     return aObj.HasError() ?
