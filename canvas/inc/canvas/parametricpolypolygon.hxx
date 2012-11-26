@@ -92,10 +92,10 @@ namespace canvas
             const GradientType                                  meType;
         };
 
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getAvailableServiceNames();
+        static ::com::sun::star::uno::Sequence< OUString > getAvailableServiceNames();
         static ParametricPolyPolygon* create(
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >& rDevice,
-            const ::rtl::OUString& rServiceName,
+            const OUString& rServiceName,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rArgs );
 
         /// Dispose all internal references
@@ -108,9 +108,9 @@ namespace canvas
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XColorSpace > SAL_CALL getColorSpace() throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
         /// Query all defining values of this object atomically
         Values getValues() const;
