@@ -843,6 +843,8 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
 
 //--------------------------------------------------------------------------
 
+#ifndef DISABLE_EXPORT
+
 static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& rConfigItem )
 {
     Graphic     aGraphic;
@@ -942,6 +944,8 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 
     return aGraphic;
 }
+
+#endif
 
 static String ImpCreateFullFilterPath( const String& rPath, const String& rFilterName )
 {
@@ -1840,6 +1844,14 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
 sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
     sal_uInt16 nFormat, const uno::Sequence< beans::PropertyValue >* pFilterData )
 {
+#ifdef DISABLE_EXPORT
+    (void) rGraphic;
+    (void) rPath;
+    (void) nFormat;
+    (void) pFilterData;
+
+    return GRFILTER_FORMATERROR;
+#else
     RTL_LOGFILE_CONTEXT( aLog, "GraphicFilter::ExportGraphic() (thb)" );
     sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ExportGraphic() : ProtType == INET_PROT_NOT_VALID" );
@@ -1856,11 +1868,14 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
             ImplDirEntryHelper::Kill( aMainUrl );
     }
     return nRetValue;
+#endif
 }
 
 // ------------------------------------------------------------------------
 
 #ifdef DISABLE_DYNLOADING
+
+#ifndef DISABLE_EXPORT
 
 extern "C" sal_Bool egiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
 extern "C" sal_Bool emeGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
@@ -1875,9 +1890,20 @@ extern "C" sal_Bool expGraphicExport( SvStream& rStream, Graphic& rGraphic, Filt
 
 #endif
 
+#endif
+
 sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPath,
     SvStream& rOStm, sal_uInt16 nFormat, const uno::Sequence< beans::PropertyValue >* pFilterData )
 {
+#ifdef DISABLE_EXPORT
+    (void) rGraphic;
+    (void) rPath;
+    (void) rOStm;
+    (void) nFormat;
+    (void) pFilterData;
+
+    return GRFILTER_FORMATERROR;
+#else
     RTL_LOGFILE_CONTEXT( aLog, "GraphicFilter::ExportGraphic() (thb)" );
     sal_uInt16 nFormatCount = GetExportFormatCount();
 
@@ -2237,6 +2263,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
         ImplSetError( nStatus, &rOStm );
     }
     return nStatus;
+#endif
 }
 
 // ------------------------------------------------------------------------
@@ -2262,6 +2289,11 @@ sal_Bool GraphicFilter::DoExportDialog( Window* pWindow, sal_uInt16 nFormat )
 
 sal_Bool GraphicFilter::DoExportDialog( Window*, sal_uInt16 nFormat, FieldUnit )
 {
+#ifdef DISABLE_EXPORT
+    (void) nFormat;
+
+    return sal_False;
+#else
     sal_Bool bRet = sal_False;
      com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
         xSMgr( ::comphelper::getProcessServiceFactory() );
@@ -2286,6 +2318,7 @@ sal_Bool GraphicFilter::DoExportDialog( Window*, sal_uInt16 nFormat, FieldUnit )
         }
     }
     return bRet;
+#endif
 }
 
 // ------------------------------------------------------------------------
@@ -2343,12 +2376,14 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
             nFormat = GetImportFormatNumberForShortName( rtl::OStringToOUString( aShortName, RTL_TEXTENCODING_UTF8) );
             nRet = ImportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == 0;
         }
+#ifndef DISABLE_EXPORT
         else if( !aShortName.isEmpty() )
         {
             // Export
             nFormat = GetExportFormatNumberForShortName( rtl::OStringToOUString(aShortName, RTL_TEXTENCODING_UTF8) );
             nRet = ExportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == 0;
         }
+#endif
     }
     return nRet;
 }
