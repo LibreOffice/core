@@ -145,6 +145,16 @@ public class DocumentLoader
 
     Bundle extras;
 
+    PageViewer getPageViewerAt(int index)
+    {
+        return (PageViewer)flipper.getChildAt(index);
+    }
+
+    PageViewer getCurrentPageViewer()
+    {
+        return (PageViewer)flipper.getCurrentView();
+    }
+
     class GestureListener
         extends GestureDetector.SimpleOnGestureListener
     {
@@ -156,7 +166,7 @@ public class DocumentLoader
         {
             Log.i(TAG, "onFling: " + event1 + " " + event2);
             if (event1.getX() - event2.getX() > 120) {
-                if (((PageViewer)flipper.getCurrentView()).currentPageNumber == documentContext.pageCount-1)
+                if (getCurrentPageViewer().currentPageNumber == documentContext.pageCount-1)
                     return false;
 
                 Animation inFromRight = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 1, Animation.RELATIVE_TO_SELF, 0,
@@ -172,10 +182,10 @@ public class DocumentLoader
 
                 flipper.showNext();
 
-                ((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber + PAGECACHE_PLUSMINUS);
+                getPageViewerAt((flipper.getDisplayedChild() + PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE).display(getCurrentPageViewer().currentPageNumber + PAGECACHE_PLUSMINUS);
                 return true;
             } else if (event2.getX() - event1.getX() > 120) {
-                if (((PageViewer)flipper.getCurrentView()).currentPageNumber == 0)
+                if (getCurrentPageViewer().currentPageNumber == 0)
                     return false;
 
                 Animation inFromLeft = new TranslateAnimation(Animation.RELATIVE_TO_SELF, -1, Animation.RELATIVE_TO_SELF, 0,
@@ -191,7 +201,7 @@ public class DocumentLoader
 
                 flipper.showPrevious();
 
-                ((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + PAGECACHE_SIZE - PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber - PAGECACHE_PLUSMINUS);
+                getPageViewerAt((flipper.getDisplayedChild() + PAGECACHE_SIZE - PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE).display(getCurrentPageViewer().currentPageNumber - PAGECACHE_PLUSMINUS);
 
                 return true;
             }
@@ -938,7 +948,7 @@ public class DocumentLoader
     public Object onRetainNonConfigurationInstance() {
         ArrayList ret = new ArrayList(2);
         ret.add(bootstrapContext);
-        documentContext.currentPageNumber = ((PageViewer)flipper.getCurrentView()).currentPageNumber;
+        documentContext.currentPageNumber = getCurrentPageViewer().currentPageNumber;
         ret.add(documentContext);
         return ret;
     }
