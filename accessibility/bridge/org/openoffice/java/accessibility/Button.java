@@ -46,7 +46,7 @@ class Button extends AbstractButton implements javax.accessibility.Accessible {
                     (javax.accessibility.Accessible) Button.this.getComponent( xAccessible );
 
                     return accessible.getAccessibleContext();
-            } catch( com.sun.star.uno.Exception e ) {
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
                 return null;
             }
         }
