@@ -1639,6 +1639,31 @@ public:
     }
 
     /**
+      Returns a new string by adding the character padChar to the end of the string
+      till length is reached.
+
+      @param  length  the requested lenght of the string.
+                      The length must be greater or equal than 0 and the string is not
+                      truncated if it is already longer than length.
+      @param  padChar the character to pad with.
+      @return the new string.
+    */
+    OUString padRight( sal_Int32 length, sal_Unicode padChar = ' '  ) const SAL_THROW(())
+    {
+        OUString padStr = OUString(padChar);
+        if ( this->getLength() >= length || padStr.getLength() < 1 ) {
+            return *this;
+        }
+
+        OUString newStr = OUString(*this);
+        while ( newStr.getLength() < length ) {
+            newStr += padStr;
+        }
+
+        return newStr;
+    }
+
+    /**
       Returns a token in the string.
 
       Example:
