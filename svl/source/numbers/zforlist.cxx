@@ -1291,7 +1291,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
         nSearch = CLOffset + ZF_STANDARD_SCIENTIFIC;
         break;
     default:
-            nSearch = CLOffset + ZF_STANDARD;
+        nSearch = CLOffset + ZF_STANDARD;
     }
 
     DefaultFormatKeysMap::iterator it = aDefaultFormatKeys.find( nSearch);
@@ -1347,16 +1347,14 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
 sal_uInt32 SvNumberFormatter::GetStandardFormat( short eType, LanguageType eLnge )
 {
     if (eLnge == LANGUAGE_DONTKNOW)
+    {
         eLnge = IniLnge;
-
+    }
     sal_uInt32 CLOffset = ImpGenerateCL(eLnge);
     switch(eType)
     {
     case NUMBERFORMAT_CURRENCY:
-        if ( eLnge == LANGUAGE_SYSTEM )
-            return ImpGetDefaultSystemCurrencyFormat();
-        else
-            return ImpGetDefaultCurrencyFormat();
+        return ( eLnge == LANGUAGE_SYSTEM ) ? ImpGetDefaultSystemCurrencyFormat() : ImpGetDefaultCurrencyFormat();
     case NUMBERFORMAT_DATE:
     case NUMBERFORMAT_TIME:
     case NUMBERFORMAT_DATETIME:
@@ -1379,7 +1377,7 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( short eType, LanguageType eLnge
 }
 
 bool SvNumberFormatter::IsSpecialStandardFormat( sal_uInt32 nFIndex,
-        LanguageType eLnge )
+                                                 LanguageType eLnge )
 {
     return
         nFIndex == GetFormatIndex( NF_TIME_MMSS00, eLnge ) ||
@@ -1389,7 +1387,7 @@ bool SvNumberFormatter::IsSpecialStandardFormat( sal_uInt32 nFIndex,
 }
 
 sal_uInt32 SvNumberFormatter::GetStandardFormat( sal_uInt32 nFIndex, short eType,
-        LanguageType eLnge )
+                                                 LanguageType eLnge )
 {
     if ( IsSpecialStandardFormat( nFIndex, eLnge ) )
         return nFIndex;
@@ -1398,7 +1396,7 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( sal_uInt32 nFIndex, short eType
 }
 
 sal_uInt32 SvNumberFormatter::GetStandardFormat( double fNumber, sal_uInt32 nFIndex,
-        short eType, LanguageType eLnge )
+                                                 short eType, LanguageType eLnge )
 {
     if ( IsSpecialStandardFormat( nFIndex, eLnge ) )
         return nFIndex;
@@ -1437,7 +1435,8 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( double fNumber, sal_uInt32 nFIn
 }
 
 sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
-        short eType, LanguageType eLang, SvNumberformat* pFormat )
+                                             short eType, LanguageType eLang,
+                                             SvNumberformat* pFormat )
 {
     sal_uInt32 nKey = nFIndex;
     switch ( eType )
@@ -1515,10 +1514,11 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
 
     sal_uInt16 nOldPrec = pFormatScanner->GetStandardPrec();
     bool bPrecChanged = false;
-    if (eType == NUMBERFORMAT_NUMBER || eType == NUMBERFORMAT_PERCENT
-                                     || eType == NUMBERFORMAT_CURRENCY
-                                     || eType == NUMBERFORMAT_SCIENTIFIC
-                                     || eType == NUMBERFORMAT_FRACTION)
+    if (eType == NUMBERFORMAT_NUMBER ||
+        eType == NUMBERFORMAT_PERCENT ||
+        eType == NUMBERFORMAT_CURRENCY ||
+        eType == NUMBERFORMAT_SCIENTIFIC ||
+        eType == NUMBERFORMAT_FRACTION)
     {
         if (eType != NUMBERFORMAT_PERCENT)  // special treatment of % later
         {
@@ -4046,7 +4046,7 @@ NfCurrencyEntry::NfCurrencyEntry( const LocaleDataWrapper& rLocaleData, Language
 
 
 NfCurrencyEntry::NfCurrencyEntry( const ::com::sun::star::i18n::Currency & rCurr,
-            const LocaleDataWrapper& rLocaleData, LanguageType eLang )
+                                  const LocaleDataWrapper& rLocaleData, LanguageType eLang )
 {
     aSymbol         = rCurr.Symbol;
     aBankSymbol     = rCurr.BankSymbol;
@@ -4067,11 +4067,13 @@ bool NfCurrencyEntry::operator==( const NfCurrencyEntry& r ) const
 }
 
 OUString NfCurrencyEntry::BuildSymbolString(bool bBank,
-    bool bWithoutExtension) const
+                                            bool bWithoutExtension) const
 {
     OUStringBuffer aBuf("[$");
     if (bBank)
+    {
         aBuf.append(aBankSymbol);
+    }
     else
     {
         if ( aSymbol.indexOf( (sal_Unicode)'-' ) >= 0 ||
@@ -4086,16 +4088,15 @@ OUString NfCurrencyEntry::BuildSymbolString(bool bBank,
         if ( !bWithoutExtension && eLanguage != LANGUAGE_DONTKNOW && eLanguage != LANGUAGE_SYSTEM )
         {
             sal_Int32 nLang = static_cast<sal_Int32>(eLanguage);
-            aBuf.append('-').append(
-                OUString::valueOf(nLang, 16).toAsciiUpperCase());
+            aBuf.append('-').append( OUString::valueOf(nLang, 16).toAsciiUpperCase());
         }
     }
     aBuf.append(']');
     return aBuf.makeStringAndClear();
 }
 
-OUString NfCurrencyEntry::Impl_BuildFormatStringNumChars(
-    const LocaleDataWrapper& rLoc, sal_uInt16 nDecimalFormat) const
+OUString NfCurrencyEntry::Impl_BuildFormatStringNumChars( const LocaleDataWrapper& rLoc,
+                                                          sal_uInt16 nDecimalFormat) const
 {
     OUStringBuffer aBuf;
     aBuf.append('#').append(rLoc.getNumThousandSep()).append("##0");
@@ -4104,18 +4105,20 @@ OUString NfCurrencyEntry::Impl_BuildFormatStringNumChars(
         aBuf.append(rLoc.getNumDecimalSep());
         sal_Unicode cDecimalChar = nDecimalFormat == 2 ? '-' : cZeroChar;
         for (sal_uInt16 i = 0; i < nDigits; ++i)
+        {
             aBuf.append(cDecimalChar);
+        }
     }
     return aBuf.makeStringAndClear();
 }
 
 
-OUString NfCurrencyEntry::BuildPositiveFormatString(bool bBank,
-            const LocaleDataWrapper& rLoc, sal_uInt16 nDecimalFormat) const
+OUString NfCurrencyEntry::BuildPositiveFormatString(bool bBank, const LocaleDataWrapper& rLoc,
+                                                    sal_uInt16 nDecimalFormat) const
 {
     OUStringBuffer sBuf(Impl_BuildFormatStringNumChars(rLoc, nDecimalFormat));
-    sal_uInt16 nPosiForm = NfCurrencyEntry::GetEffectivePositiveFormat(
-        rLoc.getCurrPositiveFormat(), nPositiveFormat, bBank );
+    sal_uInt16 nPosiForm = NfCurrencyEntry::GetEffectivePositiveFormat( rLoc.getCurrPositiveFormat(),
+                                                                        nPositiveFormat, bBank );
     CompletePositiveFormatString(sBuf, bBank, nPosiForm);
     return sBuf.makeStringAndClear();
 }
@@ -4125,8 +4128,8 @@ OUString NfCurrencyEntry::BuildNegativeFormatString(bool bBank,
             const LocaleDataWrapper& rLoc, sal_uInt16 nDecimalFormat ) const
 {
     OUStringBuffer sBuf(Impl_BuildFormatStringNumChars(rLoc, nDecimalFormat));
-    sal_uInt16 nNegaForm = NfCurrencyEntry::GetEffectiveNegativeFormat(
-        rLoc.getCurrNegativeFormat(), nNegativeFormat, bBank );
+    sal_uInt16 nNegaForm = NfCurrencyEntry::GetEffectiveNegativeFormat( rLoc.getCurrNegativeFormat(),
+                                                                        nNegativeFormat, bBank );
     CompleteNegativeFormatString(sBuf, bBank, nNegaForm);
     return sBuf.makeStringAndClear();
 }

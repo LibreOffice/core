@@ -640,7 +640,7 @@ public:
     /** Return the format index of a builtin format for a specific language/country.
         If nFormat is not a builtin format nFormat is returned. */
     sal_uInt32 GetFormatForLanguageIfBuiltIn( sal_uInt32 nFormat,
-                                    LanguageType eLnge = LANGUAGE_DONTKNOW );
+                                              LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /** Return the format index for a builtin format of a specific language
         @see NfIndexTableOffset
@@ -860,23 +860,20 @@ private:
     SVL_DLLPRIVATE void ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditionalFormats );
 
     // Generate additional formats provided by i18n
-    SVL_DLLPRIVATE void ImpGenerateAdditionalFormats(
-                sal_uInt32 CLOffset,
-                NumberFormatCodeWrapper& rNumberFormatCode,
-                bool bAfterChangingSystemCL );
+    SVL_DLLPRIVATE void ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
+                                                      NumberFormatCodeWrapper& rNumberFormatCode,
+                                                      bool bAfterChangingSystemCL );
 
-    SVL_DLLPRIVATE SvNumberformat* ImpInsertFormat(
-                const ::com::sun::star::i18n::NumberFormatCode& rCode,
-                sal_uInt32 nPos,
-                bool bAfterChangingSystemCL = false,
-                sal_Int16 nOrgIndex = 0 );
+    SVL_DLLPRIVATE SvNumberformat* ImpInsertFormat( const ::com::sun::star::i18n::NumberFormatCode& rCode,
+                                                    sal_uInt32 nPos,
+                                                    bool bAfterChangingSystemCL = false,
+                                                    sal_Int16 nOrgIndex = 0 );
     // ImpInsertNewStandardFormat for new (since version ...) builtin formats
-    SVL_DLLPRIVATE SvNumberformat* ImpInsertNewStandardFormat(
-                const ::com::sun::star::i18n::NumberFormatCode& rCode,
-                sal_uInt32 nPos,
-                sal_uInt16 nVersion,
-                bool bAfterChangingSystemCL = false,
-                sal_Int16 nOrgIndex = 0 );
+    SVL_DLLPRIVATE SvNumberformat* ImpInsertNewStandardFormat( const ::com::sun::star::i18n::NumberFormatCode& rCode,
+                                                               sal_uInt32 nPos,
+                                                               sal_uInt16 nVersion,
+                                                               bool bAfterChangingSystemCL = false,
+                                                               sal_Int16 nOrgIndex = 0 );
 
     // Return CLOffset or (MaxCLOffset + SV_COUNTRY_LANGUAGE_OFFSET) if new language/country
     SVL_DLLPRIVATE sal_uInt32 ImpGetCLOffset(LanguageType eLnge) const;
@@ -884,8 +881,8 @@ private:
     // Test whether format code already exists, then return index key,
     // otherwise NUMBERFORMAT_ENTRY_NOT_FOUND
     SVL_DLLPRIVATE sal_uInt32 ImpIsEntry( const OUString& rString,
-                        sal_uInt32 CLOffset,
-                        LanguageType eLnge );
+                                          sal_uInt32 CLOffset,
+                                          LanguageType eLnge );
 
     // Create builtin formats for language/country if necessary, return CLOffset
     SVL_DLLPRIVATE sal_uInt32 ImpGenerateCL( LanguageType eLnge, bool bNoAdditionalFormats = false );
@@ -913,9 +910,8 @@ private:
     // Return the index in a sequence of format codes matching an enum of
     // NfIndexTableOffset. If not found 0 is returned. If the sequence doesn't
     // contain any format code elements a default element is created and inserted.
-    SVL_DLLPRIVATE sal_Int32 ImpGetFormatCodeIndex(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode >& rSeq,
-        const NfIndexTableOffset nTabOff );
+    SVL_DLLPRIVATE sal_Int32 ImpGetFormatCodeIndex( ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode >& rSeq,
+                                                    const NfIndexTableOffset nTabOff );
 
     // Adjust a sequence of format codes to contain only one (THE) default
     // instead of multiple defaults for short/medium/long types.
@@ -923,25 +919,23 @@ private:
     // Return the default index in the sequence.
     // Non-PRODUCT version may check locale data for matching defaults in one
     // FormatElement group.
-    SVL_DLLPRIVATE sal_Int32 ImpAdjustFormatCodeDefault(
-        ::com::sun::star::i18n::NumberFormatCode * pFormatArr,
-        sal_Int32 nCount, bool bCheckCorrectness = true
-        );
+    SVL_DLLPRIVATE sal_Int32 ImpAdjustFormatCodeDefault( ::com::sun::star::i18n::NumberFormatCode * pFormatArr,
+                                                         sal_Int32 nCount, bool bCheckCorrectness = true );
 
     // Obtain the format entry for a given key index.
     SVL_DLLPRIVATE       SvNumberformat* GetFormatEntry( sal_uInt32 nKey );
     SVL_DLLPRIVATE const SvNumberformat* GetFormatEntry( sal_uInt32 nKey ) const
-    {
-        return GetEntry( nKey);
-    }
+        {
+            return GetEntry( nKey);
+        }
 
     // used as a loop body inside of GetNewCurrencySymbolString() and GetCurrencyEntry()
 #ifndef DBG_UTIL
     inline
 #endif
-        static bool ImpLookupCurrencyEntryLoopBody( const NfCurrencyEntry*& pFoundEntry,
-                                                    bool& bFoundBank, const NfCurrencyEntry* pData,
-                                                    sal_uInt16 nPos, const OUString& rSymbol );
+    static bool ImpLookupCurrencyEntryLoopBody( const NfCurrencyEntry*& pFoundEntry,
+                                                bool& bFoundBank, const NfCurrencyEntry* pData,
+                                                sal_uInt16 nPos, const OUString& rSymbol );
 
     // link to be set at <method>SvtSysLocaleOptions::SetCurrencyChangeLink()</method>
     DECL_DLLPRIVATE_STATIC_LINK( SvNumberFormatter, CurrencyChangeLink, void* );
@@ -951,7 +945,7 @@ private:
 public:
 
     // own static mutex, may also be used by internal class SvNumberFormatterRegistry_Impl
-    static ::osl::Mutex&        GetMutex();
+    static ::osl::Mutex& GetMutex();
 
     // called by SvNumberFormatterRegistry_Impl::Notify if the default system currency changes
     void ResetDefaultSystemCurrency();
@@ -966,9 +960,10 @@ public:
     // new format codes are appended.
     void ReplaceSystemCL( LanguageType eOldLanguage );
 
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XMultiServiceFactory >
-        GetServiceManager() const { return xServiceManager; }
+    inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetServiceManager() const
+        {
+            return xServiceManager;
+        }
 
 
 
@@ -976,7 +971,6 @@ public:
     //! public for the InputScanner.
     // return the current FormatScanner
     inline const ImpSvNumberformatScan* GetFormatScanner() const { return pFormatScanner; }
-
 
 
     //! The following methods are not to be used from outside but must be
@@ -987,12 +981,16 @@ public:
 
     // return corresponding Transliteration wrapper
     inline const ::utl::TransliterationWrapper* GetTransliteration() const
-                { return xTransliteration.get(); }
+        {
+            return xTransliteration.get();
+        }
 
     // return corresponding Transliteration wrapper with loadModuleByImplName()
-    inline const ::utl::TransliterationWrapper* GetTransliterationForModule(
-            const OUString& rModule, LanguageType eLang ) const
-                { return xTransliteration.getForModule( rModule, eLang ); }
+    inline const ::utl::TransliterationWrapper* GetTransliterationForModule( const OUString& rModule,
+                                                                             LanguageType eLang ) const
+        {
+            return xTransliteration.getForModule( rModule, eLang );
+        }
 
     // return the corresponding CharacterClassification wrapper
     inline const CharClass* GetCharClass() const { return pCharClass; }
@@ -1028,7 +1026,9 @@ inline sal_uInt32 SvNumberFormatter::GetMergeFmtIndex( sal_uInt32 nOldFmt ) cons
     {
         SvNumberFormatterIndexTable::iterator it = pMergeTable->find(nOldFmt);
         if (it != pMergeTable->end())
+        {
             return it->second;
+        }
     }
     return nOldFmt;
 }
@@ -1040,20 +1040,21 @@ inline bool SvNumberFormatter::HasMergeFmtTbl() const
 
 
 // static
-inline sal_uInt16 SvNumberFormatter::ExpandTwoDigitYear(
-            sal_uInt16 nYear, sal_uInt16 nTwoDigitYearStart )
+inline sal_uInt16 SvNumberFormatter::ExpandTwoDigitYear( sal_uInt16 nYear, sal_uInt16 nTwoDigitYearStart )
 {
     if ( nYear < 100 )
     {
         if ( nYear < (nTwoDigitYearStart % 100) )
+        {
             return nYear + (((nTwoDigitYearStart / 100) + 1) * 100);
+        }
         else
+        {
             return nYear + ((nTwoDigitYearStart / 100) * 100);
+        }
     }
     return nYear;
 }
-
-
 
 #endif  // _ZFORLIST_HXX
 

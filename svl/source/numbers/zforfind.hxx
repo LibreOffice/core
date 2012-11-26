@@ -39,18 +39,15 @@ public:
 /*!*/   void ChangeIntl();                      // MUST be called if language changes
 
     /// set reference date for offset calculation
-    void ChangeNullDate(
-            const sal_uInt16 nDay,
-            const sal_uInt16 nMonth,
-            const sal_uInt16 nYear );
+    void ChangeNullDate( const sal_uInt16 nDay,
+                         const sal_uInt16 nMonth,
+                         const sal_uInt16 nYear );
 
     /// convert input string to number
-    bool IsNumberFormat(
-            const String& rString,              /// input string
-            short& F_Type,                      /// format type (in + out)
-            double& fOutNumber,                 /// value determined (out)
-            const SvNumberformat* pFormat = NULL    /// optional a number format to which compare against
-            );
+    bool IsNumberFormat( const String& rString,              /// input string
+                         short& F_Type,                      /// format type (in + out)
+                         double& fOutNumber,                 /// value determined (out)
+                         const SvNumberformat* pFormat = NULL);  /// optional a number format to which compare against
 
     /// after IsNumberFormat: get decimal position
     short   GetDecPos() const { return nDecPos; }
@@ -191,137 +188,157 @@ private:
     // decimal separator has to be '.'
     // If bForceFraction==true the string is taken to be the fractional part
     // of 0.1234 without the leading 0. (thus being just "1234").
-    double StringToDouble(
-            const String& rStr,
-            bool bForceFraction = false );
+    double StringToDouble( const String& rStr,
+                           bool bForceFraction = false );
 
-    bool NextNumberStringSymbol(                // Next number/string symbol
-            const sal_Unicode*& pStr,
-            String& rSymbol );
+    // Next number/string symbol
+    bool NextNumberStringSymbol( const sal_Unicode*& pStr,
+                                 String& rSymbol );
 
-    bool SkipThousands(                         // Concatenate ,000,23 blocks
-            const sal_Unicode*& pStr,           // in input to 000123
-            String& rSymbol );
+    // Concatenate ,000,23 blocks
+    // in input to 000123
+    bool SkipThousands( const sal_Unicode*& pStr, String& rSymbol );
 
-    void NumberStringDivision(                  // Divide numbers/strings into
-            const String& rString );            // arrays and variables above.
-                                                // Leading blanks and blanks
-                                                // after numbers are thrown away
-
-
-                                                // optimized substring versions
-
-    static inline bool StringContains(          // Whether rString contains rWhat at nPos
-            const String& rWhat,
-            const String& rString,
-            xub_StrLen nPos )
-                {   // mostly used with one character
-                    if ( rWhat.GetChar(0) != rString.GetChar(nPos) )
-                        return false;
-                    return StringContainsImpl( rWhat, rString, nPos );
-                }
-    static inline bool StringPtrContains(       // Whether pString contains rWhat at nPos
-            const String& rWhat,
-            const sal_Unicode* pString,
-            xub_StrLen nPos )                   // nPos MUST be a valid offset from pString
-                {   // mostly used with one character
-                    if ( rWhat.GetChar(0) != *(pString+nPos) )
-                        return false;
-                    return StringPtrContainsImpl( rWhat, pString, nPos );
-                }
-    static bool StringContainsImpl(             //! DO NOT use directly
-            const String& rWhat,
-            const String& rString,
-            xub_StrLen nPos );
-    static bool StringPtrContainsImpl(          //! DO NOT use directly
-            const String& rWhat,
-            const sal_Unicode* pString,
-            xub_StrLen nPos );
+    // Divide numbers/strings into
+    // arrays and variables above.
+    // Leading blanks and blanks
+    // after numbers are thrown away
+    void NumberStringDivision( const String& rString );
 
 
-    static inline bool SkipChar(                // Skip a special character
-            sal_Unicode c,
-            const String& rString,
-            xub_StrLen& nPos );
-    static inline void SkipBlanks(              // Skip blank
-            const String& rString,
-            xub_StrLen& nPos );
-    static inline bool SkipString(              // Jump over rWhat in rString at nPos
-            const String& rWhat,
-            const String& rString,
-            xub_StrLen& nPos );
+    // optimized substring versions
 
-    inline bool GetThousandSep(                 // Recognizes exactly ,111 as group separator
-            const String& rString,
-            xub_StrLen& nPos,
-            sal_uInt16 nStringPos );
-    short GetLogical(                           // Get boolean value
-            const String& rString );
-    short GetMonth(                             // Get month and advance string position
-            const String& rString,
-            xub_StrLen& nPos );
-    int GetDayOfWeek(                           // Get day of week and advance string position
-            const String& rString,
-            xub_StrLen& nPos );
-    bool GetCurrency(                           // Get currency symbol and advance string position
-            const String& rString,
-            xub_StrLen& nPos,
-            const SvNumberformat* pFormat = NULL ); // optional number format to match against
-    bool GetTimeAmPm(                           // Get symbol AM or PM and advance string position
-            const String& rString,
-            xub_StrLen& nPos );
-    inline bool GetDecSep(                      // Get decimal separator and advance string position
-            const String& rString,
-            xub_StrLen& nPos );
-    inline bool GetTime100SecSep(               // Get hundredth seconds separator and advance string position
-            const String& rString,
-            xub_StrLen& nPos );
-    int GetSign(                                // Get sign  and advance string position
-            const String& rString,              // Including special case '('
-            xub_StrLen& nPos );
-    short GetESign(                             // Get sign of exponent and advance string position
-            const String& rString,
-            xub_StrLen& nPos );
+    // Whether rString contains rWhat at nPos
+    static inline bool StringContains( const String& rWhat,
+                                       const String& rString,
+                                       xub_StrLen nPos )
+        {
+            // mostly used with one character
+            if ( rWhat.GetChar(0) != rString.GetChar(nPos) )
+            {
+                return false;
+            }
+            return StringContainsImpl( rWhat, rString, nPos );
+        }
 
-    inline bool GetNextNumber(                  // Get next number as array offset
-            sal_uInt16& i,
-            sal_uInt16& j );
+    // Whether pString contains rWhat at nPos
+    static inline bool StringPtrContains( const String& rWhat,
+                                          const sal_Unicode* pString,
+                                          xub_StrLen nPos ) // nPos MUST be a valid offset from pString
+        {
+            // mostly used with one character
+            if ( rWhat.GetChar(0) != *(pString+nPos) )
+            {
+                return false;
+            }
+            return StringPtrContainsImpl( rWhat, pString, nPos );
+        }
+
+    //! DO NOT use directly
+    static bool StringContainsImpl( const String& rWhat,
+                                    const String& rString,
+                                    xub_StrLen nPos );
+    //! DO NOT use directly
+    static bool StringPtrContainsImpl( const String& rWhat,
+                                       const sal_Unicode* pString,
+                                       xub_StrLen nPos );
+
+    // Skip a special character
+    static inline bool SkipChar( sal_Unicode c,
+                                 const String& rString,
+                                 xub_StrLen& nPos );
+
+    // Skip blank
+    static inline void SkipBlanks( const String& rString,
+                                   xub_StrLen& nPos );
+
+    // Jump over rWhat in rString at nPos
+    static inline bool SkipString( const String& rWhat,
+                                   const String& rString,
+                                   xub_StrLen& nPos );
+
+    // Recognizes exactly ,111 as group separator
+    inline bool GetThousandSep( const String& rString,
+                                xub_StrLen& nPos,
+                                sal_uInt16 nStringPos );
+    // Get boolean value
+    short GetLogical( const String& rString );
+
+    // Get month and advance string position
+    short GetMonth( const String& rString,
+                    xub_StrLen& nPos );
+
+    // Get day of week and advance string position
+    int GetDayOfWeek(            const String& rString,
+                                 xub_StrLen& nPos );
+
+    // Get currency symbol and advance string position
+    bool GetCurrency( const String& rString,
+                      xub_StrLen& nPos,
+                      const SvNumberformat* pFormat = NULL ); // optional number format to match against
+
+    // Get symbol AM or PM and advance string position
+    bool GetTimeAmPm( const String& rString,
+                      xub_StrLen& nPos );
+
+    // Get decimal separator and advance string position
+    inline bool GetDecSep( const String& rString,
+                           xub_StrLen& nPos );
+
+    // Get hundredth seconds separator and advance string position
+    inline bool GetTime100SecSep( const String& rString,
+                                  xub_StrLen& nPos );
+
+    // Get sign  and advance string position
+    // Including special case '('
+    int GetSign( const String& rString,
+                 xub_StrLen& nPos );
+
+    // Get sign of exponent and advance string position
+    short GetESign( const String& rString,
+                    xub_StrLen& nPos );
+
+    // Get next number as array offset
+    inline bool GetNextNumber( sal_uInt16& i,
+                               sal_uInt16& j );
 
     /** Converts time -> double (only decimals)
 
         @return TRUE if time, FALSE if not (e.g. hours >12 with AM/PM)
      */
-    bool GetTimeRef(
-            double& fOutNumber,                     // result as double
-            sal_uInt16 nIndex,                      // Index of hour in input
-            sal_uInt16 nAnz );                      // Count of time substrings in input
+    bool GetTimeRef( double& fOutNumber,                     // result as double
+                     sal_uInt16 nIndex,                      // Index of hour in input
+                     sal_uInt16 nAnz );                      // Count of time substrings in input
     sal_uInt16 ImplGetDay  ( sal_uInt16 nIndex );   // Day input, 0 if no match
     sal_uInt16 ImplGetMonth( sal_uInt16 nIndex );   // Month input, zero based return, NumberOfMonths if no match
     sal_uInt16 ImplGetYear ( sal_uInt16 nIndex );   // Year input, 0 if no match
-    bool GetDateRef(                                // Conversion of date to number
-            double& fDays,                          // OUT: days diff to null date
-            sal_uInt16& nCounter,                   // Count of date substrings
-            const SvNumberformat* pFormat = NULL ); // optional number format to match against
 
-    bool ScanStartString(                       // Analyze start of string
-            const String& rString,
-            const SvNumberformat* pFormat = NULL );
-    bool ScanMidString(                         // Analyze middle substring
-            const String& rString,
-            sal_uInt16 nStringPos,
-            const SvNumberformat* pFormat = NULL );
-    bool ScanEndString(                         // Analyze end of string
-            const String& rString,
-            const SvNumberformat* pFormat = NULL );
+    // Conversion of date to number
+    bool GetDateRef( double& fDays,                          // OUT: days diff to null date
+                     sal_uInt16& nCounter,                   // Count of date substrings
+                     const SvNumberformat* pFormat = NULL ); // optional number format to match against
+
+    // Analyze start of string
+    bool ScanStartString( const String& rString,
+                          const SvNumberformat* pFormat = NULL );
+
+    // Analyze middle substring
+    bool ScanMidString( const String& rString,
+                        sal_uInt16 nStringPos,
+                        const SvNumberformat* pFormat = NULL );
+
+
+    // Analyze end of string
+    bool ScanEndString( const String& rString,
+                        const SvNumberformat* pFormat = NULL );
 
     // Compare rString to substring of array indexed by nString
     // nString == 0xFFFF => last substring
-    bool ScanStringNumFor(
-            const String& rString,
-            xub_StrLen nPos,
-            const SvNumberformat* pFormat,
-            sal_uInt16 nString,
-            bool bDontDetectNegation = false );
+    bool ScanStringNumFor( const String& rString,
+                           xub_StrLen nPos,
+                           const SvNumberformat* pFormat,
+                           sal_uInt16 nString,
+                           bool bDontDetectNegation = false );
 
     // if nMatchedAllStrings set nMatchedUsedAsReturn and return true,
     // else do nothing and return false
@@ -330,10 +347,10 @@ private:
     //! Be sure that the string to be analyzed is already converted to upper
     //! case and if it contained native humber digits that they are already
     //! converted to ASCII.
-    bool IsNumberFormatMain(                    // Main anlyzing function
-            const String& rString,
-            const SvNumberformat* pFormat = NULL    // optional number format to match against
-            );
+
+    // Main anlyzing function
+    bool IsNumberFormatMain( const String& rString,
+                             const SvNumberformat* pFormat = NULL);    // optional number format to match against
 
     static inline bool MyIsdigit( sal_Unicode c );
 

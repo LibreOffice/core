@@ -232,9 +232,8 @@ enum ScanState              // States der Turing-Maschine
     SsGetString = 3
 };
 
-bool ImpSvNumberInputScan::NextNumberStringSymbol(
-        const sal_Unicode*& pStr,
-        String& rSymbol )
+bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
+                                                   String& rSymbol )
 {
     bool isNumber = false;
     sal_Unicode cToken;
@@ -247,43 +246,53 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol(
         pHere++;
         switch (eState)
         {
-            case SsStart:
-                if ( MyIsdigit( cToken ) )
-                {
-                    eState = SsGetValue;
-                    isNumber = true;
-                }
-                else
-                    eState = SsGetString;
+        case SsStart:
+            if ( MyIsdigit( cToken ) )
+            {
+                eState = SsGetValue;
+                isNumber = true;
+            }
+            else
+            {
+                eState = SsGetString;
+            }
+            nChars++;
+            break;
+        case SsGetValue:
+            if ( MyIsdigit( cToken ) )
+            {
                 nChars++;
-                break;
-            case SsGetValue:
-                if ( MyIsdigit( cToken ) )
-                    nChars++;
-                else
-                {
-                    eState = SsStop;
-                    pHere--;
-                }
-                break;
-            case SsGetString:
-                if ( !MyIsdigit( cToken ) )
-                    nChars++;
-                else
-                {
-                    eState = SsStop;
-                    pHere--;
-                }
-                break;
-            default:
-                break;
+            }
+            else
+            {
+                eState = SsStop;
+                pHere--;
+            }
+            break;
+        case SsGetString:
+            if ( !MyIsdigit( cToken ) )
+            {
+                nChars++;
+            }
+            else
+            {
+                eState = SsStop;
+                pHere--;
+            }
+            break;
+        default:
+            break;
         }   // switch
     }   // while
 
     if ( nChars )
+    {
         rSymbol.Assign( pStr, nChars );
+    }
     else
+    {
         rSymbol.Erase();
+    }
 
     pStr = pHere;
 
@@ -297,9 +306,8 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol(
 // FIXME: should be grouping; it is only used though in case nAnzStrings is
 // near SV_MAX_ANZ_INPUT_STRINGS, in NumberStringDivision().
 
-bool ImpSvNumberInputScan::SkipThousands(
-        const sal_Unicode*& pStr,
-        String& rSymbol )
+bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
+                                          String& rSymbol )
 {
     bool res = false;
     sal_Unicode cToken;
@@ -313,45 +321,47 @@ bool ImpSvNumberInputScan::SkipThousands(
         pHere++;
         switch (eState)
         {
-            case SsStart:
-                if ( StringPtrContains( rThSep, pHere-1, 0 ) )
+        case SsStart:
+            if ( StringPtrContains( rThSep, pHere-1, 0 ) )
+            {
+                nCounter = 0;
+                eState = SsGetValue;
+                pHere += rThSep.Len()-1;
+            }
+            else
+            {
+                eState = SsStop;
+                pHere--;
+            }
+            break;
+        case SsGetValue:
+            if ( MyIsdigit( cToken ) )
+            {
+                rSymbol += cToken;
+                nCounter++;
+                if (nCounter == 3)
                 {
-                    nCounter = 0;
-                    eState = SsGetValue;
-                    pHere += rThSep.Len()-1;
+                    eState = SsStart;
+                    res = true;                 // .000 combination found
                 }
-                else
-                {
-                    eState = SsStop;
-                    pHere--;
-                }
-                break;
-            case SsGetValue:
-                if ( MyIsdigit( cToken ) )
-                {
-                    rSymbol += cToken;
-                    nCounter++;
-                    if (nCounter == 3)
-                    {
-                        eState = SsStart;
-                        res = true;                 // .000 combination found
-                    }
-                }
-                else
-                {
-                    eState = SsStop;
-                    pHere--;
-                }
-                break;
-            default:
-                break;
+            }
+            else
+            {
+                eState = SsStop;
+                pHere--;
+            }
+            break;
+        default:
+            break;
         }   // switch
     }   // while
 
     if (eState == SsGetValue)               // break witth less than 3 digits
     {
         if ( nCounter )
+        {
             rSymbol.Erase( rSymbol.Len() - nCounter, nCounter );
+        }
         pHere -= nCounter + rThSep.Len();       // put back ThSep also
     }
     pStr = pHere;
@@ -376,8 +386,12 @@ void ImpSvNumberInputScan::NumberStringDivision( const String& rString )
             nAnzNums++;
             if (nAnzStrings >= SV_MAX_ANZ_INPUT_STRINGS - 7 &&
                 nPosThousandString == 0)                // nur einmal
+            {
                 if ( SkipThousands( pStr, sStrArray[nAnzStrings] ) )
+                {
                     nPosThousandString = nAnzStrings;
+                }
+            }
         }
         else
         {
@@ -392,10 +406,12 @@ void ImpSvNumberInputScan::NumberStringDivision( const String& rString )
 // Whether rString contains rWhat at nPos
 
 bool ImpSvNumberInputScan::StringContainsImpl( const String& rWhat,
-            const String& rString, xub_StrLen nPos )
+                                               const String& rString, xub_StrLen nPos )
 {
     if ( nPos + rWhat.Len() <= rString.Len() )
+    {
         return StringPtrContainsImpl( rWhat, rString.GetBuffer(), nPos );
+    }
     return false;
 }
 
@@ -404,17 +420,21 @@ bool ImpSvNumberInputScan::StringContainsImpl( const String& rWhat,
 // Whether pString contains rWhat at nPos
 
 bool ImpSvNumberInputScan::StringPtrContainsImpl( const String& rWhat,
-            const sal_Unicode* pString, xub_StrLen nPos )
+                                                  const sal_Unicode* pString, xub_StrLen nPos )
 {
     if ( rWhat.Len() == 0 )
+    {
         return false;
-    register const sal_Unicode* pWhat = rWhat.GetBuffer();
-    register const sal_Unicode* const pEnd = pWhat + rWhat.Len();
-    register const sal_Unicode* pStr = pString + nPos;
+    }
+    const sal_Unicode* pWhat = rWhat.GetBuffer();
+    const sal_Unicode* const pEnd = pWhat + rWhat.Len();
+    const sal_Unicode* pStr = pString + nPos;
     while ( pWhat < pEnd )
     {
         if ( *pWhat != *pStr )
+        {
             return false;
+        }
         pWhat++;
         pStr++;
     }
@@ -428,7 +448,7 @@ bool ImpSvNumberInputScan::StringPtrContainsImpl( const String& rWhat,
 // ueberspringt genau das angegebene Zeichen
 
 inline bool ImpSvNumberInputScan::SkipChar( sal_Unicode c, const String& rString,
-        xub_StrLen& nPos )
+                                            xub_StrLen& nPos )
 {
     if ((nPos < rString.Len()) && (rString.GetChar(nPos) == c))
     {
@@ -445,7 +465,7 @@ inline bool ImpSvNumberInputScan::SkipChar( sal_Unicode c, const String& rString
 // Ueberspringt Leerzeichen
 
 inline void ImpSvNumberInputScan::SkipBlanks( const String& rString,
-        xub_StrLen& nPos )
+                                              xub_StrLen& nPos )
 {
     if ( nPos < rString.Len() )
     {
@@ -465,7 +485,7 @@ inline void ImpSvNumberInputScan::SkipBlanks( const String& rString,
 // jump over rWhat in rString at nPos
 
 inline bool ImpSvNumberInputScan::SkipString( const String& rWhat,
-        const String& rString, xub_StrLen& nPos )
+                                              const String& rString, xub_StrLen& nPos )
 {
     if ( StringContains( rWhat, rString, nPos ) )
     {
@@ -481,33 +501,32 @@ inline bool ImpSvNumberInputScan::SkipString( const String& rWhat,
 //
 // recognizes exactly ,111 in {3} and {3,2} or ,11 in {3,2} grouping
 
-inline bool ImpSvNumberInputScan::GetThousandSep(
-        const String& rString,
-        xub_StrLen& nPos,
-        sal_uInt16 nStringPos )
+inline bool ImpSvNumberInputScan::GetThousandSep( const String& rString,
+                                                  xub_StrLen& nPos,
+                                                  sal_uInt16 nStringPos )
 {
     const String& rSep = pFormatter->GetNumThousandSep();
     // Is it an ordinary space instead of a non-breaking space?
     bool bSpaceBreak = rSep.GetChar(0) == 0xa0 && rString.GetChar(0) == 0x20 &&
         rSep.Len() == 1 && rString.Len() == 1;
-    if (!( (rString == rSep || bSpaceBreak)             // nothing else
-                && nStringPos < nAnzStrings - 1         // safety first!
-                && IsNum[nStringPos+1] ))               // number follows
+    if (!((rString == rSep || bSpaceBreak) &&      // nothing else
+           nStringPos < nAnzStrings - 1 &&         // safety first!
+           IsNum[ nStringPos + 1 ] ))              // number follows
+    {
         return false;                                   // no? => out
+    }
 
-    utl::DigitGroupingIterator aGrouping(
-            pFormatter->GetLocaleData()->getDigitGrouping());
+    utl::DigitGroupingIterator aGrouping( pFormatter->GetLocaleData()->getDigitGrouping());
     // Match ,### in {3} or ,## in {3,2}
     /* FIXME: this could be refined to match ,## in {3,2} only if ,##,## or
      * ,##,### and to match ,### in {3,2} only if it's the last. However,
      * currently there is no track kept where group separators occur. In {3,2}
      * #,###,### and #,##,## would be valid input, which maybe isn't even bad
      * for #,###,###. Other combinations such as #,###,## maybe not. */
-    xub_StrLen nLen = sStrArray[nStringPos+1].Len();
-    if (nLen == aGrouping.get()                         // with 3 (or so) digits
-            || nLen == aGrouping.advance().get()        // or with 2 (or 3 or so) digits
-            || nPosThousandString == nStringPos+1       // or concatenated
-       )
+    xub_StrLen nLen = sStrArray[ nStringPos + 1 ].Len();
+    if (nLen == aGrouping.get() ||                  // with 3 (or so) digits
+        nLen == aGrouping.advance().get() ||        // or with 2 (or 3 or so) digits
+        nPosThousandString == nStringPos + 1 )      // or concatenated
     {
         nPos = nPos + rSep.Len();
         return true;
@@ -564,14 +583,16 @@ short ImpSvNumberInputScan::GetMonth( const String& rString, xub_StrLen& nPos )
     if (rString.Len() > nPos)                           // only if needed
     {
         if ( !bTextInitialized )
+        {
             InitText();
+        }
         sal_Int16 nMonths = pFormatter->GetCalendar()->getNumberOfMonthsInYear();
         for ( sal_Int16 i = 0; i < nMonths; i++ )
         {
             if ( bScanGenitiveMonths && StringContains( pUpperGenitiveMonthText[i], rString, nPos ) )
             {                                           // genitive full names first
                 nPos = nPos + pUpperGenitiveMonthText[i].Len();
-                res = i+1;
+                res = i + 1;
                 break;  // for
             }
             else if ( bScanGenitiveMonths && StringContains( pUpperGenitiveAbbrevMonthText[i], rString, nPos ) )
@@ -668,8 +689,7 @@ bool ImpSvNumberInputScan::GetCurrency( const String& rString, xub_StrLen& nPos,
     {
         if ( !aUpperCurrSymbol.Len() )
         {   // if no format specified the currency of the initialized formatter
-            LanguageType eLang = (pFormat ? pFormat->GetLanguage() :
-                pFormatter->GetLanguage());
+            LanguageType eLang = (pFormat ? pFormat->GetLanguage() : pFormatter->GetLanguage());
             aUpperCurrSymbol = pFormatter->GetCharClass()->uppercase(
                 SvNumberFormatter::GetCurrencyEntry( eLang ).GetSymbol() );
         }
@@ -793,17 +813,17 @@ int ImpSvNumberInputScan::GetSign( const String& rString, xub_StrLen& nPos )
     if (rString.Len() > nPos)
         switch (rString.GetChar(nPos))
         {
-            case '+':
-                nPos++;
-                return 1;
-            case '(':               // '(' aehnlich wie '-' ?!?
-                nNegCheck = 1;
-                //! fallthru
-            case '-':
-                nPos++;
-                return -1;
-            default:
-                break;
+        case '+':
+            nPos++;
+            return 1;
+        case '(':               // '(' aehnlich wie '-' ?!?
+            nNegCheck = 1;
+            //! fallthru
+        case '-':
+            nPos++;
+            return -1;
+        default:
+            break;
         }
 
     return 0;
@@ -821,18 +841,19 @@ int ImpSvNumberInputScan::GetSign( const String& rString, xub_StrLen& nPos )
 short ImpSvNumberInputScan::GetESign( const String& rString, xub_StrLen& nPos )
 {
     if (rString.Len() > nPos)
+    {
         switch (rString.GetChar(nPos))
         {
-            case '+':
-                nPos++;
-                return 1;
-            case '-':
-                nPos++;
-                return -1;
-            default:
-                break;
+        case '+':
+            nPos++;
+            return 1;
+        case '-':
+            nPos++;
+            return -1;
+        default:
+            break;
         }
-
+    }
     return 0;
 }
 
@@ -858,10 +879,9 @@ inline bool ImpSvNumberInputScan::GetNextNumber( sal_uInt16& i, sal_uInt16& j )
 //---------------------------------------------------------------------------
 //      GetTimeRef
 
-bool ImpSvNumberInputScan::GetTimeRef(
-        double& fOutNumber,
-        sal_uInt16 nIndex,          // j-value of the first numeric time part of input, default 0
-        sal_uInt16 nAnz )           // count of numeric time parts
+bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
+                                       sal_uInt16 nIndex,          // j-value of the first numeric time part of input, default 0
+                                       sal_uInt16 nAnz )           // count of numeric time parts
 {
     bool bRet = true;
     sal_uInt16 nHour;
@@ -879,16 +899,22 @@ bool ImpSvNumberInputScan::GetTimeRef(
             {
                 // nAnz is not total count, but count of time relevant strings.
                 if (nStartIndex < j && j - nStartIndex < nAnz)
+                {
                     nAnz = j - nStartIndex;
+                }
                 break;  // for
             }
         }
     }
 
     if (nDecPos == 2 && (nAnz == 3 || nAnz == 2))   // 20:45.5 or 45.5
+    {
         nHour = 0;
+    }
     else if (nIndex - nStartIndex < nAnz)
+    {
         nHour   = (sal_uInt16) sStrArray[nNums[nIndex++]].ToInt32();
+    }
     else
     {
         nHour = 0;
@@ -896,20 +922,33 @@ bool ImpSvNumberInputScan::GetTimeRef(
         SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetTimeRef: bad number index");
     }
     if (nDecPos == 2 && nAnz == 2)                  // 45.5
+    {
         nMinute = 0;
+    }
     else if (nIndex - nStartIndex < nAnz)
+    {
         nMinute = (sal_uInt16) sStrArray[nNums[nIndex++]].ToInt32();
+    }
     if (nIndex - nStartIndex < nAnz)
+    {
         nSecond = (sal_uInt16) sStrArray[nNums[nIndex++]].ToInt32();
+    }
     if (nIndex - nStartIndex < nAnz)
+    {
         fSecond100 = StringToDouble( sStrArray[nNums[nIndex]], true );
+    }
     if (nAmPm && nHour > 12)                    // not a valid AM/PM clock time
+    {
         bRet = false;
+    }
     else if (nAmPm == -1 && nHour != 12)        // PM
+    {
         nHour += 12;
+    }
     else if (nAmPm == 1 && nHour == 12)         // 12 AM
+    {
         nHour = 0;
-
+    }
     fOutNumber = ((double)nHour*3600 +
                   (double)nMinute*60 +
                   (double)nSecond +
@@ -929,7 +968,9 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetDay( sal_uInt16 nIndex )
     {
         sal_uInt16 nNum = (sal_uInt16) sStrArray[nNums[nIndex]].ToInt32();
         if (nNum <= 31)
+        {
             nRes = nNum;
+        }
     }
 
     return nRes;
@@ -948,7 +989,9 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetMonth( sal_uInt16 nIndex )
     {
         sal_uInt16 nNum = (sal_uInt16) sStrArray[nNums[nIndex]].ToInt32();
         if ( 0 < nNum && nNum <= nRes )
+        {
             nRes = nNum - 1;        // zero based for CalendarFieldIndex::MONTH
+        }
     }
 
     return nRes;
@@ -971,7 +1014,9 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetYear( sal_uInt16 nIndex )
         // A year < 100 entered with at least 3 digits with leading 0 is taken
         // as is without expansion.
         if (nYear < 100 && nLen < 3)
+        {
             nYear = SvNumberFormatter::ExpandTwoDigitYear( nYear, nYear2000 );
+        }
     }
 
     return nYear;
@@ -989,13 +1034,15 @@ bool ImpSvNumberInputScan::MayBeIso8601()
         {
             sal_Int32 n;
             if (nAnzNums >= 3 && nNums[2] < nAnzStrings &&
-                    comphelper::string::equals(sStrArray[nNums[0]+1], '-') && // separator year-month
-                    (n = sStrArray[nNums[1]].ToInt32()) >= 1 && n <= 12 &&  // month
-                    comphelper::string::equals(sStrArray[nNums[1]+1], '-') && // separator month-day
-                    (n = sStrArray[nNums[2]].ToInt32()) >= 1 && n <= 31)    // day
+                comphelper::string::equals(sStrArray[nNums[0]+1], '-') && // separator year-month
+                (n = sStrArray[nNums[1]].ToInt32()) >= 1 && n <= 12 &&  // month
+                comphelper::string::equals(sStrArray[nNums[1]+1], '-') && // separator month-day
+                (n = sStrArray[nNums[2]].ToInt32()) >= 1 && n <= 31)    // day
+            {
                 // Year (nNums[0]) value not checked, may be anything, but
                 // length (number of digits) is checked.
                 nMayBeIso8601 = (nLen >= 4 ? 4 : (nLen == 3 ? 3 : (nLen > 0 ? 2 : 1)));
+            }
         }
     }
     return nMayBeIso8601 > 1;
@@ -1007,34 +1054,39 @@ bool ImpSvNumberInputScan::CanForceToIso8601( DateFormat eDateFormat )
 {
     if (nCanForceToIso8601 == 0)
     {
-        nCanForceToIso8601 = 1;
-        do
+
+        if (!MayBeIso8601())
         {
-            if (!MayBeIso8601())
-                break;
+            nCanForceToIso8601 = 1;
+        }
+        else if (nMayBeIso8601 >= 3)
+        {
+            nCanForceToIso8601 = 2; // at least 3 digits in year
+        }
+        else
+        {
+            nCanForceToIso8601 = 1;
+        }
 
-            if (nMayBeIso8601 >= 3)
+        sal_Int32 n;
+        switch (eDateFormat)
+        {
+        case DMY:               // "day" value out of range => ISO 8601 year
+            if ((n = sStrArray[nNums[0]].ToInt32()) < 1 || n > 31)
             {
-                nCanForceToIso8601 = 2; // at least 3 digits in year
-                break;
+                nCanForceToIso8601 = 2;
             }
-
-            sal_Int32 n;
-            switch (eDateFormat)
+            break;
+        case MDY:               // "month" value out of range => ISO 8601 year
+            if ((n = sStrArray[nNums[0]].ToInt32()) < 1 || n > 12)
             {
-                case DMY:               // "day" value out of range => ISO 8601 year
-                    if ((n = sStrArray[nNums[0]].ToInt32()) < 1 || n > 31)
-                        nCanForceToIso8601 = 2;
-                    break;
-                case MDY:               // "month" value out of range => ISO 8601 year
-                    if ((n = sStrArray[nNums[0]].ToInt32()) < 1 || n > 12)
-                        nCanForceToIso8601 = 2;
-                    break;
-                case YMD:               // always possible
-                    nCanForceToIso8601 = 2;
-                    break;
+                nCanForceToIso8601 = 2;
             }
-        } while (0);
+            break;
+        case YMD:               // always possible
+            nCanForceToIso8601 = 2;
+            break;
+        }
     }
     return nCanForceToIso8601 > 1;
 }
@@ -1060,16 +1112,25 @@ bool ImpSvNumberInputScan::MayBeMonthDate()
                 sal_Int32 n;
                 bool bDay1 = (!bYear1 && (n = sStrArray[nNums[0]].ToInt32()) >= 1 && n <= 31);
                 bool bDay2 = (!bYear2 && (n = sStrArray[nNums[1]].ToInt32()) >= 1 && n <= 31);
+
                 if (bDay1 && !bDay2)
+                {
                     nMayBeMonthDate = 2;        // dd-month-yy
+                }
                 else if (!bDay1 && bDay2)
+                {
                     nMayBeMonthDate = 3;        // yy-month-dd
+                }
                 else if (bDay1 && bDay2)
                 {
                     if (bYear1 && !bYear2)
+                    {
                         nMayBeMonthDate = 3;    // yy-month-dd
+                    }
                     else if (!bYear1 && bYear2)
+                    {
                         nMayBeMonthDate = 2;    // dd-month-yy
+                    }
                 }
             }
         }
@@ -1082,10 +1143,13 @@ bool ImpSvNumberInputScan::MayBeMonthDate()
 bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
 {
     if (nAcceptedDatePattern >= -1)
+    {
         return (nAcceptedDatePattern >= 0);
-
+    }
     if (!nAnzNums)
+    {
         nAcceptedDatePattern = -1;
+    }
     else if (!sDateAcceptancePatterns.getLength())
     {
         sDateAcceptancePatterns = pFormatter->GetLocaleData()->getDateAcceptancePatterns();
@@ -1094,8 +1158,9 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
     }
 
     if (nAcceptedDatePattern == -1)
+    {
         return false;
-
+    }
     nDatePatternStart = nStartPatternAt;    // remember start particle
 
     for (sal_Int32 nPattern=0; nPattern < sDateAcceptancePatterns.getLength(); ++nPattern)
@@ -1108,34 +1173,38 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
         {
             switch (rPat[nPat])
             {
-                case 'Y':
-                case 'M':
-                case 'D':
-                    bOk = IsNum[nNext];
-                    break;
-                default:
-                    bOk = !IsNum[nNext];
+            case 'Y':
+            case 'M':
+            case 'D':
+                bOk = IsNum[nNext];
+                break;
+            default:
+                bOk = !IsNum[nNext];
+                if (bOk)
+                {
+                    const xub_StrLen nLen = sStrArray[nNext].Len();
+                    bOk = (rPat.indexOf( sStrArray[nNext], nPat) == nPat);
                     if (bOk)
                     {
-                        const xub_StrLen nLen = sStrArray[nNext].Len();
-                        bOk = (rPat.indexOf( sStrArray[nNext], nPat) == nPat);
+                        nPat += nLen - 1;
+                    }
+                    else if (nPat + nLen > rPat.getLength() && sStrArray[nNext].GetChar(nLen-1) == ' ')
+                    {
+                        using namespace comphelper::string;
+                        // Trailing blanks in input.
+                        OUStringBuffer aBuf(stripEnd(sStrArray[nNext], ' '));
+                        // Expand again in case of pattern "M. D. " and
+                        // input "M. D.  ", maybe fetched far, but..
+                        padToLength(aBuf, rPat.getLength() - nPat, ' ');
+                        OUString aStr = aBuf.makeStringAndClear();
+                        bOk = (rPat.indexOf( aStr, nPat) == nPat);
                         if (bOk)
-                            nPat += nLen - 1;
-                        else if (nPat + nLen > rPat.getLength() && sStrArray[nNext].GetChar(nLen-1) == ' ')
                         {
-                            using namespace comphelper::string;
-                            // Trailing blanks in input.
-                            OUStringBuffer aBuf(stripEnd(sStrArray[nNext], ' '));
-                            // Expand again in case of pattern "M. D. " and
-                            // input "M. D.  ", maybe fetched far, but..
-                            padToLength(aBuf, rPat.getLength() - nPat, ' ');
-                            OUString aStr = aBuf.makeStringAndClear();
-                            bOk = (rPat.indexOf( aStr, nPat) == nPat);
-                            if (bOk)
-                                nPat += aStr.getLength() - 1;
+                            nPat += aStr.getLength() - 1;
                         }
                     }
-                    break;
+                }
+                break;
             }
         }
         if (bOk)
@@ -1175,45 +1244,47 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, xub_S
 {
     // If not initialized yet start with first number, if any.
     if (!IsAcceptedDatePattern( (nAnzNums ? nNums[0] : 0)))
+    {
         return false;
-
+    }
     if (nParticle < nDatePatternStart || nParticle >= nAnzStrings || IsNum[nParticle])
+    {
         return false;
-
+    }
     sal_uInt16 nNext = nDatePatternStart;
     const rtl::OUString& rPat = sDateAcceptancePatterns[nAcceptedDatePattern];
     for (sal_Int32 nPat = 0; nPat < rPat.getLength() && nNext < nAnzStrings; ++nPat, ++nNext)
     {
         switch (rPat[nPat])
         {
-            case 'Y':
-            case 'M':
-            case 'D':
-                break;
-            default:
-                if (nNext == nParticle)
+        case 'Y':
+        case 'M':
+        case 'D':
+            break;
+        default:
+            if (nNext == nParticle)
+            {
+                const xub_StrLen nLen = sStrArray[nNext].Len();
+                bool bOk = (rPat.indexOf( sStrArray[nNext], nPat) == nPat);
+                if (!bOk && (nPat + nLen > rPat.getLength() && sStrArray[nNext].GetChar(nLen-1) == ' '))
                 {
-                    const xub_StrLen nLen = sStrArray[nNext].Len();
-                    bool bOk = (rPat.indexOf( sStrArray[nNext], nPat) == nPat);
-                    if (!bOk && (nPat + nLen > rPat.getLength() && sStrArray[nNext].GetChar(nLen-1) == ' '))
-                    {
-                        // The same ugly trailing blanks check as in
-                        // IsAcceptedDatePattern().
-                        using namespace comphelper::string;
-                        OUStringBuffer aBuf(stripEnd(sStrArray[nNext], ' '));
-                        padToLength(aBuf, rPat.getLength() - nPat, ' ');
-                        bOk = (rPat.indexOf( aBuf.makeStringAndClear(), nPat) == nPat);
-                    }
-                    if (bOk)
-                    {
-                        rPos = nLen;    // yes, set, not add!
-                        return true;
-                    }
-                    else
-                        return false;
+                    // The same ugly trailing blanks check as in
+                    // IsAcceptedDatePattern().
+                    using namespace comphelper::string;
+                    OUStringBuffer aBuf(stripEnd(sStrArray[nNext], ' '));
+                    padToLength(aBuf, rPat.getLength() - nPat, ' ');
+                    bOk = (rPat.indexOf( aBuf.makeStringAndClear(), nPat) == nPat);
                 }
-                nPat += sStrArray[nNext].Len() - 1;
-                break;
+                if (bOk)
+                {
+                    rPos = nLen;    // yes, set, not add!
+                    return true;
+                }
+                else
+                    return false;
+            }
+            nPat += sStrArray[nNext].Len() - 1;
+            break;
         }
     }
     return false;
@@ -1225,19 +1296,20 @@ sal_uInt32 ImpSvNumberInputScan::GetDatePatternOrder()
 {
     // If not initialized yet start with first number, if any.
     if (!IsAcceptedDatePattern( (nAnzNums ? nNums[0] : 0)))
+    {
         return 0;
-
+    }
     sal_uInt32 nOrder = 0;
     const rtl::OUString& rPat = sDateAcceptancePatterns[nAcceptedDatePattern];
     for (sal_Int32 nPat = 0; nPat < rPat.getLength() && !(nOrder & 0xff0000); ++nPat)
     {
         switch (rPat[nPat])
         {
-            case 'Y':
-            case 'M':
-            case 'D':
-                nOrder = (nOrder << 8) | rPat[nPat];
-                break;
+        case 'Y':
+        case 'M':
+        case 'D':
+            nOrder = (nOrder << 8) | rPat[nPat];
+            break;
         }
     }
     return nOrder;
@@ -1249,63 +1321,71 @@ DateFormat ImpSvNumberInputScan::GetDateOrder()
 {
     sal_uInt32 nOrder = GetDatePatternOrder();
     if (!nOrder)
+    {
         return pFormatter->GetLocaleData()->getDateFormat();
+    }
     switch ((nOrder & 0xff0000) >> 16)
     {
+    case 'Y':
+        if ((((nOrder & 0xff00) >> 8) == 'M') && ((nOrder & 0xff) == 'D'))
+        {
+            return YMD;
+        }
+        break;
+    case 'M':
+        if ((((nOrder & 0xff00) >> 8) == 'D') && ((nOrder & 0xff) == 'Y'))
+        {
+            return MDY;
+        }
+        break;
+    case 'D':
+        if ((((nOrder & 0xff00) >> 8) == 'M') && ((nOrder & 0xff) == 'Y'))
+        {
+            return DMY;
+        }
+        break;
+    default:
+    case 0:
+        switch ((nOrder & 0xff00) >> 8)
+        {
         case 'Y':
-            if ((((nOrder & 0xff00) >> 8) == 'M') && ((nOrder & 0xff) == 'D'))
+            switch ((nOrder & 0xff))
+            {
+            case 'M':
                 return YMD;
+            }
             break;
         case 'M':
-            if ((((nOrder & 0xff00) >> 8) == 'D') && ((nOrder & 0xff) == 'Y'))
+            switch ((nOrder & 0xff))
+            {
+            case 'Y':
+                return DMY;
+            case 'D':
                 return MDY;
+            }
             break;
         case 'D':
-            if ((((nOrder & 0xff00) >> 8) == 'M') && ((nOrder & 0xff) == 'Y'))
+            switch ((nOrder & 0xff))
+            {
+            case 'Y':
+                return MDY;
+            case 'M':
                 return DMY;
+            }
             break;
         default:
         case 0:
-            switch ((nOrder & 0xff00) >> 8)
+            switch ((nOrder & 0xff))
             {
-                case 'Y':
-                    switch ((nOrder & 0xff))
-                    {
-                        case 'M':
-                            return YMD;
-                    }
-                    break;
-                case 'M':
-                    switch ((nOrder & 0xff))
-                    {
-                        case 'Y':
-                            return DMY;
-                        case 'D':
-                            return MDY;
-                    }
-                    break;
-                case 'D':
-                    switch ((nOrder & 0xff))
-                    {
-                        case 'Y':
-                            return MDY;
-                        case 'M':
-                            return DMY;
-                    }
-                    break;
-                default:
-                case 0:
-                    switch ((nOrder & 0xff))
-                    {
-                        case 'Y':
-                            return YMD;
-                        case 'M':
-                            return MDY;
-                        case 'D':
-                            return DMY;
-                    }
-                    break;
+            case 'Y':
+                return YMD;
+            case 'M':
+                return MDY;
+            case 'D':
+                return DMY;
             }
+            break;
+        }
     }
     SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetDateOrder: undefined, falling back to locale's default");
     return pFormatter->GetLocaleData()->getDateFormat();
@@ -1315,7 +1395,7 @@ DateFormat ImpSvNumberInputScan::GetDateOrder()
 //      GetDateRef
 
 bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
-        const SvNumberformat* pFormat )
+                                       const SvNumberformat* pFormat )
 {
     using namespace ::com::sun::star::i18n;
     NfEvalDateFormat eEDF;
@@ -1325,15 +1405,17 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
         eEDF = pFormatter->GetEvalDateFormat();
         switch ( eEDF )
         {
-            case NF_EVALDATEFORMAT_INTL :
-            case NF_EVALDATEFORMAT_FORMAT :
-                nFormatOrder = 1;       // only one loop
+        case NF_EVALDATEFORMAT_INTL :
+        case NF_EVALDATEFORMAT_FORMAT :
+            nFormatOrder = 1;       // only one loop
             break;
-            default:
-                nFormatOrder = 2;
-                if ( nMatchedAllStrings )
-                    eEDF = NF_EVALDATEFORMAT_FORMAT_INTL;
-                    // we have a complete match, use it
+        default:
+            nFormatOrder = 2;
+            if ( nMatchedAllStrings )
+            {
+                eEDF = NF_EVALDATEFORMAT_FORMAT_INTL;
+                // we have a complete match, use it
+            }
         }
     }
     else
@@ -1353,42 +1435,42 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
         bool bFormatTurn;
         switch ( eEDF )
         {
-            case NF_EVALDATEFORMAT_INTL :
+        case NF_EVALDATEFORMAT_INTL :
+            bFormatTurn = false;
+            DateFmt = GetDateOrder();
+            break;
+        case NF_EVALDATEFORMAT_FORMAT :
+            bFormatTurn = true;
+            DateFmt = pFormat->GetDateOrder();
+            break;
+        case NF_EVALDATEFORMAT_INTL_FORMAT :
+            if ( nTryOrder == 1 )
+            {
                 bFormatTurn = false;
                 DateFmt = GetDateOrder();
-            break;
-            case NF_EVALDATEFORMAT_FORMAT :
+            }
+            else
+            {
                 bFormatTurn = true;
                 DateFmt = pFormat->GetDateOrder();
+            }
             break;
-            case NF_EVALDATEFORMAT_INTL_FORMAT :
-                if ( nTryOrder == 1 )
-                {
-                    bFormatTurn = false;
-                    DateFmt = GetDateOrder();
-                }
-                else
-                {
-                    bFormatTurn = true;
-                    DateFmt = pFormat->GetDateOrder();
-                }
-            break;
-            case NF_EVALDATEFORMAT_FORMAT_INTL :
-                if ( nTryOrder == 2 )
-                {
-                    bFormatTurn = false;
-                    DateFmt = GetDateOrder();
-                }
-                else
-                {
-                    bFormatTurn = true;
-                    DateFmt = pFormat->GetDateOrder();
-                }
-            break;
-            default:
-                SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetDateRef: unknown NfEvalDateFormat" );
-                DateFmt = YMD;
+        case NF_EVALDATEFORMAT_FORMAT_INTL :
+            if ( nTryOrder == 2 )
+            {
                 bFormatTurn = false;
+                DateFmt = GetDateOrder();
+            }
+            else
+            {
+                bFormatTurn = true;
+                DateFmt = pFormat->GetDateOrder();
+            }
+            break;
+        default:
+            SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetDateRef: unknown NfEvalDateFormat" );
+            DateFmt = YMD;
+            bFormatTurn = false;
         }
         if ( bFormatTurn )
         {
@@ -1420,10 +1502,14 @@ input for the following reasons:
 */
 #ifdef THE_FUTURE
             if ( pFormat->IsOtherCalendar( nStringScanNumFor ) )
+            {
                 pFormat->SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+            }
             else
+            {
                 pFormat->SwitchToSpecifiedCalendar( aOrgCalendar, fOrgDateTime,
-                        nStringScanNumFor );
+                                                    nStringScanNumFor );
+            }
 #endif
         }
 
@@ -1434,310 +1520,322 @@ input for the following reasons:
 
         switch (nAnzNums)       // count of numbers in string
         {
-            case 0:                 // none
-                if (nMonthPos)          // only month (Jan)
-                    pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
-                else
-                    res = false;
-                break;
+        case 0:                 // none
+            if (nMonthPos)          // only month (Jan)
+            {
+                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+            }
+            else
+            {
+                res = false;
+            }
+            break;
 
-            case 1:                 // only one number
-                nCounter = 1;
-                switch (nMonthPos)  // where is the month
+        case 1:                 // only one number
+            nCounter = 1;
+            switch (nMonthPos)  // where is the month
+            {
+            case 0:             // not found
+            {
+                // If input matched a date pattern, use the pattern
+                // to determine if it is a day, month or year. The
+                // pattern should have only one single value then,
+                // 'D-', 'M-' or 'Y-'. If input did not match a
+                // pattern assume the usual day of current month.
+                sal_uInt32 nDateOrder = (bFormatTurn ?
+                                         pFormat->GetExactDateOrder() :
+                                         GetDatePatternOrder());
+                switch (nDateOrder)
                 {
-                    case 0:             // not found
-                        {
-                            // If input matched a date pattern, use the pattern
-                            // to determine if it is a day, month or year. The
-                            // pattern should have only one single value then,
-                            // 'D-', 'M-' or 'Y-'. If input did not match a
-                            // pattern assume the usual day of current month.
-                            sal_uInt32 nDateOrder = (bFormatTurn ?
-                                    pFormat->GetExactDateOrder() :
-                                    GetDatePatternOrder());
-                            switch (nDateOrder)
-                            {
-                                case 'Y':
-                                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
-                                    break;
-                                case 'M':
-                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
-                                    break;
-                                case 'D':
-                                default:
-                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                                    break;
-                            }
+                case 'Y':
+                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
+                    break;
+                case 'M':
+                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                    break;
+                case 'D':
+                default:
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                    break;
+                }
+                break;
+            }
+            case 1:             // month at the beginning (Jan 01)
+                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                switch (DateFmt)
+                {
+                case MDY:
+                case YMD:
+                {
+                    sal_uInt16 nDay = ImplGetDay(0);
+                    sal_uInt16 nYear = ImplGetYear(0);
+                    if (nDay == 0 || nDay > 32)
+                    {
+                        pCal->setValue( CalendarFieldIndex::YEAR, nYear);
+                    }
+                    else
+                    {
+                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                    }
+                    break;
+                }
+                case DMY:
+                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
+                    break;
+                default:
+                    res = false;
+                    break;
+                }
+                break;
+            case 3:             // month at the end (10 Jan)
+                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                switch (DateFmt)
+                {
+                case DMY:
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                    break;
+                case YMD:
+                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
+                    break;
+                default:
+                    res = false;
+                    break;
+                }
+                break;
+            default:
+                res = false;
+                break;
+            }   // switch (nMonthPos)
+            break;
+
+        case 2:                 // 2 numbers
+            nCounter = 2;
+            switch (nMonthPos)  // where is the month
+            {
+            case 0:             // not found
+            {
+                bool bHadExact;
+                sal_uInt32 nExactDateOrder = (bFormatTurn ?
+                                              pFormat->GetExactDateOrder() :
+                                              GetDatePatternOrder());
+                bool bIsExact = (0xff < nExactDateOrder && nExactDateOrder <= 0xffff);
+                if (bIsExact)
+                {
+                    // formatted as date and exactly 2 parts
+                    bHadExact = true;
+                    switch ( (nExactDateOrder >> 8) & 0xff )
+                    {
+                    case 'Y':
+                        pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
+                        break;
+                    case 'M':
+                        pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                        break;
+                    case 'D':
+                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                        break;
+                    default:
+                        bHadExact = false;
+                    }
+                    switch ( nExactDateOrder & 0xff )
+                    {
+                    case 'Y':
+                        pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
+                        break;
+                    case 'M':
+                        pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
+                        break;
+                    case 'D':
+                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                        break;
+                    default:
+                        bHadExact = false;
+                    }
+                    SAL_WARN_IF( !bHadExact, "svl.numbers", "ImpSvNumberInputScan::GetDateRef: error in exact date order");
+                }
+                else
+                {
+                    bHadExact = false;
+                }
+                // If input matched against a date acceptance pattern
+                // do not attempt to mess around with guessing the
+                // order, either it matches or it doesn't.
+                if ((bFormatTurn || !bIsExact) && (!bHadExact || !pCal->isValid()))
+                {
+                    if ( !bHadExact && nExactDateOrder )
+                    {
+                        pCal->setGregorianDateTime( Date( Date::SYSTEM ) );   // reset today
+                    }
+                    switch (DateFmt)
+                    {
+                    case MDY:
+                        // M D
+                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                        pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                        if ( !pCal->isValid() )             // 2nd try
+                        {                                   // M Y
+                            pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
+                            pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                            pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                         }
                         break;
-                    case 1:             // month at the beginning (Jan 01)
-                        pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
-                        switch (DateFmt)
-                        {
-                            case MDY:
-                            case YMD:
-                            {
-                                sal_uInt16 nDay = ImplGetDay(0);
-                                sal_uInt16 nYear = ImplGetYear(0);
-                                if (nDay == 0 || nDay > 32) {
-                                    pCal->setValue( CalendarFieldIndex::YEAR, nYear);
-                                }
-                                else
-                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                                break;
-                            }
-                            case DMY:
-                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
-                                break;
-                            default:
-                                res = false;
-                                break;
+                    case DMY:
+                        // D M
+                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                        pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
+                        if ( !pCal->isValid() )             // 2nd try
+                        {                                   // M Y
+                            pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
+                            pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                            pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                         }
                         break;
-                    case 3:             // month at the end (10 Jan)
-                        pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
-                        switch (DateFmt)
-                        {
-                            case DMY:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                                break;
-                            case YMD:
-                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
-                                break;
-                            default:
-                                res = false;
-                                break;
+                    case YMD:
+                        // M D
+                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                        pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                        if ( !pCal->isValid() )             // 2nd try
+                        {                                   // Y M
+                            pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
+                            pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
+                            pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                         }
                         break;
                     default:
                         res = false;
                         break;
-                }   // switch (nMonthPos)
+                    }
+                }
+            }
+            break;
+            case 1:             // month at the beginning (Jan 01 01)
+            {
+                // The input is valid as MDY in almost any
+                // constellation, there is no date order (M)YD except if
+                // set in a format applied.
+                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                sal_uInt32 nExactDateOrder = (bFormatTurn ? pFormat->GetExactDateOrder() : 0);
+                if ((((nExactDateOrder >> 8) & 0xff) == 'Y') && ((nExactDateOrder & 0xff) == 'D'))
+                {
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
+                }
+                else
+                {
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
+                }
                 break;
+            }
+            case 2:             // month in the middle (10 Jan 94)
+            {
+                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                DateFormat eDF = (MayBeMonthDate() ? (nMayBeMonthDate == 2 ? DMY : YMD) : DateFmt);
+                switch (eDF)
+                {
+                case DMY:
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
+                    break;
+                case YMD:
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
+                    break;
+                default:
+                    res = false;
+                    break;
+                }
+                break;
+            }
+            default:            // else, e.g. month at the end (94 10 Jan)
+                res = false;
+                break;
+            }   // switch (nMonthPos)
+            break;
 
-            case 2:                 // 2 numbers
+        default:                // more than two numbers (31.12.94 8:23) (31.12. 8:23)
+            switch (nMonthPos)  // where is the month
+            {
+            case 0:             // not found
+            {
+                nCounter = 3;
+                if ( nTimePos > 1 )
+                {   // find first time number index (should only be 3 or 2 anyway)
+                    for ( sal_uInt16 j = 0; j < nAnzNums; j++ )
+                    {
+                        if ( nNums[j] == nTimePos - 2 )
+                        {
+                            nCounter = j;
+                            break;  // for
+                        }
+                    }
+                }
+                // ISO 8601 yyyy-mm-dd forced recognition
+                DateFormat eDF = (CanForceToIso8601( DateFmt) ? YMD : DateFmt);
+                switch (eDF)
+                {
+                case MDY:
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                    if ( nCounter > 2 )
+                        pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(2) );
+                    break;
+                case DMY:
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
+                    if ( nCounter > 2 )
+                        pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(2) );
+                    break;
+                case YMD:
+                    if ( nCounter > 2 )
+                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(2) );
+                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
+                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
+                    break;
+                default:
+                    res = false;
+                    break;
+                }
+                break;
+            }
+            case 1:             // month at the beginning (Jan 01 01 8:23)
                 nCounter = 2;
-                switch (nMonthPos)  // where is the month
+                switch (DateFmt)
                 {
-                    case 0:             // not found
-                    {
-                        bool bHadExact;
-                        sal_uInt32 nExactDateOrder = (bFormatTurn ?
-                                pFormat->GetExactDateOrder() :
-                                GetDatePatternOrder());
-                        bool bIsExact = (0xff < nExactDateOrder && nExactDateOrder <= 0xffff);
-                        if (bIsExact)
-                        {   // formatted as date and exactly 2 parts
-                            bHadExact = true;
-                            switch ( (nExactDateOrder >> 8) & 0xff )
-                            {
-                                case 'Y':
-                                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
-                                break;
-                                case 'M':
-                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
-                                break;
-                                case 'D':
-                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                                break;
-                                default:
-                                    bHadExact = false;
-                            }
-                            switch ( nExactDateOrder & 0xff )
-                            {
-                                case 'Y':
-                                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
-                                break;
-                                case 'M':
-                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
-                                break;
-                                case 'D':
-                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
-                                break;
-                                default:
-                                    bHadExact = false;
-                            }
-                            SAL_WARN_IF( !bHadExact, "svl.numbers", "ImpSvNumberInputScan::GetDateRef: error in exact date order");
-                        }
-                        else
-                            bHadExact = false;
-                        // If input matched against a date acceptance pattern
-                        // do not attempt to mess around with guessing the
-                        // order, either it matches or it doesn't.
-                        if ((bFormatTurn || !bIsExact) && (!bHadExact || !pCal->isValid()))
-                        {
-                            if ( !bHadExact && nExactDateOrder )
-                                pCal->setGregorianDateTime( Date( Date::SYSTEM ) );   // reset today
-                            switch (DateFmt)
-                            {
-                                case MDY:
-                                    // M D
-                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
-                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
-                                    if ( !pCal->isValid() )             // 2nd try
-                                    {                                   // M Y
-                                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
-                                        pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
-                                        pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
-                                    }
-                                    break;
-                                case DMY:
-                                    // D M
-                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
-                                    if ( !pCal->isValid() )             // 2nd try
-                                    {                                   // M Y
-                                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
-                                        pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
-                                        pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
-                                    }
-                                    break;
-                                case YMD:
-                                    // M D
-                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
-                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
-                                    if ( !pCal->isValid() )             // 2nd try
-                                    {                                   // Y M
-                                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
-                                        pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
-                                        pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
-                                    }
-                                    break;
-                                default:
-                                    res = false;
-                                    break;
-                            }
-                        }
-                    }
+                case MDY:
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                    pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                     break;
-                    case 1:             // month at the beginning (Jan 01 01)
-                    {
-                        // The input is valid as MDY in almost any
-                        // constellation, there is no date order (M)YD except if
-                        // set in a format applied.
-                        pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
-                        sal_uInt32 nExactDateOrder = (bFormatTurn ? pFormat->GetExactDateOrder() : 0);
-                        if ((((nExactDateOrder >> 8) & 0xff) == 'Y') && ((nExactDateOrder & 0xff) == 'D'))
-                        {
-                            pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
-                            pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
-                        }
-                        else
-                        {
-                            pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                            pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
-                        }
-                    }
+                default:
+                    res = false;
                     break;
-                    case 2:             // month in the middle (10 Jan 94)
-                    {
-                        pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
-                        DateFormat eDF = (MayBeMonthDate() ? (nMayBeMonthDate == 2 ? DMY : YMD) : DateFmt);
-                        switch (eDF)
-                        {
-                            case DMY:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
-                                break;
-                            case YMD:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
-                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
-                                break;
-                            default:
-                                res = false;
-                                break;
-                        }
-                    }
-                    break;
-                    default:            // else, e.g. month at the end (94 10 Jan)
-                        res = false;
-                        break;
-                }   // switch (nMonthPos)
+                }
                 break;
-
-            default:                // more than two numbers (31.12.94 8:23) (31.12. 8:23)
-                switch (nMonthPos)  // where is the month
+            case 2:             // month in the middle (10 Jan 94 8:23)
+                nCounter = 2;
+                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                switch (DateFmt)
                 {
-                    case 0:             // not found
-                    {
-                        nCounter = 3;
-                        if ( nTimePos > 1 )
-                        {   // find first time number index (should only be 3 or 2 anyway)
-                            for ( sal_uInt16 j = 0; j < nAnzNums; j++ )
-                            {
-                                if ( nNums[j] == nTimePos - 2 )
-                                {
-                                    nCounter = j;
-                                    break;  // for
-                                }
-                            }
-                        }
-                        // ISO 8601 yyyy-mm-dd forced recognition
-                        DateFormat eDF = (CanForceToIso8601( DateFmt) ? YMD : DateFmt);
-                        switch (eDF)
-                        {
-                            case MDY:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
-                                pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
-                                if ( nCounter > 2 )
-                                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(2) );
-                                break;
-                            case DMY:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                                pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
-                                if ( nCounter > 2 )
-                                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(2) );
-                                break;
-                            case YMD:
-                                if ( nCounter > 2 )
-                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(2) );
-                                pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
-                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
-                                break;
-                            default:
-                                res = false;
-                                break;
-                        }
-                    }
-                        break;
-                    case 1:             // month at the beginning (Jan 01 01 8:23)
-                        nCounter = 2;
-                        switch (DateFmt)
-                        {
-                            case MDY:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
-                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
-                                break;
-                            default:
-                                res = false;
-                                break;
-                        }
-                        break;
-                    case 2:             // month in the middle (10 Jan 94 8:23)
-                        nCounter = 2;
-                        pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
-                        switch (DateFmt)
-                        {
-                            case DMY:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
-                                break;
-                            case YMD:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
-                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
-                                break;
-                            default:
-                                res = false;
-                                break;
-                        }
-                        break;
-                    default:            // else, e.g. month at the end (94 10 Jan 8:23)
-                        nCounter = 2;
-                        res = false;
-                        break;
-                }   // switch (nMonthPos)
+                case DMY:
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
+                    break;
+                case YMD:
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
+                    break;
+                default:
+                    res = false;
+                    break;
+                }
                 break;
+            default:            // else, e.g. month at the end (94 10 Jan 8:23)
+                nCounter = 2;
+                res = false;
+                break;
+            }   // switch (nMonthPos)
+            break;
         }   // switch (nAnzNums)
 
         if ( res && pCal->isValid() )
@@ -1748,88 +1846,90 @@ input for the following reasons:
             nTryOrder = nFormatOrder;   // break for
         }
         else
-            res = false;
-
-        if ( aOrgCalendar.Len() )
-            pCal->loadCalendar( aOrgCalendar, pLoc->getLanguageTag().getLocale() );  // restore calendar
-
-#if NF_TEST_CALENDAR
-{
-    using namespace ::com::sun::star;
-    struct entry { const char* lan; const char* cou; const char* cal; };
-    const entry cals[] = {
-        { "en", "US",  "gregorian" },
-        { "ar", "TN",      "hijri" },
-        { "he", "IL",     "jewish" },
-        { "ja", "JP",     "gengou" },
-        { "ko", "KR", "hanja_yoil" },
-        { "th", "TH",   "buddhist" },
-        { "zh", "TW",        "ROC" },
-        {0,0,0}
-    };
-    lang::Locale aLocale;
-    bool bValid;
-    sal_Int16 nDay, nMyMonth, nYear, nHour, nMinute, nSecond;
-    sal_Int16 nDaySet, nMonthSet, nYearSet, nHourSet, nMinuteSet, nSecondSet;
-    sal_Int16 nZO, nDST1, nDST2, nDST, nZOmillis, nDST1millis, nDST2millis, nDSTmillis;
-    sal_Int32 nZoneInMillis, nDST1InMillis, nDST2InMillis;
-    uno::Reference< uno::XComponentContext > xContext =
-        ::comphelper::getProcessComponentContext();
-    uno::Reference< i18n::XCalendar3 > xCal = i18n::LocaleCalendar::create(xContext);
-    for ( const entry* p = cals; p->lan; ++p )
-    {
-        aLocale.Language = ::rtl::OUString::createFromAscii( p->lan );
-        aLocale.Country  = ::rtl::OUString::createFromAscii( p->cou );
-        xCal->loadCalendar( ::rtl::OUString::createFromAscii( p->cal ),
-                aLocale );
-        double nDateTime = 0.0;     // 1-Jan-1970 00:00:00
-        nZO           = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET );
-        nZOmillis     = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS );
-        nZoneInMillis = static_cast<sal_Int32>(nZO) * 60000 +
-            (nZO < 0 ? -1 : 1) * static_cast<sal_uInt16>(nZOmillis);
-        nDST1         = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
-        nDST1millis   = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS );
-        nDST1InMillis = static_cast<sal_Int32>(nDST1) * 60000 +
-            (nDST1 < 0 ? -1 : 1) * static_cast<sal_uInt16>(nDST1millis);
-        nDateTime    -= (double)(nZoneInMillis + nDST1InMillis) / 1000.0 / 60.0 / 60.0 / 24.0;
-        xCal->setDateTime( nDateTime );
-        nDST2         = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
-        nDST2millis   = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS );
-        nDST2InMillis = static_cast<sal_Int32>(nDST2) * 60000 +
-            (nDST2 < 0 ? -1 : 1) * static_cast<sal_uInt16>(nDST2millis);
-        if ( nDST1InMillis != nDST2InMillis )
         {
-            nDateTime = 0.0 - (double)(nZoneInMillis + nDST2InMillis) / 1000.0 / 60.0 / 60.0 / 24.0;
-            xCal->setDateTime( nDateTime );
+            res = false;
         }
-        nDaySet    = xCal->getValue( i18n::CalendarFieldIndex::DAY_OF_MONTH );
-        nMonthSet  = xCal->getValue( i18n::CalendarFieldIndex::MONTH );
-        nYearSet   = xCal->getValue( i18n::CalendarFieldIndex::YEAR );
-        nHourSet   = xCal->getValue( i18n::CalendarFieldIndex::HOUR );
-        nMinuteSet = xCal->getValue( i18n::CalendarFieldIndex::MINUTE );
-        nSecondSet = xCal->getValue( i18n::CalendarFieldIndex::SECOND );
-        nZO        = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET );
-        nZOmillis  = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS );
-        nDST       = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
-        nDSTmillis = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS );
-        xCal->setValue( i18n::CalendarFieldIndex::DAY_OF_MONTH, nDaySet );
-        xCal->setValue( i18n::CalendarFieldIndex::MONTH, nMonthSet );
-        xCal->setValue( i18n::CalendarFieldIndex::YEAR, nYearSet );
-        xCal->setValue( i18n::CalendarFieldIndex::HOUR, nHourSet );
-        xCal->setValue( i18n::CalendarFieldIndex::MINUTE, nMinuteSet );
-        xCal->setValue( i18n::CalendarFieldIndex::SECOND, nSecondSet );
-        bValid  = xCal->isValid();
-        nDay    = xCal->getValue( i18n::CalendarFieldIndex::DAY_OF_MONTH );
-        nMyMonth= xCal->getValue( i18n::CalendarFieldIndex::MONTH );
-        nYear   = xCal->getValue( i18n::CalendarFieldIndex::YEAR );
-        nHour   = xCal->getValue( i18n::CalendarFieldIndex::HOUR );
-        nMinute = xCal->getValue( i18n::CalendarFieldIndex::MINUTE );
-        nSecond = xCal->getValue( i18n::CalendarFieldIndex::SECOND );
-        bValid = bValid && nDay == nDaySet && nMyMonth == nMonthSet && nYear ==
-            nYearSet && nHour == nHourSet && nMinute == nMinuteSet && nSecond
-            == nSecondSet;
-    }
-}
+        if ( aOrgCalendar.Len() )
+        {
+            pCal->loadCalendar( aOrgCalendar, pLoc->getLanguageTag().getLocale() );  // restore calendar
+        }
+#if NF_TEST_CALENDAR
+        {
+            using namespace ::com::sun::star;
+            struct entry { const char* lan; const char* cou; const char* cal; };
+            const entry cals[] = {
+                { "en", "US",  "gregorian" },
+                { "ar", "TN",      "hijri" },
+                { "he", "IL",     "jewish" },
+                { "ja", "JP",     "gengou" },
+                { "ko", "KR", "hanja_yoil" },
+                { "th", "TH",   "buddhist" },
+                { "zh", "TW",        "ROC" },
+                {0,0,0}
+            };
+            lang::Locale aLocale;
+            bool bValid;
+            sal_Int16 nDay, nMyMonth, nYear, nHour, nMinute, nSecond;
+            sal_Int16 nDaySet, nMonthSet, nYearSet, nHourSet, nMinuteSet, nSecondSet;
+            sal_Int16 nZO, nDST1, nDST2, nDST, nZOmillis, nDST1millis, nDST2millis, nDSTmillis;
+            sal_Int32 nZoneInMillis, nDST1InMillis, nDST2InMillis;
+            uno::Reference< uno::XComponentContext > xContext =
+                ::comphelper::getProcessComponentContext();
+            uno::Reference< i18n::XCalendar3 > xCal = i18n::LocaleCalendar::create(xContext);
+            for ( const entry* p = cals; p->lan; ++p )
+            {
+                aLocale.Language = ::rtl::OUString::createFromAscii( p->lan );
+                aLocale.Country  = ::rtl::OUString::createFromAscii( p->cou );
+                xCal->loadCalendar( ::rtl::OUString::createFromAscii( p->cal ),
+                                    aLocale );
+                double nDateTime = 0.0;     // 1-Jan-1970 00:00:00
+                nZO           = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET );
+                nZOmillis     = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS );
+                nZoneInMillis = static_cast<sal_Int32>(nZO) * 60000 +
+                    (nZO < 0 ? -1 : 1) * static_cast<sal_uInt16>(nZOmillis);
+                nDST1         = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
+                nDST1millis   = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS );
+                nDST1InMillis = static_cast<sal_Int32>(nDST1) * 60000 +
+                    (nDST1 < 0 ? -1 : 1) * static_cast<sal_uInt16>(nDST1millis);
+                nDateTime    -= (double)(nZoneInMillis + nDST1InMillis) / 1000.0 / 60.0 / 60.0 / 24.0;
+                xCal->setDateTime( nDateTime );
+                nDST2         = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
+                nDST2millis   = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS );
+                nDST2InMillis = static_cast<sal_Int32>(nDST2) * 60000 +
+                    (nDST2 < 0 ? -1 : 1) * static_cast<sal_uInt16>(nDST2millis);
+                if ( nDST1InMillis != nDST2InMillis )
+                {
+                    nDateTime = 0.0 - (double)(nZoneInMillis + nDST2InMillis) / 1000.0 / 60.0 / 60.0 / 24.0;
+                    xCal->setDateTime( nDateTime );
+                }
+                nDaySet    = xCal->getValue( i18n::CalendarFieldIndex::DAY_OF_MONTH );
+                nMonthSet  = xCal->getValue( i18n::CalendarFieldIndex::MONTH );
+                nYearSet   = xCal->getValue( i18n::CalendarFieldIndex::YEAR );
+                nHourSet   = xCal->getValue( i18n::CalendarFieldIndex::HOUR );
+                nMinuteSet = xCal->getValue( i18n::CalendarFieldIndex::MINUTE );
+                nSecondSet = xCal->getValue( i18n::CalendarFieldIndex::SECOND );
+                nZO        = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET );
+                nZOmillis  = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS );
+                nDST       = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
+                nDSTmillis = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS );
+                xCal->setValue( i18n::CalendarFieldIndex::DAY_OF_MONTH, nDaySet );
+                xCal->setValue( i18n::CalendarFieldIndex::MONTH, nMonthSet );
+                xCal->setValue( i18n::CalendarFieldIndex::YEAR, nYearSet );
+                xCal->setValue( i18n::CalendarFieldIndex::HOUR, nHourSet );
+                xCal->setValue( i18n::CalendarFieldIndex::MINUTE, nMinuteSet );
+                xCal->setValue( i18n::CalendarFieldIndex::SECOND, nSecondSet );
+                bValid  = xCal->isValid();
+                nDay    = xCal->getValue( i18n::CalendarFieldIndex::DAY_OF_MONTH );
+                nMyMonth= xCal->getValue( i18n::CalendarFieldIndex::MONTH );
+                nYear   = xCal->getValue( i18n::CalendarFieldIndex::YEAR );
+                nHour   = xCal->getValue( i18n::CalendarFieldIndex::HOUR );
+                nMinute = xCal->getValue( i18n::CalendarFieldIndex::MINUTE );
+                nSecond = xCal->getValue( i18n::CalendarFieldIndex::SECOND );
+                bValid = bValid && nDay == nDaySet && nMyMonth == nMonthSet && nYear ==
+                    nYearSet && nHour == nHourSet && nMinute == nMinuteSet && nSecond
+                    == nSecondSet;
+            }
+        }
 #endif  // NF_TEST_CALENDAR
 
     }
@@ -1846,7 +1946,7 @@ input for the following reasons:
 // sonst     => false
 
 bool ImpSvNumberInputScan::ScanStartString( const String& rString,
-        const SvNumberformat* pFormat )
+                                            const SvNumberformat* pFormat )
 {
     xub_StrLen nPos = 0;
 
@@ -1856,17 +1956,23 @@ bool ImpSvNumberInputScan::ScanStartString( const String& rString,
     // Yes, nMatchedAllStrings should know about the sign position
     nSign = GetSign(rString, nPos);
     if ( nSign )           // sign?
+    {
         SkipBlanks(rString, nPos);
-
+    }
     // #102371# match against format string only if start string is not a sign character
     if ( nMatchedAllStrings && !(nSign && rString.Len() == 1) )
-    {   // Match against format in any case, so later on for a "x1-2-3" input
+    {
+        // Match against format in any case, so later on for a "x1-2-3" input
         // we may distinguish between a xy-m-d (or similar) date and a x0-0-0
         // format. No sign detection here!
         if ( ScanStringNumFor( rString, nPos, pFormat, 0, true ) )
+        {
             nMatchedAllStrings |= nMatchedStartString;
+        }
         else
+        {
             nMatchedAllStrings = 0;
+        }
     }
 
     if ( GetDecSep(rString, nPos) )                 // decimal separator in start string
@@ -1882,7 +1988,9 @@ bool ImpSvNumberInputScan::ScanStartString( const String& rString,
         {
             nSign = GetSign(rString, nPos);
             if ( nSign )   // DM -1
+            {
                 SkipBlanks(rString, nPos);
+            }
         }
         if ( GetDecSep(rString, nPos) )             // decimal separator follows currency
         {
@@ -1905,17 +2013,22 @@ bool ImpSvNumberInputScan::ScanStartString( const String& rString,
         {
             int nDayOfWeek = GetDayOfWeek( rString, nPos );
             if ( nDayOfWeek )
-            {   // day of week is just parsed away
+            {
+                // day of week is just parsed away
                 eScannedType = NUMBERFORMAT_DATE;       // !!! it IS a date !!!
                 if ( nPos < rString.Len() )
                 {
                     if ( nDayOfWeek < 0 )
-                    {   // abbreviated
+                    {
+                        // abbreviated
                         if ( rString.GetChar( nPos ) == '.' )
+                        {
                             ++nPos;
+                        }
                     }
                     else
-                    {   // full long name
+                    {
+                        // full long name
                         SkipBlanks(rString, nPos);
                         SkipString( pFormatter->GetLocaleData()->getLongDateDayOfWeekSep(), rString, nPos );
                     }
@@ -1941,16 +2054,17 @@ bool ImpSvNumberInputScan::ScanStartString( const String& rString,
     // skip any trailing '-' or '/' chars
     if (nPos < rString.Len())
     {
-        while (SkipChar ('-', rString, nPos) || SkipChar ('/', rString, nPos)) {
-            // do nothing
-        }
+        while (SkipChar ('-', rString, nPos) || SkipChar ('/', rString, nPos))
+            ; // do nothing
     }
     if (nPos < rString.Len())                       // not everything consumed
     {
         // Does input StartString equal StartString of format?
         // This time with sign detection!
         if ( !ScanStringNumFor( rString, nPos, pFormat, 0 ) )
+        {
             return MatchedReturn();
+        }
     }
 
     return true;
@@ -1965,7 +2079,7 @@ bool ImpSvNumberInputScan::ScanStartString( const String& rString,
 // sonst     => false
 
 bool ImpSvNumberInputScan::ScanMidString( const String& rString,
-        sal_uInt16 nStringPos, const SvNumberformat* pFormat )
+                                          sal_uInt16 nStringPos, const SvNumberformat* pFormat )
 {
     xub_StrLen nPos = 0;
     short eOldScannedType = eScannedType;
@@ -1975,9 +2089,13 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
         // we may distinguish between a y-m-d (or similar) date and a 0-0-0-0
         // format.
         if ( ScanStringNumFor( rString, 0, pFormat, nStringPos ) )
+        {
             nMatchedAllStrings |= nMatchedMidString;
+        }
         else
+        {
             nMatchedAllStrings = 0;
+        }
     }
 
     SkipBlanks(rString, nPos);
@@ -1987,19 +2105,25 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
             return MatchedReturn();
         else if (nDecPos == 2)                      // . dup: 12.4.
         {
-            if (bDecSepInDateSeps                   // . also date separator
-                    || SkipDatePatternSeparator( nStringPos, nPos))
+            if (bDecSepInDateSeps ||                   // . also date separator
+                SkipDatePatternSeparator( nStringPos, nPos))
             {
-                if (    eScannedType != NUMBERFORMAT_UNDEFINED &&
-                        eScannedType != NUMBERFORMAT_DATE &&
-                        eScannedType != NUMBERFORMAT_DATETIME)  // already another type
+                if ( eScannedType != NUMBERFORMAT_UNDEFINED &&
+                     eScannedType != NUMBERFORMAT_DATE &&
+                     eScannedType != NUMBERFORMAT_DATETIME)  // already another type
+                {
                     return MatchedReturn();
+                }
                 if (eScannedType == NUMBERFORMAT_UNDEFINED)
+                {
                     eScannedType = NUMBERFORMAT_DATE;   // !!! it IS a date
+                }
                 SkipBlanks(rString, nPos);
             }
             else
+            {
                 return MatchedReturn();
+            }
         }
         else
         {
@@ -2007,47 +2131,56 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
             SkipBlanks(rString, nPos);
         }
     }
-    else if ( ((eScannedType & NUMBERFORMAT_TIME) == NUMBERFORMAT_TIME)
-            && GetTime100SecSep( rString, nPos ) )
+    else if ( ((eScannedType & NUMBERFORMAT_TIME) == NUMBERFORMAT_TIME) &&
+              GetTime100SecSep( rString, nPos ) )
     {                                               // hundredth seconds separator
         if ( nDecPos )
+        {
             return MatchedReturn();
+        }
         nDecPos = 2;                                // . in mid string
         SkipBlanks(rString, nPos);
     }
 
     if (SkipChar('/', rString, nPos))               // fraction?
     {
-        if (   eScannedType != NUMBERFORMAT_UNDEFINED   // already another type
-            && eScannedType != NUMBERFORMAT_DATE)       // except date
+        if ( eScannedType != NUMBERFORMAT_UNDEFINED &&  // already another type
+             eScannedType != NUMBERFORMAT_DATE)       // except date
+        {
             return MatchedReturn();                     // => jan/31/1994
-        else if (eScannedType != NUMBERFORMAT_DATE      // analyzed no date until now
-                && ( eSetType == NUMBERFORMAT_FRACTION  // and preset was fraction
-                    || (nAnzNums == 3                   // or 3 numbers
-                        && (nStringPos == 3             // and 3rd string particle
-                            || (nStringPos == 4         // or 4th
-                                && nSign)))))           //   if signed
+        }
+        else if (eScannedType != NUMBERFORMAT_DATE &&    // analyzed no date until now
+                 ( eSetType == NUMBERFORMAT_FRACTION ||  // and preset was fraction
+                   (nAnzNums == 3 &&                     // or 3 numbers
+                    (nStringPos == 3 ||                  // and 3rd string particle
+                     (nStringPos == 4 && nSign)))))      // or 4th  if signed
         {
             SkipBlanks(rString, nPos);
             if (nPos == rString.Len())
             {
                 eScannedType = NUMBERFORMAT_FRACTION;   // !!! it IS a fraction (so far)
-                if (eSetType == NUMBERFORMAT_FRACTION
-                        && nAnzNums == 2
-                        && (nStringPos == 1                     // for 4/5
-                            || (nStringPos == 2 && nSign)))     // or signed -4/5
-                    return true;                                // don't fall into date trap
+                if (eSetType == NUMBERFORMAT_FRACTION &&
+                    nAnzNums == 2 &&
+                    (nStringPos == 1 ||                     // for 4/5
+                     (nStringPos == 2 && nSign)))           // or signed -4/5
+                {
+                    return true;                            // don't fall into date trap
+                }
             }
         }
         else
+        {
             nPos--;                                 // put '/' back
+        }
     }
 
     if (GetThousandSep(rString, nPos, nStringPos))  // 1,000
     {
-        if (   eScannedType != NUMBERFORMAT_UNDEFINED   // already another type
-            && eScannedType != NUMBERFORMAT_CURRENCY)   // except currency
+        if ( eScannedType != NUMBERFORMAT_UNDEFINED &&   // already another type
+             eScannedType != NUMBERFORMAT_CURRENCY)      // except currency
+        {
             return MatchedReturn();
+        }
         nThousand++;
     }
 
@@ -2059,18 +2192,21 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
         SkipBlanks(rString, nPos);
         bDate = SkipString( rDate, rString, nPos);      // 10.  10-  10/
     }
-    if (bDate
-            || ((MayBeIso8601() || MayBeMonthDate())    // 1999-12-31  31-Dec-1999
-                && SkipChar( '-', rString, nPos)))
+    if (bDate || ((MayBeIso8601() || MayBeMonthDate()) &&    // 1999-12-31  31-Dec-1999
+                  SkipChar( '-', rString, nPos)))
     {
-        if (   eScannedType != NUMBERFORMAT_UNDEFINED   // already another type
-            && eScannedType != NUMBERFORMAT_DATE)       // except date
+        if ( eScannedType != NUMBERFORMAT_UNDEFINED &&  // already another type
+             eScannedType != NUMBERFORMAT_DATE)       // except date
+        {
             return MatchedReturn();
+        }
         SkipBlanks(rString, nPos);
         eScannedType = NUMBERFORMAT_DATE;           // !!! it IS a date
         short nTmpMonth = GetMonth(rString, nPos);  // 10. Jan 94
         if (nMonth && nTmpMonth)                    // month dup
+        {
             return MatchedReturn();
+        }
         if (nTmpMonth)
         {
             nMonth = nTmpMonth;
@@ -2081,7 +2217,9 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
                 ;   // #79632# recognize 17-Jan-2001 to be a date
                     // #99065# short and long month name
             else
+            {
                 SkipString( pLoc->getLongDateMonthSep(), rString, nPos );
+            }
             SkipBlanks(rString, nPos);
         }
     }
@@ -2090,31 +2228,40 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
     if (nTempMonth)
     {
         if (nMonth != 0)                            // month dup
+        {
             return MatchedReturn();
-        if (   eScannedType != NUMBERFORMAT_UNDEFINED   // already another type
-            && eScannedType != NUMBERFORMAT_DATE)       // except date
+        }
+        if ( eScannedType != NUMBERFORMAT_UNDEFINED &&  // already another type
+             eScannedType != NUMBERFORMAT_DATE)         // except date
+        {
             return MatchedReturn();
+        }
         eScannedType = NUMBERFORMAT_DATE;           // !!! it IS a date
         nMonth = nTempMonth;
         nMonthPos = 2;                              // month in the middle
         if ( nMonth < 0 )
+        {
             SkipChar( '.', rString, nPos );         // abbreviated
+        }
         SkipString( pLoc->getLongDateMonthSep(), rString, nPos );
         SkipBlanks(rString, nPos);
     }
 
-    if (    SkipChar('E', rString, nPos)            // 10E, 10e, 10,Ee
-         || SkipChar('e', rString, nPos) )
+    if ( SkipChar('E', rString, nPos) ||            // 10E, 10e, 10,Ee
+         SkipChar('e', rString, nPos) )
     {
         if (eScannedType != NUMBERFORMAT_UNDEFINED) // already another type
+        {
             return MatchedReturn();
+        }
         else
         {
             SkipBlanks(rString, nPos);
             eScannedType = NUMBERFORMAT_SCIENTIFIC; // !!! it IS scientific
-            if (    nThousand+2 == nAnzNums         // special case 1.E2
-                 && nDecPos == 2 )
+            if ( nThousand+2 == nAnzNums && nDecPos == 2 ) // special case 1.E2
+            {
                 nDecPos = 3;                        // 1,100.E2 1,100,100.E3
+            }
         }
         nESign = GetESign(rString, nPos);           // signed exponent?
         SkipBlanks(rString, nPos);
@@ -2127,79 +2274,94 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
         {
             if (bDecSepInDateSeps)                  // . also date sep
             {
-                if (    eScannedType != NUMBERFORMAT_DATE &&    // already another type than date
-                        eScannedType != NUMBERFORMAT_DATETIME)  // or date time
+                if ( eScannedType != NUMBERFORMAT_DATE &&    // already another type than date
+                     eScannedType != NUMBERFORMAT_DATETIME)  // or date time
+                {
                     return MatchedReturn();
+                }
                 if (eScannedType == NUMBERFORMAT_DATE)
+                {
                     nDecPos = 0;                    // reset for time transition
+                }
             }
             else
+            {
                 return MatchedReturn();
+            }
         }
-        if (   (   eScannedType == NUMBERFORMAT_DATE        // already date type
-                || eScannedType == NUMBERFORMAT_DATETIME)   // or date time
-            && nAnzNums > 3)                                // and more than 3 numbers? (31.Dez.94 8:23)
+        if ((eScannedType == NUMBERFORMAT_DATE ||        // already date type
+             eScannedType == NUMBERFORMAT_DATETIME) &&   // or date time
+            nAnzNums > 3)                                // and more than 3 numbers? (31.Dez.94 8:23)
         {
             SkipBlanks(rString, nPos);
             eScannedType = NUMBERFORMAT_DATETIME;   // !!! it IS date with time
         }
-        else if (   eScannedType != NUMBERFORMAT_UNDEFINED  // already another type
-                 && eScannedType != NUMBERFORMAT_TIME)      // except time
+        else if ( eScannedType != NUMBERFORMAT_UNDEFINED &&  // already another type
+                  eScannedType != NUMBERFORMAT_TIME)         // except time
+        {
             return MatchedReturn();
+        }
         else
         {
             SkipBlanks(rString, nPos);
             eScannedType = NUMBERFORMAT_TIME;       // !!! it IS a time
         }
         if ( !nTimePos )
+        {
             nTimePos = nStringPos + 1;
+        }
     }
 
     if (nPos < rString.Len())
     {
         switch (eScannedType)
         {
-            case NUMBERFORMAT_DATE:
-                if (nMonthPos == 1 && pLoc->getLongDateFormat() == MDY)
+        case NUMBERFORMAT_DATE:
+            if (nMonthPos == 1 && pLoc->getLongDateFormat() == MDY)
+            {
+                // #68232# recognize long date separators like ", " in "September 5, 1999"
+                if (SkipString( pLoc->getLongDateDaySep(), rString, nPos ))
                 {
-                    // #68232# recognize long date separators like ", " in "September 5, 1999"
-                    if (SkipString( pLoc->getLongDateDaySep(), rString, nPos ))
-                        SkipBlanks( rString, nPos );
+                    SkipBlanks( rString, nPos );
                 }
-                else if (nStringPos == 5 && nPos == 0 && rString.Len() == 1 &&
-                        rString.GetChar(0) == 'T' && MayBeIso8601())
-                {
-                    // ISO 8601 combined date and time, yyyy-mm-ddThh:mm
-                    ++nPos;
-                }
-                break;
+            }
+            else if (nStringPos == 5 && nPos == 0 && rString.Len() == 1 &&
+                     rString.GetChar(0) == 'T' && MayBeIso8601())
+            {
+                // ISO 8601 combined date and time, yyyy-mm-ddThh:mm
+                ++nPos;
+            }
+            break;
 #if NF_RECOGNIZE_ISO8601_TIMEZONES
-            case NUMBERFORMAT_DATETIME:
-                if (nPos == 0 && rString.Len() == 1 && nStringPos >= 9 &&
-                        MayBeIso8601())
+        case NUMBERFORMAT_DATETIME:
+            if (nPos == 0 && rString.Len() == 1 && nStringPos >= 9 && MayBeIso8601())
+            {
+                // ISO 8601 timezone offset
+                switch (rString.GetChar(0))
                 {
-                    // ISO 8601 timezone offset
-                    switch (rString.GetChar(0))
+                case '+':
+                case '-':
+                    if (nStringPos == nAnzStrings - 2 ||
+                        nStringPos == nAnzStrings - 4)
                     {
-                        case '+':
-                        case '-':
-                            if (nStringPos == nAnzStrings-2 ||
-                                    nStringPos == nAnzStrings-4)
-                            {
-                                ++nPos;     // yyyy-mm-ddThh:mm[:ss]+xx[[:]yy]
-                                // nTimezonePos needed for GetTimeRef()
-                                if (!nTimezonePos)
-                                    nTimezonePos = nStringPos + 1;
-                            }
-                            break;
-                        case ':':
-                            if (nTimezonePos && nStringPos >= 11 &&
-                                    nStringPos == nAnzStrings-2)
-                                ++nPos;     // yyyy-mm-ddThh:mm[:ss]+xx:yy
-                            break;
+                        ++nPos;     // yyyy-mm-ddThh:mm[:ss]+xx[[:]yy]
+                        // nTimezonePos needed for GetTimeRef()
+                        if (!nTimezonePos)
+                        {
+                            nTimezonePos = nStringPos + 1;
+                        }
                     }
+                    break;
+                case ':':
+                    if (nTimezonePos && nStringPos >= 11 &&
+                        nStringPos == nAnzStrings - 2)
+                    {
+                        ++nPos;     // yyyy-mm-ddThh:mm[:ss]+xx:yy
+                    }
+                    break;
                 }
-                break;
+            }
+            break;
 #endif
         }
     }
@@ -2207,9 +2369,13 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
     if (nPos < rString.Len())                       // not everything consumed?
     {
         if ( nMatchedAllStrings & ~nMatchedVirgin )
+        {
             eScannedType = eOldScannedType;
+        }
         else
+        {
             return false;
+        }
     }
 
     return true;
@@ -2224,7 +2390,7 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
 // sonst     => false
 
 bool ImpSvNumberInputScan::ScanEndString( const String& rString,
-        const SvNumberformat* pFormat )
+                                          const SvNumberformat* pFormat )
 {
     xub_StrLen nPos = 0;
 
@@ -2233,31 +2399,43 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
         // we may distinguish between a y-m-d (or similar) date and a 0-0-0-0
         // format.
         if ( ScanStringNumFor( rString, 0, pFormat, 0xFFFF ) )
+        {
             nMatchedAllStrings |= nMatchedEndString;
+        }
         else
+        {
             nMatchedAllStrings = 0;
+        }
     }
 
     SkipBlanks(rString, nPos);
     if (GetDecSep(rString, nPos))                   // decimal separator?
     {
         if (nDecPos == 1 || nDecPos == 3)           // .12.4 or 12.E4.
+        {
             return MatchedReturn();
+        }
         else if (nDecPos == 2)                      // . dup: 12.4.
         {
-            if (bDecSepInDateSeps                   // . also date separator
-                    || SkipDatePatternSeparator( nAnzStrings-1, nPos))
+            if (bDecSepInDateSeps ||                // . also date separator
+                SkipDatePatternSeparator( nAnzStrings-1, nPos))
             {
-                if (    eScannedType != NUMBERFORMAT_UNDEFINED &&
-                        eScannedType != NUMBERFORMAT_DATE &&
-                        eScannedType != NUMBERFORMAT_DATETIME)  // already another type
+                if ( eScannedType != NUMBERFORMAT_UNDEFINED &&
+                     eScannedType != NUMBERFORMAT_DATE &&
+                     eScannedType != NUMBERFORMAT_DATETIME)  // already another type
+                {
                     return MatchedReturn();
+                }
                 if (eScannedType == NUMBERFORMAT_UNDEFINED)
+                {
                     eScannedType = NUMBERFORMAT_DATE;   // !!! it IS a date
+                }
                 SkipBlanks(rString, nPos);
             }
             else
+            {
                 return MatchedReturn();
+            }
         }
         else
         {
@@ -2267,15 +2445,19 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
     }
 
     bool bSignDetectedHere = false;
-    if (   nSign == 0                               // conflict - not signed
-        && eScannedType != NUMBERFORMAT_DATE)       // and not date
-//!? catch time too?
+    if ( nSign == 0  &&                             // conflict - not signed
+         eScannedType != NUMBERFORMAT_DATE)         // and not date
+                                                    //!? catch time too?
     {                                               // not signed yet
         nSign = GetSign(rString, nPos);             // 1- DM
         if (nNegCheck)                              // '(' as sign
+        {
             return MatchedReturn();
+        }
         if (nSign)
+        {
             bSignDetectedHere = true;
+        }
     }
 
     SkipBlanks(rString, nPos);
@@ -2288,7 +2470,9 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
     if ( GetCurrency(rString, nPos, pFormat) )      // currency symbol?
     {
         if (eScannedType != NUMBERFORMAT_UNDEFINED) // currency dup
+        {
             return MatchedReturn();
+        }
         else
         {
             SkipBlanks(rString, nPos);
@@ -2299,10 +2483,12 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
             nSign = GetSign(rString, nPos);         // DM -
             SkipBlanks(rString, nPos);
             if (nNegCheck)                          // 3 DM (
+            {
                 return MatchedReturn();
+            }
         }
-        if ( nNegCheck && eScannedType == NUMBERFORMAT_CURRENCY
-                       && SkipChar(')', rString, nPos) )
+        if ( nNegCheck && eScannedType == NUMBERFORMAT_CURRENCY &&
+             SkipChar(')', rString, nPos) )
         {
             nNegCheck = 0;                          // ')' skipped
             SkipBlanks(rString, nPos);              // only if currency
@@ -2312,7 +2498,9 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
     if ( SkipChar('%', rString, nPos) )             // 1 %
     {
         if (eScannedType != NUMBERFORMAT_UNDEFINED) // already another type
+        {
             return MatchedReturn();
+        }
         SkipBlanks(rString, nPos);
         eScannedType = NUMBERFORMAT_PERCENT;
     }
@@ -2322,7 +2510,9 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
     if ( SkipString(rTime, rString, nPos) )         // 10:
     {
         if (nDecPos)                                // already , => error
+        {
             return MatchedReturn();
+        }
         if (eScannedType == NUMBERFORMAT_DATE && nAnzNums > 2) // 31.Dez.94 8:
         {
             SkipBlanks(rString, nPos);
@@ -2330,14 +2520,18 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
         }
         else if (eScannedType != NUMBERFORMAT_UNDEFINED &&
                  eScannedType != NUMBERFORMAT_TIME) // already another type
+        {
             return MatchedReturn();
+        }
         else
         {
             SkipBlanks(rString, nPos);
             eScannedType = NUMBERFORMAT_TIME;
         }
         if ( !nTimePos )
+        {
             nTimePos = nAnzStrings;
+        }
     }
 
     bool bDate = SkipDatePatternSeparator( nAnzStrings-1, nPos);   // 12/31  31.12.  12/31/1999  31.12.1999
@@ -2347,14 +2541,17 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
         bDate = SkipString( rDate, rString, nPos);      // 10.  10-  10/
     }
     if (bDate && bSignDetectedHere)
+    {
         nSign = 0;                                  // 'D-' takes precedence over signed date
-    if (bDate
-            || ((MayBeIso8601() || MayBeMonthDate())
-                && SkipChar( '-', rString, nPos)))
+    }
+    if (bDate || ((MayBeIso8601() || MayBeMonthDate())
+                  && SkipChar( '-', rString, nPos)))
     {
         if (eScannedType != NUMBERFORMAT_UNDEFINED &&
             eScannedType != NUMBERFORMAT_DATE)          // already another type
+        {
             return MatchedReturn();
+        }
         else
         {
             SkipBlanks(rString, nPos);
@@ -2362,13 +2559,17 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
         }
         short nTmpMonth = GetMonth(rString, nPos);  // 10. Jan
         if (nMonth && nTmpMonth)                    // month dup
+        {
             return MatchedReturn();
+        }
         if (nTmpMonth)
         {
             nMonth = nTmpMonth;
             nMonthPos = 3;                          // month at end
             if ( nMonth < 0 )
+            {
                 SkipChar( '.', rString, nPos );     // abbreviated
+            }
             SkipBlanks(rString, nPos);
         }
     }
@@ -2377,15 +2578,21 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
     if (nTempMonth)
     {
         if (nMonth)                                 // month dup
+        {
             return MatchedReturn();
+        }
         if (eScannedType != NUMBERFORMAT_UNDEFINED &&
             eScannedType != NUMBERFORMAT_DATE)      // already another type
+        {
             return MatchedReturn();
+        }
         eScannedType = NUMBERFORMAT_DATE;
         nMonth = nTempMonth;
         nMonthPos = 3;                              // month at end
         if ( nMonth < 0 )
+        {
             SkipChar( '.', rString, nPos );         // abbreviated
+        }
         SkipBlanks(rString, nPos);
     }
 
@@ -2395,18 +2602,24 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
         if (eScannedType != NUMBERFORMAT_UNDEFINED &&
             eScannedType != NUMBERFORMAT_TIME &&
             eScannedType != NUMBERFORMAT_DATETIME)  // already another type
+        {
             return MatchedReturn();
+        }
         else
         {
             // If not already scanned as time, 6.78am does not result in 6
             // seconds and 78 hundredths in the morning. Keep as suffix.
             if (eScannedType != NUMBERFORMAT_TIME && nDecPos == 2 && nAnzNums == 2)
+            {
                 nPos = nOrigPos;     // rewind am/pm
+            }
             else
             {
                 SkipBlanks(rString, nPos);
                 if ( eScannedType != NUMBERFORMAT_DATETIME )
+                {
                     eScannedType = NUMBERFORMAT_TIME;
+                }
             }
         }
     }
@@ -2419,13 +2632,16 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
             SkipBlanks(rString, nPos);
         }
         else
+        {
             return MatchedReturn();
+        }
     }
 
     if ( nPos < rString.Len() &&
-            (eScannedType == NUMBERFORMAT_DATE
-            || eScannedType == NUMBERFORMAT_DATETIME) )
-    {   // day of week is just parsed away
+         (eScannedType == NUMBERFORMAT_DATE ||
+          eScannedType == NUMBERFORMAT_DATETIME) )
+    {
+        // day of week is just parsed away
         xub_StrLen nOldPos = nPos;
         const String& rSep = pFormatter->GetLocaleData()->getLongDateDayOfWeekSep();
         if ( StringContains( rSep, rString, nPos ) )
@@ -2441,18 +2657,22 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
                 if ( nDayOfWeek < 0 )
                 {   // short
                     if ( rString.GetChar( nPos ) == '.' )
+                    {
                         ++nPos;
+                    }
                 }
                 SkipBlanks(rString, nPos);
             }
         }
         else
+        {
             nPos = nOldPos;
+        }
     }
 
 #if NF_RECOGNIZE_ISO8601_TIMEZONES
     if (nPos == 0 && eScannedType == NUMBERFORMAT_DATETIME &&
-            rString.Len() == 1 && rString.GetChar(0) == 'Z' && MayBeIso8601())
+        rString.Len() == 1 && rString.GetChar(0) == 'Z' && MayBeIso8601())
     {
         // ISO 8601 timezone UTC yyyy-mm-ddThh:mmZ
         ++nPos;
@@ -2463,23 +2683,26 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
     {
         // does input EndString equal EndString in Format?
         if ( !ScanStringNumFor( rString, nPos, pFormat, 0xFFFF ) )
+        {
             return false;
+        }
     }
 
     return true;
 }
 
 
-bool ImpSvNumberInputScan::ScanStringNumFor(
-        const String& rString,          // String to scan
-        xub_StrLen nPos,                // Position until which was consumed
-        const SvNumberformat* pFormat,  // The format to match
-        sal_uInt16 nString,                 // Substring of format, 0xFFFF => last
-        bool bDontDetectNegation        // Suppress sign detection
+bool ImpSvNumberInputScan::ScanStringNumFor( const String& rString,          // String to scan
+                                             xub_StrLen nPos,                // Position until which was consumed
+                                             const SvNumberformat* pFormat,  // The format to match
+                                             sal_uInt16 nString,                 // Substring of format, 0xFFFF => last
+                                             bool bDontDetectNegation        // Suppress sign detection
         )
 {
     if ( !pFormat )
+    {
         return false;
+    }
     const ::utl::TransliterationWrapper* pTransliteration = pFormatter->GetTransliteration();
     const OUString* pStr;
     rtl::OUString aString( rString );
@@ -2502,23 +2725,31 @@ bool ImpSvNumberInputScan::ScanStringNumFor(
                 bContinue = false;
             }
             else if ( nSub < 2 )
+            {
                 ++nSub;
+            }
             else
+            {
                 bContinue = false;
-        } while ( bContinue );
+            }
+        }
+        while ( bContinue );
         if ( !bFound && bFirst && nPos )
-        {   // try remaining substring
+        {
+            // try remaining substring
             bFirst = false;
             aString = aString.copy(nPos);
             bContinue = true;
         }
-    } while ( bContinue );
+    }
+    while ( bContinue );
 
     if ( !bFound )
     {
-        if ( !bDontDetectNegation && (nString == 0) && !bFirst && (nSign < 0)
-                && pFormat->IsNegativeRealNegative() )
-        {   // simply negated twice? --1
+        if ( !bDontDetectNegation && (nString == 0) &&
+             !bFirst && (nSign < 0) && pFormat->IsNegativeRealNegative() )
+        {
+            // simply negated twice? --1
             aString = comphelper::string::remove(aString, ' ');
             if ( (aString.getLength() == 1) && (aString[0] == '-') )
             {
@@ -2528,32 +2759,45 @@ bool ImpSvNumberInputScan::ScanStringNumFor(
             }
         }
         if ( !bFound )
+        {
             return false;
+        }
     }
     else if ( !bDontDetectNegation && (nSub == 1) &&
-            pFormat->IsNegativeRealNegative() )
-    {   // negative
+              pFormat->IsNegativeRealNegative() )
+    {
+        // negative
         if ( nStringScanSign < 0 )
         {
             if ( (nSign < 0) && (nStringScanNumFor != 1) )
+            {
                 nStringScanSign = 1;        // triple negated --1 yyy
+            }
         }
         else if ( nStringScanSign == 0 )
         {
             if ( nSign < 0 )
             {   // nSign and nStringScanSign will be combined later,
                 // flip sign if doubly negated
-                if ( (nString == 0) && !bFirst
-                        && SvNumberformat::HasStringNegativeSign( aString ) )
+                if ( (nString == 0) && !bFirst &&
+                     SvNumberformat::HasStringNegativeSign( aString ) )
+                {
                     nStringScanSign = -1;   // direct double negation
+                }
                 else if ( pFormat->IsNegativeWithoutSign() )
+                {
                     nStringScanSign = -1;   // indirect double negation
+                }
             }
             else
+            {
                 nStringScanSign = -1;
+            }
         }
         else    // > 0
+        {
             nStringScanSign = -1;
+        }
     }
     nStringScanNumFor = nSub;
     return true;
@@ -2566,15 +2810,15 @@ bool ImpSvNumberInputScan::ScanStringNumFor(
 // Recognizes types of number, exponential, fraction, percent, currency, date, time.
 // Else text => return false
 
-bool ImpSvNumberInputScan::IsNumberFormatMain(
-        const String& rString,                  // string to be analyzed
-        const SvNumberformat* pFormat )         // maybe number format set to match against
+bool ImpSvNumberInputScan::IsNumberFormatMain( const String& rString,                  // string to be analyzed
+                                               const SvNumberformat* pFormat )         // maybe number format set to match against
 {
     Reset();
     NumberStringDivision( rString );            // breakdown into strings and numbers
     if (nAnzStrings >= SV_MAX_ANZ_INPUT_STRINGS) // too many elements
+    {
         return false;                           // Njet, Nope, ...
-
+    }
     if (nAnzNums == 0)                          // no number in input
     {
         if ( nAnzStrings > 0 )
@@ -2591,10 +2835,14 @@ bool ImpSvNumberInputScan::IsNumberFormatMain(
                 return true;
             }
             else
+            {
                 return false;                   // simple text
+            }
         }
         else
+        {
             return false;                       // simple text
+        }
     }
 
     sal_uInt16 i = 0;                               // mark any symbol
@@ -2602,173 +2850,207 @@ bool ImpSvNumberInputScan::IsNumberFormatMain(
 
     switch ( nAnzNums )
     {
-        case 1 :                                // Exactly 1 number in input
-        {                                       // nAnzStrings >= 1
-            if (GetNextNumber(i,j))             // i=1,0
-            {                                   // Number at start
-                if (eSetType == NUMBERFORMAT_FRACTION)  // Fraction 1 = 1/1
+    case 1 :                                // Exactly 1 number in input
+        // nAnzStrings >= 1
+        if (GetNextNumber(i,j))             // i=1,0
+        {                                   // Number at start
+            if (eSetType == NUMBERFORMAT_FRACTION)  // Fraction 1 = 1/1
+            {
+                if (i >= nAnzStrings ||     // no end string nor decimal separator
+                    sStrArray[i] == (String)pFormatter->GetNumDecimalSep())
                 {
-                    if (i >= nAnzStrings ||     // no end string nor decimal separator
-                        sStrArray[i] == (String)pFormatter->GetNumDecimalSep())
-                    {
-                        eScannedType = NUMBERFORMAT_FRACTION;
-                        nMatchedAllStrings &= ~nMatchedVirgin;
-                        return true;
-                    }
+                    eScannedType = NUMBERFORMAT_FRACTION;
+                    nMatchedAllStrings &= ~nMatchedVirgin;
+                    return true;
                 }
             }
-            else
-            {                                   // Analyze start string
-                if (!ScanStartString( sStrArray[i], pFormat ))  // i=0
-                    return false;               // already an error
-                i++;                            // next symbol, i=1
-            }
-            GetNextNumber(i,j);                 // i=1,2
-            if (eSetType == NUMBERFORMAT_FRACTION)  // Fraction -1 = -1/1
+        }
+        else
+        {                                   // Analyze start string
+            if (!ScanStartString( sStrArray[i], pFormat ))  // i=0
             {
-                if (nSign && !nNegCheck &&      // Sign +, -
-                    eScannedType == NUMBERFORMAT_UNDEFINED &&   // not date or currency
-                    nDecPos == 0 &&             // no previous decimal separator
-                    (i >= nAnzStrings ||        // no end string nor decimal separator
-                     sStrArray[i] == (String)pFormatter->GetNumDecimalSep())
+                return false;               // already an error
+            }
+            i++;                            // next symbol, i=1
+        }
+        GetNextNumber(i,j);                 // i=1,2
+        if (eSetType == NUMBERFORMAT_FRACTION)  // Fraction -1 = -1/1
+        {
+            if (nSign && !nNegCheck &&      // Sign +, -
+                eScannedType == NUMBERFORMAT_UNDEFINED &&   // not date or currency
+                nDecPos == 0 &&             // no previous decimal separator
+                (i >= nAnzStrings ||        // no end string nor decimal separator
+                 sStrArray[i] == (String)pFormatter->GetNumDecimalSep())
                 )
-                {
-                    eScannedType = NUMBERFORMAT_FRACTION;
-                    nMatchedAllStrings &= ~nMatchedVirgin;
-                    return true;
-                }
-            }
-            if (i < nAnzStrings && !ScanEndString( sStrArray[i], pFormat ))
-                    return false;
-        }
-        break;
-        case 2 :                                // Exactly 2 numbers in input
-        {                                       // nAnzStrings >= 3
-            if (!GetNextNumber(i,j))            // i=1,0
-            {                                   // Analyze start string
-                if (!ScanStartString( sStrArray[i], pFormat ))
-                    return false;               // already an error
-                i++;                            // i=1
-            }
-            GetNextNumber(i,j);                 // i=1,2
-            if ( !ScanMidString( sStrArray[i], i, pFormat ) )
-                return false;
-            i++;                                // next symbol, i=2,3
-            GetNextNumber(i,j);                 // i=3,4
-            if (i < nAnzStrings && !ScanEndString( sStrArray[i], pFormat ))
-                return false;
-            if (eSetType == NUMBERFORMAT_FRACTION)  // -1,200. as fraction
             {
-                if (!nNegCheck  &&                  // no sign '('
-                    eScannedType == NUMBERFORMAT_UNDEFINED &&
-                    (nDecPos == 0 || nDecPos == 3)  // no decimal separator or at end
-                    )
-                {
-                    eScannedType = NUMBERFORMAT_FRACTION;
-                    nMatchedAllStrings &= ~nMatchedVirgin;
-                    return true;
-                }
+                eScannedType = NUMBERFORMAT_FRACTION;
+                nMatchedAllStrings &= ~nMatchedVirgin;
+                return true;
             }
         }
+        if (i < nAnzStrings && !ScanEndString( sStrArray[i], pFormat ))
+        {
+            return false;
+        }
         break;
-        case 3 :                                // Exactly 3 numbers in input
-        {                                       // nAnzStrings >= 5
-            if (!GetNextNumber(i,j))            // i=1,0
-            {                                   // Analyze start string
-                if (!ScanStartString( sStrArray[i], pFormat ))
-                    return false;               // already an error
-                i++;                            // i=1
-                if (nDecPos == 1)               // decimal separator at start => error
-                    return false;
-            }
-            GetNextNumber(i,j);                 // i=1,2
-            if ( !ScanMidString( sStrArray[i], i, pFormat ) )
-                return false;
-            i++;                                // i=2,3
-            if (eScannedType == NUMBERFORMAT_SCIENTIFIC)    // E only at end
-                return false;
-            GetNextNumber(i,j);                 // i=3,4
-            if ( !ScanMidString( sStrArray[i], i, pFormat ) )
-                return false;
-            i++;                                // i=4,5
-            GetNextNumber(i,j);                 // i=5,6
-            if (i < nAnzStrings && !ScanEndString( sStrArray[i], pFormat ))
-                return false;
-            if (eSetType == NUMBERFORMAT_FRACTION)  // -1,200,100. as fraction
-            {
-                if (!nNegCheck  &&                  // no sign '('
-                    eScannedType == NUMBERFORMAT_UNDEFINED &&
-                    (nDecPos == 0 || nDecPos == 3)  // no decimal separator or at end
+    case 2 :                                // Exactly 2 numbers in input
+                                            // nAnzStrings >= 3
+        if (!GetNextNumber(i,j))            // i=1,0
+        {                                   // Analyze start string
+            if (!ScanStartString( sStrArray[i], pFormat ))
+                return false;               // already an error
+            i++;                            // i=1
+        }
+        GetNextNumber(i,j);                 // i=1,2
+        if ( !ScanMidString( sStrArray[i], i, pFormat ) )
+        {
+            return false;
+        }
+        i++;                                // next symbol, i=2,3
+        GetNextNumber(i,j);                 // i=3,4
+        if (i < nAnzStrings && !ScanEndString( sStrArray[i], pFormat ))
+        {
+            return false;
+        }
+        if (eSetType == NUMBERFORMAT_FRACTION)  // -1,200. as fraction
+        {
+            if (!nNegCheck  &&                  // no sign '('
+                eScannedType == NUMBERFORMAT_UNDEFINED &&
+                (nDecPos == 0 || nDecPos == 3)  // no decimal separator or at end
                 )
-                {
-                    eScannedType = NUMBERFORMAT_FRACTION;
-                    nMatchedAllStrings &= ~nMatchedVirgin;
-                    return true;
-                }
+            {
+                eScannedType = NUMBERFORMAT_FRACTION;
+                nMatchedAllStrings &= ~nMatchedVirgin;
+                return true;
             }
-            if ( eScannedType == NUMBERFORMAT_FRACTION && nDecPos )
-                return false;                   // #36857# not a real fraction
         }
         break;
-        default:                                // More than 3 numbers in input
-        {                                       // nAnzStrings >= 7
-            if (!GetNextNumber(i,j))            // i=1,0
-            {                                   // Analyze startstring
-                if (!ScanStartString( sStrArray[i], pFormat ))
-                    return false;               // already an error
-                i++;                            // i=1
-                if (nDecPos == 1)               // decimal separator at start => error
-                    return false;
+    case 3 :                                // Exactly 3 numbers in input
+                                            // nAnzStrings >= 5
+        if (!GetNextNumber(i,j))            // i=1,0
+        {                                   // Analyze start string
+            if (!ScanStartString( sStrArray[i], pFormat ))
+            {
+                return false;               // already an error
             }
-            GetNextNumber(i,j);                 // i=1,2
-            if ( !ScanMidString( sStrArray[i], i, pFormat ) )
+            i++;                            // i=1
+            if (nDecPos == 1)               // decimal separator at start => error
+            {
                 return false;
-            i++;                                // i=2,3
+            }
+        }
+        GetNextNumber(i,j);                 // i=1,2
+        if ( !ScanMidString( sStrArray[i], i, pFormat ) )
+        {
+            return false;
+        }
+        i++;                                // i=2,3
+        if (eScannedType == NUMBERFORMAT_SCIENTIFIC)    // E only at end
+        {
+            return false;
+        }
+        GetNextNumber(i,j);                 // i=3,4
+        if ( !ScanMidString( sStrArray[i], i, pFormat ) )
+        {
+            return false;
+        }
+        i++;                                // i=4,5
+        GetNextNumber(i,j);                 // i=5,6
+        if (i < nAnzStrings && !ScanEndString( sStrArray[i], pFormat ))
+        {
+            return false;
+        }
+        if (eSetType == NUMBERFORMAT_FRACTION)  // -1,200,100. as fraction
+        {
+            if (!nNegCheck  &&                  // no sign '('
+                eScannedType == NUMBERFORMAT_UNDEFINED &&
+                (nDecPos == 0 || nDecPos == 3)  // no decimal separator or at end
+                )
+            {
+                eScannedType = NUMBERFORMAT_FRACTION;
+                nMatchedAllStrings &= ~nMatchedVirgin;
+                return true;
+            }
+        }
+        if ( eScannedType == NUMBERFORMAT_FRACTION && nDecPos )
+        {
+            return false;                   // #36857# not a real fraction
+        }
+        break;
+    default:                                // More than 3 numbers in input
+                                            // nAnzStrings >= 7
+        if (!GetNextNumber(i,j))            // i=1,0
+        {                                   // Analyze startstring
+            if (!ScanStartString( sStrArray[i], pFormat ))
+                return false;               // already an error
+            i++;                            // i=1
+            if (nDecPos == 1)               // decimal separator at start => error
+                return false;
+        }
+        GetNextNumber(i,j);                 // i=1,2
+        if ( !ScanMidString( sStrArray[i], i, pFormat ) )
+        {
+            return false;
+        }
+        i++;                                // i=2,3
+        {
             sal_uInt16 nThOld = 10;                 // just not 0 or 1
-            while (nThOld != nThousand && j < nAnzNums-1)
-                                                // Execute at least one time
-                                                // but leave one number.
-            {                                   // Loop over group separators
+            while (nThOld != nThousand && j < nAnzNums-1) // Execute at least one time
+                                                          // but leave one number.
+            {                                             // Loop over group separators
                 nThOld = nThousand;
                 if (eScannedType == NUMBERFORMAT_SCIENTIFIC)    // E only at end
+                {
                     return false;
+                }
                 GetNextNumber(i,j);
                 if ( i < nAnzStrings && !ScanMidString( sStrArray[i], i, pFormat ) )
+                {
                     return false;
+                }
                 i++;
             }
-            if (eScannedType == NUMBERFORMAT_DATE ||    // long date or
-                eScannedType == NUMBERFORMAT_TIME ||    // long time or
-                eScannedType == NUMBERFORMAT_UNDEFINED) // long number
-            {
-                for (sal_uInt16 k = j; k < nAnzNums-1; k++)
-                {
-                    if (eScannedType == NUMBERFORMAT_SCIENTIFIC)    // E only at endd
-                        return false;
-                    GetNextNumber(i,j);
-                    if ( i < nAnzStrings && !ScanMidString( sStrArray[i], i, pFormat ) )
-                        return false;
-                    i++;
-                }
-            }
-            GetNextNumber(i,j);
-            if (i < nAnzStrings && !ScanEndString( sStrArray[i], pFormat ))
-                return false;
-            if (eSetType == NUMBERFORMAT_FRACTION)  // -1,200,100. as fraction
-            {
-                if (!nNegCheck  &&                  // no sign '('
-                    eScannedType == NUMBERFORMAT_UNDEFINED &&
-                    (nDecPos == 0 || nDecPos == 3)  // no decimal separator or at end
-                )
-                {
-                    eScannedType = NUMBERFORMAT_FRACTION;
-                    nMatchedAllStrings &= ~nMatchedVirgin;
-                    return true;
-                }
-            }
-            if ( eScannedType == NUMBERFORMAT_FRACTION && nDecPos )
-                return false;                       // #36857# not a real fraction
         }
+        if (eScannedType == NUMBERFORMAT_DATE ||    // long date or
+            eScannedType == NUMBERFORMAT_TIME ||    // long time or
+            eScannedType == NUMBERFORMAT_UNDEFINED) // long number
+        {
+            for (sal_uInt16 k = j; k < nAnzNums-1; k++)
+            {
+                if (eScannedType == NUMBERFORMAT_SCIENTIFIC)    // E only at endd
+                {
+                    return false;
+                }
+                GetNextNumber(i,j);
+                if ( i < nAnzStrings && !ScanMidString( sStrArray[i], i, pFormat ) )
+                {
+                    return false;
+                }
+                i++;
+            }
+        }
+        GetNextNumber(i,j);
+        if (i < nAnzStrings && !ScanEndString( sStrArray[i], pFormat ))
+        {
+            return false;
+        }
+        if (eSetType == NUMBERFORMAT_FRACTION)  // -1,200,100. as fraction
+        {
+            if (!nNegCheck  &&                  // no sign '('
+                eScannedType == NUMBERFORMAT_UNDEFINED &&
+                (nDecPos == 0 || nDecPos == 3)  // no decimal separator or at end
+                )
+            {
+                eScannedType = NUMBERFORMAT_FRACTION;
+                nMatchedAllStrings &= ~nMatchedVirgin;
+                return true;
+            }
+        }
+        if ( eScannedType == NUMBERFORMAT_FRACTION && nDecPos )
+        {
+            return false;                       // #36857# not a real fraction
+        }
+        break;
     }
 
     if (eScannedType == NUMBERFORMAT_UNDEFINED)
@@ -2784,32 +3066,44 @@ bool ImpSvNumberInputScan::IsNumberFormatMain(
                 nMatchedAllStrings = 0;
         }
         if ( nMatchedAllStrings )
+        {
             eScannedType = eSetType;
+        }
         else if ( bDidMatch )
+        {
             return false;
+        }
         else
             eScannedType = NUMBERFORMAT_NUMBER;
             // everything else should have been recognized by now
     }
     else if ( eScannedType == NUMBERFORMAT_DATE )
-    {   // the very relaxed date input checks may interfere with a preset format
+    {
+        // the very relaxed date input checks may interfere with a preset format
         nMatchedAllStrings &= ~nMatchedVirgin;
         bool bWasReturn = ((nMatchedAllStrings & nMatchedUsedAsReturn) != 0);
         if ( nMatchedAllStrings )
         {
             bool bMatch = (pFormat ? pFormat->IsNumForStringElementCountEqual(
-                        nStringScanNumFor, nAnzStrings, nAnzNums ) : false);
+                               nStringScanNumFor, nAnzStrings, nAnzNums ) : false);
             if ( !bMatch )
+            {
                 nMatchedAllStrings = 0;
+            }
         }
         if ( nMatchedAllStrings )
+        {
             eScannedType = eSetType;
+        }
         else if ( bWasReturn )
+        {
             return false;
+        }
     }
     else
+    {
         nMatchedAllStrings = 0;  // reset flag to no substrings matched
-
+    }
     return true;
 }
 
@@ -2843,7 +3137,7 @@ void ImpSvNumberInputScan::InitText()
     nElems = xElems.getLength();
     pUpperMonthText = new String[nElems];
     pUpperAbbrevMonthText = new String[nElems];
-    for ( j=0; j<nElems; j++ )
+    for ( j = 0; j < nElems; j++ )
     {
         pUpperMonthText[j] = pChrCls->uppercase( xElems[j].FullName );
         pUpperAbbrevMonthText[j] = pChrCls->uppercase( xElems[j].AbbrevName );
@@ -2856,14 +3150,16 @@ void ImpSvNumberInputScan::InitText()
     nElems = xElems.getLength();
     pUpperGenitiveMonthText = new String[nElems];
     pUpperGenitiveAbbrevMonthText = new String[nElems];
-    for ( j=0; j<nElems; j++ )
+    for ( j = 0; j < nElems; j++ )
     {
         pUpperGenitiveMonthText[j] = pChrCls->uppercase( xElems[j].FullName );
         pUpperGenitiveAbbrevMonthText[j] = pChrCls->uppercase( xElems[j].AbbrevName );
         if (!bScanGenitiveMonths &&
-                (pUpperGenitiveMonthText[j] != pUpperMonthText[j] ||
-                 pUpperGenitiveAbbrevMonthText[j] != pUpperAbbrevMonthText[j]))
+            (pUpperGenitiveMonthText[j] != pUpperMonthText[j] ||
+             pUpperGenitiveAbbrevMonthText[j] != pUpperAbbrevMonthText[j]))
+        {
             bScanGenitiveMonths = true;
+        }
     }
 
     delete [] pUpperPartitiveMonthText;
@@ -2873,14 +3169,16 @@ void ImpSvNumberInputScan::InitText()
     nElems = xElems.getLength();
     pUpperPartitiveMonthText = new String[nElems];
     pUpperPartitiveAbbrevMonthText = new String[nElems];
-    for ( j=0; j<nElems; j++ )
+    for ( j = 0; j < nElems; j++ )
     {
         pUpperPartitiveMonthText[j] = pChrCls->uppercase( xElems[j].FullName );
         pUpperPartitiveAbbrevMonthText[j] = pChrCls->uppercase( xElems[j].AbbrevName );
         if (!bScanPartitiveMonths &&
-                (pUpperPartitiveMonthText[j] != pUpperGenitiveMonthText[j] ||
-                 pUpperPartitiveAbbrevMonthText[j] != pUpperGenitiveAbbrevMonthText[j]))
+            (pUpperPartitiveMonthText[j] != pUpperGenitiveMonthText[j] ||
+             pUpperPartitiveAbbrevMonthText[j] != pUpperGenitiveAbbrevMonthText[j]))
+        {
             bScanPartitiveMonths = true;
+        }
     }
 
     delete [] pUpperDayText;
@@ -2889,7 +3187,7 @@ void ImpSvNumberInputScan::InitText()
     nElems = xElems.getLength();
     pUpperDayText = new String[nElems];
     pUpperAbbrevDayText = new String[nElems];
-    for ( j=0; j<nElems; j++ )
+    for ( j = 0; j < nElems; j++ )
     {
         pUpperDayText[j] = pChrCls->uppercase( xElems[j].FullName );
         pUpperAbbrevDayText[j] = pChrCls->uppercase( xElems[j].AbbrevName );
@@ -2921,22 +3219,27 @@ void ImpSvNumberInputScan::ChangeIntl()
 void ImpSvNumberInputScan::InvalidateDateAcceptancePatterns()
 {
     if (sDateAcceptancePatterns.getLength())
+    {
         sDateAcceptancePatterns = ::com::sun::star::uno::Sequence< ::rtl::OUString >();
+    }
 }
 
 
 //---------------------------------------------------------------------------
 //      ChangeNullDate
 
-void ImpSvNumberInputScan::ChangeNullDate(
-        const sal_uInt16 Day,
-        const sal_uInt16 Month,
-        const sal_uInt16 Year )
+void ImpSvNumberInputScan::ChangeNullDate( const sal_uInt16 Day,
+                                           const sal_uInt16 Month,
+                                           const sal_uInt16 Year )
 {
     if ( pNullDate )
+    {
         *pNullDate = Date(Day, Month, Year);
+    }
     else
+    {
         pNullDate = new Date(Day, Month, Year);
+    }
 }
 
 
@@ -2945,21 +3248,25 @@ void ImpSvNumberInputScan::ChangeNullDate(
 //
 // => does rString represent a number (also date, time et al)
 
-bool ImpSvNumberInputScan::IsNumberFormat(
-        const String& rString,                  // string to be analyzed
-        short& F_Type,                          // IN: old type, OUT: new type
-        double& fOutNumber,                     // OUT: number if convertable
-        const SvNumberformat* pFormat )         // maybe a number format to match against
+bool ImpSvNumberInputScan::IsNumberFormat( const String& rString,                  // string to be analyzed
+                                           short& F_Type,                          // IN: old type, OUT: new type
+                                           double& fOutNumber,                     // OUT: number if convertable
+                                           const SvNumberformat* pFormat )         // maybe a number format to match against
 {
     String sResString;
     String aString;
     bool res;                                   // return value
+    sal_uInt16 k;
     eSetType = F_Type;                          // old type set
 
     if ( !rString.Len() )
+    {
         res = false;
+    }
     else if (rString.Len() > 308)               // arbitrary
+    {
         res = false;
+    }
     else
     {
         // NoMoreUpperNeeded, all comparisons on UpperCase
@@ -2971,125 +3278,162 @@ bool ImpSvNumberInputScan::IsNumberFormat(
 
     if (res)
     {
-        if ( nNegCheck                              // ')' not found for '('
-                || (nSign && (eScannedType == NUMBERFORMAT_DATE
-                    || eScannedType == NUMBERFORMAT_DATETIME))
-            )                                       // signed date/datetime
+        if ( nNegCheck ||                             // ')' not found for '('
+             (nSign && (eScannedType == NUMBERFORMAT_DATE ||
+                        eScannedType == NUMBERFORMAT_DATETIME))) // signed date/datetime
+        {
             res = false;
+        }
         else
         {                                           // check count of partial number strings
             switch (eScannedType)
             {
-                case NUMBERFORMAT_PERCENT:
-                case NUMBERFORMAT_CURRENCY:
-                case NUMBERFORMAT_NUMBER:
-                    if (nDecPos == 1)               // .05
+            case NUMBERFORMAT_PERCENT:
+            case NUMBERFORMAT_CURRENCY:
+            case NUMBERFORMAT_NUMBER:
+                if (nDecPos == 1)               // .05
+                {
+                    // matched MidStrings function like group separators
+                    if ( nMatchedAllStrings )
                     {
-                        // matched MidStrings function like group separators
-                        if ( nMatchedAllStrings )
-                            nThousand = nAnzNums - 1;
-                        else if ( nAnzNums != 1 )
-                            res = false;
+                        nThousand = nAnzNums - 1;
                     }
-                    else if (nDecPos == 2)          // 1.05
+                    else if ( nAnzNums != 1 )
                     {
-                        // matched MidStrings function like group separators
-                        if ( nMatchedAllStrings )
-                            nThousand = nAnzNums - 1;
-                        else if ( nAnzNums != nThousand+2 )
-                            res = false;
+                        res = false;
                     }
-                    else                            // 1,100 or 1,100.
+                }
+                else if (nDecPos == 2)          // 1.05
+                {
+                    // matched MidStrings function like group separators
+                    if ( nMatchedAllStrings )
                     {
-                        // matched MidStrings function like group separators
-                        if ( nMatchedAllStrings )
-                            nThousand = nAnzNums - 1;
-                        else if ( nAnzNums != nThousand+1 )
-                            res = false;
+                        nThousand = nAnzNums - 1;
                     }
-                    break;
+                    else if ( nAnzNums != nThousand+2 )
+                    {
+                        res = false;
+                    }
+                }
+                else                            // 1,100 or 1,100.
+                {
+                    // matched MidStrings function like group separators
+                    if ( nMatchedAllStrings )
+                    {
+                        nThousand = nAnzNums - 1;
+                    }
+                    else if ( nAnzNums != nThousand+1 )
+                    {
+                        res = false;
+                    }
+                }
+                break;
 
-                case NUMBERFORMAT_SCIENTIFIC:       // 1.0e-2
-                    if (nDecPos == 1)               // .05
+            case NUMBERFORMAT_SCIENTIFIC:       // 1.0e-2
+                if (nDecPos == 1)               // .05
+                {
+                    if (nAnzNums != 2)
                     {
-                        if (nAnzNums != 2)
-                            res = false;
+                        res = false;
                     }
-                    else if (nDecPos == 2)          // 1.05
+                }
+                else if (nDecPos == 2)          // 1.05
+                {
+                    if (nAnzNums != nThousand+3)
                     {
-                        if (nAnzNums != nThousand+3)
-                            res = false;
+                        res = false;
                     }
-                    else                            // 1,100 or 1,100.
+                }
+                else                            // 1,100 or 1,100.
+                {
+                    if (nAnzNums != nThousand+2)
                     {
-                        if (nAnzNums != nThousand+2)
-                            res = false;
+                        res = false;
                     }
-                    break;
+                }
+                break;
 
-                case NUMBERFORMAT_DATE:
-                    if (nMonth)
-                    {                               // month name and numbers
-                        if (nAnzNums > 2)
-                            res = false;
+            case NUMBERFORMAT_DATE:
+                if (nMonth)
+                {                               // month name and numbers
+                    if (nAnzNums > 2)
+                    {
+                        res = false;
+                    }
+                }
+                else
+                {
+                    if (nAnzNums > 3)
+                    {
+                        res = false;
                     }
                     else
                     {
-                        if (nAnzNums > 3)
-                            res = false;
-                        else
-                            res = IsAcceptedDatePattern( nNums[0]) ||
-                                MayBeIso8601() || nMatchedAllStrings;
+                        res = IsAcceptedDatePattern( nNums[0]) || MayBeIso8601() || nMatchedAllStrings;
                     }
-                    break;
+                }
+                break;
 
-                case NUMBERFORMAT_TIME:
+            case NUMBERFORMAT_TIME:
+                if (nDecPos)
+                {                               // hundredth seconds included
+                    if (nAnzNums > 4)
+                    {
+                        res = false;
+                    }
+                }
+                else
+                {
+                    if (nAnzNums > 3)
+                    {
+                        res = false;
+                    }
+                }
+                break;
+
+            case NUMBERFORMAT_DATETIME:
+                if (nMonth)
+                {                               // month name and numbers
                     if (nDecPos)
-                    {                               // hundredth seconds included
-                        if (nAnzNums > 4)
-                            res = false;
-                    }
-                    else
-                    {
-                        if (nAnzNums > 3)
-                            res = false;
-                    }
-                    break;
-
-                case NUMBERFORMAT_DATETIME:
-                    if (nMonth)
-                    {                               // month name and numbers
-                        if (nDecPos)
-                        {                           // hundredth seconds included
-                            if (nAnzNums > 6)
-                                res = false;
-                        }
-                        else
+                    {                           // hundredth seconds included
+                        if (nAnzNums > 6)
                         {
-                            if (nAnzNums > 5)
-                                res = false;
+                            res = false;
                         }
                     }
                     else
                     {
-                        if (nDecPos)
-                        {                           // hundredth seconds included
-                            if (nAnzNums > 7)
-                                res = false;
-                        }
-                        else
+                        if (nAnzNums > 5)
                         {
-                            if (nAnzNums > 6)
-                                res = false;
+                            res = false;
                         }
-                        if (res)
-                            res = IsAcceptedDatePattern( nNums[0]) ||
-                                MayBeIso8601() || nMatchedAllStrings;
                     }
-                    break;
+                }
+                else
+                {
+                    if (nDecPos)
+                    {                           // hundredth seconds included
+                        if (nAnzNums > 7)
+                        {
+                            res = false;
+                        }
+                    }
+                    else
+                    {
+                        if (nAnzNums > 6)
+                        {
+                            res = false;
+                        }
+                    }
+                    if (res)
+                    {
+                        res = IsAcceptedDatePattern( nNums[0]) || MayBeIso8601() || nMatchedAllStrings;
+                    }
+                }
+                break;
 
-                default:
-                    break;
+            default:
+                break;
             }   // switch
         }   // else
     }   // if (res)
@@ -3098,162 +3442,199 @@ bool ImpSvNumberInputScan::IsNumberFormat(
     {                                           // we finally have a number
         switch (eScannedType)
         {
-            case NUMBERFORMAT_LOGICAL:
-                if      (nLogical ==  1)
-                    fOutNumber = 1.0;           // True
-                else if (nLogical == -1)
-                    fOutNumber = 0.0;           // False
-                else
-                    res = false;                // Oops
-                break;
+        case NUMBERFORMAT_LOGICAL:
+            if      (nLogical ==  1)
+                fOutNumber = 1.0;           // True
+            else if (nLogical == -1)
+                fOutNumber = 0.0;           // False
+            else
+                res = false;                // Oops
+            break;
 
-            case NUMBERFORMAT_PERCENT:
-            case NUMBERFORMAT_CURRENCY:
-            case NUMBERFORMAT_NUMBER:
-            case NUMBERFORMAT_SCIENTIFIC:
-            case NUMBERFORMAT_DEFINED:          // if no category detected handle as number
+        case NUMBERFORMAT_PERCENT:
+        case NUMBERFORMAT_CURRENCY:
+        case NUMBERFORMAT_NUMBER:
+        case NUMBERFORMAT_SCIENTIFIC:
+        case NUMBERFORMAT_DEFINED:          // if no category detected handle as number
+            if ( nDecPos == 1 )                         // . at start
             {
-                if ( nDecPos == 1 )                         // . at start
-                    sResString.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "0." ) );
-                else
-                    sResString.Erase();
-                sal_uInt16 k;
-                for ( k = 0; k <= nThousand; k++)
-                    sResString += sStrArray[nNums[k]];  // integer part
-                if ( nDecPos == 2 && k < nAnzNums )     // . somewhere
-                {
-                    sResString += '.';
-                    sal_uInt16 nStop = (eScannedType == NUMBERFORMAT_SCIENTIFIC ?
-                            nAnzNums-1 : nAnzNums);
-                    for ( ; k < nStop; k++)
-                        sResString += sStrArray[nNums[k]];  // fractional part
-                }
+                sResString.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "0." ) );
+            }
+            else
+            {
+                sResString.Erase();
+            }
 
-                if (eScannedType != NUMBERFORMAT_SCIENTIFIC)
-                    fOutNumber = StringToDouble(sResString);
-                else
-                {                                           // append exponent
-                    sResString += 'E';
-                    if ( nESign == -1 )
-                        sResString += '-';
-                    sResString += sStrArray[nNums[nAnzNums-1]];
-                    rtl_math_ConversionStatus eStatus;
-                    fOutNumber = ::rtl::math::stringToDouble(
-                        sResString, '.', ',', &eStatus, NULL );
-                    if ( eStatus == rtl_math_ConversionStatus_OutOfRange )
+            for ( k = 0; k <= nThousand; k++)
+            {
+                sResString += sStrArray[nNums[k]];  // integer part
+            }
+            if ( nDecPos == 2 && k < nAnzNums )     // . somewhere
+            {
+                sResString += '.';
+                sal_uInt16 nStop = (eScannedType == NUMBERFORMAT_SCIENTIFIC ?
+                                    nAnzNums-1 : nAnzNums);
+                for ( ; k < nStop; k++)
+                {
+                    sResString += sStrArray[nNums[k]];  // fractional part
+                }
+            }
+
+            if (eScannedType != NUMBERFORMAT_SCIENTIFIC)
+            {
+                fOutNumber = StringToDouble(sResString);
+            }
+            else
+            {                                           // append exponent
+                sResString += 'E';
+                if ( nESign == -1 )
+                {
+                    sResString += '-';
+                }
+                sResString += sStrArray[nNums[nAnzNums-1]];
+                rtl_math_ConversionStatus eStatus;
+                fOutNumber = ::rtl::math::stringToDouble( sResString, '.', ',', &eStatus, NULL );
+                if ( eStatus == rtl_math_ConversionStatus_OutOfRange )
+                {
+                    F_Type = NUMBERFORMAT_TEXT;         // overflow/underflow -> Text
+                    if (nESign == -1)
                     {
-                        F_Type = NUMBERFORMAT_TEXT;         // overflow/underflow -> Text
-                        if (nESign == -1)
-                            fOutNumber = 0.0;
-                        else
-                            fOutNumber = DBL_MAX;
-/*!*/                   return true;
+                        fOutNumber = 0.0;
                     }
-                }
-
-                if ( nStringScanSign )
-                {
-                    if ( nSign )
-                        nSign *= nStringScanSign;
                     else
-                        nSign = nStringScanSign;
+                    {
+                        fOutNumber = DBL_MAX;
+                    }
+                    return true;
                 }
-                if ( nSign < 0 )
-                    fOutNumber = -fOutNumber;
+            }
 
-                if (eScannedType == NUMBERFORMAT_PERCENT)
-                    fOutNumber/= 100.0;
+            if ( nStringScanSign )
+            {
+                if ( nSign )
+                {
+                    nSign *= nStringScanSign;
+                }
+                else
+                {
+                    nSign = nStringScanSign;
+                }
+            }
+            if ( nSign < 0 )
+            {
+                fOutNumber = -fOutNumber;
+            }
+
+            if (eScannedType == NUMBERFORMAT_PERCENT)
+            {
+                fOutNumber/= 100.0;
             }
             break;
 
-            case NUMBERFORMAT_FRACTION:
-                if (nAnzNums == 1)
-                    fOutNumber = StringToDouble(sStrArray[nNums[0]]);
-                else if (nAnzNums == 2)
+        case NUMBERFORMAT_FRACTION:
+            if (nAnzNums == 1)
+            {
+                fOutNumber = StringToDouble(sStrArray[nNums[0]]);
+            }
+            else if (nAnzNums == 2)
+            {
+                if (nThousand == 1)
                 {
-                    if (nThousand == 1)
-                    {
-                        sResString = sStrArray[nNums[0]];
-                        sResString += sStrArray[nNums[1]];  // integer part
-                        fOutNumber = StringToDouble(sResString);
-                    }
-                    else
-                    {
-                        double fZaehler = StringToDouble(sStrArray[nNums[0]]);
-                        double fNenner = StringToDouble(sStrArray[nNums[1]]);
-                        if (fNenner != 0.0)
-                            fOutNumber = fZaehler/fNenner;
-                        else
-                            res = false;
-                    }
-                }
-                else                                        // nAnzNums > 2
-                {
-                    sal_uInt16 k = 1;
                     sResString = sStrArray[nNums[0]];
-                    if (nThousand > 0)
-                        for (k = 1; k <= nThousand; k++)
-                            sResString += sStrArray[nNums[k]];
+                    sResString += sStrArray[nNums[1]];  // integer part
                     fOutNumber = StringToDouble(sResString);
-
-                    if (k == nAnzNums-2)
+                }
+                else
+                {
+                    double fZaehler = StringToDouble(sStrArray[nNums[0]]);
+                    double fNenner = StringToDouble(sStrArray[nNums[1]]);
+                    if (fNenner != 0.0)
                     {
-                        double fZaehler = StringToDouble(sStrArray[nNums[k]]);
-                        double fNenner = StringToDouble(sStrArray[nNums[k+1]]);
-                        if (fNenner != 0.0)
-                            fOutNumber += fZaehler/fNenner;
-                        else
-                            res = false;
+                        fOutNumber = fZaehler/fNenner;
+                    }
+                    else
+                    {
+                        res = false;
                     }
                 }
-
-                if ( nStringScanSign )
+            }
+            else                                        // nAnzNums > 2
+            {
+                k = 1;
+                sResString = sStrArray[nNums[0]];
+                if (nThousand > 0)
                 {
-                    if ( nSign )
-                        nSign *= nStringScanSign;
+                    for (; k <= nThousand; k++)
+                    {
+                        sResString += sStrArray[nNums[k]];
+                    }
+                }
+                fOutNumber = StringToDouble(sResString);
+
+                if (k == nAnzNums-2)
+                {
+                    double fZaehler = StringToDouble(sStrArray[nNums[k]]);
+                    double fNenner = StringToDouble(sStrArray[nNums[k + 1]]);
+                    if (fNenner != 0.0)
+                    {
+                        fOutNumber += fZaehler/fNenner;
+                    }
                     else
-                        nSign = nStringScanSign;
+                    {
+                        res = false;
+                    }
                 }
-                if ( nSign < 0 )
-                    fOutNumber = -fOutNumber;
-                break;
-
-            case NUMBERFORMAT_TIME:
-                res = GetTimeRef(fOutNumber, 0, nAnzNums);
-                if ( nSign < 0 )
-                    fOutNumber = -fOutNumber;
-                break;
-
-            case NUMBERFORMAT_DATE:
-            {
-                sal_uInt16 nCounter = 0;                        // dummy here
-                res = GetDateRef( fOutNumber, nCounter, pFormat );
             }
-            break;
 
-            case NUMBERFORMAT_DATETIME:
+            if ( nStringScanSign )
             {
-                sal_uInt16 nCounter = 0;                        // needed here
-                res = GetDateRef( fOutNumber, nCounter, pFormat );
-                if ( res )
+                if ( nSign )
                 {
-                    double fTime;
-                    res = GetTimeRef( fTime, nCounter, nAnzNums - nCounter );
-                    fOutNumber += fTime;
+                    nSign *= nStringScanSign;
                 }
+                else
+                {
+                    nSign = nStringScanSign;
+                }
+            }
+            if ( nSign < 0 )
+            {
+                fOutNumber = -fOutNumber;
             }
             break;
 
-            default:
-                SAL_WARN( "svl.numbers", "Some number recognized but what's it?" );
-                fOutNumber = 0.0;
-                break;
+        case NUMBERFORMAT_TIME:
+            res = GetTimeRef(fOutNumber, 0, nAnzNums);
+            if ( nSign < 0 )
+            {
+                fOutNumber = -fOutNumber;
+            }
+            break;
+
+        case NUMBERFORMAT_DATE:
+            res = GetDateRef( fOutNumber, k, pFormat );
+            break;
+
+        case NUMBERFORMAT_DATETIME:
+            res = GetDateRef( fOutNumber, k, pFormat );
+            if ( res )
+            {
+                double fTime;
+                res = GetTimeRef( fTime, k, nAnzNums - k );
+                fOutNumber += fTime;
+            }
+            break;
+
+        default:
+            SAL_WARN( "svl.numbers", "Some number recognized but what's it?" );
+            fOutNumber = 0.0;
+            break;
         }
     }
 
     if (res)        // overflow/underflow -> Text
     {
-        if      (fOutNumber < -DBL_MAX) // -1.7E308
+        if (fOutNumber < -DBL_MAX) // -1.7E308
         {
             F_Type = NUMBERFORMAT_TEXT;
             fOutNumber = -DBL_MAX;
@@ -3276,7 +3657,5 @@ bool ImpSvNumberInputScan::IsNumberFormat(
     F_Type = eScannedType;
     return res;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
