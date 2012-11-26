@@ -90,9 +90,9 @@ void sw_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes 
 using namespace ::com::sun::star;
 
 
-sal_Bool bObjsDirect = sal_True;
-sal_Bool bDontCreateObjects = sal_False;
-sal_Bool bSetCompletePaintOnInvalidate = sal_False;
+bool bObjsDirect = true;
+bool bDontCreateObjects = false;
+bool bSetCompletePaintOnInvalidate = false;
 
 sal_uInt8 StackHack::nCnt = 0;
 sal_Bool StackHack::bLocked = sal_False;
@@ -136,12 +136,12 @@ SwFrmNotify::~SwFrmNotify()
     }
 
     SWRECTFN( pFrm )
-    const sal_Bool bAbsP = POS_DIFF( aFrm, pFrm->Frm() );
-    const sal_Bool bChgWidth =
+    const bool bAbsP = POS_DIFF( aFrm, pFrm->Frm() );
+    const bool bChgWidth =
             (aFrm.*fnRect->fnGetWidth)() != (pFrm->Frm().*fnRect->fnGetWidth)();
-    const sal_Bool bChgHeight =
+    const bool bChgHeight =
             (aFrm.*fnRect->fnGetHeight)()!=(pFrm->Frm().*fnRect->fnGetHeight)();
-    const sal_Bool bChgFlyBasePos = pFrm->IsTxtFrm() &&
+    const bool bChgFlyBasePos = pFrm->IsTxtFrm() &&
        ( ( mnFlyAnchorOfst != ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( sal_True ) ) ||
          ( mnFlyAnchorOfstNoWrap != ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( sal_False ) ) );
 
@@ -223,9 +223,9 @@ SwFrmNotify::~SwFrmNotify()
     }
 
     //Fuer Hintergrundgrafiken muss bei Groessenaenderungen ein Repaint her.
-    const sal_Bool bPrtWidth =
+    const bool bPrtWidth =
             (aPrt.*fnRect->fnGetWidth)() != (pFrm->Prt().*fnRect->fnGetWidth)();
-    const sal_Bool bPrtHeight =
+    const bool bPrtHeight =
             (aPrt.*fnRect->fnGetHeight)()!=(pFrm->Prt().*fnRect->fnGetHeight)();
     if ( bPrtWidth || bPrtHeight )
     {
@@ -244,7 +244,7 @@ SwFrmNotify::~SwFrmNotify()
         }
     }
 
-    const sal_Bool bPrtP = POS_DIFF( aPrt, pFrm->Prt() );
+    const bool bPrtP = POS_DIFF( aPrt, pFrm->Prt() );
     if ( bAbsP || bPrtP || bChgWidth || bChgHeight ||
          bPrtWidth || bPrtHeight || bChgFlyBasePos )
     {
@@ -473,16 +473,16 @@ SwLayNotify::~SwLayNotify()
 
     SwLayoutFrm *pLay = GetLay();
     SWRECTFN( pLay )
-    sal_Bool bNotify = sal_False;
+    bool bNotify = false;
     if ( pLay->Prt().SSize() != aPrt.SSize() )
     {
         if ( !IsLowersComplete() )
         {
-            sal_Bool bInvaPercent;
+            bool bInvaPercent;
 
             if ( pLay->IsRowFrm() )
             {
-                bInvaPercent = sal_True;
+                bInvaPercent = true;
                 long nNew = (pLay->Prt().*fnRect->fnGetHeight)();
                 if( nNew != (aPrt.*fnRect->fnGetHeight)() )
                      ((SwRowFrm*)pLay)->AdjustCells( nNew, sal_True);
@@ -498,7 +498,7 @@ SwLayNotify::~SwLayNotify()
                 //3. Wenn der Fly eine feste Hoehe hat und die Spalten in der
                 //   Hoehe danebenliegen.
                 //4. niemals bei SectionFrms.
-                sal_Bool bLow;
+                bool bLow;
                 if( pLay->IsFlyFrm() )
                 {
                     if ( pLay->Lower() )
@@ -508,7 +508,7 @@ SwLayNotify::~SwLayNotify()
                              != (pLay->Prt().*fnRect->fnGetHeight)();
                     }
                     else
-                        bLow = sal_False;
+                        bLow = false;
                 }
                 else if( pLay->IsSctFrm() )
                 {
@@ -520,12 +520,12 @@ SwLayNotify::~SwLayNotify()
                             bLow = pLay->Prt().Width() != aPrt.Width();
                     }
                     else
-                        bLow = sal_False;
+                        bLow = false;
                 }
                 else if( pLay->IsFooterFrm() && !pLay->HasFixSize() )
                     bLow = pLay->Prt().Width() != aPrt.Width();
                 else
-                    bLow = sal_True;
+                    bLow = true;
                 bInvaPercent = bLow;
                 if ( bLow )
                 {
@@ -551,7 +551,7 @@ SwLayNotify::~SwLayNotify()
                     }
                 }
             }
-            bNotify = sal_True;
+            bNotify = true;
             //TEUER!! aber wie macht man es geschickter?
             if( bInvaPercent )
                 pLay->InvaPercentLowers( pLay->Prt().Height() - aPrt.Height() );
@@ -571,9 +571,9 @@ SwLayNotify::~SwLayNotify()
         }
     }
     //Lower benachrichtigen wenn sich die Position veraendert hat.
-    const sal_Bool bPrtPos = POS_DIFF( aPrt, pLay->Prt() );
-    const sal_Bool bPos = bPrtPos || POS_DIFF( aFrm, pLay->Frm() );
-    const sal_Bool bSize = pLay->Frm().SSize() != aFrm.SSize();
+    const bool bPrtPos = POS_DIFF( aPrt, pLay->Prt() );
+    const bool bPos = bPrtPos || POS_DIFF( aFrm, pLay->Frm() );
+    const bool bSize = pLay->Frm().SSize() != aFrm.SSize();
 
     if ( bPos && pLay->Lower() && !IsLowersComplete() )
         pLay->Lower()->InvalidatePos();
@@ -856,7 +856,7 @@ SwCntntNotify::~SwCntntNotify()
         }
     }
 
-    sal_Bool bFirst = (aFrm.*fnRect->fnGetWidth)() == 0;
+    bool bFirst = (aFrm.*fnRect->fnGetWidth)() == 0;
 
     if ( pCnt->IsNoTxtFrm() )
     {
@@ -1240,7 +1240,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     //Wenn in der DocStatistik eine brauchebare Seitenzahl angegeben ist
     //(wird beim Schreiben gepflegt), so wird von dieser Seitenanzahl
     //ausgegengen.
-    const sal_Bool bStartPercent = bPages && !nEndIndex;
+    const bool bStartPercent = bPages && !nEndIndex;
 
     SwPageFrm *pPage = pLay->FindPageFrm();
     const SwFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
@@ -1263,7 +1263,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         {
             const sal_uLong nPageCount = pPageMaker->CalcPageCount();
             if( nPageCount )
-                bObjsDirect = sal_False;
+                bObjsDirect = false;
         }
     }
     else
@@ -1591,7 +1591,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     {
         if ( !bDontCreateObjects )
             AppendAllObjs( pTbl, pLayout );
-        bObjsDirect = sal_True;
+        bObjsDirect = true;
     }
 
     if( pPageMaker )
@@ -1616,7 +1616,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
 void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                const SwNodeIndex &rEndIdx )
 {
-    bObjsDirect = sal_False;
+    bObjsDirect = false;
 
     SwNodeIndex aTmp( rSttIdx );
     sal_uLong nEndIdx = rEndIdx.GetIndex();
@@ -1658,8 +1658,8 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
             // auf die naechste Seite schieben. Innerhalb eines Rahmens auch
             // nicht ( in der 1. Spalte eines Rahmens waere pFrm Moveable()! )
             // Auch in spaltigen Bereichen in Tabellen waere pFrm Moveable.
-            sal_Bool bMoveNext = nEndIdx - rSttIdx.GetIndex() > 120;
-            sal_Bool bAllowMove = !pFrm->IsInFly() && pFrm->IsMoveable() &&
+            bool bMoveNext = nEndIdx - rSttIdx.GetIndex() > 120;
+            bool bAllowMove = !pFrm->IsInFly() && pFrm->IsMoveable() &&
                  (!pFrm->IsInTab() || pFrm->IsTabFrm() );
             if ( bMoveNext && bAllowMove )
             {
@@ -1825,7 +1825,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
         }
     }
 
-    bObjsDirect = sal_True;
+    bObjsDirect = true;
 }
 
 
@@ -2493,7 +2493,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
     SwFrm *pFloat = pSav;
     if( !pStart )
         pStart = pSav;
-    sal_Bool bGo = pStart == pSav;
+    bool bGo = pStart == pSav;
     do
     {
         if( bGo )
@@ -2532,7 +2532,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
                 pFloat = pFloat->GetNext();
                 if( !bGo && pFloat == pStart )
                 {
-                    bGo = sal_True;
+                    bGo = true;
                     pFloat->pPrev->pNext = NULL;
                     pFloat->pPrev = NULL;
                 }
@@ -3222,7 +3222,7 @@ const SwFrm* GetVirtualUpper( const SwFrm* pFrm, const Point& rPos )
 
 /*************************************************************************/
 
-sal_Bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
+bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
 {
     Point aPos;
     const SwFrm* pFrm;
@@ -3241,7 +3241,7 @@ sal_Bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
     pFrm = GetVirtualUpper( pFrm, aPos );
     do
     {   if ( pFrm == pCurrFrm )
-            return sal_True;
+            return true;
         if( pFrm->IsFlyFrm() )
         {
             aPos = pFrm->Frm().Pos();
@@ -3250,7 +3250,7 @@ sal_Bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
         else
             pFrm = pFrm->GetUpper();
     } while ( pFrm );
-    return sal_False;
+    return false;
 }
 
 const SwFrm *FindKontext( const SwFrm *pFrm, sal_uInt16 nAdditionalKontextTyp )
@@ -3269,7 +3269,7 @@ const SwFrm *FindKontext( const SwFrm *pFrm, sal_uInt16 nAdditionalKontextTyp )
     return pFrm;
 }
 
-sal_Bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm )
+bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm )
 {
     const SwFrm *pKontext = FindKontext( pInnerFrm, 0 );
 
@@ -3280,9 +3280,9 @@ sal_Bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm )
     {   if ( pFrm->GetType() & nTyp )
         {
             if( pFrm == pKontext )
-                return sal_True;
+                return true;
             if( pFrm->IsCellFrm() )
-                return sal_False;
+                return false;
         }
         if( pFrm->IsFlyFrm() )
         {
@@ -3293,7 +3293,7 @@ sal_Bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm )
             pFrm = pFrm->GetUpper();
     } while( pFrm );
 
-    return sal_False;
+    return false;
 }
 
 
@@ -3505,7 +3505,7 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt1
     return pMinFrm;
 }
 
-sal_Bool IsExtraData( const SwDoc *pDoc )
+bool IsExtraData( const SwDoc *pDoc )
 {
     const SwLineNumberInfo &rInf = pDoc->GetLineNumberInfo();
     return rInf.IsPaintLineNumbers() ||

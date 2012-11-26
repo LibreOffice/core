@@ -2981,7 +2981,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     SwRect aRect( rRect );
     aRect.Intersection( pSh->VisArea() );
 
-    const sal_Bool bExtraData = ::IsExtraData( GetFmt()->GetDoc() );
+    const bool bExtraData = ::IsExtraData( GetFmt()->GetDoc() );
 
     pLines = new SwLineRects;   //Container for borders.
 

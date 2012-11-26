@@ -100,7 +100,7 @@ class SwLayAction
     sal_Bool bBrowseActionStop; //Action fruehzeitig beenden (per bInput) und den
                             //Rest dem Idler ueberlassen.
     sal_Bool bWaitAllowed;      //Wartecursor erlaubt?
-    sal_Bool bPaintExtraData;   //Anzeige von Zeilennumerierung o. ae. eingeschaltet?
+    bool bPaintExtraData;   //Anzeige von Zeilennumerierung o. ae. eingeschaltet?
     sal_Bool bActionInProgress; // wird in Action() anfangs gesetzt und zum Schluss geloescht
 
     // OD 14.04.2003 #106346# - new flag for content formatting on interrupt.
@@ -152,7 +152,7 @@ public:
     sal_Bool IsPaint()              const       { return bPaint; }
     sal_Bool IsIdle()               const       { return bIdle;  }
     sal_Bool IsReschedule()         const       { return bReschedule;  }
-    sal_Bool IsPaintExtraData()     const       { return bPaintExtraData;}
+    bool IsPaintExtraData()     const       { return bPaintExtraData;}
     sal_Bool IsStopPrt()          const;
     sal_Bool IsInterrupt()        const { return IsInput() || IsStopPrt(); }
 

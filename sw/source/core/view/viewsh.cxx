@@ -232,7 +232,7 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
     if ( Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea() )
         Imp()->DelRegion();
 
-    const sal_Bool bExtraData = ::IsExtraData( GetDoc() );
+    const bool bExtraData = ::IsExtraData( GetDoc() );
 
     if ( !bIdleEnd )
     {

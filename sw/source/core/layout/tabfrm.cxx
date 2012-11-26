@@ -1203,11 +1203,11 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
         for ( nRowCount = 0; nRowCount < nRepeat; ++nRowCount )
         {
             // Insert new headlines:
-            bDontCreateObjects = sal_True;              //frmtool
+            bDontCreateObjects = true;              //frmtool
             SwRowFrm* pHeadline = new SwRowFrm(
                                     *GetTable()->GetTabLines()[ nRowCount ], this );
             pHeadline->SetRepeatedHeadline( true );
-            bDontCreateObjects = sal_False;
+            bDontCreateObjects = false;
             pHeadline->InsertBefore( pFoll, 0 );
 
             SwPageFrm *pPage = pHeadline->FindPageFrm();
@@ -3207,10 +3207,10 @@ void SwTabFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 const sal_uInt16 nNewRepeat = GetTable()->GetRowsToRepeat();
                 for ( sal_uInt16 nIdx = 0; nIdx < nNewRepeat; ++nIdx )
                 {
-                    bDontCreateObjects = sal_True;          //frmtool
+                    bDontCreateObjects = true;          //frmtool
                     SwRowFrm* pHeadline = new SwRowFrm( *GetTable()->GetTabLines()[ nIdx ], this );
                     pHeadline->SetRepeatedHeadline( true );
-                    bDontCreateObjects = sal_False;
+                    bDontCreateObjects = false;
                     pHeadline->Paste( this, pLowerRow );
                 }
             }

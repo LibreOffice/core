@@ -347,7 +347,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
         }
     }
     const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
-    const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+    const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
     SwPageFrm *pPage = pBoss->FindPageFrm();
     if ( bBrowseMode || !pPage->IsFtnPage() )
     {
@@ -893,11 +893,11 @@ SwLayoutFrm *SwFrm::GetPrevFtnLeaf( MakePageType eMakeFtn )
     if ( pRet )
     {
         const SwFtnBossFrm* pNewBoss = pRet->FindFtnBossFrm();
-        sal_Bool bJump = sal_False;
+        bool bJump = false;
         if( pOldBoss->IsColumnFrm() && pOldBoss->GetPrev() ) // es gibt eine vorherige Spalte
             bJump = pOldBoss->GetPrev() != (SwFrm*)pNewBoss;         // sind wir darin gelandet?
         else if( pNewBoss->IsColumnFrm() && pNewBoss->GetNext() )
-            bJump = sal_True; // es gibt hinter dem neuen Boss noch eine Spalte, die aber nicht
+            bJump = true; // es gibt hinter dem neuen Boss noch eine Spalte, die aber nicht
                           // der alte Boss sein kann, das haben wir ja bereits geprueft.
         else // hier landen wir nur, wenn neuer und alter Boss entweder Seiten oder letzte (neu)
         {   // bzw. erste (alt) Spalten einer Seite sind. In diesem Fall muss noch geprueft
@@ -905,7 +905,7 @@ SwLayoutFrm *SwFrm::GetPrevFtnLeaf( MakePageType eMakeFtn )
             sal_uInt16 nDiff = pOldPage->GetPhyPageNum() - pRet->FindPageFrm()->GetPhyPageNum();
             if ( nDiff > 2 ||
                  (nDiff > 1 && !((SwPageFrm*)pOldPage->GetPrev())->IsEmptyPage()) )
-                bJump = sal_True;
+                bJump = true;
         }
         if( bJump )
             SwFlowFrm::SetMoveBwdJump( sal_True );
@@ -1518,7 +1518,7 @@ void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
             !pNew->GetAttr()->GetFtn().IsEndNote() );
         sal_uInt16 nRefNum = pBoss->GetPhyPageNum();    // Die Seiten- und
         sal_uInt16 nRefCol = lcl_ColumnNum( pBoss );    // Spaltennummer der neuen Fussnote
-        sal_Bool bEnd = sal_False;
+        bool bEnd = false;
         SwFtnFrm *pLastSib = 0;
         while ( pSibling && !bEnd && (nCmpPos <= nStPos) )
         {
@@ -1539,7 +1539,7 @@ void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
                     ( nTmpRef == nRefNum && lcl_ColumnNum( pBoss ) <= nRefCol ))
                     pSibling = pFoll;
                 else
-                    bEnd = sal_True;
+                    bEnd = true;
             }
             else
             {
@@ -1554,7 +1554,7 @@ void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
                 if ( pCont )
                     pSibling = (SwFtnFrm*)pCont->Lower();
                 else
-                    bEnd = sal_True;
+                    bEnd = true;
             }
             if ( !bEnd && pSibling )
                 nCmpPos = ::lcl_FindFtnPos( pDoc, pSibling->GetAttr() );
@@ -1563,7 +1563,7 @@ void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
                 if ( (nLastPos < nCmpPos) && (nCmpPos > nStPos) )
                 {
                     pSibling = pLastSib;
-                    bEnd = sal_True;
+                    bEnd = true;
                 }
             }
         }
@@ -1619,7 +1619,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
     SwFtnBossFrm *pBoss = this;
     SwPageFrm *pPage = FindPageFrm();
     SwPageFrm *pMyPage = pPage;
-    sal_Bool bChgPage = sal_False;
+    bool bChgPage = false;
     sal_Bool bEnd = sal_False;
     if ( pAttr->GetFtn().IsEndNote() )
     {
@@ -1640,7 +1640,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
             while ( pPage->GetNext() && !pPage->IsEndNotePage() )
             {
                 pPage = (SwPageFrm*)pPage->GetNext();
-                bChgPage = sal_True;
+                bChgPage = true;
             }
             if ( !pPage->IsEndNotePage() )
             {
@@ -1648,7 +1648,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
                 pPage = ::InsertNewPage( *pDesc, pPage->GetUpper(),
                         !pPage->OnRightPage(), false, sal_False, sal_True, 0 );
                 pPage->SetEndNotePage( sal_True );
-                bChgPage = sal_True;
+                bChgPage = true;
             }
             else
             {
@@ -1683,7 +1683,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
                 !((SwPageFrm*)pPage->GetNext())->IsEndNotePage() )
         {
             pPage = (SwPageFrm*)pPage->GetNext();
-            bChgPage = sal_True;
+            bChgPage = true;
         }
 
         if ( !pPage->IsFtnPage() )
@@ -1691,7 +1691,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
             SwPageDesc *pDesc = pDoc->GetFtnInfo().GetPageDesc( *pDoc );
             pPage = ::InsertNewPage( *pDesc, pPage->GetUpper(),
                 !pPage->OnRightPage(), false, sal_False, sal_True, pPage->GetNext() );
-            bChgPage = sal_True;
+            bChgPage = true;
         }
         else
         {
@@ -2033,7 +2033,7 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
     while ( _pFtn->GetMaster() )
         _pFtn = _pFtn->GetMaster();
 
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     while ( _pFtn )
     {
@@ -2080,7 +2080,7 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
         }
 
         // OD 03.04.2003 #108446# - determine, if found footnote has to be collected.
-        sal_Bool bCollectFoundFtn = sal_False;
+        bool bCollectFoundFtn = false;
         if ( _pFtn->GetRef() == _pRef && !_pFtn->GetAttr()->GetFtn().IsEndNote() )
         {
             if ( _bCollectOnlyPreviousFtns )
@@ -2092,12 +2092,12 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
                      pBossOfFoundFtn->IsBefore( _pRefFtnBossFrm )
                    )
                 {
-                    bCollectFoundFtn = sal_True;
+                    bCollectFoundFtn = true;
                 }
             }
             else
             {
-                bCollectFoundFtn = sal_True;
+                bCollectFoundFtn = true;
             }
         }
 
@@ -2126,7 +2126,7 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
             }
             _pFtn->Cut();
             FtnInArr( _rFtnArr, _pFtn );
-            bFound = sal_True;
+            bFound = true;
         }
         else
         {
@@ -2211,7 +2211,7 @@ void SwFtnBossFrm::_MoveFtns( SwFtnFrms &rFtnArr, sal_Bool bCalc )
             {
                 SwTxtFtn *pAttr = pFtn->GetAttr();
                 pCnt = pFtn->ContainsAny();
-                sal_Bool bUnlock = !pFtn->IsBackMoveLocked();
+                bool bUnlock = !pFtn->IsBackMoveLocked();
                 pFtn->LockBackMove();
 
                 // #i49383# - disable unlock of position of
@@ -2301,7 +2301,7 @@ void SwFtnBossFrm::_MoveFtns( SwFtnFrms &rFtnArr, sal_Bool bCalc )
             SwTxtFtn* pAttr = pNextFtn->GetAttr();
             SwFrm* pCnt = pNextFtn->ContainsAny();
 
-            sal_Bool bUnlock = !pNextFtn->IsBackMoveLocked();
+            bool bUnlock = !pNextFtn->IsBackMoveLocked();
             pNextFtn->LockBackMove();
             // #i49383# - disable unlock of position of
             // lower objects during format of footnote content.
@@ -2417,7 +2417,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
         SwFrm* pCntnt = pFirst->ContainsAny();
         if( pCntnt )
         {
-            sal_Bool bUnlock = !pFirst->IsBackMoveLocked();
+            bool bUnlock = !pFirst->IsBackMoveLocked();
             pFirst->LockBackMove();
             pFirst->Calc();
             pCntnt->Calc();
@@ -2437,8 +2437,8 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
     SwFrm *pCnt = pFtn ? pFtn->ContainsAny() : 0;
     if ( pCnt )
     {
-        sal_Bool bMore = sal_True;
-        sal_Bool bStart = pAttr == 0; // wenn kein Attribut uebergeben wird, alle bearbeiten
+        bool bMore = true;
+        bool bStart = pAttr == 0; // wenn kein Attribut uebergeben wird, alle bearbeiten
         // #i49383# - disable unlock of position of
         // lower objects during format of footnote and footnote content.
         SwFtnFrm* pLastFtnFrm( 0L );
@@ -2509,7 +2509,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                 }
                 if ( bLock )
                 {
-                    sal_Bool bUnlock = !pFtnFrm->IsBackMoveLocked();
+                    bool bUnlock = !pFtnFrm->IsBackMoveLocked();
                     pFtnFrm->LockBackMove();
                     pFtnFrm->Calc();
                     pCnt->Calc();
@@ -2581,10 +2581,10 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                     SwFtnFrm* pFtnFrm = pCnt->FindFtnFrm();
                     if( pFtnFrm->GetRef()->FindFtnBossFrm(
                         pFtnFrm->GetAttr()->GetFtn().IsEndNote() ) != this )
-                        bMore = sal_False;
+                        bMore = false;
                 }
                 else
-                    bMore = sal_False;
+                    bMore = false;
             }
             if( pDel )
             {
@@ -2598,7 +2598,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                 if ( pAttr &&
                      (::lcl_FindFtnPos( pDoc,
                                     pCnt->FindFtnFrm()->GetAttr()) > nFtnPos ) )
-                    bMore = sal_False;
+                    bMore = false;
             }
         } while ( bMore );
         // #i49383#
@@ -3005,10 +3005,10 @@ sal_Bool SwCntntFrm::MoveFtnCntFwd( sal_Bool bMakePage, SwFtnBossFrm *pOldBoss )
 
     if ( pNewUpper )
     {
-        sal_Bool bSameBoss = sal_True;
+        bool bSameBoss = true;
         SwFtnBossFrm * const pNewBoss = pNewUpper->FindFtnBossFrm();
         //Wechseln wir die Spalte/Seite?
-        if ( sal_False == ( bSameBoss = (pNewBoss == pOldBoss) ) )
+        if ( !( bSameBoss = (pNewBoss == pOldBoss) ) )
         {
             bSamePage = pOldBoss->FindPageFrm() == pNewBoss->FindPageFrm(); // Seitenwechsel?
             pNewUpper->Calc();

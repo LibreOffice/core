@@ -90,10 +90,10 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                             const SwNodeIndex &rEndIdx );
 
 // prevent creation of Flys in _InsertCnt, e.g. for table headlines
-extern sal_Bool bDontCreateObjects;
+extern bool bDontCreateObjects;
 
 // for FlyCnts, see SwFlyAtCntFrm::MakeAll()
-extern sal_Bool bSetCompletePaintOnInvalidate;
+extern bool bSetCompletePaintOnInvalidate;
 
 // for table settings via keyboard
 long CalcRowRstHeight( SwLayoutFrm *pRow );
@@ -118,12 +118,12 @@ void Notify_Background( const SdrObject* pObj,
 
 const SwFrm* GetVirtualUpper( const SwFrm* pFrm, const Point& rPos );
 
-sal_Bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj );
+bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj );
 
 // FIXME: EasyHack (refactoring): rename method and parameter name in all files
 const SwFrm *FindKontext( const SwFrm *pFrm, sal_uInt16 nAdditionalKontextTyp );
 
-sal_Bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm );
+bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm );
 
 const SwFrm * FindPage( const SwRect &rRect, const SwFrm *pPage );
 
@@ -136,7 +136,7 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout,
                        const sal_Bool bCalcFrm = sal_False );
 
 // Should extra data (reline stroke, line numbers) be painted?
-sal_Bool IsExtraData( const SwDoc *pDoc );
+bool IsExtraData( const SwDoc *pDoc );
 
 // #i11760# - method declaration <CalcCntnt(..)>
 void CalcCntnt( SwLayoutFrm *pLay,

@@ -818,7 +818,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                             SwFrm *pPrv;
                             if( nRepeat > 0 )
                             {
-                                bDontCreateObjects = sal_True; //frmtool
+                                bDontCreateObjects = true; //frmtool
 
                                 // Insert new headlines:
                                 sal_uInt16 nRowIdx = 0;
@@ -835,7 +835,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                                     ++nRowIdx;
                                 }
 
-                                bDontCreateObjects = sal_False;
+                                bDontCreateObjects = false;
                                 pPrv = pHeadline;
                                 nRows = nRows + nRepeat;
                             }

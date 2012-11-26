@@ -353,7 +353,7 @@ void SwFlyAtCntFrm::MakeAll()
         // #i28701# - use new method <GetPageFrm()>
         if( GetPageFrm() )
         {
-            bSetCompletePaintOnInvalidate = sal_True;
+            bSetCompletePaintOnInvalidate = true;
             {
                 SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
                 const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
@@ -541,7 +541,7 @@ void SwFlyAtCntFrm::MakeAll()
                 SetRestartLayoutProcess( true );
                 SetTmpConsiderWrapInfluenceOfOtherObjs( true );
             }
-            bSetCompletePaintOnInvalidate = sal_False;
+            bSetCompletePaintOnInvalidate = false;
         }
     }
 }

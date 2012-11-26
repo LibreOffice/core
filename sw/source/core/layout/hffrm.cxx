@@ -49,7 +49,7 @@
 // #i43771#
 #include <objectformatter.hxx>
 
-extern sal_Bool bObjsDirect;    //frmtool.cxx
+extern bool bObjsDirect;    //frmtool.cxx
 
 static SwTwips lcl_GetFrmMinHeight(const SwLayoutFrm & rFrm)
 {
@@ -126,8 +126,8 @@ SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, SwFrm* pSib, sal_uInt16 nTypeIn)
     OSL_ENSURE( rCnt.GetCntntIdx(), "No content for Header." );
 
     // Have the objects created right now for header and footer
-    sal_Bool bOld = bObjsDirect;
-    bObjsDirect = sal_True;
+    bool bOld = bObjsDirect;
+    bObjsDirect = true;
     sal_uLong nIndex = rCnt.GetCntntIdx()->GetIndex();
     ::_InsertCnt( this, pFmt->GetDoc(), ++nIndex );
     bObjsDirect = bOld;
