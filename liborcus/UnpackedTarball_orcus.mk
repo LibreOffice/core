@@ -17,10 +17,10 @@ orcus_patches :=
 # make config.sub recognize arm-linux-androideabi
 orcus_patches += liborcus_0.1.0-configure.patch
 # fix MinGW build
-orcus_patches += liborcus_0.1.0-mingw.patch
+#orcus_patches += liborcus_0.1.0-mingw.patch
 # disable boost "auto lib" in MSVC build
 orcus_patches += liborcus_0.1.0-boost_disable_auto_lib.patch
-orcus_patches += liborcus_0.1.0-link-with-Boost.System.patch
+#orcus_patches += liborcus_0.1.0-link-with-Boost.System.patch
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,orcus,\
 	vsprojects/liborcus-static-nozip/liborcus-static-nozip.vcproj \
