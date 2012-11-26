@@ -20,7 +20,6 @@
 #ifndef _ZFORFIND_HXX
 #define _ZFORFIND_HXX
 
-#include <tools/string.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
@@ -44,7 +43,7 @@ public:
                          const sal_uInt16 nYear );
 
     /// convert input string to number
-    bool IsNumberFormat( const String& rString,              /// input string
+    bool IsNumberFormat( const OUString& rString,            /// input string
                          short& F_Type,                      /// format type (in + out)
                          double& fOutNumber,                 /// value determined (out)
                          const SvNumberformat* pFormat = NULL);  /// optional a number format to which compare against
@@ -75,29 +74,29 @@ public:
 
 private:
     SvNumberFormatter*  pFormatter;
-    String* pUpperMonthText;                    // Array of month names, uppercase
-    String* pUpperAbbrevMonthText;              // Array of month names, abbreviated, uppercase
-    String* pUpperGenitiveMonthText;            // Array of genitive month names, uppercase
-    String* pUpperGenitiveAbbrevMonthText;      // Array of genitive month names, abbreviated, uppercase
-    String* pUpperPartitiveMonthText;           // Array of partitive month names, uppercase
-    String* pUpperPartitiveAbbrevMonthText;     // Array of partitive month names, abbreviated, uppercase
-    String* pUpperDayText;                      // Array of day of week names, uppercase
-    String* pUpperAbbrevDayText;                // Array of day of week names, abbreviated, uppercase
-    String  aUpperCurrSymbol;                   // Currency symbol, uppercase
-    bool    bTextInitialized;                   // Whether days and months are initialized
-    bool    bScanGenitiveMonths;                // Whether to scan an input for genitive months
-    bool    bScanPartitiveMonths;               // Whether to scan an input for partitive months
-    Date* pNullDate;                            // 30Dec1899
-                                                // Variables for provisional results:
-    String sStrArray[SV_MAX_ANZ_INPUT_STRINGS]; // Array of scanned substrings
-    bool       IsNum[SV_MAX_ANZ_INPUT_STRINGS]; // Whether a substring is numeric
-    sal_uInt16 nNums[SV_MAX_ANZ_INPUT_STRINGS]; // Sequence of offsets to numeric strings
-    sal_uInt16 nAnzStrings;                     // Total count of scanned substrings
-    sal_uInt16 nAnzNums;                        // Count of numeric substrings
-    bool   bDecSepInDateSeps;                   // True <=> DecSep in {.,-,/,DateSep}
-    sal_uInt8   nMatchedAllStrings;             // Scan...String() matched all substrings,
-                                                // bit mask of nMatched... constants
+    OUString* pUpperMonthText;                  //* Array of month names, uppercase
+    OUString* pUpperAbbrevMonthText;            //* Array of month names, abbreviated, uppercase
+    OUString* pUpperGenitiveMonthText;          //* Array of genitive month names, uppercase
+    OUString* pUpperGenitiveAbbrevMonthText;    //* Array of genitive month names, abbreviated, uppercase
+    OUString* pUpperPartitiveMonthText;         //* Array of partitive month names, uppercase
+    OUString* pUpperPartitiveAbbrevMonthText;   //* Array of partitive month names, abbreviated, uppercase
+    OUString* pUpperDayText;                    //* Array of day of week names, uppercase
+    OUString* pUpperAbbrevDayText;              //* Array of day of week names, abbreviated, uppercase
+    OUString  aUpperCurrSymbol;                 //* Currency symbol, uppercase
+    bool    bTextInitialized;                   //* Whether days and months are initialized
+    bool    bScanGenitiveMonths;                //* Whether to scan an input for genitive months
+    bool    bScanPartitiveMonths;               //* Whether to scan an input for partitive months
+    Date* pNullDate;                            //* 30Dec1899
+    // Variables for provisional results:
+    OUString sStrArray[SV_MAX_ANZ_INPUT_STRINGS]; //* Array of scanned substrings
+    bool       IsNum[SV_MAX_ANZ_INPUT_STRINGS]; //* Whether a substring is numeric
+    sal_uInt16 nNums[SV_MAX_ANZ_INPUT_STRINGS]; //* Sequence of offsets to numeric strings
+    sal_uInt16 nAnzStrings;                     //* Total count of scanned substrings
+    sal_uInt16 nAnzNums;                        //* Count of numeric substrings
+    bool   bDecSepInDateSeps;                   //* True <=> DecSep in {.,-,/,DateSep}
+    sal_uInt8   nMatchedAllStrings;             //* Scan...String() matched all substrings,
 
+    // bit mask of nMatched... constants
     static const sal_uInt8 nMatchedEndString;        // 0x01
     static const sal_uInt8 nMatchedMidString;        // 0x02
     static const sal_uInt8 nMatchedStartString;      // 0x04
@@ -169,7 +168,7 @@ private:
         @see IsAcceptedDatePattern()
      */
     sal_Int32   nAcceptedDatePattern;
-    com::sun::star::uno::Sequence< rtl::OUString >  sDateAcceptancePatterns;
+    com::sun::star::uno::Sequence< OUString >  sDateAcceptancePatterns;
 
     /** If input matched a date acceptance pattern that starts at input
         particle sStrArray[nDatePatternStart].
@@ -188,33 +187,33 @@ private:
     // decimal separator has to be '.'
     // If bForceFraction==true the string is taken to be the fractional part
     // of 0.1234 without the leading 0. (thus being just "1234").
-    double StringToDouble( const String& rStr,
+    double StringToDouble( const OUString& rStr,
                            bool bForceFraction = false );
 
     // Next number/string symbol
     bool NextNumberStringSymbol( const sal_Unicode*& pStr,
-                                 String& rSymbol );
+                                 OUString& rSymbol );
 
     // Concatenate ,000,23 blocks
     // in input to 000123
-    bool SkipThousands( const sal_Unicode*& pStr, String& rSymbol );
+    bool SkipThousands( const sal_Unicode*& pStr, OUString& rSymbol );
 
     // Divide numbers/strings into
     // arrays and variables above.
     // Leading blanks and blanks
     // after numbers are thrown away
-    void NumberStringDivision( const String& rString );
+    void NumberStringDivision( const OUString& rString );
 
 
     // optimized substring versions
 
     // Whether rString contains rWhat at nPos
-    static inline bool StringContains( const String& rWhat,
-                                       const String& rString,
-                                       xub_StrLen nPos )
+    static inline bool StringContains( const OUString& rWhat,
+                                       const OUString& rString,
+                                       sal_Int32 nPos )
         {
             // mostly used with one character
-            if ( rWhat.GetChar(0) != rString.GetChar(nPos) )
+            if ( rWhat[ 0 ] != rString[ nPos ] )
             {
                 return false;
             }
@@ -222,12 +221,12 @@ private:
         }
 
     // Whether pString contains rWhat at nPos
-    static inline bool StringPtrContains( const String& rWhat,
+    static inline bool StringPtrContains( const OUString& rWhat,
                                           const sal_Unicode* pString,
-                                          xub_StrLen nPos ) // nPos MUST be a valid offset from pString
+                                          sal_Int32 nPos ) // nPos MUST be a valid offset from pString
         {
             // mostly used with one character
-            if ( rWhat.GetChar(0) != *(pString+nPos) )
+            if ( rWhat[ 0 ] != pString[ nPos ] )
             {
                 return false;
             }
@@ -235,68 +234,68 @@ private:
         }
 
     //! DO NOT use directly
-    static bool StringContainsImpl( const String& rWhat,
-                                    const String& rString,
-                                    xub_StrLen nPos );
+    static bool StringContainsImpl( const OUString& rWhat,
+                                    const OUString& rString,
+                                    sal_Int32 nPos );
     //! DO NOT use directly
-    static bool StringPtrContainsImpl( const String& rWhat,
+    static bool StringPtrContainsImpl( const OUString& rWhat,
                                        const sal_Unicode* pString,
-                                       xub_StrLen nPos );
+                                       sal_Int32 nPos );
 
     // Skip a special character
     static inline bool SkipChar( sal_Unicode c,
-                                 const String& rString,
-                                 xub_StrLen& nPos );
+                                 const OUString& rString,
+                                 sal_Int32& nPos );
 
     // Skip blank
-    static inline void SkipBlanks( const String& rString,
-                                   xub_StrLen& nPos );
+    static inline void SkipBlanks( const OUString& rString,
+                                   sal_Int32& nPos );
 
     // Jump over rWhat in rString at nPos
-    static inline bool SkipString( const String& rWhat,
-                                   const String& rString,
-                                   xub_StrLen& nPos );
+    static inline bool SkipString( const OUString& rWhat,
+                                   const OUString& rString,
+                                   sal_Int32& nPos );
 
     // Recognizes exactly ,111 as group separator
-    inline bool GetThousandSep( const String& rString,
-                                xub_StrLen& nPos,
+    inline bool GetThousandSep( const OUString& rString,
+                                sal_Int32& nPos,
                                 sal_uInt16 nStringPos );
     // Get boolean value
-    short GetLogical( const String& rString );
+    short GetLogical( const OUString& rString );
 
     // Get month and advance string position
-    short GetMonth( const String& rString,
-                    xub_StrLen& nPos );
+    short GetMonth( const OUString& rString,
+                    sal_Int32& nPos );
 
     // Get day of week and advance string position
-    int GetDayOfWeek(            const String& rString,
-                                 xub_StrLen& nPos );
+    int GetDayOfWeek( const OUString& rString,
+                      sal_Int32& nPos );
 
     // Get currency symbol and advance string position
-    bool GetCurrency( const String& rString,
-                      xub_StrLen& nPos,
+    bool GetCurrency( const OUString& rString,
+                      sal_Int32& nPos,
                       const SvNumberformat* pFormat = NULL ); // optional number format to match against
 
     // Get symbol AM or PM and advance string position
-    bool GetTimeAmPm( const String& rString,
-                      xub_StrLen& nPos );
+    bool GetTimeAmPm( const OUString& rString,
+                      sal_Int32& nPos );
 
     // Get decimal separator and advance string position
-    inline bool GetDecSep( const String& rString,
-                           xub_StrLen& nPos );
+    inline bool GetDecSep( const OUString& rString,
+                           sal_Int32& nPos );
 
     // Get hundredth seconds separator and advance string position
-    inline bool GetTime100SecSep( const String& rString,
-                                  xub_StrLen& nPos );
+    inline bool GetTime100SecSep( const OUString& rString,
+                                  sal_Int32& nPos );
 
     // Get sign  and advance string position
     // Including special case '('
-    int GetSign( const String& rString,
-                 xub_StrLen& nPos );
+    int GetSign( const OUString& rString,
+                 sal_Int32& nPos );
 
     // Get sign of exponent and advance string position
-    short GetESign( const String& rString,
-                    xub_StrLen& nPos );
+    short GetESign( const OUString& rString,
+                    sal_Int32& nPos );
 
     // Get next number as array offset
     inline bool GetNextNumber( sal_uInt16& i,
@@ -319,23 +318,23 @@ private:
                      const SvNumberformat* pFormat = NULL ); // optional number format to match against
 
     // Analyze start of string
-    bool ScanStartString( const String& rString,
+    bool ScanStartString( const OUString& rString,
                           const SvNumberformat* pFormat = NULL );
 
     // Analyze middle substring
-    bool ScanMidString( const String& rString,
+    bool ScanMidString( const OUString& rString,
                         sal_uInt16 nStringPos,
                         const SvNumberformat* pFormat = NULL );
 
 
     // Analyze end of string
-    bool ScanEndString( const String& rString,
+    bool ScanEndString( const OUString& rString,
                         const SvNumberformat* pFormat = NULL );
 
     // Compare rString to substring of array indexed by nString
     // nString == 0xFFFF => last substring
-    bool ScanStringNumFor( const String& rString,
-                           xub_StrLen nPos,
+    bool ScanStringNumFor( const OUString& rString,
+                           sal_Int32 nPos,
                            const SvNumberformat* pFormat,
                            sal_uInt16 nString,
                            bool bDontDetectNegation = false );
@@ -349,13 +348,13 @@ private:
     //! converted to ASCII.
 
     // Main anlyzing function
-    bool IsNumberFormatMain( const String& rString,
+    bool IsNumberFormatMain( const OUString& rString,
                              const SvNumberformat* pFormat = NULL);    // optional number format to match against
 
     static inline bool MyIsdigit( sal_Unicode c );
 
     // native number transliteration if necessary
-    void TransformInput( String& rString );
+    void TransformInput( OUString& rString );
 
     /** Whether input matches locale dependent date acceptance pattern.
 
@@ -369,12 +368,12 @@ private:
      */
     bool IsAcceptedDatePattern( sal_uInt16 nStartPatternAt );
 
-    /** Sets (not advances!) rPos to sStrArray[nParticle].Len() if string
+    /** Sets (not advances!) rPos to sStrArray[nParticle].getLength() if string
         matches separator in pattern at nParticle.
 
         @returns TRUE if separator matched.
      */
-    bool SkipDatePatternSeparator( sal_uInt16 nParticle, xub_StrLen & rPos );
+    bool SkipDatePatternSeparator( sal_uInt16 nParticle, sal_Int32 & rPos );
 
     /** Obtain order of accepted date pattern coded as, for example,
         ('D'<<16)|('M'<<8)|'Y'

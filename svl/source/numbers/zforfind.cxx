@@ -155,18 +155,22 @@ inline bool ImpSvNumberInputScan::MyIsdigit( sal_Unicode c )
 
 //---------------------------------------------------------------------------
 //
-void ImpSvNumberInputScan::TransformInput( String& rStr )
+void ImpSvNumberInputScan::TransformInput( OUString& rStr )
 {
-    xub_StrLen nPos, nLen;
-    for ( nPos = 0, nLen = rStr.Len(); nPos < nLen; ++nPos )
+    sal_Int32 nPos, nLen;
+    for ( nPos = 0, nLen = rStr.getLength(); nPos < nLen; ++nPos )
     {
-        if ( 256 <= rStr.GetChar( nPos ) &&
-                pFormatter->GetCharClass()->isDigit( rStr, nPos ) )
+        if ( 256 <= rStr[ nPos ] &&
+             pFormatter->GetCharClass()->isDigit( rStr, nPos ) )
+        {
             break;
+        }
     }
     if ( nPos < nLen )
+    {
         rStr = pFormatter->GetNatNum()->getNativeNumberString( rStr,
-                pFormatter->GetLanguageTag().getLocale(), 0 );
+                                                               pFormatter->GetLanguageTag().getLocale(), 0 );
+    }
 }
 
 
@@ -176,30 +180,36 @@ void ImpSvNumberInputScan::TransformInput( String& rStr )
 // Only simple unsigned floating point values without any error detection,
 // decimal separator has to be '.'
 
-double ImpSvNumberInputScan::StringToDouble( const String& rStr, bool bForceFraction )
+double ImpSvNumberInputScan::StringToDouble( const OUString& rStr, bool bForceFraction )
 {
     double fNum = 0.0;
     double fFrac = 0.0;
     int nExp = 0;
-    xub_StrLen nPos = 0;
-    xub_StrLen nLen = rStr.Len();
+    sal_Int32 nPos = 0;
+    sal_Int32 nLen = rStr.getLength();
     bool bPreSep = !bForceFraction;
 
     while (nPos < nLen)
     {
-        if (rStr.GetChar(nPos) == '.')
+        if (rStr[nPos] == '.')
+        {
             bPreSep = false;
+        }
         else if (bPreSep)
-            fNum = fNum * 10.0 + (double) (rStr.GetChar(nPos) - '0');
+        {
+            fNum = fNum * 10.0 + (double) (rStr[nPos] - '0');
+        }
         else
         {
-            fFrac = fFrac * 10.0 + (double) (rStr.GetChar(nPos) - '0');
+            fFrac = fFrac * 10.0 + (double) (rStr[nPos] - '0');
             --nExp;
         }
         nPos++;
     }
     if ( fFrac )
+    {
         return fNum + ::rtl::math::pow10Exp( fFrac, nExp );
+    }
     return fNum;
 }
 
@@ -233,13 +243,13 @@ enum ScanState              // States der Turing-Maschine
 };
 
 bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
-                                                   String& rSymbol )
+                                                   OUString& rSymbol )
 {
     bool isNumber = false;
     sal_Unicode cToken;
     ScanState eState = SsStart;
-    register const sal_Unicode* pHere = pStr;
-    register xub_StrLen nChars = 0;
+    const sal_Unicode* pHere = pStr;
+    sal_Int32 nChars = 0;
 
     while ( ((cToken = *pHere) != 0) && eState != SsStop)
     {
@@ -287,11 +297,11 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
 
     if ( nChars )
     {
-        rSymbol.Assign( pStr, nChars );
+        rSymbol = OUString( pStr, nChars );
     }
     else
     {
-        rSymbol.Erase();
+        rSymbol = "";
     }
 
     pStr = pHere;
@@ -307,14 +317,15 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
 // near SV_MAX_ANZ_INPUT_STRINGS, in NumberStringDivision().
 
 bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
-                                          String& rSymbol )
+                                          OUString& rSymbol )
 {
     bool res = false;
+    OUStringBuffer sBuff(rSymbol);
     sal_Unicode cToken;
-    const String& rThSep = pFormatter->GetNumThousandSep();
+    const OUString& rThSep = pFormatter->GetNumThousandSep();
     register const sal_Unicode* pHere = pStr;
     ScanState eState = SsStart;
-    xub_StrLen nCounter = 0;                                // counts 3 digits
+    sal_Int32 nCounter = 0;                                // counts 3 digits
 
     while ( ((cToken = *pHere) != 0) && eState != SsStop)
     {
@@ -326,7 +337,7 @@ bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
             {
                 nCounter = 0;
                 eState = SsGetValue;
-                pHere += rThSep.Len()-1;
+                pHere += rThSep.getLength() - 1;
             }
             else
             {
@@ -337,7 +348,7 @@ bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
         case SsGetValue:
             if ( MyIsdigit( cToken ) )
             {
-                rSymbol += cToken;
+                sBuff.append(cToken);
                 nCounter++;
                 if (nCounter == 3)
                 {
@@ -360,10 +371,11 @@ bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
     {
         if ( nCounter )
         {
-            rSymbol.Erase( rSymbol.Len() - nCounter, nCounter );
+            sBuff.remove( sBuff.getLength() - nCounter, nCounter );
         }
-        pHere -= nCounter + rThSep.Len();       // put back ThSep also
+        pHere -= nCounter + rThSep.getLength();       // put back ThSep also
     }
+    rSymbol = sBuff.makeStringAndClear();
     pStr = pHere;
 
     return res;
@@ -373,10 +385,10 @@ bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
 //---------------------------------------------------------------------------
 //      NumberStringDivision
 
-void ImpSvNumberInputScan::NumberStringDivision( const String& rString )
+void ImpSvNumberInputScan::NumberStringDivision( const OUString& rString )
 {
-    const sal_Unicode* pStr = rString.GetBuffer();
-    const sal_Unicode* const pEnd = pStr + rString.Len();
+    const sal_Unicode* pStr = rString.getStr();
+    const sal_Unicode* const pEnd = pStr + rString.getLength();
     while ( pStr < pEnd && nAnzStrings < SV_MAX_ANZ_INPUT_STRINGS )
     {
         if ( NextNumberStringSymbol( pStr, sStrArray[nAnzStrings] ) )
@@ -405,12 +417,12 @@ void ImpSvNumberInputScan::NumberStringDivision( const String& rString )
 //---------------------------------------------------------------------------
 // Whether rString contains rWhat at nPos
 
-bool ImpSvNumberInputScan::StringContainsImpl( const String& rWhat,
-                                               const String& rString, xub_StrLen nPos )
+bool ImpSvNumberInputScan::StringContainsImpl( const OUString& rWhat,
+                                               const OUString& rString, sal_Int32 nPos )
 {
-    if ( nPos + rWhat.Len() <= rString.Len() )
+    if ( nPos + rWhat.getLength() <= rString.getLength() )
     {
-        return StringPtrContainsImpl( rWhat, rString.GetBuffer(), nPos );
+        return StringPtrContainsImpl( rWhat, rString.getStr(), nPos );
     }
     return false;
 }
@@ -419,15 +431,15 @@ bool ImpSvNumberInputScan::StringContainsImpl( const String& rWhat,
 //---------------------------------------------------------------------------
 // Whether pString contains rWhat at nPos
 
-bool ImpSvNumberInputScan::StringPtrContainsImpl( const String& rWhat,
-                                                  const sal_Unicode* pString, xub_StrLen nPos )
+bool ImpSvNumberInputScan::StringPtrContainsImpl( const OUString& rWhat,
+                                                  const sal_Unicode* pString, sal_Int32 nPos )
 {
-    if ( rWhat.Len() == 0 )
+    if ( rWhat.getLength() == 0 )
     {
         return false;
     }
-    const sal_Unicode* pWhat = rWhat.GetBuffer();
-    const sal_Unicode* const pEnd = pWhat + rWhat.Len();
+    const sal_Unicode* pWhat = rWhat.getStr();
+    const sal_Unicode* const pEnd = pWhat + rWhat.getLength();
     const sal_Unicode* pStr = pString + nPos;
     while ( pWhat < pEnd )
     {
@@ -447,10 +459,10 @@ bool ImpSvNumberInputScan::StringPtrContainsImpl( const String& rWhat,
 //
 // ueberspringt genau das angegebene Zeichen
 
-inline bool ImpSvNumberInputScan::SkipChar( sal_Unicode c, const String& rString,
-                                            xub_StrLen& nPos )
+inline bool ImpSvNumberInputScan::SkipChar( sal_Unicode c, const OUString& rString,
+                                            sal_Int32& nPos )
 {
-    if ((nPos < rString.Len()) && (rString.GetChar(nPos) == c))
+    if ((nPos < rString.getLength()) && (rString[nPos] == c))
     {
         nPos++;
         return true;
@@ -464,12 +476,12 @@ inline bool ImpSvNumberInputScan::SkipChar( sal_Unicode c, const String& rString
 //
 // Ueberspringt Leerzeichen
 
-inline void ImpSvNumberInputScan::SkipBlanks( const String& rString,
-                                              xub_StrLen& nPos )
+inline void ImpSvNumberInputScan::SkipBlanks( const OUString& rString,
+                                              sal_Int32& nPos )
 {
-    if ( nPos < rString.Len() )
+    if ( nPos < rString.getLength() )
     {
-        register const sal_Unicode* p = rString.GetBuffer() + nPos;
+        register const sal_Unicode* p = rString.getStr() + nPos;
         while ( *p == ' ' )
         {
             nPos++;
@@ -484,12 +496,12 @@ inline void ImpSvNumberInputScan::SkipBlanks( const String& rString,
 //
 // jump over rWhat in rString at nPos
 
-inline bool ImpSvNumberInputScan::SkipString( const String& rWhat,
-                                              const String& rString, xub_StrLen& nPos )
+inline bool ImpSvNumberInputScan::SkipString( const OUString& rWhat,
+                                              const OUString& rString, sal_Int32& nPos )
 {
     if ( StringContains( rWhat, rString, nPos ) )
     {
-        nPos = nPos + rWhat.Len();
+        nPos = nPos + rWhat.getLength();
         return true;
     }
     return false;
@@ -501,14 +513,14 @@ inline bool ImpSvNumberInputScan::SkipString( const String& rWhat,
 //
 // recognizes exactly ,111 in {3} and {3,2} or ,11 in {3,2} grouping
 
-inline bool ImpSvNumberInputScan::GetThousandSep( const String& rString,
-                                                  xub_StrLen& nPos,
+inline bool ImpSvNumberInputScan::GetThousandSep( const OUString& rString,
+                                                  sal_Int32& nPos,
                                                   sal_uInt16 nStringPos )
 {
-    const String& rSep = pFormatter->GetNumThousandSep();
+    const OUString& rSep = pFormatter->GetNumThousandSep();
     // Is it an ordinary space instead of a non-breaking space?
-    bool bSpaceBreak = rSep.GetChar(0) == 0xa0 && rString.GetChar(0) == 0x20 &&
-        rSep.Len() == 1 && rString.Len() == 1;
+    bool bSpaceBreak = rSep[0] == (sal_Unicode)0xa0 && rString[0] == (sal_Unicode)0x20 &&
+        rSep.getLength() == 1 && rString.getLength() == 1;
     if (!((rString == rSep || bSpaceBreak) &&      // nothing else
            nStringPos < nAnzStrings - 1 &&         // safety first!
            IsNum[ nStringPos + 1 ] ))              // number follows
@@ -523,12 +535,12 @@ inline bool ImpSvNumberInputScan::GetThousandSep( const String& rString,
      * currently there is no track kept where group separators occur. In {3,2}
      * #,###,### and #,##,## would be valid input, which maybe isn't even bad
      * for #,###,###. Other combinations such as #,###,## maybe not. */
-    xub_StrLen nLen = sStrArray[ nStringPos + 1 ].Len();
+    sal_Int32 nLen = sStrArray[ nStringPos + 1 ].getLength();
     if (nLen == aGrouping.get() ||                  // with 3 (or so) digits
         nLen == aGrouping.advance().get() ||        // or with 2 (or 3 or so) digits
         nPosThousandString == nStringPos + 1 )      // or concatenated
     {
-        nPos = nPos + rSep.Len();
+        nPos = nPos + rSep.getLength();
         return true;
     }
     return false;
@@ -543,17 +555,16 @@ inline bool ImpSvNumberInputScan::GetThousandSep( const String& rString,
 // "false"=> -1:
 // else   =>  0:
 
-short ImpSvNumberInputScan::GetLogical( const String& rString )
+short ImpSvNumberInputScan::GetLogical( const OUString& rString )
 {
     short res;
-    OUString aString(rString);
 
     const ImpSvNumberformatScan* pFS = pFormatter->GetFormatScanner();
-    if ( aString == pFS->GetTrueString() )
+    if ( rString == pFS->GetTrueString() )
     {
         res = 1;
     }
-    else if ( aString == pFS->GetFalseString() )
+    else if ( rString == pFS->GetFalseString() )
     {
         res = -1;
     }
@@ -571,16 +582,16 @@ short ImpSvNumberInputScan::GetLogical( const String& rString )
 // Converts a string containing a month name (JAN, January) at nPos into the
 // month number (negative if abbreviated), returns 0 if nothing found
 
-short ImpSvNumberInputScan::GetMonth( const String& rString, xub_StrLen& nPos )
+short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
 {
     // #102136# The correct English form of month September abbreviated is
     // SEPT, but almost every data contains SEP instead.
-    static const String aSeptCorrect(RTL_CONSTASCII_USTRINGPARAM("SEPT") );
-    static const String aSepShortened(RTL_CONSTASCII_USTRINGPARAM("SEP") );
+    static const OUString aSeptCorrect("SEPT");
+    static const OUString aSepShortened("SEP");
 
     short res = 0;      // no month found
 
-    if (rString.Len() > nPos)                           // only if needed
+    if (rString.getLength() > nPos)                           // only if needed
     {
         if ( !bTextInitialized )
         {
@@ -591,44 +602,44 @@ short ImpSvNumberInputScan::GetMonth( const String& rString, xub_StrLen& nPos )
         {
             if ( bScanGenitiveMonths && StringContains( pUpperGenitiveMonthText[i], rString, nPos ) )
             {                                           // genitive full names first
-                nPos = nPos + pUpperGenitiveMonthText[i].Len();
+                nPos = nPos + pUpperGenitiveMonthText[i].getLength();
                 res = i + 1;
                 break;  // for
             }
             else if ( bScanGenitiveMonths && StringContains( pUpperGenitiveAbbrevMonthText[i], rString, nPos ) )
             {                                           // genitive abbreviated
-                nPos = nPos + pUpperGenitiveAbbrevMonthText[i].Len();
+                nPos = nPos + pUpperGenitiveAbbrevMonthText[i].getLength();
                 res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
             }
             else if ( bScanPartitiveMonths && StringContains( pUpperPartitiveMonthText[i], rString, nPos ) )
             {                                           // partitive full names
-                nPos = nPos + pUpperPartitiveMonthText[i].Len();
+                nPos = nPos + pUpperPartitiveMonthText[i].getLength();
                 res = i+1;
                 break;  // for
             }
             else if ( bScanPartitiveMonths && StringContains( pUpperPartitiveAbbrevMonthText[i], rString, nPos ) )
             {                                           // partitive abbreviated
-                nPos = nPos + pUpperPartitiveAbbrevMonthText[i].Len();
+                nPos = nPos + pUpperPartitiveAbbrevMonthText[i].getLength();
                 res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
             }
             else if ( StringContains( pUpperMonthText[i], rString, nPos ) )
             {                                           // noun full names
-                nPos = nPos + pUpperMonthText[i].Len();
+                nPos = nPos + pUpperMonthText[i].getLength();
                 res = i+1;
                 break;  // for
             }
             else if ( StringContains( pUpperAbbrevMonthText[i], rString, nPos ) )
             {                                           // noun abbreviated
-                nPos = nPos + pUpperAbbrevMonthText[i].Len();
+                nPos = nPos + pUpperAbbrevMonthText[i].getLength();
                 res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
             }
             else if ( i == 8 && pUpperAbbrevMonthText[i] == aSeptCorrect &&
                     StringContains( aSepShortened, rString, nPos ) )
             {                                           // #102136# SEPT/SEP
-                nPos = nPos + aSepShortened.Len();
+                nPos = nPos + aSepShortened.getLength();
                 res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
             }
@@ -645,26 +656,28 @@ short ImpSvNumberInputScan::GetMonth( const String& rString, xub_StrLen& nPos )
 // Converts a string containing a DayOfWeek name (Mon, Monday) at nPos into the
 // DayOfWeek number + 1 (negative if abbreviated), returns 0 if nothing found
 
-int ImpSvNumberInputScan::GetDayOfWeek( const String& rString, xub_StrLen& nPos )
+int ImpSvNumberInputScan::GetDayOfWeek( const OUString& rString, sal_Int32& nPos )
 {
     int res = 0;      // no day found
 
-    if (rString.Len() > nPos)                           // only if needed
+    if (rString.getLength() > nPos)                           // only if needed
     {
         if ( !bTextInitialized )
+        {
             InitText();
+        }
         sal_Int16 nDays = pFormatter->GetCalendar()->getNumberOfDaysInWeek();
         for ( sal_Int16 i = 0; i < nDays; i++ )
         {
             if ( StringContains( pUpperDayText[i], rString, nPos ) )
             {                                           // full names first
-                nPos = nPos + pUpperDayText[i].Len();
+                nPos = nPos + pUpperDayText[i].getLength();
                 res = i + 1;
                 break;  // for
             }
             if ( StringContains( pUpperAbbrevDayText[i], rString, nPos ) )
             {                                           // abbreviated
-                nPos = nPos + pUpperAbbrevDayText[i].Len();
+                nPos = nPos + pUpperAbbrevDayText[i].getLength();
                 res = -(i + 1);                         // negative
                 break;  // for
             }
@@ -682,12 +695,12 @@ int ImpSvNumberInputScan::GetDayOfWeek( const String& rString, xub_StrLen& nPos 
 // '$'   => true
 // sonst => false
 
-bool ImpSvNumberInputScan::GetCurrency( const String& rString, xub_StrLen& nPos,
-            const SvNumberformat* pFormat )
+bool ImpSvNumberInputScan::GetCurrency( const OUString& rString, sal_Int32& nPos,
+                                        const SvNumberformat* pFormat )
 {
-    if ( rString.Len() > nPos )
+    if ( rString.getLength() > nPos )
     {
-        if ( !aUpperCurrSymbol.Len() )
+        if ( !aUpperCurrSymbol.getLength() )
         {   // if no format specified the currency of the initialized formatter
             LanguageType eLang = (pFormat ? pFormat->GetLanguage() : pFormatter->GetLanguage());
             aUpperCurrSymbol = pFormatter->GetCharClass()->uppercase(
@@ -695,7 +708,7 @@ bool ImpSvNumberInputScan::GetCurrency( const String& rString, xub_StrLen& nPos,
         }
         if ( StringContains( aUpperCurrSymbol, rString, nPos ) )
         {
-            nPos = nPos + aUpperCurrSymbol.Len();
+            nPos = nPos + aUpperCurrSymbol.getLength();
             return true;
         }
         if ( pFormat )
@@ -703,7 +716,7 @@ bool ImpSvNumberInputScan::GetCurrency( const String& rString, xub_StrLen& nPos,
             OUString aSymbol, aExtension;
             if ( pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
             {
-                if ( aSymbol.getLength() <= rString.Len() - nPos )
+                if ( aSymbol.getLength() <= rString.getLength() - nPos )
                 {
                     aSymbol = pFormatter->GetCharClass()->uppercase(aSymbol);
                     if ( StringContains( aSymbol, rString, nPos ) )
@@ -734,10 +747,10 @@ bool ImpSvNumberInputScan::GetCurrency( const String& rString, xub_StrLen& nPos,
 //  "PM"  => -1
 //  sonst =>  0
 
-bool ImpSvNumberInputScan::GetTimeAmPm( const String& rString, xub_StrLen& nPos )
+bool ImpSvNumberInputScan::GetTimeAmPm( const OUString& rString, sal_Int32& nPos )
 {
 
-    if ( rString.Len() > nPos )
+    if ( rString.getLength() > nPos )
     {
         const CharClass* pChr = pFormatter->GetCharClass();
         const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
@@ -766,14 +779,14 @@ bool ImpSvNumberInputScan::GetTimeAmPm( const String& rString, xub_StrLen& nPos 
 // ','   => true
 // sonst => false
 
-inline bool ImpSvNumberInputScan::GetDecSep( const String& rString, xub_StrLen& nPos )
+inline bool ImpSvNumberInputScan::GetDecSep( const OUString& rString, sal_Int32& nPos )
 {
-    if ( rString.Len() > nPos )
+    if ( rString.getLength() > nPos )
     {
-        const String& rSep = pFormatter->GetNumDecimalSep();
-        if ( rString.Equals( rSep, nPos, rSep.Len() ) )
+        const OUString& rSep = pFormatter->GetNumDecimalSep();
+        if ( rString.match( rSep, nPos) )
         {
-            nPos = nPos + rSep.Len();
+            nPos = nPos + rSep.getLength();
             return true;
         }
     }
@@ -784,14 +797,14 @@ inline bool ImpSvNumberInputScan::GetDecSep( const String& rString, xub_StrLen& 
 //---------------------------------------------------------------------------
 // read a hundredth seconds separator
 
-inline bool ImpSvNumberInputScan::GetTime100SecSep( const String& rString, xub_StrLen& nPos )
+inline bool ImpSvNumberInputScan::GetTime100SecSep( const OUString& rString, sal_Int32& nPos )
 {
-    if ( rString.Len() > nPos )
+    if ( rString.getLength() > nPos )
     {
-        const String& rSep = pFormatter->GetLocaleData()->getTime100SecSep();
-        if ( rString.Equals( rSep, nPos, rSep.Len() ) )
+        const OUString& rSep = pFormatter->GetLocaleData()->getTime100SecSep();
+        if ( rString.match( rSep, nPos ))
         {
-            nPos = nPos + rSep.Len();
+            nPos = nPos + rSep.getLength();
             return true;
         }
     }
@@ -808,10 +821,10 @@ inline bool ImpSvNumberInputScan::GetTime100SecSep( const String& rString, xub_S
 // '('   => -1, nNegCheck = 1
 // sonst =>  0
 
-int ImpSvNumberInputScan::GetSign( const String& rString, xub_StrLen& nPos )
+int ImpSvNumberInputScan::GetSign( const OUString& rString, sal_Int32& nPos )
 {
-    if (rString.Len() > nPos)
-        switch (rString.GetChar(nPos))
+    if (rString.getLength() > nPos)
+        switch (rString[ nPos ])
         {
         case '+':
             nPos++;
@@ -838,11 +851,11 @@ int ImpSvNumberInputScan::GetSign( const String& rString, xub_StrLen& nPos )
 // '-'   => -1
 // sonst =>  0
 
-short ImpSvNumberInputScan::GetESign( const String& rString, xub_StrLen& nPos )
+short ImpSvNumberInputScan::GetESign( const OUString& rString, sal_Int32& nPos )
 {
-    if (rString.Len() > nPos)
+    if (rString.getLength() > nPos)
     {
-        switch (rString.GetChar(nPos))
+        switch (rString[nPos])
         {
         case '+':
             nPos++;
@@ -913,7 +926,7 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     }
     else if (nIndex - nStartIndex < nAnz)
     {
-        nHour   = (sal_uInt16) sStrArray[nNums[nIndex++]].ToInt32();
+        nHour   = (sal_uInt16) sStrArray[nNums[nIndex++]].toInt32();
     }
     else
     {
@@ -927,11 +940,11 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     }
     else if (nIndex - nStartIndex < nAnz)
     {
-        nMinute = (sal_uInt16) sStrArray[nNums[nIndex++]].ToInt32();
+        nMinute = (sal_uInt16) sStrArray[nNums[nIndex++]].toInt32();
     }
     if (nIndex - nStartIndex < nAnz)
     {
-        nSecond = (sal_uInt16) sStrArray[nNums[nIndex++]].ToInt32();
+        nSecond = (sal_uInt16) sStrArray[nNums[nIndex++]].toInt32();
     }
     if (nIndex - nStartIndex < nAnz)
     {
@@ -964,9 +977,9 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetDay( sal_uInt16 nIndex )
 {
     sal_uInt16 nRes = 0;
 
-    if (sStrArray[nNums[nIndex]].Len() <= 2)
+    if (sStrArray[nNums[nIndex]].getLength() <= 2)
     {
-        sal_uInt16 nNum = (sal_uInt16) sStrArray[nNums[nIndex]].ToInt32();
+        sal_uInt16 nNum = (sal_uInt16) sStrArray[nNums[nIndex]].toInt32();
         if (nNum <= 31)
         {
             nRes = nNum;
@@ -985,9 +998,9 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetMonth( sal_uInt16 nIndex )
     // preset invalid month number
     sal_uInt16 nRes = pFormatter->GetCalendar()->getNumberOfMonthsInYear();
 
-    if (sStrArray[nNums[nIndex]].Len() <= 2)
+    if (sStrArray[nNums[nIndex]].getLength() <= 2)
     {
-        sal_uInt16 nNum = (sal_uInt16) sStrArray[nNums[nIndex]].ToInt32();
+        sal_uInt16 nNum = (sal_uInt16) sStrArray[nNums[nIndex]].toInt32();
         if ( 0 < nNum && nNum <= nRes )
         {
             nRes = nNum - 1;        // zero based for CalendarFieldIndex::MONTH
@@ -1007,10 +1020,10 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetYear( sal_uInt16 nIndex )
 {
     sal_uInt16 nYear = 0;
 
-    xub_StrLen nLen = sStrArray[nNums[nIndex]].Len();
+    sal_Int32 nLen = sStrArray[nNums[nIndex]].getLength();
     if (nLen <= 4)
     {
-        nYear = (sal_uInt16) sStrArray[nNums[nIndex]].ToInt32();
+        nYear = (sal_uInt16) sStrArray[nNums[nIndex]].toInt32();
         // A year < 100 entered with at least 3 digits with leading 0 is taken
         // as is without expansion.
         if (nYear < 100 && nLen < 3)
@@ -1029,15 +1042,15 @@ bool ImpSvNumberInputScan::MayBeIso8601()
     if (nMayBeIso8601 == 0)
     {
         nMayBeIso8601 = 1;
-        xub_StrLen nLen = ((nAnzNums >= 1 && nNums[0] < nAnzStrings) ? sStrArray[nNums[0]].Len() : 0);
+        sal_Int32 nLen = ((nAnzNums >= 1 && nNums[0] < nAnzStrings) ? sStrArray[nNums[0]].getLength() : 0);
         if (nLen)
         {
             sal_Int32 n;
             if (nAnzNums >= 3 && nNums[2] < nAnzStrings &&
                 comphelper::string::equals(sStrArray[nNums[0]+1], '-') && // separator year-month
-                (n = sStrArray[nNums[1]].ToInt32()) >= 1 && n <= 12 &&  // month
+                (n = sStrArray[nNums[1]].toInt32()) >= 1 && n <= 12 &&  // month
                 comphelper::string::equals(sStrArray[nNums[1]+1], '-') && // separator month-day
-                (n = sStrArray[nNums[2]].ToInt32()) >= 1 && n <= 31)    // day
+                (n = sStrArray[nNums[2]].toInt32()) >= 1 && n <= 31)    // day
             {
                 // Year (nNums[0]) value not checked, may be anything, but
                 // length (number of digits) is checked.
@@ -1072,13 +1085,13 @@ bool ImpSvNumberInputScan::CanForceToIso8601( DateFormat eDateFormat )
         switch (eDateFormat)
         {
         case DMY:               // "day" value out of range => ISO 8601 year
-            if ((n = sStrArray[nNums[0]].ToInt32()) < 1 || n > 31)
+            if ((n = sStrArray[nNums[0]].toInt32()) < 1 || n > 31)
             {
                 nCanForceToIso8601 = 2;
             }
             break;
         case MDY:               // "month" value out of range => ISO 8601 year
-            if ((n = sStrArray[nNums[0]].ToInt32()) < 1 || n > 12)
+            if ((n = sStrArray[nNums[0]].toInt32()) < 1 || n > 12)
             {
                 nCanForceToIso8601 = 2;
             }
@@ -1101,17 +1114,17 @@ bool ImpSvNumberInputScan::MayBeMonthDate()
         if (nAnzNums >= 2 && nNums[1] < nAnzStrings)
         {
             // "-Jan-"
-            const String& rM = sStrArray[nNums[0]+1];
-            if (rM.Len() >= 3 && rM.GetChar(0) == '-' && rM.GetChar( rM.Len()-1) == '-')
+            const OUString& rM = sStrArray[ nNums[ 0 ] + 1 ];
+            if (rM.getLength() >= 3 && rM[0] == (sal_Unicode)'-' && rM[ rM.getLength() - 1] == (sal_Unicode)'-')
             {
                 // Check year length assuming at least 3 digits (including
                 // leading zero). Two digit years 1..31 are out of luck here
                 // and may be taken as day of month.
-                bool bYear1 = (sStrArray[nNums[0]].Len() >= 3);
-                bool bYear2 = (sStrArray[nNums[1]].Len() >= 3);
+                bool bYear1 = (sStrArray[nNums[0]].getLength() >= 3);
+                bool bYear2 = (sStrArray[nNums[1]].getLength() >= 3);
                 sal_Int32 n;
-                bool bDay1 = (!bYear1 && (n = sStrArray[nNums[0]].ToInt32()) >= 1 && n <= 31);
-                bool bDay2 = (!bYear2 && (n = sStrArray[nNums[1]].ToInt32()) >= 1 && n <= 31);
+                bool bDay1 = (!bYear1 && (n = sStrArray[nNums[0]].toInt32()) >= 1 && n <= 31);
+                bool bDay2 = (!bYear2 && (n = sStrArray[nNums[1]].toInt32()) >= 1 && n <= 31);
 
                 if (bDay1 && !bDay2)
                 {
@@ -1167,7 +1180,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
     {
         sal_uInt16 nNext = nDatePatternStart;
         bool bOk = true;
-        const rtl::OUString& rPat = sDateAcceptancePatterns[nPattern];
+        const OUString& rPat = sDateAcceptancePatterns[nPattern];
         sal_Int32 nPat = 0;
         for ( ; nPat < rPat.getLength() && bOk && nNext < nAnzStrings; ++nPat, ++nNext)
         {
@@ -1182,17 +1195,18 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                 bOk = !IsNum[nNext];
                 if (bOk)
                 {
-                    const xub_StrLen nLen = sStrArray[nNext].Len();
+                    const sal_Int32 nLen = sStrArray[nNext].getLength();
                     bOk = (rPat.indexOf( sStrArray[nNext], nPat) == nPat);
                     if (bOk)
                     {
                         nPat += nLen - 1;
                     }
-                    else if (nPat + nLen > rPat.getLength() && sStrArray[nNext].GetChar(nLen-1) == ' ')
+                    else if (nPat + nLen > rPat.getLength() && sStrArray[nNext][ nLen - 1 ] == ' ')
                     {
                         using namespace comphelper::string;
                         // Trailing blanks in input.
-                        OUStringBuffer aBuf(stripEnd(sStrArray[nNext], ' '));
+                        OUStringBuffer aBuf(sStrArray[nNext]);
+                        aBuf.stripEnd((sal_Unicode)' ');
                         // Expand again in case of pattern "M. D. " and
                         // input "M. D.  ", maybe fetched far, but..
                         padToLength(aBuf, rPat.getLength() - nPat, ' ');
@@ -1216,9 +1230,9 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                 if (!IsNum[nNext])
                 {
                     // Trailing (or separating if time follows) blanks are ok.
-                    xub_StrLen nPos = 0;
+                    sal_Int32 nPos = 0;
                     SkipBlanks( sStrArray[nNext], nPos);
-                    if (nPos == sStrArray[nNext].Len())
+                    if (nPos == sStrArray[nNext].getLength())
                     {
                         nAcceptedDatePattern = nPattern;
                         return true;
@@ -1240,7 +1254,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
 
 //---------------------------------------------------------------------------
 
-bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, xub_StrLen & rPos )
+bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_Int32 & rPos )
 {
     // If not initialized yet start with first number, if any.
     if (!IsAcceptedDatePattern( (nAnzNums ? nNums[0] : 0)))
@@ -1252,7 +1266,7 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, xub_S
         return false;
     }
     sal_uInt16 nNext = nDatePatternStart;
-    const rtl::OUString& rPat = sDateAcceptancePatterns[nAcceptedDatePattern];
+    const OUString& rPat = sDateAcceptancePatterns[nAcceptedDatePattern];
     for (sal_Int32 nPat = 0; nPat < rPat.getLength() && nNext < nAnzStrings; ++nPat, ++nNext)
     {
         switch (rPat[nPat])
@@ -1264,14 +1278,15 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, xub_S
         default:
             if (nNext == nParticle)
             {
-                const xub_StrLen nLen = sStrArray[nNext].Len();
+                const sal_Int32 nLen = sStrArray[nNext].getLength();
                 bool bOk = (rPat.indexOf( sStrArray[nNext], nPat) == nPat);
-                if (!bOk && (nPat + nLen > rPat.getLength() && sStrArray[nNext].GetChar(nLen-1) == ' '))
+                if (!bOk && (nPat + nLen > rPat.getLength() && sStrArray[nNext][ nLen - 1 ] == (sal_Unicode)' '))
                 {
                     // The same ugly trailing blanks check as in
                     // IsAcceptedDatePattern().
                     using namespace comphelper::string;
-                    OUStringBuffer aBuf(stripEnd(sStrArray[nNext], ' '));
+                    OUStringBuffer aBuf(sStrArray[nNext]);
+                    aBuf.stripEnd((sal_Unicode)' ');
                     padToLength(aBuf, rPat.getLength() - nPat, ' ');
                     bOk = (rPat.indexOf( aBuf.makeStringAndClear(), nPat) == nPat);
                 }
@@ -1283,7 +1298,7 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, xub_S
                 else
                     return false;
             }
-            nPat += sStrArray[nNext].Len() - 1;
+            nPat += sStrArray[nNext].getLength() - 1;
             break;
         }
     }
@@ -1300,7 +1315,7 @@ sal_uInt32 ImpSvNumberInputScan::GetDatePatternOrder()
         return 0;
     }
     sal_uInt32 nOrder = 0;
-    const rtl::OUString& rPat = sDateAcceptancePatterns[nAcceptedDatePattern];
+    const OUString& rPat = sDateAcceptancePatterns[nAcceptedDatePattern];
     for (sal_Int32 nPat = 0; nPat < rPat.getLength() && !(nOrder & 0xff0000); ++nPat)
     {
         switch (rPat[nPat])
@@ -1430,7 +1445,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
     for ( int nTryOrder = 1; nTryOrder <= nFormatOrder; nTryOrder++ )
     {
         pCal->setGregorianDateTime( Date( Date::SYSTEM ) );       // today
-        String aOrgCalendar;        // empty => not changed yet
+        OUString aOrgCalendar;        // empty => not changed yet
         DateFormat DateFmt;
         bool bFormatTurn;
         switch ( eEDF )
@@ -1849,7 +1864,7 @@ input for the following reasons:
         {
             res = false;
         }
-        if ( aOrgCalendar.Len() )
+        if ( aOrgCalendar.getLength() )
         {
             pCal->loadCalendar( aOrgCalendar, pLoc->getLanguageTag().getLocale() );  // restore calendar
         }
@@ -1945,10 +1960,10 @@ input for the following reasons:
 // Alles weg => true
 // sonst     => false
 
-bool ImpSvNumberInputScan::ScanStartString( const String& rString,
+bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
                                             const SvNumberformat* pFormat )
 {
-    xub_StrLen nPos = 0;
+    sal_Int32 nPos = 0;
 
     // First of all, eat leading blanks
     SkipBlanks(rString, nPos);
@@ -1960,7 +1975,7 @@ bool ImpSvNumberInputScan::ScanStartString( const String& rString,
         SkipBlanks(rString, nPos);
     }
     // #102371# match against format string only if start string is not a sign character
-    if ( nMatchedAllStrings && !(nSign && rString.Len() == 1) )
+    if ( nMatchedAllStrings && !(nSign && rString.getLength() == 1) )
     {
         // Match against format in any case, so later on for a "x1-2-3" input
         // we may distinguish between a xy-m-d (or similar) date and a x0-0-0
@@ -2006,7 +2021,9 @@ bool ImpSvNumberInputScan::ScanStartString( const String& rString,
             eScannedType = NUMBERFORMAT_DATE;       // !!! it IS a date !!!
             nMonthPos = 1;                          // month at the beginning
             if ( nMonth < 0 )
+            {
                 SkipChar( '.', rString, nPos );     // abbreviated
+            }
             SkipBlanks(rString, nPos);
         }
         else
@@ -2016,12 +2033,12 @@ bool ImpSvNumberInputScan::ScanStartString( const String& rString,
             {
                 // day of week is just parsed away
                 eScannedType = NUMBERFORMAT_DATE;       // !!! it IS a date !!!
-                if ( nPos < rString.Len() )
+                if ( nPos < rString.getLength() )
                 {
                     if ( nDayOfWeek < 0 )
                     {
                         // abbreviated
-                        if ( rString.GetChar( nPos ) == '.' )
+                        if ( rString[ nPos ] == (sal_Unicode)'.' )
                         {
                             ++nPos;
                         }
@@ -2038,7 +2055,9 @@ bool ImpSvNumberInputScan::ScanStartString( const String& rString,
                     {
                         nMonthPos = 1;                  // month a the beginning
                         if ( nMonth < 0 )
+                        {
                             SkipChar( '.', rString, nPos ); // abbreviated
+                        }
                         SkipBlanks(rString, nPos);
                     }
                 }
@@ -2052,12 +2071,12 @@ bool ImpSvNumberInputScan::ScanStartString( const String& rString,
     }
 
     // skip any trailing '-' or '/' chars
-    if (nPos < rString.Len())
+    if (nPos < rString.getLength())
     {
         while (SkipChar ('-', rString, nPos) || SkipChar ('/', rString, nPos))
             ; // do nothing
     }
-    if (nPos < rString.Len())                       // not everything consumed
+    if (nPos < rString.getLength())                       // not everything consumed
     {
         // Does input StartString equal StartString of format?
         // This time with sign detection!
@@ -2078,10 +2097,10 @@ bool ImpSvNumberInputScan::ScanStartString( const String& rString,
 // Alles weg => true
 // sonst     => false
 
-bool ImpSvNumberInputScan::ScanMidString( const String& rString,
+bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
                                           sal_uInt16 nStringPos, const SvNumberformat* pFormat )
 {
-    xub_StrLen nPos = 0;
+    sal_Int32 nPos = 0;
     short eOldScannedType = eScannedType;
 
     if ( nMatchedAllStrings )
@@ -2102,7 +2121,9 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
     if (GetDecSep(rString, nPos))                   // decimal separator?
     {
         if (nDecPos == 1 || nDecPos == 3)           // .12.4 or 1.E2.1
+        {
             return MatchedReturn();
+        }
         else if (nDecPos == 2)                      // . dup: 12.4.
         {
             if (bDecSepInDateSeps ||                   // . also date separator
@@ -2156,7 +2177,7 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
                      (nStringPos == 4 && nSign)))))      // or 4th  if signed
         {
             SkipBlanks(rString, nPos);
-            if (nPos == rString.Len())
+            if (nPos == rString.getLength())
             {
                 eScannedType = NUMBERFORMAT_FRACTION;   // !!! it IS a fraction (so far)
                 if (eSetType == NUMBERFORMAT_FRACTION &&
@@ -2188,7 +2209,7 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
     bool bDate = SkipDatePatternSeparator( nStringPos, nPos);   // 12/31  31.12.  12/31/1999  31.12.1999
     if (!bDate)
     {
-        const String& rDate = pFormatter->GetDateSep();
+        const OUString& rDate = pFormatter->GetDateSep();
         SkipBlanks(rString, nPos);
         bDate = SkipString( rDate, rString, nPos);      // 10.  10-  10/
     }
@@ -2267,7 +2288,7 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
         SkipBlanks(rString, nPos);
     }
 
-    const String& rTime = pLoc->getTimeSep();
+    const OUString& rTime = pLoc->getTimeSep();
     if ( SkipString(rTime, rString, nPos) )         // time separator?
     {
         if (nDecPos)                                // already . => maybe error
@@ -2312,7 +2333,7 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
         }
     }
 
-    if (nPos < rString.Len())
+    if (nPos < rString.getLength())
     {
         switch (eScannedType)
         {
@@ -2325,8 +2346,8 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
                     SkipBlanks( rString, nPos );
                 }
             }
-            else if (nStringPos == 5 && nPos == 0 && rString.Len() == 1 &&
-                     rString.GetChar(0) == 'T' && MayBeIso8601())
+            else if (nStringPos == 5 && nPos == 0 && rString.getLength() == 1 &&
+                     rString[ 0 ] == 'T' && MayBeIso8601())
             {
                 // ISO 8601 combined date and time, yyyy-mm-ddThh:mm
                 ++nPos;
@@ -2334,10 +2355,10 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
             break;
 #if NF_RECOGNIZE_ISO8601_TIMEZONES
         case NUMBERFORMAT_DATETIME:
-            if (nPos == 0 && rString.Len() == 1 && nStringPos >= 9 && MayBeIso8601())
+            if (nPos == 0 && rString.getLength() == 1 && nStringPos >= 9 && MayBeIso8601())
             {
                 // ISO 8601 timezone offset
-                switch (rString.GetChar(0))
+                switch (rString[ 0 ])
                 {
                 case '+':
                 case '-':
@@ -2366,7 +2387,7 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
         }
     }
 
-    if (nPos < rString.Len())                       // not everything consumed?
+    if (nPos < rString.getLength())                       // not everything consumed?
     {
         if ( nMatchedAllStrings & ~nMatchedVirgin )
         {
@@ -2389,10 +2410,10 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
 // Alles weg => true
 // sonst     => false
 
-bool ImpSvNumberInputScan::ScanEndString( const String& rString,
+bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
                                           const SvNumberformat* pFormat )
 {
-    xub_StrLen nPos = 0;
+    sal_Int32 nPos = 0;
 
     if ( nMatchedAllStrings )
     {   // Match against format in any case, so later on for a "1-2-3-4" input
@@ -2506,7 +2527,7 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
     }
 
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
-    const String& rTime = pLoc->getTimeSep();
+    const OUString& rTime = pLoc->getTimeSep();
     if ( SkipString(rTime, rString, nPos) )         // 10:
     {
         if (nDecPos)                                // already , => error
@@ -2537,7 +2558,7 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
     bool bDate = SkipDatePatternSeparator( nAnzStrings-1, nPos);   // 12/31  31.12.  12/31/1999  31.12.1999
     if (!bDate)
     {
-        const String& rDate = pFormatter->GetDateSep();
+        const OUString& rDate = pFormatter->GetDateSep();
         bDate = SkipString( rDate, rString, nPos);      // 10.  10-  10/
     }
     if (bDate && bSignDetectedHere)
@@ -2596,7 +2617,7 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
         SkipBlanks(rString, nPos);
     }
 
-    xub_StrLen nOrigPos = nPos;
+    sal_Int32 nOrigPos = nPos;
     if (GetTimeAmPm(rString, nPos))
     {
         if (eScannedType != NUMBERFORMAT_UNDEFINED &&
@@ -2637,26 +2658,26 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
         }
     }
 
-    if ( nPos < rString.Len() &&
+    if ( nPos < rString.getLength() &&
          (eScannedType == NUMBERFORMAT_DATE ||
           eScannedType == NUMBERFORMAT_DATETIME) )
     {
         // day of week is just parsed away
-        xub_StrLen nOldPos = nPos;
-        const String& rSep = pFormatter->GetLocaleData()->getLongDateDayOfWeekSep();
+        sal_Int32 nOldPos = nPos;
+        const OUString& rSep = pFormatter->GetLocaleData()->getLongDateDayOfWeekSep();
         if ( StringContains( rSep, rString, nPos ) )
         {
-            nPos = nPos + rSep.Len();
+            nPos = nPos + rSep.getLength();
             SkipBlanks(rString, nPos);
         }
         int nDayOfWeek = GetDayOfWeek( rString, nPos );
         if ( nDayOfWeek )
         {
-            if ( nPos < rString.Len() )
+            if ( nPos < rString.getLength() )
             {
                 if ( nDayOfWeek < 0 )
                 {   // short
-                    if ( rString.GetChar( nPos ) == '.' )
+                    if ( rString[ nPos ] == (sal_Unicode)'.' )
                     {
                         ++nPos;
                     }
@@ -2672,14 +2693,14 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
 
 #if NF_RECOGNIZE_ISO8601_TIMEZONES
     if (nPos == 0 && eScannedType == NUMBERFORMAT_DATETIME &&
-        rString.Len() == 1 && rString.GetChar(0) == 'Z' && MayBeIso8601())
+        rString.getLength() == 1 && rString[ 0 ] == (sal_Unicode)'Z' && MayBeIso8601())
     {
         // ISO 8601 timezone UTC yyyy-mm-ddThh:mmZ
         ++nPos;
     }
 #endif
 
-    if (nPos < rString.Len())                       // everything consumed?
+    if (nPos < rString.getLength())                       // everything consumed?
     {
         // does input EndString equal EndString in Format?
         if ( !ScanStringNumFor( rString, nPos, pFormat, 0xFFFF ) )
@@ -2692,12 +2713,11 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
 }
 
 
-bool ImpSvNumberInputScan::ScanStringNumFor( const String& rString,          // String to scan
-                                             xub_StrLen nPos,                // Position until which was consumed
+bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,          // String to scan
+                                             sal_Int32 nPos,                // Position until which was consumed
                                              const SvNumberformat* pFormat,  // The format to match
                                              sal_uInt16 nString,                 // Substring of format, 0xFFFF => last
-                                             bool bDontDetectNegation        // Suppress sign detection
-        )
+                                             bool bDontDetectNegation)        // Suppress sign detection
 {
     if ( !pFormat )
     {
@@ -2705,7 +2725,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const String& rString,          // 
     }
     const ::utl::TransliterationWrapper* pTransliteration = pFormatter->GetTransliteration();
     const OUString* pStr;
-    rtl::OUString aString( rString );
+    OUString aString( rString );
     bool bFound = false;
     bool bFirst = true;
     bool bContinue = true;
@@ -2810,7 +2830,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const String& rString,          // 
 // Recognizes types of number, exponential, fraction, percent, currency, date, time.
 // Else text => return false
 
-bool ImpSvNumberInputScan::IsNumberFormatMain( const String& rString,                  // string to be analyzed
+bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,                  // string to be analyzed
                                                const SvNumberformat* pFormat )         // maybe number format set to match against
 {
     Reset();
@@ -2826,7 +2846,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const String& rString,           
             // Here we may change the original, we don't need it anymore.
             // This saves copies and ToUpper() in GetLogical() and is faster.
             sStrArray[0] = comphelper::string::strip(sStrArray[0], ' ');
-            String& rStrArray = sStrArray[0];
+            OUString& rStrArray = sStrArray[0];
             nLogical = GetLogical( rStrArray );
             if ( nLogical )
             {
@@ -2857,7 +2877,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const String& rString,           
             if (eSetType == NUMBERFORMAT_FRACTION)  // Fraction 1 = 1/1
             {
                 if (i >= nAnzStrings ||     // no end string nor decimal separator
-                    sStrArray[i] == (String)pFormatter->GetNumDecimalSep())
+                    sStrArray[i] == pFormatter->GetNumDecimalSep())
                 {
                     eScannedType = NUMBERFORMAT_FRACTION;
                     nMatchedAllStrings &= ~nMatchedVirgin;
@@ -2880,7 +2900,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const String& rString,           
                 eScannedType == NUMBERFORMAT_UNDEFINED &&   // not date or currency
                 nDecPos == 0 &&             // no previous decimal separator
                 (i >= nAnzStrings ||        // no end string nor decimal separator
-                 sStrArray[i] == (String)pFormatter->GetNumDecimalSep())
+                 sStrArray[i] == pFormatter->GetNumDecimalSep())
                 )
             {
                 eScannedType = NUMBERFORMAT_FRACTION;
@@ -3061,9 +3081,11 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const String& rString,           
         if ( nMatchedAllStrings )
         {
             bool bMatch = (pFormat ? pFormat->IsNumForStringElementCountEqual(
-                        nStringScanNumFor, nAnzStrings, nAnzNums ) : false);
+                               nStringScanNumFor, nAnzStrings, nAnzNums ) : false);
             if ( !bMatch )
+            {
                 nMatchedAllStrings = 0;
+            }
         }
         if ( nMatchedAllStrings )
         {
@@ -3074,8 +3096,10 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const String& rString,           
             return false;
         }
         else
+        {
             eScannedType = NUMBERFORMAT_NUMBER;
             // everything else should have been recognized by now
+        }
     }
     else if ( eScannedType == NUMBERFORMAT_DATE )
     {
@@ -3135,8 +3159,8 @@ void ImpSvNumberInputScan::InitText()
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > xElems
         = pCal->getMonths();
     nElems = xElems.getLength();
-    pUpperMonthText = new String[nElems];
-    pUpperAbbrevMonthText = new String[nElems];
+    pUpperMonthText = new OUString[nElems];
+    pUpperAbbrevMonthText = new OUString[nElems];
     for ( j = 0; j < nElems; j++ )
     {
         pUpperMonthText[j] = pChrCls->uppercase( xElems[j].FullName );
@@ -3148,8 +3172,8 @@ void ImpSvNumberInputScan::InitText()
     xElems = pCal->getGenitiveMonths();
     bScanGenitiveMonths = (nElems != xElems.getLength());
     nElems = xElems.getLength();
-    pUpperGenitiveMonthText = new String[nElems];
-    pUpperGenitiveAbbrevMonthText = new String[nElems];
+    pUpperGenitiveMonthText = new OUString[nElems];
+    pUpperGenitiveAbbrevMonthText = new OUString[nElems];
     for ( j = 0; j < nElems; j++ )
     {
         pUpperGenitiveMonthText[j] = pChrCls->uppercase( xElems[j].FullName );
@@ -3167,8 +3191,8 @@ void ImpSvNumberInputScan::InitText()
     xElems = pCal->getPartitiveMonths();
     bScanPartitiveMonths = (nElems != xElems.getLength());
     nElems = xElems.getLength();
-    pUpperPartitiveMonthText = new String[nElems];
-    pUpperPartitiveAbbrevMonthText = new String[nElems];
+    pUpperPartitiveMonthText = new OUString[nElems];
+    pUpperPartitiveAbbrevMonthText = new OUString[nElems];
     for ( j = 0; j < nElems; j++ )
     {
         pUpperPartitiveMonthText[j] = pChrCls->uppercase( xElems[j].FullName );
@@ -3185,8 +3209,8 @@ void ImpSvNumberInputScan::InitText()
     delete [] pUpperAbbrevDayText;
     xElems = pCal->getDays();
     nElems = xElems.getLength();
-    pUpperDayText = new String[nElems];
-    pUpperAbbrevDayText = new String[nElems];
+    pUpperDayText = new OUString[nElems];
+    pUpperAbbrevDayText = new OUString[nElems];
     for ( j = 0; j < nElems; j++ )
     {
         pUpperDayText[j] = pChrCls->uppercase( xElems[j].FullName );
@@ -3211,7 +3235,7 @@ void ImpSvNumberInputScan::ChangeIntl()
     bDecSepInDateSeps = ( cDecSep == (sal_Unicode)'-' ||
                           cDecSep == pFormatter->GetDateSep()[0] );
     bTextInitialized = false;
-    aUpperCurrSymbol.Erase();
+    aUpperCurrSymbol ="";
     InvalidateDateAcceptancePatterns();
 }
 
@@ -3248,22 +3272,21 @@ void ImpSvNumberInputScan::ChangeNullDate( const sal_uInt16 Day,
 //
 // => does rString represent a number (also date, time et al)
 
-bool ImpSvNumberInputScan::IsNumberFormat( const String& rString,                  // string to be analyzed
+bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,                  // string to be analyzed
                                            short& F_Type,                          // IN: old type, OUT: new type
                                            double& fOutNumber,                     // OUT: number if convertable
                                            const SvNumberformat* pFormat )         // maybe a number format to match against
 {
-    String sResString;
-    String aString;
+    OUString aString;
     bool res;                                   // return value
     sal_uInt16 k;
     eSetType = F_Type;                          // old type set
 
-    if ( !rString.Len() )
+    if ( !rString.getLength() )
     {
         res = false;
     }
-    else if (rString.Len() > 308)               // arbitrary
+    else if (rString.getLength() > 308)               // arbitrary
     {
         res = false;
     }
@@ -3438,17 +3461,25 @@ bool ImpSvNumberInputScan::IsNumberFormat( const String& rString,               
         }   // else
     }   // if (res)
 
+    OUStringBuffer sResString;
+
     if (res)
     {                                           // we finally have a number
         switch (eScannedType)
         {
         case NUMBERFORMAT_LOGICAL:
-            if      (nLogical ==  1)
+            if (nLogical ==  1)
+            {
                 fOutNumber = 1.0;           // True
+            }
             else if (nLogical == -1)
+            {
                 fOutNumber = 0.0;           // False
+            }
             else
+            {
                 res = false;                // Oops
+            }
             break;
 
         case NUMBERFORMAT_PERCENT:
@@ -3458,42 +3489,38 @@ bool ImpSvNumberInputScan::IsNumberFormat( const String& rString,               
         case NUMBERFORMAT_DEFINED:          // if no category detected handle as number
             if ( nDecPos == 1 )                         // . at start
             {
-                sResString.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "0." ) );
-            }
-            else
-            {
-                sResString.Erase();
+                sResString.append("0.");
             }
 
             for ( k = 0; k <= nThousand; k++)
             {
-                sResString += sStrArray[nNums[k]];  // integer part
+                sResString.append(sStrArray[nNums[k]]);  // integer part
             }
             if ( nDecPos == 2 && k < nAnzNums )     // . somewhere
             {
-                sResString += '.';
+                sResString.append((sal_Unicode)'.');
                 sal_uInt16 nStop = (eScannedType == NUMBERFORMAT_SCIENTIFIC ?
                                     nAnzNums-1 : nAnzNums);
                 for ( ; k < nStop; k++)
                 {
-                    sResString += sStrArray[nNums[k]];  // fractional part
+                    sResString.append(sStrArray[nNums[k]]);  // fractional part
                 }
             }
 
             if (eScannedType != NUMBERFORMAT_SCIENTIFIC)
             {
-                fOutNumber = StringToDouble(sResString);
+                fOutNumber = StringToDouble(sResString.makeStringAndClear());
             }
             else
             {                                           // append exponent
-                sResString += 'E';
+                sResString.append((sal_Unicode)'E');
                 if ( nESign == -1 )
                 {
-                    sResString += '-';
+                    sResString.append((sal_Unicode)'-');
                 }
-                sResString += sStrArray[nNums[nAnzNums-1]];
+                sResString.append(sStrArray[nNums[nAnzNums-1]]);
                 rtl_math_ConversionStatus eStatus;
-                fOutNumber = ::rtl::math::stringToDouble( sResString, '.', ',', &eStatus, NULL );
+                fOutNumber = ::rtl::math::stringToDouble( sResString.makeStringAndClear(), '.', ',', &eStatus, NULL );
                 if ( eStatus == rtl_math_ConversionStatus_OutOfRange )
                 {
                     F_Type = NUMBERFORMAT_TEXT;         // overflow/underflow -> Text
@@ -3541,8 +3568,8 @@ bool ImpSvNumberInputScan::IsNumberFormat( const String& rString,               
                 if (nThousand == 1)
                 {
                     sResString = sStrArray[nNums[0]];
-                    sResString += sStrArray[nNums[1]];  // integer part
-                    fOutNumber = StringToDouble(sResString);
+                    sResString.append(sStrArray[nNums[1]]);  // integer part
+                    fOutNumber = StringToDouble(sResString.makeStringAndClear());
                 }
                 else
                 {
@@ -3566,10 +3593,10 @@ bool ImpSvNumberInputScan::IsNumberFormat( const String& rString,               
                 {
                     for (; k <= nThousand; k++)
                     {
-                        sResString += sStrArray[nNums[k]];
+                        sResString.append(sStrArray[nNums[k]]);
                     }
                 }
-                fOutNumber = StringToDouble(sResString);
+                fOutNumber = StringToDouble(sResString.makeStringAndClear());
 
                 if (k == nAnzNums-2)
                 {
