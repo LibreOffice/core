@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQ3///9Y\u003d",
+        "filename": "linguistic/source/spelldsp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2012-11-26T09:05:52Z",
+      "side": 1,
+      "message": "I think, it is ok, because this is the default behavior of the spell checker, too, to accept the capitalized lowercase words in sentence starting position or as salutation, book titles, headings, personal names, literary personification, eg. “My Dear Son,”, “The Sorrows of Young Werther”, “Mr. Child”, “Harry the Hippo”, etc. (“dear”, “son”, “sorrow”, “child”, “hippo” are only lowercase words in the English dictionary). Adding the capitalized version of the word to the negative dictionary can override this feature, too.",
+      "parentUuid": "AAAAQ3///+M\u003d",
+      "revId": "7f308c34929e01a39095c640c56cdfc0dc952225",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQ3///+U\u003d",
         "filename": "linguistic/source/spelldsp.cxx",
         "patchSetId": 1
