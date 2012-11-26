@@ -446,7 +446,7 @@ void Test::testFdo46955()
 
 void Test::testFdo45394()
 {
-    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Default"), "HeaderText");
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
     OUString aActual = xHeaderText->getString();
     // Encoding in the header was wrong.
     OUString aExpected("ПК РИК", 11, RTL_TEXTENCODING_UTF8);
@@ -484,7 +484,7 @@ void Test::testFdo44176()
 {
     uno::Reference<container::XNameAccess> xPageStyles(getStyles("PageStyles"));
     uno::Reference<beans::XPropertySet> xFirstPage(xPageStyles->getByName("First Page"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xDefault(xPageStyles->getByName("Default"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xDefault(xPageStyles->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     sal_Int32 nFirstTop = 0, nDefaultTop = 0, nDefaultHeader = 0;
     xFirstPage->getPropertyValue("TopMargin") >>= nFirstTop;
     xDefault->getPropertyValue("TopMargin") >>= nDefaultTop;
@@ -593,7 +593,7 @@ void Test::testN757651()
 
 void Test::testFdo49501()
 {
-    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
 
     CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStyle, "IsLandscape"));
     sal_Int32 nExpected(TWIP_TO_MM100(567));
@@ -668,7 +668,7 @@ void Test::testFdo46966()
      *
      * xray ThisComponent.StyleFamilies.PageStyles.Default.TopMargin
      */
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(720)), getProperty<sal_Int32>(xPropertySet, "TopMargin"));
 }
 
@@ -839,7 +839,7 @@ void Test::testCopyPastePageStyle()
     aDescriptor[1].Value <<= sal_False;
     xFilter->filter(aDescriptor);
 
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21001), getProperty<sal_Int32>(xPropertySet, "Width")); // Was letter, i.e. 21590
 }
 
@@ -879,7 +879,7 @@ void Test::testDplinehollow()
 void Test::testLeftmarginDefault()
 {
     // The default left/right margin was incorrect when the top margin was set to zero.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2540), getProperty<sal_Int32>(getStyles("PageStyles")->getByName("Default"), "LeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2540), getProperty<sal_Int32>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "LeftMargin"));
 }
 
 void Test::testDppolyline()

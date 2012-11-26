@@ -272,7 +272,7 @@ void Test::testN750935()
      *
      * xray ThisComponent.StyleFamilies.PageStyles.Default.FooterIsShared
      */
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     sal_Bool bValue = false;
     xPropertySet->getPropertyValue("HeaderIsShared") >>= bValue;
     CPPUNIT_ASSERT_EQUAL(sal_Bool(true), bValue);
@@ -533,7 +533,7 @@ xray ThisComponent.StyleFamilies.PageStyles.Default.Width
     uno::Reference<container::XNameAccess> pageStyles;
     styleFamilies->getByName("PageStyles") >>= pageStyles;
     uno::Reference<uno::XInterface> defaultStyle;
-    pageStyles->getByName("Default") >>= defaultStyle;
+    pageStyles->getByName(DEFAULT_STYLE) >>= defaultStyle;
     uno::Reference<beans::XPropertySet> styleProperties( defaultStyle, uno::UNO_QUERY );
     sal_Int32 width = 0;
     styleProperties->getPropertyValue( "Width" ) >>= width;
@@ -577,7 +577,7 @@ void Test::testN758883()
      *
      * xray ThisComponent.StyleFamilies.PageStyles.Default.LeftMargin
      */
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue("LeftMargin") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(794), nValue);
@@ -667,7 +667,7 @@ void Test::testN693238()
      *
      * xray ThisComponent.StyleFamilies.PageStyles.Default.LeftMargin ' was 2000, should be 635
      */
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue("LeftMargin") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nValue);

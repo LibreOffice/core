@@ -44,6 +44,8 @@
 
 using namespace com::sun::star;
 
+#define DEFAULT_STYLE "Default Style"
+
 /// Base class for filter tests loading or roundtriping a document, then asserting the document model.
 class SwModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
 {
