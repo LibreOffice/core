@@ -784,7 +784,7 @@ namespace {
 
 const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
 {
-    const char *pRet = "";
+    const char *pRet = NULL;
     switch(eMode)
     {
         case SC_COND_EQUAL:
@@ -824,7 +824,6 @@ const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
             break;
         case SC_COND_NONE:
         default:
-            pRet = "equal";
             break;
     }
     return pRet;
@@ -1194,7 +1193,6 @@ void XclExpCondfmt::SaveXml( XclExpXmlStream& rStrm )
 
     maCFList.SaveXml( rStrm );
 
-    // OOXTODO: XML_extLst
     rWorksheet->endElement( XML_conditionalFormatting );
 }
 
@@ -1236,8 +1234,6 @@ void XclExpColorScale::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_colorScale );
 
     rWorksheet->endElement( XML_cfRule );
-
-    // OOXTODO: XML_extLst
 }
 
 namespace {
@@ -1327,9 +1323,6 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_extLst );
 
     rWorksheet->endElement( XML_cfRule );
-
-    // OOXTODO: XML_extLst
-
 }
 
 XclExpIconSet::XclExpIconSet( const XclExpRoot& rRoot, const ScIconSetFormat& rFormat, sal_Int32 nPriority ):
@@ -1384,9 +1377,6 @@ void XclExpIconSet::SaveXml( XclExpXmlStream& rStrm )
 
     rWorksheet->endElement( XML_iconSet );
     rWorksheet->endElement( XML_cfRule );
-
-    // OOXTODO: XML_extLst
-
 }
 
 // ----------------------------------------------------------------------------
