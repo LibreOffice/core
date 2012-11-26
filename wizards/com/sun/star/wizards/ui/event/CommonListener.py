@@ -1,121 +1,98 @@
-#**********************************************************************
 #
-#   Danny.OOo.Listeners.ListenerProcAdapters.py
+# This file is part of the LibreOffice project.
 #
-#   A module to easily work with OpenOffice.org.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-#**********************************************************************
-#   Copyright (c) 2003-2004 Danny Brewer
-#   d29583@groovegarden.com
+# This file incorporates work covered by the following license notice:
 #
-#   This library is free software; you can redistribute it and/or
-#   modify it under the terms of the GNU Lesser General Public
-#   License as published by the Free Software Foundation; either
-#   version 2.1 of the License, or (at your option) any later version.
-#
-#   This library is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#   Lesser General Public License for more details.
-#
-#   You should have received a copy of the GNU Lesser General Public
-#   License along with this library; if not, write to the Free Software
-#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#
-#   See:  http://www.gnu.org/licenses/lgpl.html
-#
-#**********************************************************************
-#   If you make changes, please append to the change log below.
-#
-#   Change Log
-#   Danny Brewer         Revised 2004-06-05-01
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import unohelper
-from com.sun.star.awt import XActionListener
 
+from com.sun.star.awt import XActionListener
 class ActionListenerProcAdapter( unohelper.Base, XActionListener ):
     def __init__( self, oProcToCall, tParams=() ):
-        self.oProcToCall = oProcToCall # a python procedure
-        self.tParams = tParams # a tuple
+        self.oProcToCall = oProcToCall
 
-
-    # oActionEvent is a com.sun.star.awt.ActionEvent struct.
     def actionPerformed( self, oActionEvent ):
         if callable( self.oProcToCall ):
-            apply( self.oProcToCall )
+            self.oProcToCall()
 
 from com.sun.star.awt import XItemListener
 class ItemListenerProcAdapter( unohelper.Base, XItemListener ):
     def __init__( self, oProcToCall, tParams=() ):
-        self.oProcToCall = oProcToCall # a python procedure
-        self.tParams = tParams # a tuple
+        self.oProcToCall = oProcToCall
+        self.tParams = tParams
 
-    # oItemEvent is a com.sun.star.awt.ItemEvent struct.
     def itemStateChanged( self, oItemEvent ):
         if callable( self.oProcToCall ):
             try:
-                apply( self.oProcToCall)
+                self.oProcToCall()
             except:
-                apply( self.oProcToCall, (oItemEvent,) + self.tParams )
+                self.oProcToCall((oItemEvent,) + self.tParams )
 
 from com.sun.star.awt import XTextListener
 class TextListenerProcAdapter( unohelper.Base, XTextListener ):
     def __init__( self, oProcToCall, tParams=() ):
-        self.oProcToCall = oProcToCall # a python procedure
-        self.tParams = tParams # a tuple
+        self.oProcToCall = oProcToCall
 
-    # oTextEvent is a com.sun.star.awt.TextEvent struct.
     def textChanged( self, oTextEvent ):
         if callable( self.oProcToCall ):
-            apply( self.oProcToCall )
+            self.oProcToCall()
 
 from com.sun.star.frame import XTerminateListener
 class TerminateListenerProcAdapter( unohelper.Base, XTerminateListener ):
     def __init__( self, oProcToCall, tParams=() ):
-        self.oProcToCall = oProcToCall # a python procedure
-        self.tParams = tParams # a tuple
+        self.oProcToCall = oProcToCall
 
     def queryTermination(self, TerminateEvent):
         self.oProcToCall = getattr(self.oProcToCall,"queryTermination")
+
         if callable( self.oProcToCall ):
-            apply( self.oProcToCall )
+            self.oProcToCall()
 
 from com.sun.star.awt import XWindowListener
 class WindowListenerProcAdapter( unohelper.Base, XWindowListener ):
     def __init__( self, oProcToCall, tParams=() ):
-        self.oProcToCall = oProcToCall # a python procedure
-        self.tParams = tParams # a tuple
+        self.oProcToCall = oProcToCall
 
     def windowShown(self, TerminateEvent):
         if callable( self.oProcToCall ):
-            apply( self.oProcToCall )
+            self.oProcToCall()
 
 from com.sun.star.awt import XAdjustmentListener
 class AdjustmentListenerProcAdapter( unohelper.Base, XAdjustmentListener ):
     def __init__( self, oProcToCall, tParams=() ):
-        self.oProcToCall = oProcToCall # a python procedure
-        self.tParams = tParams # a tuple
+        self.oProcToCall = oProcToCall
 
     def adjustmentValueChanged(self, TerminateEvent):
         if callable( self.oProcToCall ):
-            apply( self.oProcToCall )
+            self.oProcToCall()
 
 from com.sun.star.awt import XFocusListener
 class FocusListenerProcAdapter( unohelper.Base, XFocusListener ):
     def __init__( self, oProcToCall, tParams=() ):
-        self.oProcToCall = oProcToCall # a python procedure
-        self.tParams = tParams # a tuple
+        self.oProcToCall = oProcToCall
+        self.tParams = tParams
 
     def focusGained(self, FocusEvent):
         if callable( self.oProcToCall ):
-            apply( self.oProcToCall, (FocusEvent,) + self.tParams )
+            self.oProcToCall((FocusEvent,) + self.tParams )
 
 from com.sun.star.awt import XKeyListener
 class KeyListenerProcAdapter( unohelper.Base, XKeyListener ):
     def __init__( self, oProcToCall, tParams=() ):
-        self.oProcToCall = oProcToCall # a python procedure
-        self.tParams = tParams # a tuple
+        self.oProcToCall = oProcToCall
+        self.tParams = tParams
 
     def keyPressed(self, KeyEvent):
         if callable( self.oProcToCall ):
-            apply( self.oProcToCall, (KeyEvent,) + self.tParams )
+            self.oProcToCall((KeyEvent,) + self.tParams )
