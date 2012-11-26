@@ -183,16 +183,15 @@ WorkWindow::~WorkWindow()
 
 // -----------------------------------------------------------------------
 
+void WorkWindow::ShowFullScreenMode( sal_Bool bFullScreenMode )
+{
+    return ShowFullScreenMode( bFullScreenMode, GetScreenNumber());
+}
+
 void WorkWindow::ShowFullScreenMode( sal_Bool bFullScreenMode, sal_Int32 nDisplayScreen )
 {
     if ( !mbFullScreenMode == !bFullScreenMode )
         return;
-
-    if( (nDisplayScreen < 0)
-    || (nDisplayScreen >= static_cast<sal_Int32>(Application::GetScreenCount()) ) )
-    {
-        nDisplayScreen = GetScreenNumber();
-    }
 
     mbFullScreenMode = bFullScreenMode != 0;
     if ( !mbSysChild )
@@ -215,6 +214,11 @@ void WorkWindow::ShowFullScreenMode( sal_Bool bFullScreenMode, sal_Int32 nDispla
 }
 
 // -----------------------------------------------------------------------
+
+void WorkWindow::StartPresentationMode( sal_Bool bPresentation, sal_uInt16 nFlags )
+{
+    return StartPresentationMode( bPresentation, nFlags, GetScreenNumber());
+}
 
 void WorkWindow::StartPresentationMode( sal_Bool bPresentation, sal_uInt16 nFlags, sal_Int32 nDisplayScreen )
 {

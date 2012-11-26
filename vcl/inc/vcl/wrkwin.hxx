@@ -80,21 +80,23 @@ public:
 
     virtual sal_Bool    Close();
 
-    /** The default value of nDisplayScreen = -1 means "don't care" and
-        allows to backends to use any screen they like (most probably
-        the current one).
-
-        NOTE: The default value cannot be 0, because 0 is a legitimate
-        Display Screen number.
-     */
-    void            ShowFullScreenMode( sal_Bool bFullScreenMode = sal_True,
-                                        sal_Int32 nDisplayScreen = -1 );
+    void            ShowFullScreenMode( sal_Bool bFullScreenMode,
+                                        sal_Int32 nDisplayScreen );
+    /**
+     @overload Calls ShowFullScreenMode( bFullScreenMode, GetScreenNumber()).
+    */
+    void            ShowFullScreenMode( sal_Bool bFullScreenMode = sal_True );
     void            EndFullScreenMode() { ShowFullScreenMode( sal_False ); }
     sal_Bool        IsFullScreenMode() const { return mbFullScreenMode; }
 
+    void            StartPresentationMode( sal_Bool   bPresentation,
+                                           sal_uInt16 nFlags,
+                                           sal_Int32  nDisplayScreen );
+    /**
+     @overload Calls StartPresentationMode( bFullScreenMode, nFlags, GetScreenNumber()).
+    */
     void            StartPresentationMode( sal_Bool   bPresentation = sal_True,
-                                           sal_uInt16 nFlags = 0,
-                                           sal_Int32  nDisplayScreen = 0 );
+                                           sal_uInt16 nFlags = 0 );
     void            EndPresentationMode() {  StartPresentationMode( sal_False ); }
     sal_Bool        IsPresentationMode() const { return mbPresentationMode; }
 
