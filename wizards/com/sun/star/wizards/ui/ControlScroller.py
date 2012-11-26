@@ -16,11 +16,11 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from wizards.common.Desktop import Desktop
-from wizards.common.PropertyNames import PropertyNames
-from wizards.common.HelpIds import HelpIds
-from wizards.common.Helper import Helper
-from wizards.ui.UnoDialog import UnoDialog
+from .UnoDialog import UnoDialog
+from ..common.Desktop import Desktop
+from ..common.PropertyNames import PropertyNames
+from ..common.HelpIds import HelpIds
+from ..common.Helper import Helper
 
 from com.sun.star.awt.ScrollBarOrientation import HORIZONTAL, VERTICAL
 
@@ -84,7 +84,7 @@ class ControlScroller(object):
         ControlScroller.nscrollvalue = 0
         ControlScroller.ControlGroupVector = []
         ypos = self.iStartPosY + ControlScroller.SORELFIRSTPOSY
-        for i in xrange(ControlScroller.nblockincrement):
+        for i in range(ControlScroller.nblockincrement):
             self.insertControlGroup(i, ypos)
             ypos += self.linedistance
 
@@ -92,13 +92,9 @@ class ControlScroller(object):
         ControlScroller.CurUnoDialog.getPeerConfiguration().\
             setPeerProperties(self.oImgControl, "MouseTransparent", True)
 
-    def setScrollBarOrientationHorizontal(self):
-        Helper.setUnoPropertyValue(
-            ControlScroller.xScrollBar, "Orientation", HORIZONTAL)
-
     @classmethod
     def fillupControls(self, binitialize):
-        for i in xrange(ControlScroller.nblockincrement):
+        for i in range(ControlScroller.nblockincrement):
             if i < self.ncurfieldcount:
                 self.fillupControl(i)
 
@@ -241,6 +237,6 @@ class ControlScroller(object):
                 retproperties[i] = curproperties
                 i += 1
             return retproperties
-        except java.lang.Exception, ex:
-            ex.printStackTrace(System.out)
+        except Exception:
+            traceback.print_exc()
             return None

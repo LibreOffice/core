@@ -140,7 +140,7 @@ class TopicsControl(ControlScroller):
 
     def initializeScrollFields(self, agenda):
         # create a row for each topic with the given values....
-        for i  in xrange(agenda.cp_Topics.getSize()):
+        for i  in range(agenda.cp_Topics.getSize()):
             row = self.newRow(i)
             agenda.cp_Topics.getElementAt(i).setDataToRow(row)
             # a parent class method
@@ -258,7 +258,7 @@ class TopicsControl(ControlScroller):
 
     def removeRow(self):
         try:
-            for i in xrange(TopicsControl.lastFocusRow,
+            for i in range(TopicsControl.lastFocusRow,
                     len(ControlScroller.scrollfields) - 1):
                 pv1 = ControlScroller.scrollfields[i]
                 pv2 = ControlScroller.scrollfields[i + 1]
@@ -288,7 +288,7 @@ class TopicsControl(ControlScroller):
     def insertRow(self):
         try:
             self.insertRowAtEnd()
-            for i in xrange(len(ControlScroller.scrollfields) - 2,
+            for i in range(len(ControlScroller.scrollfields) - 2,
                     TopicsControl.lastFocusRow, -1):
                 pv1 = ControlScroller.scrollfields[i]
                 pv2 = ControlScroller.scrollfields[i - 1]
@@ -609,7 +609,7 @@ class TopicsControl(ControlScroller):
         o1 = ControlScroller.scrollfields[row1 + ControlScroller.nscrollvalue]
         o2 = ControlScroller.scrollfields[row2 + ControlScroller.nscrollvalue]
         temp = None
-        for i in xrange(1, len(o1)):
+        for i in range(1, len(o1)):
             temp = o1[i].Value
             o1[i].Value = o2[i].Value
             o2[i].Value = temp
@@ -729,7 +729,7 @@ class TopicsControl(ControlScroller):
         try:
             ControlScroller.CurUnoDialog.agendaTemplate.topics.write(
                 row, data)
-        except Exception, ex:
+        except Exception:
             traceback.print_exc()
 
     '''
@@ -746,7 +746,7 @@ class TopicsControl(ControlScroller):
         try:
             ControlScroller.CurUnoDialog.agendaTemplate.topics.writeCell(
                 row, column, data)
-        except Exception, ex:
+        except Exception:
             traceback.print_exc()
 
     '''
@@ -759,7 +759,7 @@ class TopicsControl(ControlScroller):
         try:
             ControlScroller.CurUnoDialog.agendaTemplate.topics.reduceDocumentTo(
                 len(ControlScroller.scrollfields) - 1)
-        except Exception, ex:
+        except Exception:
             traceback.print_exc()
 
 '''

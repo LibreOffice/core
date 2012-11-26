@@ -91,7 +91,7 @@ class ConfigSet(ConfigNode):
                         child.readConfiguration(
                             configurationView.getByName(i), param)
                         self.add(i, child)
-                    except Exception, ex:
+                    except Exception:
                          traceback.print_exc()
             #remove any nulls from the list
             if self.noNulls:
@@ -107,7 +107,7 @@ class ConfigSet(ConfigNode):
                 try:
                     child = configurationView.getByName(i)
                     self.add(i, child)
-                except Exception, ex:
+                except Exception:
                     traceback.print_exc()
 
     def remove(self, obj):

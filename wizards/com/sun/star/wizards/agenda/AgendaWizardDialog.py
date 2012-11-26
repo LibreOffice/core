@@ -15,10 +15,10 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from wizards.ui.WizardDialog import WizardDialog, uno, Helper, UIConsts, \
+from ..ui.WizardDialog import WizardDialog, uno, Helper, UIConsts, \
     PropertyNames
-from AgendaWizardDialogConst import AgendaWizardDialogConst, HID
-from AgendaWizardDialogResources import AgendaWizardDialogResources
+from .AgendaWizardDialogConst import AgendaWizardDialogConst, HID
+from .AgendaWizardDialogResources import AgendaWizardDialogResources
 
 from com.sun.star.awt.FontUnderline import SINGLE
 

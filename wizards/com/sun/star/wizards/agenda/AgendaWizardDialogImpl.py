@@ -115,7 +115,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             self.removeTerminateListener()
             self.closeDocument()
             self.running = False
-        except Exception, ex:
+        except Exception:
             self.removeTerminateListener()
             traceback.print_exc()
             self.running = False
@@ -388,7 +388,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             else:
                 pass
 
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
         finally:
             if endWizard:
@@ -399,7 +399,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
     def closeDocument(self):
         try:
             xCloseable = self.agendaTemplate.xFrame.close(False)
-        except CloseVetoException, e:
+        except CloseVetoException:
             traceback.print_exc()
 
     def validatePath(self):

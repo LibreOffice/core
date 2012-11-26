@@ -134,7 +134,7 @@ class AgendaTemplate(TextDocument):
         for i in self.itemsTables:
             try:
                 i.write("")
-            except Exception, ex:
+            except Exception:
                 traceback.print_exc()
 
         self.redrawTitle("txtTitle")
@@ -156,7 +156,7 @@ class AgendaTemplate(TextDocument):
             itemsTable = self.itemsMap[itemName]
             # rewrite the table.
             itemsTable.write(None)
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
         self.xTextDocument.unlockControllers()
 
@@ -364,7 +364,7 @@ class AgendaTemplate(TextDocument):
             try:
                 self.itemsTables.append(
                     ItemsTable(self.getSection(i), self.getTable(i), self))
-            except Exception, ex:
+            except Exception:
                 traceback.print_exc()
                 raise AttributeError (
                     "Fatal Error while initialilzing \
@@ -458,7 +458,7 @@ class AgendaTemplate(TextDocument):
                 if not visible:
                     self.section.Anchor.String = ""
 
-        except Exception, ex:
+        except Exception:
             traceback.print_exc()
 
     '''
@@ -480,7 +480,7 @@ class AgendaTemplate(TextDocument):
                 minutesAllSection = self.getSection(
                     self.templateConsts.SECTION_MINUTES_ALL)
                 minutesAllSection.Anchor.String = ""
-            except Exception, ex:
+            except Exception:
                 traceback.print_exc()
 
         # the user checked "create minutes"
@@ -541,7 +541,7 @@ class AgendaTemplate(TextDocument):
                             topicTime = 0
                             try:
                                 topicTime = topic[3].Value
-                            except Exception, ex:
+                            except Exception:
                                 pass
 
                             '''
@@ -565,7 +565,7 @@ class AgendaTemplate(TextDocument):
                             self.templateConsts.SECTION_MINUTES,
                             self.template, False)
 
-            except Exception, ex:
+            except Exception:
                 traceback.print_exc()
 
     '''given a text range and a text, fills the given
@@ -590,7 +590,7 @@ class AgendaTemplate(TextDocument):
                 try:
                     Range.Start.Text.insertTextContent(
                         Range.Start, placeHolder, True)
-                except Exception, ex:
+                except Exception:
                     traceback.print_exc()
 
     '''
@@ -602,7 +602,7 @@ class AgendaTemplate(TextDocument):
         try:
             placeHolder =  xmsf.createInstance(
                 "com.sun.star.text.TextField.JumpEdit")
-        except Exception, ex:
+        except Exception:
             traceback.print_exc()
             return None
 
@@ -819,7 +819,7 @@ class Topics(object):
         try:
             Topics.table = self.agenda.getTable(
                 self.agenda.templateConsts.SECTION_TOPICS)
-        except Exception, ex:
+        except Exception:
             traceback.print_exc()
             raise AttributeError (
                 "Fatal error while loading template: table " + \
@@ -1108,7 +1108,7 @@ class PlaceholderTextElement(TextElement):
                     self.xmsf, self.text, self.hint)
                 textRange.Text.insertTextContent(
                     textRange.Start, xTextContent, True)
-            except Exception, ex:
+            except Exception:
                 traceback.print_exc()
 
 '''
@@ -1130,7 +1130,7 @@ class PlaceholderElement(object):
                 self.textDocument, self.placeHolderText, self.hint)
             textRange.Text.insertTextContent(
                 textRange.Start, xTextContent, True)
-        except Exception, ex:
+        except Exception:
             traceback.print_exc()
 
 '''
