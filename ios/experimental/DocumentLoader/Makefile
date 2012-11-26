@@ -74,7 +74,7 @@ all: $(APPDIR)/$(APP) stuff
 
 $(APPDIR)/$(APP): $(SRCS)
 	mkdir -p $(APPDIR)
-	$(CXX) -v -miphoneos-version-min=4.3 -fobjc-link-runtime -Wl,-map,$(APP).map.mangled -o $@ $(gb_GLOBALDEFS) $(CFLAGS) $(gb_OBJCXXFLAGS) $(MOREINCLUDES) $(SRCS) $(LIBS)
+	$(CXX) -v -miphoneos-version-min=4.3 -fobjc-link-runtime -Wl,-map,$(APP).map.mangled -Wl,-dead_strip -o $@ $(gb_GLOBALDEFS) $(CFLAGS) $(gb_OBJCXXFLAGS) $(MOREINCLUDES) $(SRCS) $(LIBS)
 	c++filt <$(APP).map.mangled >$(APP).map && rm $(APP).map.mangled
 
 stuff:
