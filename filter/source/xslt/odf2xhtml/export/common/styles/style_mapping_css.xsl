@@ -56,7 +56,10 @@
 
 				<xsl:value-of select="$borderType"/>
 				<xsl:text>-width:</xsl:text>
-				<xsl:value-of select="$borderWidthFixed"/>
+				<xsl:choose>
+					<xsl:when test="$borderWidth = '0.05pt'">thin</xsl:when>
+					<xsl:otherwise><xsl:value-of select="$borderWidthFixed"/></xsl:otherwise>
+				</xsl:choose>
 				<xsl:text>; </xsl:text>
 				<xsl:value-of select="$borderType"/>
 				<xsl:text>-style:</xsl:text>
@@ -294,11 +297,9 @@
 	<xsl:template match="@table:align">
 		<xsl:choose>
 			<xsl:when test=".='left'">
-			<!-- Note: problems with meeting minutes example
-				<xsl:text>float:right; </xsl:text> --></xsl:when>
+				<xsl:text>margin-left:0px; margin-right:auto;</xsl:text></xsl:when>
 			<xsl:when test=".='right'">
-			<!-- Note: problems with meeting minutes example
-				<xsl:text>float:left; </xsl:text> --></xsl:when>
+				<xsl:text>margin-left:auto; margin-right: 0px;</xsl:text></xsl:when>
 			<xsl:otherwise>
 				<xsl:text>float:none; </xsl:text>
 			</xsl:otherwise>
