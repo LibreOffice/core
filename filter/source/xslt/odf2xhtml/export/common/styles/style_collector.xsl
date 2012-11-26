@@ -800,6 +800,8 @@
             </xsl:otherwise>
         </xsl:choose>
 	</xsl:template>
+	<!-- workaround AOOO#119401 suspicious property fo:margin="100%" in paragraph style -->
+	<xsl:template match="@fo:margin[string(.) = '100%']" mode="paragraphMerge"/>
     
 	<xsl:template mode="paragraphMerge" match="@fo:margin | @fo:margin-top | @fo:margin-bottom | @fo:margin-left | @fo:margin-right">
 		<xsl:text>padding</xsl:text>

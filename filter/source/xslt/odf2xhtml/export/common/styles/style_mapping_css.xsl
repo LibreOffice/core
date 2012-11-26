@@ -83,10 +83,13 @@
 		<xsl:text>; </xsl:text>
 	</xsl:template>
 
+	<!-- workaround AOOO#119401 suspicious property fo:margin="100%" in paragraph style -->
+	<xsl:template match="@fo:margin[string(.) = '100%']"/> 
+
 	<!-- Maps fo:margin as well fo:margin-top, fo:margin-bottom, fo:padding-left, fo:margin-right -->
 	<!-- Maps fo:padding as well fo:padding-top, fo:padding-bottom, fo:padding-left, fo:padding-right -->
-	<xsl:template match="@fo:letter-spacing | @fo:line-height | @fo:width |@fo:margin | @fo:margin-top | @fo:margin-bottom | @fo:margin-left | @fo:margin-right | @fo:padding | @fo:padding-top | @fo:padding-bottom | @fo:padding-left | @fo:padding-right">
-		<xsl:value-of select="substring-after(name(), ':')"/>
+	<xsl:template match="@fo:letter-spacing | @fo:line-height | @fo:width |@fo:margin | @fo:margin-top | @fo:margin-bottom | @fo:margin-left | @fo:margin-right | @fo:padding | @fo:padding-top | @fo:padding-bottom | @fo:padding-left | @fo:padding-right">		
+		<xsl:value-of select="local-name(.)"/>
 		<xsl:text>:</xsl:text>
 		<!-- Map once erroneusly used inch shortage 'inch' to CSS shortage 'in' -->
 		<xsl:choose>
