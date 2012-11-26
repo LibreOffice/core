@@ -81,22 +81,14 @@ FindTextFieldControl::FindTextFieldControl( Window* pParent, WinBits nStyle,
     css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager) :
     ComboBox( pParent, nStyle ),
     m_xFrame(xFrame),
-    m_xServiceManager(xServiceManager),
-    m_bToClearTextField(sal_True)
+    m_xServiceManager(xServiceManager)
 {
-    InitControls_Impl();
+    SetPlaceholderText(SVX_RESSTR(RID_SVXSTR_FINDBAR_FIND));
+    EnableAutocomplete(sal_True, sal_True);
 }
 
 FindTextFieldControl::~FindTextFieldControl()
 {
-}
-
-void FindTextFieldControl::InitControls_Impl()
-{
-    SetText( SVX_RESSTR( RID_SVXSTR_FINDBAR_FIND ) );
-    SetControlForeground(GetSettings().GetStyleSettings().GetDisableColor());
-
-    EnableAutocomplete(sal_True, sal_True);
 }
 
 void FindTextFieldControl::Remember_Impl(const String& rStr)
@@ -137,15 +129,7 @@ void FindTextFieldControl::SetTextToSelected_Impl()
     if ( aString.getLength() != 0 )
     {
         SetText( aString );
-        m_bToClearTextField = sal_False;
     }
-}
-
-void FindTextFieldControl::Modify()
-{
-    ComboBox::Modify();
-
-    SetControlForeground( GetSettings().GetStyleSettings().GetWindowTextColor() );
 }
 
 long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
@@ -208,21 +192,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
         }
 
         case EVENT_GETFOCUS:
-            if ( m_bToClearTextField )
-            {
-                SetText( OUString() );
-                m_bToClearTextField = sal_False;
-            }
             SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
-            break;
-
-        case EVENT_LOSEFOCUS:
-            if ( GetText().Len() == 0 )
-            {
-                SetText( SVX_RESSTR( RID_SVXSTR_FINDBAR_FIND ) );
-                SetControlForeground(GetSettings().GetStyleSettings().GetDisableColor());
-                m_bToClearTextField = sal_True;
-            }
             break;
     }
 

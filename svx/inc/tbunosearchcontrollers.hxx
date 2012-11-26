@@ -60,10 +60,8 @@ public:
         css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
     virtual ~FindTextFieldControl();
 
-    virtual void Modify();
     virtual long PreNotify( NotifyEvent& rNEvt );
 
-    void InitControls_Impl();
     void Remember_Impl(const String& rStr);
     void SetTextToSelected_Impl();
 
@@ -71,8 +69,6 @@ private:
 
     css::uno::Reference< css::frame::XFrame > m_xFrame;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xServiceManager;
-    sal_Bool m_bToClearTextField;
-
 };
 
 class SearchToolbarControllersManager
