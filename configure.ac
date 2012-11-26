@@ -8756,7 +8756,7 @@ AC_MSG_CHECKING([which orcus library to use])
 if test "$with_system_orcus" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBORCUS=YES
-    PKG_CHECK_MODULES(ORCUS, liborcus-0.2 >= 0.1.0)
+    PKG_CHECK_MODULES(ORCUS, liborcus-0.4 >= 0.3.0)
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE ORCUS"
