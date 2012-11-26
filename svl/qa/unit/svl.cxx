@@ -262,7 +262,7 @@ void Test::testNumberFormat()
         }
     }
 
-    xub_StrLen nPos;
+    sal_Int32 nPos;
     short nType = NUMBERFORMAT_DEFINED;
     sal_uInt32 nKey;
     OUString aCode;

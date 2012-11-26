@@ -20,7 +20,6 @@
 
 #include <svl/PasswordHelper.hxx>
 #include <rtl/digest.h>
-#include <tools/string.hxx>
 
 using namespace com::sun::star;
 
@@ -35,14 +34,14 @@ void SvPasswordHelper::GetHashPassword(uno::Sequence<sal_Int8>& rPassHash, const
     }
 }
 
-void SvPasswordHelper::GetHashPasswordLittleEndian(uno::Sequence<sal_Int8>& rPassHash, const String& sPass)
+void SvPasswordHelper::GetHashPasswordLittleEndian(uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass)
 {
-    xub_StrLen nSize(sPass.Len());
+    sal_Int32 nSize(sPass.getLength());
     sal_Char* pCharBuffer = new sal_Char[nSize * sizeof(sal_Unicode)];
 
-    for (xub_StrLen i = 0; i < nSize; ++i)
+    for (sal_Int32 i = 0; i < nSize; ++i)
     {
-        sal_Unicode ch(sPass.GetChar(i));
+        sal_Unicode ch(sPass[ i ]);
         pCharBuffer[2 * i] = static_cast< sal_Char >(ch & 0xFF);
         pCharBuffer[2 * i + 1] = static_cast< sal_Char >(ch >> 8);
     }
@@ -52,14 +51,14 @@ void SvPasswordHelper::GetHashPasswordLittleEndian(uno::Sequence<sal_Int8>& rPas
     delete[] pCharBuffer;
 }
 
-void SvPasswordHelper::GetHashPasswordBigEndian(uno::Sequence<sal_Int8>& rPassHash, const String& sPass)
+void SvPasswordHelper::GetHashPasswordBigEndian(uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass)
 {
-    xub_StrLen nSize(sPass.Len());
+    sal_Int32 nSize(sPass.getLength());
     sal_Char* pCharBuffer = new sal_Char[nSize * sizeof(sal_Unicode)];
 
-    for (xub_StrLen i = 0; i < nSize; ++i)
+    for (sal_Int32 i = 0; i < nSize; ++i)
     {
-        sal_Unicode ch(sPass.GetChar(i));
+        sal_Unicode ch(sPass[ i ]);
         pCharBuffer[2 * i] = static_cast< sal_Char >(ch >> 8);
         pCharBuffer[2 * i + 1] = static_cast< sal_Char >(ch & 0xFF);
     }
@@ -69,12 +68,12 @@ void SvPasswordHelper::GetHashPasswordBigEndian(uno::Sequence<sal_Int8>& rPassHa
     delete[] pCharBuffer;
 }
 
-void SvPasswordHelper::GetHashPassword(uno::Sequence<sal_Int8>& rPassHash, const String& sPass)
+void SvPasswordHelper::GetHashPassword(uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass)
 {
     GetHashPasswordLittleEndian(rPassHash, sPass);
 }
 
-bool SvPasswordHelper::CompareHashPassword(const uno::Sequence<sal_Int8>& rOldPassHash, const String& sNewPass)
+bool SvPasswordHelper::CompareHashPassword(const uno::Sequence<sal_Int8>& rOldPassHash, const OUString& sNewPass)
 {
     bool bResult = false;
 
