@@ -259,7 +259,28 @@ static const struct {
     { "pjt_AU", lcl_DATA_OTHERS },
     { "pap_CW", lcl_DATA_OTHERS },
     { "ebo_CG", lcl_DATA_OTHERS },
-    { "tyx_CG", lcl_DATA_OTHERS }
+    { "tyx_CG", lcl_DATA_OTHERS },
+    { "axk_CG", lcl_DATA_OTHERS },
+    { "beq_CG", lcl_DATA_OTHERS },
+    { "bkw_CG", lcl_DATA_OTHERS },
+    { "bvx_CG", lcl_DATA_OTHERS },
+    { "dde_CG", lcl_DATA_OTHERS },
+    { "iyx_CG", lcl_DATA_OTHERS },
+    { "kkw_CG", lcl_DATA_OTHERS },
+    { "kng_CG", lcl_DATA_OTHERS },
+    { "ldi_CG", lcl_DATA_OTHERS },
+    { "mdw_CG", lcl_DATA_OTHERS },
+    { "mkw_CG", lcl_DATA_OTHERS },
+    { "njx_CG", lcl_DATA_OTHERS },
+    { "ngz_CG", lcl_DATA_OTHERS },
+    { "njy_CG", lcl_DATA_OTHERS },
+    { "puu_CG", lcl_DATA_OTHERS },
+    { "sdj_CG", lcl_DATA_OTHERS },
+    { "tek_CG", lcl_DATA_OTHERS },
+    { "tsa_CG", lcl_DATA_OTHERS },
+    { "vif_CG", lcl_DATA_OTHERS },
+    { "xku_CG", lcl_DATA_OTHERS },
+    { "yom_CG", lcl_DATA_OTHERS }
 };
 
 #else

@@ -491,7 +491,21 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_VEPS,                  "vep", "RU" },
     { LANGUAGE_USER_VORO,                  "vro", "EE" },
     { LANGUAGE_USER_NENETS,                "yrk", "RU" },
-    { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
+    { LANGUAGE_USER_AKA,                   "axk", "CG" },
+    { LANGUAGE_USER_DIBOLE,                "bvx", "CG" },
+    { LANGUAGE_USER_DOONDO,                "dde", "CG" },
+    { LANGUAGE_USER_KAAMBA,                "xku", "CG" },
+    { LANGUAGE_USER_KIKONGO,               "kng", "CG" },
+    { LANGUAGE_USER_KUNYI,                 "njx", "CG" },
+    { LANGUAGE_USER_NGUNGWEL,              "ngz", "CG" },
+    { LANGUAGE_USER_NJYEM,                 "njy", "CG" },
+    { LANGUAGE_USER_PUNU,                  "puu", "CG" },
+    { LANGUAGE_USER_SUUNDI,                "sdj", "CG" },
+    { LANGUAGE_USER_TEKE_KUKUYA,           "kkw", "CG" },
+    { LANGUAGE_USER_TSAANGI,               "tsa", "CG" },
+    { LANGUAGE_USER_YAKA,                  "iyx", "CG" },
+    { LANGUAGE_USER_YOMBE,                 "yom", "CG" },
+    { LANGUAGE_NONE,                       "zxx", "CG"   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
 

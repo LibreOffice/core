@@ -546,6 +546,20 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_NENETS                0x0676
 #define LANGUAGE_USER_PAPIAMENTU_CURACAO    0x8479  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_PAPIAMENTU)) */
 #define LANGUAGE_USER_PAPIAMENTU_BONAIRE    0x8879  /* makeLangID( 0x22, getPrimaryLanguage( LANGUAGE_PAPIAMENTU)) */
+#define LANGUAGE_USER_AKA                   0x0677
+#define LANGUAGE_USER_DIBOLE                0x0678
+#define LANGUAGE_USER_DOONDO                0x0679
+#define LANGUAGE_USER_KAAMBA                0x067A
+#define LANGUAGE_USER_KIKONGO               0x067B
+#define LANGUAGE_USER_KUNYI                 0x067C
+#define LANGUAGE_USER_NGUNGWEL              0x067D
+#define LANGUAGE_USER_NJYEM                 0x067E
+#define LANGUAGE_USER_PUNU                  0x067F
+#define LANGUAGE_USER_SUUNDI                0x0680
+#define LANGUAGE_USER_TEKE_KUKUYA           0x0681
+#define LANGUAGE_USER_TSAANGI               0x0682
+#define LANGUAGE_USER_YAKA                  0x0683
+#define LANGUAGE_USER_YOMBE                 0x0684
 #define LANGUAGE_USER_SYSTEM_CONFIG         0xFFFE  /* not a locale, to be used only in configuration context to obtain system default, primary 0x3fe, sub 0x3f */
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
