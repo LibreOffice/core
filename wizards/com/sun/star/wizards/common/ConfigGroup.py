@@ -48,4 +48,6 @@ class ConfigGroup(ConfigNode):
             child.readConfiguration(configView.getByName(propertyName),
                 prefix)
         else:
-            setattr(self,field,configView.getByName(propertyName))
+            value = configView.getByName(propertyName)
+            if value is not None:
+                setattr(self,field, value)

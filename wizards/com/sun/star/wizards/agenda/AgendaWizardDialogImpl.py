@@ -73,6 +73,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
             # initialize the agenda template
             self.agenda = CGAgenda()
+            
             self.templateConsts = TemplateConsts
             self.agendaTemplate = AgendaTemplate(
                 self.xMSF, self.agenda, self.resources,
