@@ -7455,10 +7455,11 @@ system)
 #include <Python.h>
 
 int main(int argc, char **argv) {
-       if (PY_MAJOR_VERSION < 3 || (PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 3)) return 0;
+       if ((PY_MAJOR_VERSION == 2 && PY_MINOR_VERSION >= 6) ||
+           (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 3)) return 0;
        else return 1;
 }
-       ]])],[AC_MSG_RESULT([ok])],[AC_MSG_ERROR([Python >= 3.3 is needed when building with Python 3])],[])
+       ]])],[AC_MSG_RESULT([ok])],[AC_MSG_ERROR([Python >= 3.3 is needed when building with Python 3, or Python >= 2.6 when building with Python 2])],[])
     CFLAGS=$save_CFLAGS
     AC_LANG_POP(C)
 
