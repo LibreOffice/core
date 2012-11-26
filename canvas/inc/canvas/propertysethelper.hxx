@@ -121,7 +121,7 @@ namespace canvas
 
             @return true, if the given name maps to a known property.
          */
-        bool isPropertyName( const ::rtl::OUString& aPropertyName ) const;
+        bool isPropertyName( const OUString& aPropertyName ) const;
 
         /** Request the currently active map
          */
@@ -129,16 +129,16 @@ namespace canvas
 
         // XPropertySet implementation
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > getPropertySetInfo() const;
-        void setPropertyValue( const ::rtl::OUString&            aPropertyName,
+        void setPropertyValue( const OUString&                   aPropertyName,
                                const ::com::sun::star::uno::Any& aValue );
-        ::com::sun::star::uno::Any getPropertyValue( const ::rtl::OUString& PropertyName ) const;
-        void addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+        ::com::sun::star::uno::Any getPropertyValue( const OUString& PropertyName ) const;
+        void addPropertyChangeListener( const OUString& aPropertyName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener );
-        void removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+        void removePropertyChangeListener( const OUString& aPropertyName,
                                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener );
-        void addVetoableChangeListener( const ::rtl::OUString& aPropertyName,
+        void addVetoableChangeListener( const OUString& aPropertyName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& xListener );
-        void removeVetoableChangeListener( const ::rtl::OUString& aPropertyName,
+        void removeVetoableChangeListener( const OUString& aPropertyName,
                                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& xListener );
 
     private:
