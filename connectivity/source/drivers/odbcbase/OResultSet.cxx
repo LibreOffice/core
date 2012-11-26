@@ -924,6 +924,8 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
                             &nRealLen
                             );
         fillNeededData(nRet = N3SQLBulkOperations(m_aStatementHandle, SQL_UPDATE_BY_BOOKMARK));
+        // LEM TODO: need to allow for change of not only bookmark value, but also bookmark length
+        assert(nRealLen == m_aBookmark.getLength());
     }
     else
         fillNeededData(nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_UPDATE,SQL_LOCK_NO_CHANGE));
