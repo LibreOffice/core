@@ -408,7 +408,7 @@ namespace canvas
                 OSL_TRACE("numeric_cast detected data loss");
 #endif
                 throw ::com::sun::star::uno::RuntimeException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "numeric_cast detected data loss" )),
+                    "numeric_cast detected data loss",
                     NULL );
             }
 
@@ -533,12 +533,12 @@ namespace canvas
 
                 @return true, if a matching entry was found.
             */
-            bool lookup( const ::rtl::OUString& rName,
+            bool lookup( const OUString& rName,
                          ValueType&             o_rResult ) const
             {
                 // rName is required to contain only ASCII characters.
                 // TODO(Q1): Enforce this at upper layers
-                ::rtl::OString aKey( ::rtl::OUStringToOString( mbCaseSensitive ? rName : rName.toAsciiLowerCase(),
+                OString aKey( OUStringToOString( mbCaseSensitive ? rName : rName.toAsciiLowerCase(),
                                                                RTL_TEXTENCODING_ASCII_US ) );
                 MapEntry aSearchKey =
                     {

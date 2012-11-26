@@ -254,7 +254,7 @@ namespace canvas
         }
 
         // XMultiServiceFactory
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const ::rtl::OUString& aServiceSpecifier ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
         {
             return ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::create(this,
@@ -262,7 +262,7 @@ namespace canvas
                                               ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >()));
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString& aServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& aServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
         {
             return ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::create(this,
@@ -270,7 +270,7 @@ namespace canvas
                                               Arguments));
         }
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames(  ) throw (::com::sun::star::uno::RuntimeException)
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw (::com::sun::star::uno::RuntimeException)
         {
             return ParametricPolyPolygon::getAvailableServiceNames();
         }
@@ -293,7 +293,7 @@ namespace canvas
             return maPropHelper.getPropertySetInfo();
         }
 
-        virtual void SAL_CALL setPropertyValue( const ::rtl::OUString&            aPropertyName,
+        virtual void SAL_CALL setPropertyValue( const OUString&                   aPropertyName,
                                                 const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException,
                                                                                                   ::com::sun::star::beans::PropertyVetoException,
                                                                                                   ::com::sun::star::lang::IllegalArgumentException,
@@ -304,7 +304,7 @@ namespace canvas
             maPropHelper.setPropertyValue( aPropertyName, aValue );
         }
 
-        virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& aPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException,
+        virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& aPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException,
                                                                                                                     ::com::sun::star::lang::WrappedTargetException,
                                                                                                                     ::com::sun::star::uno::RuntimeException)
         {
@@ -312,7 +312,7 @@ namespace canvas
             return maPropHelper.getPropertyValue( aPropertyName );
         }
 
-        virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName,
                                                          const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException,
                                                                                                                                                                         ::com::sun::star::lang::WrappedTargetException,
                                                                                                                                                                         ::com::sun::star::uno::RuntimeException)
@@ -322,7 +322,7 @@ namespace canvas
                                                     xListener );
         }
 
-        virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName,
                                                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException,
                                                                                                                                                                            ::com::sun::star::lang::WrappedTargetException,
                                                                                                                                                                            ::com::sun::star::uno::RuntimeException)
@@ -332,7 +332,7 @@ namespace canvas
                                                        xListener );
         }
 
-        virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& aPropertyName,
+        virtual void SAL_CALL addVetoableChangeListener( const OUString& aPropertyName,
                                                          const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException,
                                                                                                                                                                         ::com::sun::star::lang::WrappedTargetException,
                                                                                                                                                                         ::com::sun::star::uno::RuntimeException)
@@ -342,7 +342,7 @@ namespace canvas
                                                     xListener );
         }
 
-        virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& aPropertyName,
+        virtual void SAL_CALL removeVetoableChangeListener( const OUString& aPropertyName,
                                                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException,
                                                                                                                                                                            ::com::sun::star::lang::WrappedTargetException,
                                                                                                                                                                            ::com::sun::star::uno::RuntimeException)
