@@ -396,8 +396,7 @@ namespace canvas
             {
 #if OSL_DEBUG_LEVEL > 0
                 throw ::com::sun::star::lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": reference is NULL" )),
+                    OUString::createFromAscii(pStr) + ": reference is NULL",
                     xIf,
                     nArgPos );
 #else
