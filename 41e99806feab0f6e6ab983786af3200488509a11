@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQ3///88\u003d",
+        "filename": "sal/inc/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-11-26T13:27:45Z",
+      "side": 1,
+      "message": "This loop is probably the most inefficient way you can concatenate pieces.. it creates temporary string objects for each +\u003d operation. Instead, create one rtl_uString with the necessary buffer size, copy the original string to it and then pad.",
+      "revId": "41e99806feab0f6e6ab983786af3200488509a11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
