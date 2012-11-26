@@ -551,8 +551,9 @@ AC_ARG_ENABLE(ext-barcode,
 
 AC_ARG_ENABLE(export,
     AS_HELP_STRING([--disable-export],
-        [Disable (some) code for document format export. Useful when building *viewer* apps to avoid
-         having export-related code and data linked in. Work in progress, use only if you are hacking on it.])
+        [Disable (some) code for document export. Useful when building viewer-only apps that lack
+         save/export functionality, to avoid having an excessive amount of code and data used
+         only for exporrt linked in. Work in progress, use only if you are hacking on it.])
 )
 
 AC_ARG_ENABLE(database-connectivity,
