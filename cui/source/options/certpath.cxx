@@ -253,9 +253,9 @@ IMPL_LINK_NOARG(CertPathDialog, AddHdl_Impl)
                 AddCertPath(m_sManual, aPath);
         }
     }
-    catch (const uno::Exception&)
+    catch (uno::Exception & e)
     {
-        SAL_WARN( "cui.options", "CertPathDialog::AddHdl_Impl(): caught exception" );
+        SAL_WARN("cui.options", "caught UNO exception: " << e.Message);
     }
 
     return 0;
