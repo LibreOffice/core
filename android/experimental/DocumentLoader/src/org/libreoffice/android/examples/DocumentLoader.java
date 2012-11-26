@@ -182,7 +182,9 @@ public class DocumentLoader
 
                 flipper.showNext();
 
-                getPageViewerAt((flipper.getDisplayedChild() + PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE).display(getCurrentPageViewer().currentPageNumber + PAGECACHE_PLUSMINUS);
+                // The entry after the next, both child index and next is 0..PAGECACHE_SIZE.
+                int next = (flipper.getDisplayedChild() + PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE;
+                getPageViewerAt(next).display(getCurrentPageViewer().currentPageNumber + PAGECACHE_PLUSMINUS);
                 return true;
             } else if (event2.getX() - event1.getX() > 120) {
                 if (getCurrentPageViewer().currentPageNumber == 0)
@@ -201,7 +203,9 @@ public class DocumentLoader
 
                 flipper.showPrevious();
 
-                getPageViewerAt((flipper.getDisplayedChild() + PAGECACHE_SIZE - PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE).display(getCurrentPageViewer().currentPageNumber - PAGECACHE_PLUSMINUS);
+                // The entry before the previous, both child index and previous is 0..PAGECACHE_SIZE.
+                int previous = (flipper.getDisplayedChild() + PAGECACHE_SIZE - PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE;
+                getPageViewerAt(previous).display(getCurrentPageViewer().currentPageNumber - PAGECACHE_PLUSMINUS);
 
                 return true;
             }
