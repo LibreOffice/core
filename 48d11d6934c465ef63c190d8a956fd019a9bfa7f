@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQ3///80\u003d",
+        "filename": "i18npool/source/isolang/isolang.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-11-26T13:47:04Z",
+      "side": 1,
+      "message": "This last line is wrong, LANGUAGE_NONE must map to \"zxx\" withou any country information, do not change that.",
+      "revId": "48d11d6934c465ef63c190d8a956fd019a9bfa7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
