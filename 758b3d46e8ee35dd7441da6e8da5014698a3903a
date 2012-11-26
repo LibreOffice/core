@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQ3///8Y\u003d",
+        "filename": "bridges/source/cpp_uno/cc5_solaris_sparc64/uno2cpp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-26T17:23:28Z",
+      "side": 1,
+      "message": "the variable name tripped me up when used at #437.\nplease use a name more in line with the usual naming \u0027convention\u0027\nused in the code.. most importantly start with lowercase.\n\nsVoid is fine for instance.",
+      "revId": "758b3d46e8ee35dd7441da6e8da5014698a3903a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
