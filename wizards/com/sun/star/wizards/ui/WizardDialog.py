@@ -28,7 +28,6 @@ from ..document.OfficeDocument import OfficeDocument
 from ..text.TextDocument import TextDocument
 
 from com.sun.star.lang import NoSuchMethodException
-from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.frame import TerminationVetoException
 from com.sun.star.awt.PushButtonType import HELP, STANDARD
 
@@ -77,7 +76,7 @@ class WizardDialog(UnoDialog2):
             if self.nNewStep != self.nOldStep:
                 self.switchToStep()
 
-        except IllegalArgumentException:
+        except Exception:
             traceback.print_exc()
 
     def setRoadmapInteractive(self, _bInteractive):
@@ -89,7 +88,7 @@ class WizardDialog(UnoDialog2):
     def isRoadmapComplete(self):
         try:
             return bool(Helper.getUnoPropertyValue(self.oRoadmap, "Complete"))
-        except IllegalArgumentException:
+        except Exception:
             traceback.print_exc()
             return False
 

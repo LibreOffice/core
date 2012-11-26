@@ -19,7 +19,7 @@ import unohelper
 
 from com.sun.star.awt import XActionListener
 class ActionListenerProcAdapter( unohelper.Base, XActionListener ):
-    def __init__( self, oProcToCall, tParams=() ):
+    def __init__(self, oProcToCall):
         self.oProcToCall = oProcToCall
 
     def actionPerformed( self, oActionEvent ):
@@ -28,20 +28,19 @@ class ActionListenerProcAdapter( unohelper.Base, XActionListener ):
 
 from com.sun.star.awt import XItemListener
 class ItemListenerProcAdapter( unohelper.Base, XItemListener ):
-    def __init__( self, oProcToCall, tParams=() ):
+    def __init__(self, oProcToCall):
         self.oProcToCall = oProcToCall
-        self.tParams = tParams
 
     def itemStateChanged( self, oItemEvent ):
         if callable( self.oProcToCall ):
             try:
                 self.oProcToCall()
             except:
-                self.oProcToCall((oItemEvent,) + self.tParams )
+                self.oProcToCall(oItemEvent)
 
 from com.sun.star.awt import XTextListener
 class TextListenerProcAdapter( unohelper.Base, XTextListener ):
-    def __init__( self, oProcToCall, tParams=() ):
+    def __init__(self, oProcToCall):
         self.oProcToCall = oProcToCall
 
     def textChanged( self, oTextEvent ):
@@ -50,7 +49,7 @@ class TextListenerProcAdapter( unohelper.Base, XTextListener ):
 
 from com.sun.star.frame import XTerminateListener
 class TerminateListenerProcAdapter( unohelper.Base, XTerminateListener ):
-    def __init__( self, oProcToCall, tParams=() ):
+    def __init__(self, oProcToCall):
         self.oProcToCall = oProcToCall
 
     def queryTermination(self, TerminateEvent):
@@ -61,7 +60,7 @@ class TerminateListenerProcAdapter( unohelper.Base, XTerminateListener ):
 
 from com.sun.star.awt import XWindowListener
 class WindowListenerProcAdapter( unohelper.Base, XWindowListener ):
-    def __init__( self, oProcToCall, tParams=() ):
+    def __init__(self, oProcToCall):
         self.oProcToCall = oProcToCall
 
     def windowShown(self, TerminateEvent):
@@ -70,7 +69,7 @@ class WindowListenerProcAdapter( unohelper.Base, XWindowListener ):
 
 from com.sun.star.awt import XAdjustmentListener
 class AdjustmentListenerProcAdapter( unohelper.Base, XAdjustmentListener ):
-    def __init__( self, oProcToCall, tParams=() ):
+    def __init__(self, oProcToCall):
         self.oProcToCall = oProcToCall
 
     def adjustmentValueChanged(self, TerminateEvent):
@@ -79,20 +78,18 @@ class AdjustmentListenerProcAdapter( unohelper.Base, XAdjustmentListener ):
 
 from com.sun.star.awt import XFocusListener
 class FocusListenerProcAdapter( unohelper.Base, XFocusListener ):
-    def __init__( self, oProcToCall, tParams=() ):
+    def __init__( self, oProcToCall):
         self.oProcToCall = oProcToCall
-        self.tParams = tParams
 
     def focusGained(self, FocusEvent):
         if callable( self.oProcToCall ):
-            self.oProcToCall((FocusEvent,) + self.tParams )
+            self.oProcToCall(FocusEvent)
 
 from com.sun.star.awt import XKeyListener
 class KeyListenerProcAdapter( unohelper.Base, XKeyListener ):
-    def __init__( self, oProcToCall, tParams=() ):
+    def __init__(self, oProcToCall):
         self.oProcToCall = oProcToCall
-        self.tParams = tParams
 
     def keyPressed(self, KeyEvent):
         if callable( self.oProcToCall ):
-            self.oProcToCall((KeyEvent,) + self.tParams )
+            self.oProcToCall(KeyEvent)

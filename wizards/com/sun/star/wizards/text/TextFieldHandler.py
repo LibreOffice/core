@@ -100,7 +100,10 @@ class TextFieldHandler(object):
             self, _PropertyName, _aPropertyValue):
         try:
             xProperty = TextFieldHandler.dictTextFields[_aPropertyValue]
-            xPropertySet = xProperty.TextFieldMaster
+            try:
+                xPropertySet = xProperty.TextFieldMaster
+            except Exception:
+                return
             if xPropertySet.PropertySetInfo.hasPropertyByName(
                     _PropertyName):
                 oValue = xPropertySet.getPropertyValue(_PropertyName)
@@ -115,7 +118,8 @@ class TextFieldHandler(object):
             DependentTextFields = self.__getTextFieldsByProperty(
                     PropertyNames.PROPERTY_NAME, _FieldName)
             if DependentTextFields is not None:
-                DependentTextFields.TextFieldMaster.setPropertyValue("Content", _FieldContent)
+                DependentTextFields.TextFieldMaster.setPropertyValue(
+                    "Content", _FieldContent)
                 self.refreshTextFields()
         except Exception:
             traceback.print_exc()
