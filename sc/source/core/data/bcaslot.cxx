@@ -275,8 +275,8 @@ sal_Bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
         return false;
     sal_Bool bIsBroadcasted = false;
     const ScAddress& rAddress = rHint.GetAddress();
-    for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
-            aIter != aBroadcastAreaTbl.end(); /* increment in body */ )
+    for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin()),
+            aIterEnd = aBroadcastAreaTbl.end(); aIter != aIterEnd; /* increment in body */ )
     {
         ScBroadcastArea* pArea = *aIter;
         // A Notify() during broadcast may call EndListeningArea() and thus
