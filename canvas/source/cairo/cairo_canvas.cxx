@@ -90,26 +90,18 @@ namespace cairocanvas
 
         const SystemGraphicsData* pSysData=reinterpret_cast<const SystemGraphicsData*>(aSeq.getConstArray());
         if( !pSysData || !pSysData->nSize )
-            throw lang::NoSupportException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                     "Passed SystemGraphicsData invalid!")),
-                NULL);
+            throw lang::NoSupportException( "Passed SystemGraphicsData invalid!", NULL);
 
         bool bHasXRender = IsCairoWorking(pOutDev);
-        ENSURE_ARG_OR_THROW( bHasXRender == true,
-                             "SpriteCanvas::SpriteCanvas: No RENDER extension" );
+        ENSURE_ARG_OR_THROW( bHasXRender == true, "SpriteCanvas::SpriteCanvas: No RENDER extension" );
 
         // setup helper
-        maDeviceHelper.init( *this,
-                             *pOutDev );
+        maDeviceHelper.init( *this, *pOutDev );
 
-        maCanvasHelper.init( basegfx::B2ISize(aBounds.Width, aBounds.Height),
-                             *this, this );
+        maCanvasHelper.init( basegfx::B2ISize(aBounds.Width, aBounds.Height), *this, this );
 
         // forward surface to render on to canvashelper
-        maCanvasHelper.setSurface(
-            maDeviceHelper.getSurface(),
-            false );
+        maCanvasHelper.setSurface( maDeviceHelper.getSurface(), false );
 
         maArguments.realloc(0);
     }
@@ -129,9 +121,9 @@ namespace cairocanvas
         CanvasBaseT::disposeThis();
     }
 
-    ::rtl::OUString SAL_CALL Canvas::getServiceName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL Canvas::getServiceName(  ) throw (uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CANVAS_SERVICE_NAME ) );
+        return OUString( CANVAS_SERVICE_NAME );
     }
 
     bool Canvas::repaint( const SurfaceSharedPtr&       pSurface,
